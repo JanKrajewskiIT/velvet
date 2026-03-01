@@ -1,0 +1,29 @@
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  border: 1px solid;
+  transition:
+    opacity var(--duration-fast) var(--ease-out-expo),
+    transform var(--duration-fast) var(--ease-out-expo);
+  background: none;
+  line-height: 1.4;
+  font-family: inherit;
+}
+
+.chip:hover {
+  opacity: 0.85;
+}
+
+.chip:active {
+  transform: scale(0.96);
+}
+
+.selected {
+  border-color: transparent;
+}

@@ -1,0 +1,8 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  padding: var(--spacing-2xl) 0;
+  animation: fadeIn var(--duration-normal) var(--ease-out-expo);
+}
