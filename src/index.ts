@@ -1,3 +1,5 @@
+import './theme/globals.css';
+
 export { default as AccessDenied } from './components/common/AccessDenied/AccessDenied';
 export { default as ActionRow } from './components/common/ActionRow/ActionRow';
 export { default as AiResultPanel } from './components/common/AiResultPanel/AiResultPanel';

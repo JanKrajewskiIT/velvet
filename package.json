@@ -14,7 +14,7 @@
       "import": "./dist/velvet-ui.js",
       "require": "./dist/velvet-ui.umd.cjs"
     },
-    "./styles": "./dist/style.css"
+    "./styles": "./dist/velvet-ui.css"
   },
   "types": "./dist/index.d.ts",
   "files": [
