@@ -2,6 +2,10 @@
   "name": "@velvet/ui",
   "version": "0.1.0",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JanKrajewskiIT/velvet.git"
+  },
   "main": "./dist/velvet-ui.umd.cjs",
   "module": "./dist/velvet-ui.js",
   "exports": {
