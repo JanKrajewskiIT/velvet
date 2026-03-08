@@ -8,6 +8,7 @@ import {
   on,
 } from 'solid-js';
 
+import useEscapeKey from '../../../hooks/useEscapeKey';
 import type Props from '../../../models/Props';
 import MenuBar from './MenuBar';
 import styles from './Navbar.module.css';
@@ -17,13 +18,15 @@ interface NavbarProps {
   navItems: NavItem[];
   logo?: JSX.Element;
   actions?: JSX.Element;
-  toggleMenuLabel?: string;
+  toggleMenuLabel: string;
   navLabel?: string;
 }
 
 const Navbar = (props: Props<NavbarProps>) => {
   const [menuOpen, setMenuOpen] = createSignal(false);
   const location = useLocation();
+
+  useEscapeKey(menuOpen, () => setMenuOpen(false));
 
   const activeIndex = createMemo(() => {
     if (props.navItems.length === 0) return -1;

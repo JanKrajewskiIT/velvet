@@ -16,7 +16,7 @@ export const Accordion = (props: AccordionProps) => {
 
 export interface AccordionItemProps extends Omit<
   JSX.HTMLAttributes<HTMLDivElement>,
-  'title'
+  'title' | 'onToggle'
 > {
   title: string | JSX.Element;
   isOpen?: boolean;

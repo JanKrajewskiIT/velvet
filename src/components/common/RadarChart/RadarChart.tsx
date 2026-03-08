@@ -30,7 +30,7 @@ const DATASET_COLORS = [
   'var(--color-info)',
   'var(--color-success)',
   'var(--color-warning)',
-  'var(--color-danger)',
+  'var(--color-error)',
 ];
 
 const polarToCartesian = (angle: number, radius: number, center: number) => ({

@@ -2,7 +2,6 @@ import type Props from '../../../models/Props';
 import styles from './LocaleSwitcher.module.css';
 
 interface LocaleSwitcherProps {
-  locale: string;
   label: string;
   switchLabel: string;
   onSwitch: () => void;

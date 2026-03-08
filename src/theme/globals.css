@@ -20,11 +20,16 @@
   --color-text-muted: var(--color-gray-60);
   --color-text-secondary: var(--color-gray-60);
   --color-text-tertiary: var(--color-gray-50);
+  --color-text-inverse: var(--color-gray-0);
   --color-primary: var(--brand);
   --color-primary-hover: var(--brand-hover);
   --color-primary-light: rgba(139, 0, 54, 0.06);
   --color-border: var(--color-gray-20);
   --color-surface: var(--color-gray-10);
+  --color-bg-hover: var(--color-gray-10);
+  --color-bg-inverse: var(--color-gray-100);
+  --color-skeleton: rgba(0, 0, 0, 0.11);
+  --color-focus-ring: rgba(139, 0, 54, 0.4);
 
   /* Status / semantic colors */
   --color-info: #0288d1;
@@ -36,7 +41,6 @@
   --color-error: #d32f2f;
   --color-error-light: rgba(211, 47, 47, 0.1);
   --color-error-hover: #b71c1c;
-  --color-danger: #d32f2f;
   --color-on-accent: #fff;
 
   /* Overlay */
@@ -47,8 +51,6 @@
   --header-bg: var(--brand);
   --header-text: var(--color-gray-0);
   --header-shadow: 0 0 0.5rem var(--brand);
-
-  --color-primary-bg: rgba(139, 0, 54, 0.06);
 
   --header-height: 60px;
   --spacer-size: 20px;
@@ -63,6 +65,8 @@
   --spacing-lg: 1.5rem;
   --spacing-xl: 2rem;
   --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+  --spacing-4xl: 6rem;
 
   /* Typography — font sizes */
   --font-size-xs: 0.75rem;
@@ -100,6 +104,7 @@
   --z-overlay: 999;
   --z-modal: 1000;
   --z-dropdown: 200;
+  --z-toast: 9999;
 
   --transition-fast: 0.2s ease;
   --transition-normal: 0.5s ease;
@@ -138,15 +143,19 @@
   --color-bg: var(--color-gray-100);
   --color-bg-elevated: var(--color-gray-80);
   --color-text: var(--color-gray-10);
-  --color-text-muted: var(--color-gray-40);
+  --color-text-muted: var(--color-gray-30);
   --color-text-secondary: var(--color-gray-30);
   --color-text-tertiary: var(--color-gray-40);
+  --color-text-inverse: var(--color-gray-100);
   --color-primary: #d4446e;
   --color-primary-hover: #e05a82;
   --color-primary-light: rgba(212, 68, 110, 0.08);
-  --color-primary-bg: rgba(212, 68, 110, 0.08);
   --color-border: var(--color-gray-80);
   --color-surface: var(--color-gray-90);
+  --color-bg-hover: var(--color-gray-90);
+  --color-bg-inverse: var(--color-gray-10);
+  --color-skeleton: rgba(255, 255, 255, 0.13);
+  --color-focus-ring: rgba(212, 68, 110, 0.4);
 
   --color-info: #29b6f6;
   --color-info-light: rgba(41, 182, 246, 0.12);
@@ -157,7 +166,6 @@
   --color-error: #ef5350;
   --color-error-light: rgba(239, 83, 80, 0.12);
   --color-error-hover: #e53935;
-  --color-danger: #ef5350;
   --color-on-accent: #fff;
 
   --color-overlay: rgba(0, 0, 0, 0.6);

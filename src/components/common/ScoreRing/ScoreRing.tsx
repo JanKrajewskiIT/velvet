@@ -12,13 +12,17 @@ const ScoreRing = (props: Props<ScoreRingProps>) => {
     if (props.score >= 86) return 'var(--color-success)';
     if (props.score >= 71) return 'var(--color-primary)';
     if (props.score >= 51) return 'var(--color-warning)';
-    return 'var(--color-danger)';
+    return 'var(--color-error)';
   };
 
   return (
     <div
       class={`${styles.scoreRing} ${props.class ?? ''}`}
       style={{ '--ring-circumference': String(circumference) }}
+      role="meter"
+      aria-valuenow={props.score}
+      aria-valuemin={0}
+      aria-valuemax={100}
     >
       <svg viewBox="0 0 100 100" class={styles.scoreSvg}>
         <circle

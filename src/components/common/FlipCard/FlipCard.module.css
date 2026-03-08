@@ -11,8 +11,8 @@
   text-align: center;
   transition: transform 0.6s;
   transform-style: preserve-3d;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  border-radius: var(--radius-md, 8px);
+  box-shadow: var(--shadow-card);
+  border-radius: var(--radius-md);
 }
 
 .flipCardFront,
@@ -22,15 +22,15 @@
   height: 100%;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  border-radius: var(--radius-md, 8px);
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--bg-primary, #ffffff);
-  border: 1px solid var(--border-color, #e0e0e0);
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
 }
 
 .flipCardBack {
   transform: rotateY(180deg);
-  background-color: var(--bg-secondary, #f8f9fa);
+  background-color: var(--color-surface);
 }

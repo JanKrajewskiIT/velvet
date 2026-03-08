@@ -1,6 +1,6 @@
 import { createSignal, For, JSX, splitProps } from 'solid-js';
 
-import { TagChip } from '../TagChip/TagChip';
+import TagChip from '../TagChip/TagChip';
 import styles from './TagInput.module.css';
 
 export interface TagInputProps extends Omit<
@@ -42,7 +42,13 @@ export const TagInput = (props: TagInputProps) => {
     <div class={`${styles.container} ${local.class || ''}`}>
       <div class={styles.tagsContainer}>
         <For each={local.value}>
-          {(tag) => <TagChip label={tag} onRemove={() => removeTag(tag)} />}
+          {(tag) => (
+            <TagChip
+              label={tag}
+              color="var(--color-primary)"
+              onClick={() => removeTag(tag)}
+            />
+          )}
         </For>
         <input
           {...rest}

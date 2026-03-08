@@ -57,6 +57,7 @@ export { default as TagChip } from './components/common/TagChip/TagChip';
 export { TagInput } from './components/common/TagInput/TagInput';
 export { default as ThemeToggle } from './components/common/ThemeToggle/ThemeToggle';
 export { default as Timeline } from './components/common/Timeline/Timeline';
+export type { ToastMessage } from './components/common/Toast/Toast';
 export {
   addToast,
   removeToast,
@@ -64,6 +65,7 @@ export {
   useToast,
 } from './components/common/Toast/Toast';
 export { Tooltip } from './components/common/Tooltip/Tooltip';
+export type { WizardStep } from './components/common/Wizard/Wizard';
 export { Wizard } from './components/common/Wizard/Wizard';
 export { default as Footer } from './components/layout/Footer/Footer';
 export { default as MainLayout } from './components/layout/MainLayout/MainLayout';

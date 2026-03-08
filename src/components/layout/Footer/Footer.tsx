@@ -8,13 +8,14 @@ interface FooterProps {
   privacyLabel: string;
   privacyHref: string;
   builtWithText: string;
+  homeHref?: string;
 }
 
 const Footer = (props: Props<FooterProps>) => {
   return (
     <footer class={`${styles.footer} ${props.class ?? ''}`}>
       <div class={styles.container}>
-        <A href="/" class={styles.link}>
+        <A href={props.homeHref ?? '/'} class={styles.link}>
           {props.copyrightText}
         </A>
         <A href={props.privacyHref} class={styles.link}>

@@ -19,9 +19,9 @@ export default function useClickOutside(
     } else {
       document.removeEventListener('mousedown', handleClick);
     }
-  });
 
-  onCleanup(() => {
-    document.removeEventListener('mousedown', handleClick);
+    onCleanup(() => {
+      document.removeEventListener('mousedown', handleClick);
+    });
   });
 }

@@ -21,8 +21,16 @@ export const Skeleton = (props: SkeletonProps) => {
   ]);
 
   const baseStyle = () => {
-    const s: Record<string, string | number> =
-      typeof local.style === 'object' ? { ...local.style } : {};
+    const s: Record<string, string | number> = {};
+    if (typeof local.style === 'object' && local.style) {
+      for (const [key, val] of Object.entries(
+        local.style as Record<string, string | number | undefined>
+      )) {
+        if (val !== undefined) {
+          s[key] = val;
+        }
+      }
+    }
     if (local.width)
       s.width =
         typeof local.width === 'number' ? `${local.width}px` : local.width;

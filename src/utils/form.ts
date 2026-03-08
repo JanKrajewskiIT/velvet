@@ -11,5 +11,7 @@ export function emptyToNull<T extends string>(value: T | ''): T | null {
 }
 
 export function parseFloatOrNull(value: string): number | null {
-  return value ? parseFloat(value) : null;
+  if (!value) return null;
+  const parsed = parseFloat(value);
+  return isNaN(parsed) ? null : parsed;
 }

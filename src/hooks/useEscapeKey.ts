@@ -17,9 +17,9 @@ export default function useEscapeKey(
     } else {
       document.removeEventListener('keydown', handleKeyDown);
     }
-  });
 
-  onCleanup(() => {
-    document.removeEventListener('keydown', handleKeyDown);
+    onCleanup(() => {
+      document.removeEventListener('keydown', handleKeyDown);
+    });
   });
 }

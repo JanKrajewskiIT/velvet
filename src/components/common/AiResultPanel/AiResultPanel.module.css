@@ -28,7 +28,7 @@
 
 .errorText {
   font-size: var(--font-size-sm);
-  color: var(--color-danger);
+  color: var(--color-error);
   margin: 0;
   text-align: center;
 }
@@ -86,7 +86,7 @@
 }
 
 .iconDanger {
-  color: var(--color-danger);
+  color: var(--color-error);
   flex-shrink: 0;
 }
 

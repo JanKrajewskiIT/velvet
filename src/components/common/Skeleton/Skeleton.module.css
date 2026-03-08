@@ -1,7 +1,7 @@
 .skeleton {
   display: block;
-  background-color: var(--skeleton-color, rgba(0, 0, 0, 0.11));
-  border-radius: var(--radius-sm, 4px);
+  background-color: var(--color-skeleton);
+  border-radius: var(--radius-sm);
 }
 
 .text {
@@ -10,7 +10,7 @@
   margin-bottom: 0;
   transform-origin: 0 55%;
   transform: scale(1, 0.6);
-  border-radius: var(--radius-sm, 4px);
+  border-radius: var(--radius-sm);
 }
 .text:empty:before {
   content: '\00a0';
@@ -21,7 +21,7 @@
 }
 
 .rectangular {
-  border-radius: var(--radius-sm, 4px);
+  border-radius: var(--radius-sm);
 }
 
 .pulse {
@@ -31,7 +31,7 @@
 .wave {
   position: relative;
   overflow: hidden;
-  background-color: var(--skeleton-color, rgba(0, 0, 0, 0.11));
+  background-color: var(--color-skeleton);
 }
 
 .wave::after {

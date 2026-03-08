@@ -1,7 +1,14 @@
-import { createMemo, createSignal, For, JSX, Show, splitProps } from 'solid-js';
+import {
+  createMemo,
+  createSignal,
+  For,
+  type JSX,
+  Show,
+  splitProps,
+} from 'solid-js';
 
-import { Button } from '../Button/Button';
-import { Stepper } from '../Stepper/Stepper';
+import Button from '../Button/Button';
+import Stepper from '../Stepper/Stepper';
 import styles from './Wizard.module.css';
 
 export interface WizardStep {
@@ -18,6 +25,9 @@ export interface WizardProps extends Omit<
   onFinish: () => void | Promise<void>;
   onStepChange?: (step: number) => void;
   initialStep?: number;
+  backLabel: string;
+  nextLabel: string;
+  finishLabel: string;
 }
 
 export const Wizard = (props: WizardProps) => {
@@ -27,17 +37,26 @@ export const Wizard = (props: WizardProps) => {
     'onStepChange',
     'initialStep',
     'class',
+    'backLabel',
+    'nextLabel',
+    'finishLabel',
   ]);
-  const [currentStep, setCurrentStep] = createSignal(local.initialStep || 0);
+  const [currentStep, setCurrentStep] = createSignal(local.initialStep ?? 0);
   const [isLoading, setIsLoading] = createSignal(false);
 
   const isLastStep = createMemo(() => currentStep() === local.steps.length - 1);
+
+  const stepperSteps = () =>
+    local.steps.map((s, i) => ({
+      value: String(i),
+      label: s.label,
+    }));
 
   const handleNext = async () => {
     setIsLoading(true);
     try {
       const step = local.steps[currentStep()];
-      if (step.validate) {
+      if (step?.validate) {
         const isValid = await step.validate();
         if (!isValid) return;
       }
@@ -63,12 +82,9 @@ export const Wizard = (props: WizardProps) => {
   };
 
   return (
-    <div class={`${styles.wizard} ${local.class || ''}`} {...rest}>
+    <div class={`${styles.wizard} ${local.class ?? ''}`} {...rest}>
       <div class={styles.stepperContainer}>
-        <Stepper
-          steps={local.steps.map((s) => s.label)}
-          currentStep={currentStep()}
-        />
+        <Stepper steps={stepperSteps()} activeStep={String(currentStep())} />
       </div>
       <div class={styles.content}>
         <For each={local.steps}>
@@ -81,11 +97,11 @@ export const Wizard = (props: WizardProps) => {
       </div>
       <div class={styles.actions}>
         <Button
-          variant="secondary"
+          variant="ghost"
           disabled={currentStep() === 0 || isLoading()}
           onClick={handleBack}
         >
-          Wstecz
+          {local.backLabel}
         </Button>
         <Button
           variant="primary"
@@ -93,7 +109,7 @@ export const Wizard = (props: WizardProps) => {
           onClick={handleNext}
           loading={isLoading()}
         >
-          {isLastStep() ? 'Zakończ' : 'Dalej'}
+          {isLastStep() ? local.finishLabel : local.nextLabel}
         </Button>
       </div>
     </div>

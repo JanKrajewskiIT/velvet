@@ -26,7 +26,7 @@ export function createEslintConfig({
       ...ignorePaths,
     ]),
     {
-      ignores: ['**/*.mjs'],
+      ignores: ['**/*.mjs', '**/*.mts'],
     },
     {
       files: ['**/*.{js,cjs,ts,jsx,tsx}'],

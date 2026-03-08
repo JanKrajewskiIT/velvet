@@ -8,7 +8,7 @@ interface StatCardProps {
   value: string | number;
   label: string;
   icon?: JSX.Element;
-  colorClass?: string;
+  colorClass?: 'info' | 'warning' | 'success' | 'error';
 }
 
 const StatCard = (props: Props<StatCardProps>) => {

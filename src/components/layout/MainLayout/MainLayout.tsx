@@ -16,9 +16,9 @@ const MainLayout = (props: ParentProps<Props<MainLayoutProps>>) => {
       <main class={styles.main}>
         <div class={styles.container}>
           <Suspense fallback={<LoadingContainer />}>{props.children}</Suspense>
-          {props.footer}
         </div>
       </main>
+      {props.footer}
     </div>
   );
 };

@@ -37,8 +37,17 @@ function getStoredTheme(key: string): ThemeChoice {
   return 'system';
 }
 
+function resolveTheme(
+  choice: ThemeChoice,
+  system: ResolvedTheme
+): ResolvedTheme {
+  return choice === 'system' ? system : (choice as ResolvedTheme);
+}
+
 function applyTheme(resolved: ResolvedTheme) {
-  document.documentElement.setAttribute('data-theme', resolved);
+  if (typeof document !== 'undefined') {
+    document.documentElement.setAttribute('data-theme', resolved);
+  }
 }
 
 interface ThemeProviderProps extends ParentProps {
@@ -46,26 +55,32 @@ interface ThemeProviderProps extends ParentProps {
 }
 
 const ThemeProvider = (props: ThemeProviderProps) => {
-  const key = props.storageKey ?? DEFAULT_STORAGE_KEY;
-  const [theme, setTheme] = createSignal<ThemeChoice>(getStoredTheme(key));
+  const storageKey = () => props.storageKey ?? DEFAULT_STORAGE_KEY;
+  const initialTheme = getStoredTheme(storageKey());
+  const initialSystem = getSystemTheme();
+
+  const [theme, setTheme] = createSignal<ThemeChoice>(initialTheme);
   const [systemTheme, setSystemTheme] =
-    createSignal<ResolvedTheme>(getSystemTheme());
+    createSignal<ResolvedTheme>(initialSystem);
 
-  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-  const handleChange = (e: MediaQueryListEvent) => {
-    setSystemTheme(e.matches ? 'dark' : 'light');
-  };
-  mediaQuery.addEventListener('change', handleChange);
-  onCleanup(() => {
-    mediaQuery.removeEventListener('change', handleChange);
-  });
+  const resolved = (): ResolvedTheme => resolveTheme(theme(), systemTheme());
 
-  const resolved = (): ResolvedTheme =>
-    theme() === 'system' ? systemTheme() : (theme() as ResolvedTheme);
+  applyTheme(resolveTheme(initialTheme, initialSystem));
+
+  if (typeof window !== 'undefined') {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = (e: MediaQueryListEvent) => {
+      setSystemTheme(e.matches ? 'dark' : 'light');
+    };
+    mediaQuery.addEventListener('change', handleChange);
+    onCleanup(() => {
+      mediaQuery.removeEventListener('change', handleChange);
+    });
+  }
 
   createEffect(() => {
     const current = theme();
-    localStorage.setItem(key, current);
+    localStorage.setItem(storageKey(), current);
     applyTheme(resolved());
   });
 
