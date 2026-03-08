@@ -1,1 +1,2 @@
+eval "$(fnm env --shell bash)"
 npx lint-staged --no-stash
