@@ -1,0 +1,38 @@
+.wizard {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.stepperContainer {
+  margin-bottom: 1rem;
+}
+
+.content {
+  flex: 1;
+  min-height: 200px;
+}
+
+.stepContent {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color, #e2e8f0);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
