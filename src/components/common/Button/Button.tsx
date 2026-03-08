@@ -1,13 +1,14 @@
+import type { JSX } from 'solid-js';
+import { Show } from 'solid-js';
+
 import type Props from '~/models/Props';
 
 import Spinner from '../Spinner/Spinner';
 import styles from './Button.module.css';
-import type { JSX } from 'solid-js';
-import { Show } from 'solid-js';
 
 interface ButtonProps {
   variant?: 'primary' | 'danger' | 'ghost' | 'dashed';
-  onClick?: () => void;
+  onClick?: (e: MouseEvent) => void;
   disabled?: boolean;
   loading?: boolean;
   type?: 'button' | 'submit' | 'reset';
@@ -19,7 +20,7 @@ const Button = (props: Props<ButtonProps>) => {
     <button
       type={props.type ?? 'button'}
       class={`${styles.button} ${styles[props.variant ?? 'primary']} ${props.loading ? styles.loading : ''} ${props.class ?? ''}`}
-      onClick={() => props.onClick?.()}
+      onClick={(e) => props.onClick?.(e)}
       disabled={props.disabled ?? props.loading}
     >
       <Show when={props.loading}>

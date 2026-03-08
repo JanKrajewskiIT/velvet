@@ -2,7 +2,6 @@ import type { JSX } from 'solid-js';
 import { Show } from 'solid-js';
 
 import type Props from '../../../models/Props';
-
 import styles from './StatCard.module.css';
 
 interface StatCardProps {

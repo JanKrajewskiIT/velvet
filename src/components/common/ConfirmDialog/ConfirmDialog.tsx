@@ -1,7 +1,6 @@
 import { FiAlertTriangle, FiHelpCircle } from 'solid-icons/fi';
 
 import type Props from '../../../models/Props';
-
 import Button from '../Button/Button';
 import Dialog from '../Dialog/Dialog';
 import DialogActions from '../Dialog/DialogActions';
@@ -35,10 +34,13 @@ const ConfirmDialog = (props: Props<ConfirmDialogProps>) => {
         <p class={styles.message}>{props.message}</p>
       </DialogBody>
       <DialogActions>
-        <Button variant="ghost" onClick={props.onClose}>
+        <Button variant="ghost" onClick={() => props.onClose()}>
           {props.cancelLabel}
         </Button>
-        <Button variant={props.variant ?? 'primary'} onClick={props.onConfirm}>
+        <Button
+          variant={props.variant ?? 'primary'}
+          onClick={() => props.onConfirm()}
+        >
           {props.confirmLabel}
         </Button>
       </DialogActions>

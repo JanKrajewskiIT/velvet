@@ -1,8 +1,14 @@
 import { A, useLocation } from '@solidjs/router';
-import { createEffect, createMemo, createSignal, For, on, type JSX } from 'solid-js';
+import {
+  createEffect,
+  createMemo,
+  createSignal,
+  For,
+  type JSX,
+  on,
+} from 'solid-js';
 
 import type Props from '../../../models/Props';
-
 import MenuBar from './MenuBar';
 import styles from './Navbar.module.css';
 import type { NavItem } from './NavItem';
@@ -20,15 +26,18 @@ const Navbar = (props: Props<NavbarProps>) => {
   const location = useLocation();
 
   const activeIndex = createMemo(() => {
+    if (props.navItems.length === 0) return -1;
     const found = props.navItems.findIndex(
       (item) => item.href === location.pathname
     );
     return found === -1 ? 0 : found;
   });
 
-  const activeLabel = createMemo(
-    () => (props.navItems[activeIndex()] as NavItem).label
-  );
+  const activeLabel = createMemo(() => {
+    const idx = activeIndex();
+    if (idx < 0 || idx >= props.navItems.length) return '';
+    return props.navItems[idx]?.label ?? '';
+  });
 
   createEffect(
     on(

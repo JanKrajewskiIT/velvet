@@ -3,7 +3,6 @@ import { createSignal, type JSX, Show } from 'solid-js';
 import useClickOutside from '../../../hooks/useClickOutside';
 import useEscapeKey from '../../../hooks/useEscapeKey';
 import type Props from '../../../models/Props';
-
 import styles from './DropdownMenu.module.css';
 
 interface DropdownMenuProps {
@@ -12,9 +11,16 @@ interface DropdownMenuProps {
   label?: string;
 }
 
+function getMenuItems(menu: HTMLElement): HTMLButtonElement[] {
+  return Array.from(
+    menu.querySelectorAll<HTMLButtonElement>('button:not(:disabled)')
+  );
+}
+
 const DropdownMenu = (props: Props<DropdownMenuProps>) => {
   const [open, setOpen] = createSignal(false);
   let menuRef: HTMLDivElement | undefined;
+  let panelRef: HTMLDivElement | undefined;
 
   const close = (): void => {
     setOpen(false);
@@ -28,7 +34,52 @@ const DropdownMenu = (props: Props<DropdownMenuProps>) => {
   );
 
   const toggle = () => {
-    setOpen(!open());
+    const wasOpen = open();
+    setOpen(!wasOpen);
+    if (!wasOpen) {
+      requestAnimationFrame(() => {
+        if (panelRef) {
+          const items = getMenuItems(panelRef);
+          items[0]?.focus();
+        }
+      });
+    }
+  };
+
+  const handleMenuKeyDown = (e: KeyboardEvent) => {
+    if (!panelRef) return;
+    const items = getMenuItems(panelRef);
+    const current = document.activeElement as HTMLElement;
+    const index = items.indexOf(current as HTMLButtonElement);
+
+    switch (e.key) {
+      case 'ArrowDown': {
+        e.preventDefault();
+        const next = index < items.length - 1 ? index + 1 : 0;
+        items[next]?.focus();
+        break;
+      }
+      case 'ArrowUp': {
+        e.preventDefault();
+        const prev = index > 0 ? index - 1 : items.length - 1;
+        items[prev]?.focus();
+        break;
+      }
+      case 'Home': {
+        e.preventDefault();
+        items[0]?.focus();
+        break;
+      }
+      case 'End': {
+        e.preventDefault();
+        items[items.length - 1]?.focus();
+        break;
+      }
+      case 'Tab': {
+        close();
+        break;
+      }
+    }
   };
 
   return (
@@ -45,16 +96,13 @@ const DropdownMenu = (props: Props<DropdownMenuProps>) => {
       </button>
       <Show when={open()}>
         <div
+          ref={panelRef}
           class={styles.menu}
           role="menu"
-          tabIndex={0}
+          tabindex={-1}
+          onKeyDown={handleMenuKeyDown}
           onClick={() => {
             setOpen(false);
-          }}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              setOpen(false);
-            }
           }}
         >
           {props.children}

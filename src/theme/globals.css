@@ -18,8 +18,8 @@
   --color-bg-elevated: var(--color-gray-0);
   --color-text: var(--color-gray-100);
   --color-text-muted: var(--color-gray-60);
-  --color-text-secondary: var(--color-gray-50);
-  --color-text-tertiary: var(--color-gray-40);
+  --color-text-secondary: var(--color-gray-60);
+  --color-text-tertiary: var(--color-gray-50);
   --color-primary: var(--brand);
   --color-primary-hover: var(--brand-hover);
   --color-primary-light: rgba(139, 0, 54, 0.06);
@@ -139,8 +139,8 @@
   --color-bg-elevated: var(--color-gray-80);
   --color-text: var(--color-gray-10);
   --color-text-muted: var(--color-gray-40);
-  --color-text-secondary: var(--color-gray-50);
-  --color-text-tertiary: var(--color-gray-60);
+  --color-text-secondary: var(--color-gray-30);
+  --color-text-tertiary: var(--color-gray-40);
   --color-primary: #d4446e;
   --color-primary-hover: #e05a82;
   --color-primary-light: rgba(212, 68, 110, 0.08);

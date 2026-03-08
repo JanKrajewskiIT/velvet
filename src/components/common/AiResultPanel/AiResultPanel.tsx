@@ -2,7 +2,6 @@ import { FiCheck, FiTarget, FiX } from 'solid-icons/fi';
 import { For, type JSX, Show } from 'solid-js';
 
 import type Props from '../../../models/Props';
-
 import Button from '../Button/Button';
 import ScoreRing from '../ScoreRing/ScoreRing';
 import Spinner from '../Spinner/Spinner';

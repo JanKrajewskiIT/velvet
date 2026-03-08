@@ -1,0 +1,26 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  text-align: center;
+  padding-top: 4rem;
+}
+
+.title {
+  font-size: clamp(2rem, 6vw, 3rem);
+  margin-bottom: var(--spacing-sm);
+}
+
+.description {
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-lg);
+  font-size: clamp(0.9375rem, 2.5vw, 1rem);
+}
+
+@media (width < 768px) {
+  .page {
+    padding-top: var(--spacing-xl);
+  }
+}

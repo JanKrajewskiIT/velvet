@@ -1,7 +1,6 @@
 import { createEffect, createSignal, on, Show } from 'solid-js';
 
 import type Props from '../../../models/Props';
-
 import Button from '../Button/Button';
 import Dialog from '../Dialog/Dialog';
 import DialogActions from '../Dialog/DialogActions';

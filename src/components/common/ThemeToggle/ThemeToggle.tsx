@@ -2,7 +2,6 @@ import { AiFillMoon, AiFillSun } from 'solid-icons/ai';
 
 import type Props from '../../../models/Props';
 import { useTheme } from '../../../theme/ThemeProvider';
-
 import styles from './ThemeToggle.module.css';
 
 interface ThemeToggleProps {

@@ -3,7 +3,6 @@ import type { JSX } from 'solid-js';
 import { createSignal } from 'solid-js';
 
 import type Props from '../../../models/Props';
-
 import styles from './SectionCard.module.css';
 
 interface SectionCardProps {

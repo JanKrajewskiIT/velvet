@@ -17,7 +17,7 @@ interface ThemeContextValue {
   toggleTheme: () => void;
 }
 
-const STORAGE_KEY = 'velvet-theme';
+const DEFAULT_STORAGE_KEY = 'velvet-theme';
 
 const ThemeContext = createContext<ThemeContextValue>();
 
@@ -28,9 +28,9 @@ function getSystemTheme(): ResolvedTheme {
     : 'light';
 }
 
-function getStoredTheme(): ThemeChoice {
+function getStoredTheme(key: string): ThemeChoice {
   if (typeof window === 'undefined') return 'system';
-  const stored = localStorage.getItem(STORAGE_KEY);
+  const stored = localStorage.getItem(key);
   if (stored === 'light' || stored === 'dark' || stored === 'system') {
     return stored;
   }
@@ -41,8 +41,13 @@ function applyTheme(resolved: ResolvedTheme) {
   document.documentElement.setAttribute('data-theme', resolved);
 }
 
-const ThemeProvider = (props: ParentProps) => {
-  const [theme, setTheme] = createSignal<ThemeChoice>(getStoredTheme());
+interface ThemeProviderProps extends ParentProps {
+  storageKey?: string;
+}
+
+const ThemeProvider = (props: ThemeProviderProps) => {
+  const key = props.storageKey ?? DEFAULT_STORAGE_KEY;
+  const [theme, setTheme] = createSignal<ThemeChoice>(getStoredTheme(key));
   const [systemTheme, setSystemTheme] =
     createSignal<ResolvedTheme>(getSystemTheme());
 
@@ -60,7 +65,7 @@ const ThemeProvider = (props: ParentProps) => {
 
   createEffect(() => {
     const current = theme();
-    localStorage.setItem(STORAGE_KEY, current);
+    localStorage.setItem(key, current);
     applyTheme(resolved());
   });
 

@@ -1,0 +1,48 @@
+.dropZone {
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-xl);
+  text-align: center;
+  cursor: pointer;
+  transition:
+    border-color var(--duration-fast) var(--ease-out-expo),
+    background-color var(--duration-fast) var(--ease-out-expo),
+    color var(--duration-fast) var(--ease-out-expo);
+  color: var(--color-text-secondary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+  width: 100%;
+  background: none;
+  font: inherit;
+}
+
+.dropZone:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.dropZoneActive {
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+
+.dropIcon {
+  font-size: var(--font-size-3xl);
+  display: flex;
+  transition: transform var(--duration-fast) var(--ease-out-expo);
+}
+
+.dropZone:hover .dropIcon {
+  transform: translateY(-2px);
+}
+
+.dropText {
+  font-size: var(--font-size-sm);
+}
+
+.dropHint {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+}

@@ -1,0 +1,86 @@
+.stepIndicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 0 var(--spacing-md);
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.stepDot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  border: 2px solid var(--color-border);
+  background-color: var(--color-bg);
+  color: var(--color-text-muted);
+  transition:
+    background-color var(--duration-normal) var(--ease-out-expo),
+    border-color var(--duration-normal) var(--ease-out-expo),
+    color var(--duration-normal) var(--ease-out-expo),
+    transform var(--duration-normal) var(--ease-out-back);
+  flex-shrink: 0;
+}
+
+.stepDot.active {
+  border-color: var(--color-primary);
+  background-color: var(--color-primary);
+  color: var(--color-on-accent);
+  transform: scale(1.1);
+}
+
+.stepDot.completed {
+  border-color: var(--color-primary);
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.stepLabel {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-muted);
+  transition: color var(--duration-fast) var(--ease-out-expo);
+  white-space: nowrap;
+}
+
+.stepLabel.active {
+  color: var(--color-primary);
+}
+
+.stepLabel.completed {
+  color: var(--color-text);
+}
+
+.stepConnector {
+  flex: 1;
+  height: 2px;
+  background-color: var(--color-border);
+  margin: 0 var(--spacing-sm);
+  min-width: var(--spacing-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+.stepConnector::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--duration-normal) var(--ease-out-expo);
+}
+
+.stepConnector.completed::after {
+  transform: scaleX(1);
+}

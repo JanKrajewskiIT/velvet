@@ -1,4 +1,5 @@
 import type { JSX } from 'solid-js';
+import { Show } from 'solid-js';
 
 import type Props from '~/models/Props';
 
@@ -21,16 +22,22 @@ interface ChipProps {
 }
 
 const Chip = (props: Props<ChipProps>) => {
-  const isInteractive = () => !!props.onClick;
+  const classNames = () =>
+    `${styles.chip} ${styles[props.variant ?? 'primary']} ${props.size === 'sm' ? styles.sm : ''} ${props.selected ? styles.selected : ''} ${props.filled ? styles.filled : ''} ${props.onClick ? styles.interactive : ''} ${props.class ?? ''}`;
 
   return (
-    <button
-      type="button"
-      class={`${styles.chip} ${styles[props.variant ?? 'primary']} ${props.size === 'sm' ? styles.sm : ''} ${props.selected ? styles.selected : ''} ${props.filled ? styles.filled : ''} ${isInteractive() ? styles.interactive : ''} ${props.class ?? ''}`}
-      onClick={(e) => props.onClick?.(e)}
+    <Show
+      when={props.onClick}
+      fallback={<span class={classNames()}>{props.children}</span>}
     >
-      {props.children}
-    </button>
+      <button
+        type="button"
+        class={classNames()}
+        onClick={(e) => props.onClick?.(e)}
+      >
+        {props.children}
+      </button>
+    </Show>
   );
 };
 

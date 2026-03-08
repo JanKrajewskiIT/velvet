@@ -1,5 +1,4 @@
 import type Props from '../../../models/Props';
-
 import styles from './JsonDisplay.module.css';
 
 interface JsonDisplayProps {

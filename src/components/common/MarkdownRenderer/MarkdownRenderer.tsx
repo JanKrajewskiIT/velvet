@@ -1,9 +1,9 @@
 import DOMPurify from 'dompurify';
 import remarkGfm from 'remark-gfm';
+import { createMemo } from 'solid-js';
 import { SolidMarkdown } from 'solid-markdown';
 
 import type Props from '../../../models/Props';
-
 import styles from './MarkdownRenderer.module.css';
 
 interface MarkdownRendererProps {
@@ -11,7 +11,7 @@ interface MarkdownRendererProps {
 }
 
 const MarkdownRenderer = (props: Props<MarkdownRendererProps>) => {
-  const sanitized = () => DOMPurify.sanitize(props.content);
+  const sanitized = createMemo(() => DOMPurify.sanitize(props.content));
 
   return (
     <div class={`${styles.markdown} ${props.class ?? ''}`}>

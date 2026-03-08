@@ -1,0 +1,26 @@
+.colorPicker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.colorOption {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  border: 3px solid transparent;
+  cursor: pointer;
+  transition:
+    border-color var(--transition-fast),
+    transform var(--transition-fast);
+  padding: 0;
+}
+
+.colorOption:hover {
+  transform: scale(1.15);
+}
+
+.colorOptionSelected {
+  border-color: var(--color-text);
+  transform: scale(1.15);
+}

@@ -1,8 +1,7 @@
-import { type JSX, onCleanup, onMount } from 'solid-js';
+import { createEffect, createUniqueId, type JSX, onCleanup } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
 import type Props from '../../../models/Props';
-
 import styles from './Dialog.module.css';
 
 interface DialogProps {
@@ -13,6 +12,7 @@ interface DialogProps {
 
 const Dialog = (props: Props<DialogProps>) => {
   let dialogRef: HTMLDialogElement | undefined;
+  const titleId = createUniqueId();
 
   const handleClick = (e: MouseEvent) => {
     if (e.target === dialogRef) {
@@ -20,10 +20,20 @@ const Dialog = (props: Props<DialogProps>) => {
     }
   };
 
-  onMount(() => {
-    if (props.open && dialogRef) {
-      dialogRef.showModal();
-      dialogRef.addEventListener('click', handleClick);
+  createEffect(() => {
+    const el = dialogRef;
+    if (!el) return;
+
+    if (props.open) {
+      if (!el.open) {
+        el.showModal();
+      }
+      el.addEventListener('click', handleClick);
+    } else {
+      if (el.open) {
+        el.close();
+      }
+      el.removeEventListener('click', handleClick);
     }
   });
 
@@ -37,6 +47,8 @@ const Dialog = (props: Props<DialogProps>) => {
       <dialog
         ref={dialogRef}
         class={`${styles.dialog} ${props.class ?? ''}`}
+        aria-labelledby={titleId}
+        data-dialog-title-id={titleId}
         onClose={() => props.onClose()}
       >
         {props.children}

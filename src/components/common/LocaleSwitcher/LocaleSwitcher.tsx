@@ -1,5 +1,4 @@
 import type Props from '../../../models/Props';
-
 import styles from './LocaleSwitcher.module.css';
 
 interface LocaleSwitcherProps {
