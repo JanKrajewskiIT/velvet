@@ -3,6 +3,8 @@ import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 import solid from 'vite-plugin-solid';
 
+import { solidMarkdownOptimizeDeps } from './config/vite.mjs';
+
 export default defineConfig({
   plugins: [
     solid(),
@@ -16,18 +18,7 @@ export default defineConfig({
       '~': resolve(__dirname, 'src'),
     },
   },
-  optimizeDeps: {
-    exclude: ['solid-markdown'],
-    include: [
-      'remark-gfm',
-      'solid-markdown > extend',
-      'solid-markdown > style-to-object',
-      'solid-markdown > inline-style-parser',
-      'solid-markdown > debug',
-      'solid-markdown > ms',
-    ],
-    extensions: ['.jsx'],
-  },
+  optimizeDeps: solidMarkdownOptimizeDeps,
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),

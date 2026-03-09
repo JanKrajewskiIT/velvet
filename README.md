@@ -1,11 +1,20 @@
 # Velvet UI
 
-SolidJS UI component library published as `@jankrajewskiit/ui`.
+SolidJS UI component library and shared frontend standards published as `@jankrajewskiit/ui`.
 
-## Installation
+## Install
 
 ```bash
 npm install @jankrajewskiit/ui solid-js @solidjs/router
+```
+
+For GitHub Packages authentication, use `NODE_AUTH_TOKEN` in your environment.
+
+Example `.npmrc`:
+
+```ini
+//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
+@jankrajewskiit:registry=https://npm.pkg.github.com/
 ```
 
 ## Quick Start
@@ -23,12 +32,99 @@ const App = () => {
 };
 ```
 
-## Design Rules
+## Shared Tooling Presets
 
-- Components are framework-consistent and optimized for apps using the same stack.
-- Text labels are passed through props.
-- Styling is based on CSS variables and CSS Modules.
-- The package styles include design tokens, global baseline layout, and component styles.
+VelvetUi can be used as a shared standards package across SolidJS projects.
+
+### ESLint
+
+`eslint.config.mjs`
+
+```js
+import { createEslintConfig } from '@jankrajewskiit/ui/eslint-config';
+
+export default createEslintConfig({
+  tsconfigRootDir: import.meta.dirname,
+});
+```
+
+### Prettier
+
+`.prettierrc`
+
+```json
+"@jankrajewskiit/ui/prettier-config"
+```
+
+### TypeScript (Vite App)
+
+`tsconfig.app.json`
+
+```json
+{
+  "extends": "@jankrajewskiit/ui/tsconfig/app-vite",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["src/*"]
+    }
+  },
+  "include": ["src"]
+}
+```
+
+`tsconfig.node.json`
+
+```json
+{
+  "extends": "@jankrajewskiit/ui/tsconfig/node-vite",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo"
+  },
+  "include": ["vite.config.ts"]
+}
+```
+
+### Vite
+
+`vite.config.ts`
+
+```ts
+import { defineConfig } from 'vite';
+import { createSolidAppViteConfig } from '@jankrajewskiit/ui/vite-config';
+
+export default defineConfig(
+  createSolidAppViteConfig({
+    server: { port: 5173 },
+    preview: { port: 5173 },
+  })
+);
+```
+
+`createSolidAppViteConfig` applies defaults for:
+
+- `vite-plugin-solid`
+- alias `~ -> <project>/src`
+- `solid-markdown` optimizeDeps preset
+
+### lint-staged
+
+`.lintstagedrc.mjs`
+
+```js
+import { createLintStagedConfig } from '@jankrajewskiit/ui/lint-staged-config';
+
+export default createLintStagedConfig();
+```
+
+### Husky pre-commit
+
+`.husky/pre-commit`
+
+```sh
+. "$(dirname -- "$0")/../node_modules/@jankrajewskiit/ui/config/husky-pre-commit.sh"
+```
 
 ## Main Exports
 
@@ -40,7 +136,7 @@ const App = () => {
 
 `Footer`, `MainLayout`, `Navbar`.
 
-### Theme, Hooks, Utils, Types
+### Theme, Toast, Hooks, Utils, Types
 
 - Theme: `ThemeProvider`, `useTheme`, `ThemeChoice`
 - Toast: `ToastProvider`, `ToastViewport`, `useToast`, `addToast`, `removeToast`, `ToastMessage`
@@ -58,15 +154,11 @@ npm run test
 npm run verify
 ```
 
-`npm run verify` executes the full quality gate: typecheck, lint, build, and tests.
-
-## Testing
-
-Tests are stored in `tests/` and run with Node test runner after TypeScript compilation via `tsconfig.test.json`.
+`npm run verify` executes typecheck, lint, build, and tests.
 
 ## Publishing
 
-Publishing is done by GitHub Actions on tags matching `v*`.
+Publishing runs from GitHub Actions on tags matching `v*`.
 
 - Workflow: `.github/workflows/publish.yml`
 - Demo deployment workflow: `.github/workflows/deploy-demo.yml`

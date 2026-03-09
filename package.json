@@ -1,6 +1,6 @@
 {
   "name": "@jankrajewskiit/ui",
-  "version": "0.1.7",
+  "version": "0.2.0",
   "type": "module",
   "license": "MIT",
   "repository": {
@@ -20,7 +20,17 @@
     "./prettier-config": "./config/prettier.json",
     "./tsconfig/app": "./config/tsconfig.app.json",
     "./tsconfig/node": "./config/tsconfig.node.json",
-    "./vite-config": "./config/vite.mjs"
+    "./tsconfig/app-vite": "./config/tsconfig.app-vite.json",
+    "./tsconfig/node-vite": "./config/tsconfig.node-vite.json",
+    "./vite-config": {
+      "types": "./config/vite.d.mts",
+      "import": "./config/vite.mjs"
+    },
+    "./lint-staged-config": {
+      "types": "./config/lint-staged.d.mts",
+      "import": "./config/lint-staged.mjs"
+    },
+    "./husky/pre-commit": "./config/husky-pre-commit.sh"
   },
   "types": "./dist/index.d.ts",
   "sideEffects": [
@@ -43,15 +53,6 @@
     "test": "tsc -p tsconfig.test.json && node --test .tmp-tests/tests/**/*.test.js",
     "verify": "npm run typecheck && npm run lint && npm run build && npm run test",
     "prepare": "husky"
-  },
-  "lint-staged": {
-    "*.{ts,tsx}": [
-      "eslint --fix --no-warn-ignored",
-      "prettier --write"
-    ],
-    "*.{css,json,md}": [
-      "prettier --write"
-    ]
   },
   "peerDependencies": {
     "@solidjs/router": ">=0.15",
