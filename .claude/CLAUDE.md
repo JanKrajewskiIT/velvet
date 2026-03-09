@@ -1,77 +1,54 @@
-# CLAUDE.md — VelvetUi
+# VelvetUi
 
-Shared SolidJS UI component library published as `@jankrajewskiit/ui` to GitHub Packages. TypeScript, CSS Modules, Vite library build. Peer dependencies: `solid-js >=1.9`, `@solidjs/router >=0.15`.
+Shared SolidJS UI component library published as `@jankrajewskiit/ui` to GitHub Packages.
+TypeScript, CSS Modules, Vite library build. Peers: `solid-js >=1.9`, `@solidjs/router >=0.15`.
 
-## Skills Reference
-
-Load on-demand skills when working on a specific area:
-
-| Command              | When to use                                                                                   |
-| -------------------- | --------------------------------------------------------------------------------------------- |
-| `/solidjs-component` | Creating/modifying SolidJS components (Props, CSS Modules, component inventory, Toast, hooks) |
-| `/library-tooling`   | Vite library build, TypeScript config, ESLint, Prettier, Husky, config presets, publishing    |
-| `/design-tokens`     | CSS custom properties reference — colors, spacing, typography, shadows, z-index, animations   |
-
-## Build & Publish Commands
+## Commands
 
 ```bash
-npm install                    # install dependencies
-npm run build                  # tsc -b && vite build (outputs dist/)
-npm run typecheck              # tsc -b (typecheck only)
-npm run lint                   # eslint .
-npm run lint:fix               # eslint . --fix
-npm run format                 # prettier --write .
-npm run format:check           # prettier --check .
-npm test                       # Node.js test runner
-npm run verify                 # full pipeline: typecheck + lint + build + test
+npm run verify    # full pipeline: typecheck + lint + build + test
+npm run build     # tsc -b && vite build (dist/)
+npm run typecheck # tsc -b
+npm run lint:fix  # eslint . --fix
+npm run format    # prettier --write .
+npm test          # Node.js test runner
 ```
 
-### Pre-commit Checklist
+Pre-commit: `npm run verify`
 
-Always run before committing: `npm run verify`
+## Git
 
-### Publishing
+Branch from `main`, conventional commits: `feat:`, `fix:`, `refactor:`, `docs:`
+Published to GitHub Packages via GitHub Actions on push to `main`.
 
-Published to GitHub Packages via GitHub Actions on push to `main`. Version set in `package.json`. Consumers authenticate with `NODE_AUTH_TOKEN` (`read:packages` scope).
-
-## Git Conventions
-
-Branch from `main`, use conventional commits: `feat:`, `fix:`, `refactor:`, `docs:`
-
-## Project Structure
+## Structure
 
 ```
 src/
-├── components/
-│   ├── actions-and-forms/   # ActionRow, Button, Checkbox, Input, Select, etc. (19)
-│   ├── data-display/        # Accordion, Table, ScoreRing, RadarChart, etc. (9)
-│   ├── feedback-and-states/ # Chip, Spinner, Toast, Skeleton, StatCard, etc. (11)
-│   ├── layouts/             # Footer, MainLayout, Navbar
-│   ├── overlays/            # Dialog, Drawer, Tooltip, ConfirmDialog, ConfirmAction (6)
-│   └── workflows/           # AiResultPanel, Wizard, Tabs, FileDropZone, etc. (10)
-├── hooks/
-│   ├── useClickOutside.ts
-│   └── useEscapeKey.ts
-├── models/
-│   └── Props.ts             # Props<T> utility type
-├── theme/
-│   ├── globals.css          # CSS custom properties (design tokens)
-│   └── ThemeProvider.tsx
-├── utils/
-│   ├── color.ts             # getContrastTextColor
-│   └── form.ts              # orEmpty, numberToString, emptyToNull, parseFloatOrNull
-└── index.ts                 # Public API barrel export
+  components/
+    actions-and-forms/   # ActionRow, Button, Checkbox, Input, Select... (19)
+    data-display/        # Accordion, Table, ScoreRing, RadarChart... (9)
+    feedback-and-states/ # Chip, Spinner, Toast, Skeleton, StatCard... (11)
+    layouts/             # Footer, MainLayout, Navbar (3)
+    overlays/            # Dialog, Drawer, Tooltip, ConfirmDialog... (6)
+    workflows/           # AiResultPanel, Wizard, Tabs, FileDropZone... (10)
+  hooks/                 # useClickOutside, useEscapeKey
+  models/Props.ts        # Props<T> = T & { class?: string }
+  theme/globals.css      # CSS custom properties (design tokens)
+  theme/ThemeProvider.tsx # light/dark/system theme context
+  utils/                 # color.ts, form.ts
+  index.ts               # barrel export (public API)
+config/                  # shared tooling presets exported as sub-paths
+demo/                    # local dev app (file:.. link)
 ```
 
 ## Design Principles
 
-- Components are **generic and app-agnostic** — no i18n calls, no auth calls, no app-specific logic
-- All user-facing text is passed via **props** — consumers resolve translations at the call site
-- Layout components use **JSX slots** (`navbar?`, `footer?`, `actions?`, `logo?`) for composition
-- Every component accepts `class?: string` via the `Props<T>` utility type
+- Components are generic and app-agnostic -- no i18n, auth, or app-specific logic
+- All user-facing text via props -- consumers resolve translations
+- Layout components use JSX slots for composition
+- Every component accepts `class?: string` via `Props<T>`
 
 ## Code Style
 
-- Code is self-documenting — no comments in frontend code
-- No commented-out code
-- No `eslint-disable` directives
+- Self-documenting code -- no comments, no commented-out code, no `eslint-disable`

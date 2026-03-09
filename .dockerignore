@@ -1,0 +1,10 @@
+node_modules
+demo/node_modules
+dist
+.tmp-tests
+.env
+*.md
+.git
+.vscode
+.claude
+.husky

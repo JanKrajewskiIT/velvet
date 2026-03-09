@@ -2,12 +2,23 @@ name: Deploy Demo
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: velvet-demo
 
 jobs:
-  deploy:
+  # ==================
+  # Verify library
+  # ==================
+  verify:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
 
     steps:
       - uses: actions/checkout@v4
@@ -26,42 +37,119 @@ jobs:
       - name: Verify library
         run: npm run verify
 
-      - name: Install demo dependencies
-        run: npm ci
-        working-directory: demo
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  # ==================
+  # Build & Push Docker image
+  # ==================
+  publish:
+    needs: verify
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      image_tag: ${{ github.sha }}
+      owner_lc: ${{ steps.vars.outputs.owner_lc }}
 
-      - name: Build demo
-        run: npm run build
-        working-directory: demo
+    steps:
+      - uses: actions/checkout@v4
 
-      - name: Validate FTP secrets
-        shell: bash
-        env:
-          FTP_SERVER: ${{ secrets.FTP_SERVER }}
-          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
-          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-          FTP_SERVER_DIR: ${{ secrets.FTP_SERVER_DIR }}
-        run: |
-          missing=()
-          [[ -z "$FTP_SERVER" ]] && missing+=("FTP_SERVER")
-          [[ -z "$FTP_USERNAME" ]] && missing+=("FTP_USERNAME")
-          [[ -z "$FTP_PASSWORD" ]] && missing+=("FTP_PASSWORD")
-          [[ -z "$FTP_SERVER_DIR" ]] && missing+=("FTP_SERVER_DIR")
+      - name: Set variables
+        id: vars
+        run: echo "owner_lc=${GITHUB_REPOSITORY_OWNER,,}" >> $GITHUB_OUTPUT
 
-          if (( ${#missing[@]} )); then
-            echo "Missing required repository secrets: ${missing[*]}"
-            echo "Set them in Settings > Secrets and variables > Actions."
-            exit 1
-          fi
-
-      - name: Deploy to Hostinger via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      - name: Log in to Container Registry
+        uses: docker/login-action@v3
         with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./demo/dist/
-          server-dir: ${{ secrets.FTP_SERVER_DIR }}
-          dangerous-clean-slate: true
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push demo image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: demo/Dockerfile
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ steps.vars.outputs.owner_lc }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ steps.vars.outputs.owner_lc }}/${{ env.IMAGE_NAME }}:latest
+          secrets: |
+            github_token=${{ secrets.GITHUB_TOKEN }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ==================
+  # Deploy to VPS
+  # ==================
+  deploy:
+    needs: publish
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      IMAGE_TAG: ${{ needs.publish.outputs.image_tag }}
+      OWNER_LC: ${{ needs.publish.outputs.owner_lc }}
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          REGISTRY: ghcr.io
+          OWNER_LC: ${{ env.OWNER_LC }}
+          IMAGE_TAG: ${{ env.IMAGE_TAG }}
+          IMAGE_NAME: velvet-demo
+          CONTAINER_NAME: velvet-demo
+          GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          envs: REGISTRY,OWNER_LC,IMAGE_TAG,IMAGE_NAME,CONTAINER_NAME,GHCR_TOKEN
+          script: |
+            set -euo pipefail
+
+            IMAGE="${REGISTRY}/${OWNER_LC}/${IMAGE_NAME}"
+
+            # Login and pull the new image
+            echo "${GHCR_TOKEN}" | docker login ghcr.io -u "${OWNER_LC}" --password-stdin
+            docker pull "${IMAGE}:${IMAGE_TAG}"
+
+            # Stop and remove existing container (if any)
+            docker stop "${CONTAINER_NAME}" 2>/dev/null || true
+            docker rm "${CONTAINER_NAME}" 2>/dev/null || true
+
+            # Start new container
+            docker run -d \
+              --name "${CONTAINER_NAME}" \
+              --restart unless-stopped \
+              -p 3100:3000 \
+              "${IMAGE}:${IMAGE_TAG}"
+
+            # Cleanup old images
+            docker image prune -f
+
+            echo "Deployed ${IMAGE}:${IMAGE_TAG}"
+
+      - name: Smoke test
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -euo pipefail
+
+            echo "Waiting for container to start..."
+            sleep 5
+
+            echo "Checking container health..."
+            docker ps --filter "name=velvet-demo" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+
+            echo "Checking if demo is reachable..."
+            curl -sf --max-time 10 http://localhost:3100/ > /dev/null && echo "Demo: OK" || echo "WARNING: Demo not reachable on port 3100"
+
+            echo "Smoke test completed."
