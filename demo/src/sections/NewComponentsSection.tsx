@@ -71,7 +71,9 @@ const NewComponentsSection = () => {
             confirmLabel="Run"
             cancelLabel="Cancel"
             variant="danger"
-            onConfirm={() => setConfirmRuns((current) => current + 1)}
+            onConfirm={() => {
+              setConfirmRuns((current) => current + 1);
+            }}
           >
             {({ openConfirm, isConfirmOpen }) => (
               <div class="row">
@@ -211,11 +213,11 @@ const NewComponentsSection = () => {
           <Show when={redirectRun()} keyed>
             {(runId) => (
               <AuthRedirect
-                onRedirect={() =>
+                onRedirect={() => {
                   setRedirectLog(
                     `AuthRedirect onMount #${String(runId)} at ${new Date().toLocaleTimeString()}`
-                  )
-                }
+                  );
+                }}
                 fallback={
                   <p class="mutedText">
                     Running redirect side-effect #{String(runId)}...
