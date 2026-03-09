@@ -1,7 +1,14 @@
 import { FiX } from 'solid-icons/fi';
-import { createSignal, type JSX, onMount, Show } from 'solid-js';
+import {
+  createEffect,
+  createSignal,
+  createUniqueId,
+  type JSX,
+  Show,
+} from 'solid-js';
 import { Portal } from 'solid-js/web';
 
+import useEscapeKey from '../../../hooks/useEscapeKey';
 import type Props from '../../../models/Props';
 import IconButton from '../IconButton/IconButton';
 import styles from './Drawer.module.css';
@@ -17,8 +24,22 @@ interface DrawerProps {
 
 const Drawer = (props: Props<DrawerProps>) => {
   const [entered, setEntered] = createSignal(false);
+  const titleId = createUniqueId();
 
-  onMount(() => {
+  useEscapeKey(() => props.open, props.onClose);
+
+  createEffect(() => {
+    if (!props.open) {
+      setEntered(false);
+      return;
+    }
+
+    if (typeof window === 'undefined') {
+      setEntered(true);
+      return;
+    }
+
+    setEntered(false);
     requestAnimationFrame(() => setEntered(true));
   });
 
@@ -27,19 +48,20 @@ const Drawer = (props: Props<DrawerProps>) => {
       <Portal>
         <div
           class={`${styles.overlay} ${entered() ? styles.overlayVisible : ''}`}
-          role="button"
-          tabIndex={-1}
+          aria-hidden="true"
           onClick={() => props.onClose()}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') props.onClose();
-          }}
         />
         <div
           class={`${styles.drawer} ${entered() ? styles.drawerVisible : ''} ${props.class ?? ''}`}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={titleId}
         >
           <div class={styles.header}>
             <div class={styles.titleBlock}>
-              <h2 class={styles.name}>{props.title}</h2>
+              <h2 id={titleId} class={styles.name}>
+                {props.title}
+              </h2>
               <Show when={props.subtitle}>
                 <p class={styles.subtitle}>{props.subtitle}</p>
               </Show>

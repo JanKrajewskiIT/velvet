@@ -36,7 +36,12 @@ export default defineConfig({
       formats: ['es', 'umd'],
     },
     rollupOptions: {
-      external: ['solid-js', 'solid-js/web', 'solid-js/store', '@solidjs/router'],
+      external: [
+        'solid-js',
+        'solid-js/web',
+        'solid-js/store',
+        '@solidjs/router',
+      ],
       output: {
         globals: {
           'solid-js': 'SolidJS',

@@ -1,4 +1,4 @@
-import { createSignal, type JSX, Show } from 'solid-js';
+import { createSignal, createUniqueId, type JSX, Show } from 'solid-js';
 
 import useClickOutside from '../../../hooks/useClickOutside';
 import useEscapeKey from '../../../hooks/useEscapeKey';
@@ -19,8 +19,10 @@ function getMenuItems(menu: HTMLElement): HTMLButtonElement[] {
 
 const DropdownMenu = (props: Props<DropdownMenuProps>) => {
   const [open, setOpen] = createSignal(false);
+  const menuId = createUniqueId();
   let menuRef: HTMLDivElement | undefined;
   let panelRef: HTMLDivElement | undefined;
+  let triggerRef: HTMLDivElement | undefined;
 
   const close = (): void => {
     setOpen(false);
@@ -33,17 +35,22 @@ const DropdownMenu = (props: Props<DropdownMenuProps>) => {
     close
   );
 
+  const openAndFocusFirst = () => {
+    setOpen(true);
+    requestAnimationFrame(() => {
+      if (panelRef) {
+        const items = getMenuItems(panelRef);
+        items[0]?.focus();
+      }
+    });
+  };
+
   const toggle = () => {
-    const wasOpen = open();
-    setOpen(!wasOpen);
-    if (!wasOpen) {
-      requestAnimationFrame(() => {
-        if (panelRef) {
-          const items = getMenuItems(panelRef);
-          items[0]?.focus();
-        }
-      });
+    if (open()) {
+      close();
+      return;
     }
+    openAndFocusFirst();
   };
 
   const handleMenuKeyDown = (e: KeyboardEvent) => {
@@ -75,6 +82,12 @@ const DropdownMenu = (props: Props<DropdownMenuProps>) => {
         items[items.length - 1]?.focus();
         break;
       }
+      case 'Escape': {
+        e.preventDefault();
+        close();
+        triggerRef?.focus();
+        break;
+      }
       case 'Tab': {
         close();
         break;
@@ -84,22 +97,37 @@ const DropdownMenu = (props: Props<DropdownMenuProps>) => {
 
   return (
     <div ref={menuRef} class={`${styles.wrapper} ${props.class ?? ''}`}>
-      <button
-        type="button"
+      <div
+        ref={triggerRef}
         class={styles.trigger}
+        role="button"
+        tabIndex={0}
         onClick={toggle}
-        aria-haspopup="true"
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggle();
+            return;
+          }
+          if (e.key === 'ArrowDown' && !open()) {
+            e.preventDefault();
+            openAndFocusFirst();
+          }
+        }}
+        aria-haspopup="menu"
         aria-expanded={open()}
+        aria-controls={open() ? menuId : undefined}
         aria-label={props.label}
       >
         {props.trigger}
-      </button>
+      </div>
       <Show when={open()}>
         <div
           ref={panelRef}
+          id={menuId}
           class={styles.menu}
           role="menu"
-          tabindex={-1}
+          tabIndex={-1}
           onKeyDown={handleMenuKeyDown}
           onClick={() => {
             setOpen(false);

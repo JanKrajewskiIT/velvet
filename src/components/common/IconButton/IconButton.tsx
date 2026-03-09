@@ -1,25 +1,34 @@
-import type { JSX } from 'solid-js';
+import { type JSX, splitProps } from 'solid-js';
 
-import type Props from '../../../models/Props';
 import styles from './IconButton.module.css';
 
-interface IconButtonProps {
+export interface IconButtonProps extends Omit<
+  JSX.ButtonHTMLAttributes<HTMLButtonElement>,
+  'children' | 'title'
+> {
   icon: JSX.Element;
   title: string;
-  onClick?: () => void;
   size?: 'sm' | 'md';
 }
 
-const IconButton = (props: Props<IconButtonProps>) => {
+const IconButton = (props: IconButtonProps) => {
+  const [local, rest] = splitProps(props, [
+    'icon',
+    'title',
+    'size',
+    'class',
+    'type',
+  ]);
+
   return (
     <button
-      type="button"
-      class={`${styles.iconButton} ${props.size === 'sm' ? styles.sm : ''} ${props.class ?? ''}`}
-      title={props.title}
-      aria-label={props.title}
-      onClick={() => props.onClick?.()}
+      {...rest}
+      type={local.type ?? 'button'}
+      class={`${styles.iconButton} ${local.size === 'sm' ? styles.sm : ''} ${local.class ?? ''}`}
+      title={local.title}
+      aria-label={local.title}
     >
-      {props.icon}
+      {local.icon}
     </button>
   );
 };

@@ -39,10 +39,10 @@ const polarToCartesian = (angle: number, radius: number, center: number) => ({
 });
 
 const RadarChart = (props: Props<RadarChartProps>) => {
-  const chartSize = () => props.size ?? DEFAULT_SIZE;
-  const center = () => chartSize() / 2;
-  const radius = () => chartSize() * RADIUS_RATIO;
-  const angleStep = () => (2 * Math.PI) / props.axes.length;
+  const chartSize = createMemo(() => props.size ?? DEFAULT_SIZE);
+  const center = createMemo(() => chartSize() / 2);
+  const radius = createMemo(() => chartSize() * RADIUS_RATIO);
+  const angleStep = createMemo(() => (2 * Math.PI) / props.axes.length);
 
   const gridLevels = createMemo(() =>
     Array.from({ length: LEVELS }, (_, i) => {

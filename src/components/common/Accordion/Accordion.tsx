@@ -1,5 +1,5 @@
 import { FiChevronDown } from 'solid-icons/fi';
-import { createMemo, createSignal, JSX, splitProps } from 'solid-js';
+import { createMemo, createSignal, type JSX, splitProps } from 'solid-js';
 
 import styles from './Accordion.module.css';
 

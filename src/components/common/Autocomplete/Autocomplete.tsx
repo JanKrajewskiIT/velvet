@@ -1,5 +1,5 @@
 import { IoCloseOutline } from 'solid-icons/io';
-import { createSignal, For, Show } from 'solid-js';
+import { createMemo, createSignal, For, Show } from 'solid-js';
 
 import type Props from '../../../models/Props';
 import Input from '../Input/Input';
@@ -17,12 +17,12 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
   const [inputValue, setInputValue] = createSignal('');
   const [showDropdown, setShowDropdown] = createSignal(false);
 
-  const filteredOptions = () => {
+  const filteredOptions = createMemo(() => {
     const query = inputValue().toLowerCase();
     const available = props.options.filter((r) => !props.values.includes(r));
     if (!query) return available;
     return available.filter((r) => r.toLowerCase().includes(query));
-  };
+  });
 
   const addValue = (value: string) => {
     if (!props.values.includes(value)) {

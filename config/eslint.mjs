@@ -67,5 +67,15 @@ export function createEslintConfig({
         'no-unassigned-vars': 'off',
       },
     },
+    {
+      files: ['tests/**/*.ts'],
+      languageOptions: {
+        parserOptions: {
+          projectService: false,
+          project: ['./tsconfig.test.json'],
+          tsconfigRootDir,
+        },
+      },
+    },
   ]);
 }

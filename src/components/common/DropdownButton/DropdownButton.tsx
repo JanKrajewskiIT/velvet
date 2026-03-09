@@ -33,7 +33,7 @@ const DropdownButton = (props: Props<DropdownButtonProps>) => {
         type="button"
         class={`${styles.trigger} ${styles[props.variant ?? 'ghost']}`}
         onClick={() => setOpen(!open())}
-        aria-haspopup="true"
+        aria-haspopup="menu"
         aria-expanded={open()}
       >
         {props.label}
@@ -45,7 +45,7 @@ const DropdownButton = (props: Props<DropdownButtonProps>) => {
         <div
           class={styles.menu}
           role="menu"
-          tabindex="-1"
+          tabIndex={-1}
           onClick={() => setOpen(false)}
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {

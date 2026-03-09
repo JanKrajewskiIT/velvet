@@ -1,34 +1,41 @@
-import type { JSX } from 'solid-js';
-import { Show } from 'solid-js';
-
-import type Props from '~/models/Props';
+import { type JSX, Show, splitProps } from 'solid-js';
 
 import Spinner from '../Spinner/Spinner';
 import styles from './Button.module.css';
 
-interface ButtonProps {
+export interface ButtonProps extends Omit<
+  JSX.ButtonHTMLAttributes<HTMLButtonElement>,
+  'children'
+> {
   variant?: 'primary' | 'danger' | 'ghost' | 'dashed';
-  onClick?: (e: MouseEvent) => void;
-  disabled?: boolean;
   loading?: boolean;
-  type?: 'button' | 'submit' | 'reset';
   children: JSX.Element;
 }
 
-const Button = (props: Props<ButtonProps>) => {
+const Button = (props: ButtonProps) => {
+  const [local, rest] = splitProps(props, [
+    'variant',
+    'loading',
+    'class',
+    'children',
+    'disabled',
+    'type',
+  ]);
+
   return (
     <button
-      type={props.type ?? 'button'}
-      class={`${styles.button} ${styles[props.variant ?? 'primary']} ${props.loading ? styles.loading : ''} ${props.class ?? ''}`}
-      onClick={(e) => props.onClick?.(e)}
-      disabled={props.disabled ?? props.loading}
+      {...rest}
+      type={local.type ?? 'button'}
+      class={`${styles.button} ${styles[local.variant ?? 'primary']} ${local.loading ? styles.loading : ''} ${local.class ?? ''}`}
+      disabled={Boolean(local.disabled ?? local.loading)}
+      aria-busy={local.loading ? 'true' : undefined}
     >
-      <Show when={props.loading}>
+      <Show when={local.loading}>
         <span class={styles.spinner}>
           <Spinner size="sm" />
         </span>
       </Show>
-      {props.children}
+      {local.children}
     </button>
   );
 };

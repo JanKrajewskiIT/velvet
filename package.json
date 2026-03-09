@@ -40,11 +40,13 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "test": "tsc -p tsconfig.test.json && node --test .tmp-tests/tests/**/*.test.js",
+    "verify": "npm run typecheck && npm run lint && npm run build && npm run test",
     "prepare": "husky"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "eslint --fix",
+      "eslint --fix --no-warn-ignored",
       "prettier --write"
     ],
     "*.{css,json,md}": [
@@ -54,11 +56,6 @@
   "peerDependencies": {
     "@solidjs/router": ">=0.15",
     "solid-js": ">=1.9"
-  },
-  "peerDependenciesMeta": {
-    "@solidjs/router": {
-      "optional": true
-    }
   },
   "dependencies": {
     "dompurify": "^3.3.2",

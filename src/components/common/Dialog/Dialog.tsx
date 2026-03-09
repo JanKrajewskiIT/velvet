@@ -35,11 +35,13 @@ const Dialog = (props: Props<DialogProps>) => {
       }
       el.removeEventListener('click', handleClick);
     }
-  });
 
-  onCleanup(() => {
-    dialogRef?.removeEventListener('click', handleClick);
-    dialogRef?.close();
+    onCleanup(() => {
+      el.removeEventListener('click', handleClick);
+      if (el.open) {
+        el.close();
+      }
+    });
   });
 
   return (

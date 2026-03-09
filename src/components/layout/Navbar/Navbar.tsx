@@ -79,7 +79,7 @@ const Navbar = (props: Props<NavbarProps>) => {
       </div>
 
       <div class={`${styles.mobileOverlay} ${menuOpen() ? styles.open : ''}`}>
-        <nav class={styles.mobileNav}>
+        <nav class={styles.mobileNav} aria-label={props.navLabel}>
           <For each={props.navItems}>
             {(item) => (
               <A href={item.href} class={styles.mobileNavLink}>

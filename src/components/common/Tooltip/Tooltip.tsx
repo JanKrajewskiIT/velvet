@@ -1,4 +1,11 @@
-import { createSignal, JSX, Show, splitProps } from 'solid-js';
+import {
+  createSignal,
+  createUniqueId,
+  type JSX,
+  onCleanup,
+  Show,
+  splitProps,
+} from 'solid-js';
 
 import styles from './Tooltip.module.css';
 
@@ -9,6 +16,7 @@ export interface TooltipProps extends JSX.HTMLAttributes<HTMLDivElement> {
 }
 
 export const Tooltip = (props: TooltipProps) => {
+  const tooltipId = createUniqueId();
   const [local, rest] = splitProps(props, [
     'content',
     'position',
@@ -17,10 +25,15 @@ export const Tooltip = (props: TooltipProps) => {
     'class',
   ]);
   const [isVisible, setIsVisible] = createSignal(false);
-  let timer: number | undefined;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+
+  onCleanup(() => {
+    if (timer) clearTimeout(timer);
+  });
 
   const show = () => {
-    timer = window.setTimeout(() => setIsVisible(true), local.delay || 200);
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(() => setIsVisible(true), local.delay || 200);
   };
 
   const hide = () => {
@@ -35,11 +48,14 @@ export const Tooltip = (props: TooltipProps) => {
       onMouseLeave={hide}
       onFocus={show}
       onBlur={hide}
+      aria-describedby={isVisible() ? tooltipId : undefined}
       {...rest}
     >
       {local.children}
       <Show when={isVisible()}>
         <div
+          id={tooltipId}
+          role="tooltip"
           class={`${styles.tooltipContent} ${styles[local.position || 'top']}`}
         >
           {local.content}

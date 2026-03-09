@@ -12,6 +12,8 @@ export default function useEscapeKey(
   };
 
   createEffect(() => {
+    if (typeof document === 'undefined') return;
+
     if (isActive()) {
       document.addEventListener('keydown', handleKeyDown);
     } else {

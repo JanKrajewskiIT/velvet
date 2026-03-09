@@ -1,4 +1,4 @@
-import { createSignal, For, JSX, splitProps } from 'solid-js';
+import { createSignal, For, type JSX, splitProps } from 'solid-js';
 
 import TagChip from '../TagChip/TagChip';
 import styles from './TagInput.module.css';

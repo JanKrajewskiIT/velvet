@@ -1,4 +1,4 @@
-import { createSignal, JSX, splitProps } from 'solid-js';
+import { createMemo, createSignal, type JSX, splitProps } from 'solid-js';
 
 import styles from './FlipCard.module.css';
 
@@ -23,8 +23,9 @@ export const FlipCard = (props: FlipCardProps) => {
   ]);
   const [internalFlipped, setInternalFlipped] = createSignal(false);
 
-  const isFlipped = () =>
-    local.isFlipped !== undefined ? local.isFlipped : internalFlipped();
+  const isFlipped = createMemo(() =>
+    local.isFlipped !== undefined ? local.isFlipped : internalFlipped()
+  );
 
   const handleFlip = () => {
     const newValue = !isFlipped();

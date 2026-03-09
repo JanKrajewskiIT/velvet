@@ -6,7 +6,7 @@ export default function useClickOutside(
   isActive: Accessor<boolean>,
   onClickOutside: () => void
 ): void {
-  const handleClick = (e: MouseEvent): void => {
+  const handleClick = (e: PointerEvent): void => {
     const el = ref();
     if (el && !el.contains(e.target as Node)) {
       onClickOutside();
@@ -14,14 +14,16 @@ export default function useClickOutside(
   };
 
   createEffect(() => {
+    if (typeof document === 'undefined') return;
+
     if (isActive()) {
-      document.addEventListener('mousedown', handleClick);
+      document.addEventListener('pointerdown', handleClick);
     } else {
-      document.removeEventListener('mousedown', handleClick);
+      document.removeEventListener('pointerdown', handleClick);
     }
 
     onCleanup(() => {
-      document.removeEventListener('mousedown', handleClick);
+      document.removeEventListener('pointerdown', handleClick);
     });
   });
 }

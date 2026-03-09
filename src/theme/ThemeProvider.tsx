@@ -80,13 +80,17 @@ const ThemeProvider = (props: ThemeProviderProps) => {
 
   createEffect(() => {
     const current = theme();
-    localStorage.setItem(storageKey(), current);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(storageKey(), current);
+    }
     applyTheme(resolved());
   });
 
-  requestAnimationFrame(() => {
-    document.body.classList.add('transitions-ready');
-  });
+  if (typeof window !== 'undefined') {
+    requestAnimationFrame(() => {
+      document.body.classList.add('transitions-ready');
+    });
+  }
 
   const toggleTheme = () => {
     const current = resolved();
