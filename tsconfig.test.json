@@ -4,6 +4,7 @@
     "noEmit": false,
     "outDir": "./.tmp-tests",
     "rootDir": ".",
+    "allowImportingTsExtensions": false,
     "declaration": false,
     "emitDeclarationOnly": false,
     "types": ["node"]
