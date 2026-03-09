@@ -9,6 +9,12 @@ import {
 } from '@jankrajewskiit/ui';
 import { createSignal } from 'solid-js';
 
+import {
+  PreviewPanel,
+  ShowcaseMeta,
+  ShowcaseSection,
+} from '../components/ShowcaseSection';
+
 const OverlaysSection = () => {
   const [dialogOpen, setDialogOpen] = createSignal(false);
   const [confirmOpen, setConfirmOpen] = createSignal(false);
@@ -16,23 +22,23 @@ const OverlaysSection = () => {
 
   return (
     <div>
-      <div class="section">
-        <h2 class="sectionTitle">Dialog</h2>
-        <div class="previewBox">
+      <ShowcaseSection
+        title="Dialog"
+        subtitle="Native dialog with smooth transitions"
+      >
+        <PreviewPanel>
           <Button variant="primary" onClick={() => setDialogOpen(true)}>
-            Open Dialog
+            Open dialog
           </Button>
-        </div>
+        </PreviewPanel>
 
         <Dialog open={dialogOpen()} onClose={() => setDialogOpen(false)}>
-          <DialogTitle>Example Dialog</DialogTitle>
+          <DialogTitle>Example dialog</DialogTitle>
           <DialogBody>
-            <p style={{ margin: 0, color: 'var(--color-text-muted)' }}>
-              This is a modal dialog built with the native{' '}
-              <code style={{ 'font-size': 'var(--font-size-sm)' }}>
-                &lt;dialog&gt;
-              </code>{' '}
-              element. It supports Escape and backdrop click to close.
+            <p class="mutedText">
+              This modal is built on the{' '}
+              <span class="codeInline">&lt;dialog&gt;</span> element and closes
+              on Escape or backdrop click.
             </p>
           </DialogBody>
           <DialogActions>
@@ -44,15 +50,17 @@ const OverlaysSection = () => {
             </Button>
           </DialogActions>
         </Dialog>
-      </div>
+      </ShowcaseSection>
 
-      <div class="section">
-        <h2 class="sectionTitle">ConfirmDialog</h2>
-        <div class="previewBox">
+      <ShowcaseSection
+        title="ConfirmDialog"
+        subtitle="Preconfigured danger confirmation flow"
+      >
+        <PreviewPanel>
           <Button variant="danger" onClick={() => setConfirmOpen(true)}>
             Delete item
           </Button>
-        </div>
+        </PreviewPanel>
 
         <ConfirmDialog
           open={confirmOpen()}
@@ -64,15 +72,17 @@ const OverlaysSection = () => {
           onConfirm={() => setConfirmOpen(false)}
           onClose={() => setConfirmOpen(false)}
         />
-      </div>
+      </ShowcaseSection>
 
-      <div class="section">
-        <h2 class="sectionTitle">Drawer</h2>
-        <div class="previewBox">
+      <ShowcaseSection
+        title="Drawer"
+        subtitle="Slide-in side panel for secondary workflows"
+      >
+        <PreviewPanel>
           <Button variant="ghost" onClick={() => setDrawerOpen(true)}>
-            Open Drawer
+            Open drawer
           </Button>
-        </div>
+        </PreviewPanel>
 
         <Drawer
           open={drawerOpen()}
@@ -80,16 +90,28 @@ const OverlaysSection = () => {
           title="Settings"
           subtitle="Adjust your preferences"
           closeLabel="Close settings drawer"
+          actions={
+            <>
+              <Button variant="ghost" onClick={() => setDrawerOpen(false)}>
+                Cancel
+              </Button>
+              <Button variant="primary" onClick={() => setDrawerOpen(false)}>
+                Save changes
+              </Button>
+            </>
+          }
         >
-          <p style={{ color: 'var(--color-text-muted)', 'line-height': '1.6' }}>
-            Drawer content goes here. Useful for settings panels, detail views,
-            or side forms.
+          <p class="mutedText">
+            Drawer content goes here. It works well for settings panels,
+            side-by-side forms and detail views.
           </p>
-          <Button variant="primary" onClick={() => setDrawerOpen(false)}>
-            Save changes
-          </Button>
         </Drawer>
-      </div>
+
+        <ShowcaseMeta>
+          Dialogs and drawers reuse button styles, spacing tokens and transition
+          curves for a consistent feel.
+        </ShowcaseMeta>
+      </ShowcaseSection>
     </div>
   );
 };

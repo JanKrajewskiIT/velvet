@@ -19,7 +19,8 @@ interface DrawerProps {
   closeLabel: string;
   title: JSX.Element;
   subtitle?: JSX.Element;
-  children: JSX.Element;
+  children?: JSX.Element;
+  actions?: JSX.Element;
 }
 
 const Drawer = (props: Props<DrawerProps>) => {
@@ -72,7 +73,14 @@ const Drawer = (props: Props<DrawerProps>) => {
               onClick={() => props.onClose()}
             />
           </div>
-          <div class={styles.body}>{props.children}</div>
+
+          <Show when={props.children}>
+            <div class={styles.body}>{props.children}</div>
+          </Show>
+
+          <Show when={props.actions}>
+            <div class={styles.footer}>{props.actions}</div>
+          </Show>
         </div>
       </Portal>
     </Show>

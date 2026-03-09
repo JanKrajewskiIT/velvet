@@ -1,30 +1,44 @@
-import { Button, IconButton, Spinner, Tooltip } from '@jankrajewskiit/ui';
+import {
+  ActionRow,
+  Button,
+  IconButton,
+  LocaleSwitcher,
+  Spinner,
+  Tooltip,
+} from '@jankrajewskiit/ui';
 import { IoAdd, IoClose, IoDownload, IoPencil, IoTrash } from 'solid-icons/io';
 import { createSignal } from 'solid-js';
 
+import {
+  PreviewPanel,
+  ShowcaseMeta,
+  ShowcaseSection,
+} from '../components/ShowcaseSection';
+
 const ActionsSection = () => {
   const [loading, setLoading] = createSignal(false);
+  const [locale, setLocale] = createSignal<'EN' | 'PL'>('EN');
 
   const simulateLoad = () => {
     setLoading(true);
-    setTimeout(() => setLoading(false), 2000);
+    setTimeout(() => setLoading(false), 1400);
   };
 
   return (
     <div>
-      <div class="section">
-        <h2 class="sectionTitle">Button - variants</h2>
-        <div class="previewBox">
+      <ShowcaseSection
+        title="Button variants"
+        subtitle="Primary actions, danger actions and low-emphasis controls"
+      >
+        <PreviewPanel>
           <div class="row">
             <Button variant="primary">Primary</Button>
             <Button variant="danger">Danger</Button>
             <Button variant="ghost">Ghost</Button>
             <Button variant="dashed">Dashed</Button>
           </div>
-        </div>
-
-        <h2 class="sectionTitle">Button - states</h2>
-        <div class="previewBox">
+        </PreviewPanel>
+        <PreviewPanel>
           <div class="row">
             <Button variant="primary" disabled>
               Disabled
@@ -37,12 +51,14 @@ const ActionsSection = () => {
               {loading() ? 'Saving...' : 'Click to load'}
             </Button>
           </div>
-        </div>
-      </div>
+        </PreviewPanel>
+      </ShowcaseSection>
 
-      <div class="section">
-        <h2 class="sectionTitle">IconButton</h2>
-        <div class="previewBox">
+      <ShowcaseSection
+        title="IconButton"
+        subtitle="Compact controls for dense interfaces"
+      >
+        <PreviewPanel>
           <div class="row">
             <IconButton icon={<IoPencil />} title="Edit" />
             <IconButton icon={<IoTrash />} title="Delete" />
@@ -50,12 +66,14 @@ const ActionsSection = () => {
             <IconButton icon={<IoDownload />} title="Download" size="md" />
             <IconButton icon={<IoClose />} title="Close" disabled />
           </div>
-        </div>
-      </div>
+        </PreviewPanel>
+      </ShowcaseSection>
 
-      <div class="section">
-        <h2 class="sectionTitle">Tooltip</h2>
-        <div class="previewBox">
+      <ShowcaseSection
+        title="Tooltip"
+        subtitle="Contextual hints around interactive elements"
+      >
+        <PreviewPanel>
           <div class="row">
             <Tooltip content="Tooltip on top" position="top">
               <Button variant="ghost">Top</Button>
@@ -70,19 +88,47 @@ const ActionsSection = () => {
               <Button variant="ghost">Right</Button>
             </Tooltip>
           </div>
-        </div>
-      </div>
+        </PreviewPanel>
+      </ShowcaseSection>
 
-      <div class="section">
-        <h2 class="sectionTitle">Spinner</h2>
-        <div class="previewBox">
+      <ShowcaseSection
+        title="ActionRow and LocaleSwitcher"
+        subtitle="Reusable helper components for action bars"
+      >
+        <PreviewPanel class="col">
+          <ActionRow align="start">
+            <Button variant="primary">Create</Button>
+            <Button variant="ghost">Preview</Button>
+            <Button variant="dashed">Duplicate</Button>
+          </ActionRow>
+
+          <ActionRow align="end">
+            <LocaleSwitcher
+              label={locale()}
+              switchLabel="Switch locale"
+              onSwitch={() =>
+                setLocale((current) => (current === 'EN' ? 'PL' : 'EN'))
+              }
+            />
+          </ActionRow>
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection
+        title="Spinner"
+        subtitle="Progress indicators in multiple sizes"
+      >
+        <PreviewPanel>
           <div class="row">
             <Spinner size="sm" label="Small spinner" />
             <Spinner size="md" label="Medium spinner" />
             <Spinner size="lg" label="Large spinner" />
           </div>
-        </div>
-      </div>
+        </PreviewPanel>
+        <ShowcaseMeta>
+          Spinners inherit brand colors and support reduced-motion preferences.
+        </ShowcaseMeta>
+      </ShowcaseSection>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { ThemeProvider, ThemeToggle, ToastProvider } from '@jankrajewskiit/ui';
+﻿import { ThemeProvider, ThemeToggle, ToastProvider } from '@jankrajewskiit/ui';
 import { createSignal, For, Match, Switch } from 'solid-js';
 
 import ActionsSection from './sections/ActionsSection';
@@ -7,9 +7,11 @@ import DataDisplaySection from './sections/DataDisplaySection';
 import FeedbackSection from './sections/FeedbackSection';
 import InputsSection from './sections/InputsSection';
 import OverlaysSection from './sections/OverlaysSection';
+import OverviewSection from './sections/OverviewSection';
 import StatesSection from './sections/StatesSection';
 
 type SectionId =
+  | 'overview'
   | 'actions'
   | 'inputs'
   | 'feedback'
@@ -25,71 +27,81 @@ interface NavGroup {
 
 const NAV_GROUPS: NavGroup[] = [
   {
+    label: 'Start',
+    items: [{ id: 'overview', label: 'Overview and Installation' }],
+  },
+  {
     label: 'Primitives',
     items: [
-      { id: 'actions', label: 'Actions & Tooltips' },
-      { id: 'inputs', label: 'Inputs & Forms' },
+      { id: 'actions', label: 'Actions and Tooltips' },
+      { id: 'inputs', label: 'Inputs and Forms' },
     ],
   },
   {
     label: 'Feedback',
     items: [
-      { id: 'feedback', label: 'Chips, Stats & Toast' },
-      { id: 'states', label: 'States & Errors' },
+      { id: 'feedback', label: 'Chips, Stats and Toast' },
+      { id: 'states', label: 'States and Errors' },
     ],
   },
   {
     label: 'Overlays',
-    items: [{ id: 'overlays', label: 'Dialog & Drawer' }],
+    items: [{ id: 'overlays', label: 'Dialog and Drawer' }],
   },
   {
     label: 'Data',
-    items: [{ id: 'data', label: 'Tables, Charts & More' }],
+    items: [{ id: 'data', label: 'Tables, Charts and More' }],
   },
   {
     label: 'Complex',
-    items: [{ id: 'complex', label: 'Wizard, FlipCard & Files' }],
+    items: [{ id: 'complex', label: 'Wizard, AI and Files' }],
   },
 ];
 
 const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
+  overview: {
+    title: 'VelvetUI Overview',
+    description:
+      'Start here for installation, library goals and a quick snapshot of what is included.',
+  },
   actions: {
-    title: 'Actions & Tooltips',
-    description: 'Button variants, icon buttons, tooltips and spinners.',
+    title: 'Actions and Tooltips',
+    description:
+      'Buttons, icon buttons, tooltips, locale switcher and action rows.',
   },
   inputs: {
-    title: 'Inputs & Forms',
+    title: 'Inputs and Forms',
     description:
       'Text inputs, selects, autocomplete, tag input, checkbox, switch, radio group, color picker and form layout components.',
   },
   feedback: {
-    title: 'Chips, Stats & Toast',
+    title: 'Chips, Stats and Toast',
     description:
       'Status chips, tag chips, stat cards, skeleton loaders and toast notifications.',
   },
   overlays: {
-    title: 'Dialog & Drawer',
+    title: 'Dialog and Drawer',
     description: 'Modal dialogs, confirm dialogs and slide-in drawers.',
   },
   data: {
-    title: 'Tables, Charts & More',
+    title: 'Tables, Charts and More',
     description:
       'Tabs, accordion, section cards, tables, pagination, stepper, timeline, score ring, radar chart, JSON display and Markdown renderer.',
   },
   complex: {
-    title: 'Wizard, FlipCard & Files',
+    title: 'Wizard, AI and Files',
     description:
-      'Multi-step wizard, flip cards and drag-and-drop file drop zone.',
+      'Multi-step wizard, AI result panel, markdown editing, flip cards and drag-and-drop files.',
   },
   states: {
-    title: 'States & Errors',
+    title: 'States and Errors',
     description:
       'Loading containers, empty states, error messages and error fallback pages.',
   },
 };
 
 const AppContent = () => {
-  const [activeSection, setActiveSection] = createSignal<SectionId>('actions');
+  const [activeSection, setActiveSection] = createSignal<SectionId>('overview');
 
   const meta = () => PAGE_TITLES[activeSection()];
 
@@ -97,8 +109,9 @@ const AppContent = () => {
     <div class="layout">
       <nav class="sidebar" aria-label="Component categories">
         <div class="sidebarLogo">
+          <span class="sidebarBadge">VelvetUi library</span>
           <p class="sidebarTitle">VelvetUI</p>
-          <p class="sidebarSubtitle">Component showcase</p>
+          <p class="sidebarSubtitle">Modern SolidJS component showcase</p>
         </div>
 
         <For each={NAV_GROUPS}>
@@ -123,11 +136,15 @@ const AppContent = () => {
 
       <main class="main">
         <div class="pageHeader">
+          <p class="pageEyebrow">Component playground</p>
           <h1 class="pageTitle">{meta().title}</h1>
           <p class="pageDescription">{meta().description}</p>
         </div>
 
         <Switch>
+          <Match when={activeSection() === 'overview'}>
+            <OverviewSection />
+          </Match>
           <Match when={activeSection() === 'actions'}>
             <ActionsSection />
           </Match>

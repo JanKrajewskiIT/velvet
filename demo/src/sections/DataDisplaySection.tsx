@@ -19,6 +19,12 @@ import {
 } from '@jankrajewskiit/ui';
 import { createSignal, For } from 'solid-js';
 
+import {
+  PreviewPanel,
+  ShowcaseMeta,
+  ShowcaseSection,
+} from '../components/ShowcaseSection';
+
 const SAMPLE_JSON = {
   id: 1,
   name: 'VelvetUI',
@@ -32,7 +38,7 @@ const TIMELINE_ITEMS = [
     key: '1',
     content: (
       <span>
-        <strong>v0.1.6</strong> - Added Wizard, Stepper, Timeline
+        <strong>v0.1.6</strong> - Added Wizard, Stepper and Timeline
       </span>
     ),
   },
@@ -40,7 +46,7 @@ const TIMELINE_ITEMS = [
     key: '2',
     content: (
       <span>
-        <strong>v0.1.4</strong> - Added Accordion, Drawer, Tooltip
+        <strong>v0.1.4</strong> - Added Accordion, Drawer and Tooltip
       </span>
     ),
   },
@@ -68,7 +74,7 @@ A **SolidJS** component library with:
 
 - CSS Modules theming
 - TypeScript strict mode
-- Dark / light mode support
+- Dark and light mode support
 
 \`\`\`tsx
 import { Button } from '@jankrajewskiit/ui';
@@ -85,9 +91,8 @@ const DataDisplaySection = () => {
 
   return (
     <div>
-      <div class="section">
-        <h2 class="sectionTitle">Tabs</h2>
-        <div class="previewBox">
+      <ShowcaseSection title="Tabs" subtitle="Underline and segmented variants">
+        <PreviewPanel>
           <Tabs<TabValue>
             tabs={[
               { value: 'preview', label: 'Preview' },
@@ -98,15 +103,9 @@ const DataDisplaySection = () => {
             onChange={setTab}
             variant="underline"
           />
-          <div
-            style={{
-              'padding-top': 'var(--spacing-md)',
-              color: 'var(--color-text-muted)',
-              'font-size': 'var(--font-size-sm)',
-            }}
-          >
+          <ShowcaseMeta>
             Active tab: <strong>{tab()}</strong>
-          </div>
+          </ShowcaseMeta>
           <Tabs<TabValue>
             tabs={[
               { value: 'preview', label: 'Preview' },
@@ -117,50 +116,47 @@ const DataDisplaySection = () => {
             onChange={setTab}
             variant="pill"
           />
-        </div>
-      </div>
+        </PreviewPanel>
+      </ShowcaseSection>
 
-      <div class="section">
-        <h2 class="sectionTitle">Accordion</h2>
-        <div class="previewBox">
+      <ShowcaseSection
+        title="Accordion"
+        subtitle="Progressive disclosure for grouped content"
+      >
+        <PreviewPanel>
           <Accordion>
             <AccordionItem title="What is VelvetUI?">
-              <p style={{ margin: 0, color: 'var(--color-text-muted)' }}>
+              <p class="mutedText">
                 VelvetUI is a SolidJS component library built with CSS Modules,
                 TypeScript and Vite.
               </p>
             </AccordionItem>
             <AccordionItem title="How to install?">
-              <code style={{ 'font-size': 'var(--font-size-sm)' }}>
-                npm install @jankrajewskiit/ui
-              </code>
+              <span class="codeInline">npm install @jankrajewskiit/ui</span>
             </AccordionItem>
             <AccordionItem title="Disabled item" disabled>
-              <p style={{ margin: 0 }}>This content is not accessible.</p>
+              <p class="mutedText">This content is not accessible.</p>
             </AccordionItem>
           </Accordion>
-        </div>
-      </div>
+        </PreviewPanel>
+      </ShowcaseSection>
 
-      <div class="section">
-        <h2 class="sectionTitle">SectionCard</h2>
-        <div class="previewBox col">
+      <ShowcaseSection
+        title="SectionCard"
+        subtitle="Collapsible card for grouped settings"
+      >
+        <PreviewPanel class="col">
           <SectionCard title="Details" defaultOpen>
-            <p style={{ margin: 0, color: 'var(--color-text-muted)' }}>
-              Collapsible section card - starts open.
-            </p>
+            <p class="mutedText">Collapsible section card that starts open.</p>
           </SectionCard>
           <SectionCard title="Advanced options">
-            <p style={{ margin: 0, color: 'var(--color-text-muted)' }}>
-              Collapsed by default.
-            </p>
+            <p class="mutedText">Collapsed by default.</p>
           </SectionCard>
-        </div>
-      </div>
+        </PreviewPanel>
+      </ShowcaseSection>
 
-      <div class="section">
-        <h2 class="sectionTitle">Table</h2>
-        <div class="previewBox">
+      <ShowcaseSection title="Table" subtitle="Composable table primitives">
+        <PreviewPanel>
           <Table>
             <TableHead>
               <TableRow>
@@ -187,12 +183,11 @@ const DataDisplaySection = () => {
               </TableRow>
             </TableBody>
           </Table>
-        </div>
-      </div>
+        </PreviewPanel>
+      </ShowcaseSection>
 
-      <div class="section">
-        <h2 class="sectionTitle">Pagination</h2>
-        <div class="previewBox">
+      <ShowcaseSection title="Pagination" subtitle="Navigate large result sets">
+        <PreviewPanel>
           <Pagination
             page={page()}
             totalPages={19}
@@ -201,70 +196,59 @@ const DataDisplaySection = () => {
             nextLabel="Next"
             ariaLabel="Table pages"
           />
-          <p
-            style={{
-              'margin-top': 'var(--spacing-sm)',
-              color: 'var(--color-text-muted)',
-            }}
-          >
+          <ShowcaseMeta>
             Current page: <strong>{page()}</strong>
-          </p>
-        </div>
-      </div>
+          </ShowcaseMeta>
+        </PreviewPanel>
+      </ShowcaseSection>
 
-      <div class="section">
-        <h2 class="sectionTitle">Stepper</h2>
-        <div class="previewBox">
+      <ShowcaseSection
+        title="Stepper"
+        subtitle="Visual progress through ordered steps"
+      >
+        <PreviewPanel>
           <Stepper steps={STEPPER_STEPS} activeStep={activeStep()} />
-          <div class="row" style={{ 'margin-top': 'var(--spacing-md)' }}>
+          <div class="stepButtons">
             <For each={STEPPER_STEPS}>
               {(s) => (
                 <button
                   type="button"
+                  class={`miniButton${activeStep() === s.value ? ' miniButtonActive' : ''}`}
                   onClick={() => setActiveStep(s.value)}
-                  style={{
-                    padding: '4px 10px',
-                    'border-radius': 'var(--radius-sm)',
-                    border: '1px solid var(--color-border)',
-                    background:
-                      activeStep() === s.value
-                        ? 'var(--color-primary-light)'
-                        : 'transparent',
-                    color: 'var(--color-text)',
-                    cursor: 'pointer',
-                    'font-size': 'var(--font-size-sm)',
-                  }}
                 >
                   {s.label}
                 </button>
               )}
             </For>
           </div>
-        </div>
-      </div>
+        </PreviewPanel>
+      </ShowcaseSection>
 
-      <div class="section">
-        <h2 class="sectionTitle">Timeline</h2>
-        <div class="previewBox">
+      <ShowcaseSection
+        title="Timeline"
+        subtitle="Chronological list of releases"
+      >
+        <PreviewPanel>
           <Timeline items={TIMELINE_ITEMS} />
-        </div>
-      </div>
+        </PreviewPanel>
+      </ShowcaseSection>
 
-      <div class="section">
-        <h2 class="sectionTitle">ScoreRing</h2>
-        <div class="previewBox">
+      <ShowcaseSection
+        title="ScoreRing"
+        subtitle="Circular score visualization"
+      >
+        <PreviewPanel>
           <div class="row">
             <ScoreRing score={92} />
             <ScoreRing score={68} />
             <ScoreRing score={45} />
             <ScoreRing score={22} />
           </div>
-        </div>
-      </div>
+        </PreviewPanel>
+      </ShowcaseSection>
 
-      <div class="section">
-        <h2 class="sectionTitle">RadarChart</h2>
-        <div class="previewBox">
+      <ShowcaseSection title="RadarChart" subtitle="Multi-axis data comparison">
+        <PreviewPanel>
           <RadarChart
             size={280}
             axes={[
@@ -279,22 +263,20 @@ const DataDisplaySection = () => {
               { label: 'Mobile', values: [74, 85, 90, 75, 55] },
             ]}
           />
-        </div>
-      </div>
+        </PreviewPanel>
+      </ShowcaseSection>
 
-      <div class="section">
-        <h2 class="sectionTitle">JsonDisplay</h2>
-        <div class="previewBox">
+      <ShowcaseSection title="JsonDisplay" subtitle="Formatted object preview">
+        <PreviewPanel>
           <JsonDisplay data={SAMPLE_JSON} />
-        </div>
-      </div>
+        </PreviewPanel>
+      </ShowcaseSection>
 
-      <div class="section">
-        <h2 class="sectionTitle">MarkdownRenderer</h2>
-        <div class="previewBox">
+      <ShowcaseSection title="MarkdownRenderer" subtitle="Rich markdown output">
+        <PreviewPanel>
           <MarkdownRenderer content={MARKDOWN} />
-        </div>
-      </div>
+        </PreviewPanel>
+      </ShowcaseSection>
     </div>
   );
 };

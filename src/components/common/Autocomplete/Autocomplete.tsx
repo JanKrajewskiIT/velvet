@@ -16,6 +16,7 @@ interface AutocompleteProps {
 const Autocomplete = (props: Props<AutocompleteProps>) => {
   const [inputValue, setInputValue] = createSignal('');
   const [showDropdown, setShowDropdown] = createSignal(false);
+  let inputRef: HTMLInputElement | undefined;
 
   const filteredOptions = createMemo(() => {
     const query = inputValue().toLowerCase();
@@ -28,8 +29,9 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
     if (!props.values.includes(value)) {
       props.onChange([...props.values, value]);
     }
+
     setInputValue('');
-    setShowDropdown(false);
+    setShowDropdown(document.activeElement === inputRef);
   };
 
   const removeValue = (value: string) => {
@@ -41,6 +43,7 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
       e.preventDefault();
       addValue(inputValue().trim());
     }
+
     if (e.key === 'Escape') {
       setShowDropdown(false);
     }
@@ -69,11 +72,16 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
           )}
         </For>
       </div>
+
       <div class={styles.inputWrapper}>
         <Input
+          ref={inputRef}
           type="text"
           value={inputValue()}
-          onInput={(e) => setInputValue(e.currentTarget.value)}
+          onInput={(e) => {
+            setInputValue(e.currentTarget.value);
+            setShowDropdown(true);
+          }}
           onFocus={() => setShowDropdown(true)}
           onBlur={() => {
             setTimeout(() => setShowDropdown(false), 200);
@@ -81,6 +89,7 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
           onKeyDown={handleKeyDown}
           placeholder={props.placeholder}
         />
+
         <Show when={showDropdown() && filteredOptions().length > 0}>
           <div class={styles.dropdown}>
             <For each={filteredOptions()}>

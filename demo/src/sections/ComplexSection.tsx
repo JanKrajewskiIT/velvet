@@ -1,16 +1,39 @@
 import {
+  ActionRow,
   addToast,
+  AiResultPanel,
+  Button,
   FileDropZone,
   FlipCard,
   FormField,
   Input,
+  MarkdownEditDialog,
+  MarkdownRenderer,
   Wizard,
 } from '@jankrajewskiit/ui';
 import { IoDocument } from 'solid-icons/io';
 import { createSignal } from 'solid-js';
 
+import {
+  PreviewPanel,
+  ShowcaseMeta,
+  ShowcaseSection,
+} from '../components/ShowcaseSection';
+
+type AnalysisState = 'idle' | 'loading' | 'result' | 'error';
+
+const INITIAL_MARKDOWN = `## Release Notes
+
+- Updated visual tokens
+- Improved core controls
+- Refreshed demo experience`;
+
 const ComplexSection = () => {
   const [droppedFile, setDroppedFile] = createSignal<string | null>(null);
+  const [analysisState, setAnalysisState] = createSignal<AnalysisState>('idle');
+  const [resultNext, setResultNext] = createSignal(true);
+  const [markdown, setMarkdown] = createSignal(INITIAL_MARKDOWN);
+  const [editorOpen, setEditorOpen] = createSignal(false);
 
   const wizardSteps = [
     {
@@ -42,13 +65,7 @@ const ComplexSection = () => {
     {
       label: 'Confirm',
       component: (
-        <p
-          style={{
-            color: 'var(--color-text-muted)',
-            margin: 0,
-            'line-height': '1.6',
-          }}
-        >
+        <p class="mutedText">
           Review your information and click <strong>Finish</strong> to complete
           registration.
         </p>
@@ -56,11 +73,20 @@ const ComplexSection = () => {
     },
   ];
 
+  const runAnalysis = () => {
+    setAnalysisState('loading');
+
+    setTimeout(() => {
+      const shouldSucceed = resultNext();
+      setAnalysisState(shouldSucceed ? 'result' : 'error');
+      setResultNext((current) => !current);
+    }, 1200);
+  };
+
   return (
     <div>
-      <div class="section">
-        <h2 class="sectionTitle">Wizard</h2>
-        <div class="previewBox">
+      <ShowcaseSection title="Wizard" subtitle="Multi-step guided workflow">
+        <PreviewPanel>
           <Wizard
             steps={wizardSteps}
             backLabel="Back"
@@ -70,12 +96,91 @@ const ComplexSection = () => {
               addToast({ type: 'success', message: 'Registration complete!' });
             }}
           />
-        </div>
-      </div>
+        </PreviewPanel>
+      </ShowcaseSection>
 
-      <div class="section">
-        <h2 class="sectionTitle">FileDropZone</h2>
-        <div class="previewBox col">
+      <ShowcaseSection
+        title="AiResultPanel"
+        subtitle="Reusable result layout for AI and scoring flows"
+      >
+        <PreviewPanel>
+          <AiResultPanel
+            isPending={analysisState() === 'loading'}
+            loadingText="Analyzing design consistency..."
+            hasError={analysisState() === 'error'}
+            errorText="Analysis timed out. Retry to generate a new report."
+            onRetry={runAnalysis}
+            retryLabel="Retry"
+            score={87}
+            scoreLabel="Design consistency"
+            summary="The component library now uses stronger visual hierarchy and shared interaction patterns."
+            sections={[
+              {
+                icon: 'success',
+                title: 'Highlights',
+                items: [
+                  'Unified interaction styles for buttons, inputs and tabs',
+                  'Consistent spacing and elevation across sections',
+                ],
+              },
+              {
+                icon: 'danger',
+                title: 'Needs follow-up',
+                items: [
+                  'Extend the same polish to all remaining secondary components',
+                ],
+              },
+            ]}
+            hasResult={analysisState() === 'result'}
+            idle={
+              <p class="mutedText">
+                Run analysis to generate a consistency report for the current
+                component set.
+              </p>
+            }
+            actions={
+              <ActionRow align="end">
+                <Button
+                  variant="ghost"
+                  onClick={() => setAnalysisState('idle')}
+                >
+                  Reset
+                </Button>
+                <Button onClick={runAnalysis}>Run analysis</Button>
+              </ActionRow>
+            }
+          />
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection
+        title="MarkdownEditDialog"
+        subtitle="Edit and preview markdown in one flow"
+      >
+        <PreviewPanel class="col">
+          <ActionRow align="start">
+            <Button variant="ghost" onClick={() => setEditorOpen(true)}>
+              Open markdown editor
+            </Button>
+          </ActionRow>
+          <MarkdownRenderer content={markdown()} />
+        </PreviewPanel>
+
+        <MarkdownEditDialog
+          open={editorOpen()}
+          title="Edit release notes"
+          label="Markdown"
+          initialValue={markdown()}
+          previewLabel="Preview"
+          saveLabel="Save changes"
+          cancelLabel="Cancel"
+          onSave={setMarkdown}
+          onClose={() => setEditorOpen(false)}
+        />
+      </ShowcaseSection>
+
+      <ShowcaseSection title="FileDropZone" subtitle="Drag-and-drop file input">
+        <PreviewPanel class="col">
           <FileDropZone
             label="Drop a file here or click to browse"
             hint="Supports: .pdf, .jpg, .png"
@@ -87,129 +192,42 @@ const ComplexSection = () => {
             }}
           />
           {droppedFile() && (
-            <p
-              style={{
-                margin: 0,
-                'font-size': 'var(--font-size-sm)',
-                color: 'var(--color-text-muted)',
-              }}
-            >
-              Selected: <strong>{droppedFile()}</strong>
-            </p>
+            <ShowcaseMeta>
+              Selected file: <strong>{droppedFile()}</strong>
+            </ShowcaseMeta>
           )}
-        </div>
-      </div>
+        </PreviewPanel>
+      </ShowcaseSection>
 
-      <div class="section">
-        <h2 class="sectionTitle">FlipCard</h2>
-        <div class="previewBox">
-          <div class="row">
+      <ShowcaseSection title="FlipCard" subtitle="Interactive front/back card">
+        <PreviewPanel>
+          <div class="flipCardGrid">
             <FlipCard
               width="220px"
               height="140px"
               front={
-                <div
-                  style={{
-                    display: 'flex',
-                    'flex-direction': 'column',
-                    'align-items': 'center',
-                    'justify-content': 'center',
-                    height: '100%',
-                    gap: 'var(--spacing-xs)',
-                  }}
-                >
-                  <strong
-                    style={{
-                      'font-size': 'var(--font-size-lg)',
-                      color: 'var(--color-primary)',
-                    }}
-                  >
-                    VelvetUI
-                  </strong>
-                  <span
-                    style={{
-                      'font-size': 'var(--font-size-sm)',
-                      color: 'var(--color-text-muted)',
-                    }}
-                  >
-                    Click to flip
-                  </span>
+                <div class="flipCardFace">
+                  <strong class="flipCardTitle">VelvetUI</strong>
+                  <span class="flipCardHint">Click to flip</span>
                 </div>
               }
               back={
-                <div
-                  style={{
-                    display: 'flex',
-                    'flex-direction': 'column',
-                    'align-items': 'center',
-                    'justify-content': 'center',
-                    height: '100%',
-                    gap: 'var(--spacing-xs)',
-                  }}
-                >
-                  <strong style={{ color: 'var(--color-text-inverse)' }}>
-                    SolidJS + Vite
-                  </strong>
-                  <span
-                    style={{
-                      'font-size': 'var(--font-size-sm)',
-                      color: 'rgba(255,255,255,0.7)',
-                    }}
-                  >
-                    TypeScript · CSS Modules
-                  </span>
+                <div class="flipCardBack">
+                  <strong>SolidJS plus Vite</strong>
+                  <span class="flipCardHint">TypeScript and CSS Modules</span>
                 </div>
               }
             />
             <FlipCard
               width="220px"
               height="140px"
-              front={
-                <div
-                  style={{
-                    display: 'flex',
-                    'align-items': 'center',
-                    'justify-content': 'center',
-                    height: '100%',
-                  }}
-                >
-                  <span style={{ 'font-size': 'var(--font-size-2xl)' }}>
-                    🎨
-                  </span>
-                </div>
-              }
-              back={
-                <div
-                  style={{
-                    display: 'flex',
-                    'align-items': 'center',
-                    'justify-content': 'center',
-                    height: '100%',
-                  }}
-                >
-                  <span
-                    style={{
-                      color: 'var(--color-text-inverse)',
-                      'font-size': 'var(--font-size-sm)',
-                    }}
-                  >
-                    Dark &amp; Light theme
-                  </span>
-                </div>
-              }
+              front={<div class="flipCardFace">UI System</div>}
+              back={<div class="flipCardSimple">Dark and light theme</div>}
             />
           </div>
-          <p
-            style={{
-              margin: 'var(--spacing-xs) 0 0',
-              'font-size': 'var(--font-size-xs)',
-              color: 'var(--color-text-muted)',
-            }}
-          >
-            Click a card to flip it
-          </p>
-        </div>
-      </div>
+        </PreviewPanel>
+        <ShowcaseMeta>Click a card to flip it.</ShowcaseMeta>
+      </ShowcaseSection>
     </div>
   );
 };

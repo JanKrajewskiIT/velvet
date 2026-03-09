@@ -13,12 +13,16 @@ import {
   IoStatsChart,
 } from 'solid-icons/io';
 
+import { PreviewPanel, ShowcaseSection } from '../components/ShowcaseSection';
+
 const FeedbackSection = () => {
   return (
     <div>
-      <div class="section">
-        <h2 class="sectionTitle">Chip - variants</h2>
-        <div class="previewBox">
+      <ShowcaseSection
+        title="Chip variants"
+        subtitle="Status, selection and clickable chips"
+      >
+        <PreviewPanel>
           <div class="row">
             <Chip variant="primary">Primary</Chip>
             <Chip variant="primaryOutline">Outline</Chip>
@@ -45,23 +49,24 @@ const FeedbackSection = () => {
               Clickable
             </Chip>
           </div>
-        </div>
-      </div>
+        </PreviewPanel>
+      </ShowcaseSection>
 
-      <div class="section">
-        <h2 class="sectionTitle">TagChip</h2>
-        <div class="previewBox">
+      <ShowcaseSection
+        title="TagChip"
+        subtitle="Color-coded tags with optional selection"
+      >
+        <PreviewPanel>
           <div class="row">
-            <TagChip label="design" color="#8b0036" />
+            <TagChip label="design" color="#1467ff" />
             <TagChip label="frontend" color="#0288d1" />
             <TagChip label="selected" color="#2e7d32" selected />
             <TagChip label="clickable" color="#ed6c02" onClick={() => {}} />
           </div>
-        </div>
-      </div>
+        </PreviewPanel>
+      </ShowcaseSection>
 
-      <div class="section">
-        <h2 class="sectionTitle">StatCard</h2>
+      <ShowcaseSection title="StatCard" subtitle="Compact KPI cards">
         <div class="gridCards">
           <StatCard
             value="1 284"
@@ -88,15 +93,14 @@ const FeedbackSection = () => {
             colorClass="error"
           />
         </div>
-      </div>
+      </ShowcaseSection>
 
-      <div class="section">
-        <h2 class="sectionTitle">Skeleton</h2>
-        <div class="previewBox col">
-          <div
-            class="row"
-            style={{ 'align-items': 'center', gap: 'var(--spacing-md)' }}
-          >
+      <ShowcaseSection
+        title="Skeleton"
+        subtitle="Loading placeholders with multiple variants"
+      >
+        <PreviewPanel class="col">
+          <div class="row">
             <Skeleton variant="circular" width={48} height={48} />
             <div class="col" style={{ flex: 1 }}>
               <Skeleton variant="text" width="60%" height={16} />
@@ -106,12 +110,14 @@ const FeedbackSection = () => {
           </div>
           <Skeleton variant="rectangular" height={120} animation="pulse" />
           <Skeleton variant="text" width="80%" animation="none" />
-        </div>
-      </div>
+        </PreviewPanel>
+      </ShowcaseSection>
 
-      <div class="section">
-        <h2 class="sectionTitle">Toast</h2>
-        <div class="previewBox">
+      <ShowcaseSection
+        title="Toast"
+        subtitle="Global notifications from any action"
+      >
+        <PreviewPanel>
           <div class="row">
             <Button
               variant="primary"
@@ -152,8 +158,8 @@ const FeedbackSection = () => {
               Warning toast
             </Button>
           </div>
-        </div>
-      </div>
+        </PreviewPanel>
+      </ShowcaseSection>
     </div>
   );
 };

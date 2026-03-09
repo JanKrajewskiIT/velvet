@@ -14,14 +14,20 @@ import {
 } from '@jankrajewskiit/ui';
 import { createSignal } from 'solid-js';
 
+import {
+  PreviewPanel,
+  ShowcaseMeta,
+  ShowcaseSection,
+} from '../components/ShowcaseSection';
+
 const PRESET_COLORS = [
-  '#8b0036',
-  '#a30040',
-  '#0288d1',
+  '#1467ff',
+  '#0c52cf',
+  '#02a4ff',
   '#2e7d32',
   '#ed6c02',
   '#d32f2f',
-  '#6a1b9a',
+  '#1b78ff',
   '#00838f',
 ];
 
@@ -32,16 +38,18 @@ const InputsSection = () => {
   const [selected, setSelected] = createSignal('');
   const [tags, setTags] = createSignal<string[]>(['solid-js', 'vite']);
   const [autoValues, setAutoValues] = createSignal<string[]>(['TypeScript']);
-  const [color, setColor] = createSignal('#8b0036');
+  const [color, setColor] = createSignal('#1467ff');
   const [newsletter, setNewsletter] = createSignal(true);
   const [notifications, setNotifications] = createSignal(false);
   const [role, setRole] = createSignal<RoleValue>('editor');
 
   return (
     <div>
-      <div class="section">
-        <h2 class="sectionTitle">Input</h2>
-        <div class="previewBox col">
+      <ShowcaseSection
+        title="Input"
+        subtitle="Text, disabled and password fields"
+      >
+        <PreviewPanel class="col">
           <FormField label="Text input" id="demo-text">
             <Input
               id="demo-text"
@@ -57,12 +65,14 @@ const InputsSection = () => {
           <FormField label="Password" id="demo-pass">
             <Input id="demo-pass" type="password" placeholder="********" />
           </FormField>
-        </div>
-      </div>
+        </PreviewPanel>
+      </ShowcaseSection>
 
-      <div class="section">
-        <h2 class="sectionTitle">Select</h2>
-        <div class="previewBox">
+      <ShowcaseSection
+        title="Select"
+        subtitle="Native select with custom styling"
+      >
+        <PreviewPanel>
           <FormField label="Choose option" id="demo-select">
             <Select
               id="demo-select"
@@ -75,12 +85,11 @@ const InputsSection = () => {
               <option value="c">Option C</option>
             </Select>
           </FormField>
-        </div>
-      </div>
+        </PreviewPanel>
+      </ShowcaseSection>
 
-      <div class="section">
-        <h2 class="sectionTitle">TextArea</h2>
-        <div class="previewBox">
+      <ShowcaseSection title="TextArea" subtitle="Long-form input control">
+        <PreviewPanel>
           <FormField label="Description" id="demo-ta">
             <TextArea
               id="demo-ta"
@@ -88,12 +97,14 @@ const InputsSection = () => {
               rows={4}
             />
           </FormField>
-        </div>
-      </div>
+        </PreviewPanel>
+      </ShowcaseSection>
 
-      <div class="section">
-        <h2 class="sectionTitle">Autocomplete</h2>
-        <div class="previewBox">
+      <ShowcaseSection
+        title="Autocomplete"
+        subtitle="Multi-value select with filtering"
+      >
+        <PreviewPanel>
           <FormField label="Technologies" id="demo-auto">
             <Autocomplete
               values={autoValues()}
@@ -112,12 +123,14 @@ const InputsSection = () => {
               removeLabel="Remove"
             />
           </FormField>
-        </div>
-      </div>
+        </PreviewPanel>
+      </ShowcaseSection>
 
-      <div class="section">
-        <h2 class="sectionTitle">TagInput</h2>
-        <div class="previewBox">
+      <ShowcaseSection
+        title="TagInput"
+        subtitle="Quick keyboard-driven tagging"
+      >
+        <PreviewPanel>
           <FormField label="Tags" id="demo-tags">
             <TagInput
               value={tags()}
@@ -125,12 +138,14 @@ const InputsSection = () => {
               placeholder="Add a tag and press Enter"
             />
           </FormField>
-        </div>
-      </div>
+        </PreviewPanel>
+      </ShowcaseSection>
 
-      <div class="section">
-        <h2 class="sectionTitle">ColorPicker</h2>
-        <div class="previewBox">
+      <ShowcaseSection
+        title="ColorPicker"
+        subtitle="Palette-driven accent selection"
+      >
+        <PreviewPanel>
           <FormField label="Brand color" id="demo-color">
             <ColorPicker
               colors={PRESET_COLORS}
@@ -138,21 +153,17 @@ const InputsSection = () => {
               onChange={setColor}
             />
           </FormField>
-          <p
-            style={{
-              'margin-top': 'var(--spacing-xs)',
-              'font-size': 'var(--font-size-sm)',
-              color: 'var(--color-text-muted)',
-            }}
-          >
-            Selected: <code>{color()}</code>
-          </p>
-        </div>
-      </div>
+        </PreviewPanel>
+        <ShowcaseMeta>
+          Selected color: <span class="codeInline">{color()}</span>
+        </ShowcaseMeta>
+      </ShowcaseSection>
 
-      <div class="section">
-        <h2 class="sectionTitle">Checkbox, Switch, RadioGroup</h2>
-        <div class="previewBox col">
+      <ShowcaseSection
+        title="Checkbox, Switch, RadioGroup"
+        subtitle="Binary and single-choice controls"
+      >
+        <PreviewPanel class="col">
           <Checkbox
             checked={newsletter()}
             onChange={(e) => setNewsletter(e.currentTarget.checked)}
@@ -187,12 +198,14 @@ const InputsSection = () => {
               },
             ]}
           />
-        </div>
-      </div>
+        </PreviewPanel>
+      </ShowcaseSection>
 
-      <div class="section">
-        <h2 class="sectionTitle">FormGrid</h2>
-        <div class="previewBox">
+      <ShowcaseSection
+        title="FormGrid"
+        subtitle="Composable form layout for responsive forms"
+      >
+        <PreviewPanel>
           <FormLayout>
             <FormGrid>
               <FormField label="First name" id="fn">
@@ -213,8 +226,8 @@ const InputsSection = () => {
               </FormField>
             </FormGrid>
           </FormLayout>
-        </div>
-      </div>
+        </PreviewPanel>
+      </ShowcaseSection>
     </div>
   );
 };
