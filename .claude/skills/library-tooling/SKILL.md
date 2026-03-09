@@ -1,17 +1,6 @@
----
-name: library-tooling
-description: >
-  Build and tooling configuration for VelvetUi (@jankrajewskiit/ui).
-  Covers Vite library build (ES + UMD, CSS bundling, external peer deps),
-  TypeScript strict settings (ES2024, erasableSyntaxOnly, verbatimModuleSyntax),
-  vite-plugin-dts for .d.ts generation, ESLint flat config, Prettier,
-  Husky pre-commit with lint-staged, npm publishing to GitHub Packages,
-  and package.json exports configuration.
----
+# Library Tooling — VelvetUi
 
-# Library Tooling
-
-VelvetUi is a SolidJS component library built with Vite in library mode. Published as `@jankrajewskiit/ui` to GitHub Packages.
+Build and tooling configuration for VelvetUi (`@jankrajewskiit/ui`). Covers Vite library build (ES + UMD, CSS bundling, external peer deps), TypeScript strict settings (ES2024, erasableSyntaxOnly, verbatimModuleSyntax), vite-plugin-dts for .d.ts generation, ESLint flat config, Prettier, Husky pre-commit with lint-staged, npm publishing to GitHub Packages, and package.json exports configuration.
 
 ## Vite Configuration
 
@@ -48,11 +37,27 @@ VelvetUi is a SolidJS component library built with Vite in library mode. Publish
 
 Consumers import components from `@jankrajewskiit/ui` and CSS via `@jankrajewskiit/ui/styles`.
 
+## Shared Config Presets
+
+VelvetUi also exports its own tooling configs as sub-paths so consumers can share the exact same setup:
+
+| Sub-path                                | Consumer usage                                                          |
+| --------------------------------------- | ----------------------------------------------------------------------- |
+| `@jankrajewskiit/ui/eslint-config`      | `import { createEslintConfig } from '@jankrajewskiit/ui/eslint-config'` |
+| `@jankrajewskiit/ui/prettier-config`    | `"prettier": "@jankrajewskiit/ui/prettier-config"` in package.json      |
+| `@jankrajewskiit/ui/vite-config`        | Vite config helper + `solidMarkdownOptimizeDeps`                        |
+| `@jankrajewskiit/ui/tsconfig`           | Extends base tsconfig (app/node/app-vite/node-vite variants)            |
+| `@jankrajewskiit/ui/lint-staged-config` | Shared lint-staged rules                                                |
+| `@jankrajewskiit/ui/husky/pre-commit`   | Shared Husky pre-commit hook                                            |
+
+Config source files live in `config/` directory (not `src/`), compiled separately.
+
 ## TypeScript Configuration
 
 **Files:** `tsconfig.json` (project refs) → `tsconfig.app.json` (library source) + `tsconfig.node.json` (Vite config)
 
 Key settings:
+
 - `target: ES2024`
 - `verbatimModuleSyntax: true` — forces `import type` for type-only imports
 - `noUncheckedIndexedAccess: true` — array/object index returns `T | undefined`
@@ -67,6 +72,7 @@ Key settings:
 Plugin stack: `@eslint/js` recommended → `typescript-eslint` strictTypeChecked → `eslint-plugin-solid` typescript → `eslint-config-prettier` → `jsx-a11y` recommended → `simple-import-sort` → `unused-imports`.
 
 Notable rules:
+
 - `require-unicode-regexp` — all regexes need `/u` flag
 - `solid/reactivity: warn`
 - Several strict TS rules relaxed for SolidJS compatibility
@@ -80,6 +86,7 @@ Global ignores: `dist`, `*.d.ts`, `vite.config.*`, `*.mjs`
 ## Husky + lint-staged
 
 **Pre-commit hook** (`.husky/pre-commit`):
+
 - `lint-staged`: `*.{ts,tsx}` → eslint --fix + prettier --write; `*.{css,json,md}` → prettier --write
 
 ## Publishing to GitHub Packages
@@ -88,12 +95,31 @@ Global ignores: `dist`, `*.d.ts`, `vite.config.*`, `*.mjs`
 
 **Workflow:** GitHub Actions publishes on push to `main`. Consumers need a GitHub PAT with `read:packages` scope set as `NODE_AUTH_TOKEN`.
 
+## Scripts
+
+```bash
+npm run build          # tsc -b && vite build (outputs dist/)
+npm run typecheck      # tsc -b (typecheck only)
+npm run lint           # eslint .
+npm run lint:fix       # eslint . --fix
+npm run format         # prettier --write .
+npm run format:check   # prettier --check .
+npm test               # Node.js test runner
+npm run verify         # full pipeline: typecheck + lint + build + test
+```
+
 ## Adding a New Component
 
-1. Create directory: `src/components/common/MyComponent/`
-2. Create `MyComponent.tsx` + `MyComponent.module.css`
-3. Export from `src/index.ts`: `export { default as MyComponent } from './components/common/MyComponent/MyComponent'`
-4. Run `npm run build` to verify it compiles and is included in the bundle
+1. Pick the right category directory:
+   - `src/components/actions-and-forms/` — inputs, buttons, forms
+   - `src/components/data-display/` — tables, charts, content renderers
+   - `src/components/feedback-and-states/` — status, loading, toasts
+   - `src/components/layouts/` — page layout shells
+   - `src/components/overlays/` — dialogs, drawers, tooltips
+   - `src/components/workflows/` — complex multi-step patterns
+2. Create `MyComponent/MyComponent.tsx` + `MyComponent/MyComponent.module.css`
+3. Export from `src/index.ts`: `export { default as MyComponent } from './components/<category>/MyComponent/MyComponent'`
+4. Run `npm run verify` to confirm it compiles, lints, and passes tests
 5. Bump version in `package.json` and push to publish
 
 ## Key Files
