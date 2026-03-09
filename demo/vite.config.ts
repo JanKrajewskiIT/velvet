@@ -9,6 +9,10 @@ export default defineConfig({
   resolve: {
     alias: [
       {
+        find: '~',
+        replacement: resolve(__dirname, '../src'),
+      },
+      {
         find: /^@jankrajewskiit\/ui\/styles$/u,
         replacement: resolve(__dirname, '../src/theme/globals.css'),
       },

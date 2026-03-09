@@ -4,6 +4,7 @@
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "baseUrl": ".",
     "paths": {
+      "~/*": ["../src/*"],
       "@jankrajewskiit/ui": ["../src/index.ts"],
       "@jankrajewskiit/ui/styles": ["../src/theme/globals.css"]
     }
