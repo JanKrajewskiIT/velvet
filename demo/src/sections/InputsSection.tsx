@@ -50,21 +50,23 @@ const InputsSection = () => {
         subtitle="Text, disabled and password fields"
       >
         <PreviewPanel class="col">
-          <FormField label="Text input" id="demo-text">
-            <Input
-              id="demo-text"
-              type="text"
-              placeholder="Enter text..."
-              value={text()}
-              onInput={(e) => setText(e.currentTarget.value)}
-            />
-          </FormField>
-          <FormField label="Disabled input" id="demo-disabled">
-            <Input id="demo-disabled" type="text" value="Disabled" disabled />
-          </FormField>
-          <FormField label="Password" id="demo-pass">
-            <Input id="demo-pass" type="password" placeholder="********" />
-          </FormField>
+          <form onSubmit={(e) => e.preventDefault()}>
+            <FormField label="Text input" id="demo-text">
+              <Input
+                id="demo-text"
+                type="text"
+                placeholder="Enter text..."
+                value={text()}
+                onInput={(e) => setText(e.currentTarget.value)}
+              />
+            </FormField>
+            <FormField label="Disabled input" id="demo-disabled">
+              <Input id="demo-disabled" type="text" value="Disabled" disabled />
+            </FormField>
+            <FormField label="Password" id="demo-pass">
+              <Input id="demo-pass" type="password" placeholder="********" />
+            </FormField>
+          </form>
         </PreviewPanel>
       </ShowcaseSection>
 

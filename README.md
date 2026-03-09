@@ -128,13 +128,43 @@ export default createLintStagedConfig();
 
 ## Main Exports
 
-### Common Components
+### Component Sections (Same as Demo)
 
-`AccessDenied`, `Accordion`, `AccordionItem`, `ActionRow`, `AiResultPanel`, `AuthRedirect`, `Autocomplete`, `Button`, `Checkbox`, `Chip`, `ColorPicker`, `ConfirmAction`, `ConfirmDialog`, `Dialog`, `DialogActions`, `DialogBody`, `DialogTitle`, `Drawer`, `DropdownButton`, `DropdownItem`, `DropdownMenu`, `EditableCollection`, `EmptyState`, `ErrorFallback`, `ErrorMessage`, `FileDropZone`, `FlipCard`, `FormField`, `FormGrid`, `FormLayout`, `IconButton`, `Input`, `Select`, `TextArea`, `JsonDisplay`, `LoadingContainer`, `LocaleSwitcher`, `MarkdownEditDialog`, `MarkdownRenderer`, `Pagination`, `RadarChart`, `RadioGroup`, `RequireAuth`, `ScoreRing`, `SectionCard`, `Skeleton`, `Spinner`, `StatCard`, `Stepper`, `Switch`, `Table`, `TableHead`, `TableBody`, `TableRow`, `TableHeader`, `TableCell`, `Tabs`, `TagChip`, `TagInput`, `ThemeToggle`, `Timeline`, `Tooltip`, `Wizard`.
+#### Actions and Forms
 
-### Layout Components
+`ActionRow`, `Autocomplete`, `Button`, `Checkbox`, `ColorPicker`, `DropdownButton`, `DropdownItem`, `DropdownMenu`, `FormField`, `FormGrid`, `FormLayout`, `IconButton`, `Input`, `Select`, `TextArea`, `LocaleSwitcher`, `RadioGroup`, `Switch`, `TagInput`.
+
+#### Layouts
 
 `Footer`, `MainLayout`, `Navbar`.
+
+#### Feedback and States
+
+`AccessDenied`, `Chip`, `EmptyState`, `ErrorFallback`, `ErrorMessage`, `LoadingContainer`, `Skeleton`, `Spinner`, `StatCard`, `TagChip`, `ThemeToggle`.
+
+#### Overlays
+
+`ConfirmAction`, `ConfirmDialog`, `Dialog`, `DialogActions`, `DialogBody`, `DialogTitle`, `Drawer`, `Tooltip`.
+
+#### Data Display
+
+`Accordion`, `AccordionItem`, `JsonDisplay`, `MarkdownRenderer`, `Pagination`, `RadarChart`, `ScoreRing`, `SectionCard`, `Stepper`, `Table`, `TableHead`, `TableBody`, `TableRow`, `TableHeader`, `TableCell`.
+
+#### Workflows
+
+`AiResultPanel`, `AuthRedirect`, `EditableCollection`, `FileDropZone`, `FlipCard`, `MarkdownEditDialog`, `RequireAuth`, `Tabs`, `Timeline`, `Wizard`.
+
+### Source Structure
+
+```text
+src/components/
+  actions-and-forms/
+  layouts/
+  feedback-and-states/
+  overlays/
+  data-display/
+  workflows/
+```
 
 ### Theme, Toast, Hooks, Utils, Types
 

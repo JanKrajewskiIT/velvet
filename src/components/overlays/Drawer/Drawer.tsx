@@ -10,7 +10,7 @@ import { Portal } from 'solid-js/web';
 
 import useEscapeKey from '../../../hooks/useEscapeKey';
 import type Props from '../../../models/Props';
-import IconButton from '../IconButton/IconButton';
+import IconButton from '../../actions-and-forms/IconButton/IconButton';
 import styles from './Drawer.module.css';
 
 interface DrawerProps {

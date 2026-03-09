@@ -7,6 +7,7 @@ import DataDisplaySection from './sections/DataDisplaySection';
 import DeveloperSection from './sections/DeveloperSection';
 import FeedbackSection from './sections/FeedbackSection';
 import InputsSection from './sections/InputsSection';
+import LayoutsSection from './sections/LayoutsSection';
 import NewComponentsSection from './sections/NewComponentsSection';
 import OverlaysSection from './sections/OverlaysSection';
 import OverviewSection from './sections/OverviewSection';
@@ -14,15 +15,16 @@ import StatesSection from './sections/StatesSection';
 
 type SectionId =
   | 'overview'
-  | 'new-components'
-  | 'developer'
   | 'actions'
   | 'inputs'
+  | 'layouts'
   | 'feedback'
+  | 'states'
   | 'overlays'
   | 'data'
   | 'complex'
-  | 'states';
+  | 'new-components'
+  | 'developer';
 
 interface NavGroup {
   label: string;
@@ -31,22 +33,22 @@ interface NavGroup {
 
 const NAV_GROUPS: NavGroup[] = [
   {
-    label: 'Start',
+    label: 'Overview',
     items: [{ id: 'overview', label: 'Overview and Installation' }],
   },
   {
-    label: 'Latest',
-    items: [{ id: 'new-components', label: 'New Components Showcase' }],
-  },
-  {
-    label: 'Primitives',
+    label: 'Actions and Forms',
     items: [
       { id: 'actions', label: 'Actions and Tooltips' },
       { id: 'inputs', label: 'Inputs and Forms' },
     ],
   },
   {
-    label: 'Feedback',
+    label: 'Layouts',
+    items: [{ id: 'layouts', label: 'Recron App Shell' }],
+  },
+  {
+    label: 'Feedback and States',
     items: [
       { id: 'feedback', label: 'Chips, Stats and Toast' },
       { id: 'states', label: 'States and Errors' },
@@ -57,16 +59,19 @@ const NAV_GROUPS: NavGroup[] = [
     items: [{ id: 'overlays', label: 'Dialog and Drawer' }],
   },
   {
-    label: 'Data',
+    label: 'Data Display',
     items: [{ id: 'data', label: 'Tables, Charts and More' }],
   },
   {
-    label: 'Complex',
-    items: [{ id: 'complex', label: 'Wizard, AI and Files' }],
+    label: 'Workflows',
+    items: [
+      { id: 'complex', label: 'Wizard, AI and Files' },
+      { id: 'new-components', label: 'New Components Showcase' },
+    ],
   },
   {
-    label: 'Docs',
-    items: [{ id: 'developer', label: 'Developer Technical Docs' }],
+    label: 'Developer Docs',
+    items: [{ id: 'developer', label: 'Technical Docs and Setup' }],
   },
 ];
 
@@ -75,16 +80,6 @@ const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
     title: 'VelvetUI Overview',
     description:
       'Start here for installation, library goals and a quick snapshot of what is included.',
-  },
-  'new-components': {
-    title: 'New Components',
-    description:
-      'Interactive demos for ConfirmAction, EditableCollection, AuthRedirect and RequireAuth.',
-  },
-  developer: {
-    title: 'Developer Technical Docs',
-    description:
-      'Ready-to-copy setup, tooling presets and integration snippets based on the package README.',
   },
   actions: {
     title: 'Actions and Tooltips',
@@ -96,10 +91,20 @@ const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
     description:
       'Text inputs, selects, autocomplete, tag input, checkbox, switch, radio group, color picker and form layout components.',
   },
+  layouts: {
+    title: 'Layouts',
+    description:
+      'Recron-inspired app shell built from Navbar, MainLayout and Footer composition slots.',
+  },
   feedback: {
     title: 'Chips, Stats and Toast',
     description:
       'Status chips, tag chips, stat cards, skeleton loaders and toast notifications.',
+  },
+  states: {
+    title: 'States and Errors',
+    description:
+      'Loading containers, empty states, error messages and error fallback pages.',
   },
   overlays: {
     title: 'Dialog and Drawer',
@@ -115,10 +120,15 @@ const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
     description:
       'Multi-step wizard, AI result panel, markdown editing, flip cards and drag-and-drop files.',
   },
-  states: {
-    title: 'States and Errors',
+  'new-components': {
+    title: 'New Components',
     description:
-      'Loading containers, empty states, error messages and error fallback pages.',
+      'Interactive demos for ConfirmAction, EditableCollection, AuthRedirect and RequireAuth.',
+  },
+  developer: {
+    title: 'Developer Technical Docs',
+    description:
+      'Ready-to-copy setup, tooling presets and integration snippets based on the package README.',
   },
 };
 
@@ -167,20 +177,20 @@ const AppContent = () => {
           <Match when={activeSection() === 'overview'}>
             <OverviewSection />
           </Match>
-          <Match when={activeSection() === 'new-components'}>
-            <NewComponentsSection />
-          </Match>
-          <Match when={activeSection() === 'developer'}>
-            <DeveloperSection />
-          </Match>
           <Match when={activeSection() === 'actions'}>
             <ActionsSection />
           </Match>
           <Match when={activeSection() === 'inputs'}>
             <InputsSection />
           </Match>
+          <Match when={activeSection() === 'layouts'}>
+            <LayoutsSection />
+          </Match>
           <Match when={activeSection() === 'feedback'}>
             <FeedbackSection />
+          </Match>
+          <Match when={activeSection() === 'states'}>
+            <StatesSection />
           </Match>
           <Match when={activeSection() === 'overlays'}>
             <OverlaysSection />
@@ -191,8 +201,11 @@ const AppContent = () => {
           <Match when={activeSection() === 'complex'}>
             <ComplexSection />
           </Match>
-          <Match when={activeSection() === 'states'}>
-            <StatesSection />
+          <Match when={activeSection() === 'new-components'}>
+            <NewComponentsSection />
+          </Match>
+          <Match when={activeSection() === 'developer'}>
+            <DeveloperSection />
           </Match>
         </Switch>
       </main>

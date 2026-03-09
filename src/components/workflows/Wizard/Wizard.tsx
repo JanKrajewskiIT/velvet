@@ -7,8 +7,8 @@ import {
   splitProps,
 } from 'solid-js';
 
-import Button from '../Button/Button';
-import Stepper from '../Stepper/Stepper';
+import Button from '../../actions-and-forms/Button/Button';
+import Stepper from '../../data-display/Stepper/Stepper';
 import styles from './Wizard.module.css';
 
 export interface WizardStep {

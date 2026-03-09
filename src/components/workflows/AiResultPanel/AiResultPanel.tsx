@@ -2,9 +2,9 @@ import { FiCheck, FiTarget, FiX } from 'solid-icons/fi';
 import { For, type JSX, Show } from 'solid-js';
 
 import type Props from '../../../models/Props';
-import Button from '../Button/Button';
-import ScoreRing from '../ScoreRing/ScoreRing';
-import Spinner from '../Spinner/Spinner';
+import Button from '../../actions-and-forms/Button/Button';
+import ScoreRing from '../../data-display/ScoreRing/ScoreRing';
+import Spinner from '../../feedback-and-states/Spinner/Spinner';
 import styles from './AiResultPanel.module.css';
 
 interface AiResultSection {

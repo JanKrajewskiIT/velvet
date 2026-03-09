@@ -1,6 +1,6 @@
 import { type JSX, Show, splitProps } from 'solid-js';
 
-import Spinner from '../Spinner/Spinner';
+import Spinner from '../../feedback-and-states/Spinner/Spinner';
 import styles from './Button.module.css';
 
 export interface ButtonProps extends Omit<

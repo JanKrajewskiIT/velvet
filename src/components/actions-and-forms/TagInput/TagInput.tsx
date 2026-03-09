@@ -1,6 +1,6 @@
 import { createSignal, For, type JSX, splitProps } from 'solid-js';
 
-import TagChip from '../TagChip/TagChip';
+import TagChip from '../../feedback-and-states/TagChip/TagChip';
 import styles from './TagInput.module.css';
 
 export interface TagInputProps extends Omit<

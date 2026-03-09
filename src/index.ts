@@ -1,67 +1,38 @@
 import './theme/globals.css';
 
-export { default as AccessDenied } from './components/common/AccessDenied/AccessDenied';
+export { default as ActionRow } from './components/actions-and-forms/ActionRow/ActionRow';
+export { default as Autocomplete } from './components/actions-and-forms/Autocomplete/Autocomplete';
+export { default as Button } from './components/actions-and-forms/Button/Button';
+export { default as Checkbox } from './components/actions-and-forms/Checkbox/Checkbox';
+export { default as ColorPicker } from './components/actions-and-forms/ColorPicker/ColorPicker';
+export { default as DropdownButton } from './components/actions-and-forms/DropdownButton/DropdownButton';
+export { default as DropdownItem } from './components/actions-and-forms/DropdownMenu/DropdownItem';
+export { default as DropdownMenu } from './components/actions-and-forms/DropdownMenu/DropdownMenu';
+export { default as FormField } from './components/actions-and-forms/FormField/FormField';
+export { default as FormGrid } from './components/actions-and-forms/FormGrid/FormGrid';
+export { default as FormLayout } from './components/actions-and-forms/FormLayout/FormLayout';
+export { default as IconButton } from './components/actions-and-forms/IconButton/IconButton';
+export { default as Input } from './components/actions-and-forms/Input/Input';
+export { default as Select } from './components/actions-and-forms/Input/Select';
+export { default as TextArea } from './components/actions-and-forms/Input/TextArea';
+export { default as LocaleSwitcher } from './components/actions-and-forms/LocaleSwitcher/LocaleSwitcher';
+export {
+  RadioGroup,
+  type RadioOption,
+} from './components/actions-and-forms/Radio/Radio';
+export { default as Switch } from './components/actions-and-forms/Switch/Switch';
+export { TagInput } from './components/actions-and-forms/TagInput/TagInput';
 export {
   Accordion,
   AccordionItem,
-} from './components/common/Accordion/Accordion';
-export { default as ActionRow } from './components/common/ActionRow/ActionRow';
-export { default as AiResultPanel } from './components/common/AiResultPanel/AiResultPanel';
-export type { AuthRedirectProps } from './components/common/AuthRedirect/AuthRedirect';
-export { default as AuthRedirect } from './components/common/AuthRedirect/AuthRedirect';
-export { default as Autocomplete } from './components/common/Autocomplete/Autocomplete';
-export { default as Button } from './components/common/Button/Button';
-export { default as Checkbox } from './components/common/Checkbox/Checkbox';
-export { default as Chip } from './components/common/Chip/Chip';
-export { default as ColorPicker } from './components/common/ColorPicker/ColorPicker';
-export type {
-  ConfirmActionProps,
-  ConfirmActionRenderContext,
-} from './components/common/ConfirmAction/ConfirmAction';
-export { default as ConfirmAction } from './components/common/ConfirmAction/ConfirmAction';
-export { default as ConfirmDialog } from './components/common/ConfirmDialog/ConfirmDialog';
-export { default as Dialog } from './components/common/Dialog/Dialog';
-export { default as DialogActions } from './components/common/Dialog/DialogActions';
-export { default as DialogBody } from './components/common/Dialog/DialogBody';
-export { default as DialogTitle } from './components/common/Dialog/DialogTitle';
-export { default as Drawer } from './components/common/Drawer/Drawer';
-export { default as DropdownButton } from './components/common/DropdownButton/DropdownButton';
-export { default as DropdownItem } from './components/common/DropdownMenu/DropdownItem';
-export { default as DropdownMenu } from './components/common/DropdownMenu/DropdownMenu';
-export type {
-  EditableCollectionProps,
-  EditableCollectionRenderContext,
-} from './components/common/EditableCollection/EditableCollection';
-export { default as EditableCollection } from './components/common/EditableCollection/EditableCollection';
-export { default as EmptyState } from './components/common/EmptyState/EmptyState';
-export { default as ErrorFallback } from './components/common/ErrorFallback/ErrorFallback';
-export { default as ErrorMessage } from './components/common/ErrorMessage/ErrorMessage';
-export { default as FileDropZone } from './components/common/FileDropZone/FileDropZone';
-export { FlipCard } from './components/common/FlipCard/FlipCard';
-export { default as FormField } from './components/common/FormField/FormField';
-export { default as FormGrid } from './components/common/FormGrid/FormGrid';
-export { default as FormLayout } from './components/common/FormLayout/FormLayout';
-export { default as IconButton } from './components/common/IconButton/IconButton';
-export { default as Input } from './components/common/Input/Input';
-export { default as Select } from './components/common/Input/Select';
-export { default as TextArea } from './components/common/Input/TextArea';
-export { default as JsonDisplay } from './components/common/JsonDisplay/JsonDisplay';
-export { default as LoadingContainer } from './components/common/LoadingContainer/LoadingContainer';
-export { default as LocaleSwitcher } from './components/common/LocaleSwitcher/LocaleSwitcher';
-export { default as MarkdownEditDialog } from './components/common/MarkdownEditDialog/MarkdownEditDialog';
-export { default as MarkdownRenderer } from './components/common/MarkdownRenderer/MarkdownRenderer';
-export { default as Pagination } from './components/common/Pagination/Pagination';
-export { default as RadarChart } from './components/common/RadarChart/RadarChart';
-export { RadioGroup, type RadioOption } from './components/common/Radio/Radio';
-export type { RequireAuthProps } from './components/common/RequireAuth/RequireAuth';
-export { default as RequireAuth } from './components/common/RequireAuth/RequireAuth';
-export { default as ScoreRing } from './components/common/ScoreRing/ScoreRing';
-export { default as SectionCard } from './components/common/SectionCard/SectionCard';
-export { Skeleton } from './components/common/Skeleton/Skeleton';
-export { default as Spinner } from './components/common/Spinner/Spinner';
-export { default as StatCard } from './components/common/StatCard/StatCard';
-export { default as Stepper } from './components/common/Stepper/Stepper';
-export { default as Switch } from './components/common/Switch/Switch';
+} from './components/data-display/Accordion/Accordion';
+export { default as JsonDisplay } from './components/data-display/JsonDisplay/JsonDisplay';
+export { default as MarkdownRenderer } from './components/data-display/MarkdownRenderer/MarkdownRenderer';
+export { default as Pagination } from './components/data-display/Pagination/Pagination';
+export { default as RadarChart } from './components/data-display/RadarChart/RadarChart';
+export { default as ScoreRing } from './components/data-display/ScoreRing/ScoreRing';
+export { default as SectionCard } from './components/data-display/SectionCard/SectionCard';
+export { default as Stepper } from './components/data-display/Stepper/Stepper';
 export {
   Table,
   TableBody,
@@ -69,27 +40,59 @@ export {
   TableHead,
   TableHeader,
   TableRow,
-} from './components/common/Table/Table';
-export { default as Tabs } from './components/common/Tabs/Tabs';
-export { default as TagChip } from './components/common/TagChip/TagChip';
-export { TagInput } from './components/common/TagInput/TagInput';
-export { default as ThemeToggle } from './components/common/ThemeToggle/ThemeToggle';
-export { default as Timeline } from './components/common/Timeline/Timeline';
-export type { ToastMessage } from './components/common/Toast/Toast';
+} from './components/data-display/Table/Table';
+export { default as AccessDenied } from './components/feedback-and-states/AccessDenied/AccessDenied';
+export { default as Chip } from './components/feedback-and-states/Chip/Chip';
+export { default as EmptyState } from './components/feedback-and-states/EmptyState/EmptyState';
+export { default as ErrorFallback } from './components/feedback-and-states/ErrorFallback/ErrorFallback';
+export { default as ErrorMessage } from './components/feedback-and-states/ErrorMessage/ErrorMessage';
+export { default as LoadingContainer } from './components/feedback-and-states/LoadingContainer/LoadingContainer';
+export { Skeleton } from './components/feedback-and-states/Skeleton/Skeleton';
+export { default as Spinner } from './components/feedback-and-states/Spinner/Spinner';
+export { default as StatCard } from './components/feedback-and-states/StatCard/StatCard';
+export { default as TagChip } from './components/feedback-and-states/TagChip/TagChip';
+export { default as ThemeToggle } from './components/feedback-and-states/ThemeToggle/ThemeToggle';
+export type { ToastMessage } from './components/feedback-and-states/Toast/Toast';
 export {
   addToast,
   removeToast,
   ToastProvider,
   ToastViewport,
   useToast,
-} from './components/common/Toast/Toast';
-export { Tooltip } from './components/common/Tooltip/Tooltip';
-export type { WizardStep } from './components/common/Wizard/Wizard';
-export { Wizard } from './components/common/Wizard/Wizard';
-export { default as Footer } from './components/layout/Footer/Footer';
-export { default as MainLayout } from './components/layout/MainLayout/MainLayout';
-export { default as Navbar } from './components/layout/Navbar/Navbar';
-export type { NavItem } from './components/layout/Navbar/NavItem';
+} from './components/feedback-and-states/Toast/Toast';
+export { default as Footer } from './components/layouts/Footer/Footer';
+export { default as MainLayout } from './components/layouts/MainLayout/MainLayout';
+export { default as Navbar } from './components/layouts/Navbar/Navbar';
+export type { NavItem } from './components/layouts/Navbar/NavItem';
+export type {
+  ConfirmActionProps,
+  ConfirmActionRenderContext,
+} from './components/overlays/ConfirmAction/ConfirmAction';
+export { default as ConfirmAction } from './components/overlays/ConfirmAction/ConfirmAction';
+export { default as ConfirmDialog } from './components/overlays/ConfirmDialog/ConfirmDialog';
+export { default as Dialog } from './components/overlays/Dialog/Dialog';
+export { default as DialogActions } from './components/overlays/Dialog/DialogActions';
+export { default as DialogBody } from './components/overlays/Dialog/DialogBody';
+export { default as DialogTitle } from './components/overlays/Dialog/DialogTitle';
+export { default as Drawer } from './components/overlays/Drawer/Drawer';
+export { Tooltip } from './components/overlays/Tooltip/Tooltip';
+export { default as AiResultPanel } from './components/workflows/AiResultPanel/AiResultPanel';
+export type { AuthRedirectProps } from './components/workflows/AuthRedirect/AuthRedirect';
+export { default as AuthRedirect } from './components/workflows/AuthRedirect/AuthRedirect';
+export type {
+  EditableCollectionProps,
+  EditableCollectionRenderContext,
+} from './components/workflows/EditableCollection/EditableCollection';
+export { default as EditableCollection } from './components/workflows/EditableCollection/EditableCollection';
+export { default as FileDropZone } from './components/workflows/FileDropZone/FileDropZone';
+export { FlipCard } from './components/workflows/FlipCard/FlipCard';
+export { default as MarkdownEditDialog } from './components/workflows/MarkdownEditDialog/MarkdownEditDialog';
+export type { RequireAuthProps } from './components/workflows/RequireAuth/RequireAuth';
+export { default as RequireAuth } from './components/workflows/RequireAuth/RequireAuth';
+export { default as Tabs } from './components/workflows/Tabs/Tabs';
+export { default as Timeline } from './components/workflows/Timeline/Timeline';
+export type { WizardStep } from './components/workflows/Wizard/Wizard';
+export { Wizard } from './components/workflows/Wizard/Wizard';
 export { default as useClickOutside } from './hooks/useClickOutside';
 export { default as useEscapeKey } from './hooks/useEscapeKey';
 export type { default as Props } from './models/Props';
