@@ -7,11 +7,18 @@ export {
 } from './components/common/Accordion/Accordion';
 export { default as ActionRow } from './components/common/ActionRow/ActionRow';
 export { default as AiResultPanel } from './components/common/AiResultPanel/AiResultPanel';
+export type { AuthRedirectProps } from './components/common/AuthRedirect/AuthRedirect';
+export { default as AuthRedirect } from './components/common/AuthRedirect/AuthRedirect';
 export { default as Autocomplete } from './components/common/Autocomplete/Autocomplete';
 export { default as Button } from './components/common/Button/Button';
 export { default as Checkbox } from './components/common/Checkbox/Checkbox';
 export { default as Chip } from './components/common/Chip/Chip';
 export { default as ColorPicker } from './components/common/ColorPicker/ColorPicker';
+export type {
+  ConfirmActionProps,
+  ConfirmActionRenderContext,
+} from './components/common/ConfirmAction/ConfirmAction';
+export { default as ConfirmAction } from './components/common/ConfirmAction/ConfirmAction';
 export { default as ConfirmDialog } from './components/common/ConfirmDialog/ConfirmDialog';
 export { default as Dialog } from './components/common/Dialog/Dialog';
 export { default as DialogActions } from './components/common/Dialog/DialogActions';
@@ -21,6 +28,11 @@ export { default as Drawer } from './components/common/Drawer/Drawer';
 export { default as DropdownButton } from './components/common/DropdownButton/DropdownButton';
 export { default as DropdownItem } from './components/common/DropdownMenu/DropdownItem';
 export { default as DropdownMenu } from './components/common/DropdownMenu/DropdownMenu';
+export type {
+  EditableCollectionProps,
+  EditableCollectionRenderContext,
+} from './components/common/EditableCollection/EditableCollection';
+export { default as EditableCollection } from './components/common/EditableCollection/EditableCollection';
 export { default as EmptyState } from './components/common/EmptyState/EmptyState';
 export { default as ErrorFallback } from './components/common/ErrorFallback/ErrorFallback';
 export { default as ErrorMessage } from './components/common/ErrorMessage/ErrorMessage';
@@ -41,6 +53,8 @@ export { default as MarkdownRenderer } from './components/common/MarkdownRendere
 export { default as Pagination } from './components/common/Pagination/Pagination';
 export { default as RadarChart } from './components/common/RadarChart/RadarChart';
 export { RadioGroup, type RadioOption } from './components/common/Radio/Radio';
+export type { RequireAuthProps } from './components/common/RequireAuth/RequireAuth';
+export { default as RequireAuth } from './components/common/RequireAuth/RequireAuth';
 export { default as ScoreRing } from './components/common/ScoreRing/ScoreRing';
 export { default as SectionCard } from './components/common/SectionCard/SectionCard';
 export { Skeleton } from './components/common/Skeleton/Skeleton';

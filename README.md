@@ -130,7 +130,7 @@ export default createLintStagedConfig();
 
 ### Common Components
 
-`AccessDenied`, `Accordion`, `AccordionItem`, `ActionRow`, `AiResultPanel`, `Autocomplete`, `Button`, `Checkbox`, `Chip`, `ColorPicker`, `ConfirmDialog`, `Dialog`, `DialogActions`, `DialogBody`, `DialogTitle`, `Drawer`, `DropdownButton`, `DropdownItem`, `DropdownMenu`, `EmptyState`, `ErrorFallback`, `ErrorMessage`, `FileDropZone`, `FlipCard`, `FormField`, `FormGrid`, `FormLayout`, `IconButton`, `Input`, `Select`, `TextArea`, `JsonDisplay`, `LoadingContainer`, `LocaleSwitcher`, `MarkdownEditDialog`, `MarkdownRenderer`, `Pagination`, `RadarChart`, `RadioGroup`, `ScoreRing`, `SectionCard`, `Skeleton`, `Spinner`, `StatCard`, `Stepper`, `Switch`, `Table`, `TableHead`, `TableBody`, `TableRow`, `TableHeader`, `TableCell`, `Tabs`, `TagChip`, `TagInput`, `ThemeToggle`, `Timeline`, `Tooltip`, `Wizard`.
+`AccessDenied`, `Accordion`, `AccordionItem`, `ActionRow`, `AiResultPanel`, `AuthRedirect`, `Autocomplete`, `Button`, `Checkbox`, `Chip`, `ColorPicker`, `ConfirmAction`, `ConfirmDialog`, `Dialog`, `DialogActions`, `DialogBody`, `DialogTitle`, `Drawer`, `DropdownButton`, `DropdownItem`, `DropdownMenu`, `EditableCollection`, `EmptyState`, `ErrorFallback`, `ErrorMessage`, `FileDropZone`, `FlipCard`, `FormField`, `FormGrid`, `FormLayout`, `IconButton`, `Input`, `Select`, `TextArea`, `JsonDisplay`, `LoadingContainer`, `LocaleSwitcher`, `MarkdownEditDialog`, `MarkdownRenderer`, `Pagination`, `RadarChart`, `RadioGroup`, `RequireAuth`, `ScoreRing`, `SectionCard`, `Skeleton`, `Spinner`, `StatCard`, `Stepper`, `Switch`, `Table`, `TableHead`, `TableBody`, `TableRow`, `TableHeader`, `TableCell`, `Tabs`, `TagChip`, `TagInput`, `ThemeToggle`, `Timeline`, `Tooltip`, `Wizard`.
 
 ### Layout Components
 

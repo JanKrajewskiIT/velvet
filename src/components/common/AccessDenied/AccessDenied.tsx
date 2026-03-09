@@ -1,4 +1,3 @@
-import { A } from '@solidjs/router';
 import { IoLockClosedOutline } from 'solid-icons/io';
 
 import type Props from '../../../models/Props';
@@ -18,9 +17,9 @@ const AccessDenied = (props: Props<AccessDeniedProps>) => {
         <IoLockClosedOutline class={styles.icon} aria-hidden />
         <h1 class={styles.title}>{props.title}</h1>
         <p class={styles.description}>{props.description}</p>
-        <A href={props.goHomeHref ?? '/'} class={styles.link}>
+        <a href={props.goHomeHref ?? '/'} class={styles.link}>
           {props.goHomeLabel}
-        </A>
+        </a>
       </div>
     </div>
   );

@@ -36,6 +36,26 @@ jobs:
         run: npm run build
         working-directory: demo
 
+      - name: Validate FTP secrets
+        shell: bash
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_SERVER_DIR: ${{ secrets.FTP_SERVER_DIR }}
+        run: |
+          missing=()
+          [[ -z "$FTP_SERVER" ]] && missing+=("FTP_SERVER")
+          [[ -z "$FTP_USERNAME" ]] && missing+=("FTP_USERNAME")
+          [[ -z "$FTP_PASSWORD" ]] && missing+=("FTP_PASSWORD")
+          [[ -z "$FTP_SERVER_DIR" ]] && missing+=("FTP_SERVER_DIR")
+
+          if (( ${#missing[@]} )); then
+            echo "Missing required repository secrets: ${missing[*]}"
+            echo "Set them in Settings > Secrets and variables > Actions."
+            exit 1
+          fi
+
       - name: Deploy to Hostinger via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:

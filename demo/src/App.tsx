@@ -1,17 +1,21 @@
-﻿import { ThemeProvider, ThemeToggle, ToastProvider } from '@jankrajewskiit/ui';
+import { ThemeProvider, ThemeToggle, ToastProvider } from '@jankrajewskiit/ui';
 import { createSignal, For, Match, Switch } from 'solid-js';
 
 import ActionsSection from './sections/ActionsSection';
 import ComplexSection from './sections/ComplexSection';
 import DataDisplaySection from './sections/DataDisplaySection';
+import DeveloperSection from './sections/DeveloperSection';
 import FeedbackSection from './sections/FeedbackSection';
 import InputsSection from './sections/InputsSection';
+import NewComponentsSection from './sections/NewComponentsSection';
 import OverlaysSection from './sections/OverlaysSection';
 import OverviewSection from './sections/OverviewSection';
 import StatesSection from './sections/StatesSection';
 
 type SectionId =
   | 'overview'
+  | 'new-components'
+  | 'developer'
   | 'actions'
   | 'inputs'
   | 'feedback'
@@ -29,6 +33,10 @@ const NAV_GROUPS: NavGroup[] = [
   {
     label: 'Start',
     items: [{ id: 'overview', label: 'Overview and Installation' }],
+  },
+  {
+    label: 'Latest',
+    items: [{ id: 'new-components', label: 'New Components Showcase' }],
   },
   {
     label: 'Primitives',
@@ -56,6 +64,10 @@ const NAV_GROUPS: NavGroup[] = [
     label: 'Complex',
     items: [{ id: 'complex', label: 'Wizard, AI and Files' }],
   },
+  {
+    label: 'Docs',
+    items: [{ id: 'developer', label: 'Developer Technical Docs' }],
+  },
 ];
 
 const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
@@ -63,6 +75,16 @@ const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
     title: 'VelvetUI Overview',
     description:
       'Start here for installation, library goals and a quick snapshot of what is included.',
+  },
+  'new-components': {
+    title: 'New Components',
+    description:
+      'Interactive demos for ConfirmAction, EditableCollection, AuthRedirect and RequireAuth.',
+  },
+  developer: {
+    title: 'Developer Technical Docs',
+    description:
+      'Ready-to-copy setup, tooling presets and integration snippets based on the package README.',
   },
   actions: {
     title: 'Actions and Tooltips',
@@ -144,6 +166,12 @@ const AppContent = () => {
         <Switch>
           <Match when={activeSection() === 'overview'}>
             <OverviewSection />
+          </Match>
+          <Match when={activeSection() === 'new-components'}>
+            <NewComponentsSection />
+          </Match>
+          <Match when={activeSection() === 'developer'}>
+            <DeveloperSection />
           </Match>
           <Match when={activeSection() === 'actions'}>
             <ActionsSection />

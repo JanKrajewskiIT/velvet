@@ -1,0 +1,79 @@
+import type { JSX } from 'solid-js';
+import { createSignal, For } from 'solid-js';
+
+import type Props from '../../../models/Props';
+import type { ButtonProps } from '../Button/Button';
+import Button from '../Button/Button';
+import ConfirmDialog from '../ConfirmDialog/ConfirmDialog';
+import styles from './EditableCollection.module.css';
+
+export interface EditableCollectionRenderContext {
+  requestRemove: () => void;
+}
+
+export interface EditableCollectionProps<T> {
+  items: readonly T[];
+  getId: (item: T) => string;
+  renderItem: (
+    item: T,
+    context: EditableCollectionRenderContext
+  ) => JSX.Element;
+  onAdd: () => void;
+  onRemove: (id: string) => void;
+  addLabel: string;
+  confirmTitle: string;
+  confirmMessage: string;
+  confirmLabel: string;
+  cancelLabel: string;
+  confirmVariant?: 'danger' | 'primary';
+  addButtonVariant?: ButtonProps['variant'];
+  listClass?: string;
+  itemClass?: string;
+  addButtonClass?: string;
+}
+
+const EditableCollection = <T,>(props: Props<EditableCollectionProps<T>>) => {
+  const [deleteId, setDeleteId] = createSignal<string | null>(null);
+
+  const handleConfirmDelete = () => {
+    const id = deleteId();
+    if (!id) return;
+    props.onRemove(id);
+    setDeleteId(null);
+  };
+
+  return (
+    <div class={`${styles.list} ${props.listClass ?? ''} ${props.class ?? ''}`}>
+      <For each={props.items}>
+        {(item) => (
+          <div class={`${styles.item} ${props.itemClass ?? ''}`}>
+            {props.renderItem(item, {
+              requestRemove: () => {
+                setDeleteId(props.getId(item));
+              },
+            })}
+          </div>
+        )}
+      </For>
+      <Button
+        class={`${styles.addButton} ${props.addButtonClass ?? ''}`}
+        variant={props.addButtonVariant ?? 'ghost'}
+        onClick={props.onAdd}
+      >
+        {props.addLabel}
+      </Button>
+      <ConfirmDialog
+        open={deleteId() !== null}
+        title={props.confirmTitle}
+        message={props.confirmMessage}
+        confirmLabel={props.confirmLabel}
+        cancelLabel={props.cancelLabel}
+        variant={props.confirmVariant ?? 'danger'}
+        onConfirm={handleConfirmDelete}
+        onClose={() => setDeleteId(null)}
+      />
+    </div>
+  );
+};
+
+export default EditableCollection;
