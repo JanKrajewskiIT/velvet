@@ -186,9 +186,122 @@ npm run verify
 
 `npm run verify` executes typecheck, lint, build, and tests.
 
-## Publishing
+## CI/CD
+
+### Publishing
 
 Publishing runs from GitHub Actions on tags matching `v*`.
 
 - Workflow: `.github/workflows/publish.yml`
-- Demo deployment workflow: `.github/workflows/deploy-demo.yml`
+
+### Demo Deployment
+
+The demo app is deployed as a Docker container to a Hostinger VPS on every push to `main`.
+
+- Workflow: `.github/workflows/deploy-demo.yml`
+- Pipeline: verify library → build Docker image → push to GHCR → deploy via SSH
+
+#### Required GitHub Secrets
+
+Create a GitHub Environment named `production` (Settings → Environments → New environment) and add the following secrets:
+
+| Secret        | Description                                                 |
+| ------------- | ----------------------------------------------------------- |
+| `VPS_HOST`    | Hostinger VPS IP address                                    |
+| `VPS_USER`    | SSH username (typically `root`)                             |
+| `VPS_SSH_KEY` | Ed25519 private SSH key (see below)                         |
+| `GHCR_TOKEN`  | GitHub PAT with `read:packages` and `write:packages` scopes |
+
+#### Generating GHCR_TOKEN
+
+1. Go to GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)
+2. Generate new token (classic)
+3. Set expiration (recommended: 90 days)
+4. Select scopes: `read:packages`, `write:packages`
+5. Generate token, copy it immediately
+6. Add as `GHCR_TOKEN` in the `production` environment secrets
+
+#### Generating VPS_SSH_KEY
+
+**Windows (PowerShell):**
+
+```powershell
+# Create .ssh directory if it doesn't exist
+mkdir ~/.ssh -ErrorAction SilentlyContinue
+
+# Generate Ed25519 key (press Enter twice for empty passphrase)
+ssh-keygen -t ed25519 -C "github-actions-deploy" -f $env:USERPROFILE\.ssh\velvet_deploy
+
+# Copy public key to VPS (enter VPS password when prompted)
+Get-Content $env:USERPROFILE\.ssh\velvet_deploy.pub | ssh root@YOUR_VPS_IP "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys"
+
+# Test connection (should connect without password)
+ssh -i $env:USERPROFILE\.ssh\velvet_deploy root@YOUR_VPS_IP
+
+# Display private key to copy to GitHub Secrets
+Get-Content $env:USERPROFILE\.ssh\velvet_deploy
+```
+
+**Linux/macOS:**
+
+```bash
+# Generate Ed25519 key with empty passphrase
+ssh-keygen -t ed25519 -C "github-actions-deploy" -f ~/.ssh/velvet_deploy -N ""
+
+# Copy public key to VPS
+ssh-copy-id -i ~/.ssh/velvet_deploy.pub root@YOUR_VPS_IP
+
+# Test connection (should connect without password)
+ssh -i ~/.ssh/velvet_deploy root@YOUR_VPS_IP
+
+# Display private key to copy to GitHub Secrets
+cat ~/.ssh/velvet_deploy
+```
+
+> **Important:** Copy the **entire** private key content, including the header and footer lines:
+>
+> ```
+> -----BEGIN OPENSSH PRIVATE KEY-----
+> ...
+> -----END OPENSSH PRIVATE KEY-----
+> ```
+>
+> If the VPS is already configured for another project (e.g. Recron), the SSH key is already in `authorized_keys` on the server. You can reuse the same private key — just copy its value into the `VPS_SSH_KEY` secret in this repository.
+
+#### DNS Configuration
+
+Add an A record in Hostinger hPanel (DNS Zone Editor) pointing the demo subdomain to the VPS:
+
+| Type | Name   | Target         |
+| ---- | ------ | -------------- |
+| A    | `demo` | VPS IP address |
+
+#### SSL Certificate
+
+The demo runs behind the Recron Nginx reverse proxy and shares its wildcard SSL certificate. If the certificate was issued before `demo.bluebraces.online` was added, it must be re-issued to include the new subdomain.
+
+On the VPS:
+
+```bash
+# Expand the existing certificate to include demo.bluebraces.online
+docker run --rm \
+  -v /opt/recron/certbot/conf:/etc/letsencrypt \
+  -v /opt/recron/certbot/www:/var/www/certbot \
+  certbot/certbot certonly \
+  --webroot --webroot-path=/var/www/certbot \
+  --email YOUR_EMAIL \
+  --agree-tos --no-eff-email --non-interactive --expand \
+  -d bluebraces.online \
+  -d auth.bluebraces.online \
+  -d api.bluebraces.online \
+  -d app.bluebraces.online \
+  -d docs.bluebraces.online \
+  -d demo.bluebraces.online
+
+# Reload Nginx to pick up the new certificate
+docker exec recron-nginx nginx -s reload
+```
+
+#### Nginx Reverse Proxy
+
+The Velvet demo container joins the Recron Docker network (`aspire`) on deployment. Nginx routes `demo.bluebraces.online` to the `velvet-demo` container. The Nginx config is maintained in the Recron repository at `deploy/nginx/nginx.conf`.

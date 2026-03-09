@@ -122,11 +122,22 @@ jobs:
             docker stop "${CONTAINER_NAME}" 2>/dev/null || true
             docker rm "${CONTAINER_NAME}" 2>/dev/null || true
 
-            # Start new container
+            # Find the Recron aspire network (created by docker compose in /opt/recron)
+            NETWORK=$(docker network ls --filter "name=aspire" --format "{{.Name}}" | head -1)
+            if [ -z "${NETWORK}" ]; then
+              echo "WARNING: aspire network not found, container will not be reachable via Nginx"
+              NETWORK_FLAG=""
+            else
+              echo "Joining Docker network: ${NETWORK}"
+              NETWORK_FLAG="--network ${NETWORK}"
+            fi
+
+            # Start new container (port 3100 as fallback, Nginx proxies via Docker network)
             docker run -d \
               --name "${CONTAINER_NAME}" \
               --restart unless-stopped \
               -p 3100:3000 \
+              ${NETWORK_FLAG} \
               "${IMAGE}:${IMAGE_TAG}"
 
             # Cleanup old images
