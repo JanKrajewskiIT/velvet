@@ -14,29 +14,3 @@ export const Table = (props: TableProps) => {
     </div>
   );
 };
-
-export const TableHead = (
-  props: JSX.HTMLAttributes<HTMLTableSectionElement>
-) => {
-  return <thead class={styles.thead} {...props} />;
-};
-
-export const TableBody = (
-  props: JSX.HTMLAttributes<HTMLTableSectionElement>
-) => {
-  return <tbody class={styles.tbody} {...props} />;
-};
-
-export const TableRow = (props: JSX.HTMLAttributes<HTMLTableRowElement>) => {
-  return <tr class={styles.tr} {...props} />;
-};
-
-export const TableHeader = (
-  props: JSX.HTMLAttributes<HTMLTableCellElement>
-) => {
-  return <th class={styles.th} {...props} />;
-};
-
-export const TableCell = (props: JSX.HTMLAttributes<HTMLTableCellElement>) => {
-  return <td class={styles.td} {...props} />;
-};

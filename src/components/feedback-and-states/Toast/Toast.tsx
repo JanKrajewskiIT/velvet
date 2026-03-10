@@ -1,6 +1,4 @@
-import { createSignal, For, type JSX, onCleanup } from 'solid-js';
-
-import styles from './Toast.module.css';
+import { createSignal } from 'solid-js';
 
 export interface ToastMessage {
   id: string;
@@ -9,18 +7,9 @@ export interface ToastMessage {
   duration?: number;
 }
 
-interface ToastProviderProps {
-  children: JSX.Element;
-  closeLabel?: string;
-}
-
-interface ToastViewportProps {
-  closeLabel?: string;
-}
-
-const [toasts, setToasts] = createSignal<ToastMessage[]>([]);
+export const [toasts, setToasts] = createSignal<ToastMessage[]>([]);
 let fallbackToastId = 0;
-const toastTimers = new Map<string, ReturnType<typeof setTimeout>>();
+export const toastTimers = new Map<string, ReturnType<typeof setTimeout>>();
 
 const createToastId = (): string => {
   if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
@@ -60,49 +49,10 @@ export const useToast = () => {
   return { addToast, removeToast };
 };
 
-export const ToastViewport = (props: ToastViewportProps) => {
-  return (
-    <div
-      class={styles.toastContainer}
-      role="region"
-      aria-live="polite"
-      aria-atomic="false"
-    >
-      <For each={toasts()}>
-        {(toast) => (
-          <div
-            class={`${styles.toast} ${styles[toast.type]}`}
-            role={toast.type === 'error' ? 'alert' : 'status'}
-          >
-            <div class={styles.message}>{toast.message}</div>
-            <button
-              type="button"
-              class={styles.closeBtn}
-              onClick={() => removeToast(toast.id)}
-              aria-label={props.closeLabel ?? 'Close toast'}
-            >
-              &times;
-            </button>
-          </div>
-        )}
-      </For>
-    </div>
-  );
-};
-
-export const ToastProvider = (props: ToastProviderProps) => {
-  onCleanup(() => {
-    for (const timer of toastTimers.values()) {
-      clearTimeout(timer);
-    }
-    toastTimers.clear();
-    setToasts([]);
-  });
-
-  return (
-    <>
-      {props.children}
-      <ToastViewport closeLabel={props.closeLabel} />
-    </>
-  );
+export const cleanupToasts = (): void => {
+  for (const timer of toastTimers.values()) {
+    clearTimeout(timer);
+  }
+  toastTimers.clear();
+  setToasts([]);
 };

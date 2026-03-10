@@ -22,10 +22,8 @@ export {
 } from './components/actions-and-forms/Radio/Radio';
 export { default as Switch } from './components/actions-and-forms/Switch/Switch';
 export { TagInput } from './components/actions-and-forms/TagInput/TagInput';
-export {
-  Accordion,
-  AccordionItem,
-} from './components/data-display/Accordion/Accordion';
+export { Accordion } from './components/data-display/Accordion/Accordion';
+export { AccordionItem } from './components/data-display/Accordion/AccordionItem';
 export { default as JsonDisplay } from './components/data-display/JsonDisplay/JsonDisplay';
 export { default as MarkdownRenderer } from './components/data-display/MarkdownRenderer/MarkdownRenderer';
 export { default as Pagination } from './components/data-display/Pagination/Pagination';
@@ -33,14 +31,12 @@ export { default as RadarChart } from './components/data-display/RadarChart/Rada
 export { default as ScoreRing } from './components/data-display/ScoreRing/ScoreRing';
 export { default as SectionCard } from './components/data-display/SectionCard/SectionCard';
 export { default as Stepper } from './components/data-display/Stepper/Stepper';
-export {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from './components/data-display/Table/Table';
+export { Table } from './components/data-display/Table/Table';
+export { TableBody } from './components/data-display/Table/TableBody';
+export { TableCell } from './components/data-display/Table/TableCell';
+export { TableHead } from './components/data-display/Table/TableHead';
+export { TableHeader } from './components/data-display/Table/TableHeader';
+export { TableRow } from './components/data-display/Table/TableRow';
 export { default as AccessDenied } from './components/feedback-and-states/AccessDenied/AccessDenied';
 export { default as Chip } from './components/feedback-and-states/Chip/Chip';
 export { default as EmptyState } from './components/feedback-and-states/EmptyState/EmptyState';
@@ -56,10 +52,10 @@ export type { ToastMessage } from './components/feedback-and-states/Toast/Toast'
 export {
   addToast,
   removeToast,
-  ToastProvider,
-  ToastViewport,
   useToast,
 } from './components/feedback-and-states/Toast/Toast';
+export { ToastProvider } from './components/feedback-and-states/Toast/ToastProvider';
+export { ToastViewport } from './components/feedback-and-states/Toast/ToastViewport';
 export { default as Footer } from './components/layouts/Footer/Footer';
 export { default as MainLayout } from './components/layouts/MainLayout/MainLayout';
 export { default as Navbar } from './components/layouts/Navbar/Navbar';
