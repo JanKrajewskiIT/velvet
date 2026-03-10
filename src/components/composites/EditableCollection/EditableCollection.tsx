@@ -3,8 +3,8 @@ import { createSignal, For } from 'solid-js';
 
 import type Props from '~/models/Props';
 
-import type { ButtonProps } from '../../actions-and-forms/Button/Button';
-import Button from '../../actions-and-forms/Button/Button';
+import type { ButtonProps } from '../../inputs/Button/Button';
+import Button from '../../inputs/Button/Button';
 import ConfirmDialog from '../../overlays/ConfirmDialog/ConfirmDialog';
 import styles from './EditableCollection.module.css';
 

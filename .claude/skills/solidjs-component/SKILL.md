@@ -16,7 +16,7 @@ With HTML attribute spreading: `interface XOwnProps extends JSX.*HTMLAttributes`
 
 ## Inventory
 
-`actions-and-forms/` (19), `data-display/` (9), `feedback-and-states/` (11), `layouts/` (3), `overlays/` (6), `workflows/` (10).
+`inputs/` (11), `forms/` (4), `data-display/` (7), `navigation/` (4), `feedback/` (10), `overlays/` (6), `layout/` (4), `composites/` (5), `app/` (3).
 
 ## Toast
 

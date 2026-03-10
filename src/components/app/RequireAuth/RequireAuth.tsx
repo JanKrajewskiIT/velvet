@@ -2,8 +2,8 @@ import { createMemo, type JSX, Show } from 'solid-js';
 
 import type Props from '~/models/Props';
 
-import AccessDenied from '../../feedback-and-states/AccessDenied/AccessDenied';
-import LoadingContainer from '../../feedback-and-states/LoadingContainer/LoadingContainer';
+import AccessDenied from '../../feedback/AccessDenied/AccessDenied';
+import LoadingContainer from '../../feedback/LoadingContainer/LoadingContainer';
 import AuthRedirect from '../AuthRedirect/AuthRedirect';
 
 export interface RequireAuthProps {

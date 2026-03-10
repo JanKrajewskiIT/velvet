@@ -2,7 +2,7 @@ import { FiAlertTriangle, FiHelpCircle } from 'solid-icons/fi';
 
 import type Props from '~/models/Props';
 
-import Button from '../../actions-and-forms/Button/Button';
+import Button from '../../inputs/Button/Button';
 import Dialog from '../Dialog/Dialog';
 import DialogActions from '../Dialog/DialogActions';
 import DialogBody from '../Dialog/DialogBody';

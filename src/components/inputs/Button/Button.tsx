@@ -2,7 +2,7 @@ import { type JSX, Show, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
 
-import Spinner from '../../feedback-and-states/Spinner/Spinner';
+import Spinner from '../../feedback/Spinner/Spinner';
 import styles from './Button.module.css';
 
 interface ButtonOwnProps extends Omit<

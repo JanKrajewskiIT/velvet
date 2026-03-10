@@ -2,14 +2,14 @@ import { createEffect, createSignal, on, Show } from 'solid-js';
 
 import type Props from '~/models/Props';
 
-import Button from '../../actions-and-forms/Button/Button';
-import FormField from '../../actions-and-forms/FormField/FormField';
-import TextArea from '../../actions-and-forms/Input/TextArea';
 import MarkdownRenderer from '../../data-display/MarkdownRenderer/MarkdownRenderer';
-import Dialog from '../../overlays/Dialog/Dialog';
-import DialogActions from '../../overlays/Dialog/DialogActions';
-import DialogBody from '../../overlays/Dialog/DialogBody';
-import DialogTitle from '../../overlays/Dialog/DialogTitle';
+import FormField from '../../forms/FormField/FormField';
+import Button from '../../inputs/Button/Button';
+import TextArea from '../../inputs/Input/TextArea';
+import Dialog from '../Dialog/Dialog';
+import DialogActions from '../Dialog/DialogActions';
+import DialogBody from '../Dialog/DialogBody';
+import DialogTitle from '../Dialog/DialogTitle';
 import styles from './MarkdownEditDialog.module.css';
 
 interface MarkdownEditDialogProps {

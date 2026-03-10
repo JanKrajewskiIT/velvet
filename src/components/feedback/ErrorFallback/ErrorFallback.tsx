@@ -1,6 +1,6 @@
 import type Props from '~/models/Props';
 
-import Button from '../../actions-and-forms/Button/Button';
+import Button from '../../inputs/Button/Button';
 import styles from './ErrorFallback.module.css';
 
 interface ErrorFallbackOwnProps {

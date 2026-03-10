@@ -2,7 +2,7 @@ import { type JSX, type ParentProps, Suspense } from 'solid-js';
 
 import type Props from '~/models/Props';
 
-import LoadingContainer from '../../feedback-and-states/LoadingContainer/LoadingContainer';
+import LoadingContainer from '../../feedback/LoadingContainer/LoadingContainer';
 import styles from './MainLayout.module.css';
 
 interface MainLayoutProps {

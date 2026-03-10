@@ -3,9 +3,9 @@ import { For, type JSX, Show } from 'solid-js';
 
 import type Props from '~/models/Props';
 
-import Button from '../../actions-and-forms/Button/Button';
 import ScoreRing from '../../data-display/ScoreRing/ScoreRing';
-import Spinner from '../../feedback-and-states/Spinner/Spinner';
+import Spinner from '../../feedback/Spinner/Spinner';
+import Button from '../../inputs/Button/Button';
 import styles from './AiResultPanel.module.css';
 
 interface AiResultSection {

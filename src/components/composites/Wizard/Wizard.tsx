@@ -9,8 +9,8 @@ import {
 
 import type Props from '~/models/Props';
 
-import Button from '../../actions-and-forms/Button/Button';
-import Stepper from '../../data-display/Stepper/Stepper';
+import Button from '../../inputs/Button/Button';
+import Stepper from '../../navigation/Stepper/Stepper';
 import styles from './Wizard.module.css';
 
 export interface WizardStep {

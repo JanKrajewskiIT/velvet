@@ -13,7 +13,7 @@ Branch from `main`, conventional commits (`feat:`, `fix:`, `refactor:`, `docs:`)
 
 ## Structure
 
-`src/components/{category}/` (6 categories, 58+ components), `src/hooks/`, `src/models/Props.ts`, `src/theme/`, `src/utils/`, `src/index.ts`, `config/`, `demo/`
+`src/components/{category}/` (9 categories, 58+ components), `src/hooks/`, `src/models/Props.ts`, `src/theme/`, `src/utils/`, `src/index.ts`, `config/`, `demo/`
 
 ## Principles
 
