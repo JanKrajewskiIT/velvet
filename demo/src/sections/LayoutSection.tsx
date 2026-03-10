@@ -1,5 +1,4 @@
 import { Button, Footer, MainLayout, Navbar, type NavItem, ThemeToggle } from '@jankrajewskiit/ui';
-import { Route, Router } from '@solidjs/router';
 import { FaSolidQuestion } from 'solid-icons/fa';
 import { IoCalendar, IoHome, IoPersonCircle, IoSettings } from 'solid-icons/io';
 
@@ -20,39 +19,32 @@ const LayoutSection = () => {
     <div>
       <ShowcaseSection title="App Shell" subtitle="Navbar, MainLayout and Footer composition">
         <PreviewPanel class="layoutPreviewPanel">
-          <Router>
-            <Route
-              path="/*"
-              component={() => (
-                <div class="layoutPreviewShell">
-                  <MainLayout
-                    navbar={
-                      <Navbar
-                        navItems={DEMO_NAV_ITEMS}
-                        toggleMenuLabel="Toggle navigation"
-                        navLabel="Main navigation"
-                        logo={<strong class="layoutLogo">MyApp</strong>}
-                        actions={<Button variant="ghost">Upgrade</Button>}
-                      />
-                    }
-                    footer={
-                      <Footer
-                        copyrightText={`(c) ${String(year)} MyApp`}
-                        privacyLabel="Privacy"
-                        privacyHref="/privacy"
-                        builtWithText="Built with VelvetUi"
-                      />
-                    }
-                  >
-                    <div class="recronHero">
-                      <h3 class="recronTitle">Dashboard</h3>
-                      <p class="mutedText">Example shell composition: top nav, central workspace and footer.</p>
-                    </div>
-                  </MainLayout>
-                </div>
-              )}
-            />
-          </Router>
+          <div class="layoutPreviewShell">
+            <MainLayout
+              navbar={
+                <Navbar
+                  navItems={DEMO_NAV_ITEMS}
+                  toggleMenuLabel="Toggle navigation"
+                  navLabel="Main navigation"
+                  logo={<strong class="layoutLogo">MyApp</strong>}
+                  actions={<Button variant="ghost">Upgrade</Button>}
+                />
+              }
+              footer={
+                <Footer
+                  copyrightText={`(c) ${String(year)} MyApp`}
+                  privacyLabel="Privacy"
+                  privacyHref="/privacy"
+                  builtWithText="Built with VelvetUi"
+                />
+              }
+            >
+              <div class="recronHero">
+                <h3 class="recronTitle">Dashboard</h3>
+                <p class="mutedText">Example shell composition: top nav, central workspace and footer.</p>
+              </div>
+            </MainLayout>
+          </div>
         </PreviewPanel>
 
         <ShowcaseMeta>

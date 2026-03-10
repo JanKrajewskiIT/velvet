@@ -32,6 +32,10 @@
   border-bottom: none;
 }
 
+.tr {
+  transition: background-color var(--duration-fast) var(--ease-out-expo);
+}
+
 .tr:hover {
   background-color: var(--color-bg-hover);
 }

@@ -6,15 +6,16 @@
 .tooltipContent {
   position: absolute;
   z-index: var(--z-modal);
-  padding: var(--spacing-sm) var(--spacing-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
   font-size: var(--font-size-xs);
   color: var(--color-text-inverse);
-  background-color: var(--color-bg-inverse);
+  background-color: var(--color-tooltip);
+  backdrop-filter: blur(8px);
   border-radius: var(--radius-sm);
   white-space: nowrap;
   pointer-events: none;
-  animation: fadeIn var(--transition-fast);
-  box-shadow: var(--shadow-sm);
+  animation: tooltipIn var(--duration-fast) var(--ease-out-back);
+  box-shadow: var(--shadow-popover);
 }
 
 .top {
@@ -41,12 +42,14 @@
   transform: translateY(-50%) translateX(8px);
 }
 
-@keyframes fadeIn {
+@keyframes tooltipIn {
   from {
     opacity: 0;
+    scale: 0.92;
   }
 
   to {
     opacity: 1;
+    scale: 1;
   }
 }

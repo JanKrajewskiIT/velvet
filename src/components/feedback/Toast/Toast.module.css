@@ -17,8 +17,9 @@
   padding: var(--spacing-md) var(--spacing-lg);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-popover);
-  animation: slideIn 0.3s ease-out;
-  background-color: var(--color-bg);
+  animation: slideIn var(--duration-slow) var(--ease-out-back);
+  background-color: var(--color-glass);
+  backdrop-filter: var(--blur-overlay);
   color: var(--color-text);
   border-left: 4px solid transparent;
 }
@@ -56,12 +57,12 @@
 
 @keyframes slideIn {
   from {
-    transform: translateX(100%);
+    transform: translateX(120%) scale(0.9);
     opacity: 0;
   }
 
   to {
-    transform: translateX(0);
+    transform: translateX(0) scale(1);
     opacity: 1;
   }
 }

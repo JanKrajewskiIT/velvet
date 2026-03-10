@@ -42,7 +42,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.3s ease;
+  transition: transform var(--duration-normal) var(--ease-spring);
   color: var(--color-text-secondary);
 }
 
@@ -53,7 +53,7 @@
 .content {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 0.3s ease-out;
+  transition: grid-template-rows var(--duration-slow) var(--ease-out-expo);
   background: var(--color-surface);
 }
 
@@ -66,8 +66,8 @@
   padding: 0 var(--spacing-lg);
   opacity: 0;
   transition:
-    padding 0.3s ease-out,
-    opacity 0.3s ease-out;
+    padding var(--duration-slow) var(--ease-out-expo),
+    opacity var(--duration-slow) var(--ease-out-expo);
 }
 
 .contentOpen .contentInner {
@@ -76,6 +76,6 @@
 }
 
 .disabled .header {
-  opacity: 0.5;
+  opacity: var(--opacity-disabled);
   cursor: not-allowed;
 }

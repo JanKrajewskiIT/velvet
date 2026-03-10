@@ -21,11 +21,13 @@
 .dropZone:hover {
   border-color: var(--color-primary);
   color: var(--color-primary);
+  background: var(--color-primary-light);
 }
 
 .dropZoneActive {
   border-color: var(--color-primary);
   background: var(--color-primary-light);
+  box-shadow: var(--shadow-glow-sm);
 }
 
 .dropIcon {
@@ -35,7 +37,7 @@
 }
 
 .dropZone:hover .dropIcon {
-  transform: translateY(-2px);
+  transform: translateY(-4px) scale(1.1);
 }
 
 .dropText {

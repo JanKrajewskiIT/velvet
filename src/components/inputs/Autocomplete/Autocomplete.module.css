@@ -50,11 +50,14 @@
   z-index: var(--z-dropdown);
   max-height: 190px;
   overflow-y: auto;
-  background-color: var(--color-bg);
+  background-color: var(--color-glass);
+  backdrop-filter: var(--blur-overlay);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   box-shadow: var(--shadow-popover);
   margin-top: var(--spacing-xs);
+  animation: scaleIn var(--duration-fast) var(--ease-out-expo);
+  transform-origin: top;
 }
 
 .dropdownItem {

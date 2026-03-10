@@ -19,7 +19,7 @@
 }
 
 .button:disabled {
-  opacity: 0.4;
+  opacity: var(--opacity-disabled);
   cursor: not-allowed;
 }
 
@@ -36,6 +36,7 @@
 
 .primary:hover:not(:disabled) {
   background-color: var(--color-primary-hover);
+  box-shadow: var(--shadow-glow);
 }
 
 .danger {
@@ -46,6 +47,7 @@
 
 .danger:hover:not(:disabled) {
   background-color: var(--color-error-hover);
+  box-shadow: 0 0 16px rgb(211 47 47 / 25%);
 }
 
 .ghost {
@@ -56,6 +58,8 @@
 
 .ghost:hover:not(:disabled) {
   background-color: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
 }
 
 .dashed {
@@ -71,6 +75,7 @@
   background-color: var(--color-surface);
   border-color: var(--color-text-muted);
   color: var(--color-text);
+  transform: translateY(-1px);
 }
 
 .loading {

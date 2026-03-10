@@ -34,7 +34,7 @@
 
 .dialog::backdrop {
   background-color: var(--color-overlay);
-  backdrop-filter: blur(2px);
+  backdrop-filter: var(--blur-overlay);
   opacity: 1;
   transition:
     opacity var(--duration-normal) var(--ease-out-expo),

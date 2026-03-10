@@ -19,8 +19,8 @@
 }
 
 .interactive:hover {
-  opacity: 0.85;
-  transform: scale(1.03);
+  transform: translateY(-1px) scale(1.03);
+  box-shadow: var(--shadow-sm);
 }
 
 .interactive:focus-visible {

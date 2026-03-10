@@ -10,21 +10,22 @@
   font-size: var(--font-size-md);
   font-family: inherit;
   outline: none;
-  transition: border-color var(--transition-fast);
+  transition:
+    border-color var(--duration-fast) var(--ease-out-expo),
+    box-shadow var(--duration-fast) var(--ease-out-expo);
 }
 
 .input:focus,
 .select:focus,
 .textarea:focus {
   border-color: var(--color-primary);
-  outline: 2px solid var(--color-primary);
-  outline-offset: -2px;
+  box-shadow: 0 0 0 3px var(--color-focus-ring);
 }
 
 .input:disabled,
 .select:disabled,
 .textarea:disabled {
-  opacity: 0.6;
+  opacity: var(--opacity-disabled);
   cursor: not-allowed;
 }
 

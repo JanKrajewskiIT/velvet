@@ -20,6 +20,14 @@ export default defineConfig({
         find: /^@jankrajewskiit\/ui$/u,
         replacement: resolve(__dirname, '../src/index.ts'),
       },
+      {
+        find: /^@solidjs\/router$/u,
+        replacement: resolve(__dirname, 'node_modules/@solidjs/router'),
+      },
+      {
+        find: /^solid-js(\/.*)?$/u,
+        replacement: resolve(__dirname, 'node_modules/solid-js$1'),
+      },
     ],
   },
   server: {
@@ -29,14 +37,7 @@ export default defineConfig({
   },
   optimizeDeps: {
     exclude: ['@jankrajewskiit/ui', 'solid-markdown', 'solid-icons'],
-    include: [
-      'remark-gfm',
-      'solid-markdown > extend',
-      'solid-markdown > style-to-object',
-      'solid-markdown > inline-style-parser',
-      'solid-markdown > debug',
-      'solid-markdown > ms',
-    ],
+    include: ['remark-gfm', 'debug', 'extend', 'style-to-object', 'inline-style-parser', 'ms'],
     extensions: ['.jsx'],
   },
 });
