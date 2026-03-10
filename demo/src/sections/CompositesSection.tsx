@@ -3,37 +3,38 @@ import {
   addToast,
   AiResultPanel,
   Button,
+  EditableCollection,
   FileDropZone,
   FlipCard,
   FormField,
+  IconButton,
   Input,
-  MarkdownEditDialog,
-  MarkdownRenderer,
   Wizard,
 } from '@jankrajewskiit/ui';
-import { IoDocument } from 'solid-icons/io';
+import { IoDocument, IoTrash } from 'solid-icons/io';
 import { createSignal } from 'solid-js';
 
-import {
-  PreviewPanel,
-  ShowcaseMeta,
-  ShowcaseSection,
-} from '../components/ShowcaseSection';
+import { PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
 
 type AnalysisState = 'idle' | 'loading' | 'result' | 'error';
 
-const INITIAL_MARKDOWN = `## Release Notes
+interface TaskItem {
+  id: string;
+  title: string;
+  owner: string;
+}
 
-- Updated visual tokens
-- Improved core controls
-- Refreshed demo experience`;
+const createTask = (index: number): TaskItem => ({
+  id: crypto.randomUUID(),
+  title: `Task ${index}`,
+  owner: 'Product Team',
+});
 
-const ComplexSection = () => {
+const CompositesSection = () => {
   const [droppedFile, setDroppedFile] = createSignal<string | null>(null);
   const [analysisState, setAnalysisState] = createSignal<AnalysisState>('idle');
   const [resultNext, setResultNext] = createSignal(true);
-  const [markdown, setMarkdown] = createSignal(INITIAL_MARKDOWN);
-  const [editorOpen, setEditorOpen] = createSignal(false);
+  const [tasks, setTasks] = createSignal<TaskItem[]>([createTask(1), createTask(2)]);
 
   const wizardSteps = [
     {
@@ -66,8 +67,7 @@ const ComplexSection = () => {
       label: 'Confirm',
       component: (
         <p class="mutedText">
-          Review your information and click <strong>Finish</strong> to complete
-          registration.
+          Review your information and click <strong>Finish</strong> to complete registration.
         </p>
       ),
     },
@@ -81,6 +81,10 @@ const ComplexSection = () => {
       setAnalysisState(shouldSucceed ? 'result' : 'error');
       setResultNext((current) => !current);
     }, 1200);
+  };
+
+  const updateTask = (id: string, field: keyof TaskItem, value: string) => {
+    setTasks((current) => current.map((task) => (task.id === id ? { ...task, [field]: value } : task)));
   };
 
   return (
@@ -99,10 +103,7 @@ const ComplexSection = () => {
         </PreviewPanel>
       </ShowcaseSection>
 
-      <ShowcaseSection
-        title="AiResultPanel"
-        subtitle="Reusable result layout for AI and scoring flows"
-      >
+      <ShowcaseSection title="AiResultPanel" subtitle="Reusable result layout for AI and scoring flows">
         <PreviewPanel>
           <AiResultPanel
             isPending={analysisState() === 'loading'}
@@ -126,24 +127,14 @@ const ComplexSection = () => {
               {
                 icon: 'danger',
                 title: 'Needs follow-up',
-                items: [
-                  'Extend the same polish to all remaining secondary components',
-                ],
+                items: ['Extend the same polish to all remaining secondary components'],
               },
             ]}
             hasResult={analysisState() === 'result'}
-            idle={
-              <p class="mutedText">
-                Run analysis to generate a consistency report for the current
-                component set.
-              </p>
-            }
+            idle={<p class="mutedText">Run analysis to generate a consistency report for the current component set.</p>}
             actions={
               <ActionRow align="end">
-                <Button
-                  variant="ghost"
-                  onClick={() => setAnalysisState('idle')}
-                >
+                <Button variant="ghost" onClick={() => setAnalysisState('idle')}>
                   Reset
                 </Button>
                 <Button onClick={runAnalysis}>Run analysis</Button>
@@ -153,30 +144,44 @@ const ComplexSection = () => {
         </PreviewPanel>
       </ShowcaseSection>
 
-      <ShowcaseSection
-        title="MarkdownEditDialog"
-        subtitle="Edit and preview markdown in one flow"
-      >
+      <ShowcaseSection title="EditableCollection" subtitle="Add/remove/edit list scaffold for dynamic forms">
         <PreviewPanel class="col">
-          <ActionRow align="start">
-            <Button variant="ghost" onClick={() => setEditorOpen(true)}>
-              Open markdown editor
-            </Button>
-          </ActionRow>
-          <MarkdownRenderer content={markdown()} />
+          <EditableCollection
+            items={tasks()}
+            getId={(item) => item.id}
+            onAdd={() => setTasks((current) => [...current, createTask(current.length + 1)])}
+            onRemove={(id) => setTasks((current) => current.filter((item) => item.id !== id))}
+            addLabel="Add task"
+            confirmTitle="Remove task"
+            confirmMessage="Do you want to remove this task from the collection?"
+            confirmLabel="Remove"
+            cancelLabel="Cancel"
+            renderItem={(item, { requestRemove }) => (
+              <>
+                <div class="editableHeader">
+                  <span class="statusChip">{item.id.slice(0, 8)}</span>
+                  <IconButton icon={<IoTrash />} title="Remove task" size="sm" onClick={requestRemove} />
+                </div>
+                <div class="editableGrid">
+                  <FormField label="Title" id={`task-title-${item.id}`}>
+                    <Input
+                      id={`task-title-${item.id}`}
+                      value={item.title}
+                      onInput={(e) => updateTask(item.id, 'title', e.currentTarget.value)}
+                    />
+                  </FormField>
+                  <FormField label="Owner" id={`task-owner-${item.id}`}>
+                    <Input
+                      id={`task-owner-${item.id}`}
+                      value={item.owner}
+                      onInput={(e) => updateTask(item.id, 'owner', e.currentTarget.value)}
+                    />
+                  </FormField>
+                </div>
+              </>
+            )}
+          />
         </PreviewPanel>
-
-        <MarkdownEditDialog
-          open={editorOpen()}
-          title="Edit release notes"
-          label="Markdown"
-          initialValue={markdown()}
-          previewLabel="Preview"
-          saveLabel="Save changes"
-          cancelLabel="Cancel"
-          onSave={setMarkdown}
-          onClose={() => setEditorOpen(false)}
-        />
       </ShowcaseSection>
 
       <ShowcaseSection title="FileDropZone" subtitle="Drag-and-drop file input">
@@ -232,4 +237,4 @@ const ComplexSection = () => {
   );
 };
 
-export default ComplexSection;
+export default CompositesSection;

@@ -15,31 +15,25 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '~': resolve(__dirname, 'src'),
+      '~': resolve(import.meta.dirname, 'src'),
     },
   },
   optimizeDeps: solidMarkdownOptimizeDeps,
   build: {
     lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
+      entry: resolve(import.meta.dirname, 'src/index.ts'),
       name: 'VelvetUi',
       fileName: 'velvet-ui',
-      formats: ['es', 'umd'],
+      formats: ['es'],
     },
     rollupOptions: {
-      external: [
-        'solid-js',
-        'solid-js/web',
-        'solid-js/store',
-        '@solidjs/router',
-      ],
+      external: (id) =>
+        id.includes('node_modules') ||
+        /^(solid-js|@solidjs\/router|solid-icons|solid-markdown|dompurify|remark-gfm)(\/|$)/u.test(id),
       output: {
-        globals: {
-          'solid-js': 'SolidJS',
-          'solid-js/web': 'SolidJSWeb',
-          'solid-js/store': 'SolidJSStore',
-          '@solidjs/router': 'SolidRouter',
-        },
+        preserveModules: true,
+        preserveModulesRoot: 'src',
+        entryFileNames: '[name].js',
       },
     },
     cssCodeSplit: false,

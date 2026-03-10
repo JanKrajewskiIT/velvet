@@ -5,15 +5,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JanKrajewskiIT/velvet.git"
+    "url": "git+https://github.com/JanKrajewskiIT/velvet.git"
   },
-  "main": "./dist/velvet-ui.umd.cjs",
-  "module": "./dist/velvet-ui.js",
+  "module": "./dist/index.js",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/velvet-ui.js",
-      "require": "./dist/velvet-ui.umd.cjs"
+      "import": "./dist/index.js"
     },
     "./styles": "./dist/velvet-ui.css",
     "./eslint-config": "./config/eslint.mjs",
@@ -36,6 +34,7 @@
   "sideEffects": [
     "**/*.css"
   ],
+  "packageManager": "npm@11.4.2",
   "files": [
     "dist",
     "config"
@@ -51,21 +50,39 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "tsc -p tsconfig.test.json && node --test .tmp-tests/tests/**/*.test.js",
-    "verify": "npm run typecheck && npm run lint && npm run build && npm run test",
+    "lint:css": "stylelint \"src/**/*.css\"",
+    "lint:css:fix": "stylelint \"src/**/*.css\" --fix",
+    "verify": "npm run typecheck && npm run lint && npm run lint:css && npm run build && npm run test && npm run verify:pkg",
+    "verify:pkg": "publint && attw --pack . --entrypoints . --profile esm-only --ignore-rules internal-resolution-error",
+    "size": "size-limit",
     "prepare": "husky"
   },
   "peerDependencies": {
     "@solidjs/router": ">=0.15",
-    "solid-js": ">=1.9"
+    "solid-js": ">=1.9",
+    "solid-icons": ">=1.2.0",
+    "solid-markdown": ">=2.1.0"
+  },
+  "peerDependenciesMeta": {
+    "@solidjs/router": {
+      "optional": true
+    },
+    "solid-icons": {
+      "optional": true
+    },
+    "solid-markdown": {
+      "optional": true
+    }
   },
   "dependencies": {
     "dompurify": "^3.3.2",
-    "remark-gfm": "^4.0.1",
-    "solid-icons": "^1.2.0",
-    "solid-markdown": "^2.1.1"
+    "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.17.4",
     "@eslint/js": "^10.0.1",
+    "@solidjs/router": "^0.15.4",
+    "@size-limit/file": "^11.2.0",
     "@types/node": "^25.3.5",
     "eslint": "^10.0.3",
     "eslint-config-prettier": "^10.1.8",
@@ -77,12 +94,29 @@
     "husky": "^9.1.7",
     "lint-staged": "^16.3.2",
     "prettier": "^3.8.1",
+    "publint": "^0.3.12",
+    "size-limit": "^11.2.0",
+    "solid-icons": "^1.2.0",
+    "solid-js": "^1.9.11",
+    "solid-markdown": "^2.1.1",
+    "stylelint": "^16.18.0",
+    "stylelint-config-standard": "^38.0.0",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.56.1",
     "vite": "^7.3.1",
     "vite-plugin-dts": "^4.5.4",
     "vite-plugin-solid": "^2.11.10"
   },
+  "size-limit": [
+    {
+      "path": "dist/index.js",
+      "limit": "100 kB"
+    },
+    {
+      "path": "dist/style.css",
+      "limit": "50 kB"
+    }
+  ],
   "overrides": {
     "eslint-plugin-jsx-a11y": {
       "eslint": "$eslint"

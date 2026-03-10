@@ -1,10 +1,13 @@
 import {
   Autocomplete,
+  Button,
   Checkbox,
   ColorPicker,
+  DropdownButton,
+  DropdownItem,
+  DropdownMenu,
   FormField,
-  FormGrid,
-  FormLayout,
+  IconButton,
   Input,
   RadioGroup,
   Select,
@@ -12,28 +15,17 @@ import {
   TagInput,
   TextArea,
 } from '@jankrajewskiit/ui';
+import { IoAdd, IoClose, IoDownload, IoEllipsisHorizontal, IoPencil, IoTrash } from 'solid-icons/io';
 import { createSignal } from 'solid-js';
 
-import {
-  PreviewPanel,
-  ShowcaseMeta,
-  ShowcaseSection,
-} from '../components/ShowcaseSection';
+import { PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
 
-const PRESET_COLORS = [
-  '#1467ff',
-  '#0c52cf',
-  '#02a4ff',
-  '#2e7d32',
-  '#ed6c02',
-  '#d32f2f',
-  '#1b78ff',
-  '#00838f',
-];
+const PRESET_COLORS = ['#1467ff', '#0c52cf', '#02a4ff', '#2e7d32', '#ed6c02', '#d32f2f', '#1b78ff', '#00838f'];
 
 type RoleValue = 'admin' | 'editor' | 'viewer';
 
 const InputsSection = () => {
+  const [loading, setLoading] = createSignal(false);
   const [text, setText] = createSignal('');
   const [selected, setSelected] = createSignal('');
   const [tags, setTags] = createSignal<string[]>(['solid-js', 'vite']);
@@ -43,12 +35,68 @@ const InputsSection = () => {
   const [notifications, setNotifications] = createSignal(false);
   const [role, setRole] = createSignal<RoleValue>('editor');
 
+  const simulateLoad = () => {
+    setLoading(true);
+    setTimeout(() => setLoading(false), 1400);
+  };
+
   return (
     <div>
-      <ShowcaseSection
-        title="Input"
-        subtitle="Text, disabled and password fields"
-      >
+      <ShowcaseSection title="Button variants" subtitle="Primary actions, danger actions and low-emphasis controls">
+        <PreviewPanel>
+          <div class="row">
+            <Button variant="primary">Primary</Button>
+            <Button variant="danger">Danger</Button>
+            <Button variant="ghost">Ghost</Button>
+            <Button variant="dashed">Dashed</Button>
+          </div>
+        </PreviewPanel>
+        <PreviewPanel>
+          <div class="row">
+            <Button variant="primary" disabled>
+              Disabled
+            </Button>
+            <Button variant="primary" loading={loading()} onClick={simulateLoad}>
+              {loading() ? 'Saving...' : 'Click to load'}
+            </Button>
+          </div>
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="IconButton" subtitle="Compact controls for dense interfaces">
+        <PreviewPanel>
+          <div class="row">
+            <IconButton icon={<IoPencil />} title="Edit" />
+            <IconButton icon={<IoTrash />} title="Delete" />
+            <IconButton icon={<IoAdd />} title="Add" size="sm" />
+            <IconButton icon={<IoDownload />} title="Download" size="md" />
+            <IconButton icon={<IoClose />} title="Close" disabled />
+          </div>
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="DropdownButton and DropdownMenu" subtitle="Action menus with keyboard navigation">
+        <PreviewPanel>
+          <div class="row">
+            <DropdownButton label="Actions" variant="primary">
+              <DropdownItem label="Edit" onClick={() => {}} />
+              <DropdownItem label="Duplicate" onClick={() => {}} />
+              <DropdownItem label="Archive" onClick={() => {}} />
+            </DropdownButton>
+
+            <DropdownMenu
+              trigger={<IconButton icon={<IoEllipsisHorizontal />} title="More options" />}
+              label="More options"
+            >
+              <DropdownItem label="Settings" onClick={() => {}} />
+              <DropdownItem label="Export" onClick={() => {}} />
+              <DropdownItem label="Delete" onClick={() => {}} variant="error" />
+            </DropdownMenu>
+          </div>
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="Input" subtitle="Text, disabled and password fields">
         <PreviewPanel class="col">
           <form onSubmit={(e) => e.preventDefault()}>
             <FormField label="Text input" id="demo-text">
@@ -70,17 +118,10 @@ const InputsSection = () => {
         </PreviewPanel>
       </ShowcaseSection>
 
-      <ShowcaseSection
-        title="Select"
-        subtitle="Native select with custom styling"
-      >
+      <ShowcaseSection title="Select" subtitle="Native select with custom styling">
         <PreviewPanel>
           <FormField label="Choose option" id="demo-select">
-            <Select
-              id="demo-select"
-              value={selected()}
-              onChange={(e) => setSelected(e.currentTarget.value)}
-            >
+            <Select id="demo-select" value={selected()} onChange={(e) => setSelected(e.currentTarget.value)}>
               <option value="">-- select --</option>
               <option value="a">Option A</option>
               <option value="b">Option B</option>
@@ -93,33 +134,17 @@ const InputsSection = () => {
       <ShowcaseSection title="TextArea" subtitle="Long-form input control">
         <PreviewPanel>
           <FormField label="Description" id="demo-ta">
-            <TextArea
-              id="demo-ta"
-              placeholder="Enter a longer description..."
-              rows={4}
-            />
+            <TextArea id="demo-ta" placeholder="Enter a longer description..." rows={4} />
           </FormField>
         </PreviewPanel>
       </ShowcaseSection>
 
-      <ShowcaseSection
-        title="Autocomplete"
-        subtitle="Multi-value select with filtering"
-      >
+      <ShowcaseSection title="Autocomplete" subtitle="Multi-value select with filtering">
         <PreviewPanel>
           <FormField label="Technologies" id="demo-auto">
             <Autocomplete
               values={autoValues()}
-              options={[
-                'TypeScript',
-                'JavaScript',
-                'SolidJS',
-                'React',
-                'Vue',
-                'Svelte',
-                'Vite',
-                'Tailwind',
-              ]}
+              options={['TypeScript', 'JavaScript', 'SolidJS', 'React', 'Vue', 'Svelte', 'Vite', 'Tailwind']}
               onChange={setAutoValues}
               placeholder="Type to search..."
               removeLabel="Remove"
@@ -128,32 +153,18 @@ const InputsSection = () => {
         </PreviewPanel>
       </ShowcaseSection>
 
-      <ShowcaseSection
-        title="TagInput"
-        subtitle="Quick keyboard-driven tagging"
-      >
+      <ShowcaseSection title="TagInput" subtitle="Quick keyboard-driven tagging">
         <PreviewPanel>
           <FormField label="Tags" id="demo-tags">
-            <TagInput
-              value={tags()}
-              onChange={setTags}
-              placeholder="Add a tag and press Enter"
-            />
+            <TagInput value={tags()} onChange={setTags} placeholder="Add a tag and press Enter" />
           </FormField>
         </PreviewPanel>
       </ShowcaseSection>
 
-      <ShowcaseSection
-        title="ColorPicker"
-        subtitle="Palette-driven accent selection"
-      >
+      <ShowcaseSection title="ColorPicker" subtitle="Palette-driven accent selection">
         <PreviewPanel>
           <FormField label="Brand color" id="demo-color">
-            <ColorPicker
-              colors={PRESET_COLORS}
-              value={color()}
-              onChange={setColor}
-            />
+            <ColorPicker colors={PRESET_COLORS} value={color()} onChange={setColor} />
           </FormField>
         </PreviewPanel>
         <ShowcaseMeta>
@@ -161,10 +172,7 @@ const InputsSection = () => {
         </ShowcaseMeta>
       </ShowcaseSection>
 
-      <ShowcaseSection
-        title="Checkbox, Switch, RadioGroup"
-        subtitle="Binary and single-choice controls"
-      >
+      <ShowcaseSection title="Checkbox, Switch, RadioGroup" subtitle="Binary and single-choice controls">
         <PreviewPanel class="col">
           <Checkbox
             checked={newsletter()}
@@ -200,34 +208,6 @@ const InputsSection = () => {
               },
             ]}
           />
-        </PreviewPanel>
-      </ShowcaseSection>
-
-      <ShowcaseSection
-        title="FormGrid"
-        subtitle="Composable form layout for responsive forms"
-      >
-        <PreviewPanel>
-          <FormLayout>
-            <FormGrid>
-              <FormField label="First name" id="fn">
-                <Input id="fn" type="text" placeholder="Jan" />
-              </FormField>
-              <FormField label="Last name" id="ln">
-                <Input id="ln" type="text" placeholder="Kowalski" />
-              </FormField>
-              <FormField label="Email" id="email">
-                <Input id="email" type="email" placeholder="jan@example.com" />
-              </FormField>
-              <FormField label="Role" id="role">
-                <Select id="role">
-                  <option value="">-- select role --</option>
-                  <option value="admin">Admin</option>
-                  <option value="user">User</option>
-                </Select>
-              </FormField>
-            </FormGrid>
-          </FormLayout>
         </PreviewPanel>
       </ShowcaseSection>
     </div>

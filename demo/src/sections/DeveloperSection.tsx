@@ -1,10 +1,6 @@
 import { For } from 'solid-js';
 
-import {
-  PreviewPanel,
-  ShowcaseMeta,
-  ShowcaseSection,
-} from '../components/ShowcaseSection';
+import { PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
 
 interface DocSnippet {
   title: string;
@@ -138,10 +134,7 @@ const USAGE_SNIPPETS: DocSnippet[] = [
 const DeveloperSection = () => {
   return (
     <div>
-      <ShowcaseSection
-        title="Developer Setup"
-        subtitle="Install package, styles and peer dependencies"
-      >
+      <ShowcaseSection title="Developer Setup" subtitle="Install package, styles and peer dependencies">
         <PreviewPanel class="col">
           <pre class="installBlock">
             <code>npm install @jankrajewskiit/ui solid-js @solidjs/router</code>
@@ -152,6 +145,43 @@ const DeveloperSection = () => {
           <ShowcaseMeta>
             Package name: <span class="codeInline">@jankrajewskiit/ui</span>
           </ShowcaseMeta>
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="Component Categories" subtitle="9 categories organized by purpose">
+        <PreviewPanel class="col">
+          <ul class="overviewList">
+            <li>
+              <strong>inputs/</strong> (11) - Button, IconButton, Checkbox, Input, Radio, Switch, Autocomplete,
+              ColorPicker, TagInput, DropdownButton, DropdownMenu
+            </li>
+            <li>
+              <strong>forms/</strong> (4) - FormField, FormGrid, FormLayout, ActionRow
+            </li>
+            <li>
+              <strong>data-display/</strong> (7) - Table, Accordion, JsonDisplay, MarkdownRenderer, ScoreRing,
+              RadarChart, SectionCard
+            </li>
+            <li>
+              <strong>navigation/</strong> (4) - Tabs, Stepper, Pagination, Timeline
+            </li>
+            <li>
+              <strong>feedback/</strong> (11) - Toast, Spinner, Skeleton, LoadingContainer, ErrorMessage, EmptyState,
+              ErrorFallback, AccessDenied, Chip, TagChip, StatCard
+            </li>
+            <li>
+              <strong>overlays/</strong> (6) - Dialog, Drawer, Tooltip, ConfirmDialog, ConfirmAction, MarkdownEditDialog
+            </li>
+            <li>
+              <strong>layout/</strong> (4) - MainLayout, Navbar, Footer, ThemeToggle
+            </li>
+            <li>
+              <strong>composites/</strong> (5) - EditableCollection, FileDropZone, FlipCard, Wizard, AiResultPanel
+            </li>
+            <li>
+              <strong>app/</strong> (3) - LocaleSwitcher, AuthRedirect, RequireAuth
+            </li>
+          </ul>
         </PreviewPanel>
       </ShowcaseSection>
 
@@ -197,22 +227,14 @@ const DeveloperSection = () => {
         </div>
       </ShowcaseSection>
 
-      <ShowcaseSection
-        title="Design Principles"
-        subtitle="Rules that keep VelvetUi reusable across apps"
-      >
+      <ShowcaseSection title="Design Principles" subtitle="Rules that keep VelvetUi reusable across apps">
         <PreviewPanel class="col">
           <ul class="overviewList">
-            <li>
-              Components are app-agnostic and avoid business logic coupling.
-            </li>
+            <li>Components are app-agnostic and avoid business logic coupling.</li>
             <li>User-facing text is passed via props by the consuming app.</li>
             <li>Layout components expose slots for flexible composition.</li>
             <li>Every public component supports an optional class prop.</li>
-            <li>
-              Shared tooling keeps lint, format and tsconfig consistent across
-              repositories.
-            </li>
+            <li>Shared tooling keeps lint, format and tsconfig consistent across repositories.</li>
           </ul>
         </PreviewPanel>
       </ShowcaseSection>

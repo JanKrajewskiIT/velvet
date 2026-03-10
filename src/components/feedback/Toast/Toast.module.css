@@ -26,12 +26,15 @@
 .success {
   border-left-color: var(--color-success);
 }
+
 .error {
   border-left-color: var(--color-error);
 }
+
 .info {
   border-left-color: var(--color-info);
 }
+
 .warning {
   border-left-color: var(--color-warning);
 }
@@ -56,6 +59,7 @@
     transform: translateX(100%);
     opacity: 0;
   }
+
   to {
     transform: translateX(0);
     opacity: 1;

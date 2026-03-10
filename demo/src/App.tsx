@@ -1,29 +1,29 @@
 import { ThemeProvider, ThemeToggle, ToastProvider } from '@jankrajewskiit/ui';
 import { createSignal, For, Match, Switch } from 'solid-js';
 
-import ActionsSection from './sections/ActionsSection';
-import ComplexSection from './sections/ComplexSection';
+import AppSection from './sections/AppSection';
+import CompositesSection from './sections/CompositesSection';
 import DataDisplaySection from './sections/DataDisplaySection';
 import DeveloperSection from './sections/DeveloperSection';
 import FeedbackSection from './sections/FeedbackSection';
+import FormsSection from './sections/FormsSection';
 import InputsSection from './sections/InputsSection';
-import LayoutsSection from './sections/LayoutsSection';
-import NewComponentsSection from './sections/NewComponentsSection';
+import LayoutSection from './sections/LayoutSection';
+import NavigationSection from './sections/NavigationSection';
 import OverlaysSection from './sections/OverlaysSection';
 import OverviewSection from './sections/OverviewSection';
-import StatesSection from './sections/StatesSection';
 
 type SectionId =
   | 'overview'
-  | 'actions'
   | 'inputs'
-  | 'layouts'
+  | 'forms'
+  | 'data-display'
+  | 'navigation'
   | 'feedback'
-  | 'states'
   | 'overlays'
-  | 'data'
-  | 'complex'
-  | 'new-components'
+  | 'layout'
+  | 'composites'
+  | 'app'
   | 'developer';
 
 interface NavGroup {
@@ -33,102 +33,97 @@ interface NavGroup {
 
 const NAV_GROUPS: NavGroup[] = [
   {
-    label: 'Overview',
+    label: 'Getting Started',
     items: [{ id: 'overview', label: 'Overview and Installation' }],
   },
   {
-    label: 'Actions and Forms',
-    items: [
-      { id: 'actions', label: 'Actions and Tooltips' },
-      { id: 'inputs', label: 'Inputs and Forms' },
-    ],
+    label: 'Inputs',
+    items: [{ id: 'inputs', label: 'Buttons, Controls and Fields' }],
   },
   {
-    label: 'Layouts',
-    items: [{ id: 'layouts', label: 'Recron App Shell' }],
-  },
-  {
-    label: 'Feedback and States',
-    items: [
-      { id: 'feedback', label: 'Chips, Stats and Toast' },
-      { id: 'states', label: 'States and Errors' },
-    ],
-  },
-  {
-    label: 'Overlays',
-    items: [{ id: 'overlays', label: 'Dialog and Drawer' }],
+    label: 'Forms',
+    items: [{ id: 'forms', label: 'Form Layout and Structure' }],
   },
   {
     label: 'Data Display',
-    items: [{ id: 'data', label: 'Tables, Charts and More' }],
+    items: [{ id: 'data-display', label: 'Tables, Charts and Content' }],
   },
   {
-    label: 'Workflows',
-    items: [
-      { id: 'complex', label: 'Wizard, AI and Files' },
-      { id: 'new-components', label: 'New Components Showcase' },
-    ],
+    label: 'Navigation',
+    items: [{ id: 'navigation', label: 'Tabs, Stepper and Pagination' }],
+  },
+  {
+    label: 'Feedback',
+    items: [{ id: 'feedback', label: 'States, Chips and Toast' }],
+  },
+  {
+    label: 'Overlays',
+    items: [{ id: 'overlays', label: 'Dialogs, Drawers and Tooltips' }],
+  },
+  {
+    label: 'Layout',
+    items: [{ id: 'layout', label: 'App Shell and Theme' }],
+  },
+  {
+    label: 'Composites',
+    items: [{ id: 'composites', label: 'Wizard, AI Panel and More' }],
+  },
+  {
+    label: 'App-Specific',
+    items: [{ id: 'app', label: 'Auth and Locale Helpers' }],
   },
   {
     label: 'Developer Docs',
-    items: [{ id: 'developer', label: 'Technical Docs and Setup' }],
+    items: [{ id: 'developer', label: 'Setup, Tooling and Snippets' }],
   },
 ];
 
 const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
   overview: {
     title: 'VelvetUI Overview',
-    description:
-      'Start here for installation, library goals and a quick snapshot of what is included.',
-  },
-  actions: {
-    title: 'Actions and Tooltips',
-    description:
-      'Buttons, icon buttons, tooltips, locale switcher and action rows.',
+    description: 'Start here for installation, library goals and a quick snapshot of what is included.',
   },
   inputs: {
-    title: 'Inputs and Forms',
+    title: 'Inputs',
     description:
-      'Text inputs, selects, autocomplete, tag input, checkbox, switch, radio group, color picker and form layout components.',
+      'Buttons, icon buttons, text fields, selects, autocomplete, tag input, checkbox, switch, radio, color picker and dropdown menus.',
   },
-  layouts: {
-    title: 'Layouts',
-    description:
-      'Recron-inspired app shell built from Navbar, MainLayout and Footer composition slots.',
+  forms: {
+    title: 'Forms',
+    description: 'Form layout primitives: field wrappers, responsive grids and action rows.',
+  },
+  'data-display': {
+    title: 'Data Display',
+    description: 'Tables, accordion, section cards, score rings, radar charts, JSON display and Markdown renderer.',
+  },
+  navigation: {
+    title: 'Navigation',
+    description: 'Tabs, stepper, pagination and timeline for navigating between views and steps.',
   },
   feedback: {
-    title: 'Chips, Stats and Toast',
+    title: 'Feedback',
     description:
-      'Status chips, tag chips, stat cards, skeleton loaders and toast notifications.',
-  },
-  states: {
-    title: 'States and Errors',
-    description:
-      'Loading containers, empty states, error messages and error fallback pages.',
+      'Chips, stat cards, skeleton loaders, spinners, toast notifications, loading states, empty states and error handling.',
   },
   overlays: {
-    title: 'Dialog and Drawer',
-    description: 'Modal dialogs, confirm dialogs and slide-in drawers.',
+    title: 'Overlays',
+    description: 'Modal dialogs, confirm dialogs, confirm actions, drawers, tooltips and markdown edit dialog.',
   },
-  data: {
-    title: 'Tables, Charts and More',
-    description:
-      'Tabs, accordion, section cards, tables, pagination, stepper, timeline, score ring, radar chart, JSON display and Markdown renderer.',
+  layout: {
+    title: 'Layout',
+    description: 'App shell composition with Navbar, MainLayout, Footer and ThemeToggle.',
   },
-  complex: {
-    title: 'Wizard, AI and Files',
-    description:
-      'Multi-step wizard, AI result panel, markdown editing, flip cards and drag-and-drop files.',
+  composites: {
+    title: 'Composites',
+    description: 'Multi-step wizard, AI result panel, editable collections, file drop zone and flip cards.',
   },
-  'new-components': {
-    title: 'New Components',
-    description:
-      'Interactive demos for ConfirmAction, EditableCollection, AuthRedirect and RequireAuth.',
+  app: {
+    title: 'App-Specific',
+    description: 'Locale switcher, authentication redirect and authorization gate helpers.',
   },
   developer: {
     title: 'Developer Technical Docs',
-    description:
-      'Ready-to-copy setup, tooling presets and integration snippets based on the package README.',
+    description: 'Ready-to-copy setup, tooling presets and integration snippets based on the package README.',
   },
 };
 
@@ -177,32 +172,32 @@ const AppContent = () => {
           <Match when={activeSection() === 'overview'}>
             <OverviewSection />
           </Match>
-          <Match when={activeSection() === 'actions'}>
-            <ActionsSection />
-          </Match>
           <Match when={activeSection() === 'inputs'}>
             <InputsSection />
           </Match>
-          <Match when={activeSection() === 'layouts'}>
-            <LayoutsSection />
+          <Match when={activeSection() === 'forms'}>
+            <FormsSection />
+          </Match>
+          <Match when={activeSection() === 'data-display'}>
+            <DataDisplaySection />
+          </Match>
+          <Match when={activeSection() === 'navigation'}>
+            <NavigationSection />
           </Match>
           <Match when={activeSection() === 'feedback'}>
             <FeedbackSection />
           </Match>
-          <Match when={activeSection() === 'states'}>
-            <StatesSection />
-          </Match>
           <Match when={activeSection() === 'overlays'}>
             <OverlaysSection />
           </Match>
-          <Match when={activeSection() === 'data'}>
-            <DataDisplaySection />
+          <Match when={activeSection() === 'layout'}>
+            <LayoutSection />
           </Match>
-          <Match when={activeSection() === 'complex'}>
-            <ComplexSection />
+          <Match when={activeSection() === 'composites'}>
+            <CompositesSection />
           </Match>
-          <Match when={activeSection() === 'new-components'}>
-            <NewComponentsSection />
+          <Match when={activeSection() === 'app'}>
+            <AppSection />
           </Match>
           <Match when={activeSection() === 'developer'}>
             <DeveloperSection />
@@ -211,11 +206,7 @@ const AppContent = () => {
       </main>
 
       <div class="themeToggleBar">
-        <ThemeToggle
-          lightLabel="Light mode"
-          darkLabel="Dark mode"
-          groupLabel="Theme"
-        />
+        <ThemeToggle lightLabel="Light mode" darkLabel="Dark mode" groupLabel="Theme" />
       </div>
     </div>
   );

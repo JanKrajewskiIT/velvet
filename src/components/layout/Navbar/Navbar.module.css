@@ -7,8 +7,7 @@
   display: grid;
   grid-template-columns: 50px 50px 1fr auto;
   column-gap: 10px;
-  justify-items: center;
-  align-items: center;
+  place-items: center center;
   height: var(--header-height);
   padding: 0 10px;
   background-color: var(--header-bg);

@@ -22,16 +22,24 @@ jobs:
     env:
       GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
 
+    strategy:
+      matrix:
+        node-version: [20, 22]
+
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: ${{ matrix.node-version }}
           scope: '@jankrajewskiit'
+          cache: 'npm'
 
       - name: Install root dependencies
         run: npm ci
+
+      - name: Audit dependencies
+        run: npm audit --audit-level=moderate
 
       - name: Verify library
         run: npm run verify
@@ -150,13 +158,21 @@ jobs:
           script: |
             set -euo pipefail
 
-            echo "Waiting for container to start..."
-            sleep 5
-
-            echo "Checking container health..."
-            docker ps --filter "name=velvet-demo" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+            echo "Waiting for container to become healthy..."
+            for i in $(seq 1 12); do
+              if docker ps --filter "name=velvet-demo" --format "{{.Status}}" | grep -q "healthy"; then
+                echo "Container is healthy."
+                break
+              fi
+              if [ "$i" -eq 12 ]; then
+                echo "ERROR: Container did not become healthy within 60s"
+                docker ps --filter "name=velvet-demo" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+                exit 1
+              fi
+              sleep 5
+            done
 
             echo "Checking HTTPS endpoint via Traefik..."
-            curl -sf --max-time 10 https://velvet.bluebraces.online/ > /dev/null && echo "Demo: OK" || echo "WARNING: Demo not reachable via HTTPS (Traefik may need DNS propagation)"
+            curl -sf --retry 3 --retry-delay 5 --max-time 10 https://velvet.bluebraces.online/ > /dev/null && echo "Demo: OK" || { echo "ERROR: Demo not reachable via HTTPS"; exit 1; }
 
             echo "Smoke test completed."

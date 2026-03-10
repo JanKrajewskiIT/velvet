@@ -12,7 +12,8 @@
   transform: scale(1, 0.6);
   border-radius: var(--radius-sm);
 }
-.text:empty:before {
+
+.text:empty::before {
   content: '\00a0';
 }
 
@@ -36,17 +37,9 @@
 
 .wave::after {
   position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  inset: 0;
   transform: translateX(-100%);
-  background-image: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.4),
-    transparent
-  );
+  background-image: linear-gradient(90deg, transparent, rgb(255 255 255 / 40%), transparent);
   animation: wave 1.5s infinite;
   content: '';
 }
@@ -55,9 +48,11 @@
   0% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.4;
   }
+
   100% {
     opacity: 1;
   }

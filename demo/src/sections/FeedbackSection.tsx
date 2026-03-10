@@ -2,26 +2,26 @@ import {
   addToast,
   Button,
   Chip,
+  EmptyState,
+  ErrorFallback,
+  ErrorMessage,
+  LoadingContainer,
   Skeleton,
+  Spinner,
   StatCard,
   TagChip,
 } from '@jankrajewskiit/ui';
-import {
-  IoAlertCircle,
-  IoCheckmarkCircle,
-  IoPeople,
-  IoStatsChart,
-} from 'solid-icons/io';
+import { IoAlertCircle, IoCheckmarkCircle, IoFolder, IoPeople, IoSearch, IoStatsChart } from 'solid-icons/io';
+import { createSignal } from 'solid-js';
 
-import { PreviewPanel, ShowcaseSection } from '../components/ShowcaseSection';
+import { PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
 
 const FeedbackSection = () => {
+  const [retried, setRetried] = createSignal(false);
+
   return (
     <div>
-      <ShowcaseSection
-        title="Chip variants"
-        subtitle="Status, selection and clickable chips"
-      >
+      <ShowcaseSection title="Chip variants" subtitle="Status, selection and clickable chips">
         <PreviewPanel>
           <div class="row">
             <Chip variant="primary">Primary</Chip>
@@ -52,10 +52,7 @@ const FeedbackSection = () => {
         </PreviewPanel>
       </ShowcaseSection>
 
-      <ShowcaseSection
-        title="TagChip"
-        subtitle="Color-coded tags with optional selection"
-      >
+      <ShowcaseSection title="TagChip" subtitle="Color-coded tags with optional selection">
         <PreviewPanel>
           <div class="row">
             <TagChip label="design" color="#1467ff" />
@@ -68,37 +65,25 @@ const FeedbackSection = () => {
 
       <ShowcaseSection title="StatCard" subtitle="Compact KPI cards">
         <div class="gridCards">
-          <StatCard
-            value="1 284"
-            label="Active users"
-            icon={<IoPeople />}
-            colorClass="info"
-          />
-          <StatCard
-            value="98.7%"
-            label="Uptime"
-            icon={<IoCheckmarkCircle />}
-            colorClass="success"
-          />
-          <StatCard
-            value="3"
-            label="Open issues"
-            icon={<IoAlertCircle />}
-            colorClass="warning"
-          />
-          <StatCard
-            value="42"
-            label="Deployments"
-            icon={<IoStatsChart />}
-            colorClass="error"
-          />
+          <StatCard value="1 284" label="Active users" icon={<IoPeople />} colorClass="info" />
+          <StatCard value="98.7%" label="Uptime" icon={<IoCheckmarkCircle />} colorClass="success" />
+          <StatCard value="3" label="Open issues" icon={<IoAlertCircle />} colorClass="warning" />
+          <StatCard value="42" label="Deployments" icon={<IoStatsChart />} colorClass="error" />
         </div>
       </ShowcaseSection>
 
-      <ShowcaseSection
-        title="Skeleton"
-        subtitle="Loading placeholders with multiple variants"
-      >
+      <ShowcaseSection title="Spinner" subtitle="Progress indicators in multiple sizes">
+        <PreviewPanel>
+          <div class="row">
+            <Spinner size="sm" label="Small spinner" />
+            <Spinner size="md" label="Medium spinner" />
+            <Spinner size="lg" label="Large spinner" />
+          </div>
+        </PreviewPanel>
+        <ShowcaseMeta>Spinners inherit brand colors and support reduced-motion preferences.</ShowcaseMeta>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="Skeleton" subtitle="Loading placeholders with multiple variants">
         <PreviewPanel class="col">
           <div class="row">
             <Skeleton variant="circular" width={48} height={48} />
@@ -113,10 +98,52 @@ const FeedbackSection = () => {
         </PreviewPanel>
       </ShowcaseSection>
 
-      <ShowcaseSection
-        title="Toast"
-        subtitle="Global notifications from any action"
-      >
+      <ShowcaseSection title="LoadingContainer" subtitle="Centered loading states for container surfaces">
+        <PreviewPanel>
+          <div class="loaderRow">
+            <div class="loaderSample loaderSm">
+              <LoadingContainer size="sm" />
+            </div>
+            <div class="loaderSample loaderMd">
+              <LoadingContainer size="md" />
+            </div>
+            <div class="loaderSample loaderLg">
+              <LoadingContainer size="lg" />
+            </div>
+          </div>
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="EmptyState" subtitle="Friendly zero-state messaging">
+        <PreviewPanel class="col">
+          <EmptyState
+            icon={<IoSearch size={40} />}
+            message="No results found"
+            hint="Try adjusting your search query or filters."
+          />
+          <EmptyState icon={<IoFolder size={40} />} message="This folder is empty" />
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="ErrorMessage" subtitle="Inline error alerts">
+        <PreviewPanel class="col">
+          <ErrorMessage>Failed to load data. Please try again.</ErrorMessage>
+          <ErrorMessage>Network error: connection timed out.</ErrorMessage>
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="ErrorFallback" subtitle="Page-level failure handling">
+        <PreviewPanel>
+          <ErrorFallback
+            title={retried() ? 'Still failing' : 'Something went wrong'}
+            description="An unexpected error occurred while loading this page."
+            retryLabel="Try again"
+            onRetry={() => setRetried(true)}
+          />
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="Toast" subtitle="Global notifications from any action">
         <PreviewPanel>
           <div class="row">
             <Button
@@ -130,20 +157,10 @@ const FeedbackSection = () => {
             >
               Success toast
             </Button>
-            <Button
-              variant="danger"
-              onClick={() =>
-                addToast({ type: 'error', message: 'Something went wrong.' })
-              }
-            >
+            <Button variant="danger" onClick={() => addToast({ type: 'error', message: 'Something went wrong.' })}>
               Error toast
             </Button>
-            <Button
-              variant="ghost"
-              onClick={() =>
-                addToast({ type: 'info', message: 'New version available.' })
-              }
-            >
+            <Button variant="ghost" onClick={() => addToast({ type: 'info', message: 'New version available.' })}>
               Info toast
             </Button>
             <Button
