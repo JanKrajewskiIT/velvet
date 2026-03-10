@@ -1,0 +1,29 @@
+# VelvetUi Demo — production docker-compose with Traefik labels
+# Deployed to /opt/velvet/ on VPS
+
+services:
+  velvet-demo:
+    image: ${VELVET_DEMO_IMAGE:-ghcr.io/jankrajewskiit/velvet-demo:latest}
+    container_name: velvet-demo
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.velvet-demo.rule=Host(`velvet.bluebraces.online`)
+      - traefik.http.routers.velvet-demo.entrypoints=websecure
+      - traefik.http.routers.velvet-demo.tls.certresolver=letsencrypt
+      - traefik.http.services.velvet-demo.loadbalancer.server.port=3000
+      # Security headers
+      - traefik.http.routers.velvet-demo.middlewares=velvet-headers
+      - traefik.http.middlewares.velvet-headers.headers.stsSeconds=31536000
+      - traefik.http.middlewares.velvet-headers.headers.stsIncludeSubdomains=true
+      - traefik.http.middlewares.velvet-headers.headers.contentTypeNosniff=true
+      - traefik.http.middlewares.velvet-headers.headers.frameDeny=false
+      - traefik.http.middlewares.velvet-headers.headers.customFrameOptionsValue=SAMEORIGIN
+      - traefik.http.middlewares.velvet-headers.headers.referrerPolicy=strict-origin-when-cross-origin
+      - traefik.http.middlewares.velvet-headers.headers.permissionsPolicy=camera=(), microphone=(), geolocation=()
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true

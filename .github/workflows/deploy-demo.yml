@@ -94,6 +94,19 @@ jobs:
       OWNER_LC: ${{ needs.publish.outputs.owner_lc }}
 
     steps:
+      - uses: actions/checkout@v4
+
+      - name: Copy compose file to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          source: "deploy/docker-compose.yml"
+          target: "/opt/velvet"
+          strip_components: 1
+          timeout: 60s
+
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         env:
@@ -101,48 +114,32 @@ jobs:
           OWNER_LC: ${{ env.OWNER_LC }}
           IMAGE_TAG: ${{ env.IMAGE_TAG }}
           IMAGE_NAME: velvet-demo
-          CONTAINER_NAME: velvet-demo
           GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
-          envs: REGISTRY,OWNER_LC,IMAGE_TAG,IMAGE_NAME,CONTAINER_NAME,GHCR_TOKEN
+          envs: REGISTRY,OWNER_LC,IMAGE_TAG,IMAGE_NAME,GHCR_TOKEN
           script: |
             set -euo pipefail
+            cd /opt/velvet
 
-            IMAGE="${REGISTRY}/${OWNER_LC}/${IMAGE_NAME}"
+            # Create .env with image tag
+            cat > .env <<EOF
+            VELVET_DEMO_IMAGE=${REGISTRY}/${OWNER_LC}/${IMAGE_NAME}:${IMAGE_TAG}
+            EOF
 
-            # Login and pull the new image
+            # Ensure proxy network exists (created by Traefik)
+            docker network inspect proxy >/dev/null 2>&1 || docker network create proxy
+
+            # Login, pull, deploy
             echo "${GHCR_TOKEN}" | docker login ghcr.io -u "${OWNER_LC}" --password-stdin
-            docker pull "${IMAGE}:${IMAGE_TAG}"
+            docker compose pull
+            docker compose up -d --remove-orphans
 
-            # Stop and remove existing container (if any)
-            docker stop "${CONTAINER_NAME}" 2>/dev/null || true
-            docker rm "${CONTAINER_NAME}" 2>/dev/null || true
-
-            # Find the Recron aspire network (created by docker compose in /opt/recron)
-            NETWORK=$(docker network ls --filter "name=aspire" --format "{{.Name}}" | head -1)
-            if [ -z "${NETWORK}" ]; then
-              echo "WARNING: aspire network not found, container will not be reachable via Nginx"
-              NETWORK_FLAG=""
-            else
-              echo "Joining Docker network: ${NETWORK}"
-              NETWORK_FLAG="--network ${NETWORK}"
-            fi
-
-            # Start new container (port 3100 as fallback, Nginx proxies via Docker network)
-            docker run -d \
-              --name "${CONTAINER_NAME}" \
-              --restart unless-stopped \
-              -p 3100:3000 \
-              ${NETWORK_FLAG} \
-              "${IMAGE}:${IMAGE_TAG}"
-
-            # Cleanup old images
+            # Cleanup
             docker image prune -f
-
-            echo "Deployed ${IMAGE}:${IMAGE_TAG}"
+            docker compose ps
 
       - name: Smoke test
         uses: appleboy/ssh-action@v1.0.3
@@ -159,7 +156,7 @@ jobs:
             echo "Checking container health..."
             docker ps --filter "name=velvet-demo" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
 
-            echo "Checking if demo is reachable..."
-            curl -sf --max-time 10 http://localhost:3100/ > /dev/null && echo "Demo: OK" || echo "WARNING: Demo not reachable on port 3100"
+            echo "Checking HTTPS endpoint via Traefik..."
+            curl -sf --max-time 10 https://velvet.bluebraces.online/ > /dev/null && echo "Demo: OK" || echo "WARNING: Demo not reachable via HTTPS (Traefik may need DNS propagation)"
 
             echo "Smoke test completed."
