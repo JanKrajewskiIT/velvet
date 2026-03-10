@@ -6,8 +6,7 @@ WORKDIR /app
 # Copy root package files and install library dependencies
 COPY package*.json .npmrc ./
 RUN --mount=type=secret,id=github_token \
-    GITHUB_TOKEN=$(cat /run/secrets/github_token) \
-    NODE_AUTH_TOKEN=$(cat /run/secrets/github_token) \
+    GHCR_TOKEN=$(cat /run/secrets/github_token) \
     npm ci --ignore-scripts
 
 # Remove .npmrc so token does not leak into subsequent layers
