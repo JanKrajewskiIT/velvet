@@ -14,20 +14,10 @@ interface FlipCardOwnProps extends JSX.HTMLAttributes<HTMLDivElement> {
 }
 
 const FlipCard = (props: Props<FlipCardOwnProps>) => {
-  const [local, rest] = splitProps(props, [
-    'front',
-    'back',
-    'isFlipped',
-    'onFlip',
-    'width',
-    'height',
-    'class',
-  ]);
+  const [local, rest] = splitProps(props, ['front', 'back', 'isFlipped', 'onFlip', 'width', 'height', 'class']);
   const [internalFlipped, setInternalFlipped] = createSignal(false);
 
-  const isFlipped = createMemo(() =>
-    local.isFlipped !== undefined ? local.isFlipped : internalFlipped()
-  );
+  const isFlipped = createMemo(() => (local.isFlipped !== undefined ? local.isFlipped : internalFlipped()));
 
   const handleFlip = () => {
     const newValue = !isFlipped();
@@ -39,6 +29,13 @@ const FlipCard = (props: Props<FlipCardOwnProps>) => {
     }
   };
 
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleFlip();
+    }
+  };
+
   return (
     <div
       class={`${styles.flipCard} ${local.class ?? ''}`}
@@ -47,20 +44,12 @@ const FlipCard = (props: Props<FlipCardOwnProps>) => {
         height: local.height || '200px',
       }}
       onClick={handleFlip}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          handleFlip();
-        }
-      }}
+      onKeyDown={handleKeyDown}
       role="button"
       tabIndex={0}
       {...rest}
     >
-      <div
-        class={styles.flipCardInner}
-        style={{ transform: isFlipped() ? 'rotateY(180deg)' : 'rotateY(0deg)' }}
-      >
+      <div class={styles.flipCardInner} style={{ transform: isFlipped() ? 'rotateY(180deg)' : 'rotateY(0deg)' }}>
         <div class={styles.flipCardFront}>{local.front}</div>
         <div class={styles.flipCardBack}>{local.back}</div>
       </div>

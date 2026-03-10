@@ -13,9 +13,7 @@ interface DropdownMenuProps {
 }
 
 function getMenuItems(menu: HTMLElement): HTMLButtonElement[] {
-  return Array.from(
-    menu.querySelectorAll<HTMLButtonElement>('button:not(:disabled)')
-  );
+  return Array.from(menu.querySelectorAll<HTMLButtonElement>('button:not(:disabled)'));
 }
 
 const DropdownMenu = (props: Props<DropdownMenuProps>) => {
@@ -52,6 +50,18 @@ const DropdownMenu = (props: Props<DropdownMenuProps>) => {
       return;
     }
     openAndFocusFirst();
+  };
+
+  const handleTriggerKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      toggle();
+      return;
+    }
+    if (e.key === 'ArrowDown' && !open()) {
+      e.preventDefault();
+      openAndFocusFirst();
+    }
   };
 
   const handleMenuKeyDown = (e: KeyboardEvent) => {
@@ -104,17 +114,7 @@ const DropdownMenu = (props: Props<DropdownMenuProps>) => {
         role="button"
         tabIndex={0}
         onClick={toggle}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            toggle();
-            return;
-          }
-          if (e.key === 'ArrowDown' && !open()) {
-            e.preventDefault();
-            openAndFocusFirst();
-          }
-        }}
+        onKeyDown={handleTriggerKeyDown}
         aria-haspopup="menu"
         aria-expanded={open()}
         aria-controls={open() ? menuId : undefined}
@@ -130,9 +130,7 @@ const DropdownMenu = (props: Props<DropdownMenuProps>) => {
           role="menu"
           tabIndex={-1}
           onKeyDown={handleMenuKeyDown}
-          onClick={() => {
-            setOpen(false);
-          }}
+          onClick={close}
         >
           {props.children}
         </div>

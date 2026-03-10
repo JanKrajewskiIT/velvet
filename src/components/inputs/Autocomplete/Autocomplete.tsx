@@ -39,6 +39,15 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
     props.onChange(props.values.filter((r) => r !== value));
   };
 
+  const handleInput = (e: InputEvent & { currentTarget: HTMLInputElement }) => {
+    setInputValue(e.currentTarget.value);
+    setShowDropdown(true);
+  };
+
+  const handleBlur = () => {
+    setTimeout(() => setShowDropdown(false), 200);
+  };
+
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'Enter' && inputValue().trim()) {
       e.preventDefault();
@@ -60,11 +69,7 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
               <button
                 type="button"
                 class={styles.removeTag}
-                aria-label={
-                  props.removeLabel
-                    ? `${props.removeLabel} ${value}`
-                    : undefined
-                }
+                aria-label={props.removeLabel ? `${props.removeLabel} ${value}` : undefined}
                 onClick={() => removeValue(value)}
               >
                 <IoCloseOutline />
@@ -79,14 +84,9 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
           ref={inputRef}
           type="text"
           value={inputValue()}
-          onInput={(e) => {
-            setInputValue(e.currentTarget.value);
-            setShowDropdown(true);
-          }}
+          onInput={handleInput}
           onFocus={() => setShowDropdown(true)}
-          onBlur={() => {
-            setTimeout(() => setShowDropdown(false), 200);
-          }}
+          onBlur={handleBlur}
           onKeyDown={handleKeyDown}
           placeholder={props.placeholder}
         />

@@ -28,32 +28,28 @@ const DropdownButton = (props: Props<DropdownButtonProps>) => {
     close
   );
 
+  const toggle = () => setOpen(!open());
+
+  const handleMenuKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      close();
+    }
+  };
+
   return (
     <div ref={wrapperRef} class={`${styles.wrapper} ${props.class ?? ''}`}>
       <button
         type="button"
         class={`${styles.trigger} ${styles[props.variant ?? 'ghost']}`}
-        onClick={() => setOpen(!open())}
+        onClick={toggle}
         aria-haspopup="menu"
         aria-expanded={open()}
       >
         {props.label}
-        <IoChevronDown
-          class={`${styles.chevron} ${open() ? styles.chevronOpen : ''}`}
-        />
+        <IoChevronDown class={`${styles.chevron} ${open() ? styles.chevronOpen : ''}`} />
       </button>
       <Show when={open()}>
-        <div
-          class={styles.menu}
-          role="menu"
-          tabIndex={-1}
-          onClick={() => setOpen(false)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              setOpen(false);
-            }
-          }}
-        >
+        <div class={styles.menu} role="menu" tabIndex={-1} onClick={close} onKeyDown={handleMenuKeyDown}>
           {props.children}
         </div>
       </Show>

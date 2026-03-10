@@ -48,6 +48,10 @@ const MarkdownEditDialog = (props: Props<MarkdownEditDialogProps>) => {
     props.onClose();
   };
 
+  const handleInput = (e: InputEvent & { currentTarget: HTMLTextAreaElement }) => {
+    setValue(e.currentTarget.value);
+  };
+
   return (
     <Show when={props.open}>
       <Dialog open={props.open} onClose={handleCancel} class={props.class}>
@@ -55,13 +59,7 @@ const MarkdownEditDialog = (props: Props<MarkdownEditDialogProps>) => {
         <DialogBody>
           <div class={styles.body}>
             <FormField label={props.label}>
-              <TextArea
-                rows={8}
-                value={value()}
-                onInput={(e) => {
-                  setValue(e.currentTarget.value);
-                }}
-              />
+              <TextArea rows={8} value={value()} onInput={handleInput} />
             </FormField>
 
             <FormField label={props.previewLabel}>
