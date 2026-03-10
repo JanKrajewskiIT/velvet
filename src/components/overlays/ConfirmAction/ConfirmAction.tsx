@@ -1,6 +1,7 @@
 import { createSignal, type JSX } from 'solid-js';
 
-import type Props from '../../../models/Props';
+import type Props from '~/models/Props';
+
 import ConfirmDialog from '../ConfirmDialog/ConfirmDialog';
 
 export interface ConfirmActionRenderContext {

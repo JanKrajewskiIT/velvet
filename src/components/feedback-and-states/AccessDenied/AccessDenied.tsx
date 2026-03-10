@@ -1,6 +1,7 @@
 import { IoLockClosedOutline } from 'solid-icons/io';
 
-import type Props from '../../../models/Props';
+import type Props from '~/models/Props';
+
 import styles from './AccessDenied.module.css';
 
 interface AccessDeniedProps {

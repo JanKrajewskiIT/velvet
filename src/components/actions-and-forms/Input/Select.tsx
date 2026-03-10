@@ -1,11 +1,11 @@
 import type { JSX } from 'solid-js';
 import { splitProps } from 'solid-js';
 
+import type Props from '~/models/Props';
+
 import styles from './Input.module.css';
 
-type SelectProps = JSX.SelectHTMLAttributes<HTMLSelectElement>;
-
-const Select = (props: SelectProps) => {
+const Select = (props: Props<JSX.SelectHTMLAttributes<HTMLSelectElement>>) => {
   const [local, rest] = splitProps(props, ['class']);
   return <select {...rest} class={`${styles.select} ${local.class ?? ''}`} />;
 };

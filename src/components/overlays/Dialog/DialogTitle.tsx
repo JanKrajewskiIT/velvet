@@ -1,6 +1,7 @@
 import { type JSX, onMount } from 'solid-js';
 
-import type Props from '../../../models/Props';
+import type Props from '~/models/Props';
+
 import styles from './Dialog.module.css';
 
 interface DialogTitleProps {

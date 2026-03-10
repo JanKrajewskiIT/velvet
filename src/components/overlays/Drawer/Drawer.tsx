@@ -8,8 +8,9 @@ import {
 } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
+import type Props from '~/models/Props';
+
 import useEscapeKey from '../../../hooks/useEscapeKey';
-import type Props from '../../../models/Props';
 import IconButton from '../../actions-and-forms/IconButton/IconButton';
 import styles from './Drawer.module.css';
 

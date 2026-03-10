@@ -1,6 +1,7 @@
 import { createMemo, For } from 'solid-js';
 
-import type Props from '../../../models/Props';
+import type Props from '~/models/Props';
+
 import styles from './RadarChart.module.css';
 
 interface RadarAxis {

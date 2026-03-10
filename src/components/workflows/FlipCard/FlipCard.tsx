@@ -1,8 +1,10 @@
 import { createMemo, createSignal, type JSX, splitProps } from 'solid-js';
 
+import type Props from '~/models/Props';
+
 import styles from './FlipCard.module.css';
 
-export interface FlipCardProps extends JSX.HTMLAttributes<HTMLDivElement> {
+interface FlipCardOwnProps extends JSX.HTMLAttributes<HTMLDivElement> {
   front: JSX.Element;
   back: JSX.Element;
   isFlipped?: boolean;
@@ -11,7 +13,7 @@ export interface FlipCardProps extends JSX.HTMLAttributes<HTMLDivElement> {
   height?: string;
 }
 
-export const FlipCard = (props: FlipCardProps) => {
+const FlipCard = (props: Props<FlipCardOwnProps>) => {
   const [local, rest] = splitProps(props, [
     'front',
     'back',
@@ -39,7 +41,7 @@ export const FlipCard = (props: FlipCardProps) => {
 
   return (
     <div
-      class={`${styles.flipCard} ${local.class || ''}`}
+      class={`${styles.flipCard} ${local.class ?? ''}`}
       style={{
         width: local.width || '100%',
         height: local.height || '200px',
@@ -65,3 +67,5 @@ export const FlipCard = (props: FlipCardProps) => {
     </div>
   );
 };
+
+export default FlipCard;

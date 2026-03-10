@@ -1,4 +1,5 @@
-import type Props from '../../../models/Props';
+import type Props from '~/models/Props';
+
 import Spinner from '../Spinner/Spinner';
 import styles from './LoadingContainer.module.css';
 

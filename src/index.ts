@@ -21,9 +21,9 @@ export {
   type RadioOption,
 } from './components/actions-and-forms/Radio/Radio';
 export { default as Switch } from './components/actions-and-forms/Switch/Switch';
-export { TagInput } from './components/actions-and-forms/TagInput/TagInput';
-export { Accordion } from './components/data-display/Accordion/Accordion';
-export { AccordionItem } from './components/data-display/Accordion/AccordionItem';
+export { default as TagInput } from './components/actions-and-forms/TagInput/TagInput';
+export { default as Accordion } from './components/data-display/Accordion/Accordion';
+export { default as AccordionItem } from './components/data-display/Accordion/AccordionItem';
 export { default as JsonDisplay } from './components/data-display/JsonDisplay/JsonDisplay';
 export { default as MarkdownRenderer } from './components/data-display/MarkdownRenderer/MarkdownRenderer';
 export { default as Pagination } from './components/data-display/Pagination/Pagination';
@@ -31,19 +31,19 @@ export { default as RadarChart } from './components/data-display/RadarChart/Rada
 export { default as ScoreRing } from './components/data-display/ScoreRing/ScoreRing';
 export { default as SectionCard } from './components/data-display/SectionCard/SectionCard';
 export { default as Stepper } from './components/data-display/Stepper/Stepper';
-export { Table } from './components/data-display/Table/Table';
-export { TableBody } from './components/data-display/Table/TableBody';
-export { TableCell } from './components/data-display/Table/TableCell';
-export { TableHead } from './components/data-display/Table/TableHead';
-export { TableHeader } from './components/data-display/Table/TableHeader';
-export { TableRow } from './components/data-display/Table/TableRow';
+export { default as Table } from './components/data-display/Table/Table';
+export { default as TableBody } from './components/data-display/Table/TableBody';
+export { default as TableCell } from './components/data-display/Table/TableCell';
+export { default as TableHead } from './components/data-display/Table/TableHead';
+export { default as TableHeader } from './components/data-display/Table/TableHeader';
+export { default as TableRow } from './components/data-display/Table/TableRow';
 export { default as AccessDenied } from './components/feedback-and-states/AccessDenied/AccessDenied';
 export { default as Chip } from './components/feedback-and-states/Chip/Chip';
 export { default as EmptyState } from './components/feedback-and-states/EmptyState/EmptyState';
 export { default as ErrorFallback } from './components/feedback-and-states/ErrorFallback/ErrorFallback';
 export { default as ErrorMessage } from './components/feedback-and-states/ErrorMessage/ErrorMessage';
 export { default as LoadingContainer } from './components/feedback-and-states/LoadingContainer/LoadingContainer';
-export { Skeleton } from './components/feedback-and-states/Skeleton/Skeleton';
+export { default as Skeleton } from './components/feedback-and-states/Skeleton/Skeleton';
 export { default as Spinner } from './components/feedback-and-states/Spinner/Spinner';
 export { default as StatCard } from './components/feedback-and-states/StatCard/StatCard';
 export { default as TagChip } from './components/feedback-and-states/TagChip/TagChip';
@@ -54,8 +54,8 @@ export {
   removeToast,
   useToast,
 } from './components/feedback-and-states/Toast/Toast';
-export { ToastProvider } from './components/feedback-and-states/Toast/ToastProvider';
-export { ToastViewport } from './components/feedback-and-states/Toast/ToastViewport';
+export { default as ToastProvider } from './components/feedback-and-states/Toast/ToastProvider';
+export { default as ToastViewport } from './components/feedback-and-states/Toast/ToastViewport';
 export { default as Footer } from './components/layouts/Footer/Footer';
 export { default as MainLayout } from './components/layouts/MainLayout/MainLayout';
 export { default as Navbar } from './components/layouts/Navbar/Navbar';
@@ -71,7 +71,7 @@ export { default as DialogActions } from './components/overlays/Dialog/DialogAct
 export { default as DialogBody } from './components/overlays/Dialog/DialogBody';
 export { default as DialogTitle } from './components/overlays/Dialog/DialogTitle';
 export { default as Drawer } from './components/overlays/Drawer/Drawer';
-export { Tooltip } from './components/overlays/Tooltip/Tooltip';
+export { default as Tooltip } from './components/overlays/Tooltip/Tooltip';
 export { default as AiResultPanel } from './components/workflows/AiResultPanel/AiResultPanel';
 export type { AuthRedirectProps } from './components/workflows/AuthRedirect/AuthRedirect';
 export { default as AuthRedirect } from './components/workflows/AuthRedirect/AuthRedirect';
@@ -81,14 +81,14 @@ export type {
 } from './components/workflows/EditableCollection/EditableCollection';
 export { default as EditableCollection } from './components/workflows/EditableCollection/EditableCollection';
 export { default as FileDropZone } from './components/workflows/FileDropZone/FileDropZone';
-export { FlipCard } from './components/workflows/FlipCard/FlipCard';
+export { default as FlipCard } from './components/workflows/FlipCard/FlipCard';
 export { default as MarkdownEditDialog } from './components/workflows/MarkdownEditDialog/MarkdownEditDialog';
 export type { RequireAuthProps } from './components/workflows/RequireAuth/RequireAuth';
 export { default as RequireAuth } from './components/workflows/RequireAuth/RequireAuth';
 export { default as Tabs } from './components/workflows/Tabs/Tabs';
 export { default as Timeline } from './components/workflows/Timeline/Timeline';
 export type { WizardStep } from './components/workflows/Wizard/Wizard';
-export { Wizard } from './components/workflows/Wizard/Wizard';
+export { default as Wizard } from './components/workflows/Wizard/Wizard';
 export { default as useClickOutside } from './hooks/useClickOutside';
 export { default as useEscapeKey } from './hooks/useEscapeKey';
 export type { default as Props } from './models/Props';

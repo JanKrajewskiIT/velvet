@@ -1,9 +1,11 @@
 import { type JSX, Show, splitProps } from 'solid-js';
 
+import type Props from '~/models/Props';
+
 import Spinner from '../../feedback-and-states/Spinner/Spinner';
 import styles from './Button.module.css';
 
-export interface ButtonProps extends Omit<
+interface ButtonOwnProps extends Omit<
   JSX.ButtonHTMLAttributes<HTMLButtonElement>,
   'children'
 > {
@@ -12,7 +14,9 @@ export interface ButtonProps extends Omit<
   children: JSX.Element;
 }
 
-const Button = (props: ButtonProps) => {
+export type ButtonProps = Props<ButtonOwnProps>;
+
+const Button = (props: Props<ButtonOwnProps>) => {
   const [local, rest] = splitProps(props, [
     'variant',
     'loading',

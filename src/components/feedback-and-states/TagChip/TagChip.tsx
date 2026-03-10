@@ -1,6 +1,7 @@
 import { Show } from 'solid-js';
 
-import type Props from '../../../models/Props';
+import type Props from '~/models/Props';
+
 import { getContrastTextColor } from '../../../utils/color';
 import styles from './TagChip.module.css';
 

@@ -7,15 +7,17 @@ import {
   splitProps,
 } from 'solid-js';
 
+import type Props from '~/models/Props';
+
 import styles from './Tooltip.module.css';
 
-export interface TooltipProps extends JSX.HTMLAttributes<HTMLDivElement> {
+interface TooltipOwnProps extends JSX.HTMLAttributes<HTMLDivElement> {
   content: JSX.Element;
   position?: 'top' | 'bottom' | 'left' | 'right';
   delay?: number;
 }
 
-export const Tooltip = (props: TooltipProps) => {
+const Tooltip = (props: Props<TooltipOwnProps>) => {
   const tooltipId = createUniqueId();
   const [local, rest] = splitProps(props, [
     'content',
@@ -43,7 +45,7 @@ export const Tooltip = (props: TooltipProps) => {
 
   return (
     <div
-      class={`${styles.tooltipContainer} ${local.class || ''}`}
+      class={`${styles.tooltipContainer} ${local.class ?? ''}`}
       onMouseEnter={show}
       onMouseLeave={hide}
       onFocus={show}
@@ -64,3 +66,5 @@ export const Tooltip = (props: TooltipProps) => {
     </div>
   );
 };
+
+export default Tooltip;

@@ -1,7 +1,8 @@
 import { FiCheck } from 'solid-icons/fi';
 import { For, Show } from 'solid-js';
 
-import type Props from '../../../models/Props';
+import type Props from '~/models/Props';
+
 import styles from './Stepper.module.css';
 
 interface StepperStep {

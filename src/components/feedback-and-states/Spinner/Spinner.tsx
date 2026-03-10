@@ -1,4 +1,5 @@
-import type Props from '../../../models/Props';
+import type Props from '~/models/Props';
+
 import styles from './Spinner.module.css';
 
 interface SpinnerProps {

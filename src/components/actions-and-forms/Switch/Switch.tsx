@@ -1,8 +1,10 @@
 import { type JSX, Show, splitProps } from 'solid-js';
 
+import type Props from '~/models/Props';
+
 import styles from './Switch.module.css';
 
-export interface SwitchProps extends Omit<
+interface SwitchOwnProps extends Omit<
   JSX.ButtonHTMLAttributes<HTMLButtonElement>,
   'type' | 'onChange'
 > {
@@ -12,7 +14,7 @@ export interface SwitchProps extends Omit<
   description?: JSX.Element;
 }
 
-const Switch = (props: SwitchProps) => {
+const Switch = (props: Props<SwitchOwnProps>) => {
   const [local, rest] = splitProps(props, [
     'checked',
     'onChange',

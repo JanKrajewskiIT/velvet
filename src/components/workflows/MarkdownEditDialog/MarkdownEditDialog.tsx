@@ -1,6 +1,7 @@
 import { createEffect, createSignal, on, Show } from 'solid-js';
 
-import type Props from '../../../models/Props';
+import type Props from '~/models/Props';
+
 import Button from '../../actions-and-forms/Button/Button';
 import FormField from '../../actions-and-forms/FormField/FormField';
 import TextArea from '../../actions-and-forms/Input/TextArea';

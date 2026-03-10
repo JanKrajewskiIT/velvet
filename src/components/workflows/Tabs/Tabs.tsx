@@ -1,6 +1,7 @@
 import { For, type JSX } from 'solid-js';
 
-import type Props from '../../../models/Props';
+import type Props from '~/models/Props';
+
 import styles from './Tabs.module.css';
 
 interface Tab<T extends string> {

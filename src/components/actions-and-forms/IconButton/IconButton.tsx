@@ -1,8 +1,10 @@
 import { type JSX, splitProps } from 'solid-js';
 
+import type Props from '~/models/Props';
+
 import styles from './IconButton.module.css';
 
-export interface IconButtonProps extends Omit<
+interface IconButtonOwnProps extends Omit<
   JSX.ButtonHTMLAttributes<HTMLButtonElement>,
   'children' | 'title'
 > {
@@ -11,7 +13,7 @@ export interface IconButtonProps extends Omit<
   size?: 'sm' | 'md';
 }
 
-const IconButton = (props: IconButtonProps) => {
+const IconButton = (props: Props<IconButtonOwnProps>) => {
   const [local, rest] = splitProps(props, [
     'icon',
     'title',

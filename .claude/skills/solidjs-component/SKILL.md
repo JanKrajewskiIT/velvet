@@ -1,59 +1,31 @@
 ---
 name: solidjs-component
-description: SolidJS component patterns for VelvetUi -- Props convention, component inventory, slots, hooks, toast system. Use when creating or modifying components.
+description: SolidJS component patterns for VelvetUi -- Props convention, component inventory, hooks, toast system. Use when creating or modifying components.
 ---
 
-## Component Pattern
+## Standard component
 
-```tsx
-import type Props from '../../../models/Props';
+`import type Props from '~/models/Props'` > interface > `(props: Props<X>) =>` > `export default`
 
-interface MyComponentProps {
-  title: string;
-}
+With HTML attribute spreading: `interface XOwnProps extends JSX.*HTMLAttributes` + `splitProps` + `{...rest}`.
 
-const MyComponent = (props: Props<MyComponentProps>) => {
-  return (
-    <div class={`${styles.wrapper} ${props.class ?? ''}`}>{props.title}</div>
-  );
-};
+## File structure
 
-export default MyComponent;
-```
+`ComponentName/ComponentName.tsx` + `.module.css`. Export from `src/index.ts` as `{ default as X }`.
+`ThemeProvider`/`ToastProvider` use `ParentProps` (no own DOM, no `Props<T>`).
 
-No extra props: use `Props` directly. `Props<T>` = `T & { class?: string }`.
+## Inventory
 
-## File Structure
+`actions-and-forms/` (19), `data-display/` (9), `feedback-and-states/` (11), `layouts/` (3), `overlays/` (6), `workflows/` (10).
 
-One component per directory: `ComponentName/ComponentName.tsx` + `.module.css`.
-`ThemeProvider`/`useTheme` uses `ParentProps`, not `Props`.
-Relative imports (`../../../models/Props`), not path aliases.
-Every new component exported from `src/index.ts`.
+## Toast
 
-## Component Categories
+`addToast({ message, type?, duration? })` / `removeToast(id)`. `ToastProvider` + `ToastViewport` in app shell.
 
-| Category               | Count | Examples                                                                                      |
-| ---------------------- | ----- | --------------------------------------------------------------------------------------------- |
-| `actions-and-forms/`   | 19    | ActionRow, Button, Checkbox, Input, Select, FormField, FormGrid, TagInput, Switch, RadioGroup |
-| `data-display/`        | 9     | Accordion, Table, ScoreRing, RadarChart, MarkdownRenderer, Pagination, Stepper                |
-| `feedback-and-states/` | 11    | Chip, Spinner, Toast, Skeleton, StatCard, EmptyState, ErrorFallback, LoadingContainer         |
-| `layouts/`             | 3     | Footer, MainLayout, Navbar                                                                    |
-| `overlays/`            | 6     | Dialog, Drawer, Tooltip, ConfirmDialog, ConfirmAction                                         |
-| `workflows/`           | 10    | AiResultPanel, Wizard, Tabs, FileDropZone, FlipCard, EditableCollection, Timeline             |
+## Hooks
 
-## Toast System
+`useClickOutside(ref, isActive, cb)`, `useEscapeKey(isActive, cb)`
 
-`addToast({ message, type?, duration? })` / `removeToast(id)` -- callable from anywhere.
-`ToastProvider` + `ToastViewport` in app shell. `useToast()` returns current list.
+## Utils
 
-## Hooks & Utilities
-
-- `useClickOutside(ref, isActive, onClickOutside)`
-- `useEscapeKey(isActive, onEscape)`
-- `color.ts` -- `getContrastTextColor(hexColor)`
-- `form.ts` -- `orEmpty()`, `numberToString()`, `emptyToNull()`, `parseFloatOrNull()`
-
-## Anti-Patterns (NEVER)
-
-- `dangerouslySetInnerHTML` without DOMPurify
-- Import app-specific stores (auth, i18n, routing) -- this is a generic library
+`getContrastTextColor(hex)`, `orEmpty()`, `numberToString()`, `emptyToNull()`, `parseFloatOrNull()`

@@ -1,9 +1,10 @@
 import { IoChevronDown } from 'solid-icons/io';
 import { createSignal, type JSX, Show } from 'solid-js';
 
+import type Props from '~/models/Props';
+
 import useClickOutside from '../../../hooks/useClickOutside';
 import useEscapeKey from '../../../hooks/useEscapeKey';
-import type Props from '../../../models/Props';
 import styles from './DropdownButton.module.css';
 
 interface DropdownButtonProps {

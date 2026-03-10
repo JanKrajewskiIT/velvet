@@ -1,6 +1,7 @@
 import { createMemo, type JSX, Show } from 'solid-js';
 
-import type Props from '../../../models/Props';
+import type Props from '~/models/Props';
+
 import AccessDenied from '../../feedback-and-states/AccessDenied/AccessDenied';
 import LoadingContainer from '../../feedback-and-states/LoadingContainer/LoadingContainer';
 import AuthRedirect from '../AuthRedirect/AuthRedirect';

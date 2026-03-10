@@ -1,14 +1,16 @@
 import { type JSX, splitProps } from 'solid-js';
 
+import type Props from '~/models/Props';
+
 import styles from './Accordion.module.css';
 
-export type AccordionProps = JSX.HTMLAttributes<HTMLDivElement>;
-
-export const Accordion = (props: AccordionProps) => {
+const Accordion = (props: Props<JSX.HTMLAttributes<HTMLDivElement>>) => {
   const [local, rest] = splitProps(props, ['class', 'children']);
   return (
-    <div class={`${styles.accordion} ${local.class || ''}`} {...rest}>
+    <div class={`${styles.accordion} ${local.class ?? ''}`} {...rest}>
       {local.children}
     </div>
   );
 };
+
+export default Accordion;

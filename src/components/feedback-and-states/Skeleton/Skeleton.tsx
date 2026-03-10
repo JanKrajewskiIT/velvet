@@ -1,15 +1,17 @@
 import { type JSX, mergeProps, splitProps } from 'solid-js';
 
+import type Props from '~/models/Props';
+
 import styles from './Skeleton.module.css';
 
-export interface SkeletonProps extends JSX.HTMLAttributes<HTMLDivElement> {
+interface SkeletonOwnProps extends JSX.HTMLAttributes<HTMLDivElement> {
   variant?: 'text' | 'circular' | 'rectangular';
   width?: string | number;
   height?: string | number;
   animation?: 'pulse' | 'wave' | 'none';
 }
 
-export const Skeleton = (props: SkeletonProps) => {
+const Skeleton = (props: Props<SkeletonOwnProps>) => {
   const merged = mergeProps({ variant: 'text', animation: 'wave' }, props);
   const [local, rest] = splitProps(merged, [
     'variant',
@@ -42,9 +44,11 @@ export const Skeleton = (props: SkeletonProps) => {
 
   return (
     <div
-      class={`${styles.skeleton} ${styles[local.variant]} ${styles[local.animation]} ${local.class || ''}`}
+      class={`${styles.skeleton} ${styles[local.variant]} ${styles[local.animation]} ${local.class ?? ''}`}
       style={baseStyle()}
       {...rest}
     />
   );
 };
+
+export default Skeleton;

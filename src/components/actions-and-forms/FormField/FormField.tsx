@@ -1,6 +1,7 @@
 import type { JSX } from 'solid-js';
 
-import type Props from '../../../models/Props';
+import type Props from '~/models/Props';
+
 import styles from './FormField.module.css';
 
 interface FormFieldProps {

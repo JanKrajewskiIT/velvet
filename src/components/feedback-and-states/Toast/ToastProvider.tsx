@@ -1,14 +1,14 @@
 import { type JSX, onCleanup } from 'solid-js';
 
 import { cleanupToasts } from './Toast';
-import { ToastViewport } from './ToastViewport';
+import ToastViewport from './ToastViewport';
 
 interface ToastProviderProps {
   children: JSX.Element;
   closeLabel: string;
 }
 
-export const ToastProvider = (props: ToastProviderProps) => {
+const ToastProvider = (props: ToastProviderProps) => {
   onCleanup(cleanupToasts);
 
   return (
@@ -18,3 +18,5 @@ export const ToastProvider = (props: ToastProviderProps) => {
     </>
   );
 };
+
+export default ToastProvider;

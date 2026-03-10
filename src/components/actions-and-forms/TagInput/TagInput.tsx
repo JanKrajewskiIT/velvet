@@ -1,9 +1,11 @@
 import { createSignal, For, type JSX, splitProps } from 'solid-js';
 
+import type Props from '~/models/Props';
+
 import TagChip from '../../feedback-and-states/TagChip/TagChip';
 import styles from './TagInput.module.css';
 
-export interface TagInputProps extends Omit<
+interface TagInputOwnProps extends Omit<
   JSX.InputHTMLAttributes<HTMLInputElement>,
   'value' | 'onChange'
 > {
@@ -12,7 +14,7 @@ export interface TagInputProps extends Omit<
   placeholder?: string;
 }
 
-export const TagInput = (props: TagInputProps) => {
+const TagInput = (props: Props<TagInputOwnProps>) => {
   const [local, rest] = splitProps(props, [
     'value',
     'onChange',
@@ -39,7 +41,7 @@ export const TagInput = (props: TagInputProps) => {
   };
 
   return (
-    <div class={`${styles.container} ${local.class || ''}`}>
+    <div class={`${styles.container} ${local.class ?? ''}`}>
       <div class={styles.tagsContainer}>
         <For each={local.value}>
           {(tag) => (
@@ -62,3 +64,5 @@ export const TagInput = (props: TagInputProps) => {
     </div>
   );
 };
+
+export default TagInput;

@@ -1,6 +1,7 @@
 import { For } from 'solid-js';
 
-import type Props from '../../../models/Props';
+import type Props from '~/models/Props';
+
 import MenuIndicator from './MenuIndicator';
 import MenuItem from './MenuItem';
 import styles from './Navbar.module.css';

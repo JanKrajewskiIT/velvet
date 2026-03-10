@@ -1,7 +1,8 @@
 import { FiAlertCircle } from 'solid-icons/fi';
 import type { JSX } from 'solid-js';
 
-import type Props from '../../../models/Props';
+import type Props from '~/models/Props';
+
 import styles from './ErrorMessage.module.css';
 
 interface ErrorMessageProps {

@@ -1,6 +1,7 @@
 import { For } from 'solid-js';
 
-import type Props from '../../../models/Props';
+import type Props from '~/models/Props';
+
 import { removeToast, toasts } from './Toast';
 import styles from './Toast.module.css';
 
@@ -8,7 +9,7 @@ interface ToastViewportBaseProps {
   closeLabel: string;
 }
 
-export const ToastViewport = (props: Props<ToastViewportBaseProps>) => {
+const ToastViewport = (props: Props<ToastViewportBaseProps>) => {
   return (
     <div
       class={`${styles.toastContainer} ${props.class ?? ''}`}
@@ -37,3 +38,5 @@ export const ToastViewport = (props: Props<ToastViewportBaseProps>) => {
     </div>
   );
 };
+
+export default ToastViewport;

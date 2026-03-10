@@ -1,5 +1,7 @@
 import { createUniqueId, For, type JSX, Show, splitProps } from 'solid-js';
 
+import type Props from '~/models/Props';
+
 import styles from './Radio.module.css';
 
 export interface RadioOption<T extends string = string> {
@@ -9,7 +11,7 @@ export interface RadioOption<T extends string = string> {
   disabled?: boolean;
 }
 
-export interface RadioGroupProps<T extends string> extends Omit<
+interface RadioGroupOwnProps<T extends string> extends Omit<
   JSX.HTMLAttributes<HTMLDivElement>,
   'onChange'
 > {
@@ -20,7 +22,7 @@ export interface RadioGroupProps<T extends string> extends Omit<
   direction?: 'row' | 'column';
 }
 
-export const RadioGroup = <T extends string>(props: RadioGroupProps<T>) => {
+const RadioGroup = <T extends string>(props: Props<RadioGroupOwnProps<T>>) => {
   const generatedName = createUniqueId();
   const [local, rest] = splitProps(props, [
     'name',
@@ -76,3 +78,5 @@ export const RadioGroup = <T extends string>(props: RadioGroupProps<T>) => {
     </div>
   );
 };
+
+export { RadioGroup };

@@ -1,7 +1,8 @@
 import { IoCloseOutline } from 'solid-icons/io';
 import { createMemo, createSignal, For, Show } from 'solid-js';
 
-import type Props from '../../../models/Props';
+import type Props from '~/models/Props';
+
 import Input from '../Input/Input';
 import styles from './Autocomplete.module.css';
 

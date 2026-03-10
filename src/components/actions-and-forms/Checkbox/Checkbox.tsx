@@ -1,8 +1,10 @@
 import { createUniqueId, type JSX, Show, splitProps } from 'solid-js';
 
+import type Props from '~/models/Props';
+
 import styles from './Checkbox.module.css';
 
-export interface CheckboxProps extends Omit<
+interface CheckboxOwnProps extends Omit<
   JSX.InputHTMLAttributes<HTMLInputElement>,
   'type'
 > {
@@ -10,7 +12,7 @@ export interface CheckboxProps extends Omit<
   description?: JSX.Element;
 }
 
-const Checkbox = (props: CheckboxProps) => {
+const Checkbox = (props: Props<CheckboxOwnProps>) => {
   const generatedId = createUniqueId();
   const [local, rest] = splitProps(props, [
     'label',

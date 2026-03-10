@@ -3,55 +3,33 @@ name: library-tooling
 description: Vite library build, TypeScript config, shared config presets, npm publishing, adding new components. Use when modifying build config or tooling.
 ---
 
-## Vite (`vite.config.ts`)
+## Build
 
-- Plugins: `vite-plugin-solid` + `vite-plugin-dts`
-- Library build: entry `src/index.ts`, formats `es` + `umd`
-- Output: `dist/velvet-ui.js`, `dist/velvet-ui.umd.cjs`, `dist/velvet-ui.css`
-- External: `solid-js`, `solid-js/web`, `solid-js/store`, `@solidjs/router`
-- `cssCodeSplit: false` -- all CSS in one file
+Vite + `vite-plugin-solid` + `vite-plugin-dts`. Entry `src/index.ts`, formats `es`+`umd`.
+Output: `dist/velvet-ui.{js,umd.cjs,css}`. External: `solid-js/*`, `@solidjs/router`. `cssCodeSplit: false`.
 
-## Package Exports
+## Package exports
 
-```json
-{
-  ".": {
-    "types": "./dist/index.d.ts",
-    "import": "./dist/velvet-ui.js",
-    "require": "./dist/velvet-ui.umd.cjs"
-  },
-  "./styles": "./dist/velvet-ui.css"
-}
-```
+`.` -> types + import + require. `./styles` -> CSS.
 
-## Shared Config Sub-paths
+## Shared config sub-paths
 
-| Sub-path                                | Usage                                     |
-| --------------------------------------- | ----------------------------------------- |
-| `@jankrajewskiit/ui/eslint-config`      | `createEslintConfig()`                    |
-| `@jankrajewskiit/ui/prettier-config`    | extends in package.json                   |
-| `@jankrajewskiit/ui/vite-config`        | Vite helper + `solidMarkdownOptimizeDeps` |
-| `@jankrajewskiit/ui/tsconfig`           | app/node/app-vite/node-vite variants      |
-| `@jankrajewskiit/ui/lint-staged-config` | shared lint-staged rules                  |
-| `@jankrajewskiit/ui/husky/pre-commit`   | shared pre-commit hook                    |
-
-Config sources in `config/` directory.
+`@jankrajewskiit/ui/{eslint,prettier,vite,lint-staged}-config`, `tsconfig`, `husky/pre-commit`. Sources in `config/`.
 
 ## TypeScript
 
-Target ES2024, `verbatimModuleSyntax`, `noUncheckedIndexedAccess`, `erasableSyntaxOnly` (no `enum`). JSX: `preserve` + `jsxImportSource: solid-js`. Paths: `~/* -> src/*`.
+ES2024, `verbatimModuleSyntax`, `noUncheckedIndexedAccess`, `erasableSyntaxOnly` (no `enum`). JSX `preserve`, `jsxImportSource: solid-js`. Paths: `~/* -> src/*`.
 
 ## ESLint (flat)
 
-`@eslint/js` -> `typescript-eslint` strictTypeChecked -> `eslint-plugin-solid` -> `prettier` -> `jsx-a11y` -> `simple-import-sort` -> `unused-imports`.
+`@eslint/js` > `typescript-eslint` strictTypeChecked > `eslint-plugin-solid` > `prettier` > `jsx-a11y` > `simple-import-sort` > `unused-imports`.
 
 ## Publishing
 
 GitHub Packages via Actions on push to `main`. Consumers need `read:packages` PAT as `GHCR_TOKEN`.
 
-## Adding a Component
+## Adding a component
 
-1. Pick category, create `MyComponent/MyComponent.tsx` + `.module.css`
+1. Create `{category}/ComponentName/ComponentName.tsx` + `.module.css`
 2. Export from `src/index.ts`
 3. `npm run verify`
-4. Bump version, push

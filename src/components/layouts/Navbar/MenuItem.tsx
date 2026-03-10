@@ -1,6 +1,7 @@
 import { A } from '@solidjs/router';
 
-import type Props from '../../../models/Props';
+import type Props from '~/models/Props';
+
 import styles from './Navbar.module.css';
 import type { NavItem } from './NavItem';
 

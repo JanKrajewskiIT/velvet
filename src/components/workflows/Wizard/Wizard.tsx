@@ -7,6 +7,8 @@ import {
   splitProps,
 } from 'solid-js';
 
+import type Props from '~/models/Props';
+
 import Button from '../../actions-and-forms/Button/Button';
 import Stepper from '../../data-display/Stepper/Stepper';
 import styles from './Wizard.module.css';
@@ -17,7 +19,7 @@ export interface WizardStep {
   validate?: () => boolean | Promise<boolean>;
 }
 
-export interface WizardProps extends Omit<
+interface WizardOwnProps extends Omit<
   JSX.HTMLAttributes<HTMLDivElement>,
   'children' | 'onFinish'
 > {
@@ -30,7 +32,7 @@ export interface WizardProps extends Omit<
   finishLabel: string;
 }
 
-export const Wizard = (props: WizardProps) => {
+const Wizard = (props: Props<WizardOwnProps>) => {
   const [local, rest] = splitProps(props, [
     'steps',
     'onFinish',
@@ -115,3 +117,5 @@ export const Wizard = (props: WizardProps) => {
     </div>
   );
 };
+
+export default Wizard;

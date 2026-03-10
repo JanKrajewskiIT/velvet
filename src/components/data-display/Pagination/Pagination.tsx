@@ -1,10 +1,12 @@
 import { For, type JSX, splitProps } from 'solid-js';
 
+import type Props from '~/models/Props';
+
 import styles from './Pagination.module.css';
 
 type PageItem = number | 'left-ellipsis' | 'right-ellipsis';
 
-export interface PaginationProps extends Omit<
+interface PaginationOwnProps extends Omit<
   JSX.HTMLAttributes<HTMLElement>,
   'onChange'
 > {
@@ -17,11 +19,11 @@ export interface PaginationProps extends Omit<
   ariaLabel?: string;
 }
 
-function buildPageItems(
+const buildPageItems = (
   page: number,
   totalPages: number,
   maxVisible: number
-): PageItem[] {
+): PageItem[] => {
   if (totalPages <= 0) return [];
   if (totalPages <= maxVisible) {
     return Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -54,9 +56,9 @@ function buildPageItems(
   }
 
   return items;
-}
+};
 
-const Pagination = (props: PaginationProps) => {
+const Pagination = (props: Props<PaginationOwnProps>) => {
   const [local, rest] = splitProps(props, [
     'page',
     'totalPages',

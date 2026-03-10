@@ -1,9 +1,11 @@
 import { FiChevronDown } from 'solid-icons/fi';
 import { createMemo, createSignal, type JSX, splitProps } from 'solid-js';
 
+import type Props from '~/models/Props';
+
 import styles from './Accordion.module.css';
 
-export interface AccordionItemProps extends Omit<
+interface AccordionItemOwnProps extends Omit<
   JSX.HTMLAttributes<HTMLDivElement>,
   'title' | 'onToggle'
 > {
@@ -13,7 +15,7 @@ export interface AccordionItemProps extends Omit<
   disabled?: boolean;
 }
 
-export const AccordionItem = (props: AccordionItemProps) => {
+const AccordionItem = (props: Props<AccordionItemOwnProps>) => {
   const [local, rest] = splitProps(props, [
     'title',
     'children',
@@ -37,7 +39,7 @@ export const AccordionItem = (props: AccordionItemProps) => {
 
   return (
     <div
-      class={`${styles.accordionItem} ${isOpen() ? styles.open : ''} ${local.disabled ? styles.disabled : ''} ${local.class || ''}`}
+      class={`${styles.accordionItem} ${isOpen() ? styles.open : ''} ${local.disabled ? styles.disabled : ''} ${local.class ?? ''}`}
       {...rest}
     >
       <button
@@ -56,3 +58,5 @@ export const AccordionItem = (props: AccordionItemProps) => {
     </div>
   );
 };
+
+export default AccordionItem;

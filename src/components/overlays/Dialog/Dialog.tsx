@@ -1,7 +1,8 @@
 import { createEffect, createUniqueId, type JSX, onCleanup } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
-import type Props from '../../../models/Props';
+import type Props from '~/models/Props';
+
 import styles from './Dialog.module.css';
 
 interface DialogProps {

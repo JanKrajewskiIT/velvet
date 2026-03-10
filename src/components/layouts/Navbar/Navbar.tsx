@@ -8,8 +8,9 @@ import {
   on,
 } from 'solid-js';
 
+import type Props from '~/models/Props';
+
 import useEscapeKey from '../../../hooks/useEscapeKey';
-import type Props from '../../../models/Props';
 import MenuBar from './MenuBar';
 import styles from './Navbar.module.css';
 import type { NavItem } from './NavItem';
