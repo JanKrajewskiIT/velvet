@@ -1,6 +1,7 @@
-import {
+﻿import {
   Accordion,
   AccordionItem,
+  CandleActionDiagram,
   JsonDisplay,
   MarkdownRenderer,
   RadarChart,
@@ -38,6 +39,35 @@ import { Button } from '@jankrajewskiit/ui';
 <Button variant="primary">Click me</Button>
 \`\`\`
 `;
+
+const CANDLE_SAMPLE = [
+  { open: 98, close: 104, high: 108, low: 95, volume: 180 },
+  { open: 104, close: 101, high: 106, low: 99, volume: 140 },
+  { open: 101, close: 112, high: 116, low: 100, volume: 220 },
+  { open: 112, close: 108, high: 114, low: 105, volume: 170 },
+  { open: 108, close: 115, high: 118, low: 106, volume: 240 },
+  { open: 115, close: 110, high: 117, low: 109, volume: 160 },
+  { open: 110, close: 118, high: 121, low: 109, volume: 260 },
+  { open: 118, close: 122, high: 124, low: 116, volume: 210 },
+  { open: 122, close: 117, high: 123, low: 115, volume: 190 },
+  { open: 117, close: 125, high: 127, low: 116, volume: 280 },
+];
+
+const ACTION_SAMPLE = [
+  { index: 1, type: 'buy', label: 'Buy', strength: 2 },
+  { index: 3, type: 'stop-loss', label: 'SL' },
+  { index: 4, type: 'take-profit', label: 'TP' },
+  { index: 6, type: 'hold', label: 'Hold' },
+  { index: 8, type: 'sell', label: 'Sell', strength: 2 },
+];
+
+const ACTION_LEGEND = [
+  { type: 'buy', label: 'Buy', description: 'Entry on bullish confirmation.' },
+  { type: 'sell', label: 'Sell', description: 'Exit on distribution spike.' },
+  { type: 'take-profit', label: 'Take profit', description: 'Target hit and scaled out.' },
+  { type: 'stop-loss', label: 'Stop loss', description: 'Risk control below support.' },
+  { type: 'hold', label: 'Hold', description: 'No action while trend holds.' },
+];
 
 const DataDisplaySection = () => {
   return (
@@ -110,6 +140,33 @@ const DataDisplaySection = () => {
             <ScoreRing score={45} />
             <ScoreRing score={22} />
           </div>
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="CandleActionDiagram" subtitle="Action markers over candle formations">
+        <PreviewPanel class="col">
+          <CandleActionDiagram
+            candles={CANDLE_SAMPLE}
+            actions={ACTION_SAMPLE}
+            variant="basic"
+            height={220}
+            ariaLabel="Basic candle action diagram"
+          />
+          <CandleActionDiagram
+            candles={CANDLE_SAMPLE}
+            actions={ACTION_SAMPLE}
+            variant="expanded"
+            height={240}
+            ariaLabel="Expanded candle action diagram"
+          />
+          <CandleActionDiagram
+            candles={CANDLE_SAMPLE}
+            actions={ACTION_SAMPLE}
+            variant="full"
+            legend={ACTION_LEGEND}
+            height={280}
+            ariaLabel="Full candle action diagram"
+          />
         </PreviewPanel>
       </ShowcaseSection>
 
