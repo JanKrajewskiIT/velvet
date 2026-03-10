@@ -1,17 +1,15 @@
 ---
 name: library-tooling
-description: Vite library build, TypeScript config, ESLint, Prettier, Husky, config presets, npm publishing, and how to add new components. Use when modifying build config or tooling.
+description: Vite library build, TypeScript config, shared config presets, npm publishing, adding new components. Use when modifying build config or tooling.
 ---
 
-## Vite Config (`vite.config.ts`)
+## Vite (`vite.config.ts`)
 
-- Plugins: `vite-plugin-solid` + `vite-plugin-dts` (from `tsconfig.app.json`)
-- Alias: `~ -> src/`
-- Library build: entry `src/index.ts`, name `VelvetUi`, formats `es` + `umd`
-- Output: `dist/velvet-ui.js` (ESM), `dist/velvet-ui.umd.cjs` (UMD), `dist/velvet-ui.css`
+- Plugins: `vite-plugin-solid` + `vite-plugin-dts`
+- Library build: entry `src/index.ts`, formats `es` + `umd`
+- Output: `dist/velvet-ui.js`, `dist/velvet-ui.umd.cjs`, `dist/velvet-ui.css`
 - External: `solid-js`, `solid-js/web`, `solid-js/store`, `@solidjs/router`
-- `cssCodeSplit: false` -- all CSS bundled into one file
-- `optimizeDeps`: `solid-markdown` excluded; transitive deps explicitly included
+- `cssCodeSplit: false` -- all CSS in one file
 
 ## Package Exports
 
@@ -37,35 +35,23 @@ description: Vite library build, TypeScript config, ESLint, Prettier, Husky, con
 | `@jankrajewskiit/ui/lint-staged-config` | shared lint-staged rules                  |
 | `@jankrajewskiit/ui/husky/pre-commit`   | shared pre-commit hook                    |
 
-Config sources in `config/` directory (not `src/`).
+Config sources in `config/` directory.
 
 ## TypeScript
 
-- Target: ES2024, `verbatimModuleSyntax`, `noUncheckedIndexedAccess`, `erasableSyntaxOnly` (no `enum`)
-- JSX: `preserve` + `jsxImportSource: solid-js`
-- Paths: `~/* -> src/*`
+Target ES2024, `verbatimModuleSyntax`, `noUncheckedIndexedAccess`, `erasableSyntaxOnly` (no `enum`). JSX: `preserve` + `jsxImportSource: solid-js`. Paths: `~/* -> src/*`.
 
-## ESLint (flat config)
+## ESLint (flat)
 
-`@eslint/js` -> `typescript-eslint` strictTypeChecked -> `eslint-plugin-solid` -> `eslint-config-prettier` -> `jsx-a11y` -> `simple-import-sort` -> `unused-imports`.
-Rules: `require-unicode-regexp`, `solid/reactivity: warn`. Ignores: `dist`, `*.d.ts`, `vite.config.*`, `*.mjs`.
-
-## Prettier
-
-`endOfLine: lf`, `singleQuote: true`, `trailingComma: es5`
-
-## Husky + lint-staged
-
-Pre-commit: `*.{ts,tsx}` -> eslint --fix + prettier --write; `*.{css,json,md}` -> prettier --write.
+`@eslint/js` -> `typescript-eslint` strictTypeChecked -> `eslint-plugin-solid` -> `prettier` -> `jsx-a11y` -> `simple-import-sort` -> `unused-imports`.
 
 ## Publishing
 
-`.npmrc` configures `@jankrajewskiit` scope to `npm.pkg.github.com`. GitHub Actions publishes on push to `main`. Consumers need `read:packages` PAT as `GHCR_TOKEN`.
+GitHub Packages via Actions on push to `main`. Consumers need `read:packages` PAT as `GHCR_TOKEN`.
 
-## Adding a New Component
+## Adding a Component
 
-1. Pick category: `actions-and-forms/`, `data-display/`, `feedback-and-states/`, `layouts/`, `overlays/`, `workflows/`
-2. Create `MyComponent/MyComponent.tsx` + `MyComponent.module.css`
-3. Export from `src/index.ts`
-4. Run `npm run verify`
-5. Bump version in `package.json`, push to publish
+1. Pick category, create `MyComponent/MyComponent.tsx` + `.module.css`
+2. Export from `src/index.ts`
+3. `npm run verify`
+4. Bump version, push

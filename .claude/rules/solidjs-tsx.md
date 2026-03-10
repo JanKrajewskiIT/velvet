@@ -3,14 +3,12 @@ paths:
   - 'src/**/*.tsx'
 ---
 
-# SolidJS TSX Rules
+# SolidJS TSX
 
-- Arrow function components, never function declarations
-- `Props<T>` from `../../models/Props` or `../../../models/Props` -- never manual `class?: string`
-- Forward `class` on top-level element: ``class={`${styles.x} ${props.class ?? ''}`}``
-- NEVER destructure props -- access as `props.name` for SolidJS reactivity
-- NEVER use React patterns: `useState`, `useEffect`, `useMemo`, `className`
-- Icons from `solid-icons` only -- never emoji
-- One component per file, split at ~150 lines
-- No comments, no `eslint-disable`
-- No app-specific imports (auth, i18n, routing) -- this is a generic library
+- Arrow functions only, never function declarations
+- `Props<T>` from `../../models/Props` -- never manual `class?: string`
+- Forward `class`: ``class={`${styles.x} ${props.class ?? ''}`}``
+- NEVER destructure props -- `props.name` for reactivity
+- NEVER React patterns (`useState`, `useEffect`, `className`)
+- Icons: `solid-icons` only
+- One component per file, split ~150 lines

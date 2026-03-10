@@ -3,10 +3,10 @@ paths:
   - 'src/**/*.module.css'
 ---
 
-# CSS Modules Rules
+# CSS Modules
 
-- camelCase class names: `.menuItem`, `.addButton` -- never kebab-case or PascalCase
-- Use CSS custom properties from `globals.css`: `var(--color-*)`, `var(--spacing-*)`, `var(--font-size-*)`, `var(--radius-*)`, `var(--shadow-*)`
-- Never hardcode colors, spacing, or shadows -- always use design tokens
-- Never import CSS from another component's directory
-- Dark theme handled by semantic tokens -- never target `[data-theme='dark']` in component CSS
+- camelCase classes (`.menuItem`) -- never kebab/PascalCase
+- Design tokens from `globals.css`: `var(--color-*)`, `var(--spacing-*)`, `var(--font-size-*)`, `var(--radius-*)`, `var(--shadow-*)`
+- Never hardcode colors/spacing/shadows
+- Never import CSS from another component
+- Dark theme via semantic tokens -- never target `[data-theme='dark']`
