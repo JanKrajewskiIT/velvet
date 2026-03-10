@@ -8,12 +8,12 @@ SolidJS UI component library and shared frontend standards published as `@jankra
 npm install @jankrajewskiit/ui solid-js @solidjs/router
 ```
 
-For GitHub Packages authentication, use `NODE_AUTH_TOKEN` in your environment.
+For GitHub Packages authentication, use `GHCR_TOKEN` in your environment.
 
 Example `.npmrc`:
 
 ```ini
-//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
+//npm.pkg.github.com/:_authToken=${GHCR_TOKEN}
 @jankrajewskiit:registry=https://npm.pkg.github.com/
 ```
 

@@ -60,7 +60,7 @@ Pre-commit: `*.{ts,tsx}` -> eslint --fix + prettier --write; `*.{css,json,md}` -
 
 ## Publishing
 
-`.npmrc` configures `@jankrajewskiit` scope to `npm.pkg.github.com`. GitHub Actions publishes on push to `main`. Consumers need `read:packages` PAT as `NODE_AUTH_TOKEN`.
+`.npmrc` configures `@jankrajewskiit` scope to `npm.pkg.github.com`. GitHub Actions publishes on push to `main`. Consumers need `read:packages` PAT as `GHCR_TOKEN`.
 
 ## Adding a New Component
 
