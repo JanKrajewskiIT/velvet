@@ -195,6 +195,13 @@ const NavigationSection = () => {
         </PreviewPanel>
       </ShowcaseSection>
 
+      <ShowcaseSection title="Breadcrumbs" subtitle="Hierarchical path navigation with collapse">
+        <PreviewPanel class="col">
+          <Breadcrumbs items={BASIC_BREADCRUMBS} />
+          <Breadcrumbs items={COLLAPSIBLE_BREADCRUMBS} maxItems={3} />
+        </PreviewPanel>
+      </ShowcaseSection>
+
       <ShowcaseSection title="Pagination" subtitle="Navigate large result sets">
         <PreviewPanel>
           <Pagination
@@ -217,10 +224,12 @@ const NavigationSection = () => {
         </PreviewPanel>
       </ShowcaseSection>
 
-      <ShowcaseSection title="Breadcrumbs" subtitle="Hierarchical path navigation with collapse">
-        <PreviewPanel class="col">
-          <Breadcrumbs items={BASIC_BREADCRUMBS} />
-          <Breadcrumbs items={COLLAPSIBLE_BREADCRUMBS} maxItems={3} />
+      <ShowcaseSection title="CommandPalette" subtitle="Keyboard-driven command search overlay">
+        <PreviewPanel>
+          <button type="button" onClick={() => setCommandOpen(true)}>
+            Open Command Palette (Ctrl+K)
+          </button>
+          <CommandPalette open={commandOpen()} onClose={() => setCommandOpen(false)} items={commandItems} />
         </PreviewPanel>
       </ShowcaseSection>
 
@@ -229,13 +238,6 @@ const NavigationSection = () => {
           <div style={{ position: 'relative', height: '200px' }}>
             <SpeedDial actions={SPEED_DIAL_ACTIONS} />
           </div>
-        </PreviewPanel>
-      </ShowcaseSection>
-
-      <ShowcaseSection title="BackToTop" subtitle="Floating scroll-to-top button">
-        <PreviewPanel>
-          <p class="mutedText">Scroll down the page to see the back-to-top button appear in the bottom-right corner.</p>
-          <BackToTop threshold={200} />
         </PreviewPanel>
       </ShowcaseSection>
 
@@ -261,12 +263,10 @@ const NavigationSection = () => {
         <ShowcaseMeta>Supports badges on items. Designed for mobile viewport widths.</ShowcaseMeta>
       </ShowcaseSection>
 
-      <ShowcaseSection title="CommandPalette" subtitle="Keyboard-driven command search overlay">
+      <ShowcaseSection title="BackToTop" subtitle="Floating scroll-to-top button">
         <PreviewPanel>
-          <button type="button" onClick={() => setCommandOpen(true)}>
-            Open Command Palette (Ctrl+K)
-          </button>
-          <CommandPalette open={commandOpen()} onClose={() => setCommandOpen(false)} items={commandItems} />
+          <p class="mutedText">Scroll down the page to see the back-to-top button appear in the bottom-right corner.</p>
+          <BackToTop threshold={200} />
         </PreviewPanel>
       </ShowcaseSection>
     </div>

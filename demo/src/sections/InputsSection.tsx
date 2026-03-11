@@ -120,6 +120,16 @@ const InputsSection = () => {
         </PreviewPanel>
       </ShowcaseSection>
 
+      <ShowcaseSection title="CopyButton" subtitle="One-click clipboard copy with feedback">
+        <PreviewPanel>
+          <div class="row">
+            <CopyButton text="npm install @jankrajewskiit/ui" label="Copy command" />
+            <CopyButton text="Hello World" variant="outline" label="Outline" />
+            <CopyButton text="Small copy" size="sm" />
+          </div>
+        </PreviewPanel>
+      </ShowcaseSection>
+
       <ShowcaseSection title="Input" subtitle="Text, disabled and password fields">
         <PreviewPanel class="col">
           <form onSubmit={(e) => e.preventDefault()}>
@@ -153,25 +163,22 @@ const InputsSection = () => {
         </PreviewPanel>
       </ShowcaseSection>
 
-      <ShowcaseSection title="Select" subtitle="Native select with custom styling">
-        <PreviewPanel>
-          <FormField label="Choose option" id="demo-select">
-            <Select id="demo-select" value={selected()} onChange={(e) => setSelected(e.currentTarget.value)}>
-              <option value="">-- select --</option>
-              <option value="a">Option A</option>
-              <option value="b">Option B</option>
-              <option value="c">Option C</option>
-            </Select>
-          </FormField>
-        </PreviewPanel>
-      </ShowcaseSection>
-
       <ShowcaseSection title="TextArea" subtitle="Long-form input control">
         <PreviewPanel>
           <FormField label="Description" id="demo-ta">
             <TextArea id="demo-ta" placeholder="Enter a longer description..." rows={4} />
           </FormField>
         </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="SearchInput" subtitle="Filtered input with clear and debounce">
+        <PreviewPanel class="col">
+          <SearchInput value={search()} onInput={setSearch} placeholder="Search components..." />
+          <SearchInput value="" onInput={() => {}} disabled placeholder="Disabled" />
+        </PreviewPanel>
+        <ShowcaseMeta>
+          Search value: <span class="codeInline">{search()}</span>
+        </ShowcaseMeta>
       </ShowcaseSection>
 
       <ShowcaseSection title="Autocomplete" subtitle="Multi-value select with filtering">
@@ -196,15 +203,26 @@ const InputsSection = () => {
         </PreviewPanel>
       </ShowcaseSection>
 
-      <ShowcaseSection title="ColorPicker" subtitle="Palette-driven accent selection">
+      <ShowcaseSection title="OtpInput" subtitle="One-time password entry">
         <PreviewPanel>
-          <FormField label="Brand color" id="demo-color">
-            <ColorPicker colors={PRESET_COLORS} value={color()} onChange={setColor} />
-          </FormField>
+          <OtpInput value={otp()} onChange={setOtp} length={6} />
         </PreviewPanel>
         <ShowcaseMeta>
-          Selected color: <span class="codeInline">{color()}</span>
+          Entered value: <span class="codeInline">{otp()}</span>
         </ShowcaseMeta>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="Select" subtitle="Native select with custom styling">
+        <PreviewPanel>
+          <FormField label="Choose option" id="demo-select">
+            <Select id="demo-select" value={selected()} onChange={(e) => setSelected(e.currentTarget.value)}>
+              <option value="">-- select --</option>
+              <option value="a">Option A</option>
+              <option value="b">Option B</option>
+              <option value="c">Option C</option>
+            </Select>
+          </FormField>
+        </PreviewPanel>
       </ShowcaseSection>
 
       <ShowcaseSection title="Checkbox, Switch, RadioGroup" subtitle="Binary and single-choice controls">
@@ -246,50 +264,6 @@ const InputsSection = () => {
         </PreviewPanel>
       </ShowcaseSection>
 
-      <ShowcaseSection title="Slider" subtitle="Fine-grained value selection">
-        <PreviewPanel class="col">
-          <Slider label="Volume" value={sliderValue()} onChange={setSliderValue} showValue />
-          <Slider label="Disabled" value={60} onChange={() => {}} disabled />
-        </PreviewPanel>
-      </ShowcaseSection>
-
-      <ShowcaseSection title="NumberInput" subtitle="Numeric stepper with increment and decrement">
-        <PreviewPanel>
-          <NumberInput value={quantity()} onChange={setQuantity} label="Quantity" min={0} max={100} />
-          <NumberInput value={1} onChange={() => {}} disabled size="sm" />
-        </PreviewPanel>
-      </ShowcaseSection>
-
-      <ShowcaseSection title="SearchInput" subtitle="Filtered input with clear and debounce">
-        <PreviewPanel class="col">
-          <SearchInput value={search()} onInput={setSearch} placeholder="Search components..." />
-          <SearchInput value="" onInput={() => {}} disabled placeholder="Disabled" />
-        </PreviewPanel>
-        <ShowcaseMeta>
-          Search value: <span class="codeInline">{search()}</span>
-        </ShowcaseMeta>
-      </ShowcaseSection>
-
-      <ShowcaseSection title="CopyButton" subtitle="One-click clipboard copy with feedback">
-        <PreviewPanel>
-          <div class="row">
-            <CopyButton text="npm install @jankrajewskiit/ui" label="Copy command" />
-            <CopyButton text="Hello World" variant="outline" label="Outline" />
-            <CopyButton text="Small copy" size="sm" />
-          </div>
-        </PreviewPanel>
-      </ShowcaseSection>
-
-      <ShowcaseSection title="Rating" subtitle="Star-based scoring control">
-        <PreviewPanel>
-          <div class="row">
-            <Rating value={rating()} onChange={setRating} />
-            <Rating value={3.5} />
-            <Rating value={4} size="sm" />
-          </div>
-        </PreviewPanel>
-      </ShowcaseSection>
-
       <ShowcaseSection title="SegmentedControl" subtitle="Mutually exclusive toggle group">
         <PreviewPanel class="col">
           <SegmentedControl
@@ -313,13 +287,28 @@ const InputsSection = () => {
         </PreviewPanel>
       </ShowcaseSection>
 
-      <ShowcaseSection title="OtpInput" subtitle="One-time password entry">
+      <ShowcaseSection title="NumberInput" subtitle="Numeric stepper with increment and decrement">
         <PreviewPanel>
-          <OtpInput value={otp()} onChange={setOtp} length={6} />
+          <NumberInput value={quantity()} onChange={setQuantity} label="Quantity" min={0} max={100} />
+          <NumberInput value={1} onChange={() => {}} disabled size="sm" />
         </PreviewPanel>
-        <ShowcaseMeta>
-          Entered value: <span class="codeInline">{otp()}</span>
-        </ShowcaseMeta>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="Slider" subtitle="Fine-grained value selection">
+        <PreviewPanel class="col">
+          <Slider label="Volume" value={sliderValue()} onChange={setSliderValue} showValue />
+          <Slider label="Disabled" value={60} onChange={() => {}} disabled />
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="Rating" subtitle="Star-based scoring control">
+        <PreviewPanel>
+          <div class="row">
+            <Rating value={rating()} onChange={setRating} />
+            <Rating value={3.5} />
+            <Rating value={4} size="sm" />
+          </div>
+        </PreviewPanel>
       </ShowcaseSection>
 
       <ShowcaseSection title="DatePicker" subtitle="Calendar-driven date selection">
@@ -346,6 +335,17 @@ const InputsSection = () => {
           <TimePicker label="Meeting time" value={time()} onChange={setTime} step={30} />
           <TimePicker label="Precise time" value={time15()} onChange={setTime15} step={15} />
         </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="ColorPicker" subtitle="Palette-driven accent selection">
+        <PreviewPanel>
+          <FormField label="Brand color" id="demo-color">
+            <ColorPicker colors={PRESET_COLORS} value={color()} onChange={setColor} />
+          </FormField>
+        </PreviewPanel>
+        <ShowcaseMeta>
+          Selected color: <span class="codeInline">{color()}</span>
+        </ShowcaseMeta>
       </ShowcaseSection>
 
       <ShowcaseSection title="FileInput" subtitle="Drag-and-drop file upload zone">

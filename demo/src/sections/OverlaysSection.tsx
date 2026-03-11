@@ -9,7 +9,6 @@ import {
   DialogActions,
   DialogBody,
   DialogTitle,
-  Divider,
   Drawer,
   Lightbox,
   MarkdownEditDialog,
@@ -77,6 +76,33 @@ const OverlaysSection = () => {
             <Tooltip content="Tooltip on right" position="right">
               <Button variant="ghost">Right</Button>
             </Tooltip>
+          </div>
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="Popover" subtitle="Click-triggered floating content">
+        <PreviewPanel>
+          <div class="row">
+            <Popover
+              trigger={<Button variant="ghost">Top</Button>}
+              content={<p class="mutedText">Popover content for top</p>}
+              position="top"
+            />
+            <Popover
+              trigger={<Button variant="ghost">Bottom</Button>}
+              content={<p class="mutedText">Popover content for bottom</p>}
+              position="bottom"
+            />
+            <Popover
+              trigger={<Button variant="ghost">Left</Button>}
+              content={<p class="mutedText">Popover content for left</p>}
+              position="left"
+            />
+            <Popover
+              trigger={<Button variant="ghost">Right</Button>}
+              content={<p class="mutedText">Popover content for right</p>}
+              position="right"
+            />
           </div>
         </PreviewPanel>
       </ShowcaseSection>
@@ -153,6 +179,29 @@ const OverlaysSection = () => {
         </PreviewPanel>
       </ShowcaseSection>
 
+      <ShowcaseSection title="MarkdownEditDialog" subtitle="Edit and preview markdown in one flow">
+        <PreviewPanel class="col">
+          <ActionRow align="start">
+            <Button variant="ghost" onClick={() => setEditorOpen(true)}>
+              Open markdown editor
+            </Button>
+          </ActionRow>
+          <MarkdownRenderer content={markdown()} />
+        </PreviewPanel>
+
+        <MarkdownEditDialog
+          open={editorOpen()}
+          title="Edit release notes"
+          label="Markdown"
+          initialValue={markdown()}
+          previewLabel="Preview"
+          saveLabel="Save changes"
+          cancelLabel="Cancel"
+          onSave={setMarkdown}
+          onClose={() => setEditorOpen(false)}
+        />
+      </ShowcaseSection>
+
       <ShowcaseSection title="Drawer" subtitle="Slide-in side panel for secondary workflows">
         <PreviewPanel>
           <Button variant="ghost" onClick={() => setDrawerOpen(true)}>
@@ -181,83 +230,6 @@ const OverlaysSection = () => {
             Drawer content goes here. It works well for settings panels, side-by-side forms and detail views.
           </p>
         </Drawer>
-      </ShowcaseSection>
-
-      <ShowcaseSection title="MarkdownEditDialog" subtitle="Edit and preview markdown in one flow">
-        <PreviewPanel class="col">
-          <ActionRow align="start">
-            <Button variant="ghost" onClick={() => setEditorOpen(true)}>
-              Open markdown editor
-            </Button>
-          </ActionRow>
-          <MarkdownRenderer content={markdown()} />
-        </PreviewPanel>
-
-        <MarkdownEditDialog
-          open={editorOpen()}
-          title="Edit release notes"
-          label="Markdown"
-          initialValue={markdown()}
-          previewLabel="Preview"
-          saveLabel="Save changes"
-          cancelLabel="Cancel"
-          onSave={setMarkdown}
-          onClose={() => setEditorOpen(false)}
-        />
-      </ShowcaseSection>
-
-      <ShowcaseSection title="Popover" subtitle="Click-triggered floating content">
-        <PreviewPanel>
-          <div class="row">
-            <Popover
-              trigger={<Button variant="ghost">Top</Button>}
-              content={<p class="mutedText">Popover content for top</p>}
-              position="top"
-            />
-            <Popover
-              trigger={<Button variant="ghost">Bottom</Button>}
-              content={<p class="mutedText">Popover content for bottom</p>}
-              position="bottom"
-            />
-            <Popover
-              trigger={<Button variant="ghost">Left</Button>}
-              content={<p class="mutedText">Popover content for left</p>}
-              position="left"
-            />
-            <Popover
-              trigger={<Button variant="ghost">Right</Button>}
-              content={<p class="mutedText">Popover content for right</p>}
-              position="right"
-            />
-          </div>
-        </PreviewPanel>
-      </ShowcaseSection>
-
-      <ShowcaseSection title="ContextMenu" subtitle="Right-click action menus">
-        <PreviewPanel>
-          <ContextMenu
-            items={[
-              { label: 'Edit', icon: <IoPencil />, onClick: () => {} },
-              { label: 'Duplicate', icon: <IoCopy />, onClick: () => {} },
-              'separator',
-              { label: 'Delete', icon: <IoTrash />, onClick: () => {}, danger: true },
-            ]}
-          >
-            <div
-              style={{
-                'min-height': '120px',
-                display: 'flex',
-                'align-items': 'center',
-                'justify-content': 'center',
-                border: '2px dashed var(--color-border)',
-                'border-radius': 'var(--radius-md)',
-              }}
-            >
-              Right-click here
-            </div>
-          </ContextMenu>
-        </PreviewPanel>
-        <ShowcaseMeta>Try right-clicking the dashed area above.</ShowcaseMeta>
       </ShowcaseSection>
 
       <ShowcaseSection title="Sheet" subtitle="Modal panel from any edge">
@@ -309,6 +281,33 @@ const OverlaysSection = () => {
         </Sheet>
       </ShowcaseSection>
 
+      <ShowcaseSection title="ContextMenu" subtitle="Right-click action menus">
+        <PreviewPanel>
+          <ContextMenu
+            items={[
+              { label: 'Edit', icon: <IoPencil />, onClick: () => {} },
+              { label: 'Duplicate', icon: <IoCopy />, onClick: () => {} },
+              'separator',
+              { label: 'Delete', icon: <IoTrash />, onClick: () => {}, danger: true },
+            ]}
+          >
+            <div
+              style={{
+                'min-height': '120px',
+                display: 'flex',
+                'align-items': 'center',
+                'justify-content': 'center',
+                border: '2px dashed var(--color-border)',
+                'border-radius': 'var(--radius-md)',
+              }}
+            >
+              Right-click here
+            </div>
+          </ContextMenu>
+        </PreviewPanel>
+        <ShowcaseMeta>Try right-clicking the dashed area above.</ShowcaseMeta>
+      </ShowcaseSection>
+
       <ShowcaseSection title="Lightbox" subtitle="Fullscreen image viewer with navigation">
         <PreviewPanel>
           <Button variant="ghost" onClick={() => setLightboxOpen(true)}>
@@ -336,20 +335,6 @@ const OverlaysSection = () => {
         <ShowcaseMeta>
           Highlights DOM elements by CSS selector. Supports top, bottom, left and right placements.
         </ShowcaseMeta>
-      </ShowcaseSection>
-
-      <ShowcaseSection title="Divider" subtitle="Visual separator with optional label">
-        <PreviewPanel class="col">
-          <Divider />
-          <Divider label="OR" />
-          <Divider variant="dashed" />
-          <Divider variant="dashed" label="Section" />
-          <div class="row" style={{ height: '60px' }}>
-            <span>Left</span>
-            <Divider orientation="vertical" />
-            <span>Right</span>
-          </div>
-        </PreviewPanel>
       </ShowcaseSection>
     </div>
   );

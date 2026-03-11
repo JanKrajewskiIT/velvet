@@ -1,4 +1,5 @@
 import {
+  AccessDenied,
   addToast,
   Alert,
   Badge,
@@ -38,6 +39,33 @@ const FeedbackSection = () => {
 
   return (
     <div>
+      <ShowcaseSection title="Badge" subtitle="Notification indicators on elements">
+        <PreviewPanel>
+          <div class="row">
+            <Badge content={5}>
+              <IconButton icon={<IoNotifications />} title="Notifications" />
+            </Badge>
+            <Badge content={99} max={99}>
+              <Button variant="primary">Messages</Button>
+            </Badge>
+            <Badge dot>
+              <IconButton icon={<IoMail />} title="Mail" />
+            </Badge>
+          </div>
+          <div class="row">
+            <Badge variant="info" content={3}>
+              <Button variant="ghost">Info</Button>
+            </Badge>
+            <Badge variant="success" content="OK">
+              <Button variant="ghost">Status</Button>
+            </Badge>
+            <Badge variant="error" content={12}>
+              <Button variant="ghost">Errors</Button>
+            </Badge>
+          </div>
+        </PreviewPanel>
+      </ShowcaseSection>
+
       <ShowcaseSection title="Chip variants" subtitle="Status, selection and clickable chips">
         <PreviewPanel>
           <div class="row">
@@ -89,6 +117,46 @@ const FeedbackSection = () => {
         </div>
       </ShowcaseSection>
 
+      <ShowcaseSection title="Progress" subtitle="Determinate and indeterminate progress bars">
+        <PreviewPanel class="col">
+          <Progress value={75} variant="primary" label="Uploading" showValue />
+          <Progress value={45} variant="success" size="sm" />
+          <Progress value={90} variant="warning" size="lg" showValue />
+          <Progress variant="info" label="Loading..." />
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="CircularProgress" subtitle="SVG circular progress indicator">
+        <PreviewPanel class="col">
+          <div class="row">
+            <CircularProgress value={75} showValue variant="primary" label="Primary 75%" />
+            <CircularProgress value={50} showValue variant="success" label="Success 50%" />
+            <CircularProgress value={25} showValue variant="warning" label="Warning 25%" />
+            <CircularProgress value={90} showValue variant="error" label="Error 90%" />
+          </div>
+          <div class="row">
+            <CircularProgress value={60} size="sm" showValue label="Small" />
+            <CircularProgress value={60} size="md" showValue label="Medium" />
+            <CircularProgress value={60} size="lg" showValue label="Large" />
+            <CircularProgress label="Indeterminate" />
+          </div>
+        </PreviewPanel>
+        <ShowcaseMeta>
+          Determinate with <span class="codeInline">value</span> or indeterminate without. Supports size and variant
+          props.
+        </ShowcaseMeta>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="Countdown" subtitle="Animated countdown timer">
+        <PreviewPanel class="col">
+          <div class="row">
+            <Countdown seconds={90} format="mm:ss" size="lg" />
+            <Countdown seconds={3600} format="hh:mm:ss" />
+            <Countdown seconds={15} format="ss" size="sm" />
+          </div>
+        </PreviewPanel>
+      </ShowcaseSection>
+
       <ShowcaseSection title="Spinner" subtitle="Progress indicators in multiple sizes">
         <PreviewPanel>
           <div class="row">
@@ -131,14 +199,41 @@ const FeedbackSection = () => {
         </PreviewPanel>
       </ShowcaseSection>
 
-      <ShowcaseSection title="EmptyState" subtitle="Friendly zero-state messaging">
+      <ShowcaseSection title="Alert" subtitle="Contextual status messages">
         <PreviewPanel class="col">
-          <EmptyState
-            icon={<IoSearch size={40} />}
-            message="No results found"
-            hint="Try adjusting your search query or filters."
-          />
-          <EmptyState icon={<IoFolder size={40} />} message="This folder is empty" />
+          <Alert variant="info" title="Information">
+            Your account has been updated.
+          </Alert>
+          <Alert variant="success" title="Success">
+            File uploaded successfully.
+          </Alert>
+          <Alert variant="warning" onClose={() => {}}>
+            Disk space is running low.
+          </Alert>
+          <Alert variant="error" title="Error">
+            Failed to save changes.
+          </Alert>
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="Banner" subtitle="Full-width status strip">
+        <PreviewPanel class="col">
+          <Banner
+            variant="primary"
+            action={
+              <Button variant="ghost" style={{ color: 'white' }}>
+                Update now
+              </Button>
+            }
+          >
+            New version available!
+          </Banner>
+          {bannerVisible() && (
+            <Banner variant="warning" onClose={() => setBannerVisible(false)}>
+              Scheduled maintenance tonight.
+            </Banner>
+          )}
+          <Banner variant="error">Service degraded in EU region.</Banner>
         </PreviewPanel>
       </ShowcaseSection>
 
@@ -156,6 +251,27 @@ const FeedbackSection = () => {
             description="An unexpected error occurred while loading this page."
             retryLabel="Try again"
             onRetry={() => setRetried(true)}
+          />
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="EmptyState" subtitle="Friendly zero-state messaging">
+        <PreviewPanel class="col">
+          <EmptyState
+            icon={<IoSearch size={40} />}
+            message="No results found"
+            hint="Try adjusting your search query or filters."
+          />
+          <EmptyState icon={<IoFolder size={40} />} message="This folder is empty" />
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="AccessDenied" subtitle="Full-page permission denied screen">
+        <PreviewPanel>
+          <AccessDenied
+            title="Access denied"
+            description="You do not have permission to view this page."
+            goHomeLabel="Go to homepage"
           />
         </PreviewPanel>
       </ShowcaseSection>
@@ -192,111 +308,6 @@ const FeedbackSection = () => {
               Warning toast
             </Button>
           </div>
-        </PreviewPanel>
-      </ShowcaseSection>
-
-      <ShowcaseSection title="Badge" subtitle="Notification indicators on elements">
-        <PreviewPanel>
-          <div class="row">
-            <Badge content={5}>
-              <IconButton icon={<IoNotifications />} title="Notifications" />
-            </Badge>
-            <Badge content={99} max={99}>
-              <Button variant="primary">Messages</Button>
-            </Badge>
-            <Badge dot>
-              <IconButton icon={<IoMail />} title="Mail" />
-            </Badge>
-          </div>
-          <div class="row">
-            <Badge variant="info" content={3}>
-              <Button variant="ghost">Info</Button>
-            </Badge>
-            <Badge variant="success" content="OK">
-              <Button variant="ghost">Status</Button>
-            </Badge>
-            <Badge variant="error" content={12}>
-              <Button variant="ghost">Errors</Button>
-            </Badge>
-          </div>
-        </PreviewPanel>
-      </ShowcaseSection>
-
-      <ShowcaseSection title="Progress" subtitle="Determinate and indeterminate progress bars">
-        <PreviewPanel class="col">
-          <Progress value={75} variant="primary" label="Uploading" showValue />
-          <Progress value={45} variant="success" size="sm" />
-          <Progress value={90} variant="warning" size="lg" showValue />
-          <Progress variant="info" label="Loading..." />
-        </PreviewPanel>
-      </ShowcaseSection>
-
-      <ShowcaseSection title="CircularProgress" subtitle="SVG circular progress indicator">
-        <PreviewPanel class="col">
-          <div class="row">
-            <CircularProgress value={75} showValue variant="primary" label="Primary 75%" />
-            <CircularProgress value={50} showValue variant="success" label="Success 50%" />
-            <CircularProgress value={25} showValue variant="warning" label="Warning 25%" />
-            <CircularProgress value={90} showValue variant="error" label="Error 90%" />
-          </div>
-          <div class="row">
-            <CircularProgress value={60} size="sm" showValue label="Small" />
-            <CircularProgress value={60} size="md" showValue label="Medium" />
-            <CircularProgress value={60} size="lg" showValue label="Large" />
-            <CircularProgress label="Indeterminate" />
-          </div>
-        </PreviewPanel>
-        <ShowcaseMeta>
-          Determinate with <span class="codeInline">value</span> or indeterminate without. Supports size and variant
-          props.
-        </ShowcaseMeta>
-      </ShowcaseSection>
-
-      <ShowcaseSection title="Countdown" subtitle="Animated countdown timer">
-        <PreviewPanel class="col">
-          <div class="row">
-            <Countdown seconds={90} format="mm:ss" size="lg" />
-            <Countdown seconds={3600} format="hh:mm:ss" />
-            <Countdown seconds={15} format="ss" size="sm" />
-          </div>
-        </PreviewPanel>
-      </ShowcaseSection>
-
-      <ShowcaseSection title="Alert" subtitle="Contextual status messages">
-        <PreviewPanel class="col">
-          <Alert variant="info" title="Information">
-            Your account has been updated.
-          </Alert>
-          <Alert variant="success" title="Success">
-            File uploaded successfully.
-          </Alert>
-          <Alert variant="warning" onClose={() => {}}>
-            Disk space is running low.
-          </Alert>
-          <Alert variant="error" title="Error">
-            Failed to save changes.
-          </Alert>
-        </PreviewPanel>
-      </ShowcaseSection>
-
-      <ShowcaseSection title="Banner" subtitle="Full-width status strip">
-        <PreviewPanel class="col">
-          <Banner
-            variant="primary"
-            action={
-              <Button variant="ghost" style={{ color: 'white' }}>
-                Update now
-              </Button>
-            }
-          >
-            New version available!
-          </Banner>
-          {bannerVisible() && (
-            <Banner variant="warning" onClose={() => setBannerVisible(false)}>
-              Scheduled maintenance tonight.
-            </Banner>
-          )}
-          <Banner variant="error">Service degraded in EU region.</Banner>
         </PreviewPanel>
       </ShowcaseSection>
     </div>

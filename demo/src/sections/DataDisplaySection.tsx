@@ -137,6 +137,62 @@ const DataDisplaySection = () => {
 
   return (
     <div>
+      <ShowcaseSection title="Kbd" subtitle="Styled keyboard shortcut keys">
+        <PreviewPanel>
+          <div class="row">
+            <Kbd>Ctrl</Kbd> + <Kbd>K</Kbd>
+            <Kbd>⌘</Kbd> + <Kbd>Shift</Kbd> + <Kbd>P</Kbd>
+            <Kbd>Esc</Kbd>
+          </div>
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="CodeBlock" subtitle="Code display with copy button and line numbers">
+        <PreviewPanel class="col">
+          <CodeBlock code={CODE_SAMPLE} language="tsx" showLineNumbers copyable />
+          <CodeBlock code="npm install @jankrajewskiit/ui" language="bash" />
+        </PreviewPanel>
+        <ShowcaseMeta>
+          Supports <span class="codeInline">showLineNumbers</span> and one-click copy to clipboard.
+        </ShowcaseMeta>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="JsonDisplay" subtitle="Formatted object preview">
+        <PreviewPanel>
+          <JsonDisplay data={SAMPLE_JSON} />
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="MarkdownRenderer" subtitle="Rich markdown output">
+        <PreviewPanel>
+          <MarkdownRenderer content={MARKDOWN} />
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="List & ListItem" subtitle="Structured content rows with icons and actions">
+        <PreviewPanel class="col">
+          <List>
+            <ListItem icon={<IoFolder />} secondary="3 files">
+              Documents
+            </ListItem>
+            <ListItem icon={<IoDocumentText />} secondary="Updated yesterday">
+              Report.pdf
+            </ListItem>
+            <ListItem icon={<IoImage />} secondary="Click to preview" onClick={() => {}}>
+              Photo.png
+            </ListItem>
+          </List>
+          <List variant="bordered">
+            <ListItem icon={<IoFolder />} secondary="Shared folder">
+              Projects
+            </ListItem>
+            <ListItem icon={<IoDocumentText />} secondary="Draft" action={<Button variant="ghost">Edit</Button>}>
+              Notes.md
+            </ListItem>
+          </List>
+        </PreviewPanel>
+      </ShowcaseSection>
+
       <ShowcaseSection title="Accordion" subtitle="Progressive disclosure for grouped content">
         <PreviewPanel>
           <Accordion>
@@ -163,6 +219,40 @@ const DataDisplaySection = () => {
           <SectionCard title="Advanced options">
             <p class="mutedText">Collapsed by default.</p>
           </SectionCard>
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="TreeView" subtitle="Hierarchical expandable tree">
+        <PreviewPanel>
+          <TreeView
+            nodes={TREE_DATA}
+            defaultExpanded={['src']}
+            selectedId={selectedNode()}
+            onSelect={setSelectedNode}
+          />
+        </PreviewPanel>
+        <ShowcaseMeta>
+          Selected: <span class="codeInline">{selectedNode() || 'none'}</span>
+        </ShowcaseMeta>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="Collapsible" subtitle="Simple expand and collapse">
+        <PreviewPanel class="col">
+          <Collapsible
+            open={collapsibleOpen()}
+            onToggle={() => setCollapsibleOpen((prev) => !prev)}
+            trigger={
+              <span class="row" style={{ gap: 'var(--spacing-xs)' }}>
+                <IoChevronDown size={16} />
+                <span>{collapsibleOpen() ? 'Hide details' : 'Show details'}</span>
+              </span>
+            }
+          >
+            <p class="mutedText">
+              This content is revealed when the trigger is clicked. Use Collapsible for simple toggle patterns that do
+              not need accordion grouping.
+            </p>
+          </Collapsible>
         </PreviewPanel>
       </ShowcaseSection>
 
@@ -197,6 +287,93 @@ const DataDisplaySection = () => {
         </PreviewPanel>
       </ShowcaseSection>
 
+      <ShowcaseSection title="DataCard" subtitle="Versatile content container with media and actions">
+        <PreviewPanel>
+          <div class="row">
+            <DataCard
+              variant="elevated"
+              header={<strong>Project Overview</strong>}
+              footer={<Button variant="primary">View details</Button>}
+            >
+              <p class="mutedText">A summary of the current project status and recent activity.</p>
+            </DataCard>
+            <DataCard variant="outlined" hoverable>
+              <p class="mutedText">An outlined hoverable card without header or footer.</p>
+            </DataCard>
+          </div>
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="Avatar & AvatarGroup" subtitle="User identity with image, initials or icon fallback">
+        <PreviewPanel class="col">
+          <div class="row">
+            <Avatar src="https://i.pravatar.cc/150?u=a" alt="User photo" />
+            <Avatar name="Jan Krajewski" />
+            <Avatar />
+          </div>
+          <div class="row">
+            <Avatar src="https://i.pravatar.cc/150?u=a" size="sm" />
+            <Avatar src="https://i.pravatar.cc/150?u=a" size="md" />
+            <Avatar src="https://i.pravatar.cc/150?u=a" size="lg" />
+            <Avatar src="https://i.pravatar.cc/150?u=a" size="xl" />
+          </div>
+          <AvatarGroup max={3}>
+            <Avatar src="https://i.pravatar.cc/150?u=a" />
+            <Avatar src="https://i.pravatar.cc/150?u=b" />
+            <Avatar src="https://i.pravatar.cc/150?u=c" />
+            <Avatar src="https://i.pravatar.cc/150?u=d" />
+            <Avatar src="https://i.pravatar.cc/150?u=e" />
+          </AvatarGroup>
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="Carousel" subtitle="Snap-scroll content slider with auto-play">
+        <PreviewPanel>
+          <Carousel>
+            <div style={{ padding: 'var(--spacing-2xl)', 'text-align': 'center', background: 'var(--color-surface)' }}>
+              Slide 1
+            </div>
+            <div style={{ padding: 'var(--spacing-2xl)', 'text-align': 'center', background: 'var(--color-surface)' }}>
+              Slide 2
+            </div>
+            <div style={{ padding: 'var(--spacing-2xl)', 'text-align': 'center', background: 'var(--color-surface)' }}>
+              Slide 3
+            </div>
+            <div style={{ padding: 'var(--spacing-2xl)', 'text-align': 'center', background: 'var(--color-surface)' }}>
+              Slide 4
+            </div>
+          </Carousel>
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="ImageGrid" subtitle="CSS Grid image gallery">
+        <PreviewPanel>
+          <ImageGrid images={GALLERY_IMAGES} columns={3} hoverable rounded />
+        </PreviewPanel>
+        <ShowcaseMeta>
+          Configurable columns, gap, rounded corners and hover effects. Supports optional captions.
+        </ShowcaseMeta>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="Marquee" subtitle="Infinite scrolling ticker">
+        <PreviewPanel class="col">
+          <Marquee speed={20}>
+            <span style={{ padding: '0 var(--spacing-lg)' }}>SolidJS</span>
+            <span style={{ padding: '0 var(--spacing-lg)' }}>TypeScript</span>
+            <span style={{ padding: '0 var(--spacing-lg)' }}>CSS Modules</span>
+            <span style={{ padding: '0 var(--spacing-lg)' }}>Vite</span>
+            <span style={{ padding: '0 var(--spacing-lg)' }}>VelvetUI</span>
+          </Marquee>
+          <Marquee speed={25} direction="right">
+            <span style={{ padding: '0 var(--spacing-lg)' }}>ESLint</span>
+            <span style={{ padding: '0 var(--spacing-lg)' }}>Prettier</span>
+            <span style={{ padding: '0 var(--spacing-lg)' }}>Vitest</span>
+            <span style={{ padding: '0 var(--spacing-lg)' }}>PostCSS</span>
+          </Marquee>
+        </PreviewPanel>
+        <ShowcaseMeta>Pauses on hover. Supports left and right directions with configurable speed.</ShowcaseMeta>
+      </ShowcaseSection>
+
       <ShowcaseSection title="ScoreRing" subtitle="Circular score visualization">
         <PreviewPanel>
           <div class="row">
@@ -205,6 +382,25 @@ const DataDisplaySection = () => {
             <ScoreRing score={45} />
             <ScoreRing score={22} />
           </div>
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="RadarChart" subtitle="Multi-axis data comparison">
+        <PreviewPanel>
+          <RadarChart
+            size={280}
+            axes={[
+              { label: 'Performance', key: 'perf' },
+              { label: 'Accessibility', key: 'a11y' },
+              { label: 'Best Practices', key: 'bp' },
+              { label: 'SEO', key: 'seo' },
+              { label: 'PWA', key: 'pwa' },
+            ]}
+            datasets={[
+              { label: 'Desktop', values: [92, 88, 95, 80, 60] },
+              { label: 'Mobile', values: [74, 85, 90, 75, 55] },
+            ]}
+          />
         </PreviewPanel>
       </ShowcaseSection>
 
@@ -235,47 +431,6 @@ const DataDisplaySection = () => {
         </PreviewPanel>
       </ShowcaseSection>
 
-      <ShowcaseSection title="RadarChart" subtitle="Multi-axis data comparison">
-        <PreviewPanel>
-          <RadarChart
-            size={280}
-            axes={[
-              { label: 'Performance', key: 'perf' },
-              { label: 'Accessibility', key: 'a11y' },
-              { label: 'Best Practices', key: 'bp' },
-              { label: 'SEO', key: 'seo' },
-              { label: 'PWA', key: 'pwa' },
-            ]}
-            datasets={[
-              { label: 'Desktop', values: [92, 88, 95, 80, 60] },
-              { label: 'Mobile', values: [74, 85, 90, 75, 55] },
-            ]}
-          />
-        </PreviewPanel>
-      </ShowcaseSection>
-
-      <ShowcaseSection title="JsonDisplay" subtitle="Formatted object preview">
-        <PreviewPanel>
-          <JsonDisplay data={SAMPLE_JSON} />
-        </PreviewPanel>
-      </ShowcaseSection>
-
-      <ShowcaseSection title="MarkdownRenderer" subtitle="Rich markdown output">
-        <PreviewPanel>
-          <MarkdownRenderer content={MARKDOWN} />
-        </PreviewPanel>
-      </ShowcaseSection>
-
-      <ShowcaseSection title="Kbd" subtitle="Styled keyboard shortcut keys">
-        <PreviewPanel>
-          <div class="row">
-            <Kbd>Ctrl</Kbd> + <Kbd>K</Kbd>
-            <Kbd>⌘</Kbd> + <Kbd>Shift</Kbd> + <Kbd>P</Kbd>
-            <Kbd>Esc</Kbd>
-          </div>
-        </PreviewPanel>
-      </ShowcaseSection>
-
       <ShowcaseSection title="Callout" subtitle="Highlighted content blocks for tips, warnings and notes">
         <PreviewPanel class="col">
           <Callout variant="info" title="Information">
@@ -291,161 +446,6 @@ const DataDisplaySection = () => {
           <Callout variant="tip" title="Tip">
             Use <Kbd>Ctrl</Kbd> + <Kbd>K</Kbd> to open the command palette.
           </Callout>
-        </PreviewPanel>
-      </ShowcaseSection>
-
-      <ShowcaseSection title="TreeView" subtitle="Hierarchical expandable tree">
-        <PreviewPanel>
-          <TreeView
-            nodes={TREE_DATA}
-            defaultExpanded={['src']}
-            selectedId={selectedNode()}
-            onSelect={setSelectedNode}
-          />
-        </PreviewPanel>
-        <ShowcaseMeta>
-          Selected: <span class="codeInline">{selectedNode() || 'none'}</span>
-        </ShowcaseMeta>
-      </ShowcaseSection>
-
-      <ShowcaseSection title="Avatar & AvatarGroup" subtitle="User identity with image, initials or icon fallback">
-        <PreviewPanel class="col">
-          <div class="row">
-            <Avatar src="https://i.pravatar.cc/150?u=a" alt="User photo" />
-            <Avatar name="Jan Krajewski" />
-            <Avatar />
-          </div>
-          <div class="row">
-            <Avatar src="https://i.pravatar.cc/150?u=a" size="sm" />
-            <Avatar src="https://i.pravatar.cc/150?u=a" size="md" />
-            <Avatar src="https://i.pravatar.cc/150?u=a" size="lg" />
-            <Avatar src="https://i.pravatar.cc/150?u=a" size="xl" />
-          </div>
-          <AvatarGroup max={3}>
-            <Avatar src="https://i.pravatar.cc/150?u=a" />
-            <Avatar src="https://i.pravatar.cc/150?u=b" />
-            <Avatar src="https://i.pravatar.cc/150?u=c" />
-            <Avatar src="https://i.pravatar.cc/150?u=d" />
-            <Avatar src="https://i.pravatar.cc/150?u=e" />
-          </AvatarGroup>
-        </PreviewPanel>
-      </ShowcaseSection>
-
-      <ShowcaseSection title="List & ListItem" subtitle="Structured content rows with icons and actions">
-        <PreviewPanel class="col">
-          <List>
-            <ListItem icon={<IoFolder />} secondary="3 files">
-              Documents
-            </ListItem>
-            <ListItem icon={<IoDocumentText />} secondary="Updated yesterday">
-              Report.pdf
-            </ListItem>
-            <ListItem icon={<IoImage />} secondary="Click to preview" onClick={() => {}}>
-              Photo.png
-            </ListItem>
-          </List>
-          <List variant="bordered">
-            <ListItem icon={<IoFolder />} secondary="Shared folder">
-              Projects
-            </ListItem>
-            <ListItem icon={<IoDocumentText />} secondary="Draft" action={<Button variant="ghost">Edit</Button>}>
-              Notes.md
-            </ListItem>
-          </List>
-        </PreviewPanel>
-      </ShowcaseSection>
-
-      <ShowcaseSection title="DataCard" subtitle="Versatile content container with media and actions">
-        <PreviewPanel>
-          <div class="row">
-            <DataCard
-              variant="elevated"
-              header={<strong>Project Overview</strong>}
-              footer={<Button variant="primary">View details</Button>}
-            >
-              <p class="mutedText">A summary of the current project status and recent activity.</p>
-            </DataCard>
-            <DataCard variant="outlined" hoverable>
-              <p class="mutedText">An outlined hoverable card without header or footer.</p>
-            </DataCard>
-          </div>
-        </PreviewPanel>
-      </ShowcaseSection>
-
-      <ShowcaseSection title="CodeBlock" subtitle="Code display with copy button and line numbers">
-        <PreviewPanel class="col">
-          <CodeBlock code={CODE_SAMPLE} language="tsx" showLineNumbers copyable />
-          <CodeBlock code="npm install @jankrajewskiit/ui" language="bash" />
-        </PreviewPanel>
-        <ShowcaseMeta>
-          Supports <span class="codeInline">showLineNumbers</span> and one-click copy to clipboard.
-        </ShowcaseMeta>
-      </ShowcaseSection>
-
-      <ShowcaseSection title="Marquee" subtitle="Infinite scrolling ticker">
-        <PreviewPanel class="col">
-          <Marquee speed={20}>
-            <span style={{ padding: '0 var(--spacing-lg)' }}>SolidJS</span>
-            <span style={{ padding: '0 var(--spacing-lg)' }}>TypeScript</span>
-            <span style={{ padding: '0 var(--spacing-lg)' }}>CSS Modules</span>
-            <span style={{ padding: '0 var(--spacing-lg)' }}>Vite</span>
-            <span style={{ padding: '0 var(--spacing-lg)' }}>VelvetUI</span>
-          </Marquee>
-          <Marquee speed={25} direction="right">
-            <span style={{ padding: '0 var(--spacing-lg)' }}>ESLint</span>
-            <span style={{ padding: '0 var(--spacing-lg)' }}>Prettier</span>
-            <span style={{ padding: '0 var(--spacing-lg)' }}>Vitest</span>
-            <span style={{ padding: '0 var(--spacing-lg)' }}>PostCSS</span>
-          </Marquee>
-        </PreviewPanel>
-        <ShowcaseMeta>Pauses on hover. Supports left and right directions with configurable speed.</ShowcaseMeta>
-      </ShowcaseSection>
-
-      <ShowcaseSection title="ImageGrid" subtitle="CSS Grid image gallery">
-        <PreviewPanel>
-          <ImageGrid images={GALLERY_IMAGES} columns={3} hoverable rounded />
-        </PreviewPanel>
-        <ShowcaseMeta>
-          Configurable columns, gap, rounded corners and hover effects. Supports optional captions.
-        </ShowcaseMeta>
-      </ShowcaseSection>
-
-      <ShowcaseSection title="Collapsible" subtitle="Simple expand and collapse">
-        <PreviewPanel class="col">
-          <Collapsible
-            open={collapsibleOpen()}
-            onToggle={() => setCollapsibleOpen((prev) => !prev)}
-            trigger={
-              <span class="row" style={{ gap: 'var(--spacing-xs)' }}>
-                <IoChevronDown size={16} />
-                <span>{collapsibleOpen() ? 'Hide details' : 'Show details'}</span>
-              </span>
-            }
-          >
-            <p class="mutedText">
-              This content is revealed when the trigger is clicked. Use Collapsible for simple toggle patterns that do
-              not need accordion grouping.
-            </p>
-          </Collapsible>
-        </PreviewPanel>
-      </ShowcaseSection>
-
-      <ShowcaseSection title="Carousel" subtitle="Snap-scroll content slider with auto-play">
-        <PreviewPanel>
-          <Carousel>
-            <div style={{ padding: 'var(--spacing-2xl)', 'text-align': 'center', background: 'var(--color-surface)' }}>
-              Slide 1
-            </div>
-            <div style={{ padding: 'var(--spacing-2xl)', 'text-align': 'center', background: 'var(--color-surface)' }}>
-              Slide 2
-            </div>
-            <div style={{ padding: 'var(--spacing-2xl)', 'text-align': 'center', background: 'var(--color-surface)' }}>
-              Slide 3
-            </div>
-            <div style={{ padding: 'var(--spacing-2xl)', 'text-align': 'center', background: 'var(--color-surface)' }}>
-              Slide 4
-            </div>
-          </Carousel>
         </PreviewPanel>
       </ShowcaseSection>
     </div>

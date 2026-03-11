@@ -1,6 +1,7 @@
 import {
   AspectRatio,
   Button,
+  Divider,
   Footer,
   MainLayout,
   Navbar,
@@ -92,55 +93,18 @@ const LayoutSection = () => {
         </ShowcaseMeta>
       </ShowcaseSection>
 
-      <ShowcaseSection title="ResizablePanel" subtitle="Split panel with draggable handle">
-        <PreviewPanel>
-          <div style={{ height: '200px' }}>
-            <ResizablePanel direction="horizontal" initialSplit={40} minSize={20}>
-              <div style={{ padding: 'var(--spacing-md)', background: 'var(--color-surface)' }}>
-                <strong>Left panel</strong>
-                <p class="mutedText">Drag the handle to resize.</p>
-              </div>
-              <div style={{ padding: 'var(--spacing-md)', background: 'var(--color-surface)' }}>
-                <strong>Right panel</strong>
-                <p class="mutedText">Content adjusts automatically.</p>
-              </div>
-            </ResizablePanel>
+      <ShowcaseSection title="Divider" subtitle="Visual separator with optional label">
+        <PreviewPanel class="col">
+          <Divider />
+          <Divider label="OR" />
+          <Divider variant="dashed" />
+          <Divider variant="dashed" label="Section" />
+          <div class="row" style={{ height: '60px' }}>
+            <span>Left</span>
+            <Divider orientation="vertical" />
+            <span>Right</span>
           </div>
         </PreviewPanel>
-        <ShowcaseMeta>
-          Supports <span class="codeInline">horizontal</span> and <span class="codeInline">vertical</span> directions
-          with configurable min size.
-        </ShowcaseMeta>
-      </ShowcaseSection>
-
-      <ShowcaseSection title="Sidebar" subtitle="Collapsible navigation sidebar">
-        <PreviewPanel>
-          <div
-            style={{
-              display: 'flex',
-              height: '280px',
-              border: '1px solid var(--color-border)',
-              'border-radius': 'var(--radius-md)',
-              overflow: 'hidden',
-            }}
-          >
-            <Sidebar
-              items={SIDEBAR_ITEMS}
-              activeId={activeSidebarId()}
-              onSelect={setActiveSidebarId}
-              collapsed={sidebarCollapsed()}
-              collapsible
-              onToggle={() => setSidebarCollapsed((prev) => !prev)}
-              header={<strong style={{ padding: 'var(--spacing-sm)' }}>MyApp</strong>}
-            />
-            <div style={{ flex: 1, padding: 'var(--spacing-md)' }}>
-              <p class="mutedText">
-                Active: <strong>{activeSidebarId()}</strong>
-              </p>
-            </div>
-          </div>
-        </PreviewPanel>
-        <ShowcaseMeta>Supports nested items, badges, icons and a collapsible toggle.</ShowcaseMeta>
       </ShowcaseSection>
 
       <ShowcaseSection title="AspectRatio" subtitle="Maintain content proportions">
@@ -199,6 +163,57 @@ const LayoutSection = () => {
         <ShowcaseMeta>
           Pass a numeric <span class="codeInline">ratio</span> prop. Defaults to 16/9.
         </ShowcaseMeta>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="ResizablePanel" subtitle="Split panel with draggable handle">
+        <PreviewPanel>
+          <div style={{ height: '200px' }}>
+            <ResizablePanel direction="horizontal" initialSplit={40} minSize={20}>
+              <div style={{ padding: 'var(--spacing-md)', background: 'var(--color-surface)' }}>
+                <strong>Left panel</strong>
+                <p class="mutedText">Drag the handle to resize.</p>
+              </div>
+              <div style={{ padding: 'var(--spacing-md)', background: 'var(--color-surface)' }}>
+                <strong>Right panel</strong>
+                <p class="mutedText">Content adjusts automatically.</p>
+              </div>
+            </ResizablePanel>
+          </div>
+        </PreviewPanel>
+        <ShowcaseMeta>
+          Supports <span class="codeInline">horizontal</span> and <span class="codeInline">vertical</span> directions
+          with configurable min size.
+        </ShowcaseMeta>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="Sidebar" subtitle="Collapsible navigation sidebar">
+        <PreviewPanel>
+          <div
+            style={{
+              display: 'flex',
+              height: '280px',
+              border: '1px solid var(--color-border)',
+              'border-radius': 'var(--radius-md)',
+              overflow: 'hidden',
+            }}
+          >
+            <Sidebar
+              items={SIDEBAR_ITEMS}
+              activeId={activeSidebarId()}
+              onSelect={setActiveSidebarId}
+              collapsed={sidebarCollapsed()}
+              collapsible
+              onToggle={() => setSidebarCollapsed((prev) => !prev)}
+              header={<strong style={{ padding: 'var(--spacing-sm)' }}>MyApp</strong>}
+            />
+            <div style={{ flex: 1, padding: 'var(--spacing-md)' }}>
+              <p class="mutedText">
+                Active: <strong>{activeSidebarId()}</strong>
+              </p>
+            </div>
+          </div>
+        </PreviewPanel>
+        <ShowcaseMeta>Supports nested items, badges, icons and a collapsible toggle.</ShowcaseMeta>
       </ShowcaseSection>
 
       <ShowcaseSection title="Layout Composition Snippet" subtitle="Template for app structure">
