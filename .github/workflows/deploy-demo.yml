@@ -11,38 +11,10 @@ env:
   IMAGE_NAME: velvet-demo
 
 jobs:
-  # ==================
-  # Verify library
-  # ==================
   verify:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: read
-    env:
+    uses: ./.github/workflows/verify.yml
+    secrets:
       GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
-
-    strategy:
-      matrix:
-        node-version: [20, 22]
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          scope: '@jankrajewskiit'
-          cache: 'npm'
-
-      - name: Install root dependencies
-        run: npm ci
-
-      - name: Audit dependencies
-        run: npm audit --audit-level=moderate
-
-      - name: Verify library
-        run: npm run verify
 
   # ==================
   # Build & Push Docker image
