@@ -1,0 +1,96 @@
+.track {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+}
+
+.value {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+}
+
+.trackBar {
+  width: 100%;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  position: relative;
+}
+
+.sm .trackBar {
+  height: 4px;
+}
+
+.md .trackBar {
+  height: 8px;
+}
+
+.lg .trackBar {
+  height: 12px;
+}
+
+.fill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  transition: width var(--duration-normal) var(--ease-out-expo);
+}
+
+.primary {
+  background: var(--color-primary);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--color-primary) 30%, transparent);
+}
+
+.info {
+  background: var(--color-info);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--color-info) 30%, transparent);
+}
+
+.success {
+  background: var(--color-success);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--color-success) 30%, transparent);
+}
+
+.warning {
+  background: var(--color-warning);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--color-warning) 30%, transparent);
+}
+
+.error {
+  background: var(--color-error);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--color-error) 30%, transparent);
+}
+
+.indeterminate {
+  width: 30% !important;
+  animation: shimmer 1.5s var(--ease-out-expo) infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(333%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .indeterminate {
+    animation: none;
+  }
+}

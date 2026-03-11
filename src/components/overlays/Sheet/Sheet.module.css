@@ -1,0 +1,144 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: var(--color-overlay);
+  backdrop-filter: var(--blur-overlay);
+  z-index: var(--z-overlay);
+  opacity: 0;
+  transition: opacity var(--duration-slow) ease;
+}
+
+.overlayVisible {
+  opacity: 1;
+}
+
+.panel {
+  position: fixed;
+  z-index: var(--z-modal);
+  background-color: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+  transition:
+    transform var(--duration-slow) var(--ease-out-expo),
+    box-shadow var(--duration-slow) var(--ease-out-expo);
+}
+
+.bottom {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-height: 85vh;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  transform: translateY(100%);
+}
+
+.left {
+  top: 0;
+  left: 0;
+  bottom: 0;
+  transform: translateX(-100%);
+}
+
+.right {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  transform: translateX(100%);
+}
+
+.bottom.sm {
+  height: 30vh;
+}
+.bottom.md {
+  height: 50vh;
+}
+.bottom.lg {
+  height: 70vh;
+}
+
+.left.sm,
+.right.sm {
+  width: 320px;
+}
+
+.left.md,
+.right.md {
+  width: 480px;
+}
+
+.left.lg,
+.right.lg {
+  width: 640px;
+}
+
+.panelVisible {
+  transform: translate(0, 0);
+  box-shadow: var(--shadow-drawer);
+}
+
+.dragHandle {
+  width: 32px;
+  height: 4px;
+  border-radius: var(--radius-sm);
+  background: var(--color-border);
+  margin: var(--spacing-sm) auto 0;
+  flex-shrink: 0;
+}
+
+.header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md) var(--spacing-lg);
+  gap: var(--spacing-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  margin: 0;
+}
+
+.body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+@media (width < 768px) {
+  .left,
+  .right {
+    width: 100vw;
+  }
+
+  .header {
+    padding: var(--spacing-md);
+  }
+
+  .body {
+    padding: var(--spacing-md);
+  }
+
+  .title {
+    font-size: var(--font-size-lg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel {
+    transition: none;
+    transform: translate(0, 0);
+    box-shadow: var(--shadow-drawer);
+  }
+
+  .overlay {
+    transition: none;
+    opacity: 1;
+  }
+}

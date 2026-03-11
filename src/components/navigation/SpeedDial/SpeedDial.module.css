@@ -1,0 +1,145 @@
+.speedDial {
+  position: fixed;
+  z-index: var(--z-overlay);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bottomRight {
+  bottom: var(--spacing-lg);
+  right: var(--spacing-lg);
+}
+
+.bottomLeft {
+  bottom: var(--spacing-lg);
+  left: var(--spacing-lg);
+}
+
+.fab {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-full);
+  border: none;
+  background-color: var(--color-primary);
+  color: var(--color-on-accent);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-card);
+  transition:
+    background-color var(--duration-fast) var(--ease-out-expo),
+    box-shadow var(--duration-fast) var(--ease-out-expo),
+    transform var(--duration-fast) var(--ease-out-back);
+}
+
+.fab:hover {
+  background-color: var(--color-primary-hover);
+  box-shadow: var(--shadow-glow);
+  transform: scale(1.05);
+}
+
+.fab:active {
+  transform: scale(0.95);
+}
+
+.fabIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--duration-fast) var(--ease-out-expo);
+}
+
+.fabOpen .fabIcon {
+  transform: rotate(45deg);
+}
+
+.actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  padding-bottom: var(--spacing-sm);
+}
+
+.actions.up {
+  flex-direction: column-reverse;
+  align-items: center;
+  padding-bottom: var(--spacing-sm);
+}
+
+.actions.left {
+  flex-direction: row-reverse;
+  position: absolute;
+  bottom: 8px;
+  right: 64px;
+  padding-bottom: 0;
+  padding-right: var(--spacing-sm);
+}
+
+.bottomLeft .actions.left {
+  right: auto;
+  left: 64px;
+  flex-direction: row;
+  padding-right: 0;
+  padding-left: var(--spacing-sm);
+}
+
+.actionWrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  animation: actionIn var(--duration-fast) var(--ease-out-back) both;
+}
+
+@keyframes actionIn {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.actionButton {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  border: none;
+  background-color: var(--color-bg-elevated);
+  color: var(--color-text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-card);
+  transition:
+    transform var(--duration-fast) var(--ease-out-back),
+    box-shadow var(--duration-fast) var(--ease-out-expo);
+}
+
+.actionButton:hover {
+  transform: scale(1.1);
+  box-shadow: var(--shadow-hover);
+}
+
+.tooltip {
+  background-color: var(--color-glass);
+  backdrop-filter: blur(8px);
+  color: var(--color-text);
+  font-size: var(--font-size-xs);
+  padding: var(--spacing-xxs) var(--spacing-sm);
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.tooltip.left {
+  order: -1;
+}
+
+.tooltip.right {
+  order: 1;
+}

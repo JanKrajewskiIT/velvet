@@ -3,17 +3,24 @@ import {
   Button,
   Checkbox,
   ColorPicker,
+  DatePicker,
   DropdownButton,
   DropdownItem,
   DropdownMenu,
+  FileInput,
   FormField,
   IconButton,
   Input,
+  OtpInput,
   RadioGroup,
+  Rating,
+  SegmentedControl,
   Select,
+  Slider,
   Switch,
   TagInput,
   TextArea,
+  TimePicker,
 } from '@jankrajewskiit/ui';
 import { IoAdd, IoClose, IoDownload, IoEllipsisHorizontal, IoPencil, IoTrash } from 'solid-icons/io';
 import { createSignal } from 'solid-js';
@@ -34,6 +41,14 @@ const InputsSection = () => {
   const [newsletter, setNewsletter] = createSignal(true);
   const [notifications, setNotifications] = createSignal(false);
   const [role, setRole] = createSignal<RoleValue>('editor');
+  const [sliderValue, setSliderValue] = createSignal(40);
+  const [rating, setRating] = createSignal(3);
+  const [segment, setSegment] = createSignal('list');
+  const [billingCycle, setBillingCycle] = createSignal('monthly');
+  const [otp, setOtp] = createSignal('');
+  const [date, setDate] = createSignal('');
+  const [time, setTime] = createSignal('');
+  const [time15, setTime15] = createSignal('');
 
   const simulateLoad = () => {
     setLoading(true);
@@ -208,6 +223,76 @@ const InputsSection = () => {
               },
             ]}
           />
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="Slider" subtitle="Fine-grained value selection">
+        <PreviewPanel class="col">
+          <Slider label="Volume" value={sliderValue()} onChange={setSliderValue} showValue />
+          <Slider label="Disabled" value={60} onChange={() => {}} disabled />
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="Rating" subtitle="Star-based scoring control">
+        <PreviewPanel>
+          <div class="row">
+            <Rating value={rating()} onChange={setRating} />
+            <Rating value={3.5} />
+            <Rating value={4} size="sm" />
+          </div>
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="SegmentedControl" subtitle="Mutually exclusive toggle group">
+        <PreviewPanel class="col">
+          <SegmentedControl
+            value={segment()}
+            onChange={setSegment}
+            options={[
+              { value: 'list', label: 'List' },
+              { value: 'grid', label: 'Grid' },
+              { value: 'board', label: 'Board' },
+            ]}
+          />
+          <SegmentedControl
+            value={billingCycle()}
+            onChange={setBillingCycle}
+            size="sm"
+            options={[
+              { value: 'monthly', label: 'Monthly' },
+              { value: 'yearly', label: 'Yearly' },
+            ]}
+          />
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="OtpInput" subtitle="One-time password entry">
+        <PreviewPanel>
+          <OtpInput value={otp()} onChange={setOtp} length={6} />
+        </PreviewPanel>
+        <ShowcaseMeta>
+          Entered value: <span class="codeInline">{otp()}</span>
+        </ShowcaseMeta>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="DatePicker" subtitle="Calendar-driven date selection">
+        <PreviewPanel class="col">
+          <DatePicker label="Start date" value={date()} onChange={setDate} />
+          <DatePicker label="Disabled" value="" onChange={() => {}} disabled />
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="TimePicker" subtitle="Scrollable time slot picker">
+        <PreviewPanel class="col">
+          <TimePicker label="Meeting time" value={time()} onChange={setTime} step={30} />
+          <TimePicker label="Precise time" value={time15()} onChange={setTime15} step={15} />
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="FileInput" subtitle="Drag-and-drop file upload zone">
+        <PreviewPanel class="col">
+          <FileInput accept="image/*" onFiles={() => {}} />
+          <FileInput accept="*" multiple onFiles={() => {}} label="Drop multiple files here or click to browse" />
         </PreviewPanel>
       </ShowcaseSection>
     </div>

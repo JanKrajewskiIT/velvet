@@ -1,0 +1,62 @@
+.wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.trigger {
+  all: unset;
+  display: inline-flex;
+  cursor: pointer;
+}
+
+.content {
+  position: absolute;
+  z-index: var(--z-dropdown);
+  padding: var(--spacing-md);
+  background: var(--color-glass);
+  backdrop-filter: var(--blur-overlay);
+  box-shadow: var(--shadow-popover);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  animation: scaleIn var(--duration-fast) var(--ease-out-back);
+}
+
+.bottom {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 8px;
+}
+
+.top {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 8px;
+}
+
+.left {
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-right: 8px;
+}
+
+.right {
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 8px;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    scale: 0.92;
+  }
+
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}

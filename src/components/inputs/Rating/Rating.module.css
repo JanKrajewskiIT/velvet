@@ -1,0 +1,60 @@
+.wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2xs);
+}
+
+.star {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-border);
+  transition:
+    transform var(--duration-fast) var(--ease-spring),
+    color var(--duration-fast) var(--ease-out-expo);
+  user-select: none;
+  line-height: 1;
+}
+
+.star svg {
+  width: 1em;
+  height: 1em;
+}
+
+.filled {
+  color: var(--color-warning);
+}
+
+.filled svg {
+  fill: currentcolor;
+}
+
+.half {
+  position: relative;
+  color: var(--color-border);
+}
+
+.half::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: 50%;
+  overflow: hidden;
+  color: var(--color-warning);
+}
+
+.half svg {
+  fill: var(--color-border);
+}
+
+.interactive {
+  cursor: pointer;
+}
+
+.interactive:hover {
+  transform: scale(1.2);
+}
+
+.star:not(.interactive) {
+  cursor: default;
+}

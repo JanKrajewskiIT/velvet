@@ -1,23 +1,38 @@
 import {
   addToast,
+  Alert,
+  Badge,
+  Banner,
   Button,
   Chip,
   EmptyState,
   ErrorFallback,
   ErrorMessage,
+  IconButton,
   LoadingContainer,
+  Progress,
   Skeleton,
   Spinner,
   StatCard,
   TagChip,
 } from '@jankrajewskiit/ui';
-import { IoAlertCircle, IoCheckmarkCircle, IoFolder, IoPeople, IoSearch, IoStatsChart } from 'solid-icons/io';
+import {
+  IoAlertCircle,
+  IoCheckmarkCircle,
+  IoFolder,
+  IoMail,
+  IoNotifications,
+  IoPeople,
+  IoSearch,
+  IoStatsChart,
+} from 'solid-icons/io';
 import { createSignal } from 'solid-js';
 
 import { PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
 
 const FeedbackSection = () => {
   const [retried, setRetried] = createSignal(false);
+  const [bannerVisible, setBannerVisible] = createSignal(true);
 
   return (
     <div>
@@ -175,6 +190,80 @@ const FeedbackSection = () => {
               Warning toast
             </Button>
           </div>
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="Badge" subtitle="Notification indicators on elements">
+        <PreviewPanel>
+          <div class="row">
+            <Badge content={5}>
+              <IconButton icon={<IoNotifications />} title="Notifications" />
+            </Badge>
+            <Badge content={99} max={99}>
+              <Button variant="primary">Messages</Button>
+            </Badge>
+            <Badge dot>
+              <IconButton icon={<IoMail />} title="Mail" />
+            </Badge>
+          </div>
+          <div class="row">
+            <Badge variant="info" content={3}>
+              <Button variant="ghost">Info</Button>
+            </Badge>
+            <Badge variant="success" content="OK">
+              <Button variant="ghost">Status</Button>
+            </Badge>
+            <Badge variant="error" content={12}>
+              <Button variant="ghost">Errors</Button>
+            </Badge>
+          </div>
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="Progress" subtitle="Determinate and indeterminate progress bars">
+        <PreviewPanel class="col">
+          <Progress value={75} variant="primary" label="Uploading" showValue />
+          <Progress value={45} variant="success" size="sm" />
+          <Progress value={90} variant="warning" size="lg" showValue />
+          <Progress variant="info" label="Loading..." />
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="Alert" subtitle="Contextual status messages">
+        <PreviewPanel class="col">
+          <Alert variant="info" title="Information">
+            Your account has been updated.
+          </Alert>
+          <Alert variant="success" title="Success">
+            File uploaded successfully.
+          </Alert>
+          <Alert variant="warning" onClose={() => {}}>
+            Disk space is running low.
+          </Alert>
+          <Alert variant="error" title="Error">
+            Failed to save changes.
+          </Alert>
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="Banner" subtitle="Full-width status strip">
+        <PreviewPanel class="col">
+          <Banner
+            variant="primary"
+            action={
+              <Button variant="ghost" style={{ color: 'white' }}>
+                Update now
+              </Button>
+            }
+          >
+            New version available!
+          </Banner>
+          {bannerVisible() && (
+            <Banner variant="warning" onClose={() => setBannerVisible(false)}>
+              Scheduled maintenance tonight.
+            </Banner>
+          )}
+          <Banner variant="error">Service degraded in EU region.</Banner>
         </PreviewPanel>
       </ShowcaseSection>
     </div>

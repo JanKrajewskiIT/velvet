@@ -1,10 +1,17 @@
 ﻿import {
   Accordion,
   AccordionItem,
+  Avatar,
+  AvatarGroup,
+  Button,
   type CandleAction,
   CandleActionDiagram,
   type CandleActionLegendItem,
+  Carousel,
+  DataCard,
   JsonDisplay,
+  List,
+  ListItem,
   MarkdownRenderer,
   RadarChart,
   ScoreRing,
@@ -16,6 +23,7 @@
   TableHeader,
   TableRow,
 } from '@jankrajewskiit/ui';
+import { IoDocumentText, IoFolder, IoImage } from 'solid-icons/io';
 
 import { PreviewPanel, ShowcaseSection } from '../components/ShowcaseSection';
 
@@ -200,6 +208,89 @@ const DataDisplaySection = () => {
       <ShowcaseSection title="MarkdownRenderer" subtitle="Rich markdown output">
         <PreviewPanel>
           <MarkdownRenderer content={MARKDOWN} />
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="Avatar & AvatarGroup" subtitle="User identity with image, initials or icon fallback">
+        <PreviewPanel class="col">
+          <div class="row">
+            <Avatar src="https://i.pravatar.cc/150?u=a" alt="User photo" />
+            <Avatar name="Jan Krajewski" />
+            <Avatar />
+          </div>
+          <div class="row">
+            <Avatar src="https://i.pravatar.cc/150?u=a" size="sm" />
+            <Avatar src="https://i.pravatar.cc/150?u=a" size="md" />
+            <Avatar src="https://i.pravatar.cc/150?u=a" size="lg" />
+            <Avatar src="https://i.pravatar.cc/150?u=a" size="xl" />
+          </div>
+          <AvatarGroup max={3}>
+            <Avatar src="https://i.pravatar.cc/150?u=a" />
+            <Avatar src="https://i.pravatar.cc/150?u=b" />
+            <Avatar src="https://i.pravatar.cc/150?u=c" />
+            <Avatar src="https://i.pravatar.cc/150?u=d" />
+            <Avatar src="https://i.pravatar.cc/150?u=e" />
+          </AvatarGroup>
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="List & ListItem" subtitle="Structured content rows with icons and actions">
+        <PreviewPanel class="col">
+          <List>
+            <ListItem icon={<IoFolder />} secondary="3 files">
+              Documents
+            </ListItem>
+            <ListItem icon={<IoDocumentText />} secondary="Updated yesterday">
+              Report.pdf
+            </ListItem>
+            <ListItem icon={<IoImage />} secondary="Click to preview" onClick={() => {}}>
+              Photo.png
+            </ListItem>
+          </List>
+          <List variant="bordered">
+            <ListItem icon={<IoFolder />} secondary="Shared folder">
+              Projects
+            </ListItem>
+            <ListItem icon={<IoDocumentText />} secondary="Draft" action={<Button variant="ghost">Edit</Button>}>
+              Notes.md
+            </ListItem>
+          </List>
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="DataCard" subtitle="Versatile content container with media and actions">
+        <PreviewPanel>
+          <div class="row">
+            <DataCard
+              variant="elevated"
+              header={<strong>Project Overview</strong>}
+              footer={<Button variant="primary">View details</Button>}
+            >
+              <p class="mutedText">A summary of the current project status and recent activity.</p>
+            </DataCard>
+            <DataCard variant="outlined" hoverable>
+              <p class="mutedText">An outlined hoverable card without header or footer.</p>
+            </DataCard>
+          </div>
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="Carousel" subtitle="Snap-scroll content slider with auto-play">
+        <PreviewPanel>
+          <Carousel>
+            <div style={{ padding: 'var(--spacing-2xl)', 'text-align': 'center', background: 'var(--color-surface)' }}>
+              Slide 1
+            </div>
+            <div style={{ padding: 'var(--spacing-2xl)', 'text-align': 'center', background: 'var(--color-surface)' }}>
+              Slide 2
+            </div>
+            <div style={{ padding: 'var(--spacing-2xl)', 'text-align': 'center', background: 'var(--color-surface)' }}>
+              Slide 3
+            </div>
+            <div style={{ padding: 'var(--spacing-2xl)', 'text-align': 'center', background: 'var(--color-surface)' }}>
+              Slide 4
+            </div>
+          </Carousel>
         </PreviewPanel>
       </ShowcaseSection>
     </div>

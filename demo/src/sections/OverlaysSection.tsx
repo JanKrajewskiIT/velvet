@@ -3,6 +3,7 @@ import {
   Button,
   ConfirmAction,
   ConfirmDialog,
+  ContextMenu,
   Dialog,
   DialogActions,
   DialogBody,
@@ -10,8 +11,11 @@ import {
   Drawer,
   MarkdownEditDialog,
   MarkdownRenderer,
+  Popover,
+  Sheet,
   Tooltip,
 } from '@jankrajewskiit/ui';
+import { IoCopy, IoPencil, IoTrash } from 'solid-icons/io';
 import { createSignal } from 'solid-js';
 
 import { PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
@@ -29,6 +33,9 @@ const OverlaysSection = () => {
   const [confirmRuns, setConfirmRuns] = createSignal(0);
   const [markdown, setMarkdown] = createSignal(INITIAL_MARKDOWN);
   const [editorOpen, setEditorOpen] = createSignal(false);
+  const [bottomSheetOpen, setBottomSheetOpen] = createSignal(false);
+  const [leftSheetOpen, setLeftSheetOpen] = createSignal(false);
+  const [rightSheetOpen, setRightSheetOpen] = createSignal(false);
 
   return (
     <div>
@@ -174,6 +181,109 @@ const OverlaysSection = () => {
           onSave={setMarkdown}
           onClose={() => setEditorOpen(false)}
         />
+      </ShowcaseSection>
+
+      <ShowcaseSection title="Popover" subtitle="Click-triggered floating content">
+        <PreviewPanel>
+          <div class="row">
+            <Popover
+              trigger={<Button variant="ghost">Top</Button>}
+              content={<p class="mutedText">Popover content for top</p>}
+              position="top"
+            />
+            <Popover
+              trigger={<Button variant="ghost">Bottom</Button>}
+              content={<p class="mutedText">Popover content for bottom</p>}
+              position="bottom"
+            />
+            <Popover
+              trigger={<Button variant="ghost">Left</Button>}
+              content={<p class="mutedText">Popover content for left</p>}
+              position="left"
+            />
+            <Popover
+              trigger={<Button variant="ghost">Right</Button>}
+              content={<p class="mutedText">Popover content for right</p>}
+              position="right"
+            />
+          </div>
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="ContextMenu" subtitle="Right-click action menus">
+        <PreviewPanel>
+          <ContextMenu
+            items={[
+              { label: 'Edit', icon: <IoPencil />, onClick: () => {} },
+              { label: 'Duplicate', icon: <IoCopy />, onClick: () => {} },
+              'separator',
+              { label: 'Delete', icon: <IoTrash />, onClick: () => {}, danger: true },
+            ]}
+          >
+            <div
+              style={{
+                'min-height': '120px',
+                display: 'flex',
+                'align-items': 'center',
+                'justify-content': 'center',
+                border: '2px dashed var(--color-border)',
+                'border-radius': 'var(--radius-md)',
+              }}
+            >
+              Right-click here
+            </div>
+          </ContextMenu>
+        </PreviewPanel>
+        <ShowcaseMeta>Try right-clicking the dashed area above.</ShowcaseMeta>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="Sheet" subtitle="Modal panel from any edge">
+        <PreviewPanel>
+          <div class="row">
+            <Button variant="ghost" onClick={() => setBottomSheetOpen(true)}>
+              Bottom sheet
+            </Button>
+            <Button variant="ghost" onClick={() => setLeftSheetOpen(true)}>
+              Left sheet
+            </Button>
+            <Button variant="ghost" onClick={() => setRightSheetOpen(true)}>
+              Right sheet
+            </Button>
+          </div>
+        </PreviewPanel>
+
+        <Sheet
+          open={bottomSheetOpen()}
+          onClose={() => setBottomSheetOpen(false)}
+          title="Bottom sheet"
+          closeLabel="Close bottom sheet"
+          side="bottom"
+          size="md"
+        >
+          <p class="mutedText">This sheet slides up from the bottom edge of the viewport.</p>
+        </Sheet>
+
+        <Sheet
+          open={leftSheetOpen()}
+          onClose={() => setLeftSheetOpen(false)}
+          title="Left sheet"
+          closeLabel="Close left sheet"
+          side="left"
+          size="sm"
+        >
+          <p class="mutedText">This sheet slides in from the left edge of the viewport.</p>
+        </Sheet>
+
+        <Sheet
+          open={rightSheetOpen()}
+          onClose={() => setRightSheetOpen(false)}
+          title="Right sheet"
+          closeLabel="Close right sheet"
+          side="right"
+          size="lg"
+        >
+          <p class="mutedText">This sheet slides in from the right edge of the viewport.</p>
+        </Sheet>
       </ShowcaseSection>
     </div>
   );

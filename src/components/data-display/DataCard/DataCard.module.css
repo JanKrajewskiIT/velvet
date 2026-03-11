@@ -1,0 +1,51 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  animation: fadeInUp var(--duration-normal) var(--ease-out-expo);
+  transition:
+    transform var(--duration-normal) var(--ease-out-expo),
+    box-shadow var(--duration-normal) var(--ease-out-expo);
+}
+
+.elevated {
+  background: var(--color-bg-elevated);
+  box-shadow: var(--shadow-card);
+}
+
+.outlined {
+  border: 1px solid var(--color-border);
+}
+
+.hoverable:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+.media {
+  width: 100%;
+  overflow: hidden;
+}
+
+.media > :first-child {
+  display: block;
+  width: 100%;
+}
+
+.header {
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+}
+
+.body {
+  padding: var(--spacing-md) var(--spacing-lg);
+  color: var(--color-text);
+}
+
+.footer {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
