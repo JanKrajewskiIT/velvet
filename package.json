@@ -1,6 +1,6 @@
 {
   "name": "@jankrajewskiit/ui",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "type": "module",
   "license": "MIT",
   "repository": {
@@ -28,7 +28,8 @@
       "types": "./config/lint-staged.d.mts",
       "import": "./config/lint-staged.mjs"
     },
-    "./husky/pre-commit": "./config/husky-pre-commit.sh"
+    "./husky/pre-commit": "./config/husky-pre-commit.sh",
+    "./stylelint-config": "./config/stylelint.json"
   },
   "types": "./dist/index.d.ts",
   "sideEffects": [
@@ -61,7 +62,9 @@
     "@solidjs/router": ">=0.15",
     "solid-js": ">=1.9",
     "solid-icons": ">=1.2.0",
-    "solid-markdown": ">=2.1.0"
+    "solid-markdown": ">=2.1.0",
+    "stylelint": ">=17",
+    "stylelint-config-standard": ">=40"
   },
   "peerDependenciesMeta": {
     "@solidjs/router": {
@@ -71,6 +74,12 @@
       "optional": true
     },
     "solid-markdown": {
+      "optional": true
+    },
+    "stylelint": {
+      "optional": true
+    },
+    "stylelint-config-standard": {
       "optional": true
     }
   },
