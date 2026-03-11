@@ -1,11 +1,4 @@
-import {
-  createMemo,
-  createSignal,
-  For,
-  type JSX,
-  Show,
-  splitProps,
-} from 'solid-js';
+import { createMemo, createSignal, For, type JSX, Show, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
 
@@ -19,10 +12,7 @@ export interface WizardStep {
   validate?: () => boolean | Promise<boolean>;
 }
 
-interface WizardOwnProps extends Omit<
-  JSX.HTMLAttributes<HTMLDivElement>,
-  'children' | 'onFinish'
-> {
+interface WizardOwnProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'children' | 'onFinish'> {
   steps: WizardStep[];
   onFinish: () => void | Promise<void>;
   onStepChange?: (step: number) => void;
@@ -98,19 +88,10 @@ const Wizard = (props: Props<WizardOwnProps>) => {
         </For>
       </div>
       <div class={styles.actions}>
-        <Button
-          variant="ghost"
-          disabled={currentStep() === 0 || isLoading()}
-          onClick={handleBack}
-        >
+        <Button variant="ghost" disabled={currentStep() === 0 || isLoading()} onClick={handleBack}>
           {local.backLabel}
         </Button>
-        <Button
-          variant="primary"
-          disabled={isLoading()}
-          onClick={handleNext}
-          loading={isLoading()}
-        >
+        <Button variant="primary" disabled={isLoading()} onClick={() => void handleNext()} loading={isLoading()}>
           {isLastStep() ? local.finishLabel : local.nextLabel}
         </Button>
       </div>

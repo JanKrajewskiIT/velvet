@@ -1,11 +1,5 @@
 import { FiX } from 'solid-icons/fi';
-import {
-  createEffect,
-  createSignal,
-  createUniqueId,
-  type JSX,
-  Show,
-} from 'solid-js';
+import { createEffect, createSignal, createUniqueId, type JSX, Show } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
 import type Props from '~/models/Props';
@@ -28,7 +22,10 @@ const Drawer = (props: Props<DrawerProps>) => {
   const [entered, setEntered] = createSignal(false);
   const titleId = createUniqueId();
 
-  useEscapeKey(() => props.open, props.onClose);
+  useEscapeKey(
+    () => props.open,
+    () => props.onClose()
+  );
 
   createEffect(() => {
     if (!props.open) {
@@ -68,11 +65,7 @@ const Drawer = (props: Props<DrawerProps>) => {
                 <p class={styles.subtitle}>{props.subtitle}</p>
               </Show>
             </div>
-            <IconButton
-              icon={<FiX />}
-              title={props.closeLabel}
-              onClick={() => props.onClose()}
-            />
+            <IconButton icon={<FiX />} title={props.closeLabel} onClick={() => props.onClose()} />
           </div>
 
           <Show when={props.children}>

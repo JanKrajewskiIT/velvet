@@ -45,22 +45,21 @@ const RadarChart = (props: Props<RadarChartProps>) => {
   const radius = createMemo(() => chartSize() * RADIUS_RATIO);
   const angleStep = createMemo(() => (2 * Math.PI) / props.axes.length);
 
-  const gridLevels = createMemo(() =>
-    Array.from({ length: LEVELS }, (_, i) => {
-      const levelRadius = (radius() / LEVELS) * (i + 1);
+  const gridLevels = createMemo(() => {
+    const r = radius();
+    const step = angleStep();
+    const c = center();
+    return Array.from({ length: LEVELS }, (_, i) => {
+      const levelRadius = (r / LEVELS) * (i + 1);
       const points = props.axes
         .map((_, j) => {
-          const { x, y } = polarToCartesian(
-            j * angleStep(),
-            levelRadius,
-            center()
-          );
+          const { x, y } = polarToCartesian(j * step, levelRadius, c);
           return `${x},${y}`;
         })
         .join(' ');
       return points;
-    })
-  );
+    });
+  });
 
   const axisLines = createMemo(() =>
     props.axes.map((_, i) => {
@@ -71,11 +70,7 @@ const RadarChart = (props: Props<RadarChartProps>) => {
 
   const axisLabels = createMemo(() =>
     props.axes.map((axis, i) => {
-      const { x, y } = polarToCartesian(
-        i * angleStep(),
-        radius() + LABEL_OFFSET,
-        center()
-      );
+      const { x, y } = polarToCartesian(i * angleStep(), radius() + LABEL_OFFSET, center());
       return { ...axis, x, y };
     })
   );
@@ -85,18 +80,13 @@ const RadarChart = (props: Props<RadarChartProps>) => {
       const points = dataset.values
         .map((value, i) => {
           const normalizedRadius = (value / 100) * radius();
-          const { x, y } = polarToCartesian(
-            i * angleStep(),
-            normalizedRadius,
-            center()
-          );
+          const { x, y } = polarToCartesian(i * angleStep(), normalizedRadius, center());
           return `${x},${y}`;
         })
         .join(' ');
       return {
         points,
-        color:
-          dataset.color ?? DATASET_COLORS[datasetIndex % DATASET_COLORS.length],
+        color: dataset.color ?? DATASET_COLORS[datasetIndex % DATASET_COLORS.length],
         label: dataset.label,
       };
     })
@@ -106,17 +96,11 @@ const RadarChart = (props: Props<RadarChartProps>) => {
     props.datasets.flatMap((dataset, datasetIndex) =>
       dataset.values.map((value, i) => {
         const normalizedRadius = (value / 100) * radius();
-        const { x, y } = polarToCartesian(
-          i * angleStep(),
-          normalizedRadius,
-          center()
-        );
+        const { x, y } = polarToCartesian(i * angleStep(), normalizedRadius, center());
         return {
           x,
           y,
-          color:
-            dataset.color ??
-            DATASET_COLORS[datasetIndex % DATASET_COLORS.length],
+          color: dataset.color ?? DATASET_COLORS[datasetIndex % DATASET_COLORS.length],
         };
       })
     )
@@ -202,9 +186,7 @@ const RadarChart = (props: Props<RadarChartProps>) => {
               <span
                 class={styles.legendColor}
                 style={{
-                  'background-color':
-                    dataset.color ??
-                    DATASET_COLORS[i() % DATASET_COLORS.length],
+                  'background-color': dataset.color ?? DATASET_COLORS[i() % DATASET_COLORS.length],
                 }}
               />
               <span class={styles.legendLabel}>{dataset.label}</span>

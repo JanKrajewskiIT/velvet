@@ -11,10 +11,7 @@ export interface RadioOption<T extends string = string> {
   disabled?: boolean;
 }
 
-interface RadioGroupOwnProps<T extends string> extends Omit<
-  JSX.HTMLAttributes<HTMLDivElement>,
-  'onChange'
-> {
+interface RadioGroupOwnProps<T extends string> extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'onChange'> {
   name?: string;
   value: T;
   options: RadioOption<T>[];
@@ -24,14 +21,7 @@ interface RadioGroupOwnProps<T extends string> extends Omit<
 
 const RadioGroup = <T extends string>(props: Props<RadioGroupOwnProps<T>>) => {
   const generatedName = createUniqueId();
-  const [local, rest] = splitProps(props, [
-    'name',
-    'value',
-    'options',
-    'onChange',
-    'direction',
-    'class',
-  ]);
+  const [local, rest] = splitProps(props, ['name', 'value', 'options', 'onChange', 'direction', 'class']);
 
   const groupName = () => local.name || generatedName;
 
@@ -43,29 +33,28 @@ const RadioGroup = <T extends string>(props: Props<RadioGroupOwnProps<T>>) => {
     >
       <For each={local.options}>
         {(option, index) => {
-          const optionId = `${groupName()}-${index()}`;
-          const optionLabel = `${optionId}-label`;
-          const ariaLabel =
-            typeof option.label === 'string' ? option.label : option.value;
+          const optionId = () => `${groupName()}-${index()}`;
+          const optionLabel = () => `${optionId()}-label`;
+          const ariaLabel = typeof option.label === 'string' ? option.label : option.value;
 
           return (
-            <label class={styles.option} for={optionId}>
+            <label class={styles.option} for={optionId()}>
               <span class={styles.control}>
                 <input
-                  id={optionId}
+                  id={optionId()}
                   type="radio"
                   name={groupName()}
                   value={option.value}
                   checked={local.value === option.value}
                   disabled={option.disabled}
                   class={styles.input}
-                  aria-labelledby={optionLabel}
+                  aria-labelledby={optionLabel()}
                   aria-label={ariaLabel}
                   onChange={() => local.onChange(option.value)}
                 />
                 <span class={styles.indicator} aria-hidden="true" />
               </span>
-              <span class={styles.text} id={optionLabel}>
+              <span class={styles.text} id={optionLabel()}>
                 <span class={styles.label}>{option.label}</span>
                 <Show when={option.description}>
                   <span class={styles.description}>{option.description}</span>

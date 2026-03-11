@@ -1,11 +1,4 @@
-import {
-  createContext,
-  createEffect,
-  createSignal,
-  onCleanup,
-  type ParentProps,
-  useContext,
-} from 'solid-js';
+import { createContext, createEffect, createSignal, onCleanup, type ParentProps, useContext } from 'solid-js';
 
 export type ThemeChoice = 'light' | 'dark' | 'system';
 type ResolvedTheme = 'light' | 'dark';
@@ -23,9 +16,7 @@ const ThemeContext = createContext<ThemeContextValue>();
 
 function getSystemTheme(): ResolvedTheme {
   if (typeof window === 'undefined') return 'light';
-  return window.matchMedia('(prefers-color-scheme: dark)').matches
-    ? 'dark'
-    : 'light';
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
 
 function getStoredTheme(key: string): ThemeChoice {
@@ -37,10 +28,7 @@ function getStoredTheme(key: string): ThemeChoice {
   return 'system';
 }
 
-function resolveTheme(
-  choice: ThemeChoice,
-  system: ResolvedTheme
-): ResolvedTheme {
+function resolveTheme(choice: ThemeChoice, system: ResolvedTheme): ResolvedTheme {
   return choice === 'system' ? system : (choice as ResolvedTheme);
 }
 
@@ -56,12 +44,11 @@ interface ThemeProviderProps extends ParentProps {
 
 const ThemeProvider = (props: ThemeProviderProps) => {
   const storageKey = () => props.storageKey ?? DEFAULT_STORAGE_KEY;
-  const initialTheme = getStoredTheme(storageKey());
+  const initialTheme = getStoredTheme(props.storageKey ?? DEFAULT_STORAGE_KEY);
   const initialSystem = getSystemTheme();
 
   const [theme, setTheme] = createSignal<ThemeChoice>(initialTheme);
-  const [systemTheme, setSystemTheme] =
-    createSignal<ResolvedTheme>(initialSystem);
+  const [systemTheme, setSystemTheme] = createSignal<ResolvedTheme>(initialSystem);
 
   const resolved = (): ResolvedTheme => resolveTheme(theme(), systemTheme());
 
@@ -102,9 +89,7 @@ const ThemeProvider = (props: ThemeProviderProps) => {
   };
 
   return (
-    <ThemeContext.Provider
-      value={{ theme, resolved, setTheme: changeTheme, toggleTheme }}
-    >
+    <ThemeContext.Provider value={{ theme, resolved, setTheme: changeTheme, toggleTheme }}>
       {props.children}
     </ThemeContext.Provider>
   );

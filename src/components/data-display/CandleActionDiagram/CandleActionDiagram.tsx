@@ -106,12 +106,16 @@ const CandleActionDiagram = (props: Props<CandleActionDiagramProps>) => {
   const slotWidth = createMemo(() => chartWidth() / Math.max(local.candles.length, 1));
   const bodyWidth = createMemo(() => Math.max(4, Math.min(slotWidth() * 0.55, 20)));
 
-  const gridLines = createMemo(() =>
-    Array.from({ length: GRID_LINES + 1 }, (_, i) => {
-      const value = priceRange().max - (priceRange().max - priceRange().min) * (i / GRID_LINES);
-      return { value, y: yScale(value) };
-    })
-  );
+  const gridLines = createMemo(() => {
+    const range = priceRange();
+    const cHeight = chartHeight();
+    return Array.from({ length: GRID_LINES + 1 }, (_, i) => {
+      const value = range.max - (range.max - range.min) * (i / GRID_LINES);
+      const ratio = (value - range.min) / (range.max - range.min || 1);
+      const y = chartTop + cHeight * (1 - ratio);
+      return { value, y };
+    });
+  });
 
   const trendPath = createMemo(() => {
     if (!showTrend() || local.candles.length < 2) return '';
@@ -154,6 +158,13 @@ const CandleActionDiagram = (props: Props<CandleActionDiagramProps>) => {
 
   const markers = createMemo(() => {
     const counters = new Map<number, number>();
+    const sw = slotWidth();
+    const range = priceRange();
+    const cHeight = chartHeight();
+    const scale = (value: number) => {
+      const ratio = (value - range.min) / (range.max - range.min || 1);
+      return chartTop + cHeight * (1 - ratio);
+    };
     return (local.actions ?? [])
       .filter((a) => a.index >= 0 && a.index < local.candles.length)
       .reduce<
@@ -170,11 +181,11 @@ const CandleActionDiagram = (props: Props<CandleActionDiagramProps>) => {
       >((acc, action, markerIdx) => {
         const candle = local.candles[action.index];
         if (!candle) return acc;
-        const x = PADDING_X + slotWidth() * action.index + slotWidth() / 2;
+        const x = PADDING_X + sw * action.index + sw / 2;
         const count = counters.get(action.index) ?? 0;
         counters.set(action.index, count + 1);
         const above = action.type === 'sell' || action.type === 'take-profit' || action.type === 'hold';
-        const baseY = above ? yScale(candle.high) : yScale(candle.low);
+        const baseY = above ? scale(candle.high) : scale(candle.low);
         const offset = 14 + count * 14;
         const y = above ? baseY - offset : baseY + offset;
         const size = 5 + Math.min(action.strength ?? 1, 3) * 1.2;
