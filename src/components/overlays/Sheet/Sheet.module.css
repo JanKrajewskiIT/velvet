@@ -49,9 +49,11 @@
 .bottom.sm {
   height: 30vh;
 }
+
 .bottom.md {
   height: 50vh;
 }
+
 .bottom.lg {
   height: 70vh;
 }

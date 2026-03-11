@@ -1,6 +1,27 @@
-import type { BreadcrumbItem, CommandItem, SpeedDialAction } from '@jankrajewskiit/ui';
-import { Breadcrumbs, CommandPalette, Pagination, SpeedDial, Stepper, Tabs, Timeline } from '@jankrajewskiit/ui';
-import { IoAdd, IoDownload, IoHome, IoMoon, IoPencil, IoPerson, IoSettings, IoShareSocial } from 'solid-icons/io';
+import type { BottomNavItem, BreadcrumbItem, CommandItem, SpeedDialAction } from '@jankrajewskiit/ui';
+import {
+  BackToTop,
+  BottomNav,
+  Breadcrumbs,
+  CommandPalette,
+  Pagination,
+  SpeedDial,
+  Stepper,
+  Tabs,
+  Timeline,
+} from '@jankrajewskiit/ui';
+import {
+  IoAdd,
+  IoCalendar,
+  IoDownload,
+  IoHome,
+  IoMoon,
+  IoPencil,
+  IoPerson,
+  IoSearch,
+  IoSettings,
+  IoShareSocial,
+} from 'solid-icons/io';
 import { createSignal, For } from 'solid-js';
 
 import { PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
@@ -62,11 +83,19 @@ const TIMELINE_ITEMS = [
   },
 ];
 
+const BOTTOM_NAV_ITEMS: BottomNavItem[] = [
+  { id: 'home', label: 'Home', icon: <IoHome size={20} /> },
+  { id: 'search', label: 'Search', icon: <IoSearch size={20} /> },
+  { id: 'calendar', label: 'Calendar', icon: <IoCalendar size={20} />, badge: 2 },
+  { id: 'profile', label: 'Profile', icon: <IoPerson size={20} /> },
+];
+
 const NavigationSection = () => {
   const [tab, setTab] = createSignal<TabValue>('preview');
   const [activeStep, setActiveStep] = createSignal('details');
   const [page, setPage] = createSignal(5);
   const [commandOpen, setCommandOpen] = createSignal(false);
+  const [activeBottomNav, setActiveBottomNav] = createSignal('home');
 
   const commandItems: CommandItem[] = [
     {
@@ -201,6 +230,35 @@ const NavigationSection = () => {
             <SpeedDial actions={SPEED_DIAL_ACTIONS} />
           </div>
         </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="BackToTop" subtitle="Floating scroll-to-top button">
+        <PreviewPanel>
+          <p class="mutedText">Scroll down the page to see the back-to-top button appear in the bottom-right corner.</p>
+          <BackToTop threshold={200} />
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="BottomNav" subtitle="Mobile bottom navigation bar">
+        <PreviewPanel>
+          <div
+            style={{
+              position: 'relative',
+              height: '120px',
+              border: '1px solid var(--color-border)',
+              'border-radius': 'var(--radius-md)',
+              overflow: 'hidden',
+            }}
+          >
+            <div style={{ padding: 'var(--spacing-md)', 'text-align': 'center' }}>
+              <p class="mutedText">
+                Active: <strong>{activeBottomNav()}</strong>
+              </p>
+            </div>
+            <BottomNav items={BOTTOM_NAV_ITEMS} activeId={activeBottomNav()} onChange={setActiveBottomNav} />
+          </div>
+        </PreviewPanel>
+        <ShowcaseMeta>Supports badges on items. Designed for mobile viewport widths.</ShowcaseMeta>
       </ShowcaseSection>
 
       <ShowcaseSection title="CommandPalette" subtitle="Keyboard-driven command search overlay">

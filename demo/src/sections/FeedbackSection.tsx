@@ -5,6 +5,8 @@ import {
   Banner,
   Button,
   Chip,
+  CircularProgress,
+  Countdown,
   EmptyState,
   ErrorFallback,
   ErrorMessage,
@@ -226,6 +228,37 @@ const FeedbackSection = () => {
           <Progress value={45} variant="success" size="sm" />
           <Progress value={90} variant="warning" size="lg" showValue />
           <Progress variant="info" label="Loading..." />
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="CircularProgress" subtitle="SVG circular progress indicator">
+        <PreviewPanel class="col">
+          <div class="row">
+            <CircularProgress value={75} showValue variant="primary" label="Primary 75%" />
+            <CircularProgress value={50} showValue variant="success" label="Success 50%" />
+            <CircularProgress value={25} showValue variant="warning" label="Warning 25%" />
+            <CircularProgress value={90} showValue variant="error" label="Error 90%" />
+          </div>
+          <div class="row">
+            <CircularProgress value={60} size="sm" showValue label="Small" />
+            <CircularProgress value={60} size="md" showValue label="Medium" />
+            <CircularProgress value={60} size="lg" showValue label="Large" />
+            <CircularProgress label="Indeterminate" />
+          </div>
+        </PreviewPanel>
+        <ShowcaseMeta>
+          Determinate with <span class="codeInline">value</span> or indeterminate without. Supports size and variant
+          props.
+        </ShowcaseMeta>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="Countdown" subtitle="Animated countdown timer">
+        <PreviewPanel class="col">
+          <div class="row">
+            <Countdown seconds={90} format="mm:ss" size="lg" />
+            <Countdown seconds={3600} format="hh:mm:ss" />
+            <Countdown seconds={15} format="ss" size="sm" />
+          </div>
         </PreviewPanel>
       </ShowcaseSection>
 

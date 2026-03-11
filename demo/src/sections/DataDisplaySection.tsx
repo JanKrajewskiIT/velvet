@@ -4,15 +4,22 @@
   Avatar,
   AvatarGroup,
   Button,
+  Callout,
   type CandleAction,
   CandleActionDiagram,
   type CandleActionLegendItem,
   Carousel,
+  CodeBlock,
+  Collapsible,
   DataCard,
+  ImageGrid,
+  type ImageGridItem,
   JsonDisplay,
+  Kbd,
   List,
   ListItem,
   MarkdownRenderer,
+  Marquee,
   RadarChart,
   ScoreRing,
   SectionCard,
@@ -22,10 +29,13 @@
   TableHead,
   TableHeader,
   TableRow,
+  type TreeNode,
+  TreeView,
 } from '@jankrajewskiit/ui';
-import { IoDocumentText, IoFolder, IoImage } from 'solid-icons/io';
+import { IoChevronDown, IoDocumentText, IoFolder, IoImage } from 'solid-icons/io';
+import { createSignal } from 'solid-js';
 
-import { PreviewPanel, ShowcaseSection } from '../components/ShowcaseSection';
+import { PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
 
 const SAMPLE_JSON = {
   id: 1,
@@ -79,7 +89,52 @@ const ACTION_LEGEND: CandleActionLegendItem[] = [
   { type: 'hold', label: 'Hold', description: 'No action while trend holds.' },
 ];
 
+const TREE_DATA: TreeNode[] = [
+  {
+    id: 'src',
+    label: 'src',
+    icon: <IoFolder />,
+    children: [
+      {
+        id: 'components',
+        label: 'components',
+        icon: <IoFolder />,
+        children: [
+          { id: 'button', label: 'Button.tsx', icon: <IoDocumentText /> },
+          { id: 'input', label: 'Input.tsx', icon: <IoDocumentText /> },
+        ],
+      },
+      { id: 'index', label: 'index.ts', icon: <IoDocumentText /> },
+    ],
+  },
+  {
+    id: 'package',
+    label: 'package.json',
+    icon: <IoDocumentText />,
+  },
+];
+
+const CODE_SAMPLE = `import { Button } from '@jankrajewskiit/ui';
+
+const App = () => {
+  return <Button variant="primary">Click me</Button>;
+};
+
+export default App;`;
+
+const GALLERY_IMAGES: ImageGridItem[] = [
+  { src: 'https://picsum.photos/id/10/400/300', alt: 'Forest', caption: 'Misty forest' },
+  { src: 'https://picsum.photos/id/15/400/300', alt: 'Mountains', caption: 'Mountain sunrise' },
+  { src: 'https://picsum.photos/id/29/400/300', alt: 'Coast', caption: 'Rocky coastline' },
+  { src: 'https://picsum.photos/id/37/400/300', alt: 'Cliff', caption: 'Seaside cliff' },
+  { src: 'https://picsum.photos/id/42/400/300', alt: 'Night', caption: 'City at night' },
+  { src: 'https://picsum.photos/id/49/400/300', alt: 'Bridge', caption: 'Old bridge' },
+];
+
 const DataDisplaySection = () => {
+  const [selectedNode, setSelectedNode] = createSignal('');
+  const [collapsibleOpen, setCollapsibleOpen] = createSignal(false);
+
   return (
     <div>
       <ShowcaseSection title="Accordion" subtitle="Progressive disclosure for grouped content">
@@ -211,6 +266,48 @@ const DataDisplaySection = () => {
         </PreviewPanel>
       </ShowcaseSection>
 
+      <ShowcaseSection title="Kbd" subtitle="Styled keyboard shortcut keys">
+        <PreviewPanel>
+          <div class="row">
+            <Kbd>Ctrl</Kbd> + <Kbd>K</Kbd>
+            <Kbd>⌘</Kbd> + <Kbd>Shift</Kbd> + <Kbd>P</Kbd>
+            <Kbd>Esc</Kbd>
+          </div>
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="Callout" subtitle="Highlighted content blocks for tips, warnings and notes">
+        <PreviewPanel class="col">
+          <Callout variant="info" title="Information">
+            Use design tokens for consistent styling.
+          </Callout>
+          <Callout variant="success" title="Success">
+            Your changes have been saved.
+          </Callout>
+          <Callout variant="warning">This feature will be deprecated in the next major version.</Callout>
+          <Callout variant="danger" title="Breaking change">
+            API response format has changed.
+          </Callout>
+          <Callout variant="tip" title="Tip">
+            Use <Kbd>Ctrl</Kbd> + <Kbd>K</Kbd> to open the command palette.
+          </Callout>
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="TreeView" subtitle="Hierarchical expandable tree">
+        <PreviewPanel>
+          <TreeView
+            nodes={TREE_DATA}
+            defaultExpanded={['src']}
+            selectedId={selectedNode()}
+            onSelect={setSelectedNode}
+          />
+        </PreviewPanel>
+        <ShowcaseMeta>
+          Selected: <span class="codeInline">{selectedNode() || 'none'}</span>
+        </ShowcaseMeta>
+      </ShowcaseSection>
+
       <ShowcaseSection title="Avatar & AvatarGroup" subtitle="User identity with image, initials or icon fallback">
         <PreviewPanel class="col">
           <div class="row">
@@ -272,6 +369,64 @@ const DataDisplaySection = () => {
               <p class="mutedText">An outlined hoverable card without header or footer.</p>
             </DataCard>
           </div>
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="CodeBlock" subtitle="Code display with copy button and line numbers">
+        <PreviewPanel class="col">
+          <CodeBlock code={CODE_SAMPLE} language="tsx" showLineNumbers copyable />
+          <CodeBlock code="npm install @jankrajewskiit/ui" language="bash" />
+        </PreviewPanel>
+        <ShowcaseMeta>
+          Supports <span class="codeInline">showLineNumbers</span> and one-click copy to clipboard.
+        </ShowcaseMeta>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="Marquee" subtitle="Infinite scrolling ticker">
+        <PreviewPanel class="col">
+          <Marquee speed={20}>
+            <span style={{ padding: '0 var(--spacing-lg)' }}>SolidJS</span>
+            <span style={{ padding: '0 var(--spacing-lg)' }}>TypeScript</span>
+            <span style={{ padding: '0 var(--spacing-lg)' }}>CSS Modules</span>
+            <span style={{ padding: '0 var(--spacing-lg)' }}>Vite</span>
+            <span style={{ padding: '0 var(--spacing-lg)' }}>VelvetUI</span>
+          </Marquee>
+          <Marquee speed={25} direction="right">
+            <span style={{ padding: '0 var(--spacing-lg)' }}>ESLint</span>
+            <span style={{ padding: '0 var(--spacing-lg)' }}>Prettier</span>
+            <span style={{ padding: '0 var(--spacing-lg)' }}>Vitest</span>
+            <span style={{ padding: '0 var(--spacing-lg)' }}>PostCSS</span>
+          </Marquee>
+        </PreviewPanel>
+        <ShowcaseMeta>Pauses on hover. Supports left and right directions with configurable speed.</ShowcaseMeta>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="ImageGrid" subtitle="CSS Grid image gallery">
+        <PreviewPanel>
+          <ImageGrid images={GALLERY_IMAGES} columns={3} hoverable rounded />
+        </PreviewPanel>
+        <ShowcaseMeta>
+          Configurable columns, gap, rounded corners and hover effects. Supports optional captions.
+        </ShowcaseMeta>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="Collapsible" subtitle="Simple expand and collapse">
+        <PreviewPanel class="col">
+          <Collapsible
+            open={collapsibleOpen()}
+            onToggle={() => setCollapsibleOpen((prev) => !prev)}
+            trigger={
+              <span class="row" style={{ gap: 'var(--spacing-xs)' }}>
+                <IoChevronDown size={16} />
+                <span>{collapsibleOpen() ? 'Hide details' : 'Show details'}</span>
+              </span>
+            }
+          >
+            <p class="mutedText">
+              This content is revealed when the trigger is clicked. Use Collapsible for simple toggle patterns that do
+              not need accordion grouping.
+            </p>
+          </Collapsible>
         </PreviewPanel>
       </ShowcaseSection>
 

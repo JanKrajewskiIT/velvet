@@ -1,0 +1,91 @@
+.wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.sm {
+  width: 32px;
+  height: 32px;
+}
+
+.md {
+  width: 48px;
+  height: 48px;
+}
+
+.lg {
+  width: 64px;
+  height: 64px;
+}
+
+.svg {
+  transform: rotate(-90deg);
+}
+
+.track {
+  fill: none;
+  stroke: var(--color-border);
+}
+
+.bar {
+  fill: none;
+  transition: stroke-dashoffset var(--duration-normal) var(--ease-out-expo);
+}
+
+.primary {
+  stroke: var(--color-primary);
+}
+
+.success {
+  stroke: var(--color-success);
+}
+
+.warning {
+  stroke: var(--color-warning);
+}
+
+.error {
+  stroke: var(--color-error);
+}
+
+.value {
+  position: absolute;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+}
+
+.indeterminate {
+  animation: spin 1.4s linear infinite;
+}
+
+.indeterminateBar {
+  stroke-dasharray: 80 200;
+  stroke-dashoffset: 0;
+  animation: dash 1.4s ease-in-out infinite;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1 200;
+    stroke-dashoffset: 0;
+  }
+
+  50% {
+    stroke-dasharray: 80 200;
+    stroke-dashoffset: -35;
+  }
+
+  100% {
+    stroke-dasharray: 80 200;
+    stroke-dashoffset: -124;
+  }
+}

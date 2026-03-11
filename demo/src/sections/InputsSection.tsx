@@ -3,7 +3,10 @@ import {
   Button,
   Checkbox,
   ColorPicker,
+  CopyButton,
   DatePicker,
+  type DateRange,
+  DateRangePicker,
   DropdownButton,
   DropdownItem,
   DropdownMenu,
@@ -11,9 +14,12 @@ import {
   FormField,
   IconButton,
   Input,
+  NumberInput,
   OtpInput,
+  PasswordInput,
   RadioGroup,
   Rating,
+  SearchInput,
   SegmentedControl,
   Select,
   Slider,
@@ -49,6 +55,9 @@ const InputsSection = () => {
   const [date, setDate] = createSignal('');
   const [time, setTime] = createSignal('');
   const [time15, setTime15] = createSignal('');
+  const [quantity, setQuantity] = createSignal(5);
+  const [search, setSearch] = createSignal('');
+  const [range, setRange] = createSignal<DateRange>({ start: '', end: '' });
 
   const simulateLoad = () => {
     setLoading(true);
@@ -130,6 +139,17 @@ const InputsSection = () => {
               <Input id="demo-pass" type="password" placeholder="********" />
             </FormField>
           </form>
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="PasswordInput" subtitle="Password field with visibility toggle">
+        <PreviewPanel class="col">
+          <FormField label="Password" id="demo-pwd">
+            <PasswordInput id="demo-pwd" placeholder="Enter password..." />
+          </FormField>
+          <FormField label="Disabled" id="demo-pwd-dis">
+            <PasswordInput id="demo-pwd-dis" value="secret123" disabled />
+          </FormField>
         </PreviewPanel>
       </ShowcaseSection>
 
@@ -233,6 +253,33 @@ const InputsSection = () => {
         </PreviewPanel>
       </ShowcaseSection>
 
+      <ShowcaseSection title="NumberInput" subtitle="Numeric stepper with increment and decrement">
+        <PreviewPanel>
+          <NumberInput value={quantity()} onChange={setQuantity} label="Quantity" min={0} max={100} />
+          <NumberInput value={1} onChange={() => {}} disabled size="sm" />
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="SearchInput" subtitle="Filtered input with clear and debounce">
+        <PreviewPanel class="col">
+          <SearchInput value={search()} onInput={setSearch} placeholder="Search components..." />
+          <SearchInput value="" onInput={() => {}} disabled placeholder="Disabled" />
+        </PreviewPanel>
+        <ShowcaseMeta>
+          Search value: <span class="codeInline">{search()}</span>
+        </ShowcaseMeta>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="CopyButton" subtitle="One-click clipboard copy with feedback">
+        <PreviewPanel>
+          <div class="row">
+            <CopyButton text="npm install @jankrajewskiit/ui" label="Copy command" />
+            <CopyButton text="Hello World" variant="outline" label="Outline" />
+            <CopyButton text="Small copy" size="sm" />
+          </div>
+        </PreviewPanel>
+      </ShowcaseSection>
+
       <ShowcaseSection title="Rating" subtitle="Star-based scoring control">
         <PreviewPanel>
           <div class="row">
@@ -280,6 +327,18 @@ const InputsSection = () => {
           <DatePicker label="Start date" value={date()} onChange={setDate} />
           <DatePicker label="Disabled" value="" onChange={() => {}} disabled />
         </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="DateRangePicker" subtitle="Calendar-driven date range selection">
+        <PreviewPanel class="col">
+          <DateRangePicker value={range()} onChange={setRange} />
+        </PreviewPanel>
+        <ShowcaseMeta>
+          Range:{' '}
+          <span class="codeInline">
+            {range().start || '–'} → {range().end || '–'}
+          </span>
+        </ShowcaseMeta>
       </ShowcaseSection>
 
       <ShowcaseSection title="TimePicker" subtitle="Scrollable time slot picker">

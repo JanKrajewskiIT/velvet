@@ -3,18 +3,61 @@ import {
   addToast,
   AiResultPanel,
   Button,
+  DataTable,
+  type DataTableColumn,
   EditableCollection,
   FileDropZone,
   FlipCard,
   FormField,
   IconButton,
   Input,
+  type TransferItem,
+  TransferList,
   Wizard,
 } from '@jankrajewskiit/ui';
 import { IoDocument, IoTrash } from 'solid-icons/io';
 import { createSignal } from 'solid-js';
 
 import { PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
+
+interface PackageRow extends Record<string, unknown> {
+  name: string;
+  version: string;
+  downloads: number;
+  license: string;
+}
+
+const PACKAGE_DATA: PackageRow[] = [
+  { name: 'solid-js', version: '1.9.7', downloads: 45000, license: 'MIT' },
+  { name: 'vite', version: '7.3.1', downloads: 120000, license: 'MIT' },
+  { name: 'typescript', version: '5.9.3', downloads: 300000, license: 'Apache-2.0' },
+  { name: 'vitest', version: '3.1.0', downloads: 68000, license: 'MIT' },
+  { name: 'eslint', version: '9.18.0', downloads: 210000, license: 'MIT' },
+  { name: 'prettier', version: '4.0.0', downloads: 175000, license: 'MIT' },
+  { name: 'postcss', version: '8.5.1', downloads: 95000, license: 'MIT' },
+];
+
+const PACKAGE_COLUMNS: DataTableColumn<PackageRow>[] = [
+  { key: 'name', header: 'Package', sortable: true },
+  { key: 'version', header: 'Version' },
+  {
+    key: 'downloads',
+    header: 'Downloads',
+    sortable: true,
+    render: (val) => <span>{Number(val).toLocaleString()}</span>,
+  },
+  { key: 'license', header: 'License', sortable: true },
+];
+
+const INITIAL_SOURCE: TransferItem[] = [
+  { id: '1', label: 'TypeScript' },
+  { id: '2', label: 'CSS Modules' },
+  { id: '3', label: 'Vite' },
+  { id: '4', label: 'ESLint' },
+  { id: '5', label: 'Prettier' },
+];
+
+const INITIAL_TARGET: TransferItem[] = [{ id: '6', label: 'SolidJS' }];
 
 type AnalysisState = 'idle' | 'loading' | 'result' | 'error';
 
@@ -31,6 +74,8 @@ const createTask = (index: number): TaskItem => ({
 });
 
 const CompositesSection = () => {
+  const [sourceItems, setSourceItems] = createSignal<TransferItem[]>(INITIAL_SOURCE);
+  const [targetItems, setTargetItems] = createSignal<TransferItem[]>(INITIAL_TARGET);
   const [droppedFile, setDroppedFile] = createSignal<string | null>(null);
   const [analysisState, setAnalysisState] = createSignal<AnalysisState>('idle');
   const [resultNext, setResultNext] = createSignal(true);
@@ -87,8 +132,45 @@ const CompositesSection = () => {
     setTasks((current) => current.map((task) => (task.id === id ? { ...task, [field]: value } : task)));
   };
 
+  const handleTransferChange = (source: TransferItem[], target: TransferItem[]) => {
+    setSourceItems(source);
+    setTargetItems(target);
+  };
+
   return (
     <div>
+      <ShowcaseSection title="DataTable" subtitle="Generic sortable and paginated table">
+        <PreviewPanel>
+          <DataTable<PackageRow>
+            data={PACKAGE_DATA}
+            columns={PACKAGE_COLUMNS}
+            pageSize={4}
+            sortable
+            striped
+            hoverable
+          />
+        </PreviewPanel>
+        <ShowcaseMeta>
+          Click column headers to sort. Pagination appears when rows exceed <span class="codeInline">pageSize</span>.
+        </ShowcaseMeta>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="TransferList" subtitle="Dual-list picker for moving items between groups">
+        <PreviewPanel>
+          <TransferList
+            sourceItems={sourceItems()}
+            targetItems={targetItems()}
+            onChange={handleTransferChange}
+            sourceTitle="Available"
+            targetTitle="Selected"
+            searchable
+          />
+        </PreviewPanel>
+        <ShowcaseMeta>
+          Check items and use the arrow buttons to transfer. Search filters within each panel.
+        </ShowcaseMeta>
+      </ShowcaseSection>
+
       <ShowcaseSection title="Wizard" subtitle="Multi-step guided workflow">
         <PreviewPanel>
           <Wizard

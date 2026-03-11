@@ -1,3 +1,4 @@
+import type { LightboxImage, TourStep } from '@jankrajewskiit/ui';
 import {
   ActionRow,
   Button,
@@ -8,12 +9,15 @@ import {
   DialogActions,
   DialogBody,
   DialogTitle,
+  Divider,
   Drawer,
+  Lightbox,
   MarkdownEditDialog,
   MarkdownRenderer,
   Popover,
   Sheet,
   Tooltip,
+  Tour,
 } from '@jankrajewskiit/ui';
 import { IoCopy, IoPencil, IoTrash } from 'solid-icons/io';
 import { createSignal } from 'solid-js';
@@ -26,7 +30,25 @@ const INITIAL_MARKDOWN = `## Release Notes
 - Improved core controls
 - Refreshed demo experience`;
 
+const SAMPLE_IMAGES: LightboxImage[] = [
+  { src: 'https://picsum.photos/id/10/800/600', alt: 'Forest', caption: 'Misty forest trail' },
+  { src: 'https://picsum.photos/id/15/800/600', alt: 'Mountains', caption: 'Mountain sunrise' },
+  { src: 'https://picsum.photos/id/29/800/600', alt: 'Coast', caption: 'Rocky coastline' },
+];
+
+const TOUR_STEPS: TourStep[] = [
+  { target: '.showcaseTitle', title: 'Welcome', content: 'This is the section title area.', placement: 'bottom' },
+  {
+    target: '.previewPanel',
+    title: 'Preview',
+    content: 'Each component is shown in a preview panel.',
+    placement: 'bottom',
+  },
+  { target: '.themeToggleBar', title: 'Theme', content: 'Toggle between light and dark mode here.', placement: 'top' },
+];
+
 const OverlaysSection = () => {
+  const [tourOpen, setTourOpen] = createSignal(false);
   const [dialogOpen, setDialogOpen] = createSignal(false);
   const [confirmOpen, setConfirmOpen] = createSignal(false);
   const [drawerOpen, setDrawerOpen] = createSignal(false);
@@ -36,6 +58,7 @@ const OverlaysSection = () => {
   const [bottomSheetOpen, setBottomSheetOpen] = createSignal(false);
   const [leftSheetOpen, setLeftSheetOpen] = createSignal(false);
   const [rightSheetOpen, setRightSheetOpen] = createSignal(false);
+  const [lightboxOpen, setLightboxOpen] = createSignal(false);
 
   return (
     <div>
@@ -284,6 +307,49 @@ const OverlaysSection = () => {
         >
           <p class="mutedText">This sheet slides in from the right edge of the viewport.</p>
         </Sheet>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="Lightbox" subtitle="Fullscreen image viewer with navigation">
+        <PreviewPanel>
+          <Button variant="ghost" onClick={() => setLightboxOpen(true)}>
+            Open lightbox
+          </Button>
+        </PreviewPanel>
+        <Lightbox images={SAMPLE_IMAGES} open={lightboxOpen()} onClose={() => setLightboxOpen(false)} />
+      </ShowcaseSection>
+
+      <ShowcaseSection title="Tour" subtitle="Step-by-step onboarding spotlight">
+        <PreviewPanel>
+          <Button variant="primary" onClick={() => setTourOpen(true)}>
+            Start tour
+          </Button>
+        </PreviewPanel>
+        <Tour
+          steps={TOUR_STEPS}
+          open={tourOpen()}
+          onClose={() => setTourOpen(false)}
+          nextLabel="Next"
+          prevLabel="Back"
+          finishLabel="Done"
+          skipLabel="Skip"
+        />
+        <ShowcaseMeta>
+          Highlights DOM elements by CSS selector. Supports top, bottom, left and right placements.
+        </ShowcaseMeta>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="Divider" subtitle="Visual separator with optional label">
+        <PreviewPanel class="col">
+          <Divider />
+          <Divider label="OR" />
+          <Divider variant="dashed" />
+          <Divider variant="dashed" label="Section" />
+          <div class="row" style={{ height: '60px' }}>
+            <span>Left</span>
+            <Divider orientation="vertical" />
+            <span>Right</span>
+          </div>
+        </PreviewPanel>
       </ShowcaseSection>
     </div>
   );

@@ -1,0 +1,46 @@
+.countdown {
+  display: inline-flex;
+  align-items: center;
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--font-weight-semibold);
+}
+
+.sm {
+  font-size: var(--font-size-sm);
+}
+
+.md {
+  font-size: var(--font-size-xl);
+}
+
+.lg {
+  font-size: var(--font-size-3xl);
+}
+
+.digit {
+  color: var(--color-text);
+}
+
+.separator {
+  color: var(--color-text-muted);
+  margin: 0 2px;
+}
+
+.urgent {
+  color: var(--color-error);
+  animation: pulse 1s ease infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+
+  100% {
+    transform: scale(0.95);
+  }
+}
