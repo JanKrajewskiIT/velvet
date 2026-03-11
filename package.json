@@ -84,7 +84,7 @@
     }
   },
   "dependencies": {
-    "dompurify": "^3.3.2",
+    "dompurify": "^3.3.3",
     "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
