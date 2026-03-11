@@ -49,9 +49,10 @@ const RadarChart = (props: Props<RadarChartProps>) => {
     const r = radius();
     const step = angleStep();
     const c = center();
+    const axes = props.axes;
     return Array.from({ length: LEVELS }, (_, i) => {
       const levelRadius = (r / LEVELS) * (i + 1);
-      const points = props.axes
+      const points = axes
         .map((_, j) => {
           const { x, y } = polarToCartesian(j * step, levelRadius, c);
           return `${x},${y}`;

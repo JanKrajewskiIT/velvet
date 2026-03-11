@@ -161,12 +161,14 @@ const CandleActionDiagram = (props: Props<CandleActionDiagramProps>) => {
     const sw = slotWidth();
     const range = priceRange();
     const cHeight = chartHeight();
+    const candles = local.candles;
+    const actions = local.actions ?? [];
     const scale = (value: number) => {
       const ratio = (value - range.min) / (range.max - range.min || 1);
       return chartTop + cHeight * (1 - ratio);
     };
-    return (local.actions ?? [])
-      .filter((a) => a.index >= 0 && a.index < local.candles.length)
+    return actions
+      .filter((a) => a.index >= 0 && a.index < candles.length)
       .reduce<
         Array<{
           x: number;
@@ -179,7 +181,7 @@ const CandleActionDiagram = (props: Props<CandleActionDiagramProps>) => {
           baseY: number;
         }>
       >((acc, action, markerIdx) => {
-        const candle = local.candles[action.index];
+        const candle = candles[action.index];
         if (!candle) return acc;
         const x = PADDING_X + sw * action.index + sw / 2;
         const count = counters.get(action.index) ?? 0;

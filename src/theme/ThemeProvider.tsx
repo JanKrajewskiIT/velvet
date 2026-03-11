@@ -1,4 +1,4 @@
-import { createContext, createEffect, createSignal, onCleanup, type ParentProps, useContext } from 'solid-js';
+import { createContext, createEffect, createSignal, onCleanup, type ParentProps, untrack, useContext } from 'solid-js';
 
 export type ThemeChoice = 'light' | 'dark' | 'system';
 type ResolvedTheme = 'light' | 'dark';
@@ -44,7 +44,7 @@ interface ThemeProviderProps extends ParentProps {
 
 const ThemeProvider = (props: ThemeProviderProps) => {
   const storageKey = () => props.storageKey ?? DEFAULT_STORAGE_KEY;
-  const initialTheme = getStoredTheme(props.storageKey ?? DEFAULT_STORAGE_KEY);
+  const initialTheme = getStoredTheme(untrack(() => props.storageKey) ?? DEFAULT_STORAGE_KEY);
   const initialSystem = getSystemTheme();
 
   const [theme, setTheme] = createSignal<ThemeChoice>(initialTheme);

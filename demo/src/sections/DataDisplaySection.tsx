@@ -1,7 +1,9 @@
 ﻿import {
   Accordion,
   AccordionItem,
+  type CandleAction,
   CandleActionDiagram,
+  type CandleActionLegendItem,
   JsonDisplay,
   MarkdownRenderer,
   RadarChart,
@@ -53,7 +55,7 @@ const CANDLE_SAMPLE = [
   { open: 117, close: 125, high: 127, low: 116, volume: 280 },
 ];
 
-const ACTION_SAMPLE = [
+const ACTION_SAMPLE: CandleAction[] = [
   { index: 1, type: 'buy', label: 'Buy', strength: 2 },
   { index: 3, type: 'stop-loss', label: 'SL' },
   { index: 4, type: 'take-profit', label: 'TP' },
@@ -61,7 +63,7 @@ const ACTION_SAMPLE = [
   { index: 8, type: 'sell', label: 'Sell', strength: 2 },
 ];
 
-const ACTION_LEGEND = [
+const ACTION_LEGEND: CandleActionLegendItem[] = [
   { type: 'buy', label: 'Buy', description: 'Entry on bullish confirmation.' },
   { type: 'sell', label: 'Sell', description: 'Exit on distribution spike.' },
   { type: 'take-profit', label: 'Take profit', description: 'Target hit and scaled out.' },
