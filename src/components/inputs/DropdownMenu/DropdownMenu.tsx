@@ -1,9 +1,9 @@
 import { createSignal, createUniqueId, type JSX, Show } from 'solid-js';
 
+import useClickOutside from '~/hooks/useClickOutside';
+import useEscapeKey from '~/hooks/useEscapeKey';
 import type Props from '~/models/Props';
 
-import useClickOutside from '../../../hooks/useClickOutside';
-import useEscapeKey from '../../../hooks/useEscapeKey';
 import styles from './DropdownMenu.module.css';
 
 interface DropdownMenuProps {
@@ -12,9 +12,8 @@ interface DropdownMenuProps {
   label?: string;
 }
 
-function getMenuItems(menu: HTMLElement): HTMLButtonElement[] {
-  return Array.from(menu.querySelectorAll<HTMLButtonElement>('button:not(:disabled)'));
-}
+const getMenuItems = (menu: HTMLElement): HTMLButtonElement[] =>
+  Array.from(menu.querySelectorAll<HTMLButtonElement>('button:not(:disabled)'));
 
 const DropdownMenu = (props: Props<DropdownMenuProps>) => {
   const [open, setOpen] = createSignal(false);

@@ -8,7 +8,7 @@
 .spotlight {
   position: absolute;
   z-index: var(--z-overlay);
-  box-shadow: 0 0 0 9999px rgb(0 0 0 / 50%);
+  box-shadow: 0 0 0 9999px var(--color-overlay);
   border-radius: var(--radius-sm);
   transition: all var(--duration-normal) var(--ease-out-expo);
   pointer-events: none;
@@ -70,7 +70,7 @@
 
 .btnPrimary {
   background: var(--color-primary);
-  color: white;
+  color: var(--color-on-accent);
 }
 
 .btnPrimary:hover {

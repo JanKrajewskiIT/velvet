@@ -32,7 +32,7 @@
   left: 0;
   right: 0;
   padding: var(--spacing-xs) var(--spacing-sm);
-  background: linear-gradient(transparent, rgb(0 0 0 / 60%));
+  background: linear-gradient(transparent, var(--color-overlay));
   color: white;
   font-size: var(--font-size-xs);
   opacity: 0;

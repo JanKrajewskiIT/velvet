@@ -1,5 +1,5 @@
 .header {
-  --indicator-color: var(--brand);
+  --indicator-color: var(--header-text);
 
   position: sticky;
   top: 0;
@@ -15,10 +15,6 @@
   transition:
     background-color var(--transition-fast),
     box-shadow var(--transition-fast);
-}
-
-[data-theme='dark'] .header {
-  --indicator-color: var(--color-gray-10);
 }
 
 .logo {
