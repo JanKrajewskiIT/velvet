@@ -1,5 +1,5 @@
 # Build stage — context must be repo root (demo references ../src)
-FROM node:22-alpine AS builder
+FROM node:25-alpine AS builder
 
 WORKDIR /app
 

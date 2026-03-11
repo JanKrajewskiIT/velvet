@@ -31,7 +31,7 @@ jobs:
       owner_lc: ${{ steps.vars.outputs.owner_lc }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Set variables
         id: vars
@@ -74,7 +74,7 @@ jobs:
       OWNER_LC: ${{ needs.publish.outputs.owner_lc }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Copy compose file to VPS
         uses: appleboy/scp-action@v0.1.7
