@@ -5,12 +5,9 @@
 }
 
 .toggle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  min-width: 2rem;
   width: 2rem;
   height: 2rem;
-  padding: 0;
   border: 2px solid var(--color-gray-0);
   border-radius: var(--radius-full);
   background: transparent;
@@ -43,6 +40,17 @@
   opacity: 1;
   transform: scale(1.25) rotate(360deg);
   pointer-events: none;
+}
+
+.light .toggle {
+  border-color: var(--theme-toggle-light-border);
+  color: var(--theme-toggle-light-border);
+}
+
+.light .toggle.selected {
+  color: var(--theme-toggle-light-selected-fg);
+  border-color: var(--theme-toggle-light-selected-border);
+  background-color: var(--theme-toggle-light-selected-bg);
 }
 
 .icon {

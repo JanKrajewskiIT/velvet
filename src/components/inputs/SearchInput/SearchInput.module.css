@@ -2,13 +2,7 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  padding-inline: var(--spacing-sm);
-  background: var(--color-surface);
-  transition:
-    border-color var(--duration-fast) var(--ease-out-expo),
-    box-shadow var(--duration-fast) var(--ease-out-expo);
+  background: transparent;
 }
 
 .icon {
@@ -22,8 +16,8 @@
   background: transparent;
   outline: none;
   color: var(--color-text);
-  font-size: var(--font-size-base);
-  padding: var(--spacing-xs) 0;
+  min-width: 0;
+  width: 100%;
 }
 
 .input::placeholder {
@@ -47,12 +41,6 @@
   color: var(--color-text);
 }
 
-.focused {
-  border-color: var(--color-focus-ring);
-  box-shadow: 0 0 0 3px var(--color-focus-ring);
-}
-
 .disabled {
-  opacity: 0.5;
   pointer-events: none;
 }

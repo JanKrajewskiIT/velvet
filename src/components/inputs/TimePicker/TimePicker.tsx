@@ -2,9 +2,14 @@ import { FiClock } from 'solid-icons/fi';
 import { createMemo, createSignal, createUniqueId, For, Show } from 'solid-js';
 
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
 import useClickOutside from '../../../hooks/useClickOutside';
 import useEscapeKey from '../../../hooks/useEscapeKey';
+import type { InputSize } from '../Input/Input';
+import DropdownOption from '../shared/DropdownOption';
+import DropdownSurface from '../shared/DropdownSurface';
+import InputBase from '../shared/InputBase';
 import styles from './TimePicker.module.css';
 
 interface TimePickerMessages {
@@ -20,6 +25,7 @@ interface TimePickerProps {
   disabled?: boolean;
   step?: number;
   label?: string;
+  size?: InputSize;
   openPickerLabel?: string;
   optionsLabel?: string;
   messages?: TimePickerMessages;
@@ -75,14 +81,19 @@ const TimePicker = (props: Props<TimePickerProps>) => {
     close();
   };
 
-  const optionClass = (time: string): string => `${styles.option} ${time === props.value ? styles.optionSelected : ''}`;
+  const optionClass = (): string => styles.option;
 
   return (
     <div ref={wrapperRef} class={`${styles.wrapper} ${props.class ?? ''}`}>
       <Show when={props.label}>
         <span class={styles.label}>{props.label}</span>
       </Show>
-      <div class={`${styles.inputRow} ${props.disabled ? styles.inputRowDisabled : ''}`}>
+      <InputBase
+        class={classNames(styles.inputRow, props.disabled && styles.inputRowDisabled)}
+        size={props.size}
+        disabled={props.disabled}
+        focusWithin
+      >
         <input
           type="text"
           class={styles.input}
@@ -103,23 +114,29 @@ const TimePicker = (props: Props<TimePickerProps>) => {
         >
           <FiClock />
         </button>
-      </div>
+      </InputBase>
       <Show when={isOpen()}>
-        <div ref={dropdownRef} id={dropdownId} class={styles.dropdown} role="listbox" aria-label={optionsLabel()}>
+        <DropdownSurface
+          ref={dropdownRef}
+          id={dropdownId}
+          class={styles.dropdown}
+          role="listbox"
+          aria-label={optionsLabel()}
+        >
           <For each={timeOptions()}>
             {(time) => (
-              <button
-                type="button"
-                class={optionClass(time)}
+              <DropdownOption
+                class={optionClass()}
+                selected={time === props.value}
                 onClick={() => select(time)}
                 role="option"
                 aria-selected={time === props.value}
               >
                 {time}
-              </button>
+              </DropdownOption>
             )}
           </For>
-        </div>
+        </DropdownSurface>
       </Show>
     </div>
   );

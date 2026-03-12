@@ -2,8 +2,11 @@ import { IoCloseOutline } from 'solid-icons/io';
 import { createMemo, createSignal, For, Show } from 'solid-js';
 
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
-import Input from '../Input/Input';
+import Input, { type InputSize } from '../Input/Input';
+import DropdownOption from '../shared/DropdownOption';
+import DropdownSurface from '../shared/DropdownSurface';
 import styles from './Autocomplete.module.css';
 
 interface AutocompleteProps {
@@ -12,6 +15,7 @@ interface AutocompleteProps {
   onChange: (values: string[]) => void;
   placeholder?: string;
   removeLabel?: string;
+  size?: InputSize;
 }
 
 const Autocomplete = (props: Props<AutocompleteProps>) => {
@@ -83,6 +87,7 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
         <Input
           ref={inputRef}
           type="text"
+          size={props.size}
           value={inputValue()}
           onInput={handleInput}
           onFocus={() => setShowDropdown(true)}
@@ -92,20 +97,19 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
         />
 
         <Show when={showDropdown() && filteredOptions().length > 0}>
-          <div class={styles.dropdown}>
+          <DropdownSurface class={styles.dropdown} role="listbox">
             <For each={filteredOptions()}>
               {(option) => (
-                <button
-                  type="button"
-                  class={styles.dropdownItem}
+                <DropdownOption
+                  class={classNames(styles.dropdownItem)}
                   onMouseDown={(e) => e.preventDefault()}
                   onClick={() => addValue(option)}
                 >
                   {option}
-                </button>
+                </DropdownOption>
               )}
             </For>
-          </div>
+          </DropdownSurface>
         </Show>
       </div>
     </div>

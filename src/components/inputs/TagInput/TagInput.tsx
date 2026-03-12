@@ -1,26 +1,22 @@
 import { createSignal, For, type JSX, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
 import TagChip from '../../feedback/TagChip/TagChip';
+import type { InputSize } from '../Input/Input';
+import InputBase from '../shared/InputBase';
 import styles from './TagInput.module.css';
 
-interface TagInputOwnProps extends Omit<
-  JSX.InputHTMLAttributes<HTMLInputElement>,
-  'value' | 'onChange'
-> {
+interface TagInputOwnProps extends Omit<JSX.InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange'> {
   value: string[];
   onChange: (tags: string[]) => void;
   placeholder?: string;
+  size?: InputSize;
 }
 
 const TagInput = (props: Props<TagInputOwnProps>) => {
-  const [local, rest] = splitProps(props, [
-    'value',
-    'onChange',
-    'placeholder',
-    'class',
-  ]);
+  const [local, rest] = splitProps(props, ['value', 'onChange', 'placeholder', 'size', 'class']);
   const [inputValue, setInputValue] = createSignal('');
 
   const handleKeyDown = (e: KeyboardEvent) => {
@@ -39,18 +35,16 @@ const TagInput = (props: Props<TagInputOwnProps>) => {
   const removeTag = (tagToRemove: string) => {
     local.onChange(local.value.filter((tag) => tag !== tagToRemove));
   };
-
   return (
     <div class={`${styles.container} ${local.class ?? ''}`}>
-      <div class={styles.tagsContainer}>
+      <InputBase
+        class={classNames(styles.tagsContainer, rest.disabled && styles.disabled)}
+        size={local.size}
+        disabled={rest.disabled}
+        focusWithin
+      >
         <For each={local.value}>
-          {(tag) => (
-            <TagChip
-              label={tag}
-              color="var(--color-primary)"
-              onClick={() => removeTag(tag)}
-            />
-          )}
+          {(tag) => <TagChip label={tag} color="var(--color-primary)" onClick={() => removeTag(tag)} />}
         </For>
         <input
           {...rest}
@@ -60,7 +54,7 @@ const TagInput = (props: Props<TagInputOwnProps>) => {
           onKeyDown={handleKeyDown}
           placeholder={local.value.length === 0 ? local.placeholder : ''}
         />
-      </div>
+      </InputBase>
     </div>
   );
 };

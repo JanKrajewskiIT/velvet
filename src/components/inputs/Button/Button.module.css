@@ -1,89 +1,5 @@
-.button {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-xs);
-  padding: var(--spacing-sm) var(--spacing-md);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  font-size: var(--font-size-md);
-  transition:
-    background-color var(--duration-fast) var(--ease-out-expo),
-    box-shadow var(--duration-fast) var(--ease-out-expo),
-    transform var(--duration-fast) var(--ease-out-expo);
-}
-
-.button:active:not(:disabled) {
-  transform: scale(0.97);
-}
-
-.button:disabled {
-  opacity: var(--opacity-disabled);
-  cursor: not-allowed;
-}
-
-.button:focus-visible {
-  outline: 2px solid var(--color-focus-ring);
-  outline-offset: 2px;
-}
-
-.primary {
-  border: none;
-  background-color: var(--color-primary);
-  color: var(--color-on-accent);
-}
-
-.primary:hover:not(:disabled) {
-  background-color: var(--color-primary-hover);
-  box-shadow: var(--shadow-glow);
-}
-
-.danger {
-  border: none;
-  background-color: var(--color-error);
-  color: var(--color-on-accent);
-}
-
-.danger:hover:not(:disabled) {
-  background-color: var(--color-error-hover);
-  box-shadow: var(--shadow-glow-sm);
-}
-
-.ghost {
-  border: 1px solid var(--color-border);
-  background: none;
-  color: var(--color-text);
-}
-
-.ghost:hover:not(:disabled) {
-  background-color: var(--color-surface);
-  box-shadow: var(--shadow-sm);
-  transform: translateY(-1px);
-}
-
-.dashed {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-  border: 1px dashed var(--color-border);
-  background: none;
-  color: var(--color-text-muted);
-}
-
-.dashed:hover:not(:disabled) {
-  background-color: var(--color-surface);
-  border-color: var(--color-text-muted);
-  color: var(--color-text);
-  transform: translateY(-1px);
-}
-
 .loading {
   pointer-events: none;
-}
-
-.loading > *:not(.spinner) {
-  visibility: hidden;
 }
 
 .spinner {
@@ -92,4 +8,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.content {
+  display: inline-flex;
+  align-items: center;
+}
+
+.contentHidden {
+  visibility: hidden;
 }

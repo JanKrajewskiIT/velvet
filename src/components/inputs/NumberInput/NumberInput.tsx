@@ -2,7 +2,10 @@ import { IoAdd, IoRemove } from 'solid-icons/io';
 import { type JSX, onCleanup, Show, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
+import type { InputSize } from '../Input/Input';
+import InputBase from '../shared/InputBase';
 import styles from './NumberInput.module.css';
 
 interface NumberInputMessages {
@@ -18,7 +21,7 @@ interface NumberInputOwnProps {
   step?: number;
   label?: string;
   disabled?: boolean;
-  size?: 'sm' | 'md';
+  size?: InputSize;
   decrementLabel?: string;
   incrementLabel?: string;
   messages?: NumberInputMessages;
@@ -93,14 +96,23 @@ const NumberInput = (props: Props<NumberInputOwnProps>) => {
     }
   };
 
-  const sizeClass = () => (size() === 'sm' ? styles.sm : styles.md);
+  const sizeClass = () => {
+    if (size() === 'sm') return styles.sizeSm;
+    if (size() === 'lg') return styles.sizeLg;
+    return styles.sizeMd;
+  };
 
   return (
-    <div class={`${styles.wrapper} ${sizeClass()} ${local.disabled ? styles.disabled : ''} ${local.class ?? ''}`}>
+    <div class={classNames(styles.wrapper, local.disabled && styles.disabled, local.class)}>
       <Show when={local.label}>
         <label class={styles.label}>{local.label}</label>
       </Show>
-      <div class={styles.controls}>
+      <InputBase
+        class={classNames(styles.controls, sizeClass())}
+        size={local.size}
+        disabled={local.disabled}
+        focusWithin
+      >
         <button
           type="button"
           class={styles.button}
@@ -134,7 +146,7 @@ const NumberInput = (props: Props<NumberInputOwnProps>) => {
         >
           <IoAdd />
         </button>
-      </div>
+      </InputBase>
     </div>
   );
 };

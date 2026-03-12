@@ -46,7 +46,8 @@ export type SectionId =
   | 'layout-shell'
   | 'layout-sidebar'
   | 'composites-lists'
-  | 'composites-wizard-ai';
+  | 'composites-wizard-ai'
+  | 'composites-scheduler';
 
 interface NavGroup {
   label: string;
@@ -64,8 +65,8 @@ const NAV_GROUPS: NavGroup[] = [
   {
     label: 'Layout & Navigation',
     items: [
-      { id: 'layout-shell', label: 'App shell' },
-      { id: 'layout-sidebar', label: 'Sidebar & utilities' },
+      { id: 'layout-shell', label: 'Navbar & Layouts' },
+      { id: 'layout-sidebar', label: 'Layout utilities' },
       { id: 'nav-tabs-stepper', label: 'Tabs & Stepper' },
       { id: 'nav-timeline', label: 'Timeline' },
       { id: 'nav-command-fab', label: 'Command palette & FAB' },
@@ -76,7 +77,7 @@ const NAV_GROUPS: NavGroup[] = [
     label: 'Inputs & Forms',
     items: [
       { id: 'inputs-buttons', label: 'Buttons & toggles' },
-      { id: 'inputs-fields', label: 'Text & search' },
+      { id: 'inputs-fields', label: 'Inputs' },
       { id: 'inputs-controls', label: 'Selectors & pickers' },
       { id: 'inputs-dropdowns', label: 'Dropdowns & autocomplete' },
       { id: 'inputs-datetime', label: 'Date & time' },
@@ -118,8 +119,9 @@ const NAV_GROUPS: NavGroup[] = [
   {
     label: 'Composites & Flows',
     items: [
-      { id: 'composites-lists', label: 'Transfer & editable list' },
+      { id: 'composites-lists', label: 'Transfer, editable & kanban' },
       { id: 'composites-wizard-ai', label: 'Wizard & AI panel' },
+      { id: 'composites-scheduler', label: 'Scheduler & calendar' },
     ],
   },
 ];
@@ -144,8 +146,9 @@ const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
       'DropdownButton, DropdownMenu, Autocomplete, MultiSelect and Select for searchable menus and option selection.',
   },
   'inputs-fields': {
-    title: 'Inputs & Forms · Text & search',
-    description: 'Input, PasswordInput, TextArea, SearchInput, InlineEditableText, TagInput, OtpInput and NumberInput.',
+    title: 'Inputs & Forms · Inputs',
+    description:
+      'Input, TextArea, NumberInput, SearchInput, PasswordInput, TagInput, OtpInput, InlineEditableText and RichTextEditor.',
   },
   'inputs-controls': {
     title: 'Inputs & Forms · Selectors & pickers',
@@ -184,7 +187,7 @@ const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
   'data-tables': {
     title: 'Data Display · Tables & pagination',
     description:
-      'Table primitives, DataTable with sorting and pagination plus standalone Pagination for lists and grids.',
+      'Table primitives, DataTable v2 and DataGridPro v3 (virtualization, pinning, resizing, selection, visibility, reorder, JSON import/export).',
   },
   'data-lists': {
     title: 'Data Display · Lists',
@@ -192,7 +195,7 @@ const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
   },
   'data-tree': {
     title: 'Data Display · Tree',
-    description: 'TreeView for hierarchical expandable tree navigation.',
+    description: 'TreeView v2 with lazy loading, checkbox selection and drag-and-drop tree navigation.',
   },
   'nav-tabs-stepper': {
     title: 'Layout & Navigation · Tabs, Stepper & Breadcrumbs',
@@ -252,21 +255,26 @@ const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
     description: 'Lightbox for fullscreen image viewer and Tour for step-by-step onboarding spotlights.',
   },
   'layout-shell': {
-    title: 'Layout & Navigation · App shell',
-    description: 'MainLayout, Navbar and Footer for composing the overall app shell structure.',
+    title: 'Layout & Navigation · Navbar & Layouts',
+    description:
+      'Navbar, MainLayout, Footer and Sidebar for page shells, side navigation and composition-friendly layouts.',
   },
   'layout-sidebar': {
-    title: 'Layout & Navigation · Sidebar & utilities',
-    description:
-      'Sidebar, ResizablePanel, Divider, AspectRatio, Stack and Grid for side navigation and composition-friendly layouts.',
+    title: 'Layout & Navigation · Layout utilities',
+    description: 'Grid, Stack, ResizablePanel and Divider for composition-friendly layouts.',
   },
   'composites-lists': {
-    title: 'Composites & Flows · Transfer & editable list',
-    description: 'TransferList and EditableCollection for moving items between groups and managing dynamic lists.',
+    title: 'Composites & Flows · Transfer, editable & kanban',
+    description:
+      'TransferList, EditableCollection and KanbanBoard for moving items between groups, managing dynamic lists and workflow columns.',
   },
   'composites-wizard-ai': {
     title: 'Composites & Flows · Wizard & AI panel',
     description: 'Wizard for guided multi-step flows and AiResultPanel for AI-style result and scoring layouts.',
+  },
+  'composites-scheduler': {
+    title: 'Composites & Flows · Scheduler & calendar',
+    description: 'Scheduler for month-based planning with multi-day events and drag-and-drop rescheduling.',
   },
 };
 
@@ -279,8 +287,12 @@ const AppContent = () => {
     <div class="layout">
       <nav class="sidebar" aria-label="Component categories">
         <div class="sidebar-logo">
-          <span class="sidebar-badge">VelvetUi library</span>
-          <p class="sidebar-title">VelvetUI</p>
+          <div class="sidebar-logo-header">
+            <p class="sidebar-title">VelvetUI</p>
+            <div class="theme-toggle-bar">
+              <ThemeToggle lightLabel="Light mode" darkLabel="Dark mode" groupLabel="Theme" variant="light" />
+            </div>
+          </div>
           <p class="sidebar-subtitle">Modern SolidJS component showcase</p>
         </div>
 
@@ -344,10 +356,6 @@ const AppContent = () => {
           </Match>
         </Switch>
       </main>
-
-      <div class="theme-toggle-bar">
-        <ThemeToggle lightLabel="Light mode" darkLabel="Dark mode" groupLabel="Theme" />
-      </div>
     </div>
   );
 };

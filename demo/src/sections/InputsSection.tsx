@@ -30,6 +30,7 @@ import {
   RadioGroup,
   RangeSlider,
   Rating,
+  RichTextEditor,
   SearchInput,
   SegmentedControl,
   Select,
@@ -92,6 +93,7 @@ const InputsSection = (props: InputsSectionProps) => {
   const [search, setSearch] = createSignal('');
   const [range, setRange] = createSignal<DateRange>({ start: '', end: '' });
   const [dateTime, setDateTime] = createSignal('');
+  const [richText, setRichText] = createSignal('<p><strong>Release notes</strong> for <em>VelvetUi</em>.</p>');
   const [droppedFile, setDroppedFile] = createSignal<string | null>(null);
   const [locale, setLocale] = createSignal<'EN' | 'PL'>('EN');
 
@@ -165,6 +167,7 @@ const InputsSection = (props: InputsSectionProps) => {
               <LocaleSwitcher
                 label={locale()}
                 switchLabel="Switch locale"
+                variant="surface"
                 onSwitch={() => {
                   setLocale((current) => (current === 'EN' ? 'PL' : 'EN'));
                 }}
@@ -176,7 +179,7 @@ const InputsSection = (props: InputsSectionProps) => {
         <ShowcaseSection title="ThemeToggle" subtitle="Light and dark mode switch">
           <PreviewPanel>
             <div class="row">
-              <ThemeToggle lightLabel="Light mode" darkLabel="Dark mode" groupLabel="Theme" />
+              <ThemeToggle lightLabel="Light mode" darkLabel="Dark mode" groupLabel="Theme" variant="light" />
             </div>
           </PreviewPanel>
           <ShowcaseMeta>
@@ -253,9 +256,9 @@ const InputsSection = (props: InputsSectionProps) => {
       </Show>
 
       <Show when={sectionId() === 'inputs-fields'}>
-        <ShowcaseSection title="Input" subtitle="Text, disabled and password fields">
+        <ShowcaseSection title="Input" subtitle="Text and disabled field variants">
           <PreviewPanel class="col">
-            <form onSubmit={(e) => e.preventDefault()}>
+            <form class="inputFieldStack" onSubmit={(e) => e.preventDefault()}>
               <FormField label="Text input" id="demo-text">
                 <Input
                   id="demo-text"
@@ -268,20 +271,15 @@ const InputsSection = (props: InputsSectionProps) => {
               <FormField label="Disabled input" id="demo-disabled">
                 <Input id="demo-disabled" type="text" value="Disabled" disabled />
               </FormField>
-              <FormField label="Password" id="demo-pass">
-                <Input id="demo-pass" type="password" placeholder="********" />
-              </FormField>
             </form>
           </PreviewPanel>
-        </ShowcaseSection>
-
-        <ShowcaseSection title="PasswordInput" subtitle="Password field with visibility toggle">
           <PreviewPanel class="col">
-            <FormField label="Password" id="demo-pwd">
-              <PasswordInput id="demo-pwd" placeholder="Enter password..." />
-            </FormField>
-            <FormField label="Disabled" id="demo-pwd-dis">
-              <PasswordInput id="demo-pwd-dis" value="secret123" disabled />
+            <FormField label="Input sizes" id="demo-input-sizes">
+              <div class="col">
+                <Input id="demo-input-sm" size="sm" placeholder="Small input" />
+                <Input id="demo-input-md" size="md" placeholder="Medium input" />
+                <Input id="demo-input-lg" size="lg" placeholder="Large input" />
+              </div>
             </FormField>
           </PreviewPanel>
         </ShowcaseSection>
@@ -291,6 +289,13 @@ const InputsSection = (props: InputsSectionProps) => {
             <FormField label="Description" id="demo-ta">
               <TextArea id="demo-ta" placeholder="Enter a longer description..." rows={4} />
             </FormField>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection title="NumberInput" subtitle="Numeric stepper with increment and decrement">
+          <PreviewPanel class="col numberInputStack">
+            <NumberInput value={quantity()} onChange={setQuantity} label="Quantity" min={0} max={100} size="sm" />
+            <NumberInput value={1} onChange={() => {}} disabled size="sm" />
           </PreviewPanel>
         </ShowcaseSection>
 
@@ -304,13 +309,15 @@ const InputsSection = (props: InputsSectionProps) => {
           </ShowcaseMeta>
         </ShowcaseSection>
 
-        <ShowcaseSection title="InlineEditableText" subtitle="Click-to-edit single line text">
+        <ShowcaseSection title="PasswordInput" subtitle="Password field with visibility toggle">
           <PreviewPanel class="col">
-            <InlineEditableText value={editableTitle()} onChange={setEditableTitle} placeholder="Set a title" />
+            <FormField label="Password" id="demo-pwd">
+              <PasswordInput id="demo-pwd" placeholder="Enter password..." />
+            </FormField>
+            <FormField label="Disabled" id="demo-pwd-dis">
+              <PasswordInput id="demo-pwd-dis" value="secret123" disabled />
+            </FormField>
           </PreviewPanel>
-          <ShowcaseMeta>
-            Current value: <span class="code-inline">{editableTitle()}</span>
-          </ShowcaseMeta>
         </ShowcaseSection>
 
         <ShowcaseSection title="TagInput" subtitle="Quick keyboard-driven tagging">
@@ -330,11 +337,27 @@ const InputsSection = (props: InputsSectionProps) => {
           </ShowcaseMeta>
         </ShowcaseSection>
 
-        <ShowcaseSection title="NumberInput" subtitle="Numeric stepper with increment and decrement">
-          <PreviewPanel>
-            <NumberInput value={quantity()} onChange={setQuantity} label="Quantity" min={0} max={100} />
-            <NumberInput value={1} onChange={() => {}} disabled size="sm" />
+        <ShowcaseSection title="InlineEditableText" subtitle="Click-to-edit single line text">
+          <PreviewPanel class="col">
+            <InlineEditableText value={editableTitle()} onChange={setEditableTitle} placeholder="Set a title" />
           </PreviewPanel>
+          <ShowcaseMeta>
+            Current value: <span class="code-inline">{editableTitle()}</span>
+          </ShowcaseMeta>
+        </ShowcaseSection>
+
+        <ShowcaseSection title="RichTextEditor" subtitle="WYSIWYG editor for formatted content">
+          <PreviewPanel class="col">
+            <RichTextEditor
+              label="Article body"
+              value={richText()}
+              onChange={setRichText}
+              placeholder="Start writing..."
+            />
+          </PreviewPanel>
+          <ShowcaseMeta>
+            HTML length: <span class="code-inline">{richText().length}</span>
+          </ShowcaseMeta>
         </ShowcaseSection>
       </Show>
 

@@ -4,6 +4,7 @@ import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import Spinner from '../../feedback/Spinner/Spinner';
+import ButtonBase from '../shared/ButtonBase';
 import styles from './Button.module.css';
 
 interface ButtonOwnProps extends Omit<JSX.ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
@@ -18,25 +19,21 @@ const Button = (props: Props<ButtonOwnProps>) => {
   const [local, rest] = splitProps(props, ['variant', 'loading', 'class', 'children', 'disabled', 'type']);
 
   return (
-    <button
+    <ButtonBase
       {...rest}
       type={local.type ?? 'button'}
-      class={classNames(
-        styles.button,
-        styles[local.variant ?? 'primary'],
-        local.loading && styles.loading,
-        local.class
-      )}
-      disabled={Boolean(local.disabled ?? local.loading)}
-      aria-busy={local.loading ? 'true' : undefined}
+      variant={local.variant}
+      loading={local.loading}
+      disabled={local.disabled}
+      class={classNames(local.loading && styles.loading, local.class)}
     >
       <Show when={local.loading}>
         <span class={styles.spinner}>
           <Spinner size="sm" />
         </span>
       </Show>
-      {local.children}
-    </button>
+      <span class={classNames(styles.content, local.loading && styles.contentHidden)}>{local.children}</span>
+    </ButtonBase>
   );
 };
 

@@ -7,21 +7,11 @@
 
 .trigger {
   width: 100%;
-  min-height: 42px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: var(--color-bg);
-  color: var(--color-text);
-  padding: var(--spacing-sm) var(--spacing-md);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--spacing-sm);
   cursor: pointer;
-  transition:
-    border-color var(--transition-fast),
-    box-shadow var(--transition-fast),
-    background-color var(--transition-fast);
 }
 
 .trigger:hover {
@@ -29,9 +19,7 @@
 }
 
 .trigger:focus-visible {
-  outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px var(--color-primary-light);
+  box-shadow: 0 0 0 3px var(--color-focus-ring);
 }
 
 .disabled {
@@ -61,39 +49,19 @@
 
 .dropdown {
   position: absolute;
-  z-index: var(--z-dropdown);
   top: calc(100% - var(--spacing-2xs));
   left: 0;
   right: 0;
-  max-height: 240px;
-  overflow: auto;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: var(--color-bg-elevated);
-  box-shadow: var(--shadow-popover);
   padding: var(--spacing-xs);
 }
 
 .option {
+  composes: item from '../shared/DropdownBase.module.css';
   width: 100%;
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
-  border: none;
-  border-radius: var(--radius-sm);
-  background: transparent;
-  color: var(--color-text);
   padding: var(--spacing-xs) var(--spacing-sm);
-  text-align: left;
-  cursor: pointer;
-}
-
-.option:hover {
-  background: var(--color-bg-hover);
-}
-
-.optionSelected {
-  background: var(--color-primary-light);
 }
 
 .optionDisabled {
@@ -119,9 +87,8 @@
 }
 
 .empty {
-  color: var(--color-text-muted);
+  composes: empty from '../shared/DropdownBase.module.css';
   padding: var(--spacing-sm);
-  font-size: var(--font-size-sm);
 }
 
 .selected {

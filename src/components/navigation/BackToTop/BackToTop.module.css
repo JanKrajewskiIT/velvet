@@ -3,16 +3,7 @@
   bottom: var(--spacing-xl);
   right: var(--spacing-xl);
   z-index: var(--z-dropdown);
-  width: 48px;
-  height: 48px;
   border-radius: var(--radius-full);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--color-primary);
-  color: var(--color-on-accent);
-  border: none;
-  cursor: pointer;
   box-shadow: var(--shadow-popover);
   transition:
     transform var(--duration-fast) var(--ease-out-back),
@@ -31,6 +22,5 @@
 }
 
 .button:hover {
-  background-color: var(--color-primary-hover);
   transform: scale(1.1);
 }

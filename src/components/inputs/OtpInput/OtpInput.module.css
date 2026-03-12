@@ -5,16 +5,11 @@
 }
 
 .box {
-  width: 48px;
-  height: 48px;
+  composes: field from '../shared/InputBase.module.css';
   text-align: center;
-  font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-text);
-  background: var(--color-bg);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  outline: none;
+  padding: 0;
   caret-color: var(--color-primary);
   transition:
     border-color var(--duration-fast) var(--ease-out-expo),
@@ -40,6 +35,24 @@
 
 .disabled .box {
   cursor: not-allowed;
+}
+
+.sizeSm {
+  width: 36px;
+  height: 36px;
+  font-size: var(--font-size-lg);
+}
+
+.sizeMd {
+  width: 48px;
+  height: 48px;
+  font-size: var(--font-size-xl);
+}
+
+.sizeLg {
+  width: 56px;
+  height: 56px;
+  font-size: var(--font-size-2xl);
 }
 
 @keyframes fadeInUp {

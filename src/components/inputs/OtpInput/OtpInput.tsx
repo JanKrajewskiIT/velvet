@@ -1,7 +1,9 @@
 import { createEffect, For } from 'solid-js';
 
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
+import type { InputSize } from '../Input/Input';
 import styles from './OtpInput.module.css';
 
 interface OtpInputOwnProps {
@@ -9,6 +11,7 @@ interface OtpInputOwnProps {
   value: string;
   onChange: (value: string) => void;
   disabled?: boolean;
+  size?: InputSize;
 }
 
 const OtpInput = (props: Props<OtpInputOwnProps>) => {
@@ -66,19 +69,21 @@ const OtpInput = (props: Props<OtpInputOwnProps>) => {
     const nextIndex = Math.min(chars.length, length() - 1);
     focusAt(nextIndex);
   };
+  const sizeClass = () => {
+    if (props.size === 'sm') return styles.sizeSm;
+    if (props.size === 'lg') return styles.sizeLg;
+    return styles.sizeMd;
+  };
 
   return (
-    <div
-      class={`${styles.wrapper} ${props.disabled ? styles.disabled : ''} ${props.class ?? ''}`}
-      onPaste={handlePaste}
-    >
+    <div class={classNames(styles.wrapper, props.disabled && styles.disabled, props.class)} onPaste={handlePaste}>
       <For each={digits()}>
         {(index) => (
           <input
             ref={(el) => {
               refs[index] = el;
             }}
-            class={styles.box}
+            class={classNames(styles.box, sizeClass())}
             type="text"
             inputmode="numeric"
             maxLength={1}

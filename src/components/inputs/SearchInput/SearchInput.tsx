@@ -1,8 +1,11 @@
 import { IoClose, IoSearch } from 'solid-icons/io';
-import { createSignal, onCleanup, Show } from 'solid-js';
+import { onCleanup, Show } from 'solid-js';
 
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
+import type { InputSize } from '../Input/Input';
+import InputBase from '../shared/InputBase';
 import styles from './SearchInput.module.css';
 
 interface SearchInputMessages {
@@ -19,11 +22,11 @@ interface SearchInputProps {
   disabled?: boolean;
   autofocus?: boolean;
   clearLabel?: string;
+  size?: InputSize;
   messages?: SearchInputMessages;
 }
 
 const SearchInput = (props: Props<SearchInputProps>) => {
-  const [focused, setFocused] = createSignal(false);
   let debounceTimer: ReturnType<typeof setTimeout> | undefined;
 
   const fireInput = (value: string) => {
@@ -54,8 +57,11 @@ const SearchInput = (props: Props<SearchInputProps>) => {
   onCleanup(() => clearTimeout(debounceTimer));
 
   return (
-    <div
-      class={`${styles.wrapper} ${focused() ? styles.focused : ''} ${props.disabled ? styles.disabled : ''} ${props.class ?? ''}`}
+    <InputBase
+      class={classNames(styles.wrapper, props.disabled && styles.disabled, props.class)}
+      size={props.size}
+      disabled={props.disabled}
+      focusWithin
     >
       <IoSearch class={styles.icon} />
       <input
@@ -64,8 +70,6 @@ const SearchInput = (props: Props<SearchInputProps>) => {
         value={props.value}
         onInput={handleInput}
         onKeyDown={handleKeyDown}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
         placeholder={props.messages?.placeholder ?? props.placeholder ?? 'Search\u2026'}
         disabled={props.disabled}
         autofocus={props.autofocus}
@@ -80,7 +84,7 @@ const SearchInput = (props: Props<SearchInputProps>) => {
           <IoClose />
         </button>
       </Show>
-    </div>
+    </InputBase>
   );
 };
 

@@ -2,9 +2,13 @@ import { FiCalendar, FiChevronLeft, FiChevronRight } from 'solid-icons/fi';
 import { createMemo, createSignal, createUniqueId, For, Show } from 'solid-js';
 
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
 import useClickOutside from '../../../hooks/useClickOutside';
 import useEscapeKey from '../../../hooks/useEscapeKey';
+import type { InputSize } from '../Input/Input';
+import DropdownSurface from '../shared/DropdownSurface';
+import InputBase from '../shared/InputBase';
 import styles from './DatePicker.module.css';
 
 interface DatePickerMessages {
@@ -23,6 +27,7 @@ interface DatePickerProps {
   min?: string;
   max?: string;
   label?: string;
+  size?: InputSize;
   openPickerLabel?: string;
   calendarLabel?: string;
   previousMonthLabel?: string;
@@ -158,7 +163,12 @@ const DatePicker = (props: Props<DatePickerProps>) => {
       <Show when={props.label}>
         <span class={styles.label}>{props.label}</span>
       </Show>
-      <div class={`${styles.inputRow} ${props.disabled ? styles.inputRowDisabled : ''}`}>
+      <InputBase
+        class={classNames(styles.inputRow, props.disabled && styles.inputRowDisabled)}
+        size={props.size}
+        disabled={props.disabled}
+        focusWithin
+      >
         <input
           type="text"
           class={styles.input}
@@ -179,9 +189,16 @@ const DatePicker = (props: Props<DatePickerProps>) => {
         >
           <FiCalendar />
         </button>
-      </div>
+      </InputBase>
       <Show when={isOpen()}>
-        <div id={dropdownId} class={styles.dropdown} role="dialog" aria-modal="false" aria-label={calendarLabel()}>
+        <DropdownSurface
+          id={dropdownId}
+          class={styles.dropdown}
+          role="dialog"
+          aria-modal="false"
+          aria-label={calendarLabel()}
+          scrollable={false}
+        >
           <div class={styles.header}>
             <button type="button" class={styles.navBtn} onClick={prevMonth} aria-label={previousMonthLabel()}>
               <FiChevronLeft />
@@ -206,7 +223,7 @@ const DatePicker = (props: Props<DatePickerProps>) => {
               )}
             </For>
           </div>
-        </div>
+        </DropdownSurface>
       </Show>
     </div>
   );

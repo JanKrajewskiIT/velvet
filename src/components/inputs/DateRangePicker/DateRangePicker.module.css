@@ -9,15 +9,11 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: var(--color-surface);
   cursor: pointer;
   font-family: inherit;
-  font-size: var(--font-size-sm);
   color: var(--color-text);
-  transition: border-color var(--duration-fast) var(--ease-out-expo);
+  min-width: 128px;
+  width: auto;
 }
 
 .field:hover {
@@ -26,10 +22,10 @@
 
 .fieldActive {
   border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-focus-ring);
 }
 
 .fieldDisabled {
-  opacity: var(--opacity-disabled);
   cursor: not-allowed;
   pointer-events: none;
 }
@@ -45,12 +41,7 @@
   position: absolute;
   top: 100%;
   left: 0;
-  margin-top: var(--spacing-xs);
-  z-index: var(--z-dropdown);
-  background: var(--color-bg-elevated);
-  border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-popover);
   padding: var(--spacing-md);
   animation: fadeInDown var(--duration-fast) var(--ease-out-expo);
   transform-origin: top left;

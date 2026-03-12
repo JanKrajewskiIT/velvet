@@ -4,6 +4,7 @@ import { createEffect, createSignal, onMount, Show } from 'solid-js';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
+import Input, { type InputSize } from '../Input/Input';
 import styles from './InlineEditableText.module.css';
 
 interface InlineEditableTextProps {
@@ -11,6 +12,7 @@ interface InlineEditableTextProps {
   onChange: (value: string) => void;
   placeholder?: string;
   disabled?: boolean;
+  size?: InputSize;
   startInEditMode?: boolean;
   saveLabel?: string;
   cancelLabel?: string;
@@ -83,9 +85,10 @@ const InlineEditableText = (props: Props<InlineEditableTextProps>) => {
         }
       >
         <div class={styles.editMode}>
-          <input
+          <Input
             type="text"
             class={styles.input}
+            size={props.size}
             value={draft()}
             onInput={(e) => setDraft(e.currentTarget.value)}
             onKeyDown={handleKeyDown}

@@ -3,6 +3,7 @@ import { createMemo } from 'solid-js';
 import type Props from '~/models/Props';
 
 import DatePicker from '../DatePicker/DatePicker';
+import type { InputSize } from '../Input/Input';
 import TimePicker from '../TimePicker/TimePicker';
 import styles from './DateTimePicker.module.css';
 
@@ -17,6 +18,7 @@ interface DateTimePickerProps {
   timeLabel?: string;
   datePlaceholder?: string;
   timePlaceholder?: string;
+  size?: InputSize;
 }
 
 const DateTimePicker = (props: Props<DateTimePickerProps>) => {
@@ -47,6 +49,7 @@ const DateTimePicker = (props: Props<DateTimePickerProps>) => {
         value={parts().date}
         onChange={handleDateChange}
         disabled={props.disabled}
+        size={props.size}
         min={props.minDate}
         max={props.maxDate}
         label={props.dateLabel}
@@ -56,6 +59,7 @@ const DateTimePicker = (props: Props<DateTimePickerProps>) => {
         value={parts().time}
         onChange={handleTimeChange}
         disabled={props.disabled || !parts().date}
+        size={props.size}
         step={props.step}
         label={props.timeLabel}
         placeholder={props.timePlaceholder}

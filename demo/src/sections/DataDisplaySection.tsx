@@ -2,6 +2,7 @@ import {
   Accordion,
   AccordionItem,
   ActionRow,
+  addToast,
   Avatar,
   AvatarGroup,
   Button,
@@ -117,6 +118,12 @@ const createTreeData = (): TreeNode[] => [
     ],
   },
   {
+    id: 'lazy-modules',
+    label: 'lazy-modules',
+    icon: <IoFolder />,
+    hasChildren: true,
+  },
+  {
     id: 'package',
     label: 'package.json',
     icon: <IoDocumentText />,
@@ -149,6 +156,8 @@ const VIRTUAL_ITEMS = Array.from({ length: 1200 }, (_, index) => ({
 const DataDisplaySection = (props: { sectionId: SectionId }) => {
   const sectionId = () => props.sectionId;
   const [selectedNode, setSelectedNode] = createSignal('');
+  const [checkedTreeNodes, setCheckedTreeNodes] = createSignal<string[]>([]);
+  const [lastMove, setLastMove] = createSignal('');
   const [collapsibleOpen, setCollapsibleOpen] = createSignal(false);
   const [editorOpen, setEditorOpen] = createSignal(false);
   const [markdown, setMarkdown] = createSignal(MARKDOWN);
@@ -206,6 +215,19 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
       JSON.stringify({ op: 'unsubscribe', symbol: context.symbol, interval: context.interval }),
     mapData: (payload) => (isTradingPoint(payload) ? payload : null),
   });
+
+  const loadTreeChildren = async (node: TreeNode): Promise<TreeNode[]> => {
+    await new Promise((resolve) => setTimeout(resolve, 450));
+    if (node.id === 'lazy-modules') {
+      return [
+        { id: 'virtualized-list', label: 'VirtualizedList.tsx', icon: <IoDocumentText /> },
+        { id: 'notification-center', label: 'NotificationCenter.tsx', icon: <IoDocumentText /> },
+        { id: 'treeview-v2', label: 'TreeView.v2.tsx', icon: <IoDocumentText /> },
+      ];
+    }
+
+    return [];
+  };
 
   return (
     <div>
@@ -404,17 +426,28 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
       </Show>
 
       <Show when={sectionId() === 'data-tree'}>
-        <ShowcaseSection title="TreeView" subtitle="Hierarchical expandable tree">
+        <ShowcaseSection title="TreeView" subtitle="Hierarchical tree with lazy loading, checkboxes and drag and drop">
           <PreviewPanel>
             <TreeView
               nodes={createTreeData()}
               defaultExpanded={['src']}
               selectedId={selectedNode()}
               onSelect={setSelectedNode}
+              checkable
+              checkedIds={checkedTreeNodes()}
+              onCheckedIdsChange={setCheckedTreeNodes}
+              loadChildren={loadTreeChildren}
+              draggable
+              onMove={(draggedId, targetId) => {
+                setLastMove(`${draggedId} -> ${targetId}`);
+                addToast({ type: 'info', message: `Moved ${draggedId} to ${targetId}` });
+              }}
             />
           </PreviewPanel>
           <ShowcaseMeta>
-            Selected: <span class="code-inline">{selectedNode() || 'none'}</span>
+            Selected: <span class="code-inline">{selectedNode() || 'none'}</span> | Checked:{' '}
+            <span class="code-inline">{checkedTreeNodes().length}</span> | Last move:{' '}
+            <span class="code-inline">{lastMove() || 'none'}</span>
           </ShowcaseMeta>
         </ShowcaseSection>
       </Show>

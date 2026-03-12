@@ -1,0 +1,293 @@
+.scheduler {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: var(--spacing-md);
+}
+
+.calendarPanel,
+.eventsPanel {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-elevated);
+  padding: var(--spacing-md);
+}
+
+.calendarHeader,
+.eventsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+.monthLabel,
+.eventsTitle {
+  margin: 0;
+  color: var(--color-text);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+}
+
+.eventsHeaderActions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.navButton,
+.todayButton {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  color: var(--color-text-secondary);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease-out-expo),
+    border-color var(--duration-fast) var(--ease-out-expo),
+    color var(--duration-fast) var(--ease-out-expo);
+}
+
+.addButton {
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease-out-expo),
+    border-color var(--duration-fast) var(--ease-out-expo);
+}
+
+.addButton:hover {
+  border-color: var(--color-primary-hover);
+  background: var(--color-primary-light);
+}
+
+.navButton:hover,
+.todayButton:hover {
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.weekHeader {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: var(--spacing-2xs);
+  margin-bottom: var(--spacing-2xs);
+}
+
+.weekDay {
+  text-align: center;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  padding: var(--spacing-xs) var(--spacing-2xs);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: var(--spacing-2xs);
+}
+
+.dayCell {
+  min-height: var(--spacing-2xl);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  color: var(--color-text);
+  padding: var(--spacing-xs);
+  cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  transition:
+    border-color var(--duration-fast) var(--ease-out-expo),
+    background-color var(--duration-fast) var(--ease-out-expo);
+}
+
+.dayCell:hover {
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+
+.dayOutside {
+  color: var(--color-text-tertiary);
+  background: var(--color-surface);
+}
+
+.daySelected {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-primary-light);
+}
+
+.dayToday {
+  outline: 1px dashed var(--color-primary);
+  outline-offset: calc(var(--spacing-2xs) * -1);
+}
+
+.dayDragOver {
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+
+.dayBadge {
+  min-width: var(--spacing-md);
+  height: var(--spacing-md);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-primary);
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  padding: 0 var(--spacing-2xs);
+}
+
+.selectedDateLabel {
+  margin: 0 0 var(--spacing-sm);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.createForm {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  padding: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+  display: grid;
+  gap: var(--spacing-xs);
+}
+
+.createRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xs);
+}
+
+.createInput,
+.createTextarea {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-elevated);
+  color: var(--color-text);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  font-family: inherit;
+}
+
+.createTextarea {
+  min-height: var(--spacing-2xl);
+  resize: vertical;
+}
+
+.createActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-xs);
+}
+
+.eventsList {
+  display: grid;
+  gap: var(--spacing-sm);
+}
+
+.eventItem {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  padding: var(--spacing-sm);
+}
+
+.eventDragging {
+  opacity: 0.6;
+}
+
+.eventHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+}
+
+.eventTitle {
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+}
+
+.eventTime {
+  color: var(--color-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+}
+
+.eventDate {
+  margin: var(--spacing-2xs) 0 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+}
+
+.eventDescription {
+  margin: var(--spacing-2xs) 0 0;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+}
+
+.eventActions {
+  margin-top: var(--spacing-sm);
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.eventAction {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  padding: var(--spacing-2xs) var(--spacing-sm);
+  cursor: grab;
+}
+
+.eventAction:active {
+  cursor: grabbing;
+}
+
+.deleteAction {
+  border: 1px solid var(--color-error);
+  border-radius: var(--radius-pill);
+  background: var(--color-error-light);
+  color: var(--color-error);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  padding: var(--spacing-2xs) var(--spacing-sm);
+  cursor: pointer;
+}
+
+.emptyLabel {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+@media (width < 960px) {
+  .scheduler {
+    grid-template-columns: 1fr;
+  }
+
+  .createRow {
+    grid-template-columns: 1fr;
+  }
+}

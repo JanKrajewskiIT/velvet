@@ -19,6 +19,14 @@
   transition: background-color var(--transition-fast);
 }
 
+.checkbox {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
 .row:hover {
   background: var(--color-bg-hover);
 }
@@ -30,6 +38,11 @@
 
 .selected {
   background: var(--color-primary-light);
+}
+
+.dragOver {
+  outline: 1px dashed var(--color-primary);
+  outline-offset: -1px;
 }
 
 .chevron {
@@ -76,4 +89,10 @@
 
 .childrenInner {
   overflow: hidden;
+}
+
+.loading {
+  padding: var(--spacing-xs) var(--spacing-md);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
 }

@@ -2,10 +2,16 @@ import './theme/globals.css';
 
 export type { AuthRedirectProps } from './components/app/AuthRedirect/AuthRedirect';
 export { default as AuthRedirect } from './components/app/AuthRedirect/AuthRedirect';
-export { default as LocaleSwitcher } from './components/app/LocaleSwitcher/LocaleSwitcher';
+export { default as LocaleSwitcher, type LocaleSwitcherVariant } from './components/app/LocaleSwitcher/LocaleSwitcher';
 export type { RequireAuthProps } from './components/app/RequireAuth/RequireAuth';
 export { default as RequireAuth } from './components/app/RequireAuth/RequireAuth';
 export { default as AiResultPanel } from './components/composites/AiResultPanel/AiResultPanel';
+export type {
+  DataGridProColumn,
+  DataGridProProps,
+  DataGridProSortState,
+} from './components/composites/DataGridPro/DataGridPro';
+export { DataGridPro } from './components/composites/DataGridPro/DataGridPro';
 export type { DataTableColumn, DataTableProps } from './components/composites/DataTable/DataTable';
 export { DataTable } from './components/composites/DataTable/DataTable';
 export type {
@@ -15,6 +21,10 @@ export type {
 export { default as EditableCollection } from './components/composites/EditableCollection/EditableCollection';
 export { default as FileDropZone } from './components/composites/FileDropZone/FileDropZone';
 export { default as FlipCard } from './components/composites/FlipCard/FlipCard';
+export type { KanbanColumn, KanbanItemBase } from './components/composites/KanbanBoard/KanbanBoard';
+export { default as KanbanBoard } from './components/composites/KanbanBoard/KanbanBoard';
+export type { SchedulerEvent } from './components/composites/Scheduler/Scheduler';
+export { default as Scheduler } from './components/composites/Scheduler/Scheduler';
 export type { TransferItem } from './components/composites/TransferList/TransferList';
 export { default as TransferList } from './components/composites/TransferList/TransferList';
 export type { WizardStep } from './components/composites/Wizard/Wizard';
@@ -121,13 +131,13 @@ export { RadioGroup, type RadioOption } from './components/inputs/Radio/Radio';
 export type { SliderRangeValue } from './components/inputs/RangeSlider/RangeSlider';
 export { default as RangeSlider } from './components/inputs/RangeSlider/RangeSlider';
 export { default as Rating } from './components/inputs/Rating/Rating';
+export { default as RichTextEditor } from './components/inputs/RichTextEditor/RichTextEditor';
 export { default as SearchInput } from './components/inputs/SearchInput/SearchInput';
 export { default as SegmentedControl } from './components/inputs/SegmentedControl/SegmentedControl';
 export { default as Slider } from './components/inputs/Slider/Slider';
 export { default as Switch } from './components/inputs/Switch/Switch';
 export { default as TagInput } from './components/inputs/TagInput/TagInput';
 export { default as TimePicker } from './components/inputs/TimePicker/TimePicker';
-export { default as AspectRatio } from './components/layout/AspectRatio/AspectRatio';
 export { default as Divider } from './components/layout/Divider/Divider';
 export { default as Footer } from './components/layout/Footer/Footer';
 export { default as Grid } from './components/layout/Grid/Grid';

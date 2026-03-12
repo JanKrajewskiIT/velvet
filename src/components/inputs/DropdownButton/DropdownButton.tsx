@@ -2,9 +2,12 @@ import { IoChevronDown } from 'solid-icons/io';
 import { createSignal, type JSX, Show } from 'solid-js';
 
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
 import useClickOutside from '../../../hooks/useClickOutside';
 import useEscapeKey from '../../../hooks/useEscapeKey';
+import ButtonBase from '../shared/ButtonBase';
+import DropdownSurface from '../shared/DropdownSurface';
 import styles from './DropdownButton.module.css';
 
 interface DropdownButtonProps {
@@ -38,20 +41,27 @@ const DropdownButton = (props: Props<DropdownButtonProps>) => {
 
   return (
     <div ref={wrapperRef} class={`${styles.wrapper} ${props.class ?? ''}`}>
-      <button
-        type="button"
-        class={`${styles.trigger} ${styles[props.variant ?? 'ghost']}`}
+      <ButtonBase
+        class={styles.trigger}
+        variant={props.variant ?? 'ghost'}
         onClick={toggle}
         aria-haspopup="menu"
         aria-expanded={open()}
       >
         {props.label}
-        <IoChevronDown class={`${styles.chevron} ${open() ? styles.chevronOpen : ''}`} />
-      </button>
+        <IoChevronDown class={classNames(styles.chevron, open() && styles.chevronOpen)} />
+      </ButtonBase>
       <Show when={open()}>
-        <div class={styles.menu} role="menu" tabIndex={-1} onClick={close} onKeyDown={handleMenuKeyDown}>
+        <DropdownSurface
+          class={styles.menu}
+          role="menu"
+          tabIndex={-1}
+          onClick={close}
+          onKeyDown={handleMenuKeyDown}
+          scrollable={false}
+        >
           {props.children}
-        </div>
+        </DropdownSurface>
       </Show>
     </div>
   );

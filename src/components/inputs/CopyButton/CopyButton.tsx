@@ -2,7 +2,9 @@ import { IoCheckmark, IoCopy } from 'solid-icons/io';
 import { createSignal, onCleanup, Show } from 'solid-js';
 
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
+import ButtonBase from '../shared/ButtonBase';
 import styles from './CopyButton.module.css';
 
 interface CopyButtonProps {
@@ -29,9 +31,11 @@ const CopyButton = (props: Props<CopyButtonProps>) => {
   onCleanup(() => clearTimeout(timeoutId));
 
   return (
-    <button
+    <ButtonBase
       type="button"
-      class={`${styles.button} ${styles[props.variant ?? 'ghost']} ${styles[props.size ?? 'md']} ${copied() ? styles.copied : ''} ${props.class ?? ''}`}
+      variant={props.variant ?? 'ghost'}
+      size={props.size ?? 'md'}
+      class={classNames(copied() && styles.copied, props.class)}
       onClick={handleClick}
     >
       <span class={styles.icon}>
@@ -40,7 +44,7 @@ const CopyButton = (props: Props<CopyButtonProps>) => {
         </Show>
       </span>
       {copied() ? (props.copiedLabel ?? 'Copied!') : (props.label ?? 'Copy')}
-    </button>
+    </ButtonBase>
   );
 };
 

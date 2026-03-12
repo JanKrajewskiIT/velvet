@@ -7,6 +7,11 @@ import {
   FormField,
   IconButton,
   Input,
+  KanbanBoard,
+  type KanbanColumn,
+  type KanbanItemBase,
+  Scheduler,
+  type SchedulerEvent,
   type TransferItem,
   TransferList,
   Wizard,
@@ -35,11 +40,89 @@ interface TaskItem {
   owner: string;
 }
 
+interface KanbanDemoItem extends KanbanItemBase {
+  owner: string;
+  priority: 'low' | 'medium' | 'high';
+}
+
 const createTask = (index: number): TaskItem => ({
   id: crypto.randomUUID(),
   title: `Task ${index}`,
   owner: 'Product Team',
 });
+
+const KANBAN_COLUMNS: KanbanColumn[] = [
+  { id: 'todo', title: 'To do' },
+  { id: 'in-progress', title: 'In progress' },
+  { id: 'done', title: 'Done' },
+];
+
+const INITIAL_KANBAN_ITEMS: KanbanDemoItem[] = [
+  {
+    id: 'kanban-1',
+    columnId: 'todo',
+    title: 'Design system review',
+    description: 'Audit inconsistent paddings in legacy cards.',
+    owner: 'Anna',
+    priority: 'high',
+  },
+  {
+    id: 'kanban-2',
+    columnId: 'todo',
+    title: 'Write migration notes',
+    description: 'Summarize DataGridPro v3 API additions.',
+    owner: 'Marek',
+    priority: 'medium',
+  },
+  {
+    id: 'kanban-3',
+    columnId: 'in-progress',
+    title: 'Polish interactions',
+    description: 'Finalize keyboard UX for grid toolbar.',
+    owner: 'Jan',
+    priority: 'high',
+  },
+  {
+    id: 'kanban-4',
+    columnId: 'done',
+    title: 'Ship release notes',
+    description: 'Publish changelog to docs portal.',
+    owner: 'Kasia',
+    priority: 'low',
+  },
+];
+
+const SCHEDULER_EVENTS: SchedulerEvent[] = [
+  {
+    id: 'event-1',
+    title: 'Design review',
+    date: '2026-03-12',
+    time: '09:30',
+    description: 'Review dashboard cards and interaction states.',
+  },
+  {
+    id: 'event-2',
+    title: 'API sync',
+    date: '2026-03-12',
+    time: '13:00',
+    description: 'Align contract for DataGrid server-side sorting.',
+  },
+  {
+    id: 'event-3',
+    title: 'UX workshop sprint',
+    date: '2026-03-14',
+    endDate: '2026-03-16',
+    time: '11:00',
+    description: 'Collect feedback for scheduling and planning flows during a multi-day workshop.',
+  },
+  {
+    id: 'event-4',
+    title: 'Release prep',
+    date: '2026-03-19',
+    time: '16:00',
+    description: 'Finalize changelog and migration notes.',
+  },
+];
 
 const CompositesSection = (props: { sectionId: SectionId }) => {
   const sectionId = () => props.sectionId;
@@ -48,6 +131,8 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
   const [analysisState, setAnalysisState] = createSignal<AnalysisState>('idle');
   const [resultNext, setResultNext] = createSignal(true);
   const [tasks, setTasks] = createSignal<TaskItem[]>([createTask(1), createTask(2)]);
+  const [kanbanItems, setKanbanItems] = createSignal<KanbanDemoItem[]>(INITIAL_KANBAN_ITEMS);
+  const [schedulerEvents, setSchedulerEvents] = createSignal<SchedulerEvent[]>(SCHEDULER_EVENTS);
 
   const wizardSteps = [
     {
@@ -163,6 +248,28 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
             />
           </PreviewPanel>
         </ShowcaseSection>
+
+        <ShowcaseSection title="KanbanBoard" subtitle="Drag and drop cards between workflow columns">
+          <PreviewPanel>
+            <KanbanBoard
+              columns={KANBAN_COLUMNS}
+              items={kanbanItems()}
+              onChange={setKanbanItems}
+              emptyLabel="Drop cards here"
+              renderCard={(item) => (
+                <div class="col" style={{ gap: 'var(--spacing-2xs)' }}>
+                  <strong>{item.title}</strong>
+                  <span class="muted-text">{item.description}</span>
+                  <div class="row" style={{ 'justify-content': 'space-between' }}>
+                    <span class="status-chip">{item.owner}</span>
+                    <span class="status-chip">{item.priority}</span>
+                  </div>
+                </div>
+              )}
+            />
+          </PreviewPanel>
+          <ShowcaseMeta>Drag cards between columns to update their status.</ShowcaseMeta>
+        </ShowcaseSection>
       </Show>
 
       <Show when={sectionId() === 'composites-wizard-ai'}>
@@ -221,6 +328,24 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
               }
             />
           </PreviewPanel>
+        </ShowcaseSection>
+      </Show>
+
+      <Show when={sectionId() === 'composites-scheduler'}>
+        <ShowcaseSection title="Scheduler" subtitle="Month calendar with per-day agenda panel">
+          <PreviewPanel>
+            <Scheduler
+              events={schedulerEvents()}
+              onEventsChange={setSchedulerEvents}
+              defaultSelectedDate="2026-03-12"
+            />
+          </PreviewPanel>
+          <ShowcaseMeta>
+            Navigate months, select a day, add events with <span class="code-inline">Add event</span> (or double-click a
+            day), edit/delete entries inline, then drag <span class="code-inline">Move</span> or{' '}
+            <span class="code-inline">Resize end</span> onto a calendar day. Use <span class="code-inline">Esc</span> to
+            cancel forms and <span class="code-inline">Ctrl+Enter</span> to submit.
+          </ShowcaseMeta>
         </ShowcaseSection>
       </Show>
     </div>

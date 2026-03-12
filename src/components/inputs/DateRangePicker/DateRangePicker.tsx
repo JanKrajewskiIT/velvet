@@ -2,9 +2,13 @@ import { FiChevronLeft, FiChevronRight } from 'solid-icons/fi';
 import { createMemo, createSignal, createUniqueId, For, Show } from 'solid-js';
 
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
 import useClickOutside from '../../../hooks/useClickOutside';
 import useEscapeKey from '../../../hooks/useEscapeKey';
+import type { InputSize } from '../Input/Input';
+import DropdownSurface from '../shared/DropdownSurface';
+import InputBase from '../shared/InputBase';
 import styles from './DateRangePicker.module.css';
 
 interface DateRangePickerMessages {
@@ -27,6 +31,7 @@ interface DateRangePickerProps {
   onChange: (range: DateRange) => void;
   startLabel?: string;
   endLabel?: string;
+  size?: InputSize;
   disabled?: boolean;
   min?: string;
   max?: string;
@@ -218,10 +223,14 @@ const DateRangePicker = (props: Props<DateRangePickerProps>) => {
   });
 
   return (
-    <div ref={wrapperRef} class={`${styles.wrapper} ${props.class ?? ''}`}>
-      <button
+    <div ref={wrapperRef} class={classNames(styles.wrapper, props.class)}>
+      <InputBase
+        as="button"
         type="button"
         class={startFieldClass()}
+        size={props.size}
+        disabled={props.disabled}
+        focusWithin={false}
         onClick={() => openCalendar('start')}
         aria-label={startAriaLabel()}
         aria-haspopup="dialog"
@@ -229,11 +238,15 @@ const DateRangePicker = (props: Props<DateRangePickerProps>) => {
         aria-controls={isOpen() ? dropdownId : undefined}
       >
         {props.value.start || startLabel()}
-      </button>
+      </InputBase>
       <span class={styles.separator}>{'\u2192'}</span>
-      <button
+      <InputBase
+        as="button"
         type="button"
         class={endFieldClass()}
+        size={props.size}
+        disabled={props.disabled}
+        focusWithin={false}
         onClick={() => openCalendar('end')}
         aria-label={endAriaLabel()}
         aria-haspopup="dialog"
@@ -241,9 +254,16 @@ const DateRangePicker = (props: Props<DateRangePickerProps>) => {
         aria-controls={isOpen() ? dropdownId : undefined}
       >
         {props.value.end || endLabel()}
-      </button>
+      </InputBase>
       <Show when={isOpen()}>
-        <div id={dropdownId} class={styles.dropdown} role="dialog" aria-modal="false" aria-label={calendarLabel()}>
+        <DropdownSurface
+          id={dropdownId}
+          class={styles.dropdown}
+          role="dialog"
+          aria-modal="false"
+          aria-label={calendarLabel()}
+          scrollable={false}
+        >
           <div class={styles.nav}>
             <button type="button" class={styles.navBtn} onClick={prevMonth} aria-label={previousMonthLabel()}>
               <FiChevronLeft />
@@ -268,7 +288,7 @@ const DateRangePicker = (props: Props<DateRangePickerProps>) => {
               )}
             </For>
           </div>
-        </div>
+        </DropdownSurface>
       </Show>
     </div>
   );

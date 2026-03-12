@@ -6,6 +6,10 @@ import useEscapeKey from '~/hooks/useEscapeKey';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
+import type { InputSize } from '../Input/Input';
+import DropdownOption from '../shared/DropdownOption';
+import DropdownSurface from '../shared/DropdownSurface';
+import InputBase from '../shared/InputBase';
 import styles from './MultiSelect.module.css';
 
 export interface MultiSelectOption {
@@ -22,6 +26,7 @@ interface MultiSelectOwnProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, '
   emptyLabel?: string;
   removeLabel?: string;
   disabled?: boolean;
+  size?: InputSize;
 }
 
 const MultiSelect = (props: Props<MultiSelectOwnProps>) => {
@@ -33,6 +38,7 @@ const MultiSelect = (props: Props<MultiSelectOwnProps>) => {
     'emptyLabel',
     'removeLabel',
     'disabled',
+    'size',
     'class',
   ]);
   const [open, setOpen] = createSignal(false);
@@ -83,13 +89,16 @@ const MultiSelect = (props: Props<MultiSelectOwnProps>) => {
 
   return (
     <div {...rest} ref={rootRef} class={classNames(styles.wrapper, local.class)}>
-      <button
+      <InputBase
+        as="button"
         type="button"
         class={classNames(styles.trigger, local.disabled && styles.disabled)}
+        size={local.size}
+        disabled={local.disabled}
+        focusWithin={false}
         aria-haspopup="listbox"
         aria-expanded={open() ? 'true' : 'false'}
         onClick={toggleOpen}
-        disabled={local.disabled}
       >
         <span class={classNames(styles.triggerText, local.value.length === 0 && styles.placeholder)}>
           <Show when={local.value.length > 0} fallback={local.placeholder ?? 'Select options'}>
@@ -99,10 +108,10 @@ const MultiSelect = (props: Props<MultiSelectOwnProps>) => {
           </Show>
         </span>
         <IoChevronDown class={classNames(styles.chevron, open() && styles.chevronOpen)} />
-      </button>
+      </InputBase>
 
       <Show when={open()}>
-        <div class={styles.dropdown} role="listbox" aria-multiselectable="true">
+        <DropdownSurface class={styles.dropdown} role="listbox" aria-multiselectable="true">
           <Show
             when={local.options.length > 0}
             fallback={<div class={styles.empty}>{local.emptyLabel ?? 'No options'}</div>}
@@ -112,13 +121,9 @@ const MultiSelect = (props: Props<MultiSelectOwnProps>) => {
                 const selected = () => isSelected(option.value);
 
                 return (
-                  <button
-                    type="button"
-                    class={classNames(
-                      styles.option,
-                      selected() && styles.optionSelected,
-                      option.disabled && styles.optionDisabled
-                    )}
+                  <DropdownOption
+                    class={classNames(styles.option, option.disabled && styles.optionDisabled)}
+                    selected={selected()}
                     onClick={() => toggleOption(option)}
                     disabled={option.disabled}
                     role="option"
@@ -130,12 +135,12 @@ const MultiSelect = (props: Props<MultiSelectOwnProps>) => {
                       </Show>
                     </span>
                     <span>{option.label}</span>
-                  </button>
+                  </DropdownOption>
                 );
               }}
             </For>
           </Show>
-        </div>
+        </DropdownSurface>
       </Show>
 
       <Show when={selectedOptions().length > 0}>

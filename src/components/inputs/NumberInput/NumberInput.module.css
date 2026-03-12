@@ -13,20 +13,10 @@
 .controls {
   display: inline-flex;
   align-items: center;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: var(--color-surface);
   overflow: hidden;
-  transition:
-    border-color var(--duration-fast) var(--ease-out-expo),
-    box-shadow var(--duration-fast) var(--ease-out-expo);
-}
-
-.controls:focus-within {
-  border-color: var(--color-primary);
-  box-shadow:
-    0 0 0 3px var(--color-focus-ring),
-    var(--shadow-glow-sm);
+  background: transparent;
+  padding: 0;
+  width: auto;
 }
 
 .button {
@@ -71,31 +61,42 @@
 }
 
 .disabled {
-  opacity: var(--opacity-disabled);
   cursor: not-allowed;
   pointer-events: none;
 }
 
-.sm .button {
+.sizeSm .button {
   width: 28px;
   height: 28px;
   font-size: var(--font-size-sm);
 }
 
-.sm .input {
+.sizeSm .input {
   width: 40px;
   height: 28px;
   font-size: var(--font-size-sm);
 }
 
-.md .button {
+.sizeMd .button {
   width: 36px;
   height: 36px;
   font-size: var(--font-size-md);
 }
 
-.md .input {
+.sizeMd .input {
   width: 52px;
   height: 36px;
   font-size: var(--font-size-md);
+}
+
+.sizeLg .button {
+  width: 44px;
+  height: 44px;
+  font-size: var(--font-size-lg);
+}
+
+.sizeLg .input {
+  width: 64px;
+  height: 44px;
+  font-size: var(--font-size-lg);
 }
