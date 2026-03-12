@@ -74,7 +74,7 @@
   background: var(--color-primary);
   color: var(--color-on-accent);
   border-radius: var(--radius-pill);
-  padding: 1px var(--spacing-xs);
+  padding: var(--spacing-2xs) var(--spacing-xs);
   min-width: 20px;
   text-align: center;
 }

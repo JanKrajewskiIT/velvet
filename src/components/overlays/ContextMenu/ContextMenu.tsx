@@ -117,6 +117,7 @@ const ContextMenu = (props: Props<ContextMenuProps>) => {
               {(item) => (
                 <Show when={item !== 'separator'} fallback={<div class={styles.separator} role="separator" />}>
                   <button
+                    type="button"
                     class={`${styles.item} ${(item as ContextMenuItem).danger ? styles.danger : ''} ${(item as ContextMenuItem).disabled ? styles.disabled : ''}`}
                     onClick={() => handleItemClick(item as ContextMenuItem)}
                     disabled={(item as ContextMenuItem).disabled}

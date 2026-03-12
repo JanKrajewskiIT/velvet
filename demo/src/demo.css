@@ -43,7 +43,7 @@ body {
   align-items: center;
   border-radius: var(--radius-pill);
   border: 1px solid var(--color-primary);
-  padding: 2px 10px;
+  padding: var(--spacing-2xs) var(--spacing-sm);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
   color: var(--color-primary);
@@ -237,7 +237,7 @@ body {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
-  padding: 2px 8px;
+  padding: var(--spacing-2xs) var(--spacing-xs);
 }
 
 .overview-list {
@@ -281,7 +281,7 @@ body {
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
-  padding: 6px 12px;
+  padding: var(--spacing-xs) var(--spacing-sm);
   cursor: pointer;
 }
 
@@ -401,14 +401,14 @@ body {
 .status-chip {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--spacing-xs);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-pill);
   background: var(--color-surface);
   color: var(--color-text-secondary);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
-  padding: 4px 10px;
+  padding: var(--spacing-2xs) var(--spacing-sm);
 }
 
 .editable-header {
