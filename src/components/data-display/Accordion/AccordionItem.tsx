@@ -5,14 +5,13 @@ import type Props from '~/models/Props';
 
 import styles from './Accordion.module.css';
 
-interface AccordionItemOwnProps extends Omit<
-  JSX.HTMLAttributes<HTMLDivElement>,
-  'title' | 'onToggle'
-> {
+interface AccordionItemOwnProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'title' | 'onToggle'> {
   title: string | JSX.Element;
   isOpen?: boolean;
+  defaultOpen?: boolean;
   onToggle?: (isOpen: boolean) => void;
   disabled?: boolean;
+  variant?: 'default' | 'card';
 }
 
 const AccordionItem = (props: Props<AccordionItemOwnProps>) => {
@@ -20,15 +19,15 @@ const AccordionItem = (props: Props<AccordionItemOwnProps>) => {
     'title',
     'children',
     'isOpen',
+    'defaultOpen',
     'onToggle',
     'disabled',
+    'variant',
     'class',
   ]);
-  const [internalOpen, setInternalOpen] = createSignal(false);
+  const [internalOpen, setInternalOpen] = createSignal(local.defaultOpen ?? false);
 
-  const isOpen = createMemo(() =>
-    local.isOpen !== undefined ? local.isOpen : internalOpen()
-  );
+  const isOpen = createMemo(() => (local.isOpen !== undefined ? local.isOpen : internalOpen()));
 
   const handleToggle = () => {
     if (local.disabled) return;
@@ -39,14 +38,10 @@ const AccordionItem = (props: Props<AccordionItemOwnProps>) => {
 
   return (
     <div
-      class={`${styles.accordionItem} ${isOpen() ? styles.open : ''} ${local.disabled ? styles.disabled : ''} ${local.class ?? ''}`}
+      class={`${styles.accordionItem} ${local.variant === 'card' ? styles.cardVariant : ''} ${isOpen() ? styles.open : ''} ${local.disabled ? styles.disabled : ''} ${local.class ?? ''}`}
       {...rest}
     >
-      <button
-        class={styles.header}
-        onClick={handleToggle}
-        disabled={local.disabled}
-      >
+      <button class={styles.header} onClick={handleToggle} disabled={local.disabled}>
         <div class={styles.title}>{local.title}</div>
         <div class={`${styles.icon} ${isOpen() ? styles.iconOpen : ''}`}>
           <FiChevronDown />

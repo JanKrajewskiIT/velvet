@@ -172,10 +172,10 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
                 </div>
               )}
             </ConfirmAction>
-            <ShowcaseMeta>
-              Confirmed actions: <span class="code-inline">{String(confirmRuns())}</span>
-            </ShowcaseMeta>
           </PreviewPanel>
+          <ShowcaseMeta>
+            Confirmed actions: <span class="code-inline">{String(confirmRuns())}</span>
+          </ShowcaseMeta>
         </ShowcaseSection>
       </Show>
 

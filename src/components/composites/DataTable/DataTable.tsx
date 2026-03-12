@@ -2,6 +2,13 @@ import { IoCaretDown, IoCaretUp } from 'solid-icons/io';
 import type { JSX } from 'solid-js';
 import { createMemo, createSignal, For, Show } from 'solid-js';
 
+import Table from '~/components/data-display/Table/Table';
+import TableBody from '~/components/data-display/Table/TableBody';
+import TableCell from '~/components/data-display/Table/TableCell';
+import TableHead from '~/components/data-display/Table/TableHead';
+import TableHeader from '~/components/data-display/Table/TableHeader';
+import TableRow from '~/components/data-display/Table/TableRow';
+import Pagination from '~/components/navigation/Pagination/Pagination';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -72,26 +79,6 @@ const DataTable = <T extends Record<string, unknown>>(props: Props<DataTableProp
     return sortedData().slice(start, start + pageSize());
   });
 
-  const pageNumbers = createMemo(() => Array.from({ length: totalPages() }, (_, i) => i + 1));
-
-  const paginationSlots = createMemo(() => {
-    const total = totalPages();
-    const current = currentPage();
-    if (total <= 7) return pageNumbers();
-    const slots: (number | 'ellipsis')[] = [];
-    const windowSize = 2;
-    const left = Math.max(2, current - windowSize);
-    const right = Math.min(total - 1, current + windowSize);
-    slots.push(1);
-    if (left > 2) slots.push('ellipsis');
-    for (let p = left; p <= right; p++) {
-      if (p !== 1 && p !== total) slots.push(p);
-    }
-    if (right < total - 1) slots.push('ellipsis');
-    if (total > 1) slots.push(total);
-    return slots;
-  });
-
   const handleSort = (column: DataTableColumn<T>) => {
     if (!column.sortable && !props.sortable) return;
     if (column.sortable === false) return;
@@ -117,22 +104,25 @@ const DataTable = <T extends Record<string, unknown>>(props: Props<DataTableProp
   };
 
   const rowClass = (index: number) => {
-    return classNames(props.striped && index % 2 === 1 && styles.stripedRow, props.hoverable && styles.hoverableRow);
+    return classNames(
+      props.striped && index % 2 === 1 && styles.stripedRow,
+      props.hoverable ? styles.hoverableRow : styles.noHoverRow
+    );
   };
 
   return (
     <div class={classNames(styles.wrapper, props.class)}>
-      <table class={styles.table}>
-        <thead>
-          <tr>
+      <Table class={styles.dataTable} containerClass={styles.tableContainer}>
+        <TableHead class={styles.dataTableHead}>
+          <TableRow>
             <For each={props.columns}>
               {(column) => {
                 const sortable = () => isColumnSortable(column);
                 const active = () => sortKey() === column.key;
 
                 return (
-                  <th
-                    class={`${styles.th} ${sortable() ? styles.sortable : ''}`}
+                  <TableHeader
+                    class={classNames(styles.headerCell, sortable() && styles.sortable)}
                     style={column.width ? { width: column.width } : undefined}
                     onClick={() => sortable() && handleSort(column)}
                   >
@@ -144,81 +134,52 @@ const DataTable = <T extends Record<string, unknown>>(props: Props<DataTableProp
                         </Show>
                       </span>
                     </Show>
-                  </th>
+                  </TableHeader>
                 );
               }}
             </For>
-          </tr>
-        </thead>
-        <tbody>
+          </TableRow>
+        </TableHead>
+        <TableBody>
           <Show
             when={paginatedData().length > 0}
             fallback={
-              <tr>
-                <td class={styles.empty} colSpan={props.columns.length}>
+              <TableRow>
+                <TableCell class={classNames(styles.dataCell, styles.empty)} colSpan={props.columns.length}>
                   {props.emptyMessage ?? 'No data'}
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             }
           >
             <For each={paginatedData()}>
               {(row, index) => (
-                <tr class={rowClass(index())}>
+                <TableRow class={rowClass(index())}>
                   <For each={props.columns}>
                     {(column) => (
-                      <td class={styles.td}>
+                      <TableCell class={styles.dataCell}>
                         {column.render ? column.render(row[column.key], row) : String(row[column.key] ?? '')}
-                      </td>
+                      </TableCell>
                     )}
                   </For>
-                </tr>
+                </TableRow>
               )}
             </For>
           </Show>
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
       <Show when={totalPages() > 1}>
         <div class={styles.pagination}>
           <span class={styles.pageInfo}>
             Page {currentPage()} of {totalPages()}
           </span>
-          <div class={styles.pageButtons}>
-            <button
-              type="button"
-              class={`${styles.pageBtn} ${currentPage() <= 1 ? styles.pageBtnDisabled : ''}`}
-              onClick={() => handlePageChange(currentPage() - 1)}
-              aria-label="Previous page"
-            >
-              Prev
-            </button>
-            <For each={paginationSlots()}>
-              {(slot) =>
-                slot === 'ellipsis' ? (
-                  <span class={styles.pageEllipsis} aria-hidden="true">
-                    …
-                  </span>
-                ) : (
-                  <button
-                    type="button"
-                    class={classNames(styles.pageBtn, slot === currentPage() && styles.pageBtnActive)}
-                    onClick={() => handlePageChange(slot)}
-                    aria-label={`Page ${slot}`}
-                    aria-current={slot === currentPage() ? 'page' : undefined}
-                  >
-                    {slot}
-                  </button>
-                )
-              }
-            </For>
-            <button
-              type="button"
-              class={classNames(styles.pageBtn, currentPage() >= totalPages() && styles.pageBtnDisabled)}
-              onClick={() => handlePageChange(currentPage() + 1)}
-              aria-label="Next page"
-            >
-              Next
-            </button>
-          </div>
+          <Pagination
+            page={currentPage()}
+            totalPages={totalPages()}
+            onChange={handlePageChange}
+            previousLabel="Prev"
+            nextLabel="Next"
+            ariaLabel="Data table pages"
+          />
         </div>
       </Show>
     </div>

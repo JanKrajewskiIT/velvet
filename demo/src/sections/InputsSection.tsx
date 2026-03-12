@@ -152,11 +152,11 @@ const InputsSection = (props: InputsSectionProps) => {
                 variant="surface"
               />
             </div>
-            <ShowcaseMeta>
-              Use <span class="code-inline">variant="surface"</span> on light backgrounds (e.g. this section). Default{' '}
-              <span class="code-inline">variant="navbar"</span> for brand/dark navbar.
-            </ShowcaseMeta>
           </PreviewPanel>
+          <ShowcaseMeta>
+            Use <span class="code-inline">variant="surface"</span> on light backgrounds (e.g. this section). Default{' '}
+            <span class="code-inline">variant="navbar"</span> for brand/dark navbar.
+          </ShowcaseMeta>
         </ShowcaseSection>
 
         <ShowcaseSection title="ThemeToggle" subtitle="Light and dark mode switch">
@@ -164,12 +164,12 @@ const InputsSection = (props: InputsSectionProps) => {
             <div class="row">
               <ThemeToggle lightLabel="Light mode" darkLabel="Dark mode" groupLabel="Theme" variant="surface" />
             </div>
-            <ShowcaseMeta>
-              Use <span class="code-inline">variant="surface"</span> on light backgrounds. Default{' '}
-              <span class="code-inline">variant="navbar"</span> for brand/dark navbar. Wraps{' '}
-              <span class="code-inline">useTheme()</span> from ThemeProvider.
-            </ShowcaseMeta>
           </PreviewPanel>
+          <ShowcaseMeta>
+            Use <span class="code-inline">variant="surface"</span> on light backgrounds. Default{' '}
+            <span class="code-inline">variant="navbar"</span> for brand/dark navbar. Wraps{' '}
+            <span class="code-inline">useTheme()</span> from ThemeProvider.
+          </ShowcaseMeta>
         </ShowcaseSection>
       </Show>
 
@@ -479,12 +479,12 @@ const InputsSection = (props: InputsSectionProps) => {
                 addToast({ type: 'success', message: `Picked: ${f.name}` });
               }}
             />
-            {droppedFile() && (
-              <ShowcaseMeta>
-                Selected file: <strong>{droppedFile()}</strong>
-              </ShowcaseMeta>
-            )}
           </PreviewPanel>
+          {droppedFile() && (
+            <ShowcaseMeta>
+              Selected file: <strong>{droppedFile()}</strong>
+            </ShowcaseMeta>
+          )}
         </ShowcaseSection>
 
         <ShowcaseSection title="FileInput" subtitle="Drag-and-drop file upload zone">

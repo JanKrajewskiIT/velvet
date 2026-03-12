@@ -161,9 +161,6 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
               onChange={setTab}
               variant="underline"
             />
-            <ShowcaseMeta>
-              Active tab: <strong>{tab()}</strong>
-            </ShowcaseMeta>
             <Tabs<TabValue>
               tabs={[
                 { value: 'preview', label: 'Preview' },
@@ -175,6 +172,9 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
               variant="pill"
             />
           </PreviewPanel>
+          <ShowcaseMeta>
+            Active tab: <strong>{tab()}</strong>
+          </ShowcaseMeta>
         </ShowcaseSection>
 
         <ShowcaseSection title="Stepper" subtitle="Visual progress through ordered steps">

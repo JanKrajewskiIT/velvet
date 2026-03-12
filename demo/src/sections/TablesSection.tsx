@@ -119,11 +119,11 @@ const TablesSection = () => {
             nextLabel="Next"
             ariaLabel="Table pages"
           />
-          <ShowcaseMeta>
-            Current page: <strong>{page()}</strong>. Use with custom lists or tables when you need page navigation
-            without DataTable.
-          </ShowcaseMeta>
         </PreviewPanel>
+        <ShowcaseMeta>
+          Current page: <strong>{page()}</strong>. Use with custom lists or tables when you need page navigation without
+          DataTable.
+        </ShowcaseMeta>
       </ShowcaseSection>
     </div>
   );
