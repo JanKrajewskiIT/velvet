@@ -140,21 +140,20 @@ const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
   },
   'inputs-dropdowns': {
     title: 'Inputs & Forms · Dropdowns & autocomplete',
-    description: 'DropdownButton, DropdownMenu, Autocomplete and Select for searchable menus and option selection.',
+    description:
+      'DropdownButton, DropdownMenu, Autocomplete, MultiSelect and Select for searchable menus and option selection.',
   },
   'inputs-fields': {
     title: 'Inputs & Forms · Text & search',
-    description:
-      'Input, PasswordInput, TextArea, SearchInput, TagInput, OtpInput and NumberInput for text, numeric entry and search.',
+    description: 'Input, PasswordInput, TextArea, SearchInput, InlineEditableText, TagInput, OtpInput and NumberInput.',
   },
   'inputs-controls': {
     title: 'Inputs & Forms · Selectors & pickers',
-    description:
-      'Checkbox, Switch, RadioGroup, SegmentedControl, Slider, Rating and ColorPicker for on/off, choice and scoring controls.',
+    description: 'Checkbox, Switch, RadioGroup, SegmentedControl, Slider, RangeSlider, Rating and ColorPicker.',
   },
   'inputs-datetime': {
     title: 'Inputs & Forms · Date & time',
-    description: 'DatePicker, DateRangePicker and TimePicker for calendar-driven date and time selection.',
+    description: 'DatePicker, DateRangePicker, TimePicker and DateTimePicker for date/time scheduling workflows.',
   },
   'inputs-other': {
     title: 'Inputs & Forms · File & upload',
@@ -199,6 +198,10 @@ const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
     title: 'Layout & Navigation · Tabs, Stepper & Breadcrumbs',
     description:
       'Tabs, Stepper and Breadcrumbs for switching views, visualizing progress and showing hierarchical paths.',
+  },
+  'nav-breadcrumbs': {
+    title: 'Layout & Navigation · Breadcrumbs',
+    description: 'Breadcrumbs for displaying hierarchical location and quick parent navigation.',
   },
   'nav-timeline': {
     title: 'Layout & Navigation · Timeline',
@@ -254,7 +257,8 @@ const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
   },
   'layout-sidebar': {
     title: 'Layout & Navigation · Sidebar & utilities',
-    description: 'Sidebar, ResizablePanel, Divider and AspectRatio for side navigation and split-pane layouts.',
+    description:
+      'Sidebar, ResizablePanel, Divider, AspectRatio, Stack and Grid for side navigation and composition-friendly layouts.',
   },
   'composites-lists': {
     title: 'Composites & Flows · Transfer & editable list',

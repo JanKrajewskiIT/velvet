@@ -3,12 +3,14 @@ import {
   Button,
   Divider,
   Footer,
+  Grid,
   MainLayout,
   Navbar,
   type NavItem,
   ResizablePanel,
   Sidebar,
   type SidebarItem,
+  Stack,
 } from '@jankrajewskiit/ui';
 import { FaSolidQuestion } from 'solid-icons/fa';
 import { IoCalendar, IoDocumentText, IoFolder, IoHome, IoPersonCircle, IoSettings } from 'solid-icons/io';
@@ -155,6 +157,48 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
           </PreviewPanel>
           <ShowcaseMeta>
             Pass a numeric <span class="code-inline">ratio</span> prop. Defaults to 16/9.
+          </ShowcaseMeta>
+        </ShowcaseSection>
+
+        <ShowcaseSection title="Stack" subtitle="Flexible vertical and horizontal spacing layout">
+          <PreviewPanel class="col">
+            <Stack gap="sm">
+              <div class="status-chip">First item</div>
+              <div class="status-chip">Second item</div>
+              <div class="status-chip">Third item</div>
+            </Stack>
+            <Stack direction="horizontal" gap="md" align="center" justify="between" wrap>
+              <div class="status-chip">Horizontal</div>
+              <div class="status-chip">Aligned center</div>
+              <div class="status-chip">Wrap enabled</div>
+            </Stack>
+          </PreviewPanel>
+          <ShowcaseMeta>
+            Use <span class="code-inline">direction</span>, <span class="code-inline">gap</span>,{' '}
+            <span class="code-inline">align</span>, <span class="code-inline">justify</span> and{' '}
+            <span class="code-inline">wrap</span> to compose spacing layouts quickly.
+          </ShowcaseMeta>
+        </ShowcaseSection>
+
+        <ShowcaseSection title="Grid" subtitle="Responsive multi-column primitive">
+          <PreviewPanel class="col">
+            <Grid columns={3} gap="sm">
+              <div class="status-chip">Column 1</div>
+              <div class="status-chip">Column 2</div>
+              <div class="status-chip">Column 3</div>
+              <div class="status-chip">Column 4</div>
+              <div class="status-chip">Column 5</div>
+            </Grid>
+            <Grid minColumnWidth="180px" gap="md">
+              <div class="status-chip">Auto-fit A</div>
+              <div class="status-chip">Auto-fit B</div>
+              <div class="status-chip">Auto-fit C</div>
+              <div class="status-chip">Auto-fit D</div>
+            </Grid>
+          </PreviewPanel>
+          <ShowcaseMeta>
+            Set fixed columns via <span class="code-inline">columns</span> or use responsive auto-fit with{' '}
+            <span class="code-inline">minColumnWidth</span>.
           </ShowcaseMeta>
         </ShowcaseSection>
 

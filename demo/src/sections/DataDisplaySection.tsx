@@ -25,7 +25,11 @@ import {
   type TradingViewChartPoint,
   type TreeNode,
   TreeView,
+  useTradingViewPollingFeed,
+  useTradingViewWsFeed,
+  VirtualizedList,
 } from '@jankrajewskiit/ui';
+import type { UTCTimestamp } from 'lightweight-charts';
 import { IoChevronDown, IoDocumentText, IoFolder, IoImage } from 'solid-icons/io';
 import { createSignal, Show } from 'solid-js';
 
@@ -47,41 +51,51 @@ import { Button } from '@jankrajewskiit/ui';
 \`\`\`
 `;
 
+const asUtcTimestamp = (value: number): UTCTimestamp => value as UTCTimestamp;
+
 const TRADING_VIEW_SAMPLE: TradingViewChartPoint[] = [
-  { time: 1704067200, open: 2062.1, high: 2068.9, low: 2059.4, close: 2066.8, volume: 5420 },
-  { time: 1704153600, open: 2066.8, high: 2072.5, low: 2061.7, close: 2063.2, volume: 4880 },
-  { time: 1704240000, open: 2063.2, high: 2076.4, low: 2060.1, close: 2071.9, volume: 6170 },
-  { time: 1704326400, open: 2071.9, high: 2079.8, low: 2067.2, close: 2075.6, volume: 6430 },
-  { time: 1704412800, open: 2075.6, high: 2084.2, low: 2073.4, close: 2080.5, volume: 6810 },
-  { time: 1704499200, open: 2080.5, high: 2085.3, low: 2074.8, close: 2078.1, volume: 5290 },
-  { time: 1704585600, open: 2078.1, high: 2088.6, low: 2076.4, close: 2086.4, volume: 7140 },
-  { time: 1704672000, open: 2086.4, high: 2091.7, low: 2080.2, close: 2082.3, volume: 5660 },
-  { time: 1704758400, open: 2082.3, high: 2096.5, low: 2079.6, close: 2093.8, volume: 7350 },
-  { time: 1704844800, open: 2093.8, high: 2101.1, low: 2089.1, close: 2098.6, volume: 7820 },
-  { time: 1704931200, open: 2098.6, high: 2104.2, low: 2092.7, close: 2095.1, volume: 6080 },
-  { time: 1705017600, open: 2095.1, high: 2107.4, low: 2091.5, close: 2103.9, volume: 7560 },
+  { time: asUtcTimestamp(1704067200), open: 2062.1, high: 2068.9, low: 2059.4, close: 2066.8, volume: 5420 },
+  { time: asUtcTimestamp(1704153600), open: 2066.8, high: 2072.5, low: 2061.7, close: 2063.2, volume: 4880 },
+  { time: asUtcTimestamp(1704240000), open: 2063.2, high: 2076.4, low: 2060.1, close: 2071.9, volume: 6170 },
+  { time: asUtcTimestamp(1704326400), open: 2071.9, high: 2079.8, low: 2067.2, close: 2075.6, volume: 6430 },
+  { time: asUtcTimestamp(1704412800), open: 2075.6, high: 2084.2, low: 2073.4, close: 2080.5, volume: 6810 },
+  { time: asUtcTimestamp(1704499200), open: 2080.5, high: 2085.3, low: 2074.8, close: 2078.1, volume: 5290 },
+  { time: asUtcTimestamp(1704585600), open: 2078.1, high: 2088.6, low: 2076.4, close: 2086.4, volume: 7140 },
+  { time: asUtcTimestamp(1704672000), open: 2086.4, high: 2091.7, low: 2080.2, close: 2082.3, volume: 5660 },
+  { time: asUtcTimestamp(1704758400), open: 2082.3, high: 2096.5, low: 2079.6, close: 2093.8, volume: 7350 },
+  { time: asUtcTimestamp(1704844800), open: 2093.8, high: 2101.1, low: 2089.1, close: 2098.6, volume: 7820 },
+  { time: asUtcTimestamp(1704931200), open: 2098.6, high: 2104.2, low: 2092.7, close: 2095.1, volume: 6080 },
+  { time: asUtcTimestamp(1705017600), open: 2095.1, high: 2107.4, low: 2091.5, close: 2103.9, volume: 7560 },
 ];
 
-let liveCursor = 1705017600;
-let livePrice = 2103.9;
-
-const createLiveBar = (): TradingViewChartPoint => {
-  liveCursor += 60 * 60;
-  const open = livePrice;
-  const drift = (Math.random() - 0.5) * 11;
-  const close = Math.max(1, open + drift);
-  const high = Math.max(open, close) + Math.random() * 5.5;
-  const low = Math.min(open, close) - Math.random() * 5.2;
-  const volume = 5200 + Math.random() * 2600;
-  livePrice = close;
-  return {
-    time: liveCursor as TradingViewChartPoint['time'],
-    open: Number(open.toFixed(2)),
-    high: Number(high.toFixed(2)),
-    low: Number(low.toFixed(2)),
-    close: Number(close.toFixed(2)),
-    volume: Number(volume.toFixed(0)),
+const createBarGenerator = (initialTime: UTCTimestamp, initialPrice: number) => {
+  let cursor = initialTime;
+  let price = initialPrice;
+  return (): TradingViewChartPoint => {
+    cursor = asUtcTimestamp(cursor + 60 * 60);
+    const open = price;
+    const drift = (Math.random() - 0.5) * 11;
+    const close = Math.max(1, open + drift);
+    const high = Math.max(open, close) + Math.random() * 5.5;
+    const low = Math.min(open, close) - Math.random() * 5.2;
+    const volume = 5200 + Math.random() * 2600;
+    price = close;
+    return {
+      time: cursor,
+      open: Number(open.toFixed(2)),
+      high: Number(high.toFixed(2)),
+      low: Number(low.toFixed(2)),
+      close: Number(close.toFixed(2)),
+      volume: Number(volume.toFixed(0)),
+    };
   };
+};
+
+const isTradingPoint = (value: unknown): value is TradingViewChartPoint => {
+  if (!value || typeof value !== 'object') return false;
+  return (
+    'time' in value && 'open' in value && 'high' in value && 'low' in value && 'close' in value && 'volume' in value
+  );
 };
 
 const createTreeData = (): TreeNode[] => [
@@ -126,12 +140,70 @@ const GALLERY_IMAGES: ImageGridItem[] = [
   { src: 'https://picsum.photos/id/49/400/300', alt: 'Bridge', caption: 'Old bridge' },
 ];
 
+const VIRTUAL_ITEMS = Array.from({ length: 1200 }, (_, index) => ({
+  id: `item-${index + 1}`,
+  label: `Virtualized record #${index + 1}`,
+  status: index % 3 === 0 ? 'synced' : index % 3 === 1 ? 'queued' : 'draft',
+}));
+
 const DataDisplaySection = (props: { sectionId: SectionId }) => {
   const sectionId = () => props.sectionId;
   const [selectedNode, setSelectedNode] = createSignal('');
   const [collapsibleOpen, setCollapsibleOpen] = createSignal(false);
   const [editorOpen, setEditorOpen] = createSignal(false);
   const [markdown, setMarkdown] = createSignal(MARKDOWN);
+  const nextPollingBar = createBarGenerator(asUtcTimestamp(1705017600), 2103.9);
+  const nextWsBar = createBarGenerator(asUtcTimestamp(1705017600), 2098.4);
+
+  const pollingFeed = useTradingViewPollingFeed({
+    intervalMs: 1800,
+    url: 'https://demo.local/trading/poll',
+    fetcher: () =>
+      new Response(JSON.stringify(nextPollingBar()), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      }),
+    mapData: (payload) => (isTradingPoint(payload) ? payload : null),
+  });
+
+  const wsFeed = useTradingViewWsFeed({
+    url: 'wss://demo.local/trading/ws',
+    webSocketFactory: () => {
+      const target = new EventTarget();
+      let timerId = 0;
+      let state: number = WebSocket.CONNECTING;
+      const socket = {
+        get readyState() {
+          return state;
+        },
+        send: () => {},
+        close: () => {
+          if (state === WebSocket.CLOSED) return;
+          state = WebSocket.CLOSED;
+          if (timerId) window.clearInterval(timerId);
+          target.dispatchEvent(new CloseEvent('close', { code: 1000, reason: 'closed by demo' }));
+        },
+        addEventListener: target.addEventListener.bind(target),
+        removeEventListener: target.removeEventListener.bind(target),
+      } as unknown as WebSocket;
+
+      queueMicrotask(() => {
+        state = WebSocket.OPEN;
+        target.dispatchEvent(new Event('open'));
+        timerId = window.setInterval(() => {
+          const payload = JSON.stringify(nextWsBar());
+          target.dispatchEvent(new MessageEvent('message', { data: payload }));
+        }, 2100);
+      });
+
+      return socket;
+    },
+    buildSubscribeMessage: (context) =>
+      JSON.stringify({ op: 'subscribe', symbol: context.symbol, interval: context.interval }),
+    buildUnsubscribeMessage: (context) =>
+      JSON.stringify({ op: 'unsubscribe', symbol: context.symbol, interval: context.interval }),
+    mapData: (payload) => (isTradingPoint(payload) ? payload : null),
+  });
 
   return (
     <div>
@@ -208,6 +280,26 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
               </ListItem>
             </List>
           </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection title="VirtualizedList" subtitle="Efficient rendering for long datasets">
+          <PreviewPanel class="col">
+            <VirtualizedList
+              items={VIRTUAL_ITEMS}
+              height={320}
+              itemHeight={46}
+              overscan={6}
+              renderItem={(item, index) => (
+                <div class="virtual-row">
+                  <span class="virtual-label">{item.label}</span>
+                  <span class="virtual-meta">
+                    #{index + 1} - {item.status}
+                  </span>
+                </div>
+              )}
+            />
+          </PreviewPanel>
+          <ShowcaseMeta>Try fast scrolling: only visible rows are rendered in the DOM.</ShowcaseMeta>
         </ShowcaseSection>
       </Show>
 
@@ -471,25 +563,36 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
             <TradingViewChart symbol="XAUUSD" />
             <TradingViewChart symbol="XAUUSD custom feed" data={TRADING_VIEW_SAMPLE} height={420} />
             <TradingViewChart
-              symbol="XAUUSD live demo"
+              symbol="XAUUSD polling adapter"
               data={TRADING_VIEW_SAMPLE}
               defaultDrawingTool="trendline"
-              liveFeed={{
-                mode: 'polling',
-                enabled: true,
-                intervalMs: 1800,
-                poll: () => createLiveBar(),
-              }}
+              liveFeed={pollingFeed}
               drawings={{
                 levels: [{ id: 'lvl-res', price: 2104.5, label: 'Resistance' }],
-                zones: [{ id: 'zone-demand', fromTime: 1704672000, toTime: 1704931200, low: 2088, high: 2094 }],
+                zones: [
+                  {
+                    id: 'zone-demand',
+                    fromTime: asUtcTimestamp(1704672000),
+                    toTime: asUtcTimestamp(1704931200),
+                    low: 2088,
+                    high: 2094,
+                  },
+                ],
               }}
               height={460}
+            />
+            <TradingViewChart
+              symbol="XAUUSD websocket adapter"
+              data={TRADING_VIEW_SAMPLE}
+              liveFeed={wsFeed}
+              height={420}
             />
           </PreviewPanel>
           <ShowcaseMeta>
             Includes interval switching, volume, SMA/EMA plus RSI/MACD/BB, drawing tools (trend/level/zone) and live
-            feed API via polling or websocket callbacks.
+            feed API via polling or websocket callbacks. This demo uses helper hooks{' '}
+            <span class="code-inline">useTradingViewPollingFeed</span> and{' '}
+            <span class="code-inline">useTradingViewWsFeed</span>.
           </ShowcaseMeta>
         </ShowcaseSection>
       </Show>

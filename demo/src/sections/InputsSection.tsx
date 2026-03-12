@@ -9,6 +9,7 @@ import {
   DatePicker,
   type DateRange,
   DateRangePicker,
+  DateTimePicker,
   DropdownButton,
   DropdownItem,
   DropdownMenu,
@@ -18,12 +19,16 @@ import {
   FormGrid,
   FormLayout,
   IconButton,
+  InlineEditableText,
   Input,
   LocaleSwitcher,
+  MultiSelect,
+  type MultiSelectOption,
   NumberInput,
   OtpInput,
   PasswordInput,
   RadioGroup,
+  RangeSlider,
   Rating,
   SearchInput,
   SegmentedControl,
@@ -42,6 +47,14 @@ import type { SectionId } from '../App';
 import { PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
 
 const PRESET_COLORS = ['#1467ff', '#0c52cf', '#02a4ff', '#2e7d32', '#ed6c02', '#d32f2f', '#1b78ff', '#00838f'];
+const FRAMEWORK_OPTIONS: MultiSelectOption[] = [
+  { value: 'solid', label: 'SolidJS' },
+  { value: 'react', label: 'React' },
+  { value: 'vue', label: 'Vue' },
+  { value: 'svelte', label: 'Svelte' },
+  { value: 'angular', label: 'Angular', disabled: true },
+  { value: 'qwik', label: 'Qwik' },
+];
 
 type RoleValue = 'admin' | 'editor' | 'viewer';
 
@@ -53,7 +66,9 @@ const InputsSection = (props: InputsSectionProps) => {
   const sectionId = () => props.sectionId;
   const [loading, setLoading] = createSignal(false);
   const [text, setText] = createSignal('');
+  const [editableTitle, setEditableTitle] = createSignal('Release notes');
   const [selected, setSelected] = createSignal('');
+  const [frameworks, setFrameworks] = createSignal<string[]>(['solid', 'vue']);
   const [tags, setTags] = createSignal<string[]>(['solid-js', 'vite']);
   const [autoValues, setAutoValues] = createSignal<string[]>(['TypeScript']);
   const [color, setColor] = createSignal('#1467ff');
@@ -65,6 +80,7 @@ const InputsSection = (props: InputsSectionProps) => {
   const [role, setRole] = createSignal<RoleValue>('editor');
   const [viewMode, setViewMode] = createSignal('list');
   const [sliderValue, setSliderValue] = createSignal(40);
+  const [priceRange, setPriceRange] = createSignal({ min: 20, max: 80 });
   const [rating, setRating] = createSignal(3);
   const [segment, setSegment] = createSignal('list');
   const [billingCycle, setBillingCycle] = createSignal('monthly');
@@ -75,6 +91,7 @@ const InputsSection = (props: InputsSectionProps) => {
   const [quantity, setQuantity] = createSignal(5);
   const [search, setSearch] = createSignal('');
   const [range, setRange] = createSignal<DateRange>({ start: '', end: '' });
+  const [dateTime, setDateTime] = createSignal('');
   const [droppedFile, setDroppedFile] = createSignal<string | null>(null);
   const [locale, setLocale] = createSignal<'EN' | 'PL'>('EN');
 
@@ -148,27 +165,22 @@ const InputsSection = (props: InputsSectionProps) => {
               <LocaleSwitcher
                 label={locale()}
                 switchLabel="Switch locale"
-                onSwitch={() => setLocale((current) => (current === 'EN' ? 'PL' : 'EN'))}
-                variant="surface"
+                onSwitch={() => {
+                  setLocale((current) => (current === 'EN' ? 'PL' : 'EN'));
+                }}
               />
             </div>
           </PreviewPanel>
-          <ShowcaseMeta>
-            Use <span class="code-inline">variant="surface"</span> on light backgrounds (e.g. this section). Default{' '}
-            <span class="code-inline">variant="navbar"</span> for brand/dark navbar.
-          </ShowcaseMeta>
         </ShowcaseSection>
 
         <ShowcaseSection title="ThemeToggle" subtitle="Light and dark mode switch">
           <PreviewPanel>
             <div class="row">
-              <ThemeToggle lightLabel="Light mode" darkLabel="Dark mode" groupLabel="Theme" variant="surface" />
+              <ThemeToggle lightLabel="Light mode" darkLabel="Dark mode" groupLabel="Theme" />
             </div>
           </PreviewPanel>
           <ShowcaseMeta>
-            Use <span class="code-inline">variant="surface"</span> on light backgrounds. Default{' '}
-            <span class="code-inline">variant="navbar"</span> for brand/dark navbar. Wraps{' '}
-            <span class="code-inline">useTheme()</span> from ThemeProvider.
+            Wraps <span class="code-inline">useTheme()</span> from ThemeProvider.
           </ShowcaseMeta>
         </ShowcaseSection>
       </Show>
@@ -207,6 +219,23 @@ const InputsSection = (props: InputsSectionProps) => {
               />
             </FormField>
           </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection title="MultiSelect" subtitle="Checkbox dropdown for selecting many options">
+          <PreviewPanel>
+            <FormField label="Frameworks" id="demo-multi-select">
+              <MultiSelect
+                value={frameworks()}
+                options={FRAMEWORK_OPTIONS}
+                onChange={setFrameworks}
+                placeholder="Choose frameworks"
+                removeLabel="Remove"
+              />
+            </FormField>
+          </PreviewPanel>
+          <ShowcaseMeta>
+            Selected: <span class="code-inline">{frameworks().join(', ') || 'none'}</span>
+          </ShowcaseMeta>
         </ShowcaseSection>
 
         <ShowcaseSection title="Select" subtitle="Native select with custom styling">
@@ -272,6 +301,15 @@ const InputsSection = (props: InputsSectionProps) => {
           </PreviewPanel>
           <ShowcaseMeta>
             Search value: <span class="code-inline">{search()}</span>
+          </ShowcaseMeta>
+        </ShowcaseSection>
+
+        <ShowcaseSection title="InlineEditableText" subtitle="Click-to-edit single line text">
+          <PreviewPanel class="col">
+            <InlineEditableText value={editableTitle()} onChange={setEditableTitle} placeholder="Set a title" />
+          </PreviewPanel>
+          <ShowcaseMeta>
+            Current value: <span class="code-inline">{editableTitle()}</span>
           </ShowcaseMeta>
         </ShowcaseSection>
 
@@ -416,6 +454,19 @@ const InputsSection = (props: InputsSectionProps) => {
           </PreviewPanel>
         </ShowcaseSection>
 
+        <ShowcaseSection title="RangeSlider" subtitle="Select minimum and maximum values">
+          <PreviewPanel class="col">
+            <RangeSlider
+              label="Price range"
+              value={priceRange()}
+              onChange={setPriceRange}
+              min={0}
+              max={100}
+              showValue
+            />
+          </PreviewPanel>
+        </ShowcaseSection>
+
         <ShowcaseSection title="Rating" subtitle="Star-based scoring control">
           <PreviewPanel>
             <div class="row">
@@ -463,6 +514,21 @@ const InputsSection = (props: InputsSectionProps) => {
             <TimePicker label="Meeting time" value={time()} onChange={setTime} step={30} />
             <TimePicker label="Precise time" value={time15()} onChange={setTime15} step={15} />
           </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection title="DateTimePicker" subtitle="Combined date and time selection">
+          <PreviewPanel class="col">
+            <DateTimePicker
+              value={dateTime()}
+              onChange={setDateTime}
+              dateLabel="Publish date"
+              timeLabel="Publish time"
+              step={15}
+            />
+          </PreviewPanel>
+          <ShowcaseMeta>
+            DateTime: <span class="code-inline">{dateTime() || 'not set'}</span>
+          </ShowcaseMeta>
         </ShowcaseSection>
       </Show>
 
