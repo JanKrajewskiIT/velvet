@@ -159,10 +159,12 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
     intervalMs: 1800,
     url: 'https://demo.local/trading/poll',
     fetcher: () =>
-      new Response(JSON.stringify(nextPollingBar()), {
-        status: 200,
-        headers: { 'content-type': 'application/json' },
-      }),
+      Promise.resolve(
+        new Response(JSON.stringify(nextPollingBar()), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        })
+      ),
     mapData: (payload) => (isTradingPoint(payload) ? payload : null),
   });
 

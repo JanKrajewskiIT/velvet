@@ -2,6 +2,24 @@
   width: 100%;
 }
 
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.filterInput {
+  min-width: min(100%, 280px);
+}
+
+.resultsCount {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
 .tableContainer {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;

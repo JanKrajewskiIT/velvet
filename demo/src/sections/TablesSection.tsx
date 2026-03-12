@@ -44,6 +44,7 @@ const PACKAGE_COLUMNS: DataTableColumn<PackageRow>[] = [
 
 const TablesSection = () => {
   const [page, setPage] = createSignal(5);
+  const [query, setQuery] = createSignal('');
 
   return (
     <div>
@@ -88,12 +89,16 @@ const TablesSection = () => {
             columns={PACKAGE_COLUMNS}
             pageSize={4}
             sortable
+            filterable
+            filterQuery={query()}
+            onFilterQueryChange={setQuery}
+            filterPlaceholder="Search package, version or license"
             striped
             hoverable
           />
         </PreviewPanel>
         <ShowcaseMeta>
-          Click column headers to sort. Pagination with ellipsis appears when rows exceed{' '}
+          Click column headers to sort and use built-in filtering API. Pagination with ellipsis appears when rows exceed{' '}
           <span class="code-inline">pageSize</span>. Supports custom cell render and column width.
         </ShowcaseMeta>
       </ShowcaseSection>

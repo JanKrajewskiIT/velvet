@@ -1,6 +1,6 @@
 import { IoCaretDown, IoCaretUp } from 'solid-icons/io';
 import type { JSX } from 'solid-js';
-import { createMemo, createSignal, For, Show } from 'solid-js';
+import { createEffect, createMemo, createSignal, For, Show } from 'solid-js';
 
 import Table from '~/components/data-display/Table/Table';
 import TableBody from '~/components/data-display/Table/TableBody';
@@ -8,6 +8,7 @@ import TableCell from '~/components/data-display/Table/TableCell';
 import TableHead from '~/components/data-display/Table/TableHead';
 import TableHeader from '~/components/data-display/Table/TableHeader';
 import TableRow from '~/components/data-display/Table/TableRow';
+import Input from '~/components/inputs/Input/Input';
 import Pagination from '~/components/navigation/Pagination/Pagination';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
@@ -18,10 +19,13 @@ interface DataTableColumn<T> {
   key: keyof T & string;
   header: string;
   sortable?: boolean;
+  filterable?: boolean;
   render?: (value: T[keyof T], row: T) => JSX.Element;
   width?: string;
   sortAccessor?: (row: T) => string | number | boolean | Date | null | undefined;
   sortFn?: (a: T, b: T, direction: 'asc' | 'desc') => number;
+  filterAccessor?: (row: T) => string | number | boolean | null | undefined;
+  filterFn?: (row: T, query: string) => boolean;
 }
 
 interface DataTableProps<T> {
@@ -32,18 +36,48 @@ interface DataTableProps<T> {
   striped?: boolean;
   hoverable?: boolean;
   emptyMessage?: string;
+  filterable?: boolean;
+  filterQuery?: string;
+  onFilterQueryChange?: (query: string) => void;
+  filterPlaceholder?: string;
+  filterFn?: (row: T, query: string) => boolean;
+  showResultsCount?: boolean;
 }
 
 const DataTable = <T extends Record<string, unknown>>(props: Props<DataTableProps<T>>) => {
   const [sortKey, setSortKey] = createSignal<string | null>(null);
   const [sortDirection, setSortDirection] = createSignal<'asc' | 'desc'>('asc');
   const [currentPage, setCurrentPage] = createSignal(1);
+  const [internalFilterQuery, setInternalFilterQuery] = createSignal('');
 
   const pageSize = () => props.pageSize ?? 10;
+  const filterQuery = () => props.filterQuery ?? internalFilterQuery();
+
+  const filteredData = createMemo(() => {
+    const query = filterQuery().trim().toLowerCase();
+    if (!query) return props.data;
+
+    const matchWithColumn = (row: T) => {
+      return props.columns.some((column) => {
+        if (column.filterable === false) return false;
+        if (column.filterFn) return column.filterFn(row, query);
+
+        const raw = column.filterAccessor ? column.filterAccessor(row) : row[column.key];
+        const text = String(raw ?? '').toLowerCase();
+        return text.includes(query);
+      });
+    };
+
+    if (props.filterFn) {
+      return props.data.filter((row) => props.filterFn?.(row, query));
+    }
+
+    return props.data.filter(matchWithColumn);
+  });
 
   const sortedData = createMemo(() => {
     const key = sortKey();
-    const data = [...props.data];
+    const data = [...filteredData()];
     if (!key) return data;
 
     const direction = sortDirection();
@@ -110,8 +144,35 @@ const DataTable = <T extends Record<string, unknown>>(props: Props<DataTableProp
     );
   };
 
+  const handleFilterInput: JSX.EventHandler<HTMLInputElement, InputEvent> = (e) => {
+    const next = e.currentTarget.value;
+    setInternalFilterQuery(next);
+    props.onFilterQueryChange?.(next);
+  };
+
+  createEffect(() => {
+    filterQuery();
+    setCurrentPage(1);
+  });
+
   return (
     <div class={classNames(styles.wrapper, props.class)}>
+      <Show when={props.filterable}>
+        <div class={styles.toolbar}>
+          <Input
+            type="search"
+            value={filterQuery()}
+            onInput={handleFilterInput}
+            placeholder={props.filterPlaceholder ?? 'Filter rows...'}
+            class={styles.filterInput}
+          />
+          <Show when={props.showResultsCount ?? true}>
+            <span class={styles.resultsCount}>
+              {sortedData().length} result{sortedData().length === 1 ? '' : 's'}
+            </span>
+          </Show>
+        </div>
+      </Show>
       <Table class={styles.dataTable} containerClass={styles.tableContainer}>
         <TableHead class={styles.dataTableHead}>
           <TableRow>
