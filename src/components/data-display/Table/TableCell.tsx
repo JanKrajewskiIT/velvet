@@ -4,7 +4,7 @@ import type Props from '~/models/Props';
 
 import styles from './Table.module.css';
 
-const TableCell = (props: Props<JSX.HTMLAttributes<HTMLTableCellElement>>) => {
+const TableCell = (props: Props<JSX.TdHTMLAttributes<HTMLTableCellElement>>) => {
   const [local, rest] = splitProps(props, ['class']);
   return <td class={`${styles.td} ${local.class ?? ''}`} {...rest} />;
 };

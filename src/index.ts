@@ -48,8 +48,10 @@ export type {
   TradingViewChartProps,
   TradingViewDrawings,
   TradingViewDrawingTool,
+  TradingViewFeedContext,
   TradingViewLevelLine,
   TradingViewLiveFeedConfig,
+  TradingViewLiveFeedMode,
   TradingViewTrendLine,
   TradingViewZone,
 } from './components/data-display/TradingViewChart/TradingViewChart';
@@ -150,6 +152,10 @@ export { default as Tour } from './components/overlays/Tour/Tour';
 export { default as useClickOutside } from './hooks/useClickOutside';
 export { default as useEscapeKey } from './hooks/useEscapeKey';
 export { default as useFocusTrap } from './hooks/useFocusTrap';
+export type { TradingViewPollingFeedOptions } from './hooks/useTradingViewPollingFeed';
+export { default as useTradingViewPollingFeed } from './hooks/useTradingViewPollingFeed';
+export type { TradingViewWsFeedOptions } from './hooks/useTradingViewWsFeed';
+export { default as useTradingViewWsFeed } from './hooks/useTradingViewWsFeed';
 export type { default as Props } from './models/Props';
 export type { ThemeChoice } from './theme/ThemeProvider';
 export { ThemeProvider, useTheme } from './theme/ThemeProvider';

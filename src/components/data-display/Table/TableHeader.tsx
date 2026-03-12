@@ -4,9 +4,7 @@ import type Props from '~/models/Props';
 
 import styles from './Table.module.css';
 
-const TableHeader = (
-  props: Props<JSX.HTMLAttributes<HTMLTableCellElement>>
-) => {
+const TableHeader = (props: Props<JSX.ThHTMLAttributes<HTMLTableCellElement>>) => {
   const [local, rest] = splitProps(props, ['class']);
   return <th class={`${styles.th} ${local.class ?? ''}`} {...rest} />;
 };

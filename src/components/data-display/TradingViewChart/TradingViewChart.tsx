@@ -981,8 +981,10 @@ export type {
   TradingViewChartProps,
   TradingViewDrawings,
   TradingViewDrawingTool,
+  TradingViewFeedContext,
   TradingViewLevelLine,
   TradingViewLiveFeedConfig,
+  TradingViewLiveFeedMode,
   TradingViewTrendLine,
   TradingViewZone,
 };
