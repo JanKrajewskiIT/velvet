@@ -23,14 +23,6 @@ export { default as Accordion } from './components/data-display/Accordion/Accord
 export { default as AccordionItem } from './components/data-display/Accordion/AccordionItem';
 export { default as Avatar } from './components/data-display/Avatar/Avatar';
 export { default as AvatarGroup } from './components/data-display/Avatar/AvatarGroup';
-export type {
-  Candle,
-  CandleAction,
-  CandleActionDiagramProps,
-  CandleActionLegendItem,
-  CandleActionType,
-} from './components/data-display/CandleActionDiagram/CandleActionDiagram';
-export { default as CandleActionDiagram } from './components/data-display/CandleActionDiagram/CandleActionDiagram';
 export { default as Carousel } from './components/data-display/Carousel/Carousel';
 export { default as CodeBlock } from './components/data-display/CodeBlock/CodeBlock';
 export { default as Collapsible } from './components/data-display/Collapsible/Collapsible';
@@ -51,6 +43,17 @@ export { default as TableCell } from './components/data-display/Table/TableCell'
 export { default as TableHead } from './components/data-display/Table/TableHead';
 export { default as TableHeader } from './components/data-display/Table/TableHeader';
 export { default as TableRow } from './components/data-display/Table/TableRow';
+export type {
+  TradingViewChartPoint,
+  TradingViewChartProps,
+  TradingViewDrawings,
+  TradingViewDrawingTool,
+  TradingViewLevelLine,
+  TradingViewLiveFeedConfig,
+  TradingViewTrendLine,
+  TradingViewZone,
+} from './components/data-display/TradingViewChart/TradingViewChart';
+export { default as TradingViewChart } from './components/data-display/TradingViewChart/TradingViewChart';
 export type { TreeNode } from './components/data-display/TreeView/TreeView';
 export { default as TreeView } from './components/data-display/TreeView/TreeView';
 export { default as AccessDenied } from './components/feedback/AccessDenied/AccessDenied';

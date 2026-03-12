@@ -180,7 +180,7 @@ const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
   },
   'data-charts': {
     title: 'Data Display · Charts',
-    description: 'ScoreRing, RadarChart and CandleActionDiagram for data visualization.',
+    description: 'ScoreRing, RadarChart and TradingViewChart for data visualization.',
   },
   'data-tables': {
     title: 'Data Display · Tables & pagination',

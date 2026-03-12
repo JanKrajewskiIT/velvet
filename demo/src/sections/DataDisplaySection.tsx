@@ -5,9 +5,6 @@ import {
   Avatar,
   AvatarGroup,
   Button,
-  type CandleAction,
-  CandleActionDiagram,
-  type CandleActionLegendItem,
   Carousel,
   CodeBlock,
   Collapsible,
@@ -24,6 +21,8 @@ import {
   RadarChart,
   ScoreRing,
   SectionCard,
+  TradingViewChart,
+  type TradingViewChartPoint,
   type TreeNode,
   TreeView,
 } from '@jankrajewskiit/ui';
@@ -48,34 +47,42 @@ import { Button } from '@jankrajewskiit/ui';
 \`\`\`
 `;
 
-const CANDLE_SAMPLE = [
-  { open: 98, close: 104, high: 108, low: 95, volume: 180 },
-  { open: 104, close: 101, high: 106, low: 99, volume: 140 },
-  { open: 101, close: 112, high: 116, low: 100, volume: 220 },
-  { open: 112, close: 108, high: 114, low: 105, volume: 170 },
-  { open: 108, close: 115, high: 118, low: 106, volume: 240 },
-  { open: 115, close: 110, high: 117, low: 109, volume: 160 },
-  { open: 110, close: 118, high: 121, low: 109, volume: 260 },
-  { open: 118, close: 122, high: 124, low: 116, volume: 210 },
-  { open: 122, close: 117, high: 123, low: 115, volume: 190 },
-  { open: 117, close: 125, high: 127, low: 116, volume: 280 },
+const TRADING_VIEW_SAMPLE: TradingViewChartPoint[] = [
+  { time: 1704067200, open: 2062.1, high: 2068.9, low: 2059.4, close: 2066.8, volume: 5420 },
+  { time: 1704153600, open: 2066.8, high: 2072.5, low: 2061.7, close: 2063.2, volume: 4880 },
+  { time: 1704240000, open: 2063.2, high: 2076.4, low: 2060.1, close: 2071.9, volume: 6170 },
+  { time: 1704326400, open: 2071.9, high: 2079.8, low: 2067.2, close: 2075.6, volume: 6430 },
+  { time: 1704412800, open: 2075.6, high: 2084.2, low: 2073.4, close: 2080.5, volume: 6810 },
+  { time: 1704499200, open: 2080.5, high: 2085.3, low: 2074.8, close: 2078.1, volume: 5290 },
+  { time: 1704585600, open: 2078.1, high: 2088.6, low: 2076.4, close: 2086.4, volume: 7140 },
+  { time: 1704672000, open: 2086.4, high: 2091.7, low: 2080.2, close: 2082.3, volume: 5660 },
+  { time: 1704758400, open: 2082.3, high: 2096.5, low: 2079.6, close: 2093.8, volume: 7350 },
+  { time: 1704844800, open: 2093.8, high: 2101.1, low: 2089.1, close: 2098.6, volume: 7820 },
+  { time: 1704931200, open: 2098.6, high: 2104.2, low: 2092.7, close: 2095.1, volume: 6080 },
+  { time: 1705017600, open: 2095.1, high: 2107.4, low: 2091.5, close: 2103.9, volume: 7560 },
 ];
 
-const ACTION_SAMPLE: CandleAction[] = [
-  { index: 1, type: 'buy', label: 'Buy', strength: 2 },
-  { index: 3, type: 'stop-loss', label: 'SL' },
-  { index: 4, type: 'take-profit', label: 'TP' },
-  { index: 6, type: 'hold', label: 'Hold' },
-  { index: 8, type: 'sell', label: 'Sell', strength: 2 },
-];
+let liveCursor = 1705017600;
+let livePrice = 2103.9;
 
-const ACTION_LEGEND: CandleActionLegendItem[] = [
-  { type: 'buy', label: 'Buy', description: 'Entry on bullish confirmation.' },
-  { type: 'sell', label: 'Sell', description: 'Exit on distribution spike.' },
-  { type: 'take-profit', label: 'Take profit', description: 'Target hit and scaled out.' },
-  { type: 'stop-loss', label: 'Stop loss', description: 'Risk control below support.' },
-  { type: 'hold', label: 'Hold', description: 'No action while trend holds.' },
-];
+const createLiveBar = (): TradingViewChartPoint => {
+  liveCursor += 60 * 60;
+  const open = livePrice;
+  const drift = (Math.random() - 0.5) * 11;
+  const close = Math.max(1, open + drift);
+  const high = Math.max(open, close) + Math.random() * 5.5;
+  const low = Math.min(open, close) - Math.random() * 5.2;
+  const volume = 5200 + Math.random() * 2600;
+  livePrice = close;
+  return {
+    time: liveCursor as TradingViewChartPoint['time'],
+    open: Number(open.toFixed(2)),
+    high: Number(high.toFixed(2)),
+    low: Number(low.toFixed(2)),
+    close: Number(close.toFixed(2)),
+    volume: Number(volume.toFixed(0)),
+  };
+};
 
 const createTreeData = (): TreeNode[] => [
   {
@@ -456,31 +463,34 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="CandleActionDiagram" subtitle="Action markers over candle formations">
+        <ShowcaseSection
+          title="TradingViewChart"
+          subtitle="Advanced candlestick chart with intervals, OHLC and overlays"
+        >
           <PreviewPanel class="col">
-            <CandleActionDiagram
-              candles={CANDLE_SAMPLE}
-              actions={ACTION_SAMPLE}
-              variant="basic"
-              height={220}
-              ariaLabel="Basic candle action diagram"
-            />
-            <CandleActionDiagram
-              candles={CANDLE_SAMPLE}
-              actions={ACTION_SAMPLE}
-              variant="expanded"
-              height={240}
-              ariaLabel="Expanded candle action diagram"
-            />
-            <CandleActionDiagram
-              candles={CANDLE_SAMPLE}
-              actions={ACTION_SAMPLE}
-              variant="full"
-              legend={ACTION_LEGEND}
-              height={280}
-              ariaLabel="Full candle action diagram"
+            <TradingViewChart symbol="XAUUSD" />
+            <TradingViewChart symbol="XAUUSD custom feed" data={TRADING_VIEW_SAMPLE} height={420} />
+            <TradingViewChart
+              symbol="XAUUSD live demo"
+              data={TRADING_VIEW_SAMPLE}
+              defaultDrawingTool="trendline"
+              liveFeed={{
+                mode: 'polling',
+                enabled: true,
+                intervalMs: 1800,
+                poll: () => createLiveBar(),
+              }}
+              drawings={{
+                levels: [{ id: 'lvl-res', price: 2104.5, label: 'Resistance' }],
+                zones: [{ id: 'zone-demand', fromTime: 1704672000, toTime: 1704931200, low: 2088, high: 2094 }],
+              }}
+              height={460}
             />
           </PreviewPanel>
+          <ShowcaseMeta>
+            Includes interval switching, volume, SMA/EMA plus RSI/MACD/BB, drawing tools (trend/level/zone) and live
+            feed API via polling or websocket callbacks.
+          </ShowcaseMeta>
         </ShowcaseSection>
       </Show>
     </div>
