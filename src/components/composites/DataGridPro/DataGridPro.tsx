@@ -1,6 +1,6 @@
 import { IoCaretDown, IoCaretUp } from 'solid-icons/io';
 import type { JSX } from 'solid-js';
-import { createEffect, createMemo, createSignal, For, Show } from 'solid-js';
+import { createEffect, createMemo, createSignal, For, onCleanup, Show } from 'solid-js';
 
 import Input from '~/components/inputs/Input/Input';
 import useClickOutside from '~/hooks/useClickOutside';
@@ -236,7 +236,7 @@ const DataGridPro = <T extends Record<string, unknown>>(props: Props<DataGridPro
   };
 
   const applyGridState = (state: PersistedGridState): boolean => {
-    if (!state || state.v !== DATA_GRID_PERSISTENCE_VERSION) return false;
+    if (state.v !== DATA_GRID_PERSISTENCE_VERSION) return false;
 
     if (props.filterQuery == null && typeof state.filterQuery === 'string') {
       setInternalFilterQuery(state.filterQuery);
@@ -551,24 +551,26 @@ const DataGridPro = <T extends Record<string, unknown>>(props: Props<DataGridPro
     const file = event.currentTarget.files?.[0];
     event.currentTarget.value = '';
     if (!file) return;
-    void file
-      .text()
-      .then((content) => {
+    const storageKey = persistenceStorageKey();
+
+    void (async () => {
+      try {
+        const content = await file.text();
         const parsed = JSON.parse(content) as PersistedGridState;
         if (!applyGridState(parsed)) return;
 
-        if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined' && persistenceStorageKey()) {
+        if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined' && storageKey) {
           try {
-            window.localStorage.setItem(persistenceStorageKey(), JSON.stringify(parsed));
+            window.localStorage.setItem(storageKey, JSON.stringify(parsed));
             setHasPersistedLayout(true);
           } catch {
             // Ignore storage errors and keep imported in-memory state.
           }
         }
-      })
-      .catch(() => {
+      } catch {
         // Ignore malformed imports.
-      });
+      }
+    })();
   };
 
   const handleHeaderDragStart = (key: string, e: DragEvent) => {
@@ -643,18 +645,19 @@ const DataGridPro = <T extends Record<string, unknown>>(props: Props<DataGridPro
     window.addEventListener('mousemove', onMouseMove);
     window.addEventListener('mouseup', onMouseUp);
 
-    return () => {
+    onCleanup(() => {
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('mouseup', onMouseUp);
-    };
+    });
   });
 
-  const gridWidth = createMemo(() =>
-    visibleColumns().reduce(
-      (acc, column) => acc + (columnWidths()[column.key] ?? DEFAULT_COLUMN_WIDTH),
+  const gridWidth = createMemo(() => {
+    const widths = columnWidths();
+    return visibleColumns().reduce(
+      (acc, column) => acc + (widths[column.key] ?? DEFAULT_COLUMN_WIDTH),
       selectable() ? SELECTION_COLUMN_WIDTH : 0
-    )
-  );
+    );
+  });
 
   createEffect(() => {
     if (hydratedPersistence()) return;

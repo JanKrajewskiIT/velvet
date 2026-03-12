@@ -4,22 +4,14 @@ import type Props from '~/models/Props';
 
 import styles from './Checkbox.module.css';
 
-interface CheckboxOwnProps extends Omit<
-  JSX.InputHTMLAttributes<HTMLInputElement>,
-  'type'
-> {
+interface CheckboxOwnProps extends Omit<JSX.InputHTMLAttributes<HTMLInputElement>, 'type'> {
   label?: JSX.Element;
   description?: JSX.Element;
 }
 
 const Checkbox = (props: Props<CheckboxOwnProps>) => {
   const generatedId = createUniqueId();
-  const [local, rest] = splitProps(props, [
-    'label',
-    'description',
-    'class',
-    'id',
-  ]);
+  const [local, rest] = splitProps(props, ['label', 'description', 'class', 'id']);
 
   const inputId = () => local.id ?? generatedId;
 

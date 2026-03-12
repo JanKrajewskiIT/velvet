@@ -14,9 +14,7 @@ interface StatCardProps {
 
 const StatCard = (props: Props<StatCardProps>) => {
   return (
-    <div
-      class={`${styles.card} ${props.colorClass ? (styles[props.colorClass] ?? '') : ''} ${props.class ?? ''}`}
-    >
+    <div class={`${styles.card} ${props.colorClass ? (styles[props.colorClass] ?? '') : ''} ${props.class ?? ''}`}>
       <Show when={props.icon}>
         <div class={styles.icon}>{props.icon}</div>
       </Show>

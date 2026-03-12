@@ -9,9 +9,7 @@ interface FormGridProps {
 }
 
 const FormGrid = (props: Props<FormGridProps>) => {
-  return (
-    <div class={`${styles.grid} ${props.class ?? ''}`}>{props.children}</div>
-  );
+  return <div class={`${styles.grid} ${props.class ?? ''}`}>{props.children}</div>;
 };
 
 export default FormGrid;

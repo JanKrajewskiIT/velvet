@@ -17,13 +17,7 @@ export const solidMarkdownOptimizeDeps = {
 
 export function createSolidAppViteConfig(
   userConfig = {},
-  {
-    alias = '~',
-    srcDir = 'src',
-    port = null,
-    includeSolidMarkdownDeps = true,
-    solidPluginOptions = undefined,
-  } = {}
+  { alias = '~', srcDir = 'src', port = null, includeSolidMarkdownDeps = true, solidPluginOptions = undefined } = {}
 ) {
   const baseConfig = {
     plugins: [solid(solidPluginOptions)],
@@ -34,9 +28,7 @@ export function createSolidAppViteConfig(
           },
         }
       : undefined,
-    optimizeDeps: includeSolidMarkdownDeps
-      ? solidMarkdownOptimizeDeps
-      : undefined,
+    optimizeDeps: includeSolidMarkdownDeps ? solidMarkdownOptimizeDeps : undefined,
     server: port ? { port } : undefined,
     preview: port ? { port } : undefined,
   };

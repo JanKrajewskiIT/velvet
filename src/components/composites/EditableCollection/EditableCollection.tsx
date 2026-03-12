@@ -15,10 +15,7 @@ export interface EditableCollectionRenderContext {
 export interface EditableCollectionProps<T> {
   items: readonly T[];
   getId: (item: T) => string;
-  renderItem: (
-    item: T,
-    context: EditableCollectionRenderContext
-  ) => JSX.Element;
+  renderItem: (item: T, context: EditableCollectionRenderContext) => JSX.Element;
   onAdd: () => void;
   onRemove: (id: string) => void;
   addLabel: string;

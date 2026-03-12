@@ -9,9 +9,7 @@ interface DialogBodyProps {
 }
 
 const DialogBody = (props: Props<DialogBodyProps>) => {
-  return (
-    <div class={`${styles.body} ${props.class ?? ''}`}>{props.children}</div>
-  );
+  return <div class={`${styles.body} ${props.class ?? ''}`}>{props.children}</div>;
 };
 
 export default DialogBody;

@@ -27,10 +27,7 @@ const Timeline = (props: Props<TimelineProps>) => {
         )}
       </For>
       {props.trailing && (
-        <div
-          class={styles.addRow}
-          style={{ '--item-count': props.items.length }}
-        >
+        <div class={styles.addRow} style={{ '--item-count': props.items.length }}>
           <span class={styles.addDot} />
           {props.trailing}
         </div>

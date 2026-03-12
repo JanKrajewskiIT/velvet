@@ -9,9 +9,7 @@ interface FormLayoutProps {
 }
 
 const FormLayout = (props: Props<FormLayoutProps>) => {
-  return (
-    <div class={`${styles.form} ${props.class ?? ''}`}>{props.children}</div>
-  );
+  return <div class={`${styles.form} ${props.class ?? ''}`}>{props.children}</div>;
 };
 
 export default FormLayout;

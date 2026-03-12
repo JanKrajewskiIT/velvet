@@ -43,7 +43,7 @@ const PACKAGE_DATA: PackageRow[] = [
 ];
 
 const DATA_GRID_ROWS: PackageRow[] = Array.from({ length: 2500 }, (_, index) => {
-  const base = PACKAGE_DATA[index % PACKAGE_DATA.length];
+  const base = PACKAGE_DATA[index % PACKAGE_DATA.length] as PackageRow;
   return {
     ...base,
     id: `${base.id}-${index + 1}`,

@@ -81,7 +81,7 @@ const TimePicker = (props: Props<TimePickerProps>) => {
     close();
   };
 
-  const optionClass = (): string => styles.option;
+  const optionClass = (): string => styles.option ?? '';
 
   return (
     <div ref={wrapperRef} class={`${styles.wrapper} ${props.class ?? ''}`}>

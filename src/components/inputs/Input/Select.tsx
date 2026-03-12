@@ -86,7 +86,8 @@ const Select = (props: Props<SelectOwnProps>) => {
     const currentIndex = enabledOptions.findIndex((option) => option.value === currentValue());
     const startIndex = currentIndex === -1 ? (direction === 1 ? -1 : 0) : currentIndex;
     const nextIndex = (startIndex + direction + enabledOptions.length) % enabledOptions.length;
-    selectValue(enabledOptions[nextIndex].value);
+    const next = enabledOptions[nextIndex];
+    if (next) selectValue(next.value);
   };
 
   const handleTriggerKeyDown = (e: KeyboardEvent) => {

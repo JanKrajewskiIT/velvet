@@ -21,10 +21,12 @@ const CopyButton = (props: Props<CopyButtonProps>) => {
   let timeoutId: ReturnType<typeof setTimeout> | undefined;
 
   const handleClick = () => {
-    void navigator.clipboard.writeText(props.text).then(() => {
+    const timeout = props.timeout ?? 2000;
+    const text = props.text;
+    void navigator.clipboard.writeText(text).then(() => {
       setCopied(true);
       clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => setCopied(false), props.timeout ?? 2000);
+      timeoutId = setTimeout(() => setCopied(false), timeout);
     });
   };
 

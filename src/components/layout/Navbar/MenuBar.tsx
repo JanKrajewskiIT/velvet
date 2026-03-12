@@ -15,15 +15,10 @@ interface MenuBarProps {
 
 const MenuBar = (props: Props<MenuBarProps>) => {
   return (
-    <nav
-      class={`${styles.menuBar} ${props.class ?? ''}`}
-      aria-label={props.navLabel}
-    >
+    <nav class={`${styles.menuBar} ${props.class ?? ''}`} aria-label={props.navLabel}>
       <ul class={styles.menuList}>
         <For each={props.items}>
-          {(item, index) => (
-            <MenuItem item={item} isActive={props.activeIndex === index()} />
-          )}
+          {(item, index) => <MenuItem item={item} isActive={props.activeIndex === index()} />}
         </For>
         <MenuIndicator offset={props.activeIndex} />
       </ul>

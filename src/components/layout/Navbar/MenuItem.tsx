@@ -12,14 +12,8 @@ interface MenuItemProps {
 
 const MenuItem = (props: Props<MenuItemProps>) => {
   return (
-    <li
-      class={`${styles.menuItem} ${props.isActive ? styles.active : ''} ${props.class ?? ''}`}
-    >
-      <A
-        href={props.item.href}
-        aria-label={props.item.label}
-        class={styles.menuItemLink}
-      >
+    <li class={`${styles.menuItem} ${props.isActive ? styles.active : ''} ${props.class ?? ''}`}>
+      <A href={props.item.href} aria-label={props.item.label} class={styles.menuItemLink}>
         <props.item.icon class={styles.menuIcon} />
       </A>
       <span class={styles.tooltip}>{props.item.label}</span>

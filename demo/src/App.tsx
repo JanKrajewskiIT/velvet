@@ -91,7 +91,7 @@ const NAV_GROUPS: NavGroup[] = [
       { id: 'data-content', label: 'Content & code' },
       { id: 'data-lists', label: 'Lists' },
       { id: 'data-tree', label: 'Tree' },
-      { id: 'data-cards', label: 'Cards & collapsible' },
+      { id: 'data-cards', label: 'Accordion & collapsible' },
       { id: 'data-media', label: 'Media & galleries' },
       { id: 'data-charts', label: 'Charts' },
       { id: 'data-tables', label: 'Tables & pagination' },
@@ -172,9 +172,9 @@ const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
       'Kbd, CodeBlock, MarkdownRenderer and MarkdownEditDialog for documentation, code snippets and markdown editing.',
   },
   'data-cards': {
-    title: 'Data Display · Cards & collapsible',
+    title: 'Data Display · Accordion & collapsible',
     description:
-      'Accordion, SectionCard, Collapsible, DataCard and FlipCard for grouped, collapsible and interactive card layouts.',
+      'Accordion and Collapsible for progressive disclosure and grouped content. Cards are in Layout utilities.',
   },
   'data-media': {
     title: 'Data Display · Media & galleries',
@@ -219,8 +219,8 @@ const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
     description: 'BottomNav for mobile navigation bars and BackToTop for long-scrolling layouts.',
   },
   'feedback-badges-chips': {
-    title: 'Feedback · Badges, chips & stats',
-    description: 'Badge, Chip, TagChip and StatCard for status, filters and compact KPI summaries.',
+    title: 'Feedback · Badges & chips',
+    description: 'Badge, Chip and TagChip for status, filters and tags. StatCard is in Layout utilities.',
   },
   'feedback-progress': {
     title: 'Feedback · Progress & loading',
@@ -261,7 +261,7 @@ const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
   },
   'layout-sidebar': {
     title: 'Layout & Navigation · Layout utilities',
-    description: 'Grid, Stack, ResizablePanel and Divider for composition-friendly layouts.',
+    description: 'Cards, Grid, Stack, ResizablePanel and Divider for composition-friendly layouts.',
   },
   'composites-lists': {
     title: 'Composites & Flows · Transfer, editable & kanban',

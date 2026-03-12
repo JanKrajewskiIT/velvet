@@ -1,5 +1,5 @@
 import { FiChevronLeft, FiChevronRight } from 'solid-icons/fi';
-import { createEffect, createMemo, createSignal, For, Show, splitProps } from 'solid-js';
+import { createEffect, createMemo, createSignal, For, type JSX, Show, splitProps } from 'solid-js';
 
 import useEscapeKey from '~/hooks/useEscapeKey';
 import type Props from '~/models/Props';
@@ -269,7 +269,7 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
     const descriptionValue = draftDescription().trim();
 
     const nextEvent: SchedulerEvent = {
-      id: typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `event-${Date.now()}`,
+      id: typeof crypto !== 'undefined' ? crypto.randomUUID() : `event-${Date.now()}`,
       title,
       date: selectedDate(),
       endDate: normalizedEndDate,

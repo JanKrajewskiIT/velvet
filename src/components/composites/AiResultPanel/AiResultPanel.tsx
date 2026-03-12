@@ -88,9 +88,7 @@ const AiResultPanel = (props: Props<AiResultPanelProps>) => {
                     {section.title}
                   </h4>
                   <ul class={styles.list}>
-                    <For each={section.items}>
-                      {(item) => <li class={styles.listItem}>{item}</li>}
-                    </For>
+                    <For each={section.items}>{(item) => <li class={styles.listItem}>{item}</li>}</For>
                   </ul>
                 </div>
               </Show>
@@ -105,13 +103,7 @@ const AiResultPanel = (props: Props<AiResultPanelProps>) => {
         </div>
       </Show>
 
-      <Show
-        when={
-          !props.isPending && !props.hasResult && !props.hasError && props.idle
-        }
-      >
-        {props.idle}
-      </Show>
+      <Show when={!props.isPending && !props.hasResult && !props.hasError && props.idle}>{props.idle}</Show>
     </div>
   );
 };

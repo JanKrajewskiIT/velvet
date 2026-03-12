@@ -8,23 +8,14 @@ import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
 import simpleImportSortPlugin from 'eslint-plugin-simple-import-sort';
 import unusedImportsPlugin from 'eslint-plugin-unused-imports';
 
-export function createEslintConfig({
-  tsconfigRootDir,
-  ignorePaths = [],
-}) {
+export function createEslintConfig({ tsconfigRootDir, ignorePaths = [] }) {
   return defineConfig([
     eslint.configs.recommended,
     jsxA11yPlugin.flatConfigs.recommended,
     ...tseslint.configs.strictTypeChecked,
     solidPlugin,
     prettier,
-    globalIgnores([
-      'dist',
-      '**/vite-env.d.ts',
-      '**/*.d.ts',
-      'vite.config.ts',
-      ...ignorePaths,
-    ]),
+    globalIgnores(['dist', '**/vite-env.d.ts', '**/*.d.ts', 'vite.config.ts', ...ignorePaths]),
     {
       ignores: ['**/*.mjs', '**/*.mts'],
     },

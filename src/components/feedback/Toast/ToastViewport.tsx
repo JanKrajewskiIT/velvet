@@ -11,18 +11,10 @@ interface ToastViewportBaseProps {
 
 const ToastViewport = (props: Props<ToastViewportBaseProps>) => {
   return (
-    <div
-      class={`${styles.toastContainer} ${props.class ?? ''}`}
-      role="region"
-      aria-live="polite"
-      aria-atomic="false"
-    >
+    <div class={`${styles.toastContainer} ${props.class ?? ''}`} role="region" aria-live="polite" aria-atomic="false">
       <For each={toasts()}>
         {(toast) => (
-          <div
-            class={`${styles.toast} ${styles[toast.type]}`}
-            role={toast.type === 'error' ? 'alert' : 'status'}
-          >
+          <div class={`${styles.toast} ${styles[toast.type]}`} role={toast.type === 'error' ? 'alert' : 'status'}>
             <div class={styles.message}>{toast.message}</div>
             <button
               type="button"

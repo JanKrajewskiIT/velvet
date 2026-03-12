@@ -33,6 +33,7 @@ export { default as Accordion } from './components/data-display/Accordion/Accord
 export { default as AccordionItem } from './components/data-display/Accordion/AccordionItem';
 export { default as Avatar } from './components/data-display/Avatar/Avatar';
 export { default as AvatarGroup } from './components/data-display/Avatar/AvatarGroup';
+export { default as Card } from './components/data-display/Card/Card';
 export { default as Carousel } from './components/data-display/Carousel/Carousel';
 export { default as CodeBlock } from './components/data-display/CodeBlock/CodeBlock';
 export { default as Collapsible } from './components/data-display/Collapsible/Collapsible';

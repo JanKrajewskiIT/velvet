@@ -4,10 +4,7 @@ import type Props from '~/models/Props';
 
 import styles from './Switch.module.css';
 
-interface SwitchOwnProps extends Omit<
-  JSX.ButtonHTMLAttributes<HTMLButtonElement>,
-  'type' | 'onChange'
-> {
+interface SwitchOwnProps extends Omit<JSX.ButtonHTMLAttributes<HTMLButtonElement>, 'type' | 'onChange'> {
   checked: boolean;
   onChange: (checked: boolean) => void;
   label?: JSX.Element;
@@ -15,14 +12,7 @@ interface SwitchOwnProps extends Omit<
 }
 
 const Switch = (props: Props<SwitchOwnProps>) => {
-  const [local, rest] = splitProps(props, [
-    'checked',
-    'onChange',
-    'label',
-    'description',
-    'class',
-    'disabled',
-  ]);
+  const [local, rest] = splitProps(props, ['checked', 'onChange', 'label', 'description', 'class', 'disabled']);
 
   return (
     <div class={`${styles.wrapper} ${local.class ?? ''}`}>

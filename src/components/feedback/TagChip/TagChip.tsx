@@ -13,8 +13,7 @@ interface TagChipProps {
 }
 
 const TagChip = (props: Props<TagChipProps>) => {
-  const classNames = () =>
-    `${styles.chip} ${props.selected ? styles.selected : ''} ${props.class ?? ''}`;
+  const classNames = () => `${styles.chip} ${props.selected ? styles.selected : ''} ${props.class ?? ''}`;
 
   const inlineStyles = () => ({
     'border-color': props.color,
@@ -31,12 +30,7 @@ const TagChip = (props: Props<TagChipProps>) => {
         </span>
       }
     >
-      <button
-        type="button"
-        class={classNames()}
-        style={inlineStyles()}
-        onClick={() => props.onClick?.()}
-      >
+      <button type="button" class={classNames()} style={inlineStyles()} onClick={() => props.onClick?.()}>
         {props.label}
       </button>
     </Show>

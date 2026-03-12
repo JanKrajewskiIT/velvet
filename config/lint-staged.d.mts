@@ -5,9 +5,7 @@ export interface CreateLintStagedConfigOptions {
 
 export type LintStagedConfig = Record<string, string[]>;
 
-export declare function createLintStagedConfig(
-  options?: CreateLintStagedConfigOptions
-): LintStagedConfig;
+export declare function createLintStagedConfig(options?: CreateLintStagedConfigOptions): LintStagedConfig;
 
 export declare const lintStagedConfig: LintStagedConfig;
 

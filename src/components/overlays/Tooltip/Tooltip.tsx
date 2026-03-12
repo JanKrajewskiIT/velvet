@@ -1,11 +1,4 @@
-import {
-  createSignal,
-  createUniqueId,
-  type JSX,
-  onCleanup,
-  Show,
-  splitProps,
-} from 'solid-js';
+import { createSignal, createUniqueId, type JSX, onCleanup, Show, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
 
@@ -19,13 +12,7 @@ interface TooltipOwnProps extends JSX.HTMLAttributes<HTMLDivElement> {
 
 const Tooltip = (props: Props<TooltipOwnProps>) => {
   const tooltipId = createUniqueId();
-  const [local, rest] = splitProps(props, [
-    'content',
-    'position',
-    'delay',
-    'children',
-    'class',
-  ]);
+  const [local, rest] = splitProps(props, ['content', 'position', 'delay', 'children', 'class']);
   const [isVisible, setIsVisible] = createSignal(false);
   let timer: ReturnType<typeof setTimeout> | undefined;
 
@@ -55,11 +42,7 @@ const Tooltip = (props: Props<TooltipOwnProps>) => {
     >
       {local.children}
       <Show when={isVisible()}>
-        <div
-          id={tooltipId}
-          role="tooltip"
-          class={`${styles.tooltipContent} ${styles[local.position || 'top']}`}
-        >
+        <div id={tooltipId} role="tooltip" class={`${styles.tooltipContent} ${styles[local.position || 'top']}`}>
           {local.content}
         </div>
       </Show>

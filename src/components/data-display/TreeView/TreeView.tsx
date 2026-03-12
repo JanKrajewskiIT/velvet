@@ -1,5 +1,5 @@
 import { IoChevronForward } from 'solid-icons/io';
-import { createEffect, createMemo, createSignal, For, type JSX, Show } from 'solid-js';
+import { createEffect, createMemo, createSignal, For, type JSX, Show, untrack } from 'solid-js';
 
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
@@ -246,7 +246,7 @@ const TreeItem = (props: TreeItemProps) => {
 };
 
 const TreeView = (props: Props<TreeViewProps>) => {
-  const [treeData, setTreeData] = createSignal<TreeNode[]>(cloneNodes(props.nodes));
+  const [treeData, setTreeData] = createSignal<TreeNode[]>(untrack(() => cloneNodes(props.nodes)));
   const [expanded, setExpanded] = createSignal<Set<string>>(new Set(props.defaultExpanded ?? []));
   const [loadingIds, setLoadingIds] = createSignal<Set<string>>(new Set());
   const [draggingId, setDraggingId] = createSignal<string | null>(null);
@@ -412,7 +412,9 @@ const TreeView = (props: Props<TreeViewProps>) => {
     if (!props.draggable) return;
     setDraggingId(id);
     event.dataTransfer?.setData('text/plain', id);
-    event.dataTransfer?.setDragImage((event.target as Element) ?? new Image(), 8, 8);
+    if (event.currentTarget instanceof Element) {
+      event.dataTransfer?.setDragImage(event.currentTarget, 8, 8);
+    }
   };
 
   const handleDragOver = (id: string, event: DragEvent) => {

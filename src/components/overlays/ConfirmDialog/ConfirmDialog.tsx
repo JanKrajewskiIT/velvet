@@ -27,9 +27,7 @@ const ConfirmDialog = (props: Props<ConfirmDialogProps>) => {
     <Dialog open={props.open} onClose={props.onClose} class={props.class}>
       <DialogTitle>{props.title}</DialogTitle>
       <DialogBody>
-        <div
-          class={`${styles.iconWrapper} ${isDanger() ? styles.iconDanger : styles.iconPrimary}`}
-        >
+        <div class={`${styles.iconWrapper} ${isDanger() ? styles.iconDanger : styles.iconPrimary}`}>
           {isDanger() ? <FiAlertTriangle /> : <FiHelpCircle />}
         </div>
         <p class={styles.message}>{props.message}</p>
@@ -38,10 +36,7 @@ const ConfirmDialog = (props: Props<ConfirmDialogProps>) => {
         <Button variant="ghost" onClick={() => props.onClose()}>
           {props.cancelLabel}
         </Button>
-        <Button
-          variant={props.variant ?? 'primary'}
-          onClick={() => props.onConfirm()}
-        >
+        <Button variant={props.variant ?? 'primary'} onClick={() => props.onConfirm()}>
           {props.confirmLabel}
         </Button>
       </DialogActions>

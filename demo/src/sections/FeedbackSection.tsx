@@ -18,19 +18,9 @@ import {
   Progress,
   Skeleton,
   Spinner,
-  StatCard,
   TagChip,
 } from '@jankrajewskiit/ui';
-import {
-  IoAlertCircle,
-  IoCheckmarkCircle,
-  IoFolder,
-  IoMail,
-  IoNotifications,
-  IoPeople,
-  IoSearch,
-  IoStatsChart,
-} from 'solid-icons/io';
+import { IoFolder, IoMail, IoNotifications, IoSearch } from 'solid-icons/io';
 import { createSignal, Show } from 'solid-js';
 
 import type { SectionId } from '../App';
@@ -111,15 +101,6 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
               <TagChip label="clickable" color="#ed6c02" onClick={() => {}} />
             </div>
           </PreviewPanel>
-        </ShowcaseSection>
-
-        <ShowcaseSection title="StatCard" subtitle="Compact KPI cards">
-          <div class="grid-cards">
-            <StatCard value="1 284" label="Active users" icon={<IoPeople />} colorClass="info" />
-            <StatCard value="98.7%" label="Uptime" icon={<IoCheckmarkCircle />} colorClass="success" />
-            <StatCard value="3" label="Open issues" icon={<IoAlertCircle />} colorClass="warning" />
-            <StatCard value="42" label="Deployments" icon={<IoStatsChart />} colorClass="error" />
-          </div>
         </ShowcaseSection>
       </Show>
 

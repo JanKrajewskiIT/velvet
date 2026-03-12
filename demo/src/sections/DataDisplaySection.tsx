@@ -9,8 +9,6 @@ import {
   Carousel,
   CodeBlock,
   Collapsible,
-  DataCard,
-  FlipCard,
   ImageGrid,
   type ImageGridItem,
   Kbd,
@@ -21,7 +19,6 @@ import {
   Marquee,
   RadarChart,
   ScoreRing,
-  SectionCard,
   TradingViewChart,
   type TradingViewChartPoint,
   type TreeNode,
@@ -346,17 +343,6 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="SectionCard" subtitle="Collapsible card for grouped settings">
-          <PreviewPanel class="col">
-            <SectionCard title="Details" defaultOpen>
-              <p class="muted-text">Collapsible section card that starts open.</p>
-            </SectionCard>
-            <SectionCard title="Advanced options">
-              <p class="muted-text">Collapsed by default.</p>
-            </SectionCard>
-          </PreviewPanel>
-        </ShowcaseSection>
-
         <ShowcaseSection title="Collapsible" subtitle="Simple expand and collapse">
           <PreviewPanel class="col">
             <Collapsible
@@ -375,53 +361,6 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
               </p>
             </Collapsible>
           </PreviewPanel>
-        </ShowcaseSection>
-
-        <ShowcaseSection title="DataCard" subtitle="Versatile content container with media and actions">
-          <PreviewPanel>
-            <div class="row">
-              <DataCard
-                variant="elevated"
-                header={<strong>Project Overview</strong>}
-                footer={<Button variant="primary">View details</Button>}
-              >
-                <p class="muted-text">A summary of the current project status and recent activity.</p>
-              </DataCard>
-              <DataCard variant="outlined" hoverable>
-                <p class="muted-text">An outlined hoverable card without header or footer.</p>
-              </DataCard>
-            </div>
-          </PreviewPanel>
-        </ShowcaseSection>
-
-        <ShowcaseSection title="FlipCard" subtitle="Interactive front/back card">
-          <PreviewPanel>
-            <div class="flip-card-grid">
-              <FlipCard
-                width="220px"
-                height="140px"
-                front={
-                  <div class="flip-card-face">
-                    <strong class="flip-card-title">VelvetUI</strong>
-                    <span class="flip-card-hint">Click to flip</span>
-                  </div>
-                }
-                back={
-                  <div class="flip-card-back">
-                    <strong>SolidJS plus Vite</strong>
-                    <span class="flip-card-hint">TypeScript and CSS Modules</span>
-                  </div>
-                }
-              />
-              <FlipCard
-                width="220px"
-                height="140px"
-                front={<div class="flip-card-face">UI System</div>}
-                back={<div class="flip-card-simple">Dark and light theme</div>}
-              />
-            </div>
-          </PreviewPanel>
-          <ShowcaseMeta>Click a card to flip it.</ShowcaseMeta>
         </ShowcaseSection>
       </Show>
 

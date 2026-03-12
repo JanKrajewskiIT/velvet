@@ -1,12 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import {
-  emptyToNull,
-  numberToString,
-  orEmpty,
-  parseFloatOrNull,
-} from '../src/utils/form.js';
+import { emptyToNull, numberToString, orEmpty, parseFloatOrNull } from '../src/utils/form.js';
 
 void test('orEmpty returns empty string for nullish values', () => {
   assert.equal(orEmpty(undefined), '');

@@ -15,11 +15,7 @@ const ActionRow = (props: Props<ActionRowProps>) => {
     return styles[a] ?? '';
   };
 
-  return (
-    <div class={`${styles.row} ${alignClass()} ${props.class ?? ''}`}>
-      {props.children}
-    </div>
-  );
+  return <div class={`${styles.row} ${alignClass()} ${props.class ?? ''}`}>{props.children}</div>;
 };
 
 export default ActionRow;

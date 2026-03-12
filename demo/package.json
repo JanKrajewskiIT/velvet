@@ -7,9 +7,15 @@
     "node": ">=20"
   },
   "scripts": {
-    "dev": "vite --force",
+    "prepublishOnly": "npm run verify",
     "build": "tsc -b && vite build",
     "typecheck": "tsc -b",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint:css": "stylelint \"src/**/*.css\"",
+    "lint:css:fix": "stylelint \"src/**/*.css\" --fix",
     "preview": "vite preview"
   },
   "dependencies": {

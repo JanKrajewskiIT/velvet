@@ -1,5 +1,9 @@
 import {
+  Button,
+  Card,
+  DataCard,
   Divider,
+  FlipCard,
   Footer,
   Grid,
   LocaleSwitcher,
@@ -7,14 +11,27 @@ import {
   Navbar,
   type NavItem,
   ResizablePanel,
+  SectionCard,
   Sidebar,
   type SidebarItem,
   Stack,
+  StatCard,
   ThemeToggle,
 } from '@jankrajewskiit/ui';
 import { BiLogosReact } from 'solid-icons/bi';
 import { FaSolidQuestion } from 'solid-icons/fa';
-import { IoCalendar, IoDocumentText, IoFolder, IoHome, IoPersonCircle, IoSettings } from 'solid-icons/io';
+import {
+  IoAlertCircle,
+  IoCalendar,
+  IoCheckmarkCircle,
+  IoDocumentText,
+  IoFolder,
+  IoHome,
+  IoPeople,
+  IoPersonCircle,
+  IoSettings,
+  IoStatsChart,
+} from 'solid-icons/io';
 import { OcPerson2 } from 'solid-icons/oc';
 import { createSignal, Show } from 'solid-js';
 
@@ -178,6 +195,70 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
       </Show>
 
       <Show when={sectionId() === 'layout-sidebar'}>
+        <ShowcaseSection title="Cards" subtitle="Basic and specialized card components">
+          <PreviewPanel>
+            <div class="row">
+              <Card>
+                <p class="muted-text">Basic card with border. Use as a simple content container.</p>
+              </Card>
+              <Card />
+              <DataCard
+                variant="elevated"
+                header={<strong>Project Overview</strong>}
+                footer={<Button variant="primary">View details</Button>}
+              >
+                <p class="muted-text">DataCard with header, body and footer slots.</p>
+              </DataCard>
+              <DataCard variant="outlined" hoverable>
+                <p class="muted-text">Outlined hoverable DataCard.</p>
+              </DataCard>
+            </div>
+            <div class="col" style={{ 'margin-top': 'var(--spacing-lg)' }}>
+              <SectionCard title="Details" defaultOpen>
+                <p class="muted-text">Collapsible SectionCard for grouped settings.</p>
+              </SectionCard>
+              <SectionCard title="Advanced options">
+                <p class="muted-text">Collapsed by default.</p>
+              </SectionCard>
+            </div>
+            <div class="flip-card-grid" style={{ 'margin-top': 'var(--spacing-lg)' }}>
+              <FlipCard
+                width="220px"
+                height="140px"
+                front={
+                  <div class="flip-card-face">
+                    <strong class="flip-card-title">VelvetUI</strong>
+                    <span class="flip-card-hint">Click to flip</span>
+                  </div>
+                }
+                back={
+                  <div class="flip-card-back">
+                    <strong>SolidJS plus Vite</strong>
+                    <span class="flip-card-hint">TypeScript and CSS Modules</span>
+                  </div>
+                }
+              />
+              <FlipCard
+                width="220px"
+                height="140px"
+                front={<div class="flip-card-face">UI System</div>}
+                back={<div class="flip-card-simple">Dark and light theme</div>}
+              />
+            </div>
+            <div class="grid-cards" style={{ 'margin-top': 'var(--spacing-lg)' }}>
+              <StatCard value="1 284" label="Active users" icon={<IoPeople />} colorClass="info" />
+              <StatCard value="98.7%" label="Uptime" icon={<IoCheckmarkCircle />} colorClass="success" />
+              <StatCard value="3" label="Open issues" icon={<IoAlertCircle />} colorClass="warning" />
+              <StatCard value="42" label="Deployments" icon={<IoStatsChart />} colorClass="error" />
+            </div>
+          </PreviewPanel>
+          <ShowcaseMeta>
+            <span class="code-inline">Card</span> – basic bordered container. <span class="code-inline">DataCard</span>,{' '}
+            <span class="code-inline">SectionCard</span>, <span class="code-inline">FlipCard</span> and{' '}
+            <span class="code-inline">StatCard</span> for richer layouts.
+          </ShowcaseMeta>
+        </ShowcaseSection>
+
         <ShowcaseSection title="Grid" subtitle="Responsive multi-column primitive">
           <PreviewPanel class="col">
             <Grid columns={3} gap="sm">

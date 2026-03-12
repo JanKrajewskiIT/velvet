@@ -38,17 +38,12 @@ const RequireAuth = (props: Props<RequireAuthProps>) => {
   });
 
   return (
-    <Show
-      when={!props.isLoading}
-      fallback={props.loadingFallback ?? <LoadingContainer />}
-    >
+    <Show when={!props.isLoading} fallback={props.loadingFallback ?? <LoadingContainer />}>
       <Show
         when={props.isAuthenticated}
         fallback={
           props.unauthenticatedFallback ??
-          (props.onUnauthenticated ? (
-            <AuthRedirect onRedirect={props.onUnauthenticated} />
-          ) : null)
+          (props.onUnauthenticated ? <AuthRedirect onRedirect={props.onUnauthenticated} /> : null)
         }
       >
         <Show
@@ -57,10 +52,7 @@ const RequireAuth = (props: Props<RequireAuthProps>) => {
             props.accessDeniedFallback ?? (
               <AccessDenied
                 title={props.accessDeniedTitle ?? 'Access denied'}
-                description={
-                  props.accessDeniedDescription ??
-                  'You do not have permission to view this page.'
-                }
+                description={props.accessDeniedDescription ?? 'You do not have permission to view this page.'}
                 goHomeLabel={props.accessDeniedGoHomeLabel ?? 'Go home'}
                 goHomeHref={props.accessDeniedGoHomeHref}
               />
