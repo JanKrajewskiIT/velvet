@@ -13,7 +13,7 @@ interface CollapsibleProps {
 const Collapsible = (props: ParentProps<Props<CollapsibleProps>>) => {
   return (
     <div class={`${styles.wrapper} ${props.class ?? ''}`}>
-      <button class={styles.trigger} onClick={() => props.onToggle()} aria-expanded={props.open}>
+      <button type="button" class={styles.trigger} onClick={() => props.onToggle()} aria-expanded={props.open}>
         {props.trigger}
       </button>
       <div class={`${styles.content} ${props.open ? styles.contentOpen : ''}`}>

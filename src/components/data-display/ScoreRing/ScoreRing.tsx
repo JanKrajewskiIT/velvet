@@ -8,11 +8,12 @@ interface ScoreRingProps {
 
 const ScoreRing = (props: Props<ScoreRingProps>) => {
   const circumference = 2 * Math.PI * 40;
-  const offset = () => circumference - (props.score / 100) * circumference;
+  const normalized = () => Math.min(100, Math.max(0, props.score));
+  const offset = () => circumference - (normalized() / 100) * circumference;
   const color = () => {
-    if (props.score >= 86) return 'var(--color-success)';
-    if (props.score >= 71) return 'var(--color-primary)';
-    if (props.score >= 51) return 'var(--color-warning)';
+    if (normalized() >= 86) return 'var(--color-success)';
+    if (normalized() >= 71) return 'var(--color-primary)';
+    if (normalized() >= 51) return 'var(--color-warning)';
     return 'var(--color-error)';
   };
 
@@ -21,19 +22,12 @@ const ScoreRing = (props: Props<ScoreRingProps>) => {
       class={`${styles.scoreRing} ${props.class ?? ''}`}
       style={{ '--ring-circumference': String(circumference) }}
       role="meter"
-      aria-valuenow={props.score}
+      aria-valuenow={normalized()}
       aria-valuemin={0}
       aria-valuemax={100}
     >
       <svg viewBox="0 0 100 100" class={styles.scoreSvg}>
-        <circle
-          cx="50"
-          cy="50"
-          r="40"
-          fill="none"
-          stroke="var(--color-border)"
-          stroke-width="8"
-        />
+        <circle cx="50" cy="50" r="40" fill="none" stroke="var(--color-border)" stroke-width="8" />
         <circle
           cx="50"
           cy="50"
@@ -50,7 +44,7 @@ const ScoreRing = (props: Props<ScoreRingProps>) => {
         />
       </svg>
       <span class={styles.scoreText} style={{ color: color() }}>
-        {props.score}%
+        {normalized()}%
       </span>
     </div>
   );

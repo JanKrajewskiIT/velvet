@@ -3,6 +3,7 @@ import { Portal } from 'solid-js/web';
 
 import type Props from '~/models/Props';
 
+import useFocusTrap from '../../../hooks/useFocusTrap';
 import styles from './Dialog.module.css';
 
 interface DialogProps {
@@ -15,10 +16,20 @@ const Dialog = (props: Props<DialogProps>) => {
   let dialogRef: HTMLDialogElement | undefined;
   const titleId = createUniqueId();
 
+  useFocusTrap(
+    () => dialogRef,
+    () => props.open
+  );
+
   const handleClick = (e: MouseEvent) => {
     if (e.target === dialogRef) {
       props.onClose();
     }
+  };
+
+  const handleCancel: JSX.EventHandler<HTMLDialogElement, Event> = (e) => {
+    e.preventDefault();
+    props.onClose();
   };
 
   createEffect(() => {
@@ -52,7 +63,7 @@ const Dialog = (props: Props<DialogProps>) => {
         class={`${styles.dialog} ${props.class ?? ''}`}
         aria-labelledby={titleId}
         data-dialog-title-id={titleId}
-        onClose={() => props.onClose()}
+        onCancel={handleCancel}
       >
         {props.children}
       </dialog>

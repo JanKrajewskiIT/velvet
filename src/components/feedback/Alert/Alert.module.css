@@ -88,6 +88,24 @@
   color: var(--color-error);
 }
 
+.danger {
+  background-color: var(--color-error-light);
+  border-left-color: var(--color-error);
+}
+
+.danger .icon {
+  color: var(--color-error);
+}
+
+.tip {
+  background-color: var(--color-primary-light);
+  border-left-color: var(--color-primary);
+}
+
+.tip .icon {
+  color: var(--color-primary);
+}
+
 @keyframes fadeInUp {
   from {
     opacity: 0;

@@ -17,7 +17,7 @@ const Carousel = (props: Props<CarouselProps>) => {
   const resolved = resolveChildren(() => props.children);
   const [activeIndex, setActiveIndex] = createSignal(0);
   const [hovered, setHovered] = createSignal(false);
-  let trackRef: HTMLDivElement | undefined;
+  const [trackRef, setTrackRef] = createSignal<HTMLDivElement | undefined>();
 
   const slides = () => {
     const c = resolved();
@@ -29,7 +29,8 @@ const Carousel = (props: Props<CarouselProps>) => {
     if (count === 0) return;
     const clamped = Math.max(0, Math.min(index, count - 1));
     setActiveIndex(clamped);
-    trackRef?.children[clamped]?.scrollIntoView({
+    const el = trackRef();
+    el?.children[clamped]?.scrollIntoView({
       behavior: 'smooth',
       block: 'nearest',
       inline: 'start',
@@ -53,6 +54,23 @@ const Carousel = (props: Props<CarouselProps>) => {
     onCleanup(() => clearInterval(timer));
   });
 
+  createEffect(() => {
+    const el = trackRef();
+    if (!el) return;
+
+    const syncFromScroll = () => {
+      const count = el.children.length;
+      if (count === 0) return;
+      const slideWidth = el.clientWidth;
+      const index = Math.round(el.scrollLeft / slideWidth);
+      const clamped = Math.max(0, Math.min(index, count - 1));
+      setActiveIndex(clamped);
+    };
+
+    el.addEventListener('scroll', syncFromScroll);
+    onCleanup(() => el.removeEventListener('scroll', syncFromScroll));
+  });
+
   const showArrows = () => props.showArrows ?? true;
   const showDots = () => props.showDots ?? true;
 
@@ -62,7 +80,7 @@ const Carousel = (props: Props<CarouselProps>) => {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <div class={styles.track} ref={trackRef}>
+      <div class={styles.track} ref={setTrackRef}>
         <For each={slides()}>{(slide) => <div class={styles.slide}>{slide}</div>}</For>
       </div>
 

@@ -1,4 +1,4 @@
-import { createSignal, For, type JSX, Show } from 'solid-js';
+import { createEffect, createSignal, For, type JSX, Show } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
 import type Props from '~/models/Props';
@@ -43,6 +43,58 @@ const ContextMenu = (props: Props<ContextMenuProps>) => {
     item.onClick();
   };
 
+  const getMenuItems = (): HTMLButtonElement[] =>
+    menuRef ? Array.from(menuRef.querySelectorAll<HTMLButtonElement>('button[role="menuitem"]:not(:disabled)')) : [];
+
+  const focusItemAt = (index: number) => {
+    const items = getMenuItems();
+    if (items.length === 0) return;
+    const clampedIndex = (index + items.length) % items.length;
+    items[clampedIndex]?.focus();
+  };
+
+  const handleMenuKeyDown: JSX.EventHandler<HTMLDivElement, KeyboardEvent> = (e) => {
+    const items = getMenuItems();
+    if (items.length === 0) return;
+    const current = document.activeElement as HTMLButtonElement | null;
+    const currentIndex = current ? items.indexOf(current) : -1;
+
+    switch (e.key) {
+      case 'ArrowDown': {
+        e.preventDefault();
+        focusItemAt(currentIndex + 1);
+        break;
+      }
+      case 'ArrowUp': {
+        e.preventDefault();
+        focusItemAt(currentIndex - 1);
+        break;
+      }
+      case 'Home': {
+        e.preventDefault();
+        focusItemAt(0);
+        break;
+      }
+      case 'End': {
+        e.preventDefault();
+        focusItemAt(items.length - 1);
+        break;
+      }
+      case 'Escape': {
+        e.preventDefault();
+        close();
+        break;
+      }
+    }
+  };
+
+  createEffect(() => {
+    if (!visible()) return;
+    requestAnimationFrame(() => {
+      focusItemAt(0);
+    });
+  });
+
   return (
     <div class={`${styles.wrapper} ${props.class ?? ''}`} onContextMenu={handleContextMenu}>
       {props.children}
@@ -51,19 +103,24 @@ const ContextMenu = (props: Props<ContextMenuProps>) => {
           <div
             ref={menuRef}
             class={styles.menu}
+            role="menu"
+            tabIndex={-1}
+            aria-orientation="vertical"
             style={{
               top: `${position().y}px`,
               left: `${position().x}px`,
               'transform-origin': '0 0',
             }}
+            onKeyDown={handleMenuKeyDown}
           >
             <For each={props.items}>
               {(item) => (
-                <Show when={item !== 'separator'} fallback={<div class={styles.separator} />}>
+                <Show when={item !== 'separator'} fallback={<div class={styles.separator} role="separator" />}>
                   <button
                     class={`${styles.item} ${(item as ContextMenuItem).danger ? styles.danger : ''} ${(item as ContextMenuItem).disabled ? styles.disabled : ''}`}
                     onClick={() => handleItemClick(item as ContextMenuItem)}
                     disabled={(item as ContextMenuItem).disabled}
+                    role="menuitem"
                   >
                     <Show when={(item as ContextMenuItem).icon}>
                       <span class={styles.icon}>{(item as ContextMenuItem).icon}</span>

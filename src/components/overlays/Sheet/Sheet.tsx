@@ -5,6 +5,7 @@ import { Portal } from 'solid-js/web';
 import type Props from '~/models/Props';
 
 import useEscapeKey from '../../../hooks/useEscapeKey';
+import useFocusTrap from '../../../hooks/useFocusTrap';
 import IconButton from '../../inputs/IconButton/IconButton';
 import styles from './Sheet.module.css';
 
@@ -20,6 +21,7 @@ interface SheetProps {
 
 const Sheet = (props: Props<SheetProps>) => {
   const [entered, setEntered] = createSignal(false);
+  const [panelRef, setPanelRef] = createSignal<HTMLElement | undefined>();
   const titleId = createUniqueId();
 
   const side = () => props.side ?? 'bottom';
@@ -29,6 +31,8 @@ const Sheet = (props: Props<SheetProps>) => {
     () => props.open,
     () => props.onClose()
   );
+
+  useFocusTrap(panelRef, () => props.open);
 
   createEffect(() => {
     if (!props.open) {
@@ -56,7 +60,13 @@ const Sheet = (props: Props<SheetProps>) => {
           aria-hidden="true"
           onClick={() => props.onClose()}
         />
-        <div class={panelClass()} role="dialog" aria-modal="true" aria-labelledby={props.title ? titleId : undefined}>
+        <div
+          ref={setPanelRef}
+          class={panelClass()}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={props.title ? titleId : undefined}
+        >
           <Show when={side() === 'bottom'}>
             <div class={styles.dragHandle} />
           </Show>

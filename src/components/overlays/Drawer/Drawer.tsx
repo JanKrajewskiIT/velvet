@@ -5,6 +5,7 @@ import { Portal } from 'solid-js/web';
 import type Props from '~/models/Props';
 
 import useEscapeKey from '../../../hooks/useEscapeKey';
+import useFocusTrap from '../../../hooks/useFocusTrap';
 import IconButton from '../../inputs/IconButton/IconButton';
 import styles from './Drawer.module.css';
 
@@ -21,11 +22,14 @@ interface DrawerProps {
 const Drawer = (props: Props<DrawerProps>) => {
   const [entered, setEntered] = createSignal(false);
   const titleId = createUniqueId();
+  const [drawerRef, setDrawerRef] = createSignal<HTMLElement | undefined>();
 
   useEscapeKey(
     () => props.open,
     () => props.onClose()
   );
+
+  useFocusTrap(drawerRef, () => props.open);
 
   createEffect(() => {
     if (!props.open) {
@@ -51,6 +55,7 @@ const Drawer = (props: Props<DrawerProps>) => {
           onClick={() => props.onClose()}
         />
         <div
+          ref={setDrawerRef}
           class={`${styles.drawer} ${entered() ? styles.drawerVisible : ''} ${props.class ?? ''}`}
           role="dialog"
           aria-modal="true"

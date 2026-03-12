@@ -43,25 +43,17 @@ const FileInput = (props: Props<FileInputOwnProps>) => {
     if (!props.disabled) fileInputRef.click();
   };
 
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      handleClick();
-    }
-  };
-
   const handleChange = () => {
     handleFiles(fileInputRef.files);
     fileInputRef.value = '';
   };
 
   return (
-    <div
-      role="button"
-      tabIndex={0}
+    <button
+      type="button"
       class={`${styles.dropZone} ${isDragging() ? styles.dragging : ''} ${props.disabled ? styles.disabled : ''} ${props.class ?? ''}`}
+      disabled={props.disabled}
       onClick={handleClick}
-      onKeyDown={handleKeyDown}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
@@ -86,7 +78,7 @@ const FileInput = (props: Props<FileInputOwnProps>) => {
       >
         {props.children}
       </Show>
-    </div>
+    </button>
   );
 };
 

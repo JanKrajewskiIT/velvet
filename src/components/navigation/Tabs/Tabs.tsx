@@ -1,6 +1,7 @@
 import { For, type JSX } from 'solid-js';
 
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
 import styles from './Tabs.module.css';
 
@@ -47,24 +48,22 @@ const Tabs = <T extends string>(props: Props<TabsProps<T>>) => {
     const nextTab = tabs[nextIndex];
     if (!nextTab) return;
     props.onChange(nextTab.value);
-    const target = (e.currentTarget as HTMLElement).children[nextIndex] as
-      | HTMLElement
-      | undefined;
+    const target = (e.currentTarget as HTMLElement).children[nextIndex] as HTMLElement | undefined;
     target?.focus();
   };
 
   return (
     <div
-      class={`${styles.tabs} ${styles[variant()]} ${props.class ?? ''}`}
+      class={classNames(styles.tabs, styles[variant()], props.class)}
       role="tablist"
-      tabindex={-1}
+      tabIndex={0}
       onKeyDown={handleKeyDown}
     >
       <For each={props.tabs}>
         {(tab) => (
           <button
             type="button"
-            class={`${styles.tab} ${props.value === tab.value ? styles.tabActive : ''}`}
+            class={classNames(styles.tab, props.value === tab.value && styles.tabActive)}
             onClick={() => props.onChange(tab.value)}
             role="tab"
             aria-selected={props.value === tab.value}

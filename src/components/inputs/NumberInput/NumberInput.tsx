@@ -5,6 +5,11 @@ import type Props from '~/models/Props';
 
 import styles from './NumberInput.module.css';
 
+interface NumberInputMessages {
+  decrementButtonLabel?: string;
+  incrementButtonLabel?: string;
+}
+
 interface NumberInputOwnProps {
   value: number;
   onChange: (value: number) => void;
@@ -14,6 +19,9 @@ interface NumberInputOwnProps {
   label?: string;
   disabled?: boolean;
   size?: 'sm' | 'md';
+  decrementLabel?: string;
+  incrementLabel?: string;
+  messages?: NumberInputMessages;
 }
 
 const NumberInput = (props: Props<NumberInputOwnProps>) => {
@@ -26,6 +34,9 @@ const NumberInput = (props: Props<NumberInputOwnProps>) => {
     'label',
     'disabled',
     'size',
+    'decrementLabel',
+    'incrementLabel',
+    'messages',
     'class',
   ]);
 
@@ -94,11 +105,11 @@ const NumberInput = (props: Props<NumberInputOwnProps>) => {
           type="button"
           class={styles.button}
           disabled={local.disabled}
+          onClick={decrement}
           onMouseDown={() => startRepeat(decrement)}
           onMouseUp={stopRepeat}
           onMouseLeave={stopRepeat}
-          tabIndex={-1}
-          aria-label="Decrease"
+          aria-label={local.messages?.decrementButtonLabel ?? local.decrementLabel ?? 'Decrease'}
         >
           <IoRemove />
         </button>
@@ -115,11 +126,11 @@ const NumberInput = (props: Props<NumberInputOwnProps>) => {
           type="button"
           class={styles.button}
           disabled={local.disabled}
+          onClick={increment}
           onMouseDown={() => startRepeat(increment)}
           onMouseUp={stopRepeat}
           onMouseLeave={stopRepeat}
-          tabIndex={-1}
-          aria-label="Increase"
+          aria-label={local.messages?.incrementButtonLabel ?? local.incrementLabel ?? 'Increase'}
         >
           <IoAdd />
         </button>

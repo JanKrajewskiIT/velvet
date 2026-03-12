@@ -1,0 +1,38 @@
+---
+description: Core VelvetUi project principles and high-level constraints
+alwaysApply: true
+---
+
+# VelvetUi – Core Principles
+
+## Overview
+
+- SolidJS UI component library: `@jankrajewskiit/ui`
+- Stack: SolidJS, TypeScript, CSS Modules, Vite
+- Peers: `solid-js >=1.9`, `@solidjs/router >=0.15`
+
+## Scope and Responsibilities
+
+- Generic, app-agnostic components:
+  - No domain/auth/business logic
+  - No app-specific i18n logic – all copy via props
+  - No data fetching or side-effectful API calls inside components
+
+## Code Style and Cleanliness
+
+- Self-documenting code:
+  - No comments explaining obvious behavior
+  - No commented-out code left in files
+  - No `eslint-disable` (inline or file-level) unless explicitly requested
+- Consistent TypeScript + SolidJS patterns (see `solidjs-tsx` rule for details)
+
+## Project Structure (high level)
+
+- `src/components/{category}/` – components grouped by category
+- `src/hooks/` – reusable hooks
+- `src/models/Props.ts` – shared `Props` model
+- `src/theme/` – design tokens and theming
+- `src/utils/` – shared utilities
+- `src/index.ts` – library entry/exports
+- `config/` – shared config packages and tooling
+- `demo/` – demo application using the library

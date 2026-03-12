@@ -50,6 +50,8 @@ const ResizablePanel = (props: ParentProps<Props<ResizablePanelProps>>) => {
   };
 
   createEffect(() => {
+    if (typeof document === 'undefined') return;
+
     if (dragging()) {
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);

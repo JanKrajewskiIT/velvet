@@ -3,6 +3,7 @@ import { createEffect, createSignal, onCleanup, Show } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
 import useEscapeKey from '~/hooks/useEscapeKey';
+import useFocusTrap from '~/hooks/useFocusTrap';
 import type Props from '~/models/Props';
 
 import styles from './Lightbox.module.css';
@@ -13,26 +14,40 @@ export interface LightboxImage {
   caption?: string;
 }
 
+interface LightboxMessages {
+  closeLabel?: string;
+  previousLabel?: string;
+  nextLabel?: string;
+}
+
 interface LightboxProps {
   images: LightboxImage[];
   open: boolean;
   onClose: () => void;
   startIndex?: number;
   closeLabel?: string;
+  previousLabel?: string;
+  nextLabel?: string;
+  messages?: LightboxMessages;
 }
 
 const Lightbox = (props: Props<LightboxProps>) => {
   const [currentIndex, setCurrentIndex] = createSignal(0);
+  let overlayRef: HTMLDivElement | undefined;
 
-  const closeLabel = () => props.closeLabel ?? 'Close';
+  const closeLabel = () => props.messages?.closeLabel ?? props.closeLabel ?? 'Close';
+  const previousLabel = () => props.messages?.previousLabel ?? props.previousLabel ?? 'Previous';
+  const nextLabel = () => props.messages?.nextLabel ?? props.nextLabel ?? 'Next';
   const total = () => props.images.length;
   const currentImage = () => props.images[currentIndex()];
 
   const goPrev = () => {
+    if (total() <= 1) return;
     setCurrentIndex((i) => (i > 0 ? i - 1 : total() - 1));
   };
 
   const goNext = () => {
+    if (total() <= 1) return;
     setCurrentIndex((i) => (i < total() - 1 ? i + 1 : 0));
   };
 
@@ -46,8 +61,15 @@ const Lightbox = (props: Props<LightboxProps>) => {
     () => props.onClose()
   );
 
+  useFocusTrap(
+    () => overlayRef,
+    () => props.open
+  );
+
   createEffect(() => {
-    setCurrentIndex(props.startIndex ?? 0);
+    const maxIndex = Math.max(total() - 1, 0);
+    const startIndex = props.startIndex ?? 0;
+    setCurrentIndex(Math.min(Math.max(startIndex, 0), maxIndex));
   });
 
   createEffect(() => {
@@ -70,7 +92,13 @@ const Lightbox = (props: Props<LightboxProps>) => {
   return (
     <Show when={props.open}>
       <Portal>
-        <div role="dialog" aria-modal="true" aria-label={closeLabel()} class={`${styles.overlay} ${props.class ?? ''}`}>
+        <div
+          ref={overlayRef}
+          role="dialog"
+          aria-modal="true"
+          aria-label={closeLabel()}
+          class={`${styles.overlay} ${props.class ?? ''}`}
+        >
           <button
             type="button"
             class={styles.backdrop}
@@ -90,7 +118,12 @@ const Lightbox = (props: Props<LightboxProps>) => {
 
           <div class={styles.imageContainer}>
             <Show when={total() > 1}>
-              <button class={`${styles.nav} ${styles.prev}`} type="button" aria-label="Previous" onClick={goPrev}>
+              <button
+                class={`${styles.nav} ${styles.prev}`}
+                type="button"
+                aria-label={previousLabel()}
+                onClick={goPrev}
+              >
                 <IoChevronBack />
               </button>
             </Show>
@@ -98,7 +131,7 @@ const Lightbox = (props: Props<LightboxProps>) => {
             <img class={styles.image} src={currentImage()?.src} alt={currentImage()?.alt ?? ''} draggable={false} />
 
             <Show when={total() > 1}>
-              <button class={`${styles.nav} ${styles.next}`} type="button" aria-label="Next" onClick={goNext}>
+              <button class={`${styles.nav} ${styles.next}`} type="button" aria-label={nextLabel()} onClick={goNext}>
                 <IoChevronForward />
               </button>
             </Show>

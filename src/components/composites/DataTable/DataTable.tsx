@@ -3,6 +3,7 @@ import type { JSX } from 'solid-js';
 import { createMemo, createSignal, For, Show } from 'solid-js';
 
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
 import styles from './DataTable.module.css';
 
@@ -12,6 +13,8 @@ interface DataTableColumn<T> {
   sortable?: boolean;
   render?: (value: T[keyof T], row: T) => JSX.Element;
   width?: string;
+  sortAccessor?: (row: T) => string | number | boolean | Date | null | undefined;
+  sortFn?: (a: T, b: T, direction: 'asc' | 'desc') => number;
 }
 
 interface DataTableProps<T> {
@@ -37,9 +40,22 @@ const DataTable = <T extends Record<string, unknown>>(props: Props<DataTableProp
     if (!key) return data;
 
     const direction = sortDirection();
+
+    const column = props.columns.find((col) => col.key === key);
+
+    const sortFn = column?.sortFn;
+    if (sortFn) {
+      return data.sort((a, b) => sortFn(a, b, direction));
+    }
+
+    const getValue = (row: T) =>
+      column?.sortAccessor
+        ? column.sortAccessor(row)
+        : (row[key] as string | number | boolean | Date | null | undefined);
+
     return data.sort((a, b) => {
-      const aVal = a[key];
-      const bVal = b[key];
+      const aVal = getValue(a);
+      const bVal = getValue(b);
       if (aVal == null && bVal == null) return 0;
       if (aVal == null) return 1;
       if (bVal == null) return -1;
@@ -57,6 +73,24 @@ const DataTable = <T extends Record<string, unknown>>(props: Props<DataTableProp
   });
 
   const pageNumbers = createMemo(() => Array.from({ length: totalPages() }, (_, i) => i + 1));
+
+  const paginationSlots = createMemo(() => {
+    const total = totalPages();
+    const current = currentPage();
+    if (total <= 7) return pageNumbers();
+    const slots: (number | 'ellipsis')[] = [];
+    const windowSize = 2;
+    const left = Math.max(2, current - windowSize);
+    const right = Math.min(total - 1, current + windowSize);
+    slots.push(1);
+    if (left > 2) slots.push('ellipsis');
+    for (let p = left; p <= right; p++) {
+      if (p !== 1 && p !== total) slots.push(p);
+    }
+    if (right < total - 1) slots.push('ellipsis');
+    if (total > 1) slots.push(total);
+    return slots;
+  });
 
   const handleSort = (column: DataTableColumn<T>) => {
     if (!column.sortable && !props.sortable) return;
@@ -83,14 +117,11 @@ const DataTable = <T extends Record<string, unknown>>(props: Props<DataTableProp
   };
 
   const rowClass = (index: number) => {
-    let cls = '';
-    if (props.striped && index % 2 === 1) cls += ` ${styles.stripedRow}`;
-    if (props.hoverable) cls += ` ${styles.hoverableRow}`;
-    return cls;
+    return classNames(props.striped && index % 2 === 1 && styles.stripedRow, props.hoverable && styles.hoverableRow);
   };
 
   return (
-    <div class={`${styles.wrapper} ${props.class ?? ''}`}>
+    <div class={classNames(styles.wrapper, props.class)}>
       <table class={styles.table}>
         <thead>
           <tr>
@@ -156,24 +187,34 @@ const DataTable = <T extends Record<string, unknown>>(props: Props<DataTableProp
               type="button"
               class={`${styles.pageBtn} ${currentPage() <= 1 ? styles.pageBtnDisabled : ''}`}
               onClick={() => handlePageChange(currentPage() - 1)}
+              aria-label="Previous page"
             >
               Prev
             </button>
-            <For each={pageNumbers()}>
-              {(page) => (
-                <button
-                  type="button"
-                  class={`${styles.pageBtn} ${page === currentPage() ? styles.pageBtnActive : ''}`}
-                  onClick={() => handlePageChange(page)}
-                >
-                  {page}
-                </button>
-              )}
+            <For each={paginationSlots()}>
+              {(slot) =>
+                slot === 'ellipsis' ? (
+                  <span class={styles.pageEllipsis} aria-hidden="true">
+                    …
+                  </span>
+                ) : (
+                  <button
+                    type="button"
+                    class={classNames(styles.pageBtn, slot === currentPage() && styles.pageBtnActive)}
+                    onClick={() => handlePageChange(slot)}
+                    aria-label={`Page ${slot}`}
+                    aria-current={slot === currentPage() ? 'page' : undefined}
+                  >
+                    {slot}
+                  </button>
+                )
+              }
             </For>
             <button
               type="button"
-              class={`${styles.pageBtn} ${currentPage() >= totalPages() ? styles.pageBtnDisabled : ''}`}
+              class={classNames(styles.pageBtn, currentPage() >= totalPages() && styles.pageBtnDisabled)}
               onClick={() => handlePageChange(currentPage() + 1)}
+              aria-label="Next page"
             >
               Next
             </button>

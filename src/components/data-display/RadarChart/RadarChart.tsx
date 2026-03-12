@@ -43,7 +43,8 @@ const RadarChart = (props: Props<RadarChartProps>) => {
   const chartSize = createMemo(() => props.size ?? DEFAULT_SIZE);
   const center = createMemo(() => chartSize() / 2);
   const radius = createMemo(() => chartSize() * RADIUS_RATIO);
-  const angleStep = createMemo(() => (2 * Math.PI) / props.axes.length);
+  const angleStep = createMemo(() => (props.axes.length > 0 ? (2 * Math.PI) / props.axes.length : 0));
+  const normalizeValue = (value: number | undefined) => Math.min(100, Math.max(0, value ?? 0));
 
   const gridLevels = createMemo(() => {
     const r = radius();
@@ -78,9 +79,9 @@ const RadarChart = (props: Props<RadarChartProps>) => {
 
   const datasetPolygons = createMemo(() =>
     props.datasets.map((dataset, datasetIndex) => {
-      const points = dataset.values
-        .map((value, i) => {
-          const normalizedRadius = (value / 100) * radius();
+      const points = props.axes
+        .map((_, i) => {
+          const normalizedRadius = (normalizeValue(dataset.values[i]) / 100) * radius();
           const { x, y } = polarToCartesian(i * angleStep(), normalizedRadius, center());
           return `${x},${y}`;
         })
@@ -95,8 +96,8 @@ const RadarChart = (props: Props<RadarChartProps>) => {
 
   const dataPoints = createMemo(() =>
     props.datasets.flatMap((dataset, datasetIndex) =>
-      dataset.values.map((value, i) => {
-        const normalizedRadius = (value / 100) * radius();
+      props.axes.map((_, i) => {
+        const normalizedRadius = (normalizeValue(dataset.values[i]) / 100) * radius();
         const { x, y } = polarToCartesian(i * angleStep(), normalizedRadius, center());
         return {
           x,

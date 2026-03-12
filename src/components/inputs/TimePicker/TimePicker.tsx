@@ -1,11 +1,17 @@
 import { FiClock } from 'solid-icons/fi';
-import { createMemo, createSignal, For, Show } from 'solid-js';
+import { createMemo, createSignal, createUniqueId, For, Show } from 'solid-js';
 
 import type Props from '~/models/Props';
 
 import useClickOutside from '../../../hooks/useClickOutside';
 import useEscapeKey from '../../../hooks/useEscapeKey';
 import styles from './TimePicker.module.css';
+
+interface TimePickerMessages {
+  placeholder?: string;
+  openPickerLabel?: string;
+  optionsLabel?: string;
+}
 
 interface TimePickerProps {
   value?: string;
@@ -14,6 +20,9 @@ interface TimePickerProps {
   disabled?: boolean;
   step?: number;
   label?: string;
+  openPickerLabel?: string;
+  optionsLabel?: string;
+  messages?: TimePickerMessages;
 }
 
 const pad = (n: number): string => String(n).padStart(2, '0');
@@ -28,6 +37,7 @@ const generateTimeOptions = (step: number): string[] => {
 
 const TimePicker = (props: Props<TimePickerProps>) => {
   const [isOpen, setIsOpen] = createSignal(false);
+  const dropdownId = createUniqueId();
   let wrapperRef: HTMLDivElement | undefined;
   let dropdownRef: HTMLDivElement | undefined;
 
@@ -41,6 +51,9 @@ const TimePicker = (props: Props<TimePickerProps>) => {
   useEscapeKey(() => isOpen(), close);
 
   const timeOptions = createMemo(() => generateTimeOptions(props.step ?? 30));
+  const placeholder = () => props.messages?.placeholder ?? props.placeholder ?? 'HH:MM';
+  const openPickerLabel = () => props.messages?.openPickerLabel ?? props.openPickerLabel ?? 'Open time picker';
+  const optionsLabel = () => props.messages?.optionsLabel ?? props.optionsLabel ?? 'Time options';
 
   const scrollToSelected = () => {
     if (!dropdownRef || !props.value) return;
@@ -74,19 +87,34 @@ const TimePicker = (props: Props<TimePickerProps>) => {
           type="text"
           class={styles.input}
           value={props.value ?? ''}
-          placeholder={props.placeholder ?? 'HH:MM'}
+          placeholder={placeholder()}
           readOnly
           disabled={props.disabled}
         />
-        <button type="button" class={styles.iconBtn} onClick={toggle} disabled={props.disabled}>
+        <button
+          type="button"
+          class={styles.iconBtn}
+          onClick={toggle}
+          disabled={props.disabled}
+          aria-label={openPickerLabel()}
+          aria-haspopup="listbox"
+          aria-expanded={isOpen()}
+          aria-controls={isOpen() ? dropdownId : undefined}
+        >
           <FiClock />
         </button>
       </div>
       <Show when={isOpen()}>
-        <div ref={dropdownRef} class={styles.dropdown}>
+        <div ref={dropdownRef} id={dropdownId} class={styles.dropdown} role="listbox" aria-label={optionsLabel()}>
           <For each={timeOptions()}>
             {(time) => (
-              <button type="button" class={optionClass(time)} onClick={() => select(time)}>
+              <button
+                type="button"
+                class={optionClass(time)}
+                onClick={() => select(time)}
+                role="option"
+                aria-selected={time === props.value}
+              >
                 {time}
               </button>
             )}

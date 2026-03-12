@@ -16,8 +16,7 @@ interface StepperProps {
 }
 
 const Stepper = (props: Props<StepperProps>) => {
-  const activeIndex = () =>
-    props.steps.findIndex((s) => s.value === props.activeStep);
+  const activeIndex = () => props.steps.findIndex((s) => s.value === props.activeStep);
 
   const getStepState = (index: number) => {
     const current = activeIndex();
@@ -27,31 +26,20 @@ const Stepper = (props: Props<StepperProps>) => {
   };
 
   return (
-    <div class={`${styles.stepIndicator} ${props.class ?? ''}`}>
+    <div class={`${styles.stepIndicator} ${props.class ?? ''}`} role="list">
       <For each={props.steps}>
         {(step, index) => (
           <>
             <Show when={index() > 0}>
-              <div
-                class={`${styles.stepConnector} ${getStepState(index()) !== 'pending' ? styles.completed : ''}`}
-              />
+              <div class={`${styles.stepConnector} ${getStepState(index()) !== 'pending' ? styles.completed : ''}`} />
             </Show>
-            <div class={styles.step}>
-              <span
-                class={`${styles.stepDot} ${styles[getStepState(index())] ?? ''}`}
-              >
-                <Show
-                  when={getStepState(index()) === 'completed'}
-                  fallback={index() + 1}
-                >
+            <div class={styles.step} role="listitem">
+              <span class={`${styles.stepDot} ${styles[getStepState(index())] ?? ''}`}>
+                <Show when={getStepState(index()) === 'completed'} fallback={index() + 1}>
                   <FiCheck />
                 </Show>
               </span>
-              <span
-                class={`${styles.stepLabel} ${styles[getStepState(index())] ?? ''}`}
-              >
-                {step.label}
-              </span>
+              <span class={`${styles.stepLabel} ${styles[getStepState(index())] ?? ''}`}>{step.label}</span>
             </div>
           </>
         )}

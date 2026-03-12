@@ -24,7 +24,7 @@
 }
 
 .button:focus-visible {
-  outline: 2px solid var(--color-primary);
+  outline: 2px solid var(--color-focus-ring);
   outline-offset: 2px;
 }
 
@@ -47,7 +47,7 @@
 
 .danger:hover:not(:disabled) {
   background-color: var(--color-error-hover);
-  box-shadow: 0 0 16px rgb(211 47 47 / 25%);
+  box-shadow: var(--shadow-glow-sm);
 }
 
 .ghost {

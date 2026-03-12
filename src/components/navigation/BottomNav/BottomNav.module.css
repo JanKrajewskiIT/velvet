@@ -54,7 +54,7 @@
   height: 16px;
   border-radius: var(--radius-full);
   background: var(--color-error);
-  color: white;
+  color: var(--color-on-accent);
   font-size: 10px;
   display: flex;
   align-items: center;

@@ -5,6 +5,11 @@ import type Props from '~/models/Props';
 
 import styles from './SearchInput.module.css';
 
+interface SearchInputMessages {
+  placeholder?: string;
+  clearButtonLabel?: string;
+}
+
 interface SearchInputProps {
   value: string;
   onInput: (value: string) => void;
@@ -13,6 +18,8 @@ interface SearchInputProps {
   debounce?: number;
   disabled?: boolean;
   autofocus?: boolean;
+  clearLabel?: string;
+  messages?: SearchInputMessages;
 }
 
 const SearchInput = (props: Props<SearchInputProps>) => {
@@ -59,12 +66,17 @@ const SearchInput = (props: Props<SearchInputProps>) => {
         onKeyDown={handleKeyDown}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
-        placeholder={props.placeholder ?? 'Search\u2026'}
+        placeholder={props.messages?.placeholder ?? props.placeholder ?? 'Search\u2026'}
         disabled={props.disabled}
         autofocus={props.autofocus}
       />
       <Show when={props.value.length > 0}>
-        <button type="button" class={styles.clear} onClick={handleClear}>
+        <button
+          type="button"
+          class={styles.clear}
+          onClick={handleClear}
+          aria-label={props.messages?.clearButtonLabel ?? props.clearLabel ?? 'Clear search'}
+        >
           <IoClose />
         </button>
       </Show>

@@ -3,9 +3,14 @@ import { type JSX, onCleanup } from 'solid-js';
 import { cleanupToasts } from './Toast';
 import ToastViewport from './ToastViewport';
 
+interface ToastProviderMessages {
+  closeButtonLabel?: string;
+}
+
 interface ToastProviderProps {
   children: JSX.Element;
-  closeLabel: string;
+  closeLabel?: string;
+  messages?: ToastProviderMessages;
 }
 
 const ToastProvider = (props: ToastProviderProps) => {
@@ -14,7 +19,7 @@ const ToastProvider = (props: ToastProviderProps) => {
   return (
     <>
       {props.children}
-      <ToastViewport closeLabel={props.closeLabel} />
+      <ToastViewport closeLabel={props.messages?.closeButtonLabel ?? props.closeLabel ?? 'Close'} />
     </>
   );
 };

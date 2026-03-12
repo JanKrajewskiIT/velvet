@@ -72,7 +72,7 @@
   margin-left: auto;
   font-size: var(--font-size-xs);
   background: var(--color-primary);
-  color: white;
+  color: var(--color-on-accent);
   border-radius: var(--radius-pill);
   padding: 1px var(--spacing-xs);
   min-width: 20px;

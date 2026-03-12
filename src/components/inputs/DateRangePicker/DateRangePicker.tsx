@@ -1,11 +1,21 @@
 import { FiChevronLeft, FiChevronRight } from 'solid-icons/fi';
-import { createMemo, createSignal, For, Show } from 'solid-js';
+import { createMemo, createSignal, createUniqueId, For, Show } from 'solid-js';
 
 import type Props from '~/models/Props';
 
 import useClickOutside from '../../../hooks/useClickOutside';
 import useEscapeKey from '../../../hooks/useEscapeKey';
 import styles from './DateRangePicker.module.css';
+
+interface DateRangePickerMessages {
+  startLabel?: string;
+  endLabel?: string;
+  startAriaLabel?: string;
+  endAriaLabel?: string;
+  calendarLabel?: string;
+  previousMonthLabel?: string;
+  nextMonthLabel?: string;
+}
 
 export interface DateRange {
   start: string;
@@ -20,6 +30,12 @@ interface DateRangePickerProps {
   disabled?: boolean;
   min?: string;
   max?: string;
+  startAriaLabel?: string;
+  endAriaLabel?: string;
+  calendarLabel?: string;
+  previousMonthLabel?: string;
+  nextMonthLabel?: string;
+  messages?: DateRangePickerMessages;
 }
 
 const DAY_LABELS = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
@@ -65,6 +81,7 @@ const DateRangePicker = (props: Props<DateRangePickerProps>) => {
   const [isOpen, setIsOpen] = createSignal(false);
   const [activeField, setActiveField] = createSignal<'start' | 'end'>('start');
   const [pendingStart, setPendingStart] = createSignal<string | null>(null);
+  const dropdownId = createUniqueId();
 
   const initial = (): { year: number; month: number } => {
     if (props.value.start) return parseDate(props.value.start);
@@ -95,6 +112,19 @@ const DateRangePicker = (props: Props<DateRangePickerProps>) => {
   const monthName = createMemo(() =>
     new Date(viewYear(), viewMonth()).toLocaleString('en', { month: 'long', year: 'numeric' })
   );
+  const startLabel = () => props.messages?.startLabel ?? props.startLabel ?? 'Start';
+  const endLabel = () => props.messages?.endLabel ?? props.endLabel ?? 'End';
+  const startAriaLabel = () =>
+    props.messages?.startAriaLabel ??
+    props.startAriaLabel ??
+    props.startLabel ??
+    props.messages?.startLabel ??
+    'Start date';
+  const endAriaLabel = () =>
+    props.messages?.endAriaLabel ?? props.endAriaLabel ?? props.endLabel ?? props.messages?.endLabel ?? 'End date';
+  const calendarLabel = () => props.messages?.calendarLabel ?? props.calendarLabel ?? 'Date range calendar';
+  const previousMonthLabel = () => props.messages?.previousMonthLabel ?? props.previousMonthLabel ?? 'Previous month';
+  const nextMonthLabel = () => props.messages?.nextMonthLabel ?? props.nextMonthLabel ?? 'Next month';
 
   const prevMonth = () => {
     if (viewMonth() === 0) {
@@ -189,21 +219,37 @@ const DateRangePicker = (props: Props<DateRangePickerProps>) => {
 
   return (
     <div ref={wrapperRef} class={`${styles.wrapper} ${props.class ?? ''}`}>
-      <button type="button" class={startFieldClass()} onClick={() => openCalendar('start')}>
-        {props.value.start || (props.startLabel ?? 'Start')}
+      <button
+        type="button"
+        class={startFieldClass()}
+        onClick={() => openCalendar('start')}
+        aria-label={startAriaLabel()}
+        aria-haspopup="dialog"
+        aria-expanded={isOpen() && activeField() === 'start'}
+        aria-controls={isOpen() ? dropdownId : undefined}
+      >
+        {props.value.start || startLabel()}
       </button>
       <span class={styles.separator}>{'\u2192'}</span>
-      <button type="button" class={endFieldClass()} onClick={() => openCalendar('end')}>
-        {props.value.end || (props.endLabel ?? 'End')}
+      <button
+        type="button"
+        class={endFieldClass()}
+        onClick={() => openCalendar('end')}
+        aria-label={endAriaLabel()}
+        aria-haspopup="dialog"
+        aria-expanded={isOpen() && activeField() === 'end'}
+        aria-controls={isOpen() ? dropdownId : undefined}
+      >
+        {props.value.end || endLabel()}
       </button>
       <Show when={isOpen()}>
-        <div class={styles.dropdown}>
+        <div id={dropdownId} class={styles.dropdown} role="dialog" aria-modal="false" aria-label={calendarLabel()}>
           <div class={styles.nav}>
-            <button type="button" class={styles.navBtn} onClick={prevMonth}>
+            <button type="button" class={styles.navBtn} onClick={prevMonth} aria-label={previousMonthLabel()}>
               <FiChevronLeft />
             </button>
             <span class={styles.monthYear}>{monthName()}</span>
-            <button type="button" class={styles.navBtn} onClick={nextMonth}>
+            <button type="button" class={styles.navBtn} onClick={nextMonth} aria-label={nextMonthLabel()}>
               <FiChevronRight />
             </button>
           </div>
@@ -211,7 +257,12 @@ const DateRangePicker = (props: Props<DateRangePickerProps>) => {
             <For each={DAY_LABELS}>{(d) => <span class={styles.dayHeader}>{d}</span>}</For>
             <For each={daysGrid()}>
               {(cell) => (
-                <button type="button" class={dayClass(cell)} onClick={() => selectDay(cell)}>
+                <button
+                  type="button"
+                  class={dayClass(cell)}
+                  onClick={() => selectDay(cell)}
+                  aria-label={toIso(cell.year, cell.month, cell.day)}
+                >
                   {cell.day}
                 </button>
               )}

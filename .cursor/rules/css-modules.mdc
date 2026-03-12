@@ -1,0 +1,13 @@
+---
+description: CSS Modules conventions for VelvetUi
+globs: src/**/*.module.css
+alwaysApply: false
+---
+
+# CSS Modules
+
+- camelCase classes (`.menuItem`) -- never kebab/PascalCase
+- Design tokens from `globals.css`: `var(--color-*)`, `var(--spacing-*)`, `var(--font-size-*)`, `var(--radius-*)`, `var(--shadow-*)`
+- Never hardcode colors/spacing/shadows
+- Never import CSS from another component
+- Dark theme via semantic tokens -- never target `[data-theme='dark']`

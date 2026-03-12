@@ -1,11 +1,19 @@
 import { FiCalendar, FiChevronLeft, FiChevronRight } from 'solid-icons/fi';
-import { createMemo, createSignal, For, Show } from 'solid-js';
+import { createMemo, createSignal, createUniqueId, For, Show } from 'solid-js';
 
 import type Props from '~/models/Props';
 
 import useClickOutside from '../../../hooks/useClickOutside';
 import useEscapeKey from '../../../hooks/useEscapeKey';
 import styles from './DatePicker.module.css';
+
+interface DatePickerMessages {
+  placeholder?: string;
+  openPickerLabel?: string;
+  calendarLabel?: string;
+  previousMonthLabel?: string;
+  nextMonthLabel?: string;
+}
 
 interface DatePickerProps {
   value?: string;
@@ -15,6 +23,11 @@ interface DatePickerProps {
   min?: string;
   max?: string;
   label?: string;
+  openPickerLabel?: string;
+  calendarLabel?: string;
+  previousMonthLabel?: string;
+  nextMonthLabel?: string;
+  messages?: DatePickerMessages;
 }
 
 const DAY_LABELS = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
@@ -58,6 +71,7 @@ const parseDate = (iso: string): { year: number; month: number } => {
 
 const DatePicker = (props: Props<DatePickerProps>) => {
   const [isOpen, setIsOpen] = createSignal(false);
+  const dropdownId = createUniqueId();
 
   const initial = (): { year: number; month: number } => {
     if (props.value) return parseDate(props.value);
@@ -85,6 +99,11 @@ const DatePicker = (props: Props<DatePickerProps>) => {
   const monthName = createMemo(() =>
     new Date(viewYear(), viewMonth()).toLocaleString('en', { month: 'long', year: 'numeric' })
   );
+  const placeholder = () => props.messages?.placeholder ?? props.placeholder ?? 'YYYY-MM-DD';
+  const openPickerLabel = () => props.messages?.openPickerLabel ?? props.openPickerLabel ?? 'Open date picker';
+  const calendarLabel = () => props.messages?.calendarLabel ?? props.calendarLabel ?? 'Calendar';
+  const previousMonthLabel = () => props.messages?.previousMonthLabel ?? props.previousMonthLabel ?? 'Previous month';
+  const nextMonthLabel = () => props.messages?.nextMonthLabel ?? props.nextMonthLabel ?? 'Next month';
 
   const prevMonth = () => {
     if (viewMonth() === 0) {
@@ -144,22 +163,31 @@ const DatePicker = (props: Props<DatePickerProps>) => {
           type="text"
           class={styles.input}
           value={props.value ?? ''}
-          placeholder={props.placeholder ?? 'YYYY-MM-DD'}
+          placeholder={placeholder()}
           readOnly
           disabled={props.disabled}
         />
-        <button type="button" class={styles.iconBtn} onClick={toggle} disabled={props.disabled}>
+        <button
+          type="button"
+          class={styles.iconBtn}
+          onClick={toggle}
+          disabled={props.disabled}
+          aria-label={openPickerLabel()}
+          aria-haspopup="dialog"
+          aria-expanded={isOpen()}
+          aria-controls={isOpen() ? dropdownId : undefined}
+        >
           <FiCalendar />
         </button>
       </div>
       <Show when={isOpen()}>
-        <div class={styles.dropdown}>
+        <div id={dropdownId} class={styles.dropdown} role="dialog" aria-modal="false" aria-label={calendarLabel()}>
           <div class={styles.header}>
-            <button type="button" class={styles.navBtn} onClick={prevMonth}>
+            <button type="button" class={styles.navBtn} onClick={prevMonth} aria-label={previousMonthLabel()}>
               <FiChevronLeft />
             </button>
             <span class={styles.monthYear}>{monthName()}</span>
-            <button type="button" class={styles.navBtn} onClick={nextMonth}>
+            <button type="button" class={styles.navBtn} onClick={nextMonth} aria-label={nextMonthLabel()}>
               <FiChevronRight />
             </button>
           </div>
@@ -167,7 +195,12 @@ const DatePicker = (props: Props<DatePickerProps>) => {
             <For each={DAY_LABELS}>{(d) => <span class={styles.dayHeader}>{d}</span>}</For>
             <For each={daysGrid()}>
               {(cell) => (
-                <button type="button" class={dayClass(cell)} onClick={() => selectDay(cell)}>
+                <button
+                  type="button"
+                  class={dayClass(cell)}
+                  onClick={() => selectDay(cell)}
+                  aria-label={toIso(cell.year, cell.month, cell.day)}
+                >
                   {cell.day}
                 </button>
               )}

@@ -1,6 +1,6 @@
 import { For } from 'solid-js';
 
-import { PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
+import { PreviewPanel, ShowcaseSection } from '../components/ShowcaseSection';
 
 interface DocSnippet {
   title: string;
@@ -22,6 +22,20 @@ export default createEslintConfig({
     title: 'Prettier preset',
     file: '.prettierrc',
     code: `"@jankrajewskiit/ui/prettier-config"`,
+  },
+  {
+    title: 'Prettier (JSON)',
+    file: '.prettierrc.json',
+    code: `{
+  "extends": "@jankrajewskiit/ui/prettier-config"
+}`,
+  },
+  {
+    title: 'Stylelint preset',
+    file: '.stylelintrc.json',
+    code: `{
+  "extends": "@jankrajewskiit/ui/stylelint-config"
+}`,
   },
   {
     title: 'TypeScript app config',
@@ -68,9 +82,46 @@ export default createLintStagedConfig();`,
     file: '.husky/pre-commit',
     code: `. "$(dirname -- "$0")/../node_modules/@jankrajewskiit/ui/config/husky-pre-commit.sh"`,
   },
+  {
+    title: 'package.json scripts',
+    file: 'package.json',
+    code: `"scripts": {
+  "lint": "eslint .",
+  "lint:fix": "eslint . --fix",
+  "lint:css": "stylelint \\"src/**/*.css\\"",
+  "lint:css:fix": "stylelint \\"src/**/*.css\\" --fix",
+  "format": "prettier --write .",
+  "format:check": "prettier --check .",
+  "typecheck": "tsc -b",
+  "prepare": "husky"
+}`,
+  },
 ];
 
 const USAGE_SNIPPETS: DocSnippet[] = [
+  {
+    title: 'useClickOutside',
+    file: 'hooks/useClickOutside.ts',
+    code: `import { useClickOutside } from '@jankrajewskiit/ui';
+
+const [ref, setRef] = createSignal<HTMLElement | null>(null);
+useClickOutside(ref, () => closeMenu());`,
+  },
+  {
+    title: 'useEscapeKey',
+    file: 'hooks/useEscapeKey.ts',
+    code: `import { useEscapeKey } from '@jankrajewskiit/ui';
+
+useEscapeKey(() => closeModal());`,
+  },
+  {
+    title: 'useFocusTrap',
+    file: 'hooks/useFocusTrap.ts',
+    code: `import { useFocusTrap } from '@jankrajewskiit/ui';
+
+const [container, setContainer] = createSignal<HTMLElement | null>(null);
+useFocusTrap(container, { enabled: () => dialogOpen() });`,
+  },
   {
     title: 'ConfirmAction',
     file: 'features/DeleteAction.tsx',
@@ -129,38 +180,36 @@ const USAGE_SNIPPETS: DocSnippet[] = [
   <AdminPage />
 </RequireAuth>;`,
   },
+  {
+    title: 'AuthRedirect',
+    file: 'routing/RedirectAfterAuth.tsx',
+    code: `import { AuthRedirect } from '@jankrajewskiit/ui';
+
+<AuthRedirect
+  onRedirect={() => {
+    navigate('/dashboard', { replace: true });
+  }}
+  fallback={<Spinner label="Redirecting..." />}
+/>`,
+  },
 ];
 
 const DeveloperSection = () => {
   return (
     <div>
-      <ShowcaseSection title="Developer Setup" subtitle="Install package, styles and peer dependencies">
-        <PreviewPanel class="col">
-          <pre class="installBlock">
-            <code>npm install @jankrajewskiit/ui solid-js @solidjs/router</code>
-          </pre>
-          <pre class="installBlock">
-            <code>{`import '@jankrajewskiit/ui/styles';`}</code>
-          </pre>
-          <ShowcaseMeta>
-            Package name: <span class="codeInline">@jankrajewskiit/ui</span>
-          </ShowcaseMeta>
-        </PreviewPanel>
-      </ShowcaseSection>
-
       <ShowcaseSection title="Component Categories" subtitle="9 categories organized by purpose">
         <PreviewPanel class="col">
-          <ul class="overviewList">
+          <ul class="overview-list">
             <li>
               <strong>inputs/</strong> (11) - Button, IconButton, Checkbox, Input, Radio, Switch, Autocomplete,
               ColorPicker, TagInput, DropdownButton, DropdownMenu
             </li>
             <li>
-              <strong>forms/</strong> (4) - FormField, FormGrid, FormLayout, ActionRow
+              <strong>forms/</strong> (4) - FormField, FormGrid, FormLayout, ActionRow (shown under Inputs in this demo)
             </li>
             <li>
-              <strong>data-display/</strong> (7) - Table, Accordion, JsonDisplay, MarkdownRenderer, ScoreRing,
-              RadarChart, SectionCard
+              <strong>data-display/</strong> (6) - Table, Accordion, MarkdownRenderer, ScoreRing, RadarChart,
+              SectionCard
             </li>
             <li>
               <strong>navigation/</strong> (4) - Tabs, Stepper, Pagination, Timeline
@@ -170,16 +219,19 @@ const DeveloperSection = () => {
               ErrorFallback, AccessDenied, Chip, TagChip, StatCard
             </li>
             <li>
-              <strong>overlays/</strong> (6) - Dialog, Drawer, Tooltip, ConfirmDialog, ConfirmAction, MarkdownEditDialog
+              <strong>overlays/</strong> (8) - Dialog, Drawer, Tooltip, ConfirmDialog, ConfirmAction, ContextMenu,
+              Lightbox, Tour
             </li>
             <li>
-              <strong>layout/</strong> (4) - MainLayout, Navbar, Footer, ThemeToggle
+              <strong>layout/</strong> (3) - MainLayout, Navbar, Footer
             </li>
             <li>
-              <strong>composites/</strong> (5) - EditableCollection, FileDropZone, FlipCard, Wizard, AiResultPanel
+              <strong>composites/</strong> (6) - DataTable, EditableCollection, FileDropZone, FlipCard, Wizard,
+              AiResultPanel
             </li>
             <li>
-              <strong>app/</strong> (3) - LocaleSwitcher, AuthRedirect, RequireAuth
+              <strong>app/</strong> (4) - LocaleSwitcher, ThemeToggle, AuthRedirect, RequireAuth (shown under Inputs ·
+              Buttons and Developer snippets)
             </li>
           </ul>
         </PreviewPanel>
@@ -189,15 +241,15 @@ const DeveloperSection = () => {
         title="Shared Tooling Presets"
         subtitle="Drop-in standards for linting, formatting, tsconfig and Vite"
       >
-        <div class="docsGrid">
+        <div class="docs-grid">
           <For each={TOOLING_SNIPPETS}>
             {(snippet) => (
-              <PreviewPanel class="docsCard">
-                <div class="docsCardHeader">
-                  <p class="docsCardTitle">{snippet.title}</p>
-                  <span class="codeInline">{snippet.file}</span>
+              <PreviewPanel class="docs-card">
+                <div class="docs-card-header">
+                  <p class="docs-card-title">{snippet.title}</p>
+                  <span class="code-inline">{snippet.file}</span>
                 </div>
-                <pre class="installBlock">
+                <pre class="install-block">
                   <code>{snippet.code}</code>
                 </pre>
               </PreviewPanel>
@@ -208,17 +260,17 @@ const DeveloperSection = () => {
 
       <ShowcaseSection
         title="Usage Snippets"
-        subtitle="Examples for extracted components used across multiple projects"
+        subtitle="Hooks (useClickOutside, useEscapeKey, useFocusTrap) and component patterns"
       >
-        <div class="docsGrid">
+        <div class="docs-grid">
           <For each={USAGE_SNIPPETS}>
             {(snippet) => (
-              <PreviewPanel class="docsCard">
-                <div class="docsCardHeader">
-                  <p class="docsCardTitle">{snippet.title}</p>
-                  <span class="codeInline">{snippet.file}</span>
+              <PreviewPanel class="docs-card">
+                <div class="docs-card-header">
+                  <p class="docs-card-title">{snippet.title}</p>
+                  <span class="code-inline">{snippet.file}</span>
                 </div>
-                <pre class="installBlock">
+                <pre class="install-block">
                   <code>{snippet.code}</code>
                 </pre>
               </PreviewPanel>
@@ -229,7 +281,7 @@ const DeveloperSection = () => {
 
       <ShowcaseSection title="Design Principles" subtitle="Rules that keep VelvetUi reusable across apps">
         <PreviewPanel class="col">
-          <ul class="overviewList">
+          <ul class="overview-list">
             <li>Components are app-agnostic and avoid business logic coupling.</li>
             <li>User-facing text is passed via props by the consuming app.</li>
             <li>Layout components expose slots for flexible composition.</li>

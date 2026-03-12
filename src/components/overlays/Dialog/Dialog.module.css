@@ -83,3 +83,22 @@
   justify-content: flex-end;
   gap: var(--spacing-sm);
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .dialog {
+    transition: none;
+  }
+
+  .dialog:not([open]) {
+    opacity: 0;
+    transform: none;
+  }
+
+  .dialog::backdrop {
+    transition: none;
+  }
+
+  .dialog:not([open])::backdrop {
+    opacity: 0;
+  }
+}

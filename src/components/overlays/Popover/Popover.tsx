@@ -36,11 +36,11 @@ const Popover = (props: Props<PopoverProps>) => {
 
   return (
     <div class={`${styles.wrapper} ${props.class ?? ''}`}>
-      <button type="button" class={styles.trigger} onClick={toggle}>
+      <button type="button" class={styles.trigger} onClick={toggle} aria-haspopup="dialog" aria-expanded={isOpen()}>
         {props.trigger}
       </button>
       <Show when={isOpen()}>
-        <div ref={contentRef} class={`${styles.content} ${styles[position()]}`}>
+        <div ref={contentRef} class={`${styles.content} ${styles[position()]}`} role="dialog" aria-modal="false">
           {props.content}
         </div>
       </Show>

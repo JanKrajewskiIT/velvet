@@ -20,7 +20,7 @@ const DropdownMenu = (props: Props<DropdownMenuProps>) => {
   const menuId = createUniqueId();
   let menuRef: HTMLDivElement | undefined;
   let panelRef: HTMLDivElement | undefined;
-  let triggerRef: HTMLDivElement | undefined;
+  let triggerRef: HTMLButtonElement | undefined;
 
   const close = (): void => {
     setOpen(false);
@@ -52,11 +52,6 @@ const DropdownMenu = (props: Props<DropdownMenuProps>) => {
   };
 
   const handleTriggerKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      toggle();
-      return;
-    }
     if (e.key === 'ArrowDown' && !open()) {
       e.preventDefault();
       openAndFocusFirst();
@@ -100,6 +95,7 @@ const DropdownMenu = (props: Props<DropdownMenuProps>) => {
       }
       case 'Tab': {
         close();
+        triggerRef?.focus();
         break;
       }
     }
@@ -107,11 +103,10 @@ const DropdownMenu = (props: Props<DropdownMenuProps>) => {
 
   return (
     <div ref={menuRef} class={`${styles.wrapper} ${props.class ?? ''}`}>
-      <div
+      <button
+        type="button"
         ref={triggerRef}
         class={styles.trigger}
-        role="button"
-        tabIndex={0}
         onClick={toggle}
         onKeyDown={handleTriggerKeyDown}
         aria-haspopup="menu"
@@ -120,7 +115,7 @@ const DropdownMenu = (props: Props<DropdownMenuProps>) => {
         aria-label={props.label}
       >
         {props.trigger}
-      </div>
+      </button>
       <Show when={open()}>
         <div
           ref={panelRef}

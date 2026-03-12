@@ -77,6 +77,13 @@
 .pageButtons {
   display: flex;
   gap: var(--spacing-2xs);
+  align-items: center;
+}
+
+.pageEllipsis {
+  padding: 0 var(--spacing-2xs);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
 }
 
 .pageBtn {
@@ -95,11 +102,16 @@
 
 .pageBtnActive {
   background: var(--color-primary);
-  color: white;
+  color: var(--color-on-accent);
   border-color: var(--color-primary);
 }
 
 .pageBtnDisabled {
   opacity: 0.4;
   pointer-events: none;
+}
+
+.pageBtn:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
 }

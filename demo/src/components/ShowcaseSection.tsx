@@ -18,10 +18,10 @@ interface ShowcaseMetaProps {
 
 export const ShowcaseSection = (props: ShowcaseSectionProps) => {
   return (
-    <section class="showcaseSection">
-      <div class="showcaseHeading">
-        <h2 class="showcaseTitle">{props.title}</h2>
-        {props.subtitle && <p class="showcaseSubtitle">{props.subtitle}</p>}
+    <section class="showcase-section">
+      <div class="showcase-heading">
+        <h2 class="showcase-title">{props.title}</h2>
+        {props.subtitle && <p class="showcase-subtitle">{props.subtitle}</p>}
       </div>
       {props.children}
     </section>
@@ -29,11 +29,9 @@ export const ShowcaseSection = (props: ShowcaseSectionProps) => {
 };
 
 export const PreviewPanel = (props: PreviewPanelProps) => {
-  return (
-    <div class={`previewPanel ${props.class ?? ''}`}>{props.children}</div>
-  );
+  return <div class={`preview-panel ${props.class ?? ''}`}>{props.children}</div>;
 };
 
 export const ShowcaseMeta = (props: ShowcaseMetaProps) => {
-  return <p class={`showcaseMeta ${props.class ?? ''}`}>{props.children}</p>;
+  return <p class={`showcase-meta ${props.class ?? ''}`}>{props.children}</p>;
 };

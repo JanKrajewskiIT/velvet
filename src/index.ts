@@ -1,4 +1,4 @@
-﻿import './theme/globals.css';
+import './theme/globals.css';
 
 export type { AuthRedirectProps } from './components/app/AuthRedirect/AuthRedirect';
 export { default as AuthRedirect } from './components/app/AuthRedirect/AuthRedirect';
@@ -23,7 +23,6 @@ export { default as Accordion } from './components/data-display/Accordion/Accord
 export { default as AccordionItem } from './components/data-display/Accordion/AccordionItem';
 export { default as Avatar } from './components/data-display/Avatar/Avatar';
 export { default as AvatarGroup } from './components/data-display/Avatar/AvatarGroup';
-export { default as Callout } from './components/data-display/Callout/Callout';
 export type {
   Candle,
   CandleAction,
@@ -38,7 +37,6 @@ export { default as Collapsible } from './components/data-display/Collapsible/Co
 export { default as DataCard } from './components/data-display/DataCard/DataCard';
 export type { ImageGridItem } from './components/data-display/ImageGrid/ImageGrid';
 export { default as ImageGrid } from './components/data-display/ImageGrid/ImageGrid';
-export { default as JsonDisplay } from './components/data-display/JsonDisplay/JsonDisplay';
 export { default as Kbd } from './components/data-display/Kbd/Kbd';
 export { default as List } from './components/data-display/List/List';
 export { default as ListItem } from './components/data-display/List/ListItem';
@@ -115,7 +113,7 @@ export type { NavItem } from './components/layout/Navbar/NavItem';
 export { default as ResizablePanel } from './components/layout/ResizablePanel/ResizablePanel';
 export type { SidebarItem } from './components/layout/Sidebar/Sidebar';
 export { default as Sidebar } from './components/layout/Sidebar/Sidebar';
-export { default as ThemeToggle } from './components/layout/ThemeToggle/ThemeToggle';
+export { default as ThemeToggle, type ThemeToggleVariant } from './components/layout/ThemeToggle/ThemeToggle';
 export { default as BackToTop } from './components/navigation/BackToTop/BackToTop';
 export type { BottomNavItem } from './components/navigation/BottomNav/BottomNav';
 export { default as BottomNav } from './components/navigation/BottomNav/BottomNav';
@@ -148,6 +146,7 @@ export type { TourStep } from './components/overlays/Tour/Tour';
 export { default as Tour } from './components/overlays/Tour/Tour';
 export { default as useClickOutside } from './hooks/useClickOutside';
 export { default as useEscapeKey } from './hooks/useEscapeKey';
+export { default as useFocusTrap } from './hooks/useFocusTrap';
 export type { default as Props } from './models/Props';
 export type { ThemeChoice } from './theme/ThemeProvider';
 export { ThemeProvider, useTheme } from './theme/ThemeProvider';

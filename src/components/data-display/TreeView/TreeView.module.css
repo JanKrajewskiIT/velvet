@@ -23,6 +23,11 @@
   background: var(--color-bg-hover);
 }
 
+.row:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 1px;
+}
+
 .selected {
   background: var(--color-primary-light);
 }

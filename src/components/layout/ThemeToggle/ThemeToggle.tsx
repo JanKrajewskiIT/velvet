@@ -5,6 +5,8 @@ import type Props from '~/models/Props';
 import { useTheme } from '../../../theme/ThemeProvider';
 import styles from './ThemeToggle.module.css';
 
+export type ThemeToggleVariant = 'light' | 'dark';
+
 interface ThemeToggleProps {
   lightLabel: string;
   darkLabel: string;
@@ -22,11 +24,7 @@ const ThemeToggle = (props: Props<ThemeToggleProps>) => {
   };
 
   return (
-    <div
-      class={`${styles.group} ${props.class ?? ''}`}
-      role="group"
-      aria-label={props.groupLabel ?? props.darkLabel}
-    >
+    <div class={`${styles.group} ${props.class ?? ''}`} role="group" aria-label={props.groupLabel ?? props.darkLabel}>
       <button
         class={`${styles.toggle} ${resolved() === 'light' ? styles.selected : ''}`}
         onClick={handleLight}
