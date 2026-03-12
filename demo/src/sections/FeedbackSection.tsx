@@ -14,6 +14,7 @@ import {
   IconButton,
   Kbd,
   LoadingContainer,
+  NotificationCenter,
   Progress,
   Skeleton,
   Spinner,
@@ -288,6 +289,15 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
           <ShowcaseMeta>
             Wrap your app in <span class="code-inline">ToastProvider</span> and render{' '}
             <span class="code-inline">ToastViewport</span> (e.g. in root layout) for toasts to appear.
+          </ShowcaseMeta>
+        </ShowcaseSection>
+
+        <ShowcaseSection title="NotificationCenter" subtitle="Persistent history powered by toast events">
+          <PreviewPanel>
+            <NotificationCenter maxItems={6} />
+          </PreviewPanel>
+          <ShowcaseMeta>
+            Trigger toasts above to see them collected here. Use actions to mark as read or clear history.
           </ShowcaseMeta>
         </ShowcaseSection>
 

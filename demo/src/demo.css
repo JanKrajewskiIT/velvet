@@ -352,6 +352,26 @@ body {
   color: var(--color-text-inverse);
 }
 
+.virtual-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+}
+
+.virtual-label {
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+}
+
+.virtual-meta {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
 .theme-toggle-bar {
   position: fixed;
   right: var(--spacing-xl);

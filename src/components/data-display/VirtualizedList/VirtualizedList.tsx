@@ -41,7 +41,7 @@ const VirtualizedList = <T,>(props: Props<VirtualizedListOwnProps<T>>) => {
   const totalHeight = createMemo(() => local.items.length * local.itemHeight);
   const offsetY = createMemo(() => startIndex() * local.itemHeight);
 
-  const handleScroll: JSX.EventHandler<HTMLDivElement, UIEvent> = (e) => {
+  const handleScroll: JSX.EventHandler<HTMLDivElement, Event> = (e) => {
     setScrollTop(e.currentTarget.scrollTop);
   };
 
