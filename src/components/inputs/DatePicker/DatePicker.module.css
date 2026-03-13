@@ -78,16 +78,8 @@
 }
 
 .navBtn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--color-text-muted);
-  padding: var(--spacing-xs);
+  composes: iconaction from '../shared/IconAction.module.css';
   border-radius: var(--radius-full);
-  transition: background-color var(--duration-fast) var(--ease-out-expo);
 }
 
 .navBtn:hover {
@@ -109,20 +101,15 @@
 }
 
 .day {
+  composes: iconaction from '../shared/IconAction.module.css';
   width: 36px;
   height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  background: none;
   border-radius: var(--radius-full);
   font-size: var(--font-size-sm);
   color: var(--color-text);
-  cursor: pointer;
-  transition:
-    background-color var(--duration-fast) var(--ease-out-expo),
-    color var(--duration-fast) var(--ease-out-expo);
+  border-color: transparent;
+  background: transparent;
+  transform: none;
 }
 
 .day:hover {

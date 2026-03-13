@@ -3,8 +3,8 @@ import { createSignal, For, type JSX, splitProps } from 'solid-js';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import TagChip from '../../feedback/TagChip/TagChip';
 import type { InputSize } from '../Input/Input';
+import EditableChip from '../shared/EditableChip';
 import InputBase from '../shared/InputBase';
 import styles from './TagInput.module.css';
 
@@ -44,7 +44,7 @@ const TagInput = (props: Props<TagInputOwnProps>) => {
         focusWithin
       >
         <For each={local.value}>
-          {(tag) => <TagChip label={tag} color="var(--color-primary)" onClick={() => removeTag(tag)} />}
+          {(tag) => <EditableChip label={tag} removeLabel={`Remove ${tag}`} onRemove={() => removeTag(tag)} />}
         </For>
         <input
           {...rest}

@@ -1,4 +1,4 @@
-import { IoCheckmark, IoChevronDown, IoCloseOutline } from 'solid-icons/io';
+import { IoCheckmark, IoChevronDown } from 'solid-icons/io';
 import { createMemo, createSignal, For, type JSX, Show, splitProps } from 'solid-js';
 
 import useClickOutside from '~/hooks/useClickOutside';
@@ -9,6 +9,7 @@ import classNames from '~/utils/classNames';
 import type { InputSize } from '../Input/Input';
 import DropdownOption from '../shared/DropdownOption';
 import DropdownSurface from '../shared/DropdownSurface';
+import EditableChip from '../shared/EditableChip';
 import InputBase from '../shared/InputBase';
 import styles from './MultiSelect.module.css';
 
@@ -147,17 +148,11 @@ const MultiSelect = (props: Props<MultiSelectOwnProps>) => {
         <div class={styles.selected}>
           <For each={selectedOptions()}>
             {(option) => (
-              <span class={styles.tag}>
-                {option.label}
-                <button
-                  type="button"
-                  class={styles.removeTag}
-                  aria-label={local.removeLabel ? `${local.removeLabel} ${option.label}` : undefined}
-                  onClick={() => removeValue(option.value)}
-                >
-                  <IoCloseOutline />
-                </button>
-              </span>
+              <EditableChip
+                label={option.label}
+                removeLabel={local.removeLabel ? `${local.removeLabel} ${option.label}` : undefined}
+                onRemove={() => removeValue(option.value)}
+              />
             )}
           </For>
         </div>

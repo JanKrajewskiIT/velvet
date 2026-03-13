@@ -21,6 +21,7 @@
       "files": ["**/*.module.css"],
       "rules": {
         "property-no-unknown": [true, { "ignoreProperties": ["composes"] }],
+        "value-keyword-case": ["lower", { "ignoreProperties": ["composes"] }],
         "selector-class-pattern": [
           "^[a-z][a-zA-Z0-9]+$",
           { "message": "Expected class selector to be camelCase (CSS Modules convention)" }

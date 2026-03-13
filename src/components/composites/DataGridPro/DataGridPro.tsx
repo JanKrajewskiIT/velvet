@@ -2,7 +2,9 @@ import { IoCaretDown, IoCaretUp } from 'solid-icons/io';
 import type { JSX } from 'solid-js';
 import { createEffect, createMemo, createSignal, For, onCleanup, Show } from 'solid-js';
 
+import Card from '~/components/data-display/Card/Card';
 import Input from '~/components/inputs/Input/Input';
+import CheckboxControl from '~/components/inputs/shared/CheckboxControl';
 import useClickOutside from '~/hooks/useClickOutside';
 import useEscapeKey from '~/hooks/useEscapeKey';
 import type Props from '~/models/Props';
@@ -687,7 +689,7 @@ const DataGridPro = <T extends Record<string, unknown>>(props: Props<DataGridPro
   const rowClass = (index: number) => classNames(styles.row, props.striped && index % 2 === 1 && styles.striped);
 
   return (
-    <div class={classNames(styles.wrapper, props.class)}>
+    <Card class={classNames(styles.wrapper, props.class)}>
       <Show when={showToolbar()}>
         <div class={styles.toolbar}>
           <div class={styles.toolbarLeft}>
@@ -767,8 +769,7 @@ const DataGridPro = <T extends Record<string, unknown>>(props: Props<DataGridPro
 
                       return (
                         <label class={styles.columnOption}>
-                          <input
-                            type="checkbox"
+                          <CheckboxControl
                             checked={checked()}
                             disabled={disableUncheck()}
                             onChange={() => handleColumnVisibilityToggle(key())}
@@ -802,8 +803,7 @@ const DataGridPro = <T extends Record<string, unknown>>(props: Props<DataGridPro
                   'z-index': 6,
                 }}
               >
-                <input
-                  type="checkbox"
+                <CheckboxControl
                   checked={allVisibleSelected()}
                   onChange={toggleAllVisible}
                   aria-label="Select all visible rows"
@@ -888,8 +888,7 @@ const DataGridPro = <T extends Record<string, unknown>>(props: Props<DataGridPro
                             'z-index': 5,
                           }}
                         >
-                          <input
-                            type="checkbox"
+                          <CheckboxControl
                             checked={selectedSet().has(entry.id)}
                             onClick={(e) => e.stopPropagation()}
                             onChange={() => toggleRow(entry.id)}
@@ -924,7 +923,7 @@ const DataGridPro = <T extends Record<string, unknown>>(props: Props<DataGridPro
           </Show>
         </div>
       </div>
-    </div>
+    </Card>
   );
 };
 

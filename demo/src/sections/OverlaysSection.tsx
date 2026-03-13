@@ -19,7 +19,7 @@ import { IoCopy, IoPencil, IoTrash } from 'solid-icons/io';
 import { createSignal, Show } from 'solid-js';
 
 import type { SectionId } from '../App';
-import { PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
+import { PreviewGroup, PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
 
 const SAMPLE_IMAGES: LightboxImage[] = [
   { src: 'https://picsum.photos/id/10/800/600', alt: 'Forest', caption: 'Misty forest trail' },
@@ -60,47 +60,51 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
       <Show when={sectionId() === 'overlays-tooltips'}>
         <ShowcaseSection title="Tooltip" subtitle="Contextual hints around interactive elements">
           <PreviewPanel>
-            <div class="row">
-              <Tooltip content="Tooltip on top" position="top">
-                <Button variant="ghost">Top</Button>
-              </Tooltip>
-              <Tooltip content="Tooltip on bottom" position="bottom">
-                <Button variant="ghost">Bottom</Button>
-              </Tooltip>
-              <Tooltip content="Tooltip on left" position="left">
-                <Button variant="ghost">Left</Button>
-              </Tooltip>
-              <Tooltip content="Tooltip on right" position="right">
-                <Button variant="ghost">Right</Button>
-              </Tooltip>
-            </div>
+            <PreviewGroup title="Examples">
+              <div class="row">
+                <Tooltip content="Tooltip on top" position="top">
+                  <Button variant="ghost">Top</Button>
+                </Tooltip>
+                <Tooltip content="Tooltip on bottom" position="bottom">
+                  <Button variant="ghost">Bottom</Button>
+                </Tooltip>
+                <Tooltip content="Tooltip on left" position="left">
+                  <Button variant="ghost">Left</Button>
+                </Tooltip>
+                <Tooltip content="Tooltip on right" position="right">
+                  <Button variant="ghost">Right</Button>
+                </Tooltip>
+              </div>
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="Popover" subtitle="Click-triggered floating content">
           <PreviewPanel>
-            <div class="row">
-              <Popover
-                trigger={<Button variant="ghost">Top</Button>}
-                content={<p class="muted-text">Popover content for top</p>}
-                position="top"
-              />
-              <Popover
-                trigger={<Button variant="ghost">Bottom</Button>}
-                content={<p class="muted-text">Popover content for bottom</p>}
-                position="bottom"
-              />
-              <Popover
-                trigger={<Button variant="ghost">Left</Button>}
-                content={<p class="muted-text">Popover content for left</p>}
-                position="left"
-              />
-              <Popover
-                trigger={<Button variant="ghost">Right</Button>}
-                content={<p class="muted-text">Popover content for right</p>}
-                position="right"
-              />
-            </div>
+            <PreviewGroup title="Examples">
+              <div class="row">
+                <Popover
+                  trigger={<Button variant="ghost">Top</Button>}
+                  content={<p class="muted-text">Popover content for top</p>}
+                  position="top"
+                />
+                <Popover
+                  trigger={<Button variant="ghost">Bottom</Button>}
+                  content={<p class="muted-text">Popover content for bottom</p>}
+                  position="bottom"
+                />
+                <Popover
+                  trigger={<Button variant="ghost">Left</Button>}
+                  content={<p class="muted-text">Popover content for left</p>}
+                  position="left"
+                />
+                <Popover
+                  trigger={<Button variant="ghost">Right</Button>}
+                  content={<p class="muted-text">Popover content for right</p>}
+                  position="right"
+                />
+              </div>
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
       </Show>
@@ -108,70 +112,76 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
       <Show when={sectionId() === 'overlays-dialogs'}>
         <ShowcaseSection title="Dialog" subtitle="Native dialog with smooth transitions">
           <PreviewPanel>
-            <Button variant="primary" onClick={() => setDialogOpen(true)}>
-              Open dialog
-            </Button>
-          </PreviewPanel>
+            <PreviewGroup title="Examples">
+              <Button variant="primary" onClick={() => setDialogOpen(true)}>
+                Open dialog
+              </Button>
 
-          <Dialog open={dialogOpen()} onClose={() => setDialogOpen(false)}>
-            <DialogTitle>Example dialog</DialogTitle>
-            <DialogBody>
-              <p class="muted-text">
-                This modal is built on the <span class="code-inline">&lt;dialog&gt;</span> element and closes on Escape
-                or backdrop click.
-              </p>
-            </DialogBody>
-            <DialogActions>
-              <Button variant="ghost" onClick={() => setDialogOpen(false)}>
-                Cancel
-              </Button>
-              <Button variant="primary" onClick={() => setDialogOpen(false)}>
-                Confirm
-              </Button>
-            </DialogActions>
-          </Dialog>
+              <Dialog open={dialogOpen()} onClose={() => setDialogOpen(false)}>
+                <DialogTitle>Example dialog</DialogTitle>
+                <DialogBody>
+                  <p class="muted-text">
+                    This modal is built on the <span class="code-inline">&lt;dialog&gt;</span> element and closes on
+                    Escape or backdrop click.
+                  </p>
+                </DialogBody>
+                <DialogActions>
+                  <Button variant="ghost" onClick={() => setDialogOpen(false)}>
+                    Cancel
+                  </Button>
+                  <Button variant="primary" onClick={() => setDialogOpen(false)}>
+                    Confirm
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </PreviewGroup>
+          </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="ConfirmDialog" subtitle="Preconfigured danger confirmation flow">
           <PreviewPanel>
-            <Button variant="danger" onClick={() => setConfirmOpen(true)}>
-              Delete item
-            </Button>
-          </PreviewPanel>
+            <PreviewGroup title="Examples">
+              <Button variant="danger" onClick={() => setConfirmOpen(true)}>
+                Delete item
+              </Button>
 
-          <ConfirmDialog
-            open={confirmOpen()}
-            title="Delete item?"
-            message="This action cannot be undone. The item will be permanently removed."
-            confirmLabel="Delete"
-            cancelLabel="Cancel"
-            variant="danger"
-            onConfirm={() => setConfirmOpen(false)}
-            onClose={() => setConfirmOpen(false)}
-          />
+              <ConfirmDialog
+                open={confirmOpen()}
+                title="Delete item?"
+                message="This action cannot be undone. The item will be permanently removed."
+                confirmLabel="Delete"
+                cancelLabel="Cancel"
+                variant="danger"
+                onConfirm={() => setConfirmOpen(false)}
+                onClose={() => setConfirmOpen(false)}
+              />
+            </PreviewGroup>
+          </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="ConfirmAction" subtitle="Headless confirmation flow wrapped around your own trigger">
-          <PreviewPanel class="col">
-            <ConfirmAction
-              title="Run destructive action?"
-              message="This demo increments a counter so you can verify the flow."
-              confirmLabel="Run"
-              cancelLabel="Cancel"
-              variant="danger"
-              onConfirm={() => {
-                setConfirmRuns((current) => current + 1);
-              }}
-            >
-              {({ openConfirm, isConfirmOpen }) => (
-                <div class="row">
-                  <Button variant="danger" onClick={openConfirm}>
-                    Open confirmation
-                  </Button>
-                  <span class="status-chip">Confirm opened: {isConfirmOpen() ? 'yes' : 'no'}</span>
-                </div>
-              )}
-            </ConfirmAction>
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <ConfirmAction
+                title="Run destructive action?"
+                message="This demo increments a counter so you can verify the flow."
+                confirmLabel="Run"
+                cancelLabel="Cancel"
+                variant="danger"
+                onConfirm={() => {
+                  setConfirmRuns((current) => current + 1);
+                }}
+              >
+                {({ openConfirm, isConfirmOpen }) => (
+                  <div class="row">
+                    <Button variant="danger" onClick={openConfirm}>
+                      Open confirmation
+                    </Button>
+                    <span class="status-chip">Confirm opened: {isConfirmOpen() ? 'yes' : 'no'}</span>
+                  </div>
+                )}
+              </ConfirmAction>
+            </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
             Confirmed actions: <span class="code-inline">{String(confirmRuns())}</span>
@@ -182,108 +192,114 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
       <Show when={sectionId() === 'overlays-drawers'}>
         <ShowcaseSection title="Drawer" subtitle="Slide-in side panel for secondary workflows">
           <PreviewPanel>
-            <Button variant="ghost" onClick={() => setDrawerOpen(true)}>
-              Open drawer
-            </Button>
-          </PreviewPanel>
+            <PreviewGroup title="Examples">
+              <Button variant="ghost" onClick={() => setDrawerOpen(true)}>
+                Open drawer
+              </Button>
 
-          <Drawer
-            open={drawerOpen()}
-            onClose={() => setDrawerOpen(false)}
-            title="Settings"
-            subtitle="Adjust your preferences"
-            closeLabel="Close settings drawer"
-            actions={
-              <>
-                <Button variant="ghost" onClick={() => setDrawerOpen(false)}>
-                  Cancel
-                </Button>
-                <Button variant="primary" onClick={() => setDrawerOpen(false)}>
-                  Save changes
-                </Button>
-              </>
-            }
-          >
-            <p class="muted-text">
-              Drawer content goes here. It works well for settings panels, side-by-side forms and detail views.
-            </p>
-          </Drawer>
+              <Drawer
+                open={drawerOpen()}
+                onClose={() => setDrawerOpen(false)}
+                title="Settings"
+                subtitle="Adjust your preferences"
+                closeLabel="Close settings drawer"
+                actions={
+                  <>
+                    <Button variant="ghost" onClick={() => setDrawerOpen(false)}>
+                      Cancel
+                    </Button>
+                    <Button variant="primary" onClick={() => setDrawerOpen(false)}>
+                      Save changes
+                    </Button>
+                  </>
+                }
+              >
+                <p class="muted-text">
+                  Drawer content goes here. It works well for settings panels, side-by-side forms and detail views.
+                </p>
+              </Drawer>
+            </PreviewGroup>
+          </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="Sheet" subtitle="Modal panel from any edge">
           <PreviewPanel>
-            <div class="row">
-              <Button variant="ghost" onClick={() => setBottomSheetOpen(true)}>
-                Bottom sheet
-              </Button>
-              <Button variant="ghost" onClick={() => setLeftSheetOpen(true)}>
-                Left sheet
-              </Button>
-              <Button variant="ghost" onClick={() => setRightSheetOpen(true)}>
-                Right sheet
-              </Button>
-            </div>
+            <PreviewGroup title="Examples">
+              <div class="row">
+                <Button variant="ghost" onClick={() => setBottomSheetOpen(true)}>
+                  Bottom sheet
+                </Button>
+                <Button variant="ghost" onClick={() => setLeftSheetOpen(true)}>
+                  Left sheet
+                </Button>
+                <Button variant="ghost" onClick={() => setRightSheetOpen(true)}>
+                  Right sheet
+                </Button>
+              </div>
+
+              <Sheet
+                open={bottomSheetOpen()}
+                onClose={() => setBottomSheetOpen(false)}
+                title="Bottom sheet"
+                closeLabel="Close bottom sheet"
+                side="bottom"
+                size="md"
+              >
+                <p class="muted-text">This sheet slides up from the bottom edge of the viewport.</p>
+              </Sheet>
+
+              <Sheet
+                open={leftSheetOpen()}
+                onClose={() => setLeftSheetOpen(false)}
+                title="Left sheet"
+                closeLabel="Close left sheet"
+                side="left"
+                size="sm"
+              >
+                <p class="muted-text">This sheet slides in from the left edge of the viewport.</p>
+              </Sheet>
+
+              <Sheet
+                open={rightSheetOpen()}
+                onClose={() => setRightSheetOpen(false)}
+                title="Right sheet"
+                closeLabel="Close right sheet"
+                side="right"
+                size="lg"
+              >
+                <p class="muted-text">This sheet slides in from the right edge of the viewport.</p>
+              </Sheet>
+            </PreviewGroup>
           </PreviewPanel>
-
-          <Sheet
-            open={bottomSheetOpen()}
-            onClose={() => setBottomSheetOpen(false)}
-            title="Bottom sheet"
-            closeLabel="Close bottom sheet"
-            side="bottom"
-            size="md"
-          >
-            <p class="muted-text">This sheet slides up from the bottom edge of the viewport.</p>
-          </Sheet>
-
-          <Sheet
-            open={leftSheetOpen()}
-            onClose={() => setLeftSheetOpen(false)}
-            title="Left sheet"
-            closeLabel="Close left sheet"
-            side="left"
-            size="sm"
-          >
-            <p class="muted-text">This sheet slides in from the left edge of the viewport.</p>
-          </Sheet>
-
-          <Sheet
-            open={rightSheetOpen()}
-            onClose={() => setRightSheetOpen(false)}
-            title="Right sheet"
-            closeLabel="Close right sheet"
-            side="right"
-            size="lg"
-          >
-            <p class="muted-text">This sheet slides in from the right edge of the viewport.</p>
-          </Sheet>
         </ShowcaseSection>
       </Show>
 
       <Show when={sectionId() === 'overlays-context'}>
         <ShowcaseSection title="ContextMenu" subtitle="Right-click action menus">
           <PreviewPanel>
-            <ContextMenu
-              items={[
-                { label: 'Edit', icon: <IoPencil />, onClick: () => {} },
-                { label: 'Duplicate', icon: <IoCopy />, onClick: () => {} },
-                'separator',
-                { label: 'Delete', icon: <IoTrash />, onClick: () => {}, danger: true },
-              ]}
-            >
-              <div
-                style={{
-                  'min-height': '120px',
-                  display: 'flex',
-                  'align-items': 'center',
-                  'justify-content': 'center',
-                  border: '2px dashed var(--color-border)',
-                  'border-radius': 'var(--radius-md)',
-                }}
+            <PreviewGroup title="Examples">
+              <ContextMenu
+                items={[
+                  { label: 'Edit', icon: <IoPencil />, onClick: () => {} },
+                  { label: 'Duplicate', icon: <IoCopy />, onClick: () => {} },
+                  'separator',
+                  { label: 'Delete', icon: <IoTrash />, onClick: () => {}, danger: true },
+                ]}
               >
-                Right-click here
-              </div>
-            </ContextMenu>
+                <div
+                  style={{
+                    'min-height': '120px',
+                    display: 'flex',
+                    'align-items': 'center',
+                    'justify-content': 'center',
+                    border: '2px dashed var(--color-border)',
+                    'border-radius': 'var(--radius-md)',
+                  }}
+                >
+                  Right-click here
+                </div>
+              </ContextMenu>
+            </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>Try right-clicking the dashed area above.</ShowcaseMeta>
         </ShowcaseSection>
@@ -292,28 +308,32 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
       <Show when={sectionId() === 'overlays-lightbox'}>
         <ShowcaseSection title="Lightbox" subtitle="Fullscreen image viewer with navigation">
           <PreviewPanel>
-            <Button variant="ghost" onClick={() => setLightboxOpen(true)}>
-              Open lightbox
-            </Button>
+            <PreviewGroup title="Examples">
+              <Button variant="ghost" onClick={() => setLightboxOpen(true)}>
+                Open lightbox
+              </Button>
+              <Lightbox images={SAMPLE_IMAGES} open={lightboxOpen()} onClose={() => setLightboxOpen(false)} />
+            </PreviewGroup>
           </PreviewPanel>
-          <Lightbox images={SAMPLE_IMAGES} open={lightboxOpen()} onClose={() => setLightboxOpen(false)} />
         </ShowcaseSection>
 
         <ShowcaseSection title="Tour" subtitle="Step-by-step onboarding spotlight">
           <PreviewPanel>
-            <Button variant="primary" onClick={() => setTourOpen(true)}>
-              Start tour
-            </Button>
+            <PreviewGroup title="Examples">
+              <Button variant="primary" onClick={() => setTourOpen(true)}>
+                Start tour
+              </Button>
+              <Tour
+                steps={TOUR_STEPS}
+                open={tourOpen()}
+                onClose={() => setTourOpen(false)}
+                nextLabel="Next"
+                prevLabel="Back"
+                finishLabel="Done"
+                skipLabel="Skip"
+              />
+            </PreviewGroup>
           </PreviewPanel>
-          <Tour
-            steps={TOUR_STEPS}
-            open={tourOpen()}
-            onClose={() => setTourOpen(false)}
-            nextLabel="Next"
-            prevLabel="Back"
-            finishLabel="Done"
-            skipLabel="Skip"
-          />
           <ShowcaseMeta>
             Highlights DOM elements by CSS selector. Supports top, bottom, left and right placements.
           </ShowcaseMeta>

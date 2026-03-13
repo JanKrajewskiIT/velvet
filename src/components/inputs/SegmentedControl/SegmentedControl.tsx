@@ -7,6 +7,7 @@ import styles from './SegmentedControl.module.css';
 interface SegmentedControlOption {
   value: string;
   label: string | JSX.Element;
+  ariaLabel?: string;
 }
 
 interface SegmentedControlOwnProps {
@@ -15,6 +16,8 @@ interface SegmentedControlOwnProps {
   onChange: (value: string) => void;
   size?: 'sm' | 'md';
   disabled?: boolean;
+  optionClass?: string;
+  activeOptionClass?: string;
 }
 
 const SegmentedControl = (props: Props<SegmentedControlOwnProps>) => {
@@ -34,8 +37,9 @@ const SegmentedControl = (props: Props<SegmentedControlOwnProps>) => {
           <button
             type="button"
             role="radio"
-            class={`${styles.option} ${props.value === option.value ? styles.active : ''}`}
+            class={`${styles.option} ${props.optionClass ?? ''} ${props.value === option.value ? styles.active : ''} ${props.value === option.value ? (props.activeOptionClass ?? '') : ''}`}
             aria-checked={props.value === option.value}
+            aria-label={option.ariaLabel}
             disabled={props.disabled}
             onClick={() => handleSelect(option.value)}
           >

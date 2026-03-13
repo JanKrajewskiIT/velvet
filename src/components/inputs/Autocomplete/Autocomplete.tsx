@@ -1,4 +1,3 @@
-import { IoCloseOutline } from 'solid-icons/io';
 import { createMemo, createSignal, For, Show } from 'solid-js';
 
 import type Props from '~/models/Props';
@@ -7,6 +6,7 @@ import classNames from '~/utils/classNames';
 import Input, { type InputSize } from '../Input/Input';
 import DropdownOption from '../shared/DropdownOption';
 import DropdownSurface from '../shared/DropdownSurface';
+import EditableChip from '../shared/EditableChip';
 import styles from './Autocomplete.module.css';
 
 interface AutocompleteProps {
@@ -68,17 +68,11 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
       <div class={styles.selectedTags}>
         <For each={props.values}>
           {(value) => (
-            <span class={styles.tag}>
-              {value}
-              <button
-                type="button"
-                class={styles.removeTag}
-                aria-label={props.removeLabel ? `${props.removeLabel} ${value}` : undefined}
-                onClick={() => removeValue(value)}
-              >
-                <IoCloseOutline />
-              </button>
-            </span>
+            <EditableChip
+              label={value}
+              removeLabel={props.removeLabel ? `${props.removeLabel} ${value}` : undefined}
+              onRemove={() => removeValue(value)}
+            />
           )}
         </For>
       </div>

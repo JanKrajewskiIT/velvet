@@ -4,6 +4,7 @@ import { createEffect, createMemo, createSignal, For, type JSX, Show, untrack } 
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
+import CheckboxControl from '../../inputs/shared/CheckboxControl';
 import styles from './TreeView.module.css';
 
 export interface TreeNode {
@@ -188,8 +189,7 @@ const TreeItem = (props: TreeItemProps) => {
         onDragLeave={() => props.onDragLeave()}
       >
         <Show when={props.checkable}>
-          <input
-            type="checkbox"
+          <CheckboxControl
             class={styles.checkbox}
             checked={isChecked()}
             onClick={handleCheckboxClick}

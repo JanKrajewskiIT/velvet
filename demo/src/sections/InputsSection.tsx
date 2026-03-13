@@ -1,6 +1,7 @@
 import {
   ActionRow,
   addToast,
+  AffixButton,
   Autocomplete,
   Button,
   Checkbox,
@@ -45,7 +46,7 @@ import { IoAdd, IoClose, IoDocument, IoDownload, IoEllipsisHorizontal, IoPencil,
 import { createSignal, Show } from 'solid-js';
 
 import type { SectionId } from '../App';
-import { PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
+import { PreviewGroup, PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
 
 const PRESET_COLORS = ['#1467ff', '#0c52cf', '#02a4ff', '#2e7d32', '#ed6c02', '#d32f2f', '#1b78ff', '#00838f'];
 const FRAMEWORK_OPTIONS: MultiSelectOption[] = [
@@ -107,45 +108,67 @@ const InputsSection = (props: InputsSectionProps) => {
       <Show when={sectionId() === 'inputs-buttons'}>
         <ShowcaseSection title="Button variants" subtitle="Primary actions, danger actions and low-emphasis controls">
           <PreviewPanel>
-            <div class="row">
-              <Button variant="primary">Primary</Button>
-              <Button variant="danger">Danger</Button>
-              <Button variant="ghost">Ghost</Button>
-              <Button variant="dashed">Dashed</Button>
-            </div>
+            <PreviewGroup title="Variants">
+              <div class="row">
+                <Button variant="primary">Primary</Button>
+                <Button variant="danger">Danger</Button>
+                <Button variant="ghost">Ghost</Button>
+                <Button variant="dashed">Dashed</Button>
+              </div>
+            </PreviewGroup>
+            <PreviewGroup title="States">
+              <div class="row">
+                <Button variant="primary" disabled>
+                  Disabled
+                </Button>
+                <Button variant="primary" loading={loading()} onClick={simulateLoad}>
+                  {loading() ? 'Saving...' : 'Click to load'}
+                </Button>
+              </div>
+            </PreviewGroup>
+            <PreviewGroup title="AffixButton">
+              <div class="row">
+                <AffixButton variant="ghost" prefix={<IoDocument />} badge={12}>
+                  Documents
+                </AffixButton>
+                <AffixButton variant="primary" prefix={<IoDownload />} suffix={<IoEllipsisHorizontal />}>
+                  Export report
+                </AffixButton>
+                <AffixButton variant="dashed" prefix={<IoAdd />} suffix={<IoClose />}>
+                  Create tag
+                </AffixButton>
+              </div>
+            </PreviewGroup>
           </PreviewPanel>
-          <PreviewPanel>
-            <div class="row">
-              <Button variant="primary" disabled>
-                Disabled
-              </Button>
-              <Button variant="primary" loading={loading()} onClick={simulateLoad}>
-                {loading() ? 'Saving...' : 'Click to load'}
-              </Button>
-            </div>
-          </PreviewPanel>
+          <ShowcaseMeta>
+            <span class="code-inline">AffixButton</span> supports prefix icon and suffix element or badge in one API.
+          </ShowcaseMeta>
         </ShowcaseSection>
         <ShowcaseSection title="IconButton" subtitle="Compact controls for dense interfaces">
           <PreviewPanel>
-            <div class="row">
-              <IconButton icon={<IoPencil />} title="Edit" />
-              <IconButton icon={<IoTrash />} title="Delete" />
-              <IconButton icon={<IoAdd />} title="Add" size="sm" />
-              <IconButton icon={<IoDownload />} title="Download" size="md" />
-              <IconButton icon={<IoClose />} title="Close" disabled />
-            </div>
+            <PreviewGroup title="Examples">
+              <div class="row">
+                <IconButton icon={<IoPencil />} title="Edit" />
+                <IconButton icon={<IoTrash />} title="Delete" />
+                <IconButton icon={<IoAdd />} title="Add" size="sm" />
+                <IconButton icon={<IoDownload />} title="Download" size="md" />
+                <IconButton icon={<IoClose />} title="Close" disabled />
+              </div>
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
         <ShowcaseSection title="ActionRow" subtitle="Horizontal row for action buttons with alignment">
-          <PreviewPanel class="col">
-            <ActionRow align="start">
-              <Button variant="primary">Save</Button>
-              <Button variant="ghost">Cancel</Button>
-            </ActionRow>
-            <ActionRow align="end">
-              <Button variant="dashed">Export</Button>
-              <Button variant="primary">Submit</Button>
-            </ActionRow>
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <ActionRow align="start">
+                <Button variant="primary">Save</Button>
+                <Button variant="ghost">Cancel</Button>
+              </ActionRow>
+              <ActionRow align="end">
+                <Button variant="dashed">Export</Button>
+                <Button variant="primary">Submit</Button>
+              </ActionRow>
+            </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
             Use <span class="code-inline">align</span> prop to control button positioning within the row.
@@ -153,34 +176,40 @@ const InputsSection = (props: InputsSectionProps) => {
         </ShowcaseSection>
         <ShowcaseSection title="CopyButton" subtitle="One-click clipboard copy with feedback">
           <PreviewPanel>
-            <div class="row">
-              <CopyButton text="npm install @jankrajewskiit/ui" label="Copy command" />
-              <CopyButton text="Hello World" variant="outline" label="Outline" />
-              <CopyButton text="Small copy" size="sm" />
-            </div>
+            <PreviewGroup title="Examples">
+              <div class="row">
+                <CopyButton text="npm install @jankrajewskiit/ui" label="Copy command" />
+                <CopyButton text="Hello World" variant="outline" label="Outline" />
+                <CopyButton text="Small copy" size="sm" />
+              </div>
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="LocaleSwitcher" subtitle="Language toggle button">
           <PreviewPanel>
-            <div class="row">
-              <LocaleSwitcher
-                label={locale()}
-                switchLabel="Switch locale"
-                variant="surface"
-                onSwitch={() => {
-                  setLocale((current) => (current === 'EN' ? 'PL' : 'EN'));
-                }}
-              />
-            </div>
+            <PreviewGroup title="Examples">
+              <div class="row">
+                <LocaleSwitcher
+                  label={locale()}
+                  switchLabel="Switch locale"
+                  variant="surface"
+                  onSwitch={() => {
+                    setLocale((current) => (current === 'EN' ? 'PL' : 'EN'));
+                  }}
+                />
+              </div>
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="ThemeToggle" subtitle="Light and dark mode switch">
           <PreviewPanel>
-            <div class="row">
-              <ThemeToggle lightLabel="Light mode" darkLabel="Dark mode" groupLabel="Theme" variant="light" />
-            </div>
+            <PreviewGroup title="Examples">
+              <div class="row">
+                <ThemeToggle lightLabel="Light mode" darkLabel="Dark mode" groupLabel="Theme" variant="light" />
+              </div>
+            </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
             Wraps <span class="code-inline">useTheme()</span> from ThemeProvider.
@@ -191,50 +220,56 @@ const InputsSection = (props: InputsSectionProps) => {
       <Show when={sectionId() === 'inputs-dropdowns'}>
         <ShowcaseSection title="DropdownButton and DropdownMenu" subtitle="Action menus with keyboard navigation">
           <PreviewPanel>
-            <div class="row">
-              <DropdownButton label="Actions" variant="primary">
-                <DropdownItem label="Edit" onClick={() => {}} />
-                <DropdownItem label="Duplicate" onClick={() => {}} />
-                <DropdownItem label="Archive" onClick={() => {}} />
-              </DropdownButton>
+            <PreviewGroup title="Examples">
+              <div class="row">
+                <DropdownButton label="Actions" variant="primary">
+                  <DropdownItem label="Edit" onClick={() => {}} />
+                  <DropdownItem label="Duplicate" onClick={() => {}} />
+                  <DropdownItem label="Archive" onClick={() => {}} />
+                </DropdownButton>
 
-              <DropdownMenu
-                trigger={<IconButton icon={<IoEllipsisHorizontal />} title="More options" />}
-                label="More options"
-              >
-                <DropdownItem label="Settings" onClick={() => {}} />
-                <DropdownItem label="Export" onClick={() => {}} />
-                <DropdownItem label="Delete" onClick={() => {}} variant="error" />
-              </DropdownMenu>
-            </div>
+                <DropdownMenu
+                  trigger={<IconButton icon={<IoEllipsisHorizontal />} title="More options" />}
+                  label="More options"
+                >
+                  <DropdownItem label="Settings" onClick={() => {}} />
+                  <DropdownItem label="Export" onClick={() => {}} />
+                  <DropdownItem label="Delete" onClick={() => {}} variant="error" />
+                </DropdownMenu>
+              </div>
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="Autocomplete" subtitle="Multi-value select with filtering">
           <PreviewPanel>
-            <FormField label="Technologies" id="demo-auto">
-              <Autocomplete
-                values={autoValues()}
-                options={['TypeScript', 'JavaScript', 'SolidJS', 'React', 'Vue', 'Svelte', 'Vite', 'Tailwind']}
-                onChange={setAutoValues}
-                placeholder="Type to search..."
-                removeLabel="Remove"
-              />
-            </FormField>
+            <PreviewGroup title="Examples">
+              <FormField label="Technologies" id="demo-auto">
+                <Autocomplete
+                  values={autoValues()}
+                  options={['TypeScript', 'JavaScript', 'SolidJS', 'React', 'Vue', 'Svelte', 'Vite', 'Tailwind']}
+                  onChange={setAutoValues}
+                  placeholder="Type to search..."
+                  removeLabel="Remove"
+                />
+              </FormField>
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="MultiSelect" subtitle="Checkbox dropdown for selecting many options">
           <PreviewPanel>
-            <FormField label="Frameworks" id="demo-multi-select">
-              <MultiSelect
-                value={frameworks()}
-                options={FRAMEWORK_OPTIONS}
-                onChange={setFrameworks}
-                placeholder="Choose frameworks"
-                removeLabel="Remove"
-              />
-            </FormField>
+            <PreviewGroup title="Examples">
+              <FormField label="Frameworks" id="demo-multi-select">
+                <MultiSelect
+                  value={frameworks()}
+                  options={FRAMEWORK_OPTIONS}
+                  onChange={setFrameworks}
+                  placeholder="Choose frameworks"
+                  removeLabel="Remove"
+                />
+              </FormField>
+            </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
             Selected: <span class="code-inline">{frameworks().join(', ') || 'none'}</span>
@@ -243,66 +278,74 @@ const InputsSection = (props: InputsSectionProps) => {
 
         <ShowcaseSection title="Select" subtitle="Native select with custom styling">
           <PreviewPanel>
-            <FormField label="Choose option" id="demo-select">
-              <Select id="demo-select" value={selected()} onChange={(e) => setSelected(e.currentTarget.value)}>
-                <option value="">-- select --</option>
-                <option value="a">Option A</option>
-                <option value="b">Option B</option>
-                <option value="c">Option C</option>
-              </Select>
-            </FormField>
+            <PreviewGroup title="Examples">
+              <FormField label="Choose option" id="demo-select">
+                <Select id="demo-select" value={selected()} onChange={(e) => setSelected(e.currentTarget.value)}>
+                  <option value="">-- select --</option>
+                  <option value="a">Option A</option>
+                  <option value="b">Option B</option>
+                  <option value="c">Option C</option>
+                </Select>
+              </FormField>
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
       </Show>
 
       <Show when={sectionId() === 'inputs-fields'}>
         <ShowcaseSection title="Input" subtitle="Text and disabled field variants">
-          <PreviewPanel class="col">
-            <form class="inputFieldStack" onSubmit={(e) => e.preventDefault()}>
-              <FormField label="Text input" id="demo-text">
-                <Input
-                  id="demo-text"
-                  type="text"
-                  placeholder="Enter text..."
-                  value={text()}
-                  onInput={(e) => setText(e.currentTarget.value)}
-                />
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <form class="inputFieldStack" onSubmit={(e) => e.preventDefault()}>
+                <FormField label="Text input" id="demo-text">
+                  <Input
+                    id="demo-text"
+                    type="text"
+                    placeholder="Enter text..."
+                    value={text()}
+                    onInput={(e) => setText(e.currentTarget.value)}
+                  />
+                </FormField>
+                <FormField label="Disabled input" id="demo-disabled">
+                  <Input id="demo-disabled" type="text" value="Disabled" disabled />
+                </FormField>
+              </form>
+              <FormField label="Input sizes" id="demo-input-sizes">
+                <div class="col">
+                  <Input id="demo-input-sm" size="sm" placeholder="Small input" />
+                  <Input id="demo-input-md" size="md" placeholder="Medium input" />
+                  <Input id="demo-input-lg" size="lg" placeholder="Large input" />
+                </div>
               </FormField>
-              <FormField label="Disabled input" id="demo-disabled">
-                <Input id="demo-disabled" type="text" value="Disabled" disabled />
-              </FormField>
-            </form>
-          </PreviewPanel>
-          <PreviewPanel class="col">
-            <FormField label="Input sizes" id="demo-input-sizes">
-              <div class="col">
-                <Input id="demo-input-sm" size="sm" placeholder="Small input" />
-                <Input id="demo-input-md" size="md" placeholder="Medium input" />
-                <Input id="demo-input-lg" size="lg" placeholder="Large input" />
-              </div>
-            </FormField>
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="TextArea" subtitle="Long-form input control">
           <PreviewPanel>
-            <FormField label="Description" id="demo-ta">
-              <TextArea id="demo-ta" placeholder="Enter a longer description..." rows={4} />
-            </FormField>
+            <PreviewGroup title="Examples">
+              <FormField label="Description" id="demo-ta">
+                <TextArea id="demo-ta" placeholder="Enter a longer description..." rows={4} />
+              </FormField>
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="NumberInput" subtitle="Numeric stepper with increment and decrement">
-          <PreviewPanel class="col numberInputStack">
-            <NumberInput value={quantity()} onChange={setQuantity} label="Quantity" min={0} max={100} size="sm" />
-            <NumberInput value={1} onChange={() => {}} disabled size="sm" />
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <NumberInput value={quantity()} onChange={setQuantity} label="Quantity" min={0} max={100} size="sm" />
+              <NumberInput value={1} onChange={() => {}} disabled size="sm" />
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="SearchInput" subtitle="Filtered input with clear and debounce">
-          <PreviewPanel class="col">
-            <SearchInput value={search()} onInput={setSearch} placeholder="Search components..." />
-            <SearchInput value="" onInput={() => {}} disabled placeholder="Disabled" />
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <SearchInput value={search()} onInput={setSearch} placeholder="Search components..." />
+              <SearchInput value="" onInput={() => {}} disabled placeholder="Disabled" />
+            </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
             Search value: <span class="code-inline">{search()}</span>
@@ -310,27 +353,33 @@ const InputsSection = (props: InputsSectionProps) => {
         </ShowcaseSection>
 
         <ShowcaseSection title="PasswordInput" subtitle="Password field with visibility toggle">
-          <PreviewPanel class="col">
-            <FormField label="Password" id="demo-pwd">
-              <PasswordInput id="demo-pwd" placeholder="Enter password..." />
-            </FormField>
-            <FormField label="Disabled" id="demo-pwd-dis">
-              <PasswordInput id="demo-pwd-dis" value="secret123" disabled />
-            </FormField>
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <FormField label="Password" id="demo-pwd">
+                <PasswordInput id="demo-pwd" placeholder="Enter password..." />
+              </FormField>
+              <FormField label="Disabled" id="demo-pwd-dis">
+                <PasswordInput id="demo-pwd-dis" value="secret123" disabled />
+              </FormField>
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="TagInput" subtitle="Quick keyboard-driven tagging">
           <PreviewPanel>
-            <FormField label="Tags" id="demo-tags">
-              <TagInput value={tags()} onChange={setTags} placeholder="Add a tag and press Enter" />
-            </FormField>
+            <PreviewGroup title="Examples">
+              <FormField label="Tags" id="demo-tags">
+                <TagInput value={tags()} onChange={setTags} placeholder="Add a tag and press Enter" />
+              </FormField>
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="OtpInput" subtitle="One-time password entry">
           <PreviewPanel>
-            <OtpInput value={otp()} onChange={setOtp} length={6} />
+            <PreviewGroup title="Examples">
+              <OtpInput value={otp()} onChange={setOtp} length={6} />
+            </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
             Entered value: <span class="code-inline">{otp()}</span>
@@ -338,8 +387,10 @@ const InputsSection = (props: InputsSectionProps) => {
         </ShowcaseSection>
 
         <ShowcaseSection title="InlineEditableText" subtitle="Click-to-edit single line text">
-          <PreviewPanel class="col">
-            <InlineEditableText value={editableTitle()} onChange={setEditableTitle} placeholder="Set a title" />
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <InlineEditableText value={editableTitle()} onChange={setEditableTitle} placeholder="Set a title" />
+            </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
             Current value: <span class="code-inline">{editableTitle()}</span>
@@ -347,13 +398,15 @@ const InputsSection = (props: InputsSectionProps) => {
         </ShowcaseSection>
 
         <ShowcaseSection title="RichTextEditor" subtitle="WYSIWYG editor for formatted content">
-          <PreviewPanel class="col">
-            <RichTextEditor
-              label="Article body"
-              value={richText()}
-              onChange={setRichText}
-              placeholder="Start writing..."
-            />
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <RichTextEditor
+                label="Article body"
+                value={richText()}
+                onChange={setRichText}
+                placeholder="Start writing..."
+              />
+            </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
             HTML length: <span class="code-inline">{richText().length}</span>
@@ -363,148 +416,164 @@ const InputsSection = (props: InputsSectionProps) => {
 
       <Show when={sectionId() === 'inputs-controls'}>
         <ShowcaseSection title="Checkbox" subtitle="Binary choice with optional label and description">
-          <PreviewPanel class="col">
-            <Checkbox
-              checked={newsletter()}
-              onChange={(e) => setNewsletter(e.currentTarget.checked)}
-              label="Subscribe to newsletter"
-              description="Monthly product updates"
-            />
-            <Checkbox
-              checked={termsAccepted()}
-              onChange={(e) => setTermsAccepted(e.currentTarget.checked)}
-              label="I accept the terms and conditions"
-            />
-            <Checkbox
-              checked={marketingEmails()}
-              onChange={(e) => setMarketingEmails(e.currentTarget.checked)}
-              label="Send me product news and offers"
-              description="You can unsubscribe at any time"
-            />
-            <Checkbox checked={false} onChange={() => {}} label="Unchecked by default" />
-            <Checkbox checked disabled onChange={() => {}} label="Checked and disabled" />
-            <Checkbox checked={false} disabled onChange={() => {}} label="Unchecked and disabled" />
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <Checkbox
+                checked={newsletter()}
+                onChange={(e) => setNewsletter(e.currentTarget.checked)}
+                label="Subscribe to newsletter"
+                description="Monthly product updates"
+              />
+              <Checkbox
+                checked={termsAccepted()}
+                onChange={(e) => setTermsAccepted(e.currentTarget.checked)}
+                label="I accept the terms and conditions"
+              />
+              <Checkbox
+                checked={marketingEmails()}
+                onChange={(e) => setMarketingEmails(e.currentTarget.checked)}
+                label="Send me product news and offers"
+                description="You can unsubscribe at any time"
+              />
+              <Checkbox checked={false} onChange={() => {}} label="Unchecked by default" />
+              <Checkbox checked disabled onChange={() => {}} label="Checked and disabled" />
+              <Checkbox checked={false} disabled onChange={() => {}} label="Unchecked and disabled" />
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="Switch" subtitle="Toggle control with optional label and description">
-          <PreviewPanel class="col">
-            <Switch
-              checked={notifications()}
-              onChange={setNotifications}
-              label="Enable push notifications"
-              description="Receive alerts for important events"
-              aria-label="Enable push notifications"
-            />
-            <Switch
-              checked={focusMode()}
-              onChange={setFocusMode}
-              label="Focus mode"
-              description="Hide sidebar and reduce distractions"
-              aria-label="Focus mode"
-            />
-            <Switch checked={true} onChange={() => {}} label="On (controlled elsewhere)" aria-label="On" />
-            <Switch checked={false} onChange={() => {}} label="Off" aria-label="Off" />
-            <Switch checked disabled onChange={() => {}} label="Disabled on" aria-label="Disabled on" />
-            <Switch checked={false} disabled onChange={() => {}} label="Disabled off" aria-label="Disabled off" />
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <Switch
+                checked={notifications()}
+                onChange={setNotifications}
+                label="Enable push notifications"
+                description="Receive alerts for important events"
+                aria-label="Enable push notifications"
+              />
+              <Switch
+                checked={focusMode()}
+                onChange={setFocusMode}
+                label="Focus mode"
+                description="Hide sidebar and reduce distractions"
+                aria-label="Focus mode"
+              />
+              <Switch checked={true} onChange={() => {}} label="On (controlled elsewhere)" aria-label="On" />
+              <Switch checked={false} onChange={() => {}} label="Off" aria-label="Off" />
+              <Switch checked disabled onChange={() => {}} label="Disabled on" aria-label="Disabled on" />
+              <Switch checked={false} disabled onChange={() => {}} label="Disabled off" aria-label="Disabled off" />
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="RadioGroup" subtitle="Single choice from a set of options">
-          <PreviewPanel class="col">
-            <RadioGroup<RoleValue>
-              name="demo-role"
-              value={role()}
-              onChange={setRole}
-              direction="column"
-              options={[
-                { value: 'admin', label: 'Admin', description: 'Full access' },
-                { value: 'editor', label: 'Editor', description: 'Can edit resources' },
-                { value: 'viewer', label: 'Viewer', description: 'Read-only access' },
-              ]}
-            />
-            <RadioGroup
-              name="demo-horizontal"
-              value={viewMode()}
-              onChange={setViewMode}
-              direction="row"
-              options={[
-                { value: 'list', label: 'List' },
-                { value: 'grid', label: 'Grid' },
-                { value: 'board', label: 'Board' },
-              ]}
-            />
-            <RadioGroup
-              name="demo-disabled"
-              value={billingCycle()}
-              onChange={setBillingCycle}
-              direction="column"
-              options={[
-                { value: 'monthly', label: 'Monthly billing' },
-                { value: 'yearly', label: 'Yearly billing', description: 'Save 20%' },
-              ]}
-            />
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <RadioGroup<RoleValue>
+                name="demo-role"
+                value={role()}
+                onChange={setRole}
+                direction="column"
+                options={[
+                  { value: 'admin', label: 'Admin', description: 'Full access' },
+                  { value: 'editor', label: 'Editor', description: 'Can edit resources' },
+                  { value: 'viewer', label: 'Viewer', description: 'Read-only access' },
+                ]}
+              />
+              <RadioGroup
+                name="demo-horizontal"
+                value={viewMode()}
+                onChange={setViewMode}
+                direction="row"
+                options={[
+                  { value: 'list', label: 'List' },
+                  { value: 'grid', label: 'Grid' },
+                  { value: 'board', label: 'Board' },
+                ]}
+              />
+              <RadioGroup
+                name="demo-disabled"
+                value={billingCycle()}
+                onChange={setBillingCycle}
+                direction="column"
+                options={[
+                  { value: 'monthly', label: 'Monthly billing' },
+                  { value: 'yearly', label: 'Yearly billing', description: 'Save 20%' },
+                ]}
+              />
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="SegmentedControl" subtitle="Mutually exclusive toggle group">
-          <PreviewPanel class="col">
-            <SegmentedControl
-              value={segment()}
-              onChange={setSegment}
-              options={[
-                { value: 'list', label: 'List' },
-                { value: 'grid', label: 'Grid' },
-                { value: 'board', label: 'Board' },
-              ]}
-            />
-            <SegmentedControl
-              value={billingCycle()}
-              onChange={setBillingCycle}
-              size="sm"
-              options={[
-                { value: 'monthly', label: 'Monthly' },
-                { value: 'yearly', label: 'Yearly' },
-              ]}
-            />
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <SegmentedControl
+                value={segment()}
+                onChange={setSegment}
+                options={[
+                  { value: 'list', label: 'List' },
+                  { value: 'grid', label: 'Grid' },
+                  { value: 'board', label: 'Board' },
+                ]}
+              />
+              <SegmentedControl
+                value={billingCycle()}
+                onChange={setBillingCycle}
+                size="sm"
+                options={[
+                  { value: 'monthly', label: 'Monthly' },
+                  { value: 'yearly', label: 'Yearly' },
+                ]}
+              />
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="Slider" subtitle="Fine-grained value selection">
-          <PreviewPanel class="col">
-            <Slider label="Volume" value={sliderValue()} onChange={setSliderValue} showValue />
-            <Slider label="Disabled" value={60} onChange={() => {}} disabled />
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <Slider label="Volume" value={sliderValue()} onChange={setSliderValue} showValue />
+              <Slider label="Disabled" value={60} onChange={() => {}} disabled />
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="RangeSlider" subtitle="Select minimum and maximum values">
-          <PreviewPanel class="col">
-            <RangeSlider
-              label="Price range"
-              value={priceRange()}
-              onChange={setPriceRange}
-              min={0}
-              max={100}
-              showValue
-            />
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <RangeSlider
+                label="Price range"
+                value={priceRange()}
+                onChange={setPriceRange}
+                min={0}
+                max={100}
+                showValue
+              />
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="Rating" subtitle="Star-based scoring control">
           <PreviewPanel>
-            <div class="row">
-              <Rating value={rating()} onChange={setRating} />
-              <Rating value={3.5} />
-              <Rating value={4} size="sm" />
-            </div>
+            <PreviewGroup title="Examples">
+              <div class="row">
+                <Rating value={rating()} onChange={setRating} />
+                <Rating value={3.5} />
+                <Rating value={4} size="sm" />
+              </div>
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="ColorPicker" subtitle="Palette-driven accent selection">
           <PreviewPanel>
-            <FormField label="Brand color" id="demo-color">
-              <ColorPicker colors={PRESET_COLORS} value={color()} onChange={setColor} />
-            </FormField>
+            <PreviewGroup title="Examples">
+              <FormField label="Brand color" id="demo-color">
+                <ColorPicker colors={PRESET_COLORS} value={color()} onChange={setColor} />
+              </FormField>
+            </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
             Selected color: <span class="code-inline">{color()}</span>
@@ -514,15 +583,19 @@ const InputsSection = (props: InputsSectionProps) => {
 
       <Show when={sectionId() === 'inputs-datetime'}>
         <ShowcaseSection title="DatePicker" subtitle="Calendar-driven date selection">
-          <PreviewPanel class="col">
-            <DatePicker label="Start date" value={date()} onChange={setDate} />
-            <DatePicker label="Disabled" value="" onChange={() => {}} disabled />
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <DatePicker label="Start date" value={date()} onChange={setDate} />
+              <DatePicker label="Disabled" value="" onChange={() => {}} disabled />
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="DateRangePicker" subtitle="Calendar-driven date range selection">
-          <PreviewPanel class="col">
-            <DateRangePicker value={range()} onChange={setRange} />
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <DateRangePicker value={range()} onChange={setRange} />
+            </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
             Range:{' '}
@@ -533,21 +606,25 @@ const InputsSection = (props: InputsSectionProps) => {
         </ShowcaseSection>
 
         <ShowcaseSection title="TimePicker" subtitle="Scrollable time slot picker">
-          <PreviewPanel class="col">
-            <TimePicker label="Meeting time" value={time()} onChange={setTime} step={30} />
-            <TimePicker label="Precise time" value={time15()} onChange={setTime15} step={15} />
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <TimePicker label="Meeting time" value={time()} onChange={setTime} step={30} />
+              <TimePicker label="Precise time" value={time15()} onChange={setTime15} step={15} />
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="DateTimePicker" subtitle="Combined date and time selection">
-          <PreviewPanel class="col">
-            <DateTimePicker
-              value={dateTime()}
-              onChange={setDateTime}
-              dateLabel="Publish date"
-              timeLabel="Publish time"
-              step={15}
-            />
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <DateTimePicker
+                value={dateTime()}
+                onChange={setDateTime}
+                dateLabel="Publish date"
+                timeLabel="Publish time"
+                step={15}
+              />
+            </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
             DateTime: <span class="code-inline">{dateTime() || 'not set'}</span>
@@ -557,17 +634,19 @@ const InputsSection = (props: InputsSectionProps) => {
 
       <Show when={sectionId() === 'inputs-other'}>
         <ShowcaseSection title="FileDropZone" subtitle="Drag-and-drop file input with preview">
-          <PreviewPanel class="col">
-            <FileDropZone
-              label="Drop a file here or click to browse"
-              hint="Supports: .pdf, .jpg, .png"
-              accept=".pdf,.jpg,.png,image/*"
-              icon={<IoDocument size={28} />}
-              onFile={(f) => {
-                setDroppedFile(f.name);
-                addToast({ type: 'success', message: `Picked: ${f.name}` });
-              }}
-            />
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <FileDropZone
+                label="Drop a file here or click to browse"
+                hint="Supports: .pdf, .jpg, .png"
+                accept=".pdf,.jpg,.png,image/*"
+                icon={<IoDocument size={28} />}
+                onFile={(f) => {
+                  setDroppedFile(f.name);
+                  addToast({ type: 'success', message: `Picked: ${f.name}` });
+                }}
+              />
+            </PreviewGroup>
           </PreviewPanel>
           {droppedFile() && (
             <ShowcaseMeta>
@@ -577,72 +656,80 @@ const InputsSection = (props: InputsSectionProps) => {
         </ShowcaseSection>
 
         <ShowcaseSection title="FileInput" subtitle="Drag-and-drop file upload zone">
-          <PreviewPanel class="col">
-            <FileInput accept="image/*" onFiles={() => {}} />
-            <FileInput accept="*" multiple onFiles={() => {}} label="Drop multiple files here or click to browse" />
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <FileInput accept="image/*" onFiles={() => {}} />
+              <FileInput accept="*" multiple onFiles={() => {}} label="Drop multiple files here or click to browse" />
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
       </Show>
 
       <Show when={sectionId() === 'inputs-form-layout'}>
         <ShowcaseSection title="FormField" subtitle="Label wrapper for form controls">
-          <PreviewPanel class="col">
-            <FormField label="Full name" id="demo-ff-name">
-              <Input id="demo-ff-name" type="text" placeholder="Jan Kowalski" />
-            </FormField>
-            <FormField label="Email address" id="demo-ff-email">
-              <Input id="demo-ff-email" type="email" placeholder="jan@example.com" />
-            </FormField>
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <FormField label="Full name" id="demo-ff-name">
+                <Input id="demo-ff-name" type="text" placeholder="Jan Kowalski" />
+              </FormField>
+              <FormField label="Email address" id="demo-ff-email">
+                <Input id="demo-ff-email" type="email" placeholder="jan@example.com" />
+              </FormField>
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="FormGrid" subtitle="Responsive multi-column form layout">
           <PreviewPanel>
-            <FormLayout>
-              <FormGrid>
-                <FormField label="First name" id="fn">
-                  <Input id="fn" type="text" placeholder="Jan" />
-                </FormField>
-                <FormField label="Last name" id="ln">
-                  <Input id="ln" type="text" placeholder="Kowalski" />
-                </FormField>
-                <FormField label="Email" id="email">
-                  <Input id="email" type="email" placeholder="jan@example.com" />
-                </FormField>
-                <FormField label="Role" id="role">
-                  <Select id="role">
-                    <option value="">-- select role --</option>
-                    <option value="admin">Admin</option>
-                    <option value="user">User</option>
-                  </Select>
-                </FormField>
-              </FormGrid>
-            </FormLayout>
+            <PreviewGroup title="Examples">
+              <FormLayout>
+                <FormGrid>
+                  <FormField label="First name" id="fn">
+                    <Input id="fn" type="text" placeholder="Jan" />
+                  </FormField>
+                  <FormField label="Last name" id="ln">
+                    <Input id="ln" type="text" placeholder="Kowalski" />
+                  </FormField>
+                  <FormField label="Email" id="email">
+                    <Input id="email" type="email" placeholder="jan@example.com" />
+                  </FormField>
+                  <FormField label="Role" id="role">
+                    <Select id="role">
+                      <option value="">-- select role --</option>
+                      <option value="admin">Admin</option>
+                      <option value="user">User</option>
+                    </Select>
+                  </FormField>
+                </FormGrid>
+              </FormLayout>
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="Complete form" subtitle="FormLayout + FormGrid + FormField + ActionRow">
-          <PreviewPanel class="col">
-            <FormLayout>
-              <FormGrid>
-                <FormField label="First name" id="cf-fn">
-                  <Input id="cf-fn" type="text" placeholder="Jan" />
-                </FormField>
-                <FormField label="Last name" id="cf-ln">
-                  <Input id="cf-ln" type="text" placeholder="Kowalski" />
-                </FormField>
-                <FormField label="Email" id="cf-em">
-                  <Input id="cf-em" type="email" placeholder="jan@example.com" />
-                </FormField>
-                <FormField label="Bio" id="cf-bio">
-                  <TextArea id="cf-bio" placeholder="Short bio..." rows={3} />
-                </FormField>
-              </FormGrid>
-              <ActionRow align="end">
-                <Button variant="ghost">Cancel</Button>
-                <Button variant="primary">Save</Button>
-              </ActionRow>
-            </FormLayout>
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <FormLayout>
+                <FormGrid>
+                  <FormField label="First name" id="cf-fn">
+                    <Input id="cf-fn" type="text" placeholder="Jan" />
+                  </FormField>
+                  <FormField label="Last name" id="cf-ln">
+                    <Input id="cf-ln" type="text" placeholder="Kowalski" />
+                  </FormField>
+                  <FormField label="Email" id="cf-em">
+                    <Input id="cf-em" type="email" placeholder="jan@example.com" />
+                  </FormField>
+                  <FormField label="Bio" id="cf-bio">
+                    <TextArea id="cf-bio" placeholder="Short bio..." rows={3} />
+                  </FormField>
+                </FormGrid>
+                <ActionRow align="end">
+                  <Button variant="ghost">Cancel</Button>
+                  <Button variant="primary">Save</Button>
+                </ActionRow>
+              </FormLayout>
+            </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
             Combine <span class="code-inline">FormLayout</span>, <span class="code-inline">FormGrid</span>,{' '}

@@ -4,15 +4,15 @@
 }
 
 .sizeSm {
-  composes: sizesm from '../shared/InputBase.module.css';
+  composes: sizeSm from '../shared/InputBase.module.css';
 }
 
 .sizeMd {
-  composes: sizemd from '../shared/InputBase.module.css';
+  composes: sizeMd from '../shared/InputBase.module.css';
 }
 
 .sizeLg {
-  composes: sizelg from '../shared/InputBase.module.css';
+  composes: sizeLg from '../shared/InputBase.module.css';
 }
 
 .textarea {

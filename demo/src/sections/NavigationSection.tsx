@@ -24,7 +24,7 @@ import {
 import { createSignal, For, Show } from 'solid-js';
 
 import type { SectionId } from '../App';
-import { PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
+import { PreviewGroup, PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
 
 type TabValue = 'preview' | 'code' | 'props';
 
@@ -151,26 +151,30 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
       <Show when={sectionId() === 'nav-tabs-stepper'}>
         <ShowcaseSection title="Tabs" subtitle="Underline and pill variants">
           <PreviewPanel>
-            <Tabs<TabValue>
-              tabs={[
-                { value: 'preview', label: 'Preview' },
-                { value: 'code', label: 'Code' },
-                { value: 'props', label: 'Props' },
-              ]}
-              value={tab()}
-              onChange={setTab}
-              variant="underline"
-            />
-            <Tabs<TabValue>
-              tabs={[
-                { value: 'preview', label: 'Preview' },
-                { value: 'code', label: 'Code' },
-                { value: 'props', label: 'Props' },
-              ]}
-              value={tab()}
-              onChange={setTab}
-              variant="pill"
-            />
+            <PreviewGroup title="Underline variant">
+              <Tabs<TabValue>
+                tabs={[
+                  { value: 'preview', label: 'Preview' },
+                  { value: 'code', label: 'Code' },
+                  { value: 'props', label: 'Props' },
+                ]}
+                value={tab()}
+                onChange={setTab}
+                variant="underline"
+              />
+            </PreviewGroup>
+            <PreviewGroup title="Pill variant">
+              <Tabs<TabValue>
+                tabs={[
+                  { value: 'preview', label: 'Preview' },
+                  { value: 'code', label: 'Code' },
+                  { value: 'props', label: 'Props' },
+                ]}
+                value={tab()}
+                onChange={setTab}
+                variant="pill"
+              />
+            </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
             Active tab: <strong>{tab()}</strong>
@@ -179,27 +183,31 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
 
         <ShowcaseSection title="Stepper" subtitle="Visual progress through ordered steps">
           <PreviewPanel>
-            <Stepper steps={STEPPER_STEPS} activeStep={activeStep()} />
-            <div class="step-buttons">
-              <For each={STEPPER_STEPS}>
-                {(s) => (
-                  <button
-                    type="button"
-                    class={`mini-button${activeStep() === s.value ? ' mini-button-active' : ''}`}
-                    onClick={() => setActiveStep(s.value)}
-                  >
-                    {s.label}
-                  </button>
-                )}
-              </For>
-            </div>
+            <PreviewGroup title="Examples">
+              <Stepper steps={STEPPER_STEPS} activeStep={activeStep()} />
+              <div class="step-buttons">
+                <For each={STEPPER_STEPS}>
+                  {(s) => (
+                    <button
+                      type="button"
+                      class={`mini-button${activeStep() === s.value ? ' mini-button-active' : ''}`}
+                      onClick={() => setActiveStep(s.value)}
+                    >
+                      {s.label}
+                    </button>
+                  )}
+                </For>
+              </div>
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="Breadcrumbs" subtitle="Hierarchical path navigation with collapse">
-          <PreviewPanel class="col">
-            <Breadcrumbs items={BASIC_BREADCRUMBS} />
-            <Breadcrumbs items={COLLAPSIBLE_BREADCRUMBS} maxItems={3} />
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <Breadcrumbs items={BASIC_BREADCRUMBS} />
+              <Breadcrumbs items={COLLAPSIBLE_BREADCRUMBS} maxItems={3} />
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
       </Show>
@@ -207,7 +215,9 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
       <Show when={sectionId() === 'nav-timeline'}>
         <ShowcaseSection title="Timeline" subtitle="Chronological list of events">
           <PreviewPanel>
-            <Timeline items={TIMELINE_ITEMS} />
+            <PreviewGroup title="Examples">
+              <Timeline items={TIMELINE_ITEMS} />
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
       </Show>
@@ -215,18 +225,22 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
       <Show when={sectionId() === 'nav-command-fab'}>
         <ShowcaseSection title="CommandPalette" subtitle="Keyboard-driven command search overlay">
           <PreviewPanel>
-            <button type="button" onClick={() => setCommandOpen(true)}>
-              Open Command Palette (Ctrl+K)
-            </button>
-            <CommandPalette open={commandOpen()} onClose={() => setCommandOpen(false)} items={commandItems} />
+            <PreviewGroup title="Examples">
+              <button type="button" onClick={() => setCommandOpen(true)}>
+                Open Command Palette (Ctrl+K)
+              </button>
+              <CommandPalette open={commandOpen()} onClose={() => setCommandOpen(false)} items={commandItems} />
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="SpeedDial" subtitle="Floating action button with radial actions">
           <PreviewPanel>
-            <div style={{ position: 'relative', height: '200px' }}>
-              <SpeedDial actions={SPEED_DIAL_ACTIONS} />
-            </div>
+            <PreviewGroup title="Examples">
+              <div style={{ position: 'relative', height: '200px' }}>
+                <SpeedDial actions={SPEED_DIAL_ACTIONS} />
+              </div>
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
       </Show>
@@ -234,32 +248,36 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
       <Show when={sectionId() === 'nav-mobile'}>
         <ShowcaseSection title="BottomNav" subtitle="Mobile bottom navigation bar">
           <PreviewPanel>
-            <div
-              style={{
-                position: 'relative',
-                height: '120px',
-                border: '1px solid var(--color-border)',
-                'border-radius': 'var(--radius-md)',
-                overflow: 'hidden',
-              }}
-            >
-              <div style={{ padding: 'var(--spacing-md)', 'text-align': 'center' }}>
-                <p class="muted-text">
-                  Active: <strong>{activeBottomNav()}</strong>
-                </p>
+            <PreviewGroup title="Examples">
+              <div
+                style={{
+                  position: 'relative',
+                  height: '120px',
+                  border: '1px solid var(--color-border)',
+                  'border-radius': 'var(--radius-md)',
+                  overflow: 'hidden',
+                }}
+              >
+                <div style={{ padding: 'var(--spacing-md)', 'text-align': 'center' }}>
+                  <p class="muted-text">
+                    Active: <strong>{activeBottomNav()}</strong>
+                  </p>
+                </div>
+                <BottomNav items={BOTTOM_NAV_ITEMS} activeId={activeBottomNav()} onChange={setActiveBottomNav} />
               </div>
-              <BottomNav items={BOTTOM_NAV_ITEMS} activeId={activeBottomNav()} onChange={setActiveBottomNav} />
-            </div>
+            </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>Supports badges on items. Designed for mobile viewport widths.</ShowcaseMeta>
         </ShowcaseSection>
 
         <ShowcaseSection title="BackToTop" subtitle="Floating scroll-to-top button">
           <PreviewPanel>
-            <p class="muted-text">
-              Scroll down the page to see the back-to-top button appear in the bottom-right corner.
-            </p>
-            <BackToTop threshold={200} />
+            <PreviewGroup title="Examples">
+              <p class="muted-text">
+                Scroll down the page to see the back-to-top button appear in the bottom-right corner.
+              </p>
+              <BackToTop threshold={200} />
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
       </Show>

@@ -1,6 +1,7 @@
 import { FiChevronLeft, FiChevronRight } from 'solid-icons/fi';
 import { createEffect, createMemo, createSignal, For, type JSX, Show, splitProps } from 'solid-js';
 
+import Card from '~/components/data-display/Card/Card';
 import useEscapeKey from '~/hooks/useEscapeKey';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
@@ -456,7 +457,7 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
 
   return (
     <div {...rest} class={classNames(styles.scheduler, local.class)}>
-      <div class={styles.calendarPanel}>
+      <Card class={styles.calendarPanel}>
         <header class={styles.calendarHeader}>
           <button type="button" class={styles.navButton} onClick={goToPreviousMonth} aria-label="Previous month">
             <FiChevronLeft />
@@ -495,9 +496,9 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
             )}
           </For>
         </div>
-      </div>
+      </Card>
 
-      <aside class={styles.eventsPanel}>
+      <Card class={styles.eventsPanel}>
         <div class={styles.eventsHeader}>
           <h4 class={styles.eventsTitle}>Agenda</h4>
           <div class={styles.eventsHeaderActions}>
@@ -657,7 +658,7 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
             </For>
           </Show>
         </div>
-      </aside>
+      </Card>
       <ConfirmDialog
         open={deleteConfirmEventId() !== null}
         title="Delete event"

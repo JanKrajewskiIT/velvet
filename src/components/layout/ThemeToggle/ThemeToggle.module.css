@@ -2,12 +2,23 @@
   display: flex;
   align-items: center;
   gap: 0;
+  overflow: visible;
+}
+
+.segmented {
+  background: transparent;
+  padding: 0;
+  gap: 0;
+  border-radius: 0;
 }
 
 .toggle {
   min-width: 2rem;
   width: 2rem;
   height: 2rem;
+  min-height: 2rem;
+  padding: 0;
+  line-height: 1;
   border: 2px solid var(--color-gray-0);
   border-radius: var(--radius-full);
   background: transparent;
@@ -29,6 +40,10 @@
   opacity: 0.85;
 }
 
+.toggle:active:not(.selected) {
+  transform: scale(1.06);
+}
+
 .toggle:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
@@ -37,9 +52,15 @@
 .toggle.selected {
   color: var(--color-primary);
   background-color: var(--color-gray-0);
+  box-shadow: none;
+  font-weight: var(--font-weight-normal);
   opacity: 1;
   transform: scale(1.25) rotate(360deg);
   pointer-events: none;
+}
+
+.toggle.selected:hover {
+  transform: scale(1.25) rotate(360deg);
 }
 
 .light .toggle {
@@ -56,4 +77,5 @@
 .icon {
   width: 1.125rem;
   height: 1.125rem;
+  pointer-events: none;
 }

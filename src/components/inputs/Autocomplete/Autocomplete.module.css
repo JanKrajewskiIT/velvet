@@ -10,34 +10,6 @@
   gap: var(--spacing-xs);
 }
 
-.tag {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  font-size: var(--font-size-xs);
-}
-
-.removeTag {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--color-text-muted);
-  font-size: var(--font-size-xs);
-  padding: 0;
-  line-height: 1;
-}
-
-.removeTag:hover {
-  color: var(--color-text);
-}
-
 .inputWrapper {
   position: relative;
 }

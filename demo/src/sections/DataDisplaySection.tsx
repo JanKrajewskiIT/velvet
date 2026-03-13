@@ -19,6 +19,7 @@ import {
   Marquee,
   RadarChart,
   ScoreRing,
+  SectionCard,
   TradingViewChart,
   type TradingViewChartPoint,
   type TreeNode,
@@ -32,7 +33,7 @@ import { IoChevronDown, IoDocumentText, IoFolder, IoImage } from 'solid-icons/io
 import { createSignal, Show } from 'solid-js';
 
 import type { SectionId } from '../App';
-import { PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
+import { PreviewGroup, PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
 
 const MARKDOWN = `
 ## VelvetUI
@@ -231,18 +232,24 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
       <Show when={sectionId() === 'data-content'}>
         <ShowcaseSection title="Kbd" subtitle="Styled keyboard shortcut keys">
           <PreviewPanel>
-            <div class="row">
-              <Kbd>Ctrl</Kbd> + <Kbd>K</Kbd>
-              <Kbd>⌘</Kbd> + <Kbd>Shift</Kbd> + <Kbd>P</Kbd>
-              <Kbd>Esc</Kbd>
-            </div>
+            <PreviewGroup title="Examples">
+              <div class="row">
+                <Kbd>Ctrl</Kbd> + <Kbd>K</Kbd>
+                <Kbd>⌘</Kbd> + <Kbd>Shift</Kbd> + <Kbd>P</Kbd>
+                <Kbd>Esc</Kbd>
+              </div>
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="CodeBlock" subtitle="Code display with copy button and line numbers">
-          <PreviewPanel class="col">
-            <CodeBlock code={CODE_SAMPLE} language="tsx" showLineNumbers copyable />
-            <CodeBlock code="npm install @jankrajewskiit/ui" language="bash" />
+          <PreviewPanel>
+            <PreviewGroup title="TSX snippet">
+              <CodeBlock code={CODE_SAMPLE} language="tsx" showLineNumbers copyable />
+            </PreviewGroup>
+            <PreviewGroup title="CLI snippet">
+              <CodeBlock code="npm install @jankrajewskiit/ui" language="bash" />
+            </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
             Supports <span class="code-inline">showLineNumbers</span> and one-click copy to clipboard.
@@ -251,74 +258,82 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
 
         <ShowcaseSection title="MarkdownRenderer" subtitle="Rich markdown output">
           <PreviewPanel>
-            <MarkdownRenderer content={MARKDOWN} />
+            <PreviewGroup title="Examples">
+              <MarkdownRenderer content={MARKDOWN} />
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="MarkdownEditDialog" subtitle="Edit and preview markdown in one flow">
-          <PreviewPanel class="col">
-            <ActionRow align="start">
-              <Button variant="ghost" onClick={() => setEditorOpen(true)}>
-                Open markdown editor
-              </Button>
-            </ActionRow>
-            <MarkdownRenderer content={markdown()} />
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <ActionRow align="start">
+                <Button variant="ghost" onClick={() => setEditorOpen(true)}>
+                  Open markdown editor
+                </Button>
+              </ActionRow>
+              <MarkdownRenderer content={markdown()} />
+              <MarkdownEditDialog
+                open={editorOpen()}
+                title="Edit release notes"
+                label="Markdown"
+                initialValue={markdown()}
+                previewLabel="Preview"
+                saveLabel="Save changes"
+                cancelLabel="Cancel"
+                onSave={setMarkdown}
+                onClose={() => setEditorOpen(false)}
+              />
+            </PreviewGroup>
           </PreviewPanel>
-          <MarkdownEditDialog
-            open={editorOpen()}
-            title="Edit release notes"
-            label="Markdown"
-            initialValue={markdown()}
-            previewLabel="Preview"
-            saveLabel="Save changes"
-            cancelLabel="Cancel"
-            onSave={setMarkdown}
-            onClose={() => setEditorOpen(false)}
-          />
         </ShowcaseSection>
       </Show>
 
       <Show when={sectionId() === 'data-lists'}>
         <ShowcaseSection title="List & ListItem" subtitle="Structured content rows with icons and actions">
-          <PreviewPanel class="col">
-            <List>
-              <ListItem icon={<IoFolder />} secondary="3 files">
-                Documents
-              </ListItem>
-              <ListItem icon={<IoDocumentText />} secondary="Updated yesterday">
-                Report.pdf
-              </ListItem>
-              <ListItem icon={<IoImage />} secondary="Click to preview" onClick={() => {}}>
-                Photo.png
-              </ListItem>
-            </List>
-            <List variant="bordered">
-              <ListItem icon={<IoFolder />} secondary="Shared folder">
-                Projects
-              </ListItem>
-              <ListItem icon={<IoDocumentText />} secondary="Draft" action={<Button variant="ghost">Edit</Button>}>
-                Notes.md
-              </ListItem>
-            </List>
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <List>
+                <ListItem icon={<IoFolder />} secondary="3 files">
+                  Documents
+                </ListItem>
+                <ListItem icon={<IoDocumentText />} secondary="Updated yesterday">
+                  Report.pdf
+                </ListItem>
+                <ListItem icon={<IoImage />} secondary="Click to preview" onClick={() => {}}>
+                  Photo.png
+                </ListItem>
+              </List>
+              <List variant="bordered">
+                <ListItem icon={<IoFolder />} secondary="Shared folder">
+                  Projects
+                </ListItem>
+                <ListItem icon={<IoDocumentText />} secondary="Draft" action={<Button variant="ghost">Edit</Button>}>
+                  Notes.md
+                </ListItem>
+              </List>
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="VirtualizedList" subtitle="Efficient rendering for long datasets">
-          <PreviewPanel class="col">
-            <VirtualizedList
-              items={VIRTUAL_ITEMS}
-              height={320}
-              itemHeight={46}
-              overscan={6}
-              renderItem={(item, index) => (
-                <div class="virtual-row">
-                  <span class="virtual-label">{item.label}</span>
-                  <span class="virtual-meta">
-                    #{index + 1} - {item.status}
-                  </span>
-                </div>
-              )}
-            />
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <VirtualizedList
+                items={VIRTUAL_ITEMS}
+                height={320}
+                itemHeight={46}
+                overscan={6}
+                renderItem={(item, index) => (
+                  <div class="virtual-row">
+                    <span class="virtual-label">{item.label}</span>
+                    <span class="virtual-meta">
+                      #{index + 1} - {item.status}
+                    </span>
+                  </div>
+                )}
+              />
+            </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>Try fast scrolling: only visible rows are rendered in the DOM.</ShowcaseMeta>
         </ShowcaseSection>
@@ -327,61 +342,83 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
       <Show when={sectionId() === 'data-cards'}>
         <ShowcaseSection title="Accordion" subtitle="Progressive disclosure for grouped content">
           <PreviewPanel>
-            <Accordion>
-              <AccordionItem title="What is VelvetUI?">
-                <p class="muted-text">
-                  VelvetUI is a SolidJS component library built with CSS Modules, TypeScript and Vite.
-                </p>
-              </AccordionItem>
-              <AccordionItem title="How to install?">
-                <span class="code-inline">npm install @jankrajewskiit/ui</span>
-              </AccordionItem>
-              <AccordionItem title="Disabled item" disabled>
-                <p class="muted-text">This content is not accessible.</p>
-              </AccordionItem>
-            </Accordion>
+            <PreviewGroup title="Examples">
+              <Accordion>
+                <AccordionItem title="What is VelvetUI?">
+                  <p class="muted-text">
+                    VelvetUI is a SolidJS component library built with CSS Modules, TypeScript and Vite.
+                  </p>
+                </AccordionItem>
+                <AccordionItem title="How to install?">
+                  <span class="code-inline">npm install @jankrajewskiit/ui</span>
+                </AccordionItem>
+                <AccordionItem title="Disabled item" disabled>
+                  <p class="muted-text">This content is not accessible.</p>
+                </AccordionItem>
+              </Accordion>
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="Collapsible" subtitle="Simple expand and collapse">
-          <PreviewPanel class="col">
-            <Collapsible
-              open={collapsibleOpen()}
-              onToggle={() => setCollapsibleOpen((prev) => !prev)}
-              trigger={
-                <span class="row" style={{ gap: 'var(--spacing-xs)' }}>
-                  <IoChevronDown size={16} />
-                  <span>{collapsibleOpen() ? 'Hide details' : 'Show details'}</span>
-                </span>
-              }
-            >
-              <p class="muted-text">
-                This content is revealed when the trigger is clicked. Use Collapsible for simple toggle patterns that do
-                not need accordion grouping.
-              </p>
-            </Collapsible>
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <Collapsible
+                open={collapsibleOpen()}
+                onToggle={() => setCollapsibleOpen((prev) => !prev)}
+                trigger={
+                  <span class="row" style={{ gap: 'var(--spacing-xs)' }}>
+                    <IoChevronDown size={16} />
+                    <span>{collapsibleOpen() ? 'Hide details' : 'Show details'}</span>
+                  </span>
+                }
+              >
+                <p class="muted-text">
+                  This content is revealed when the trigger is clicked. Use Collapsible for simple toggle patterns that
+                  do not need accordion grouping.
+                </p>
+              </Collapsible>
+            </PreviewGroup>
           </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection title="SectionCard" subtitle="Collapsible card for grouped settings">
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <SectionCard title="Details" defaultOpen>
+                <p class="muted-text">Collapsible card for grouped settings.</p>
+              </SectionCard>
+              <SectionCard title="Advanced options">
+                <p class="muted-text">Collapsed by default.</p>
+              </SectionCard>
+            </PreviewGroup>
+          </PreviewPanel>
+          <ShowcaseMeta>
+            <span class="code-inline">SectionCard</span> combines a card with built-in collapsible behavior.
+          </ShowcaseMeta>
         </ShowcaseSection>
       </Show>
 
       <Show when={sectionId() === 'data-tree'}>
         <ShowcaseSection title="TreeView" subtitle="Hierarchical tree with lazy loading, checkboxes and drag and drop">
           <PreviewPanel>
-            <TreeView
-              nodes={createTreeData()}
-              defaultExpanded={['src']}
-              selectedId={selectedNode()}
-              onSelect={setSelectedNode}
-              checkable
-              checkedIds={checkedTreeNodes()}
-              onCheckedIdsChange={setCheckedTreeNodes}
-              loadChildren={loadTreeChildren}
-              draggable
-              onMove={(draggedId, targetId) => {
-                setLastMove(`${draggedId} -> ${targetId}`);
-                addToast({ type: 'info', message: `Moved ${draggedId} to ${targetId}` });
-              }}
-            />
+            <PreviewGroup title="Examples">
+              <TreeView
+                nodes={createTreeData()}
+                defaultExpanded={['src']}
+                selectedId={selectedNode()}
+                onSelect={setSelectedNode}
+                checkable
+                checkedIds={checkedTreeNodes()}
+                onCheckedIdsChange={setCheckedTreeNodes}
+                loadChildren={loadTreeChildren}
+                draggable
+                onMove={(draggedId, targetId) => {
+                  setLastMove(`${draggedId} -> ${targetId}`);
+                  addToast({ type: 'info', message: `Moved ${draggedId} to ${targetId}` });
+                }}
+              />
+            </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
             Selected: <span class="code-inline">{selectedNode() || 'none'}</span> | Checked:{' '}
@@ -393,74 +430,80 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
 
       <Show when={sectionId() === 'data-media'}>
         <ShowcaseSection title="Avatar & AvatarGroup" subtitle="User identity with image, initials or icon fallback">
-          <PreviewPanel class="col">
-            <div class="row">
-              <Avatar src="https://i.pravatar.cc/150?u=a" alt="User photo" />
-              <Avatar name="Jan Krajewski" />
-              <Avatar />
-            </div>
-            <div class="row">
-              <Avatar src="https://i.pravatar.cc/150?u=a" size="sm" />
-              <Avatar src="https://i.pravatar.cc/150?u=a" size="md" />
-              <Avatar src="https://i.pravatar.cc/150?u=a" size="lg" />
-              <Avatar src="https://i.pravatar.cc/150?u=a" size="xl" />
-            </div>
-            <AvatarGroup max={3}>
-              <Avatar src="https://i.pravatar.cc/150?u=a" />
-              <Avatar src="https://i.pravatar.cc/150?u=b" />
-              <Avatar src="https://i.pravatar.cc/150?u=c" />
-              <Avatar src="https://i.pravatar.cc/150?u=d" />
-              <Avatar src="https://i.pravatar.cc/150?u=e" />
-            </AvatarGroup>
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <div class="row">
+                <Avatar src="https://i.pravatar.cc/150?u=a" alt="User photo" />
+                <Avatar name="Jan Krajewski" />
+                <Avatar />
+              </div>
+              <div class="row">
+                <Avatar src="https://i.pravatar.cc/150?u=a" size="sm" />
+                <Avatar src="https://i.pravatar.cc/150?u=a" size="md" />
+                <Avatar src="https://i.pravatar.cc/150?u=a" size="lg" />
+                <Avatar src="https://i.pravatar.cc/150?u=a" size="xl" />
+              </div>
+              <AvatarGroup max={3}>
+                <Avatar src="https://i.pravatar.cc/150?u=a" />
+                <Avatar src="https://i.pravatar.cc/150?u=b" />
+                <Avatar src="https://i.pravatar.cc/150?u=c" />
+                <Avatar src="https://i.pravatar.cc/150?u=d" />
+                <Avatar src="https://i.pravatar.cc/150?u=e" />
+              </AvatarGroup>
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="Carousel" subtitle="Snap-scroll content slider">
           <PreviewPanel>
-            <Carousel>
-              <div
-                style={{ padding: 'var(--spacing-2xl)', 'text-align': 'center', background: 'var(--color-surface)' }}
-              >
-                Slide 1
-              </div>
-              <div
-                style={{ padding: 'var(--spacing-2xl)', 'text-align': 'center', background: 'var(--color-surface)' }}
-              >
-                Slide 2
-              </div>
-              <div
-                style={{ padding: 'var(--spacing-2xl)', 'text-align': 'center', background: 'var(--color-surface)' }}
-              >
-                Slide 3
-              </div>
-              <div
-                style={{ padding: 'var(--spacing-2xl)', 'text-align': 'center', background: 'var(--color-surface)' }}
-              >
-                Slide 4
-              </div>
-            </Carousel>
+            <PreviewGroup title="Examples">
+              <Carousel>
+                <div
+                  style={{ padding: 'var(--spacing-2xl)', 'text-align': 'center', background: 'var(--color-surface)' }}
+                >
+                  Slide 1
+                </div>
+                <div
+                  style={{ padding: 'var(--spacing-2xl)', 'text-align': 'center', background: 'var(--color-surface)' }}
+                >
+                  Slide 2
+                </div>
+                <div
+                  style={{ padding: 'var(--spacing-2xl)', 'text-align': 'center', background: 'var(--color-surface)' }}
+                >
+                  Slide 3
+                </div>
+                <div
+                  style={{ padding: 'var(--spacing-2xl)', 'text-align': 'center', background: 'var(--color-surface)' }}
+                >
+                  Slide 4
+                </div>
+              </Carousel>
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="Carousel with auto-play and dots" subtitle="Auto-advance and dot indicators">
           <PreviewPanel>
-            <Carousel autoPlay interval={4000} showDots showArrows>
-              <div
-                style={{ padding: 'var(--spacing-2xl)', 'text-align': 'center', background: 'var(--color-surface)' }}
-              >
-                Auto slide 1
-              </div>
-              <div
-                style={{ padding: 'var(--spacing-2xl)', 'text-align': 'center', background: 'var(--color-surface)' }}
-              >
-                Auto slide 2
-              </div>
-              <div
-                style={{ padding: 'var(--spacing-2xl)', 'text-align': 'center', background: 'var(--color-surface)' }}
-              >
-                Auto slide 3
-              </div>
-            </Carousel>
+            <PreviewGroup title="Examples">
+              <Carousel autoPlay interval={4000} showDots showArrows>
+                <div
+                  style={{ padding: 'var(--spacing-2xl)', 'text-align': 'center', background: 'var(--color-surface)' }}
+                >
+                  Auto slide 1
+                </div>
+                <div
+                  style={{ padding: 'var(--spacing-2xl)', 'text-align': 'center', background: 'var(--color-surface)' }}
+                >
+                  Auto slide 2
+                </div>
+                <div
+                  style={{ padding: 'var(--spacing-2xl)', 'text-align': 'center', background: 'var(--color-surface)' }}
+                >
+                  Auto slide 3
+                </div>
+              </Carousel>
+            </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
             <span class="code-inline">autoPlay</span> with <span class="code-inline">interval</span> (ms). Pauses on
@@ -471,7 +514,9 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
 
         <ShowcaseSection title="ImageGrid" subtitle="CSS Grid image gallery">
           <PreviewPanel>
-            <ImageGrid images={GALLERY_IMAGES} columns={3} hoverable rounded />
+            <PreviewGroup title="Examples">
+              <ImageGrid images={GALLERY_IMAGES} columns={3} hoverable rounded />
+            </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
             Configurable columns, gap, rounded corners and hover effects. Supports optional captions.
@@ -479,20 +524,22 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
         </ShowcaseSection>
 
         <ShowcaseSection title="Marquee" subtitle="Infinite scrolling ticker">
-          <PreviewPanel class="col">
-            <Marquee speed={20}>
-              <span style={{ padding: '0 var(--spacing-lg)' }}>SolidJS</span>
-              <span style={{ padding: '0 var(--spacing-lg)' }}>TypeScript</span>
-              <span style={{ padding: '0 var(--spacing-lg)' }}>CSS Modules</span>
-              <span style={{ padding: '0 var(--spacing-lg)' }}>Vite</span>
-              <span style={{ padding: '0 var(--spacing-lg)' }}>VelvetUI</span>
-            </Marquee>
-            <Marquee speed={25} direction="right">
-              <span style={{ padding: '0 var(--spacing-lg)' }}>ESLint</span>
-              <span style={{ padding: '0 var(--spacing-lg)' }}>Prettier</span>
-              <span style={{ padding: '0 var(--spacing-lg)' }}>Vitest</span>
-              <span style={{ padding: '0 var(--spacing-lg)' }}>PostCSS</span>
-            </Marquee>
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <Marquee speed={20}>
+                <span style={{ padding: '0 var(--spacing-lg)' }}>SolidJS</span>
+                <span style={{ padding: '0 var(--spacing-lg)' }}>TypeScript</span>
+                <span style={{ padding: '0 var(--spacing-lg)' }}>CSS Modules</span>
+                <span style={{ padding: '0 var(--spacing-lg)' }}>Vite</span>
+                <span style={{ padding: '0 var(--spacing-lg)' }}>VelvetUI</span>
+              </Marquee>
+              <Marquee speed={25} direction="right">
+                <span style={{ padding: '0 var(--spacing-lg)' }}>ESLint</span>
+                <span style={{ padding: '0 var(--spacing-lg)' }}>Prettier</span>
+                <span style={{ padding: '0 var(--spacing-lg)' }}>Vitest</span>
+                <span style={{ padding: '0 var(--spacing-lg)' }}>PostCSS</span>
+              </Marquee>
+            </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>Pauses on hover. Supports left and right directions with configurable speed.</ShowcaseMeta>
         </ShowcaseSection>
@@ -501,31 +548,35 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
       <Show when={sectionId() === 'data-charts'}>
         <ShowcaseSection title="ScoreRing" subtitle="Circular score visualization">
           <PreviewPanel>
-            <div class="row">
-              <ScoreRing score={92} />
-              <ScoreRing score={68} />
-              <ScoreRing score={45} />
-              <ScoreRing score={22} />
-            </div>
+            <PreviewGroup title="Examples">
+              <div class="row">
+                <ScoreRing score={92} />
+                <ScoreRing score={68} />
+                <ScoreRing score={45} />
+                <ScoreRing score={22} />
+              </div>
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="RadarChart" subtitle="Multi-axis data comparison">
           <PreviewPanel>
-            <RadarChart
-              size={280}
-              axes={[
-                { label: 'Performance', key: 'perf' },
-                { label: 'Accessibility', key: 'a11y' },
-                { label: 'Best Practices', key: 'bp' },
-                { label: 'SEO', key: 'seo' },
-                { label: 'PWA', key: 'pwa' },
-              ]}
-              datasets={[
-                { label: 'Desktop', values: [92, 88, 95, 80, 60] },
-                { label: 'Mobile', values: [74, 85, 90, 75, 55] },
-              ]}
-            />
+            <PreviewGroup title="Examples">
+              <RadarChart
+                size={280}
+                axes={[
+                  { label: 'Performance', key: 'perf' },
+                  { label: 'Accessibility', key: 'a11y' },
+                  { label: 'Best Practices', key: 'bp' },
+                  { label: 'SEO', key: 'seo' },
+                  { label: 'PWA', key: 'pwa' },
+                ]}
+                datasets={[
+                  { label: 'Desktop', values: [92, 88, 95, 80, 60] },
+                  { label: 'Mobile', values: [74, 85, 90, 75, 55] },
+                ]}
+              />
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
@@ -533,34 +584,36 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
           title="TradingViewChart"
           subtitle="Advanced candlestick chart with intervals, OHLC and overlays"
         >
-          <PreviewPanel class="col">
-            <TradingViewChart symbol="XAUUSD" />
-            <TradingViewChart symbol="XAUUSD custom feed" data={TRADING_VIEW_SAMPLE} height={420} />
-            <TradingViewChart
-              symbol="XAUUSD polling adapter"
-              data={TRADING_VIEW_SAMPLE}
-              defaultDrawingTool="trendline"
-              liveFeed={pollingFeed}
-              drawings={{
-                levels: [{ id: 'lvl-res', price: 2104.5, label: 'Resistance' }],
-                zones: [
-                  {
-                    id: 'zone-demand',
-                    fromTime: asUtcTimestamp(1704672000),
-                    toTime: asUtcTimestamp(1704931200),
-                    low: 2088,
-                    high: 2094,
-                  },
-                ],
-              }}
-              height={460}
-            />
-            <TradingViewChart
-              symbol="XAUUSD websocket adapter"
-              data={TRADING_VIEW_SAMPLE}
-              liveFeed={wsFeed}
-              height={420}
-            />
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <TradingViewChart symbol="XAUUSD" />
+              <TradingViewChart symbol="XAUUSD custom feed" data={TRADING_VIEW_SAMPLE} height={420} />
+              <TradingViewChart
+                symbol="XAUUSD polling adapter"
+                data={TRADING_VIEW_SAMPLE}
+                defaultDrawingTool="trendline"
+                liveFeed={pollingFeed}
+                drawings={{
+                  levels: [{ id: 'lvl-res', price: 2104.5, label: 'Resistance' }],
+                  zones: [
+                    {
+                      id: 'zone-demand',
+                      fromTime: asUtcTimestamp(1704672000),
+                      toTime: asUtcTimestamp(1704931200),
+                      low: 2088,
+                      high: 2094,
+                    },
+                  ],
+                }}
+                height={460}
+              />
+              <TradingViewChart
+                symbol="XAUUSD websocket adapter"
+                data={TRADING_VIEW_SAMPLE}
+                liveFeed={wsFeed}
+                height={420}
+              />
+            </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
             Includes interval switching, volume, SMA/EMA plus RSI/MACD/BB, drawing tools (trend/level/zone) and live

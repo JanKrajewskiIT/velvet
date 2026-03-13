@@ -19,3 +19,8 @@ alwaysApply: false
 - Prefer `createMemo` over `createEffect` for derived state; use `createEffect` only for true side effects (DOM, timers, listeners)
 - One component per file, ~150 lines max
 - `export default` (exception: generic components use named export)
+- Prefer VelvetUi primitives for interactive UI:
+  - `ButtonBase`/`Button` for button semantics and states
+  - `InputBase`/`Input` for field shells and focus handling
+  - `DropdownSurface`/`DropdownOption` for option lists and menus
+- Avoid raw `<button>`/`<input>`/`<select>` when the element is a standard control variant; use raw tags only when native behavior is required (e.g. checkbox/radio/range/file internals)

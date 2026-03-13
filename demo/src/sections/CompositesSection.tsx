@@ -20,7 +20,7 @@ import { IoTrash } from 'solid-icons/io';
 import { createSignal, Show } from 'solid-js';
 
 import type { SectionId } from '../App';
-import { PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
+import { PreviewGroup, PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
 
 const INITIAL_SOURCE: TransferItem[] = [
   { id: '1', label: 'TypeScript' },
@@ -195,14 +195,16 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
       <Show when={sectionId() === 'composites-lists'}>
         <ShowcaseSection title="TransferList" subtitle="Dual-list picker for moving items between groups">
           <PreviewPanel>
-            <TransferList
-              sourceItems={sourceItems()}
-              targetItems={targetItems()}
-              onChange={handleTransferChange}
-              sourceTitle="Available"
-              targetTitle="Selected"
-              searchable
-            />
+            <PreviewGroup title="Examples">
+              <TransferList
+                sourceItems={sourceItems()}
+                targetItems={targetItems()}
+                onChange={handleTransferChange}
+                sourceTitle="Available"
+                targetTitle="Selected"
+                searchable
+              />
+            </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
             Check items and use the arrow buttons to transfer. Search filters within each panel.
@@ -210,63 +212,67 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
         </ShowcaseSection>
 
         <ShowcaseSection title="EditableCollection" subtitle="Add/remove/edit list scaffold for dynamic forms">
-          <PreviewPanel class="col">
-            <EditableCollection
-              items={tasks()}
-              getId={(item) => item.id}
-              onAdd={() => setTasks((current) => [...current, createTask(current.length + 1)])}
-              onRemove={(id) => setTasks((current) => current.filter((item) => item.id !== id))}
-              addLabel="Add task"
-              confirmTitle="Remove task"
-              confirmMessage="Do you want to remove this task from the collection?"
-              confirmLabel="Remove"
-              cancelLabel="Cancel"
-              renderItem={(item, { requestRemove }) => (
-                <>
-                  <div class="editable-header">
-                    <span class="status-chip">{item.id.slice(0, 8)}</span>
-                    <IconButton icon={<IoTrash />} title="Remove task" size="sm" onClick={requestRemove} />
-                  </div>
-                  <div class="editable-grid">
-                    <FormField label="Title" id={`task-title-${item.id}`}>
-                      <Input
-                        id={`task-title-${item.id}`}
-                        value={item.title}
-                        onInput={(e) => updateTask(item.id, 'title', e.currentTarget.value)}
-                      />
-                    </FormField>
-                    <FormField label="Owner" id={`task-owner-${item.id}`}>
-                      <Input
-                        id={`task-owner-${item.id}`}
-                        value={item.owner}
-                        onInput={(e) => updateTask(item.id, 'owner', e.currentTarget.value)}
-                      />
-                    </FormField>
-                  </div>
-                </>
-              )}
-            />
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <EditableCollection
+                items={tasks()}
+                getId={(item) => item.id}
+                onAdd={() => setTasks((current) => [...current, createTask(current.length + 1)])}
+                onRemove={(id) => setTasks((current) => current.filter((item) => item.id !== id))}
+                addLabel="Add task"
+                confirmTitle="Remove task"
+                confirmMessage="Do you want to remove this task from the collection?"
+                confirmLabel="Remove"
+                cancelLabel="Cancel"
+                renderItem={(item, { requestRemove }) => (
+                  <>
+                    <div class="editable-header">
+                      <span class="status-chip">{item.id.slice(0, 8)}</span>
+                      <IconButton icon={<IoTrash />} title="Remove task" size="sm" onClick={requestRemove} />
+                    </div>
+                    <div class="editable-grid">
+                      <FormField label="Title" id={`task-title-${item.id}`}>
+                        <Input
+                          id={`task-title-${item.id}`}
+                          value={item.title}
+                          onInput={(e) => updateTask(item.id, 'title', e.currentTarget.value)}
+                        />
+                      </FormField>
+                      <FormField label="Owner" id={`task-owner-${item.id}`}>
+                        <Input
+                          id={`task-owner-${item.id}`}
+                          value={item.owner}
+                          onInput={(e) => updateTask(item.id, 'owner', e.currentTarget.value)}
+                        />
+                      </FormField>
+                    </div>
+                  </>
+                )}
+              />
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="KanbanBoard" subtitle="Drag and drop cards between workflow columns">
           <PreviewPanel>
-            <KanbanBoard
-              columns={KANBAN_COLUMNS}
-              items={kanbanItems()}
-              onChange={setKanbanItems}
-              emptyLabel="Drop cards here"
-              renderCard={(item) => (
-                <div class="col" style={{ gap: 'var(--spacing-2xs)' }}>
-                  <strong>{item.title}</strong>
-                  <span class="muted-text">{item.description}</span>
-                  <div class="row" style={{ 'justify-content': 'space-between' }}>
-                    <span class="status-chip">{item.owner}</span>
-                    <span class="status-chip">{item.priority}</span>
+            <PreviewGroup title="Examples">
+              <KanbanBoard
+                columns={KANBAN_COLUMNS}
+                items={kanbanItems()}
+                onChange={setKanbanItems}
+                emptyLabel="Drop cards here"
+                renderCard={(item) => (
+                  <div class="col" style={{ gap: 'var(--spacing-2xs)' }}>
+                    <strong>{item.title}</strong>
+                    <span class="muted-text">{item.description}</span>
+                    <div class="row" style={{ 'justify-content': 'space-between' }}>
+                      <span class="status-chip">{item.owner}</span>
+                      <span class="status-chip">{item.priority}</span>
+                    </div>
                   </div>
-                </div>
-              )}
-            />
+                )}
+              />
+            </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>Drag cards between columns to update their status.</ShowcaseMeta>
         </ShowcaseSection>
@@ -275,58 +281,62 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
       <Show when={sectionId() === 'composites-wizard-ai'}>
         <ShowcaseSection title="Wizard" subtitle="Multi-step guided workflow">
           <PreviewPanel>
-            <Wizard
-              steps={wizardSteps}
-              backLabel="Back"
-              nextLabel="Next"
-              finishLabel="Finish"
-              onFinish={() => {
-                addToast({ type: 'success', message: 'Registration complete!' });
-              }}
-            />
+            <PreviewGroup title="Examples">
+              <Wizard
+                steps={wizardSteps}
+                backLabel="Back"
+                nextLabel="Next"
+                finishLabel="Finish"
+                onFinish={() => {
+                  addToast({ type: 'success', message: 'Registration complete!' });
+                }}
+              />
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="AiResultPanel" subtitle="Reusable result layout for AI and scoring flows">
           <PreviewPanel>
-            <AiResultPanel
-              isPending={analysisState() === 'loading'}
-              loadingText="Analyzing design consistency..."
-              hasError={analysisState() === 'error'}
-              errorText="Analysis timed out. Retry to generate a new report."
-              onRetry={runAnalysis}
-              retryLabel="Retry"
-              score={87}
-              scoreLabel="Design consistency"
-              summary="The component library now uses stronger visual hierarchy and shared interaction patterns."
-              sections={[
-                {
-                  icon: 'success',
-                  title: 'Highlights',
-                  items: [
-                    'Unified interaction styles for buttons, inputs and tabs',
-                    'Consistent spacing and elevation across sections',
-                  ],
-                },
-                {
-                  icon: 'danger',
-                  title: 'Needs follow-up',
-                  items: ['Extend the same polish to all remaining secondary components'],
-                },
-              ]}
-              hasResult={analysisState() === 'result'}
-              idle={
-                <p class="muted-text">Run analysis to generate a consistency report for the current component set.</p>
-              }
-              actions={
-                <ActionRow align="end">
-                  <Button variant="ghost" onClick={() => setAnalysisState('idle')}>
-                    Reset
-                  </Button>
-                  <Button onClick={runAnalysis}>Run analysis</Button>
-                </ActionRow>
-              }
-            />
+            <PreviewGroup title="Examples">
+              <AiResultPanel
+                isPending={analysisState() === 'loading'}
+                loadingText="Analyzing design consistency..."
+                hasError={analysisState() === 'error'}
+                errorText="Analysis timed out. Retry to generate a new report."
+                onRetry={runAnalysis}
+                retryLabel="Retry"
+                score={87}
+                scoreLabel="Design consistency"
+                summary="The component library now uses stronger visual hierarchy and shared interaction patterns."
+                sections={[
+                  {
+                    icon: 'success',
+                    title: 'Highlights',
+                    items: [
+                      'Unified interaction styles for buttons, inputs and tabs',
+                      'Consistent spacing and elevation across sections',
+                    ],
+                  },
+                  {
+                    icon: 'danger',
+                    title: 'Needs follow-up',
+                    items: ['Extend the same polish to all remaining secondary components'],
+                  },
+                ]}
+                hasResult={analysisState() === 'result'}
+                idle={
+                  <p class="muted-text">Run analysis to generate a consistency report for the current component set.</p>
+                }
+                actions={
+                  <ActionRow align="end">
+                    <Button variant="ghost" onClick={() => setAnalysisState('idle')}>
+                      Reset
+                    </Button>
+                    <Button onClick={runAnalysis}>Run analysis</Button>
+                  </ActionRow>
+                }
+              />
+            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
       </Show>
@@ -334,11 +344,13 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
       <Show when={sectionId() === 'composites-scheduler'}>
         <ShowcaseSection title="Scheduler" subtitle="Month calendar with per-day agenda panel">
           <PreviewPanel>
-            <Scheduler
-              events={schedulerEvents()}
-              onEventsChange={setSchedulerEvents}
-              defaultSelectedDate="2026-03-12"
-            />
+            <PreviewGroup title="Examples">
+              <Scheduler
+                events={schedulerEvents()}
+                onEventsChange={setSchedulerEvents}
+                defaultSelectedDate="2026-03-12"
+              />
+            </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
             Navigate months, select a day, add events with <span class="code-inline">Add event</span> (or double-click a

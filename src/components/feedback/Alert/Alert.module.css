@@ -33,19 +33,11 @@
 }
 
 .closeBtn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  composes: iconaction from '../../inputs/shared/IconAction.module.css';
   flex-shrink: 0;
   width: 28px;
+  min-width: 28px;
   height: 28px;
-  padding: 0;
-  border: none;
-  border-radius: var(--radius-sm);
-  background: transparent;
-  color: var(--color-text-secondary);
-  cursor: pointer;
-  transition: background-color var(--duration-fast) var(--ease-out-expo);
 }
 
 .closeBtn:hover {

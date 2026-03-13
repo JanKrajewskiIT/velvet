@@ -1,6 +1,6 @@
 import { For } from 'solid-js';
 
-import { PreviewPanel, ShowcaseSection } from '../components/ShowcaseSection';
+import { PreviewGroup, PreviewPanel, ShowcaseSection } from '../components/ShowcaseSection';
 
 interface DocSnippet {
   title: string;
@@ -198,42 +198,45 @@ const DeveloperSection = () => {
   return (
     <div>
       <ShowcaseSection title="Component Categories" subtitle="9 categories organized by purpose">
-        <PreviewPanel class="col">
-          <ul class="overview-list">
-            <li>
-              <strong>inputs/</strong> (11) - Button, IconButton, Checkbox, Input, Radio, Switch, Autocomplete,
-              ColorPicker, TagInput, DropdownButton, DropdownMenu
-            </li>
-            <li>
-              <strong>forms/</strong> (4) - FormField, FormGrid, FormLayout, ActionRow (shown under Inputs in this demo)
-            </li>
-            <li>
-              <strong>data-display/</strong> (6) - Table, Accordion, MarkdownRenderer, ScoreRing, RadarChart,
-              SectionCard
-            </li>
-            <li>
-              <strong>navigation/</strong> (4) - Tabs, Stepper, Pagination, Timeline
-            </li>
-            <li>
-              <strong>feedback/</strong> (11) - Toast, Spinner, Skeleton, LoadingContainer, ErrorMessage, EmptyState,
-              ErrorFallback, AccessDenied, Chip, TagChip, StatCard
-            </li>
-            <li>
-              <strong>overlays/</strong> (8) - Dialog, Drawer, Tooltip, ConfirmDialog, ConfirmAction, ContextMenu,
-              Lightbox, Tour
-            </li>
-            <li>
-              <strong>layout/</strong> (3) - MainLayout, Navbar, Footer
-            </li>
-            <li>
-              <strong>composites/</strong> (6) - DataTable, EditableCollection, FileDropZone, FlipCard, Wizard,
-              AiResultPanel
-            </li>
-            <li>
-              <strong>app/</strong> (4) - LocaleSwitcher, ThemeToggle, AuthRedirect, RequireAuth (shown under Inputs ·
-              Buttons and Developer snippets)
-            </li>
-          </ul>
+        <PreviewPanel>
+          <PreviewGroup title="Examples">
+            <ul class="overview-list">
+              <li>
+                <strong>inputs/</strong> (11) - Button, IconButton, Checkbox, Input, Radio, Switch, Autocomplete,
+                ColorPicker, TagInput, DropdownButton, DropdownMenu
+              </li>
+              <li>
+                <strong>forms/</strong> (4) - FormField, FormGrid, FormLayout, ActionRow (shown under Inputs in this
+                demo)
+              </li>
+              <li>
+                <strong>data-display/</strong> (6) - Table, Accordion, MarkdownRenderer, ScoreRing, RadarChart,
+                SectionCard
+              </li>
+              <li>
+                <strong>navigation/</strong> (4) - Tabs, Stepper, Pagination, Timeline
+              </li>
+              <li>
+                <strong>feedback/</strong> (11) - Toast, Spinner, Skeleton, LoadingContainer, ErrorMessage, EmptyState,
+                ErrorFallback, AccessDenied, Chip, TagChip, StatCard
+              </li>
+              <li>
+                <strong>overlays/</strong> (8) - Dialog, Drawer, Tooltip, ConfirmDialog, ConfirmAction, ContextMenu,
+                Lightbox, Tour
+              </li>
+              <li>
+                <strong>layout/</strong> (3) - MainLayout, Navbar, Footer
+              </li>
+              <li>
+                <strong>composites/</strong> (6) - DataTable, EditableCollection, FileDropZone, FlipCard, Wizard,
+                AiResultPanel
+              </li>
+              <li>
+                <strong>app/</strong> (4) - LocaleSwitcher, ThemeToggle, AuthRedirect, RequireAuth (shown under Inputs ·
+                Buttons and Developer snippets)
+              </li>
+            </ul>
+          </PreviewGroup>
         </PreviewPanel>
       </ShowcaseSection>
 
@@ -241,53 +244,63 @@ const DeveloperSection = () => {
         title="Shared Tooling Presets"
         subtitle="Drop-in standards for linting, formatting, tsconfig and Vite"
       >
-        <div class="docs-grid">
-          <For each={TOOLING_SNIPPETS}>
-            {(snippet) => (
-              <PreviewPanel class="docs-card">
-                <div class="docs-card-header">
-                  <p class="docs-card-title">{snippet.title}</p>
-                  <span class="code-inline">{snippet.file}</span>
-                </div>
-                <pre class="install-block">
-                  <code>{snippet.code}</code>
-                </pre>
-              </PreviewPanel>
-            )}
-          </For>
-        </div>
+        <PreviewPanel>
+          <PreviewGroup title="Examples">
+            <div class="docs-grid">
+              <For each={TOOLING_SNIPPETS}>
+                {(snippet) => (
+                  <div class="docs-card">
+                    <div class="docs-card-header">
+                      <p class="docs-card-title">{snippet.title}</p>
+                      <span class="code-inline">{snippet.file}</span>
+                    </div>
+                    <pre class="install-block">
+                      <code>{snippet.code}</code>
+                    </pre>
+                  </div>
+                )}
+              </For>
+            </div>
+          </PreviewGroup>
+        </PreviewPanel>
       </ShowcaseSection>
 
       <ShowcaseSection
         title="Usage Snippets"
         subtitle="Hooks (useClickOutside, useEscapeKey, useFocusTrap) and component patterns"
       >
-        <div class="docs-grid">
-          <For each={USAGE_SNIPPETS}>
-            {(snippet) => (
-              <PreviewPanel class="docs-card">
-                <div class="docs-card-header">
-                  <p class="docs-card-title">{snippet.title}</p>
-                  <span class="code-inline">{snippet.file}</span>
-                </div>
-                <pre class="install-block">
-                  <code>{snippet.code}</code>
-                </pre>
-              </PreviewPanel>
-            )}
-          </For>
-        </div>
+        <PreviewPanel>
+          <PreviewGroup title="Examples">
+            <div class="docs-grid">
+              <For each={USAGE_SNIPPETS}>
+                {(snippet) => (
+                  <div class="docs-card">
+                    <div class="docs-card-header">
+                      <p class="docs-card-title">{snippet.title}</p>
+                      <span class="code-inline">{snippet.file}</span>
+                    </div>
+                    <pre class="install-block">
+                      <code>{snippet.code}</code>
+                    </pre>
+                  </div>
+                )}
+              </For>
+            </div>
+          </PreviewGroup>
+        </PreviewPanel>
       </ShowcaseSection>
 
       <ShowcaseSection title="Design Principles" subtitle="Rules that keep VelvetUi reusable across apps">
-        <PreviewPanel class="col">
-          <ul class="overview-list">
-            <li>Components are app-agnostic and avoid business logic coupling.</li>
-            <li>User-facing text is passed via props by the consuming app.</li>
-            <li>Layout components expose slots for flexible composition.</li>
-            <li>Every public component supports an optional class prop.</li>
-            <li>Shared tooling keeps lint, format and tsconfig consistent across repositories.</li>
-          </ul>
+        <PreviewPanel>
+          <PreviewGroup title="Examples">
+            <ul class="overview-list">
+              <li>Components are app-agnostic and avoid business logic coupling.</li>
+              <li>User-facing text is passed via props by the consuming app.</li>
+              <li>Layout components expose slots for flexible composition.</li>
+              <li>Every public component supports an optional class prop.</li>
+              <li>Shared tooling keeps lint, format and tsconfig consistent across repositories.</li>
+            </ul>
+          </PreviewGroup>
         </PreviewPanel>
       </ShowcaseSection>
     </div>

@@ -4,19 +4,17 @@
 }
 
 .trigger {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
+  composes: base from '../shared/ButtonBase.module.css';
+  padding: var(--spacing-xs);
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+  min-height: 32px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  padding: var(--spacing-xs);
-  cursor: pointer;
+  background: var(--color-bg-elevated);
   color: var(--color-text-muted);
-  transition:
-    background-color var(--duration-fast) var(--ease-out-expo),
-    color var(--duration-fast) var(--ease-out-expo),
-    border-color var(--duration-fast) var(--ease-out-expo);
+  transform: none;
 }
 
 .trigger:hover {
@@ -30,38 +28,25 @@
 }
 
 .menu {
+  composes: surface scrollable from '../shared/DropdownBase.module.css';
   position: absolute;
   top: 100%;
   right: 0;
-  z-index: var(--z-dropdown);
   min-width: 200px;
-  background-color: var(--color-glass);
-  backdrop-filter: var(--blur-overlay);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-popover);
   padding: var(--spacing-xs);
-  margin-top: var(--spacing-xs);
   display: flex;
   flex-direction: column;
-  animation: scaleIn var(--duration-fast) var(--ease-out-back);
   transform-origin: top right;
 }
 
 .item {
+  composes: item from '../shared/DropdownBase.module.css';
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
-  padding: var(--spacing-sm) var(--spacing-sm);
-  border: none;
-  border-radius: var(--radius-sm);
-  background: none;
   color: var(--color-text);
-  cursor: pointer;
   font-size: var(--font-size-sm);
-  text-align: left;
-  transition: background-color var(--duration-fast) var(--ease-out-expo);
-  width: 100%;
+  border-radius: var(--radius-sm);
 }
 
 .item:hover {

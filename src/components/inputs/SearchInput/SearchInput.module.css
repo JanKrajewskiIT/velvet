@@ -25,16 +25,8 @@
 }
 
 .clear {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: var(--color-text-muted);
-  background: none;
-  border: none;
-  padding: 0;
+  composes: iconaction from '../shared/IconAction.module.css';
   flex-shrink: 0;
-  transition: color var(--duration-fast) var(--ease-out-expo);
 }
 
 .clear:hover {

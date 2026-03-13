@@ -8,16 +8,19 @@
 }
 
 .option {
-  all: unset;
+  composes: base from '../shared/ButtonBase.module.css';
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  min-height: 32px;
   padding: var(--spacing-xs) var(--spacing-md);
+  border-color: transparent;
+  background: transparent;
   border-radius: var(--radius-sm);
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
-  cursor: pointer;
   white-space: nowrap;
+  transform: none;
   transition:
     background-color var(--duration-normal) var(--ease-spring),
     color var(--duration-fast) var(--ease-out-expo),

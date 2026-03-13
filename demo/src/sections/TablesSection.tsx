@@ -14,7 +14,7 @@ import {
 } from '@jankrajewskiit/ui';
 import { createMemo, createSignal } from 'solid-js';
 
-import { PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
+import { PreviewGroup, PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
 
 interface PackageRow extends Record<string, unknown> {
   id: string;
@@ -120,32 +120,34 @@ const TablesSection = () => {
     <div>
       <ShowcaseSection title="Table" subtitle="Composable table primitives for custom layouts">
         <PreviewPanel>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableHeader>Name</TableHeader>
-                <TableHeader>Version</TableHeader>
-                <TableHeader>Status</TableHeader>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow>
-                <TableCell>solid-js</TableCell>
-                <TableCell>1.9.7</TableCell>
-                <TableCell>stable</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>vite</TableCell>
-                <TableCell>7.3.1</TableCell>
-                <TableCell>stable</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>typescript</TableCell>
-                <TableCell>5.9.3</TableCell>
-                <TableCell>stable</TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
+          <PreviewGroup title="Examples">
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableHeader>Name</TableHeader>
+                  <TableHeader>Version</TableHeader>
+                  <TableHeader>Status</TableHeader>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableRow>
+                  <TableCell>solid-js</TableCell>
+                  <TableCell>1.9.7</TableCell>
+                  <TableCell>stable</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>vite</TableCell>
+                  <TableCell>7.3.1</TableCell>
+                  <TableCell>stable</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>typescript</TableCell>
+                  <TableCell>5.9.3</TableCell>
+                  <TableCell>stable</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </PreviewGroup>
         </PreviewPanel>
         <ShowcaseMeta>
           Use Table, TableHead, TableBody, TableRow, TableHeader and TableCell to build custom tables with full control.
@@ -154,18 +156,20 @@ const TablesSection = () => {
 
       <ShowcaseSection title="DataTable" subtitle="Sortable and paginated data grid">
         <PreviewPanel>
-          <DataTable<PackageRow>
-            data={PACKAGE_DATA}
-            columns={PACKAGE_COLUMNS}
-            pageSize={4}
-            sortable
-            filterable
-            filterQuery={query()}
-            onFilterQueryChange={setQuery}
-            filterPlaceholder="Search package, version or license"
-            striped
-            hoverable
-          />
+          <PreviewGroup title="Examples">
+            <DataTable<PackageRow>
+              data={PACKAGE_DATA}
+              columns={PACKAGE_COLUMNS}
+              pageSize={4}
+              sortable
+              filterable
+              filterQuery={query()}
+              onFilterQueryChange={setQuery}
+              filterPlaceholder="Search package, version or license"
+              striped
+              hoverable
+            />
+          </PreviewGroup>
         </PreviewPanel>
         <ShowcaseMeta>
           Click column headers to sort and use built-in filtering API. Pagination with ellipsis appears when rows exceed{' '}
@@ -175,12 +179,14 @@ const TablesSection = () => {
 
       <ShowcaseSection title="DataTable empty state" subtitle="Custom message when there is no data">
         <PreviewPanel>
-          <DataTable<PackageRow>
-            data={[]}
-            columns={PACKAGE_COLUMNS}
-            pageSize={4}
-            emptyMessage="No packages match your filters."
-          />
+          <PreviewGroup title="Examples">
+            <DataTable<PackageRow>
+              data={[]}
+              columns={PACKAGE_COLUMNS}
+              pageSize={4}
+              emptyMessage="No packages match your filters."
+            />
+          </PreviewGroup>
         </PreviewPanel>
       </ShowcaseSection>
 
@@ -189,35 +195,37 @@ const TablesSection = () => {
         subtitle="Virtualized rows, pinning, resizing, selection, toolbar actions, visibility and reorder"
       >
         <PreviewPanel>
-          <DataGridPro<PackageRow>
-            data={serverRows()}
-            columns={DATA_GRID_COLUMNS}
-            persistenceKey="demo-packages-grid"
-            resetPersistenceLabel="Reset saved grid"
-            importSettingsLabel="Import layout JSON"
-            exportSettingsLabel="Export layout JSON"
-            persistedBadgeLabel="Persisted"
-            defaultBadgeLabel="Default"
-            height={420}
-            rowHeight={40}
-            headerHeight={44}
-            overscan={8}
-            sortable
-            filterable
-            filterQuery={gridFilterQuery()}
-            onFilterQueryChange={setGridFilterQuery}
-            filterPlaceholder="Server filter: package, version, license or category"
-            sortKey={gridSort().key}
-            sortDirection={gridSort().direction}
-            onSortChange={setGridSort}
-            manualFiltering
-            manualSorting
-            selectable
-            selectedRowIds={selectedRows()}
-            onSelectedRowIdsChange={setSelectedRows}
-            getRowId={(row) => row.id}
-            striped
-          />
+          <PreviewGroup title="Examples">
+            <DataGridPro<PackageRow>
+              data={serverRows()}
+              columns={DATA_GRID_COLUMNS}
+              persistenceKey="demo-packages-grid"
+              resetPersistenceLabel="Reset saved grid"
+              importSettingsLabel="Import layout JSON"
+              exportSettingsLabel="Export layout JSON"
+              persistedBadgeLabel="Persisted"
+              defaultBadgeLabel="Default"
+              height={420}
+              rowHeight={40}
+              headerHeight={44}
+              overscan={8}
+              sortable
+              filterable
+              filterQuery={gridFilterQuery()}
+              onFilterQueryChange={setGridFilterQuery}
+              filterPlaceholder="Server filter: package, version, license or category"
+              sortKey={gridSort().key}
+              sortDirection={gridSort().direction}
+              onSortChange={setGridSort}
+              manualFiltering
+              manualSorting
+              selectable
+              selectedRowIds={selectedRows()}
+              onSelectedRowIdsChange={setSelectedRows}
+              getRowId={(row) => row.id}
+              striped
+            />
+          </PreviewGroup>
         </PreviewPanel>
         <ShowcaseMeta>
           Drag header separators to resize. Left and right pinned columns are enabled. Sorting and filtering are in
@@ -229,14 +237,16 @@ const TablesSection = () => {
 
       <ShowcaseSection title="Pagination" subtitle="Navigate large result sets">
         <PreviewPanel>
-          <Pagination
-            page={page()}
-            totalPages={19}
-            onChange={setPage}
-            previousLabel="Previous"
-            nextLabel="Next"
-            ariaLabel="Table pages"
-          />
+          <PreviewGroup title="Examples">
+            <Pagination
+              page={page()}
+              totalPages={19}
+              onChange={setPage}
+              previousLabel="Previous"
+              nextLabel="Next"
+              ariaLabel="Table pages"
+            />
+          </PreviewGroup>
         </PreviewPanel>
         <ShowcaseMeta>
           Current page: <strong>{page()}</strong>. Use with custom lists or tables when you need page navigation without

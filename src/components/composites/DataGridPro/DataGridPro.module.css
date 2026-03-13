@@ -1,5 +1,7 @@
 .wrapper {
   width: 100%;
+  padding: 0;
+  overflow: visible;
 }
 
 .toolbar {
@@ -251,14 +253,6 @@
 .pinnedRight {
   background: var(--color-bg-elevated);
   box-shadow: -2px 0 0 var(--color-border);
-}
-
-.headerCell input[type='checkbox'],
-.cell input[type='checkbox'] {
-  width: 16px;
-  height: 16px;
-  margin: 0;
-  accent-color: var(--color-primary);
 }
 
 .empty {

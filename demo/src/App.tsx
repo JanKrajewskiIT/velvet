@@ -1,5 +1,5 @@
-import { ThemeProvider, ThemeToggle, ToastProvider } from '@jankrajewskiit/ui';
-import { createSignal, For, Match, Switch } from 'solid-js';
+import { SidebarNav, type SidebarNavGroup, ThemeProvider, ThemeToggle, ToastProvider } from '@jankrajewskiit/ui';
+import { createSignal, Match, Switch } from 'solid-js';
 
 import CompositesSection from './sections/CompositesSection';
 import DataDisplaySection from './sections/DataDisplaySection';
@@ -45,16 +45,12 @@ export type SectionId =
   | 'overlays-lightbox'
   | 'layout-shell'
   | 'layout-sidebar'
+  | 'layout-cards'
   | 'composites-lists'
   | 'composites-wizard-ai'
   | 'composites-scheduler';
 
-interface NavGroup {
-  label: string;
-  items: Array<{ id: SectionId; label: string }>;
-}
-
-const NAV_GROUPS: NavGroup[] = [
+const NAV_GROUPS: SidebarNavGroup[] = [
   {
     label: 'Getting Started',
     items: [
@@ -67,6 +63,7 @@ const NAV_GROUPS: NavGroup[] = [
     items: [
       { id: 'layout-shell', label: 'Navbar & Layouts' },
       { id: 'layout-sidebar', label: 'Layout utilities' },
+      { id: 'layout-cards', label: 'Cards' },
       { id: 'nav-tabs-stepper', label: 'Tabs & Stepper' },
       { id: 'nav-timeline', label: 'Timeline' },
       { id: 'nav-command-fab', label: 'Command palette & FAB' },
@@ -138,7 +135,7 @@ const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
   },
   'inputs-buttons': {
     title: 'Inputs & Forms · Buttons & toggles',
-    description: 'Button, IconButton, ActionRow, CopyButton, LocaleSwitcher and ThemeToggle.',
+    description: 'Button, AffixButton, IconButton, ActionRow, CopyButton, LocaleSwitcher and ThemeToggle.',
   },
   'inputs-dropdowns': {
     title: 'Inputs & Forms · Dropdowns & autocomplete',
@@ -173,8 +170,7 @@ const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
   },
   'data-cards': {
     title: 'Data Display · Accordion & collapsible',
-    description:
-      'Accordion and Collapsible for progressive disclosure and grouped content. Cards are in Layout utilities.',
+    description: 'Accordion, Collapsible and SectionCard for progressive disclosure and grouped content.',
   },
   'data-media': {
     title: 'Data Display · Media & galleries',
@@ -219,8 +215,8 @@ const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
     description: 'BottomNav for mobile navigation bars and BackToTop for long-scrolling layouts.',
   },
   'feedback-badges-chips': {
-    title: 'Feedback · Badges & chips',
-    description: 'Badge, Chip and TagChip for status, filters and tags. StatCard is in Layout utilities.',
+    title: 'Feedback · Badges, chips & stats',
+    description: 'Badge, Chip, TagChip and StatCard for status, filters, tags and compact KPIs.',
   },
   'feedback-progress': {
     title: 'Feedback · Progress & loading',
@@ -261,7 +257,11 @@ const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
   },
   'layout-sidebar': {
     title: 'Layout & Navigation · Layout utilities',
-    description: 'Cards, Grid, Stack, ResizablePanel and Divider for composition-friendly layouts.',
+    description: 'Grid, Stack, ResizablePanel and Divider for composition-friendly layouts.',
+  },
+  'layout-cards': {
+    title: 'Layout & Navigation · Cards',
+    description: 'Card, DataCard and FlipCard for content containers and interactive layouts.',
   },
   'composites-lists': {
     title: 'Composites & Flows · Transfer, editable & kanban',
@@ -285,36 +285,19 @@ const AppContent = () => {
 
   return (
     <div class="layout">
-      <nav class="sidebar" aria-label="Component categories">
-        <div class="sidebar-logo">
-          <div class="sidebar-logo-header">
-            <p class="sidebar-title">VelvetUI</p>
-            <div class="theme-toggle-bar">
-              <ThemeToggle lightLabel="Light mode" darkLabel="Dark mode" groupLabel="Theme" variant="light" />
-            </div>
+      <SidebarNav
+        groups={NAV_GROUPS}
+        activeId={activeSection()}
+        onSelect={(id) => setActiveSection(id as SectionId)}
+        title="VelvetUI"
+        subtitle="Modern SolidJS component showcase"
+        navLabel="Component categories"
+        actions={
+          <div class="theme-toggle-bar">
+            <ThemeToggle lightLabel="Light mode" darkLabel="Dark mode" groupLabel="Theme" variant="light" />
           </div>
-          <p class="sidebar-subtitle">Modern SolidJS component showcase</p>
-        </div>
-
-        <For each={NAV_GROUPS}>
-          {(group) => (
-            <div class="sidebar-group">
-              <p class="sidebar-group-label">{group.label}</p>
-              <For each={group.items}>
-                {(item) => (
-                  <button
-                    type="button"
-                    class={`sidebar-item${activeSection() === item.id ? ' sidebar-item-active' : ''}`}
-                    onClick={() => setActiveSection(item.id)}
-                  >
-                    {item.label}
-                  </button>
-                )}
-              </For>
-            </div>
-          )}
-        </For>
-      </nav>
+        }
+      />
 
       <main class="main">
         <div class="page-header">

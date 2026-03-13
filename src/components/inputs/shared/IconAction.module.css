@@ -1,0 +1,19 @@
+.iconaction {
+  composes: base from './ButtonBase.module.css';
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+  min-height: 32px;
+  padding: 0;
+  border-radius: var(--radius-sm);
+  border-color: transparent;
+  background: transparent;
+  color: var(--color-text-muted);
+  justify-content: center;
+}
+
+.iconaction:hover:not(:disabled) {
+  color: var(--color-text);
+  background: var(--color-bg-hover);
+  transform: none;
+}

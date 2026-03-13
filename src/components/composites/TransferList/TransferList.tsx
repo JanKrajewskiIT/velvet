@@ -3,6 +3,7 @@ import { createMemo, createSignal, For, Show } from 'solid-js';
 
 import type Props from '~/models/Props';
 
+import CheckboxControl from '../../inputs/shared/CheckboxControl';
 import styles from './TransferList.module.css';
 
 export interface TransferItem {
@@ -98,11 +99,11 @@ const TransferList = (props: Props<TransferListProps>) => {
           <For each={filteredSource()}>
             {(item) => (
               <label class={`${styles.item} ${sourceChecked().has(item.id) ? styles.itemChecked : ''}`}>
-                <input
-                  type="checkbox"
+                <CheckboxControl
                   class={styles.checkbox}
                   checked={sourceChecked().has(item.id)}
                   onChange={() => toggleSourceChecked(item.id)}
+                  aria-label={`Select ${item.label}`}
                 />
                 {item.label}
               </label>
@@ -160,11 +161,11 @@ const TransferList = (props: Props<TransferListProps>) => {
           <For each={filteredTarget()}>
             {(item) => (
               <label class={`${styles.item} ${targetChecked().has(item.id) ? styles.itemChecked : ''}`}>
-                <input
-                  type="checkbox"
+                <CheckboxControl
                   class={styles.checkbox}
                   checked={targetChecked().has(item.id)}
                   onChange={() => toggleTargetChecked(item.id)}
+                  aria-label={`Select ${item.label}`}
                 />
                 {item.label}
               </label>

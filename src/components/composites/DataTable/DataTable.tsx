@@ -2,6 +2,7 @@ import { IoCaretDown, IoCaretUp } from 'solid-icons/io';
 import type { JSX } from 'solid-js';
 import { createEffect, createMemo, createSignal, For, Show } from 'solid-js';
 
+import Card from '~/components/data-display/Card/Card';
 import Table from '~/components/data-display/Table/Table';
 import TableBody from '~/components/data-display/Table/TableBody';
 import TableCell from '~/components/data-display/Table/TableCell';
@@ -156,7 +157,7 @@ const DataTable = <T extends Record<string, unknown>>(props: Props<DataTableProp
   });
 
   return (
-    <div class={classNames(styles.wrapper, props.class)}>
+    <Card class={classNames(styles.wrapper, props.class)}>
       <Show when={props.filterable}>
         <div class={styles.toolbar}>
           <Input
@@ -243,7 +244,7 @@ const DataTable = <T extends Record<string, unknown>>(props: Props<DataTableProp
           />
         </div>
       </Show>
-    </div>
+    </Card>
   );
 };
 
