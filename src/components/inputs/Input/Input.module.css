@@ -15,6 +15,14 @@
   composes: sizeLg from '../shared/InputBase.module.css';
 }
 
+.invalid {
+  composes: invalid from '../shared/InputBase.module.css';
+}
+
+.readOnly {
+  composes: readOnly from '../shared/InputBase.module.css';
+}
+
 .textarea {
   resize: vertical;
 }
@@ -45,6 +53,10 @@
   gap: var(--spacing-sm);
   cursor: pointer;
   text-align: left;
+}
+
+.selectTriggerReadonly {
+  cursor: default;
 }
 
 .selectTriggerOpen {

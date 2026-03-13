@@ -201,7 +201,7 @@ const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
   'data-tables': {
     title: 'Data & Tables',
     description:
-      'Table primitives, DataTable v2 and DataGridPro v3 (virtualization, pinning, resizing, selection, visibility, reorder, JSON import/export).',
+      'Table primitives, DataTable v2, ColumnManager and DataGridPro v3 (virtualization, pinning, resizing, selection, visibility, reorder, JSON import/export).',
   },
   'data-lists': {
     title: 'Data & Lists',
@@ -289,7 +289,7 @@ const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
   'composites-lists': {
     title: 'Composites & Transfer & Kanban',
     description:
-      'TransferList, EditableCollection and KanbanBoard for moving items between groups, managing dynamic lists and workflow columns.',
+      'FilterBar, TransferList, EditableCollection and KanbanBoard for filter toolbars, moving items between groups and workflow columns.',
   },
   'composites-wizard-ai': {
     title: 'Composites & Wizard & AI',

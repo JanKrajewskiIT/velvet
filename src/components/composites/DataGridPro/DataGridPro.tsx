@@ -13,6 +13,8 @@ import classNames from '~/utils/classNames';
 import styles from './DataGridPro.module.css';
 
 type SortDirection = 'asc' | 'desc';
+type DataGridProColumnPin = 'left' | 'right' | null;
+type DataGridProColumnPinning = Partial<Record<string, DataGridProColumnPin>>;
 
 interface DataGridProColumn<T> {
   key: keyof T & string;
@@ -68,6 +70,9 @@ interface DataGridProProps<T> {
   columnVisibility?: Record<string, boolean>;
   defaultColumnVisibility?: Record<string, boolean>;
   onColumnVisibilityChange?: (visibility: Record<string, boolean>) => void;
+  columnPinning?: DataGridProColumnPinning;
+  defaultColumnPinning?: DataGridProColumnPinning;
+  onColumnPinningChange?: (pinning: DataGridProColumnPinning) => void;
   persistenceKey?: string;
   resetPersistenceLabel?: string;
   onPersistenceReset?: () => void;
@@ -94,6 +99,7 @@ interface PersistedGridState {
   sortDirection?: SortDirection;
   columnOrder?: string[];
   columnVisibility?: Record<string, boolean>;
+  columnPinning?: DataGridProColumnPinning;
   columnWidths?: Record<string, number>;
 }
 
@@ -117,6 +123,9 @@ const DataGridPro = <T extends Record<string, unknown>>(props: Props<DataGridPro
   const [internalColumnVisibility, setInternalColumnVisibility] = createSignal<Record<string, boolean>>(
     props.defaultColumnVisibility ?? {}
   );
+  const [internalColumnPinning, setInternalColumnPinning] = createSignal<DataGridProColumnPinning>(
+    props.defaultColumnPinning ?? {}
+  );
   const [columnWidths, setColumnWidths] = createSignal<Record<string, number>>({});
   const [resizeState, setResizeState] = createSignal<ResizeState | null>(null);
   const [scrollTop, setScrollTop] = createSignal(0);
@@ -135,6 +144,7 @@ const DataGridPro = <T extends Record<string, unknown>>(props: Props<DataGridPro
   const selectedRowIds = () => props.selectedRowIds ?? internalSelectedRowIds();
   const currentColumnOrder = () => props.columnOrder ?? internalColumnOrder();
   const currentColumnVisibility = () => props.columnVisibility ?? internalColumnVisibility();
+  const currentColumnPinning = () => props.columnPinning ?? internalColumnPinning();
 
   const rowHeight = () => props.rowHeight ?? 40;
   const headerHeight = () => props.headerHeight ?? 44;
@@ -176,6 +186,18 @@ const DataGridPro = <T extends Record<string, unknown>>(props: Props<DataGridPro
     });
   });
 
+  createEffect(() => {
+    const keys = props.columns.map((column) => column.key);
+    const byKey = new Map(props.columns.map((column) => [column.key, column]));
+    setInternalColumnPinning((prev) => {
+      const next: DataGridProColumnPinning = {};
+      for (const key of keys) {
+        next[key] = prev[key] ?? props.defaultColumnPinning?.[key] ?? byKey.get(key)?.pinned ?? null;
+      }
+      return next;
+    });
+  });
+
   const getRowId = (row: T, index: number): string => {
     if (props.getRowId) return props.getRowId(row, index);
     return String(index);
@@ -188,6 +210,14 @@ const DataGridPro = <T extends Record<string, unknown>>(props: Props<DataGridPro
     for (const column of props.columns) {
       const key = column.key;
       next[key] = props.defaultColumnVisibility?.[key] ?? true;
+    }
+    return next;
+  };
+  const pinningDefault = () => {
+    const next: DataGridProColumnPinning = {};
+    for (const column of props.columns) {
+      const key = column.key;
+      next[key] = props.defaultColumnPinning?.[key] ?? column.pinned ?? null;
     }
     return next;
   };
@@ -211,6 +241,11 @@ const DataGridPro = <T extends Record<string, unknown>>(props: Props<DataGridPro
   const setColumnVisibility = (nextVisibility: Record<string, boolean>) => {
     setInternalColumnVisibility(nextVisibility);
     props.onColumnVisibilityChange?.(nextVisibility);
+  };
+
+  const setColumnPinning = (nextPinning: DataGridProColumnPinning) => {
+    setInternalColumnPinning(nextPinning);
+    props.onColumnPinningChange?.(nextPinning);
   };
 
   const loadPersistedState = () => {
@@ -270,6 +305,11 @@ const DataGridPro = <T extends Record<string, unknown>>(props: Props<DataGridPro
       props.onColumnVisibilityChange?.(state.columnVisibility);
     }
 
+    if (!props.columnPinning && state.columnPinning && typeof state.columnPinning === 'object') {
+      setInternalColumnPinning(state.columnPinning);
+      props.onColumnPinningChange?.(state.columnPinning);
+    }
+
     if (state.columnWidths && typeof state.columnWidths === 'object') {
       setColumnWidths((prev) => ({ ...prev, ...state.columnWidths }));
     }
@@ -284,6 +324,7 @@ const DataGridPro = <T extends Record<string, unknown>>(props: Props<DataGridPro
     sortDirection: sortDirection(),
     columnOrder: currentColumnOrder(),
     columnVisibility: currentColumnVisibility(),
+    columnPinning: currentColumnPinning(),
     columnWidths: columnWidths(),
   });
 
@@ -395,8 +436,15 @@ const DataGridPro = <T extends Record<string, unknown>>(props: Props<DataGridPro
     orderedColumns().filter((column) => currentColumnVisibility()[column.key] !== false)
   );
 
-  const pinnedLeftColumns = createMemo(() => visibleColumns().filter((column) => column.pinned === 'left'));
-  const pinnedRightColumns = createMemo(() => visibleColumns().filter((column) => column.pinned === 'right'));
+  const getColumnPin = (column: DataGridProColumn<T>): DataGridProColumnPin => {
+    const pin = currentColumnPinning()[column.key];
+    if (pin === 'left' || pin === 'right') return pin;
+    if (pin === null) return null;
+    return column.pinned ?? null;
+  };
+
+  const pinnedLeftColumns = createMemo(() => visibleColumns().filter((column) => getColumnPin(column) === 'left'));
+  const pinnedRightColumns = createMemo(() => visibleColumns().filter((column) => getColumnPin(column) === 'right'));
   const pinnedLeftOffsets = createMemo(() => {
     const offsets: Record<string, number> = {};
     let offset = selectable() ? SELECTION_COLUMN_WIDTH : 0;
@@ -418,8 +466,9 @@ const DataGridPro = <T extends Record<string, unknown>>(props: Props<DataGridPro
 
   const getColumnStyle = (column: DataGridProColumn<T>): JSX.CSSProperties => {
     const width = columnWidths()[column.key] ?? DEFAULT_COLUMN_WIDTH;
-    const isPinnedLeft = column.pinned === 'left';
-    const isPinnedRight = column.pinned === 'right';
+    const pin = getColumnPin(column);
+    const isPinnedLeft = pin === 'left';
+    const isPinnedRight = pin === 'right';
     return {
       width: `${width}px`,
       'min-width': `${width}px`,
@@ -508,6 +557,7 @@ const DataGridPro = <T extends Record<string, unknown>>(props: Props<DataGridPro
   const resetColumns = () => {
     setColumnOrder(keyOrderDefault());
     setColumnVisibility(visibilityDefault());
+    setColumnPinning(pinningDefault());
   };
 
   const resetView = () => {
@@ -676,6 +726,7 @@ const DataGridPro = <T extends Record<string, unknown>>(props: Props<DataGridPro
     sortDirection();
     currentColumnOrder();
     currentColumnVisibility();
+    currentColumnPinning();
     columnWidths();
 
     const saveReady = persistenceSaveReady();
@@ -825,8 +876,8 @@ const DataGridPro = <T extends Record<string, unknown>>(props: Props<DataGridPro
                       sortable() && styles.headerSortable,
                       draggingColumnKey() === key() && styles.headerDragging,
                       dragOverColumnKey() === key() && styles.headerDragOver,
-                      column.pinned === 'left' && styles.pinnedLeft,
-                      column.pinned === 'right' && styles.pinnedRight
+                      getColumnPin(column) === 'left' && styles.pinnedLeft,
+                      getColumnPin(column) === 'right' && styles.pinnedRight
                     )}
                     style={getColumnStyle(column)}
                     onClick={() => handleSort(column)}
@@ -901,8 +952,8 @@ const DataGridPro = <T extends Record<string, unknown>>(props: Props<DataGridPro
                           <div
                             class={classNames(
                               styles.cell,
-                              column.pinned === 'left' && styles.pinnedLeft,
-                              column.pinned === 'right' && styles.pinnedRight
+                              getColumnPin(column) === 'left' && styles.pinnedLeft,
+                              getColumnPin(column) === 'right' && styles.pinnedRight
                             )}
                             style={getColumnStyle(column)}
                           >
@@ -928,4 +979,10 @@ const DataGridPro = <T extends Record<string, unknown>>(props: Props<DataGridPro
 };
 
 export { DataGridPro };
-export type { DataGridProColumn, DataGridProProps, DataGridProSortState };
+export type {
+  DataGridProColumn,
+  DataGridProColumnPin,
+  DataGridProColumnPinning,
+  DataGridProProps,
+  DataGridProSortState,
+};

@@ -7,7 +7,16 @@ export type { RequireAuthProps } from './components/app/RequireAuth/RequireAuth'
 export { default as RequireAuth } from './components/app/RequireAuth/RequireAuth';
 export { default as AiResultPanel } from './components/composites/AiResultPanel/AiResultPanel';
 export type {
+  ColumnManagerColumn,
+  ColumnManagerPin,
+  ColumnManagerPinning,
+  ColumnManagerVisibility,
+} from './components/composites/ColumnManager/ColumnManager';
+export { default as ColumnManager } from './components/composites/ColumnManager/ColumnManager';
+export type {
   DataGridProColumn,
+  DataGridProColumnPin,
+  DataGridProColumnPinning,
   DataGridProProps,
   DataGridProSortState,
 } from './components/composites/DataGridPro/DataGridPro';
@@ -20,6 +29,8 @@ export type {
 } from './components/composites/EditableCollection/EditableCollection';
 export { default as EditableCollection } from './components/composites/EditableCollection/EditableCollection';
 export { default as FileDropZone } from './components/composites/FileDropZone/FileDropZone';
+export type { FilterBarFilter, FilterBarOption, FilterBarValue } from './components/composites/FilterBar/FilterBar';
+export { default as FilterBar } from './components/composites/FilterBar/FilterBar';
 export { default as FlipCard } from './components/composites/FlipCard/FlipCard';
 export type { KanbanColumn, KanbanItemBase } from './components/composites/KanbanBoard/KanbanBoard';
 export { default as KanbanBoard } from './components/composites/KanbanBoard/KanbanBoard';
@@ -102,7 +113,7 @@ export {
 export { default as ToastProvider } from './components/feedback/Toast/ToastProvider';
 export { default as ToastViewport } from './components/feedback/Toast/ToastViewport';
 export { default as ActionRow } from './components/forms/ActionRow/ActionRow';
-export { default as FormField } from './components/forms/FormField/FormField';
+export { default as FormField, type FormFieldProps } from './components/forms/FormField/FormField';
 export { default as FormGrid } from './components/forms/FormGrid/FormGrid';
 export { default as FormLayout } from './components/forms/FormLayout/FormLayout';
 export { default as AffixButton } from './components/inputs/AffixButton/AffixButton';

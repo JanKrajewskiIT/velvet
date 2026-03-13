@@ -5,6 +5,9 @@ import {
   Button,
   CodeText,
   EditableCollection,
+  FilterBar,
+  type FilterBarFilter,
+  type FilterBarValue,
   FormField,
   IconButton,
   Input,
@@ -33,6 +36,40 @@ const INITIAL_SOURCE: TransferItem[] = [
 ];
 
 const INITIAL_TARGET: TransferItem[] = [{ id: '6', label: 'SolidJS' }];
+
+const FILTER_DEFINITIONS: FilterBarFilter[] = [
+  {
+    key: 'status',
+    label: 'Status',
+    options: [
+      { value: 'todo', label: 'To do' },
+      { value: 'in-progress', label: 'In progress' },
+      { value: 'done', label: 'Done' },
+    ],
+    placeholder: 'Any status',
+  },
+  {
+    key: 'owner',
+    label: 'Owner',
+    options: [
+      { value: 'anna', label: 'Anna' },
+      { value: 'marek', label: 'Marek' },
+      { value: 'jan', label: 'Jan' },
+      { value: 'kasia', label: 'Kasia' },
+    ],
+    placeholder: 'Any owner',
+  },
+  {
+    key: 'priority',
+    label: 'Priority',
+    options: [
+      { value: 'low', label: 'Low' },
+      { value: 'medium', label: 'Medium' },
+      { value: 'high', label: 'High' },
+    ],
+    placeholder: 'Any priority',
+  },
+];
 
 type AnalysisState = 'idle' | 'loading' | 'result' | 'error';
 
@@ -133,6 +170,11 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
   const [analysisState, setAnalysisState] = createSignal<AnalysisState>('idle');
   const [resultNext, setResultNext] = createSignal(true);
   const [tasks, setTasks] = createSignal<TaskItem[]>([createTask(1), createTask(2)]);
+  const [filtersQuery, setFiltersQuery] = createSignal('');
+  const [filtersValue, setFiltersValue] = createSignal<FilterBarValue[]>([
+    { key: 'status', value: 'in-progress' },
+    { key: 'priority', value: 'high' },
+  ]);
   const [kanbanItems, setKanbanItems] = createSignal<KanbanDemoItem[]>(INITIAL_KANBAN_ITEMS);
   const [schedulerEvents, setSchedulerEvents] = createSignal<SchedulerEvent[]>(SCHEDULER_EVENTS);
 
@@ -210,6 +252,30 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
           </PreviewPanel>
           <ShowcaseMeta>
             Check items and use the arrow buttons to transfer. Search filters within each panel.
+          </ShowcaseMeta>
+        </ShowcaseSection>
+
+        <ShowcaseSection title="FilterBar" subtitle="Search + structured filters + active removable chips">
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <FilterBar
+                filters={FILTER_DEFINITIONS}
+                value={filtersValue()}
+                onChange={setFiltersValue}
+                search={filtersQuery()}
+                onSearchChange={setFiltersQuery}
+                searchPlaceholder="Search tasks..."
+                allLabel="All"
+                clearAllLabel="Clear filters"
+                removeFilterLabel="Remove filter"
+              />
+              <Text as="p" variant="caption" tone="muted" class="mutedText">
+                Query: {filtersQuery() || 'none'} | Active filters: {filtersValue().length}
+              </Text>
+            </PreviewGroup>
+          </PreviewPanel>
+          <ShowcaseMeta>
+            Use the toolbar to compose search and filter criteria, then remove single filters via chips or reset all.
           </ShowcaseMeta>
         </ShowcaseSection>
 

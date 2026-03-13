@@ -13,11 +13,22 @@ interface InputBaseOwnProps extends JSX.HTMLAttributes<HTMLElement> {
   size?: InputSize;
   disabled?: boolean;
   focusWithin?: boolean;
+  invalid?: boolean;
+  readOnly?: boolean;
   type?: JSX.ButtonHTMLAttributes<HTMLButtonElement>['type'];
 }
 
 const InputBase = (props: Props<InputBaseOwnProps>) => {
-  const [local, rest] = splitProps(props, ['as', 'class', 'size', 'disabled', 'focusWithin', 'children']);
+  const [local, rest] = splitProps(props, [
+    'as',
+    'class',
+    'size',
+    'disabled',
+    'focusWithin',
+    'children',
+    'invalid',
+    'readOnly',
+  ]);
 
   const sizeClass = () => {
     if (local.size === 'sm') return styles.sizeSm;
@@ -30,11 +41,15 @@ const InputBase = (props: Props<InputBaseOwnProps>) => {
       component={local.as ?? 'div'}
       {...rest}
       disabled={local.as === 'button' ? local.disabled : undefined}
+      aria-invalid={local.invalid || undefined}
+      aria-readonly={local.readOnly || undefined}
       class={classNames(
         styles.field,
         sizeClass(),
         local.focusWithin !== false && styles.focusWithin,
         local.disabled && styles.disabled,
+        local.invalid && styles.invalid,
+        local.readOnly && styles.readOnly,
         local.class
       )}
     >

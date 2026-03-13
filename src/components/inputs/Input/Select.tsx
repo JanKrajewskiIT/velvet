@@ -15,10 +15,12 @@ import styles from './Input.module.css';
 
 interface SelectOwnProps extends JSX.SelectHTMLAttributes<HTMLSelectElement> {
   size?: InputSize;
+  invalid?: boolean;
+  readOnly?: boolean;
 }
 
 const Select = (props: Props<SelectOwnProps>) => {
-  const [local, rest] = splitProps(props, ['class', 'size', 'children', 'value', 'disabled']);
+  const [local, rest] = splitProps(props, ['class', 'size', 'children', 'value', 'disabled', 'invalid', 'readOnly']);
   const [isOpen, setIsOpen] = createSignal(false);
   const [options, setOptions] = createSignal<{ value: string; label: string; disabled: boolean }[]>([]);
   const dropdownId = createUniqueId();
@@ -27,8 +29,10 @@ const Select = (props: Props<SelectOwnProps>) => {
   let nativeSelectRef: HTMLSelectElement | undefined;
 
   const close = () => setIsOpen(false);
+  const isInteractive = () => !local.disabled && !local.readOnly;
+
   const toggle = () => {
-    if (local.disabled) return;
+    if (!isInteractive()) return;
     setIsOpen(!isOpen());
   };
 
@@ -70,6 +74,7 @@ const Select = (props: Props<SelectOwnProps>) => {
   });
 
   const selectValue = (value: string) => {
+    if (local.readOnly) return;
     if (!nativeSelectRef) return;
     if (nativeSelectRef.value !== value) {
       nativeSelectRef.value = value;
@@ -91,7 +96,7 @@ const Select = (props: Props<SelectOwnProps>) => {
   };
 
   const handleTriggerKeyDown = (e: KeyboardEvent) => {
-    if (local.disabled) return;
+    if (!isInteractive()) return;
 
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
@@ -130,12 +135,19 @@ const Select = (props: Props<SelectOwnProps>) => {
         type="button"
         size={local.size}
         disabled={local.disabled}
-        class={classNames(styles.selectTrigger, isOpen() && styles.selectTriggerOpen)}
+        invalid={local.invalid}
+        readOnly={local.readOnly}
+        class={classNames(
+          styles.selectTrigger,
+          isOpen() && styles.selectTriggerOpen,
+          local.readOnly && styles.selectTriggerReadonly
+        )}
         onClick={toggle}
         onKeyDown={handleTriggerKeyDown}
         aria-haspopup="listbox"
         aria-expanded={isOpen()}
         aria-controls={isOpen() ? dropdownId : undefined}
+        aria-readonly={local.readOnly || undefined}
       >
         <span class={classNames(styles.selectValue, currentValue() === '' && styles.selectPlaceholder)}>
           {selectedLabel()}
@@ -152,7 +164,7 @@ const Select = (props: Props<SelectOwnProps>) => {
                 selected={option.value === currentValue()}
                 role="option"
                 aria-selected={option.value === currentValue()}
-                disabled={option.disabled}
+                disabled={option.disabled || !!local.readOnly}
                 onClick={() => selectValue(option.value)}
               >
                 {option.label}

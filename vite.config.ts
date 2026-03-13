@@ -29,7 +29,9 @@ export default defineConfig({
     rollupOptions: {
       external: (id) =>
         id.includes('node_modules') ||
-        /^(solid-js|@solidjs\/router|solid-icons|solid-markdown|dompurify|remark-gfm)(\/|$)/u.test(id),
+        /^(solid-js|@solidjs\/router|solid-icons|solid-markdown|dompurify|remark-gfm|lightweight-charts)(\/|$)/u.test(
+          id
+        ),
       output: {
         preserveModules: true,
         preserveModulesRoot: 'src',

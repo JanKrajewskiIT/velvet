@@ -21,8 +21,19 @@
   box-shadow: 0 0 0 3px var(--color-focus-ring);
 }
 
+.invalid,
+.invalid:focus,
+.invalid.focusWithin:focus-within {
+  border-color: var(--color-error);
+  box-shadow: 0 0 0 3px var(--color-error-light);
+}
+
 .field::placeholder {
   color: var(--color-text-muted);
+}
+
+.readOnly {
+  background-color: var(--color-surface);
 }
 
 .field:disabled,

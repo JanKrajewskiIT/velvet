@@ -5,6 +5,21 @@
 }
 
 .label {
-  display: block;
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--spacing-2xs);
   max-width: 100%;
+}
+
+.required {
+  color: var(--color-error);
+}
+
+.description {
+  margin: 0;
+}
+
+.error {
+  margin: 0;
+  color: var(--color-error);
 }

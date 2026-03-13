@@ -1,7 +1,10 @@
 import {
   CodeText,
+  ColumnManager,
+  type ColumnManagerColumn,
   DataGridPro,
   type DataGridProColumn,
+  type DataGridProColumnPinning,
   type DataGridProSortState,
   DataTable,
   type DataTableColumn,
@@ -81,12 +84,33 @@ const DATA_GRID_COLUMNS: DataGridProColumn<PackageRow>[] = [
   { key: 'category', header: 'Category', width: 160, minWidth: 120, sortable: true, pinned: 'right' },
 ];
 
+const DATA_GRID_COLUMN_SETTINGS: ColumnManagerColumn[] = DATA_GRID_COLUMNS.map((column) => ({
+  key: column.key,
+  label: column.header,
+  canHide: true,
+  canPin: true,
+}));
+
+const DATA_GRID_DEFAULT_ORDER = DATA_GRID_COLUMNS.map((column) => column.key);
+
+const DATA_GRID_DEFAULT_VISIBILITY = Object.fromEntries(
+  DATA_GRID_COLUMNS.map((column) => [column.key, true])
+) as Record<string, boolean>;
+
+const DATA_GRID_DEFAULT_PINNING: DataGridProColumnPinning = Object.fromEntries(
+  DATA_GRID_COLUMNS.map((column) => [column.key, column.pinned ?? null])
+);
+
 const TablesSection = () => {
   const [page, setPage] = createSignal(5);
   const [query, setQuery] = createSignal('');
   const [gridFilterQuery, setGridFilterQuery] = createSignal('');
   const [gridSort, setGridSort] = createSignal<DataGridProSortState>({ key: 'downloads', direction: 'desc' });
   const [selectedRows, setSelectedRows] = createSignal<string[]>([]);
+  const [gridColumnOrder, setGridColumnOrder] = createSignal<string[]>(DATA_GRID_DEFAULT_ORDER);
+  const [gridColumnVisibility, setGridColumnVisibility] =
+    createSignal<Record<string, boolean>>(DATA_GRID_DEFAULT_VISIBILITY);
+  const [gridColumnPinning, setGridColumnPinning] = createSignal<DataGridProColumnPinning>(DATA_GRID_DEFAULT_PINNING);
 
   const serverRows = createMemo(() => {
     const filter = gridFilterQuery().trim().toLowerCase();
@@ -201,6 +225,20 @@ const TablesSection = () => {
       >
         <PreviewPanel>
           <PreviewGroup title="Examples">
+            <ColumnManager
+              columns={DATA_GRID_COLUMN_SETTINGS}
+              order={gridColumnOrder()}
+              onOrderChange={setGridColumnOrder}
+              visibility={gridColumnVisibility()}
+              onVisibilityChange={setGridColumnVisibility}
+              pinning={gridColumnPinning()}
+              onPinningChange={setGridColumnPinning}
+              defaultOrder={DATA_GRID_DEFAULT_ORDER}
+              defaultVisibility={DATA_GRID_DEFAULT_VISIBILITY}
+              defaultPinning={DATA_GRID_DEFAULT_PINNING}
+              description="Configure order, visibility and pinning before rendering the grid."
+              resetLabel="Reset settings"
+            />
             <DataGridPro<PackageRow>
               data={serverRows()}
               columns={DATA_GRID_COLUMNS}
@@ -227,15 +265,21 @@ const TablesSection = () => {
               selectable
               selectedRowIds={selectedRows()}
               onSelectedRowIdsChange={setSelectedRows}
+              columnOrder={gridColumnOrder()}
+              onColumnOrderChange={setGridColumnOrder}
+              columnVisibility={gridColumnVisibility()}
+              onColumnVisibilityChange={setGridColumnVisibility}
+              columnPinning={gridColumnPinning()}
+              onColumnPinningChange={setGridColumnPinning}
               getRowId={(row) => row.id}
               striped
             />
           </PreviewGroup>
         </PreviewPanel>
         <ShowcaseMeta>
-          Drag header separators to resize. Left and right pinned columns are enabled. Sorting and filtering are in
-          manual mode (server-style control), rows support checkbox selection, and the toolbar allows column visibility
-          toggles, drag-and-drop reorder, JSON import/export of settings, plus persisted/default layout badge. Use
+          Drag header separators to resize. Use ColumnManager to control order, visibility and pinning, then verify the
+          same layout in DataGridPro. Sorting and filtering are in manual mode (server-style control), rows support
+          checkbox selection, and the toolbar still provides JSON import/export plus persisted/default layout badge. Use
           "Reset saved grid" to clear persisted layout in localStorage. Selected: {selectedRows().length}.
         </ShowcaseMeta>
       </ShowcaseSection>
