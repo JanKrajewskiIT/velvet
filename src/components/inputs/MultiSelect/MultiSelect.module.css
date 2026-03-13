@@ -29,8 +29,8 @@
 
 .triggerText {
   text-align: left;
-  font-size: var(--font-size-sm);
-  line-height: 1.4;
+  font-size: var(--typography-scale-sm);
+  line-height: var(--typography-line-height-normal);
 }
 
 .placeholder {

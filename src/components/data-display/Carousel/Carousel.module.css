@@ -26,27 +26,26 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border: none;
   border-radius: var(--radius-full);
   background: var(--color-glass);
   backdrop-filter: blur(8px);
   color: var(--color-text);
-  cursor: pointer;
   z-index: 1;
-  font-size: var(--font-size-xl);
+  font-size: var(--typography-scale-xl);
   transition:
     transform var(--duration-normal) var(--ease-out-expo),
     box-shadow var(--duration-normal) var(--ease-out-expo);
 }
 
-.arrow:hover {
+.arrow:hover:not(:disabled) {
+  background: var(--color-glass);
+  color: var(--color-text);
   transform: translateY(-50%) scale(1.1);
   box-shadow: var(--shadow-glow-sm);
+}
+
+.arrow:active:not(:disabled) {
+  transform: translateY(-50%) scale(0.97);
 }
 
 .arrowPrev {

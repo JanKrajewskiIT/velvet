@@ -34,7 +34,7 @@
   display: flex;
   align-items: center;
   color: var(--color-text-muted);
-  font-size: var(--font-size-sm);
+  font-size: var(--typography-scale-sm);
 }
 
 .dropdown {
@@ -64,8 +64,8 @@
 }
 
 .monthYear {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
+  font-size: var(--typography-scale-sm);
+  font-weight: var(--typography-weight-medium);
   color: var(--color-text);
 }
 
@@ -77,9 +77,9 @@
 }
 
 .dayHeader {
-  font-size: var(--font-size-xs);
+  font-size: var(--typography-scale-xs);
   color: var(--color-text-muted);
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--typography-weight-medium);
   padding: var(--spacing-2xs);
   line-height: 36px;
 }
@@ -90,7 +90,7 @@
   height: 36px;
   padding: var(--spacing-2xs);
   border-radius: var(--radius-sm);
-  font-size: var(--font-size-sm);
+  font-size: var(--typography-scale-sm);
   color: var(--color-text);
   border-color: transparent;
   background: transparent;
@@ -106,7 +106,7 @@
 }
 
 .today {
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--typography-weight-bold);
 }
 
 .inRange {

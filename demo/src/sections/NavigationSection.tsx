@@ -330,7 +330,7 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
                 Scroll the <CodeText as="span">main</CodeText> column (not the sidebar). After ~200px scroll, the fixed
                 control appears bottom-right and returns this column to the top.
               </Text>
-              <BackToTop threshold={200} scrollRoot={() => document.querySelector('main.main')} />
+              <BackToTop threshold={200} scrollRoot={() => document.querySelector<HTMLElement>('main.main')} />
               <div class="backToTopScrollFiller" aria-label="Scroll preview — placeholder content">
                 <For each={Array.from({ length: 16 }, (_, i) => i)}>
                   {() => (

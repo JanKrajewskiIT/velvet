@@ -4,15 +4,15 @@
   gap: var(--spacing-xs);
   padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--radius-pill);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-medium);
+  font-size: var(--typography-scale-xs);
+  font-weight: var(--typography-weight-medium);
   cursor: pointer;
   border: 1px solid;
   transition:
     opacity var(--duration-fast) var(--ease-out-expo),
     transform var(--duration-fast) var(--ease-out-expo);
   background: none;
-  line-height: 1.4;
+  line-height: var(--typography-line-height-normal);
   font-family: inherit;
 }
 

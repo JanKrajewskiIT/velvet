@@ -31,7 +31,7 @@
 }
 
 .dropIcon {
-  font-size: var(--font-size-3xl);
+  font-size: var(--typography-scale-3xl);
   display: flex;
   transition: transform var(--duration-fast) var(--ease-out-expo);
 }
@@ -41,10 +41,10 @@
 }
 
 .dropText {
-  font-size: var(--font-size-sm);
+  font-size: var(--typography-scale-sm);
 }
 
 .dropHint {
-  font-size: var(--font-size-xs);
+  font-size: var(--typography-scale-xs);
   color: var(--color-text-tertiary);
 }

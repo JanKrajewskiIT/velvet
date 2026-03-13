@@ -1,8 +1,8 @@
 .message {
   margin: 0;
   color: var(--color-text-muted);
-  font-size: var(--font-size-md);
-  line-height: 1.6;
+  font-size: var(--typography-scale-md);
+  line-height: var(--typography-line-height-relaxed);
 }
 
 .iconWrapper {
@@ -13,7 +13,7 @@
   height: 48px;
   border-radius: var(--radius-full);
   margin-bottom: var(--spacing-sm);
-  font-size: var(--font-size-2xl);
+  font-size: var(--typography-scale-2xl);
 }
 
 .iconDanger {

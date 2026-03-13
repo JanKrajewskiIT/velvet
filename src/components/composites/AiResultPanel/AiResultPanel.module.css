@@ -13,7 +13,7 @@
 }
 
 .loadingText {
-  font-size: var(--font-size-sm);
+  font-size: var(--typography-scale-sm);
   color: var(--color-text-muted);
   margin: 0;
 }
@@ -27,7 +27,7 @@
 }
 
 .errorText {
-  font-size: var(--font-size-sm);
+  font-size: var(--typography-scale-sm);
   color: var(--color-error);
   margin: 0;
   text-align: center;
@@ -47,7 +47,7 @@
 }
 
 .scoreLabel {
-  font-size: var(--font-size-xs);
+  font-size: var(--typography-scale-xs);
   color: var(--color-text-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -60,8 +60,8 @@
 }
 
 .summaryText {
-  font-size: var(--font-size-sm);
-  line-height: 1.5;
+  font-size: var(--typography-scale-sm);
+  line-height: var(--typography-line-height-body);
   margin: 0;
 }
 
@@ -75,8 +75,8 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
+  font-size: var(--typography-scale-sm);
+  font-weight: var(--typography-weight-semibold);
   margin: 0;
 }
 
@@ -104,8 +104,8 @@
 }
 
 .listItem {
-  font-size: var(--font-size-sm);
-  line-height: 1.4;
+  font-size: var(--typography-scale-sm);
+  line-height: var(--typography-line-height-normal);
   color: var(--color-text);
 }
 

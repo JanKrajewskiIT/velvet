@@ -12,14 +12,14 @@
 }
 
 .label {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
+  font-size: var(--typography-scale-sm);
+  font-weight: var(--typography-weight-medium);
   color: var(--color-text);
 }
 
 .value {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
+  font-size: var(--typography-scale-sm);
+  font-weight: var(--typography-weight-medium);
   color: var(--color-text-secondary);
 }
 

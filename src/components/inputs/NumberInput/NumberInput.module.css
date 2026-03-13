@@ -12,9 +12,9 @@
 }
 
 .label {
-  font-size: var(--font-size-sm);
+  font-size: var(--typography-scale-sm);
   color: var(--color-text);
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--typography-weight-medium);
 }
 
 .controls {
@@ -67,7 +67,7 @@
 .sizeSm .button {
   width: 28px;
   height: 28px;
-  font-size: var(--font-size-sm);
+  font-size: var(--typography-scale-sm);
 }
 
 .sizeSm .input {
@@ -75,13 +75,13 @@
   min-width: 2.5ch;
   height: 28px;
   padding-inline: var(--spacing-xs);
-  font-size: var(--font-size-sm);
+  font-size: var(--typography-scale-sm);
 }
 
 .sizeMd .button {
   width: 36px;
   height: 36px;
-  font-size: var(--font-size-md);
+  font-size: var(--typography-scale-md);
 }
 
 .sizeMd .input {
@@ -89,13 +89,13 @@
   min-width: 3ch;
   height: 36px;
   padding-inline: var(--spacing-xs);
-  font-size: var(--font-size-md);
+  font-size: var(--typography-scale-md);
 }
 
 .sizeLg .button {
   width: 44px;
   height: 44px;
-  font-size: var(--font-size-lg);
+  font-size: var(--typography-scale-lg);
 }
 
 .sizeLg .input {
@@ -103,5 +103,5 @@
   min-width: 3.25ch;
   height: 44px;
   padding-inline: var(--spacing-sm);
-  font-size: var(--font-size-lg);
+  font-size: var(--typography-scale-lg);
 }

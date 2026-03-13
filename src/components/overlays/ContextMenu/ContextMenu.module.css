@@ -24,7 +24,7 @@
   border: none;
   background: none;
   color: var(--color-text);
-  font-size: var(--font-size-sm);
+  font-size: var(--typography-scale-sm);
   cursor: pointer;
   text-align: left;
   white-space: nowrap;
@@ -48,7 +48,7 @@
   display: flex;
   align-items: center;
   flex-shrink: 0;
-  font-size: var(--font-size-md);
+  font-size: var(--typography-scale-md);
 }
 
 .separator {

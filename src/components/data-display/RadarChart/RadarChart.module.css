@@ -13,9 +13,9 @@
 }
 
 .axisLabel {
-  font-size: 10px;
+  font-size: var(--typography-scale-2xs);
   fill: var(--color-text-muted);
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--typography-weight-medium);
   animation: fadeIn var(--duration-slow) var(--ease-out-expo) both;
   animation-delay: 300ms;
 }
@@ -77,7 +77,7 @@
 }
 
 .legendLabel {
-  font-size: var(--font-size-xs);
+  font-size: var(--typography-scale-xs);
   color: var(--color-text-muted);
   white-space: nowrap;
   overflow: hidden;

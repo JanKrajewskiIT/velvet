@@ -8,7 +8,7 @@
 }
 
 .chevron {
-  font-size: var(--font-size-sm);
+  font-size: var(--typography-scale-sm);
   transition: transform var(--duration-fast) var(--ease-out-expo);
 }
 

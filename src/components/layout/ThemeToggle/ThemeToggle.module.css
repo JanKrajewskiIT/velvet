@@ -18,7 +18,7 @@
   height: 2rem;
   min-height: 2rem;
   padding: 0;
-  line-height: 1;
+  line-height: var(--typography-line-height-none);
   border: 2px solid var(--color-gray-0);
   border-radius: var(--radius-full);
   background: transparent;
@@ -53,7 +53,7 @@
   color: var(--color-primary);
   background-color: var(--color-gray-0);
   box-shadow: none;
-  font-weight: var(--font-weight-normal);
+  font-weight: var(--typography-weight-regular);
   opacity: 1;
   transform: scale(1.25) rotate(360deg);
   pointer-events: none;

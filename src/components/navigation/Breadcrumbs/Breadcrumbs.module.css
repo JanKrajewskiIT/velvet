@@ -1,5 +1,5 @@
 .breadcrumbs {
-  font-size: var(--font-size-sm);
+  font-size: var(--typography-scale-sm);
 }
 
 .list {
@@ -21,7 +21,7 @@
   display: flex;
   align-items: center;
   color: var(--color-text-tertiary);
-  line-height: 0;
+  line-height: var(--typography-line-height-zero);
 }
 
 .link {
@@ -42,7 +42,7 @@
 
 .current {
   color: var(--color-text);
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--typography-weight-medium);
 }
 
 .ellipsis {
@@ -51,7 +51,7 @@
   border: none;
   padding: 0 var(--spacing-xxs);
   font: inherit;
-  font-size: var(--font-size-sm);
+  font-size: var(--typography-scale-sm);
   cursor: pointer;
   letter-spacing: 0.1em;
   transition: color var(--duration-fast) var(--ease-out-expo);

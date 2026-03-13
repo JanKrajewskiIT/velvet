@@ -27,8 +27,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
+  font-size: var(--typography-scale-xl);
+  font-weight: var(--typography-weight-bold);
   animation: fadeIn var(--duration-normal) var(--ease-out-expo);
   animation-delay: var(--duration-fast);
   animation-fill-mode: both;

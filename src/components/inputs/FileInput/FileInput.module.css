@@ -48,12 +48,12 @@
 }
 
 .icon {
-  font-size: var(--font-size-2xl);
+  font-size: var(--typography-scale-2xl);
   color: var(--color-text-muted);
 }
 
 .label {
-  font-size: var(--font-size-sm);
+  font-size: var(--typography-scale-sm);
   color: var(--color-text-muted);
   text-align: center;
 }

@@ -25,8 +25,8 @@
   border-radius: var(--radius-full);
   background-color: var(--color-surface);
   color: var(--color-text-muted);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
+  font-size: var(--typography-scale-xs);
+  font-weight: var(--typography-weight-semibold);
   border: 2px solid var(--color-bg);
   flex-shrink: 0;
 }

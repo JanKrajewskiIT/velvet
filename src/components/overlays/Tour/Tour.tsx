@@ -1,6 +1,7 @@
 import { createEffect, createSignal, onCleanup, Show } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
+import Button from '~/components/inputs/Button/Button';
 import type Props from '~/models/Props';
 
 import styles from './Tour.module.css';
@@ -115,9 +116,9 @@ const Tour = (props: Props<TourProps>) => {
         <div class={`${styles.overlay} ${props.class ?? ''}`}>
           <div class={styles.spotlight} style={spotlightStyle()} />
           <div class={styles.card} style={cardStyle()}>
-            <button class={styles.skip} onClick={handleSkip}>
+            <Button variant="ghost" size="sm" class={styles.skip} onClick={handleSkip}>
               {skipLabel()}
-            </button>
+            </Button>
             <div class={styles.title}>{props.steps[currentStep()]?.title}</div>
             <div class={styles.content}>{props.steps[currentStep()]?.content}</div>
             <div class={styles.footer}>
@@ -126,13 +127,13 @@ const Tour = (props: Props<TourProps>) => {
               </span>
               <div class={styles.actions}>
                 <Show when={currentStep() > 0}>
-                  <button class={`${styles.btn} ${styles.btnGhost}`} onClick={handlePrev}>
+                  <Button variant="ghost" size="sm" onClick={handlePrev}>
                     {prevLabel()}
-                  </button>
+                  </Button>
                 </Show>
-                <button class={`${styles.btn} ${styles.btnPrimary}`} onClick={handleNext}>
+                <Button variant="primary" size="sm" onClick={handleNext}>
                   {isLastStep() ? finishLabel() : nextLabel()}
-                </button>
+                </Button>
               </div>
             </div>
           </div>

@@ -17,8 +17,8 @@
 
 .header {
   padding: var(--spacing-sm) var(--spacing-md);
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-sm);
+  font-weight: var(--typography-weight-semibold);
+  font-size: var(--typography-scale-sm);
   color: var(--color-text);
   border-bottom: 1px solid var(--color-border);
   background: var(--color-bg-elevated);
@@ -28,9 +28,9 @@
 }
 
 .count {
-  font-weight: var(--font-weight-normal);
+  font-weight: var(--typography-weight-regular);
   color: var(--color-text-muted);
-  font-size: var(--font-size-xs);
+  font-size: var(--typography-scale-xs);
 }
 
 .search {
@@ -43,7 +43,7 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   padding: var(--spacing-2xs) var(--spacing-xs);
-  font-size: var(--font-size-sm);
+  font-size: var(--typography-scale-sm);
   background: var(--color-surface);
   color: var(--color-text);
   outline: none;
@@ -66,7 +66,7 @@
   padding: var(--spacing-2xs) var(--spacing-sm);
   border-radius: var(--radius-sm);
   cursor: pointer;
-  font-size: var(--font-size-sm);
+  font-size: var(--typography-scale-sm);
   transition: var(--transition-fast);
 }
 
@@ -92,26 +92,13 @@
 }
 
 .controlBtn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
   background: var(--color-surface);
-  cursor: pointer;
-  color: var(--color-text-muted);
-  transition: var(--transition-fast);
 }
 
 .controlBtn:hover:not(:disabled) {
   background: var(--color-primary);
   color: var(--color-on-accent);
   border-color: var(--color-primary);
-}
-
-.controlBtn:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
+  transform: none;
 }

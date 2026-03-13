@@ -41,7 +41,7 @@ const AccordionItem = (props: Props<AccordionItemOwnProps>) => {
       class={`${styles.accordionItem} ${local.variant === 'card' ? styles.cardVariant : ''} ${isOpen() ? styles.open : ''} ${local.disabled ? styles.disabled : ''} ${local.class ?? ''}`}
       {...rest}
     >
-      <button class={styles.header} onClick={handleToggle} disabled={local.disabled}>
+      <button type="button" class={styles.header} onClick={handleToggle} disabled={local.disabled}>
         <div class={styles.title}>{local.title}</div>
         <div class={`${styles.icon} ${isOpen() ? styles.iconOpen : ''}`}>
           <FiChevronDown />

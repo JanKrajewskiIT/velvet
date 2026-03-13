@@ -50,7 +50,7 @@
 }
 
 .value {
-  line-height: 1.2;
+  line-height: var(--typography-line-height-tight);
 }
 
 .label {

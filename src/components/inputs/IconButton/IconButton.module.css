@@ -1,5 +1,5 @@
 .iconButton {
-  line-height: 1;
+  line-height: var(--typography-line-height-none);
 }
 
 .iconButton > svg {

@@ -70,7 +70,7 @@
 
 .label {
   flex: 1;
-  font-size: var(--font-size-sm);
+  font-size: var(--typography-scale-sm);
   color: var(--color-text);
 }
 
@@ -92,5 +92,5 @@
 .loading {
   padding: var(--spacing-xs) var(--spacing-md);
   color: var(--color-text-muted);
-  font-size: var(--font-size-xs);
+  font-size: var(--typography-scale-xs);
 }

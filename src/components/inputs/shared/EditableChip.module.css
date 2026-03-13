@@ -6,8 +6,8 @@
   border-radius: var(--radius-pill);
   background: var(--color-surface);
   color: var(--color-text-secondary);
-  font-size: var(--font-size-xs);
-  line-height: 1.2;
+  font-size: var(--typography-scale-xs);
+  line-height: var(--typography-line-height-tight);
   padding: var(--spacing-2xs) var(--spacing-xs);
 }
 
@@ -20,7 +20,7 @@
   align-items: center;
   justify-content: center;
   padding: 0;
-  line-height: 1;
+  line-height: var(--typography-line-height-none);
 }
 
 .removeButton:hover {

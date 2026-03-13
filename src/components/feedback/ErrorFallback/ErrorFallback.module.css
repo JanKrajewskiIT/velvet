@@ -9,14 +9,14 @@
 }
 
 .title {
-  font-size: clamp(2rem, 6vw, 3rem);
+  font-size: var(--typography-size-fluid-display);
   margin-bottom: var(--spacing-sm);
 }
 
 .description {
   color: var(--color-text-muted);
   margin-bottom: var(--spacing-lg);
-  font-size: clamp(0.9375rem, 2.5vw, 1rem);
+  font-size: var(--typography-size-fluid-body);
 }
 
 @media (width < 768px) {

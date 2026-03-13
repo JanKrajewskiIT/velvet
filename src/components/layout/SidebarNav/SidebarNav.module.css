@@ -29,13 +29,13 @@
 }
 
 .title {
-  font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-bold);
+  font-size: var(--typography-scale-2xl);
+  font-weight: var(--typography-weight-bold);
   margin: 0;
 }
 
 .subtitle {
-  font-size: var(--font-size-sm);
+  font-size: var(--typography-scale-sm);
   color: var(--color-text-muted);
   margin: var(--spacing-sm) 0 0;
 }
@@ -47,8 +47,8 @@
 }
 
 .groupLabel {
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
+  font-size: var(--typography-scale-xs);
+  font-weight: var(--typography-weight-semibold);
   color: var(--color-text-tertiary);
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -70,8 +70,8 @@
   border-radius: var(--radius-md);
   box-shadow: none;
   color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
+  font-size: var(--typography-scale-sm);
+  font-weight: var(--typography-weight-medium);
 }
 
 .item:hover {

@@ -52,8 +52,8 @@
 
 .value {
   position: absolute;
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
+  font-size: var(--typography-scale-xs);
+  font-weight: var(--typography-weight-semibold);
   color: var(--color-text);
 }
 

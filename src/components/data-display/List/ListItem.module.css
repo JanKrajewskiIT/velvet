@@ -55,12 +55,12 @@
 
 .primary {
   color: var(--color-text);
-  font-size: var(--font-size-md);
+  font-size: var(--typography-scale-md);
 }
 
 .secondary {
   color: var(--color-text-muted);
-  font-size: var(--font-size-sm);
+  font-size: var(--typography-scale-sm);
 }
 
 .action {

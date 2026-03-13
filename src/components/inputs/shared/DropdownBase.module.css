@@ -37,7 +37,7 @@
   border-radius: var(--radius-sm);
   background: none;
   color: var(--color-text);
-  font-size: var(--font-size-sm);
+  font-size: var(--typography-scale-sm);
   text-align: left;
   cursor: pointer;
   transition: background-color var(--duration-fast) var(--ease-out-expo);
@@ -55,11 +55,11 @@
 .itemSelected {
   background-color: var(--color-primary-light);
   color: var(--color-primary);
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--typography-weight-medium);
 }
 
 .empty {
   padding: var(--spacing-sm) var(--spacing-md);
   color: var(--color-text-muted);
-  font-size: var(--font-size-sm);
+  font-size: var(--typography-scale-sm);
 }

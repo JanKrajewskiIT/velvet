@@ -28,9 +28,9 @@
 
 .columnTitle {
   margin: 0;
-  font-size: var(--font-size-sm);
+  font-size: var(--typography-scale-sm);
   color: var(--color-text);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--typography-weight-semibold);
 }
 
 .columnCount {
@@ -40,7 +40,7 @@
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   color: var(--color-text-secondary);
-  font-size: var(--font-size-xs);
+  font-size: var(--typography-scale-xs);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -77,12 +77,12 @@
 
 .cardTitle {
   color: var(--color-text);
-  font-size: var(--font-size-sm);
+  font-size: var(--typography-scale-sm);
 }
 
 .cardDescription {
   color: var(--color-text-muted);
-  font-size: var(--font-size-xs);
+  font-size: var(--typography-scale-xs);
 }
 
 .empty {
@@ -90,6 +90,6 @@
   border-radius: var(--radius-sm);
   color: var(--color-text-muted);
   text-align: center;
-  font-size: var(--font-size-xs);
+  font-size: var(--typography-scale-xs);
   padding: var(--spacing-sm);
 }

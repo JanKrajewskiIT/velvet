@@ -5,8 +5,8 @@
 }
 
 .label {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
+  font-size: var(--typography-scale-sm);
+  font-weight: var(--typography-weight-medium);
   color: var(--color-text);
 }
 
@@ -28,8 +28,8 @@
 .toolButton {
   composes: iconaction from '../shared/IconAction.module.css';
   border-radius: var(--radius-sm);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
+  font-size: var(--typography-scale-xs);
+  font-weight: var(--typography-weight-semibold);
   padding: var(--spacing-2xs) var(--spacing-xs);
   width: auto;
   min-width: 32px;
@@ -48,8 +48,8 @@
 .editor {
   padding: var(--spacing-sm);
   color: var(--color-text);
-  font-size: var(--font-size-sm);
-  line-height: 1.6;
+  font-size: var(--typography-scale-sm);
+  line-height: var(--typography-line-height-relaxed);
   outline: none;
 }
 

@@ -6,8 +6,8 @@
 }
 
 .label {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
+  font-size: var(--typography-scale-sm);
+  font-weight: var(--typography-weight-medium);
   color: var(--color-text);
 }
 
@@ -47,8 +47,8 @@
   min-height: 100%;
   color: var(--color-text-muted);
   cursor: pointer;
-  font-size: var(--font-size-md);
-  line-height: 1;
+  font-size: var(--typography-scale-md);
+  line-height: var(--typography-line-height-none);
   transition: color var(--duration-fast) var(--ease-out-expo);
 }
 
@@ -72,8 +72,8 @@
 }
 
 .monthYear {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
+  font-size: var(--typography-scale-sm);
+  font-weight: var(--typography-weight-medium);
   color: var(--color-text);
 }
 
@@ -94,9 +94,9 @@
 }
 
 .dayHeader {
-  font-size: var(--font-size-xs);
+  font-size: var(--typography-scale-xs);
   color: var(--color-text-tertiary);
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--typography-weight-medium);
   line-height: 36px;
 }
 
@@ -105,7 +105,7 @@
   width: 36px;
   height: 36px;
   border-radius: var(--radius-full);
-  font-size: var(--font-size-sm);
+  font-size: var(--typography-scale-sm);
   color: var(--color-text);
   border-color: transparent;
   background: transparent;

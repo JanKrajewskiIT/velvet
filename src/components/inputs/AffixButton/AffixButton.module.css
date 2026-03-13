@@ -37,6 +37,6 @@
   border-radius: var(--radius-pill);
   background: var(--color-primary);
   color: var(--color-on-accent);
-  font-size: var(--font-size-xs);
-  line-height: 1;
+  font-size: var(--typography-scale-xs);
+  line-height: var(--typography-line-height-none);
 }

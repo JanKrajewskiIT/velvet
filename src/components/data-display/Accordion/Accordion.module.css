@@ -33,7 +33,7 @@
   text-align: left;
   transition: background-color var(--transition-fast);
   color: var(--color-text);
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--typography-weight-medium);
 }
 
 .header:hover {

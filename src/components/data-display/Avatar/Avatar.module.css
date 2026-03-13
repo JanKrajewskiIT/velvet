@@ -23,25 +23,25 @@
 .sm {
   width: 28px;
   height: 28px;
-  font-size: var(--font-size-xs);
+  font-size: var(--typography-scale-xs);
 }
 
 .md {
   width: 36px;
   height: 36px;
-  font-size: var(--font-size-sm);
+  font-size: var(--typography-scale-sm);
 }
 
 .lg {
   width: 48px;
   height: 48px;
-  font-size: var(--font-size-md);
+  font-size: var(--typography-scale-md);
 }
 
 .xl {
   width: 64px;
   height: 64px;
-  font-size: var(--font-size-lg);
+  font-size: var(--typography-scale-lg);
 }
 
 .image {
@@ -58,8 +58,8 @@
   height: 100%;
   background-color: var(--color-primary-light);
   color: var(--color-primary);
-  font-weight: var(--font-weight-semibold);
-  line-height: 1;
+  font-weight: var(--typography-weight-semibold);
+  line-height: var(--typography-line-height-none);
 }
 
 .icon {

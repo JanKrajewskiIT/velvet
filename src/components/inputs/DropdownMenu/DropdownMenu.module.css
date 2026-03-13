@@ -45,7 +45,7 @@
   align-items: center;
   gap: var(--spacing-sm);
   color: var(--color-text);
-  font-size: var(--font-size-sm);
+  font-size: var(--typography-scale-sm);
   border-radius: var(--radius-sm);
 }
 
@@ -70,7 +70,7 @@
 .itemIcon {
   display: flex;
   align-items: center;
-  font-size: var(--font-size-base);
+  font-size: var(--typography-scale-base);
   flex-shrink: 0;
 }
 

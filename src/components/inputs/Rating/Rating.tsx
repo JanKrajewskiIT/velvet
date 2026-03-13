@@ -1,5 +1,6 @@
 import { FiStar } from 'solid-icons/fi';
 import { createSignal, For, type JSX, Show } from 'solid-js';
+import { Dynamic } from 'solid-js/web';
 
 import type Props from '~/models/Props';
 
@@ -40,13 +41,6 @@ const Rating = (props: Props<RatingOwnProps>) => {
     props.onChange?.(index);
   };
 
-  const handleKeyDown = (index: number, e: KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      handleClick(index);
-    }
-  };
-
   const handleMouseEnter = (index: number) => {
     if (isInteractive()) setHoverIndex(index);
   };
@@ -64,21 +58,21 @@ const Rating = (props: Props<RatingOwnProps>) => {
     >
       <For each={stars()}>
         {(index) => (
-          <span
+          <Dynamic
+            component={isInteractive() ? 'button' : 'span'}
+            type={isInteractive() ? 'button' : undefined}
             role="radio"
-            tabIndex={isInteractive() ? 0 : undefined}
             aria-checked={index <= props.value}
             aria-label={`${index} of ${max()}`}
             class={`${styles.star} ${isFilled(index) ? styles.filled : ''} ${isHalf(index) ? styles.half : ''} ${isInteractive() ? styles.interactive : ''}`}
             style={{ 'font-size': `${size()}px` }}
             onClick={() => handleClick(index)}
-            onKeyDown={(e) => handleKeyDown(index, e)}
             onMouseEnter={() => handleMouseEnter(index)}
           >
             <Show when={props.icon} fallback={<FiStar />}>
               {props.icon}
             </Show>
-          </span>
+          </Dynamic>
         )}
       </For>
     </div>

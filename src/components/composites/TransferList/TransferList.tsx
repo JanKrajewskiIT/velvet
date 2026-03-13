@@ -1,6 +1,7 @@
 import { IoChevronBack, IoChevronForward, IoPlayBack, IoPlayForward } from 'solid-icons/io';
 import { createMemo, createSignal, For, Show } from 'solid-js';
 
+import IconButton from '~/components/inputs/IconButton/IconButton';
 import type Props from '~/models/Props';
 
 import CheckboxControl from '../../inputs/shared/CheckboxControl';
@@ -113,33 +114,38 @@ const TransferList = (props: Props<TransferListProps>) => {
       </div>
 
       <div class={styles.controls}>
-        <button
-          type="button"
+        <IconButton
           class={styles.controlBtn}
           disabled={sourceChecked().size === 0}
           onClick={moveSelectedRight}
-        >
-          <IoChevronForward />
-        </button>
-        <button
-          type="button"
+          title="Move selected to right"
+          icon={<IoChevronForward />}
+          size="sm"
+        />
+        <IconButton
           class={styles.controlBtn}
           disabled={props.sourceItems.length === 0}
           onClick={moveAllRight}
-        >
-          <IoPlayForward />
-        </button>
-        <button
-          type="button"
+          title="Move all to right"
+          icon={<IoPlayForward />}
+          size="sm"
+        />
+        <IconButton
           class={styles.controlBtn}
           disabled={targetChecked().size === 0}
           onClick={moveSelectedLeft}
-        >
-          <IoChevronBack />
-        </button>
-        <button type="button" class={styles.controlBtn} disabled={props.targetItems.length === 0} onClick={moveAllLeft}>
-          <IoPlayBack />
-        </button>
+          title="Move selected to left"
+          icon={<IoChevronBack />}
+          size="sm"
+        />
+        <IconButton
+          class={styles.controlBtn}
+          disabled={props.targetItems.length === 0}
+          onClick={moveAllLeft}
+          title="Move all to left"
+          icon={<IoPlayBack />}
+          size="sm"
+        />
       </div>
 
       <div class={styles.panel}>

@@ -7,7 +7,7 @@
   position: absolute;
   z-index: var(--z-modal);
   padding: var(--spacing-xs) var(--spacing-sm);
-  font-size: var(--font-size-xs);
+  font-size: var(--typography-scale-xs);
   color: var(--color-text-inverse);
   background-color: var(--color-tooltip);
   backdrop-filter: blur(8px);

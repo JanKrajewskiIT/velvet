@@ -43,7 +43,7 @@
   padding: var(--spacing-xs) var(--spacing-sm);
   background: linear-gradient(transparent, var(--color-overlay));
   color: var(--color-text-inverse);
-  font-size: var(--font-size-xs);
+  font-size: var(--typography-scale-xs);
   opacity: 0;
   transform: translateY(4px);
   transition:

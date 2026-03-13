@@ -15,9 +15,9 @@
   height: 18px;
   padding: 0 var(--spacing-xs);
   border-radius: var(--radius-pill);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-  line-height: 1;
+  font-size: var(--typography-scale-xs);
+  font-weight: var(--typography-weight-semibold);
+  line-height: var(--typography-line-height-none);
   color: var(--color-on-accent);
   white-space: nowrap;
   pointer-events: none;

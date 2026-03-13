@@ -29,10 +29,10 @@
 }
 
 .label {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
+  font-size: var(--typography-scale-sm);
+  font-weight: var(--typography-weight-semibold);
   letter-spacing: 0.05em;
-  line-height: 1;
+  line-height: var(--typography-line-height-none);
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;

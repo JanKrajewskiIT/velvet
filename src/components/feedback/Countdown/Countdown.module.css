@@ -2,19 +2,19 @@
   display: inline-flex;
   align-items: center;
   font-variant-numeric: tabular-nums;
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--typography-weight-semibold);
 }
 
 .sm {
-  font-size: var(--font-size-sm);
+  font-size: var(--typography-scale-sm);
 }
 
 .md {
-  font-size: var(--font-size-xl);
+  font-size: var(--typography-scale-xl);
 }
 
 .lg {
-  font-size: var(--font-size-3xl);
+  font-size: var(--typography-scale-3xl);
 }
 
 .digit {

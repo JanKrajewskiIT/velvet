@@ -42,14 +42,14 @@
 
 .message {
   flex: 1;
-  font-size: var(--font-size-md);
+  font-size: var(--typography-scale-md);
 }
 
 .closeBtn {
   background: transparent;
   border: none;
-  font-size: var(--font-size-xl);
-  line-height: 1;
+  font-size: var(--typography-scale-xl);
+  line-height: var(--typography-line-height-none);
   cursor: pointer;
   color: var(--color-text-secondary);
   padding: 0 0 0 var(--spacing-md);

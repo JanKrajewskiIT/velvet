@@ -6,8 +6,8 @@
 }
 
 .label {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
+  font-size: var(--typography-scale-sm);
+  font-weight: var(--typography-weight-medium);
   color: var(--color-text);
 }
 
@@ -42,7 +42,7 @@
   min-height: auto;
   border-radius: 0;
   background: transparent;
-  font-size: var(--font-size-md);
+  font-size: var(--typography-scale-md);
 }
 
 .iconBtn:hover {

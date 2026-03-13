@@ -7,7 +7,7 @@
 .box {
   composes: field from '../shared/InputBase.module.css';
   text-align: center;
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--typography-weight-bold);
   color: var(--color-text);
   padding: 0;
   caret-color: var(--color-primary);
@@ -40,19 +40,19 @@
 .sizeSm {
   width: 36px;
   height: 36px;
-  font-size: var(--font-size-lg);
+  font-size: var(--typography-scale-lg);
 }
 
 .sizeMd {
   width: 48px;
   height: 48px;
-  font-size: var(--font-size-xl);
+  font-size: var(--typography-scale-xl);
 }
 
 .sizeLg {
   width: 56px;
   height: 56px;
-  font-size: var(--font-size-2xl);
+  font-size: var(--typography-scale-2xl);
 }
 
 @keyframes fadeInUp {

@@ -16,7 +16,7 @@
 }
 
 .icon {
-  font-size: var(--font-size-3xl);
+  font-size: var(--typography-scale-3xl);
   color: var(--color-text-muted);
 }
 
@@ -29,8 +29,8 @@
   color: var(--color-on-accent);
   text-decoration: none;
   border-radius: var(--radius-sm);
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-medium);
+  font-size: var(--typography-scale-md);
+  font-weight: var(--typography-weight-medium);
   transition: background-color var(--transition-fast);
 }
 

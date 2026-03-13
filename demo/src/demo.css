@@ -431,7 +431,7 @@ body {
 }
 
 .layoutNavbarLogo {
-  font-size: 3.125rem;
+  font-size: var(--typography-scale-5xl);
   color: var(--header-text);
 }
 

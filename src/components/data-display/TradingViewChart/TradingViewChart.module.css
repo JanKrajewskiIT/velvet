@@ -26,8 +26,8 @@
 }
 
 .symbol {
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-semibold);
+  font-size: var(--typography-scale-md);
+  font-weight: var(--typography-weight-semibold);
   color: var(--color-text);
   margin-right: var(--spacing-xs);
 }
@@ -38,8 +38,8 @@
   color: var(--color-text-secondary);
   border-radius: var(--radius-pill);
   padding: var(--spacing-2xs) var(--spacing-sm);
-  font-size: var(--font-size-xs);
-  line-height: 1.4;
+  font-size: var(--typography-scale-xs);
+  line-height: var(--typography-line-height-normal);
   cursor: pointer;
   transition:
     background-color var(--duration-fast),
@@ -74,7 +74,7 @@
 }
 
 .ohlcItem {
-  font-size: var(--font-size-xs);
+  font-size: var(--typography-scale-xs);
   color: var(--color-text-secondary);
   font-variant-numeric: tabular-nums;
 }
@@ -116,9 +116,9 @@
 }
 
 .levelLabel {
-  font-size: var(--font-size-xs);
+  font-size: var(--typography-scale-xs);
   fill: var(--color-warning);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--typography-weight-semibold);
 }
 
 .zoneRect {

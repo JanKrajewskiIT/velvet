@@ -16,12 +16,12 @@
 
 .text {
   color: var(--color-text-muted);
-  font-size: var(--font-size-sm);
+  font-size: var(--typography-scale-sm);
 }
 
 .link {
   color: var(--color-text-muted);
-  font-size: var(--font-size-sm);
+  font-size: var(--typography-scale-sm);
   text-decoration: none;
   transition: color var(--duration-fast) var(--ease-out-expo);
 }

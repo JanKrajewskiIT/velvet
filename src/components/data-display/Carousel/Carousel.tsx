@@ -1,6 +1,7 @@
 import { FiChevronLeft, FiChevronRight } from 'solid-icons/fi';
 import { children as resolveChildren, createEffect, createSignal, For, type JSX, onCleanup, Show } from 'solid-js';
 
+import IconButton from '~/components/inputs/IconButton/IconButton';
 import type Props from '~/models/Props';
 
 import styles from './Carousel.module.css';
@@ -85,17 +86,18 @@ const Carousel = (props: Props<CarouselProps>) => {
       </div>
 
       <Show when={showArrows()}>
-        <button
-          type="button"
+        <IconButton
           class={`${styles.arrow} ${styles.arrowPrev}`}
           onClick={goPrev}
-          aria-label="Previous slide"
-        >
-          <FiChevronLeft />
-        </button>
-        <button type="button" class={`${styles.arrow} ${styles.arrowNext}`} onClick={goNext} aria-label="Next slide">
-          <FiChevronRight />
-        </button>
+          title="Previous slide"
+          icon={<FiChevronLeft />}
+        />
+        <IconButton
+          class={`${styles.arrow} ${styles.arrowNext}`}
+          onClick={goNext}
+          title="Next slide"
+          icon={<FiChevronRight />}
+        />
       </Show>
 
       <Show when={showDots()}>
