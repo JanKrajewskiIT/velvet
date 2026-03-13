@@ -43,7 +43,8 @@ export type SectionId =
   | 'nav-breadcrumbs'
   | 'nav-timeline'
   | 'nav-command-fab'
-  | 'nav-mobile'
+  | 'nav-bottom-nav'
+  | 'nav-back-to-top'
   | 'feedback-badges-chips'
   | 'feedback-progress'
   | 'feedback-alerts'
@@ -78,7 +79,8 @@ const NAV_GROUPS: SidebarNavGroup[] = [
       { id: 'nav-tabs-stepper', label: 'Breadcrumbs & Tabs & Stepper' },
       { id: 'nav-timeline', label: 'Timeline' },
       { id: 'nav-command-fab', label: 'Palette & FAB' },
-      { id: 'nav-mobile', label: 'Bottom Nav & Back To Top' },
+      { id: 'nav-bottom-nav', label: 'Bottom nav' },
+      { id: 'nav-back-to-top', label: 'Back to top' },
     ],
   },
   {
@@ -226,9 +228,14 @@ const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
     title: 'Layout & Command Palette & FAB',
     description: 'CommandPalette for keyboard-driven navigation and SpeedDial for quick floating actions.',
   },
-  'nav-mobile': {
-    title: 'Layout & Bottom Nav & Back To Top',
-    description: 'BottomNav for mobile navigation bars and BackToTop for long-scrolling layouts.',
+  'nav-bottom-nav': {
+    title: 'Layout & Bottom nav',
+    description:
+      'BottomNav for mobile navigation bars; use placement container when the bar sits only above main content.',
+  },
+  'nav-back-to-top': {
+    title: 'Layout & Back to top',
+    description: 'BackToTop floating control for long-scrolling pages.',
   },
   'feedback-badges-chips': {
     title: 'Feedback & Badges & Chips & Stats',

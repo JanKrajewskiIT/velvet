@@ -288,7 +288,7 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
         </ShowcaseSection>
       </Show>
 
-      <Show when={sectionId() === 'nav-mobile'}>
+      <Show when={sectionId() === 'nav-bottom-nav'}>
         <ShowcaseSection title="BottomNav" subtitle="Mobile bottom navigation bar">
           <PreviewPanel>
             <PreviewGroup title="Examples">
@@ -306,20 +306,42 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
                     Active: <strong>{activeBottomNav()}</strong>
                   </Text>
                 </div>
-                <BottomNav items={BOTTOM_NAV_ITEMS} activeId={activeBottomNav()} onChange={setActiveBottomNav} />
+                <BottomNav
+                  placement="container"
+                  items={BOTTOM_NAV_ITEMS}
+                  activeId={activeBottomNav()}
+                  onChange={setActiveBottomNav}
+                />
               </div>
             </PreviewGroup>
           </PreviewPanel>
-          <ShowcaseMeta>Supports badges on items. Designed for mobile viewport widths.</ShowcaseMeta>
+          <ShowcaseMeta>
+            Supports badges. Use placement=&quot;viewport&quot; for full-width fixed bars; &quot;container&quot; keeps
+            the bar inside a positioned region (e.g. main column next to a sidebar).
+          </ShowcaseMeta>
         </ShowcaseSection>
+      </Show>
 
+      <Show when={sectionId() === 'nav-back-to-top'}>
         <ShowcaseSection title="BackToTop" subtitle="Floating scroll-to-top button">
           <PreviewPanel>
             <PreviewGroup title="Examples">
               <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                Scroll down the page to see the back-to-top button appear in the bottom-right corner.
+                Scroll the <CodeText as="span">main</CodeText> column (not the sidebar). After ~200px scroll, the fixed
+                control appears bottom-right and returns this column to the top.
               </Text>
-              <BackToTop threshold={200} />
+              <BackToTop threshold={200} scrollRoot={() => document.querySelector('main.main')} />
+              <div class="backToTopScrollFiller" aria-label="Scroll preview — placeholder content">
+                <For each={Array.from({ length: 16 }, (_, i) => i)}>
+                  {() => (
+                    <div class="backToTopScrollFillerCard">
+                      <div class="backToTopScrollFillerBar backToTopScrollFillerBarNarrow" />
+                      <div class="backToTopScrollFillerBar backToTopScrollFillerBarWide" />
+                      <div class="backToTopScrollFillerBar backToTopScrollFillerBarMid" />
+                    </div>
+                  )}
+                </For>
+              </div>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>

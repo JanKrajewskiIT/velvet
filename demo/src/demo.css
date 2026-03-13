@@ -108,6 +108,46 @@ body {
   border-top: 1px solid var(--color-border);
 }
 
+.backToTopScrollFiller {
+  margin-top: var(--spacing-xl);
+  min-height: min(200vh, 2800px);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.backToTopScrollFillerCard {
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+  padding: var(--spacing-lg);
+  display: grid;
+  gap: var(--spacing-sm);
+}
+
+.backToTopScrollFillerBar {
+  height: 10px;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-hover);
+  max-width: 100%;
+}
+
+.backToTopScrollFillerBarNarrow {
+  width: 38%;
+}
+
+.backToTopScrollFillerBarWide {
+  width: 92%;
+}
+
+.backToTopScrollFillerBarMid {
+  width: 72%;
+}
+
 .previewGroupHeader {
   display: grid;
   gap: var(--spacing-2xs);

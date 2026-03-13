@@ -68,7 +68,8 @@ const DEMO_APP_NAV_GROUPS: SidebarNavGroup[] = [
       { id: 'tabs-stepper', label: 'Breadcrumbs & Tabs & Stepper' },
       { id: 'timeline', label: 'Timeline' },
       { id: 'command-fab', label: 'Palette & FAB' },
-      { id: 'mobile-nav', label: 'Bottom Nav & Back To Top' },
+      { id: 'bottom-nav', label: 'Bottom nav' },
+      { id: 'back-to-top', label: 'Back to top' },
     ],
   },
   {

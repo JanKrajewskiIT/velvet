@@ -16,11 +16,15 @@ interface BottomNavProps {
   items: BottomNavItem[];
   activeId: string;
   onChange: (id: string) => void;
+  placement?: 'viewport' | 'container';
 }
 
 const BottomNav = (props: Props<BottomNavProps>) => {
+  const placement = () => props.placement ?? 'viewport';
+  const barClass = () => (placement() === 'container' ? styles.barContainer : styles.barViewport);
+
   return (
-    <nav class={`${styles.bar} ${props.class ?? ''}`}>
+    <nav class={`${barClass()} ${props.class ?? ''}`}>
       <For each={props.items}>
         {(item) => (
           <button

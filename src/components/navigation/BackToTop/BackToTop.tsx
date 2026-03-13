@@ -11,6 +11,7 @@ interface BackToTopProps {
   threshold?: number;
   smooth?: boolean;
   ariaLabel?: string;
+  scrollRoot?: () => HTMLElement | null | undefined;
 }
 
 const BackToTop = (props: Props<BackToTopProps>) => {
@@ -21,14 +22,32 @@ const BackToTop = (props: Props<BackToTopProps>) => {
   const label = () => props.ariaLabel ?? 'Back to top';
 
   createEffect(() => {
-    const onScroll = () => setVisible(window.scrollY >= threshold());
+    const root = props.scrollRoot?.() ?? null;
+    const update = () => {
+      if (root) {
+        setVisible(root.scrollTop >= threshold());
+      } else {
+        setVisible(window.scrollY >= threshold());
+      }
+    };
 
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onCleanup(() => window.removeEventListener('scroll', onScroll));
+    update();
+    if (root) {
+      root.addEventListener('scroll', update, { passive: true });
+      onCleanup(() => root.removeEventListener('scroll', update));
+    } else {
+      window.addEventListener('scroll', update, { passive: true });
+      onCleanup(() => window.removeEventListener('scroll', update));
+    }
   });
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: smooth() ? 'smooth' : 'auto' });
+    const root = props.scrollRoot?.() ?? null;
+    if (root) {
+      root.scrollTo({ top: 0, behavior: smooth() ? 'smooth' : 'auto' });
+    } else {
+      window.scrollTo({ top: 0, behavior: smooth() ? 'smooth' : 'auto' });
+    }
   };
 
   return (
