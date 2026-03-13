@@ -21,7 +21,7 @@ All tokens in `src/theme/globals.css`. Never hardcode -- always use tokens.
 
 ## Layout
 
-`--header-height` 60px, `--container-max-width` 1200px, `--container-padding` 1rem
+`--header-height` 60px, `--layout-sidebar-width` 240px (Sidebar + SidebarNav), `--container-max-width` 1200px, `--container-padding` 1rem
 
 ## Typography
 

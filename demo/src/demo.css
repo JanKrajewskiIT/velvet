@@ -14,7 +14,7 @@ body {
 
 .layout {
   display: grid;
-  grid-template-columns: 260px 1fr;
+  grid-template-columns: var(--layout-sidebar-width) 1fr;
   min-height: 100dvh;
   height: 100dvh;
   overflow: hidden;
@@ -613,7 +613,7 @@ body {
 }
 
 .sidebar-nav-preview {
-  width: 260px;
+  width: var(--layout-sidebar-width);
 }
 
 .resizable-demo-shell {

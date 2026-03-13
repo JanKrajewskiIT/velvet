@@ -45,6 +45,7 @@
   --header-text: var(--color-gray-0);
   --header-shadow: 0 0 0.5rem var(--brand);
   --header-height: 60px;
+  --layout-sidebar-width: 240px;
   --spacer-size: 20px;
   --container-max-width: 1200px;
   --container-padding: 1rem;
