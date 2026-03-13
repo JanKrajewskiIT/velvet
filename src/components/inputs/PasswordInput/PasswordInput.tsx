@@ -9,7 +9,7 @@ import styles from './PasswordInput.module.css';
 
 interface PasswordInputProps extends Omit<JSX.InputHTMLAttributes<HTMLInputElement>, 'type'> {
   showToggle?: boolean;
-  visibilityLabel?: string;
+  visibilityLabel: string;
   size?: InputSize;
 }
 
@@ -28,12 +28,7 @@ const PasswordInput = (props: Props<PasswordInputProps>) => {
     <div class={classNames(styles.wrapper, sizeClass(), rest.disabled && styles.disabled, local.class)}>
       <Input {...rest} type={visible() ? 'text' : 'password'} class={styles.input} size={local.size} />
       <Show when={local.showToggle !== false}>
-        <button
-          type="button"
-          class={styles.toggle}
-          onClick={toggle}
-          aria-label={local.visibilityLabel ?? 'Toggle password visibility'}
-        >
+        <button type="button" class={styles.toggle} onClick={toggle} aria-label={local.visibilityLabel}>
           <Show when={visible()} fallback={<IoEyeOutline />}>
             <IoEye />
           </Show>

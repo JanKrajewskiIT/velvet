@@ -2,6 +2,7 @@ import { type JSX, onMount } from 'solid-js';
 
 import type Props from '~/models/Props';
 
+import Heading from '../../typography/Heading/Heading';
 import styles from './Dialog.module.css';
 
 interface DialogTitleProps {
@@ -22,7 +23,9 @@ const DialogTitle = (props: Props<DialogTitleProps>) => {
 
   return (
     <div ref={headerRef} class={`${styles.header} ${props.class ?? ''}`}>
-      <h3 class={styles.title}>{props.children}</h3>
+      <Heading variant="titleLg" as="h3" class={styles.title}>
+        {props.children}
+      </Heading>
     </div>
   );
 };

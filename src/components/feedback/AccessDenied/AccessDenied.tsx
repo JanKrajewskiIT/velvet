@@ -2,6 +2,8 @@ import { IoLockClosedOutline } from 'solid-icons/io';
 
 import type Props from '~/models/Props';
 
+import Heading from '../../typography/Heading/Heading';
+import Text from '../../typography/Text/Text';
 import styles from './AccessDenied.module.css';
 
 interface AccessDeniedProps {
@@ -16,8 +18,8 @@ const AccessDenied = (props: Props<AccessDeniedProps>) => {
     <div class={`${styles.container} ${props.class ?? ''}`}>
       <div class={styles.content}>
         <IoLockClosedOutline class={styles.icon} aria-hidden />
-        <h1 class={styles.title}>{props.title}</h1>
-        <p class={styles.description}>{props.description}</p>
+        <Heading level={1}>{props.title}</Heading>
+        <Text tone="muted">{props.description}</Text>
         <a href={props.goHomeHref ?? '/'} class={styles.link}>
           {props.goHomeLabel}
         </a>

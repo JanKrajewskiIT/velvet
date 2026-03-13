@@ -17,9 +17,9 @@ export interface RequireAuthProps {
   loadingFallback?: JSX.Element;
   unauthenticatedFallback?: JSX.Element;
   accessDeniedFallback?: JSX.Element;
-  accessDeniedTitle?: string;
-  accessDeniedDescription?: string;
-  accessDeniedGoHomeLabel?: string;
+  accessDeniedTitle: string;
+  accessDeniedDescription: string;
+  accessDeniedGoHomeLabel: string;
   accessDeniedGoHomeHref?: string;
 }
 
@@ -51,9 +51,9 @@ const RequireAuth = (props: Props<RequireAuthProps>) => {
           fallback={
             props.accessDeniedFallback ?? (
               <AccessDenied
-                title={props.accessDeniedTitle ?? 'Access denied'}
-                description={props.accessDeniedDescription ?? 'You do not have permission to view this page.'}
-                goHomeLabel={props.accessDeniedGoHomeLabel ?? 'Go home'}
+                title={props.accessDeniedTitle}
+                description={props.accessDeniedDescription}
+                goHomeLabel={props.accessDeniedGoHomeLabel}
                 goHomeHref={props.accessDeniedGoHomeHref}
               />
             )

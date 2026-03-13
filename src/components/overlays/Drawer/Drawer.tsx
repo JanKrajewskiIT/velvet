@@ -1,12 +1,14 @@
 import { FiX } from 'solid-icons/fi';
-import { createEffect, createSignal, createUniqueId, type JSX, Show } from 'solid-js';
+import { createSignal, createUniqueId, type JSX, Show } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
 import type Props from '~/models/Props';
 
 import useEscapeKey from '../../../hooks/useEscapeKey';
 import useFocusTrap from '../../../hooks/useFocusTrap';
+import useOverlayAnimation from '../../../hooks/useOverlayAnimation';
 import IconButton from '../../inputs/IconButton/IconButton';
+import Text from '../../typography/Text/Text';
 import styles from './Drawer.module.css';
 
 interface DrawerProps {
@@ -20,9 +22,9 @@ interface DrawerProps {
 }
 
 const Drawer = (props: Props<DrawerProps>) => {
-  const [entered, setEntered] = createSignal(false);
   const titleId = createUniqueId();
   const [drawerRef, setDrawerRef] = createSignal<HTMLElement | undefined>();
+  const entered = useOverlayAnimation(() => props.open);
 
   useEscapeKey(
     () => props.open,
@@ -30,21 +32,6 @@ const Drawer = (props: Props<DrawerProps>) => {
   );
 
   useFocusTrap(drawerRef, () => props.open);
-
-  createEffect(() => {
-    if (!props.open) {
-      setEntered(false);
-      return;
-    }
-
-    if (typeof window === 'undefined') {
-      setEntered(true);
-      return;
-    }
-
-    setEntered(false);
-    requestAnimationFrame(() => setEntered(true));
-  });
 
   return (
     <Show when={props.open}>
@@ -67,7 +54,9 @@ const Drawer = (props: Props<DrawerProps>) => {
                 {props.title}
               </h2>
               <Show when={props.subtitle}>
-                <p class={styles.subtitle}>{props.subtitle}</p>
+                <Text tone="muted" class={styles.subtitle}>
+                  {props.subtitle}
+                </Text>
               </Show>
             </div>
             <IconButton icon={<FiX />} title={props.closeLabel} onClick={() => props.onClose()} />

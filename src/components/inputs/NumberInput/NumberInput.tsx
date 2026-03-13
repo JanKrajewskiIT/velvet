@@ -22,8 +22,8 @@ interface NumberInputOwnProps {
   label?: string;
   disabled?: boolean;
   size?: InputSize;
-  decrementLabel?: string;
-  incrementLabel?: string;
+  decrementLabel: string;
+  incrementLabel: string;
   messages?: NumberInputMessages;
 }
 
@@ -121,7 +121,7 @@ const NumberInput = (props: Props<NumberInputOwnProps>) => {
           onMouseDown={() => startRepeat(decrement)}
           onMouseUp={stopRepeat}
           onMouseLeave={stopRepeat}
-          aria-label={local.messages?.decrementButtonLabel ?? local.decrementLabel ?? 'Decrease'}
+          aria-label={local.messages?.decrementButtonLabel ?? local.decrementLabel}
         >
           <IoRemove />
         </button>
@@ -142,7 +142,7 @@ const NumberInput = (props: Props<NumberInputOwnProps>) => {
           onMouseDown={() => startRepeat(increment)}
           onMouseUp={stopRepeat}
           onMouseLeave={stopRepeat}
-          aria-label={local.messages?.incrementButtonLabel ?? local.incrementLabel ?? 'Increase'}
+          aria-label={local.messages?.incrementButtonLabel ?? local.incrementLabel}
         >
           <IoAdd />
         </button>

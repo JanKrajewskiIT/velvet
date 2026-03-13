@@ -360,8 +360,24 @@ const InputsSection = (props: InputsSectionProps) => {
         <ShowcaseSection title="NumberInput" subtitle="Numeric stepper with increment and decrement">
           <PreviewPanel>
             <PreviewGroup title="Examples">
-              <NumberInput value={quantity()} onChange={setQuantity} label="Quantity" min={0} max={100} size="sm" />
-              <NumberInput value={1} onChange={() => {}} disabled size="sm" />
+              <NumberInput
+                value={quantity()}
+                onChange={setQuantity}
+                label="Quantity"
+                min={0}
+                max={100}
+                size="sm"
+                decrementLabel="Decrease"
+                incrementLabel="Increase"
+              />
+              <NumberInput
+                value={1}
+                onChange={() => {}}
+                disabled
+                size="sm"
+                decrementLabel="Decrease"
+                incrementLabel="Increase"
+              />
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
@@ -385,10 +401,19 @@ const InputsSection = (props: InputsSectionProps) => {
           <PreviewPanel>
             <PreviewGroup title="Examples">
               <FormField label="Password" id="demo-pwd">
-                <PasswordInput id="demo-pwd" placeholder="Enter password..." />
+                <PasswordInput
+                  id="demo-pwd"
+                  placeholder="Enter password..."
+                  visibilityLabel="Toggle password visibility"
+                />
               </FormField>
               <FormField label="Disabled" id="demo-pwd-dis">
-                <PasswordInput id="demo-pwd-dis" value="secret123" disabled />
+                <PasswordInput
+                  id="demo-pwd-dis"
+                  value="secret123"
+                  disabled
+                  visibilityLabel="Toggle password visibility"
+                />
               </FormField>
             </PreviewGroup>
           </PreviewPanel>

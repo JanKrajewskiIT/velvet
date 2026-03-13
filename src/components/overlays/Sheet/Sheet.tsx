@@ -1,11 +1,12 @@
 import { FiX } from 'solid-icons/fi';
-import { createEffect, createSignal, createUniqueId, type JSX, Show } from 'solid-js';
+import { createSignal, createUniqueId, type JSX, Show } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
 import type Props from '~/models/Props';
 
 import useEscapeKey from '../../../hooks/useEscapeKey';
 import useFocusTrap from '../../../hooks/useFocusTrap';
+import useOverlayAnimation from '../../../hooks/useOverlayAnimation';
 import IconButton from '../../inputs/IconButton/IconButton';
 import styles from './Sheet.module.css';
 
@@ -20,9 +21,9 @@ interface SheetProps {
 }
 
 const Sheet = (props: Props<SheetProps>) => {
-  const [entered, setEntered] = createSignal(false);
   const [panelRef, setPanelRef] = createSignal<HTMLElement | undefined>();
   const titleId = createUniqueId();
+  const entered = useOverlayAnimation(() => props.open);
 
   const side = () => props.side ?? 'bottom';
   const size = () => props.size ?? 'md';
@@ -33,21 +34,6 @@ const Sheet = (props: Props<SheetProps>) => {
   );
 
   useFocusTrap(panelRef, () => props.open);
-
-  createEffect(() => {
-    if (!props.open) {
-      setEntered(false);
-      return;
-    }
-
-    if (typeof window === 'undefined') {
-      setEntered(true);
-      return;
-    }
-
-    setEntered(false);
-    requestAnimationFrame(() => setEntered(true));
-  });
 
   const panelClass = () =>
     `${styles.panel} ${styles[side()]} ${styles[size()]} ${entered() ? styles.panelVisible : ''} ${props.class ?? ''}`;
