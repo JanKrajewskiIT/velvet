@@ -3,6 +3,7 @@ import {
   addToast,
   AiResultPanel,
   Button,
+  CodeText,
   EditableCollection,
   FormField,
   IconButton,
@@ -12,6 +13,7 @@ import {
   type KanbanItemBase,
   Scheduler,
   type SchedulerEvent,
+  Text,
   type TransferItem,
   TransferList,
   Wizard,
@@ -164,9 +166,9 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
     {
       label: 'Confirm',
       component: (
-        <p class="muted-text">
+        <Text as="p" variant="bodySm" tone="muted" class="mutedText">
           Review your information and click <strong>Finish</strong> to complete registration.
-        </p>
+        </Text>
       ),
     },
   ];
@@ -226,11 +228,13 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
                 cancelLabel="Cancel"
                 renderItem={(item, { requestRemove }) => (
                   <>
-                    <div class="editable-header">
-                      <span class="status-chip">{item.id.slice(0, 8)}</span>
+                    <div class="editableHeader">
+                      <Text as="span" variant="labelMd" class="statusChip">
+                        {item.id.slice(0, 8)}
+                      </Text>
                       <IconButton icon={<IoTrash />} title="Remove task" size="sm" onClick={requestRemove} />
                     </div>
-                    <div class="editable-grid">
+                    <div class="editableGrid">
                       <FormField label="Title" id={`task-title-${item.id}`}>
                         <Input
                           id={`task-title-${item.id}`}
@@ -264,10 +268,16 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
                 renderCard={(item) => (
                   <div class="col" style={{ gap: 'var(--spacing-2xs)' }}>
                     <strong>{item.title}</strong>
-                    <span class="muted-text">{item.description}</span>
+                    <Text as="span" variant="bodySm" tone="muted" class="mutedText">
+                      {item.description}
+                    </Text>
                     <div class="row" style={{ 'justify-content': 'space-between' }}>
-                      <span class="status-chip">{item.owner}</span>
-                      <span class="status-chip">{item.priority}</span>
+                      <Text as="span" variant="labelMd" class="statusChip">
+                        {item.owner}
+                      </Text>
+                      <Text as="span" variant="labelMd" class="statusChip">
+                        {item.priority}
+                      </Text>
                     </div>
                   </div>
                 )}
@@ -325,7 +335,9 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
                 ]}
                 hasResult={analysisState() === 'result'}
                 idle={
-                  <p class="muted-text">Run analysis to generate a consistency report for the current component set.</p>
+                  <Text as="p" variant="bodySm" tone="muted" class="mutedText">
+                    Run analysis to generate a consistency report for the current component set.
+                  </Text>
                 }
                 actions={
                   <ActionRow align="end">
@@ -353,10 +365,27 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Navigate months, select a day, add events with <span class="code-inline">Add event</span> (or double-click a
-            day), edit/delete entries inline, then drag <span class="code-inline">Move</span> or{' '}
-            <span class="code-inline">Resize end</span> onto a calendar day. Use <span class="code-inline">Esc</span> to
-            cancel forms and <span class="code-inline">Ctrl+Enter</span> to submit.
+            Navigate months, select a day, add events with{' '}
+            <CodeText as="span" class="codeInline">
+              Add event
+            </CodeText>{' '}
+            (or double-click a day), edit/delete entries inline, then drag{' '}
+            <CodeText as="span" class="codeInline">
+              Move
+            </CodeText>{' '}
+            or{' '}
+            <CodeText as="span" class="codeInline">
+              Resize end
+            </CodeText>{' '}
+            onto a calendar day. Use{' '}
+            <CodeText as="span" class="codeInline">
+              Esc
+            </CodeText>{' '}
+            to cancel forms and{' '}
+            <CodeText as="span" class="codeInline">
+              Ctrl+Enter
+            </CodeText>{' '}
+            to submit.
           </ShowcaseMeta>
         </ShowcaseSection>
       </Show>

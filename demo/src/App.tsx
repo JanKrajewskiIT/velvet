@@ -1,4 +1,12 @@
-import { SidebarNav, type SidebarNavGroup, ThemeProvider, ThemeToggle, ToastProvider } from '@jankrajewskiit/ui';
+import {
+  Heading,
+  SidebarNav,
+  type SidebarNavGroup,
+  Text,
+  ThemeProvider,
+  ThemeToggle,
+  ToastProvider,
+} from '@jankrajewskiit/ui';
 import { createSignal, Match, Switch } from 'solid-js';
 
 import CompositesSection from './sections/CompositesSection';
@@ -11,9 +19,11 @@ import NavigationSection from './sections/NavigationSection';
 import OverlaysSection from './sections/OverlaysSection';
 import OverviewSection from './sections/OverviewSection';
 import TablesSection from './sections/TablesSection';
+import TypographySection from './sections/TypographySection';
 
 export type SectionId =
   | 'overview'
+  | 'typography'
   | 'developer'
   | 'inputs-buttons'
   | 'inputs-dropdowns'
@@ -55,6 +65,7 @@ const NAV_GROUPS: SidebarNavGroup[] = [
     label: 'Start',
     items: [
       { id: 'overview', label: 'Overview' },
+      { id: 'typography', label: 'Typography' },
       { id: 'developer', label: 'Tooling' },
     ],
   },
@@ -127,6 +138,11 @@ const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
   overview: {
     title: 'VelvetUI Overview',
     description: 'Start here for installation, library goals and a quick snapshot of what is included.',
+  },
+  typography: {
+    title: 'Typography',
+    description:
+      'Semantic heading, text and code primitives built on top of brand typography tokens for consistent UI copy.',
   },
   developer: {
     title: 'Tooling',
@@ -293,17 +309,23 @@ const AppContent = () => {
         subtitle="Modern SolidJS component showcase"
         navLabel="Component categories"
         actions={
-          <div class="theme-toggle-bar">
+          <div class="themeToggleBar">
             <ThemeToggle lightLabel="Light mode" darkLabel="Dark mode" groupLabel="Theme" variant="light" />
           </div>
         }
       />
 
       <main class="main">
-        <div class="page-header">
-          <p class="page-eyebrow">Component playground</p>
-          <h1 class="page-title">{meta().title}</h1>
-          <p class="page-description">{meta().description}</p>
+        <div class="pageHeader">
+          <Text as="p" variant="overline" tone="primary" class="pageEyebrow">
+            Component playground
+          </Text>
+          <Heading level={1} variant="displayMd" class="pageTitle">
+            {meta().title}
+          </Heading>
+          <Text as="p" variant="bodySm" tone="muted" class="pageDescription">
+            {meta().description}
+          </Text>
         </div>
 
         <Switch>
@@ -312,6 +334,9 @@ const AppContent = () => {
           </Match>
           <Match when={activeSection() === 'developer'}>
             <DeveloperSection />
+          </Match>
+          <Match when={activeSection() === 'typography'}>
+            <TypographySection />
           </Match>
           <Match when={activeSection() === 'data-tables'}>
             <TablesSection />

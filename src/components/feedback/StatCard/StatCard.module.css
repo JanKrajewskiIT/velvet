@@ -50,12 +50,10 @@
 }
 
 .value {
-  font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-bold);
   line-height: 1.2;
 }
 
 .label {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
+  display: block;
+  max-width: 100%;
 }

@@ -28,7 +28,7 @@ alwaysApply: true
 
 ## Project Structure (high level)
 
-- `src/components/{category}/` – components grouped by category
+- `src/components/{category}/` – components grouped by category (m.in. `typography/`, `data-display/`, …)
 - `src/hooks/` – reusable hooks
 - `src/models/Props.ts` – shared `Props` model
 - `src/theme/` – design tokens and theming

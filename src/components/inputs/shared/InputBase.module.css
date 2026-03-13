@@ -4,8 +4,11 @@
   border-radius: var(--radius-sm);
   background-color: var(--color-bg);
   color: var(--color-text);
-  font-size: var(--font-size-md);
-  font-family: inherit;
+  font-size: var(--typography-body-md-font-size);
+  line-height: var(--typography-body-md-line-height);
+  font-weight: var(--typography-body-md-font-weight);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+  font-family: var(--font-family-sans);
   outline: none;
   transition:
     border-color var(--duration-fast) var(--ease-out-expo),
@@ -31,17 +34,26 @@
 .sizeSm {
   min-height: 32px;
   padding: var(--spacing-xs) var(--spacing-sm);
-  font-size: var(--font-size-sm);
+  font-size: var(--typography-body-sm-font-size);
+  line-height: var(--typography-body-sm-line-height);
+  font-weight: var(--typography-body-sm-font-weight);
+  letter-spacing: var(--typography-body-sm-letter-spacing);
 }
 
 .sizeMd {
   min-height: 40px;
   padding: var(--spacing-sm) var(--spacing-sm);
-  font-size: var(--font-size-md);
+  font-size: var(--typography-body-md-font-size);
+  line-height: var(--typography-body-md-line-height);
+  font-weight: var(--typography-body-md-font-weight);
+  letter-spacing: var(--typography-body-md-letter-spacing);
 }
 
 .sizeLg {
   min-height: 48px;
   padding: var(--spacing-sm) var(--spacing-md);
-  font-size: var(--font-size-lg);
+  font-size: var(--typography-body-lg-font-size);
+  line-height: var(--typography-body-lg-line-height);
+  font-weight: var(--typography-body-lg-font-weight);
+  letter-spacing: var(--typography-body-lg-letter-spacing);
 }

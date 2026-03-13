@@ -5,6 +5,7 @@ import {
   Autocomplete,
   Button,
   Checkbox,
+  CodeText,
   ColorPicker,
   CopyButton,
   DatePicker,
@@ -141,7 +142,10 @@ const InputsSection = (props: InputsSectionProps) => {
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            <span class="code-inline">AffixButton</span> supports prefix icon and suffix element or badge in one API.
+            <CodeText as="span" class="codeInline">
+              AffixButton
+            </CodeText>{' '}
+            supports prefix icon and suffix element or badge in one API.
           </ShowcaseMeta>
         </ShowcaseSection>
         <ShowcaseSection title="IconButton" subtitle="Compact controls for dense interfaces">
@@ -171,7 +175,11 @@ const InputsSection = (props: InputsSectionProps) => {
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Use <span class="code-inline">align</span> prop to control button positioning within the row.
+            Use{' '}
+            <CodeText as="span" class="codeInline">
+              align
+            </CodeText>{' '}
+            prop to control button positioning within the row.
           </ShowcaseMeta>
         </ShowcaseSection>
         <ShowcaseSection title="CopyButton" subtitle="One-click clipboard copy with feedback">
@@ -200,17 +208,6 @@ const InputsSection = (props: InputsSectionProps) => {
                 />
               </div>
             </PreviewGroup>
-            <PreviewGroup title="On header (default)" subtitle="For Navbar — glass pill, no primary hover">
-              <div class="locale-switcher-navbar-demo">
-                <LocaleSwitcher
-                  label={locale()}
-                  switchLabel="Switch locale"
-                  onSwitch={() => {
-                    setLocale((current) => (current === 'EN' ? 'PL' : 'EN'));
-                  }}
-                />
-              </div>
-            </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
@@ -223,7 +220,11 @@ const InputsSection = (props: InputsSectionProps) => {
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Wraps <span class="code-inline">useTheme()</span> from ThemeProvider.
+            Wraps{' '}
+            <CodeText as="span" class="codeInline">
+              useTheme()
+            </CodeText>{' '}
+            from ThemeProvider.
           </ShowcaseMeta>
         </ShowcaseSection>
       </Show>
@@ -283,7 +284,10 @@ const InputsSection = (props: InputsSectionProps) => {
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Selected: <span class="code-inline">{frameworks().join(', ') || 'none'}</span>
+            Selected:{' '}
+            <CodeText as="span" class="codeInline">
+              {frameworks().join(', ') || 'none'}
+            </CodeText>
           </ShowcaseMeta>
         </ShowcaseSection>
 
@@ -321,13 +325,24 @@ const InputsSection = (props: InputsSectionProps) => {
                   <Input id="demo-disabled" type="text" value="Disabled" disabled />
                 </FormField>
               </form>
-              <FormField label="Input sizes" id="demo-input-sizes">
-                <div class="col">
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection title="Input sizes" subtitle="Small, medium and large control height">
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <div class="inputSizesStack">
+                <FormField label="Small" id="demo-input-sm">
                   <Input id="demo-input-sm" size="sm" placeholder="Small input" />
+                </FormField>
+                <FormField label="Medium" id="demo-input-md">
                   <Input id="demo-input-md" size="md" placeholder="Medium input" />
+                </FormField>
+                <FormField label="Large" id="demo-input-lg">
                   <Input id="demo-input-lg" size="lg" placeholder="Large input" />
-                </div>
-              </FormField>
+                </FormField>
+              </div>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
@@ -359,7 +374,10 @@ const InputsSection = (props: InputsSectionProps) => {
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Search value: <span class="code-inline">{search()}</span>
+            Search value:{' '}
+            <CodeText as="span" class="codeInline">
+              {search()}
+            </CodeText>
           </ShowcaseMeta>
         </ShowcaseSection>
 
@@ -393,7 +411,10 @@ const InputsSection = (props: InputsSectionProps) => {
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Entered value: <span class="code-inline">{otp()}</span>
+            Entered value:{' '}
+            <CodeText as="span" class="codeInline">
+              {otp()}
+            </CodeText>
           </ShowcaseMeta>
         </ShowcaseSection>
 
@@ -404,7 +425,10 @@ const InputsSection = (props: InputsSectionProps) => {
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Current value: <span class="code-inline">{editableTitle()}</span>
+            Current value:{' '}
+            <CodeText as="span" class="codeInline">
+              {editableTitle()}
+            </CodeText>
           </ShowcaseMeta>
         </ShowcaseSection>
 
@@ -420,7 +444,10 @@ const InputsSection = (props: InputsSectionProps) => {
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            HTML length: <span class="code-inline">{richText().length}</span>
+            HTML length:{' '}
+            <CodeText as="span" class="codeInline">
+              {String(richText().length)}
+            </CodeText>
           </ShowcaseMeta>
         </ShowcaseSection>
       </Show>
@@ -587,7 +614,10 @@ const InputsSection = (props: InputsSectionProps) => {
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Selected color: <span class="code-inline">{color()}</span>
+            Selected color:{' '}
+            <CodeText as="span" class="codeInline">
+              {color()}
+            </CodeText>
           </ShowcaseMeta>
         </ShowcaseSection>
       </Show>
@@ -610,9 +640,9 @@ const InputsSection = (props: InputsSectionProps) => {
           </PreviewPanel>
           <ShowcaseMeta>
             Range:{' '}
-            <span class="code-inline">
+            <CodeText as="span" class="codeInline">
               {range().start || '–'} → {range().end || '–'}
-            </span>
+            </CodeText>
           </ShowcaseMeta>
         </ShowcaseSection>
 
@@ -638,7 +668,10 @@ const InputsSection = (props: InputsSectionProps) => {
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            DateTime: <span class="code-inline">{dateTime() || 'not set'}</span>
+            DateTime:{' '}
+            <CodeText as="span" class="codeInline">
+              {dateTime() || 'not set'}
+            </CodeText>
           </ShowcaseMeta>
         </ShowcaseSection>
       </Show>
@@ -647,16 +680,18 @@ const InputsSection = (props: InputsSectionProps) => {
         <ShowcaseSection title="FileDropZone" subtitle="Drag-and-drop file input with preview">
           <PreviewPanel>
             <PreviewGroup title="Examples">
-              <FileDropZone
-                label="Drop a file here or click to browse"
-                hint="Supports: .pdf, .jpg, .png"
-                accept=".pdf,.jpg,.png,image/*"
-                icon={<IoDocument size={28} />}
-                onFile={(f) => {
-                  setDroppedFile(f.name);
-                  addToast({ type: 'success', message: `Picked: ${f.name}` });
-                }}
-              />
+              <div class="previewUploadFull">
+                <FileDropZone
+                  label="Drop a file here or click to browse"
+                  hint="Supports: .pdf, .jpg, .png"
+                  accept=".pdf,.jpg,.png,image/*"
+                  icon={<IoDocument size={28} />}
+                  onFile={(f) => {
+                    setDroppedFile(f.name);
+                    addToast({ type: 'success', message: `Picked: ${f.name}` });
+                  }}
+                />
+              </div>
             </PreviewGroup>
           </PreviewPanel>
           {droppedFile() && (
@@ -669,8 +704,10 @@ const InputsSection = (props: InputsSectionProps) => {
         <ShowcaseSection title="FileInput" subtitle="Drag-and-drop file upload zone">
           <PreviewPanel>
             <PreviewGroup title="Examples">
-              <FileInput accept="image/*" onFiles={() => {}} />
-              <FileInput accept="*" multiple onFiles={() => {}} label="Drop multiple files here or click to browse" />
+              <div class="previewUploadFull previewUploadFull--stack">
+                <FileInput accept="image/*" onFiles={() => {}} />
+                <FileInput accept="*" multiple onFiles={() => {}} label="Drop multiple files here or click to browse" />
+              </div>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
@@ -743,9 +780,23 @@ const InputsSection = (props: InputsSectionProps) => {
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Combine <span class="code-inline">FormLayout</span>, <span class="code-inline">FormGrid</span>,{' '}
-            <span class="code-inline">FormField</span> and <span class="code-inline">ActionRow</span> for full-screen
-            forms.
+            Combine{' '}
+            <CodeText as="span" class="codeInline">
+              FormLayout
+            </CodeText>
+            ,{' '}
+            <CodeText as="span" class="codeInline">
+              FormGrid
+            </CodeText>
+            ,{' '}
+            <CodeText as="span" class="codeInline">
+              FormField
+            </CodeText>{' '}
+            and{' '}
+            <CodeText as="span" class="codeInline">
+              ActionRow
+            </CodeText>{' '}
+            for full-screen forms.
           </ShowcaseMeta>
         </ShowcaseSection>
       </Show>

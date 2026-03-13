@@ -1,11 +1,13 @@
 import {
   Button,
   Card,
+  CodeText,
   DataCard,
   Divider,
   FlipCard,
   Footer,
   Grid,
+  Heading,
   MainLayout,
   Navbar,
   type NavItem,
@@ -15,6 +17,7 @@ import {
   SidebarNav,
   type SidebarNavGroup,
   Stack,
+  Text,
   ThemeToggle,
 } from '@jankrajewskiit/ui';
 import { BiLogosReact } from 'solid-icons/bi';
@@ -95,7 +98,7 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
         <ShowcaseSection title="Navbar & Layouts" subtitle="Navbar-only showcase and full page shell composition">
           <PreviewPanel>
             <PreviewGroup title="Navbar only" subtitle="Focused composition with navigation and top actions">
-              <div class="layout-preview-shell layout-preview-shell-compact">
+              <div class="layoutPreviewShell layoutPreviewShellCompact">
                 <MainLayout
                   navbar={
                     <Navbar
@@ -111,19 +114,21 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
                     />
                   }
                 >
-                  <div class="layout-shell-content">
-                    <div class="recron-hero">
-                      <h3 class="recron-title">Navbar Preview</h3>
-                      <p class="muted-text">
+                  <div class="layoutShellContent">
+                    <div class="recronHero">
+                      <Heading as="h3" level={3} variant="titleLg" class="recronTitle">
+                        Navbar Preview
+                      </Heading>
+                      <Text as="p" variant="bodySm" tone="muted" class="mutedText">
                         Showcase focused only on navbar composition: icon logo, navigation items and theme switch.
-                      </p>
+                      </Text>
                     </div>
                   </div>
                 </MainLayout>
               </div>
             </PreviewGroup>
             <PreviewGroup title="Full shell" subtitle="Header, content and footer inside one layout primitive">
-              <div class="layout-preview-shell">
+              <div class="layoutPreviewShell">
                 <MainLayout
                   navbar={
                     <Navbar
@@ -147,12 +152,14 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
                     />
                   }
                 >
-                  <div class="layout-shell-content">
-                    <div class="recron-hero">
-                      <h3 class="recron-title">Dashboard</h3>
-                      <p class="muted-text">
+                  <div class="layoutShellContent">
+                    <div class="recronHero">
+                      <Heading as="h3" level={3} variant="titleLg" class="recronTitle">
+                        Dashboard
+                      </Heading>
+                      <Text as="p" variant="bodySm" tone="muted" class="mutedText">
                         Fixed-height card with scrollable page content and footer pinned to the bottom.
-                      </p>
+                      </Text>
                     </div>
                   </div>
                 </MainLayout>
@@ -160,15 +167,26 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Layout components use slots: <span class="code-inline">navbar</span> and{' '}
-            <span class="code-inline">footer</span> in <span class="code-inline">MainLayout</span>.
+            Layout components use slots:{' '}
+            <CodeText as="span" class="codeInline">
+              navbar
+            </CodeText>{' '}
+            and{' '}
+            <CodeText as="span" class="codeInline">
+              footer
+            </CodeText>{' '}
+            in{' '}
+            <CodeText as="span" class="codeInline">
+              MainLayout
+            </CodeText>
+            .
           </ShowcaseMeta>
         </ShowcaseSection>
 
         <ShowcaseSection title="Sidebar" subtitle="Collapsible navigation sidebar">
           <PreviewPanel>
             <PreviewGroup title="Interactive sample" subtitle="Nested links with collapsed mode toggle">
-              <div class="sidebar-preview-shell">
+              <div class="sidebarPreviewShell">
                 <Sidebar
                   items={SIDEBAR_ITEMS}
                   activeId={activeSidebarId()}
@@ -176,17 +194,17 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
                   collapsed={sidebarCollapsed()}
                   collapsible
                   onToggle={() => setSidebarCollapsed((prev) => !prev)}
-                  header={<strong class="sidebar-preview-header">MyApp</strong>}
+                  header={<strong class="sidebarPreviewHeader">MyApp</strong>}
                 />
-                <div class="sidebar-preview-body">
-                  <p class="muted-text">
+                <div class="sidebarPreviewBody">
+                  <Text as="p" variant="bodySm" tone="muted" class="mutedText">
                     Active: <strong>{activeSidebarId()}</strong>
-                  </p>
+                  </Text>
                 </div>
               </div>
             </PreviewGroup>
             <PreviewGroup title="SidebarNav from app shell" subtitle="Category navigation with regular ghost buttons">
-              <div class="sidebar-preview-shell">
+              <div class="sidebarPreviewShell">
                 <SidebarNav
                   groups={DEMO_APP_NAV_GROUPS}
                   activeId={activeDemoAppSidebarId()}
@@ -194,15 +212,15 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
                   title="VelvetUI"
                   subtitle="Modern SolidJS component showcase"
                   navLabel="Component categories"
-                  class="sidebar-nav-preview"
+                  class="sidebarNavPreview"
                   actions={
                     <ThemeToggle lightLabel="Light mode" darkLabel="Dark mode" groupLabel="Theme" variant="light" />
                   }
                 />
-                <div class="sidebar-preview-body">
-                  <p class="muted-text">
+                <div class="sidebarPreviewBody">
+                  <Text as="p" variant="bodySm" tone="muted" class="mutedText">
                     Active: <strong>{activeDemoAppSidebarId()}</strong>
-                  </p>
+                  </Text>
                 </div>
               </div>
             </PreviewGroup>
@@ -215,68 +233,97 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
         <ShowcaseSection title="Grid" subtitle="Responsive multi-column primitive">
           <PreviewPanel>
             <Grid columns={3} gap="sm">
-              <div class="status-chip">Column 1</div>
-              <div class="status-chip">Column 2</div>
-              <div class="status-chip">Column 3</div>
-              <div class="status-chip">Column 4</div>
-              <div class="status-chip">Column 5</div>
+              <div class="statusChip">Column 1</div>
+              <div class="statusChip">Column 2</div>
+              <div class="statusChip">Column 3</div>
+              <div class="statusChip">Column 4</div>
+              <div class="statusChip">Column 5</div>
             </Grid>
             <Grid minColumnWidth="180px" gap="md">
-              <div class="status-chip">Auto-fit A</div>
-              <div class="status-chip">Auto-fit B</div>
-              <div class="status-chip">Auto-fit C</div>
-              <div class="status-chip">Auto-fit D</div>
+              <div class="statusChip">Auto-fit A</div>
+              <div class="statusChip">Auto-fit B</div>
+              <div class="statusChip">Auto-fit C</div>
+              <div class="statusChip">Auto-fit D</div>
             </Grid>
           </PreviewPanel>
           <ShowcaseMeta>
-            Set fixed columns via <span class="code-inline">columns</span> or use responsive auto-fit with{' '}
-            <span class="code-inline">minColumnWidth</span>.
+            Set fixed columns via{' '}
+            <CodeText as="span" class="codeInline">
+              columns
+            </CodeText>{' '}
+            or use responsive auto-fit with{' '}
+            <CodeText as="span" class="codeInline">
+              minColumnWidth
+            </CodeText>
+            .
           </ShowcaseMeta>
         </ShowcaseSection>
 
         <ShowcaseSection title="Stack" subtitle="Flexible vertical and horizontal spacing layout">
           <PreviewPanel>
             <Stack gap="sm">
-              <div class="status-chip">First item</div>
-              <div class="status-chip">Second item</div>
-              <div class="status-chip">Third item</div>
+              <div class="statusChip">First item</div>
+              <div class="statusChip">Second item</div>
+              <div class="statusChip">Third item</div>
             </Stack>
             <Stack direction="horizontal" gap="md" align="center" justify="between" wrap>
-              <div class="status-chip">Horizontal</div>
-              <div class="status-chip">Aligned center</div>
-              <div class="status-chip">Wrap enabled</div>
+              <div class="statusChip">Horizontal</div>
+              <div class="statusChip">Aligned center</div>
+              <div class="statusChip">Wrap enabled</div>
             </Stack>
           </PreviewPanel>
           <ShowcaseMeta>
-            Use <span class="code-inline">direction</span>, <span class="code-inline">gap</span>,{' '}
-            <span class="code-inline">align</span>, <span class="code-inline">justify</span> and{' '}
-            <span class="code-inline">wrap</span> to compose spacing layouts quickly.
+            Use{' '}
+            <CodeText as="span" class="codeInline">
+              direction
+            </CodeText>
+            ,{' '}
+            <CodeText as="span" class="codeInline">
+              gap
+            </CodeText>
+            ,{' '}
+            <CodeText as="span" class="codeInline">
+              align
+            </CodeText>
+            ,{' '}
+            <CodeText as="span" class="codeInline">
+              justify
+            </CodeText>{' '}
+            and{' '}
+            <CodeText as="span" class="codeInline">
+              wrap
+            </CodeText>{' '}
+            to compose spacing layouts quickly.
           </ShowcaseMeta>
         </ShowcaseSection>
 
         <ShowcaseSection title="ResizablePanel" subtitle="Split panel with draggable handle">
           <PreviewPanel>
             <PreviewGroup title="Horizontal split" subtitle="Drag handle to adjust available width">
-              <div class="resizable-demo-shell">
+              <div class="resizableDemoShell">
                 <ResizablePanel direction="horizontal" initialSplit={40} minSize={20}>
-                  <div class="resizable-demo-panel">
+                  <div class="resizableDemoPanel">
                     <strong>Left panel</strong>
-                    <p class="muted-text">Drag the handle to resize.</p>
+                    <Text as="p" variant="bodySm" tone="muted" class="mutedText">
+                      Drag the handle to resize.
+                    </Text>
                   </div>
-                  <div class="resizable-demo-panel">
+                  <div class="resizableDemoPanel">
                     <strong>Right panel</strong>
-                    <p class="muted-text">Content adjusts automatically.</p>
+                    <Text as="p" variant="bodySm" tone="muted" class="mutedText">
+                      Content adjusts automatically.
+                    </Text>
                   </div>
                 </ResizablePanel>
               </div>
             </PreviewGroup>
             <PreviewGroup title="Vertical split" subtitle="Same API, vertical direction">
-              <div class="resizable-demo-shell">
+              <div class="resizableDemoShell">
                 <ResizablePanel direction="vertical" initialSplit={50} minSize={20}>
-                  <div class="resizable-demo-panel">
+                  <div class="resizableDemoPanel">
                     <strong>Top panel</strong>
                   </div>
-                  <div class="resizable-demo-panel">
+                  <div class="resizableDemoPanel">
                     <strong>Bottom panel</strong>
                   </div>
                 </ResizablePanel>
@@ -284,7 +331,14 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Supports <span class="code-inline">horizontal</span> and <span class="code-inline">vertical</span>{' '}
+            Supports{' '}
+            <CodeText as="span" class="codeInline">
+              horizontal
+            </CodeText>{' '}
+            and{' '}
+            <CodeText as="span" class="codeInline">
+              vertical
+            </CodeText>{' '}
             directions with configurable min size.
           </ShowcaseMeta>
         </ShowcaseSection>
@@ -298,7 +352,7 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
               <Divider variant="dashed" label="Section" />
             </PreviewGroup>
             <PreviewGroup title="Vertical variant">
-              <div class="row divider-vertical-demo">
+              <div class="row dividerVerticalDemo">
                 <span>Left</span>
                 <Divider orientation="vertical" />
                 <span>Right</span>
@@ -313,26 +367,34 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
           <PreviewPanel>
             <PreviewGroup title="Base card">
               <Card>
-                <p class="muted-text">Simple bordered container for arbitrary content.</p>
+                <Text as="p" variant="bodySm" tone="muted" class="mutedText">
+                  Simple bordered container for arbitrary content.
+                </Text>
               </Card>
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Use <span class="code-inline">Card</span> as a minimal wrapper for grouped content.
+            Use{' '}
+            <CodeText as="span" class="codeInline">
+              Card
+            </CodeText>{' '}
+            as a minimal wrapper for grouped content.
           </ShowcaseMeta>
         </ShowcaseSection>
 
         <ShowcaseSection title="DataCard variants" subtitle="Material-inspired filled, elevated and outlined styles">
           <PreviewPanel>
             <PreviewGroup title="Filled, elevated and outlined">
-              <div class="grid-cards">
+              <div class="gridCards">
                 <DataCard
                   variant="filled"
                   hoverable
                   header={<strong>Filled card</strong>}
                   footer={<Button variant="primary">Continue</Button>}
                 >
-                  <p class="muted-text">Tonal variant inspired by modern Material surfaces.</p>
+                  <Text as="p" variant="bodySm" tone="muted" class="mutedText">
+                    Tonal variant inspired by modern Material surfaces.
+                  </Text>
                 </DataCard>
                 <DataCard
                   variant="elevated"
@@ -340,7 +402,9 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
                   header={<strong>Elevated card</strong>}
                   footer={<Button variant="primary">Open</Button>}
                 >
-                  <p class="muted-text">Balanced default with soft depth and strong readability.</p>
+                  <Text as="p" variant="bodySm" tone="muted" class="mutedText">
+                    Balanced default with soft depth and strong readability.
+                  </Text>
                 </DataCard>
                 <DataCard
                   variant="outlined"
@@ -348,48 +412,70 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
                   header={<strong>Outlined card</strong>}
                   footer={<Button variant="ghost">Details</Button>}
                 >
-                  <p class="muted-text">Clean and neutral variant for dense enterprise layouts.</p>
+                  <Text as="p" variant="bodySm" tone="muted" class="mutedText">
+                    Clean and neutral variant for dense enterprise layouts.
+                  </Text>
                 </DataCard>
               </div>
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            All variants support <span class="code-inline">header</span>, content,{' '}
-            <span class="code-inline">footer</span> and optional <span class="code-inline">hoverable</span>.
+            All variants support{' '}
+            <CodeText as="span" class="codeInline">
+              header
+            </CodeText>
+            , content,{' '}
+            <CodeText as="span" class="codeInline">
+              footer
+            </CodeText>{' '}
+            and optional{' '}
+            <CodeText as="span" class="codeInline">
+              hoverable
+            </CodeText>
+            .
           </ShowcaseMeta>
         </ShowcaseSection>
 
         <ShowcaseSection title="FlipCard" subtitle="Interactive front/back card">
           <PreviewPanel>
             <PreviewGroup title="Click and hover samples">
-              <div class="flip-card-grid">
+              <div class="flipCardGrid">
                 <FlipCard
                   width="220px"
                   height="140px"
                   front={
-                    <div class="flip-card-face">
-                      <strong class="flip-card-title">VelvetUI</strong>
-                      <span class="flip-card-hint">Click to flip</span>
+                    <div class="flipCardFace">
+                      <Heading as="strong" level={4} variant="titleLg" tone="primary" class="flipCardTitle">
+                        VelvetUI
+                      </Heading>
+                      <Text as="span" variant="bodySm" tone="muted" class="flipCardHint">
+                        Click to flip
+                      </Text>
                     </div>
                   }
                   back={
-                    <div class="flip-card-back">
+                    <div class="flipCardBack">
                       <strong>SolidJS plus Vite</strong>
-                      <span class="flip-card-hint">TypeScript and CSS Modules</span>
+                      <Text as="span" variant="bodySm" tone="muted" class="flipCardHint">
+                        TypeScript and CSS Modules
+                      </Text>
                     </div>
                   }
                 />
                 <FlipCard
                   width="220px"
                   height="140px"
-                  front={<div class="flip-card-face">UI System</div>}
-                  back={<div class="flip-card-simple">Dark and light theme</div>}
+                  front={<div class="flipCardFace">UI System</div>}
+                  back={<div class="flipCardSimple">Dark and light theme</div>}
                 />
               </div>
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            <span class="code-inline">FlipCard</span> reveals back content on click or hover.
+            <CodeText as="span" class="codeInline">
+              FlipCard
+            </CodeText>{' '}
+            reveals back content on click or hover.
           </ShowcaseMeta>
         </ShowcaseSection>
       </Show>

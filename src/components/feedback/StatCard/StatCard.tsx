@@ -3,6 +3,8 @@ import { Show } from 'solid-js';
 
 import type Props from '~/models/Props';
 
+import Heading from '../../typography/Heading/Heading';
+import Text from '../../typography/Text/Text';
 import styles from './StatCard.module.css';
 
 interface StatCardProps {
@@ -19,8 +21,12 @@ const StatCard = (props: Props<StatCardProps>) => {
         <div class={styles.icon}>{props.icon}</div>
       </Show>
       <div class={styles.content}>
-        <span class={styles.value}>{props.value}</span>
-        <span class={styles.label}>{props.label}</span>
+        <Heading as="span" level={3} variant="h2" class={styles.value}>
+          {props.value}
+        </Heading>
+        <Text as="span" variant="bodySm" tone="muted" class={styles.label}>
+          {props.label}
+        </Text>
       </div>
     </div>
   );

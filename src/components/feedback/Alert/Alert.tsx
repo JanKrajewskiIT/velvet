@@ -5,6 +5,8 @@ import { Show } from 'solid-js';
 
 import type Props from '~/models/Props';
 
+import Heading from '../../typography/Heading/Heading';
+import Text from '../../typography/Text/Text';
 import styles from './Alert.module.css';
 
 interface AlertMessages {
@@ -38,9 +40,13 @@ const Alert = (props: Props<AlertProps>) => {
       <div class={styles.icon}>{icon()}</div>
       <div class={styles.content}>
         <Show when={props.title}>
-          <div class={styles.title}>{props.title}</div>
+          <Heading as="div" level={4} variant="titleMd" class={styles.title}>
+            {props.title}
+          </Heading>
         </Show>
-        <div class={styles.message}>{props.children}</div>
+        <Text as="div" variant="bodySm" tone="secondary" class={styles.message}>
+          {props.children}
+        </Text>
       </div>
       <Show when={props.onClose}>
         <button

@@ -1,0 +1,56 @@
+.text {
+  margin: 0;
+  color: var(--color-text);
+}
+
+.bodyLg {
+  composes: typeBodyLg from '../shared/Typography.module.css';
+}
+
+.bodyMd {
+  composes: typeBodyMd from '../shared/Typography.module.css';
+}
+
+.bodySm {
+  composes: typeBodySm from '../shared/Typography.module.css';
+}
+
+.labelLg {
+  composes: typeLabelLg from '../shared/Typography.module.css';
+}
+
+.labelMd {
+  composes: typeLabelMd from '../shared/Typography.module.css';
+}
+
+.caption {
+  composes: typeCaption from '../shared/Typography.module.css';
+}
+
+.overline {
+  composes: typeOverline from '../shared/Typography.module.css';
+}
+
+.toneDefault {
+  color: var(--color-text);
+}
+
+.toneMuted {
+  color: var(--color-text-muted);
+}
+
+.toneSecondary {
+  color: var(--color-text-secondary);
+}
+
+.toneTertiary {
+  color: var(--color-text-tertiary);
+}
+
+.toneInverse {
+  color: var(--color-text-inverse);
+}
+
+.tonePrimary {
+  color: var(--color-primary);
+}

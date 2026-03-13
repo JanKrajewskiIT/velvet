@@ -3,10 +3,13 @@ import {
   BackToTop,
   BottomNav,
   Breadcrumbs,
+  Button,
+  CodeText,
   CommandPalette,
   SpeedDial,
   Stepper,
   Tabs,
+  Text,
   Timeline,
 } from '@jankrajewskiit/ui';
 import {
@@ -47,6 +50,16 @@ const SPEED_DIAL_ACTIONS: SpeedDialAction[] = [
   { icon: <IoAdd size={20} />, label: 'Add', onClick: () => {} },
   { icon: <IoPencil size={20} />, label: 'Edit', onClick: () => {} },
   { icon: <IoShareSocial size={20} />, label: 'Share', onClick: () => {} },
+];
+
+const SPEED_DIAL_DIRECTION_VARIANTS: Array<{
+  title: string;
+  direction: 'up' | 'down' | 'left' | 'right';
+}> = [
+  { title: 'Up', direction: 'up' },
+  { title: 'Down', direction: 'down' },
+  { title: 'Left', direction: 'left' },
+  { title: 'Right', direction: 'right' },
 ];
 
 const STEPPER_STEPS = [
@@ -162,12 +175,12 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
           <PreviewPanel>
             <PreviewGroup title="Examples">
               <Stepper steps={STEPPER_STEPS} activeStep={activeStep()} />
-              <div class="step-buttons">
+              <div class="stepButtons">
                 <For each={STEPPER_STEPS}>
                   {(s) => (
                     <button
                       type="button"
-                      class={`mini-button${activeStep() === s.value ? ' mini-button-active' : ''}`}
+                      class={`miniButton${activeStep() === s.value ? ' miniButtonActive' : ''}`}
                       onClick={() => setActiveStep(s.value)}
                     >
                       {s.label}
@@ -207,7 +220,10 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Active tab: <strong>{tab()}</strong>
+            Active tab:{' '}
+            <CodeText as="span" class="codeInline">
+              {tab()}
+            </CodeText>
           </ShowcaseMeta>
         </ShowcaseSection>
       </Show>
@@ -226,19 +242,46 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
         <ShowcaseSection title="Command Palette" subtitle="Keyboard-driven command launcher with grouped results">
           <PreviewPanel>
             <PreviewGroup title="Examples">
-              <button type="button" onClick={() => setCommandOpen(true)}>
+              <Button variant="primary" onClick={() => setCommandOpen(true)}>
                 Open Command Palette (Ctrl+K)
-              </button>
+              </Button>
               <CommandPalette open={commandOpen()} onClose={() => setCommandOpen(false)} items={commandItems} />
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="Speed Dial (FAB)" subtitle="Floating action button for quick contextual actions">
+        <ShowcaseSection title="Speed Dial (FAB)" subtitle="Quick actions with tooltip labels">
           <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <div style={{ position: 'relative', height: '200px' }}>
-                <SpeedDial actions={SPEED_DIAL_ACTIONS} />
+            <PreviewGroup title="Direction variants">
+              <div
+                style={{
+                  display: 'grid',
+                  gap: 'var(--spacing-md)',
+                  'grid-template-columns': 'repeat(auto-fit, minmax(180px, 1fr))',
+                }}
+              >
+                <For each={SPEED_DIAL_DIRECTION_VARIANTS}>
+                  {(variant) => (
+                    <div
+                      style={{
+                        display: 'flex',
+                        'flex-direction': 'column',
+                        gap: 'var(--spacing-sm)',
+                        'align-items': 'center',
+                        padding: 'var(--spacing-md)',
+                        border: '1px solid var(--color-border)',
+                        'border-radius': 'var(--radius-md)',
+                      }}
+                    >
+                      <Text as="p" variant="bodySm" tone="muted" class="mutedText">
+                        {variant.title}
+                      </Text>
+                      <div style={{ position: 'relative', width: '56px', height: '56px' }}>
+                        <SpeedDial actions={SPEED_DIAL_ACTIONS} position="inline" direction={variant.direction} />
+                      </div>
+                    </div>
+                  )}
+                </For>
               </div>
             </PreviewGroup>
           </PreviewPanel>
@@ -259,9 +302,9 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
                 }}
               >
                 <div style={{ padding: 'var(--spacing-md)', 'text-align': 'center' }}>
-                  <p class="muted-text">
+                  <Text as="p" variant="bodySm" tone="muted" class="mutedText">
                     Active: <strong>{activeBottomNav()}</strong>
-                  </p>
+                  </Text>
                 </div>
                 <BottomNav items={BOTTOM_NAV_ITEMS} activeId={activeBottomNav()} onChange={setActiveBottomNav} />
               </div>
@@ -273,9 +316,9 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
         <ShowcaseSection title="BackToTop" subtitle="Floating scroll-to-top button">
           <PreviewPanel>
             <PreviewGroup title="Examples">
-              <p class="muted-text">
+              <Text as="p" variant="bodySm" tone="muted" class="mutedText">
                 Scroll down the page to see the back-to-top button appear in the bottom-right corner.
-              </p>
+              </Text>
               <BackToTop threshold={200} />
             </PreviewGroup>
           </PreviewPanel>

@@ -1,3 +1,4 @@
+import { CodeText, Heading } from '@jankrajewskiit/ui';
 import { For } from 'solid-js';
 
 import { PreviewGroup, PreviewPanel, ShowcaseSection } from '../components/ShowcaseSection';
@@ -200,7 +201,7 @@ const DeveloperSection = () => {
       <ShowcaseSection title="Component Categories" subtitle="9 categories organized by purpose">
         <PreviewPanel>
           <PreviewGroup title="Examples">
-            <ul class="overview-list">
+            <ul class="overviewList">
               <li>
                 <strong>inputs/</strong> (11) - Button, IconButton, Checkbox, Input, Radio, Switch, Autocomplete,
                 ColorPicker, TagInput, DropdownButton, DropdownMenu
@@ -246,17 +247,21 @@ const DeveloperSection = () => {
       >
         <PreviewPanel>
           <PreviewGroup title="Examples">
-            <div class="docs-grid">
+            <div class="docsGrid">
               <For each={TOOLING_SNIPPETS}>
                 {(snippet) => (
-                  <div class="docs-card">
-                    <div class="docs-card-header">
-                      <p class="docs-card-title">{snippet.title}</p>
-                      <span class="code-inline">{snippet.file}</span>
+                  <div class="docsCard">
+                    <div class="docsCardHeader">
+                      <Heading as="p" level={4} variant="titleMd" class="docsCardTitle">
+                        {snippet.title}
+                      </Heading>
+                      <CodeText as="span" class="codeInline">
+                        {snippet.file}
+                      </CodeText>
                     </div>
-                    <pre class="install-block">
-                      <code>{snippet.code}</code>
-                    </pre>
+                    <CodeText as="pre" variant="block" size="md" class="installBlock">
+                      {snippet.code}
+                    </CodeText>
                   </div>
                 )}
               </For>
@@ -271,17 +276,21 @@ const DeveloperSection = () => {
       >
         <PreviewPanel>
           <PreviewGroup title="Examples">
-            <div class="docs-grid">
+            <div class="docsGrid">
               <For each={USAGE_SNIPPETS}>
                 {(snippet) => (
-                  <div class="docs-card">
-                    <div class="docs-card-header">
-                      <p class="docs-card-title">{snippet.title}</p>
-                      <span class="code-inline">{snippet.file}</span>
+                  <div class="docsCard">
+                    <div class="docsCardHeader">
+                      <Heading as="p" level={4} variant="titleMd" class="docsCardTitle">
+                        {snippet.title}
+                      </Heading>
+                      <CodeText as="span" class="codeInline">
+                        {snippet.file}
+                      </CodeText>
                     </div>
-                    <pre class="install-block">
-                      <code>{snippet.code}</code>
-                    </pre>
+                    <CodeText as="pre" variant="block" size="md" class="installBlock">
+                      {snippet.code}
+                    </CodeText>
                   </div>
                 )}
               </For>
@@ -293,7 +302,7 @@ const DeveloperSection = () => {
       <ShowcaseSection title="Design Principles" subtitle="Rules that keep VelvetUi reusable across apps">
         <PreviewPanel>
           <PreviewGroup title="Examples">
-            <ul class="overview-list">
+            <ul class="overviewList">
               <li>Components are app-agnostic and avoid business logic coupling.</li>
               <li>User-facing text is passed via props by the consuming app.</li>
               <li>Layout components expose slots for flexible composition.</li>

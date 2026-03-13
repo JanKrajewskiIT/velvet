@@ -71,10 +71,81 @@
   --font-size-xl: 1.25rem;
   --font-size-2xl: 1.5rem;
   --font-size-3xl: 2rem;
+  --font-family-sans: 'Geist Variable', 'Geist', system-ui, -apple-system, sans-serif;
+  --font-family-display: var(--font-family-sans);
+  --font-family-mono: 'Geist Mono', ui-monospace, sfmono-regular, menlo, consolas, monospace;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
   --font-weight-normal: 400;
+  --typography-display-lg-font-size: clamp(2rem, 3.2vw, 3rem);
+  --typography-display-lg-line-height: 1.08;
+  --typography-display-lg-font-weight: var(--font-weight-bold);
+  --typography-display-lg-letter-spacing: -0.03em;
+  --typography-display-md-font-size: clamp(1.75rem, 2.4vw, 2.5rem);
+  --typography-display-md-line-height: 1.12;
+  --typography-display-md-font-weight: var(--font-weight-bold);
+  --typography-display-md-letter-spacing: -0.025em;
+  --typography-h1-font-size: var(--font-size-3xl);
+  --typography-h1-line-height: 1.2;
+  --typography-h1-font-weight: var(--font-weight-bold);
+  --typography-h1-letter-spacing: -0.02em;
+  --typography-h2-font-size: var(--font-size-2xl);
+  --typography-h2-line-height: 1.26;
+  --typography-h2-font-weight: var(--font-weight-semibold);
+  --typography-h2-letter-spacing: -0.01em;
+  --typography-h3-font-size: var(--font-size-xl);
+  --typography-h3-line-height: 1.35;
+  --typography-h3-font-weight: var(--font-weight-semibold);
+  --typography-h3-letter-spacing: -0.005em;
+  --typography-title-lg-font-size: var(--font-size-lg);
+  --typography-title-lg-line-height: 1.4;
+  --typography-title-lg-font-weight: var(--font-weight-semibold);
+  --typography-title-lg-letter-spacing: -0.005em;
+  --typography-title-md-font-size: var(--font-size-md);
+  --typography-title-md-line-height: 1.45;
+  --typography-title-md-font-weight: var(--font-weight-semibold);
+  --typography-title-md-letter-spacing: 0;
+  --typography-body-lg-font-size: var(--font-size-lg);
+  --typography-body-lg-line-height: 1.55;
+  --typography-body-lg-font-weight: var(--font-weight-normal);
+  --typography-body-lg-letter-spacing: 0;
+  --typography-body-md-font-size: var(--font-size-base);
+  --typography-body-md-line-height: 1.5;
+  --typography-body-md-font-weight: var(--font-weight-normal);
+  --typography-body-md-letter-spacing: 0;
+  --typography-body-sm-font-size: var(--font-size-md);
+  --typography-body-sm-line-height: 1.45;
+  --typography-body-sm-font-weight: var(--font-weight-normal);
+  --typography-body-sm-letter-spacing: 0;
+  --typography-label-lg-font-size: var(--font-size-md);
+  --typography-label-lg-line-height: 1.35;
+  --typography-label-lg-font-weight: var(--font-weight-medium);
+  --typography-label-lg-letter-spacing: 0.01em;
+  --typography-label-md-font-size: var(--font-size-sm);
+  --typography-label-md-line-height: 1.3;
+  --typography-label-md-font-weight: var(--font-weight-medium);
+  --typography-label-md-letter-spacing: 0.015em;
+  --typography-caption-font-size: var(--font-size-xs);
+  --typography-caption-line-height: 1.35;
+  --typography-caption-font-weight: var(--font-weight-normal);
+  --typography-caption-letter-spacing: 0.01em;
+  --typography-overline-font-size: var(--font-size-xs);
+  --typography-overline-line-height: 1.2;
+  --typography-overline-font-weight: var(--font-weight-semibold);
+  --typography-overline-letter-spacing: 0.09em;
+  --typography-button-sm-font-size: var(--font-size-sm);
+  --typography-button-sm-line-height: 1.2;
+  --typography-button-sm-font-weight: var(--font-weight-medium);
+  --typography-button-sm-letter-spacing: 0.005em;
+  --typography-button-md-font-size: var(--font-size-md);
+  --typography-button-md-line-height: 1.2;
+  --typography-button-md-font-weight: var(--font-weight-medium);
+  --typography-button-md-letter-spacing: 0.004em;
+  --typography-button-lg-font-size: var(--font-size-lg);
+  --typography-button-lg-line-height: 1.2;
+  --typography-button-lg-font-weight: var(--font-weight-semibold);
+  --typography-button-lg-letter-spacing: 0.003em;
   --radius-sm: 6px;
   --radius-md: 8px;
   --radius-lg: 12px;
@@ -114,13 +185,10 @@
   --loader-duration-in: 0.2s;
   --loader-duration-out: 0.6s;
 
-  font-family:
-    'Inter Variable',
-    system-ui,
-    -apple-system,
-    sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  font-family: var(--font-family-sans);
+  line-height: var(--typography-body-md-line-height);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
   font-synthesis: none;
   text-rendering: optimizelegibility;
   -webkit-font-smoothing: antialiased;
@@ -196,7 +264,7 @@ body {
   overflow: hidden;
 }
 
-body.transitions-ready {
+body.transitionsReady {
   transition:
     color var(--transition-fast),
     background-color var(--transition-fast);
@@ -207,6 +275,63 @@ body.transitions-ready {
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
+}
+
+.vuTypeDisplayLg {
+  font-size: var(--typography-display-lg-font-size);
+  line-height: var(--typography-display-lg-line-height);
+  font-weight: var(--typography-display-lg-font-weight);
+  letter-spacing: var(--typography-display-lg-letter-spacing);
+}
+
+.vuTypeH1 {
+  font-size: var(--typography-h1-font-size);
+  line-height: var(--typography-h1-line-height);
+  font-weight: var(--typography-h1-font-weight);
+  letter-spacing: var(--typography-h1-letter-spacing);
+}
+
+.vuTypeH2 {
+  font-size: var(--typography-h2-font-size);
+  line-height: var(--typography-h2-line-height);
+  font-weight: var(--typography-h2-font-weight);
+  letter-spacing: var(--typography-h2-letter-spacing);
+}
+
+.vuTypeTitle {
+  font-size: var(--typography-title-lg-font-size);
+  line-height: var(--typography-title-lg-line-height);
+  font-weight: var(--typography-title-lg-font-weight);
+  letter-spacing: var(--typography-title-lg-letter-spacing);
+}
+
+.vuTypeBody {
+  font-size: var(--typography-body-md-font-size);
+  line-height: var(--typography-body-md-line-height);
+  font-weight: var(--typography-body-md-font-weight);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+}
+
+.vuTypeLabel {
+  font-size: var(--typography-label-md-font-size);
+  line-height: var(--typography-label-md-line-height);
+  font-weight: var(--typography-label-md-font-weight);
+  letter-spacing: var(--typography-label-md-letter-spacing);
+}
+
+.vuTypeCaption {
+  font-size: var(--typography-caption-font-size);
+  line-height: var(--typography-caption-line-height);
+  font-weight: var(--typography-caption-font-weight);
+  letter-spacing: var(--typography-caption-letter-spacing);
+}
+
+.vuTypeOverline {
+  font-size: var(--typography-overline-font-size);
+  line-height: var(--typography-overline-line-height);
+  font-weight: var(--typography-overline-font-weight);
+  letter-spacing: var(--typography-overline-letter-spacing);
+  text-transform: uppercase;
 }
 
 @keyframes fadeIn {

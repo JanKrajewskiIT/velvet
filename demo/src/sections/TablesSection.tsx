@@ -1,9 +1,11 @@
 import {
+  CodeText,
   DataGridPro,
   type DataGridProColumn,
   type DataGridProSortState,
   DataTable,
   type DataTableColumn,
+  Heading,
   Pagination,
   Table,
   TableBody,
@@ -173,7 +175,10 @@ const TablesSection = () => {
         </PreviewPanel>
         <ShowcaseMeta>
           Click column headers to sort and use built-in filtering API. Pagination with ellipsis appears when rows exceed{' '}
-          <span class="code-inline">pageSize</span>. Supports custom cell render and column width.
+          <CodeText as="span" class="codeInline">
+            pageSize
+          </CodeText>
+          . Supports custom cell render and column width.
         </ShowcaseMeta>
       </ShowcaseSection>
 
@@ -249,8 +254,11 @@ const TablesSection = () => {
           </PreviewGroup>
         </PreviewPanel>
         <ShowcaseMeta>
-          Current page: <strong>{page()}</strong>. Use with custom lists or tables when you need page navigation without
-          DataTable.
+          Current page:{' '}
+          <Heading as="strong" level={4} variant="titleMd">
+            {String(page())}
+          </Heading>
+          . Use with custom lists or tables when you need page navigation without DataTable.
         </ShowcaseMeta>
       </ShowcaseSection>
     </div>

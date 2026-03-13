@@ -1,0 +1,56 @@
+.heading {
+  margin: 0;
+  color: var(--color-text);
+}
+
+.displayLg {
+  composes: typeDisplayLg from '../shared/Typography.module.css';
+}
+
+.displayMd {
+  composes: typeDisplayMd from '../shared/Typography.module.css';
+}
+
+.h1 {
+  composes: typeH1 from '../shared/Typography.module.css';
+}
+
+.h2 {
+  composes: typeH2 from '../shared/Typography.module.css';
+}
+
+.h3 {
+  composes: typeH3 from '../shared/Typography.module.css';
+}
+
+.titleLg {
+  composes: typeTitleLg from '../shared/Typography.module.css';
+}
+
+.titleMd {
+  composes: typeTitleMd from '../shared/Typography.module.css';
+}
+
+.toneDefault {
+  color: var(--color-text);
+}
+
+.toneMuted {
+  color: var(--color-text-muted);
+}
+
+.toneSecondary {
+  color: var(--color-text-secondary);
+}
+
+.toneTertiary {
+  color: var(--color-text-tertiary);
+}
+
+.toneInverse {
+  color: var(--color-text-inverse);
+}
+
+.tonePrimary {
+  color: var(--color-primary);
+}

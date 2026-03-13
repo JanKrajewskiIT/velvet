@@ -6,6 +6,7 @@ import type Props from '~/models/Props';
 import useClickOutside from '../../../hooks/useClickOutside';
 import useEscapeKey from '../../../hooks/useEscapeKey';
 import ButtonBase from '../../inputs/shared/ButtonBase';
+import Tooltip from '../../overlays/Tooltip/Tooltip';
 import styles from './SpeedDial.module.css';
 
 export interface SpeedDialAction {
@@ -17,8 +18,8 @@ export interface SpeedDialAction {
 interface SpeedDialProps {
   actions: SpeedDialAction[];
   icon?: JSX.Element;
-  position?: 'bottom-right' | 'bottom-left';
-  direction?: 'up' | 'left';
+  position?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left' | 'inline';
+  direction?: 'up' | 'down' | 'left' | 'right';
   actionsLabel?: string;
   openLabel?: string;
   closeLabel?: string;
@@ -54,7 +55,12 @@ const SpeedDial = (props: Props<SpeedDialProps>) => {
     setOpen(false);
   };
 
-  const tooltipSide = () => (position() === 'bottom-right' ? 'left' : 'right');
+  const tooltipPosition = (): 'top' | 'bottom' | 'left' | 'right' => {
+    if (direction() === 'left') return 'top';
+    if (direction() === 'right') return 'top';
+    if (position() === 'bottom-right' || position() === 'top-right') return 'left';
+    return 'right';
+  };
 
   return (
     <div ref={containerRef} class={`${styles.speedDial} ${styles[position()]} ${props.class ?? ''}`}>
@@ -63,17 +69,18 @@ const SpeedDial = (props: Props<SpeedDialProps>) => {
           <For each={props.actions}>
             {(action, index) => (
               <div class={styles.actionWrapper} style={{ 'animation-delay': `${index() * 30}ms` }}>
-                <span class={`${styles.tooltip} ${styles[tooltipSide()]}`}>{action.label}</span>
-                <ButtonBase
-                  variant="outline"
-                  size="sm"
-                  class={styles.actionButton}
-                  onClick={() => handleAction(action)}
-                  aria-label={action.label}
-                  role="menuitem"
-                >
-                  {action.icon}
-                </ButtonBase>
+                <Tooltip content={action.label} position={tooltipPosition()}>
+                  <ButtonBase
+                    variant="outline"
+                    size="sm"
+                    class={styles.actionButton}
+                    onClick={() => handleAction(action)}
+                    aria-label={action.label}
+                    role="menuitem"
+                  >
+                    {action.icon}
+                  </ButtonBase>
+                </Tooltip>
               </div>
             )}
           </For>

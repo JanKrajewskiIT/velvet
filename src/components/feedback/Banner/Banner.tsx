@@ -4,6 +4,7 @@ import { Show } from 'solid-js';
 
 import type Props from '~/models/Props';
 
+import Text from '../../typography/Text/Text';
 import styles from './Banner.module.css';
 
 interface BannerMessages {
@@ -24,7 +25,9 @@ const Banner = (props: Props<BannerProps>) => {
 
   return (
     <div role="status" class={`${styles.banner} ${styles[variant()]} ${props.class ?? ''}`}>
-      <div class={styles.content}>{props.children}</div>
+      <Text as="div" variant="labelLg" tone="inverse" class={styles.content}>
+        {props.children}
+      </Text>
       <Show when={props.action}>
         <div class={styles.action}>{props.action}</div>
       </Show>

@@ -1,0 +1,112 @@
+.typeDisplayLg {
+  font-family: var(--font-family-display);
+  font-size: var(--typography-display-lg-font-size);
+  line-height: var(--typography-display-lg-line-height);
+  font-weight: var(--typography-display-lg-font-weight);
+  letter-spacing: var(--typography-display-lg-letter-spacing);
+}
+
+.typeDisplayMd {
+  font-family: var(--font-family-display);
+  font-size: var(--typography-display-md-font-size);
+  line-height: var(--typography-display-md-line-height);
+  font-weight: var(--typography-display-md-font-weight);
+  letter-spacing: var(--typography-display-md-letter-spacing);
+}
+
+.typeH1 {
+  font-family: var(--font-family-display);
+  font-size: var(--typography-h1-font-size);
+  line-height: var(--typography-h1-line-height);
+  font-weight: var(--typography-h1-font-weight);
+  letter-spacing: var(--typography-h1-letter-spacing);
+}
+
+.typeH2 {
+  font-family: var(--font-family-display);
+  font-size: var(--typography-h2-font-size);
+  line-height: var(--typography-h2-line-height);
+  font-weight: var(--typography-h2-font-weight);
+  letter-spacing: var(--typography-h2-letter-spacing);
+}
+
+.typeH3 {
+  font-family: var(--font-family-display);
+  font-size: var(--typography-h3-font-size);
+  line-height: var(--typography-h3-line-height);
+  font-weight: var(--typography-h3-font-weight);
+  letter-spacing: var(--typography-h3-letter-spacing);
+}
+
+.typeTitleLg {
+  font-family: var(--font-family-sans);
+  font-size: var(--typography-title-lg-font-size);
+  line-height: var(--typography-title-lg-line-height);
+  font-weight: var(--typography-title-lg-font-weight);
+  letter-spacing: var(--typography-title-lg-letter-spacing);
+}
+
+.typeTitleMd {
+  font-family: var(--font-family-sans);
+  font-size: var(--typography-title-md-font-size);
+  line-height: var(--typography-title-md-line-height);
+  font-weight: var(--typography-title-md-font-weight);
+  letter-spacing: var(--typography-title-md-letter-spacing);
+}
+
+.typeBodyLg {
+  font-family: var(--font-family-sans);
+  font-size: var(--typography-body-lg-font-size);
+  line-height: var(--typography-body-lg-line-height);
+  font-weight: var(--typography-body-lg-font-weight);
+  letter-spacing: var(--typography-body-lg-letter-spacing);
+}
+
+.typeBodyMd {
+  font-family: var(--font-family-sans);
+  font-size: var(--typography-body-md-font-size);
+  line-height: var(--typography-body-md-line-height);
+  font-weight: var(--typography-body-md-font-weight);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+}
+
+.typeBodySm {
+  font-family: var(--font-family-sans);
+  font-size: var(--typography-body-sm-font-size);
+  line-height: var(--typography-body-sm-line-height);
+  font-weight: var(--typography-body-sm-font-weight);
+  letter-spacing: var(--typography-body-sm-letter-spacing);
+}
+
+.typeLabelLg {
+  font-family: var(--font-family-sans);
+  font-size: var(--typography-label-lg-font-size);
+  line-height: var(--typography-label-lg-line-height);
+  font-weight: var(--typography-label-lg-font-weight);
+  letter-spacing: var(--typography-label-lg-letter-spacing);
+}
+
+.typeLabelMd {
+  font-family: var(--font-family-sans);
+  font-size: var(--typography-label-md-font-size);
+  line-height: var(--typography-label-md-line-height);
+  font-weight: var(--typography-label-md-font-weight);
+  letter-spacing: var(--typography-label-md-letter-spacing);
+}
+
+.typeCaption {
+  font-family: var(--font-family-sans);
+  font-size: var(--typography-caption-font-size);
+  line-height: var(--typography-caption-line-height);
+  font-weight: var(--typography-caption-font-weight);
+  letter-spacing: var(--typography-caption-letter-spacing);
+}
+
+.typeOverline {
+  font-family: var(--font-family-sans);
+  font-size: var(--typography-overline-font-size);
+  line-height: var(--typography-overline-line-height);
+  font-weight: var(--typography-overline-font-weight);
+  letter-spacing: var(--typography-overline-letter-spacing);
+  text-transform: uppercase;
+}

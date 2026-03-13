@@ -1,4 +1,4 @@
-import { Card } from '@jankrajewskiit/ui';
+import { Card, Heading, Text } from '@jankrajewskiit/ui';
 import type { JSX } from 'solid-js';
 
 interface ShowcaseSectionProps {
@@ -24,32 +24,48 @@ interface PreviewGroupProps {
 
 export const ShowcaseSection = (props: ShowcaseSectionProps) => {
   return (
-    <section class="showcase-section">
-      <div class="showcase-heading">
-        <h2 class="showcase-title">{props.title}</h2>
-        {props.subtitle && <p class="showcase-subtitle">{props.subtitle}</p>}
+    <section class="showcaseSection">
+      <div class="showcaseHeading">
+        <Heading level={2} variant="h3" class="showcaseTitle">
+          {props.title}
+        </Heading>
+        {props.subtitle && (
+          <Text as="p" variant="bodySm" tone="muted" class="showcaseSubtitle">
+            {props.subtitle}
+          </Text>
+        )}
       </div>
-      <div class="showcase-content">{props.children}</div>
+      <div class="showcaseContent">{props.children}</div>
     </section>
   );
 };
 
 export const PreviewPanel = (props: PreviewPanelProps) => {
-  return <Card class={`preview-panel ${props.class ?? ''}`}>{props.children}</Card>;
+  return <Card class={`previewPanel ${props.class ?? ''}`}>{props.children}</Card>;
 };
 
 export const ShowcaseMeta = (props: ShowcaseMetaProps) => {
-  return <p class="showcase-meta">{props.children}</p>;
+  return (
+    <Text as="p" variant="bodySm" tone="muted" class="showcaseMeta">
+      {props.children}
+    </Text>
+  );
 };
 
 export const PreviewGroup = (props: PreviewGroupProps) => {
   return (
-    <section class="preview-group">
-      <header class="preview-group-header">
-        <h3 class="preview-group-title">{props.title}</h3>
-        {props.subtitle && <p class="preview-group-subtitle">{props.subtitle}</p>}
+    <section class="previewGroup">
+      <header class="previewGroupHeader">
+        <Heading level={3} variant="titleMd" tone="secondary" class="previewGroupTitle">
+          {props.title}
+        </Heading>
+        {props.subtitle && (
+          <Text as="p" variant="caption" tone="muted" class="previewGroupSubtitle">
+            {props.subtitle}
+          </Text>
+        )}
       </header>
-      <div class="preview-group-content">{props.children}</div>
+      <div class="previewGroupContent">{props.children}</div>
     </section>
   );
 };

@@ -1,3 +1,4 @@
+import { CodeText, Heading, Text } from '@jankrajewskiit/ui';
 import { For } from 'solid-js';
 
 import { PreviewGroup, PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
@@ -16,15 +17,18 @@ const OverviewSection = () => {
       <ShowcaseSection title="What is VelvetUI?" subtitle="A reusable SolidJS UI component library">
         <PreviewPanel>
           <PreviewGroup title="Core idea">
-            <p class="muted-text">
-              VelvetUI is an app-agnostic component library for SolidJS. It uses TypeScript and CSS Modules, and is
-              published as
-              <span class="code-inline">@jankrajewskiit/ui</span>.
-            </p>
+            <Text as="p" variant="bodySm" tone="muted" class="mutedText">
+              VelvetUI is an app-agnostic component library for SolidJS. It uses TypeScript and CSS Modules, and is{' '}
+              published as{' '}
+              <CodeText as="span" class="codeInline">
+                @jankrajewskiit/ui
+              </CodeText>
+              .
+            </Text>
           </PreviewGroup>
 
           <PreviewGroup title="Highlights" subtitle="What you get out of the box">
-            <ul class="overview-list">
+            <ul class="overviewList">
               <li>Works with SolidJS and @solidjs/router as peer dependencies</li>
               <li>Supports light, dark and system theme modes</li>
               <li>Exports component styles as @jankrajewskiit/ui/styles</li>
@@ -40,15 +44,15 @@ const OverviewSection = () => {
       <ShowcaseSection title="Installation" subtitle="Install package and required peers">
         <PreviewPanel>
           <PreviewGroup title="Install dependencies">
-            <pre class="install-block">
-              <code>npm install @jankrajewskiit/ui solid-js @solidjs/router</code>
-            </pre>
+            <CodeText as="pre" variant="block" size="md" class="installBlock">
+              npm install @jankrajewskiit/ui solid-js @solidjs/router
+            </CodeText>
           </PreviewGroup>
 
           <PreviewGroup title="Import styles">
-            <pre class="install-block">
-              <code>import '@jankrajewskiit/ui/styles';</code>
-            </pre>
+            <CodeText as="pre" variant="block" size="md" class="installBlock">
+              import '@jankrajewskiit/ui/styles';
+            </CodeText>
           </PreviewGroup>
         </PreviewPanel>
         <ShowcaseMeta>Import styles once in your app entry point:</ShowcaseMeta>
@@ -57,12 +61,16 @@ const OverviewSection = () => {
       <ShowcaseSection title="Library Stats" subtitle="Quick snapshot of the current package scope">
         <PreviewPanel>
           <PreviewGroup title="Current package shape">
-            <div class="page-stats">
+            <div class="pageStats">
               <For each={STATS}>
                 {(stat) => (
-                  <div class="stat-pill">
-                    <span class="stat-label">{stat.label}</span>
-                    <span class="stat-value">{stat.value}</span>
+                  <div class="statPill">
+                    <Text as="span" variant="overline" tone="tertiary" class="stat-label">
+                      {stat.label}
+                    </Text>
+                    <Heading as="span" level={4} variant="titleLg" class="stat-value">
+                      {stat.value}
+                    </Heading>
                   </div>
                 )}
               </For>

@@ -8,6 +8,7 @@ import {
   Button,
   Carousel,
   CodeBlock,
+  CodeText,
   Collapsible,
   ImageGrid,
   type ImageGridItem,
@@ -20,6 +21,7 @@ import {
   RadarChart,
   ScoreRing,
   SectionCard,
+  Text,
   TradingViewChart,
   type TradingViewChartPoint,
   type TreeNode,
@@ -252,7 +254,11 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Supports <span class="code-inline">showLineNumbers</span> and one-click copy to clipboard.
+            Supports{' '}
+            <CodeText as="span" class="codeInline">
+              showLineNumbers
+            </CodeText>{' '}
+            and one-click copy to clipboard.
           </ShowcaseMeta>
         </ShowcaseSection>
 
@@ -325,11 +331,13 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
                 itemHeight={46}
                 overscan={6}
                 renderItem={(item, index) => (
-                  <div class="virtual-row">
-                    <span class="virtual-label">{item.label}</span>
-                    <span class="virtual-meta">
+                  <div class="virtualRow">
+                    <Text as="span" variant="bodySm" class="virtual-label">
+                      {item.label}
+                    </Text>
+                    <Text as="span" variant="overline" tone="muted" class="virtual-meta">
                       #{index + 1} - {item.status}
-                    </span>
+                    </Text>
                   </div>
                 )}
               />
@@ -345,15 +353,19 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
             <PreviewGroup title="Examples">
               <Accordion>
                 <AccordionItem title="What is VelvetUI?">
-                  <p class="muted-text">
+                  <Text as="p" variant="bodySm" tone="muted" class="mutedText">
                     VelvetUI is a SolidJS component library built with CSS Modules, TypeScript and Vite.
-                  </p>
+                  </Text>
                 </AccordionItem>
                 <AccordionItem title="How to install?">
-                  <span class="code-inline">npm install @jankrajewskiit/ui</span>
+                  <CodeText as="span" class="codeInline">
+                    npm install @jankrajewskiit/ui
+                  </CodeText>
                 </AccordionItem>
                 <AccordionItem title="Disabled item" disabled>
-                  <p class="muted-text">This content is not accessible.</p>
+                  <Text as="p" variant="bodySm" tone="muted" class="mutedText">
+                    This content is not accessible.
+                  </Text>
                 </AccordionItem>
               </Accordion>
             </PreviewGroup>
@@ -373,10 +385,10 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
                   </span>
                 }
               >
-                <p class="muted-text">
+                <Text as="p" variant="bodySm" tone="muted" class="mutedText">
                   This content is revealed when the trigger is clicked. Use Collapsible for simple toggle patterns that
                   do not need accordion grouping.
-                </p>
+                </Text>
               </Collapsible>
             </PreviewGroup>
           </PreviewPanel>
@@ -386,15 +398,22 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
           <PreviewPanel>
             <PreviewGroup title="Examples">
               <SectionCard title="Details" defaultOpen>
-                <p class="muted-text">Collapsible card for grouped settings.</p>
+                <Text as="p" variant="bodySm" tone="muted" class="mutedText">
+                  Collapsible card for grouped settings.
+                </Text>
               </SectionCard>
               <SectionCard title="Advanced options">
-                <p class="muted-text">Collapsed by default.</p>
+                <Text as="p" variant="bodySm" tone="muted" class="mutedText">
+                  Collapsed by default.
+                </Text>
               </SectionCard>
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            <span class="code-inline">SectionCard</span> combines a card with built-in collapsible behavior.
+            <CodeText as="span" class="codeInline">
+              SectionCard
+            </CodeText>{' '}
+            combines a card with built-in collapsible behavior.
           </ShowcaseMeta>
         </ShowcaseSection>
       </Show>
@@ -421,9 +440,18 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Selected: <span class="code-inline">{selectedNode() || 'none'}</span> | Checked:{' '}
-            <span class="code-inline">{checkedTreeNodes().length}</span> | Last move:{' '}
-            <span class="code-inline">{lastMove() || 'none'}</span>
+            Selected:{' '}
+            <CodeText as="span" class="codeInline">
+              {selectedNode() || 'none'}
+            </CodeText>{' '}
+            | Checked:{' '}
+            <CodeText as="span" class="codeInline">
+              {String(checkedTreeNodes().length)}
+            </CodeText>{' '}
+            | Last move:{' '}
+            <CodeText as="span" class="codeInline">
+              {lastMove() || 'none'}
+            </CodeText>
           </ShowcaseMeta>
         </ShowcaseSection>
       </Show>
@@ -506,8 +534,21 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            <span class="code-inline">autoPlay</span> with <span class="code-inline">interval</span> (ms). Pauses on
-            hover. <span class="code-inline">showDots</span> and <span class="code-inline">showArrows</span>{' '}
+            <CodeText as="span" class="codeInline">
+              autoPlay
+            </CodeText>{' '}
+            with{' '}
+            <CodeText as="span" class="codeInline">
+              interval
+            </CodeText>{' '}
+            (ms). Pauses on hover.{' '}
+            <CodeText as="span" class="codeInline">
+              showDots
+            </CodeText>{' '}
+            and{' '}
+            <CodeText as="span" class="codeInline">
+              showArrows
+            </CodeText>{' '}
             configurable.
           </ShowcaseMeta>
         </ShowcaseSection>
@@ -618,8 +659,14 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
           <ShowcaseMeta>
             Includes interval switching, volume, SMA/EMA plus RSI/MACD/BB, drawing tools (trend/level/zone) and live
             feed API via polling or websocket callbacks. This demo uses helper hooks{' '}
-            <span class="code-inline">useTradingViewPollingFeed</span> and{' '}
-            <span class="code-inline">useTradingViewWsFeed</span>.
+            <CodeText as="span" class="codeInline">
+              useTradingViewPollingFeed
+            </CodeText>{' '}
+            and{' '}
+            <CodeText as="span" class="codeInline">
+              useTradingViewWsFeed
+            </CodeText>
+            .
           </ShowcaseMeta>
         </ShowcaseSection>
       </Show>

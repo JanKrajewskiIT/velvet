@@ -20,15 +20,10 @@
 }
 
 .title {
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
   margin-bottom: var(--spacing-2xs);
 }
 
 .message {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
   line-height: 1.5;
 }
 

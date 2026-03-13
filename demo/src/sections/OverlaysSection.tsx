@@ -1,6 +1,7 @@
 import type { LightboxImage, TourStep } from '@jankrajewskiit/ui';
 import {
   Button,
+  CodeText,
   ConfirmAction,
   ConfirmDialog,
   ContextMenu,
@@ -12,6 +13,7 @@ import {
   Lightbox,
   Popover,
   Sheet,
+  Text,
   Tooltip,
   Tour,
 } from '@jankrajewskiit/ui';
@@ -28,15 +30,15 @@ const SAMPLE_IMAGES: LightboxImage[] = [
 ];
 
 const TOUR_STEPS: TourStep[] = [
-  { target: '.showcase-title', title: 'Welcome', content: 'This is the section title area.', placement: 'bottom' },
+  { target: '.showcaseTitle', title: 'Welcome', content: 'This is the section title area.', placement: 'bottom' },
   {
-    target: '.preview-panel',
+    target: '.previewPanel',
     title: 'Preview',
     content: 'Each component is shown in a preview panel.',
     placement: 'bottom',
   },
   {
-    target: '.theme-toggle-bar',
+    target: '.themeToggleBar',
     title: 'Theme',
     content: 'Toggle between light and dark mode here.',
     placement: 'top',
@@ -85,22 +87,38 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
               <div class="row">
                 <Popover
                   trigger={<Button variant="ghost">Top</Button>}
-                  content={<p class="muted-text">Popover content for top</p>}
+                  content={
+                    <Text as="p" variant="bodySm" tone="muted" class="mutedText">
+                      Popover content for top
+                    </Text>
+                  }
                   position="top"
                 />
                 <Popover
                   trigger={<Button variant="ghost">Bottom</Button>}
-                  content={<p class="muted-text">Popover content for bottom</p>}
+                  content={
+                    <Text as="p" variant="bodySm" tone="muted" class="mutedText">
+                      Popover content for bottom
+                    </Text>
+                  }
                   position="bottom"
                 />
                 <Popover
                   trigger={<Button variant="ghost">Left</Button>}
-                  content={<p class="muted-text">Popover content for left</p>}
+                  content={
+                    <Text as="p" variant="bodySm" tone="muted" class="mutedText">
+                      Popover content for left
+                    </Text>
+                  }
                   position="left"
                 />
                 <Popover
                   trigger={<Button variant="ghost">Right</Button>}
-                  content={<p class="muted-text">Popover content for right</p>}
+                  content={
+                    <Text as="p" variant="bodySm" tone="muted" class="mutedText">
+                      Popover content for right
+                    </Text>
+                  }
                   position="right"
                 />
               </div>
@@ -120,10 +138,13 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
               <Dialog open={dialogOpen()} onClose={() => setDialogOpen(false)}>
                 <DialogTitle>Example dialog</DialogTitle>
                 <DialogBody>
-                  <p class="muted-text">
-                    This modal is built on the <span class="code-inline">&lt;dialog&gt;</span> element and closes on
-                    Escape or backdrop click.
-                  </p>
+                  <Text as="p" variant="bodySm" tone="muted" class="mutedText">
+                    This modal is built on the{' '}
+                    <CodeText as="span" class="codeInline">
+                      &lt;dialog&gt;
+                    </CodeText>{' '}
+                    element and closes on Escape or backdrop click.
+                  </Text>
                 </DialogBody>
                 <DialogActions>
                   <Button variant="ghost" onClick={() => setDialogOpen(false)}>
@@ -177,14 +198,19 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
                     <Button variant="danger" onClick={openConfirm}>
                       Open confirmation
                     </Button>
-                    <span class="status-chip">Confirm opened: {isConfirmOpen() ? 'yes' : 'no'}</span>
+                    <Text as="span" variant="labelMd" class="statusChip">
+                      Confirm opened: {isConfirmOpen() ? 'yes' : 'no'}
+                    </Text>
                   </div>
                 )}
               </ConfirmAction>
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Confirmed actions: <span class="code-inline">{String(confirmRuns())}</span>
+            Confirmed actions:{' '}
+            <CodeText as="span" class="codeInline">
+              {String(confirmRuns())}
+            </CodeText>
           </ShowcaseMeta>
         </ShowcaseSection>
       </Show>
@@ -214,9 +240,9 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
                   </>
                 }
               >
-                <p class="muted-text">
+                <Text as="p" variant="bodySm" tone="muted" class="mutedText">
                   Drawer content goes here. It works well for settings panels, side-by-side forms and detail views.
-                </p>
+                </Text>
               </Drawer>
             </PreviewGroup>
           </PreviewPanel>
@@ -245,7 +271,9 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
                 side="bottom"
                 size="md"
               >
-                <p class="muted-text">This sheet slides up from the bottom edge of the viewport.</p>
+                <Text as="p" variant="bodySm" tone="muted" class="mutedText">
+                  This sheet slides up from the bottom edge of the viewport.
+                </Text>
               </Sheet>
 
               <Sheet
@@ -256,7 +284,9 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
                 side="left"
                 size="sm"
               >
-                <p class="muted-text">This sheet slides in from the left edge of the viewport.</p>
+                <Text as="p" variant="bodySm" tone="muted" class="mutedText">
+                  This sheet slides in from the left edge of the viewport.
+                </Text>
               </Sheet>
 
               <Sheet
@@ -267,7 +297,9 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
                 side="right"
                 size="lg"
               >
-                <p class="muted-text">This sheet slides in from the right edge of the viewport.</p>
+                <Text as="p" variant="bodySm" tone="muted" class="mutedText">
+                  This sheet slides in from the right edge of the viewport.
+                </Text>
               </Sheet>
             </PreviewGroup>
           </PreviewPanel>

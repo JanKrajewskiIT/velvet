@@ -2,31 +2,21 @@
   "extends": "stylelint-config-standard",
   "rules": {
     "custom-property-pattern": null,
-    "keyframes-name-pattern": null,
+    "keyframes-name-pattern": ["^[a-z][a-zA-Z0-9]+$", { "message": "Expected keyframe name to be camelCase" }],
     "declaration-block-no-redundant-longhand-properties": true,
     "shorthand-property-no-redundant-values": true,
     "no-descending-specificity": null,
     "no-duplicate-selectors": true,
     "property-no-vendor-prefix": [true, { "ignoreProperties": ["backface-visibility"] }],
-    "declaration-property-value-no-unknown": [true, { "ignoreProperties": { "r": "/.*/" } }]
+    "declaration-property-value-no-unknown": [true, { "ignoreProperties": { "r": "/.*/" } }],
+    "selector-class-pattern": ["^[a-z][a-zA-Z0-9]+$", { "message": "Expected class selector to be camelCase" }]
   },
   "overrides": [
-    {
-      "files": ["demo/src/**/*.css"],
-      "rules": {
-        "selector-class-pattern": null
-      }
-    },
     {
       "files": ["**/*.module.css"],
       "rules": {
         "property-no-unknown": [true, { "ignoreProperties": ["composes"] }],
-        "value-keyword-case": ["lower", { "ignoreProperties": ["composes"] }],
-        "selector-class-pattern": [
-          "^[a-z][a-zA-Z0-9]+$",
-          { "message": "Expected class selector to be camelCase (CSS Modules convention)" }
-        ],
-        "keyframes-name-pattern": ["^[a-z][a-zA-Z0-9]+$", { "message": "Expected keyframe name to be camelCase" }]
+        "value-keyword-case": ["lower", { "ignoreProperties": ["composes"] }]
       }
     }
   ]

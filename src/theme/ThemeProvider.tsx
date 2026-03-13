@@ -75,7 +75,7 @@ const ThemeProvider = (props: ThemeProviderProps) => {
 
   if (typeof window !== 'undefined') {
     requestAnimationFrame(() => {
-      document.body.classList.add('transitions-ready');
+      document.body.classList.add('transitionsReady');
     });
   }
 

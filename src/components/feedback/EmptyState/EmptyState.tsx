@@ -3,6 +3,8 @@ import { Show } from 'solid-js';
 
 import type Props from '~/models/Props';
 
+import Heading from '../../typography/Heading/Heading';
+import Text from '../../typography/Text/Text';
 import styles from './EmptyState.module.css';
 
 interface EmptyStateProps {
@@ -18,9 +20,13 @@ const EmptyState = (props: Props<EmptyStateProps>) => {
       <Show when={props.icon}>
         <div class={styles.icon}>{props.icon}</div>
       </Show>
-      <p class={styles.message}>{props.message}</p>
+      <Heading as="p" level={4} variant="titleMd" tone="secondary" class={styles.message}>
+        {props.message}
+      </Heading>
       <Show when={props.hint}>
-        <p class={styles.hint}>{props.hint}</p>
+        <Text as="p" variant="caption" tone="tertiary" class={styles.hint}>
+          {props.hint}
+        </Text>
       </Show>
       <Show when={props.children}>
         <div class={styles.content}>{props.children}</div>

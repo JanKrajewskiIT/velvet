@@ -7,6 +7,7 @@ import {
   Button,
   Chip,
   CircularProgress,
+  CodeText,
   Countdown,
   EmptyState,
   ErrorFallback,
@@ -126,7 +127,7 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
         <ShowcaseSection title="StatCard" subtitle="Compact KPI cards">
           <PreviewPanel>
             <PreviewGroup title="Examples">
-              <div class="grid-cards">
+              <div class="gridCards">
                 <StatCard value="1 284" label="Active users" icon={<IoPeople />} colorClass="info" />
                 <StatCard value="98.7%" label="Uptime" icon={<IoCheckmarkCircle />} colorClass="success" />
                 <StatCard value="3" label="Open issues" icon={<IoAlertCircle />} colorClass="warning" />
@@ -135,7 +136,10 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            <span class="code-inline">StatCard</span> for dashboards and metric summaries.
+            <CodeText as="span" class="codeInline">
+              StatCard
+            </CodeText>{' '}
+            for dashboards and metric summaries.
           </ShowcaseMeta>
         </ShowcaseSection>
       </Show>
@@ -170,8 +174,11 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Determinate with <span class="code-inline">value</span> or indeterminate without. Supports size and variant
-            props.
+            Determinate with{' '}
+            <CodeText as="span" class="codeInline">
+              value
+            </CodeText>{' '}
+            or indeterminate without. Supports size and variant props.
           </ShowcaseMeta>
         </ShowcaseSection>
 
@@ -220,14 +227,14 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
         <ShowcaseSection title="LoadingContainer" subtitle="Centered loading states for container surfaces">
           <PreviewPanel>
             <PreviewGroup title="Examples">
-              <div class="loader-row">
-                <div class="loader-sample loader-sm">
+              <div class="loaderRow">
+                <div class="loaderSample loaderSm">
                   <LoadingContainer size="sm" />
                 </div>
-                <div class="loader-sample loader-md">
+                <div class="loaderSample loaderMd">
                   <LoadingContainer size="md" />
                 </div>
-                <div class="loader-sample loader-lg">
+                <div class="loaderSample loaderLg">
                   <LoadingContainer size="lg" />
                 </div>
               </div>
@@ -324,8 +331,15 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Wrap your app in <span class="code-inline">ToastProvider</span> and render{' '}
-            <span class="code-inline">ToastViewport</span> (e.g. in root layout) for toasts to appear.
+            Wrap your app in{' '}
+            <CodeText as="span" class="codeInline">
+              ToastProvider
+            </CodeText>{' '}
+            and render{' '}
+            <CodeText as="span" class="codeInline">
+              ToastViewport
+            </CodeText>{' '}
+            (e.g. in root layout) for toasts to appear.
           </ShowcaseMeta>
         </ShowcaseSection>
 

@@ -21,14 +21,10 @@
 }
 
 .message {
-  font-size: var(--font-size-md);
-  color: var(--color-text-muted);
   margin: 0;
 }
 
 .hint {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-tertiary);
   margin: 0;
 }
 
