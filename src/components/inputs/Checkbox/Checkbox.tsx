@@ -1,7 +1,8 @@
-import { createUniqueId, type JSX, Show, splitProps } from 'solid-js';
+import { createUniqueId, type JSX, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
 
+import LabelText from '../shared/LabelText';
 import styles from './Checkbox.module.css';
 
 interface CheckboxOwnProps extends Omit<JSX.InputHTMLAttributes<HTMLInputElement>, 'type'> {
@@ -21,16 +22,7 @@ const Checkbox = (props: Props<CheckboxOwnProps>) => {
         <input {...rest} id={inputId()} type="checkbox" class={styles.input} />
         <span class={styles.indicator} aria-hidden="true" />
       </span>
-      <Show when={local.label || local.description}>
-        <span class={styles.text}>
-          <Show when={local.label}>
-            <span class={styles.label}>{local.label}</span>
-          </Show>
-          <Show when={local.description}>
-            <span class={styles.description}>{local.description}</span>
-          </Show>
-        </span>
-      </Show>
+      <LabelText label={local.label} description={local.description} />
     </label>
   );
 };

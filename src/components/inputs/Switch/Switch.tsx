@@ -1,7 +1,9 @@
-import { type JSX, Show, splitProps } from 'solid-js';
+import { type JSX, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
+import LabelText from '../shared/LabelText';
 import styles from './Switch.module.css';
 
 interface SwitchOwnProps extends Omit<JSX.ButtonHTMLAttributes<HTMLButtonElement>, 'type' | 'onChange'> {
@@ -20,23 +22,14 @@ const Switch = (props: Props<SwitchOwnProps>) => {
         {...rest}
         type="button"
         role="switch"
-        class={`${styles.switch} ${local.checked ? styles.checked : ''}`}
+        class={classNames(styles.switch, local.checked && styles.checked)}
         aria-checked={local.checked}
         disabled={local.disabled}
         onClick={() => local.onChange(!local.checked)}
       >
         <span class={styles.thumb} />
       </button>
-      <Show when={local.label || local.description}>
-        <span class={styles.text}>
-          <Show when={local.label}>
-            <span class={styles.label}>{local.label}</span>
-          </Show>
-          <Show when={local.description}>
-            <span class={styles.description}>{local.description}</span>
-          </Show>
-        </span>
-      </Show>
+      <LabelText label={local.label} description={local.description} />
     </div>
   );
 };

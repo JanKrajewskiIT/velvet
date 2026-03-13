@@ -1,6 +1,7 @@
 import { For, type JSX } from 'solid-js';
 
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
 import styles from './SegmentedControl.module.css';
 
@@ -29,7 +30,7 @@ const SegmentedControl = (props: Props<SegmentedControlOwnProps>) => {
 
   return (
     <div
-      class={`${styles.container} ${styles[size()]} ${props.disabled ? styles.disabled : ''} ${props.class ?? ''}`}
+      class={classNames(styles.container, styles[size()], props.disabled && styles.disabled, props.class)}
       role="radiogroup"
     >
       <For each={props.options}>
@@ -37,7 +38,12 @@ const SegmentedControl = (props: Props<SegmentedControlOwnProps>) => {
           <button
             type="button"
             role="radio"
-            class={`${styles.option} ${props.optionClass ?? ''} ${props.value === option.value ? styles.active : ''} ${props.value === option.value ? (props.activeOptionClass ?? '') : ''}`}
+            class={classNames(
+              styles.option,
+              props.optionClass,
+              props.value === option.value && styles.active,
+              props.value === option.value && props.activeOptionClass
+            )}
             aria-checked={props.value === option.value}
             aria-label={option.ariaLabel}
             disabled={props.disabled}
