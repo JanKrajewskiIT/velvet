@@ -149,6 +149,36 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
   return (
     <div>
       <Show when={sectionId() === 'nav-tabs-stepper'}>
+        <ShowcaseSection title="Breadcrumbs" subtitle="Hierarchical path navigation with collapse">
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <Breadcrumbs items={BASIC_BREADCRUMBS} />
+              <Breadcrumbs items={COLLAPSIBLE_BREADCRUMBS} maxItems={3} />
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection title="Stepper" subtitle="Visual progress through ordered steps">
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <Stepper steps={STEPPER_STEPS} activeStep={activeStep()} />
+              <div class="step-buttons">
+                <For each={STEPPER_STEPS}>
+                  {(s) => (
+                    <button
+                      type="button"
+                      class={`mini-button${activeStep() === s.value ? ' mini-button-active' : ''}`}
+                      onClick={() => setActiveStep(s.value)}
+                    >
+                      {s.label}
+                    </button>
+                  )}
+                </For>
+              </div>
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+
         <ShowcaseSection title="Tabs" subtitle="Underline and pill variants">
           <PreviewPanel>
             <PreviewGroup title="Underline variant">
@@ -180,36 +210,6 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
             Active tab: <strong>{tab()}</strong>
           </ShowcaseMeta>
         </ShowcaseSection>
-
-        <ShowcaseSection title="Stepper" subtitle="Visual progress through ordered steps">
-          <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <Stepper steps={STEPPER_STEPS} activeStep={activeStep()} />
-              <div class="step-buttons">
-                <For each={STEPPER_STEPS}>
-                  {(s) => (
-                    <button
-                      type="button"
-                      class={`mini-button${activeStep() === s.value ? ' mini-button-active' : ''}`}
-                      onClick={() => setActiveStep(s.value)}
-                    >
-                      {s.label}
-                    </button>
-                  )}
-                </For>
-              </div>
-            </PreviewGroup>
-          </PreviewPanel>
-        </ShowcaseSection>
-
-        <ShowcaseSection title="Breadcrumbs" subtitle="Hierarchical path navigation with collapse">
-          <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <Breadcrumbs items={BASIC_BREADCRUMBS} />
-              <Breadcrumbs items={COLLAPSIBLE_BREADCRUMBS} maxItems={3} />
-            </PreviewGroup>
-          </PreviewPanel>
-        </ShowcaseSection>
       </Show>
 
       <Show when={sectionId() === 'nav-timeline'}>
@@ -223,7 +223,7 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
       </Show>
 
       <Show when={sectionId() === 'nav-command-fab'}>
-        <ShowcaseSection title="CommandPalette" subtitle="Keyboard-driven command search overlay">
+        <ShowcaseSection title="Command Palette" subtitle="Keyboard-driven command launcher with grouped results">
           <PreviewPanel>
             <PreviewGroup title="Examples">
               <button type="button" onClick={() => setCommandOpen(true)}>
@@ -234,7 +234,7 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="SpeedDial" subtitle="Floating action button with radial actions">
+        <ShowcaseSection title="Speed Dial (FAB)" subtitle="Floating action button for quick contextual actions">
           <PreviewPanel>
             <PreviewGroup title="Examples">
               <div style={{ position: 'relative', height: '200px' }}>

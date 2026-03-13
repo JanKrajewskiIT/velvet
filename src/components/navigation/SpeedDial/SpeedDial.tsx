@@ -1,9 +1,11 @@
 import { FiPlus } from 'solid-icons/fi';
-import { createSignal, For, type JSX, Show } from 'solid-js';
+import { createSignal, createUniqueId, For, type JSX, Show } from 'solid-js';
 
 import type Props from '~/models/Props';
 
 import useClickOutside from '../../../hooks/useClickOutside';
+import useEscapeKey from '../../../hooks/useEscapeKey';
+import ButtonBase from '../../inputs/shared/ButtonBase';
 import styles from './SpeedDial.module.css';
 
 export interface SpeedDialAction {
@@ -17,10 +19,14 @@ interface SpeedDialProps {
   icon?: JSX.Element;
   position?: 'bottom-right' | 'bottom-left';
   direction?: 'up' | 'left';
+  actionsLabel?: string;
+  openLabel?: string;
+  closeLabel?: string;
 }
 
 const SpeedDial = (props: Props<SpeedDialProps>) => {
   const [open, setOpen] = createSignal(false);
+  const menuId = createUniqueId();
   let containerRef: HTMLDivElement | undefined;
 
   useClickOutside(
@@ -29,10 +35,19 @@ const SpeedDial = (props: Props<SpeedDialProps>) => {
     () => setOpen(false)
   );
 
+  useEscapeKey(open, () => setOpen(false));
+
   const position = () => props.position ?? 'bottom-right';
   const direction = () => props.direction ?? 'up';
+  const actionsLabel = () => props.actionsLabel ?? 'Quick actions';
+  const hasActions = () => props.actions.length > 0;
+  const openLabel = () => props.openLabel ?? 'Open quick actions';
+  const closeLabel = () => props.closeLabel ?? 'Close quick actions';
 
-  const toggle = () => setOpen((prev) => !prev);
+  const toggle = () => {
+    if (!hasActions()) return;
+    setOpen((prev) => !prev);
+  };
 
   const handleAction = (action: SpeedDialAction) => {
     action.onClick();
@@ -43,34 +58,39 @@ const SpeedDial = (props: Props<SpeedDialProps>) => {
 
   return (
     <div ref={containerRef} class={`${styles.speedDial} ${styles[position()]} ${props.class ?? ''}`}>
-      <Show when={open()}>
-        <div class={`${styles.actions} ${styles[direction()]}`}>
+      <Show when={open() && hasActions()}>
+        <div id={menuId} class={`${styles.actions} ${styles[direction()]}`} role="menu" aria-label={actionsLabel()}>
           <For each={props.actions}>
             {(action, index) => (
               <div class={styles.actionWrapper} style={{ 'animation-delay': `${index() * 30}ms` }}>
                 <span class={`${styles.tooltip} ${styles[tooltipSide()]}`}>{action.label}</span>
-                <button
-                  type="button"
+                <ButtonBase
+                  variant="outline"
+                  size="sm"
                   class={styles.actionButton}
                   onClick={() => handleAction(action)}
                   aria-label={action.label}
+                  role="menuitem"
                 >
                   {action.icon}
-                </button>
+                </ButtonBase>
               </div>
             )}
           </For>
         </div>
       </Show>
-      <button
-        type="button"
+      <ButtonBase
+        iconOnly
+        size="lg"
         class={`${styles.fab} ${open() ? styles.fabOpen : ''}`}
         onClick={toggle}
+        disabled={!hasActions()}
         aria-expanded={open()}
-        aria-label={open() ? 'Close actions' : 'Open actions'}
+        aria-controls={menuId}
+        aria-label={open() ? closeLabel() : openLabel()}
       >
         <span class={styles.fabIcon}>{props.icon ?? <FiPlus size={24} />}</span>
-      </button>
+      </ButtonBase>
     </div>
   );
 };

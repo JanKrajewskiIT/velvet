@@ -23,6 +23,11 @@
   gap: var(--spacing-sm);
 }
 
+.brandActions {
+  flex-shrink: 0;
+  margin-inline-end: var(--spacing-xs);
+}
+
 .title {
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
@@ -49,6 +54,11 @@
   letter-spacing: 0.1em;
   margin: var(--spacing-sm) 0 0;
   padding: 0 var(--spacing-xs);
+}
+
+.root .item {
+  justify-content: flex-start;
+  text-align: start;
 }
 
 .item {

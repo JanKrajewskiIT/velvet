@@ -188,12 +188,23 @@ const InputsSection = (props: InputsSectionProps) => {
 
         <ShowcaseSection title="LocaleSwitcher" subtitle="Language toggle button">
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title="On surface (variant)" subtitle="Ghost button for light page backgrounds">
               <div class="row">
                 <LocaleSwitcher
                   label={locale()}
                   switchLabel="Switch locale"
                   variant="surface"
+                  onSwitch={() => {
+                    setLocale((current) => (current === 'EN' ? 'PL' : 'EN'));
+                  }}
+                />
+              </div>
+            </PreviewGroup>
+            <PreviewGroup title="On header (default)" subtitle="For Navbar — glass pill, no primary hover">
+              <div class="locale-switcher-navbar-demo">
+                <LocaleSwitcher
+                  label={locale()}
+                  switchLabel="Switch locale"
                   onSwitch={() => {
                     setLocale((current) => (current === 'EN' ? 'PL' : 'EN'));
                   }}

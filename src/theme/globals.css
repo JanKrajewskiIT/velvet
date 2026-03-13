@@ -44,6 +44,11 @@
   --header-bg: var(--brand);
   --header-text: var(--color-gray-0);
   --header-shadow: 0 0 0.5rem var(--brand);
+  --header-control-bg: rgb(255 255 255 / 12%);
+  --header-control-bg-hover: rgb(255 255 255 / 22%);
+  --header-control-bg-active: rgb(255 255 255 / 16%);
+  --header-control-border-hover: rgb(255 255 255 / 55%);
+  --header-control-focus-ring: rgb(255 255 255 / 55%);
   --header-height: 60px;
   --layout-sidebar-width: 240px;
   --spacer-size: 20px;
@@ -157,6 +162,11 @@
   --header-bg: var(--color-gray-90);
   --header-text: var(--color-gray-10);
   --header-shadow: none;
+  --header-control-bg: rgb(255 255 255 / 10%);
+  --header-control-bg-hover: rgb(255 255 255 / 18%);
+  --header-control-bg-active: rgb(255 255 255 / 12%);
+  --header-control-border-hover: rgb(255 255 255 / 50%);
+  --header-control-focus-ring: rgb(255 255 255 / 50%);
   --shadow-sm: 0 1px 3px rgb(0 0 0 / 20%);
   --shadow-card: 0 2px 8px rgb(0 0 0 / 20%);
   --shadow-popover: 0 4px 16px rgb(0 0 0 / 30%);

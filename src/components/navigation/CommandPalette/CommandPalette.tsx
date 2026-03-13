@@ -6,6 +6,7 @@ import type Props from '~/models/Props';
 
 import useEscapeKey from '../../../hooks/useEscapeKey';
 import useFocusTrap from '../../../hooks/useFocusTrap';
+import InputBase from '../../inputs/shared/InputBase';
 import styles from './CommandPalette.module.css';
 
 export interface CommandItem {
@@ -18,6 +19,10 @@ export interface CommandItem {
 }
 
 interface CommandPaletteMessages {
+  title?: string;
+  closeHintLabel?: string;
+  navigateHintLabel?: string;
+  selectHintLabel?: string;
   placeholder?: string;
   dialogLabel?: string;
   resultsLabel?: string;
@@ -131,34 +136,48 @@ const CommandPalette = (props: Props<CommandPaletteProps>) => {
     if (e.target === e.currentTarget) props.onClose();
   };
 
+  const handleItemClick = (item: CommandItem) => {
+    item.onSelect();
+    props.onClose();
+  };
+
   const placeholder = () => props.messages?.placeholder ?? props.placeholder ?? 'Search commands...';
   const dialogLabel = () => props.messages?.dialogLabel ?? props.dialogLabel ?? 'Command palette';
   const resultsLabel = () => props.messages?.resultsLabel ?? props.resultsLabel ?? 'Command results';
   const emptyLabel = () => props.messages?.emptyLabel ?? props.emptyLabel ?? 'No results found';
+  const title = () => props.messages?.title ?? 'Command Palette';
+  const closeHintLabel = () => props.messages?.closeHintLabel ?? 'Esc';
+  const navigateHintLabel = () => props.messages?.navigateHintLabel ?? 'Up/Down to navigate';
+  const selectHintLabel = () => props.messages?.selectHintLabel ?? 'Enter to select';
 
   return (
     <Show when={props.open}>
       <Portal>
         <div role="presentation" class={`${styles.overlay} ${props.class ?? ''}`} onClick={handleOverlayClick}>
           <div ref={setPanelRef} class={styles.panel} role="dialog" aria-modal="true" aria-label={dialogLabel()}>
-            <div class={styles.searchBar}>
-              <FiSearch size={20} class={styles.searchIcon} />
-              <input
-                ref={inputRef}
-                type="text"
-                class={styles.searchInput}
-                placeholder={placeholder()}
-                value={query()}
-                onInput={(e) => setQuery(e.currentTarget.value)}
-                onKeyDown={handleKeyDown}
-                role="combobox"
-                aria-autocomplete="list"
-                aria-expanded={props.open}
-                aria-controls={listboxId}
-                aria-activedescendant={flatList().length > 0 ? optionId(selectedIndex()) : undefined}
-              />
+            <div class={styles.header}>
+              <h2 class={styles.title}>{title()}</h2>
+              <span class={styles.hintKey}>{closeHintLabel()}</span>
             </div>
-            <div class={styles.divider} />
+            <div class={styles.searchWrap}>
+              <InputBase class={styles.searchField} size="lg" focusWithin>
+                <FiSearch size={18} class={styles.searchIcon} />
+                <input
+                  ref={inputRef}
+                  type="text"
+                  class={styles.searchInput}
+                  placeholder={placeholder()}
+                  value={query()}
+                  onInput={(e) => setQuery(e.currentTarget.value)}
+                  onKeyDown={handleKeyDown}
+                  role="combobox"
+                  aria-autocomplete="list"
+                  aria-expanded={props.open}
+                  aria-controls={listboxId}
+                  aria-activedescendant={flatList().length > 0 ? optionId(selectedIndex()) : undefined}
+                />
+              </InputBase>
+            </div>
             <div class={styles.results} id={listboxId} role="listbox" aria-label={resultsLabel()}>
               <Show when={flatList().length > 0} fallback={<div class={styles.empty}>{emptyLabel()}</div>}>
                 <For each={grouped()}>
@@ -176,10 +195,7 @@ const CommandPalette = (props: Props<CommandPaletteProps>) => {
                               id={optionId(itemIndex())}
                               class={`${styles.resultItem} ${itemIndex() === selectedIndex() ? styles.selected : ''}`}
                               onMouseEnter={() => setSelectedIndex(itemIndex())}
-                              onClick={() => {
-                                item.onSelect();
-                                props.onClose();
-                              }}
+                              onClick={() => handleItemClick(item)}
                               role="option"
                               aria-selected={itemIndex() === selectedIndex()}
                             >
@@ -198,6 +214,10 @@ const CommandPalette = (props: Props<CommandPaletteProps>) => {
                   )}
                 </For>
               </Show>
+            </div>
+            <div class={styles.footer}>
+              <span class={styles.footerHint}>{navigateHintLabel()}</span>
+              <span class={styles.footerHint}>{selectHintLabel()}</span>
             </div>
           </div>
         </div>

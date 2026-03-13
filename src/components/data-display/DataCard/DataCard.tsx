@@ -9,14 +9,24 @@ interface DataCardOwnProps extends JSX.HTMLAttributes<HTMLDivElement> {
   header?: JSX.Element;
   footer?: JSX.Element;
   children: JSX.Element;
-  variant?: 'elevated' | 'outlined';
+  variant?: 'filled' | 'elevated' | 'outlined';
   hoverable?: boolean;
 }
 
 const DataCard = (props: Props<DataCardOwnProps>) => {
   const [local, rest] = splitProps(props, ['media', 'header', 'footer', 'children', 'variant', 'hoverable', 'class']);
 
-  const variantClass = () => (local.variant === 'outlined' ? styles.outlined : styles.elevated);
+  const variantClass = () => {
+    if (local.variant === 'filled') {
+      return styles.filled;
+    }
+
+    if (local.variant === 'outlined') {
+      return styles.outlined;
+    }
+
+    return styles.elevated;
+  };
 
   const hoverableClass = () => (local.hoverable ? styles.hoverable : '');
 

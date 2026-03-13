@@ -9,7 +9,7 @@
   column-gap: var(--spacing-sm);
   place-items: center center;
   height: var(--header-height);
-  padding: 0 var(--spacing-sm);
+  padding: 0 var(--spacing-md);
   background-color: var(--header-bg);
   box-shadow: var(--header-shadow);
   transition:
@@ -35,6 +35,7 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
+  margin-inline-end: var(--spacing-2xs);
 }
 
 .menuBar {

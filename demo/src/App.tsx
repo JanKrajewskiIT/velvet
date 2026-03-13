@@ -52,73 +52,73 @@ export type SectionId =
 
 const NAV_GROUPS: SidebarNavGroup[] = [
   {
-    label: 'Getting Started',
+    label: 'Start',
     items: [
-      { id: 'overview', label: 'Overview and Installation' },
-      { id: 'developer', label: 'Developer and Tooling' },
+      { id: 'overview', label: 'Overview' },
+      { id: 'developer', label: 'Tooling' },
     ],
   },
   {
-    label: 'Layout & Navigation',
+    label: 'Layout',
     items: [
-      { id: 'layout-shell', label: 'Navbar & Layouts' },
-      { id: 'layout-sidebar', label: 'Layout utilities' },
+      { id: 'layout-shell', label: 'Shell & Sidebar' },
+      { id: 'layout-sidebar', label: 'Grid & Stack' },
       { id: 'layout-cards', label: 'Cards' },
-      { id: 'nav-tabs-stepper', label: 'Tabs & Stepper' },
+      { id: 'nav-tabs-stepper', label: 'Breadcrumbs & Tabs & Stepper' },
       { id: 'nav-timeline', label: 'Timeline' },
-      { id: 'nav-command-fab', label: 'Command palette & FAB' },
-      { id: 'nav-mobile', label: 'Mobile nav & Back to top' },
+      { id: 'nav-command-fab', label: 'Palette & FAB' },
+      { id: 'nav-mobile', label: 'Bottom Nav & Back To Top' },
     ],
   },
   {
-    label: 'Inputs & Forms',
+    label: 'Inputs',
     items: [
-      { id: 'inputs-buttons', label: 'Buttons & toggles' },
-      { id: 'inputs-fields', label: 'Inputs' },
-      { id: 'inputs-controls', label: 'Selectors & pickers' },
-      { id: 'inputs-dropdowns', label: 'Dropdowns & autocomplete' },
-      { id: 'inputs-datetime', label: 'Date & time' },
-      { id: 'inputs-other', label: 'File & upload' },
-      { id: 'inputs-form-layout', label: 'Form layout' },
+      { id: 'inputs-buttons', label: 'Buttons' },
+      { id: 'inputs-fields', label: 'Fields' },
+      { id: 'inputs-controls', label: 'Controls' },
+      { id: 'inputs-dropdowns', label: 'Dropdowns' },
+      { id: 'inputs-datetime', label: 'Date & Time' },
+      { id: 'inputs-other', label: 'Upload' },
+      { id: 'inputs-form-layout', label: 'Form Layout' },
     ],
   },
   {
-    label: 'Data Display',
+    label: 'Data',
     items: [
-      { id: 'data-content', label: 'Content & code' },
+      { id: 'data-content', label: 'Code & Markdown' },
       { id: 'data-lists', label: 'Lists' },
       { id: 'data-tree', label: 'Tree' },
-      { id: 'data-cards', label: 'Accordion & collapsible' },
-      { id: 'data-media', label: 'Media & galleries' },
+      { id: 'data-cards', label: 'Accordion' },
+      { id: 'data-media', label: 'Media' },
       { id: 'data-charts', label: 'Charts' },
-      { id: 'data-tables', label: 'Tables & pagination' },
+      { id: 'data-tables', label: 'Tables' },
     ],
   },
   {
     label: 'Feedback',
     items: [
-      { id: 'feedback-badges-chips', label: 'Badges, chips & stats' },
-      { id: 'feedback-progress', label: 'Progress & loading' },
-      { id: 'feedback-alerts', label: 'Alerts, banners & toasts' },
-      { id: 'feedback-states', label: 'States & empty pages' },
+      { id: 'feedback-badges-chips', label: 'Badges & Chips & Stats' },
+      { id: 'feedback-progress', label: 'Progress' },
+      { id: 'feedback-alerts', label: 'Alerts & Banners & Toasts' },
+      { id: 'feedback-states', label: 'Empty States' },
     ],
   },
   {
     label: 'Overlays',
     items: [
       { id: 'overlays-tooltips', label: 'Tooltip & Popover' },
-      { id: 'overlays-dialogs', label: 'Dialogs & confirm' },
-      { id: 'overlays-drawers', label: 'Drawers & sheets' },
-      { id: 'overlays-context', label: 'Context menu' },
-      { id: 'overlays-lightbox', label: 'Lightbox & tours' },
+      { id: 'overlays-dialogs', label: 'Dialogs' },
+      { id: 'overlays-drawers', label: 'Drawers' },
+      { id: 'overlays-context', label: 'Context Menu' },
+      { id: 'overlays-lightbox', label: 'Lightbox & Tour' },
     ],
   },
   {
-    label: 'Composites & Flows',
+    label: 'Composites',
     items: [
-      { id: 'composites-lists', label: 'Transfer, editable & kanban' },
-      { id: 'composites-wizard-ai', label: 'Wizard & AI panel' },
-      { id: 'composites-scheduler', label: 'Scheduler & calendar' },
+      { id: 'composites-lists', label: 'Transfer & Kanban' },
+      { id: 'composites-wizard-ai', label: 'Wizard & AI' },
+      { id: 'composites-scheduler', label: 'Scheduler' },
     ],
   },
 ];
@@ -129,151 +129,151 @@ const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
     description: 'Start here for installation, library goals and a quick snapshot of what is included.',
   },
   developer: {
-    title: 'Developer & Tooling',
+    title: 'Tooling',
     description:
       'ESLint, Prettier, Stylelint, TypeScript, Vite, lint-staged and Husky presets plus usage snippets and design principles.',
   },
   'inputs-buttons': {
-    title: 'Inputs & Forms · Buttons & toggles',
+    title: 'Inputs & Buttons',
     description: 'Button, AffixButton, IconButton, ActionRow, CopyButton, LocaleSwitcher and ThemeToggle.',
   },
   'inputs-dropdowns': {
-    title: 'Inputs & Forms · Dropdowns & autocomplete',
+    title: 'Inputs & Dropdowns',
     description:
       'DropdownButton, DropdownMenu, Autocomplete, MultiSelect and Select for searchable menus and option selection.',
   },
   'inputs-fields': {
-    title: 'Inputs & Forms · Inputs',
+    title: 'Inputs & Fields',
     description:
       'Input, TextArea, NumberInput, SearchInput, PasswordInput, TagInput, OtpInput, InlineEditableText and RichTextEditor.',
   },
   'inputs-controls': {
-    title: 'Inputs & Forms · Selectors & pickers',
+    title: 'Inputs & Controls',
     description: 'Checkbox, Switch, RadioGroup, SegmentedControl, Slider, RangeSlider, Rating and ColorPicker.',
   },
   'inputs-datetime': {
-    title: 'Inputs & Forms · Date & time',
+    title: 'Inputs & Date & Time',
     description: 'DatePicker, DateRangePicker, TimePicker and DateTimePicker for date/time scheduling workflows.',
   },
   'inputs-other': {
-    title: 'Inputs & Forms · File & upload',
+    title: 'Inputs & Upload',
     description: 'FileDropZone and FileInput for drag-and-drop and multi-file upload flows.',
   },
   'inputs-form-layout': {
-    title: 'Inputs & Forms · Form layout',
+    title: 'Inputs & Form Layout',
     description: 'FormField, FormGrid, FormLayout and ActionRow for structured and responsive form pages.',
   },
   'data-content': {
-    title: 'Data Display · Content & code',
+    title: 'Data & Code & Markdown',
     description:
       'Kbd, CodeBlock, MarkdownRenderer and MarkdownEditDialog for documentation, code snippets and markdown editing.',
   },
   'data-cards': {
-    title: 'Data Display · Accordion & collapsible',
+    title: 'Data & Accordion',
     description: 'Accordion, Collapsible and SectionCard for progressive disclosure and grouped content.',
   },
   'data-media': {
-    title: 'Data Display · Media & galleries',
+    title: 'Data & Media',
     description: 'Avatar, AvatarGroup, Carousel, ImageGrid and Marquee for people, galleries and ticker-style content.',
   },
   'data-charts': {
-    title: 'Data Display · Charts',
+    title: 'Data & Charts',
     description: 'ScoreRing, RadarChart and TradingViewChart for data visualization.',
   },
   'data-tables': {
-    title: 'Data Display · Tables & pagination',
+    title: 'Data & Tables',
     description:
       'Table primitives, DataTable v2 and DataGridPro v3 (virtualization, pinning, resizing, selection, visibility, reorder, JSON import/export).',
   },
   'data-lists': {
-    title: 'Data Display · Lists',
+    title: 'Data & Lists',
     description: 'List and ListItem for structured rows with icons, secondary text and inline actions.',
   },
   'data-tree': {
-    title: 'Data Display · Tree',
+    title: 'Data & Tree',
     description: 'TreeView v2 with lazy loading, checkbox selection and drag-and-drop tree navigation.',
   },
   'nav-tabs-stepper': {
-    title: 'Layout & Navigation · Tabs, Stepper & Breadcrumbs',
+    title: 'Layout & Breadcrumbs & Tabs & Stepper',
     description:
       'Tabs, Stepper and Breadcrumbs for switching views, visualizing progress and showing hierarchical paths.',
   },
   'nav-breadcrumbs': {
-    title: 'Layout & Navigation · Breadcrumbs',
+    title: 'Layout & Breadcrumbs',
     description: 'Breadcrumbs for displaying hierarchical location and quick parent navigation.',
   },
   'nav-timeline': {
-    title: 'Layout & Navigation · Timeline',
+    title: 'Layout & Timeline',
     description: 'Timeline for chronological list of events.',
   },
   'nav-command-fab': {
-    title: 'Layout & Navigation · Command palette & FAB',
-    description: 'CommandPalette for keyboard-driven search and SpeedDial for floating primary actions.',
+    title: 'Layout & Command Palette & FAB',
+    description: 'CommandPalette for keyboard-driven navigation and SpeedDial for quick floating actions.',
   },
   'nav-mobile': {
-    title: 'Layout & Navigation · Mobile nav & Back to top',
+    title: 'Layout & Bottom Nav & Back To Top',
     description: 'BottomNav for mobile navigation bars and BackToTop for long-scrolling layouts.',
   },
   'feedback-badges-chips': {
-    title: 'Feedback · Badges, chips & stats',
+    title: 'Feedback & Badges & Chips & Stats',
     description: 'Badge, Chip, TagChip and StatCard for status, filters, tags and compact KPIs.',
   },
   'feedback-progress': {
-    title: 'Feedback · Progress & loading',
+    title: 'Feedback & Progress',
     description: 'Progress, CircularProgress, Countdown, Spinner, Skeleton and LoadingContainer.',
   },
   'feedback-alerts': {
-    title: 'Feedback · Alerts, banners & toasts',
+    title: 'Feedback & Alerts & Banners & Toasts',
     description: 'Alert, Banner, ErrorMessage and Toast for inline, full-width and global status messages.',
   },
   'feedback-states': {
-    title: 'Feedback · States & empty pages',
+    title: 'Feedback & Empty States',
     description: 'ErrorFallback, EmptyState and AccessDenied for error, zero-data and permission-denied screens.',
   },
   'overlays-tooltips': {
-    title: 'Overlays · Tooltip & Popover',
+    title: 'Overlays & Tooltip & Popover',
     description: 'Tooltip and Popover for contextual hints and click-triggered floating content around controls.',
   },
   'overlays-dialogs': {
-    title: 'Overlays · Dialogs & confirm',
+    title: 'Overlays & Dialogs',
     description: 'Dialog, ConfirmDialog and ConfirmAction for modal workflows and confirmation flows.',
   },
   'overlays-drawers': {
-    title: 'Overlays · Drawers & sheets',
+    title: 'Overlays & Drawers',
     description: 'Drawer and Sheet for slide-in panels from any edge of the viewport.',
   },
   'overlays-context': {
-    title: 'Overlays · Context menu',
+    title: 'Overlays & Context Menu',
     description: 'ContextMenu for right-click action menus.',
   },
   'overlays-lightbox': {
-    title: 'Overlays · Lightbox & tours',
+    title: 'Overlays & Lightbox & Tour',
     description: 'Lightbox for fullscreen image viewer and Tour for step-by-step onboarding spotlights.',
   },
   'layout-shell': {
-    title: 'Layout & Navigation · Navbar & Layouts',
+    title: 'Layout & Shell & Sidebar',
     description:
       'Navbar, MainLayout, Footer and Sidebar for page shells, side navigation and composition-friendly layouts.',
   },
   'layout-sidebar': {
-    title: 'Layout & Navigation · Layout utilities',
+    title: 'Layout & Grid & Stack',
     description: 'Grid, Stack, ResizablePanel and Divider for composition-friendly layouts.',
   },
   'layout-cards': {
-    title: 'Layout & Navigation · Cards',
+    title: 'Layout & Cards',
     description: 'Card, DataCard and FlipCard for content containers and interactive layouts.',
   },
   'composites-lists': {
-    title: 'Composites & Flows · Transfer, editable & kanban',
+    title: 'Composites & Transfer & Kanban',
     description:
       'TransferList, EditableCollection and KanbanBoard for moving items between groups, managing dynamic lists and workflow columns.',
   },
   'composites-wizard-ai': {
-    title: 'Composites & Flows · Wizard & AI panel',
+    title: 'Composites & Wizard & AI',
     description: 'Wizard for guided multi-step flows and AiResultPanel for AI-style result and scoring layouts.',
   },
   'composites-scheduler': {
-    title: 'Composites & Flows · Scheduler & calendar',
+    title: 'Composites & Scheduler',
     description: 'Scheduler for month-based planning with multi-day events and drag-and-drop rescheduling.',
   },
 };

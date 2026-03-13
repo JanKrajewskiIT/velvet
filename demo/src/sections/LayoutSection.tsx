@@ -6,7 +6,6 @@ import {
   FlipCard,
   Footer,
   Grid,
-  LocaleSwitcher,
   MainLayout,
   Navbar,
   type NavItem,
@@ -51,34 +50,34 @@ const SIDEBAR_ITEMS: SidebarItem[] = [
 
 const DEMO_APP_NAV_GROUPS: SidebarNavGroup[] = [
   {
-    label: 'Getting Started',
+    label: 'Start',
     items: [
-      { id: 'overview-installation', label: 'Overview and Installation' },
-      { id: 'developer-tooling', label: 'Developer and Tooling' },
+      { id: 'overview-installation', label: 'Overview' },
+      { id: 'developer-tooling', label: 'Tooling' },
     ],
   },
   {
-    label: 'Layout & Navigation',
+    label: 'Layout',
     items: [
-      { id: 'navbar-layouts', label: 'Navbar & Layouts' },
-      { id: 'layout-utilities', label: 'Layout utilities' },
+      { id: 'navbar-layouts', label: 'Shell & Sidebar' },
+      { id: 'layout-utilities', label: 'Grid & Stack' },
       { id: 'cards', label: 'Cards' },
-      { id: 'tabs-stepper', label: 'Tabs & Stepper' },
+      { id: 'tabs-stepper', label: 'Breadcrumbs & Tabs & Stepper' },
       { id: 'timeline', label: 'Timeline' },
-      { id: 'command-fab', label: 'Command palette & FAB' },
-      { id: 'mobile-nav', label: 'Mobile nav & Back to top' },
+      { id: 'command-fab', label: 'Palette & FAB' },
+      { id: 'mobile-nav', label: 'Bottom Nav & Back To Top' },
     ],
   },
   {
-    label: 'Inputs & Forms',
+    label: 'Inputs',
     items: [
-      { id: 'buttons-toggles', label: 'Buttons & toggles' },
-      { id: 'inputs', label: 'Inputs' },
-      { id: 'selectors-pickers', label: 'Selectors & pickers' },
-      { id: 'dropdowns-autocomplete', label: 'Dropdowns & autocomplete' },
-      { id: 'date-time', label: 'Date & time' },
-      { id: 'file-upload', label: 'File & upload' },
-      { id: 'form-layout', label: 'Form layout' },
+      { id: 'buttons-toggles', label: 'Buttons' },
+      { id: 'inputs', label: 'Fields' },
+      { id: 'selectors-pickers', label: 'Controls' },
+      { id: 'dropdowns-autocomplete', label: 'Dropdowns' },
+      { id: 'date-time', label: 'Date & Time' },
+      { id: 'file-upload', label: 'Upload' },
+      { id: 'form-layout', label: 'Form Layout' },
     ],
   },
 ];
@@ -89,7 +88,6 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
   const [sidebarCollapsed, setSidebarCollapsed] = createSignal(false);
   const [activeSidebarId, setActiveSidebarId] = createSignal('home');
   const [activeDemoAppSidebarId, setActiveDemoAppSidebarId] = createSignal('overview-installation');
-  const [navbarLocale, setNavbarLocale] = createSignal<'EN' | 'PL'>('EN');
 
   return (
     <div>
@@ -107,11 +105,6 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
                       logo={<BiLogosReact class="layoutNavbarLogo" />}
                       actions={
                         <div class="layoutNavbarActions">
-                          <LocaleSwitcher
-                            label={navbarLocale()}
-                            switchLabel="Switch locale"
-                            onSwitch={() => setNavbarLocale((current) => (current === 'EN' ? 'PL' : 'EN'))}
-                          />
                           <ThemeToggle lightLabel="Light mode" darkLabel="Dark mode" groupLabel="Theme" />
                         </div>
                       }
@@ -140,11 +133,6 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
                       logo={<BiLogosReact class="layoutNavbarLogo" />}
                       actions={
                         <div class="layoutNavbarActions">
-                          <LocaleSwitcher
-                            label={navbarLocale()}
-                            switchLabel="Switch locale"
-                            onSwitch={() => setNavbarLocale((current) => (current === 'EN' ? 'PL' : 'EN'))}
-                          />
                           <ThemeToggle lightLabel="Light mode" darkLabel="Dark mode" groupLabel="Theme" />
                         </div>
                       }
@@ -334,35 +322,40 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
           </ShowcaseMeta>
         </ShowcaseSection>
 
-        <ShowcaseSection title="Outlined hoverable" subtitle="Outlined variant with hover interaction">
+        <ShowcaseSection title="DataCard variants" subtitle="Material-inspired filled, elevated and outlined styles">
           <PreviewPanel>
-            <PreviewGroup title="Interaction sample">
-              <DataCard variant="outlined" hoverable>
-                <p class="muted-text">Outlined, hoverable variant.</p>
-              </DataCard>
+            <PreviewGroup title="Filled, elevated and outlined">
+              <div class="grid-cards">
+                <DataCard
+                  variant="filled"
+                  hoverable
+                  header={<strong>Filled card</strong>}
+                  footer={<Button variant="primary">Continue</Button>}
+                >
+                  <p class="muted-text">Tonal variant inspired by modern Material surfaces.</p>
+                </DataCard>
+                <DataCard
+                  variant="elevated"
+                  hoverable
+                  header={<strong>Elevated card</strong>}
+                  footer={<Button variant="primary">Open</Button>}
+                >
+                  <p class="muted-text">Balanced default with soft depth and strong readability.</p>
+                </DataCard>
+                <DataCard
+                  variant="outlined"
+                  hoverable
+                  header={<strong>Outlined card</strong>}
+                  footer={<Button variant="ghost">Details</Button>}
+                >
+                  <p class="muted-text">Clean and neutral variant for dense enterprise layouts.</p>
+                </DataCard>
+              </div>
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Uses <span class="code-inline">variant=&quot;outlined&quot;</span> with{' '}
-            <span class="code-inline">hoverable</span>.
-          </ShowcaseMeta>
-        </ShowcaseSection>
-
-        <ShowcaseSection title="DataCard" subtitle="Header, body and footer slots">
-          <PreviewPanel>
-            <PreviewGroup title="Primary sample">
-              <DataCard
-                variant="elevated"
-                header={<strong>Overview</strong>}
-                footer={<Button variant="primary">View details</Button>}
-              >
-                <p class="muted-text">Header, body and footer slots.</p>
-              </DataCard>
-            </PreviewGroup>
-          </PreviewPanel>
-          <ShowcaseMeta>
-            Slot-based composition with <span class="code-inline">header</span>, content and{' '}
-            <span class="code-inline">footer</span>.
+            All variants support <span class="code-inline">header</span>, content,{' '}
+            <span class="code-inline">footer</span> and optional <span class="code-inline">hoverable</span>.
           </ShowcaseMeta>
         </ShowcaseSection>
 

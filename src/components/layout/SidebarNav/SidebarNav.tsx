@@ -34,7 +34,9 @@ const SidebarNav = (props: Props<SidebarNavProps>) => {
       <div class={styles.brand}>
         <div class={styles.brandHeader}>
           <p class={styles.title}>{props.title}</p>
-          <Show when={props.actions}>{props.actions}</Show>
+          <Show when={props.actions}>
+            <div class={styles.brandActions}>{props.actions}</div>
+          </Show>
         </div>
         <Show when={props.subtitle}>
           <p class={styles.subtitle}>{props.subtitle}</p>

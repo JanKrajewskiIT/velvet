@@ -14,11 +14,11 @@ interface LocaleSwitcherProps {
 }
 
 const LocaleSwitcher = (props: Props<LocaleSwitcherProps>) => {
-  const variantClass = () => (props.variant === 'surface' ? styles.surface : '');
+  const isSurface = () => props.variant === 'surface';
 
   return (
     <Button
-      class={classNames(styles.button, variantClass(), props.class)}
+      class={classNames(styles.button, isSurface() ? styles.surface : styles.navbar, props.class)}
       variant="ghost"
       onClick={() => props.onSwitch()}
       aria-label={props.switchLabel}
