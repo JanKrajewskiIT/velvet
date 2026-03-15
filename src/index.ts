@@ -34,6 +34,15 @@ export { default as FilterBar } from './components/composites/FilterBar/FilterBa
 export { default as FlipCard } from './components/composites/FlipCard/FlipCard';
 export type { KanbanColumn, KanbanItemBase } from './components/composites/KanbanBoard/KanbanBoard';
 export { default as KanbanBoard } from './components/composites/KanbanBoard/KanbanBoard';
+export type {
+  QueryBuilderCombinator,
+  QueryBuilderField,
+  QueryBuilderFieldOption,
+  QueryBuilderOperator,
+  QueryBuilderRule,
+  QueryBuilderValue,
+} from './components/composites/QueryBuilder/QueryBuilder';
+export { default as QueryBuilder } from './components/composites/QueryBuilder/QueryBuilder';
 export type { SchedulerEvent } from './components/composites/Scheduler/Scheduler';
 export { default as Scheduler } from './components/composites/Scheduler/Scheduler';
 export type { TransferItem } from './components/composites/TransferList/TransferList';

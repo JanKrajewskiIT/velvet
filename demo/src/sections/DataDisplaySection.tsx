@@ -216,6 +216,22 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
     mapData: (payload) => (isTradingPoint(payload) ? payload : null),
   });
 
+  const handleTreeMove = (draggedId: string, targetId: string) => {
+    setLastMove(`${draggedId} -> ${targetId}`);
+    addToast({ type: 'info', message: `Moved ${draggedId} to ${targetId}` });
+  };
+
+  const renderVirtualItem = (item: (typeof VIRTUAL_ITEMS)[number], index: number) => (
+    <div class="virtualRow">
+      <Text as="span" variant="bodySm" class="virtual-label">
+        {item.label}
+      </Text>
+      <Text as="span" variant="overline" tone="muted" class="virtual-meta">
+        #{index + 1} - {item.status}
+      </Text>
+    </div>
+  );
+
   const loadTreeChildren = async (node: TreeNode): Promise<TreeNode[]> => {
     await new Promise((resolve) => setTimeout(resolve, 450));
     if (node.id === 'lazy-modules') {
@@ -330,16 +346,7 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
                 height={320}
                 itemHeight={46}
                 overscan={6}
-                renderItem={(item, index) => (
-                  <div class="virtualRow">
-                    <Text as="span" variant="bodySm" class="virtual-label">
-                      {item.label}
-                    </Text>
-                    <Text as="span" variant="overline" tone="muted" class="virtual-meta">
-                      #{index + 1} - {item.status}
-                    </Text>
-                  </div>
-                )}
+                renderItem={renderVirtualItem}
               />
             </PreviewGroup>
           </PreviewPanel>
@@ -379,7 +386,7 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
                 open={collapsibleOpen()}
                 onToggle={() => setCollapsibleOpen((prev) => !prev)}
                 trigger={
-                  <span class="row" style={{ gap: 'var(--spacing-xs)' }}>
+                  <span class="row colGapXs">
                     <IoChevronDown size={16} />
                     <span>{collapsibleOpen() ? 'Hide details' : 'Show details'}</span>
                   </span>
@@ -432,10 +439,7 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
                 onCheckedIdsChange={setCheckedTreeNodes}
                 loadChildren={loadTreeChildren}
                 draggable
-                onMove={(draggedId, targetId) => {
-                  setLastMove(`${draggedId} -> ${targetId}`);
-                  addToast({ type: 'info', message: `Moved ${draggedId} to ${targetId}` });
-                }}
+                onMove={handleTreeMove}
               />
             </PreviewGroup>
           </PreviewPanel>
@@ -486,26 +490,10 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
           <PreviewPanel>
             <PreviewGroup title="Examples">
               <Carousel>
-                <div
-                  style={{ padding: 'var(--spacing-2xl)', 'text-align': 'center', background: 'var(--color-surface)' }}
-                >
-                  Slide 1
-                </div>
-                <div
-                  style={{ padding: 'var(--spacing-2xl)', 'text-align': 'center', background: 'var(--color-surface)' }}
-                >
-                  Slide 2
-                </div>
-                <div
-                  style={{ padding: 'var(--spacing-2xl)', 'text-align': 'center', background: 'var(--color-surface)' }}
-                >
-                  Slide 3
-                </div>
-                <div
-                  style={{ padding: 'var(--spacing-2xl)', 'text-align': 'center', background: 'var(--color-surface)' }}
-                >
-                  Slide 4
-                </div>
+                <div class="surfacePanel">Slide 1</div>
+                <div class="surfacePanel">Slide 2</div>
+                <div class="surfacePanel">Slide 3</div>
+                <div class="surfacePanel">Slide 4</div>
               </Carousel>
             </PreviewGroup>
           </PreviewPanel>
@@ -515,21 +503,9 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
           <PreviewPanel>
             <PreviewGroup title="Examples">
               <Carousel autoPlay interval={4000} showDots showArrows>
-                <div
-                  style={{ padding: 'var(--spacing-2xl)', 'text-align': 'center', background: 'var(--color-surface)' }}
-                >
-                  Auto slide 1
-                </div>
-                <div
-                  style={{ padding: 'var(--spacing-2xl)', 'text-align': 'center', background: 'var(--color-surface)' }}
-                >
-                  Auto slide 2
-                </div>
-                <div
-                  style={{ padding: 'var(--spacing-2xl)', 'text-align': 'center', background: 'var(--color-surface)' }}
-                >
-                  Auto slide 3
-                </div>
+                <div class="surfacePanel">Auto slide 1</div>
+                <div class="surfacePanel">Auto slide 2</div>
+                <div class="surfacePanel">Auto slide 3</div>
               </Carousel>
             </PreviewGroup>
           </PreviewPanel>
@@ -568,17 +544,17 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
           <PreviewPanel>
             <PreviewGroup title="Examples">
               <Marquee speed={20}>
-                <span style={{ padding: '0 var(--spacing-lg)' }}>SolidJS</span>
-                <span style={{ padding: '0 var(--spacing-lg)' }}>TypeScript</span>
-                <span style={{ padding: '0 var(--spacing-lg)' }}>CSS Modules</span>
-                <span style={{ padding: '0 var(--spacing-lg)' }}>Vite</span>
-                <span style={{ padding: '0 var(--spacing-lg)' }}>VelvetUI</span>
+                <span class="marqueeTag">SolidJS</span>
+                <span class="marqueeTag">TypeScript</span>
+                <span class="marqueeTag">CSS Modules</span>
+                <span class="marqueeTag">Vite</span>
+                <span class="marqueeTag">VelvetUI</span>
               </Marquee>
               <Marquee speed={25} direction="right">
-                <span style={{ padding: '0 var(--spacing-lg)' }}>ESLint</span>
-                <span style={{ padding: '0 var(--spacing-lg)' }}>Prettier</span>
-                <span style={{ padding: '0 var(--spacing-lg)' }}>Vitest</span>
-                <span style={{ padding: '0 var(--spacing-lg)' }}>PostCSS</span>
+                <span class="marqueeTag">ESLint</span>
+                <span class="marqueeTag">Prettier</span>
+                <span class="marqueeTag">Vitest</span>
+                <span class="marqueeTag">PostCSS</span>
               </Marquee>
             </PreviewGroup>
           </PreviewPanel>

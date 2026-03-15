@@ -178,13 +178,13 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
               <div class="stepButtons">
                 <For each={STEPPER_STEPS}>
                   {(s) => (
-                    <button
-                      type="button"
-                      class={`miniButton${activeStep() === s.value ? ' miniButtonActive' : ''}`}
+                    <Button
+                      variant={activeStep() === s.value ? 'primary' : 'ghost'}
+                      size="sm"
                       onClick={() => setActiveStep(s.value)}
                     >
                       {s.label}
-                    </button>
+                    </Button>
                   )}
                 </For>
               </div>
@@ -253,30 +253,14 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
         <ShowcaseSection title="Speed Dial (FAB)" subtitle="Quick actions with tooltip labels">
           <PreviewPanel>
             <PreviewGroup title="Direction variants">
-              <div
-                style={{
-                  display: 'grid',
-                  gap: 'var(--spacing-md)',
-                  'grid-template-columns': 'repeat(auto-fit, minmax(180px, 1fr))',
-                }}
-              >
+              <div class="speedDialGrid">
                 <For each={SPEED_DIAL_DIRECTION_VARIANTS}>
                   {(variant) => (
-                    <div
-                      style={{
-                        display: 'flex',
-                        'flex-direction': 'column',
-                        gap: 'var(--spacing-sm)',
-                        'align-items': 'center',
-                        padding: 'var(--spacing-md)',
-                        border: '1px solid var(--color-border)',
-                        'border-radius': 'var(--radius-md)',
-                      }}
-                    >
+                    <div class="speedDialCard">
                       <Text as="p" variant="bodySm" tone="muted" class="mutedText">
                         {variant.title}
                       </Text>
-                      <div style={{ position: 'relative', width: '56px', height: '56px' }}>
+                      <div class="speedDialAnchor">
                         <SpeedDial actions={SPEED_DIAL_ACTIONS} position="inline" direction={variant.direction} />
                       </div>
                     </div>
@@ -292,16 +276,8 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
         <ShowcaseSection title="BottomNav" subtitle="Mobile bottom navigation bar">
           <PreviewPanel>
             <PreviewGroup title="Examples">
-              <div
-                style={{
-                  position: 'relative',
-                  height: '120px',
-                  border: '1px solid var(--color-border)',
-                  'border-radius': 'var(--radius-md)',
-                  overflow: 'hidden',
-                }}
-              >
-                <div style={{ padding: 'var(--spacing-md)', 'text-align': 'center' }}>
+              <div class="bottomNavPreview">
+                <div class="bottomNavPreviewLabel">
                   <Text as="p" variant="bodySm" tone="muted" class="mutedText">
                     Active: <strong>{activeBottomNav()}</strong>
                   </Text>

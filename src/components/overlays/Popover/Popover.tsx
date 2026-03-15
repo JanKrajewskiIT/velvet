@@ -1,9 +1,10 @@
 import { createSignal, type JSX, Show } from 'solid-js';
 
+import useClickOutside from '~/hooks/useClickOutside';
+import useEscapeKey from '~/hooks/useEscapeKey';
 import type Props from '~/models/Props';
 
-import useClickOutside from '../../../hooks/useClickOutside';
-import useEscapeKey from '../../../hooks/useEscapeKey';
+import ButtonBase from '../../inputs/shared/ButtonBase';
 import styles from './Popover.module.css';
 
 interface PopoverProps {
@@ -36,9 +37,9 @@ const Popover = (props: Props<PopoverProps>) => {
 
   return (
     <div class={`${styles.wrapper} ${props.class ?? ''}`}>
-      <button type="button" class={styles.trigger} onClick={toggle} aria-haspopup="dialog" aria-expanded={isOpen()}>
+      <ButtonBase class={styles.trigger} onClick={toggle} aria-haspopup="dialog" aria-expanded={isOpen()}>
         {props.trigger}
-      </button>
+      </ButtonBase>
       <Show when={isOpen()}>
         <div ref={contentRef} class={`${styles.content} ${styles[position()]}`} role="dialog" aria-modal="false">
           {props.content}

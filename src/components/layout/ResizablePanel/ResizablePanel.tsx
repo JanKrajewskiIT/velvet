@@ -1,6 +1,7 @@
 import { children, createEffect, createSignal, onCleanup, type ParentProps } from 'solid-js';
 
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
 import styles from './ResizablePanel.module.css';
 
@@ -77,7 +78,12 @@ const ResizablePanel = (props: ParentProps<Props<ResizablePanelProps>>) => {
   return (
     <div
       ref={wrapperRef}
-      class={`${styles.wrapper} ${isHorizontal() ? styles.horizontal : styles.vertical} ${dragging() ? styles.dragging : ''} ${props.class ?? ''}`}
+      class={classNames(
+        styles.wrapper,
+        isHorizontal() ? styles.horizontal : styles.vertical,
+        dragging() && styles.dragging,
+        props.class
+      )}
     >
       <div class={styles.panelFirst} style={firstStyle()}>
         {childArray()[0]}

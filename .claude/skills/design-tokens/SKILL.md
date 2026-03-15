@@ -12,7 +12,7 @@ All tokens in `src/theme/globals.css`. Never hardcode -- always use tokens.
 **Text**: `--color-text`, `--color-text-muted`, `--color-text-secondary`, `--color-text-tertiary`, `--color-text-inverse`
 **Primary**: `--color-primary`, `--color-primary-hover`, `--color-primary-light`, `--color-border`, `--color-focus-ring`
 **Status**: `--color-{info,success,warning,error}` (each has `-light`)
-**Header**: `--header-bg`, `--header-text`, `--header-shadow`, `--color-header-border`
+**Header**: `--header-bg`, `--header-text`, `--header-shadow`, `--color-header-border`, `--header-control-bg`, `--header-control-bg-hover`, `--header-control-bg-active`, `--header-control-border-hover`, `--header-control-focus-ring`
 **Gray**: `--color-gray-{0,10,20,...,100}`
 
 ## Spacing
@@ -21,7 +21,7 @@ All tokens in `src/theme/globals.css`. Never hardcode -- always use tokens.
 
 ## Layout
 
-`--header-height` 60px, `--container-max-width` 1200px, `--container-padding` 1rem
+`--header-height` 60px, `--layout-sidebar-width` 240px (Sidebar + SidebarNav), `--container-max-width` 1200px, `--container-padding` 1rem
 
 ## Typography
 

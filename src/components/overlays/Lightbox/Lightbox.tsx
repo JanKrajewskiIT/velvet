@@ -6,6 +6,8 @@ import useEscapeKey from '~/hooks/useEscapeKey';
 import useFocusTrap from '~/hooks/useFocusTrap';
 import type Props from '~/models/Props';
 
+import IconButton from '../../inputs/IconButton/IconButton';
+import Text from '../../typography/Text/Text';
 import styles from './Lightbox.module.css';
 
 export interface LightboxImage {
@@ -106,9 +108,7 @@ const Lightbox = (props: Props<LightboxProps>) => {
             onClick={() => props.onClose()}
             tabIndex={-1}
           />
-          <button class={styles.close} type="button" aria-label={closeLabel()} onClick={() => props.onClose()}>
-            <IoClose />
-          </button>
+          <IconButton icon={<IoClose />} title={closeLabel()} class={styles.close} onClick={() => props.onClose()} />
 
           <Show when={total() > 1}>
             <span class={styles.counter}>
@@ -118,27 +118,30 @@ const Lightbox = (props: Props<LightboxProps>) => {
 
           <div class={styles.imageContainer}>
             <Show when={total() > 1}>
-              <button
+              <IconButton
+                icon={<IoChevronBack />}
+                title={previousLabel()}
                 class={`${styles.nav} ${styles.prev}`}
-                type="button"
-                aria-label={previousLabel()}
                 onClick={goPrev}
-              >
-                <IoChevronBack />
-              </button>
+              />
             </Show>
 
             <img class={styles.image} src={currentImage()?.src} alt={currentImage()?.alt ?? ''} draggable={false} />
 
             <Show when={total() > 1}>
-              <button class={`${styles.nav} ${styles.next}`} type="button" aria-label={nextLabel()} onClick={goNext}>
-                <IoChevronForward />
-              </button>
+              <IconButton
+                icon={<IoChevronForward />}
+                title={nextLabel()}
+                class={`${styles.nav} ${styles.next}`}
+                onClick={goNext}
+              />
             </Show>
           </div>
 
           <Show when={currentImage()?.caption}>
-            <p class={styles.caption}>{currentImage()?.caption}</p>
+            <Text as="p" class={styles.caption}>
+              {currentImage()?.caption}
+            </Text>
           </Show>
         </div>
       </Portal>

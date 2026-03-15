@@ -3,6 +3,7 @@ import { createSignal, For, type JSX, Show } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
 
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
 import styles from './Rating.module.css';
 
@@ -14,13 +15,12 @@ interface RatingOwnProps {
   icon?: JSX.Element;
 }
 
-const sizeMap = { sm: 16, md: 24, lg: 32 };
-
 const Rating = (props: Props<RatingOwnProps>) => {
   const [hoverIndex, setHoverIndex] = createSignal(-1);
 
   const max = () => props.max ?? 5;
-  const size = () => sizeMap[props.size ?? 'md'];
+  const sizeClassMap = { sm: styles.sizeSm, md: styles.sizeMd, lg: styles.sizeLg } as const;
+  const sizeClass = () => sizeClassMap[props.size ?? 'md'];
   const isInteractive = () => !!props.onChange;
 
   const stars = () => Array.from({ length: max() }, (_, i) => i + 1);
@@ -64,8 +64,13 @@ const Rating = (props: Props<RatingOwnProps>) => {
             role="radio"
             aria-checked={index <= props.value}
             aria-label={`${index} of ${max()}`}
-            class={`${styles.star} ${isFilled(index) ? styles.filled : ''} ${isHalf(index) ? styles.half : ''} ${isInteractive() ? styles.interactive : ''}`}
-            style={{ 'font-size': `${size()}px` }}
+            class={classNames(
+              styles.star,
+              sizeClass(),
+              isFilled(index) && styles.filled,
+              isHalf(index) && styles.half,
+              isInteractive() && styles.interactive
+            )}
             onClick={() => handleClick(index)}
             onMouseEnter={() => handleMouseEnter(index)}
           >

@@ -4,7 +4,9 @@ import type { JSX } from 'solid-js';
 import { Show } from 'solid-js';
 
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
+import IconButton from '../../inputs/IconButton/IconButton';
 import Heading from '../../typography/Heading/Heading';
 import Text from '../../typography/Text/Text';
 import styles from './Alert.module.css';
@@ -36,7 +38,7 @@ const Alert = (props: Props<AlertProps>) => {
   const icon = () => props.icon ?? defaultIcons[props.variant]();
 
   return (
-    <div role="alert" class={`${styles.alert} ${styles[props.variant]} ${props.class ?? ''}`}>
+    <div role="alert" class={classNames(styles.alert, styles[props.variant], props.class)}>
       <div class={styles.icon}>{icon()}</div>
       <div class={styles.content}>
         <Show when={props.title}>
@@ -49,14 +51,12 @@ const Alert = (props: Props<AlertProps>) => {
         </Text>
       </div>
       <Show when={props.onClose}>
-        <button
-          type="button"
+        <IconButton
+          icon={<FiX size={16} />}
+          title={props.messages?.closeButtonLabel ?? props.closeLabel ?? 'Close'}
           class={styles.closeBtn}
-          aria-label={props.messages?.closeButtonLabel ?? props.closeLabel ?? 'Close'}
           onClick={() => props.onClose?.()}
-        >
-          <FiX size={16} />
-        </button>
+        />
       </Show>
     </div>
   );

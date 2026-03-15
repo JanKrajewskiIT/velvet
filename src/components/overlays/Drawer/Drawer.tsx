@@ -2,12 +2,14 @@ import { FiX } from 'solid-icons/fi';
 import { createSignal, createUniqueId, type JSX, Show } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
+import useEscapeKey from '~/hooks/useEscapeKey';
+import useFocusTrap from '~/hooks/useFocusTrap';
+import useOverlayAnimation from '~/hooks/useOverlayAnimation';
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
-import useEscapeKey from '../../../hooks/useEscapeKey';
-import useFocusTrap from '../../../hooks/useFocusTrap';
-import useOverlayAnimation from '../../../hooks/useOverlayAnimation';
 import IconButton from '../../inputs/IconButton/IconButton';
+import Heading from '../../typography/Heading/Heading';
 import Text from '../../typography/Text/Text';
 import styles from './Drawer.module.css';
 
@@ -37,22 +39,22 @@ const Drawer = (props: Props<DrawerProps>) => {
     <Show when={props.open}>
       <Portal>
         <div
-          class={`${styles.overlay} ${entered() ? styles.overlayVisible : ''}`}
+          class={classNames(styles.overlay, entered() && styles.overlayVisible)}
           aria-hidden="true"
           onClick={() => props.onClose()}
         />
         <div
           ref={setDrawerRef}
-          class={`${styles.drawer} ${entered() ? styles.drawerVisible : ''} ${props.class ?? ''}`}
+          class={classNames(styles.drawer, entered() && styles.drawerVisible, props.class)}
           role="dialog"
           aria-modal="true"
           aria-labelledby={titleId}
         >
           <div class={styles.header}>
             <div class={styles.titleBlock}>
-              <h2 id={titleId} class={styles.name}>
+              <Heading as="h2" level={2} id={titleId} class={styles.name}>
                 {props.title}
-              </h2>
+              </Heading>
               <Show when={props.subtitle}>
                 <Text tone="muted" class={styles.subtitle}>
                   {props.subtitle}

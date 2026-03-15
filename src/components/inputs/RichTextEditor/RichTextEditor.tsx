@@ -139,7 +139,7 @@ const RichTextEditor = (props: Props<RichTextEditorOwnProps>) => {
           class={styles.editor}
           contentEditable={!local.disabled}
           data-placeholder={local.placeholder ?? 'Write rich text content...'}
-          style={{ 'min-height': local.minHeight ?? '180px' }}
+          style={local.minHeight ? { '--editor-min-height': local.minHeight } : undefined}
           onInput={handleInput}
           role="textbox"
           aria-multiline="true"

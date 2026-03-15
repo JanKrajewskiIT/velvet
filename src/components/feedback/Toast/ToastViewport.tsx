@@ -1,7 +1,9 @@
+import { IoClose } from 'solid-icons/io';
 import { For } from 'solid-js';
 
 import type Props from '~/models/Props';
 
+import IconButton from '../../inputs/IconButton/IconButton';
 import { removeToast, toasts } from './Toast';
 import styles from './Toast.module.css';
 
@@ -16,14 +18,12 @@ const ToastViewport = (props: Props<ToastViewportBaseProps>) => {
         {(toast) => (
           <div class={`${styles.toast} ${styles[toast.type]}`} role={toast.type === 'error' ? 'alert' : 'status'}>
             <div class={styles.message}>{toast.message}</div>
-            <button
-              type="button"
+            <IconButton
+              icon={<IoClose />}
+              title={props.closeLabel}
               class={styles.closeBtn}
               onClick={() => removeToast(toast.id)}
-              aria-label={props.closeLabel}
-            >
-              &times;
-            </button>
+            />
           </div>
         )}
       </For>

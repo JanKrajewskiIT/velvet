@@ -1,6 +1,6 @@
 ---
 name: solidjs-component
-description: SolidJS component patterns for VelvetUi -- Props convention, component inventory, hooks, toast system. Use when creating or modifying components.
+description: SolidJS component patterns for VelvetUi -- Props convention, component inventory, hooks, toast system, overlay pattern, shared utils. Use when creating or modifying components.
 ---
 
 ## Standard component
@@ -16,7 +16,7 @@ With HTML attribute spreading: `interface XOwnProps extends JSX.*HTMLAttributes`
 
 ## Inventory
 
-`inputs/` (11), `forms/` (4), `data-display/` (7), `navigation/` (4), `feedback/` (10), `overlays/` (6), `layout/` (4), `composites/` (5), `app/` (3).
+`typography/` (Heading, Text, CodeText), `inputs/`, `forms/`, `data-display/`, `navigation/`, `feedback/`, `overlays/`, `layout/`, `composites/`, `app/`.
 
 ## Code / JSX separation
 
@@ -28,10 +28,29 @@ With HTML attribute spreading: `interface XOwnProps extends JSX.*HTMLAttributes`
 
 `addToast({ message, type?, duration? })` / `removeToast(id)`. `ToastProvider` + `ToastViewport` in app shell.
 
-## Hooks
+## Hooks (all from `~/hooks/`)
 
-`useClickOutside(ref, isActive, cb)`, `useEscapeKey(isActive, cb)`
+- `useClickOutside(ref, isActive, cb)` -- close on outside click
+- `useEscapeKey(isActive, cb)` -- close on Escape
+- `useFocusTrap(ref, isActive)` -- trap focus inside overlays
+- `useOverlayAnimation(isOpen)` -- enter/exit CSS transitions for overlays
 
-## Utils
+## Overlay pattern
 
-`getContrastTextColor(hex)`, `orEmpty()`, `numberToString()`, `emptyToNull()`, `parseFloatOrNull()`
+Overlays (Dialog, Sheet, Drawer, Popover, ContextMenu) follow a shared pattern:
+
+- `useEscapeKey` + `useFocusTrap` for keyboard/focus management
+- `useOverlayAnimation` for enter/exit transitions
+- `classNames()` for conditional class composition (open/closed states)
+- `Heading` for overlay titles -- never raw `<h1>`–`<h6>`
+- `IconButton` for close buttons -- never raw `<button>` with icon
+
+## Utils (all from `~/utils/`)
+
+- `classNames(...args)` -- conditional class string builder, preferred over template literals
+- `getContrastTextColor(hex)` -- accessible text color for a given background
+- `orEmpty()`, `numberToString()`, `emptyToNull()`, `parseFloatOrNull()` -- form value helpers
+
+## Shared modules
+
+- `~/components/inputs/shared/calendar` -- `DAY_LABELS`, `DayCell`, `pad`, `toIso`, `buildDaysGrid`, `parseDate` (used by DatePicker, DateRangePicker)

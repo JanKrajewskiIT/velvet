@@ -6,6 +6,8 @@ import type Props from '~/models/Props';
 import ScoreRing from '../../data-display/ScoreRing/ScoreRing';
 import Spinner from '../../feedback/Spinner/Spinner';
 import Button from '../../inputs/Button/Button';
+import Heading from '../../typography/Heading/Heading';
+import Text from '../../typography/Text/Text';
 import styles from './AiResultPanel.module.css';
 
 interface AiResultSection {
@@ -49,13 +51,17 @@ const AiResultPanel = (props: Props<AiResultPanelProps>) => {
       <Show when={props.isPending}>
         <div class={styles.loading}>
           <Spinner size="md" />
-          <p class={styles.loadingText}>{props.loadingText}</p>
+          <Text as="p" class={styles.loadingText}>
+            {props.loadingText}
+          </Text>
         </div>
       </Show>
 
       <Show when={props.hasError && !props.hasResult && !props.isPending}>
         <div class={styles.errorState}>
-          <p class={styles.errorText}>{props.errorText}</p>
+          <Text as="p" class={styles.errorText}>
+            {props.errorText}
+          </Text>
           <Button variant="ghost" onClick={() => props.onRetry()}>
             {props.retryLabel}
           </Button>
@@ -75,7 +81,9 @@ const AiResultPanel = (props: Props<AiResultPanelProps>) => {
 
           <Show when={props.summary}>
             <div class={styles.summarySection}>
-              <p class={styles.summaryText}>{props.summary}</p>
+              <Text as="p" class={styles.summaryText}>
+                {props.summary}
+              </Text>
             </div>
           </Show>
 
@@ -83,10 +91,10 @@ const AiResultPanel = (props: Props<AiResultPanelProps>) => {
             {(section) => (
               <Show when={section.items.length > 0}>
                 <div class={styles.listSection}>
-                  <h4 class={styles.listTitle}>
+                  <Heading as="h4" level={4} class={styles.listTitle}>
                     {iconMap[section.icon](iconClassMap[section.icon] ?? '')}
                     {section.title}
-                  </h4>
+                  </Heading>
                   <ul class={styles.list}>
                     <For each={section.items}>{(item) => <li class={styles.listItem}>{item}</li>}</For>
                   </ul>

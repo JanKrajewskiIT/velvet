@@ -1,11 +1,11 @@
 import { FiClock } from 'solid-icons/fi';
 import { createMemo, createSignal, createUniqueId, For, Show } from 'solid-js';
 
+import useClickOutside from '~/hooks/useClickOutside';
+import useEscapeKey from '~/hooks/useEscapeKey';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import useClickOutside from '../../../hooks/useClickOutside';
-import useEscapeKey from '../../../hooks/useEscapeKey';
 import type { InputSize } from '../Input/Input';
 import DropdownOption from '../shared/DropdownOption';
 import DropdownSurface from '../shared/DropdownSurface';

@@ -1,9 +1,9 @@
 import { createEffect, createUniqueId, type JSX, onCleanup } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
+import useFocusTrap from '~/hooks/useFocusTrap';
 import type Props from '~/models/Props';
 
-import useFocusTrap from '../../../hooks/useFocusTrap';
 import styles from './Dialog.module.css';
 
 interface DialogProps {

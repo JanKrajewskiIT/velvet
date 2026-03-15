@@ -4,6 +4,7 @@ import useClickOutside from '~/hooks/useClickOutside';
 import useEscapeKey from '~/hooks/useEscapeKey';
 import type Props from '~/models/Props';
 
+import ButtonBase from '../shared/ButtonBase';
 import styles from './DropdownMenu.module.css';
 
 interface DropdownMenuProps {
@@ -103,8 +104,7 @@ const DropdownMenu = (props: Props<DropdownMenuProps>) => {
 
   return (
     <div ref={menuRef} class={`${styles.wrapper} ${props.class ?? ''}`}>
-      <button
-        type="button"
+      <ButtonBase
         ref={triggerRef}
         class={styles.trigger}
         onClick={toggle}
@@ -115,7 +115,7 @@ const DropdownMenu = (props: Props<DropdownMenuProps>) => {
         aria-label={props.label}
       >
         {props.trigger}
-      </button>
+      </ButtonBase>
       <Show when={open()}>
         <div
           ref={panelRef}

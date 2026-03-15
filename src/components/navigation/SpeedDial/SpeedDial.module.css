@@ -109,6 +109,7 @@
   display: flex;
   align-items: center;
   animation: scaleIn var(--duration-fast) var(--ease-out-back) both;
+  animation-delay: var(--action-delay, 0ms);
 }
 
 .actionButton {

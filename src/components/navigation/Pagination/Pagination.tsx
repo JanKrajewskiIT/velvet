@@ -2,6 +2,7 @@ import { For, type JSX, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
 
+import ButtonBase from '../../inputs/shared/ButtonBase';
 import styles from './Pagination.module.css';
 
 type PageItem = number | 'left-ellipsis' | 'right-ellipsis';
@@ -60,14 +61,9 @@ const Pagination = (props: Props<PaginationOwnProps>) => {
 
   return (
     <nav {...rest} class={`${styles.nav} ${local.class ?? ''}`} aria-label={local.ariaLabel ?? 'Pagination'}>
-      <button
-        type="button"
-        class={styles.navButton}
-        disabled={current() <= 1}
-        onClick={() => local.onChange(current() - 1)}
-      >
+      <ButtonBase class={styles.navButton} disabled={current() <= 1} onClick={() => local.onChange(current() - 1)}>
         {local.previousLabel}
-      </button>
+      </ButtonBase>
 
       <div class={styles.pages}>
         <For each={pages()}>
@@ -79,27 +75,25 @@ const Pagination = (props: Props<PaginationOwnProps>) => {
             const active = () => item === current();
 
             return (
-              <button
-                type="button"
+              <ButtonBase
                 class={`${styles.pageButton} ${active() ? styles.active : ''}`}
                 aria-current={active() ? 'page' : undefined}
                 onClick={() => local.onChange(item)}
               >
                 {item}
-              </button>
+              </ButtonBase>
             );
           }}
         </For>
       </div>
 
-      <button
-        type="button"
+      <ButtonBase
         class={styles.navButton}
         disabled={current() >= local.totalPages}
         onClick={() => local.onChange(current() + 1)}
       >
         {local.nextLabel}
-      </button>
+      </ButtonBase>
     </nav>
   );
 };

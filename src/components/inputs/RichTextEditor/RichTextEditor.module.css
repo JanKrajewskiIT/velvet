@@ -47,6 +47,7 @@
 
 .editor {
   padding: var(--spacing-sm);
+  min-height: var(--editor-min-height, 180px);
   color: var(--color-text);
   font-size: var(--typography-scale-sm);
   line-height: var(--typography-line-height-relaxed);

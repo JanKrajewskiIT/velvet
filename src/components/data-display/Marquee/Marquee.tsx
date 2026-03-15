@@ -21,8 +21,10 @@ const Marquee = (props: Props<MarqueeProps>) => {
 
   const trackClass = () => `${styles.track} ${isRight() ? styles.right : ''}`;
 
+  const wrapperStyle = () => ({ '--speed': speed(), '--gap': gap() });
+
   return (
-    <div class={wrapperClass()} style={{ '--speed': speed(), '--gap': gap() }}>
+    <div class={wrapperClass()} style={wrapperStyle()}>
       <div class={trackClass()}>
         <div class={styles.content}>{props.children}</div>
         <div class={styles.content} aria-hidden="true">

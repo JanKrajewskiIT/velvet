@@ -38,13 +38,10 @@ const Grid = (props: Props<GridOwnProps>) => {
     return `repeat(${String(local.columns ?? 12)}, minmax(0, 1fr))`;
   };
 
-  const style = (): string | JSX.CSSProperties => {
-    if (typeof local.style === 'string') {
-      return `${local.style};grid-template-columns:${templateColumns()};`;
-    }
-
+  const style = (): JSX.CSSProperties => {
+    const base = typeof local.style === 'object' ? (local.style ?? {}) : {};
     return {
-      ...(local.style ?? {}),
+      ...base,
       'grid-template-columns': templateColumns(),
     };
   };

@@ -6,7 +6,13 @@ import useEscapeKey from '~/hooks/useEscapeKey';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
+import Button from '../../inputs/Button/Button';
+import IconButton from '../../inputs/IconButton/IconButton';
+import Input from '../../inputs/Input/Input';
+import TextArea from '../../inputs/Input/TextArea';
 import ConfirmDialog from '../../overlays/ConfirmDialog/ConfirmDialog';
+import Heading from '../../typography/Heading/Heading';
+import Text from '../../typography/Text/Text';
 import styles from './Scheduler.module.css';
 
 interface SchedulerDayCell {
@@ -459,13 +465,16 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
     <div {...rest} class={classNames(styles.scheduler, local.class)}>
       <Card class={styles.calendarPanel}>
         <header class={styles.calendarHeader}>
-          <button type="button" class={styles.navButton} onClick={goToPreviousMonth} aria-label="Previous month">
-            <FiChevronLeft />
-          </button>
-          <h3 class={styles.monthLabel}>{monthLabel()}</h3>
-          <button type="button" class={styles.navButton} onClick={goToNextMonth} aria-label="Next month">
-            <FiChevronRight />
-          </button>
+          <IconButton
+            icon={<FiChevronLeft />}
+            title="Previous month"
+            class={styles.navButton}
+            onClick={goToPreviousMonth}
+          />
+          <Heading as="h3" level={3} class={styles.monthLabel}>
+            {monthLabel()}
+          </Heading>
+          <IconButton icon={<FiChevronRight />} title="Next month" class={styles.navButton} onClick={goToNextMonth} />
         </header>
 
         <div class={styles.weekHeader}>
@@ -500,22 +509,26 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
 
       <Card class={styles.eventsPanel}>
         <div class={styles.eventsHeader}>
-          <h4 class={styles.eventsTitle}>Agenda</h4>
+          <Heading as="h4" level={4} class={styles.eventsTitle}>
+            Agenda
+          </Heading>
           <div class={styles.eventsHeaderActions}>
             <Show when={canEditEvents()}>
-              <button type="button" class={styles.addButton} onClick={() => openCreateForDate(selectedDate())}>
+              <Button variant="primary" class={styles.addButton} onClick={() => openCreateForDate(selectedDate())}>
                 Add event
-              </button>
+              </Button>
             </Show>
-            <button type="button" class={styles.todayButton} onClick={goToToday}>
+            <Button variant="ghost" class={styles.todayButton} onClick={goToToday}>
               Today
-            </button>
+            </Button>
           </div>
         </div>
-        <p class={styles.selectedDateLabel}>{selectedDate()}</p>
+        <Text as="p" class={styles.selectedDateLabel}>
+          {selectedDate()}
+        </Text>
         <Show when={createOpen()}>
           <form class={styles.createForm} onSubmit={createEvent}>
-            <input
+            <Input
               ref={createTitleInputRef}
               type="text"
               class={styles.createInput}
@@ -525,13 +538,13 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
               required
             />
             <div class={styles.createRow}>
-              <input
+              <Input
                 type="time"
                 class={styles.createInput}
                 value={draftTime()}
                 onInput={(event) => setDraftTime(event.currentTarget.value)}
               />
-              <input
+              <Input
                 type="date"
                 class={styles.createInput}
                 min={selectedDate()}
@@ -539,26 +552,30 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
                 onInput={(event) => setDraftEndDate(event.currentTarget.value)}
               />
             </div>
-            <textarea
+            <TextArea
               class={styles.createTextarea}
               placeholder="Description (optional)"
               value={draftDescription()}
               onInput={(event) => setDraftDescription(event.currentTarget.value)}
             />
             <div class={styles.createActions}>
-              <button type="button" class={styles.eventAction} onClick={closeCreate}>
+              <Button variant="ghost" class={styles.eventAction} onClick={closeCreate}>
                 Cancel
-              </button>
-              <button type="submit" class={styles.addButton}>
+              </Button>
+              <Button variant="primary" type="submit" class={styles.addButton}>
                 Save
-              </button>
+              </Button>
             </div>
           </form>
         </Show>
         <div class={styles.eventsList}>
           <Show
             when={selectedDayEvents().length > 0}
-            fallback={<p class={styles.emptyLabel}>{local.emptyDayLabel ?? 'No events scheduled for this day.'}</p>}
+            fallback={
+              <Text as="p" class={styles.emptyLabel}>
+                {local.emptyDayLabel ?? 'No events scheduled for this day.'}
+              </Text>
+            }
           >
             <For each={selectedDayEvents()}>
               {(event) => (
@@ -569,7 +586,7 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
                     when={editingEventId() !== event.id}
                     fallback={
                       <form class={styles.createForm} onSubmit={(submitEvent) => saveEdit(event.id, submitEvent)}>
-                        <input
+                        <Input
                           ref={editTitleInputRef}
                           type="text"
                           class={styles.createInput}
@@ -578,13 +595,13 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
                           required
                         />
                         <div class={styles.createRow}>
-                          <input
+                          <Input
                             type="time"
                             class={styles.createInput}
                             value={editTime()}
                             onInput={(inputEvent) => setEditTime(inputEvent.currentTarget.value)}
                           />
-                          <input
+                          <Input
                             type="date"
                             class={styles.createInput}
                             min={event.date}
@@ -592,18 +609,18 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
                             onInput={(inputEvent) => setEditEndDate(inputEvent.currentTarget.value)}
                           />
                         </div>
-                        <textarea
+                        <TextArea
                           class={styles.createTextarea}
                           value={editDescription()}
                           onInput={(inputEvent) => setEditDescription(inputEvent.currentTarget.value)}
                         />
                         <div class={styles.createActions}>
-                          <button type="button" class={styles.eventAction} onClick={resetEdit}>
+                          <Button variant="ghost" class={styles.eventAction} onClick={resetEdit}>
                             Cancel
-                          </button>
-                          <button type="submit" class={styles.addButton}>
+                          </Button>
+                          <Button variant="primary" type="submit" class={styles.addButton}>
                             Save changes
-                          </button>
+                          </Button>
                         </div>
                       </form>
                     }
@@ -614,18 +631,26 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
                         <span class={styles.eventTime}>{event.time}</span>
                       </Show>
                     </header>
-                    <p class={styles.eventDate}>{eventLabel(event)}</p>
+                    <Text as="p" class={styles.eventDate}>
+                      {eventLabel(event)}
+                    </Text>
                     <Show when={event.description}>
-                      <p class={styles.eventDescription}>{event.description}</p>
+                      <Text as="p" class={styles.eventDescription}>
+                        {event.description}
+                      </Text>
                     </Show>
                     <Show when={canEditEvents()}>
                       <div class={styles.eventActions}>
-                        <button type="button" class={styles.eventAction} onClick={() => openEdit(event)}>
+                        <Button variant="ghost" class={styles.eventAction} onClick={() => openEdit(event)}>
                           Edit
-                        </button>
-                        <button type="button" class={styles.deleteAction} onClick={() => requestDeleteEvent(event.id)}>
+                        </Button>
+                        <Button
+                          variant="danger"
+                          class={styles.deleteAction}
+                          onClick={() => requestDeleteEvent(event.id)}
+                        >
                           Delete
-                        </button>
+                        </Button>
                       </div>
                     </Show>
                     <Show when={draggableEvents() && Boolean(local.onEventsChange)}>

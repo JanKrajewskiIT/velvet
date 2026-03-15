@@ -3,6 +3,7 @@ import {
   addToast,
   AiResultPanel,
   Button,
+  Chip,
   CodeText,
   EditableCollection,
   FilterBar,
@@ -234,6 +235,50 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
     setTargetItems(target);
   };
 
+  const renderTaskItem = (item: TaskItem, { requestRemove }: { requestRemove: () => void }) => (
+    <>
+      <div class="editableHeader">
+        <Chip variant="subtle" size="sm">
+          {item.id.slice(0, 8)}
+        </Chip>
+        <IconButton icon={<IoTrash />} title="Remove task" size="sm" onClick={requestRemove} />
+      </div>
+      <div class="editableGrid">
+        <FormField label="Title" id={`task-title-${item.id}`}>
+          <Input
+            id={`task-title-${item.id}`}
+            value={item.title}
+            onInput={(e) => updateTask(item.id, 'title', e.currentTarget.value)}
+          />
+        </FormField>
+        <FormField label="Owner" id={`task-owner-${item.id}`}>
+          <Input
+            id={`task-owner-${item.id}`}
+            value={item.owner}
+            onInput={(e) => updateTask(item.id, 'owner', e.currentTarget.value)}
+          />
+        </FormField>
+      </div>
+    </>
+  );
+
+  const renderKanbanCard = (item: KanbanDemoItem) => (
+    <div class="col colGap2xs">
+      <strong>{item.title}</strong>
+      <Text as="span" variant="bodySm" tone="muted" class="mutedText">
+        {item.description}
+      </Text>
+      <div class="row justifyBetween">
+        <Chip variant="subtle" size="sm">
+          {item.owner}
+        </Chip>
+        <Chip variant="subtle" size="sm">
+          {item.priority}
+        </Chip>
+      </div>
+    </div>
+  );
+
   return (
     <div>
       <Show when={sectionId() === 'composites-lists'}>
@@ -292,32 +337,7 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
                 confirmMessage="Do you want to remove this task from the collection?"
                 confirmLabel="Remove"
                 cancelLabel="Cancel"
-                renderItem={(item, { requestRemove }) => (
-                  <>
-                    <div class="editableHeader">
-                      <Text as="span" variant="labelMd" class="statusChip">
-                        {item.id.slice(0, 8)}
-                      </Text>
-                      <IconButton icon={<IoTrash />} title="Remove task" size="sm" onClick={requestRemove} />
-                    </div>
-                    <div class="editableGrid">
-                      <FormField label="Title" id={`task-title-${item.id}`}>
-                        <Input
-                          id={`task-title-${item.id}`}
-                          value={item.title}
-                          onInput={(e) => updateTask(item.id, 'title', e.currentTarget.value)}
-                        />
-                      </FormField>
-                      <FormField label="Owner" id={`task-owner-${item.id}`}>
-                        <Input
-                          id={`task-owner-${item.id}`}
-                          value={item.owner}
-                          onInput={(e) => updateTask(item.id, 'owner', e.currentTarget.value)}
-                        />
-                      </FormField>
-                    </div>
-                  </>
-                )}
+                renderItem={renderTaskItem}
               />
             </PreviewGroup>
           </PreviewPanel>
@@ -331,22 +351,7 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
                 items={kanbanItems()}
                 onChange={setKanbanItems}
                 emptyLabel="Drop cards here"
-                renderCard={(item) => (
-                  <div class="col" style={{ gap: 'var(--spacing-2xs)' }}>
-                    <strong>{item.title}</strong>
-                    <Text as="span" variant="bodySm" tone="muted" class="mutedText">
-                      {item.description}
-                    </Text>
-                    <div class="row" style={{ 'justify-content': 'space-between' }}>
-                      <Text as="span" variant="labelMd" class="statusChip">
-                        {item.owner}
-                      </Text>
-                      <Text as="span" variant="labelMd" class="statusChip">
-                        {item.priority}
-                      </Text>
-                    </div>
-                  </div>
-                )}
+                renderCard={renderKanbanCard}
               />
             </PreviewGroup>
           </PreviewPanel>

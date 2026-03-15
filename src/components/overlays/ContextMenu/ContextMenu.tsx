@@ -1,10 +1,10 @@
 import { createEffect, createSignal, For, type JSX, Show } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
+import useClickOutside from '~/hooks/useClickOutside';
+import useEscapeKey from '~/hooks/useEscapeKey';
 import type Props from '~/models/Props';
 
-import useClickOutside from '../../../hooks/useClickOutside';
-import useEscapeKey from '../../../hooks/useEscapeKey';
 import styles from './ContextMenu.module.css';
 
 interface ContextMenuItem {
@@ -106,11 +106,7 @@ const ContextMenu = (props: Props<ContextMenuProps>) => {
             role="menu"
             tabIndex={-1}
             aria-orientation="vertical"
-            style={{
-              top: `${position().y}px`,
-              left: `${position().x}px`,
-              'transform-origin': '0 0',
-            }}
+            style={{ top: `${position().y}px`, left: `${position().x}px` }}
             onKeyDown={handleMenuKeyDown}
           >
             <For each={props.items}>

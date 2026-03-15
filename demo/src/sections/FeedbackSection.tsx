@@ -212,7 +212,7 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
             <PreviewGroup title="Examples">
               <div class="row">
                 <Skeleton variant="circular" width={48} height={48} />
-                <div class="col" style={{ flex: 1 }}>
+                <div class="col flex1">
                   <Skeleton variant="text" width="60%" height={16} />
                   <Skeleton variant="text" width="90%" height={14} />
                   <Skeleton variant="text" width="40%" height={14} />
@@ -269,7 +269,7 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
               <Banner
                 variant="primary"
                 action={
-                  <Button variant="ghost" style={{ color: 'white' }}>
+                  <Button variant="ghost" class="bannerActionInverse">
                     Update now
                   </Button>
                 }

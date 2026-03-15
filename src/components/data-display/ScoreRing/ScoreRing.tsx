@@ -1,4 +1,7 @@
+import { createEffect } from 'solid-js';
+
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
 import styles from './ScoreRing.module.css';
 
@@ -17,10 +20,21 @@ const ScoreRing = (props: Props<ScoreRingProps>) => {
     return 'var(--color-error)';
   };
 
+  let rootRef: HTMLDivElement | undefined;
+  let circleRef: SVGCircleElement | undefined;
+
+  createEffect(() => {
+    rootRef?.style.setProperty('--ring-circumference', String(circumference));
+  });
+
+  createEffect(() => {
+    circleRef?.style.setProperty('--target-offset', String(offset()));
+  });
+
   return (
     <div
-      class={`${styles.scoreRing} ${props.class ?? ''}`}
-      style={{ '--ring-circumference': String(circumference) }}
+      ref={rootRef}
+      class={classNames(styles.scoreRing, props.class)}
       role="meter"
       aria-valuenow={normalized()}
       aria-valuemin={0}
@@ -29,6 +43,7 @@ const ScoreRing = (props: Props<ScoreRingProps>) => {
       <svg viewBox="0 0 100 100" class={styles.scoreSvg}>
         <circle cx="50" cy="50" r="40" fill="none" stroke="var(--color-border)" stroke-width="8" />
         <circle
+          ref={circleRef}
           cx="50"
           cy="50"
           r="40"
@@ -40,10 +55,9 @@ const ScoreRing = (props: Props<ScoreRingProps>) => {
           stroke-linecap="round"
           transform="rotate(-90 50 50)"
           class={styles.scoreCircle}
-          style={{ '--target-offset': String(offset()) }}
         />
       </svg>
-      <span class={styles.scoreText} style={{ color: color() }}>
+      <span class={styles.scoreText} style={{ '--ring-color': color() }}>
         {normalized()}%
       </span>
     </div>

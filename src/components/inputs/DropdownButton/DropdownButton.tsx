@@ -1,11 +1,11 @@
 import { IoChevronDown } from 'solid-icons/io';
 import { createSignal, type JSX, Show } from 'solid-js';
 
+import useClickOutside from '~/hooks/useClickOutside';
+import useEscapeKey from '~/hooks/useEscapeKey';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import useClickOutside from '../../../hooks/useClickOutside';
-import useEscapeKey from '../../../hooks/useEscapeKey';
 import ButtonBase from '../shared/ButtonBase';
 import DropdownSurface from '../shared/DropdownSurface';
 import styles from './DropdownButton.module.css';

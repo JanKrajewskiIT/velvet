@@ -5,6 +5,7 @@ import { splitProps } from 'solid-js';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
+import IconButton from '../IconButton/IconButton';
 import styles from './EditableChip.module.css';
 
 interface EditableChipOwnProps extends Omit<JSX.HTMLAttributes<HTMLSpanElement>, 'children'> {
@@ -19,9 +20,13 @@ const EditableChip = (props: Props<EditableChipOwnProps>) => {
   return (
     <span {...rest} class={classNames(styles.chip, local.class)}>
       {local.label}
-      <button type="button" class={styles.removeButton} aria-label={local.removeLabel} onClick={() => local.onRemove()}>
-        <IoCloseOutline />
-      </button>
+      <IconButton
+        icon={<IoCloseOutline />}
+        title={local.removeLabel ?? 'Remove'}
+        class={styles.removeButton}
+        onClick={() => local.onRemove()}
+        size="sm"
+      />
     </span>
   );
 };

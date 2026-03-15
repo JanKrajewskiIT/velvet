@@ -3,7 +3,9 @@ import type { JSX } from 'solid-js';
 import { Show } from 'solid-js';
 
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
+import IconButton from '../../inputs/IconButton/IconButton';
 import Text from '../../typography/Text/Text';
 import styles from './Banner.module.css';
 
@@ -24,7 +26,7 @@ const Banner = (props: Props<BannerProps>) => {
   const variant = () => props.variant ?? 'primary';
 
   return (
-    <div role="status" class={`${styles.banner} ${styles[variant()]} ${props.class ?? ''}`}>
+    <div role="status" class={classNames(styles.banner, styles[variant()], props.class)}>
       <Text as="div" variant="labelLg" tone="inverse" class={styles.content}>
         {props.children}
       </Text>
@@ -32,14 +34,12 @@ const Banner = (props: Props<BannerProps>) => {
         <div class={styles.action}>{props.action}</div>
       </Show>
       <Show when={props.onClose}>
-        <button
-          type="button"
+        <IconButton
+          icon={<FiX size={16} />}
+          title={props.messages?.closeButtonLabel ?? props.closeLabel ?? 'Close'}
           class={styles.closeBtn}
-          aria-label={props.messages?.closeButtonLabel ?? props.closeLabel ?? 'Close'}
           onClick={() => props.onClose?.()}
-        >
-          <FiX size={16} />
-        </button>
+        />
       </Show>
     </div>
   );

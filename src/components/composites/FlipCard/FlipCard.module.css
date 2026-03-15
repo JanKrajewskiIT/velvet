@@ -17,6 +17,10 @@
   overflow: hidden;
 }
 
+.flipped {
+  transform: rotateY(180deg);
+}
+
 .flipCard:hover .flipCardInner {
   box-shadow: var(--shadow-hover);
 }

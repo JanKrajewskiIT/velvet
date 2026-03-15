@@ -3,6 +3,7 @@ import type { JSX } from 'solid-js';
 
 import type Props from '~/models/Props';
 
+import Text from '../../typography/Text/Text';
 import styles from './ErrorMessage.module.css';
 
 interface ErrorMessageProps {
@@ -11,12 +12,12 @@ interface ErrorMessageProps {
 
 const ErrorMessage = (props: Props<ErrorMessageProps>) => {
   return (
-    <p role="alert" class={`${styles.error} ${props.class ?? ''}`}>
+    <Text as="p" role="alert" class={`${styles.error} ${props.class ?? ''}`}>
       <span class={styles.icon}>
         <FiAlertCircle />
       </span>
       {props.children}
-    </p>
+    </Text>
   );
 };
 

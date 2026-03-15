@@ -245,6 +245,24 @@
   background: inherit;
 }
 
+.selectionHeaderCell {
+  width: 44px;
+  min-width: 44px;
+  max-width: 44px;
+  position: sticky;
+  left: 0;
+  z-index: 6;
+}
+
+.selectionCell {
+  width: 44px;
+  min-width: 44px;
+  max-width: 44px;
+  position: sticky;
+  left: 0;
+  z-index: 5;
+}
+
 .pinnedLeft {
   background: var(--color-bg-elevated);
   box-shadow: 2px 0 0 var(--color-border);

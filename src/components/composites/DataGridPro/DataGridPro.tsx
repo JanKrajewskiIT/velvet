@@ -465,28 +465,16 @@ const DataGridPro = <T extends Record<string, unknown>>(props: Props<DataGridPro
   });
 
   const getColumnStyle = (column: DataGridProColumn<T>): JSX.CSSProperties => {
-    const width = columnWidths()[column.key] ?? DEFAULT_COLUMN_WIDTH;
+    const width = `${columnWidths()[column.key] ?? DEFAULT_COLUMN_WIDTH}px`;
     const pin = getColumnPin(column);
-    const isPinnedLeft = pin === 'left';
-    const isPinnedRight = pin === 'right';
-    return {
-      width: `${width}px`,
-      'min-width': `${width}px`,
-      'max-width': `${width}px`,
-      ...(isPinnedLeft
-        ? {
-            position: 'sticky',
-            left: `${pinnedLeftOffsets()[column.key]}px`,
-            'z-index': 4,
-          }
-        : isPinnedRight
-          ? {
-              position: 'sticky',
-              right: `${pinnedRightOffsets()[column.key]}px`,
-              'z-index': 4,
-            }
-          : {}),
-    };
+    const base: JSX.CSSProperties = { width, 'min-width': width, 'max-width': width };
+    if (pin === 'left') {
+      return { ...base, position: 'sticky', left: `${pinnedLeftOffsets()[column.key]}px`, 'z-index': 4 };
+    }
+    if (pin === 'right') {
+      return { ...base, position: 'sticky', right: `${pinnedRightOffsets()[column.key]}px`, 'z-index': 4 };
+    }
+    return base;
   };
 
   const handleScroll: JSX.EventHandler<HTMLDivElement, Event> = (e) => {
@@ -843,17 +831,7 @@ const DataGridPro = <T extends Record<string, unknown>>(props: Props<DataGridPro
         <div class={styles.grid} style={{ width: `${gridWidth()}px` }}>
           <div class={styles.header} style={{ height: `${headerHeight()}px` }}>
             <Show when={selectable()}>
-              <div
-                class={classNames(styles.headerCell, styles.pinnedLeft)}
-                style={{
-                  width: `${SELECTION_COLUMN_WIDTH}px`,
-                  'min-width': `${SELECTION_COLUMN_WIDTH}px`,
-                  'max-width': `${SELECTION_COLUMN_WIDTH}px`,
-                  position: 'sticky',
-                  left: '0',
-                  'z-index': 6,
-                }}
-              >
+              <div class={classNames(styles.headerCell, styles.pinnedLeft, styles.selectionHeaderCell)}>
                 <CheckboxControl
                   checked={allVisibleSelected()}
                   onChange={toggleAllVisible}
@@ -928,17 +906,7 @@ const DataGridPro = <T extends Record<string, unknown>>(props: Props<DataGridPro
                   {(entry) => (
                     <div class={rowClass(entry.index)} style={{ height: `${rowHeight()}px` }}>
                       <Show when={selectable()}>
-                        <div
-                          class={classNames(styles.cell, styles.pinnedLeft)}
-                          style={{
-                            width: `${SELECTION_COLUMN_WIDTH}px`,
-                            'min-width': `${SELECTION_COLUMN_WIDTH}px`,
-                            'max-width': `${SELECTION_COLUMN_WIDTH}px`,
-                            position: 'sticky',
-                            left: '0',
-                            'z-index': 5,
-                          }}
-                        >
+                        <div class={classNames(styles.cell, styles.pinnedLeft, styles.selectionCell)}>
                           <CheckboxControl
                             checked={selectedSet().has(entry.id)}
                             onClick={(e) => e.stopPropagation()}

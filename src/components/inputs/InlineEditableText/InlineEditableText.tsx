@@ -4,6 +4,7 @@ import { createEffect, createSignal, onMount, Show } from 'solid-js';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
+import IconButton from '../IconButton/IconButton';
 import Input, { type InputSize } from '../Input/Input';
 import styles from './InlineEditableText.module.css';
 
@@ -72,15 +73,13 @@ const InlineEditableText = (props: Props<InlineEditableTextProps>) => {
             <span class={classNames(styles.value, !props.value && styles.placeholder)}>
               {props.value || props.placeholder || 'Click edit'}
             </span>
-            <button
-              type="button"
+            <IconButton
+              icon={<IoPencil />}
+              title={props.editLabel ?? 'Edit value'}
               class={styles.iconButton}
               onClick={beginEdit}
               disabled={props.disabled}
-              aria-label={props.editLabel ?? 'Edit value'}
-            >
-              <IoPencil />
-            </button>
+            />
           </div>
         }
       >
@@ -95,17 +94,18 @@ const InlineEditableText = (props: Props<InlineEditableTextProps>) => {
             placeholder={props.placeholder}
             autofocus
           />
-          <button type="button" class={styles.iconButton} onClick={saveEdit} aria-label={props.saveLabel ?? 'Save'}>
-            <IoCheckmark />
-          </button>
-          <button
-            type="button"
+          <IconButton
+            icon={<IoCheckmark />}
+            title={props.saveLabel ?? 'Save'}
+            class={styles.iconButton}
+            onClick={saveEdit}
+          />
+          <IconButton
+            icon={<IoCloseOutline />}
+            title={props.cancelLabel ?? 'Cancel'}
             class={styles.iconButton}
             onClick={cancelEdit}
-            aria-label={props.cancelLabel ?? 'Cancel'}
-          >
-            <IoCloseOutline />
-          </button>
+          />
         </div>
       </Show>
     </div>

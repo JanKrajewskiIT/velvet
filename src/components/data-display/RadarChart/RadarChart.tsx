@@ -187,9 +187,7 @@ const RadarChart = (props: Props<RadarChartProps>) => {
             <div class={styles.legendItem} style={{ '--item-index': i() }}>
               <span
                 class={styles.legendColor}
-                style={{
-                  'background-color': dataset.color ?? DATASET_COLORS[i() % DATASET_COLORS.length],
-                }}
+                style={{ 'background-color': dataset.color ?? DATASET_COLORS[i() % DATASET_COLORS.length] }}
               />
               <span class={styles.legendLabel}>{dataset.label}</span>
             </div>

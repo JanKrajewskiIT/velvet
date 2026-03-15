@@ -4,6 +4,7 @@ import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import Button from '../../inputs/Button/Button';
+import Text from '../../typography/Text/Text';
 import styles from './SidebarNav.module.css';
 
 export interface SidebarNavItem {
@@ -33,20 +34,26 @@ const SidebarNav = (props: Props<SidebarNavProps>) => {
     <nav class={classNames(styles.root, props.class)} aria-label={props.navLabel ?? 'Component categories'}>
       <div class={styles.brand}>
         <div class={styles.brandHeader}>
-          <p class={styles.title}>{props.title}</p>
+          <Text as="p" class={styles.title}>
+            {props.title}
+          </Text>
           <Show when={props.actions}>
             <div class={styles.brandActions}>{props.actions}</div>
           </Show>
         </div>
         <Show when={props.subtitle}>
-          <p class={styles.subtitle}>{props.subtitle}</p>
+          <Text as="p" class={styles.subtitle}>
+            {props.subtitle}
+          </Text>
         </Show>
       </div>
 
       <For each={props.groups}>
         {(group) => (
           <div class={styles.group}>
-            <p class={styles.groupLabel}>{group.label}</p>
+            <Text as="p" class={styles.groupLabel}>
+              {group.label}
+            </Text>
             <For each={group.items}>
               {(item) => (
                 <Button

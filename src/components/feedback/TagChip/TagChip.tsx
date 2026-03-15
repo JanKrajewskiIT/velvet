@@ -1,8 +1,9 @@
 import { Show } from 'solid-js';
 
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
+import { getContrastTextColor } from '~/utils/color';
 
-import { getContrastTextColor } from '../../../utils/color';
 import styles from './TagChip.module.css';
 
 interface TagChipProps {
@@ -13,7 +14,7 @@ interface TagChipProps {
 }
 
 const TagChip = (props: Props<TagChipProps>) => {
-  const classNames = () => `${styles.chip} ${props.selected ? styles.selected : ''} ${props.class ?? ''}`;
+  const chipClass = () => classNames(styles.chip, props.selected && styles.selected, props.class);
 
   const inlineStyles = () => ({
     'border-color': props.color,
@@ -25,12 +26,12 @@ const TagChip = (props: Props<TagChipProps>) => {
     <Show
       when={props.onClick}
       fallback={
-        <span class={classNames()} style={inlineStyles()}>
+        <span class={chipClass()} style={inlineStyles()}>
           {props.label}
         </span>
       }
     >
-      <button type="button" class={classNames()} style={inlineStyles()} onClick={() => props.onClick?.()}>
+      <button type="button" class={chipClass()} style={inlineStyles()} onClick={() => props.onClick?.()}>
         {props.label}
       </button>
     </Show>

@@ -1,6 +1,7 @@
 import type { LightboxImage, TourStep } from '@jankrajewskiit/ui';
 import {
   Button,
+  Chip,
   CodeText,
   ConfirmAction,
   ConfirmDialog,
@@ -198,9 +199,7 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
                     <Button variant="danger" onClick={openConfirm}>
                       Open confirmation
                     </Button>
-                    <Text as="span" variant="labelMd" class="statusChip">
-                      Confirm opened: {isConfirmOpen() ? 'yes' : 'no'}
-                    </Text>
+                    <Chip variant="subtle">Confirm opened: {isConfirmOpen() ? 'yes' : 'no'}</Chip>
                   </div>
                 )}
               </ConfirmAction>
@@ -318,18 +317,7 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
                   { label: 'Delete', icon: <IoTrash />, onClick: () => {}, danger: true },
                 ]}
               >
-                <div
-                  style={{
-                    'min-height': '120px',
-                    display: 'flex',
-                    'align-items': 'center',
-                    'justify-content': 'center',
-                    border: '2px dashed var(--color-border)',
-                    'border-radius': 'var(--radius-md)',
-                  }}
-                >
-                  Right-click here
-                </div>
+                <div class="contextMenuTarget">Right-click here</div>
               </ContextMenu>
             </PreviewGroup>
           </PreviewPanel>

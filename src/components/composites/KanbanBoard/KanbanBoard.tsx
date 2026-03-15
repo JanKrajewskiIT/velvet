@@ -4,6 +4,7 @@ import { createMemo, createSignal, For, Show } from 'solid-js';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
+import Heading from '../../typography/Heading/Heading';
 import styles from './KanbanBoard.module.css';
 
 export interface KanbanColumn {
@@ -97,7 +98,9 @@ const KanbanBoard = <T extends KanbanItemBase>(props: Props<KanbanBoardProps<T>>
               onDrop={(e) => handleDropColumn(column.id, e)}
             >
               <header class={styles.columnHeader}>
-                <h4 class={styles.columnTitle}>{column.title}</h4>
+                <Heading as="h4" level={4} class={styles.columnTitle}>
+                  {column.title}
+                </Heading>
                 <span class={styles.columnCount}>{items().length}</span>
               </header>
               <div class={styles.columnBody}>

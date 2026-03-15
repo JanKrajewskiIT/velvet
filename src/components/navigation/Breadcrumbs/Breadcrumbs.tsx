@@ -3,6 +3,7 @@ import { createMemo, createSignal, For, type JSX, Show } from 'solid-js';
 
 import type Props from '~/models/Props';
 
+import ButtonBase from '../../inputs/shared/ButtonBase';
 import styles from './Breadcrumbs.module.css';
 
 export interface BreadcrumbItem {
@@ -53,9 +54,9 @@ const Breadcrumbs = (props: Props<BreadcrumbsProps>) => {
     }
     if (item.onClick) {
       return (
-        <button type="button" class={styles.link} onClick={item.onClick}>
+        <ButtonBase class={styles.link} onClick={item.onClick}>
           {item.label}
-        </button>
+        </ButtonBase>
       );
     }
     return <span class={styles.link}>{item.label}</span>;
@@ -72,14 +73,9 @@ const Breadcrumbs = (props: Props<BreadcrumbsProps>) => {
             {separator()}
           </li>
           <li class={styles.item}>
-            <button
-              type="button"
-              class={styles.ellipsis}
-              onClick={() => setExpanded(true)}
-              aria-label="Show all breadcrumbs"
-            >
+            <ButtonBase class={styles.ellipsis} onClick={() => setExpanded(true)} aria-label="Show all breadcrumbs">
               &hellip;
-            </button>
+            </ButtonBase>
           </li>
           <li class={styles.separator} aria-hidden="true">
             {separator()}

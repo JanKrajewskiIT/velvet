@@ -1,0 +1,62 @@
+---
+paths:
+  - 'src/**/*.tsx'
+---
+
+# SolidJS TSX
+
+## Language and reactivity
+
+- Arrow functions only, never `function` declarations
+- Never JS-destructure props -- breaks reactivity
+- Never React patterns (`useState`, `useEffect`, `className`)
+- `splitProps` + `{...rest}` only for HTML wrapper components extending `JSX.*HTMLAttributes`
+- Without HTML spreading: access `props.name` directly
+- Prefer `createMemo` over `createEffect` for derived state; use `createEffect` only for true side effects (DOM, timers, listeners)
+- Separate logic from JSX: define all handlers/methods above `return`, never inline multi-statement functions in JSX
+
+## Props and exports
+
+- `import type Props from '~/models/Props'` -- path alias, never relative
+- Inline `Props<T>` in signature: `(props: Props<MyProps>) =>` -- no intermediate type alias
+- One component per file, ~150 lines max
+- `export default` (exception: generic components use named export)
+- Icons: `solid-icons` only
+
+## Imports -- always `~/` path alias
+
+- `~/models/Props`, `~/utils/classNames`, `~/utils/color`, `~/utils/form`
+- `~/hooks/useClickOutside`, `~/hooks/useEscapeKey`, `~/hooks/useFocusTrap`, `~/hooks/useOverlayAnimation`
+- Never `../../../hooks/` or `../../../utils/` -- always `~/`
+
+## Style prop -- object syntax only
+
+- Always use object syntax `style={{ key: value }}` -- never string syntax `style={\`...\`}`(violates`solid/style-prop` lint rule)
+- For dynamic values consumed by CSS, inject CSS custom properties: `style={{ '--fill-percent': \`${value()}%\` }}`and use`var(--fill-percent)`in`.module.css`
+- Static styles belong in `.module.css` -- never inline what can be a class
+- Acceptable inline `style` uses: truly dynamic runtime values (virtualization offsets, user-provided dimensions, DOM measurements, color pass-through from props)
+- Extract style computation above `return` when it involves logic (e.g. `const columnStyle = () => ({ ... })`)
+
+## Class forwarding -- prefer `classNames()`
+
+- Use `classNames()` from `~/utils/classNames` for multi-condition class strings
+- `classNames(styles.root, cond && styles.active, props.class)` -- clean, no trailing spaces
+- Simple single-class: `` `${styles.x} ${props.class ?? ''}` `` is acceptable
+- Never `||` for class fallback -- always `??`
+
+## Primitive hierarchy -- never reinvent
+
+- **Headings**: always `Heading` -- never raw `<h1>`–`<h6>`
+- **Body text**: always `Text` -- never raw `<p>` for display text
+- **Close / icon-only buttons**: `IconButton` -- never raw `<button>` with just an icon
+- **Triggers** (dropdown, popover, accordion, collapsible): `ButtonBase`
+- **Text action buttons** (Save, Cancel, Delete): `Button` with appropriate `variant`
+- **Inputs**: `Input` / `TextArea` / `InputBase` -- never raw `<input type="text">` or `<textarea>`
+- **Dropdowns**: `DropdownSurface` / `DropdownOption` for option lists and menus
+- Raw tags only when native behavior is required: checkbox, radio, range, file, switch, color swatch, calendar day cell, resize handle, hamburger toggle
+
+## i18n labels -- `messages` bag pattern
+
+- Components with user-facing strings accept a `messages?: XMessages` bag plus flat fallback props
+- Resolution order: `props.messages?.key ?? props.flatProp ?? 'default'`
+- `messages` always takes priority over flat props

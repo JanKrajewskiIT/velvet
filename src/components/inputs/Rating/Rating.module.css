@@ -19,6 +19,18 @@
   line-height: var(--typography-line-height-none);
 }
 
+.sizeSm {
+  font-size: 16px;
+}
+
+.sizeMd {
+  font-size: 24px;
+}
+
+.sizeLg {
+  font-size: 32px;
+}
+
 .star svg {
   width: 1em;
   height: 1em;

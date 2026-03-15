@@ -1,6 +1,7 @@
 import { createMemo, createSignal, type JSX, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
 import styles from './FlipCard.module.css';
 
@@ -39,17 +40,14 @@ const FlipCard = (props: Props<FlipCardOwnProps>) => {
   return (
     <div
       class={`${styles.flipCard} ${local.class ?? ''}`}
-      style={{
-        width: local.width || '100%',
-        height: local.height || '200px',
-      }}
+      style={{ width: local.width || '100%', height: local.height || '200px' }}
       onClick={handleFlip}
       onKeyDown={handleKeyDown}
       role="button"
       tabIndex={0}
       {...rest}
     >
-      <div class={styles.flipCardInner} style={{ transform: isFlipped() ? 'rotateY(180deg)' : 'rotateY(0deg)' }}>
+      <div class={classNames(styles.flipCardInner, isFlipped() && styles.flipped)}>
         <div class={styles.flipCardFront}>{local.front}</div>
         <div class={styles.flipCardBack}>{local.back}</div>
       </div>

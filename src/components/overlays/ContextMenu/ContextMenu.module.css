@@ -12,6 +12,7 @@
   box-shadow: var(--shadow-popover);
   border-radius: var(--radius-md);
   border: 1px solid var(--color-border);
+  transform-origin: 0 0;
   animation: scaleIn var(--duration-fast) var(--ease-out-back);
 }
 

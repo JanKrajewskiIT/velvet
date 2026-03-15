@@ -2,6 +2,7 @@ import type { JSX, ParentProps } from 'solid-js';
 
 import type Props from '~/models/Props';
 
+import ButtonBase from '../../inputs/shared/ButtonBase';
 import styles from './Collapsible.module.css';
 
 interface CollapsibleProps {
@@ -13,9 +14,9 @@ interface CollapsibleProps {
 const Collapsible = (props: ParentProps<Props<CollapsibleProps>>) => {
   return (
     <div class={`${styles.wrapper} ${props.class ?? ''}`}>
-      <button type="button" class={styles.trigger} onClick={() => props.onToggle()} aria-expanded={props.open}>
+      <ButtonBase class={styles.trigger} onClick={() => props.onToggle()} aria-expanded={props.open}>
         {props.trigger}
-      </button>
+      </ButtonBase>
       <div class={`${styles.content} ${props.open ? styles.contentOpen : ''}`}>
         <div class={styles.inner}>{props.children}</div>
       </div>

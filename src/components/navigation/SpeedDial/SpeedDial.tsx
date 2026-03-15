@@ -1,10 +1,10 @@
 import { FiPlus } from 'solid-icons/fi';
 import { createSignal, createUniqueId, For, type JSX, Show } from 'solid-js';
 
+import useClickOutside from '~/hooks/useClickOutside';
+import useEscapeKey from '~/hooks/useEscapeKey';
 import type Props from '~/models/Props';
 
-import useClickOutside from '../../../hooks/useClickOutside';
-import useEscapeKey from '../../../hooks/useEscapeKey';
 import ButtonBase from '../../inputs/shared/ButtonBase';
 import Tooltip from '../../overlays/Tooltip/Tooltip';
 import styles from './SpeedDial.module.css';
@@ -68,7 +68,7 @@ const SpeedDial = (props: Props<SpeedDialProps>) => {
         <div id={menuId} class={`${styles.actions} ${styles[direction()]}`} role="menu" aria-label={actionsLabel()}>
           <For each={props.actions}>
             {(action, index) => (
-              <div class={styles.actionWrapper} style={{ 'animation-delay': `${index() * 30}ms` }}>
+              <div class={styles.actionWrapper} style={{ '--action-delay': `${index() * 30}ms` }}>
                 <Tooltip content={action.label} position={tooltipPosition()}>
                   <ButtonBase
                     variant="outline"

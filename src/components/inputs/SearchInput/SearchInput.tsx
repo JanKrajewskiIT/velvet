@@ -4,6 +4,7 @@ import { onCleanup, Show } from 'solid-js';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
+import IconButton from '../IconButton/IconButton';
 import type { InputSize } from '../Input/Input';
 import InputBase from '../shared/InputBase';
 import styles from './SearchInput.module.css';
@@ -75,14 +76,13 @@ const SearchInput = (props: Props<SearchInputProps>) => {
         autofocus={props.autofocus}
       />
       <Show when={props.value.length > 0}>
-        <button
-          type="button"
+        <IconButton
+          icon={<IoClose />}
+          title={props.messages?.clearButtonLabel ?? props.clearLabel ?? 'Clear search'}
           class={styles.clear}
           onClick={handleClear}
-          aria-label={props.messages?.clearButtonLabel ?? props.clearLabel ?? 'Clear search'}
-        >
-          <IoClose />
-        </button>
+          size="sm"
+        />
       </Show>
     </InputBase>
   );

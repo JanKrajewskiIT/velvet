@@ -2,11 +2,12 @@ import { FiSearch } from 'solid-icons/fi';
 import { createEffect, createMemo, createSignal, createUniqueId, For, type JSX, Show } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
+import useEscapeKey from '~/hooks/useEscapeKey';
+import useFocusTrap from '~/hooks/useFocusTrap';
 import type Props from '~/models/Props';
 
-import useEscapeKey from '../../../hooks/useEscapeKey';
-import useFocusTrap from '../../../hooks/useFocusTrap';
 import InputBase from '../../inputs/shared/InputBase';
+import Heading from '../../typography/Heading/Heading';
 import styles from './CommandPalette.module.css';
 
 export interface CommandItem {
@@ -156,7 +157,9 @@ const CommandPalette = (props: Props<CommandPaletteProps>) => {
         <div role="presentation" class={`${styles.overlay} ${props.class ?? ''}`} onClick={handleOverlayClick}>
           <div ref={setPanelRef} class={styles.panel} role="dialog" aria-modal="true" aria-label={dialogLabel()}>
             <div class={styles.header}>
-              <h2 class={styles.title}>{title()}</h2>
+              <Heading as="h2" level={2} class={styles.title}>
+                {title()}
+              </Heading>
               <span class={styles.hintKey}>{closeHintLabel()}</span>
             </div>
             <div class={styles.searchWrap}>

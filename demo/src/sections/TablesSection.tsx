@@ -10,6 +10,10 @@ import {
   type DataTableColumn,
   Heading,
   Pagination,
+  QueryBuilder,
+  type QueryBuilderField,
+  type QueryBuilderRule,
+  type QueryBuilderValue,
   Table,
   TableBody,
   TableCell,
@@ -101,6 +105,79 @@ const DATA_GRID_DEFAULT_PINNING: DataGridProColumnPinning = Object.fromEntries(
   DATA_GRID_COLUMNS.map((column) => [column.key, column.pinned ?? null])
 );
 
+const QUERY_BUILDER_FIELDS: QueryBuilderField[] = [
+  { key: 'name', label: 'Package', type: 'text' },
+  { key: 'version', label: 'Version', type: 'text' },
+  {
+    key: 'license',
+    label: 'License',
+    type: 'select',
+    options: [
+      { value: 'MIT', label: 'MIT' },
+      { value: 'Apache-2.0', label: 'Apache-2.0' },
+    ],
+  },
+  {
+    key: 'category',
+    label: 'Category',
+    type: 'select',
+    options: [
+      { value: 'framework', label: 'Framework' },
+      { value: 'tooling', label: 'Tooling' },
+      { value: 'language', label: 'Language' },
+      { value: 'testing', label: 'Testing' },
+      { value: 'quality', label: 'Quality' },
+      { value: 'css', label: 'CSS' },
+    ],
+  },
+  { key: 'downloads', label: 'Downloads', type: 'number' },
+];
+
+const QUERY_FIELD_MAP = new Map(QUERY_BUILDER_FIELDS.map((field) => [field.key, field]));
+
+const matchesRule = (row: PackageRow, rule: QueryBuilderRule): boolean => {
+  const field = QUERY_FIELD_MAP.get(rule.fieldKey);
+  if (!field) return true;
+
+  const raw = row[rule.fieldKey as keyof PackageRow];
+  const asString =
+    typeof raw === 'string' ? raw.trim() : typeof raw === 'number' || typeof raw === 'boolean' ? String(raw) : '';
+  const left = asString.toLowerCase();
+  const right = rule.value.trim().toLowerCase();
+
+  if (rule.operator === 'isEmpty') return left.length === 0;
+  if (rule.operator === 'isNotEmpty') return left.length > 0;
+  if (right.length === 0) return false;
+
+  if (field.type === 'number') {
+    const leftNumber = Number(raw);
+    const rightNumber = Number(rule.value);
+    if (Number.isNaN(leftNumber) || Number.isNaN(rightNumber)) return false;
+    if (rule.operator === 'equals') return leftNumber === rightNumber;
+    if (rule.operator === 'notEquals') return leftNumber !== rightNumber;
+    if (rule.operator === 'gt') return leftNumber > rightNumber;
+    if (rule.operator === 'gte') return leftNumber >= rightNumber;
+    if (rule.operator === 'lt') return leftNumber < rightNumber;
+    if (rule.operator === 'lte') return leftNumber <= rightNumber;
+    return false;
+  }
+
+  if (rule.operator === 'equals') return left === right;
+  if (rule.operator === 'notEquals') return left !== right;
+  if (rule.operator === 'contains') return left.includes(right);
+  if (rule.operator === 'startsWith') return left.startsWith(right);
+  if (rule.operator === 'endsWith') return left.endsWith(right);
+  return false;
+};
+
+const applyQueryBuilder = (rows: PackageRow[], query: QueryBuilderValue) => {
+  if (query.rules.length === 0) return rows;
+  if (query.combinator === 'or') {
+    return rows.filter((row) => query.rules.some((rule) => matchesRule(row, rule)));
+  }
+  return rows.filter((row) => query.rules.every((rule) => matchesRule(row, rule)));
+};
+
 const TablesSection = () => {
   const [page, setPage] = createSignal(5);
   const [query, setQuery] = createSignal('');
@@ -111,6 +188,17 @@ const TablesSection = () => {
   const [gridColumnVisibility, setGridColumnVisibility] =
     createSignal<Record<string, boolean>>(DATA_GRID_DEFAULT_VISIBILITY);
   const [gridColumnPinning, setGridColumnPinning] = createSignal<DataGridProColumnPinning>(DATA_GRID_DEFAULT_PINNING);
+  const [advancedQuery, setAdvancedQuery] = createSignal<QueryBuilderValue>({
+    combinator: 'and',
+    rules: [
+      {
+        id: 'query-default-1',
+        fieldKey: 'category',
+        operator: 'notEquals',
+        value: 'css',
+      },
+    ],
+  });
 
   const serverRows = createMemo(() => {
     const filter = gridFilterQuery().trim().toLowerCase();
@@ -125,6 +213,8 @@ const TablesSection = () => {
           row.category.toLowerCase().includes(filter)
       );
     }
+
+    rows = applyQueryBuilder(rows, advancedQuery());
 
     const key = gridSort().key;
     if (!key) return rows;
@@ -225,6 +315,14 @@ const TablesSection = () => {
       >
         <PreviewPanel>
           <PreviewGroup title="Examples">
+            <QueryBuilder
+              fields={QUERY_BUILDER_FIELDS}
+              value={advancedQuery()}
+              onChange={setAdvancedQuery}
+              description="Compose advanced filters with AND/OR logic before rendering the grid."
+              addRuleLabel="Add condition"
+              clearLabel="Clear conditions"
+            />
             <ColumnManager
               columns={DATA_GRID_COLUMN_SETTINGS}
               order={gridColumnOrder()}
@@ -277,10 +375,11 @@ const TablesSection = () => {
           </PreviewGroup>
         </PreviewPanel>
         <ShowcaseMeta>
-          Drag header separators to resize. Use ColumnManager to control order, visibility and pinning, then verify the
-          same layout in DataGridPro. Sorting and filtering are in manual mode (server-style control), rows support
-          checkbox selection, and the toolbar still provides JSON import/export plus persisted/default layout badge. Use
-          "Reset saved grid" to clear persisted layout in localStorage. Selected: {selectedRows().length}.
+          QueryBuilder applies advanced AND/OR rules before DataGridPro sorting. Drag header separators to resize. Use
+          ColumnManager to control order, visibility and pinning, then verify the same layout in DataGridPro. Sorting
+          and filtering are in manual mode (server-style control), rows support checkbox selection, and the toolbar
+          still provides JSON import/export plus persisted/default layout badge. Use "Reset saved grid" to clear
+          persisted layout in localStorage. Selected: {selectedRows().length}.
         </ShowcaseMeta>
       </ShowcaseSection>
 

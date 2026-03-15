@@ -41,7 +41,7 @@ const Progress = (props: Props<ProgressProps>) => {
         aria-valuemin={0}
         aria-valuemax={100}
       >
-        <div class={fillClass()} style={isDeterminate() ? { width: `${clampedValue()}%` } : undefined} />
+        <div class={fillClass()} style={isDeterminate() ? { '--fill-percent': `${clampedValue()}%` } : undefined} />
       </div>
     </div>
   );

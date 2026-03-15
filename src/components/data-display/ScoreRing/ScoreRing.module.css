@@ -29,6 +29,7 @@
   justify-content: center;
   font-size: var(--typography-scale-xl);
   font-weight: var(--typography-weight-bold);
+  color: var(--ring-color, var(--color-text));
   animation: fadeIn var(--duration-normal) var(--ease-out-expo);
   animation-delay: var(--duration-fast);
   animation-fill-mode: both;

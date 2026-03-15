@@ -3,6 +3,7 @@ import { FiAlertTriangle, FiHelpCircle } from 'solid-icons/fi';
 import type Props from '~/models/Props';
 
 import Button from '../../inputs/Button/Button';
+import Text from '../../typography/Text/Text';
 import Dialog from '../Dialog/Dialog';
 import DialogActions from '../Dialog/DialogActions';
 import DialogBody from '../Dialog/DialogBody';
@@ -30,7 +31,9 @@ const ConfirmDialog = (props: Props<ConfirmDialogProps>) => {
         <div class={`${styles.iconWrapper} ${isDanger() ? styles.iconDanger : styles.iconPrimary}`}>
           {isDanger() ? <FiAlertTriangle /> : <FiHelpCircle />}
         </div>
-        <p class={styles.message}>{props.message}</p>
+        <Text as="p" class={styles.message}>
+          {props.message}
+        </Text>
       </DialogBody>
       <DialogActions>
         <Button variant="ghost" onClick={() => props.onClose()}>

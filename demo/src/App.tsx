@@ -201,7 +201,7 @@ const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
   'data-tables': {
     title: 'Data & Tables',
     description:
-      'Table primitives, DataTable v2, ColumnManager and DataGridPro v3 (virtualization, pinning, resizing, selection, visibility, reorder, JSON import/export).',
+      'Table primitives, DataTable v2, QueryBuilder, ColumnManager and DataGridPro v3 (virtualization, pinning, resizing, selection, visibility, reorder, JSON import/export).',
   },
   'data-lists': {
     title: 'Data & Lists',

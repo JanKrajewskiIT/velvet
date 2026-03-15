@@ -43,7 +43,7 @@ const ImageGrid = (props: Props<ImageGridProps>) => {
   };
 
   return (
-    <div class={`${styles.grid} ${props.class ?? ''}`} style={{ '--cols': String(columns()), '--gap': gap() }}>
+    <div class={`${styles.grid} ${props.class ?? ''}`} style={{ '--cols': columns(), '--gap': gap() }}>
       <For each={props.images}>
         {(item, index) => (
           <Show

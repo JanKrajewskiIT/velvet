@@ -5,6 +5,7 @@ import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import FormField from '../../forms/FormField/FormField';
+import IconButton from '../IconButton/IconButton';
 import type { InputSize } from '../Input/Input';
 import InputBase from '../shared/InputBase';
 import styles from './NumberInput.module.css';
@@ -136,18 +137,16 @@ const NumberInput = (props: Props<NumberInputOwnProps>) => {
         invalid={local.invalid}
         focusWithin={!local.readOnly}
       >
-        <button
-          type="button"
+        <IconButton
+          icon={<IoRemove />}
+          title={local.messages?.decrementButtonLabel ?? local.decrementLabel}
           class={styles.button}
           disabled={local.disabled || local.readOnly}
           onClick={decrement}
           onMouseDown={() => startRepeat(decrement)}
           onMouseUp={stopRepeat}
           onMouseLeave={stopRepeat}
-          aria-label={local.messages?.decrementButtonLabel ?? local.decrementLabel}
-        >
-          <IoRemove />
-        </button>
+        />
         <input
           {...rest}
           id={local.id}
@@ -162,18 +161,16 @@ const NumberInput = (props: Props<NumberInputOwnProps>) => {
           onKeyDown={handleKeyDown}
           onChange={handleInputChange}
         />
-        <button
-          type="button"
+        <IconButton
+          icon={<IoAdd />}
+          title={local.messages?.incrementButtonLabel ?? local.incrementLabel}
           class={styles.button}
           disabled={local.disabled || local.readOnly}
           onClick={increment}
           onMouseDown={() => startRepeat(increment)}
           onMouseUp={stopRepeat}
           onMouseLeave={stopRepeat}
-          aria-label={local.messages?.incrementButtonLabel ?? local.incrementLabel}
-        >
-          <IoAdd />
-        </button>
+        />
       </InputBase>
     </FormField>
   );

@@ -246,23 +246,39 @@ body {
   gap: var(--spacing-xs);
 }
 
-.miniButton {
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-pill);
-  background: var(--color-bg-elevated);
-  color: var(--color-text-secondary);
-  font-size: var(--typography-label-md-font-size);
-  line-height: var(--typography-label-md-line-height);
-  font-weight: var(--typography-label-md-font-weight);
-  letter-spacing: var(--typography-label-md-letter-spacing);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  cursor: pointer;
+.speedDialGrid {
+  display: grid;
+  gap: var(--spacing-md);
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 }
 
-.miniButtonActive {
-  border-color: var(--color-primary);
-  background: var(--color-primary-light);
-  color: var(--color-primary);
+.speedDialCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  align-items: center;
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.speedDialAnchor {
+  position: relative;
+  width: 56px;
+  height: 56px;
+}
+
+.bottomNavPreview {
+  position: relative;
+  height: 120px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.bottomNavPreviewLabel {
+  padding: var(--spacing-md);
+  text-align: center;
 }
 
 .loaderRow {
@@ -318,6 +334,51 @@ body {
   gap: var(--spacing-sm);
 }
 
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.colGap2xs {
+  gap: var(--spacing-2xs);
+}
+
+.colGapXs {
+  gap: var(--spacing-xs);
+}
+
+.justifyBetween {
+  justify-content: space-between;
+}
+
+.flex1 {
+  flex: 1;
+}
+
+.surfacePanel {
+  padding: var(--spacing-2xl);
+  text-align: center;
+  background: var(--color-surface);
+}
+
+.marqueeTag {
+  padding: 0 var(--spacing-lg);
+}
+
+.contextMenuTarget {
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.bannerActionInverse {
+  color: var(--color-text-inverse);
+}
+
 .themeToggleBar {
   display: inline-flex;
   margin-inline-end: var(--spacing-xs);
@@ -352,17 +413,6 @@ body {
     width: 100%;
     height: 90px;
   }
-}
-
-.statusChip {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-pill);
-  background: var(--color-surface);
-  color: var(--color-text-secondary);
-  padding: var(--spacing-2xs) var(--spacing-sm);
 }
 
 .editableHeader {

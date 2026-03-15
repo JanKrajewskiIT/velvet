@@ -1,9 +1,9 @@
 import { A, useLocation } from '@solidjs/router';
 import { createEffect, createMemo, createSignal, For, type JSX, on } from 'solid-js';
 
+import useEscapeKey from '~/hooks/useEscapeKey';
 import type Props from '~/models/Props';
 
-import useEscapeKey from '../../../hooks/useEscapeKey';
 import MenuBar from './MenuBar';
 import styles from './Navbar.module.css';
 import type { NavItem } from './NavItem';

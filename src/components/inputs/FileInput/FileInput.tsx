@@ -2,6 +2,7 @@ import { FiUpload } from 'solid-icons/fi';
 import { createSignal, type JSX, Show } from 'solid-js';
 
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
 import styles from './FileInput.module.css';
 
@@ -51,7 +52,12 @@ const FileInput = (props: Props<FileInputOwnProps>) => {
   return (
     <button
       type="button"
-      class={`${styles.dropZone} ${isDragging() ? styles.dragging : ''} ${props.disabled ? styles.disabled : ''} ${props.class ?? ''}`}
+      class={classNames(
+        styles.dropZone,
+        isDragging() && styles.dragging,
+        props.disabled && styles.disabled,
+        props.class
+      )}
       disabled={props.disabled}
       onClick={handleClick}
       onDragOver={handleDragOver}

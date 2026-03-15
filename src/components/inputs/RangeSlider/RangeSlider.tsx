@@ -73,7 +73,10 @@ const RangeSlider = (props: Props<RangeSliderOwnProps>) => {
 
       <div class={styles.sliderRoot}>
         <div class={styles.track} />
-        <div class={styles.range} style={{ left: `${leftPercent()}%`, width: `${rightPercent() - leftPercent()}%` }} />
+        <div
+          class={styles.range}
+          style={{ '--range-left': `${leftPercent()}%`, '--range-width': `${rightPercent() - leftPercent()}%` }}
+        />
         <input
           {...rest}
           type="range"

@@ -4,6 +4,8 @@ import { createMemo, For, type JSX, Show, splitProps } from 'solid-js';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
+import IconButton from '../../inputs/IconButton/IconButton';
+import Heading from '../../typography/Heading/Heading';
 import {
   clearNotifications,
   markAllNotificationsRead,
@@ -53,7 +55,9 @@ const NotificationCenter = (props: Props<NotificationCenterOwnProps>) => {
     <div {...rest} class={classNames(styles.wrapper, local.class)}>
       <div class={styles.header}>
         <div class={styles.titleRow}>
-          <h3 class={styles.title}>{local.title ?? 'Notifications'}</h3>
+          <Heading as="h3" level={3} class={styles.title}>
+            {local.title ?? 'Notifications'}
+          </Heading>
           <Show when={unreadCount() > 0}>
             <span class={styles.badge}>{unreadCount()}</span>
           </Show>
@@ -92,22 +96,18 @@ const NotificationCenter = (props: Props<NotificationCenterOwnProps>) => {
                   <span class={styles.time}>{formatDate(item.createdAt)}</span>
                 </button>
                 <div class={styles.itemActions}>
-                  <button
-                    type="button"
+                  <IconButton
+                    icon={<IoCheckmarkDone />}
+                    title="Mark as read"
                     class={styles.iconButton}
                     onClick={() => markNotificationRead(item.id)}
-                    aria-label="Mark as read"
-                  >
-                    <IoCheckmarkDone />
-                  </button>
-                  <button
-                    type="button"
+                  />
+                  <IconButton
+                    icon={<IoTrash />}
+                    title={dismissLabel()}
                     class={styles.iconButton}
                     onClick={() => removeNotification(item.id)}
-                    aria-label={dismissLabel()}
-                  >
-                    <IoTrash />
-                  </button>
+                  />
                 </div>
               </li>
             )}

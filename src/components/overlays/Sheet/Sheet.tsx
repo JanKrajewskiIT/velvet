@@ -2,12 +2,14 @@ import { FiX } from 'solid-icons/fi';
 import { createSignal, createUniqueId, type JSX, Show } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
+import useEscapeKey from '~/hooks/useEscapeKey';
+import useFocusTrap from '~/hooks/useFocusTrap';
+import useOverlayAnimation from '~/hooks/useOverlayAnimation';
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
-import useEscapeKey from '../../../hooks/useEscapeKey';
-import useFocusTrap from '../../../hooks/useFocusTrap';
-import useOverlayAnimation from '../../../hooks/useOverlayAnimation';
 import IconButton from '../../inputs/IconButton/IconButton';
+import Heading from '../../typography/Heading/Heading';
 import styles from './Sheet.module.css';
 
 interface SheetProps {
@@ -36,13 +38,13 @@ const Sheet = (props: Props<SheetProps>) => {
   useFocusTrap(panelRef, () => props.open);
 
   const panelClass = () =>
-    `${styles.panel} ${styles[side()]} ${styles[size()]} ${entered() ? styles.panelVisible : ''} ${props.class ?? ''}`;
+    classNames(styles.panel, styles[side()], styles[size()], entered() && styles.panelVisible, props.class);
 
   return (
     <Show when={props.open}>
       <Portal>
         <div
-          class={`${styles.overlay} ${entered() ? styles.overlayVisible : ''}`}
+          class={classNames(styles.overlay, entered() && styles.overlayVisible)}
           aria-hidden="true"
           onClick={() => props.onClose()}
         />
@@ -58,9 +60,9 @@ const Sheet = (props: Props<SheetProps>) => {
           </Show>
           <div class={styles.header}>
             <Show when={props.title}>
-              <h2 id={titleId} class={styles.title}>
+              <Heading as="h2" level={2} id={titleId} class={styles.title}>
                 {props.title}
-              </h2>
+              </Heading>
             </Show>
             <IconButton icon={<FiX />} title={props.closeLabel} onClick={() => props.onClose()} />
           </div>

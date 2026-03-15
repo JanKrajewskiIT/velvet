@@ -1,6 +1,7 @@
 import {
   Button,
   Card,
+  Chip,
   CodeText,
   DataCard,
   Divider,
@@ -234,17 +235,17 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
         <ShowcaseSection title="Grid" subtitle="Responsive multi-column primitive">
           <PreviewPanel>
             <Grid columns={3} gap="sm">
-              <div class="statusChip">Column 1</div>
-              <div class="statusChip">Column 2</div>
-              <div class="statusChip">Column 3</div>
-              <div class="statusChip">Column 4</div>
-              <div class="statusChip">Column 5</div>
+              <Chip variant="subtle">Column 1</Chip>
+              <Chip variant="subtle">Column 2</Chip>
+              <Chip variant="subtle">Column 3</Chip>
+              <Chip variant="subtle">Column 4</Chip>
+              <Chip variant="subtle">Column 5</Chip>
             </Grid>
             <Grid minColumnWidth="180px" gap="md">
-              <div class="statusChip">Auto-fit A</div>
-              <div class="statusChip">Auto-fit B</div>
-              <div class="statusChip">Auto-fit C</div>
-              <div class="statusChip">Auto-fit D</div>
+              <Chip variant="subtle">Auto-fit A</Chip>
+              <Chip variant="subtle">Auto-fit B</Chip>
+              <Chip variant="subtle">Auto-fit C</Chip>
+              <Chip variant="subtle">Auto-fit D</Chip>
             </Grid>
           </PreviewPanel>
           <ShowcaseMeta>
@@ -263,14 +264,14 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
         <ShowcaseSection title="Stack" subtitle="Flexible vertical and horizontal spacing layout">
           <PreviewPanel>
             <Stack gap="sm">
-              <div class="statusChip">First item</div>
-              <div class="statusChip">Second item</div>
-              <div class="statusChip">Third item</div>
+              <Chip variant="subtle">First item</Chip>
+              <Chip variant="subtle">Second item</Chip>
+              <Chip variant="subtle">Third item</Chip>
             </Stack>
             <Stack direction="horizontal" gap="md" align="center" justify="between" wrap>
-              <div class="statusChip">Horizontal</div>
-              <div class="statusChip">Aligned center</div>
-              <div class="statusChip">Wrap enabled</div>
+              <Chip variant="subtle">Horizontal</Chip>
+              <Chip variant="subtle">Aligned center</Chip>
+              <Chip variant="subtle">Wrap enabled</Chip>
             </Stack>
           </PreviewPanel>
           <ShowcaseMeta>

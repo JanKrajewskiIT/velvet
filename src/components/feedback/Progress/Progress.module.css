@@ -45,6 +45,7 @@
 
 .fill {
   height: 100%;
+  width: var(--fill-percent, 0%);
   border-radius: var(--radius-pill);
   transition: width var(--duration-normal) var(--ease-out-expo);
 }
