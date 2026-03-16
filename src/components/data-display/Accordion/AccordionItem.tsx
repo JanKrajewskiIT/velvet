@@ -3,7 +3,6 @@ import { createMemo, createSignal, type JSX, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
 
-import ButtonBase from '../../inputs/shared/ButtonBase';
 import styles from './Accordion.module.css';
 
 interface AccordionItemOwnProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'title' | 'onToggle'> {
@@ -42,12 +41,12 @@ const AccordionItem = (props: Props<AccordionItemOwnProps>) => {
       class={`${styles.accordionItem} ${local.variant === 'card' ? styles.cardVariant : ''} ${isOpen() ? styles.open : ''} ${local.disabled ? styles.disabled : ''} ${local.class ?? ''}`}
       {...rest}
     >
-      <ButtonBase class={styles.header} onClick={handleToggle} disabled={local.disabled}>
+      <button type="button" class={styles.header} onClick={handleToggle} disabled={local.disabled}>
         <div class={styles.title}>{local.title}</div>
         <div class={`${styles.icon} ${isOpen() ? styles.iconOpen : ''}`}>
           <FiChevronDown />
         </div>
-      </ButtonBase>
+      </button>
       <div class={`${styles.content} ${isOpen() ? styles.contentOpen : ''}`}>
         <div class={styles.contentInner}>{local.children}</div>
       </div>

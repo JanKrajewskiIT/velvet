@@ -1,10 +1,10 @@
 import { IoChevronBack, IoChevronForward, IoPlayBack, IoPlayForward } from 'solid-icons/io';
 import { createMemo, createSignal, For, Show } from 'solid-js';
 
-import IconButton from '~/components/inputs/IconButton/IconButton';
+import IconButton from '~/components/buttons/IconButton/IconButton';
 import type Props from '~/models/Props';
 
-import CheckboxControl from '../../inputs/shared/CheckboxControl';
+import CheckboxControl from '../../switchers/CheckboxControl/CheckboxControl';
 import styles from './TransferList.module.css';
 
 export interface TransferItem {

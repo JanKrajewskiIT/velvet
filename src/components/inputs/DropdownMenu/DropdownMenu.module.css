@@ -4,16 +4,12 @@
 }
 
 .trigger {
-  composes: base from '../shared/ButtonBase.module.css';
-  padding: var(--spacing-xs);
+  padding: 0;
   width: 32px;
   min-width: 32px;
   height: 32px;
   min-height: 32px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: var(--color-bg-elevated);
-  color: var(--color-text-muted);
+  border-radius: var(--radius-sm);
   transform: none;
 }
 

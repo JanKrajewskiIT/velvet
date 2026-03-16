@@ -1,0 +1,176 @@
+.base {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-family-sans);
+  font-weight: var(--typography-button-md-font-weight);
+  line-height: var(--typography-button-md-line-height);
+  letter-spacing: var(--typography-button-md-letter-spacing);
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background-color var(--duration-fast) var(--ease-out-expo),
+    border-color var(--duration-fast) var(--ease-out-expo),
+    color var(--duration-fast) var(--ease-out-expo),
+    box-shadow var(--duration-fast) var(--ease-out-expo),
+    transform var(--duration-fast) var(--ease-out-expo);
+}
+
+.base:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+.base:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.base:disabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+
+.sizeSm {
+  min-height: 32px;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: var(--typography-button-sm-font-size);
+  line-height: var(--typography-button-sm-line-height);
+  font-weight: var(--typography-button-sm-font-weight);
+  letter-spacing: var(--typography-button-sm-letter-spacing);
+}
+
+.sizeMd {
+  min-height: 40px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--typography-button-md-font-size);
+  line-height: var(--typography-button-md-line-height);
+  font-weight: var(--typography-button-md-font-weight);
+  letter-spacing: var(--typography-button-md-letter-spacing);
+}
+
+.sizeLg {
+  min-height: 48px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--typography-button-lg-font-size);
+  line-height: var(--typography-button-lg-line-height);
+  font-weight: var(--typography-button-lg-font-weight);
+  letter-spacing: var(--typography-button-lg-letter-spacing);
+}
+
+.iconOnly {
+  gap: 0;
+  padding: 0;
+}
+
+.iconSizeSm {
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+}
+
+.iconSizeMd {
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+}
+
+.iconSizeLg {
+  width: 48px;
+  min-width: 48px;
+  height: 48px;
+}
+
+.variantPrimary {
+  border-color: transparent;
+  background-color: var(--color-primary);
+  color: var(--color-on-accent);
+}
+
+.variantPrimary:hover:not(:disabled) {
+  background-color: var(--color-primary-hover);
+  box-shadow: var(--shadow-glow);
+}
+
+.variantDanger {
+  border-color: transparent;
+  background-color: var(--color-error);
+  color: var(--color-on-accent);
+}
+
+.variantDanger:hover:not(:disabled) {
+  background-color: var(--color-error-hover);
+  box-shadow: var(--shadow-glow-sm);
+}
+
+.variantGhost {
+  border-color: var(--color-border);
+  background: var(--color-bg-elevated);
+  color: var(--color-text-secondary);
+}
+
+.variantGhost:hover:not(:disabled) {
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.variantOutline {
+  border-color: var(--color-border);
+  background: transparent;
+  color: var(--color-text);
+}
+
+.variantOutline:hover:not(:disabled) {
+  background-color: var(--color-bg-hover);
+}
+
+.variantDashed {
+  border-style: dashed;
+  border-color: var(--color-border);
+  background: none;
+  color: var(--color-text-muted);
+}
+
+.variantDashed:hover:not(:disabled) {
+  background-color: var(--color-surface);
+  border-color: var(--color-text-muted);
+  color: var(--color-text);
+}
+
+.variantSubtle {
+  border-color: transparent;
+  background: transparent;
+  color: var(--color-text-muted);
+}
+
+.variantSubtle:hover:not(:disabled) {
+  background: var(--color-bg-hover);
+  color: var(--color-text);
+  transform: scale(1.05);
+}
+
+.loading {
+  pointer-events: none;
+}
+
+.spinner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.content {
+  display: inline-flex;
+  align-items: center;
+}
+
+.contentHidden {
+  visibility: hidden;
+}

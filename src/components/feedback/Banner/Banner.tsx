@@ -5,7 +5,7 @@ import { Show } from 'solid-js';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import IconButton from '../../inputs/IconButton/IconButton';
+import IconButton from '../../buttons/IconButton/IconButton';
 import Text from '../../typography/Text/Text';
 import styles from './Banner.module.css';
 

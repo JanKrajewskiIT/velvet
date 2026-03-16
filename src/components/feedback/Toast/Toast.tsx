@@ -14,8 +14,9 @@ export interface ToastNotification extends ToastMessage {
 
 export const [toasts, setToasts] = createSignal<ToastMessage[]>([]);
 export const [notifications, setNotifications] = createSignal<ToastNotification[]>([]);
-let fallbackToastId = 0;
 export const toastTimers = new Map<string, ReturnType<typeof setTimeout>>();
+
+let fallbackToastId = 0;
 
 const createToastId = (): string => {
   if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {

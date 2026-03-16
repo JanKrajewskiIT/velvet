@@ -2,9 +2,9 @@ import { createEffect, createSignal, on, Show } from 'solid-js';
 
 import type Props from '~/models/Props';
 
+import Button from '../../buttons/Button/Button';
 import MarkdownRenderer from '../../data-display/MarkdownRenderer/MarkdownRenderer';
 import FormField from '../../forms/FormField/FormField';
-import Button from '../../inputs/Button/Button';
 import TextArea from '../../inputs/Input/TextArea';
 import Dialog from '../Dialog/Dialog';
 import DialogActions from '../Dialog/DialogActions';

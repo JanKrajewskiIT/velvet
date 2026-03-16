@@ -2,7 +2,7 @@ import { createMemo, createSignal, For, type JSX, Show, splitProps } from 'solid
 
 import type Props from '~/models/Props';
 
-import Button from '../../inputs/Button/Button';
+import Button from '../../buttons/Button/Button';
 import Stepper from '../../navigation/Stepper/Stepper';
 import styles from './Wizard.module.css';
 

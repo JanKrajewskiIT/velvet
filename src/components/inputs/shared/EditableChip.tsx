@@ -5,7 +5,7 @@ import { splitProps } from 'solid-js';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import IconButton from '../IconButton/IconButton';
+import IconButton from '../../buttons/IconButton/IconButton';
 import styles from './EditableChip.module.css';
 
 interface EditableChipOwnProps extends Omit<JSX.HTMLAttributes<HTMLSpanElement>, 'children'> {

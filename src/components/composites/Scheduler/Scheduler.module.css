@@ -34,12 +34,12 @@
 
 .navButton,
 .todayButton {
+  min-height: 32px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   background: var(--color-bg);
   color: var(--color-text-secondary);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  cursor: pointer;
+  padding: 0 var(--spacing-sm);
   transition:
     background-color var(--duration-fast) var(--ease-out-expo),
     border-color var(--duration-fast) var(--ease-out-expo),
@@ -47,14 +47,14 @@
 }
 
 .addButton {
+  min-height: 32px;
   border: 1px solid var(--color-primary);
   border-radius: var(--radius-sm);
   background: var(--color-primary-light);
   color: var(--color-primary);
-  padding: var(--spacing-xs) var(--spacing-sm);
+  padding: 0 var(--spacing-sm);
   font-size: var(--typography-scale-xs);
   font-weight: var(--typography-weight-semibold);
-  cursor: pointer;
   transition:
     background-color var(--duration-fast) var(--ease-out-expo),
     border-color var(--duration-fast) var(--ease-out-expo);
@@ -248,6 +248,7 @@
 }
 
 .eventAction {
+  min-height: 28px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-pill);
   background: var(--color-surface);
@@ -255,14 +256,18 @@
   font-size: var(--typography-scale-xs);
   font-weight: var(--typography-weight-semibold);
   padding: var(--spacing-2xs) var(--spacing-sm);
+}
+
+.dragAction {
   cursor: grab;
 }
 
-.eventAction:active {
+.dragAction:active {
   cursor: grabbing;
 }
 
 .deleteAction {
+  min-height: 28px;
   border: 1px solid var(--color-error);
   border-radius: var(--radius-pill);
   background: var(--color-error-light);
@@ -270,7 +275,6 @@
   font-size: var(--typography-scale-xs);
   font-weight: var(--typography-weight-semibold);
   padding: var(--spacing-2xs) var(--spacing-sm);
-  cursor: pointer;
 }
 
 .emptyLabel {

@@ -31,6 +31,7 @@
   border: none;
   cursor: pointer;
   text-align: left;
+  font: inherit;
   transition: background-color var(--transition-fast);
   color: var(--color-text);
   font-weight: var(--typography-weight-medium);
@@ -38,6 +39,11 @@
 
 .header:hover {
   background: var(--color-bg-hover);
+}
+
+.header:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: -2px;
 }
 
 .title {

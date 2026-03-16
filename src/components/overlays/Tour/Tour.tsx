@@ -1,7 +1,7 @@
 import { createEffect, createSignal, onCleanup, Show } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
-import Button from '~/components/inputs/Button/Button';
+import Button from '~/components/buttons/Button/Button';
 import type Props from '~/models/Props';
 
 import styles from './Tour.module.css';

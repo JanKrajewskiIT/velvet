@@ -4,8 +4,8 @@ import { type JSX, onCleanup, splitProps } from 'solid-js';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
+import IconButton from '../../buttons/IconButton/IconButton';
 import FormField from '../../forms/FormField/FormField';
-import IconButton from '../IconButton/IconButton';
 import type { InputSize } from '../Input/Input';
 import InputBase from '../shared/InputBase';
 import styles from './NumberInput.module.css';

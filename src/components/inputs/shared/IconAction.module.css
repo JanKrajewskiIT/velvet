@@ -1,5 +1,8 @@
 .iconaction {
-  composes: base from './ButtonBase.module.css';
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  border: 1px solid transparent;
   width: 32px;
   min-width: 32px;
   height: 32px;

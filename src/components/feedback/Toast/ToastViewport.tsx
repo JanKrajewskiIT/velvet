@@ -3,7 +3,8 @@ import { For } from 'solid-js';
 
 import type Props from '~/models/Props';
 
-import IconButton from '../../inputs/IconButton/IconButton';
+import IconButton from '../../buttons/IconButton/IconButton';
+import Text from '../../typography/Text/Text';
 import { removeToast, toasts } from './Toast';
 import styles from './Toast.module.css';
 
@@ -17,13 +18,10 @@ const ToastViewport = (props: Props<ToastViewportBaseProps>) => {
       <For each={toasts()}>
         {(toast) => (
           <div class={`${styles.toast} ${styles[toast.type]}`} role={toast.type === 'error' ? 'alert' : 'status'}>
-            <div class={styles.message}>{toast.message}</div>
-            <IconButton
-              icon={<IoClose />}
-              title={props.closeLabel}
-              class={styles.closeBtn}
-              onClick={() => removeToast(toast.id)}
-            />
+            <Text as="span" variant="bodyMd" class={styles.message}>
+              {toast.message}
+            </Text>
+            <IconButton icon={<IoClose />} title={props.closeLabel} onClick={() => removeToast(toast.id)} />
           </div>
         )}
       </For>

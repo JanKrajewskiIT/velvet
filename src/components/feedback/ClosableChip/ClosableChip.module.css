@@ -1,0 +1,26 @@
+.chip {
+  gap: var(--spacing-2xs);
+  padding-left: var(--spacing-sm);
+}
+
+.removeButton {
+  border: none;
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  line-height: var(--typography-line-height-none);
+}
+
+.removeButton:hover {
+  color: var(--color-text);
+}
+
+.removeButton:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-full);
+}

@@ -1,8 +1,9 @@
 import { For, type JSX, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
-import ButtonBase from '../../inputs/shared/ButtonBase';
+import Button from '../../buttons/Button/Button';
 import styles from './Pagination.module.css';
 
 type PageItem = number | 'left-ellipsis' | 'right-ellipsis';
@@ -61,9 +62,15 @@ const Pagination = (props: Props<PaginationOwnProps>) => {
 
   return (
     <nav {...rest} class={`${styles.nav} ${local.class ?? ''}`} aria-label={local.ariaLabel ?? 'Pagination'}>
-      <ButtonBase class={styles.navButton} disabled={current() <= 1} onClick={() => local.onChange(current() - 1)}>
+      <Button
+        variant="ghost"
+        size="sm"
+        class={styles.navButton}
+        disabled={current() <= 1}
+        onClick={() => local.onChange(current() - 1)}
+      >
         {local.previousLabel}
-      </ButtonBase>
+      </Button>
 
       <div class={styles.pages}>
         <For each={pages()}>
@@ -75,25 +82,29 @@ const Pagination = (props: Props<PaginationOwnProps>) => {
             const active = () => item === current();
 
             return (
-              <ButtonBase
-                class={`${styles.pageButton} ${active() ? styles.active : ''}`}
+              <Button
+                variant={active() ? 'primary' : 'ghost'}
+                size="sm"
+                class={classNames(styles.pageButton, active() && styles.active)}
                 aria-current={active() ? 'page' : undefined}
                 onClick={() => local.onChange(item)}
               >
                 {item}
-              </ButtonBase>
+              </Button>
             );
           }}
         </For>
       </div>
 
-      <ButtonBase
+      <Button
+        variant="ghost"
+        size="sm"
         class={styles.navButton}
         disabled={current() >= local.totalPages}
         onClick={() => local.onChange(current() + 1)}
       >
         {local.nextLabel}
-      </ButtonBase>
+      </Button>
     </nav>
   );
 };

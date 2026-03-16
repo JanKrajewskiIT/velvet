@@ -3,7 +3,7 @@ import { For, Show } from 'solid-js';
 
 import type Props from '~/models/Props';
 
-import ButtonBase from '../../inputs/shared/ButtonBase';
+import Button from '../../buttons/Button/Button';
 import styles from './BottomNav.module.css';
 
 export interface BottomNavItem {
@@ -28,8 +28,10 @@ const BottomNav = (props: Props<BottomNavProps>) => {
     <nav class={`${barClass()} ${props.class ?? ''}`}>
       <For each={props.items}>
         {(item) => (
-          <ButtonBase
+          <Button
             class={`${styles.item} ${props.activeId === item.id ? styles.active : ''}`}
+            variant="subtle"
+            size="md"
             onClick={() => props.onChange(item.id)}
           >
             <span class={styles.icon}>
@@ -39,7 +41,7 @@ const BottomNav = (props: Props<BottomNavProps>) => {
               </Show>
             </span>
             <span class={styles.label}>{item.label}</span>
-          </ButtonBase>
+          </Button>
         )}
       </For>
     </nav>

@@ -6,8 +6,8 @@ import useEscapeKey from '~/hooks/useEscapeKey';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import Button from '../../inputs/Button/Button';
-import IconButton from '../../inputs/IconButton/IconButton';
+import Button from '../../buttons/Button/Button';
+import IconButton from '../../buttons/IconButton/IconButton';
 import Input from '../../inputs/Input/Input';
 import TextArea from '../../inputs/Input/TextArea';
 import ConfirmDialog from '../../overlays/ConfirmDialog/ConfirmDialog';
@@ -469,12 +469,21 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
             icon={<FiChevronLeft />}
             title="Previous month"
             class={styles.navButton}
+            size="sm"
+            variant="outline"
             onClick={goToPreviousMonth}
           />
           <Heading as="h3" level={3} class={styles.monthLabel}>
             {monthLabel()}
           </Heading>
-          <IconButton icon={<FiChevronRight />} title="Next month" class={styles.navButton} onClick={goToNextMonth} />
+          <IconButton
+            icon={<FiChevronRight />}
+            title="Next month"
+            class={styles.navButton}
+            size="sm"
+            variant="outline"
+            onClick={goToNextMonth}
+          />
         </header>
 
         <div class={styles.weekHeader}>
@@ -514,11 +523,16 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
           </Heading>
           <div class={styles.eventsHeaderActions}>
             <Show when={canEditEvents()}>
-              <Button variant="primary" class={styles.addButton} onClick={() => openCreateForDate(selectedDate())}>
+              <Button
+                size="sm"
+                variant="primary"
+                class={styles.addButton}
+                onClick={() => openCreateForDate(selectedDate())}
+              >
                 Add event
               </Button>
             </Show>
-            <Button variant="ghost" class={styles.todayButton} onClick={goToToday}>
+            <Button size="sm" variant="ghost" class={styles.todayButton} onClick={goToToday}>
               Today
             </Button>
           </div>
@@ -559,10 +573,10 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
               onInput={(event) => setDraftDescription(event.currentTarget.value)}
             />
             <div class={styles.createActions}>
-              <Button variant="ghost" class={styles.eventAction} onClick={closeCreate}>
+              <Button size="sm" variant="ghost" class={styles.eventAction} onClick={closeCreate}>
                 Cancel
               </Button>
-              <Button variant="primary" type="submit" class={styles.addButton}>
+              <Button size="sm" variant="primary" type="submit" class={styles.addButton}>
                 Save
               </Button>
             </div>
@@ -615,10 +629,10 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
                           onInput={(inputEvent) => setEditDescription(inputEvent.currentTarget.value)}
                         />
                         <div class={styles.createActions}>
-                          <Button variant="ghost" class={styles.eventAction} onClick={resetEdit}>
+                          <Button size="sm" variant="ghost" class={styles.eventAction} onClick={resetEdit}>
                             Cancel
                           </Button>
-                          <Button variant="primary" type="submit" class={styles.addButton}>
+                          <Button size="sm" variant="primary" type="submit" class={styles.addButton}>
                             Save changes
                           </Button>
                         </div>
@@ -641,10 +655,11 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
                     </Show>
                     <Show when={canEditEvents()}>
                       <div class={styles.eventActions}>
-                        <Button variant="ghost" class={styles.eventAction} onClick={() => openEdit(event)}>
+                        <Button size="sm" variant="ghost" class={styles.eventAction} onClick={() => openEdit(event)}>
                           Edit
                         </Button>
                         <Button
+                          size="sm"
                           variant="danger"
                           class={styles.deleteAction}
                           onClick={() => requestDeleteEvent(event.id)}
@@ -655,26 +670,28 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
                     </Show>
                     <Show when={draggableEvents() && Boolean(local.onEventsChange)}>
                       <div class={styles.eventActions}>
-                        <button
-                          type="button"
-                          class={styles.eventAction}
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          class={classNames(styles.eventAction, styles.dragAction)}
                           draggable
                           onDragStart={(e) => handleEventDragStart(event.id, 'move', e)}
                           onDragEnd={handleEventDragEnd}
                           aria-label={`Move ${event.title}`}
                         >
                           Move
-                        </button>
-                        <button
-                          type="button"
-                          class={styles.eventAction}
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          class={classNames(styles.eventAction, styles.dragAction)}
                           draggable
                           onDragStart={(e) => handleEventDragStart(event.id, 'resize-end', e)}
                           onDragEnd={handleEventDragEnd}
                           aria-label={`Resize ${event.title} end`}
                         >
                           Resize end
-                        </button>
+                        </Button>
                       </div>
                     </Show>
                   </Show>

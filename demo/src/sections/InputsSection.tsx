@@ -16,7 +16,6 @@ import {
   DropdownItem,
   DropdownMenu,
   FileDropZone,
-  FileInput,
   FormField,
   FormGrid,
   FormLayout,
@@ -97,6 +96,7 @@ const InputsSection = (props: InputsSectionProps) => {
   const [dateTime, setDateTime] = createSignal('');
   const [richText, setRichText] = createSignal('<p><strong>Release notes</strong> for <em>VelvetUi</em>.</p>');
   const [droppedFile, setDroppedFile] = createSignal<string | null>(null);
+  const [droppedFiles, setDroppedFiles] = createSignal<string[]>([]);
   const [locale, setLocale] = createSignal<'EN' | 'PL'>('EN');
 
   const simulateLoad = () => {
@@ -107,7 +107,10 @@ const InputsSection = (props: InputsSectionProps) => {
   return (
     <div>
       <Show when={sectionId() === 'inputs-buttons'}>
-        <ShowcaseSection title="Button variants" subtitle="Primary actions, danger actions and low-emphasis controls">
+        <ShowcaseSection
+          title="Button variants"
+          subtitle="Primary, danger, ghost, dashed, outline and subtle action styles"
+        >
           <PreviewPanel>
             <PreviewGroup title="Variants">
               <div class="row">
@@ -115,6 +118,8 @@ const InputsSection = (props: InputsSectionProps) => {
                 <Button variant="danger">Danger</Button>
                 <Button variant="ghost">Ghost</Button>
                 <Button variant="dashed">Dashed</Button>
+                <Button variant="outline">Outline</Button>
+                <Button variant="subtle">Subtle</Button>
               </div>
             </PreviewGroup>
             <PreviewGroup title="States">
@@ -127,6 +132,24 @@ const InputsSection = (props: InputsSectionProps) => {
                 </Button>
               </div>
             </PreviewGroup>
+            <PreviewGroup title="Sizes">
+              <div class="row">
+                <Button variant="primary" size="sm">
+                  Small
+                </Button>
+                <Button variant="primary" size="md">
+                  Medium
+                </Button>
+                <Button variant="primary" size="lg">
+                  Large
+                </Button>
+              </div>
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection title="AffixButton" subtitle="Buttons with prefix, suffix and badge content slots">
+          <PreviewPanel>
             <PreviewGroup title="AffixButton">
               <div class="row">
                 <AffixButton variant="ghost" prefix={<IoDocument />} badge={12}>
@@ -160,27 +183,6 @@ const InputsSection = (props: InputsSectionProps) => {
               </div>
             </PreviewGroup>
           </PreviewPanel>
-        </ShowcaseSection>
-        <ShowcaseSection title="ActionRow" subtitle="Horizontal row for action buttons with alignment">
-          <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <ActionRow align="start">
-                <Button variant="primary">Save</Button>
-                <Button variant="ghost">Cancel</Button>
-              </ActionRow>
-              <ActionRow align="end">
-                <Button variant="dashed">Export</Button>
-                <Button variant="primary">Submit</Button>
-              </ActionRow>
-            </PreviewGroup>
-          </PreviewPanel>
-          <ShowcaseMeta>
-            Use{' '}
-            <CodeText as="span" class="codeInline">
-              align
-            </CodeText>{' '}
-            prop to control button positioning within the row.
-          </ShowcaseMeta>
         </ShowcaseSection>
         <ShowcaseSection title="CopyButton" subtitle="One-click clipboard copy with feedback">
           <PreviewPanel>
@@ -477,7 +479,32 @@ const InputsSection = (props: InputsSectionProps) => {
         </ShowcaseSection>
       </Show>
 
-      <Show when={sectionId() === 'inputs-controls'}>
+      <Show when={sectionId() === 'inputs-switchers'}>
+        <ShowcaseSection title="SegmentedControl" subtitle="Mutually exclusive toggle group">
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <SegmentedControl
+                value={segment()}
+                onChange={setSegment}
+                options={[
+                  { value: 'list', label: 'List' },
+                  { value: 'grid', label: 'Grid' },
+                  { value: 'board', label: 'Board' },
+                ]}
+              />
+              <SegmentedControl
+                value={billingCycle()}
+                onChange={setBillingCycle}
+                size="sm"
+                options={[
+                  { value: 'monthly', label: 'Monthly' },
+                  { value: 'yearly', label: 'Yearly' },
+                ]}
+              />
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+
         <ShowcaseSection title="Checkbox" subtitle="Binary choice with optional label and description">
           <PreviewPanel>
             <PreviewGroup title="Examples">
@@ -501,31 +528,6 @@ const InputsSection = (props: InputsSectionProps) => {
               <Checkbox checked={false} onChange={() => {}} label="Unchecked by default" />
               <Checkbox checked disabled onChange={() => {}} label="Checked and disabled" />
               <Checkbox checked={false} disabled onChange={() => {}} label="Unchecked and disabled" />
-            </PreviewGroup>
-          </PreviewPanel>
-        </ShowcaseSection>
-
-        <ShowcaseSection title="Switch" subtitle="Toggle control with optional label and description">
-          <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <Switch
-                checked={notifications()}
-                onChange={setNotifications}
-                label="Enable push notifications"
-                description="Receive alerts for important events"
-                aria-label="Enable push notifications"
-              />
-              <Switch
-                checked={focusMode()}
-                onChange={setFocusMode}
-                label="Focus mode"
-                description="Hide sidebar and reduce distractions"
-                aria-label="Focus mode"
-              />
-              <Switch checked={true} onChange={() => {}} label="On (controlled elsewhere)" aria-label="On" />
-              <Switch checked={false} onChange={() => {}} label="Off" aria-label="Off" />
-              <Switch checked disabled onChange={() => {}} label="Disabled on" aria-label="Disabled on" />
-              <Switch checked={false} disabled onChange={() => {}} label="Disabled off" aria-label="Disabled off" />
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
@@ -569,31 +571,33 @@ const InputsSection = (props: InputsSectionProps) => {
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="SegmentedControl" subtitle="Mutually exclusive toggle group">
+        <ShowcaseSection title="Switch" subtitle="Toggle control with optional label and description">
           <PreviewPanel>
             <PreviewGroup title="Examples">
-              <SegmentedControl
-                value={segment()}
-                onChange={setSegment}
-                options={[
-                  { value: 'list', label: 'List' },
-                  { value: 'grid', label: 'Grid' },
-                  { value: 'board', label: 'Board' },
-                ]}
+              <Switch
+                checked={notifications()}
+                onChange={setNotifications}
+                label="Enable push notifications"
+                description="Receive alerts for important events"
+                aria-label="Enable push notifications"
               />
-              <SegmentedControl
-                value={billingCycle()}
-                onChange={setBillingCycle}
-                size="sm"
-                options={[
-                  { value: 'monthly', label: 'Monthly' },
-                  { value: 'yearly', label: 'Yearly' },
-                ]}
+              <Switch
+                checked={focusMode()}
+                onChange={setFocusMode}
+                label="Focus mode"
+                description="Hide sidebar and reduce distractions"
+                aria-label="Focus mode"
               />
+              <Switch checked={true} onChange={() => {}} label="On (controlled elsewhere)" aria-label="On" />
+              <Switch checked={false} onChange={() => {}} label="Off" aria-label="Off" />
+              <Switch checked disabled onChange={() => {}} label="Disabled on" aria-label="Disabled on" />
+              <Switch checked={false} disabled onChange={() => {}} label="Disabled off" aria-label="Disabled off" />
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
+      </Show>
 
+      <Show when={sectionId() === 'inputs-pickers'}>
         <ShowcaseSection title="Slider" subtitle="Fine-grained value selection">
           <PreviewPanel>
             <PreviewGroup title="Examples">
@@ -726,15 +730,29 @@ const InputsSection = (props: InputsSectionProps) => {
           )}
         </ShowcaseSection>
 
-        <ShowcaseSection title="FileInput" subtitle="Drag-and-drop file upload zone">
+        <ShowcaseSection title="FileDropZone (multiple)" subtitle="Drag-and-drop upload for multiple files">
           <PreviewPanel>
             <PreviewGroup title="Examples">
-              <div class="previewUploadFull previewUploadFull--stack">
-                <FileInput accept="image/*" onFiles={() => {}} />
-                <FileInput accept="*" multiple onFiles={() => {}} label="Drop multiple files here or click to browse" />
+              <div class="previewUploadFull">
+                <FileDropZone
+                  accept="*"
+                  multiple
+                  label="Drop multiple files here or click to browse"
+                  hint="You can select or drop multiple files at once"
+                  icon={<IoDocument size={28} />}
+                  onFiles={(files) => {
+                    setDroppedFiles(files.map((file) => file.name));
+                    addToast({ type: 'success', message: `Picked ${String(files.length)} file(s)` });
+                  }}
+                />
               </div>
             </PreviewGroup>
           </PreviewPanel>
+          {droppedFiles().length > 0 && (
+            <ShowcaseMeta>
+              Selected files: <strong>{droppedFiles().join(', ')}</strong>
+            </ShowcaseMeta>
+          )}
         </ShowcaseSection>
       </Show>
 
@@ -822,6 +840,28 @@ const InputsSection = (props: InputsSectionProps) => {
               ActionRow
             </CodeText>{' '}
             for full-screen forms.
+          </ShowcaseMeta>
+        </ShowcaseSection>
+
+        <ShowcaseSection title="ActionRow" subtitle="Horizontal row for action buttons with alignment">
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <ActionRow align="start">
+                <Button variant="primary">Save draft</Button>
+                <Button variant="ghost">Cancel</Button>
+              </ActionRow>
+              <ActionRow align="end">
+                <Button variant="dashed">Export</Button>
+                <Button variant="primary">Submit</Button>
+              </ActionRow>
+            </PreviewGroup>
+          </PreviewPanel>
+          <ShowcaseMeta>
+            Use{' '}
+            <CodeText as="span" class="codeInline">
+              align
+            </CodeText>{' '}
+            prop to control button positioning within the row.
           </ShowcaseMeta>
         </ShowcaseSection>
       </Show>

@@ -4,31 +4,31 @@
 }
 
 .displayLg {
-  composes: typeDisplayLg from '../shared/Typography.module.css';
+  composes: typeDisplayLg from '../Typography/Typography.module.css';
 }
 
 .displayMd {
-  composes: typeDisplayMd from '../shared/Typography.module.css';
+  composes: typeDisplayMd from '../Typography/Typography.module.css';
 }
 
 .h1 {
-  composes: typeH1 from '../shared/Typography.module.css';
+  composes: typeH1 from '../Typography/Typography.module.css';
 }
 
 .h2 {
-  composes: typeH2 from '../shared/Typography.module.css';
+  composes: typeH2 from '../Typography/Typography.module.css';
 }
 
 .h3 {
-  composes: typeH3 from '../shared/Typography.module.css';
+  composes: typeH3 from '../Typography/Typography.module.css';
 }
 
 .titleLg {
-  composes: typeTitleLg from '../shared/Typography.module.css';
+  composes: typeTitleLg from '../Typography/Typography.module.css';
 }
 
 .titleMd {
-  composes: typeTitleMd from '../shared/Typography.module.css';
+  composes: typeTitleMd from '../Typography/Typography.module.css';
 }
 
 .toneDefault {

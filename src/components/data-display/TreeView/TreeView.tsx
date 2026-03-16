@@ -4,7 +4,7 @@ import { createEffect, createMemo, createSignal, For, type JSX, Show, untrack } 
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import CheckboxControl from '../../inputs/shared/CheckboxControl';
+import CheckboxControl from '../../switchers/CheckboxControl/CheckboxControl';
 import styles from './TreeView.module.css';
 
 export interface TreeNode {

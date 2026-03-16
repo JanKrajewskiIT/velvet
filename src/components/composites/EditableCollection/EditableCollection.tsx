@@ -1,10 +1,9 @@
 import type { JSX } from 'solid-js';
 import { createSignal, For } from 'solid-js';
 
+import Button, { type ButtonVariant } from '~/components/buttons/Button/Button';
 import type Props from '~/models/Props';
 
-import type { ButtonProps } from '../../inputs/Button/Button';
-import Button from '../../inputs/Button/Button';
 import ConfirmDialog from '../../overlays/ConfirmDialog/ConfirmDialog';
 import styles from './EditableCollection.module.css';
 
@@ -24,7 +23,7 @@ export interface EditableCollectionProps<T> {
   confirmLabel: string;
   cancelLabel: string;
   confirmVariant?: 'danger' | 'primary';
-  addButtonVariant?: ButtonProps['variant'];
+  addButtonVariant?: ButtonVariant;
   listClass?: string;
   itemClass?: string;
   addButtonClass?: string;

@@ -1,0 +1,80 @@
+.group {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.column {
+  flex-direction: column;
+}
+
+.row {
+  flex-flow: row wrap;
+}
+
+.option {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+  cursor: pointer;
+}
+
+.control {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.input {
+  position: absolute;
+  inset: 0;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.indicator {
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-full);
+  border: 1.5px solid var(--color-border);
+  background: var(--color-bg);
+  transition:
+    border-color var(--duration-fast) var(--ease-out-expo),
+    box-shadow var(--duration-fast) var(--ease-out-expo);
+}
+
+.input:hover:not(:disabled) + .indicator {
+  border-color: var(--color-primary);
+}
+
+.input:checked + .indicator {
+  border-color: var(--color-primary);
+  box-shadow: inset 0 0 0 5px var(--color-primary);
+  animation: checkBounce var(--duration-normal) var(--ease-out-back);
+}
+
+.input:focus-visible + .indicator {
+  box-shadow: 0 0 0 3px var(--color-focus-ring);
+}
+
+.input:disabled + .indicator {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+
+@keyframes checkBounce {
+  0% {
+    transform: scale(1);
+  }
+
+  40% {
+    transform: scale(0.85);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}

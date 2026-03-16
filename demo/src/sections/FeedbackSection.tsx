@@ -7,6 +7,7 @@ import {
   Button,
   Chip,
   CircularProgress,
+  ClosableChip,
   CodeText,
   Countdown,
   EmptyState,
@@ -20,7 +21,6 @@ import {
   Skeleton,
   Spinner,
   StatCard,
-  TagChip,
 } from '@jankrajewskiit/ui';
 import {
   IoAlertCircle,
@@ -76,9 +76,9 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="Chip variants" subtitle="Status, selection and clickable chips">
+        <ShowcaseSection title="Chip" subtitle="Status, selection and clickable chips">
           <PreviewPanel>
-            <PreviewGroup title="Color variants">
+            <PreviewGroup title="Preset variants">
               <div class="row">
                 <Chip variant="primary">Primary</Chip>
                 <Chip variant="primaryOutline">Outline</Chip>
@@ -89,7 +89,7 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
                 <Chip variant="subtle">Subtle</Chip>
               </div>
             </PreviewGroup>
-            <PreviewGroup title="Interaction states">
+            <PreviewGroup title="Interactive and custom color">
               <div class="row">
                 <Chip variant="success" filled>
                   Filled success
@@ -106,19 +106,24 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
                 <Chip variant="primary" onClick={() => {}}>
                   Clickable
                 </Chip>
+                <Chip color="#2e7d32" selected>
+                  selected
+                </Chip>
+                <Chip color="#ed6c02" onClick={() => {}}>
+                  clickable
+                </Chip>
               </div>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="TagChip" subtitle="Color-coded tags with optional selection">
+        <ShowcaseSection title="ClosableChip" subtitle="Subtle chip with close affordance for dropdown selections">
           <PreviewPanel>
             <PreviewGroup title="Examples">
               <div class="row">
-                <TagChip label="design" color="#1467ff" />
-                <TagChip label="frontend" color="#0288d1" />
-                <TagChip label="selected" color="#2e7d32" selected />
-                <TagChip label="clickable" color="#ed6c02" onClick={() => {}} />
+                <ClosableChip onRemove={() => {}}>JavaScript</ClosableChip>
+                <ClosableChip onRemove={() => {}}>TypeScript</ClosableChip>
+                <ClosableChip onRemove={() => {}}>SolidJS</ClosableChip>
               </div>
             </PreviewGroup>
           </PreviewPanel>
@@ -207,23 +212,6 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
           <ShowcaseMeta>Spinners inherit brand colors and support reduced-motion preferences.</ShowcaseMeta>
         </ShowcaseSection>
 
-        <ShowcaseSection title="Skeleton" subtitle="Loading placeholders with multiple variants">
-          <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <div class="row">
-                <Skeleton variant="circular" width={48} height={48} />
-                <div class="col flex1">
-                  <Skeleton variant="text" width="60%" height={16} />
-                  <Skeleton variant="text" width="90%" height={14} />
-                  <Skeleton variant="text" width="40%" height={14} />
-                </div>
-              </div>
-              <Skeleton variant="rectangular" height={120} animation="pulse" />
-              <Skeleton variant="text" width="80%" animation="none" />
-            </PreviewGroup>
-          </PreviewPanel>
-        </ShowcaseSection>
-
         <ShowcaseSection title="LoadingContainer" subtitle="Centered loading states for container surfaces">
           <PreviewPanel>
             <PreviewGroup title="Examples">
@@ -238,6 +226,23 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
                   <LoadingContainer size="lg" />
                 </div>
               </div>
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection title="Skeleton" subtitle="Loading placeholders with multiple variants">
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <div class="row">
+                <Skeleton variant="circular" width={48} height={48} />
+                <div class="col flex1">
+                  <Skeleton variant="text" width="60%" height={16} />
+                  <Skeleton variant="text" width="90%" height={14} />
+                  <Skeleton variant="text" width="40%" height={14} />
+                </div>
+              </div>
+              <Skeleton variant="rectangular" height={120} animation="pulse" />
+              <Skeleton variant="text" width="80%" animation="none" />
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
@@ -258,6 +263,9 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
               </Alert>
               <Alert variant="error" title="Error">
                 Failed to save changes.
+              </Alert>
+              <Alert variant="tip" title="Tip">
+                Use <Kbd>Ctrl</Kbd> + <Kbd>K</Kbd> to open the command palette.
               </Alert>
             </PreviewGroup>
           </PreviewPanel>
@@ -353,29 +361,21 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
             Trigger toasts above to see them collected here. Use actions to mark as read or clear history.
           </ShowcaseMeta>
         </ShowcaseSection>
-
-        <ShowcaseSection title="Alert variants" subtitle="Highlighted content blocks for tips, warnings and notes">
-          <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <Alert variant="info" title="Information">
-                Use design tokens for consistent styling.
-              </Alert>
-              <Alert variant="success" title="Success">
-                Your changes have been saved.
-              </Alert>
-              <Alert variant="warning">This feature will be deprecated in the next major version.</Alert>
-              <Alert variant="danger" title="Breaking change">
-                API response format has changed.
-              </Alert>
-              <Alert variant="tip" title="Tip">
-                Use <Kbd>Ctrl</Kbd> + <Kbd>K</Kbd> to open the command palette.
-              </Alert>
-            </PreviewGroup>
-          </PreviewPanel>
-        </ShowcaseSection>
       </Show>
 
       <Show when={sectionId() === 'feedback-states'}>
+        <ShowcaseSection title="AccessDenied" subtitle="Full-page permission denied screen">
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <AccessDenied
+                title="Access denied"
+                description="You do not have permission to view this page."
+                goHomeLabel="Go to homepage"
+              />
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+
         <ShowcaseSection title="ErrorFallback" subtitle="Page-level failure handling">
           <PreviewPanel>
             <PreviewGroup title="Examples">
@@ -389,7 +389,7 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="EmptyState" subtitle="Friendly zero-state messaging">
+        <ShowcaseSection title="EmptyState - No results found" subtitle="Friendly zero-state for empty search">
           <PreviewPanel>
             <PreviewGroup title="Examples">
               <EmptyState
@@ -397,19 +397,14 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
                 message="No results found"
                 hint="Try adjusting your search query or filters."
               />
-              <EmptyState icon={<IoFolder size={40} />} message="This folder is empty" />
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="AccessDenied" subtitle="Full-page permission denied screen">
+        <ShowcaseSection title="EmptyState - This folder is empty" subtitle="Friendly zero-state for empty collections">
           <PreviewPanel>
             <PreviewGroup title="Examples">
-              <AccessDenied
-                title="Access denied"
-                description="You do not have permission to view this page."
-                goHomeLabel="Go to homepage"
-              />
+              <EmptyState icon={<IoFolder size={40} />} message="This folder is empty" />
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>

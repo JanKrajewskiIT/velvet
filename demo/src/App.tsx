@@ -26,9 +26,10 @@ export type SectionId =
   | 'typography'
   | 'developer'
   | 'inputs-buttons'
+  | 'inputs-switchers'
   | 'inputs-dropdowns'
   | 'inputs-fields'
-  | 'inputs-controls'
+  | 'inputs-pickers'
   | 'inputs-datetime'
   | 'inputs-other'
   | 'inputs-form-layout'
@@ -87,9 +88,10 @@ const NAV_GROUPS: SidebarNavGroup[] = [
     label: 'Inputs',
     items: [
       { id: 'inputs-buttons', label: 'Buttons' },
-      { id: 'inputs-fields', label: 'Fields' },
-      { id: 'inputs-controls', label: 'Controls' },
+      { id: 'inputs-switchers', label: 'Switchers' },
+      { id: 'inputs-pickers', label: 'Pickers' },
       { id: 'inputs-dropdowns', label: 'Dropdowns' },
+      { id: 'inputs-fields', label: 'Fields' },
       { id: 'inputs-datetime', label: 'Date & Time' },
       { id: 'inputs-other', label: 'Upload' },
       { id: 'inputs-form-layout', label: 'Form Layout' },
@@ -155,6 +157,10 @@ const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
     title: 'Inputs & Buttons',
     description: 'Button, AffixButton, IconButton, ActionRow, CopyButton, LocaleSwitcher and ThemeToggle.',
   },
+  'inputs-switchers': {
+    title: 'Inputs & Switchers',
+    description: 'SegmentedControl, Checkbox, RadioGroup and Switch for binary and exclusive selection patterns.',
+  },
   'inputs-dropdowns': {
     title: 'Inputs & Dropdowns',
     description:
@@ -165,9 +171,9 @@ const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
     description:
       'Input, TextArea, NumberInput, SearchInput, PasswordInput, TagInput, OtpInput, InlineEditableText and RichTextEditor.',
   },
-  'inputs-controls': {
-    title: 'Inputs & Controls',
-    description: 'Checkbox, Switch, RadioGroup, SegmentedControl, Slider, RangeSlider, Rating and ColorPicker.',
+  'inputs-pickers': {
+    title: 'Inputs & Pickers',
+    description: 'Slider, RangeSlider, Rating and ColorPicker for scalar, range and palette selection.',
   },
   'inputs-datetime': {
     title: 'Inputs & Date & Time',
@@ -175,7 +181,7 @@ const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
   },
   'inputs-other': {
     title: 'Inputs & Upload',
-    description: 'FileDropZone and FileInput for drag-and-drop and multi-file upload flows.',
+    description: 'FileDropZone for drag-and-drop single and multi-file upload flows.',
   },
   'inputs-form-layout': {
     title: 'Inputs & Form Layout',
@@ -239,7 +245,7 @@ const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
   },
   'feedback-badges-chips': {
     title: 'Feedback & Badges & Chips & Stats',
-    description: 'Badge, Chip, TagChip and StatCard for status, filters, tags and compact KPIs.',
+    description: 'Badge, Chip and StatCard for status, filters, tags and compact KPIs.',
   },
   'feedback-progress': {
     title: 'Feedback & Progress',

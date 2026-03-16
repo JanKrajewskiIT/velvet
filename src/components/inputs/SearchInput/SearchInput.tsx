@@ -4,7 +4,7 @@ import { onCleanup, Show } from 'solid-js';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import IconButton from '../IconButton/IconButton';
+import IconButton from '../../buttons/IconButton/IconButton';
 import type { InputSize } from '../Input/Input';
 import InputBase from '../shared/InputBase';
 import styles from './SearchInput.module.css';

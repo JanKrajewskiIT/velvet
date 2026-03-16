@@ -45,16 +45,6 @@
   font-size: var(--typography-scale-md);
 }
 
-.closeBtn {
-  background: transparent;
-  border: none;
-  font-size: var(--typography-scale-xl);
-  line-height: var(--typography-line-height-none);
-  cursor: pointer;
-  color: var(--color-text-secondary);
-  padding: 0 0 0 var(--spacing-md);
-}
-
 @keyframes slideIn {
   from {
     transform: translateX(120%) scale(0.9);

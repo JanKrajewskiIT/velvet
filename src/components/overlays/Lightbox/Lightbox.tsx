@@ -6,7 +6,7 @@ import useEscapeKey from '~/hooks/useEscapeKey';
 import useFocusTrap from '~/hooks/useFocusTrap';
 import type Props from '~/models/Props';
 
-import IconButton from '../../inputs/IconButton/IconButton';
+import IconButton from '../../buttons/IconButton/IconButton';
 import Text from '../../typography/Text/Text';
 import styles from './Lightbox.module.css';
 
@@ -108,7 +108,14 @@ const Lightbox = (props: Props<LightboxProps>) => {
             onClick={() => props.onClose()}
             tabIndex={-1}
           />
-          <IconButton icon={<IoClose />} title={closeLabel()} class={styles.close} onClick={() => props.onClose()} />
+          <IconButton
+            icon={<IoClose />}
+            title={closeLabel()}
+            class={styles.close}
+            variant="outline"
+            size="sm"
+            onClick={() => props.onClose()}
+          />
 
           <Show when={total() > 1}>
             <span class={styles.counter}>
@@ -122,6 +129,7 @@ const Lightbox = (props: Props<LightboxProps>) => {
                 icon={<IoChevronBack />}
                 title={previousLabel()}
                 class={`${styles.nav} ${styles.prev}`}
+                variant="outline"
                 onClick={goPrev}
               />
             </Show>
@@ -133,6 +141,7 @@ const Lightbox = (props: Props<LightboxProps>) => {
                 icon={<IoChevronForward />}
                 title={nextLabel()}
                 class={`${styles.nav} ${styles.next}`}
+                variant="outline"
                 onClick={goNext}
               />
             </Show>

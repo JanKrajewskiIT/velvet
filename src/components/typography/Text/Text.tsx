@@ -4,18 +4,20 @@ import { Dynamic } from 'solid-js/web';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
+import { toneClass, type TypographyTone } from '../Typography/Typography';
 import styles from './Text.module.css';
 
 type TextVariant = 'bodyLg' | 'bodyMd' | 'bodySm' | 'labelLg' | 'labelMd' | 'caption' | 'overline';
-type TextTone = 'default' | 'muted' | 'secondary' | 'tertiary' | 'inverse' | 'primary';
 
-interface TextOwnProps extends JSX.HTMLAttributes<HTMLElement> {
+interface TextProps extends JSX.HTMLAttributes<HTMLElement> {
   as?: keyof JSX.IntrinsicElements;
   variant?: TextVariant;
-  tone?: TextTone;
+  tone?: TypographyTone;
+  class?: string;
+  children?: JSX.Element;
 }
 
-const Text = (props: Props<TextOwnProps>) => {
+const Text = (props: Props<TextProps>) => {
   const [local, rest] = splitProps(props, ['as', 'variant', 'tone', 'class', 'children']);
 
   const variantClass = () => {
@@ -28,25 +30,16 @@ const Text = (props: Props<TextOwnProps>) => {
     return styles.bodyMd;
   };
 
-  const toneClass = () => {
-    if (local.tone === 'muted') return styles.toneMuted;
-    if (local.tone === 'secondary') return styles.toneSecondary;
-    if (local.tone === 'tertiary') return styles.toneTertiary;
-    if (local.tone === 'inverse') return styles.toneInverse;
-    if (local.tone === 'primary') return styles.tonePrimary;
-    return styles.toneDefault;
-  };
-
   return (
     <Dynamic
       component={local.as ?? 'p'}
       {...rest}
-      class={classNames(styles.text, variantClass(), toneClass(), local.class)}
+      class={classNames(styles.text, variantClass(), toneClass(styles, local.tone), local.class)}
     >
       {local.children}
     </Dynamic>
   );
 };
 
-export type { TextTone, TextVariant };
+export type { TextVariant };
 export default Text;

@@ -4,7 +4,7 @@ import useClickOutside from '~/hooks/useClickOutside';
 import useEscapeKey from '~/hooks/useEscapeKey';
 import type Props from '~/models/Props';
 
-import ButtonBase from '../../inputs/shared/ButtonBase';
+import Button from '../../buttons/Button/Button';
 import styles from './Popover.module.css';
 
 interface PopoverProps {
@@ -37,9 +37,16 @@ const Popover = (props: Props<PopoverProps>) => {
 
   return (
     <div class={`${styles.wrapper} ${props.class ?? ''}`}>
-      <ButtonBase class={styles.trigger} onClick={toggle} aria-haspopup="dialog" aria-expanded={isOpen()}>
+      <Button
+        class={styles.trigger}
+        variant="subtle"
+        size="sm"
+        onClick={toggle}
+        aria-haspopup="dialog"
+        aria-expanded={isOpen()}
+      >
         {props.trigger}
-      </ButtonBase>
+      </Button>
       <Show when={isOpen()}>
         <div ref={contentRef} class={`${styles.content} ${styles[position()]}`} role="dialog" aria-modal="false">
           {props.content}

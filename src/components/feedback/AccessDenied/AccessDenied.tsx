@@ -2,8 +2,8 @@ import { IoLockClosedOutline } from 'solid-icons/io';
 
 import type Props from '~/models/Props';
 
-import Heading from '../../typography/Heading/Heading';
-import Text from '../../typography/Text/Text';
+import Button from '../../buttons/Button/Button';
+import FallbackState from '../FallbackState/FallbackState';
 import styles from './AccessDenied.module.css';
 
 interface AccessDeniedProps {
@@ -14,17 +14,19 @@ interface AccessDeniedProps {
 }
 
 const AccessDenied = (props: Props<AccessDeniedProps>) => {
+  const navigateHome = () => {
+    if (typeof window === 'undefined') return;
+    window.location.href = props.goHomeHref ?? '/';
+  };
+
   return (
-    <div class={`${styles.container} ${props.class ?? ''}`}>
-      <div class={styles.content}>
-        <IoLockClosedOutline class={styles.icon} aria-hidden />
-        <Heading level={1}>{props.title}</Heading>
-        <Text tone="muted">{props.description}</Text>
-        <a href={props.goHomeHref ?? '/'} class={styles.link}>
-          {props.goHomeLabel}
-        </a>
-      </div>
-    </div>
+    <FallbackState
+      class={props.class}
+      title={props.title}
+      description={props.description}
+      icon={<IoLockClosedOutline class={styles.icon} aria-hidden />}
+      action={<Button onClick={navigateHome}>{props.goHomeLabel}</Button>}
+    />
   );
 };
 

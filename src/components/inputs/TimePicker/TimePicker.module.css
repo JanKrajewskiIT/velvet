@@ -38,11 +38,19 @@
 }
 
 .iconBtn {
-  composes: iconaction from '../shared/IconAction.module.css';
-  min-height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  padding: 0 var(--spacing-xs);
+  min-height: 100%;
   border-radius: 0;
   background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
   font-size: var(--typography-scale-md);
+  line-height: var(--typography-line-height-none);
+  transition: color var(--duration-fast) var(--ease-out-expo);
 }
 
 .iconBtn:hover {

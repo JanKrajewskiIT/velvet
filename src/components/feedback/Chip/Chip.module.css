@@ -1,11 +1,14 @@
 .chip {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
   padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--radius-pill);
   font-size: var(--typography-scale-sm);
   font-weight: var(--typography-weight-medium);
   border: 1px solid;
   background: none;
+  font-family: inherit;
   line-height: var(--typography-line-height-normal);
   animation: scaleIn var(--duration-fast) var(--ease-out-expo) both;
   transition:

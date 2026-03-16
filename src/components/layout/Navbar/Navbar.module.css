@@ -203,11 +203,20 @@
 }
 
 .hamburger {
-  composes: base from '../../inputs/shared/ButtonBase.module.css';
   display: none;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  font-family: var(--font-family-sans);
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background-color var(--duration-fast) var(--ease-out-expo),
+    border-color var(--duration-fast) var(--ease-out-expo),
+    color var(--duration-fast) var(--ease-out-expo),
+    box-shadow var(--duration-fast) var(--ease-out-expo),
+    transform var(--duration-fast) var(--ease-out-expo);
   width: 2.25rem;
   height: 2.25rem;
   min-width: 2.25rem;

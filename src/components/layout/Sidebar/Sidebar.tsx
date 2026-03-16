@@ -4,10 +4,10 @@ import { createMemo, createSignal, For, type JSX, Show } from 'solid-js';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import Button from '../../inputs/Button/Button';
-import Checkbox from '../../inputs/Checkbox/Checkbox';
-import IconButton from '../../inputs/IconButton/IconButton';
+import Button from '../../buttons/Button/Button';
+import IconButton from '../../buttons/IconButton/IconButton';
 import Input from '../../inputs/Input/Input';
+import Checkbox from '../../switchers/Checkbox/Checkbox';
 import styles from './Sidebar.module.css';
 import SidebarItemButton from './SidebarItemButton';
 

@@ -4,8 +4,8 @@ import { Show } from 'solid-js';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import AffixButton from '../../inputs/AffixButton/AffixButton';
-import IconButton from '../../inputs/IconButton/IconButton';
+import AffixButton from '../../buttons/AffixButton/AffixButton';
+import IconButton from '../../buttons/IconButton/IconButton';
 import styles from './Sidebar.module.css';
 
 interface SidebarItemButtonOwnProps {

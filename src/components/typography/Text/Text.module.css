@@ -4,31 +4,31 @@
 }
 
 .bodyLg {
-  composes: typeBodyLg from '../shared/Typography.module.css';
+  composes: typeBodyLg from '../Typography/Typography.module.css';
 }
 
 .bodyMd {
-  composes: typeBodyMd from '../shared/Typography.module.css';
+  composes: typeBodyMd from '../Typography/Typography.module.css';
 }
 
 .bodySm {
-  composes: typeBodySm from '../shared/Typography.module.css';
+  composes: typeBodySm from '../Typography/Typography.module.css';
 }
 
 .labelLg {
-  composes: typeLabelLg from '../shared/Typography.module.css';
+  composes: typeLabelLg from '../Typography/Typography.module.css';
 }
 
 .labelMd {
-  composes: typeLabelMd from '../shared/Typography.module.css';
+  composes: typeLabelMd from '../Typography/Typography.module.css';
 }
 
 .caption {
-  composes: typeCaption from '../shared/Typography.module.css';
+  composes: typeCaption from '../Typography/Typography.module.css';
 }
 
 .overline {
-  composes: typeOverline from '../shared/Typography.module.css';
+  composes: typeOverline from '../Typography/Typography.module.css';
 }
 
 .toneDefault {

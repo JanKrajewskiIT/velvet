@@ -5,7 +5,7 @@ import useClickOutside from '~/hooks/useClickOutside';
 import useEscapeKey from '~/hooks/useEscapeKey';
 import type Props from '~/models/Props';
 
-import ButtonBase from '../../inputs/shared/ButtonBase';
+import Button from '../../buttons/Button/Button';
 import Tooltip from '../../overlays/Tooltip/Tooltip';
 import styles from './SpeedDial.module.css';
 
@@ -70,23 +70,24 @@ const SpeedDial = (props: Props<SpeedDialProps>) => {
             {(action, index) => (
               <div class={styles.actionWrapper} style={{ '--action-delay': `${index() * 30}ms` }}>
                 <Tooltip content={action.label} position={tooltipPosition()}>
-                  <ButtonBase
-                    variant="outline"
+                  <Button
+                    variant="ghost"
                     size="sm"
+                    iconOnly
                     class={styles.actionButton}
                     onClick={() => handleAction(action)}
                     aria-label={action.label}
                     role="menuitem"
                   >
                     {action.icon}
-                  </ButtonBase>
+                  </Button>
                 </Tooltip>
               </div>
             )}
           </For>
         </div>
       </Show>
-      <ButtonBase
+      <Button
         iconOnly
         size="lg"
         class={`${styles.fab} ${open() ? styles.fabOpen : ''}`}
@@ -97,7 +98,7 @@ const SpeedDial = (props: Props<SpeedDialProps>) => {
         aria-label={open() ? closeLabel() : openLabel()}
       >
         <span class={styles.fabIcon}>{props.icon ?? <FiPlus size={24} />}</span>
-      </ButtonBase>
+      </Button>
     </div>
   );
 };

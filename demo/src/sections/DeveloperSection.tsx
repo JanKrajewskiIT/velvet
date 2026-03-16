@@ -219,7 +219,7 @@ const DeveloperSection = () => {
               </li>
               <li>
                 <strong>feedback/</strong> (11) - Toast, Spinner, Skeleton, LoadingContainer, ErrorMessage, EmptyState,
-                ErrorFallback, AccessDenied, Chip, TagChip, StatCard
+                ErrorFallback, AccessDenied, Chip, StatCard
               </li>
               <li>
                 <strong>overlays/</strong> (8) - Dialog, Drawer, Tooltip, ConfirmDialog, ConfirmAction, ContextMenu,

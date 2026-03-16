@@ -4,16 +4,16 @@ import { Dynamic } from 'solid-js/web';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
+import { toneClass, type TypographyTone } from '../Typography/Typography';
 import styles from './Heading.module.css';
 
 type HeadingVariant = 'displayLg' | 'displayMd' | 'h1' | 'h2' | 'h3' | 'titleLg' | 'titleMd';
-type HeadingTone = 'default' | 'muted' | 'secondary' | 'tertiary' | 'inverse' | 'primary';
 
 interface HeadingOwnProps extends JSX.HTMLAttributes<HTMLElement> {
   as?: keyof JSX.IntrinsicElements;
   level?: 1 | 2 | 3 | 4 | 5 | 6;
   variant?: HeadingVariant;
-  tone?: HeadingTone;
+  tone?: TypographyTone;
 }
 
 const levelToVariant = (level: number): HeadingVariant => {
@@ -41,25 +41,16 @@ const Heading = (props: Props<HeadingOwnProps>) => {
     return styles.titleMd;
   };
 
-  const toneClass = () => {
-    if (local.tone === 'muted') return styles.toneMuted;
-    if (local.tone === 'secondary') return styles.toneSecondary;
-    if (local.tone === 'tertiary') return styles.toneTertiary;
-    if (local.tone === 'inverse') return styles.toneInverse;
-    if (local.tone === 'primary') return styles.tonePrimary;
-    return styles.toneDefault;
-  };
-
   return (
     <Dynamic
       component={component()}
       {...rest}
-      class={classNames(styles.heading, variantClass(), toneClass(), local.class)}
+      class={classNames(styles.heading, variantClass(), toneClass(styles, local.tone), local.class)}
     >
       {local.children}
     </Dynamic>
   );
 };
 
-export type { HeadingTone, HeadingVariant };
+export type { HeadingVariant };
 export default Heading;

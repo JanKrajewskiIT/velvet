@@ -4,7 +4,7 @@ import { createEffect, createMemo, createSignal, For, onCleanup, Show } from 'so
 
 import Card from '~/components/data-display/Card/Card';
 import Input from '~/components/inputs/Input/Input';
-import CheckboxControl from '~/components/inputs/shared/CheckboxControl';
+import CheckboxControl from '~/components/switchers/CheckboxControl/CheckboxControl';
 import useClickOutside from '~/hooks/useClickOutside';
 import useEscapeKey from '~/hooks/useEscapeKey';
 import type Props from '~/models/Props';

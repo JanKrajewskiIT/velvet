@@ -1,0 +1,24 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.label {
+  font-size: var(--typography-scale-sm);
+  color: var(--color-text);
+  font-weight: var(--typography-weight-medium);
+}
+
+.value {
+  font-size: var(--typography-scale-sm);
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}

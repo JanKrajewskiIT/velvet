@@ -4,7 +4,7 @@ import { createEffect, createSignal, onCleanup } from 'solid-js';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import ButtonBase from '../../inputs/shared/ButtonBase';
+import Button from '../../buttons/Button/Button';
 import styles from './BackToTop.module.css';
 
 interface BackToTopProps {
@@ -51,7 +51,7 @@ const BackToTop = (props: Props<BackToTopProps>) => {
   };
 
   return (
-    <ButtonBase
+    <Button
       class={classNames(styles.button, visible() ? styles.visible : styles.hidden, props.class)}
       variant="primary"
       size="lg"
@@ -60,7 +60,7 @@ const BackToTop = (props: Props<BackToTopProps>) => {
       aria-label={label()}
     >
       <IoArrowUp size={24} />
-    </ButtonBase>
+    </Button>
   );
 };
 

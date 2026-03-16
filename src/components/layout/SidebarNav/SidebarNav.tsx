@@ -3,7 +3,7 @@ import { For, type JSX, Show } from 'solid-js';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import Button from '../../inputs/Button/Button';
+import Button from '../../buttons/Button/Button';
 import Text from '../../typography/Text/Text';
 import styles from './SidebarNav.module.css';
 

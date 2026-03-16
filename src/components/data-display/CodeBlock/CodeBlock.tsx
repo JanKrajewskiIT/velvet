@@ -1,6 +1,6 @@
 import { createMemo, Show } from 'solid-js';
 
-import CopyButton from '~/components/inputs/CopyButton/CopyButton';
+import CopyButton from '~/components/buttons/CopyButton/CopyButton';
 import type Props from '~/models/Props';
 
 import styles from './CodeBlock.module.css';

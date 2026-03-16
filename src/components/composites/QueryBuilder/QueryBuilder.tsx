@@ -7,8 +7,8 @@ import Text from '~/components/typography/Text/Text';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import Button from '../../inputs/Button/Button';
-import IconButton from '../../inputs/IconButton/IconButton';
+import Button from '../../buttons/Button/Button';
+import IconButton from '../../buttons/IconButton/IconButton';
 import Input from '../../inputs/Input/Input';
 import Select from '../../inputs/Input/Select';
 import styles from './QueryBuilder.module.css';

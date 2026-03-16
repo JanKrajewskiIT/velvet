@@ -4,8 +4,8 @@ import { createMemo, createUniqueId, For, Show } from 'solid-js';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
+import Button from '../../buttons/Button/Button';
 import FormField from '../../forms/FormField/FormField';
-import Button from '../../inputs/Button/Button';
 import Select from '../../inputs/Input/Select';
 import SearchInput from '../../inputs/SearchInput/SearchInput';
 import EditableChip from '../../inputs/shared/EditableChip';

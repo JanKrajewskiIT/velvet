@@ -47,20 +47,8 @@
   gap: var(--spacing-xs);
 }
 
-.action {
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  background: var(--color-bg);
-  color: var(--color-text-secondary);
-  font-size: var(--typography-scale-xs);
-  font-weight: var(--typography-weight-medium);
-  padding: var(--spacing-2xs) var(--spacing-xs);
-  cursor: pointer;
-}
-
-.action:disabled {
-  opacity: var(--opacity-disabled);
-  cursor: not-allowed;
+.actionButton {
+  min-height: 32px;
 }
 
 .list {
@@ -99,16 +87,24 @@
   cursor: pointer;
 }
 
-.dot {
+.dotAnchor,
+.dotPlaceholder {
+  display: inline-block;
+  width: 1px;
+  height: 1px;
+}
+
+.dotBadge {
+  margin-right: var(--spacing-2xs);
+}
+
+.dotPlaceholder {
   width: 8px;
   height: 8px;
   border-radius: var(--radius-full);
-  background: var(--color-primary);
-  flex-shrink: 0;
-}
-
-.dotRead {
   background: var(--color-text-tertiary);
+  flex-shrink: 0;
+  margin-right: var(--spacing-2xs);
 }
 
 .message {
@@ -119,6 +115,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.messageWithBadge {
+  margin-left: var(--spacing-2xs);
 }
 
 .time {
@@ -137,14 +137,6 @@
 .iconButton {
   width: 28px;
   height: 28px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  background: var(--color-bg-elevated);
-  color: var(--color-text-secondary);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
 }
 
 .empty {

@@ -19,6 +19,7 @@ const CodeText = (props: Props<CodeTextOwnProps>) => {
   const [local, rest] = splitProps(props, ['as', 'variant', 'size', 'class', 'children']);
 
   const variant = () => local.variant ?? 'inline';
+
   const component = () => {
     if (local.as) return local.as;
     return variant() === 'block' ? 'pre' : 'code';

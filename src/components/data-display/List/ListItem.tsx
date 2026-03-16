@@ -2,7 +2,7 @@ import { type JSX, Show, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
 
-import ButtonBase from '../../inputs/shared/ButtonBase';
+import Button from '../../buttons/Button/Button';
 import styles from './ListItem.module.css';
 
 interface ListItemOwnProps extends Omit<JSX.HTMLAttributes<HTMLLIElement>, 'onClick'> {
@@ -37,9 +37,9 @@ const ListItem = (props: Props<ListItemOwnProps>) => {
     <li class={`${styles.listItem} ${local.class ?? ''}`} {...rest}>
       <Show when={local.onClick} fallback={<div class={styles.inner}>{content()}</div>}>
         {(handler) => (
-          <ButtonBase class={styles.innerButton} onClick={handler()}>
+          <Button class={styles.innerButton} variant="subtle" size="md" onClick={handler()}>
             {content()}
-          </ButtonBase>
+          </Button>
         )}
       </Show>
     </li>

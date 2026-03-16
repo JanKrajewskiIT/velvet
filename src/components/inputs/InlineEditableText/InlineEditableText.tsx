@@ -4,7 +4,7 @@ import { createEffect, createSignal, onMount, Show } from 'solid-js';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import IconButton from '../IconButton/IconButton';
+import IconButton from '../../buttons/IconButton/IconButton';
 import Input, { type InputSize } from '../Input/Input';
 import styles from './InlineEditableText.module.css';
 

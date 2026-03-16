@@ -8,7 +8,7 @@ import useOverlayAnimation from '~/hooks/useOverlayAnimation';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import IconButton from '../../inputs/IconButton/IconButton';
+import IconButton from '../../buttons/IconButton/IconButton';
 import Heading from '../../typography/Heading/Heading';
 import styles from './Sheet.module.css';
 

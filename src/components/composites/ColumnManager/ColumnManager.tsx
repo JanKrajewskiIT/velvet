@@ -7,10 +7,10 @@ import Text from '~/components/typography/Text/Text';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import Button from '../../inputs/Button/Button';
-import IconButton from '../../inputs/IconButton/IconButton';
+import Button from '../../buttons/Button/Button';
+import IconButton from '../../buttons/IconButton/IconButton';
 import Select from '../../inputs/Input/Select';
-import CheckboxControl from '../../inputs/shared/CheckboxControl';
+import CheckboxControl from '../../switchers/CheckboxControl/CheckboxControl';
 import styles from './ColumnManager.module.css';
 
 export type ColumnManagerPin = 'left' | 'right' | null;

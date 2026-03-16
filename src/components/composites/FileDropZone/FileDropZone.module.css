@@ -18,6 +18,19 @@
   font: inherit;
 }
 
+.dropZone:disabled,
+.dropZoneDisabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+
+.dropZone:disabled:hover,
+.dropZoneDisabled:hover {
+  border-color: var(--color-border);
+  color: var(--color-text-secondary);
+  background: none;
+}
+
 .dropZone:hover {
   border-color: var(--color-primary);
   color: var(--color-primary);
