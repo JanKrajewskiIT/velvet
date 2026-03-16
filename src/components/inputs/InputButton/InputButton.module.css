@@ -1,0 +1,33 @@
+.field {
+  composes: fieldBase from '../shared/FieldBase.module.css';
+}
+
+.field:focus,
+.focusWithin:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-focus-ring);
+}
+
+.invalid {
+  composes: fieldInvalid from '../shared/FieldBase.module.css';
+}
+
+.readOnly {
+  composes: fieldReadOnly from '../shared/FieldBase.module.css';
+}
+
+.disabled {
+  composes: fieldDisabled from '../shared/FieldBase.module.css';
+}
+
+.sizeSm {
+  composes: sizeSm from '../shared/FieldBase.module.css';
+}
+
+.sizeMd {
+  composes: sizeMd from '../shared/FieldBase.module.css';
+}
+
+.sizeLg {
+  composes: sizeLg from '../shared/FieldBase.module.css';
+}

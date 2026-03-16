@@ -24,6 +24,7 @@ const Chip = (props: Props<ChipProps>) => {
   const chipClass = () =>
     classNames(
       styles.chip,
+      usesCustomColor() && styles.customColor,
       !usesCustomColor() && styles[props.variant ?? 'primary'],
       props.size === 'sm' && styles.sm,
       props.selected && styles.selected,
@@ -36,10 +37,10 @@ const Chip = (props: Props<ChipProps>) => {
     if (!props.color) return undefined;
 
     return {
-      'border-color': props.color,
-      color: isColorFilled() ? getContrastTextColor(props.color) : props.color,
-      'background-color': isColorFilled() ? props.color : 'transparent',
-    };
+      '--chip-border-color': props.color,
+      '--chip-text-color': isColorFilled() ? getContrastTextColor(props.color) : props.color,
+      '--chip-background-color': isColorFilled() ? props.color : 'transparent',
+    } as JSX.CSSProperties;
   };
 
   return (
@@ -51,7 +52,7 @@ const Chip = (props: Props<ChipProps>) => {
         </span>
       }
     >
-      <button type="button" class={chipClass()} style={inlineStyles()} onClick={(e) => props.onClick?.(e)}>
+      <button type="button" class={chipClass()} style={inlineStyles()} onClick={(event) => props.onClick?.(event)}>
         {props.children}
       </button>
     </Show>

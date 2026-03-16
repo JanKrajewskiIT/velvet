@@ -2,6 +2,7 @@ import type { JSX } from 'solid-js';
 import { Show } from 'solid-js';
 
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
 import styles from './Badge.module.css';
 
@@ -24,13 +25,13 @@ const Badge = (props: Props<BadgeProps>) => {
   };
 
   return (
-    <div class={`${styles.wrapper} ${props.class ?? ''}`}>
+    <div class={classNames(styles.wrapper, props.class)}>
       {props.children}
       <Show when={props.dot}>
-        <span class={`${styles.badge} ${styles.dot} ${variantClass()}`} />
+        <span class={classNames(styles.badge, styles.dot, variantClass())} />
       </Show>
       <Show when={!props.dot && props.content !== undefined}>
-        <span class={`${styles.badge} ${variantClass()}`}>{displayContent()}</span>
+        <span class={classNames(styles.badge, variantClass())}>{displayContent()}</span>
       </Show>
     </div>
   );

@@ -6,8 +6,8 @@ import classNames from '~/utils/classNames';
 
 import IconButton from '../../buttons/IconButton/IconButton';
 import FormField from '../../forms/FormField/FormField';
+import AffixInput from '../AffixInput/AffixInput';
 import type { InputSize } from '../Input/Input';
-import InputBase from '../shared/InputBase';
 import styles from './NumberInput.module.css';
 
 interface NumberInputMessages {
@@ -31,8 +31,8 @@ interface NumberInputOwnProps {
   required?: boolean;
   invalid?: boolean;
   size?: InputSize;
-  decrementLabel: string;
-  incrementLabel: string;
+  decrementLabel?: string;
+  incrementLabel?: string;
   messages?: NumberInputMessages;
 }
 
@@ -63,7 +63,8 @@ const NumberInput = (props: Props<NumberInputOwnProps>) => {
   const max = () => local.max ?? Infinity;
   const step = () => local.step ?? 1;
   const size = () => local.size ?? 'md';
-
+  const decrementButtonLabel = () => local.messages?.decrementButtonLabel ?? local.decrementLabel ?? 'Decrease value';
+  const incrementButtonLabel = () => local.messages?.incrementButtonLabel ?? local.incrementLabel ?? 'Increase value';
   const clamp = (v: number) => Math.min(max(), Math.max(min(), v));
 
   const increment = () => {
@@ -107,16 +108,12 @@ const NumberInput = (props: Props<NumberInputOwnProps>) => {
 
   const handleInputChange: JSX.EventHandler<HTMLInputElement, Event> = (e) => {
     if (local.readOnly) return;
-    const parsed = Number(e.currentTarget.value);
+    const raw = e.currentTarget.value.trim();
+    if (raw.length === 0) return;
+    const parsed = Number(raw);
     if (!Number.isNaN(parsed)) {
       local.onChange(clamp(parsed));
     }
-  };
-
-  const sizeClass = () => {
-    if (size() === 'sm') return styles.sizeSm;
-    if (size() === 'lg') return styles.sizeLg;
-    return styles.sizeMd;
   };
 
   return (
@@ -127,51 +124,49 @@ const NumberInput = (props: Props<NumberInputOwnProps>) => {
       error={local.error}
       required={local.required}
       invalid={local.invalid}
-      class={classNames(styles.wrapper, local.disabled && styles.disabled, local.class)}
+      class={classNames(styles.wrapper, local.class)}
     >
-      <InputBase
-        class={classNames(styles.controls, sizeClass())}
-        size={local.size}
+      <AffixInput
+        {...rest}
+        id={local.id}
+        name={local.name}
+        type="number"
+        size={size()}
+        inputClass={styles.input}
+        value={local.value}
         disabled={local.disabled}
         readOnly={local.readOnly}
+        required={local.required}
         invalid={local.invalid}
-        focusWithin={!local.readOnly}
-      >
-        <IconButton
-          icon={<IoRemove />}
-          title={local.messages?.decrementButtonLabel ?? local.decrementLabel}
-          class={styles.button}
-          disabled={local.disabled || local.readOnly}
-          onClick={decrement}
-          onMouseDown={() => startRepeat(decrement)}
-          onMouseUp={stopRepeat}
-          onMouseLeave={stopRepeat}
-        />
-        <input
-          {...rest}
-          id={local.id}
-          name={local.name}
-          type="number"
-          class={styles.input}
-          value={local.value}
-          disabled={local.disabled}
-          readOnly={local.readOnly}
-          required={local.required}
-          aria-invalid={local.invalid || undefined}
-          onKeyDown={handleKeyDown}
-          onChange={handleInputChange}
-        />
-        <IconButton
-          icon={<IoAdd />}
-          title={local.messages?.incrementButtonLabel ?? local.incrementLabel}
-          class={styles.button}
-          disabled={local.disabled || local.readOnly}
-          onClick={increment}
-          onMouseDown={() => startRepeat(increment)}
-          onMouseUp={stopRepeat}
-          onMouseLeave={stopRepeat}
-        />
-      </InputBase>
+        onKeyDown={handleKeyDown}
+        onChange={handleInputChange}
+        prefix={
+          <IconButton
+            icon={<IoRemove />}
+            title={decrementButtonLabel()}
+            disabled={local.disabled || local.readOnly}
+            onClick={decrement}
+            onMouseDown={() => startRepeat(decrement)}
+            onMouseUp={stopRepeat}
+            onMouseLeave={stopRepeat}
+            size={size()}
+            variant="subtle"
+          />
+        }
+        suffix={
+          <IconButton
+            icon={<IoAdd />}
+            title={incrementButtonLabel()}
+            disabled={local.disabled || local.readOnly}
+            onClick={increment}
+            onMouseDown={() => startRepeat(increment)}
+            onMouseUp={stopRepeat}
+            onMouseLeave={stopRepeat}
+            size={size()}
+            variant="subtle"
+          />
+        }
+      />
     </FormField>
   );
 };

@@ -1,0 +1,63 @@
+.wrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.menu {
+  composes: surface scrollable panel panelLeft originTopLeft from '../DropdownBase/DropdownBase.module.css';
+  position: absolute;
+  min-width: 200px;
+  padding: var(--spacing-xs);
+  display: flex;
+  flex-direction: column;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--color-text);
+  font-size: var(--typography-scale-sm);
+  border-radius: var(--radius-sm);
+}
+
+.item:hover {
+  background-color: var(--color-surface);
+}
+
+.item:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
+
+.item:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.item:disabled:hover {
+  background: none;
+}
+
+.itemIcon {
+  display: flex;
+  align-items: center;
+  font-size: var(--typography-scale-base);
+  flex-shrink: 0;
+}
+
+.default {
+  color: var(--color-text);
+}
+
+.primary {
+  color: var(--color-primary);
+}
+
+.success {
+  color: var(--color-success);
+}
+
+.error {
+  color: var(--color-error);
+}

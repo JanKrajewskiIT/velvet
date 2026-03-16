@@ -2,11 +2,10 @@ import { IoClose, IoSearch } from 'solid-icons/io';
 import { onCleanup, Show } from 'solid-js';
 
 import type Props from '~/models/Props';
-import classNames from '~/utils/classNames';
 
 import IconButton from '../../buttons/IconButton/IconButton';
+import AffixInput from '../AffixInput/AffixInput';
 import type { InputSize } from '../Input/Input';
-import InputBase from '../shared/InputBase';
 import styles from './SearchInput.module.css';
 
 interface SearchInputMessages {
@@ -29,6 +28,9 @@ interface SearchInputProps {
 
 const SearchInput = (props: Props<SearchInputProps>) => {
   let debounceTimer: ReturnType<typeof setTimeout> | undefined;
+
+  const placeholderText = () => props.messages?.placeholder ?? props.placeholder ?? 'Search...';
+  const clearButtonLabel = () => props.messages?.clearButtonLabel ?? props.clearLabel ?? 'Clear search';
 
   const fireInput = (value: string) => {
     if (props.debounce && props.debounce > 0) {
@@ -58,33 +60,30 @@ const SearchInput = (props: Props<SearchInputProps>) => {
   onCleanup(() => clearTimeout(debounceTimer));
 
   return (
-    <InputBase
-      class={classNames(styles.wrapper, props.disabled && styles.disabled, props.class)}
+    <AffixInput
+      type="text"
       size={props.size}
+      value={props.value}
+      onInput={handleInput}
+      onKeyDown={handleKeyDown}
+      placeholder={placeholderText()}
       disabled={props.disabled}
-      focusWithin
-    >
-      <IoSearch class={styles.icon} />
-      <input
-        class={styles.input}
-        type="text"
-        value={props.value}
-        onInput={handleInput}
-        onKeyDown={handleKeyDown}
-        placeholder={props.messages?.placeholder ?? props.placeholder ?? 'Search\u2026'}
-        disabled={props.disabled}
-        autofocus={props.autofocus}
-      />
-      <Show when={props.value.length > 0}>
-        <IconButton
-          icon={<IoClose />}
-          title={props.messages?.clearButtonLabel ?? props.clearLabel ?? 'Clear search'}
-          class={styles.clear}
-          onClick={handleClear}
-          size="sm"
-        />
-      </Show>
-    </InputBase>
+      autofocus={props.autofocus}
+      prefix={<IoSearch class={styles.icon} />}
+      suffix={
+        <Show when={props.value.length > 0}>
+          <IconButton
+            icon={<IoClose />}
+            title={clearButtonLabel()}
+            class={styles.clear}
+            onClick={handleClear}
+            size="sm"
+            variant="subtle"
+          />
+        </Show>
+      }
+      class={props.class}
+    />
   );
 };
 

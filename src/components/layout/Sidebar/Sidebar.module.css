@@ -137,6 +137,15 @@
   margin-left: 0;
 }
 
+.badgeCount {
+  margin-right: var(--spacing-xs);
+}
+
+.badgeAnchor {
+  width: 1px;
+  height: 1px;
+}
+
 .children {
   padding-left: var(--spacing-md);
   margin-top: var(--spacing-2xs);

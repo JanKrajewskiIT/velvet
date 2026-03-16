@@ -1,6 +1,7 @@
 import { Show } from 'solid-js';
 
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
 import styles from './CircularProgress.module.css';
 
@@ -30,11 +31,11 @@ const CircularProgress = (props: Props<CircularProgressProps>) => {
 
   const viewBox = () => `0 0 ${dimension()} ${dimension()}`;
 
-  const wrapperClass = () => `${styles.wrapper} ${styles[size()]} ${props.class ?? ''}`;
+  const wrapperClass = () => classNames(styles.wrapper, styles[size()], props.class);
 
-  const svgClass = () => `${styles.svg} ${isDeterminate() ? '' : styles.indeterminate}`;
+  const svgClass = () => classNames(styles.svg, !isDeterminate() && styles.indeterminate);
 
-  const barClass = () => `${styles.bar} ${styles[variant()]} ${isDeterminate() ? '' : styles.indeterminateBar}`;
+  const barClass = () => classNames(styles.bar, styles[variant()], !isDeterminate() && styles.indeterminateBar);
 
   return (
     <div

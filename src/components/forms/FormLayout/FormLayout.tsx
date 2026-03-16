@@ -1,6 +1,7 @@
 import type { JSX } from 'solid-js';
 
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
 import styles from './FormLayout.module.css';
 
@@ -9,7 +10,7 @@ interface FormLayoutProps {
 }
 
 const FormLayout = (props: Props<FormLayoutProps>) => {
-  return <div class={`${styles.form} ${props.class ?? ''}`}>{props.children}</div>;
+  return <div class={classNames(styles.form, props.class)}>{props.children}</div>;
 };
 
 export default FormLayout;

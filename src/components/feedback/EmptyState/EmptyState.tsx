@@ -2,6 +2,7 @@ import type { JSX } from 'solid-js';
 import { Show } from 'solid-js';
 
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
 import Heading from '../../typography/Heading/Heading';
 import Text from '../../typography/Text/Text';
@@ -16,7 +17,7 @@ interface EmptyStateProps {
 
 const EmptyState = (props: Props<EmptyStateProps>) => {
   return (
-    <div class={`${styles.empty} ${props.class ?? ''}`}>
+    <div class={classNames(styles.empty, props.class)}>
       <Show when={props.icon}>
         <div class={styles.icon}>{props.icon}</div>
       </Show>

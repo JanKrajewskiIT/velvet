@@ -2,7 +2,9 @@ import {
   ActionRow,
   addToast,
   AffixButton,
+  AffixInput,
   Autocomplete,
+  Badge,
   Button,
   Checkbox,
   CodeText,
@@ -92,6 +94,7 @@ const InputsSection = (props: InputsSectionProps) => {
   const [time15, setTime15] = createSignal('');
   const [quantity, setQuantity] = createSignal(5);
   const [search, setSearch] = createSignal('');
+  const [affixValue, setAffixValue] = createSignal('hello@velvetui.dev');
   const [range, setRange] = createSignal<DateRange>({ start: '', end: '' });
   const [dateTime, setDateTime] = createSignal('');
   const [richText, setRichText] = createSignal('<p><strong>Release notes</strong> for <em>VelvetUi</em>.</p>');
@@ -152,15 +155,23 @@ const InputsSection = (props: InputsSectionProps) => {
           <PreviewPanel>
             <PreviewGroup title="AffixButton">
               <div class="row">
-                <AffixButton variant="ghost" prefix={<IoDocument />} badge={12}>
-                  Documents
-                </AffixButton>
-                <AffixButton variant="primary" prefix={<IoDownload />} suffix={<IoEllipsisHorizontal />}>
-                  Export report
-                </AffixButton>
-                <AffixButton variant="dashed" prefix={<IoAdd />} suffix={<IoClose />}>
-                  Create tag
-                </AffixButton>
+                <AffixButton
+                  variant="ghost"
+                  text="Documents"
+                  prefix={<IoDocument />}
+                  suffix={
+                    <Badge content={12}>
+                      <span style={{ width: '10px' }} />
+                    </Badge>
+                  }
+                />
+                <AffixButton
+                  variant="primary"
+                  text="Export report"
+                  prefix={<IoDownload />}
+                  suffix={<IoEllipsisHorizontal />}
+                />
+                <AffixButton variant="dashed" text="Create tag" prefix={<IoAdd />} suffix={<IoClose />} />
               </div>
             </PreviewGroup>
           </PreviewPanel>
@@ -201,7 +212,7 @@ const InputsSection = (props: InputsSectionProps) => {
             <PreviewGroup title="On surface (variant)" subtitle="Ghost button for light page backgrounds">
               <div class="row">
                 <LocaleSwitcher
-                  label={locale()}
+                  text={locale()}
                   switchLabel="Switch locale"
                   variant="surface"
                   onSwitch={() => {
@@ -232,7 +243,7 @@ const InputsSection = (props: InputsSectionProps) => {
       </Show>
 
       <Show when={sectionId() === 'inputs-dropdowns'}>
-        <ShowcaseSection title="DropdownButton and DropdownMenu" subtitle="Action menus with keyboard navigation">
+        <ShowcaseSection title="DropdownButton" subtitle="Action menu trigger with dropdown content">
           <PreviewPanel>
             <PreviewGroup title="Examples">
               <div class="row">
@@ -241,11 +252,16 @@ const InputsSection = (props: InputsSectionProps) => {
                   <DropdownItem label="Duplicate" onClick={() => {}} />
                   <DropdownItem label="Archive" onClick={() => {}} />
                 </DropdownButton>
+              </div>
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
 
-                <DropdownMenu
-                  trigger={<IconButton icon={<IoEllipsisHorizontal />} title="More options" />}
-                  label="More options"
-                >
+        <ShowcaseSection title="DropdownMenu" subtitle="Icon trigger with keyboard navigation">
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <div class="row">
+                <DropdownMenu trigger={<IoEllipsisHorizontal />} label="More options">
                   <DropdownItem label="Settings" onClick={() => {}} />
                   <DropdownItem label="Export" onClick={() => {}} />
                   <DropdownItem label="Delete" onClick={() => {}} variant="error" />
@@ -255,17 +271,16 @@ const InputsSection = (props: InputsSectionProps) => {
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="Autocomplete" subtitle="Multi-value select with filtering">
+        <ShowcaseSection title="Select" subtitle="Native select with custom styling">
           <PreviewPanel>
             <PreviewGroup title="Examples">
-              <FormField label="Technologies" id="demo-auto">
-                <Autocomplete
-                  values={autoValues()}
-                  options={['TypeScript', 'JavaScript', 'SolidJS', 'React', 'Vue', 'Svelte', 'Vite', 'Tailwind']}
-                  onChange={setAutoValues}
-                  placeholder="Type to search..."
-                  removeLabel="Remove"
-                />
+              <FormField label="Choose option" id="demo-select">
+                <Select id="demo-select" value={selected()} onChange={(e) => setSelected(e.currentTarget.value)}>
+                  <option value="">-- select --</option>
+                  <option value="a">Option A</option>
+                  <option value="b">Option B</option>
+                  <option value="c">Option C</option>
+                </Select>
               </FormField>
             </PreviewGroup>
           </PreviewPanel>
@@ -293,16 +308,17 @@ const InputsSection = (props: InputsSectionProps) => {
           </ShowcaseMeta>
         </ShowcaseSection>
 
-        <ShowcaseSection title="Select" subtitle="Native select with custom styling">
+        <ShowcaseSection title="Autocomplete" subtitle="Multi-value select with filtering">
           <PreviewPanel>
             <PreviewGroup title="Examples">
-              <FormField label="Choose option" id="demo-select">
-                <Select id="demo-select" value={selected()} onChange={(e) => setSelected(e.currentTarget.value)}>
-                  <option value="">-- select --</option>
-                  <option value="a">Option A</option>
-                  <option value="b">Option B</option>
-                  <option value="c">Option C</option>
-                </Select>
+              <FormField label="Technologies" id="demo-auto">
+                <Autocomplete
+                  values={autoValues()}
+                  options={['TypeScript', 'JavaScript', 'SolidJS', 'React', 'Vue', 'Svelte', 'Vite', 'Tailwind']}
+                  onChange={setAutoValues}
+                  placeholder="Type to search..."
+                  removeLabel="Remove"
+                />
               </FormField>
             </PreviewGroup>
           </PreviewPanel>
@@ -345,6 +361,40 @@ const InputsSection = (props: InputsSectionProps) => {
                   <Input id="demo-input-lg" size="lg" placeholder="Large input" />
                 </FormField>
               </div>
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection title="AffixInput" subtitle="Input with optional prefix and suffix slots">
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <FormField label="Email with actions" id="demo-affix-email">
+                <AffixInput
+                  id="demo-affix-email"
+                  value={affixValue()}
+                  onInput={(e) => setAffixValue(e.currentTarget.value)}
+                  placeholder="name@example.com"
+                  prefix={<IoDocument />}
+                  suffix={
+                    <IconButton
+                      icon={<IoClose />}
+                      title="Clear value"
+                      onClick={() => setAffixValue('')}
+                      size="sm"
+                      variant="subtle"
+                    />
+                  }
+                />
+              </FormField>
+              <FormField label="Search style" id="demo-affix-search">
+                <AffixInput
+                  id="demo-affix-search"
+                  size="sm"
+                  placeholder="Filter by keyword"
+                  prefix={<IoAdd />}
+                  suffix={<IoEllipsisHorizontal />}
+                />
+              </FormField>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>

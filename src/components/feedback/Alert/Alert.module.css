@@ -28,11 +28,7 @@
 }
 
 .closeBtn {
-  composes: iconaction from '../../inputs/shared/IconAction.module.css';
   flex-shrink: 0;
-  width: 28px;
-  min-width: 28px;
-  height: 28px;
 }
 
 .closeBtn:hover {

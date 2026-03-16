@@ -1,12 +1,12 @@
-import { FiSearch } from 'solid-icons/fi';
 import { createEffect, createMemo, createSignal, createUniqueId, For, type JSX, Show } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
 import useEscapeKey from '~/hooks/useEscapeKey';
 import useFocusTrap from '~/hooks/useFocusTrap';
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
-import InputBase from '../../inputs/shared/InputBase';
+import SearchInput from '../../inputs/SearchInput/SearchInput';
 import Heading from '../../typography/Heading/Heading';
 import styles from './CommandPalette.module.css';
 
@@ -46,7 +46,6 @@ const CommandPalette = (props: Props<CommandPaletteProps>) => {
   const [selectedIndex, setSelectedIndex] = createSignal(0);
   const listboxId = createUniqueId();
   const [panelRef, setPanelRef] = createSignal<HTMLElement | undefined>();
-  let inputRef: HTMLInputElement | undefined;
 
   useEscapeKey(
     () => props.open,
@@ -125,7 +124,6 @@ const CommandPalette = (props: Props<CommandPaletteProps>) => {
     if (!props.open) return;
     setQuery('');
     setSelectedIndex(0);
-    requestAnimationFrame(() => inputRef?.focus());
   });
 
   createEffect(() => {
@@ -154,7 +152,7 @@ const CommandPalette = (props: Props<CommandPaletteProps>) => {
   return (
     <Show when={props.open}>
       <Portal>
-        <div role="presentation" class={`${styles.overlay} ${props.class ?? ''}`} onClick={handleOverlayClick}>
+        <div role="presentation" class={classNames(styles.overlay, props.class)} onClick={handleOverlayClick}>
           <div ref={setPanelRef} class={styles.panel} role="dialog" aria-modal="true" aria-label={dialogLabel()}>
             <div class={styles.header}>
               <Heading as="h2" level={2} class={styles.title}>
@@ -162,24 +160,25 @@ const CommandPalette = (props: Props<CommandPaletteProps>) => {
               </Heading>
               <span class={styles.hintKey}>{closeHintLabel()}</span>
             </div>
-            <div class={styles.searchWrap}>
-              <InputBase class={styles.searchField} size="lg" focusWithin>
-                <FiSearch size={18} class={styles.searchIcon} />
-                <input
-                  ref={inputRef}
-                  type="text"
-                  class={styles.searchInput}
-                  placeholder={placeholder()}
-                  value={query()}
-                  onInput={(e) => setQuery(e.currentTarget.value)}
-                  onKeyDown={handleKeyDown}
-                  role="combobox"
-                  aria-autocomplete="list"
-                  aria-expanded={props.open}
-                  aria-controls={listboxId}
-                  aria-activedescendant={flatList().length > 0 ? optionId(selectedIndex()) : undefined}
-                />
-              </InputBase>
+            <div
+              class={styles.searchWrap}
+              onKeyDown={handleKeyDown}
+              role="combobox"
+              tabindex={0}
+              aria-autocomplete="list"
+              aria-expanded={props.open}
+              aria-controls={listboxId}
+              aria-activedescendant={flatList().length > 0 ? optionId(selectedIndex()) : undefined}
+            >
+              <SearchInput
+                class={styles.searchInput}
+                size="lg"
+                placeholder={placeholder()}
+                value={query()}
+                onInput={setQuery}
+                onClear={() => setQuery('')}
+                autofocus
+              />
             </div>
             <div class={styles.results} id={listboxId} role="listbox" aria-label={resultsLabel()}>
               <Show when={flatList().length > 0} fallback={<div class={styles.empty}>{emptyLabel()}</div>}>
@@ -196,7 +195,7 @@ const CommandPalette = (props: Props<CommandPaletteProps>) => {
                             <button
                               type="button"
                               id={optionId(itemIndex())}
-                              class={`${styles.resultItem} ${itemIndex() === selectedIndex() ? styles.selected : ''}`}
+                              class={classNames(styles.resultItem, itemIndex() === selectedIndex() && styles.selected)}
                               onMouseEnter={() => setSelectedIndex(itemIndex())}
                               onClick={() => handleItemClick(item)}
                               role="option"

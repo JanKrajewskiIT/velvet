@@ -79,6 +79,8 @@ const InlineEditableText = (props: Props<InlineEditableTextProps>) => {
               class={styles.iconButton}
               onClick={beginEdit}
               disabled={props.disabled}
+              size="sm"
+              variant="subtle"
             />
           </div>
         }
@@ -99,12 +101,16 @@ const InlineEditableText = (props: Props<InlineEditableTextProps>) => {
             title={props.saveLabel ?? 'Save'}
             class={styles.iconButton}
             onClick={saveEdit}
+            size="sm"
+            variant="subtle"
           />
           <IconButton
             icon={<IoCloseOutline />}
             title={props.cancelLabel ?? 'Cancel'}
             class={styles.iconButton}
             onClick={cancelEdit}
+            size="sm"
+            variant="subtle"
           />
         </div>
       </Show>

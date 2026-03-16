@@ -1,0 +1,21 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.selectedTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+}
+
+.inputWrapper {
+  position: relative;
+}
+
+.dropdown {
+  composes: panel panelLeft panelFullWidth originTop from '../DropdownBase/DropdownBase.module.css';
+  position: absolute;
+  max-height: 190px;
+}

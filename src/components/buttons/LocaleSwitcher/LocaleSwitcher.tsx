@@ -1,13 +1,14 @@
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
+import Text from '../../typography/Text/Text';
 import Button, { type ButtonSize } from '../Button/Button';
 import styles from './LocaleSwitcher.module.css';
 
 export type LocaleSwitcherVariant = 'navbar' | 'surface';
 
 interface LocaleSwitcherProps {
-  label: string;
+  text: string;
   switchLabel: string;
   onSwitch: () => void;
   variant?: LocaleSwitcherVariant;
@@ -15,18 +16,18 @@ interface LocaleSwitcherProps {
 }
 
 const LocaleSwitcher = (props: Props<LocaleSwitcherProps>) => {
-  const isSurface = () => props.variant === 'surface';
-
   return (
     <Button
-      class={classNames(styles.button, isSurface() ? styles.surface : styles.navbar, props.class)}
+      class={classNames(styles.button, props.variant !== 'surface' && styles.navbar, props.class)}
       variant="ghost"
       size={props.size}
-      onClick={() => props.onSwitch()}
+      onClick={props.onSwitch}
       aria-label={props.switchLabel}
       title={props.switchLabel}
     >
-      <span class={styles.label}>{props.label}</span>
+      <Text as="span" variant="labelMd" class={styles.label}>
+        {props.text}
+      </Text>
     </Button>
   );
 };

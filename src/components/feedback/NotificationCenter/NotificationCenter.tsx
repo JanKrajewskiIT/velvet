@@ -5,11 +5,11 @@ import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import Button from '../../buttons/Button/Button';
-import IconButton from '../../buttons/IconButton/IconButton';
 import Tooltip from '../../overlays/Tooltip/Tooltip';
 import Heading from '../../typography/Heading/Heading';
 import Text from '../../typography/Text/Text';
 import Badge from '../Badge/Badge';
+import IconActionButton from '../shared/IconActionButton/IconActionButton';
 import {
   clearNotifications,
   markAllNotificationsRead,
@@ -56,6 +56,8 @@ const NotificationCenter = (props: Props<NotificationCenterOwnProps>) => {
   const clearLabel = () => local.clearAllLabel ?? 'Clear all';
   const dismissLabel = () => local.removeLabel ?? 'Dismiss';
   const markReadLabel = () => 'Mark as read';
+  const handleItemRead = (id: string) => markNotificationRead(id);
+  const handleItemRemove = (id: string) => removeNotification(id);
 
   return (
     <div {...rest} class={classNames(styles.wrapper, local.class)}>
@@ -103,7 +105,7 @@ const NotificationCenter = (props: Props<NotificationCenterOwnProps>) => {
                 <button
                   type="button"
                   class={styles.itemMain}
-                  onClick={() => markNotificationRead(item.id)}
+                  onClick={() => handleItemRead(item.id)}
                   aria-label={markReadLabel()}
                 >
                   <Show when={!item.read} fallback={<span class={styles.dotPlaceholder} />}>
@@ -124,19 +126,19 @@ const NotificationCenter = (props: Props<NotificationCenterOwnProps>) => {
                 </button>
                 <div class={styles.itemActions}>
                   <Tooltip content={markReadLabel()}>
-                    <IconButton
+                    <IconActionButton
                       icon={<IoCheckmarkDone />}
                       title={markReadLabel()}
                       class={styles.iconButton}
-                      onClick={() => markNotificationRead(item.id)}
+                      onClick={() => handleItemRead(item.id)}
                     />
                   </Tooltip>
                   <Tooltip content={dismissLabel()}>
-                    <IconButton
+                    <IconActionButton
                       icon={<IoTrash />}
                       title={dismissLabel()}
                       class={styles.iconButton}
-                      onClick={() => removeNotification(item.id)}
+                      onClick={() => handleItemRemove(item.id)}
                     />
                   </Tooltip>
                 </div>

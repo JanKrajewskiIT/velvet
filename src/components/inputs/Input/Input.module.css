@@ -1,104 +1,36 @@
-.input,
-.textarea {
-  composes: field from '../shared/InputBase.module.css';
+.input {
+  composes: fieldBase from '../shared/FieldBase.module.css';
 }
 
-.sizeSm {
-  composes: sizeSm from '../shared/InputBase.module.css';
-}
-
-.sizeMd {
-  composes: sizeMd from '../shared/InputBase.module.css';
-}
-
-.sizeLg {
-  composes: sizeLg from '../shared/InputBase.module.css';
-}
-
-.invalid {
-  composes: invalid from '../shared/InputBase.module.css';
-}
-
-.readOnly {
-  composes: readOnly from '../shared/InputBase.module.css';
-}
-
-.textarea {
-  resize: vertical;
-}
-
-.selectWrapper {
-  position: relative;
-  width: 100%;
-}
-
-.selectNative {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-  border: 0;
-  pointer-events: none;
-}
-
-.selectTrigger {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--spacing-sm);
-  cursor: pointer;
-  text-align: left;
-}
-
-.selectTriggerReadonly {
-  cursor: default;
-}
-
-.selectTriggerOpen {
+.input:focus {
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px var(--color-focus-ring);
 }
 
-.selectValue {
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.selectPlaceholder {
+.input::placeholder {
   color: var(--color-text-muted);
 }
 
-.selectChevron {
-  flex-shrink: 0;
-  color: var(--color-text-muted);
-  transition: transform var(--duration-fast) var(--ease-out-expo);
+.invalid {
+  composes: fieldInvalid from '../shared/FieldBase.module.css';
 }
 
-.selectChevronOpen {
-  transform: rotate(180deg);
+.readOnly {
+  composes: fieldReadOnly from '../shared/FieldBase.module.css';
 }
 
-.selectDropdown {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  transform-origin: top;
+.disabled {
+  composes: fieldDisabled from '../shared/FieldBase.module.css';
 }
 
-.selectOption {
-  composes: item from '../shared/DropdownBase.module.css';
+.sizeSm {
+  composes: sizeSm from '../shared/FieldBase.module.css';
 }
 
-.selectOptionDisabled {
-  opacity: 0.55;
-  cursor: not-allowed;
+.sizeMd {
+  composes: sizeMd from '../shared/FieldBase.module.css';
+}
+
+.sizeLg {
+  composes: sizeLg from '../shared/FieldBase.module.css';
 }

@@ -18,18 +18,9 @@
 }
 
 .closeBtn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   flex-shrink: 0;
-  width: 28px;
-  height: 28px;
-  padding: 0;
-  border: none;
   border-radius: var(--radius-sm);
-  background: transparent;
   color: inherit;
-  cursor: pointer;
   opacity: 0.8;
   transition:
     opacity var(--duration-fast) var(--ease-out-expo),

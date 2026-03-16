@@ -11,10 +11,16 @@ interface AccessDeniedProps {
   description: string;
   goHomeLabel: string;
   goHomeHref?: string;
+  onGoHome?: () => void;
 }
 
 const AccessDenied = (props: Props<AccessDeniedProps>) => {
   const navigateHome = () => {
+    if (props.onGoHome) {
+      props.onGoHome();
+      return;
+    }
+
     if (typeof window === 'undefined') return;
     window.location.href = props.goHomeHref ?? '/';
   };

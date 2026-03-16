@@ -33,7 +33,11 @@ const Slider = (props: Props<SliderOwnProps>) => {
   const max = () => local.max ?? 100;
   const step = () => local.step ?? 1;
 
-  const percentage = () => ((local.value - min()) / (max() - min())) * 100;
+  const percentage = () => {
+    const span = max() - min();
+    if (span <= 0) return 0;
+    return Math.min(100, Math.max(0, ((local.value - min()) / span) * 100));
+  };
 
   const handleInput: JSX.EventHandler<HTMLInputElement, InputEvent> = (e) => {
     local.onChange(Number(e.currentTarget.value));

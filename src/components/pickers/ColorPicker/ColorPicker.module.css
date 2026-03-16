@@ -5,6 +5,8 @@
 }
 
 .colorOption {
+  --swatch-color: transparent;
+
   cursor: pointer;
   width: 32px;
   height: 32px;
@@ -16,7 +18,7 @@
   justify-content: center;
   border-radius: var(--radius-full);
   border: 3px solid transparent;
-  background: transparent;
+  background-color: var(--swatch-color);
   color: var(--color-text-muted);
   transform: none;
   transition:

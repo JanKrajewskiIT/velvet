@@ -30,12 +30,25 @@ const FormField = (props: Props<FormFieldOwnProps>) => {
   ]);
 
   const fieldId = () => local.id ?? generatedId;
+  const labelId = () => `${fieldId()}-label`;
+  const descriptionId = () => `${fieldId()}-description`;
+  const errorId = () => `${fieldId()}-error`;
+  const describedBy = () => {
+    const ids = [local.description && descriptionId(), local.error && errorId()].filter(Boolean);
+    return ids.length > 0 ? ids.join(' ') : undefined;
+  };
 
   return (
-    <div class={classNames(styles.field, local.class)}>
+    <div
+      class={classNames(styles.field, local.class)}
+      role="group"
+      aria-labelledby={local.label ? labelId() : undefined}
+      aria-describedby={describedBy()}
+      data-invalid={local.invalid || undefined}
+    >
       <Show when={local.label}>
-        <label class={styles.label} for={fieldId()}>
-          <Text as="span" variant="labelMd" tone={local.invalid ? 'default' : 'muted'}>
+        <label class={classNames(styles.label, local.invalid && styles.labelInvalid)} for={fieldId()} id={labelId()}>
+          <Text as="span" variant="labelMd" tone="muted">
             {local.label}
           </Text>
           <Show when={local.required}>
@@ -47,12 +60,12 @@ const FormField = (props: Props<FormFieldOwnProps>) => {
       </Show>
       {local.children}
       <Show when={local.description}>
-        <Text as="p" variant="caption" tone="muted" class={styles.description}>
+        <Text as="p" variant="caption" tone="muted" class={styles.description} id={descriptionId()}>
           {local.description}
         </Text>
       </Show>
       <Show when={local.error}>
-        <Text as="p" variant="caption" class={styles.error}>
+        <Text as="p" variant="caption" class={styles.error} id={errorId()} role="alert">
           {local.error}
         </Text>
       </Show>

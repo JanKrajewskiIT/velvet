@@ -38,8 +38,21 @@ const RangeSlider = (props: Props<RangeSliderOwnProps>) => {
   const maxLimit = () => local.max ?? 100;
   const step = () => local.step ?? 1;
 
-  const leftPercent = () => ((local.value.min - minLimit()) / (maxLimit() - minLimit())) * 100;
-  const rightPercent = () => ((local.value.max - minLimit()) / (maxLimit() - minLimit())) * 100;
+  const span = () => maxLimit() - minLimit();
+
+  const clampPercent = (value: number) => Math.min(100, Math.max(0, value));
+
+  const leftPercent = () => {
+    if (span() <= 0) return 0;
+    return clampPercent(((local.value.min - minLimit()) / span()) * 100);
+  };
+
+  const rightPercent = () => {
+    if (span() <= 0) return 0;
+    return clampPercent(((local.value.max - minLimit()) / span()) * 100);
+  };
+
+  const rangeWidth = () => Math.max(0, rightPercent() - leftPercent());
 
   const handleMinInput: JSX.EventHandler<HTMLInputElement, InputEvent> = (e) => {
     const next = Number(e.currentTarget.value);
@@ -67,7 +80,7 @@ const RangeSlider = (props: Props<RangeSliderOwnProps>) => {
         <div class={styles.track} />
         <div
           class={styles.range}
-          style={{ '--range-left': `${leftPercent()}%`, '--range-width': `${rightPercent() - leftPercent()}%` }}
+          style={{ '--range-left': `${leftPercent()}%`, '--range-width': `${rangeWidth()}%` }}
         />
         <input
           {...rest}

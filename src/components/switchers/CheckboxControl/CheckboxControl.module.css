@@ -4,19 +4,13 @@
 }
 
 .control {
-  position: relative;
-  display: inline-flex;
-  flex-shrink: 0;
+  composes: control from '../shared/ChoiceControl.module.css';
 }
 
 .input {
-  position: absolute;
-  inset: 0;
+  composes: input from '../shared/ChoiceControl.module.css';
   width: var(--checkbox-control-size, 16px);
   height: var(--checkbox-control-size, 16px);
-  margin: 0;
-  opacity: 0;
-  cursor: pointer;
 }
 
 .indicator {

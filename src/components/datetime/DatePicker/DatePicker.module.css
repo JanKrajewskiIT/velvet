@@ -1,0 +1,94 @@
+.wrapper {
+  composes: wrapper from '../shared/DateTimeTrigger.module.css';
+}
+
+.label {
+  composes: label from '../shared/DateTimeTrigger.module.css';
+}
+
+.inputRowDisabled {
+  composes: inputRowDisabled from '../shared/DateTimeTrigger.module.css';
+}
+
+.input {
+  composes: input from '../shared/DateTimeTrigger.module.css';
+}
+
+.input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.iconBtn {
+  composes: iconBtn from '../shared/DateTimeTrigger.module.css';
+}
+
+.iconBtn:hover {
+  color: var(--color-primary);
+}
+
+.dropdown {
+  composes: dropdown from '../shared/DateTimeTrigger.module.css';
+  padding: var(--spacing-md);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-sm);
+}
+
+.monthYear {
+  font-size: var(--typography-scale-sm);
+  font-weight: var(--typography-weight-medium);
+  color: var(--color-text);
+}
+
+.navBtn {
+  border-radius: var(--radius-full);
+}
+
+.navBtn:hover {
+  background-color: var(--color-bg-hover);
+}
+
+.grid {
+  composes: calendarGrid from '../shared/CalendarGrid.module.css';
+}
+
+.dayHeader {
+  composes: calendarDayHeader from '../shared/CalendarGrid.module.css';
+  color: var(--color-text-tertiary);
+}
+
+.day {
+  composes: calendarDay from '../shared/CalendarGrid.module.css';
+  border-radius: var(--radius-full);
+}
+
+.day:hover {
+  background-color: var(--color-bg-hover);
+}
+
+.dayOutside {
+  composes: calendarDayOutside from '../shared/CalendarGrid.module.css';
+}
+
+.dayToday {
+  border: 1px solid var(--color-primary);
+}
+
+.daySelected {
+  background-color: var(--color-primary);
+  color: var(--color-on-accent);
+  box-shadow: var(--shadow-glow-sm);
+}
+
+.daySelected:hover {
+  background-color: var(--color-primary);
+}
+
+.dayDisabled {
+  opacity: 0.3;
+  pointer-events: none;
+}

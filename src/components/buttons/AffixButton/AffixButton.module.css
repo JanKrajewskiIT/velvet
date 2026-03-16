@@ -27,16 +27,3 @@
   margin-left: auto;
   flex-shrink: 0;
 }
-
-.badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 20px;
-  padding: var(--spacing-2xs) var(--spacing-xs);
-  border-radius: var(--radius-pill);
-  background: var(--color-primary);
-  color: var(--color-on-accent);
-  font-size: var(--typography-scale-xs);
-  line-height: var(--typography-line-height-none);
-}

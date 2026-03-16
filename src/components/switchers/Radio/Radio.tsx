@@ -1,6 +1,7 @@
 import { createUniqueId, For, type JSX, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
 import LabelText from '../../typography/LabelText/LabelText';
 import styles from './Radio.module.css';
@@ -27,16 +28,11 @@ const RadioGroup = <T extends string>(props: Props<RadioGroupOwnProps<T>>) => {
   const groupName = () => local.name || generatedName;
 
   return (
-    <div
-      {...rest}
-      class={`${styles.group} ${styles[local.direction ?? 'column']} ${local.class ?? ''}`}
-      role="radiogroup"
-    >
+    <div {...rest} class={classNames(styles.group, styles[local.direction ?? 'column'], local.class)} role="radiogroup">
       <For each={local.options}>
         {(option, index) => {
           const optionId = () => `${groupName()}-${index()}`;
           const optionLabel = () => `${optionId()}-label`;
-          const ariaLabel = typeof option.label === 'string' ? option.label : option.value;
 
           return (
             <label class={styles.option} for={optionId()}>
@@ -50,7 +46,6 @@ const RadioGroup = <T extends string>(props: Props<RadioGroupOwnProps<T>>) => {
                   disabled={option.disabled}
                   class={styles.input}
                   aria-labelledby={optionLabel()}
-                  aria-label={ariaLabel}
                   onChange={() => local.onChange(option.value)}
                 />
                 <span class={styles.indicator} aria-hidden="true" />

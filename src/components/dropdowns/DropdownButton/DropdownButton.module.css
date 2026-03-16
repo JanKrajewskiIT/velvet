@@ -7,6 +7,12 @@
   gap: var(--spacing-sm);
 }
 
+.trigger > span {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
 .chevron {
   font-size: var(--typography-scale-sm);
   transition: transform var(--duration-fast) var(--ease-out-expo);
@@ -17,11 +23,9 @@
 }
 
 .menu {
+  composes: panel panelLeft from '../DropdownBase/DropdownBase.module.css';
   position: absolute;
-  top: 100%;
-  left: 0;
   min-width: 100%;
-  margin-top: var(--spacing-xs);
   display: flex;
   flex-direction: column;
 }

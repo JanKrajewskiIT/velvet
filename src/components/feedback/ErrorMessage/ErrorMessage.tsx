@@ -2,6 +2,7 @@ import { FiAlertCircle } from 'solid-icons/fi';
 import type { JSX } from 'solid-js';
 
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
 import Text from '../../typography/Text/Text';
 import styles from './ErrorMessage.module.css';
@@ -12,7 +13,7 @@ interface ErrorMessageProps {
 
 const ErrorMessage = (props: Props<ErrorMessageProps>) => {
   return (
-    <Text as="p" role="alert" class={`${styles.error} ${props.class ?? ''}`}>
+    <Text as="p" role="alert" class={classNames(styles.error, props.class)}>
       <span class={styles.icon}>
         <FiAlertCircle />
       </span>

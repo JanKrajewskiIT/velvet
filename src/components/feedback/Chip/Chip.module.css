@@ -26,6 +26,12 @@
   box-shadow: var(--shadow-sm);
 }
 
+.customColor {
+  border-color: var(--chip-border-color);
+  color: var(--chip-text-color);
+  background-color: var(--chip-background-color);
+}
+
 .interactive:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;

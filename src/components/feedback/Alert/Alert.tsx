@@ -6,9 +6,9 @@ import { Show } from 'solid-js';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import IconButton from '../../buttons/IconButton/IconButton';
 import Heading from '../../typography/Heading/Heading';
 import Text from '../../typography/Text/Text';
+import IconActionButton from '../shared/IconActionButton/IconActionButton';
 import styles from './Alert.module.css';
 
 interface AlertMessages {
@@ -51,11 +51,12 @@ const Alert = (props: Props<AlertProps>) => {
         </Text>
       </div>
       <Show when={props.onClose}>
-        <IconButton
+        <IconActionButton
           icon={<FiX size={16} />}
           title={props.messages?.closeButtonLabel ?? props.closeLabel ?? 'Close'}
           class={styles.closeBtn}
-          onClick={() => props.onClose?.()}
+          onClick={props.onClose}
+          variant="subtle"
         />
       </Show>
     </div>

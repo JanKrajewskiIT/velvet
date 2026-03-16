@@ -26,10 +26,6 @@
   min-width: 120px;
 }
 
-.iconButton {
-  composes: iconaction from '../shared/IconAction.module.css';
-}
-
 .iconButton:hover {
   color: var(--color-primary);
 }

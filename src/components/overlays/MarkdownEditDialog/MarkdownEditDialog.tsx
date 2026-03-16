@@ -5,7 +5,7 @@ import type Props from '~/models/Props';
 import Button from '../../buttons/Button/Button';
 import MarkdownRenderer from '../../data-display/MarkdownRenderer/MarkdownRenderer';
 import FormField from '../../forms/FormField/FormField';
-import TextArea from '../../inputs/Input/TextArea';
+import TextArea from '../../inputs/TextArea/TextArea';
 import Dialog from '../Dialog/Dialog';
 import DialogActions from '../Dialog/DialogActions';
 import DialogBody from '../Dialog/DialogBody';

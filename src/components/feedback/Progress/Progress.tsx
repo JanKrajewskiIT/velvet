@@ -1,6 +1,7 @@
 import { Show } from 'solid-js';
 
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
 import styles from './Progress.module.css';
 
@@ -18,9 +19,9 @@ const Progress = (props: Props<ProgressProps>) => {
   const isDeterminate = () => props.value !== undefined;
   const clampedValue = () => Math.min(100, Math.max(0, props.value ?? 0));
 
-  const trackClass = () => `${styles.track} ${styles[size()]} ${props.class ?? ''}`;
+  const trackClass = () => classNames(styles.track, styles[size()], props.class);
 
-  const fillClass = () => `${styles.fill} ${styles[variant()]} ${isDeterminate() ? '' : styles.indeterminate}`;
+  const fillClass = () => classNames(styles.fill, styles[variant()], !isDeterminate() && styles.indeterminate);
 
   return (
     <div class={trackClass()}>

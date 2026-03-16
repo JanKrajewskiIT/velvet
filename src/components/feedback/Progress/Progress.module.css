@@ -76,7 +76,8 @@
 }
 
 .indeterminate {
-  width: 30% !important;
+  --fill-percent: 30%;
+
   animation: shimmer 1.5s var(--ease-out-expo) infinite;
 }
 

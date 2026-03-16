@@ -9,8 +9,8 @@ import classNames from '~/utils/classNames';
 
 import Button from '../../buttons/Button/Button';
 import IconButton from '../../buttons/IconButton/IconButton';
+import Select from '../../dropdowns/Select/Select';
 import Input from '../../inputs/Input/Input';
-import Select from '../../inputs/Input/Select';
 import styles from './QueryBuilder.module.css';
 
 export type QueryBuilderCombinator = 'and' | 'or';

@@ -1,7 +1,8 @@
-import { createEffect, For } from 'solid-js';
+import { createEffect, createUniqueId, For } from 'solid-js';
 
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
+import getInputSizeClass from '~/utils/getInputSizeClass';
 
 import type { InputSize } from '../Input/Input';
 import styles from './OtpInput.module.css';
@@ -12,13 +13,16 @@ interface OtpInputOwnProps {
   onChange: (value: string) => void;
   disabled?: boolean;
   size?: InputSize;
+  label?: string;
 }
 
 const OtpInput = (props: Props<OtpInputOwnProps>) => {
   const refs: HTMLInputElement[] = [];
+  const groupId = createUniqueId();
 
   const length = () => props.length ?? 6;
   const digits = () => Array.from({ length: length() }, (_, i) => i);
+  const otpLabel = () => props.label ?? 'One-time password';
 
   createEffect(() => {
     const chars = props.value.split('');
@@ -69,26 +73,29 @@ const OtpInput = (props: Props<OtpInputOwnProps>) => {
     const nextIndex = Math.min(chars.length, length() - 1);
     focusAt(nextIndex);
   };
-  const sizeClass = () => {
-    if (props.size === 'sm') return styles.sizeSm;
-    if (props.size === 'lg') return styles.sizeLg;
-    return styles.sizeMd;
-  };
+  const sizeClass = () => getInputSizeClass(styles, props.size);
 
   return (
-    <div class={classNames(styles.wrapper, props.disabled && styles.disabled, props.class)} onPaste={handlePaste}>
+    <div
+      id={groupId}
+      class={classNames(styles.wrapper, props.disabled && styles.disabled, props.class)}
+      role="group"
+      aria-label={otpLabel()}
+      onPaste={handlePaste}
+    >
       <For each={digits()}>
         {(index) => (
           <input
             ref={(el) => {
               refs[index] = el;
             }}
-            class={classNames(styles.box, sizeClass())}
+            class={classNames(styles.box, sizeClass(), props.value[index] && styles.boxFilled)}
             type="text"
             inputmode="numeric"
             maxLength={1}
             disabled={props.disabled}
             autocomplete="one-time-code"
+            aria-label={`${otpLabel()} digit ${index + 1}`}
             style={{ '--delay': `${index * 50}ms` }}
             onInput={(e) => handleInput(index, e)}
             onKeyDown={(e) => handleKeyDown(index, e)}

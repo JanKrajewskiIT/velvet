@@ -3,9 +3,9 @@ import { createSignal, For, type JSX, splitProps } from 'solid-js';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
+import EditableChip from '../../feedback/EditableChip/EditableChip';
+import AffixInput from '../AffixInput/AffixInput';
 import type { InputSize } from '../Input/Input';
-import EditableChip from '../shared/EditableChip';
-import InputBase from '../shared/InputBase';
 import styles from './TagInput.module.css';
 
 interface TagInputOwnProps extends Omit<JSX.InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange'> {
@@ -35,27 +35,28 @@ const TagInput = (props: Props<TagInputOwnProps>) => {
   const removeTag = (tagToRemove: string) => {
     local.onChange(local.value.filter((tag) => tag !== tagToRemove));
   };
+
   return (
-    <div class={`${styles.container} ${local.class ?? ''}`}>
-      <InputBase
-        class={classNames(styles.tagsContainer, rest.disabled && styles.disabled)}
-        size={local.size}
-        disabled={rest.disabled}
-        focusWithin
-      >
-        <For each={local.value}>
-          {(tag) => <EditableChip label={tag} removeLabel={`Remove ${tag}`} onRemove={() => removeTag(tag)} />}
-        </For>
-        <input
-          {...rest}
-          class={styles.input}
-          value={inputValue()}
-          onInput={(e) => setInputValue(e.currentTarget.value)}
-          onKeyDown={handleKeyDown}
-          placeholder={local.value.length === 0 ? local.placeholder : ''}
-        />
-      </InputBase>
-    </div>
+    <AffixInput
+      {...rest}
+      type="text"
+      size={local.size}
+      class={classNames(styles.container, local.class)}
+      inputClass={styles.input}
+      value={inputValue()}
+      onInput={(e) => setInputValue(e.currentTarget.value)}
+      onKeyDown={handleKeyDown}
+      placeholder={local.value.length === 0 ? local.placeholder : ''}
+      prefix={
+        local.value.length > 0 ? (
+          <div class={styles.tagsContainer}>
+            <For each={local.value}>
+              {(tag) => <EditableChip label={tag} removeLabel={`Remove ${tag}`} onRemove={() => removeTag(tag)} />}
+            </For>
+          </div>
+        ) : undefined
+      }
+    />
   );
 };
 

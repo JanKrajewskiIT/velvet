@@ -9,7 +9,7 @@ import classNames from '~/utils/classNames';
 
 import Button from '../../buttons/Button/Button';
 import IconButton from '../../buttons/IconButton/IconButton';
-import Select from '../../inputs/Input/Select';
+import Select from '../../dropdowns/Select/Select';
 import CheckboxControl from '../../switchers/CheckboxControl/CheckboxControl';
 import styles from './ColumnManager.module.css';
 

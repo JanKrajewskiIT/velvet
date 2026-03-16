@@ -2,6 +2,7 @@ import { type JSX, Show } from 'solid-js';
 
 import type Props from '~/models/Props';
 
+import Text from '../Text/Text';
 import styles from './LabelText.module.css';
 
 interface LabelTextOwnProps {
@@ -13,10 +14,14 @@ const LabelText = (props: Props<LabelTextOwnProps>) => (
   <Show when={props.label || props.description}>
     <span class={styles.text}>
       <Show when={props.label}>
-        <span class={styles.label}>{props.label}</span>
+        <Text as="span" variant="labelLg" class={styles.label}>
+          {props.label}
+        </Text>
       </Show>
       <Show when={props.description}>
-        <span class={styles.description}>{props.description}</span>
+        <Text as="span" variant="caption" tone="muted" class={styles.description}>
+          {props.description}
+        </Text>
       </Show>
     </span>
   </Show>

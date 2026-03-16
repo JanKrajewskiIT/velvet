@@ -135,8 +135,7 @@
 }
 
 .iconButton {
-  width: 28px;
-  height: 28px;
+  color: var(--color-text-secondary);
 }
 
 .empty {

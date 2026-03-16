@@ -3,6 +3,7 @@ import { splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
+import getInputSizeClass from '~/utils/getInputSizeClass';
 
 import styles from './Input.module.css';
 
@@ -15,11 +16,7 @@ interface InputOwnProps extends JSX.InputHTMLAttributes<HTMLInputElement> {
 
 const Input = (props: Props<InputOwnProps>) => {
   const [local, rest] = splitProps(props, ['class', 'size', 'invalid', 'readOnly']);
-  const sizeClass = () => {
-    if (local.size === 'sm') return styles.sizeSm;
-    if (local.size === 'lg') return styles.sizeLg;
-    return styles.sizeMd;
-  };
+  const sizeClass = () => getInputSizeClass(styles, local.size);
 
   return (
     <input
@@ -31,6 +28,7 @@ const Input = (props: Props<InputOwnProps>) => {
         sizeClass(),
         local.invalid && styles.invalid,
         local.readOnly && styles.readOnly,
+        rest.disabled && styles.disabled,
         local.class
       )}
     />

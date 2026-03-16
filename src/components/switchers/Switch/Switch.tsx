@@ -17,7 +17,7 @@ const Switch = (props: Props<SwitchOwnProps>) => {
   const [local, rest] = splitProps(props, ['checked', 'onChange', 'label', 'description', 'class', 'disabled']);
 
   return (
-    <div class={`${styles.wrapper} ${local.class ?? ''}`}>
+    <div class={classNames(styles.wrapper, local.class)}>
       <button
         {...rest}
         class={classNames(styles.switch, local.checked && styles.checked)}

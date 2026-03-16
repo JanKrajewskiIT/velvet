@@ -11,9 +11,19 @@
 }
 
 .editorShell {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
   background: var(--color-bg);
   overflow: hidden;
   padding: 0;
+  transition:
+    border-color var(--duration-fast) var(--ease-out-expo),
+    box-shadow var(--duration-fast) var(--ease-out-expo);
+}
+
+.editorShell:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-focus-ring);
 }
 
 .toolbar {
@@ -25,8 +35,25 @@
   background: var(--color-surface);
 }
 
+.linkEditor {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2xs);
+  padding: var(--spacing-xs);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg-subtle);
+}
+
+.linkInput {
+  flex: 1;
+  min-width: 0;
+}
+
+.linkAction {
+  width: auto;
+}
+
 .toolButton {
-  composes: iconaction from '../shared/IconAction.module.css';
   border-radius: var(--radius-sm);
   font-size: var(--typography-scale-xs);
   font-weight: var(--typography-weight-semibold);

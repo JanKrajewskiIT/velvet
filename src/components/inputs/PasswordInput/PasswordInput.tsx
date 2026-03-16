@@ -1,10 +1,11 @@
 import { IoEye, IoEyeOutline } from 'solid-icons/io';
-import { createSignal, type JSX, Show, splitProps } from 'solid-js';
+import { createSignal, type JSX, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
-import classNames from '~/utils/classNames';
 
-import Input, { type InputSize } from '../Input/Input';
+import IconButton from '../../buttons/IconButton/IconButton';
+import AffixInput from '../AffixInput/AffixInput';
+import type { InputSize } from '../Input/Input';
 import styles from './PasswordInput.module.css';
 
 interface PasswordInputProps extends Omit<JSX.InputHTMLAttributes<HTMLInputElement>, 'type'> {
@@ -18,23 +19,32 @@ const PasswordInput = (props: Props<PasswordInputProps>) => {
   const [visible, setVisible] = createSignal(false);
 
   const toggle = () => setVisible(!visible());
-  const sizeClass = () => {
-    if (local.size === 'sm') return styles.sizeSm;
-    if (local.size === 'lg') return styles.sizeLg;
-    return styles.sizeMd;
+  const icon = () => (visible() ? <IoEye /> : <IoEyeOutline />);
+  const suffix = () => {
+    if (local.showToggle === false) return undefined;
+
+    return (
+      <IconButton
+        icon={icon()}
+        title={local.visibilityLabel}
+        class={styles.toggle}
+        onClick={toggle}
+        aria-pressed={visible()}
+        disabled={rest.disabled}
+        variant="subtle"
+        size={local.size}
+      />
+    );
   };
 
   return (
-    <div class={classNames(styles.wrapper, sizeClass(), rest.disabled && styles.disabled, local.class)}>
-      <Input {...rest} type={visible() ? 'text' : 'password'} class={styles.input} size={local.size} />
-      <Show when={local.showToggle !== false}>
-        <button type="button" class={styles.toggle} onClick={toggle} aria-label={local.visibilityLabel}>
-          <Show when={visible()} fallback={<IoEyeOutline />}>
-            <IoEye />
-          </Show>
-        </button>
-      </Show>
-    </div>
+    <AffixInput
+      {...rest}
+      type={visible() ? 'text' : 'password'}
+      size={local.size}
+      suffix={suffix()}
+      class={local.class}
+    />
   );
 };
 

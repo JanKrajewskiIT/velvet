@@ -32,25 +32,25 @@
 }
 
 .toneDefault {
-  color: var(--color-text);
+  composes: toneDefault from '../Typography/Typography.module.css';
 }
 
 .toneMuted {
-  color: var(--color-text-muted);
+  composes: toneMuted from '../Typography/Typography.module.css';
 }
 
 .toneSecondary {
-  color: var(--color-text-secondary);
+  composes: toneSecondary from '../Typography/Typography.module.css';
 }
 
 .toneTertiary {
-  color: var(--color-text-tertiary);
+  composes: toneTertiary from '../Typography/Typography.module.css';
 }
 
 .toneInverse {
-  color: var(--color-text-inverse);
+  composes: toneInverse from '../Typography/Typography.module.css';
 }
 
 .tonePrimary {
-  color: var(--color-primary);
+  composes: tonePrimary from '../Typography/Typography.module.css';
 }

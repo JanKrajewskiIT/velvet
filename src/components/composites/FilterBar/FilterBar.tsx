@@ -5,10 +5,10 @@ import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import Button from '../../buttons/Button/Button';
+import Select from '../../dropdowns/Select/Select';
+import EditableChip from '../../feedback/EditableChip/EditableChip';
 import FormField from '../../forms/FormField/FormField';
-import Select from '../../inputs/Input/Select';
 import SearchInput from '../../inputs/SearchInput/SearchInput';
-import EditableChip from '../../inputs/shared/EditableChip';
 import styles from './FilterBar.module.css';
 
 export interface FilterBarOption {

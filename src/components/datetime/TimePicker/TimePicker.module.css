@@ -1,0 +1,37 @@
+.wrapper {
+  composes: wrapper from '../shared/DateTimeTrigger.module.css';
+}
+
+.label {
+  composes: label from '../shared/DateTimeTrigger.module.css';
+}
+
+.inputRowDisabled {
+  composes: inputRowDisabled from '../shared/DateTimeTrigger.module.css';
+}
+
+.input {
+  composes: input from '../shared/DateTimeTrigger.module.css';
+}
+
+.input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.iconBtn {
+  composes: iconBtn from '../shared/DateTimeTrigger.module.css';
+}
+
+.iconBtn:hover {
+  color: var(--color-primary);
+}
+
+.dropdown {
+  composes: dropdown from '../shared/DateTimeTrigger.module.css';
+  right: 0;
+  transform-origin: top left;
+}
+
+.option {
+  composes: item from '../../dropdowns/DropdownBase/DropdownBase.module.css';
+}

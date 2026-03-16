@@ -1,10 +1,12 @@
-import { createEffect, type JSX, splitProps } from 'solid-js';
+import { createEffect, createSignal, createUniqueId, type JSX, Show, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
+import Button from '../../buttons/Button/Button';
+import Text from '../../typography/Text/Text';
 import type { InputSize } from '../Input/Input';
-import InputBase from '../shared/InputBase';
+import Input from '../Input/Input';
 import styles from './RichTextEditor.module.css';
 
 interface RichTextEditorOwnProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'onChange'> {
@@ -29,6 +31,10 @@ const RichTextEditor = (props: Props<RichTextEditorOwnProps>) => {
     'class',
   ]);
   let editorRef: HTMLDivElement | undefined;
+  let linkInputRef: HTMLInputElement | undefined;
+  const labelId = createUniqueId();
+  const [linkEditorOpen, setLinkEditorOpen] = createSignal(false);
+  const [linkDraft, setLinkDraft] = createSignal('');
 
   const syncEditorValue = () => {
     if (!editorRef) return;
@@ -57,11 +63,52 @@ const RichTextEditor = (props: Props<RichTextEditorOwnProps>) => {
     emitValue();
   };
 
-  const insertLink = () => {
+  const normalizeLink = (raw: string): string | null => {
+    const trimmed = raw.trim();
+    if (!trimmed) return null;
+
+    if (/^[a-zA-Z][a-zA-Z\d+.-]*:/u.test(trimmed)) {
+      return trimmed;
+    }
+
+    return `https://${trimmed}`;
+  };
+
+  const openLinkEditor = () => {
     if (local.disabled) return;
-    const url = window.prompt('Enter URL');
-    if (!url) return;
-    applyCommand('createLink', url);
+    setLinkEditorOpen(true);
+    setLinkDraft('');
+    queueMicrotask(() => linkInputRef?.focus());
+  };
+
+  const closeLinkEditor = () => {
+    setLinkEditorOpen(false);
+    setLinkDraft('');
+  };
+
+  const applyLink = () => {
+    const normalized = normalizeLink(linkDraft());
+    if (!normalized) return;
+    applyCommand('createLink', normalized);
+    closeLinkEditor();
+  };
+
+  const removeLink = () => {
+    applyCommand('unlink');
+    closeLinkEditor();
+  };
+
+  const handleLinkInputKeyDown: JSX.EventHandler<HTMLInputElement, KeyboardEvent> = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      applyLink();
+      return;
+    }
+
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      closeLinkEditor();
+    }
   };
 
   const handleInput: JSX.EventHandler<HTMLDivElement, InputEvent> = () => {
@@ -74,66 +121,107 @@ const RichTextEditor = (props: Props<RichTextEditorOwnProps>) => {
 
   return (
     <div {...rest} class={classNames(styles.wrapper, local.class)}>
-      {local.label && <span class={styles.label}>{local.label}</span>}
-      <InputBase
-        class={classNames(styles.editorShell, local.disabled && styles.disabled)}
-        size={local.size}
-        disabled={local.disabled}
-        focusWithin
-      >
+      {local.label && (
+        <Text as="span" variant="labelMd" id={labelId} class={styles.label}>
+          {local.label}
+        </Text>
+      )}
+      <div class={classNames(styles.editorShell, local.disabled && styles.disabled)}>
         <div class={styles.toolbar}>
-          <button
-            type="button"
+          <Button
             class={styles.toolButton}
+            variant="subtle"
+            size="sm"
             onClick={() => applyCommand('bold')}
             disabled={local.disabled}
           >
             B
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
             class={styles.toolButton}
+            variant="subtle"
+            size="sm"
             onClick={() => applyCommand('italic')}
             disabled={local.disabled}
           >
             I
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
             class={styles.toolButton}
+            variant="subtle"
+            size="sm"
             onClick={() => applyCommand('underline')}
             disabled={local.disabled}
           >
             U
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
             class={styles.toolButton}
+            variant="subtle"
+            size="sm"
             onClick={() => applyCommand('insertUnorderedList')}
             disabled={local.disabled}
           >
             List
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
             class={styles.toolButton}
+            variant="subtle"
+            size="sm"
             onClick={() => applyCommand('insertOrderedList')}
             disabled={local.disabled}
           >
             1.
-          </button>
-          <button type="button" class={styles.toolButton} onClick={insertLink} disabled={local.disabled}>
-            Link
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
             class={styles.toolButton}
+            variant={linkEditorOpen() ? 'outline' : 'subtle'}
+            size="sm"
+            onClick={openLinkEditor}
+            disabled={local.disabled}
+          >
+            Link
+          </Button>
+          <Button class={styles.toolButton} variant="subtle" size="sm" onClick={removeLink} disabled={local.disabled}>
+            Unlink
+          </Button>
+          <Button
+            class={styles.toolButton}
+            variant="subtle"
+            size="sm"
             onClick={() => applyCommand('removeFormat')}
             disabled={local.disabled}
           >
             Clear
-          </button>
+          </Button>
         </div>
+        <Show when={linkEditorOpen()}>
+          <div class={styles.linkEditor}>
+            <Input
+              ref={linkInputRef}
+              type="url"
+              size={local.size}
+              value={linkDraft()}
+              placeholder="https://example.com"
+              disabled={local.disabled}
+              class={styles.linkInput}
+              onInput={(event) => setLinkDraft(event.currentTarget.value)}
+              onKeyDown={handleLinkInputKeyDown}
+            />
+            <Button class={styles.linkAction} variant="primary" size="sm" onClick={applyLink} disabled={local.disabled}>
+              Apply
+            </Button>
+            <Button
+              class={styles.linkAction}
+              variant="ghost"
+              size="sm"
+              onClick={closeLinkEditor}
+              disabled={local.disabled}
+            >
+              Cancel
+            </Button>
+          </div>
+        </Show>
         <div
           ref={editorRef}
           class={styles.editor}
@@ -143,8 +231,10 @@ const RichTextEditor = (props: Props<RichTextEditorOwnProps>) => {
           onInput={handleInput}
           role="textbox"
           aria-multiline="true"
+          aria-labelledby={local.label ? labelId : undefined}
+          aria-label={local.label ? undefined : 'Rich text editor'}
         />
-      </InputBase>
+      </div>
     </div>
   );
 };

@@ -19,7 +19,7 @@ const ErrorFallback = (props: Props<ErrorFallbackOwnProps>) => {
       description={props.description}
       titleClass={styles.title}
       descriptionClass={styles.description}
-      action={<Button onClick={() => props.onRetry()}>{props.retryLabel}</Button>}
+      action={<Button onClick={props.onRetry}>{props.retryLabel}</Button>}
     />
   );
 };

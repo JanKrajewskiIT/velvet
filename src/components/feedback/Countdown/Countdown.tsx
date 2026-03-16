@@ -1,6 +1,7 @@
 import { createEffect, createSignal, For, onCleanup } from 'solid-js';
 
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
 import styles from './Countdown.module.css';
 
@@ -54,7 +55,7 @@ const Countdown = (props: Props<CountdownProps>) => {
   const isUrgent = () => remaining() > 0 && remaining() < 10;
 
   return (
-    <div class={`${styles.countdown} ${styles[size()]} ${isUrgent() ? styles.urgent : ''} ${props.class ?? ''}`}>
+    <div class={classNames(styles.countdown, styles[size()], isUrgent() && styles.urgent, props.class)}>
       <For each={segments()}>
         {(segment, index) => (
           <>

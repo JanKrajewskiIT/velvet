@@ -12,13 +12,10 @@
 }
 
 .label {
-  font-size: var(--typography-scale-sm);
-  color: var(--color-text);
-  font-weight: var(--typography-weight-medium);
+  display: inline;
 }
 
 .value {
-  font-size: var(--typography-scale-sm);
-  color: var(--color-text-muted);
+  display: inline;
   font-variant-numeric: tabular-nums;
 }

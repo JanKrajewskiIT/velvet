@@ -26,12 +26,12 @@ const ThemeToggle = (props: Props<ThemeToggleProps>) => {
 
   return (
     <div
-      class={`${styles.group} ${variantClass()} ${props.class ?? ''}`}
+      class={classNames(styles.group, variantClass(), props.class)}
       role="group"
       aria-label={props.groupLabel ?? props.darkLabel}
     >
       <SegmentedControl
-        class={classNames(styles.segmented)}
+        class={styles.segmented}
         options={options()}
         value={resolved()}
         onChange={(next) => setTheme(next as ThemeToggleVariant)}

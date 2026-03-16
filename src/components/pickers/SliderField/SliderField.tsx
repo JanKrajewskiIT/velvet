@@ -3,6 +3,7 @@ import { type JSX, Show } from 'solid-js';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
+import Text from '../../typography/Text/Text';
 import styles from './SliderField.module.css';
 
 interface SliderFieldOwnProps {
@@ -16,10 +17,14 @@ const SliderField = (props: Props<SliderFieldOwnProps>) => (
     <Show when={props.label || props.value !== undefined}>
       <div class={styles.header}>
         <Show when={props.label}>
-          <label class={styles.label}>{props.label}</label>
+          <Text as="span" variant="labelMd" class={styles.label}>
+            {props.label}
+          </Text>
         </Show>
         <Show when={props.value !== undefined}>
-          <span class={styles.value}>{props.value}</span>
+          <Text as="span" variant="labelMd" tone="muted" class={styles.value}>
+            {props.value}
+          </Text>
         </Show>
       </div>
     </Show>

@@ -11,44 +11,9 @@
   max-width: 100%;
 }
 
-.label {
-  font-size: var(--typography-scale-sm);
-  color: var(--color-text);
-  font-weight: var(--typography-weight-medium);
-}
-
-.controls {
-  display: inline-flex;
-  align-items: center;
-  overflow: hidden;
-  background: transparent;
-  padding: 0;
-  width: auto;
-}
-
-.button {
-  composes: iconaction from '../shared/IconAction.module.css';
-  flex-shrink: 0;
-  border-radius: 0;
-}
-
-.button:hover {
-  background: var(--color-bg-hover);
-  color: var(--color-primary);
-}
-
-.button:active {
-  background: var(--color-primary-light);
-}
-
 .input {
-  border: none;
-  background: transparent;
-  color: var(--color-text);
   text-align: center;
-  font-family: inherit;
   font-variant-numeric: tabular-nums;
-  outline: none;
   min-width: 0;
   appearance: textfield;
 }
@@ -57,51 +22,4 @@
 .input::-webkit-outer-spin-button {
   appearance: none;
   margin: 0;
-}
-
-.disabled {
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-.sizeSm .button {
-  width: 28px;
-  height: 28px;
-  font-size: var(--typography-scale-sm);
-}
-
-.sizeSm .input {
-  width: 3.25ch;
-  min-width: 2.5ch;
-  height: 28px;
-  padding-inline: var(--spacing-xs);
-  font-size: var(--typography-scale-sm);
-}
-
-.sizeMd .button {
-  width: 36px;
-  height: 36px;
-  font-size: var(--typography-scale-md);
-}
-
-.sizeMd .input {
-  width: 3.5ch;
-  min-width: 3ch;
-  height: 36px;
-  padding-inline: var(--spacing-xs);
-  font-size: var(--typography-scale-md);
-}
-
-.sizeLg .button {
-  width: 44px;
-  height: 44px;
-  font-size: var(--typography-scale-lg);
-}
-
-.sizeLg .input {
-  width: 4ch;
-  min-width: 3.25ch;
-  height: 44px;
-  padding-inline: var(--spacing-sm);
-  font-size: var(--typography-scale-lg);
 }

@@ -19,20 +19,14 @@
 }
 
 .control {
-  position: relative;
-  display: inline-flex;
-  flex-shrink: 0;
+  composes: control from '../shared/ChoiceControl.module.css';
   margin-top: 2px;
 }
 
 .input {
-  position: absolute;
-  inset: 0;
+  composes: input from '../shared/ChoiceControl.module.css';
   width: 18px;
   height: 18px;
-  margin: 0;
-  opacity: 0;
-  cursor: pointer;
 }
 
 .indicator {

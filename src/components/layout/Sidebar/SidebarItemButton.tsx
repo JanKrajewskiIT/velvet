@@ -6,6 +6,7 @@ import classNames from '~/utils/classNames';
 
 import AffixButton from '../../buttons/AffixButton/AffixButton';
 import IconButton from '../../buttons/IconButton/IconButton';
+import Badge from '../../feedback/Badge/Badge';
 import styles from './Sidebar.module.css';
 
 interface SidebarItemButtonOwnProps {
@@ -28,20 +29,26 @@ const SidebarItemButton = (props: Props<SidebarItemButtonOwnProps>) => {
       fallback={
         <AffixButton
           variant={props.active ? 'primary' : 'ghost'}
+          text={props.label}
           prefix={props.prefix}
-          suffix={props.suffix}
-          badge={props.badge}
+          suffix={
+            <>
+              <Show when={props.badge !== undefined}>
+                <Badge content={props.badge} class={styles.badgeCount}>
+                  <span class={styles.badgeAnchor} />
+                </Badge>
+              </Show>
+              {props.suffix}
+            </>
+          }
           class={classNames(styles.itemButton, props.active && styles.active, props.class)}
           contentClass={styles.itemContent}
           prefixClass={styles.icon}
           bodyClass={styles.label}
           suffixClass={styles.expandIcon}
-          badgeClass={styles.badge}
           style={props.style}
           onClick={() => props.onClick?.()}
-        >
-          {props.label}
-        </AffixButton>
+        />
       }
     >
       <IconButton
