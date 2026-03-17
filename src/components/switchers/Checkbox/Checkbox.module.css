@@ -1,10 +1,3 @@
-.wrapper {
-  display: inline-flex;
-  align-items: flex-start;
-  gap: var(--spacing-sm);
-  cursor: pointer;
-}
-
 .control {
   --checkbox-control-size: 18px;
 

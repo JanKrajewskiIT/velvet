@@ -18,10 +18,6 @@
 
 .selectTrigger {
   width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--spacing-sm);
   cursor: pointer;
   text-align: left;
 }
@@ -35,37 +31,18 @@
   box-shadow: 0 0 0 3px var(--color-focus-ring);
 }
 
-.selectValue {
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.selectPlaceholder {
-  color: var(--color-text-muted);
-}
-
-.selectChevron {
-  flex-shrink: 0;
-  color: var(--color-text-muted);
-  transition: transform var(--duration-fast) var(--ease-out-expo);
-}
-
-.selectChevronOpen {
-  transform: rotate(180deg);
+.selectTriggerContent {
+  width: 100%;
 }
 
 .selectDropdown {
-  composes: panel panelLeft panelFullWidth originTop from '../DropdownBase/DropdownBase.module.css';
-  position: absolute;
+  width: 100%;
 }
 
 .selectOption {
-  composes: item from '../DropdownBase/DropdownBase.module.css';
+  composes: item from '../DropdownOption/DropdownOption.module.css';
 }
 
 .selectOptionDisabled {
-  composes: itemDisabled from '../DropdownBase/DropdownBase.module.css';
+  composes: itemDisabled from '../DropdownOption/DropdownOption.module.css';
 }

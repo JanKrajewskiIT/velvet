@@ -1,15 +1,15 @@
 import { FiChevronLeft, FiChevronRight } from 'solid-icons/fi';
 import { createMemo, createSignal, createUniqueId, For, Show } from 'solid-js';
 
+import IconButton from '~/components/buttons/IconButton/IconButton';
+import DropdownSurface from '~/components/dropdowns/DropdownSurface/DropdownSurface';
+import type { InputSize } from '~/components/inputs/Input/Input';
+import InputButton from '~/components/inputs/InputButton/InputButton';
 import useClickOutside from '~/hooks/useClickOutside';
 import useEscapeKey from '~/hooks/useEscapeKey';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import IconButton from '../../buttons/IconButton/IconButton';
-import DropdownSurface from '../../dropdowns/DropdownBase/DropdownSurface';
-import type { InputSize } from '../../inputs/Input/Input';
-import InputButton from '../../inputs/InputButton/InputButton';
 import { buildDaysGrid, DAY_LABELS, parseDate, toIso } from '../calendar';
 import styles from './DateRangePicker.module.css';
 
@@ -230,6 +230,8 @@ const DateRangePicker = (props: Props<DateRangePickerProps>) => {
         <DropdownSurface
           id={dropdownId}
           class={styles.dropdown}
+          align="left"
+          origin="topLeft"
           role="dialog"
           aria-modal="false"
           aria-label={calendarLabel()}

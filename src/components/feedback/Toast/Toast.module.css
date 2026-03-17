@@ -17,7 +17,7 @@
   padding: var(--spacing-md) var(--spacing-lg);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-popover);
-  animation: slideIn var(--duration-slow) var(--ease-out-back);
+  animation: slideInRight var(--duration-slow) var(--ease-out-back);
   background-color: var(--color-glass);
   backdrop-filter: var(--blur-overlay);
   color: var(--color-text);
@@ -43,16 +43,4 @@
 .message {
   flex: 1;
   font-size: var(--typography-scale-md);
-}
-
-@keyframes slideIn {
-  from {
-    transform: translateX(120%) scale(0.9);
-    opacity: 0;
-  }
-
-  to {
-    transform: translateX(0) scale(1);
-    opacity: 1;
-  }
 }

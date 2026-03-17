@@ -1,24 +1,26 @@
+import Text from '~/components/typography/Text/Text';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import Text from '../../typography/Text/Text';
 import Button, { type ButtonSize } from '../Button/Button';
 import styles from './LocaleSwitcher.module.css';
 
-export type LocaleSwitcherVariant = 'navbar' | 'surface';
+export type LocaleSwitcherVariant = 'surface' | 'navbar';
 
 interface LocaleSwitcherProps {
   text: string;
   switchLabel: string;
   onSwitch: () => void;
-  variant?: LocaleSwitcherVariant;
   size?: ButtonSize;
+  variant?: LocaleSwitcherVariant;
 }
 
 const LocaleSwitcher = (props: Props<LocaleSwitcherProps>) => {
+  const isNavbar = () => props.variant === 'navbar';
+
   return (
     <Button
-      class={classNames(styles.button, props.variant !== 'surface' && styles.navbar, props.class)}
+      class={classNames(styles.base, isNavbar() && styles.navbar, props.class)}
       variant="ghost"
       size={props.size}
       onClick={props.onSwitch}

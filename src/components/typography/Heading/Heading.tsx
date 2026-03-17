@@ -4,10 +4,9 @@ import { Dynamic } from 'solid-js/web';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import { toneClass, type TypographyTone } from '../Typography/Typography';
+import { type HeadingVariant, headingVariantClass, toneClass, type TypographyTone } from '../Typography/Typography';
+import typographyStyles from '../Typography/Typography.module.css';
 import styles from './Heading.module.css';
-
-type HeadingVariant = 'displayLg' | 'displayMd' | 'h1' | 'h2' | 'h3' | 'titleLg' | 'titleMd';
 
 interface HeadingOwnProps extends JSX.HTMLAttributes<HTMLElement> {
   as?: keyof JSX.IntrinsicElements;
@@ -31,21 +30,16 @@ const Heading = (props: Props<HeadingOwnProps>) => {
   const component = () => local.as ?? (`h${String(level())}` as keyof JSX.IntrinsicElements);
   const variant = () => local.variant ?? levelToVariant(level());
 
-  const variantClass = () => {
-    if (variant() === 'displayLg') return styles.displayLg;
-    if (variant() === 'displayMd') return styles.displayMd;
-    if (variant() === 'h1') return styles.h1;
-    if (variant() === 'h2') return styles.h2;
-    if (variant() === 'h3') return styles.h3;
-    if (variant() === 'titleLg') return styles.titleLg;
-    return styles.titleMd;
-  };
-
   return (
     <Dynamic
       component={component()}
       {...rest}
-      class={classNames(styles.heading, variantClass(), toneClass(styles, local.tone), local.class)}
+      class={classNames(
+        styles.heading,
+        headingVariantClass(typographyStyles, variant()),
+        toneClass(typographyStyles, local.tone),
+        local.class
+      )}
     >
       {local.children}
     </Dynamic>

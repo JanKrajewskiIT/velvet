@@ -27,7 +27,7 @@
 }
 
 .dropdown {
-  composes: dropdown from '../shared/DateTimeTrigger.module.css';
+  composes: panel from '../../dropdowns/DropdownSurface/DropdownSurface.module.css';
   padding: var(--spacing-md);
 }
 

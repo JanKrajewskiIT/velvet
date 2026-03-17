@@ -1,15 +1,18 @@
 import { createUniqueId, type JSX, Show } from 'solid-js';
 
+import IconButton from '~/components/buttons/IconButton/IconButton';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import IconButton from '../../buttons/IconButton/IconButton';
+import DropdownSurface from '../DropdownSurface/DropdownSurface';
 import {
   focusFirstDropdownItem,
+  focusLastDropdownItem,
+  getDropdownOpenTarget,
   getFocusableDropdownItems,
   handleDropdownArrowNavigation,
-} from '../DropdownBase/dropdownKeyboard';
-import useDropdownState from '../DropdownBase/useDropdownState';
+} from '../shared/dropdownKeyboard';
+import useDropdownState from '../shared/useDropdownState';
 import styles from './DropdownMenu.module.css';
 
 interface DropdownMenuProps {
@@ -41,10 +44,20 @@ const DropdownMenu = (props: Props<DropdownMenuProps>) => {
   };
 
   const handleTriggerKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'ArrowDown' && !dropdown.open()) {
-      e.preventDefault();
-      openAndFocusFirst();
-    }
+    if (dropdown.open()) return;
+
+    const target = getDropdownOpenTarget(e);
+    if (!target) return;
+
+    dropdown.openDropdown();
+    requestAnimationFrame(() => {
+      if (!panelRef) return;
+      if (target === 'last') {
+        focusLastDropdownItem(panelRef);
+        return;
+      }
+      focusFirstDropdownItem(panelRef);
+    });
   };
 
   const handleMenuKeyDown = (e: KeyboardEvent) => {
@@ -87,17 +100,19 @@ const DropdownMenu = (props: Props<DropdownMenuProps>) => {
         size="sm"
       />
       <Show when={dropdown.open()}>
-        <div
+        <DropdownSurface
           ref={panelRef}
           id={menuId}
           class={styles.menu}
+          align="left"
+          origin="topLeft"
           role="menu"
           tabIndex={-1}
           onKeyDown={handleMenuKeyDown}
           onClick={dropdown.close}
         >
           {props.children}
-        </div>
+        </DropdownSurface>
       </Show>
     </div>
   );

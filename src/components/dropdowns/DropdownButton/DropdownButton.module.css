@@ -4,27 +4,14 @@
 }
 
 .trigger {
-  gap: var(--spacing-sm);
+  width: 100%;
 }
 
-.trigger > span {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-md);
-}
-
-.chevron {
-  font-size: var(--typography-scale-sm);
-  transition: transform var(--duration-fast) var(--ease-out-expo);
-}
-
-.chevronOpen {
-  transform: rotate(180deg);
+.triggerContent {
+  min-width: 120px;
 }
 
 .menu {
-  composes: panel panelLeft from '../DropdownBase/DropdownBase.module.css';
-  position: absolute;
   min-width: 100%;
   display: flex;
   flex-direction: column;

@@ -1,9 +1,9 @@
 import { type JSX, Show, splitProps } from 'solid-js';
 
+import Spinner from '~/components/feedback/Spinner/Spinner';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import Spinner from '../../feedback/Spinner/Spinner';
 import styles from './Button.module.css';
 
 export type ButtonVariant = 'primary' | 'danger' | 'ghost' | 'dashed' | 'outline' | 'subtle';
@@ -17,6 +17,27 @@ interface ButtonOwnProps extends Omit<JSX.ButtonHTMLAttributes<HTMLButtonElement
   children?: JSX.Element;
 }
 
+const sizeToClass: Record<ButtonSize, string | undefined> = {
+  sm: styles.sizeSm,
+  md: styles.sizeMd,
+  lg: styles.sizeLg,
+};
+
+const iconSizeToClass: Record<ButtonSize, string | undefined> = {
+  sm: styles.iconSizeSm,
+  md: styles.iconSizeMd,
+  lg: styles.iconSizeLg,
+};
+
+const variantToClass: Record<ButtonVariant, string | undefined> = {
+  primary: styles.variantPrimary,
+  danger: styles.variantDanger,
+  ghost: styles.variantGhost,
+  dashed: styles.variantDashed,
+  outline: styles.variantOutline,
+  subtle: styles.variantSubtle,
+};
+
 const Button = (props: Props<ButtonOwnProps>) => {
   const [local, rest] = splitProps(props, [
     'variant',
@@ -29,26 +50,9 @@ const Button = (props: Props<ButtonOwnProps>) => {
     'type',
   ]);
 
-  const sizeClass = () => {
-    if (local.size === 'sm') return styles.sizeSm;
-    if (local.size === 'lg') return styles.sizeLg;
-    return styles.sizeMd;
-  };
-
-  const iconSizeClass = () => {
-    if (local.size === 'sm') return styles.iconSizeSm;
-    if (local.size === 'lg') return styles.iconSizeLg;
-    return styles.iconSizeMd;
-  };
-
-  const variantClass = () => {
-    if (local.variant === 'danger') return styles.variantDanger;
-    if (local.variant === 'ghost') return styles.variantGhost;
-    if (local.variant === 'outline') return styles.variantOutline;
-    if (local.variant === 'dashed') return styles.variantDashed;
-    if (local.variant === 'subtle') return styles.variantSubtle;
-    return styles.variantPrimary;
-  };
+  const sizeClass = () => sizeToClass[local.size ?? 'md'];
+  const iconSizeClass = () => iconSizeToClass[local.size ?? 'md'];
+  const variantClass = () => variantToClass[local.variant ?? 'primary'];
 
   const isDisabled = () => Boolean(local.disabled ?? local.loading);
 

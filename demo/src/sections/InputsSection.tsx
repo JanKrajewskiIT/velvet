@@ -15,8 +15,8 @@ import {
   DateRangePicker,
   DateTimePicker,
   DropdownButton,
-  DropdownItem,
   DropdownMenu,
+  DropdownOption,
   FileDropZone,
   FormField,
   FormGrid,
@@ -248,9 +248,9 @@ const InputsSection = (props: InputsSectionProps) => {
             <PreviewGroup title="Examples">
               <div class="row">
                 <DropdownButton label="Actions" variant="primary">
-                  <DropdownItem label="Edit" onClick={() => {}} />
-                  <DropdownItem label="Duplicate" onClick={() => {}} />
-                  <DropdownItem label="Archive" onClick={() => {}} />
+                  <DropdownOption role="menuitem" label="Edit" onClick={() => {}} />
+                  <DropdownOption role="menuitem" label="Duplicate" onClick={() => {}} />
+                  <DropdownOption role="menuitem" label="Archive" onClick={() => {}} />
                 </DropdownButton>
               </div>
             </PreviewGroup>
@@ -262,9 +262,9 @@ const InputsSection = (props: InputsSectionProps) => {
             <PreviewGroup title="Examples">
               <div class="row">
                 <DropdownMenu trigger={<IoEllipsisHorizontal />} label="More options">
-                  <DropdownItem label="Settings" onClick={() => {}} />
-                  <DropdownItem label="Export" onClick={() => {}} />
-                  <DropdownItem label="Delete" onClick={() => {}} variant="error" />
+                  <DropdownOption role="menuitem" prefix={<IoPencil />} label="Settings" onClick={() => {}} />
+                  <DropdownOption role="menuitem" prefix={<IoDownload />} label="Export" onClick={() => {}} />
+                  <DropdownOption role="menuitem" prefix={<IoTrash />} tone="error" label="Delete" onClick={() => {}} />
                 </DropdownMenu>
               </div>
             </PreviewGroup>

@@ -1,0 +1,69 @@
+.item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  justify-content: flex-start;
+  text-align: left;
+  transform: none;
+}
+
+.item > span {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--spacing-sm);
+  width: 100%;
+}
+
+.itemLabel {
+  margin: 0;
+}
+
+.itemPrefix {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.item:hover:not(:disabled) {
+  background-color: var(--color-bg-hover);
+  transform: none;
+}
+
+.item:active:not(:disabled) {
+  transform: none;
+}
+
+.item:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
+
+.itemSelected {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  font-weight: var(--typography-weight-medium);
+}
+
+.itemToneDefault {
+  color: var(--color-text);
+}
+
+.itemTonePrimary {
+  color: var(--color-primary);
+}
+
+.itemToneSuccess {
+  color: var(--color-success);
+}
+
+.itemToneError {
+  color: var(--color-error);
+}
+
+.itemDisabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}

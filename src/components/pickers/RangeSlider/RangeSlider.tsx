@@ -3,6 +3,7 @@ import { type JSX, splitProps } from 'solid-js';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
+import sliderStyles from '../Slider/Slider.module.css';
 import SliderField from '../SliderField/SliderField';
 import styles from './RangeSlider.module.css';
 
@@ -85,7 +86,12 @@ const RangeSlider = (props: Props<RangeSliderOwnProps>) => {
         <input
           {...rest}
           type="range"
-          class={classNames(styles.sliderInput, styles.minThumb, local.disabled && styles.disabled)}
+          class={classNames(
+            sliderStyles.slider,
+            styles.sliderInput,
+            styles.minThumb,
+            local.disabled && sliderStyles.disabled
+          )}
           min={minLimit()}
           max={maxLimit()}
           step={step()}
@@ -97,7 +103,12 @@ const RangeSlider = (props: Props<RangeSliderOwnProps>) => {
         <input
           {...rest}
           type="range"
-          class={classNames(styles.sliderInput, styles.maxThumb, local.disabled && styles.disabled)}
+          class={classNames(
+            sliderStyles.slider,
+            styles.sliderInput,
+            styles.maxThumb,
+            local.disabled && sliderStyles.disabled
+          )}
           min={minLimit()}
           max={maxLimit()}
           step={step()}

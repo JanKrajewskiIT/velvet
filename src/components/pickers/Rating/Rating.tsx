@@ -1,5 +1,5 @@
 import { FiStar } from 'solid-icons/fi';
-import { createSignal, For, type JSX, Show } from 'solid-js';
+import { createMemo, createSignal, For, type JSX, splitProps } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
 
 import type Props from '~/models/Props';
@@ -7,7 +7,7 @@ import classNames from '~/utils/classNames';
 
 import styles from './Rating.module.css';
 
-interface RatingOwnProps {
+export interface RatingProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'onChange'> {
   value: number;
   onChange?: (value: number) => void;
   max?: number;
@@ -15,34 +15,45 @@ interface RatingOwnProps {
   icon?: JSX.Element;
 }
 
-const Rating = (props: Props<RatingOwnProps>) => {
+const Rating = (props: Props<RatingProps>) => {
+  const [local, rest] = splitProps(props, ['value', 'onChange', 'max', 'size', 'icon', 'class']);
   const [hoverIndex, setHoverIndex] = createSignal(-1);
+  const itemRefs: (HTMLButtonElement | undefined)[] = [];
 
-  const max = () => props.max ?? 5;
+  const max = () => local.max ?? 5;
   const sizeClassMap = { sm: styles.sizeSm, md: styles.sizeMd, lg: styles.sizeLg } as const;
-  const sizeClass = () => sizeClassMap[props.size ?? 'md'];
-  const isInteractive = () => !!props.onChange;
+  const sizeClass = () => sizeClassMap[local.size ?? 'md'];
+  const isInteractive = () => Boolean(local.onChange);
+  const stars = createMemo(() => Array.from({ length: max() }, (_, i) => i + 1));
+
   const selectedIndex = () => {
-    if (props.value < 1) return 0;
-    return Math.min(max(), Math.max(1, Math.round(props.value)));
+    if (local.value < 1) return 0;
+    return Math.min(max(), Math.max(1, Math.round(local.value)));
   };
 
-  const stars = () => Array.from({ length: max() }, (_, i) => i + 1);
+  const tabStopIndex = createMemo(() => {
+    const selected = selectedIndex();
+    return selected > 0 ? selected : 1;
+  });
 
-  const isFilled = (index: number) => {
+  const fillPercent = (index: number) => {
     if (isInteractive() && hoverIndex() >= 0) {
-      return index <= hoverIndex();
+      return index <= hoverIndex() ? 100 : 0;
     }
-    return index <= Math.floor(props.value);
+    const relative = local.value - (index - 1);
+    return Math.max(0, Math.min(100, relative * 100));
   };
 
-  const isHalf = (index: number) => {
-    if (isInteractive() && hoverIndex() >= 0) return false;
-    return !isFilled(index) && index - 0.5 <= props.value;
+  const isFilled = (index: number) => fillPercent(index) >= 100;
+
+  const isPartiallyFilled = (index: number) => {
+    const fill = fillPercent(index);
+    return fill > 0 && fill < 100;
   };
 
   const handleClick = (index: number) => {
-    props.onChange?.(index);
+    local.onChange?.(index);
+    itemRefs[index - 1]?.focus();
   };
 
   const handleKeyDown: JSX.EventHandlerUnion<HTMLButtonElement, KeyboardEvent> = (event) => {
@@ -53,31 +64,31 @@ const Rating = (props: Props<RatingOwnProps>) => {
 
     if (event.key === 'ArrowRight' || event.key === 'ArrowUp') {
       event.preventDefault();
-      props.onChange?.(Math.min(max(), current + 1));
+      handleClick(Math.min(max(), current + 1));
       return;
     }
 
     if (event.key === 'ArrowLeft' || event.key === 'ArrowDown') {
       event.preventDefault();
-      props.onChange?.(Math.max(1, current - 1));
+      handleClick(Math.max(1, current - 1));
       return;
     }
 
     if (event.key === 'Home') {
       event.preventDefault();
-      props.onChange?.(1);
+      handleClick(1);
       return;
     }
 
     if (event.key === 'End') {
       event.preventDefault();
-      props.onChange?.(max());
+      handleClick(max());
       return;
     }
 
     if (event.key === ' ' || event.key === 'Enter') {
       event.preventDefault();
-      props.onChange?.(current);
+      handleClick(current);
     }
   };
 
@@ -90,37 +101,41 @@ const Rating = (props: Props<RatingOwnProps>) => {
   };
 
   return (
-    <div class={classNames(styles.wrapper, props.class)} role="radiogroup" tabIndex={0} onMouseLeave={handleMouseLeave}>
+    <div
+      {...rest}
+      class={classNames(styles.wrapper, local.class)}
+      role={isInteractive() ? 'radiogroup' : undefined}
+      onMouseLeave={handleMouseLeave}
+    >
       <For each={stars()}>
-        {(index) => (
+        {(index, loopIndex) => (
           <Dynamic
             component={isInteractive() ? 'button' : 'span'}
             data-index={String(index)}
             type={isInteractive() ? 'button' : undefined}
-            role="radio"
-            aria-checked={selectedIndex() === index}
+            role={isInteractive() ? 'radio' : undefined}
+            aria-checked={isInteractive() ? selectedIndex() === index : undefined}
             aria-label={`${index} of ${max()}`}
-            tabIndex={
-              isInteractive()
-                ? selectedIndex() === index || (selectedIndex() === 0 && index === 1)
-                  ? 0
-                  : -1
-                : undefined
-            }
+            tabIndex={isInteractive() ? (tabStopIndex() === index ? 0 : -1) : undefined}
+            ref={(element: HTMLButtonElement | HTMLSpanElement) => {
+              if (!isInteractive()) return;
+              itemRefs[loopIndex()] = element as HTMLButtonElement;
+            }}
             class={classNames(
               styles.star,
               sizeClass(),
               isFilled(index) && styles.filled,
-              isHalf(index) && styles.half,
+              isPartiallyFilled(index) && styles.partial,
               isInteractive() && styles.interactive
             )}
             onClick={isInteractive() ? () => handleClick(index) : undefined}
             onMouseEnter={isInteractive() ? () => handleMouseEnter(index) : undefined}
             onKeyDown={isInteractive() ? handleKeyDown : undefined}
           >
-            <Show when={props.icon} fallback={<FiStar />}>
-              {props.icon}
-            </Show>
+            <span class={styles.iconBase}>{local.icon ?? <FiStar />}</span>
+            <span class={styles.iconFill} style={{ '--fill-percent': `${fillPercent(index)}%` }}>
+              {local.icon ?? <FiStar />}
+            </span>
           </Dynamic>
         )}
       </For>

@@ -1,11 +1,11 @@
 import type { JSX } from 'solid-js';
 import { Show } from 'solid-js';
 
+import Heading from '~/components/typography/Heading/Heading';
+import Text from '~/components/typography/Text/Text';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import Heading from '../../typography/Heading/Heading';
-import Text from '../../typography/Text/Text';
 import styles from './EmptyState.module.css';
 
 interface EmptyStateProps {

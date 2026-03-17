@@ -1,32 +1,22 @@
 .wrapper {
-  display: inline-flex;
-  align-items: flex-start;
+  composes: field from '../ChoiceControl/ChoiceControl.module.css';
 }
 
 .control {
-  composes: control from '../shared/ChoiceControl.module.css';
+  composes: control from '../ChoiceControl/ChoiceControl.module.css';
 }
 
 .input {
-  composes: input from '../shared/ChoiceControl.module.css';
-  width: var(--checkbox-control-size, 16px);
-  height: var(--checkbox-control-size, 16px);
+  --choice-control-size: var(--checkbox-control-size, 16px);
+
+  composes: input from '../ChoiceControl/ChoiceControl.module.css';
 }
 
 .indicator {
-  width: var(--checkbox-control-size, 16px);
-  height: var(--checkbox-control-size, 16px);
-  border: 1.5px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  background: var(--color-bg);
-  transition:
-    border-color var(--duration-fast) var(--ease-out-expo),
-    background-color var(--duration-fast) var(--ease-out-expo),
-    box-shadow var(--duration-fast) var(--ease-out-expo);
-}
+  --choice-control-size: var(--checkbox-control-size, 16px);
 
-.input:hover:not(:disabled) + .indicator {
-  border-color: var(--color-primary);
+  composes: indicator from '../ChoiceControl/ChoiceControl.module.css';
+  border-radius: var(--radius-sm);
 }
 
 .input:checked + .indicator {
@@ -34,27 +24,4 @@
   background-color: var(--color-primary);
   box-shadow: inset 0 0 0 3px var(--color-bg);
   animation: checkBounce var(--duration-normal) var(--ease-out-back);
-}
-
-.input:focus-visible + .indicator {
-  box-shadow: 0 0 0 3px var(--color-focus-ring);
-}
-
-.input:disabled + .indicator {
-  opacity: var(--opacity-disabled);
-  cursor: not-allowed;
-}
-
-@keyframes checkBounce {
-  0% {
-    transform: scale(1);
-  }
-
-  40% {
-    transform: scale(0.85);
-  }
-
-  100% {
-    transform: scale(1);
-  }
 }

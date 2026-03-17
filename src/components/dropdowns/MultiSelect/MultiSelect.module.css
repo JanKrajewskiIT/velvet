@@ -7,10 +7,6 @@
 
 .trigger {
   width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--spacing-sm);
   cursor: pointer;
 }
 
@@ -27,32 +23,12 @@
   cursor: not-allowed;
 }
 
-.triggerText {
-  flex: 1;
-  min-width: 0;
-  text-align: left;
-  font-size: var(--typography-scale-sm);
-  line-height: var(--typography-line-height-normal);
-}
-
-.placeholder {
-  color: var(--color-text-muted);
-}
-
-.chevron {
-  margin-left: var(--spacing-sm);
-  flex-shrink: 0;
-  color: var(--color-text-muted);
-  transition: transform var(--duration-fast) var(--ease-out-expo);
-}
-
-.chevronOpen {
-  transform: rotate(180deg);
+.triggerContent {
+  width: 100%;
 }
 
 .dropdown {
-  composes: panel panelLeft panelFullWidth from '../DropdownBase/DropdownBase.module.css';
-  position: absolute;
+  width: 100%;
   top: calc(100% - var(--spacing-2xs));
   padding: var(--spacing-xs);
 }
@@ -64,7 +40,7 @@
 }
 
 .optionDisabled {
-  composes: itemDisabled from '../DropdownBase/DropdownBase.module.css';
+  composes: itemDisabled from '../DropdownOption/DropdownOption.module.css';
 }
 
 .checkbox {
@@ -85,7 +61,7 @@
 }
 
 .empty {
-  composes: empty from '../DropdownBase/DropdownBase.module.css';
+  composes: empty from '../DropdownSurface/DropdownSurface.module.css';
   padding: var(--spacing-sm);
 }
 

@@ -1,11 +1,11 @@
 import { IoClose } from 'solid-icons/io';
 import { For } from 'solid-js';
 
+import IconButton from '~/components/buttons/IconButton/IconButton';
+import Text from '~/components/typography/Text/Text';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import IconButton from '../../buttons/IconButton/IconButton';
-import Text from '../../typography/Text/Text';
 import { removeToast, toasts } from './Toast';
 import styles from './Toast.module.css';
 

@@ -1,12 +1,12 @@
-import { IoChevronDown } from 'solid-icons/io';
 import { type JSX, Show } from 'solid-js';
 
+import Button, { type ButtonSize } from '~/components/buttons/Button/Button';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import Button, { type ButtonSize } from '../../buttons/Button/Button';
-import DropdownSurface from '../DropdownBase/DropdownSurface';
-import useDropdownState from '../DropdownBase/useDropdownState';
+import DropdownSurface from '../DropdownSurface/DropdownSurface';
+import DropdownTriggerContent from '../DropdownTriggerContent/DropdownTriggerContent';
+import useDropdownState from '../shared/useDropdownState';
 import styles from './DropdownButton.module.css';
 
 interface DropdownButtonProps {
@@ -30,11 +30,18 @@ const DropdownButton = (props: Props<DropdownButtonProps>) => {
         aria-haspopup="menu"
         aria-expanded={dropdown.open()}
       >
-        {props.label}
-        <IoChevronDown class={classNames(styles.chevron, dropdown.open() && styles.chevronOpen)} />
+        <DropdownTriggerContent label={props.label} open={dropdown.open()} class={styles.triggerContent} />
       </Button>
       <Show when={dropdown.open()}>
-        <DropdownSurface class={styles.menu} role="menu" tabIndex={-1} onClick={dropdown.close} scrollable={false}>
+        <DropdownSurface
+          class={styles.menu}
+          align="left"
+          origin="topLeft"
+          role="menu"
+          tabIndex={-1}
+          onClick={dropdown.close}
+          scrollable={false}
+        >
           {props.children}
         </DropdownSurface>
       </Show>

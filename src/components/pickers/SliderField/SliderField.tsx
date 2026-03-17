@@ -1,9 +1,9 @@
 import { type JSX, Show } from 'solid-js';
 
+import Text from '~/components/typography/Text/Text';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import Text from '../../typography/Text/Text';
 import styles from './SliderField.module.css';
 
 interface SliderFieldOwnProps {

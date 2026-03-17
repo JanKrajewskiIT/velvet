@@ -27,11 +27,9 @@
 }
 
 .dropdown {
-  composes: dropdown from '../shared/DateTimeTrigger.module.css';
-  right: 0;
-  transform-origin: top left;
+  composes: panel from '../../dropdowns/DropdownSurface/DropdownSurface.module.css';
 }
 
 .option {
-  composes: item from '../../dropdowns/DropdownBase/DropdownBase.module.css';
+  composes: item from '../../dropdowns/DropdownOption/DropdownOption.module.css';
 }

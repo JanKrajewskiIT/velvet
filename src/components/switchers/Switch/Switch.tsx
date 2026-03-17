@@ -1,9 +1,9 @@
-import { type JSX, splitProps } from 'solid-js';
+import { createUniqueId, type JSX, Show, splitProps } from 'solid-js';
 
+import LabelText from '~/components/typography/LabelText/LabelText';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import LabelText from '../../typography/LabelText/LabelText';
 import styles from './Switch.module.css';
 
 interface SwitchOwnProps extends Omit<JSX.ButtonHTMLAttributes<HTMLButtonElement>, 'type' | 'onChange'> {
@@ -14,7 +14,11 @@ interface SwitchOwnProps extends Omit<JSX.ButtonHTMLAttributes<HTMLButtonElement
 }
 
 const Switch = (props: Props<SwitchOwnProps>) => {
+  const generatedId = createUniqueId();
   const [local, rest] = splitProps(props, ['checked', 'onChange', 'label', 'description', 'class', 'disabled']);
+
+  const hasText = () => Boolean(local.label || local.description);
+  const textId = () => `${generatedId}-text`;
 
   return (
     <div class={classNames(styles.wrapper, local.class)}>
@@ -24,12 +28,17 @@ const Switch = (props: Props<SwitchOwnProps>) => {
         type="button"
         role="switch"
         aria-checked={local.checked}
+        aria-labelledby={hasText() ? textId() : undefined}
         disabled={local.disabled}
         onClick={() => local.onChange(!local.checked)}
       >
         <span class={styles.thumb} />
       </button>
-      <LabelText label={local.label} description={local.description} />
+      <Show when={hasText()}>
+        <span id={textId()}>
+          <LabelText label={local.label} description={local.description} />
+        </span>
+      </Show>
     </div>
   );
 };

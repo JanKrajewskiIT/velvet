@@ -1,18 +1,18 @@
 import { FiChevronLeft, FiChevronRight } from 'solid-icons/fi';
 import { createEffect, createMemo, createSignal, For, type JSX, Show, splitProps } from 'solid-js';
 
+import Button from '~/components/buttons/Button/Button';
+import IconButton from '~/components/buttons/IconButton/IconButton';
 import Card from '~/components/data-display/Card/Card';
+import Input from '~/components/inputs/Input/Input';
+import TextArea from '~/components/inputs/TextArea/TextArea';
+import ConfirmDialog from '~/components/overlays/ConfirmDialog/ConfirmDialog';
+import Heading from '~/components/typography/Heading/Heading';
+import Text from '~/components/typography/Text/Text';
 import useEscapeKey from '~/hooks/useEscapeKey';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import Button from '../../buttons/Button/Button';
-import IconButton from '../../buttons/IconButton/IconButton';
-import Input from '../../inputs/Input/Input';
-import TextArea from '../../inputs/TextArea/TextArea';
-import ConfirmDialog from '../../overlays/ConfirmDialog/ConfirmDialog';
-import Heading from '../../typography/Heading/Heading';
-import Text from '../../typography/Text/Text';
 import styles from './Scheduler.module.css';
 
 interface SchedulerDayCell {

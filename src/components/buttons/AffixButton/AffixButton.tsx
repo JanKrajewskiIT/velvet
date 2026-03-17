@@ -1,9 +1,9 @@
 import { type JSX, Show, splitProps } from 'solid-js';
 
+import Text from '~/components/typography/Text/Text';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import Text from '../../typography/Text/Text';
 import Button, { type ButtonSize, type ButtonVariant } from '../Button/Button';
 import styles from './AffixButton.module.css';
 

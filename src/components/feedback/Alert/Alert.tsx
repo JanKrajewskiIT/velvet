@@ -3,12 +3,12 @@ import { IoFlash } from 'solid-icons/io';
 import type { JSX } from 'solid-js';
 import { Show } from 'solid-js';
 
+import IconButton from '~/components/buttons/IconButton/IconButton';
+import Heading from '~/components/typography/Heading/Heading';
+import Text from '~/components/typography/Text/Text';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import Heading from '../../typography/Heading/Heading';
-import Text from '../../typography/Text/Text';
-import IconActionButton from '../shared/IconActionButton/IconActionButton';
 import styles from './Alert.module.css';
 
 interface AlertMessages {
@@ -36,9 +36,10 @@ const defaultIcons: Record<AlertProps['variant'], () => JSX.Element> = {
 
 const Alert = (props: Props<AlertProps>) => {
   const icon = () => props.icon ?? defaultIcons[props.variant]();
+  const visualVariant = () => (props.variant === 'danger' ? 'error' : props.variant);
 
   return (
-    <div role="alert" class={classNames(styles.alert, styles[props.variant], props.class)}>
+    <div role="alert" class={classNames(styles.alert, styles[visualVariant()], props.class)}>
       <div class={styles.icon}>{icon()}</div>
       <div class={styles.content}>
         <Show when={props.title}>
@@ -51,12 +52,13 @@ const Alert = (props: Props<AlertProps>) => {
         </Text>
       </div>
       <Show when={props.onClose}>
-        <IconActionButton
+        <IconButton
           icon={<FiX size={16} />}
           title={props.messages?.closeButtonLabel ?? props.closeLabel ?? 'Close'}
           class={styles.closeBtn}
           onClick={props.onClose}
           variant="subtle"
+          size="sm"
         />
       </Show>
     </div>

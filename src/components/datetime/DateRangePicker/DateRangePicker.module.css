@@ -38,13 +38,8 @@
 }
 
 .dropdown {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  border-radius: var(--radius-lg);
+  composes: panel from '../../dropdowns/DropdownSurface/DropdownSurface.module.css';
   padding: var(--spacing-md);
-  animation: fadeInDown var(--duration-fast) var(--ease-out-expo);
-  transform-origin: top left;
 }
 
 .nav {

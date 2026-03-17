@@ -9,6 +9,7 @@ import {
   Footer,
   Grid,
   Heading,
+  LocaleSwitcher,
   MainLayout,
   Navbar,
   type NavItem,
@@ -90,9 +91,14 @@ const DEMO_APP_NAV_GROUPS: SidebarNavGroup[] = [
 const LayoutSection = (props: { sectionId: SectionId }) => {
   const sectionId = () => props.sectionId;
   const year = new Date().getFullYear();
+  const [locale, setLocale] = createSignal<'EN' | 'PL'>('EN');
   const [sidebarCollapsed, setSidebarCollapsed] = createSignal(false);
   const [activeSidebarId, setActiveSidebarId] = createSignal('home');
   const [activeDemoAppSidebarId, setActiveDemoAppSidebarId] = createSignal('overview-installation');
+
+  const toggleLocale = () => {
+    setLocale((current) => (current === 'EN' ? 'PL' : 'EN'));
+  };
 
   return (
     <div>
@@ -110,6 +116,13 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
                       logo={<BiLogosReact class="layoutNavbarLogo" />}
                       actions={
                         <div class="layoutNavbarActions">
+                          <LocaleSwitcher
+                            text={locale()}
+                            switchLabel="Switch language"
+                            onSwitch={toggleLocale}
+                            variant="navbar"
+                            size="sm"
+                          />
                           <ThemeToggle lightLabel="Light mode" darkLabel="Dark mode" groupLabel="Theme" />
                         </div>
                       }
@@ -140,6 +153,13 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
                       logo={<BiLogosReact class="layoutNavbarLogo" />}
                       actions={
                         <div class="layoutNavbarActions">
+                          <LocaleSwitcher
+                            text={locale()}
+                            switchLabel="Switch language"
+                            onSwitch={toggleLocale}
+                            variant="navbar"
+                            size="sm"
+                          />
                           <ThemeToggle lightLabel="Light mode" darkLabel="Dark mode" groupLabel="Theme" />
                         </div>
                       }

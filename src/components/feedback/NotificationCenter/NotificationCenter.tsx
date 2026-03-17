@@ -1,15 +1,15 @@
 import { IoCheckmarkDone, IoTrash } from 'solid-icons/io';
 import { createMemo, For, type JSX, Show, splitProps } from 'solid-js';
 
+import Button from '~/components/buttons/Button/Button';
+import IconButton from '~/components/buttons/IconButton/IconButton';
+import Tooltip from '~/components/overlays/Tooltip/Tooltip';
+import Heading from '~/components/typography/Heading/Heading';
+import Text from '~/components/typography/Text/Text';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import Button from '../../buttons/Button/Button';
-import Tooltip from '../../overlays/Tooltip/Tooltip';
-import Heading from '../../typography/Heading/Heading';
-import Text from '../../typography/Text/Text';
 import Badge from '../Badge/Badge';
-import IconActionButton from '../shared/IconActionButton/IconActionButton';
 import {
   clearNotifications,
   markAllNotificationsRead,
@@ -56,6 +56,7 @@ const NotificationCenter = (props: Props<NotificationCenterOwnProps>) => {
   const clearLabel = () => local.clearAllLabel ?? 'Clear all';
   const dismissLabel = () => local.removeLabel ?? 'Dismiss';
   const markReadLabel = () => 'Mark as read';
+  const hasNotifications = createMemo(() => notifications().length > 0);
   const handleItemRead = (id: string) => markNotificationRead(id);
   const handleItemRemove = (id: string) => removeNotification(id);
 
@@ -87,7 +88,7 @@ const NotificationCenter = (props: Props<NotificationCenterOwnProps>) => {
             size="sm"
             class={styles.actionButton}
             onClick={clearNotifications}
-            disabled={notifications().length === 0}
+            disabled={!hasNotifications()}
           >
             {clearLabel()}
           </Button>
@@ -126,19 +127,23 @@ const NotificationCenter = (props: Props<NotificationCenterOwnProps>) => {
                 </button>
                 <div class={styles.itemActions}>
                   <Tooltip content={markReadLabel()}>
-                    <IconActionButton
+                    <IconButton
                       icon={<IoCheckmarkDone />}
                       title={markReadLabel()}
                       class={styles.iconButton}
                       onClick={() => handleItemRead(item.id)}
+                      size="sm"
+                      variant="subtle"
                     />
                   </Tooltip>
                   <Tooltip content={dismissLabel()}>
-                    <IconActionButton
+                    <IconButton
                       icon={<IoTrash />}
                       title={dismissLabel()}
                       class={styles.iconButton}
                       onClick={() => handleItemRemove(item.id)}
+                      size="sm"
+                      variant="subtle"
                     />
                   </Tooltip>
                 </div>

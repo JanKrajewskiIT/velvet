@@ -5,12 +5,14 @@
 }
 
 .star {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   background: none;
   border: none;
   padding: 0;
+  font-size: var(--rating-icon-size, 24px);
   color: var(--color-border);
   transition:
     transform var(--duration-fast) var(--ease-spring),
@@ -20,46 +22,47 @@
 }
 
 .sizeSm {
-  font-size: 16px;
+  --rating-icon-size: 16px;
 }
 
 .sizeMd {
-  font-size: 24px;
+  --rating-icon-size: 24px;
 }
 
 .sizeLg {
-  font-size: 32px;
+  --rating-icon-size: 32px;
 }
 
-.star svg {
+.iconBase,
+.iconFill {
+  display: inline-flex;
+}
+
+.iconBase svg,
+.iconFill svg {
   width: 1em;
   height: 1em;
+}
+
+.iconBase {
+  color: var(--color-border);
+}
+
+.iconFill {
+  position: absolute;
+  inset: 0;
+  width: var(--fill-percent, 0%);
+  overflow: hidden;
+  color: var(--color-warning);
 }
 
 .filled {
   color: var(--color-warning);
 }
 
-.filled svg {
-  fill: currentcolor;
-}
-
-.half {
-  position: relative;
-  color: var(--color-border);
-}
-
-.half::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  width: 50%;
-  overflow: hidden;
+.filled .iconFill,
+.partial .iconFill {
   color: var(--color-warning);
-}
-
-.half svg {
-  fill: var(--color-border);
 }
 
 .interactive {

@@ -1,9 +1,9 @@
 import { createMemo } from 'solid-js';
 
+import type { InputSize } from '~/components/inputs/Input/Input';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import type { InputSize } from '../../inputs/Input/Input';
 import type { DatePickerMessages } from '../DatePicker/DatePicker';
 import DatePicker from '../DatePicker/DatePicker';
 import type { TimePickerMessages } from '../TimePicker/TimePicker';

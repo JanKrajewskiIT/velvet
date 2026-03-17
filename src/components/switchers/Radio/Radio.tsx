@@ -1,9 +1,9 @@
 import { createUniqueId, For, type JSX, splitProps } from 'solid-js';
 
+import LabelText from '~/components/typography/LabelText/LabelText';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import LabelText from '../../typography/LabelText/LabelText';
 import styles from './Radio.module.css';
 
 export interface RadioOption<T extends string = string> {

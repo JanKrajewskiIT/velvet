@@ -30,7 +30,23 @@
   transform: scale(1.15);
 }
 
+.colorOption:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-focus-ring);
+}
+
 .colorOptionSelected {
   border-color: var(--color-text);
   transform: scale(1.15);
+}
+
+.disabled {
+  opacity: var(--opacity-disabled);
+}
+
+.disabled .colorOption {
+  cursor: not-allowed;
+}
+
+.disabled .colorOption:hover {
+  transform: none;
 }

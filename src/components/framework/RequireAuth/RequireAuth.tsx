@@ -1,12 +1,11 @@
 import { createMemo, type JSX, Show } from 'solid-js';
 
+import AccessDenied from '~/components/feedback/AccessDenied/AccessDenied';
+import LoadingContainer from '~/components/feedback/LoadingContainer/LoadingContainer';
+import AuthRedirect from '~/components/framework/AuthRedirect/AuthRedirect';
 import type Props from '~/models/Props';
 
-import AccessDenied from '../../feedback/AccessDenied/AccessDenied';
-import LoadingContainer from '../../feedback/LoadingContainer/LoadingContainer';
-import AuthRedirect from '../AuthRedirect/AuthRedirect';
-
-export interface RequireAuthProps {
+interface RequireAuthBaseProps {
   isLoading: boolean;
   isAuthenticated: boolean;
   children: JSX.Element;
@@ -16,12 +15,26 @@ export interface RequireAuthProps {
   onUnauthenticated?: () => void | Promise<void>;
   loadingFallback?: JSX.Element;
   unauthenticatedFallback?: JSX.Element;
-  accessDeniedFallback?: JSX.Element;
+}
+
+interface RequireAuthDefaultAccessDeniedProps {
+  accessDeniedFallback?: undefined;
   accessDeniedTitle: string;
   accessDeniedDescription: string;
   accessDeniedGoHomeLabel: string;
   accessDeniedGoHomeHref?: string;
 }
+
+interface RequireAuthCustomAccessDeniedProps {
+  accessDeniedFallback: JSX.Element;
+  accessDeniedTitle?: string;
+  accessDeniedDescription?: string;
+  accessDeniedGoHomeLabel?: string;
+  accessDeniedGoHomeHref?: string;
+}
+
+export type RequireAuthProps = RequireAuthBaseProps &
+  (RequireAuthDefaultAccessDeniedProps | RequireAuthCustomAccessDeniedProps);
 
 const RequireAuth = (props: Props<RequireAuthProps>) => {
   const requiredRoles = createMemo(() => {
@@ -37,28 +50,31 @@ const RequireAuth = (props: Props<RequireAuthProps>) => {
     return props.hasAnyRole(...roles);
   });
 
+  const unauthenticatedFallback = createMemo(() => {
+    if (props.unauthenticatedFallback !== undefined) return props.unauthenticatedFallback;
+    if (!props.onUnauthenticated) return null;
+    return <AuthRedirect onRedirect={props.onUnauthenticated} />;
+  });
+
+  const accessDeniedFallback = createMemo(() => {
+    if (props.accessDeniedFallback !== undefined) return props.accessDeniedFallback;
+
+    const defaultAccessDeniedProps = props as RequireAuthBaseProps & RequireAuthDefaultAccessDeniedProps;
+
+    return (
+      <AccessDenied
+        title={defaultAccessDeniedProps.accessDeniedTitle}
+        description={defaultAccessDeniedProps.accessDeniedDescription}
+        goHomeLabel={defaultAccessDeniedProps.accessDeniedGoHomeLabel}
+        goHomeHref={defaultAccessDeniedProps.accessDeniedGoHomeHref}
+      />
+    );
+  });
+
   return (
     <Show when={!props.isLoading} fallback={props.loadingFallback ?? <LoadingContainer />}>
-      <Show
-        when={props.isAuthenticated}
-        fallback={
-          props.unauthenticatedFallback ??
-          (props.onUnauthenticated ? <AuthRedirect onRedirect={props.onUnauthenticated} /> : null)
-        }
-      >
-        <Show
-          when={resolvedHasAccess()}
-          fallback={
-            props.accessDeniedFallback ?? (
-              <AccessDenied
-                title={props.accessDeniedTitle}
-                description={props.accessDeniedDescription}
-                goHomeLabel={props.accessDeniedGoHomeLabel}
-                goHomeHref={props.accessDeniedGoHomeHref}
-              />
-            )
-          }
-        >
+      <Show when={props.isAuthenticated} fallback={unauthenticatedFallback()}>
+        <Show when={resolvedHasAccess()} fallback={accessDeniedFallback()}>
           {props.children}
         </Show>
       </Show>

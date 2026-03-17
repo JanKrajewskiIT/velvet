@@ -1,10 +1,12 @@
 import { AiFillMoon, AiFillSun } from 'solid-icons/ai';
+import { createMemo } from 'solid-js';
 
+import type { SegmentedControlOption } from '~/components/switchers/SegmentedControl/SegmentedControl';
+import SegmentedControl from '~/components/switchers/SegmentedControl/SegmentedControl';
 import type Props from '~/models/Props';
+import { useTheme } from '~/theme/ThemeProvider';
 import classNames from '~/utils/classNames';
 
-import { useTheme } from '../../../theme/ThemeProvider';
-import SegmentedControl from '../../switchers/SegmentedControl/SegmentedControl';
 import styles from './ThemeToggle.module.css';
 
 export type ThemeToggleVariant = 'light' | 'dark';
@@ -18,15 +20,20 @@ interface ThemeToggleProps {
 
 const ThemeToggle = (props: Props<ThemeToggleProps>) => {
   const { resolved, setTheme } = useTheme();
-  const variantClass = () => (props.variant === 'light' ? styles.light : '');
-  const options = () => [
+  const options = createMemo<SegmentedControlOption[]>(() => [
     { value: 'light', label: <AiFillSun class={styles.icon} />, ariaLabel: props.lightLabel },
     { value: 'dark', label: <AiFillMoon class={styles.icon} />, ariaLabel: props.darkLabel },
-  ];
+  ]);
+
+  const handleThemeChange = (next: string) => {
+    if (next === 'light' || next === 'dark') {
+      setTheme(next);
+    }
+  };
 
   return (
     <div
-      class={classNames(styles.group, variantClass(), props.class)}
+      class={classNames(styles.group, props.variant === 'light' && styles.light, props.class)}
       role="group"
       aria-label={props.groupLabel ?? props.darkLabel}
     >
@@ -34,7 +41,7 @@ const ThemeToggle = (props: Props<ThemeToggleProps>) => {
         class={styles.segmented}
         options={options()}
         value={resolved()}
-        onChange={(next) => setTheme(next as ThemeToggleVariant)}
+        onChange={handleThemeChange}
         optionClass={styles.toggle}
         activeOptionClass={styles.selected}
         size="sm"

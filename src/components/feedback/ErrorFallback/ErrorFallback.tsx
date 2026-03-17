@@ -1,6 +1,6 @@
+import Button from '~/components/buttons/Button/Button';
 import type Props from '~/models/Props';
 
-import Button from '../../buttons/Button/Button';
 import FallbackState from '../FallbackState/FallbackState';
 import styles from './ErrorFallback.module.css';
 

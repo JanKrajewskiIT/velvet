@@ -1,6 +1,25 @@
 export const getFocusableDropdownItems = (surface: HTMLElement): HTMLButtonElement[] =>
   Array.from(surface.querySelectorAll<HTMLButtonElement>('button:not(:disabled)'));
 
+export const getDropdownOpenTarget = (event: KeyboardEvent): 'first' | 'last' | null => {
+  if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault();
+    return 'first';
+  }
+
+  if (event.key === 'ArrowDown') {
+    event.preventDefault();
+    return 'first';
+  }
+
+  if (event.key === 'ArrowUp') {
+    event.preventDefault();
+    return 'last';
+  }
+
+  return null;
+};
+
 export const handleDropdownArrowNavigation = (
   event: KeyboardEvent,
   items: HTMLButtonElement[],

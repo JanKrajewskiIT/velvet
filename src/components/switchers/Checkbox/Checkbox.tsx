@@ -1,9 +1,8 @@
 import { createUniqueId, type JSX, splitProps } from 'solid-js';
 
+import LabelText from '~/components/typography/LabelText/LabelText';
 import type Props from '~/models/Props';
-import classNames from '~/utils/classNames';
 
-import LabelText from '../../typography/LabelText/LabelText';
 import CheckboxControl from '../CheckboxControl/CheckboxControl';
 import styles from './Checkbox.module.css';
 
@@ -25,7 +24,7 @@ const Checkbox = (props: Props<CheckboxOwnProps>) => {
       {...rest}
       id={inputId()}
       class={styles.control}
-      wrapperClass={classNames(styles.wrapper, local.class)}
+      wrapperClass={local.class}
       label={hasText() ? <LabelText label={local.label} description={local.description} /> : undefined}
       labelId={hasText() ? textId() : undefined}
     />

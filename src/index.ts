@@ -102,8 +102,19 @@ export { default as Scheduler } from './components/datetime/Scheduler/Scheduler'
 export { default as TimePicker } from './components/datetime/TimePicker/TimePicker';
 export { default as Autocomplete } from './components/dropdowns/Autocomplete/Autocomplete';
 export { default as DropdownButton } from './components/dropdowns/DropdownButton/DropdownButton';
-export { default as DropdownItem } from './components/dropdowns/DropdownMenu/DropdownItem';
 export { default as DropdownMenu } from './components/dropdowns/DropdownMenu/DropdownMenu';
+export {
+  default as DropdownOption,
+  type DropdownOptionProps,
+} from './components/dropdowns/DropdownOption/DropdownOption';
+export {
+  default as DropdownSurface,
+  type DropdownSurfaceProps,
+} from './components/dropdowns/DropdownSurface/DropdownSurface';
+export {
+  default as DropdownTriggerContent,
+  type DropdownTriggerContentProps,
+} from './components/dropdowns/DropdownTriggerContent/DropdownTriggerContent';
 export type { MultiSelectOption } from './components/dropdowns/MultiSelect/MultiSelect';
 export { default as MultiSelect } from './components/dropdowns/MultiSelect/MultiSelect';
 export { default as Select } from './components/dropdowns/Select/Select';
@@ -203,14 +214,18 @@ export { default as Tour } from './components/overlays/Tour/Tour';
 export { default as ColorPicker } from './components/pickers/ColorPicker/ColorPicker';
 export type { SliderRangeValue } from './components/pickers/RangeSlider/RangeSlider';
 export { default as RangeSlider } from './components/pickers/RangeSlider/RangeSlider';
-export { default as Rating } from './components/pickers/Rating/Rating';
+export { default as Rating, type RatingProps } from './components/pickers/Rating/Rating';
 export { default as Slider } from './components/pickers/Slider/Slider';
 export { default as Checkbox } from './components/switchers/Checkbox/Checkbox';
 export { RadioGroup, type RadioOption } from './components/switchers/Radio/Radio';
-export { default as SegmentedControl } from './components/switchers/SegmentedControl/SegmentedControl';
+export {
+  default as SegmentedControl,
+  type SegmentedControlOption,
+} from './components/switchers/SegmentedControl/SegmentedControl';
 export { default as Switch } from './components/switchers/Switch/Switch';
 export { default as CodeText } from './components/typography/CodeText/CodeText';
 export { default as Heading } from './components/typography/Heading/Heading';
+export { default as LabelText } from './components/typography/LabelText/LabelText';
 export { default as Text } from './components/typography/Text/Text';
 export { default as useClickOutside } from './hooks/useClickOutside';
 export { default as useEscapeKey } from './hooks/useEscapeKey';

@@ -1,4 +1,4 @@
-import { For, type JSX } from 'solid-js';
+import { createMemo, For, type JSX, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
@@ -9,58 +9,80 @@ interface ColorPickerProps {
   colors: string[];
   value: string;
   onChange: (color: string) => void;
+  disabled?: boolean;
 }
 
 const ColorPicker = (props: Props<ColorPickerProps>) => {
-  const hasSelectedColor = () => props.colors.includes(props.value);
+  const [local, rest] = splitProps(props, ['colors', 'value', 'onChange', 'disabled', 'class']);
+
+  const optionRefs: (HTMLButtonElement | undefined)[] = [];
+
+  const hasSelectedColor = () => local.colors.includes(local.value);
+  const selectedIndex = createMemo(() => local.colors.findIndex((color) => color === local.value));
+  const tabStopIndex = createMemo(() => {
+    const selected = selectedIndex();
+    return selected >= 0 ? selected : 0;
+  });
+
+  const focusAndSelect = (index: number) => {
+    const color = local.colors[index];
+    if (color === undefined || local.disabled) return;
+    optionRefs[index]?.focus();
+    local.onChange(color);
+  };
 
   const handleKeyDown = (event: KeyboardEvent, currentIndex: number) => {
-    if (props.colors.length === 0) return;
+    if (local.colors.length === 0 || local.disabled) return;
 
-    const lastIndex = props.colors.length - 1;
+    const lastIndex = local.colors.length - 1;
 
     if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
       event.preventDefault();
       const nextIndex = Math.min(lastIndex, currentIndex + 1);
-      const nextColor = props.colors[nextIndex];
-      if (nextColor !== undefined) props.onChange(nextColor);
+      focusAndSelect(nextIndex);
       return;
     }
 
     if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
       event.preventDefault();
       const nextIndex = Math.max(0, currentIndex - 1);
-      const nextColor = props.colors[nextIndex];
-      if (nextColor !== undefined) props.onChange(nextColor);
+      focusAndSelect(nextIndex);
       return;
     }
 
     if (event.key === 'Home') {
       event.preventDefault();
-      const firstColor = props.colors[0];
-      if (firstColor !== undefined) props.onChange(firstColor);
+      focusAndSelect(0);
       return;
     }
 
     if (event.key === 'End') {
       event.preventDefault();
-      const lastColor = props.colors[lastIndex];
-      if (lastColor !== undefined) props.onChange(lastColor);
+      focusAndSelect(lastIndex);
     }
   };
 
   return (
-    <div class={classNames(styles.colorPicker, props.class)} role="radiogroup">
-      <For each={props.colors}>
+    <div
+      {...rest}
+      class={classNames(styles.colorPicker, local.disabled && styles.disabled, local.class)}
+      role="radiogroup"
+    >
+      <For each={local.colors}>
         {(c, index) => (
           <button
             type="button"
             role="radio"
-            aria-checked={props.value === c}
-            tabIndex={props.value === c || (!hasSelectedColor() && index() === 0) ? 0 : -1}
-            class={classNames(styles.colorOption, props.value === c && styles.colorOptionSelected)}
+            aria-checked={local.value === c}
+            aria-disabled={local.disabled}
+            disabled={local.disabled}
+            tabIndex={tabStopIndex() === index() || (!hasSelectedColor() && index() === 0) ? 0 : -1}
+            class={classNames(styles.colorOption, local.value === c && styles.colorOptionSelected)}
             style={{ '--swatch-color': c } as JSX.CSSProperties}
-            onClick={() => props.onChange(c)}
+            ref={(element) => {
+              optionRefs[index()] = element;
+            }}
+            onClick={() => local.onChange(c)}
             onKeyDown={(event) => handleKeyDown(event, index())}
             aria-label={c}
           />

@@ -1,16 +1,16 @@
 import { FiClock } from 'solid-icons/fi';
 import { createMemo, createSignal, createUniqueId, For, Show } from 'solid-js';
 
+import IconButton from '~/components/buttons/IconButton/IconButton';
+import DropdownOption from '~/components/dropdowns/DropdownOption/DropdownOption';
+import DropdownSurface from '~/components/dropdowns/DropdownSurface/DropdownSurface';
+import AffixInput from '~/components/inputs/AffixInput/AffixInput';
+import type { InputSize } from '~/components/inputs/Input/Input';
 import useClickOutside from '~/hooks/useClickOutside';
 import useEscapeKey from '~/hooks/useEscapeKey';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import IconButton from '../../buttons/IconButton/IconButton';
-import DropdownOption from '../../dropdowns/DropdownBase/DropdownOption';
-import DropdownSurface from '../../dropdowns/DropdownBase/DropdownSurface';
-import AffixInput from '../../inputs/AffixInput/AffixInput';
-import type { InputSize } from '../../inputs/Input/Input';
 import styles from './TimePicker.module.css';
 
 export interface TimePickerMessages {
@@ -119,6 +119,8 @@ const TimePicker = (props: Props<TimePickerProps>) => {
           ref={dropdownRef}
           id={dropdownId}
           class={styles.dropdown}
+          align="right"
+          origin="top"
           role="listbox"
           aria-label={optionsLabel()}
         >
@@ -127,12 +129,11 @@ const TimePicker = (props: Props<TimePickerProps>) => {
               <DropdownOption
                 class={optionClass()}
                 selected={time === props.value}
+                label={time}
                 onClick={() => select(time)}
                 role="option"
                 aria-selected={time === props.value}
-              >
-                {time}
-              </DropdownOption>
+              />
             )}
           </For>
         </DropdownSurface>
