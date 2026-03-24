@@ -1,21 +1,18 @@
-import { IoCheckmark } from 'solid-icons/io';
 import { createMemo, createUniqueId, For, type JSX, Show, splitProps } from 'solid-js';
 
-import EditableChip from '~/components/feedback/EditableChip/EditableChip';
+import ClosableChip from '~/components/feedback/ClosableChip/ClosableChip';
 import type { InputSize } from '~/components/inputs/Input/Input';
-import InputButton from '~/components/inputs/InputButton/InputButton';
+import CheckboxIndicator from '~/components/switchers/CheckboxIndicator/CheckboxIndicator';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
+import DropdownChevronFieldTrigger from '../DropdownChevronFieldTrigger/DropdownChevronFieldTrigger';
 import DropdownOption from '../DropdownOption/DropdownOption';
 import DropdownSurface from '../DropdownSurface/DropdownSurface';
-import DropdownTriggerContent from '../DropdownTriggerContent/DropdownTriggerContent';
 import {
-  focusFirstDropdownItem,
-  focusLastDropdownItem,
+  createDropdownSurfaceKeyDownHandler,
+  focusDropdownItem,
   getDropdownOpenTarget,
-  getFocusableDropdownItems,
-  handleDropdownArrowNavigation,
 } from '../shared/dropdownKeyboard';
 import useDropdownState from '../shared/useDropdownState';
 import styles from './MultiSelect.module.css';
@@ -49,6 +46,10 @@ const MultiSelect = (props: Props<MultiSelectOwnProps>) => {
     'removeLabel',
     'disabled',
     'size',
+    'id',
+    'aria-labelledby',
+    'aria-describedby',
+    'aria-invalid',
     'class',
   ]);
   let rootRef: HTMLDivElement | undefined;
@@ -100,11 +101,7 @@ const MultiSelect = (props: Props<MultiSelectOwnProps>) => {
     dropdown.openDropdown();
     requestAnimationFrame(() => {
       if (!panelRef) return;
-      if (target === 'last') {
-        focusLastDropdownItem(panelRef);
-        return;
-      }
-      focusFirstDropdownItem(panelRef);
+      focusDropdownItem(panelRef, target);
     });
   };
 
@@ -116,95 +113,76 @@ const MultiSelect = (props: Props<MultiSelectOwnProps>) => {
     openAndFocus(target);
   };
 
-  const handleDropdownKeyDown = (e: KeyboardEvent) => {
-    if (!panelRef) return;
-    const items = getFocusableDropdownItems(panelRef);
-    const current = document.activeElement as HTMLElement;
-    const index = items.indexOf(current as HTMLButtonElement);
-
-    if (handleDropdownArrowNavigation(e, items, index)) return;
-
-    if (e.key === 'Escape') {
-      e.preventDefault();
-      dropdown.close();
-      triggerRef?.focus();
-      return;
-    }
-
-    if (e.key === 'Tab') {
-      dropdown.close();
-    }
-  };
+  const handleDropdownKeyDown = createDropdownSurfaceKeyDownHandler({
+    getSurface: () => panelRef,
+    closeDropdown: dropdown.close,
+    focusTrigger: () => triggerRef?.focus(),
+  });
 
   return (
     <div {...rest} ref={rootRef} class={classNames(styles.wrapper, local.class)}>
-      <InputButton
-        ref={triggerRef}
-        class={classNames(styles.trigger, local.disabled && styles.disabled)}
-        size={local.size}
-        disabled={local.disabled}
-        aria-haspopup="listbox"
-        aria-expanded={dropdown.open() ? 'true' : 'false'}
-        aria-controls={dropdown.open() ? dropdownId : undefined}
-        onClick={toggleOpen}
-        onKeyDown={handleTriggerKeyDown}
-      >
-        <DropdownTriggerContent
+      <div class={styles.triggerArea}>
+        <DropdownChevronFieldTrigger
+          id={local.id}
+          ref={triggerRef}
           label={local.value.length > 0 ? selectedLabels() : (local.placeholder ?? 'Select options')}
           open={dropdown.open()}
-          placeholder={local.value.length === 0}
-          class={styles.triggerContent}
+          class={classNames(styles.trigger, dropdown.open() && styles.triggerOpen)}
+          size={local.size}
+          disabled={local.disabled}
+          aria-haspopup="listbox"
+          aria-expanded={dropdown.open() ? 'true' : 'false'}
+          aria-controls={dropdown.open() ? dropdownId : undefined}
+          aria-labelledby={local['aria-labelledby']}
+          aria-describedby={local['aria-describedby']}
+          aria-invalid={local['aria-invalid']}
+          onClick={toggleOpen}
+          onKeyDown={handleTriggerKeyDown}
         />
-      </InputButton>
 
-      <Show when={dropdown.open()}>
-        <DropdownSurface
-          ref={panelRef}
-          id={dropdownId}
-          class={styles.dropdown}
-          align="fullWidth"
-          origin="top"
-          role="listbox"
-          aria-multiselectable="true"
-          onKeyDown={handleDropdownKeyDown}
-        >
-          <Show
-            when={local.options.length > 0}
-            fallback={<div class={styles.empty}>{local.emptyLabel ?? 'No options'}</div>}
+        <Show when={dropdown.open()}>
+          <DropdownSurface
+            ref={panelRef}
+            id={dropdownId}
+            class={styles.dropdown}
+            align="fullWidth"
+            origin="top"
+            role="listbox"
+            aria-multiselectable="true"
+            onKeyDown={handleDropdownKeyDown}
           >
-            <For each={local.options}>
-              {(option) => {
-                const selected = () => isSelected(option.value);
+            <Show
+              when={local.options.length > 0}
+              fallback={<div class={styles.empty}>{local.emptyLabel ?? 'No options'}</div>}
+            >
+              <For each={local.options}>
+                {(option) => {
+                  const selected = () => isSelected(option.value);
 
-                return (
-                  <DropdownOption
-                    class={classNames(styles.option, option.disabled && styles.optionDisabled)}
-                    selected={selected()}
-                    label={option.label}
-                    prefix={
-                      <span class={classNames(styles.checkbox, selected() && styles.checkboxChecked)}>
-                        <Show when={selected()}>
-                          <IoCheckmark size={14} />
-                        </Show>
-                      </span>
-                    }
-                    onClick={() => toggleOption(option)}
-                    disabled={option.disabled}
-                    role="option"
-                    aria-selected={selected() ? 'true' : 'false'}
-                  />
-                );
-              }}
-            </For>
-          </Show>
-        </DropdownSurface>
-      </Show>
+                  return (
+                    <DropdownOption
+                      class={styles.option}
+                      selected={selected()}
+                      label={option.label}
+                      prefix={<CheckboxIndicator checked={selected()} class={styles.checkbox} />}
+                      onClick={() => toggleOption(option)}
+                      disabled={option.disabled}
+                      role="option"
+                      aria-selected={selected() ? 'true' : 'false'}
+                    />
+                  );
+                }}
+              </For>
+            </Show>
+          </DropdownSurface>
+        </Show>
+      </div>
 
       <Show when={selectedOptions().length > 0}>
         <div class={styles.selected}>
           <For each={selectedOptions()}>
             {(option) => (
-              <EditableChip
+              <ClosableChip
                 label={option.label}
                 removeLabel={local.removeLabel ? `${local.removeLabel} ${option.label}` : undefined}
                 disabled={local.disabled}

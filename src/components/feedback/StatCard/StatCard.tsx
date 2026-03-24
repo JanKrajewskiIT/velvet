@@ -22,10 +22,10 @@ const StatCard = (props: Props<StatCardProps>) => {
         <div class={styles.icon}>{props.icon}</div>
       </Show>
       <div class={styles.content}>
-        <Heading as="span" level={3} variant="h2" class={styles.value}>
+        <Heading as="span" level={3} variant="h2">
           {props.value}
         </Heading>
-        <Text as="span" variant="bodySm" tone="muted" class={styles.label}>
+        <Text as="span" variant="bodySm" tone="muted">
           {props.label}
         </Text>
       </div>

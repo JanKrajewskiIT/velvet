@@ -1,0 +1,8 @@
+.itemRow {
+  margin-bottom: var(--spacing-2xs);
+}
+
+.children {
+  padding-left: var(--spacing-md);
+  margin-top: var(--spacing-2xs);
+}

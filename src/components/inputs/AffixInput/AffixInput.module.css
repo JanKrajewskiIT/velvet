@@ -1,27 +1,17 @@
 .root {
   --affix-gap: 0;
+  --affix-padding-inline: var(--spacing-sm);
 
-  composes: fieldBase from '../shared/FieldBase.module.css';
   display: inline-flex;
   align-items: center;
   gap: var(--affix-gap);
+  padding: 0 var(--affix-padding-inline) 0 var(--affix-padding-inline);
 }
 
-.root:focus-within {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px var(--color-focus-ring);
-}
-
-.input {
-  border: none;
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-}
-
-.input:focus {
-  border-color: transparent;
-  box-shadow: none;
+.root .input {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
 }
 
 .prefix,
@@ -45,61 +35,6 @@
   --affix-gap: var(--spacing-xs);
 }
 
-.hasPrefix {
-  padding-left: var(--spacing-sm);
-}
-
-.hasSuffix {
-  padding-right: var(--spacing-sm);
-}
-
-.invalid {
-  composes: fieldInvalid from '../shared/FieldBase.module.css';
-}
-
-.readOnly {
-  composes: fieldReadOnly from '../shared/FieldBase.module.css';
-}
-
-.disabled {
-  composes: fieldDisabled from '../shared/FieldBase.module.css';
-}
-
-.sizeSm {
-  composes: sizeSm from '../shared/FieldBase.module.css';
-  padding: 0;
-}
-
-.sizeSm.hasPrefix {
-  padding-left: var(--spacing-sm);
-}
-
-.sizeSm.hasSuffix {
-  padding-right: var(--spacing-sm);
-}
-
-.sizeMd {
-  composes: sizeMd from '../shared/FieldBase.module.css';
-  padding: 0;
-}
-
-.sizeMd.hasPrefix {
-  padding-left: var(--spacing-sm);
-}
-
-.sizeMd.hasSuffix {
-  padding-right: var(--spacing-sm);
-}
-
 .sizeLg {
-  composes: sizeLg from '../shared/FieldBase.module.css';
-  padding: 0;
-}
-
-.sizeLg.hasPrefix {
-  padding-left: var(--spacing-md);
-}
-
-.sizeLg.hasSuffix {
-  padding-right: var(--spacing-md);
+  --affix-padding-inline: var(--spacing-md);
 }

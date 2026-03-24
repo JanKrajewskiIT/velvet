@@ -1,6 +1,7 @@
 import { createMemo, createSignal, For, type JSX, Show, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
 import Button from '../../buttons/Button/Button';
 import Stepper from '../../navigation/Stepper/Stepper';
@@ -73,8 +74,12 @@ const Wizard = (props: Props<WizardOwnProps>) => {
     }
   };
 
+  const handleNextClick = () => {
+    void handleNext();
+  };
+
   return (
-    <div class={`${styles.wizard} ${local.class ?? ''}`} {...rest}>
+    <div class={classNames(styles.wizard, local.class)} {...rest}>
       <div class={styles.stepperContainer}>
         <Stepper steps={stepperSteps()} activeStep={String(currentStep())} />
       </div>
@@ -91,7 +96,7 @@ const Wizard = (props: Props<WizardOwnProps>) => {
         <Button variant="ghost" disabled={currentStep() === 0 || isLoading()} onClick={handleBack}>
           {local.backLabel}
         </Button>
-        <Button variant="primary" disabled={isLoading()} onClick={() => void handleNext()} loading={isLoading()}>
+        <Button variant="primary" disabled={isLoading()} onClick={handleNextClick} loading={isLoading()}>
           {isLastStep() ? local.finishLabel : local.nextLabel}
         </Button>
       </div>

@@ -1,0 +1,69 @@
+.carousel {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.track {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.track::-webkit-scrollbar {
+  display: none;
+}
+
+.slide {
+  min-width: 100%;
+  scroll-snap-align: start;
+  flex-shrink: 0;
+}
+
+.arrow {
+  position: absolute;
+  top: calc(50% - 20px);
+  z-index: 2;
+}
+
+.arrowPrev {
+  left: var(--spacing-sm);
+}
+
+.arrowNext {
+  right: var(--spacing-sm);
+}
+
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) 0;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: var(--color-border);
+  cursor: pointer;
+  padding: 0;
+  transition:
+    width var(--duration-normal) var(--ease-out-expo),
+    background-color var(--duration-normal) var(--ease-out-expo),
+    box-shadow var(--duration-normal) var(--ease-out-expo);
+}
+
+.dot:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+.dotActive {
+  width: 24px;
+  background: var(--color-primary);
+  box-shadow: var(--shadow-glow-sm);
+}

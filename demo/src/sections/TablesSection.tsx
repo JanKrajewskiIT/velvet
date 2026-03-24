@@ -8,8 +8,6 @@ import {
   type DataGridProSortState,
   DataTable,
   type DataTableColumn,
-  Heading,
-  Pagination,
   QueryBuilder,
   type QueryBuilderField,
   type QueryBuilderRule,
@@ -179,7 +177,6 @@ const applyQueryBuilder = (rows: PackageRow[], query: QueryBuilderValue) => {
 };
 
 const TablesSection = () => {
-  const [page, setPage] = createSignal(5);
   const [query, setQuery] = createSignal('');
   const [gridFilterQuery, setGridFilterQuery] = createSignal('');
   const [gridSort, setGridSort] = createSignal<DataGridProSortState>({ key: 'downloads', direction: 'desc' });
@@ -380,28 +377,6 @@ const TablesSection = () => {
           and filtering are in manual mode (server-style control), rows support checkbox selection, and the toolbar
           still provides JSON import/export plus persisted/default layout badge. Use "Reset saved grid" to clear
           persisted layout in localStorage. Selected: {selectedRows().length}.
-        </ShowcaseMeta>
-      </ShowcaseSection>
-
-      <ShowcaseSection title="Pagination" subtitle="Navigate large result sets">
-        <PreviewPanel>
-          <PreviewGroup title="Examples">
-            <Pagination
-              page={page()}
-              totalPages={19}
-              onChange={setPage}
-              previousLabel="Previous"
-              nextLabel="Next"
-              ariaLabel="Table pages"
-            />
-          </PreviewGroup>
-        </PreviewPanel>
-        <ShowcaseMeta>
-          Current page:{' '}
-          <Heading as="strong" level={4} variant="titleMd">
-            {String(page())}
-          </Heading>
-          . Use with custom lists or tables when you need page navigation without DataTable.
         </ShowcaseMeta>
       </ShowcaseSection>
     </div>

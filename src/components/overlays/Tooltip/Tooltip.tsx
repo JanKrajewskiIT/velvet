@@ -1,18 +1,21 @@
 import { createSignal, createUniqueId, type JSX, onCleanup, Show, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
+import Text from '../../typography/Text/Text';
 import styles from './Tooltip.module.css';
 
 interface TooltipOwnProps extends JSX.HTMLAttributes<HTMLDivElement> {
-  content: JSX.Element;
+  content: string;
   position?: 'top' | 'bottom' | 'left' | 'right';
   delay?: number;
+  contentClass?: string;
 }
 
 const Tooltip = (props: Props<TooltipOwnProps>) => {
   const tooltipId = createUniqueId();
-  const [local, rest] = splitProps(props, ['content', 'position', 'delay', 'children', 'class']);
+  const [local, rest] = splitProps(props, ['content', 'position', 'delay', 'children', 'class', 'contentClass']);
   const [isVisible, setIsVisible] = createSignal(false);
   let timer: ReturnType<typeof setTimeout> | undefined;
 
@@ -32,7 +35,7 @@ const Tooltip = (props: Props<TooltipOwnProps>) => {
 
   return (
     <div
-      class={`${styles.tooltipContainer} ${local.class ?? ''}`}
+      class={classNames(styles.tooltipContainer, local.class)}
       onMouseEnter={show}
       onMouseLeave={hide}
       onFocus={show}
@@ -42,8 +45,14 @@ const Tooltip = (props: Props<TooltipOwnProps>) => {
     >
       {local.children}
       <Show when={isVisible()}>
-        <div id={tooltipId} role="tooltip" class={`${styles.tooltipContent} ${styles[local.position || 'top']}`}>
-          {local.content}
+        <div
+          id={tooltipId}
+          role="tooltip"
+          class={classNames(styles.tooltipContent, styles[local.position || 'top'], local.contentClass)}
+        >
+          <Text as="span" variant="caption" tone="inverse">
+            {local.content}
+          </Text>
         </div>
       </Show>
     </div>

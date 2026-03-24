@@ -1,17 +1,19 @@
-import { FiCheck, FiTarget, FiX } from 'solid-icons/fi';
+import { FiCheck, FiInfo, FiTarget, FiX } from 'solid-icons/fi';
 import { For, type JSX, Show } from 'solid-js';
 
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
 import Button from '../../buttons/Button/Button';
-import ScoreRing from '../../data-display/ScoreRing/ScoreRing';
+import ScoreRing from '../../charts/ScoreRing/ScoreRing';
 import Spinner from '../../feedback/Spinner/Spinner';
+import CodeText from '../../typography/CodeText/CodeText';
 import Heading from '../../typography/Heading/Heading';
 import Text from '../../typography/Text/Text';
 import styles from './AiResultPanel.module.css';
 
 interface AiResultSection {
-  icon: 'success' | 'danger' | 'primary';
+  icon: 'success' | 'danger' | 'primary' | 'info';
   title: string;
   items: string[];
 }
@@ -37,21 +39,23 @@ const iconMap = {
   success: (cls: string) => <FiCheck class={cls} />,
   danger: (cls: string) => <FiX class={cls} />,
   primary: (cls: string) => <FiTarget class={cls} />,
+  info: (cls: string) => <FiInfo class={cls} />,
 };
 
 const iconClassMap = {
   success: styles.iconSuccess,
   danger: styles.iconDanger,
   primary: styles.iconPrimary,
+  info: styles.iconInfo,
 };
 
 const AiResultPanel = (props: Props<AiResultPanelProps>) => {
   return (
-    <div class={`${styles.panel} ${props.class ?? ''}`}>
+    <div class={classNames(styles.panel, props.class)}>
       <Show when={props.isPending}>
         <div class={styles.loading}>
           <Spinner size="md" />
-          <Text as="p" class={styles.loadingText}>
+          <Text as="p" variant="bodySm" tone="muted">
             {props.loadingText}
           </Text>
         </div>
@@ -59,10 +63,10 @@ const AiResultPanel = (props: Props<AiResultPanelProps>) => {
 
       <Show when={props.hasError && !props.hasResult && !props.isPending}>
         <div class={styles.errorState}>
-          <Text as="p" class={styles.errorText}>
+          <Text as="p" variant="bodySm" tone="primary" class={styles.errorText}>
             {props.errorText}
           </Text>
-          <Button variant="ghost" onClick={() => props.onRetry()}>
+          <Button variant="ghost" onClick={props.onRetry}>
             {props.retryLabel}
           </Button>
         </div>
@@ -74,14 +78,16 @@ const AiResultPanel = (props: Props<AiResultPanelProps>) => {
             <div class={styles.scoreSection}>
               <ScoreRing score={props.score ?? 0} />
               <Show when={props.scoreLabel}>
-                <span class={styles.scoreLabel}>{props.scoreLabel}</span>
+                <CodeText as="span" size="sm" tone="muted" class={styles.scoreLabel}>
+                  {props.scoreLabel}
+                </CodeText>
               </Show>
             </div>
           </Show>
 
           <Show when={props.summary}>
             <div class={styles.summarySection}>
-              <Text as="p" class={styles.summaryText}>
+              <Text as="p" variant="bodySm">
                 {props.summary}
               </Text>
             </div>
@@ -91,12 +97,22 @@ const AiResultPanel = (props: Props<AiResultPanelProps>) => {
             {(section) => (
               <Show when={section.items.length > 0}>
                 <div class={styles.listSection}>
-                  <Heading as="h4" level={4} class={styles.listTitle}>
-                    {iconMap[section.icon](iconClassMap[section.icon] ?? '')}
-                    {section.title}
-                  </Heading>
+                  <div class={styles.listTitle}>
+                    {iconMap[section.icon](classNames(styles.icon, iconClassMap[section.icon]))}
+                    <Heading as="h4" level={4} variant="titleMd">
+                      {section.title}
+                    </Heading>
+                  </div>
                   <ul class={styles.list}>
-                    <For each={section.items}>{(item) => <li class={styles.listItem}>{item}</li>}</For>
+                    <For each={section.items}>
+                      {(item) => (
+                        <li>
+                          <Text as="span" variant="bodySm">
+                            {item}
+                          </Text>
+                        </li>
+                      )}
+                    </For>
                   </ul>
                 </div>
               </Show>
@@ -104,14 +120,14 @@ const AiResultPanel = (props: Props<AiResultPanelProps>) => {
           </For>
 
           <Show when={props.children}>{props.children}</Show>
-
-          <Show when={props.actions}>
-            <div class={styles.actions}>{props.actions}</div>
-          </Show>
         </div>
       </Show>
 
       <Show when={!props.isPending && !props.hasResult && !props.hasError && props.idle}>{props.idle}</Show>
+
+      <Show when={!props.isPending && props.actions}>
+        <div class={styles.actions}>{props.actions}</div>
+      </Show>
     </div>
   );
 };

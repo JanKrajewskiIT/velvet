@@ -1,5 +1,7 @@
-import { For, type JSX } from 'solid-js';
+import { For, type JSX, Show } from 'solid-js';
 
+import Button from '~/components/buttons/Button/Button';
+import Text from '~/components/typography/Text/Text';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -61,17 +63,37 @@ const Tabs = <T extends string>(props: Props<TabsProps<T>>) => {
     >
       <For each={props.tabs}>
         {(tab) => (
-          <button
-            type="button"
-            class={classNames(styles.tab, props.value === tab.value && styles.tabActive)}
-            onClick={() => props.onChange(tab.value)}
-            role="tab"
-            aria-selected={props.value === tab.value}
-            tabIndex={props.value === tab.value ? 0 : -1}
-            disabled={props.disabled}
+          <Show
+            when={variant() === 'pill'}
+            fallback={
+              <button
+                type="button"
+                class={classNames(styles.tab, props.value === tab.value && styles.tabActive)}
+                onClick={() => props.onChange(tab.value)}
+                role="tab"
+                aria-selected={props.value === tab.value}
+                tabIndex={props.value === tab.value ? 0 : -1}
+                disabled={props.disabled}
+              >
+                <Text as="span" variant="bodySm" class={styles.tabLabel}>
+                  {tab.label}
+                </Text>
+              </button>
+            }
           >
-            {tab.label}
-          </button>
+            <Button
+              variant={props.value === tab.value ? 'primary' : 'ghost'}
+              size="sm"
+              class={styles.pillButton}
+              onClick={() => props.onChange(tab.value)}
+              role="tab"
+              aria-selected={props.value === tab.value}
+              tabIndex={props.value === tab.value ? 0 : -1}
+              disabled={props.disabled}
+            >
+              {tab.label}
+            </Button>
+          </Show>
         )}
       </For>
     </div>

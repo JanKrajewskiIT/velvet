@@ -1,0 +1,68 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+  transition: width var(--duration-normal) var(--ease-out-expo);
+  overflow: hidden;
+}
+
+.expanded {
+  width: var(--layout-sidebar-width);
+}
+
+.collapsed {
+  width: 56px;
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.headerRowCollapsed {
+  justify-content: center;
+  padding: var(--spacing-sm);
+}
+
+.tools {
+  padding: var(--spacing-sm) var(--spacing-sm) var(--spacing-xs);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.toolsRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+}
+
+.nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--spacing-sm);
+}
+
+.badge {
+  margin-left: 0;
+}
+
+.collapsedItem {
+  justify-content: center;
+  padding-left: 0 !important;
+}
+
+.emptyState {
+  margin: var(--spacing-sm) 0 0;
+  padding: var(--spacing-sm);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-sm);
+}

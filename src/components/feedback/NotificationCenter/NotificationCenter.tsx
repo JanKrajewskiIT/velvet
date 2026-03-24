@@ -64,11 +64,13 @@ const NotificationCenter = (props: Props<NotificationCenterOwnProps>) => {
     <div {...rest} class={classNames(styles.wrapper, local.class)}>
       <div class={styles.header}>
         <div class={styles.titleRow}>
-          <Heading as="h3" level={3} class={styles.title}>
+          <Heading as="h3" level={5}>
             {local.title ?? 'Notifications'}
           </Heading>
           <Show when={unreadCount() > 0}>
-            <span class={styles.badge}>{unreadCount()}</span>
+            <Badge content={unreadCount()} variant="primarySoft" inline>
+              <span class={styles.badgeAnchor} />
+            </Badge>
           </Show>
         </div>
         <div class={styles.actions}>
@@ -76,20 +78,12 @@ const NotificationCenter = (props: Props<NotificationCenterOwnProps>) => {
             type="button"
             variant="ghost"
             size="sm"
-            class={styles.actionButton}
             onClick={markAllNotificationsRead}
             disabled={unreadCount() === 0}
           >
             {readLabel()}
           </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            class={styles.actionButton}
-            onClick={clearNotifications}
-            disabled={!hasNotifications()}
-          >
+          <Button type="button" variant="ghost" size="sm" onClick={clearNotifications} disabled={!hasNotifications()}>
             {clearLabel()}
           </Button>
         </div>
@@ -97,7 +91,11 @@ const NotificationCenter = (props: Props<NotificationCenterOwnProps>) => {
 
       <Show
         when={items().length > 0}
-        fallback={<div class={styles.empty}>{local.emptyMessage ?? 'No notifications yet.'}</div>}
+        fallback={
+          <Text as="p" variant="bodySm" tone="muted" class={styles.empty}>
+            {local.emptyMessage ?? 'No notifications yet.'}
+          </Text>
+        }
       >
         <ul class={styles.list}>
           <For each={items()}>
@@ -121,7 +119,7 @@ const NotificationCenter = (props: Props<NotificationCenterOwnProps>) => {
                   >
                     {item.message}
                   </Text>
-                  <Text as="span" variant="caption" tone="muted" class={styles.time}>
+                  <Text as="span" variant="caption" tone="muted">
                     {formatDate(item.createdAt)}
                   </Text>
                 </button>
@@ -130,7 +128,6 @@ const NotificationCenter = (props: Props<NotificationCenterOwnProps>) => {
                     <IconButton
                       icon={<IoCheckmarkDone />}
                       title={markReadLabel()}
-                      class={styles.iconButton}
                       onClick={() => handleItemRead(item.id)}
                       size="sm"
                       variant="subtle"
@@ -140,7 +137,6 @@ const NotificationCenter = (props: Props<NotificationCenterOwnProps>) => {
                     <IconButton
                       icon={<IoTrash />}
                       title={dismissLabel()}
-                      class={styles.iconButton}
                       onClick={() => handleItemRemove(item.id)}
                       size="sm"
                       variant="subtle"

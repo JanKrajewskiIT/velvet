@@ -1,69 +1,94 @@
-import { createMemo, createSignal, createUniqueId, For, Show } from 'solid-js';
+import { createMemo, createSignal, createUniqueId, For, Show, splitProps } from 'solid-js';
 
-import EditableChip from '~/components/feedback/EditableChip/EditableChip';
-import Input, { type InputSize } from '~/components/inputs/Input/Input';
+import ClosableChip from '~/components/feedback/ClosableChip/ClosableChip';
+import type { InputSize } from '~/components/inputs/Input/Input';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
+import DropdownInputTrigger from '../DropdownInputTrigger/DropdownInputTrigger';
 import DropdownOption from '../DropdownOption/DropdownOption';
 import DropdownSurface from '../DropdownSurface/DropdownSurface';
+import useDropdownState from '../shared/useDropdownState';
 import styles from './Autocomplete.module.css';
 
 interface AutocompleteProps {
   values: string[];
   options: string[];
   onChange: (values: string[]) => void;
+  id?: string;
   name?: string;
   disabled?: boolean;
   placeholder?: string;
   removeLabel?: string;
   size?: InputSize;
+  'aria-labelledby'?: string;
+  'aria-describedby'?: string;
+  'aria-invalid'?: true;
 }
 
 const Autocomplete = (props: Props<AutocompleteProps>) => {
+  const [local, rest] = splitProps(props, [
+    'values',
+    'options',
+    'onChange',
+    'id',
+    'name',
+    'disabled',
+    'placeholder',
+    'removeLabel',
+    'size',
+    'aria-labelledby',
+    'aria-describedby',
+    'aria-invalid',
+    'class',
+  ]);
   const [inputValue, setInputValue] = createSignal('');
-  const [showDropdown, setShowDropdown] = createSignal(false);
   const [activeIndex, setActiveIndex] = createSignal(-1);
   const dropdownId = createUniqueId();
+  let rootRef: HTMLDivElement | undefined;
   let inputRef: HTMLInputElement | undefined;
+
+  const dropdown = useDropdownState(() => rootRef, { isInteractive: () => !local.disabled });
 
   const filteredOptions = createMemo(() => {
     const query = inputValue().toLowerCase();
-    const available = props.options.filter((r) => !props.values.includes(r));
+    const available = local.options.filter((r) => !local.values.includes(r));
     if (!query) return available;
     return available.filter((r) => r.toLowerCase().includes(query));
   });
 
   const addValue = (value: string) => {
-    if (!props.values.includes(value)) {
-      props.onChange([...props.values, value]);
+    if (!local.values.includes(value)) {
+      local.onChange([...local.values, value]);
     }
 
     setInputValue('');
-    setShowDropdown(document.activeElement === inputRef);
     setActiveIndex(-1);
+    dropdown.setOpen(document.activeElement === inputRef);
   };
 
   const removeValue = (value: string) => {
-    props.onChange(props.values.filter((r) => r !== value));
+    local.onChange(local.values.filter((r) => r !== value));
   };
 
   const handleInput = (e: InputEvent & { currentTarget: HTMLInputElement }) => {
-    if (props.disabled) return;
+    if (local.disabled) return;
     setInputValue(e.currentTarget.value);
-    setShowDropdown(true);
+    dropdown.openDropdown();
     setActiveIndex(0);
   };
 
   const handleBlur = () => {
-    setTimeout(() => {
-      setShowDropdown(false);
+    requestAnimationFrame(() => {
+      const active = document.activeElement;
+      if (active && rootRef?.contains(active)) return;
+      dropdown.close();
       setActiveIndex(-1);
-    }, 200);
+    });
   };
 
   const activeOptionId = createMemo(() => {
-    if (!showDropdown()) return undefined;
+    if (!dropdown.open()) return undefined;
     const index = activeIndex();
     if (index < 0 || index >= filteredOptions().length) return undefined;
     return `${dropdownId}-option-${String(index)}`;
@@ -83,9 +108,9 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
   };
 
   const handleKeyDown = (e: KeyboardEvent) => {
-    if (props.disabled) return;
+    if (local.disabled) return;
 
-    if ((e.key === 'Enter' || e.key === ' ') && showDropdown()) {
+    if ((e.key === 'Enter' || e.key === ' ') && dropdown.open()) {
       const index = activeIndex();
       const activeOption = filteredOptions()[index];
       if (activeOption !== undefined) {
@@ -102,8 +127,8 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
     }
 
     if (e.key === 'ArrowDown') {
-      if (!showDropdown()) {
-        setShowDropdown(true);
+      if (!dropdown.open()) {
+        dropdown.openDropdown();
       }
       e.preventDefault();
       moveActiveIndex(1);
@@ -111,40 +136,40 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
     }
 
     if (e.key === 'ArrowUp') {
-      if (!showDropdown()) {
-        setShowDropdown(true);
+      if (!dropdown.open()) {
+        dropdown.openDropdown();
       }
       e.preventDefault();
       moveActiveIndex(-1);
       return;
     }
 
-    if (e.key === 'Home' && showDropdown()) {
+    if (e.key === 'Home' && dropdown.open()) {
       e.preventDefault();
       setActiveIndex(0);
       return;
     }
 
-    if (e.key === 'End' && showDropdown()) {
+    if (e.key === 'End' && dropdown.open()) {
       e.preventDefault();
       setActiveIndex(filteredOptions().length - 1);
       return;
     }
 
     if (e.key === 'Escape') {
-      setShowDropdown(false);
+      dropdown.close();
       setActiveIndex(-1);
     }
   };
 
   return (
-    <div class={classNames(styles.wrapper, props.class)}>
+    <div {...rest} ref={rootRef} class={classNames(styles.wrapper, local.class)}>
       <div class={styles.selectedTags}>
-        <For each={props.values}>
+        <For each={local.values}>
           {(value) => (
-            <EditableChip
+            <ClosableChip
               label={value}
-              removeLabel={props.removeLabel ? `${props.removeLabel} ${value}` : undefined}
+              removeLabel={local.removeLabel ? `${local.removeLabel} ${value}` : undefined}
               onRemove={() => removeValue(value)}
             />
           )}
@@ -152,29 +177,34 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
       </div>
 
       <div class={styles.inputWrapper}>
-        <Input
+        <DropdownInputTrigger
+          id={local.id}
           ref={inputRef}
           type="text"
-          size={props.size}
+          size={local.size}
           value={inputValue()}
           onInput={handleInput}
           onFocus={() => {
-            setShowDropdown(true);
+            dropdown.openDropdown();
             if (filteredOptions().length > 0) setActiveIndex(0);
           }}
           onBlur={handleBlur}
           onKeyDown={handleKeyDown}
-          placeholder={props.placeholder}
-          disabled={props.disabled}
+          placeholder={local.placeholder}
+          disabled={local.disabled}
+          open={dropdown.open()}
           role="combobox"
-          aria-expanded={showDropdown() ? 'true' : 'false'}
-          aria-controls={showDropdown() ? dropdownId : undefined}
+          aria-expanded={dropdown.open() ? 'true' : 'false'}
+          aria-controls={dropdown.open() ? dropdownId : undefined}
           aria-autocomplete="list"
           aria-activedescendant={activeOptionId()}
           aria-haspopup="listbox"
+          aria-labelledby={local['aria-labelledby']}
+          aria-describedby={local['aria-describedby']}
+          aria-invalid={local['aria-invalid']}
         />
 
-        <Show when={showDropdown() && filteredOptions().length > 0}>
+        <Show when={dropdown.open() && filteredOptions().length > 0}>
           <DropdownSurface id={dropdownId} class={styles.dropdown} align="fullWidth" origin="top" role="listbox">
             <For each={filteredOptions()}>
               {(option, index) => (
@@ -186,7 +216,10 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
                   selected={activeIndex() === index()}
                   onMouseEnter={() => setActiveIndex(index())}
                   onMouseDown={(e) => e.preventDefault()}
-                  onClick={() => addValue(option)}
+                  onClick={() => {
+                    addValue(option);
+                    inputRef?.focus();
+                  }}
                 />
               )}
             </For>
@@ -194,9 +227,9 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
         </Show>
       </div>
 
-      <Show when={Boolean(props.name)}>
-        <For each={props.values}>
-          {(value) => <input type="hidden" name={props.name} value={value} disabled={props.disabled} />}
+      <Show when={Boolean(local.name)}>
+        <For each={local.values}>
+          {(value) => <input type="hidden" name={local.name} value={value} disabled={local.disabled} />}
         </For>
       </Show>
     </div>

@@ -1,0 +1,38 @@
+.grid {
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  gap: var(--grid-gap, var(--spacing-md));
+}
+
+.alignStart {
+  align-items: start;
+}
+
+.alignCenter {
+  align-items: center;
+}
+
+.alignEnd {
+  align-items: end;
+}
+
+.alignStretch {
+  align-items: stretch;
+}
+
+.justifyStart {
+  justify-items: start;
+}
+
+.justifyCenter {
+  justify-items: center;
+}
+
+.justifyEnd {
+  justify-items: end;
+}
+
+.justifyStretch {
+  justify-items: stretch;
+}

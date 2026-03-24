@@ -134,3 +134,7 @@
 .tonePrimary {
   color: var(--color-primary);
 }
+
+.toneInherit {
+  color: inherit;
+}

@@ -2,7 +2,7 @@ import type {
   TradingViewChartPoint,
   TradingViewFeedContext,
   TradingViewLiveFeedConfig,
-} from '~/components/data-display/TradingViewChart/TradingViewChart';
+} from '~/components/charts/TradingViewChart/TradingViewChart';
 
 interface TradingViewPollingFeedOptions {
   mapData: (

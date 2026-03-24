@@ -41,7 +41,7 @@ const AffixButton = (props: Props<AffixButtonOwnProps>) => {
 
   return (
     <Button {...rest} variant={local.variant} size={local.size} class={local.class}>
-      <span class={classNames(styles.content, local.contentClass)}>
+      <span class={classNames(local.class, styles.content)}>
         <Show when={local.prefix}>
           <span class={classNames(styles.prefix, local.prefixClass)}>{local.prefix}</span>
         </Show>

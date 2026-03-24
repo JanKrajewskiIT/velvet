@@ -4,8 +4,10 @@ import { createSignal, createUniqueId, For, type JSX, Show } from 'solid-js';
 import useClickOutside from '~/hooks/useClickOutside';
 import useEscapeKey from '~/hooks/useEscapeKey';
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
 import Button from '../../buttons/Button/Button';
+import RoundIconButton from '../../buttons/RoundIconButton/RoundIconButton';
 import Tooltip from '../../overlays/Tooltip/Tooltip';
 import styles from './SpeedDial.module.css';
 
@@ -63,9 +65,14 @@ const SpeedDial = (props: Props<SpeedDialProps>) => {
   };
 
   return (
-    <div ref={containerRef} class={`${styles.speedDial} ${styles[position()]} ${props.class ?? ''}`}>
+    <div ref={containerRef} class={classNames(styles.speedDial, styles[position()], props.class)}>
       <Show when={open() && hasActions()}>
-        <div id={menuId} class={`${styles.actions} ${styles[direction()]}`} role="menu" aria-label={actionsLabel()}>
+        <div
+          id={menuId}
+          class={classNames(styles.actions, styles[direction()])}
+          role="menu"
+          aria-label={actionsLabel()}
+        >
           <For each={props.actions}>
             {(action, index) => (
               <div class={styles.actionWrapper} style={{ '--action-delay': `${index() * 30}ms` }}>
@@ -87,18 +94,17 @@ const SpeedDial = (props: Props<SpeedDialProps>) => {
           </For>
         </div>
       </Show>
-      <Button
-        iconOnly
+      <RoundIconButton
         size="lg"
-        class={`${styles.fab} ${open() ? styles.fabOpen : ''}`}
+        class={classNames(styles.fab, open() && styles.fabOpen)}
         onClick={toggle}
         disabled={!hasActions()}
         aria-expanded={open()}
         aria-controls={menuId}
-        aria-label={open() ? closeLabel() : openLabel()}
-      >
-        <span class={styles.fabIcon}>{props.icon ?? <FiPlus size={24} />}</span>
-      </Button>
+        title={open() ? closeLabel() : openLabel()}
+        elevation="glow"
+        icon={<span class={styles.fabIcon}>{props.icon ?? <FiPlus size={24} />}</span>}
+      />
     </div>
   );
 };

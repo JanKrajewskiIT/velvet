@@ -48,12 +48,3 @@
   display: flex;
   flex-direction: column;
 }
-
-.value {
-  line-height: var(--typography-line-height-tight);
-}
-
-.label {
-  display: block;
-  max-width: 100%;
-}

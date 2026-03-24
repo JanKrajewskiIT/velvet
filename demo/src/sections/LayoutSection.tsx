@@ -1,4 +1,6 @@
 import {
+  Accordion,
+  AccordionItem,
   Button,
   Card,
   Chip,
@@ -9,162 +11,31 @@ import {
   Footer,
   Grid,
   Heading,
-  LocaleSwitcher,
   MainLayout,
   Navbar,
-  type NavItem,
   ResizablePanel,
-  Sidebar,
-  type SidebarItem,
-  SidebarNav,
-  type SidebarNavGroup,
+  SectionCard,
   Stack,
   Text,
-  ThemeToggle,
 } from '@jankrajewskiit/ui';
-import { BiLogosReact } from 'solid-icons/bi';
-import { FaSolidQuestion } from 'solid-icons/fa';
-import { IoCalendar, IoDocumentText, IoFolder, IoHome, IoPersonCircle, IoSettings } from 'solid-icons/io';
-import { OcPerson2 } from 'solid-icons/oc';
-import { createSignal, Show } from 'solid-js';
+import { Show } from 'solid-js';
 
 import type { SectionId } from '../App';
 import { PreviewGroup, PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
 
-const DEMO_NAV_ITEMS: NavItem[] = [
-  { label: 'Home', href: '/', icon: IoHome },
-  { label: 'Questions', href: '/questions', icon: FaSolidQuestion },
-  { label: 'Organizer', href: '/organizer', icon: IoCalendar },
-  { label: 'Portfolio', href: '/portfolio', icon: OcPerson2 },
-  { label: 'Settings', href: '/settings', icon: IoSettings },
-];
-
-const SIDEBAR_ITEMS: SidebarItem[] = [
-  { id: 'home', label: 'Home', icon: <IoHome /> },
-  { id: 'docs', label: 'Documents', icon: <IoFolder />, badge: 3 },
-  {
-    id: 'settings',
-    label: 'Settings',
-    icon: <IoSettings />,
-    children: [
-      { id: 'general', label: 'General', icon: <IoDocumentText /> },
-      { id: 'account', label: 'Account', icon: <IoPersonCircle /> },
-    ],
-  },
-];
-
-const DEMO_APP_NAV_GROUPS: SidebarNavGroup[] = [
-  {
-    label: 'Start',
-    items: [
-      { id: 'overview-installation', label: 'Overview' },
-      { id: 'developer-tooling', label: 'Tooling' },
-    ],
-  },
-  {
-    label: 'Layout',
-    items: [
-      { id: 'navbar-layouts', label: 'Shell & Sidebar' },
-      { id: 'layout-utilities', label: 'Grid & Stack' },
-      { id: 'cards', label: 'Cards' },
-      { id: 'tabs-stepper', label: 'Breadcrumbs & Tabs & Stepper' },
-      { id: 'timeline', label: 'Timeline' },
-      { id: 'command-fab', label: 'Palette & FAB' },
-      { id: 'bottom-nav', label: 'Bottom nav' },
-      { id: 'back-to-top', label: 'Back to top' },
-    ],
-  },
-  {
-    label: 'Inputs',
-    items: [
-      { id: 'buttons-toggles', label: 'Buttons' },
-      { id: 'inputs', label: 'Fields' },
-      { id: 'selectors-pickers', label: 'Controls' },
-      { id: 'dropdowns-autocomplete', label: 'Dropdowns' },
-      { id: 'date-time', label: 'Date & Time' },
-      { id: 'file-upload', label: 'Upload' },
-      { id: 'form-layout', label: 'Form Layout' },
-    ],
-  },
-];
-
 const LayoutSection = (props: { sectionId: SectionId }) => {
   const sectionId = () => props.sectionId;
   const year = new Date().getFullYear();
-  const [locale, setLocale] = createSignal<'EN' | 'PL'>('EN');
-  const [sidebarCollapsed, setSidebarCollapsed] = createSignal(false);
-  const [activeSidebarId, setActiveSidebarId] = createSignal('home');
-  const [activeDemoAppSidebarId, setActiveDemoAppSidebarId] = createSignal('overview-installation');
-
-  const toggleLocale = () => {
-    setLocale((current) => (current === 'EN' ? 'PL' : 'EN'));
-  };
 
   return (
     <div>
-      <Show when={sectionId() === 'layout-shell'}>
-        <ShowcaseSection title="Navbar & Layouts" subtitle="Navbar-only showcase and full page shell composition">
+      <Show when={sectionId() === 'surfaces-main-layout'}>
+        <ShowcaseSection title="MainLayout" subtitle="Full page shell composition without navbar items">
           <PreviewPanel>
-            <PreviewGroup title="Navbar only" subtitle="Focused composition with navigation and top actions">
-              <div class="layoutPreviewShell layoutPreviewShellCompact">
-                <MainLayout
-                  navbar={
-                    <Navbar
-                      navItems={DEMO_NAV_ITEMS}
-                      toggleMenuLabel="Toggle navigation"
-                      navLabel="Main navigation"
-                      logo={<BiLogosReact class="layoutNavbarLogo" />}
-                      actions={
-                        <div class="layoutNavbarActions">
-                          <LocaleSwitcher
-                            text={locale()}
-                            switchLabel="Switch language"
-                            onSwitch={toggleLocale}
-                            variant="navbar"
-                            size="sm"
-                          />
-                          <ThemeToggle lightLabel="Light mode" darkLabel="Dark mode" groupLabel="Theme" />
-                        </div>
-                      }
-                    />
-                  }
-                >
-                  <div class="layoutShellContent">
-                    <div class="recronHero">
-                      <Heading as="h3" level={3} variant="titleLg" class="recronTitle">
-                        Navbar Preview
-                      </Heading>
-                      <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                        Showcase focused only on navbar composition: icon logo, navigation items and theme switch.
-                      </Text>
-                    </div>
-                  </div>
-                </MainLayout>
-              </div>
-            </PreviewGroup>
             <PreviewGroup title="Full shell" subtitle="Header, content and footer inside one layout primitive">
               <div class="layoutPreviewShell">
                 <MainLayout
-                  navbar={
-                    <Navbar
-                      navItems={DEMO_NAV_ITEMS}
-                      toggleMenuLabel="Toggle navigation"
-                      navLabel="Main navigation"
-                      logo={<BiLogosReact class="layoutNavbarLogo" />}
-                      actions={
-                        <div class="layoutNavbarActions">
-                          <LocaleSwitcher
-                            text={locale()}
-                            switchLabel="Switch language"
-                            onSwitch={toggleLocale}
-                            variant="navbar"
-                            size="sm"
-                          />
-                          <ThemeToggle lightLabel="Light mode" darkLabel="Dark mode" groupLabel="Theme" />
-                        </div>
-                      }
-                    />
-                  }
+                  navbar={<Navbar navItems={[]} toggleMenuLabel="Toggle navigation" navLabel="Main navigation" />}
                   footer={
                     <Footer
                       copyrightText={`(c) ${String(year)} MyApp`}
@@ -189,7 +60,7 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Layout components use slots:{' '}
+            Use slots:{' '}
             <CodeText as="span" class="codeInline">
               navbar
             </CodeText>{' '}
@@ -204,54 +75,9 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
             .
           </ShowcaseMeta>
         </ShowcaseSection>
-
-        <ShowcaseSection title="Sidebar" subtitle="Collapsible navigation sidebar">
-          <PreviewPanel>
-            <PreviewGroup title="Interactive sample" subtitle="Nested links with collapsed mode toggle">
-              <div class="sidebarPreviewShell">
-                <Sidebar
-                  items={SIDEBAR_ITEMS}
-                  activeId={activeSidebarId()}
-                  onSelect={setActiveSidebarId}
-                  collapsed={sidebarCollapsed()}
-                  collapsible
-                  onToggle={() => setSidebarCollapsed((prev) => !prev)}
-                  header={<strong class="sidebarPreviewHeader">MyApp</strong>}
-                />
-                <div class="sidebarPreviewBody">
-                  <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                    Active: <strong>{activeSidebarId()}</strong>
-                  </Text>
-                </div>
-              </div>
-            </PreviewGroup>
-            <PreviewGroup title="SidebarNav from app shell" subtitle="Category navigation with regular ghost buttons">
-              <div class="sidebarPreviewShell">
-                <SidebarNav
-                  groups={DEMO_APP_NAV_GROUPS}
-                  activeId={activeDemoAppSidebarId()}
-                  onSelect={setActiveDemoAppSidebarId}
-                  title="VelvetUI"
-                  subtitle="Modern SolidJS component showcase"
-                  navLabel="Component categories"
-                  class="sidebarNavPreview"
-                  actions={
-                    <ThemeToggle lightLabel="Light mode" darkLabel="Dark mode" groupLabel="Theme" variant="light" />
-                  }
-                />
-                <div class="sidebarPreviewBody">
-                  <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                    Active: <strong>{activeDemoAppSidebarId()}</strong>
-                  </Text>
-                </div>
-              </div>
-            </PreviewGroup>
-          </PreviewPanel>
-          <ShowcaseMeta>Supports nested items, badges, icons and a collapsible toggle.</ShowcaseMeta>
-        </ShowcaseSection>
       </Show>
 
-      <Show when={sectionId() === 'layout-sidebar'}>
+      <Show when={sectionId() === 'surfaces-layouts'}>
         <ShowcaseSection title="Grid" subtitle="Responsive multi-column primitive">
           <PreviewPanel>
             <Grid columns={3} gap="sm">
@@ -384,7 +210,7 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
         </ShowcaseSection>
       </Show>
 
-      <Show when={sectionId() === 'layout-cards'}>
+      <Show when={sectionId() === 'surfaces-cards'}>
         <ShowcaseSection title="Card" subtitle="Basic bordered content container">
           <PreviewPanel>
             <PreviewGroup title="Base card">
@@ -498,6 +324,55 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
               FlipCard
             </CodeText>{' '}
             reveals back content on click or hover.
+          </ShowcaseMeta>
+        </ShowcaseSection>
+      </Show>
+
+      <Show when={sectionId() === 'surfaces-collapsible'}>
+        <ShowcaseSection title="Accordion" subtitle="Progressive disclosure for grouped content">
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <Accordion>
+                <AccordionItem title="What is VelvetUI?">
+                  <Text as="p" variant="bodySm" tone="muted" class="mutedText">
+                    VelvetUI is a SolidJS component library built with CSS Modules, TypeScript and Vite.
+                  </Text>
+                </AccordionItem>
+                <AccordionItem title="How to install?">
+                  <Text as="p" variant="bodySm" tone="muted" class="mutedText">
+                    npm install @jankrajewskiit/ui
+                  </Text>
+                </AccordionItem>
+                <AccordionItem title="Disabled item" disabled>
+                  <Text as="p" variant="bodySm" tone="muted" class="mutedText">
+                    This content is not accessible.
+                  </Text>
+                </AccordionItem>
+              </Accordion>
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection title="SectionCard" subtitle="Collapsible card for grouped settings">
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <SectionCard title="Details" defaultOpen>
+                <Text as="p" variant="bodySm" tone="muted" class="mutedText">
+                  Collapsible card for grouped settings.
+                </Text>
+              </SectionCard>
+              <SectionCard title="Advanced options">
+                <Text as="p" variant="bodySm" tone="muted" class="mutedText">
+                  Collapsed by default.
+                </Text>
+              </SectionCard>
+            </PreviewGroup>
+          </PreviewPanel>
+          <ShowcaseMeta>
+            <CodeText as="span" class="codeInline">
+              SectionCard
+            </CodeText>{' '}
+            combines a card with built-in collapsible behavior.
           </ShowcaseMeta>
         </ShowcaseSection>
       </Show>

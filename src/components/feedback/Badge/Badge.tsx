@@ -8,9 +8,10 @@ import styles from './Badge.module.css';
 
 interface BadgeProps {
   content?: string | number;
-  variant?: 'primary' | 'info' | 'success' | 'warning' | 'error';
+  variant?: 'primary' | 'primarySoft' | 'info' | 'success' | 'warning' | 'error';
   max?: number;
   dot?: boolean;
+  inline?: boolean;
   children: JSX.Element;
 }
 
@@ -25,13 +26,15 @@ const Badge = (props: Props<BadgeProps>) => {
   };
 
   return (
-    <div class={classNames(styles.wrapper, props.class)}>
+    <div class={classNames(styles.wrapper, props.inline && styles.inlineWrapper, props.class)}>
       {props.children}
       <Show when={props.dot}>
-        <span class={classNames(styles.badge, styles.dot, variantClass())} />
+        <span class={classNames(styles.badge, props.inline && styles.inlineBadge, styles.dot, variantClass())} />
       </Show>
       <Show when={!props.dot && props.content !== undefined}>
-        <span class={classNames(styles.badge, variantClass())}>{displayContent()}</span>
+        <span class={classNames(styles.badge, props.inline && styles.inlineBadge, variantClass())}>
+          {displayContent()}
+        </span>
       </Show>
     </div>
   );

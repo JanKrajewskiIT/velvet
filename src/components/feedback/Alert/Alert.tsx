@@ -43,11 +43,11 @@ const Alert = (props: Props<AlertProps>) => {
       <div class={styles.icon}>{icon()}</div>
       <div class={styles.content}>
         <Show when={props.title}>
-          <Heading as="div" level={4} variant="titleMd" class={styles.title}>
+          <Heading as="div" level={4} variant="titleMd">
             {props.title}
           </Heading>
         </Show>
-        <Text as="div" variant="bodySm" tone="secondary" class={styles.message}>
+        <Text as="div" variant="bodySm" tone="secondary">
           {props.children}
         </Text>
       </div>

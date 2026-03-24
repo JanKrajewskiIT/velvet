@@ -1,0 +1,11 @@
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--duration-normal) var(--ease-spring);
+  color: var(--color-text-secondary);
+}
+
+.open {
+  transform: rotate(180deg);
+}

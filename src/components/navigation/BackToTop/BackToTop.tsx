@@ -4,7 +4,7 @@ import { createEffect, createSignal, onCleanup } from 'solid-js';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import Button from '../../buttons/Button/Button';
+import RoundIconButton from '../../buttons/RoundIconButton/RoundIconButton';
 import styles from './BackToTop.module.css';
 
 interface BackToTopProps {
@@ -51,16 +51,14 @@ const BackToTop = (props: Props<BackToTopProps>) => {
   };
 
   return (
-    <Button
+    <RoundIconButton
       class={classNames(styles.button, visible() ? styles.visible : styles.hidden, props.class)}
-      variant="primary"
       size="lg"
-      iconOnly
+      elevation="popover"
       onClick={scrollToTop}
-      aria-label={label()}
-    >
-      <IoArrowUp size={24} />
-    </Button>
+      title={label()}
+      icon={<IoArrowUp size={24} />}
+    />
   );
 };
 

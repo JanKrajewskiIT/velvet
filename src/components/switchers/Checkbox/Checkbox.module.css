@@ -3,3 +3,30 @@
 
   margin-top: 2px;
 }
+
+.input {
+  --choice-control-size: var(--checkbox-control-size, 16px);
+}
+
+.indicator {
+  --checkbox-indicator-size: var(--checkbox-control-size, 16px);
+}
+
+.input:hover:not(:disabled) + .indicator {
+  --checkbox-indicator-border: var(--color-primary);
+}
+
+.input:focus-visible + .indicator {
+  box-shadow: 0 0 0 3px var(--color-focus-ring);
+}
+
+.input:checked + .indicator {
+  --checkbox-indicator-border: var(--color-primary);
+  --checkbox-indicator-bg: var(--color-primary);
+  --checkbox-indicator-shadow: inset 0 0 0 3px var(--color-bg);
+  --checkbox-indicator-animation: checkbounce var(--duration-normal) var(--ease-out-back);
+}
+
+.input:disabled + .indicator {
+  opacity: var(--opacity-disabled);
+}

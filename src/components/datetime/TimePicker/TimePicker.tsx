@@ -1,16 +1,14 @@
 import { FiClock } from 'solid-icons/fi';
-import { createMemo, createSignal, createUniqueId, For, Show } from 'solid-js';
+import { createMemo, createSignal, createUniqueId, Show } from 'solid-js';
 
-import IconButton from '~/components/buttons/IconButton/IconButton';
-import DropdownOption from '~/components/dropdowns/DropdownOption/DropdownOption';
-import DropdownSurface from '~/components/dropdowns/DropdownSurface/DropdownSurface';
-import AffixInput from '~/components/inputs/AffixInput/AffixInput';
+import DropdownFieldTrigger from '~/components/dropdowns/DropdownFieldTrigger/DropdownFieldTrigger';
 import type { InputSize } from '~/components/inputs/Input/Input';
 import useClickOutside from '~/hooks/useClickOutside';
 import useEscapeKey from '~/hooks/useEscapeKey';
 import type Props from '~/models/Props';
-import classNames from '~/utils/classNames';
 
+import DateTimeFieldTrigger from '../DateTimeFieldTrigger/DateTimeFieldTrigger';
+import TimePanel from '../TimePanel/TimePanel';
 import styles from './TimePicker.module.css';
 
 export interface TimePickerMessages {
@@ -25,7 +23,6 @@ interface TimePickerProps {
   placeholder?: string;
   disabled?: boolean;
   step?: number;
-  label?: string;
   size?: InputSize;
   openPickerLabel?: string;
   optionsLabel?: string;
@@ -83,62 +80,42 @@ const TimePicker = (props: Props<TimePickerProps>) => {
     close();
   };
 
-  const optionClass = (): string => styles.option ?? '';
-
   return (
-    <div ref={wrapperRef} class={classNames(styles.wrapper, props.class)}>
-      <Show when={props.label}>
-        <span class={styles.label}>{props.label}</span>
-      </Show>
-      <AffixInput
-        type="text"
-        size={props.size}
-        inputClass={styles.input}
-        value={props.value ?? ''}
-        placeholder={placeholder()}
-        readOnly
-        disabled={props.disabled}
-        class={props.disabled ? styles.inputRowDisabled : undefined}
-        suffix={
-          <IconButton
-            icon={<FiClock />}
-            title={openPickerLabel()}
-            class={styles.iconBtn}
-            onClick={toggle}
-            disabled={props.disabled}
-            aria-haspopup="listbox"
-            aria-expanded={isOpen()}
-            aria-controls={isOpen() ? dropdownId : undefined}
-            size="sm"
-            variant="subtle"
-          />
-        }
-      />
-      <Show when={isOpen()}>
-        <DropdownSurface
-          ref={dropdownRef}
-          id={dropdownId}
-          class={styles.dropdown}
-          align="right"
-          origin="top"
-          role="listbox"
-          aria-label={optionsLabel()}
+    <DateTimeFieldTrigger
+      ref={wrapperRef}
+      class={props.class}
+      open={isOpen()}
+      trigger={(triggerClass) => (
+        <DropdownFieldTrigger
+          size={props.size}
+          label={props.value || placeholder()}
+          labelTone={props.value ? 'default' : 'muted'}
+          class={triggerClass}
+          disabled={props.disabled}
+          onClick={toggle}
+          aria-label={openPickerLabel()}
+          aria-haspopup="listbox"
+          aria-expanded={isOpen()}
+          aria-controls={isOpen() ? dropdownId : undefined}
         >
-          <For each={timeOptions()}>
-            {(time) => (
-              <DropdownOption
-                class={optionClass()}
-                selected={time === props.value}
-                label={time}
-                onClick={() => select(time)}
-                role="option"
-                aria-selected={time === props.value}
-              />
-            )}
-          </For>
-        </DropdownSurface>
+          <FiClock />
+        </DropdownFieldTrigger>
+      )}
+    >
+      <Show when={isOpen()}>
+        <TimePanel
+          surfaceRef={(element) => {
+            dropdownRef = element;
+          }}
+          id={dropdownId}
+          ariaLabel={optionsLabel()}
+          options={timeOptions()}
+          value={props.value}
+          onSelect={select}
+          panelClass={styles.dropdown}
+        />
       </Show>
-    </div>
+    </DateTimeFieldTrigger>
   );
 };
 

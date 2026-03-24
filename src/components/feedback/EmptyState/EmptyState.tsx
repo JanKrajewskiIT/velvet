@@ -21,13 +21,15 @@ const EmptyState = (props: Props<EmptyStateProps>) => {
       <Show when={props.icon}>
         <div class={styles.icon}>{props.icon}</div>
       </Show>
-      <Heading as="p" level={4} variant="titleMd" tone="secondary" class={styles.message}>
+      <Heading as="p" level={4} variant="titleMd" tone="secondary">
         {props.message}
       </Heading>
       <Show when={props.hint}>
-        <Text as="p" variant="caption" tone="tertiary" class={styles.hint}>
-          {props.hint}
-        </Text>
+        {(hint) => (
+          <Text as="p" variant="caption" tone="tertiary">
+            {hint()}
+          </Text>
+        )}
       </Show>
       <Show when={props.children}>
         <div class={styles.content}>{props.children}</div>

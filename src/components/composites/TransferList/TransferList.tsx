@@ -2,9 +2,13 @@ import { IoChevronBack, IoChevronForward, IoPlayBack, IoPlayForward } from 'soli
 import { createMemo, createSignal, For, Show } from 'solid-js';
 
 import IconButton from '~/components/buttons/IconButton/IconButton';
+import SearchInput from '~/components/inputs/SearchInput/SearchInput';
+import Card from '~/components/surfaces/Card/Card';
+import Text from '~/components/typography/Text/Text';
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
-import CheckboxControl from '../../switchers/CheckboxControl/CheckboxControl';
+import Checkbox from '../../switchers/Checkbox/Checkbox';
 import styles from './TransferList.module.css';
 
 export interface TransferItem {
@@ -27,31 +31,27 @@ const TransferList = (props: Props<TransferListProps>) => {
   const [sourceFilter, setSourceFilter] = createSignal('');
   const [targetFilter, setTargetFilter] = createSignal('');
 
-  const filteredSource = createMemo(() => {
-    const query = sourceFilter().toLowerCase();
-    if (!query) return props.sourceItems;
-    return props.sourceItems.filter((item) => item.label.toLowerCase().includes(query));
-  });
-
-  const filteredTarget = createMemo(() => {
-    const query = targetFilter().toLowerCase();
-    if (!query) return props.targetItems;
-    return props.targetItems.filter((item) => item.label.toLowerCase().includes(query));
-  });
-
-  const toggleSourceChecked = (id: string) => {
-    const next = new Set(sourceChecked());
-    if (next.has(id)) next.delete(id);
-    else next.add(id);
-    setSourceChecked(next);
+  const normalizeQuery = (query: string) => query.trim().toLowerCase();
+  const filterItems = (items: TransferItem[], query: string) => {
+    const normalized = normalizeQuery(query);
+    if (!normalized) return items;
+    return items.filter((item) => item.label.toLowerCase().includes(normalized));
   };
 
-  const toggleTargetChecked = (id: string) => {
-    const next = new Set(targetChecked());
+  const filteredSource = createMemo(() => filterItems(props.sourceItems, sourceFilter()));
+
+  const filteredTarget = createMemo(() => filterItems(props.targetItems, targetFilter()));
+
+  const toggleChecked = (checked: Set<string>, setChecked: (next: Set<string>) => void, id: string) => {
+    const next = new Set(checked);
     if (next.has(id)) next.delete(id);
     else next.add(id);
-    setTargetChecked(next);
+    setChecked(next);
   };
+
+  const toggleSourceChecked = (id: string) => toggleChecked(sourceChecked(), setSourceChecked, id);
+
+  const toggleTargetChecked = (id: string) => toggleChecked(targetChecked(), setTargetChecked, id);
 
   const moveSelectedRight = () => {
     const checked = sourceChecked();
@@ -79,106 +79,123 @@ const TransferList = (props: Props<TransferListProps>) => {
     props.onChange([...props.sourceItems, ...props.targetItems], []);
   };
 
+  const sourceTitle = () => props.sourceTitle ?? 'Available';
+  const targetTitle = () => props.targetTitle ?? 'Selected';
+
+  const itemClass = (checked: boolean) => classNames(styles.item, checked && styles.itemChecked);
+
   return (
-    <div class={`${styles.wrapper} ${props.class ?? ''}`}>
-      <div class={styles.panel}>
+    <div class={classNames(styles.wrapper, props.class)}>
+      <Card padding="none" class={styles.panel}>
         <div class={styles.header}>
-          <span>{props.sourceTitle ?? 'Available'}</span>
-          <span class={styles.count}>{props.sourceItems.length}</span>
+          <Text as="span" variant="labelMd">
+            {sourceTitle()}
+          </Text>
+          <Text as="span" variant="caption" tone="muted">
+            {props.sourceItems.length}
+          </Text>
         </div>
         <Show when={props.searchable}>
           <div class={styles.search}>
-            <input
+            <SearchInput
               class={styles.searchInput}
-              type="text"
+              size="sm"
               value={sourceFilter()}
-              onInput={(e) => setSourceFilter(e.currentTarget.value)}
+              onInput={setSourceFilter}
+              clearLabel="Clear source search"
+              inputAriaLabel={`${sourceTitle()} search`}
             />
           </div>
         </Show>
         <div class={styles.list}>
           <For each={filteredSource()}>
             {(item) => (
-              <label class={`${styles.item} ${sourceChecked().has(item.id) ? styles.itemChecked : ''}`}>
-                <CheckboxControl
-                  class={styles.checkbox}
+              <div class={itemClass(sourceChecked().has(item.id))}>
+                <Checkbox
+                  wrapperClass={styles.checkboxField}
                   checked={sourceChecked().has(item.id)}
                   onChange={() => toggleSourceChecked(item.id)}
+                  label={item.label}
                   aria-label={`Select ${item.label}`}
                 />
-                {item.label}
-              </label>
+              </div>
             )}
           </For>
         </div>
-      </div>
+      </Card>
 
       <div class={styles.controls}>
         <IconButton
-          class={styles.controlBtn}
           disabled={sourceChecked().size === 0}
           onClick={moveSelectedRight}
           title="Move selected to right"
           icon={<IoChevronForward />}
           size="sm"
+          variant="ghost"
         />
         <IconButton
-          class={styles.controlBtn}
           disabled={props.sourceItems.length === 0}
           onClick={moveAllRight}
           title="Move all to right"
           icon={<IoPlayForward />}
           size="sm"
+          variant="ghost"
         />
         <IconButton
-          class={styles.controlBtn}
           disabled={targetChecked().size === 0}
           onClick={moveSelectedLeft}
           title="Move selected to left"
           icon={<IoChevronBack />}
           size="sm"
+          variant="ghost"
         />
         <IconButton
-          class={styles.controlBtn}
           disabled={props.targetItems.length === 0}
           onClick={moveAllLeft}
           title="Move all to left"
           icon={<IoPlayBack />}
           size="sm"
+          variant="ghost"
         />
       </div>
 
-      <div class={styles.panel}>
+      <Card padding="none" class={styles.panel}>
         <div class={styles.header}>
-          <span>{props.targetTitle ?? 'Selected'}</span>
-          <span class={styles.count}>{props.targetItems.length}</span>
+          <Text as="span" variant="labelMd">
+            {targetTitle()}
+          </Text>
+          <Text as="span" variant="caption" tone="muted">
+            {props.targetItems.length}
+          </Text>
         </div>
         <Show when={props.searchable}>
           <div class={styles.search}>
-            <input
+            <SearchInput
               class={styles.searchInput}
-              type="text"
+              size="sm"
               value={targetFilter()}
-              onInput={(e) => setTargetFilter(e.currentTarget.value)}
+              onInput={setTargetFilter}
+              clearLabel="Clear selected search"
+              inputAriaLabel={`${targetTitle()} search`}
             />
           </div>
         </Show>
         <div class={styles.list}>
           <For each={filteredTarget()}>
             {(item) => (
-              <label class={`${styles.item} ${targetChecked().has(item.id) ? styles.itemChecked : ''}`}>
-                <CheckboxControl
-                  class={styles.checkbox}
+              <div class={itemClass(targetChecked().has(item.id))}>
+                <Checkbox
+                  wrapperClass={styles.checkboxField}
                   checked={targetChecked().has(item.id)}
                   onChange={() => toggleTargetChecked(item.id)}
+                  label={item.label}
                   aria-label={`Select ${item.label}`}
                 />
-                {item.label}
-              </label>
+              </div>
             )}
           </For>
         </div>
-      </div>
+      </Card>
     </div>
   );
 };

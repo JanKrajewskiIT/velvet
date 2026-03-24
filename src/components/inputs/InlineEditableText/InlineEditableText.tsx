@@ -1,12 +1,20 @@
 import { IoCheckmark, IoCloseOutline, IoPencil } from 'solid-icons/io';
-import { createEffect, createSignal, onMount, Show } from 'solid-js';
+import { createEffect, createSignal, type JSX, onMount, Show, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import IconButton from '../../buttons/IconButton/IconButton';
+import Text from '../../typography/Text/Text';
 import Input, { type InputSize } from '../Input/Input';
 import styles from './InlineEditableText.module.css';
+
+interface InlineEditableTextMessages {
+  emptyValue?: string;
+  saveButtonLabel?: string;
+  cancelButtonLabel?: string;
+  editButtonLabel?: string;
+}
 
 interface InlineEditableTextProps {
   value: string;
@@ -18,41 +26,62 @@ interface InlineEditableTextProps {
   saveLabel?: string;
   cancelLabel?: string;
   editLabel?: string;
+  messages?: InlineEditableTextMessages;
+  inputAriaLabel?: string;
 }
 
 const InlineEditableText = (props: Props<InlineEditableTextProps>) => {
+  const [local, rest] = splitProps(props, [
+    'value',
+    'onChange',
+    'placeholder',
+    'disabled',
+    'size',
+    'startInEditMode',
+    'saveLabel',
+    'cancelLabel',
+    'editLabel',
+    'messages',
+    'inputAriaLabel',
+    'class',
+  ]);
   const [isEditing, setIsEditing] = createSignal(false);
   const [draft, setDraft] = createSignal('');
 
   onMount(() => {
-    setIsEditing(Boolean(props.startInEditMode));
-    setDraft(props.value);
+    setIsEditing(Boolean(local.startInEditMode));
+    setDraft(local.value);
   });
+
+  const emptyValueLabel = () => local.messages?.emptyValue ?? local.placeholder ?? 'Click edit';
+  const saveButtonLabel = () => local.messages?.saveButtonLabel ?? local.saveLabel ?? 'Save';
+  const cancelButtonLabel = () => local.messages?.cancelButtonLabel ?? local.cancelLabel ?? 'Cancel';
+  const editButtonLabel = () => local.messages?.editButtonLabel ?? local.editLabel ?? 'Edit value';
 
   createEffect(() => {
     if (!isEditing()) {
-      setDraft(props.value);
+      setDraft(local.value);
     }
   });
 
   const beginEdit = () => {
-    if (props.disabled) return;
-    setDraft(props.value);
+    if (local.disabled) return;
+    setDraft(local.value);
     setIsEditing(true);
   };
 
   const cancelEdit = () => {
-    setDraft(props.value);
+    setDraft(local.value);
     setIsEditing(false);
   };
 
   const saveEdit = () => {
     const next = draft().trim();
-    props.onChange(next);
+    local.onChange(next);
     setIsEditing(false);
   };
 
-  const handleKeyDown = (e: KeyboardEvent) => {
+  const handleKeyDown: JSX.EventHandler<HTMLInputElement, KeyboardEvent> = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       saveEdit();
@@ -65,20 +94,19 @@ const InlineEditableText = (props: Props<InlineEditableTextProps>) => {
   };
 
   return (
-    <div class={classNames(styles.wrapper, props.class)}>
+    <div {...rest} class={classNames(styles.wrapper, local.class)}>
       <Show
         when={isEditing()}
         fallback={
           <div class={styles.readMode}>
-            <span class={classNames(styles.value, !props.value && styles.placeholder)}>
-              {props.value || props.placeholder || 'Click edit'}
-            </span>
+            <Text as="span" variant="bodyMd">
+              {local.value || emptyValueLabel()}
+            </Text>
             <IconButton
               icon={<IoPencil />}
-              title={props.editLabel ?? 'Edit value'}
-              class={styles.iconButton}
+              title={editButtonLabel()}
               onClick={beginEdit}
-              disabled={props.disabled}
+              disabled={local.disabled}
               size="sm"
               variant="subtle"
             />
@@ -88,26 +116,18 @@ const InlineEditableText = (props: Props<InlineEditableTextProps>) => {
         <div class={styles.editMode}>
           <Input
             type="text"
-            class={styles.input}
-            size={props.size}
+            size={local.size}
             value={draft()}
             onInput={(e) => setDraft(e.currentTarget.value)}
             onKeyDown={handleKeyDown}
-            placeholder={props.placeholder}
+            placeholder={local.placeholder}
+            aria-label={local.inputAriaLabel ?? 'Editable text input'}
             autofocus
           />
-          <IconButton
-            icon={<IoCheckmark />}
-            title={props.saveLabel ?? 'Save'}
-            class={styles.iconButton}
-            onClick={saveEdit}
-            size="sm"
-            variant="subtle"
-          />
+          <IconButton icon={<IoCheckmark />} title={saveButtonLabel()} onClick={saveEdit} size="sm" variant="subtle" />
           <IconButton
             icon={<IoCloseOutline />}
-            title={props.cancelLabel ?? 'Cancel'}
-            class={styles.iconButton}
+            title={cancelButtonLabel()}
             onClick={cancelEdit}
             size="sm"
             variant="subtle"

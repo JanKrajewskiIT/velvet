@@ -8,29 +8,3 @@
   align-items: center;
   gap: var(--spacing-xs);
 }
-
-.value {
-  min-height: 36px;
-  display: inline-flex;
-  align-items: center;
-  color: var(--color-text);
-  font-size: var(--typography-scale-md);
-}
-
-.placeholder {
-  color: var(--color-text-muted);
-}
-
-.input {
-  flex: 1;
-  min-width: 120px;
-}
-
-.iconButton:hover {
-  color: var(--color-primary);
-}
-
-.iconButton:disabled {
-  opacity: var(--opacity-disabled);
-  cursor: not-allowed;
-}

@@ -1,6 +1,4 @@
 import {
-  Accordion,
-  AccordionItem,
   ActionRow,
   addToast,
   Avatar,
@@ -9,10 +7,13 @@ import {
   Carousel,
   CodeBlock,
   CodeText,
-  Collapsible,
+  FilterBar,
+  type FilterBarFilter,
+  type FilterBarValue,
   ImageGrid,
   type ImageGridItem,
-  Kbd,
+  Lightbox,
+  type LightboxImage,
   List,
   ListItem,
   MarkdownEditDialog,
@@ -20,8 +21,8 @@ import {
   Marquee,
   RadarChart,
   ScoreRing,
-  SectionCard,
   Text,
+  Timeline,
   TradingViewChart,
   type TradingViewChartPoint,
   type TreeNode,
@@ -31,7 +32,7 @@ import {
   VirtualizedList,
 } from '@jankrajewskiit/ui';
 import type { UTCTimestamp } from 'lightweight-charts';
-import { IoChevronDown, IoDocumentText, IoFolder, IoImage } from 'solid-icons/io';
+import { IoDocumentText, IoFolder, IoImage } from 'solid-icons/io';
 import { createSignal, Show } from 'solid-js';
 
 import type { SectionId } from '../App';
@@ -147,20 +148,92 @@ const GALLERY_IMAGES: ImageGridItem[] = [
   { src: 'https://picsum.photos/id/49/400/300', alt: 'Bridge', caption: 'Old bridge' },
 ];
 
+const LIGHTBOX_IMAGES: LightboxImage[] = [
+  { src: 'https://picsum.photos/id/10/800/600', alt: 'Forest', caption: 'Misty forest trail' },
+  { src: 'https://picsum.photos/id/15/800/600', alt: 'Mountains', caption: 'Mountain sunrise' },
+  { src: 'https://picsum.photos/id/29/800/600', alt: 'Coast', caption: 'Rocky coastline' },
+];
+
 const VIRTUAL_ITEMS = Array.from({ length: 1200 }, (_, index) => ({
   id: `item-${index + 1}`,
   label: `Virtualized record #${index + 1}`,
   status: index % 3 === 0 ? 'synced' : index % 3 === 1 ? 'queued' : 'draft',
 }));
 
+const TIMELINE_ITEMS = [
+  {
+    key: '1',
+    content: (
+      <span>
+        <strong>v0.3.3</strong> - Reorganized component categories
+      </span>
+    ),
+  },
+  {
+    key: '2',
+    content: (
+      <span>
+        <strong>v0.1.6</strong> - Added Wizard, Stepper and Timeline
+      </span>
+    ),
+  },
+  {
+    key: '3',
+    content: (
+      <span>
+        <strong>v0.1.0</strong> - Initial release
+      </span>
+    ),
+  },
+];
+
+const FILTER_DEFINITIONS: FilterBarFilter[] = [
+  {
+    key: 'status',
+    label: 'Status',
+    options: [
+      { value: 'todo', label: 'To do' },
+      { value: 'in-progress', label: 'In progress' },
+      { value: 'done', label: 'Done' },
+    ],
+    placeholder: 'Any status',
+  },
+  {
+    key: 'owner',
+    label: 'Owner',
+    options: [
+      { value: 'anna', label: 'Anna' },
+      { value: 'marek', label: 'Marek' },
+      { value: 'jan', label: 'Jan' },
+      { value: 'kasia', label: 'Kasia' },
+    ],
+    placeholder: 'Any owner',
+  },
+  {
+    key: 'priority',
+    label: 'Priority',
+    options: [
+      { value: 'low', label: 'Low' },
+      { value: 'medium', label: 'Medium' },
+      { value: 'high', label: 'High' },
+    ],
+    placeholder: 'Any priority',
+  },
+];
+
 const DataDisplaySection = (props: { sectionId: SectionId }) => {
   const sectionId = () => props.sectionId;
   const [selectedNode, setSelectedNode] = createSignal('');
   const [checkedTreeNodes, setCheckedTreeNodes] = createSignal<string[]>([]);
   const [lastMove, setLastMove] = createSignal('');
-  const [collapsibleOpen, setCollapsibleOpen] = createSignal(false);
   const [editorOpen, setEditorOpen] = createSignal(false);
+  const [lightboxOpen, setLightboxOpen] = createSignal(false);
   const [markdown, setMarkdown] = createSignal(MARKDOWN);
+  const [filtersQuery, setFiltersQuery] = createSignal('');
+  const [filtersValue, setFiltersValue] = createSignal<FilterBarValue[]>([
+    { key: 'status', value: 'in-progress' },
+    { key: 'priority', value: 'high' },
+  ]);
   const nextPollingBar = createBarGenerator(asUtcTimestamp(1705017600), 2103.9);
   const nextWsBar = createBarGenerator(asUtcTimestamp(1705017600), 2098.4);
 
@@ -248,18 +321,6 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
   return (
     <div>
       <Show when={sectionId() === 'data-content'}>
-        <ShowcaseSection title="Kbd" subtitle="Styled keyboard shortcut keys">
-          <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <div class="row">
-                <Kbd>Ctrl</Kbd> + <Kbd>K</Kbd>
-                <Kbd>⌘</Kbd> + <Kbd>Shift</Kbd> + <Kbd>P</Kbd>
-                <Kbd>Esc</Kbd>
-              </div>
-            </PreviewGroup>
-          </PreviewPanel>
-        </ShowcaseSection>
-
         <ShowcaseSection title="CodeBlock" subtitle="Code display with copy button and line numbers">
           <PreviewPanel>
             <PreviewGroup title="TSX snippet">
@@ -298,9 +359,7 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
               <MarkdownEditDialog
                 open={editorOpen()}
                 title="Edit release notes"
-                label="Markdown"
                 initialValue={markdown()}
-                previewLabel="Preview"
                 saveLabel="Save changes"
                 cancelLabel="Cancel"
                 onSave={setMarkdown}
@@ -354,74 +413,39 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
         </ShowcaseSection>
       </Show>
 
-      <Show when={sectionId() === 'data-cards'}>
-        <ShowcaseSection title="Accordion" subtitle="Progressive disclosure for grouped content">
+      <Show when={sectionId() === 'data-filters'}>
+        <ShowcaseSection title="FilterBar" subtitle="Search + structured filters + active removable chips">
           <PreviewPanel>
             <PreviewGroup title="Examples">
-              <Accordion>
-                <AccordionItem title="What is VelvetUI?">
-                  <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                    VelvetUI is a SolidJS component library built with CSS Modules, TypeScript and Vite.
-                  </Text>
-                </AccordionItem>
-                <AccordionItem title="How to install?">
-                  <CodeText as="span" class="codeInline">
-                    npm install @jankrajewskiit/ui
-                  </CodeText>
-                </AccordionItem>
-                <AccordionItem title="Disabled item" disabled>
-                  <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                    This content is not accessible.
-                  </Text>
-                </AccordionItem>
-              </Accordion>
-            </PreviewGroup>
-          </PreviewPanel>
-        </ShowcaseSection>
-
-        <ShowcaseSection title="Collapsible" subtitle="Simple expand and collapse">
-          <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <Collapsible
-                open={collapsibleOpen()}
-                onToggle={() => setCollapsibleOpen((prev) => !prev)}
-                trigger={
-                  <span class="row colGapXs">
-                    <IoChevronDown size={16} />
-                    <span>{collapsibleOpen() ? 'Hide details' : 'Show details'}</span>
-                  </span>
-                }
-              >
-                <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                  This content is revealed when the trigger is clicked. Use Collapsible for simple toggle patterns that
-                  do not need accordion grouping.
-                </Text>
-              </Collapsible>
-            </PreviewGroup>
-          </PreviewPanel>
-        </ShowcaseSection>
-
-        <ShowcaseSection title="SectionCard" subtitle="Collapsible card for grouped settings">
-          <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <SectionCard title="Details" defaultOpen>
-                <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                  Collapsible card for grouped settings.
-                </Text>
-              </SectionCard>
-              <SectionCard title="Advanced options">
-                <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                  Collapsed by default.
-                </Text>
-              </SectionCard>
+              <FilterBar
+                filters={FILTER_DEFINITIONS}
+                value={filtersValue()}
+                onChange={setFiltersValue}
+                search={filtersQuery()}
+                onSearchChange={setFiltersQuery}
+                searchPlaceholder="Search tasks..."
+                allLabel="All"
+                clearAllLabel="Clear filters"
+                removeFilterLabel="Remove filter"
+              />
+              <Text as="p" variant="caption" tone="muted" class="mutedText">
+                Query: {filtersQuery() || 'none'} | Active filters: {filtersValue().length}
+              </Text>
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            <CodeText as="span" class="codeInline">
-              SectionCard
-            </CodeText>{' '}
-            combines a card with built-in collapsible behavior.
+            Use the toolbar to compose search and filter criteria, then remove single filters via chips or reset all.
           </ShowcaseMeta>
+        </ShowcaseSection>
+      </Show>
+
+      <Show when={sectionId() === 'data-timeline'}>
+        <ShowcaseSection title="Timeline" subtitle="Chronological list of events">
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <Timeline items={TIMELINE_ITEMS} />
+            </PreviewGroup>
+          </PreviewPanel>
         </ShowcaseSection>
       </Show>
 
@@ -540,6 +564,17 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
           </ShowcaseMeta>
         </ShowcaseSection>
 
+        <ShowcaseSection title="Lightbox" subtitle="Fullscreen image viewer with navigation">
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <Button variant="ghost" onClick={() => setLightboxOpen(true)}>
+                Open lightbox
+              </Button>
+              <Lightbox images={LIGHTBOX_IMAGES} open={lightboxOpen()} onClose={() => setLightboxOpen(false)} />
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+
         <ShowcaseSection title="Marquee" subtitle="Infinite scrolling ticker">
           <PreviewPanel>
             <PreviewGroup title="Examples">
@@ -611,7 +646,7 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
                 defaultDrawingTool="trendline"
                 liveFeed={pollingFeed}
                 drawings={{
-                  levels: [{ id: 'lvl-res', price: 2104.5, label: 'Resistance' }],
+                  levels: [{ id: 'lvl-res', price: 2104.5 }],
                   zones: [
                     {
                       id: 'zone-demand',

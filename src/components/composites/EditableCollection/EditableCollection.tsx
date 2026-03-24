@@ -3,6 +3,7 @@ import { createSignal, For } from 'solid-js';
 
 import Button, { type ButtonVariant } from '~/components/buttons/Button/Button';
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
 import ConfirmDialog from '../../overlays/ConfirmDialog/ConfirmDialog';
 import styles from './EditableCollection.module.css';
@@ -40,10 +41,10 @@ const EditableCollection = <T,>(props: Props<EditableCollectionProps<T>>) => {
   };
 
   return (
-    <div class={`${styles.list} ${props.listClass ?? ''} ${props.class ?? ''}`}>
+    <div class={classNames(styles.list, props.listClass, props.class)}>
       <For each={props.items}>
         {(item) => (
-          <div class={`${styles.item} ${props.itemClass ?? ''}`}>
+          <div class={classNames(styles.item, props.itemClass)}>
             {props.renderItem(item, {
               requestRemove: () => {
                 setDeleteId(props.getId(item));
@@ -53,7 +54,7 @@ const EditableCollection = <T,>(props: Props<EditableCollectionProps<T>>) => {
         )}
       </For>
       <Button
-        class={`${styles.addButton} ${props.addButtonClass ?? ''}`}
+        class={classNames(styles.addButton, props.addButtonClass)}
         variant={props.addButtonVariant ?? 'ghost'}
         onClick={props.onAdd}
       >

@@ -1,10 +1,3 @@
-.message {
-  margin: 0;
-  color: var(--color-text-muted);
-  font-size: var(--typography-scale-md);
-  line-height: var(--typography-line-height-relaxed);
-}
-
 .iconWrapper {
   display: flex;
   align-items: center;

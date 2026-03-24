@@ -2,10 +2,8 @@ import type { JSX } from 'solid-js';
 import { splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
-import classNames from '~/utils/classNames';
-import getInputSizeClass from '~/utils/getInputSizeClass';
 
-import styles from './Input.module.css';
+import FieldBase from '../FieldBase/FieldBase';
 
 export type InputSize = 'sm' | 'md' | 'lg';
 
@@ -15,22 +13,20 @@ interface InputOwnProps extends JSX.InputHTMLAttributes<HTMLInputElement> {
 }
 
 const Input = (props: Props<InputOwnProps>) => {
-  const [local, rest] = splitProps(props, ['class', 'size', 'invalid', 'readOnly']);
-  const sizeClass = () => getInputSizeClass(styles, local.size);
+  const [local, rest] = splitProps(props, ['class', 'size', 'invalid', 'readOnly', 'placeholder']);
 
   return (
-    <input
+    <FieldBase
+      as="input"
       {...rest}
+      size={local.size}
+      invalid={local.invalid}
       readOnly={local.readOnly}
+      disabled={rest.disabled}
+      focusStyle="visible"
+      placeholder={local.placeholder}
       aria-invalid={local.invalid || undefined}
-      class={classNames(
-        styles.input,
-        sizeClass(),
-        local.invalid && styles.invalid,
-        local.readOnly && styles.readOnly,
-        rest.disabled && styles.disabled,
-        local.class
-      )}
+      class={local.class}
     />
   );
 };

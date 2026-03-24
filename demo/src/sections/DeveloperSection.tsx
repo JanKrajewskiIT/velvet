@@ -222,8 +222,8 @@ const DeveloperSection = () => {
                 ErrorFallback, AccessDenied, Chip, StatCard
               </li>
               <li>
-                <strong>overlays/</strong> (8) - Dialog, Drawer, Tooltip, ConfirmDialog, ConfirmAction, ContextMenu,
-                Lightbox, Tour
+                <strong>overlays/</strong> (7) - Dialog, Tooltip, ConfirmDialog, ConfirmAction, ContextMenu, Lightbox,
+                Tour
               </li>
               <li>
                 <strong>layout/</strong> (3) - MainLayout, Navbar, Footer

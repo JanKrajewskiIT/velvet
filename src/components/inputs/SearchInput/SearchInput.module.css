@@ -2,11 +2,3 @@
   color: var(--color-text-muted);
   flex-shrink: 0;
 }
-
-.clear {
-  flex-shrink: 0;
-}
-
-.clear:hover {
-  color: var(--color-text);
-}

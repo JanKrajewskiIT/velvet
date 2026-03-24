@@ -1,63 +1,145 @@
-import { type JSX, splitProps } from 'solid-js';
+import { createMemo, For, type JSX, Show, splitProps } from 'solid-js';
 
+import Text from '~/components/typography/Text/Text';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import SliderField from '../SliderField/SliderField';
 import styles from './Slider.module.css';
 
-interface SliderOwnProps extends Omit<JSX.InputHTMLAttributes<HTMLInputElement>, 'type' | 'onChange' | 'value'> {
+export interface SliderMark {
+  value: number;
+  label?: string;
+}
+
+export interface SliderProps extends Omit<JSX.InputHTMLAttributes<HTMLInputElement>, 'type' | 'onChange' | 'value'> {
+  id?: string;
   value: number;
   onChange: (value: number) => void;
   min?: number;
   max?: number;
   step?: number;
-  label?: string;
-  showValue?: boolean;
+  marks?: SliderMark[];
+  showValueLabel?: boolean;
 }
 
-const Slider = (props: Props<SliderOwnProps>) => {
+const Slider = (props: Props<SliderProps>) => {
   const [local, rest] = splitProps(props, [
+    'id',
+    'name',
     'value',
     'onChange',
     'min',
     'max',
     'step',
-    'label',
-    'showValue',
+    'marks',
+    'showValueLabel',
     'class',
     'disabled',
+    'aria-labelledby',
+    'aria-describedby',
+    'aria-invalid',
   ]);
 
   const min = () => local.min ?? 0;
   const max = () => local.max ?? 100;
-  const step = () => local.step ?? 1;
-
-  const percentage = () => {
-    const span = max() - min();
-    if (span <= 0) return 0;
-    return Math.min(100, Math.max(0, ((local.value - min()) / span) * 100));
+  const step = () => {
+    if (local.step === undefined || local.step <= 0) return 1;
+    return local.step;
   };
 
-  const handleInput: JSX.EventHandler<HTMLInputElement, InputEvent> = (e) => {
-    local.onChange(Number(e.currentTarget.value));
+  const clamp = (value: number) => Math.min(max(), Math.max(min(), value));
+
+  const snap = (value: number) => {
+    const stepValue = step();
+    const raw = Math.round((value - min()) / stepValue) * stepValue + min();
+    return clamp(raw);
+  };
+
+  const normalizedValue = createMemo(() => snap(local.value));
+
+  const percentage = createMemo(() => {
+    const span = max() - min();
+    if (span <= 0) return 0;
+    return Math.min(100, Math.max(0, ((normalizedValue() - min()) / span) * 100));
+  });
+
+  const thumbRatio = createMemo(() => percentage() / 100);
+
+  const marks = createMemo(() => {
+    const span = max() - min();
+    if (span <= 0) return [] as Array<SliderMark & { percent: number }>;
+
+    return (local.marks ?? [])
+      .map((mark) => ({ ...mark, value: clamp(mark.value) }))
+      .map((mark) => ({
+        ...mark,
+        percent: Math.min(100, Math.max(0, ((mark.value - min()) / span) * 100)),
+      }))
+      .sort((a, b) => a.value - b.value);
+  });
+
+  const handleInput: JSX.EventHandler<HTMLInputElement, InputEvent> = (event) => {
+    const next = snap(Number(event.currentTarget.value));
+    local.onChange(next);
   };
 
   return (
-    <SliderField class={local.class} label={local.label} value={local.showValue ? local.value : undefined}>
-      <input
-        {...rest}
-        type="range"
-        class={classNames(styles.slider, local.disabled && styles.disabled)}
-        min={min()}
-        max={max()}
-        step={step()}
-        value={local.value}
-        disabled={local.disabled}
-        onInput={handleInput}
-        style={{ '--fill-percent': `${percentage()}%` }}
-      />
-    </SliderField>
+    <div class={classNames(styles.root, local.class, local.disabled && styles.disabled)}>
+      <div class={styles.railWrap}>
+        <div class={styles.rail} />
+        <div class={styles.track} style={{ '--slider-fill': `${percentage()}%` } as JSX.CSSProperties} />
+        <Show when={local.showValueLabel !== false}>
+          <Text
+            as="span"
+            variant="labelMd"
+            tone="inverse"
+            class={styles.valueLabel}
+            style={
+              {
+                '--slider-value-left': `calc((100% - var(--slider-thumb-size)) * ${thumbRatio()} + (var(--slider-thumb-size) / 2))`,
+              } as JSX.CSSProperties
+            }
+          >
+            {normalizedValue()}
+          </Text>
+        </Show>
+        <input
+          {...rest}
+          id={local.id}
+          type="range"
+          name={local.name}
+          class={styles.input}
+          min={min()}
+          max={max()}
+          step={step()}
+          value={normalizedValue()}
+          disabled={local.disabled}
+          aria-labelledby={local['aria-labelledby']}
+          aria-describedby={local['aria-describedby']}
+          aria-invalid={local['aria-invalid']}
+          onInput={handleInput}
+        />
+      </div>
+      <Show when={marks().length > 0}>
+        <div class={styles.marks}>
+          <For each={marks()}>
+            {(mark) => (
+              <div
+                class={classNames(styles.mark, mark.value <= normalizedValue() && styles.markActive)}
+                style={{ '--slider-mark-left': `${mark.percent}%` } as JSX.CSSProperties}
+              >
+                <span class={styles.markTick} />
+                <Show when={mark.label}>
+                  <Text as="span" variant="caption" tone="muted" class={styles.markLabel}>
+                    {mark.label}
+                  </Text>
+                </Show>
+              </div>
+            )}
+          </For>
+        </div>
+      </Show>
+    </div>
   );
 };
 

@@ -13,12 +13,14 @@ interface ErrorMessageProps {
 
 const ErrorMessage = (props: Props<ErrorMessageProps>) => {
   return (
-    <Text as="p" role="alert" class={classNames(styles.error, props.class)}>
+    <div class={classNames(styles.error, props.class)}>
       <span class={styles.icon}>
         <FiAlertCircle />
       </span>
-      {props.children}
-    </Text>
+      <Text as="p" role="alert" variant="bodySm" class={styles.message}>
+        {props.children}
+      </Text>
+    </div>
   );
 };
 

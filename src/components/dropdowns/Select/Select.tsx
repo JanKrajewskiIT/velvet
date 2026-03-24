@@ -2,19 +2,17 @@ import type { JSX } from 'solid-js';
 import { createEffect, createMemo, createSignal, createUniqueId, For, onMount, splitProps } from 'solid-js';
 
 import type { InputSize } from '~/components/inputs/Input/Input';
-import InputButton from '~/components/inputs/InputButton/InputButton';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
+import DropdownChevronFieldTrigger from '../DropdownChevronFieldTrigger/DropdownChevronFieldTrigger';
 import DropdownOption from '../DropdownOption/DropdownOption';
+import dropdownOptionStyles from '../DropdownOption/DropdownOption.module.css';
 import DropdownSurface from '../DropdownSurface/DropdownSurface';
-import DropdownTriggerContent from '../DropdownTriggerContent/DropdownTriggerContent';
 import {
-  focusFirstDropdownItem,
-  focusLastDropdownItem,
+  createDropdownSurfaceKeyDownHandler,
+  focusDropdownItem,
   getDropdownOpenTarget,
-  getFocusableDropdownItems,
-  handleDropdownArrowNavigation,
 } from '../shared/dropdownKeyboard';
 import useDropdownState from '../shared/useDropdownState';
 import styles from './Select.module.css';
@@ -42,11 +40,7 @@ const Select = (props: Props<SelectOwnProps>) => {
     dropdown.openDropdown();
     requestAnimationFrame(() => {
       if (!panelRef) return;
-      if (target === 'last') {
-        focusLastDropdownItem(panelRef);
-        return;
-      }
-      focusFirstDropdownItem(panelRef);
+      focusDropdownItem(panelRef, target);
     });
   };
 
@@ -125,53 +119,30 @@ const Select = (props: Props<SelectOwnProps>) => {
     }
   };
 
-  const handleDropdownKeyDown = (e: KeyboardEvent) => {
-    if (!panelRef) return;
-    const items = getFocusableDropdownItems(panelRef);
-    const current = document.activeElement as HTMLElement;
-    const currentIndex = items.indexOf(current as HTMLButtonElement);
-
-    if (handleDropdownArrowNavigation(e, items, currentIndex)) return;
-
-    if (e.key === 'Escape') {
-      e.preventDefault();
-      dropdown.close();
-      triggerRef?.focus();
-      return;
-    }
-
-    if (e.key === 'Tab') {
-      dropdown.close();
-    }
-  };
+  const handleDropdownKeyDown = createDropdownSurfaceKeyDownHandler({
+    getSurface: () => panelRef,
+    closeDropdown: dropdown.close,
+    focusTrigger: () => triggerRef?.focus(),
+  });
 
   return (
     <div ref={wrapperRef} class={classNames(styles.selectWrapper, local.class)}>
-      <InputButton
+      <DropdownChevronFieldTrigger
         ref={triggerRef}
+        label={selectedLabel()}
+        open={dropdown.open()}
         size={local.size}
         disabled={local.disabled}
         invalid={local.invalid}
         readOnly={local.readOnly}
-        class={classNames(
-          styles.selectTrigger,
-          dropdown.open() && styles.selectTriggerOpen,
-          local.readOnly && styles.selectTriggerReadonly
-        )}
+        class={classNames(styles.selectTrigger, dropdown.open() && styles.selectTriggerOpen)}
         onClick={dropdown.toggle}
         onKeyDown={handleTriggerKeyDown}
         aria-haspopup="listbox"
         aria-expanded={dropdown.open()}
         aria-controls={dropdown.open() ? dropdownId : undefined}
         aria-readonly={local.readOnly || undefined}
-      >
-        <DropdownTriggerContent
-          label={selectedLabel()}
-          open={dropdown.open()}
-          placeholder={currentValue() === ''}
-          class={styles.selectTriggerContent}
-        />
-      </InputButton>
+      />
 
       {dropdown.open() && (
         <DropdownSurface
@@ -186,7 +157,7 @@ const Select = (props: Props<SelectOwnProps>) => {
           <For each={options()}>
             {(option) => (
               <DropdownOption
-                class={classNames(styles.selectOption, option.disabled && styles.selectOptionDisabled)}
+                class={classNames(dropdownOptionStyles.item, option.disabled && dropdownOptionStyles.itemDisabled)}
                 selected={option.value === currentValue()}
                 label={option.label}
                 role="option"

@@ -16,14 +16,9 @@
 }
 
 .required {
-  color: var(--color-error);
-}
-
-.description {
-  margin: 0;
+  display: inline-flex;
 }
 
 .error {
   margin: 0;
-  color: var(--color-error);
 }

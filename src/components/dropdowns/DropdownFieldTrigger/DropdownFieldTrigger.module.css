@@ -1,0 +1,13 @@
+.trigger {
+  width: 100%;
+  cursor: pointer;
+  text-align: left;
+}
+
+.triggerReadonly {
+  cursor: default;
+}
+
+.content {
+  width: 100%;
+}

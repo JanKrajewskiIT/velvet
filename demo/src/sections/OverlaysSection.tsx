@@ -1,4 +1,4 @@
-import type { LightboxImage, TourStep } from '@jankrajewskiit/ui';
+import type { TourStep } from '@jankrajewskiit/ui';
 import {
   Button,
   Chip,
@@ -10,8 +10,6 @@ import {
   DialogActions,
   DialogBody,
   DialogTitle,
-  Drawer,
-  Lightbox,
   Popover,
   Sheet,
   Text,
@@ -23,12 +21,6 @@ import { createSignal, Show } from 'solid-js';
 
 import type { SectionId } from '../App';
 import { PreviewGroup, PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
-
-const SAMPLE_IMAGES: LightboxImage[] = [
-  { src: 'https://picsum.photos/id/10/800/600', alt: 'Forest', caption: 'Misty forest trail' },
-  { src: 'https://picsum.photos/id/15/800/600', alt: 'Mountains', caption: 'Mountain sunrise' },
-  { src: 'https://picsum.photos/id/29/800/600', alt: 'Coast', caption: 'Rocky coastline' },
-];
 
 const TOUR_STEPS: TourStep[] = [
   { target: '.showcaseTitle', title: 'Welcome', content: 'This is the section title area.', placement: 'bottom' },
@@ -51,12 +43,11 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
   const [tourOpen, setTourOpen] = createSignal(false);
   const [dialogOpen, setDialogOpen] = createSignal(false);
   const [confirmOpen, setConfirmOpen] = createSignal(false);
-  const [drawerOpen, setDrawerOpen] = createSignal(false);
+  const [sheetActionsOpen, setSheetActionsOpen] = createSignal(false);
   const [confirmRuns, setConfirmRuns] = createSignal(0);
   const [bottomSheetOpen, setBottomSheetOpen] = createSignal(false);
   const [leftSheetOpen, setLeftSheetOpen] = createSignal(false);
   const [rightSheetOpen, setRightSheetOpen] = createSignal(false);
-  const [lightboxOpen, setLightboxOpen] = createSignal(false);
 
   return (
     <div>
@@ -87,39 +78,39 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
             <PreviewGroup title="Examples">
               <div class="row">
                 <Popover
-                  trigger={<Button variant="ghost">Top</Button>}
-                  content={
-                    <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                      Popover content for top
-                    </Text>
-                  }
+                  trigger={(triggerProps) => (
+                    <Button variant="ghost" {...triggerProps}>
+                      Top
+                    </Button>
+                  )}
+                  content="Popover content for top"
                   position="top"
                 />
                 <Popover
-                  trigger={<Button variant="ghost">Bottom</Button>}
-                  content={
-                    <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                      Popover content for bottom
-                    </Text>
-                  }
+                  trigger={(triggerProps) => (
+                    <Button variant="ghost" {...triggerProps}>
+                      Bottom
+                    </Button>
+                  )}
+                  content="Popover content for bottom"
                   position="bottom"
                 />
                 <Popover
-                  trigger={<Button variant="ghost">Left</Button>}
-                  content={
-                    <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                      Popover content for left
-                    </Text>
-                  }
+                  trigger={(triggerProps) => (
+                    <Button variant="ghost" {...triggerProps}>
+                      Left
+                    </Button>
+                  )}
+                  content="Popover content for left"
                   position="left"
                 />
                 <Popover
-                  trigger={<Button variant="ghost">Right</Button>}
-                  content={
-                    <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                      Popover content for right
-                    </Text>
-                  }
+                  trigger={(triggerProps) => (
+                    <Button variant="ghost" {...triggerProps}>
+                      Right
+                    </Button>
+                  )}
+                  content="Popover content for right"
                   position="right"
                 />
               </div>
@@ -214,40 +205,42 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
         </ShowcaseSection>
       </Show>
 
-      <Show when={sectionId() === 'overlays-drawers'}>
-        <ShowcaseSection title="Drawer" subtitle="Slide-in side panel for secondary workflows">
+      <Show when={sectionId() === 'overlays-sheets'}>
+        <ShowcaseSection title="Sheet (right with actions)" subtitle="Slide-in side panel with optional footer actions">
           <PreviewPanel>
             <PreviewGroup title="Examples">
-              <Button variant="ghost" onClick={() => setDrawerOpen(true)}>
-                Open drawer
+              <Button variant="ghost" onClick={() => setSheetActionsOpen(true)}>
+                Open right sheet
               </Button>
 
-              <Drawer
-                open={drawerOpen()}
-                onClose={() => setDrawerOpen(false)}
+              <Sheet
+                open={sheetActionsOpen()}
+                onClose={() => setSheetActionsOpen(false)}
                 title="Settings"
                 subtitle="Adjust your preferences"
-                closeLabel="Close settings drawer"
+                closeLabel="Close settings panel"
+                side="right"
+                size="lg"
                 actions={
                   <>
-                    <Button variant="ghost" onClick={() => setDrawerOpen(false)}>
+                    <Button variant="ghost" onClick={() => setSheetActionsOpen(false)}>
                       Cancel
                     </Button>
-                    <Button variant="primary" onClick={() => setDrawerOpen(false)}>
+                    <Button variant="primary" onClick={() => setSheetActionsOpen(false)}>
                       Save changes
                     </Button>
                   </>
                 }
               >
                 <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                  Drawer content goes here. It works well for settings panels, side-by-side forms and detail views.
+                  Sheet content goes here. It works well for settings panels, side-by-side forms and detail views.
                 </Text>
-              </Drawer>
+              </Sheet>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="Sheet" subtitle="Modal panel from any edge">
+        <ShowcaseSection title="Sheets" subtitle="Panels from bottom, left and right edges">
           <PreviewPanel>
             <PreviewGroup title="Examples">
               <div class="row">
@@ -326,17 +319,6 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
       </Show>
 
       <Show when={sectionId() === 'overlays-lightbox'}>
-        <ShowcaseSection title="Lightbox" subtitle="Fullscreen image viewer with navigation">
-          <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <Button variant="ghost" onClick={() => setLightboxOpen(true)}>
-                Open lightbox
-              </Button>
-              <Lightbox images={SAMPLE_IMAGES} open={lightboxOpen()} onClose={() => setLightboxOpen(false)} />
-            </PreviewGroup>
-          </PreviewPanel>
-        </ShowcaseSection>
-
         <ShowcaseSection title="Tour" subtitle="Step-by-step onboarding spotlight">
           <PreviewPanel>
             <PreviewGroup title="Examples">

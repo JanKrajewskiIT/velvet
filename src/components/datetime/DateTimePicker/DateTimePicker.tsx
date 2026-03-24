@@ -11,6 +11,7 @@ import TimePicker from '../TimePicker/TimePicker';
 import styles from './DateTimePicker.module.css';
 
 interface DateTimePickerProps {
+  id?: string;
   value?: string;
   onChange: (value: string) => void;
   disabled?: boolean;
@@ -18,13 +19,14 @@ interface DateTimePickerProps {
   minDate?: string;
   maxDate?: string;
   step?: number;
-  dateLabel?: string;
-  timeLabel?: string;
   datePlaceholder?: string;
   timePlaceholder?: string;
   dateMessages?: DatePickerMessages;
   timeMessages?: TimePickerMessages;
   size?: InputSize;
+  'aria-labelledby'?: string;
+  'aria-describedby'?: string;
+  'aria-invalid'?: true;
 }
 
 const DateTimePicker = (props: Props<DateTimePickerProps>) => {
@@ -50,7 +52,13 @@ const DateTimePicker = (props: Props<DateTimePickerProps>) => {
   };
 
   return (
-    <div class={classNames(styles.wrapper, props.class)}>
+    <div
+      id={props.id}
+      class={classNames(styles.wrapper, props.class)}
+      role="group"
+      aria-labelledby={props['aria-labelledby']}
+      aria-describedby={props['aria-describedby']}
+    >
       <DatePicker
         value={parts().date}
         onChange={handleDateChange}
@@ -59,7 +67,6 @@ const DateTimePicker = (props: Props<DateTimePickerProps>) => {
         size={props.size}
         min={props.minDate}
         max={props.maxDate}
-        label={props.dateLabel}
         placeholder={props.datePlaceholder}
         messages={props.dateMessages}
       />
@@ -69,7 +76,6 @@ const DateTimePicker = (props: Props<DateTimePickerProps>) => {
         disabled={props.disabled || !parts().date}
         size={props.size}
         step={props.step}
-        label={props.timeLabel}
         placeholder={props.timePlaceholder}
         messages={props.timeMessages}
       />

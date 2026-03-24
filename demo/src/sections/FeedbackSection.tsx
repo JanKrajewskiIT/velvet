@@ -76,6 +76,18 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
           </PreviewPanel>
         </ShowcaseSection>
 
+        <ShowcaseSection title="Kbd" subtitle="Styled keyboard shortcut keys">
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <div class="row">
+                <Kbd>Ctrl</Kbd> + <Kbd>K</Kbd>
+                <Kbd>⌘</Kbd> + <Kbd>Shift</Kbd> + <Kbd>P</Kbd>
+                <Kbd>Esc</Kbd>
+              </div>
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+
         <ShowcaseSection title="Chip" subtitle="Status, selection and clickable chips">
           <PreviewPanel>
             <PreviewGroup title="Preset variants">
@@ -121,9 +133,9 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
           <PreviewPanel>
             <PreviewGroup title="Examples">
               <div class="row">
-                <ClosableChip onRemove={() => {}}>JavaScript</ClosableChip>
-                <ClosableChip onRemove={() => {}}>TypeScript</ClosableChip>
-                <ClosableChip onRemove={() => {}}>SolidJS</ClosableChip>
+                <ClosableChip label="JavaScript" onRemove={() => {}} />
+                <ClosableChip label="TypeScript" onRemove={() => {}} />
+                <ClosableChip label="SolidJS" onRemove={() => {}} />
               </div>
             </PreviewGroup>
           </PreviewPanel>
@@ -277,7 +289,7 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
               <Banner
                 variant="primary"
                 action={
-                  <Button variant="ghost" class="bannerActionInverse">
+                  <Button variant="navbar" class="bannerActionInverse">
                     Update now
                   </Button>
                 }
@@ -290,15 +302,6 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
                 </Banner>
               )}
               <Banner variant="error">Service degraded in EU region.</Banner>
-            </PreviewGroup>
-          </PreviewPanel>
-        </ShowcaseSection>
-
-        <ShowcaseSection title="ErrorMessage" subtitle="Inline error alerts">
-          <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <ErrorMessage>Failed to load data. Please try again.</ErrorMessage>
-              <ErrorMessage>Network error: connection timed out.</ErrorMessage>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
@@ -349,6 +352,15 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
             </CodeText>{' '}
             (e.g. in root layout) for toasts to appear.
           </ShowcaseMeta>
+        </ShowcaseSection>
+
+        <ShowcaseSection title="ErrorMessage" subtitle="Inline error alerts">
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <ErrorMessage>Failed to load data. Please try again.</ErrorMessage>
+              <ErrorMessage>Network error: connection timed out.</ErrorMessage>
+            </PreviewGroup>
+          </PreviewPanel>
         </ShowcaseSection>
 
         <ShowcaseSection title="NotificationCenter" subtitle="Persistent history powered by toast events">

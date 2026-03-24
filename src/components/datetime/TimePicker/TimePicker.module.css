@@ -1,35 +1,5 @@
-.wrapper {
-  composes: wrapper from '../shared/DateTimeTrigger.module.css';
-}
-
-.label {
-  composes: label from '../shared/DateTimeTrigger.module.css';
-}
-
-.inputRowDisabled {
-  composes: inputRowDisabled from '../shared/DateTimeTrigger.module.css';
-}
-
-.input {
-  composes: input from '../shared/DateTimeTrigger.module.css';
-}
-
-.input::placeholder {
-  color: var(--color-text-muted);
-}
-
-.iconBtn {
-  composes: iconBtn from '../shared/DateTimeTrigger.module.css';
-}
-
-.iconBtn:hover {
-  color: var(--color-primary);
-}
-
 .dropdown {
-  composes: panel from '../../dropdowns/DropdownSurface/DropdownSurface.module.css';
-}
-
-.option {
-  composes: item from '../../dropdowns/DropdownOption/DropdownOption.module.css';
+  display: block;
+  width: 100%;
+  z-index: var(--z-overlay);
 }

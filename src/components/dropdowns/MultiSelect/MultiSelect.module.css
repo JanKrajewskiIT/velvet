@@ -5,64 +5,35 @@
   gap: var(--spacing-sm);
 }
 
+.triggerArea {
+  position: relative;
+}
+
 .trigger {
   width: 100%;
-  cursor: pointer;
 }
 
-.trigger:hover {
-  background: var(--color-bg-hover);
-}
-
-.trigger:focus-visible {
+.triggerOpen {
+  border-color: var(--color-primary);
   box-shadow: 0 0 0 3px var(--color-focus-ring);
-}
-
-.disabled {
-  opacity: 0.65;
-  cursor: not-allowed;
-}
-
-.triggerContent {
-  width: 100%;
 }
 
 .dropdown {
   width: 100%;
-  top: calc(100% - var(--spacing-2xs));
-  padding: var(--spacing-xs);
 }
 
 .option {
   width: 100%;
-  display: block;
-  padding: var(--spacing-xs) var(--spacing-sm);
-}
-
-.optionDisabled {
-  composes: itemDisabled from '../DropdownOption/DropdownOption.module.css';
 }
 
 .checkbox {
-  width: 18px;
-  height: 18px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-bg-inverse);
-  background: var(--color-bg);
-}
-
-.checkboxChecked {
-  border-color: var(--color-primary);
-  background: var(--color-primary);
+  --checkbox-indicator-size: 18px;
 }
 
 .empty {
-  composes: empty from '../DropdownSurface/DropdownSurface.module.css';
-  padding: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  color: var(--color-text-muted);
+  font-size: var(--typography-scale-sm);
 }
 
 .selected {

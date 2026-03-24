@@ -1,5 +1,9 @@
-.iconButton {
-  line-height: var(--typography-line-height-none);
+.iconButton > span {
+  justify-content: center;
+}
+
+.iconButton svg {
+  display: block;
 }
 
 .iconButton > svg {

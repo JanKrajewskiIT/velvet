@@ -15,10 +15,22 @@ interface SwitchOwnProps extends Omit<JSX.ButtonHTMLAttributes<HTMLButtonElement
 
 const Switch = (props: Props<SwitchOwnProps>) => {
   const generatedId = createUniqueId();
-  const [local, rest] = splitProps(props, ['checked', 'onChange', 'label', 'description', 'class', 'disabled']);
+  const [local, rest] = splitProps(props, [
+    'checked',
+    'onChange',
+    'label',
+    'description',
+    'class',
+    'disabled',
+    'aria-labelledby',
+  ]);
 
   const hasText = () => Boolean(local.label || local.description);
   const textId = () => `${generatedId}-text`;
+  const labelledBy = () => {
+    const ids = [local['aria-labelledby'], hasText() ? textId() : undefined].filter(Boolean);
+    return ids.length > 0 ? ids.join(' ') : undefined;
+  };
 
   return (
     <div class={classNames(styles.wrapper, local.class)}>
@@ -28,7 +40,7 @@ const Switch = (props: Props<SwitchOwnProps>) => {
         type="button"
         role="switch"
         aria-checked={local.checked}
-        aria-labelledby={hasText() ? textId() : undefined}
+        aria-labelledby={labelledBy()}
         disabled={local.disabled}
         onClick={() => local.onChange(!local.checked)}
       >

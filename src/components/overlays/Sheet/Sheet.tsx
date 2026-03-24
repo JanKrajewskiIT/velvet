@@ -10,6 +10,7 @@ import classNames from '~/utils/classNames';
 
 import IconButton from '../../buttons/IconButton/IconButton';
 import Heading from '../../typography/Heading/Heading';
+import Text from '../../typography/Text/Text';
 import styles from './Sheet.module.css';
 
 interface SheetProps {
@@ -17,7 +18,9 @@ interface SheetProps {
   onClose: () => void;
   closeLabel: string;
   title?: JSX.Element;
+  subtitle?: JSX.Element;
   children?: JSX.Element;
+  actions?: JSX.Element;
   side?: 'bottom' | 'left' | 'right';
   size?: 'sm' | 'md' | 'lg';
 }
@@ -59,15 +62,25 @@ const Sheet = (props: Props<SheetProps>) => {
             <div class={styles.dragHandle} />
           </Show>
           <div class={styles.header}>
-            <Show when={props.title}>
-              <Heading as="h2" level={2} id={titleId} class={styles.title}>
-                {props.title}
-              </Heading>
-            </Show>
+            <div class={styles.titleBlock}>
+              <Show when={props.title}>
+                <Heading as="h2" level={2} variant="titleLg" id={titleId}>
+                  {props.title}
+                </Heading>
+              </Show>
+              <Show when={props.subtitle}>
+                <Text as="p" variant="bodySm" tone="muted">
+                  {props.subtitle}
+                </Text>
+              </Show>
+            </div>
             <IconButton icon={<FiX />} title={props.closeLabel} onClick={() => props.onClose()} />
           </div>
           <Show when={props.children}>
             <div class={styles.body}>{props.children}</div>
+          </Show>
+          <Show when={props.actions}>
+            <div class={styles.footer}>{props.actions}</div>
           </Show>
         </div>
       </Portal>

@@ -9,7 +9,7 @@ import classNames from '~/utils/classNames';
 
 import styles from './ThemeToggle.module.css';
 
-export type ThemeToggleVariant = 'light' | 'dark';
+export type ThemeToggleVariant = 'light' | 'navbar' | 'dark';
 
 interface ThemeToggleProps {
   lightLabel: string;
@@ -20,6 +20,12 @@ interface ThemeToggleProps {
 
 const ThemeToggle = (props: Props<ThemeToggleProps>) => {
   const { resolved, setTheme } = useTheme();
+  const variantClass = () => {
+    const variant = props.variant ?? 'light';
+    if (variant === 'dark') return styles.navbar;
+    return styles[variant];
+  };
+
   const options = createMemo<SegmentedControlOption[]>(() => [
     { value: 'light', label: <AiFillSun class={styles.icon} />, ariaLabel: props.lightLabel },
     { value: 'dark', label: <AiFillMoon class={styles.icon} />, ariaLabel: props.darkLabel },
@@ -33,7 +39,7 @@ const ThemeToggle = (props: Props<ThemeToggleProps>) => {
 
   return (
     <div
-      class={classNames(styles.group, props.variant === 'light' && styles.light, props.class)}
+      class={classNames(styles.group, variantClass(), props.class)}
       role="group"
       aria-label={props.groupLabel ?? props.darkLabel}
     >

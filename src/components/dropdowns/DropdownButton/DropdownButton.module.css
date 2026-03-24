@@ -11,6 +11,19 @@
   min-width: 120px;
 }
 
+.chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: inherit;
+  transition: transform var(--duration-fast) var(--ease-out-expo);
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
 .menu {
   min-width: 100%;
   display: flex;

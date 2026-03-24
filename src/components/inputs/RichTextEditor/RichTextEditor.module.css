@@ -4,26 +4,9 @@
   gap: var(--spacing-xs);
 }
 
-.label {
-  font-size: var(--typography-scale-sm);
-  font-weight: var(--typography-weight-medium);
-  color: var(--color-text);
-}
-
 .editorShell {
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  background: var(--color-bg);
   overflow: hidden;
   padding: 0;
-  transition:
-    border-color var(--duration-fast) var(--ease-out-expo),
-    box-shadow var(--duration-fast) var(--ease-out-expo);
-}
-
-.editorShell:focus-within {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px var(--color-focus-ring);
 }
 
 .toolbar {
@@ -41,7 +24,7 @@
   gap: var(--spacing-2xs);
   padding: var(--spacing-xs);
   border-bottom: 1px solid var(--color-border);
-  background: var(--color-bg-subtle);
+  background: var(--color-bg-hover);
 }
 
 .linkInput {
@@ -84,8 +67,4 @@
 .editor:empty::before {
   content: attr(data-placeholder);
   color: var(--color-text-muted);
-}
-
-.disabled {
-  opacity: var(--opacity-disabled);
 }

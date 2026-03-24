@@ -4,8 +4,8 @@ import { type JSX, onCleanup, splitProps } from 'solid-js';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
+import type { ButtonSize } from '../../buttons/Button/Button';
 import IconButton from '../../buttons/IconButton/IconButton';
-import FormField from '../../forms/FormField/FormField';
 import AffixInput from '../AffixInput/AffixInput';
 import type { InputSize } from '../Input/Input';
 import styles from './NumberInput.module.css';
@@ -23,9 +23,6 @@ interface NumberInputOwnProps {
   step?: number;
   id?: string;
   name?: string;
-  label?: JSX.Element;
-  description?: JSX.Element;
-  error?: JSX.Element;
   disabled?: boolean;
   readOnly?: boolean;
   required?: boolean;
@@ -34,6 +31,9 @@ interface NumberInputOwnProps {
   decrementLabel?: string;
   incrementLabel?: string;
   messages?: NumberInputMessages;
+  'aria-labelledby'?: string;
+  'aria-describedby'?: string;
+  'aria-invalid'?: true;
 }
 
 const NumberInput = (props: Props<NumberInputOwnProps>) => {
@@ -45,9 +45,6 @@ const NumberInput = (props: Props<NumberInputOwnProps>) => {
     'step',
     'id',
     'name',
-    'label',
-    'description',
-    'error',
     'disabled',
     'readOnly',
     'required',
@@ -66,6 +63,13 @@ const NumberInput = (props: Props<NumberInputOwnProps>) => {
   const decrementButtonLabel = () => local.messages?.decrementButtonLabel ?? local.decrementLabel ?? 'Decrease value';
   const incrementButtonLabel = () => local.messages?.incrementButtonLabel ?? local.incrementLabel ?? 'Increase value';
   const clamp = (v: number) => Math.min(max(), Math.max(min(), v));
+
+  const controlSize = (): ButtonSize => {
+    const current = size();
+    if (current === 'sm') return 'sm';
+    if (current === 'lg') return 'md';
+    return 'sm';
+  };
 
   const increment = () => {
     if (local.disabled || local.readOnly) return;
@@ -117,57 +121,48 @@ const NumberInput = (props: Props<NumberInputOwnProps>) => {
   };
 
   return (
-    <FormField
+    <AffixInput
+      {...rest}
       id={local.id}
-      label={local.label}
-      description={local.description}
-      error={local.error}
+      name={local.name}
+      type="number"
+      size={size()}
+      class={classNames(styles.controls, local.class)}
+      inputClass={styles.input}
+      value={local.value}
+      disabled={local.disabled}
+      readOnly={local.readOnly}
       required={local.required}
       invalid={local.invalid}
-      class={classNames(styles.wrapper, local.class)}
-    >
-      <AffixInput
-        {...rest}
-        id={local.id}
-        name={local.name}
-        type="number"
-        size={size()}
-        inputClass={styles.input}
-        value={local.value}
-        disabled={local.disabled}
-        readOnly={local.readOnly}
-        required={local.required}
-        invalid={local.invalid}
-        onKeyDown={handleKeyDown}
-        onChange={handleInputChange}
-        prefix={
-          <IconButton
-            icon={<IoRemove />}
-            title={decrementButtonLabel()}
-            disabled={local.disabled || local.readOnly}
-            onClick={decrement}
-            onMouseDown={() => startRepeat(decrement)}
-            onMouseUp={stopRepeat}
-            onMouseLeave={stopRepeat}
-            size={size()}
-            variant="subtle"
-          />
-        }
-        suffix={
-          <IconButton
-            icon={<IoAdd />}
-            title={incrementButtonLabel()}
-            disabled={local.disabled || local.readOnly}
-            onClick={increment}
-            onMouseDown={() => startRepeat(increment)}
-            onMouseUp={stopRepeat}
-            onMouseLeave={stopRepeat}
-            size={size()}
-            variant="subtle"
-          />
-        }
-      />
-    </FormField>
+      onKeyDown={handleKeyDown}
+      onChange={handleInputChange}
+      prefix={
+        <IconButton
+          icon={<IoRemove />}
+          title={decrementButtonLabel()}
+          disabled={local.disabled || local.readOnly}
+          onClick={decrement}
+          onMouseDown={() => startRepeat(decrement)}
+          onMouseUp={stopRepeat}
+          onMouseLeave={stopRepeat}
+          size={controlSize()}
+          variant="subtle"
+        />
+      }
+      suffix={
+        <IconButton
+          icon={<IoAdd />}
+          title={incrementButtonLabel()}
+          disabled={local.disabled || local.readOnly}
+          onClick={increment}
+          onMouseDown={() => startRepeat(increment)}
+          onMouseUp={stopRepeat}
+          onMouseLeave={stopRepeat}
+          size={controlSize()}
+          variant="subtle"
+        />
+      }
+    />
   );
 };
 

@@ -74,6 +74,17 @@
   background-color: var(--theme-toggle-light-selected-bg);
 }
 
+.navbar .toggle {
+  border-color: color-mix(in srgb, var(--header-text) 55%, transparent);
+  color: var(--header-text);
+}
+
+.navbar .toggle.selected {
+  color: var(--header-bg);
+  border-color: color-mix(in srgb, var(--header-text) 45%, transparent);
+  background-color: var(--header-text);
+}
+
 .icon {
   width: var(--font-size-lg);
   height: var(--font-size-lg);

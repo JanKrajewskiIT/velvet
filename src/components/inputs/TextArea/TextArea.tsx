@@ -3,8 +3,8 @@ import { splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
-import getInputSizeClass from '~/utils/getInputSizeClass';
 
+import FieldBase from '../FieldBase/FieldBase';
 import type { InputSize } from '../Input/Input';
 import styles from './TextArea.module.css';
 
@@ -15,21 +15,18 @@ interface TextAreaOwnProps extends JSX.TextareaHTMLAttributes<HTMLTextAreaElemen
 
 const TextArea = (props: Props<TextAreaOwnProps>) => {
   const [local, rest] = splitProps(props, ['class', 'size', 'invalid', 'readOnly']);
-  const sizeClass = () => getInputSizeClass(styles, local.size);
 
   return (
-    <textarea
+    <FieldBase
+      as="textarea"
       {...rest}
+      size={local.size}
+      invalid={local.invalid}
       readOnly={local.readOnly}
+      disabled={rest.disabled}
+      focusStyle="visible"
       aria-invalid={local.invalid || undefined}
-      class={classNames(
-        styles.root,
-        sizeClass(),
-        local.invalid && styles.invalid,
-        local.readOnly && styles.readOnly,
-        rest.disabled && styles.disabled,
-        local.class
-      )}
+      class={classNames(styles.root, local.class)}
     />
   );
 };

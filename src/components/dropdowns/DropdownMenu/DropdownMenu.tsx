@@ -6,11 +6,9 @@ import classNames from '~/utils/classNames';
 
 import DropdownSurface from '../DropdownSurface/DropdownSurface';
 import {
-  focusFirstDropdownItem,
-  focusLastDropdownItem,
+  createDropdownSurfaceKeyDownHandler,
+  focusDropdownItem,
   getDropdownOpenTarget,
-  getFocusableDropdownItems,
-  handleDropdownArrowNavigation,
 } from '../shared/dropdownKeyboard';
 import useDropdownState from '../shared/useDropdownState';
 import styles from './DropdownMenu.module.css';
@@ -28,10 +26,11 @@ const DropdownMenu = (props: Props<DropdownMenuProps>) => {
   let triggerRef: HTMLButtonElement | undefined;
   const dropdown = useDropdownState(() => menuRef);
 
-  const openAndFocusFirst = () => {
+  const openAndFocus = (target: 'first' | 'last') => {
     dropdown.openDropdown();
     requestAnimationFrame(() => {
-      if (panelRef) focusFirstDropdownItem(panelRef);
+      if (!panelRef) return;
+      focusDropdownItem(panelRef, target);
     });
   };
 
@@ -40,7 +39,7 @@ const DropdownMenu = (props: Props<DropdownMenuProps>) => {
       dropdown.close();
       return;
     }
-    openAndFocusFirst();
+    openAndFocus('first');
   };
 
   const handleTriggerKeyDown = (e: KeyboardEvent) => {
@@ -49,41 +48,15 @@ const DropdownMenu = (props: Props<DropdownMenuProps>) => {
     const target = getDropdownOpenTarget(e);
     if (!target) return;
 
-    dropdown.openDropdown();
-    requestAnimationFrame(() => {
-      if (!panelRef) return;
-      if (target === 'last') {
-        focusLastDropdownItem(panelRef);
-        return;
-      }
-      focusFirstDropdownItem(panelRef);
-    });
+    openAndFocus(target);
   };
 
-  const handleMenuKeyDown = (e: KeyboardEvent) => {
-    if (!panelRef) return;
-    const items = getFocusableDropdownItems(panelRef);
-    const current = document.activeElement as HTMLElement;
-    const index = items.indexOf(current as HTMLButtonElement);
-
-    if (handleDropdownArrowNavigation(e, items, index)) {
-      return;
-    }
-
-    switch (e.key) {
-      case 'Escape': {
-        e.preventDefault();
-        dropdown.close();
-        triggerRef?.focus();
-        break;
-      }
-      case 'Tab': {
-        dropdown.close();
-        triggerRef?.focus();
-        break;
-      }
-    }
-  };
+  const handleMenuKeyDown = createDropdownSurfaceKeyDownHandler({
+    getSurface: () => panelRef,
+    closeDropdown: dropdown.close,
+    focusTrigger: () => triggerRef?.focus(),
+    focusTriggerOnTab: true,
+  });
 
   return (
     <div ref={menuRef} class={classNames(styles.wrapper, props.class)}>

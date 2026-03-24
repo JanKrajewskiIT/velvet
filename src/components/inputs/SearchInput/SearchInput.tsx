@@ -1,5 +1,5 @@
 import { IoClose, IoSearch } from 'solid-icons/io';
-import { onCleanup, Show } from 'solid-js';
+import { type JSX, onCleanup, Show, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
 
@@ -9,49 +9,69 @@ import type { InputSize } from '../Input/Input';
 import styles from './SearchInput.module.css';
 
 interface SearchInputMessages {
+  searchPlaceholder?: string;
   placeholder?: string;
   clearButtonLabel?: string;
 }
 
-interface SearchInputProps {
+interface SearchInputProps extends Omit<JSX.InputHTMLAttributes<HTMLInputElement>, 'value' | 'onInput' | 'size'> {
   value: string;
   onInput: (value: string) => void;
   onClear?: () => void;
-  placeholder?: string;
   debounce?: number;
-  disabled?: boolean;
-  autofocus?: boolean;
   clearLabel?: string;
   size?: InputSize;
+  inputAriaLabel?: string;
   messages?: SearchInputMessages;
 }
 
 const SearchInput = (props: Props<SearchInputProps>) => {
+  const [local, rest] = splitProps(props, [
+    'value',
+    'onInput',
+    'onClear',
+    'placeholder',
+    'debounce',
+    'disabled',
+    'autofocus',
+    'clearLabel',
+    'size',
+    'inputAriaLabel',
+    'messages',
+    'onKeyDown',
+    'class',
+  ]);
   let debounceTimer: ReturnType<typeof setTimeout> | undefined;
 
-  const placeholderText = () => props.messages?.placeholder ?? props.placeholder ?? 'Search...';
-  const clearButtonLabel = () => props.messages?.clearButtonLabel ?? props.clearLabel ?? 'Clear search';
+  const placeholderText = () =>
+    local.messages?.searchPlaceholder ?? local.messages?.placeholder ?? local.placeholder ?? 'Search...';
+  const clearButtonLabel = () => local.messages?.clearButtonLabel ?? local.clearLabel ?? 'Clear search';
 
   const fireInput = (value: string) => {
-    if (props.debounce && props.debounce > 0) {
+    if (local.debounce && local.debounce > 0) {
       clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => props.onInput(value), props.debounce);
+      debounceTimer = setTimeout(() => local.onInput(value), local.debounce);
     } else {
-      props.onInput(value);
+      local.onInput(value);
     }
   };
 
-  const handleInput = (e: InputEvent) => {
-    fireInput((e.currentTarget as HTMLInputElement).value);
+  const handleInput: JSX.EventHandler<HTMLInputElement, InputEvent> = (e) => {
+    fireInput(e.currentTarget.value);
   };
 
   const handleClear = () => {
     clearTimeout(debounceTimer);
-    props.onInput('');
-    props.onClear?.();
+    local.onInput('');
+    local.onClear?.();
   };
 
-  const handleKeyDown = (e: KeyboardEvent) => {
+  const handleKeyDown: JSX.EventHandler<HTMLInputElement, KeyboardEvent> = (e) => {
+    if (typeof local.onKeyDown === 'function') {
+      local.onKeyDown(e);
+    }
+    if (e.defaultPrevented) return;
+
     if (e.key === 'Escape') {
       handleClear();
     }
@@ -61,28 +81,23 @@ const SearchInput = (props: Props<SearchInputProps>) => {
 
   return (
     <AffixInput
+      {...rest}
       type="text"
-      size={props.size}
-      value={props.value}
+      size={local.size}
+      value={local.value}
       onInput={handleInput}
       onKeyDown={handleKeyDown}
+      aria-label={local.inputAriaLabel}
       placeholder={placeholderText()}
-      disabled={props.disabled}
-      autofocus={props.autofocus}
+      disabled={local.disabled}
+      autofocus={local.autofocus}
       prefix={<IoSearch class={styles.icon} />}
       suffix={
-        <Show when={props.value.length > 0}>
-          <IconButton
-            icon={<IoClose />}
-            title={clearButtonLabel()}
-            class={styles.clear}
-            onClick={handleClear}
-            size="sm"
-            variant="subtle"
-          />
+        <Show when={local.value.length > 0}>
+          <IconButton icon={<IoClose />} title={clearButtonLabel()} onClick={handleClear} size="sm" variant="subtle" />
         </Show>
       }
-      class={props.class}
+      class={local.class}
     />
   );
 };

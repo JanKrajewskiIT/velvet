@@ -1,0 +1,10 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.preview {
+  min-height: 100px;
+  padding: 0;
+}

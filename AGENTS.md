@@ -28,5 +28,13 @@ Branch from `main`, conventional commits (`feat:`, `fix:`, `refactor:`, `docs:`)
 - Style prop must use object syntax `style={{ key: value }}` -- never string syntax (enforced by `solid/style-prop` lint rule)
 - Dynamic values go through CSS custom properties (`style={{ '--my-var': value }}` + `var(--my-var)` in `.module.css`) -- never direct inline CSS for what CSS can handle
 - Static styles belong in `.module.css` -- inline style only for truly dynamic runtime values (virtualization, user dimensions, DOM measurements)
+- `class`/`classList` on primitives is allowed only for layout/composition (positioning, sizing, spacing, flex/grid, alignment, overflow)
+- Do not skin primitives from host component classes (no typography/color/background/border/shadow/radius overrides on Text/Heading/CodeText/Button/IconButton/Input/TextArea)
+- Visual semantics of primitives must come from primitive API (`variant`/`tone`/`size`/state props). Add or extend primitive props instead of local visual overrides
+- If one shared primitive is used in multiple components (e.g. media navigation controls), keep its visual style in the shared primitive module; parent components should only position/place it
 - Shared primitive styles should live with that primitive in its own directory/module file (avoid "base catch-all" CSS files)
+- Prefer `ComponentName.tsx` + `ComponentName.module.css` pairs; avoid standalone `*.module.css` without a corresponding component
+- Exception: shared primitive style modules can stay standalone when reused across different element types (e.g. button/select/input/div)
+- Do not use `composes` in `*.module.css`; reuse shared styles by importing the primitive/component styles in TSX and combining classes with `classNames()`
+- Wrapper components are valid when they provide real semantic API/default behavior/state (not only style pass-through)
 - Demo app uses only library components and design tokens -- no inline styles, all layout via `demo.css` utility classes

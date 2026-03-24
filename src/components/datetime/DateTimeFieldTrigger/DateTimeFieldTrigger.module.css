@@ -1,0 +1,15 @@
+.root {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.rootOpen {
+  z-index: var(--z-overlay);
+}
+
+.triggerOpen {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-focus-ring);
+}

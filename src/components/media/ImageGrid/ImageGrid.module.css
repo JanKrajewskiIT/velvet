@@ -1,0 +1,62 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 3), 1fr);
+  gap: var(--gap, var(--spacing-sm));
+}
+
+.cell {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1;
+  border: none;
+  background: none;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+.rounded {
+  border-radius: var(--radius-md);
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--duration-normal) var(--ease-out-expo);
+}
+
+.hoverableImage:hover {
+  transform: scale(1.05);
+}
+
+.caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: linear-gradient(transparent, var(--color-overlay));
+  color: var(--color-text-inverse);
+  font-size: var(--typography-scale-xs);
+  opacity: 0;
+  transform: translateY(4px);
+  transition:
+    opacity var(--duration-fast),
+    transform var(--duration-fast);
+}
+
+.cell:hover .caption {
+  opacity: 1;
+  transform: translateY(0);
+}

@@ -1,0 +1,14 @@
+.reset {
+  border: none;
+  border-color: transparent;
+  box-shadow: none;
+  background: transparent;
+  outline: none;
+  padding: 0;
+}
+
+.reset:focus,
+.reset:focus-visible {
+  border-color: transparent;
+  box-shadow: none;
+}

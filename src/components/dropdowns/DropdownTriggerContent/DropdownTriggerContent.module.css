@@ -7,24 +7,16 @@
 
 .label {
   flex: 1;
-  min-width: 0;
-  margin: 0;
-  text-align: left;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
-.placeholder {
-  color: var(--color-text-muted);
-}
-
-.chevron {
+.suffix {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
   color: var(--color-text-muted);
-  transition: transform var(--duration-fast) var(--ease-out-expo);
 }
 
-.chevronOpen {
-  transform: rotate(180deg);
+.suffixInverse {
+  color: var(--color-on-accent);
 }

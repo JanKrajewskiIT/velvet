@@ -6,7 +6,7 @@ import classNames from '~/utils/classNames';
 
 import styles from './Button.module.css';
 
-export type ButtonVariant = 'primary' | 'danger' | 'ghost' | 'dashed' | 'outline' | 'subtle';
+export type ButtonVariant = 'primary' | 'danger' | 'ghost' | 'dashed' | 'outline' | 'subtle' | 'navbar';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
 interface ButtonOwnProps extends Omit<JSX.ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
@@ -14,6 +14,7 @@ interface ButtonOwnProps extends Omit<JSX.ButtonHTMLAttributes<HTMLButtonElement
   size?: ButtonSize;
   loading?: boolean;
   iconOnly?: boolean;
+  round?: boolean;
   children?: JSX.Element;
 }
 
@@ -36,6 +37,7 @@ const variantToClass: Record<ButtonVariant, string | undefined> = {
   dashed: styles.variantDashed,
   outline: styles.variantOutline,
   subtle: styles.variantSubtle,
+  navbar: styles.variantNavbar,
 };
 
 const Button = (props: Props<ButtonOwnProps>) => {
@@ -44,6 +46,7 @@ const Button = (props: Props<ButtonOwnProps>) => {
     'size',
     'loading',
     'iconOnly',
+    'round',
     'class',
     'children',
     'disabled',
@@ -53,7 +56,6 @@ const Button = (props: Props<ButtonOwnProps>) => {
   const sizeClass = () => sizeToClass[local.size ?? 'md'];
   const iconSizeClass = () => iconSizeToClass[local.size ?? 'md'];
   const variantClass = () => variantToClass[local.variant ?? 'primary'];
-
   const isDisabled = () => Boolean(local.disabled ?? local.loading);
 
   return (
@@ -65,6 +67,7 @@ const Button = (props: Props<ButtonOwnProps>) => {
         variantClass(),
         local.iconOnly && styles.iconOnly,
         local.iconOnly && iconSizeClass(),
+        local.round && styles.round,
         local.loading && styles.loading,
         local.class
       )}

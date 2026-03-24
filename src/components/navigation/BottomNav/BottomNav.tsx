@@ -1,7 +1,9 @@
 import type { JSX } from 'solid-js';
-import { For, Show } from 'solid-js';
+import { For } from 'solid-js';
 
+import Badge from '~/components/feedback/Badge/Badge';
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
 import Button from '../../buttons/Button/Button';
 import styles from './BottomNav.module.css';
@@ -25,20 +27,19 @@ const BottomNav = (props: Props<BottomNavProps>) => {
   const barClass = () => (placement() === 'container' ? styles.barContainer : styles.barViewport);
 
   return (
-    <nav class={`${barClass()} ${props.class ?? ''}`}>
+    <nav class={classNames(styles.bar, barClass(), props.class)}>
       <For each={props.items}>
         {(item) => (
           <Button
-            class={`${styles.item} ${props.activeId === item.id ? styles.active : ''}`}
+            class={classNames(styles.item, props.activeId === item.id && styles.active)}
             variant="subtle"
             size="md"
             onClick={() => props.onChange(item.id)}
           >
-            <span class={styles.icon}>
-              {item.icon}
-              <Show when={item.badge !== undefined}>
-                <span class={styles.badge}>{item.badge}</span>
-              </Show>
+            <span class={styles.iconWrap}>
+              <Badge content={item.badge} variant="error">
+                <span class={styles.icon}>{item.icon}</span>
+              </Badge>
             </span>
             <span class={styles.label}>{item.label}</span>
           </Button>

@@ -1,19 +1,16 @@
 .wrapper {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: var(--spacing-xs);
   position: relative;
+  width: 100%;
 }
 
 .field {
   display: flex;
   align-items: center;
-  gap: var(--spacing-xs);
-  cursor: pointer;
-  font-family: inherit;
-  color: var(--color-text);
-  min-width: 128px;
-  width: auto;
+  flex: 1;
+  min-width: 0;
 }
 
 .field:hover {
@@ -30,60 +27,18 @@
   pointer-events: none;
 }
 
-.separator {
-  display: flex;
-  align-items: center;
-  color: var(--color-text-muted);
-  font-size: var(--typography-scale-sm);
-}
-
 .dropdown {
-  composes: panel from '../../dropdowns/DropdownSurface/DropdownSurface.module.css';
+  display: block;
   padding: var(--spacing-md);
-}
-
-.nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--spacing-sm);
-}
-
-.navBtn {
-  border-radius: var(--radius-full);
-}
-
-.navBtn:hover {
-  background-color: var(--color-bg-hover);
-}
-
-.monthYear {
-  font-size: var(--typography-scale-sm);
-  font-weight: var(--typography-weight-medium);
-  color: var(--color-text);
-}
-
-.grid {
-  composes: calendarGrid from '../shared/CalendarGrid.module.css';
-}
-
-.dayHeader {
-  composes: calendarDayHeader from '../shared/CalendarGrid.module.css';
-  color: var(--color-text-muted);
-  padding: var(--spacing-2xs);
+  z-index: var(--z-overlay);
 }
 
 .day {
-  composes: calendarDay from '../shared/CalendarGrid.module.css';
   border-radius: var(--radius-sm);
 }
 
 .day:hover {
   background-color: var(--color-bg-hover);
-}
-
-.dayOutside {
-  composes: calendarDayOutside from '../shared/CalendarGrid.module.css';
 }
 
 .today {
@@ -123,9 +78,4 @@
 
 .rangeSingle:hover {
   background: var(--color-primary);
-}
-
-.disabled {
-  opacity: 0.3;
-  pointer-events: none;
 }

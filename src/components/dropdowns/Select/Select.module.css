@@ -18,12 +18,6 @@
 
 .selectTrigger {
   width: 100%;
-  cursor: pointer;
-  text-align: left;
-}
-
-.selectTriggerReadonly {
-  cursor: default;
 }
 
 .selectTriggerOpen {
@@ -31,18 +25,6 @@
   box-shadow: 0 0 0 3px var(--color-focus-ring);
 }
 
-.selectTriggerContent {
-  width: 100%;
-}
-
 .selectDropdown {
   width: 100%;
-}
-
-.selectOption {
-  composes: item from '../DropdownOption/DropdownOption.module.css';
-}
-
-.selectOptionDisabled {
-  composes: itemDisabled from '../DropdownOption/DropdownOption.module.css';
 }

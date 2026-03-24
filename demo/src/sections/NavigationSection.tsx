@@ -1,29 +1,30 @@
-import type { BottomNavItem, BreadcrumbItem, CommandItem, SpeedDialAction } from '@jankrajewskiit/ui';
+import type {
+  BottomNavItem,
+  BreadcrumbItem,
+  NavItem,
+  SidebarItem,
+  SidebarNavGroup,
+  SpeedDialAction,
+} from '@jankrajewskiit/ui';
 import {
   BackToTop,
   BottomNav,
   Breadcrumbs,
   Button,
   CodeText,
-  CommandPalette,
+  LocaleSwitcher,
+  Navbar,
+  Pagination,
+  Sidebar,
+  SidebarNav,
   SpeedDial,
   Stepper,
   Tabs,
   Text,
-  Timeline,
+  ThemeToggle,
 } from '@jankrajewskiit/ui';
-import {
-  IoAdd,
-  IoCalendar,
-  IoDownload,
-  IoHome,
-  IoMoon,
-  IoPencil,
-  IoPerson,
-  IoSearch,
-  IoSettings,
-  IoShareSocial,
-} from 'solid-icons/io';
+import { BiLogosReact } from 'solid-icons/bi';
+import { IoAdd, IoCalendar, IoHome, IoPencil, IoPerson, IoSearch, IoSettings, IoShareSocial } from 'solid-icons/io';
 import { createSignal, For, Show } from 'solid-js';
 
 import type { SectionId } from '../App';
@@ -46,7 +47,7 @@ const COLLAPSIBLE_BREADCRUMBS: BreadcrumbItem[] = [
   { label: 'Detail' },
 ];
 
-const SPEED_DIAL_ACTIONS: SpeedDialAction[] = [
+const getSpeedDialActions = (): SpeedDialAction[] => [
   { icon: <IoAdd size={20} />, label: 'Add', onClick: () => {} },
   { icon: <IoPencil size={20} />, label: 'Edit', onClick: () => {} },
   { icon: <IoShareSocial size={20} />, label: 'Share', onClick: () => {} },
@@ -69,99 +70,142 @@ const STEPPER_STEPS = [
   { value: 'done', label: 'Done' },
 ];
 
-const TIMELINE_ITEMS = [
-  {
-    key: '1',
-    content: (
-      <span>
-        <strong>v0.3.3</strong> - Reorganized component categories
-      </span>
-    ),
-  },
-  {
-    key: '2',
-    content: (
-      <span>
-        <strong>v0.1.6</strong> - Added Wizard, Stepper and Timeline
-      </span>
-    ),
-  },
-  {
-    key: '3',
-    content: (
-      <span>
-        <strong>v0.1.0</strong> - Initial release
-      </span>
-    ),
-  },
-];
-
-const BOTTOM_NAV_ITEMS: BottomNavItem[] = [
+const getBottomNavItems = (): BottomNavItem[] => [
   { id: 'home', label: 'Home', icon: <IoHome size={20} /> },
   { id: 'search', label: 'Search', icon: <IoSearch size={20} /> },
   { id: 'calendar', label: 'Calendar', icon: <IoCalendar size={20} />, badge: 2 },
   { id: 'profile', label: 'Profile', icon: <IoPerson size={20} /> },
 ];
 
+const NAVBAR_ITEMS: NavItem[] = [
+  { label: 'Dashboard', href: '/dashboard', icon: IoHome },
+  { label: 'Search', href: '/search', icon: IoSearch },
+  { label: 'Settings', href: '/settings', icon: IoSettings },
+];
+
+const getSidebarItems = (): SidebarItem[] => [
+  { id: 'overview', label: 'Overview', icon: <IoHome size={16} /> },
+  {
+    id: 'workspace',
+    label: 'Workspace',
+    icon: <IoCalendar size={16} />,
+    children: [
+      { id: 'reports', label: 'Reports', badge: 6 },
+      { id: 'tasks', label: 'Tasks', badge: 3 },
+      { id: 'archive', label: 'Archive' },
+    ],
+  },
+  { id: 'profile', label: 'Profile', icon: <IoPerson size={16} /> },
+];
+
+const SIDEBAR_NAV_GROUPS: SidebarNavGroup[] = [
+  {
+    label: 'Navigation',
+    items: [
+      { id: 'nav-overview', label: 'Overview' },
+      { id: 'nav-pages', label: 'Pages' },
+      { id: 'nav-settings', label: 'Settings' },
+    ],
+  },
+  {
+    label: 'Management',
+    items: [
+      { id: 'nav-users', label: 'Users' },
+      { id: 'nav-billing', label: 'Billing' },
+    ],
+  },
+];
+
 const NavigationSection = (props: { sectionId: SectionId }) => {
   const sectionId = () => props.sectionId;
+  const [locale, setLocale] = createSignal<'EN' | 'PL'>('EN');
   const [tab, setTab] = createSignal<TabValue>('preview');
   const [activeStep, setActiveStep] = createSignal('details');
-  const [commandOpen, setCommandOpen] = createSignal(false);
+  const [page, setPage] = createSignal(3);
   const [activeBottomNav, setActiveBottomNav] = createSignal('home');
+  const [sidebarActive, setSidebarActive] = createSignal('overview');
+  const [sidebarCollapsed, setSidebarCollapsed] = createSignal(false);
+  const [sidebarNavActive, setSidebarNavActive] = createSignal('nav-overview');
 
-  const commandItems: CommandItem[] = [
-    {
-      id: 'dashboard',
-      label: 'Go to Dashboard',
-      description: 'Navigate to main dashboard',
-      icon: <IoHome size={18} />,
-      group: 'Navigation',
-      onSelect: () => setCommandOpen(false),
-    },
-    {
-      id: 'settings',
-      label: 'Go to Settings',
-      description: 'Open app settings',
-      icon: <IoSettings size={18} />,
-      group: 'Navigation',
-      onSelect: () => setCommandOpen(false),
-    },
-    {
-      id: 'profile',
-      label: 'Go to Profile',
-      icon: <IoPerson size={18} />,
-      group: 'Navigation',
-      onSelect: () => setCommandOpen(false),
-    },
-    {
-      id: 'create',
-      label: 'Create new item',
-      description: 'Add a new entry',
-      icon: <IoAdd size={18} />,
-      group: 'Actions',
-      onSelect: () => setCommandOpen(false),
-    },
-    {
-      id: 'export',
-      label: 'Export data',
-      icon: <IoDownload size={18} />,
-      group: 'Actions',
-      onSelect: () => setCommandOpen(false),
-    },
-    {
-      id: 'darkmode',
-      label: 'Toggle dark mode',
-      description: 'Switch theme appearance',
-      icon: <IoMoon size={18} />,
-      group: 'Actions',
-      onSelect: () => setCommandOpen(false),
-    },
-  ];
+  const toggleLocale = () => {
+    setLocale((current) => (current === 'EN' ? 'PL' : 'EN'));
+  };
 
   return (
     <div>
-      <Show when={sectionId() === 'nav-tabs-stepper'}>
+      <Show when={sectionId() === 'nav-navbar'}>
+        <ShowcaseSection title="Navbar" subtitle="Top navigation with logo, actions and responsive menu">
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <div class="layoutPreviewShell">
+                <Navbar
+                  navItems={NAVBAR_ITEMS}
+                  logo={<BiLogosReact class="layoutNavbarLogo" />}
+                  actions={
+                    <div class="layoutNavbarActions">
+                      <LocaleSwitcher
+                        text={locale()}
+                        switchLabel="Switch language"
+                        onSwitch={toggleLocale}
+                        variant="navbar"
+                        size="sm"
+                      />
+                      <ThemeToggle lightLabel="Light mode" darkLabel="Dark mode" groupLabel="Theme" variant="navbar" />
+                    </div>
+                  }
+                  toggleMenuLabel="Toggle navigation"
+                  navLabel="Main navigation"
+                />
+              </div>
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+      </Show>
+
+      <Show when={sectionId() === 'nav-sidebars'}>
+        <ShowcaseSection title="Sidebar & SidebarNav" subtitle="Side navigation variants for app layout and docs menus">
+          <PreviewPanel>
+            <PreviewGroup title="Sidebar">
+              <div class="sidebarPreviewShell">
+                <Sidebar
+                  class="sidebarNavPreview"
+                  items={getSidebarItems()}
+                  activeId={sidebarActive()}
+                  onSelect={setSidebarActive}
+                  collapsed={sidebarCollapsed()}
+                  onToggle={() => setSidebarCollapsed((current) => !current)}
+                  header="Workspace"
+                />
+                <div class="sidebarPreviewBody">
+                  <Text as="p" variant="bodySm" tone="muted" class="mutedText">
+                    Active sidebar item: <strong>{sidebarActive()}</strong>
+                  </Text>
+                </div>
+              </div>
+            </PreviewGroup>
+
+            <PreviewGroup title="SidebarNav">
+              <div class="sidebarPreviewShell">
+                <SidebarNav
+                  class="sidebarNavPreview"
+                  groups={SIDEBAR_NAV_GROUPS}
+                  activeId={sidebarNavActive()}
+                  onSelect={setSidebarNavActive}
+                  title="VelvetUI"
+                  subtitle="Navigation preview"
+                />
+                <div class="sidebarPreviewBody">
+                  <Text as="p" variant="bodySm" tone="muted" class="mutedText">
+                    Active sidebar nav item: <strong>{sidebarNavActive()}</strong>
+                  </Text>
+                </div>
+              </div>
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+      </Show>
+
+      <Show when={sectionId() === 'nav-breadcrumbs'}>
         <ShowcaseSection title="Breadcrumbs" subtitle="Hierarchical path navigation with collapse">
           <PreviewPanel>
             <PreviewGroup title="Examples">
@@ -170,7 +214,9 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
+      </Show>
 
+      <Show when={sectionId() === 'nav-stepper'}>
         <ShowcaseSection title="Stepper" subtitle="Visual progress through ordered steps">
           <PreviewPanel>
             <PreviewGroup title="Examples">
@@ -191,7 +237,9 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
+      </Show>
 
+      <Show when={sectionId() === 'nav-tabs'}>
         <ShowcaseSection title="Tabs" subtitle="Underline and pill variants">
           <PreviewPanel>
             <PreviewGroup title="Underline variant">
@@ -228,28 +276,20 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
         </ShowcaseSection>
       </Show>
 
-      <Show when={sectionId() === 'nav-timeline'}>
-        <ShowcaseSection title="Timeline" subtitle="Chronological list of events">
+      <Show when={sectionId() === 'nav-pagination'}>
+        <ShowcaseSection title="Pagination" subtitle="Navigate between list and content pages">
           <PreviewPanel>
             <PreviewGroup title="Examples">
-              <Timeline items={TIMELINE_ITEMS} />
+              <Pagination page={page()} totalPages={24} onChange={setPage} previousLabel="Previous" nextLabel="Next" />
+              <Text as="p" variant="bodySm" tone="muted" class="mutedText">
+                Current page: <strong>{page()}</strong>
+              </Text>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
       </Show>
 
-      <Show when={sectionId() === 'nav-command-fab'}>
-        <ShowcaseSection title="Command Palette" subtitle="Keyboard-driven command launcher with grouped results">
-          <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <Button variant="primary" onClick={() => setCommandOpen(true)}>
-                Open Command Palette (Ctrl+K)
-              </Button>
-              <CommandPalette open={commandOpen()} onClose={() => setCommandOpen(false)} items={commandItems} />
-            </PreviewGroup>
-          </PreviewPanel>
-        </ShowcaseSection>
-
+      <Show when={sectionId() === 'nav-speed-dial'}>
         <ShowcaseSection title="Speed Dial (FAB)" subtitle="Quick actions with tooltip labels">
           <PreviewPanel>
             <PreviewGroup title="Direction variants">
@@ -261,7 +301,7 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
                         {variant.title}
                       </Text>
                       <div class="speedDialAnchor">
-                        <SpeedDial actions={SPEED_DIAL_ACTIONS} position="inline" direction={variant.direction} />
+                        <SpeedDial actions={getSpeedDialActions()} position="inline" direction={variant.direction} />
                       </div>
                     </div>
                   )}
@@ -284,7 +324,7 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
                 </div>
                 <BottomNav
                   placement="container"
-                  items={BOTTOM_NAV_ITEMS}
+                  items={getBottomNavItems()}
                   activeId={activeBottomNav()}
                   onChange={setActiveBottomNav}
                 />

@@ -1,13 +1,14 @@
 import { FiAlertTriangle, FiHelpCircle } from 'solid-icons/fi';
 
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
 import Button from '../../buttons/Button/Button';
 import Text from '../../typography/Text/Text';
 import Dialog from '../Dialog/Dialog';
-import DialogActions from '../Dialog/DialogActions';
-import DialogBody from '../Dialog/DialogBody';
-import DialogTitle from '../Dialog/DialogTitle';
+import DialogActions from '../DialogActions/DialogActions';
+import DialogBody from '../DialogBody/DialogBody';
+import DialogTitle from '../DialogTitle/DialogTitle';
 import styles from './ConfirmDialog.module.css';
 
 interface ConfirmDialogProps {
@@ -28,10 +29,10 @@ const ConfirmDialog = (props: Props<ConfirmDialogProps>) => {
     <Dialog open={props.open} onClose={props.onClose} class={props.class}>
       <DialogTitle>{props.title}</DialogTitle>
       <DialogBody>
-        <div class={`${styles.iconWrapper} ${isDanger() ? styles.iconDanger : styles.iconPrimary}`}>
+        <div class={classNames(styles.iconWrapper, isDanger() ? styles.iconDanger : styles.iconPrimary)}>
           {isDanger() ? <FiAlertTriangle /> : <FiHelpCircle />}
         </div>
-        <Text as="p" class={styles.message}>
+        <Text as="p" variant="bodyMd" tone="muted">
           {props.message}
         </Text>
       </DialogBody>

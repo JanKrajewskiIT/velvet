@@ -9,8 +9,11 @@ alwaysApply: false
 - camelCase classes (`.menuItem`) -- never kebab/PascalCase
 - Design tokens from `globals.css`: `var(--color-*)`, `var(--spacing-*)`, `var(--font-size-*)`, `var(--radius-*)`, `var(--shadow-*)`
 - Never hardcode colors/spacing/shadows
-- Prefer style composition for shared primitives (`composes: ... from '../shared/*.module.css'`)
-- Shared imports are allowed only from dedicated primitive/style folders (`inputs/shared`, equivalent shared folders), not arbitrary sibling components
+- Do not use `composes` in `*.module.css`
+- Reuse shared primitive styles by importing their CSS modules in TSX and combining classes with `classNames()`
+- Shared style-module imports should come from dedicated primitive/style folders (`inputs/shared`, equivalent shared folders), not arbitrary sibling components
+- Prefer `ComponentName.tsx` + `ComponentName.module.css` pairs; avoid standalone `*.module.css` without a corresponding component
+- Exception: shared primitive style modules can stay standalone when reused across different element types (e.g. button/select/input/div)
 - Dark theme via semantic tokens -- never target `[data-theme='dark']`
 
 ## CSS custom properties for dynamic values

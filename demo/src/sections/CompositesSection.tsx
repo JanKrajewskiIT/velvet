@@ -5,10 +5,8 @@ import {
   Button,
   Chip,
   CodeText,
+  CommandPalette,
   EditableCollection,
-  FilterBar,
-  type FilterBarFilter,
-  type FilterBarValue,
   FormField,
   IconButton,
   Input,
@@ -17,13 +15,27 @@ import {
   type KanbanItemBase,
   Scheduler,
   type SchedulerEvent,
+  Select,
   Text,
   type TransferItem,
   TransferList,
   Wizard,
 } from '@jankrajewskiit/ui';
-import { IoTrash } from 'solid-icons/io';
-import { createSignal, Show } from 'solid-js';
+import {
+  IoAdd,
+  IoCalendar,
+  IoCopy,
+  IoDocumentText,
+  IoDownload,
+  IoHome,
+  IoMail,
+  IoNotifications,
+  IoPencil,
+  IoSearch,
+  IoSettings,
+  IoTrash,
+} from 'solid-icons/io';
+import { createMemo, createSignal, For, Show } from 'solid-js';
 
 import type { SectionId } from '../App';
 import { PreviewGroup, PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
@@ -38,41 +50,21 @@ const INITIAL_SOURCE: TransferItem[] = [
 
 const INITIAL_TARGET: TransferItem[] = [{ id: '6', label: 'SolidJS' }];
 
-const FILTER_DEFINITIONS: FilterBarFilter[] = [
-  {
-    key: 'status',
-    label: 'Status',
-    options: [
-      { value: 'todo', label: 'To do' },
-      { value: 'in-progress', label: 'In progress' },
-      { value: 'done', label: 'Done' },
-    ],
-    placeholder: 'Any status',
-  },
-  {
-    key: 'owner',
-    label: 'Owner',
-    options: [
-      { value: 'anna', label: 'Anna' },
-      { value: 'marek', label: 'Marek' },
-      { value: 'jan', label: 'Jan' },
-      { value: 'kasia', label: 'Kasia' },
-    ],
-    placeholder: 'Any owner',
-  },
-  {
-    key: 'priority',
-    label: 'Priority',
-    options: [
-      { value: 'low', label: 'Low' },
-      { value: 'medium', label: 'Medium' },
-      { value: 'high', label: 'High' },
-    ],
-    placeholder: 'Any priority',
-  },
-];
-
 type AnalysisState = 'idle' | 'loading' | 'result' | 'error';
+
+interface AiRunScenario {
+  id: string;
+  label: string;
+  state: AnalysisState;
+  score: number;
+  scoreLabel: string;
+  summary: string;
+  sections: {
+    icon: 'success' | 'danger' | 'info';
+    title: string;
+    items: string[];
+  }[];
+}
 
 interface TaskItem {
   id: string;
@@ -164,31 +156,207 @@ const SCHEDULER_EVENTS: SchedulerEvent[] = [
   },
 ];
 
+const COMMAND_ITEMS = [
+  {
+    id: 'dashboard',
+    label: 'Go to Dashboard',
+    description: 'Navigate to main dashboard',
+    group: 'Navigation',
+    icon: <IoHome size={16} />,
+    onSelect: () => {},
+  },
+  {
+    id: 'settings',
+    label: 'Go to Settings',
+    description: 'Open app settings',
+    group: 'Navigation',
+    icon: <IoSettings size={16} />,
+    onSelect: () => {},
+  },
+  {
+    id: 'projects',
+    label: 'Go to Projects',
+    description: 'Open projects workspace',
+    group: 'Navigation',
+    icon: <IoDocumentText size={16} />,
+    onSelect: () => {},
+  },
+  {
+    id: 'inbox',
+    label: 'Go to Inbox',
+    description: 'Review recent updates and messages',
+    group: 'Navigation',
+    icon: <IoMail size={16} />,
+    onSelect: () => {},
+  },
+  {
+    id: 'create',
+    label: 'Create new item',
+    description: 'Add a new entry',
+    group: 'Actions',
+    icon: <IoAdd size={16} />,
+    onSelect: () => {},
+  },
+  {
+    id: 'export',
+    label: 'Export data',
+    description: 'Download selected records as CSV',
+    group: 'Actions',
+    icon: <IoDownload size={16} />,
+    onSelect: () => {},
+  },
+  {
+    id: 'duplicate',
+    label: 'Duplicate item',
+    description: 'Create a copy of the current entry',
+    group: 'Actions',
+    icon: <IoCopy size={16} />,
+    onSelect: () => {},
+  },
+  {
+    id: 'bulk-archive',
+    label: 'Archive selected',
+    description: 'Move selected entries to archive',
+    group: 'Actions',
+    icon: <IoTrash size={16} />,
+    onSelect: () => {},
+  },
+  {
+    id: 'theme-light',
+    label: 'Switch to light theme',
+    description: 'Apply light mode colors',
+    group: 'Preferences',
+    icon: <IoSettings size={16} />,
+    onSelect: () => {},
+  },
+  {
+    id: 'theme-dark',
+    label: 'Switch to dark theme',
+    description: 'Apply dark mode colors',
+    group: 'Preferences',
+    icon: <IoNotifications size={16} />,
+    onSelect: () => {},
+  },
+  {
+    id: 'open-shortcuts',
+    label: 'Open keyboard shortcuts',
+    description: 'Show list of available hotkeys',
+    group: 'Preferences',
+    icon: <IoSearch size={16} />,
+    onSelect: () => {},
+  },
+  {
+    id: 'schedule-review',
+    label: 'Schedule review',
+    description: 'Plan a calendar slot for design QA',
+    group: 'Preferences',
+    icon: <IoCalendar size={16} />,
+    onSelect: () => {},
+  },
+  {
+    id: 'rename-item',
+    label: 'Rename current item',
+    description: 'Edit the title without leaving this view',
+    group: 'Actions',
+    icon: <IoPencil size={16} />,
+    onSelect: () => {},
+  },
+];
+
+const AI_RUN_SCENARIOS: readonly AiRunScenario[] = [
+  {
+    id: 'a11y-audit',
+    label: 'Accessibility audit',
+    state: 'result',
+    score: 91,
+    scoreLabel: 'Accessibility compliance',
+    summary:
+      'Core primitives are now consistent for keyboard focus, but two complex composites still need aria regression checks.',
+    sections: [
+      {
+        icon: 'success',
+        title: 'Strong areas',
+        items: [
+          'Form controls expose accessible labels and descriptions',
+          'Heading hierarchy is consistent across key layouts',
+          'Color tokens keep contrast stable in both themes',
+        ],
+      },
+      {
+        icon: 'info',
+        title: 'Suggested next steps',
+        items: [
+          'Add keyboard e2e checks for DataGridPro drag and resize flows',
+          'Validate screen reader announcements for status-heavy components',
+        ],
+      },
+    ],
+  },
+  {
+    id: 'run-failure',
+    label: 'Error state',
+    state: 'error',
+    score: 0,
+    scoreLabel: 'Run failed',
+    summary: 'The analysis endpoint returned an internal error while building the latest component map.',
+    sections: [
+      {
+        icon: 'danger',
+        title: 'Failure details',
+        items: ['Request timeout after 12s', 'Two input snapshots were incomplete in this run'],
+      },
+    ],
+  },
+  {
+    id: 'interaction-review',
+    label: 'Interaction review',
+    state: 'result',
+    score: 84,
+    scoreLabel: 'Interaction consistency',
+    summary:
+      'Most action patterns are now unified, but there are still minor differences in secondary button emphasis.',
+    sections: [
+      {
+        icon: 'success',
+        title: 'Progress made',
+        items: [
+          'Toolbar actions use shared Button primitives',
+          'Filter and sorting behaviors are aligned between tabular composites',
+        ],
+      },
+      {
+        icon: 'danger',
+        title: 'Follow-up required',
+        items: [
+          'Normalize ghost button contrast in dense table headers',
+          'Unify helper text spacing in edge-case field wrappers',
+        ],
+      },
+    ],
+  },
+];
+
 const CompositesSection = (props: { sectionId: SectionId }) => {
   const sectionId = () => props.sectionId;
   const [sourceItems, setSourceItems] = createSignal<TransferItem[]>(INITIAL_SOURCE);
   const [targetItems, setTargetItems] = createSignal<TransferItem[]>(INITIAL_TARGET);
   const [analysisState, setAnalysisState] = createSignal<AnalysisState>('idle');
-  const [resultNext, setResultNext] = createSignal(true);
+  const [selectedScenarioId, setSelectedScenarioId] = createSignal(AI_RUN_SCENARIOS[0]?.id ?? '');
   const [tasks, setTasks] = createSignal<TaskItem[]>([createTask(1), createTask(2)]);
-  const [filtersQuery, setFiltersQuery] = createSignal('');
-  const [filtersValue, setFiltersValue] = createSignal<FilterBarValue[]>([
-    { key: 'status', value: 'in-progress' },
-    { key: 'priority', value: 'high' },
-  ]);
   const [kanbanItems, setKanbanItems] = createSignal<KanbanDemoItem[]>(INITIAL_KANBAN_ITEMS);
   const [schedulerEvents, setSchedulerEvents] = createSignal<SchedulerEvent[]>(SCHEDULER_EVENTS);
+  const [commandOpen, setCommandOpen] = createSignal(false);
 
   const wizardSteps = [
     {
       label: 'Account',
       component: (
         <div class="col">
-          <FormField label="Email" id="wiz-email">
-            <Input id="wiz-email" type="email" placeholder="you@example.com" />
+          <FormField label="Email">
+            {(fieldProps) => <Input {...fieldProps} type="email" placeholder="you@example.com" />}
           </FormField>
-          <FormField label="Username" id="wiz-user">
-            <Input id="wiz-user" type="text" placeholder="jankowalski" />
+          <FormField label="Username">
+            {(fieldProps) => <Input {...fieldProps} type="text" placeholder="jankowalski" />}
           </FormField>
         </div>
       ),
@@ -197,11 +365,11 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
       label: 'Profile',
       component: (
         <div class="col">
-          <FormField label="Full name" id="wiz-name">
-            <Input id="wiz-name" type="text" placeholder="Jan Kowalski" />
+          <FormField label="Full name">
+            {(fieldProps) => <Input {...fieldProps} type="text" placeholder="Jan Kowalski" />}
           </FormField>
-          <FormField label="Bio" id="wiz-bio">
-            <Input id="wiz-bio" type="text" placeholder="Short bio..." />
+          <FormField label="Bio">
+            {(fieldProps) => <Input {...fieldProps} type="text" placeholder="Short bio..." />}
           </FormField>
         </div>
       ),
@@ -220,11 +388,15 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
     setAnalysisState('loading');
 
     setTimeout(() => {
-      const shouldSucceed = resultNext();
-      setAnalysisState(shouldSucceed ? 'result' : 'error');
-      setResultNext((current) => !current);
+      const scenario = selectedScenario();
+      if (!scenario) return;
+      setAnalysisState(scenario.state);
     }, 1200);
   };
+
+  const selectedScenario = createMemo(
+    () => AI_RUN_SCENARIOS.find((scenario) => scenario.id === selectedScenarioId()) ?? AI_RUN_SCENARIOS[0]
+  );
 
   const updateTask = (id: string, field: keyof TaskItem, value: string) => {
     setTasks((current) => current.map((task) => (task.id === id ? { ...task, [field]: value } : task)));
@@ -244,19 +416,23 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
         <IconButton icon={<IoTrash />} title="Remove task" size="sm" onClick={requestRemove} />
       </div>
       <div class="editableGrid">
-        <FormField label="Title" id={`task-title-${item.id}`}>
-          <Input
-            id={`task-title-${item.id}`}
-            value={item.title}
-            onInput={(e) => updateTask(item.id, 'title', e.currentTarget.value)}
-          />
+        <FormField label="Title">
+          {(fieldProps) => (
+            <Input
+              {...fieldProps}
+              value={item.title}
+              onInput={(e) => updateTask(item.id, 'title', e.currentTarget.value)}
+            />
+          )}
         </FormField>
-        <FormField label="Owner" id={`task-owner-${item.id}`}>
-          <Input
-            id={`task-owner-${item.id}`}
-            value={item.owner}
-            onInput={(e) => updateTask(item.id, 'owner', e.currentTarget.value)}
-          />
+        <FormField label="Owner">
+          {(fieldProps) => (
+            <Input
+              {...fieldProps}
+              value={item.owner}
+              onInput={(e) => updateTask(item.id, 'owner', e.currentTarget.value)}
+            />
+          )}
         </FormField>
       </div>
     </>
@@ -281,7 +457,7 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
 
   return (
     <div>
-      <Show when={sectionId() === 'composites-lists'}>
+      <Show when={sectionId() === 'composites-transfer-list'}>
         <ShowcaseSection title="TransferList" subtitle="Dual-list picker for moving items between groups">
           <PreviewPanel>
             <PreviewGroup title="Examples">
@@ -299,31 +475,9 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
             Check items and use the arrow buttons to transfer. Search filters within each panel.
           </ShowcaseMeta>
         </ShowcaseSection>
+      </Show>
 
-        <ShowcaseSection title="FilterBar" subtitle="Search + structured filters + active removable chips">
-          <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <FilterBar
-                filters={FILTER_DEFINITIONS}
-                value={filtersValue()}
-                onChange={setFiltersValue}
-                search={filtersQuery()}
-                onSearchChange={setFiltersQuery}
-                searchPlaceholder="Search tasks..."
-                allLabel="All"
-                clearAllLabel="Clear filters"
-                removeFilterLabel="Remove filter"
-              />
-              <Text as="p" variant="caption" tone="muted" class="mutedText">
-                Query: {filtersQuery() || 'none'} | Active filters: {filtersValue().length}
-              </Text>
-            </PreviewGroup>
-          </PreviewPanel>
-          <ShowcaseMeta>
-            Use the toolbar to compose search and filter criteria, then remove single filters via chips or reset all.
-          </ShowcaseMeta>
-        </ShowcaseSection>
-
+      <Show when={sectionId() === 'composites-editable-collection'}>
         <ShowcaseSection title="EditableCollection" subtitle="Add/remove/edit list scaffold for dynamic forms">
           <PreviewPanel>
             <PreviewGroup title="Examples">
@@ -342,7 +496,9 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
+      </Show>
 
+      <Show when={sectionId() === 'composites-kanban-board'}>
         <ShowcaseSection title="KanbanBoard" subtitle="Drag and drop cards between workflow columns">
           <PreviewPanel>
             <PreviewGroup title="Examples">
@@ -359,7 +515,7 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
         </ShowcaseSection>
       </Show>
 
-      <Show when={sectionId() === 'composites-wizard-ai'}>
+      <Show when={sectionId() === 'composites-wizard'}>
         <ShowcaseSection title="Wizard" subtitle="Multi-step guided workflow">
           <PreviewPanel>
             <PreviewGroup title="Examples">
@@ -375,7 +531,22 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
+      </Show>
 
+      <Show when={sectionId() === 'composites-command-palette'}>
+        <ShowcaseSection title="Command Palette" subtitle="Keyboard-driven command launcher with grouped results">
+          <PreviewPanel>
+            <PreviewGroup title="Examples">
+              <Button variant="primary" onClick={() => setCommandOpen(true)}>
+                Open Command Palette (Ctrl+K)
+              </Button>
+              <CommandPalette open={commandOpen()} onClose={() => setCommandOpen(false)} items={COMMAND_ITEMS} />
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+      </Show>
+
+      <Show when={sectionId() === 'composites-ai-result'}>
         <ShowcaseSection title="AiResultPanel" subtitle="Reusable result layout for AI and scoring flows">
           <PreviewPanel>
             <PreviewGroup title="Examples">
@@ -386,36 +557,40 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
                 errorText="Analysis timed out. Retry to generate a new report."
                 onRetry={runAnalysis}
                 retryLabel="Retry"
-                score={87}
-                scoreLabel="Design consistency"
-                summary="The component library now uses stronger visual hierarchy and shared interaction patterns."
-                sections={[
-                  {
-                    icon: 'success',
-                    title: 'Highlights',
-                    items: [
-                      'Unified interaction styles for buttons, inputs and tabs',
-                      'Consistent spacing and elevation across sections',
-                    ],
-                  },
-                  {
-                    icon: 'danger',
-                    title: 'Needs follow-up',
-                    items: ['Extend the same polish to all remaining secondary components'],
-                  },
-                ]}
+                score={selectedScenario()?.score ?? 0}
+                scoreLabel={selectedScenario()?.scoreLabel ?? 'Analysis'}
+                summary={selectedScenario()?.summary ?? ''}
+                sections={selectedScenario()?.sections ?? []}
                 hasResult={analysisState() === 'result'}
                 idle={
-                  <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                    Run analysis to generate a consistency report for the current component set.
-                  </Text>
+                  <div class="col colGap2xs">
+                    <Text as="p" variant="bodySm" tone="muted" class="mutedText">
+                      Run analysis to generate a consistency report for the current component set.
+                    </Text>
+                    <Text as="p" variant="caption" tone="muted" class="mutedText">
+                      Choose a scenario and run analysis to preview a specific panel state.
+                    </Text>
+                  </div>
                 }
                 actions={
-                  <ActionRow align="end">
-                    <Button variant="ghost" onClick={() => setAnalysisState('idle')}>
+                  <ActionRow align="start" class="aiActionsRow">
+                    <Select
+                      size="sm"
+                      class="aiScenarioSelect"
+                      value={selectedScenarioId()}
+                      onChange={(e) => setSelectedScenarioId(e.currentTarget.value)}
+                      aria-label="Select AI scenario"
+                    >
+                      <For each={AI_RUN_SCENARIOS}>
+                        {(scenario) => <option value={scenario.id}>{scenario.label}</option>}
+                      </For>
+                    </Select>
+                    <Button size="sm" variant="ghost" class="aiActionButton" onClick={() => setAnalysisState('idle')}>
                       Reset
                     </Button>
-                    <Button onClick={runAnalysis}>Run analysis</Button>
+                    <Button size="sm" class="aiActionButton aiRunButton" onClick={runAnalysis}>
+                      Run analysis
+                    </Button>
                   </ActionRow>
                 }
               />

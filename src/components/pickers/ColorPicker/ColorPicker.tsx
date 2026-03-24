@@ -6,14 +6,28 @@ import classNames from '~/utils/classNames';
 import styles from './ColorPicker.module.css';
 
 interface ColorPickerProps {
+  id?: string;
   colors: string[];
   value: string;
   onChange: (color: string) => void;
   disabled?: boolean;
+  'aria-labelledby'?: string;
+  'aria-describedby'?: string;
+  'aria-invalid'?: true;
 }
 
 const ColorPicker = (props: Props<ColorPickerProps>) => {
-  const [local, rest] = splitProps(props, ['colors', 'value', 'onChange', 'disabled', 'class']);
+  const [local, rest] = splitProps(props, [
+    'id',
+    'colors',
+    'value',
+    'onChange',
+    'disabled',
+    'aria-labelledby',
+    'aria-describedby',
+    'aria-invalid',
+    'class',
+  ]);
 
   const optionRefs: (HTMLButtonElement | undefined)[] = [];
 
@@ -65,8 +79,12 @@ const ColorPicker = (props: Props<ColorPickerProps>) => {
   return (
     <div
       {...rest}
+      id={local.id}
       class={classNames(styles.colorPicker, local.disabled && styles.disabled, local.class)}
       role="radiogroup"
+      aria-labelledby={local['aria-labelledby']}
+      aria-describedby={local['aria-describedby']}
+      aria-invalid={local['aria-invalid']}
     >
       <For each={local.colors}>
         {(c, index) => (

@@ -1,25 +1,19 @@
-import { FiChevronLeft, FiChevronRight } from 'solid-icons/fi';
 import { createEffect, createMemo, createSignal, For, type JSX, Show, splitProps } from 'solid-js';
 
 import Button from '~/components/buttons/Button/Button';
-import IconButton from '~/components/buttons/IconButton/IconButton';
-import Card from '~/components/data-display/Card/Card';
-import Input from '~/components/inputs/Input/Input';
-import TextArea from '~/components/inputs/TextArea/TextArea';
 import ConfirmDialog from '~/components/overlays/ConfirmDialog/ConfirmDialog';
+import Card from '~/components/surfaces/Card/Card';
 import Heading from '~/components/typography/Heading/Heading';
 import Text from '~/components/typography/Text/Text';
 import useEscapeKey from '~/hooks/useEscapeKey';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
+import { buildDaysGrid, type DayCell, toIso } from '../shared/calendar';
 import styles from './Scheduler.module.css';
-
-interface SchedulerDayCell {
-  iso: string;
-  day: number;
-  outside: boolean;
-}
+import SchedulerCalendar from './SchedulerCalendar';
+import SchedulerEventForm from './SchedulerEventForm';
+import SchedulerEventItem from './SchedulerEventItem';
 
 type SchedulerDragType = 'move' | 'resize-end';
 
@@ -73,10 +67,7 @@ interface SchedulerMessages {
 
 const DAY_NAMES_DEFAULT = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
-const pad = (value: number): string => String(value).padStart(2, '0');
-const toIsoDate = (year: number, month: number, day: number): string => `${year}-${pad(month + 1)}-${pad(day)}`;
 const MS_IN_DAY = 24 * 60 * 60 * 1000;
-
 const isoToDate = (iso: string): Date => {
   const [yearRaw, monthRaw, dayRaw] = iso.split('-');
   return new Date(Number(yearRaw), Number(monthRaw) - 1, Number(dayRaw));
@@ -85,7 +76,7 @@ const isoToDate = (iso: string): Date => {
 const addDays = (iso: string, delta: number): string => {
   const date = isoToDate(iso);
   const next = new Date(date.getFullYear(), date.getMonth(), date.getDate() + delta);
-  return toIsoDate(next.getFullYear(), next.getMonth(), next.getDate());
+  return toIso(next.getFullYear(), next.getMonth(), next.getDate());
 };
 
 const getDateDiffInDays = (fromIso: string, toIso: string): number => {
@@ -111,46 +102,6 @@ const parseIsoDate = (isoDate?: string): { year: number; month: number; day: num
   return { year, month, day };
 };
 
-const buildMonthGrid = (year: number, month: number): SchedulerDayCell[] => {
-  const firstWeekday = new Date(year, month, 1).getDay();
-  const mondayOffset = (firstWeekday + 6) % 7;
-  const daysInCurrent = new Date(year, month + 1, 0).getDate();
-  const daysInPrevious = new Date(year, month, 0).getDate();
-  const cells: SchedulerDayCell[] = [];
-
-  for (let i = mondayOffset - 1; i >= 0; i--) {
-    const day = daysInPrevious - i;
-    const previousMonth = month === 0 ? 11 : month - 1;
-    const previousYear = month === 0 ? year - 1 : year;
-    cells.push({
-      iso: toIsoDate(previousYear, previousMonth, day),
-      day,
-      outside: true,
-    });
-  }
-
-  for (let day = 1; day <= daysInCurrent; day++) {
-    cells.push({
-      iso: toIsoDate(year, month, day),
-      day,
-      outside: false,
-    });
-  }
-
-  const remaining = 42 - cells.length;
-  for (let day = 1; day <= remaining; day++) {
-    const nextMonth = month === 11 ? 0 : month + 1;
-    const nextYear = month === 11 ? year + 1 : year;
-    cells.push({
-      iso: toIsoDate(nextYear, nextMonth, day),
-      day,
-      outside: true,
-    });
-  }
-
-  return cells;
-};
-
 const Scheduler = (props: Props<SchedulerOwnProps>) => {
   const [local, rest] = splitProps(props, [
     'events',
@@ -169,7 +120,7 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
   ]);
   const now = new Date();
   const [internalSelectedDate, setInternalSelectedDate] = createSignal(
-    local.defaultSelectedDate ?? toIsoDate(now.getFullYear(), now.getMonth(), now.getDate())
+    local.defaultSelectedDate ?? toIso(now.getFullYear(), now.getMonth(), now.getDate())
   );
   const [viewYear, setViewYear] = createSignal(now.getFullYear());
   const [viewMonth, setViewMonth] = createSignal(now.getMonth());
@@ -213,12 +164,11 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
   const [createOpen, setCreateOpen] = createSignal(false);
   const [draftTitle, setDraftTitle] = createSignal('');
   const [draftTime, setDraftTime] = createSignal('');
-  const [draftEndDate, setDraftEndDate] = createSignal('');
   const [draftDescription, setDraftDescription] = createSignal('');
   const [editingEventId, setEditingEventId] = createSignal<string | null>(null);
+  const [editDate, setEditDate] = createSignal('');
   const [editTitle, setEditTitle] = createSignal('');
   const [editTime, setEditTime] = createSignal('');
-  const [editEndDate, setEditEndDate] = createSignal('');
   const [editDescription, setEditDescription] = createSignal('');
   const [deleteConfirmEventId, setDeleteConfirmEventId] = createSignal<string | null>(null);
   let createTitleInputRef: HTMLInputElement | undefined;
@@ -231,7 +181,7 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
     })
   );
 
-  const gridDays = createMemo(() => buildMonthGrid(viewYear(), viewMonth()));
+  const gridDays = createMemo(() => buildDaysGrid(viewYear(), viewMonth()));
 
   const eventsByDate = createMemo(() => {
     const map = new Map<string, SchedulerEvent[]>();
@@ -252,7 +202,7 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
   });
 
   const selectedDayEvents = createMemo(() => eventsByDate().get(selectedDate()) ?? []);
-  const todayIso = toIsoDate(now.getFullYear(), now.getMonth(), now.getDate());
+  const todayIso = toIso(now.getFullYear(), now.getMonth(), now.getDate());
 
   const setSelectedDate = (nextDate: string) => {
     setInternalSelectedDate(nextDate);
@@ -279,7 +229,7 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
 
   const goToToday = () => {
     const today = new Date();
-    const iso = toIsoDate(today.getFullYear(), today.getMonth(), today.getDate());
+    const iso = toIso(today.getFullYear(), today.getMonth(), today.getDate());
     setViewYear(today.getFullYear());
     setViewMonth(today.getMonth());
     setSelectedDate(iso);
@@ -288,7 +238,6 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
   const resetDraft = () => {
     setDraftTitle('');
     setDraftTime('');
-    setDraftEndDate('');
     setDraftDescription('');
   };
 
@@ -307,9 +256,9 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
 
   const resetEdit = () => {
     setEditingEventId(null);
+    setEditDate('');
     setEditTitle('');
     setEditTime('');
-    setEditEndDate('');
     setEditDescription('');
   };
 
@@ -319,17 +268,12 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
     const title = draftTitle().trim();
     if (!title) return;
 
-    const rawEndDate = draftEndDate();
-    const selected = selectedDate();
-    const normalizedEndDate =
-      rawEndDate.length > 0 && rawEndDate >= selected && rawEndDate !== selected ? rawEndDate : undefined;
     const descriptionValue = draftDescription().trim();
 
     const nextEvent: SchedulerEvent = {
       id: typeof crypto !== 'undefined' ? crypto.randomUUID() : `event-${Date.now()}`,
       title,
       date: selectedDate(),
-      endDate: normalizedEndDate,
       time: draftTime() || undefined,
       description: descriptionValue || undefined,
     };
@@ -341,9 +285,9 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
     if (!canEditEvents()) return;
     closeCreate();
     setEditingEventId(event.id);
+    setEditDate(event.date);
     setEditTitle(event.title);
     setEditTime(event.time ?? '');
-    setEditEndDate(event.endDate ?? '');
     setEditDescription(event.description ?? '');
   };
 
@@ -355,18 +299,19 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
     const source = local.events.find((item) => item.id === eventId);
     if (!source) return;
 
-    const rawEndDate = editEndDate();
-    const normalizedEndDate =
-      rawEndDate && rawEndDate >= source.date && rawEndDate !== source.date ? rawEndDate : undefined;
+    const nextDate = editDate() || source.date;
+    const dateOffset = getDateDiffInDays(source.date, nextDate);
+    const nextEndDate = source.endDate ? addDays(source.endDate, dateOffset) : undefined;
     const descriptionValue = editDescription().trim();
 
     const nextEvents = local.events.map((item) =>
       item.id === eventId
         ? {
             ...item,
+            date: nextDate,
             title,
             time: editTime() || undefined,
-            endDate: normalizedEndDate,
+            endDate: nextEndDate,
             description: descriptionValue || undefined,
           }
         : item
@@ -424,45 +369,37 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
     local.onEventsChange?.(nextEvents);
   };
 
-  const dayButtonClass = (cell: SchedulerDayCell) =>
-    classNames(
-      styles.dayCell,
-      cell.outside && styles.dayOutside,
-      cell.iso === selectedDate() && styles.daySelected,
-      cell.iso === todayIso && styles.dayToday,
-      dragOverDate() === cell.iso && styles.dayDragOver
-    );
-
   const eventLabel = (event: SchedulerEvent): string => {
     if (!event.endDate || event.endDate === event.date) return event.date;
     return `${event.date} - ${event.endDate}`;
   };
 
-  const handleDayDragOver = (cell: SchedulerDayCell, e: DragEvent) => {
+  const handleDayDragOver = (cell: DayCell, e: DragEvent) => {
     if (!draggableEvents() || !local.onEventsChange) return;
     if (!dragState()) return;
     e.preventDefault();
-    setDragOverDate(cell.iso);
+    setDragOverDate(toIso(cell.year, cell.month, cell.day));
   };
 
-  const handleDayDrop = (cell: SchedulerDayCell, e: DragEvent) => {
+  const handleDayDrop = (cell: DayCell, e: DragEvent) => {
     if (!draggableEvents() || !local.onEventsChange) return;
     e.preventDefault();
     const activeDrag = dragState();
+    const targetIso = toIso(cell.year, cell.month, cell.day);
     if (activeDrag?.eventId) {
       if (activeDrag.type === 'move') {
-        moveEventToDate(activeDrag.eventId, cell.iso);
+        moveEventToDate(activeDrag.eventId, targetIso);
       } else {
-        resizeEventEndDate(activeDrag.eventId, cell.iso);
+        resizeEventEndDate(activeDrag.eventId, targetIso);
       }
-      setSelectedDate(cell.iso);
+      setSelectedDate(targetIso);
     }
     setDragState(null);
     setDragOverDate(null);
   };
 
-  const handleDayDragLeave = (cell: SchedulerDayCell) => {
-    if (dragOverDate() === cell.iso) {
+  const handleDayDragLeave = (cell: DayCell) => {
+    if (dragOverDate() === toIso(cell.year, cell.month, cell.day)) {
       setDragOverDate(null);
     }
   };
@@ -492,7 +429,7 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
   );
 
   createEffect(() => {
-    local.onMonthChange?.(`${viewYear()}-${pad(viewMonth() + 1)}`);
+    local.onMonthChange?.(toIso(viewYear(), viewMonth(), 1).slice(0, 7));
   });
 
   createEffect(() => {
@@ -513,60 +450,31 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
 
   return (
     <div {...rest} class={classNames(styles.scheduler, local.class)}>
-      <Card class={styles.calendarPanel}>
-        <header class={styles.calendarHeader}>
-          <IconButton
-            icon={<FiChevronLeft />}
-            title={previousMonthLabel()}
-            size="sm"
-            variant="outline"
-            onClick={goToPreviousMonth}
-          />
-          <Heading as="h3" level={3} class={styles.monthLabel}>
-            {monthLabel()}
-          </Heading>
-          <IconButton
-            icon={<FiChevronRight />}
-            title={nextMonthLabel()}
-            size="sm"
-            variant="outline"
-            onClick={goToNextMonth}
-          />
-        </header>
-
-        <div class={styles.weekHeader}>
-          <For each={dayNames()}>{(dayName) => <span class={styles.weekDay}>{dayName}</span>}</For>
-        </div>
-
-        <div class={styles.grid}>
-          <For each={gridDays()}>
-            {(cell) => (
-              <Show when={showAdjacentDays() || !cell.outside}>
-                <button
-                  type="button"
-                  class={dayButtonClass(cell)}
-                  onClick={() => setSelectedDate(cell.iso)}
-                  onDblClick={() => openCreateForDate(cell.iso)}
-                  onDragOver={(e) => handleDayDragOver(cell, e)}
-                  onDrop={(e) => handleDayDrop(cell, e)}
-                  onDragLeave={() => handleDayDragLeave(cell)}
-                  aria-pressed={cell.iso === selectedDate()}
-                  aria-label={cell.iso}
-                >
-                  <span>{cell.day}</span>
-                  <Show when={(eventsByDate().get(cell.iso)?.length ?? 0) > 0}>
-                    <span class={styles.dayBadge}>{eventsByDate().get(cell.iso)?.length}</span>
-                  </Show>
-                </button>
-              </Show>
-            )}
-          </For>
-        </div>
+      <Card class={styles.calendarPanel} style={{ overflow: 'visible', position: 'relative', 'z-index': 1 }}>
+        <SchedulerCalendar
+          monthLabel={monthLabel()}
+          previousMonthLabel={previousMonthLabel()}
+          nextMonthLabel={nextMonthLabel()}
+          dayNames={dayNames()}
+          gridDays={gridDays()}
+          selectedDate={selectedDate()}
+          todayIso={todayIso}
+          dragOverDate={dragOverDate()}
+          showAdjacentDays={showAdjacentDays()}
+          eventsByDate={eventsByDate()}
+          onPreviousMonth={goToPreviousMonth}
+          onNextMonth={goToNextMonth}
+          onSelectDate={setSelectedDate}
+          onOpenCreateForDate={openCreateForDate}
+          onDayDragOver={handleDayDragOver}
+          onDayDrop={handleDayDrop}
+          onDayDragLeave={handleDayDragLeave}
+        />
       </Card>
 
-      <Card class={styles.eventsPanel}>
+      <Card class={styles.eventsPanel} style={{ overflow: 'visible', position: 'relative', 'z-index': 2 }}>
         <div class={styles.eventsHeader}>
-          <Heading as="h4" level={4} class={styles.eventsTitle}>
+          <Heading as="h4" level={4} variant="titleMd">
             {agendaTitle()}
           </Heading>
           <div class={styles.eventsHeaderActions}>
@@ -580,150 +488,79 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
             </Button>
           </div>
         </div>
-        <Text as="p" class={styles.selectedDateLabel}>
+        <Text as="p" variant="bodySm" tone="secondary">
           {selectedDate()}
         </Text>
         <Show when={createOpen()}>
-          <form class={styles.createForm} onSubmit={createEvent}>
-            <Input
-              ref={createTitleInputRef}
-              type="text"
-              placeholder={eventTitlePlaceholder()}
-              value={draftTitle()}
-              onInput={(event) => setDraftTitle(event.currentTarget.value)}
-              required
-            />
-            <div class={styles.createRow}>
-              <Input type="time" value={draftTime()} onInput={(event) => setDraftTime(event.currentTarget.value)} />
-              <Input
-                type="date"
-                min={selectedDate()}
-                value={draftEndDate()}
-                onInput={(event) => setDraftEndDate(event.currentTarget.value)}
-              />
-            </div>
-            <TextArea
-              placeholder={descriptionPlaceholder()}
-              value={draftDescription()}
-              onInput={(event) => setDraftDescription(event.currentTarget.value)}
-            />
-            <div class={styles.createActions}>
-              <Button size="sm" variant="ghost" onClick={closeCreate}>
-                {cancelLabel()}
-              </Button>
-              <Button size="sm" variant="primary" type="submit">
-                {saveLabel()}
-              </Button>
-            </div>
-          </form>
+          <SchedulerEventForm
+            titleRef={(element) => {
+              createTitleInputRef = element;
+            }}
+            title={draftTitle()}
+            onTitleChange={setDraftTitle}
+            date={selectedDate()}
+            time={draftTime()}
+            onDateTimeChange={(date, time) => {
+              if (date) setSelectedDate(date);
+              setDraftTime(time);
+            }}
+            description={draftDescription()}
+            onDescriptionChange={setDraftDescription}
+            titlePlaceholder={eventTitlePlaceholder()}
+            descriptionPlaceholder={descriptionPlaceholder()}
+            cancelLabel={cancelLabel()}
+            submitLabel={saveLabel()}
+            onCancel={closeCreate}
+            onSubmit={createEvent}
+          />
         </Show>
         <div class={styles.eventsList}>
           <Show
             when={selectedDayEvents().length > 0}
             fallback={
-              <Text as="p" class={styles.emptyLabel}>
+              <Text as="p" variant="bodySm" tone="muted">
                 {local.emptyDayLabel ?? noEventsLabel()}
               </Text>
             }
           >
             <For each={selectedDayEvents()}>
               {(event) => (
-                <article
-                  class={classNames(styles.eventItem, dragState()?.eventId === event.id && styles.eventDragging)}
-                >
-                  <Show
-                    when={editingEventId() !== event.id}
-                    fallback={
-                      <form class={styles.createForm} onSubmit={(submitEvent) => saveEdit(event.id, submitEvent)}>
-                        <Input
-                          ref={editTitleInputRef}
-                          type="text"
-                          value={editTitle()}
-                          onInput={(inputEvent) => setEditTitle(inputEvent.currentTarget.value)}
-                          required
-                        />
-                        <div class={styles.createRow}>
-                          <Input
-                            type="time"
-                            value={editTime()}
-                            onInput={(inputEvent) => setEditTime(inputEvent.currentTarget.value)}
-                          />
-                          <Input
-                            type="date"
-                            min={event.date}
-                            value={editEndDate()}
-                            onInput={(inputEvent) => setEditEndDate(inputEvent.currentTarget.value)}
-                          />
-                        </div>
-                        <TextArea
-                          value={editDescription()}
-                          onInput={(inputEvent) => setEditDescription(inputEvent.currentTarget.value)}
-                        />
-                        <div class={styles.createActions}>
-                          <Button size="sm" variant="ghost" onClick={resetEdit}>
-                            {cancelLabel()}
-                          </Button>
-                          <Button size="sm" variant="primary" type="submit">
-                            {saveChangesLabel()}
-                          </Button>
-                        </div>
-                      </form>
-                    }
-                  >
-                    <header class={styles.eventHeader}>
-                      <Text as="span" variant="labelLg" class={styles.eventTitle}>
-                        {event.title}
-                      </Text>
-                      <Show when={event.time}>
-                        <span class={styles.eventTime}>{event.time}</span>
-                      </Show>
-                    </header>
-                    <Text as="p" class={styles.eventDate}>
-                      {eventLabel(event)}
-                    </Text>
-                    <Show when={event.description}>
-                      <Text as="p" class={styles.eventDescription}>
-                        {event.description}
-                      </Text>
-                    </Show>
-                    <Show when={canEditEvents()}>
-                      <div class={styles.eventActions}>
-                        <Button size="sm" variant="ghost" onClick={() => openEdit(event)}>
-                          {editLabel()}
-                        </Button>
-                        <Button size="sm" variant="danger" onClick={() => requestDeleteEvent(event.id)}>
-                          {deleteLabel()}
-                        </Button>
-                      </div>
-                    </Show>
-                    <Show when={draggableEvents() && Boolean(local.onEventsChange)}>
-                      <div class={styles.eventActions}>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          class={styles.dragAction}
-                          draggable
-                          onDragStart={(e) => handleEventDragStart(event.id, 'move', e)}
-                          onDragEnd={handleEventDragEnd}
-                          aria-label={moveAriaLabel(event.title)}
-                        >
-                          {moveLabel()}
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          class={styles.dragAction}
-                          draggable
-                          onDragStart={(e) => handleEventDragStart(event.id, 'resize-end', e)}
-                          onDragEnd={handleEventDragEnd}
-                          aria-label={resizeEndAriaLabel(event.title)}
-                        >
-                          {resizeEndLabel()}
-                        </Button>
-                      </div>
-                    </Show>
-                  </Show>
-                </article>
+                <SchedulerEventItem
+                  event={event}
+                  isDragging={dragState()?.eventId === event.id}
+                  isEditing={editingEventId() === event.id}
+                  canEditEvents={canEditEvents()}
+                  canDragEvents={draggableEvents() && Boolean(local.onEventsChange)}
+                  editLabel={editLabel()}
+                  deleteLabel={deleteLabel()}
+                  moveLabel={moveLabel()}
+                  resizeEndLabel={resizeEndLabel()}
+                  moveAriaLabel={moveAriaLabel(event.title)}
+                  resizeEndAriaLabel={resizeEndAriaLabel(event.title)}
+                  cancelLabel={cancelLabel()}
+                  saveChangesLabel={saveChangesLabel()}
+                  editTitle={editTitle()}
+                  editDate={editDate()}
+                  editTime={editTime()}
+                  editDescription={editDescription()}
+                  onOpenEdit={() => openEdit(event)}
+                  onRequestDelete={() => requestDeleteEvent(event.id)}
+                  onMoveDragStart={(e) => handleEventDragStart(event.id, 'move', e)}
+                  onResizeDragStart={(e) => handleEventDragStart(event.id, 'resize-end', e)}
+                  onDragEnd={handleEventDragEnd}
+                  onEditTitleChange={setEditTitle}
+                  onEditDateTimeChange={(date, time) => {
+                    if (date) setEditDate(date);
+                    setEditTime(time);
+                  }}
+                  onEditDescriptionChange={setEditDescription}
+                  onCancelEdit={resetEdit}
+                  onSaveEdit={(submitEvent) => saveEdit(event.id, submitEvent)}
+                  editTitleRef={(element) => {
+                    editTitleInputRef = element;
+                  }}
+                  eventLabel={eventLabel(event)}
+                />
               )}
             </For>
           </Show>

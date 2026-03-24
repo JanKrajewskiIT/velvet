@@ -1,16 +1,23 @@
-import type { JSX } from 'solid-js';
+import { type JSX, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
+import Grid from '../../surfaces/Grid/Grid';
 import styles from './FormGrid.module.css';
 
-interface FormGridProps {
+interface FormGridOwnProps extends JSX.HTMLAttributes<HTMLDivElement> {
   children: JSX.Element;
 }
 
-const FormGrid = (props: Props<FormGridProps>) => {
-  return <div class={classNames(styles.grid, props.class)}>{props.children}</div>;
+const FormGrid = (props: Props<FormGridOwnProps>) => {
+  const [local, rest] = splitProps(props, ['children', 'class']);
+
+  return (
+    <Grid {...rest} minColumnWidth="280px" gap="md" class={classNames(styles.grid, local.class)}>
+      {local.children}
+    </Grid>
+  );
 };
 
 export default FormGrid;

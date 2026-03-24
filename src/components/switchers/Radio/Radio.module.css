@@ -11,22 +11,11 @@
   flex-flow: row wrap;
 }
 
-.option {
-  composes: field from '../ChoiceControl/ChoiceControl.module.css';
-}
-
 .control {
   --choice-control-offset: 2px;
-
-  composes: control from '../ChoiceControl/ChoiceControl.module.css';
-}
-
-.input {
-  composes: input from '../ChoiceControl/ChoiceControl.module.css';
 }
 
 .indicator {
-  composes: indicator from '../ChoiceControl/ChoiceControl.module.css';
   border-radius: var(--radius-full);
 }
 

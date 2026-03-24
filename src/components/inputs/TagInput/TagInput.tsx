@@ -3,9 +3,10 @@ import { createSignal, For, type JSX, splitProps } from 'solid-js';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import EditableChip from '../../feedback/EditableChip/EditableChip';
-import AffixInput from '../AffixInput/AffixInput';
-import type { InputSize } from '../Input/Input';
+import ClosableChip from '../../feedback/ClosableChip/ClosableChip';
+import FieldBase from '../FieldBase/FieldBase';
+import Input, { type InputSize } from '../Input/Input';
+import fieldInputResetStyles from '../shared/fieldInputReset.module.css';
 import styles from './TagInput.module.css';
 
 interface TagInputOwnProps extends Omit<JSX.InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange'> {
@@ -13,13 +14,35 @@ interface TagInputOwnProps extends Omit<JSX.InputHTMLAttributes<HTMLInputElement
   onChange: (tags: string[]) => void;
   placeholder?: string;
   size?: InputSize;
+  inputAriaLabel?: string;
+  removeTagLabel?: (tag: string) => string;
 }
 
 const TagInput = (props: Props<TagInputOwnProps>) => {
-  const [local, rest] = splitProps(props, ['value', 'onChange', 'placeholder', 'size', 'class']);
+  const [local, rest] = splitProps(props, [
+    'value',
+    'onChange',
+    'placeholder',
+    'size',
+    'class',
+    'disabled',
+    'readOnly',
+    'inputAriaLabel',
+    'removeTagLabel',
+    'onKeyDown',
+  ]);
   const [inputValue, setInputValue] = createSignal('');
 
-  const handleKeyDown = (e: KeyboardEvent) => {
+  const removeLabel = (tag: string) => local.removeTagLabel?.(tag) ?? `Remove ${tag}`;
+
+  const handleKeyDown: JSX.EventHandler<HTMLInputElement, KeyboardEvent> = (e) => {
+    if (typeof local.onKeyDown === 'function') {
+      local.onKeyDown(e);
+    }
+    if (e.defaultPrevented) return;
+
+    if (local.readOnly || local.disabled) return;
+
     if (e.key === 'Enter' || e.key === ',') {
       e.preventDefault();
       const newTag = inputValue().trim();
@@ -33,30 +56,45 @@ const TagInput = (props: Props<TagInputOwnProps>) => {
   };
 
   const removeTag = (tagToRemove: string) => {
+    if (local.readOnly || local.disabled) return;
     local.onChange(local.value.filter((tag) => tag !== tagToRemove));
   };
 
   return (
-    <AffixInput
-      {...rest}
-      type="text"
+    <FieldBase
+      as="div"
       size={local.size}
-      class={classNames(styles.container, local.class)}
-      inputClass={styles.input}
-      value={inputValue()}
-      onInput={(e) => setInputValue(e.currentTarget.value)}
-      onKeyDown={handleKeyDown}
-      placeholder={local.value.length === 0 ? local.placeholder : ''}
-      prefix={
-        local.value.length > 0 ? (
-          <div class={styles.tagsContainer}>
-            <For each={local.value}>
-              {(tag) => <EditableChip label={tag} removeLabel={`Remove ${tag}`} onRemove={() => removeTag(tag)} />}
-            </For>
-          </div>
-        ) : undefined
-      }
-    />
+      readOnly={local.readOnly}
+      disabled={local.disabled}
+      focusStyle="within"
+      class={classNames(styles.root, local.class)}
+    >
+      <div class={styles.tagsContainer}>
+        <For each={local.value}>
+          {(tag) => (
+            <ClosableChip
+              label={tag}
+              removeLabel={removeLabel(tag)}
+              onRemove={() => removeTag(tag)}
+              disabled={local.disabled || local.readOnly}
+            />
+          )}
+        </For>
+        <Input
+          {...rest}
+          type="text"
+          class={classNames(fieldInputResetStyles.reset, styles.input)}
+          size={local.size}
+          value={inputValue()}
+          onInput={(e) => setInputValue(e.currentTarget.value)}
+          onKeyDown={handleKeyDown}
+          aria-label={local.inputAriaLabel}
+          placeholder={local.value.length === 0 ? local.placeholder : ''}
+          disabled={local.disabled}
+          readOnly={local.readOnly}
+        />
+      </div>
+    </FieldBase>
   );
 };
 

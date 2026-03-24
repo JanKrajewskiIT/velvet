@@ -4,10 +4,14 @@ import { Portal } from 'solid-js/web';
 import useClickOutside from '~/hooks/useClickOutside';
 import useEscapeKey from '~/hooks/useEscapeKey';
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
+import DropdownDivider from '../../dropdowns/DropdownDivider/DropdownDivider';
+import DropdownOption from '../../dropdowns/DropdownOption/DropdownOption';
+import DropdownSurface from '../../dropdowns/DropdownSurface/DropdownSurface';
 import styles from './ContextMenu.module.css';
 
-interface ContextMenuItem {
+interface ContextMenuOption {
   label: string;
   icon?: JSX.Element;
   onClick: () => void;
@@ -17,7 +21,7 @@ interface ContextMenuItem {
 
 interface ContextMenuProps {
   children: JSX.Element;
-  items: Array<ContextMenuItem | 'separator'>;
+  items: Array<ContextMenuOption | 'separator'>;
 }
 
 const ContextMenu = (props: Props<ContextMenuProps>) => {
@@ -37,7 +41,7 @@ const ContextMenu = (props: Props<ContextMenuProps>) => {
     setVisible(true);
   };
 
-  const handleItemClick = (item: ContextMenuItem) => {
+  const handleItemClick = (item: ContextMenuOption) => {
     if (item.disabled) return;
     close();
     item.onClick();
@@ -96,38 +100,42 @@ const ContextMenu = (props: Props<ContextMenuProps>) => {
   });
 
   return (
-    <div class={`${styles.wrapper} ${props.class ?? ''}`} onContextMenu={handleContextMenu}>
+    <div class={classNames(styles.wrapper, props.class)} onContextMenu={handleContextMenu}>
       {props.children}
       <Show when={visible()}>
         <Portal>
-          <div
+          <DropdownSurface
             ref={menuRef}
             class={styles.menu}
+            panel={false}
+            scrollable={false}
             role="menu"
             tabIndex={-1}
             aria-orientation="vertical"
-            style={{ top: `${position().y}px`, left: `${position().x}px` }}
+            style={{
+              '--context-menu-top': `${position().y}px`,
+              '--context-menu-left': `${position().x}px`,
+            }}
             onKeyDown={handleMenuKeyDown}
           >
             <For each={props.items}>
-              {(item) => (
-                <Show when={item !== 'separator'} fallback={<div class={styles.separator} role="separator" />}>
-                  <button
-                    type="button"
-                    class={`${styles.item} ${(item as ContextMenuItem).danger ? styles.danger : ''} ${(item as ContextMenuItem).disabled ? styles.disabled : ''}`}
-                    onClick={() => handleItemClick(item as ContextMenuItem)}
-                    disabled={(item as ContextMenuItem).disabled}
+              {(item) =>
+                item === 'separator' ? (
+                  <DropdownDivider />
+                ) : (
+                  <DropdownOption
+                    class={classNames(styles.item, item.disabled && styles.disabled)}
+                    onClick={() => handleItemClick(item)}
+                    disabled={item.disabled}
                     role="menuitem"
-                  >
-                    <Show when={(item as ContextMenuItem).icon}>
-                      <span class={styles.icon}>{(item as ContextMenuItem).icon}</span>
-                    </Show>
-                    <span>{(item as ContextMenuItem).label}</span>
-                  </button>
-                </Show>
-              )}
+                    tone={item.danger ? 'error' : 'default'}
+                    prefix={item.icon ? <span class={styles.icon}>{item.icon}</span> : undefined}
+                    label={item.label}
+                  />
+                )
+              }
             </For>
-          </div>
+          </DropdownSurface>
         </Portal>
       </Show>
     </div>

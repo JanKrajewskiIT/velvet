@@ -1,7 +1,10 @@
 import { FiChevronRight } from 'solid-icons/fi';
 import { createMemo, createSignal, For, type JSX, Show } from 'solid-js';
 
+import Heading from '~/components/typography/Heading/Heading';
+import Text from '~/components/typography/Text/Text';
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
 import Button from '../../buttons/Button/Button';
 import styles from './Breadcrumbs.module.css';
@@ -40,30 +43,38 @@ const Breadcrumbs = (props: Props<BreadcrumbsProps>) => {
   const renderItem = (item: BreadcrumbItem, isCurrentPage: boolean) => {
     if (isCurrentPage) {
       return (
-        <span class={styles.current} aria-current="page">
+        <Heading as="span" level={5} aria-current="page">
           {item.label}
-        </span>
+        </Heading>
       );
     }
     if (item.href) {
       return (
         <a href={item.href} class={styles.link}>
-          {item.label}
+          <Text as="span" variant="bodySm" tone="secondary">
+            {item.label}
+          </Text>
         </a>
       );
     }
     if (item.onClick) {
       return (
-        <Button class={styles.link} variant="subtle" size="sm" onClick={item.onClick}>
-          {item.label}
+        <Button variant="subtle" size="sm" onClick={item.onClick}>
+          <Text as="span" variant="bodySm">
+            {item.label}
+          </Text>
         </Button>
       );
     }
-    return <span class={styles.link}>{item.label}</span>;
+    return (
+      <Text as="span" variant="bodySm">
+        {item.label}
+      </Text>
+    );
   };
 
   return (
-    <nav aria-label="Breadcrumb" class={`${styles.breadcrumbs} ${props.class ?? ''}`}>
+    <nav aria-label="Breadcrumb" class={classNames(styles.breadcrumbs, props.class)}>
       <ol class={styles.list}>
         <Show when={showEllipsis()}>
           <For each={visibleItems().slice(0, 1)}>
@@ -73,13 +84,7 @@ const Breadcrumbs = (props: Props<BreadcrumbsProps>) => {
             {separator()}
           </li>
           <li class={styles.item}>
-            <Button
-              class={styles.ellipsis}
-              variant="subtle"
-              size="sm"
-              onClick={() => setExpanded(true)}
-              aria-label="Show all breadcrumbs"
-            >
+            <Button variant="subtle" size="sm" onClick={() => setExpanded(true)} aria-label="Show all breadcrumbs">
               &hellip;
             </Button>
           </li>

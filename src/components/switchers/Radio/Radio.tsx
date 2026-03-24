@@ -1,5 +1,6 @@
 import { createUniqueId, For, type JSX, splitProps } from 'solid-js';
 
+import ChoiceControl from '~/components/switchers/ChoiceControl/ChoiceControl';
 import LabelText from '~/components/typography/LabelText/LabelText';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
@@ -35,25 +36,24 @@ const RadioGroup = <T extends string>(props: Props<RadioGroupOwnProps<T>>) => {
           const optionLabel = () => `${optionId()}-label`;
 
           return (
-            <label class={styles.option} for={optionId()}>
-              <span class={styles.control}>
-                <input
-                  id={optionId()}
-                  type="radio"
-                  name={groupName()}
-                  value={option.value}
-                  checked={local.value === option.value}
-                  disabled={option.disabled}
-                  class={styles.input}
-                  aria-labelledby={optionLabel()}
-                  onChange={() => local.onChange(option.value)}
-                />
-                <span class={styles.indicator} aria-hidden="true" />
-              </span>
-              <span id={optionLabel()}>
-                <LabelText label={option.label} description={option.description} />
-              </span>
-            </label>
+            <ChoiceControl
+              id={optionId()}
+              type="radio"
+              name={groupName()}
+              value={option.value}
+              checked={local.value === option.value}
+              disabled={option.disabled}
+              labelId={optionLabel()}
+              onChange={() => local.onChange(option.value)}
+              controlClass={styles.control}
+              inputClass={styles.input}
+              indicatorClass={styles.indicator}
+              label={
+                <span id={optionLabel()}>
+                  <LabelText label={option.label} description={option.description} />
+                </span>
+              }
+            />
           );
         }}
       </For>

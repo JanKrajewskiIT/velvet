@@ -12,8 +12,6 @@ interface FallbackStateOwnProps {
   description: string;
   icon?: JSX.Element;
   action?: JSX.Element;
-  titleClass?: string;
-  descriptionClass?: string;
   iconClass?: string;
 }
 
@@ -23,12 +21,10 @@ const FallbackState = (props: Props<FallbackStateOwnProps>) => {
       <Show when={props.icon}>
         <div class={classNames(styles.icon, props.iconClass)}>{props.icon}</div>
       </Show>
-      <Heading as="h1" level={1} class={classNames(styles.title, props.titleClass)}>
+      <Heading as="h1" level={1}>
         {props.title}
       </Heading>
-      <Text tone="muted" class={classNames(styles.description, props.descriptionClass)}>
-        {props.description}
-      </Text>
+      <Text tone="muted">{props.description}</Text>
       <Show when={props.action}>
         <div class={styles.action}>{props.action}</div>
       </Show>

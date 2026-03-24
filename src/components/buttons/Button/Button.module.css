@@ -65,6 +65,11 @@
 .iconOnly {
   gap: 0;
   padding: 0;
+  line-height: var(--typography-line-height-none);
+}
+
+.round {
+  border-radius: var(--radius-full);
 }
 
 .iconSizeSm {
@@ -94,6 +99,18 @@
 .variantPrimary:hover:not(:disabled) {
   background-color: var(--color-primary-hover);
   box-shadow: var(--shadow-glow);
+}
+
+.variantNavbar {
+  border-color: color-mix(in srgb, var(--color-gray-0) 42%, transparent);
+  background-color: transparent;
+  color: var(--color-gray-0);
+}
+
+.variantNavbar:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--color-gray-0) 58%, transparent);
+  background-color: color-mix(in srgb, var(--color-gray-0) 14%, transparent);
+  box-shadow: var(--shadow-glow-sm);
 }
 
 .variantDanger {
@@ -169,6 +186,8 @@
 .content {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 .contentHidden {

@@ -4,7 +4,9 @@ import { createMemo, createSignal, For, Show } from 'solid-js';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
+import Card from '../../surfaces/Card/Card';
 import Heading from '../../typography/Heading/Heading';
+import Text from '../../typography/Text/Text';
 import styles from './KanbanBoard.module.css';
 
 export interface KanbanColumn {
@@ -78,9 +80,13 @@ const KanbanBoard = <T extends KanbanItemBase>(props: Props<KanbanBoardProps<T>>
 
   const defaultCard = (item: T) => (
     <div class={styles.cardContent}>
-      <strong class={styles.cardTitle}>{item.title}</strong>
+      <Text as="span" variant="labelMd" tone="secondary" class={styles.cardTitle}>
+        {item.title}
+      </Text>
       <Show when={item.description}>
-        <span class={styles.cardDescription}>{item.description}</span>
+        <Text as="span" variant="caption" tone="muted" class={styles.cardDescription}>
+          {item.description}
+        </Text>
       </Show>
     </div>
   );
@@ -93,35 +99,48 @@ const KanbanBoard = <T extends KanbanItemBase>(props: Props<KanbanBoardProps<T>>
 
           return (
             <section
-              class={classNames(styles.column, dragOverColumnId() === column.id && styles.columnDragOver)}
+              class={styles.columnSection}
               onDragOver={(e) => handleDragOverColumn(column.id, e)}
               onDrop={(e) => handleDropColumn(column.id, e)}
             >
-              <header class={styles.columnHeader}>
-                <Heading as="h4" level={4} class={styles.columnTitle}>
-                  {column.title}
-                </Heading>
-                <span class={styles.columnCount}>{items().length}</span>
-              </header>
-              <div class={styles.columnBody}>
-                <Show
-                  when={items().length > 0}
-                  fallback={<div class={styles.empty}>{props.emptyLabel ?? 'No cards'}</div>}
-                >
-                  <For each={items()}>
-                    {(item) => (
-                      <article
-                        class={classNames(styles.card, draggingId() === item.id && styles.cardDragging)}
-                        draggable
-                        onDragStart={(e) => handleDragStart(item.id, e)}
-                        onDragEnd={handleDragEnd}
-                      >
-                        {props.renderCard ? props.renderCard(item) : defaultCard(item)}
-                      </article>
-                    )}
-                  </For>
-                </Show>
-              </div>
+              <Card
+                padding="none"
+                class={classNames(styles.column, dragOverColumnId() === column.id && styles.columnDragOver)}
+              >
+                <header class={styles.columnHeader}>
+                  <Heading as="h4" level={4} class={styles.columnTitle}>
+                    {column.title}
+                  </Heading>
+                  <Text as="span" variant="caption" tone="secondary" class={styles.columnCount}>
+                    {items().length}
+                  </Text>
+                </header>
+                <div class={styles.columnBody}>
+                  <Show
+                    when={items().length > 0}
+                    fallback={
+                      <Text as="p" variant="caption" tone="muted" class={styles.empty}>
+                        {props.emptyLabel ?? 'No cards'}
+                      </Text>
+                    }
+                  >
+                    <For each={items()}>
+                      {(item) => (
+                        <article
+                          class={classNames(styles.card, draggingId() === item.id && styles.cardDragging)}
+                          draggable
+                          onDragStart={(e) => handleDragStart(item.id, e)}
+                          onDragEnd={handleDragEnd}
+                        >
+                          <Card class={styles.cardSurface}>
+                            {props.renderCard ? props.renderCard(item) : defaultCard(item)}
+                          </Card>
+                        </article>
+                      )}
+                    </For>
+                  </Show>
+                </div>
+              </Card>
             </section>
           );
         }}

@@ -4,10 +4,12 @@
   gap: var(--spacing-md);
 }
 
+.columnSection {
+  min-height: 240px;
+}
+
 .column {
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: var(--color-bg-elevated);
+  height: 100%;
   min-height: 240px;
   display: flex;
   flex-direction: column;
@@ -26,21 +28,12 @@
   border-bottom: 1px solid var(--color-border);
 }
 
-.columnTitle {
-  margin: 0;
-  font-size: var(--typography-scale-sm);
-  color: var(--color-text);
-  font-weight: var(--typography-weight-semibold);
-}
-
 .columnCount {
   min-width: 22px;
   height: 22px;
   border-radius: var(--radius-pill);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  color: var(--color-text-secondary);
-  font-size: var(--typography-scale-xs);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -54,11 +47,12 @@
 }
 
 .card {
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: var(--color-bg);
-  padding: var(--spacing-sm);
   cursor: grab;
+}
+
+.cardSurface {
+  padding: var(--spacing-sm);
+  background: var(--color-bg);
   box-shadow: var(--shadow-sm);
 }
 
@@ -75,21 +69,8 @@
   gap: var(--spacing-2xs);
 }
 
-.cardTitle {
-  color: var(--color-text);
-  font-size: var(--typography-scale-sm);
-}
-
-.cardDescription {
-  color: var(--color-text-muted);
-  font-size: var(--typography-scale-xs);
-}
-
 .empty {
   border: 1px dashed var(--color-border);
   border-radius: var(--radius-sm);
-  color: var(--color-text-muted);
-  text-align: center;
-  font-size: var(--typography-scale-xs);
   padding: var(--spacing-sm);
 }

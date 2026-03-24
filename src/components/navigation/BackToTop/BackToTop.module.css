@@ -3,8 +3,6 @@
   bottom: var(--spacing-xl);
   right: var(--spacing-xl);
   z-index: var(--z-dropdown);
-  border-radius: var(--radius-full);
-  box-shadow: var(--shadow-popover);
   transition:
     transform var(--duration-fast) var(--ease-out-back),
     opacity var(--duration-fast);
@@ -19,8 +17,4 @@
   opacity: 0;
   transform: scale(0.5);
   pointer-events: none;
-}
-
-.button:hover {
-  transform: scale(1.1);
 }

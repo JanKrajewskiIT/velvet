@@ -5,7 +5,9 @@ import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 import getInputSizeClass from '~/utils/getInputSizeClass';
 
+import FieldBase from '../FieldBase/FieldBase';
 import Input, { type InputSize } from '../Input/Input';
+import fieldInputResetStyles from '../shared/fieldInputReset.module.css';
 import styles from './AffixInput.module.css';
 
 interface AffixInputOwnProps extends Omit<JSX.InputHTMLAttributes<HTMLInputElement>, 'class' | 'size' | 'prefix'> {
@@ -20,19 +22,22 @@ interface AffixInputOwnProps extends Omit<JSX.InputHTMLAttributes<HTMLInputEleme
 const AffixInput = (props: Props<AffixInputOwnProps>) => {
   const [local, rest] = splitProps(props, ['class', 'inputClass', 'size', 'invalid', 'readOnly', 'prefix', 'suffix']);
 
-  const sizeClass = () => getInputSizeClass(styles, local.size);
+  const affixSizeClass = () => getInputSizeClass(styles, local.size);
 
   const hasPrefix = () => local.prefix !== undefined && local.prefix !== null;
   const hasSuffix = () => local.suffix !== undefined && local.suffix !== null;
 
   return (
-    <div
+    <FieldBase
+      as="div"
+      size={local.size}
+      invalid={local.invalid}
+      readOnly={local.readOnly}
+      disabled={rest.disabled}
+      focusStyle="within"
       class={classNames(
         styles.root,
-        sizeClass(),
-        local.invalid && styles.invalid,
-        local.readOnly && styles.readOnly,
-        rest.disabled && styles.disabled,
+        affixSizeClass(),
         hasPrefix() && styles.hasPrefix,
         hasSuffix() && styles.hasSuffix,
         local.class
@@ -44,10 +49,11 @@ const AffixInput = (props: Props<AffixInputOwnProps>) => {
         size={local.size}
         invalid={local.invalid}
         readOnly={local.readOnly}
-        class={classNames(styles.input, local.inputClass)}
+        disabled={rest.disabled}
+        class={classNames(fieldInputResetStyles.reset, styles.input, local.inputClass)}
       />
       {hasSuffix() && <span class={styles.suffix}>{local.suffix}</span>}
-    </div>
+    </FieldBase>
   );
 };
 

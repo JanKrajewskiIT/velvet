@@ -20,15 +20,8 @@ export default defineConfig({
         find: /^@jankrajewskiit\/ui$/u,
         replacement: resolve(__dirname, '../src/index.ts'),
       },
-      {
-        find: /^@solidjs\/router$/u,
-        replacement: resolve(__dirname, 'node_modules/@solidjs/router'),
-      },
-      {
-        find: /^solid-js(\/.*)?$/u,
-        replacement: resolve(__dirname, 'node_modules/solid-js$1'),
-      },
     ],
+    dedupe: ['solid-js', '@solidjs/router'],
   },
   server: {
     fs: {

@@ -1,0 +1,24 @@
+.indicator {
+  width: var(--checkbox-indicator-size, 18px);
+  height: var(--checkbox-indicator-size, 18px);
+  border: 1.5px solid var(--checkbox-indicator-border, var(--color-border));
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-bg-inverse);
+  background: var(--checkbox-indicator-bg, var(--color-bg));
+  box-shadow: var(--checkbox-indicator-shadow, none);
+  animation: var(--checkbox-indicator-animation, none);
+  transition:
+    border-color var(--duration-fast) var(--ease-out-expo),
+    background-color var(--duration-fast) var(--ease-out-expo),
+    box-shadow var(--duration-fast) var(--ease-out-expo);
+}
+
+.indicatorChecked {
+  --checkbox-indicator-border: var(--color-primary);
+  --checkbox-indicator-bg: var(--color-primary);
+  --checkbox-indicator-shadow: inset 0 0 0 3px var(--color-bg);
+  --checkbox-indicator-animation: checkbounce var(--duration-normal) var(--ease-out-back);
+}

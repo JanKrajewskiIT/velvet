@@ -3,13 +3,14 @@ import { createSignal, type JSX, Show } from 'solid-js';
 import useClickOutside from '~/hooks/useClickOutside';
 import useEscapeKey from '~/hooks/useEscapeKey';
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
-import Button from '../../buttons/Button/Button';
+import Text from '../../typography/Text/Text';
 import styles from './Popover.module.css';
 
 interface PopoverProps {
-  trigger: JSX.Element;
-  content: JSX.Element;
+  trigger: (triggerProps: JSX.ButtonHTMLAttributes<HTMLButtonElement>) => JSX.Element;
+  content: string;
   position?: 'top' | 'bottom' | 'left' | 'right';
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
@@ -17,7 +18,7 @@ interface PopoverProps {
 
 const Popover = (props: Props<PopoverProps>) => {
   const [internalOpen, setInternalOpen] = createSignal(false);
-  let contentRef: HTMLDivElement | undefined;
+  let rootRef: HTMLDivElement | undefined;
 
   const isOpen = () => props.open ?? internalOpen();
 
@@ -31,25 +32,22 @@ const Popover = (props: Props<PopoverProps>) => {
 
   const position = () => props.position ?? 'bottom';
 
-  useClickOutside(() => contentRef, isOpen, close);
+  useClickOutside(() => rootRef, isOpen, close);
 
   useEscapeKey(isOpen, close);
 
   return (
-    <div class={`${styles.wrapper} ${props.class ?? ''}`}>
-      <Button
-        class={styles.trigger}
-        variant="subtle"
-        size="sm"
-        onClick={toggle}
-        aria-haspopup="dialog"
-        aria-expanded={isOpen()}
-      >
-        {props.trigger}
-      </Button>
+    <div ref={rootRef} class={classNames(styles.wrapper, props.class)}>
+      {props.trigger({
+        onClick: toggle,
+        'aria-haspopup': 'dialog',
+        'aria-expanded': isOpen(),
+      })}
       <Show when={isOpen()}>
-        <div ref={contentRef} class={`${styles.content} ${styles[position()]}`} role="dialog" aria-modal="false">
-          {props.content}
+        <div class={classNames(styles.content, styles[position()])} role="dialog" aria-modal="false">
+          <Text as="p" variant="bodySm" tone="muted">
+            {props.content}
+          </Text>
         </div>
       </Show>
     </div>

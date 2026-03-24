@@ -1,5 +1,7 @@
 import { type JSX, onCleanup } from 'solid-js';
 
+import type Props from '~/models/Props';
+
 import { cleanupToasts } from './Toast';
 import ToastViewport from './ToastViewport';
 
@@ -13,13 +15,13 @@ interface ToastProviderProps {
   messages?: ToastProviderMessages;
 }
 
-const ToastProvider = (props: ToastProviderProps) => {
+const ToastProvider = (props: Props<ToastProviderProps>) => {
   onCleanup(cleanupToasts);
 
   return (
     <>
       {props.children}
-      <ToastViewport closeLabel={props.messages?.closeButtonLabel ?? props.closeLabel ?? 'Close'} />
+      <ToastViewport class={props.class} closeLabel={props.messages?.closeButtonLabel ?? props.closeLabel ?? 'Close'} />
     </>
   );
 };

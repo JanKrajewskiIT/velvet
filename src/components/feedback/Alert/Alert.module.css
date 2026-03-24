@@ -19,20 +19,8 @@
   min-width: 0;
 }
 
-.title {
-  margin-bottom: var(--spacing-2xs);
-}
-
-.message {
-  line-height: var(--typography-line-height-body);
-}
-
 .closeBtn {
   flex-shrink: 0;
-}
-
-.closeBtn:hover {
-  background-color: var(--color-surface);
 }
 
 .info {

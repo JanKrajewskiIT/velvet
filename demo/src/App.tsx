@@ -34,16 +34,20 @@ export type SectionId =
   | 'inputs-other'
   | 'inputs-form-layout'
   | 'data-content'
-  | 'data-cards'
   | 'data-media'
   | 'data-charts'
   | 'data-tables'
   | 'data-lists'
+  | 'data-filters'
+  | 'data-timeline'
   | 'data-tree'
-  | 'nav-tabs-stepper'
+  | 'nav-navbar'
+  | 'nav-sidebars'
   | 'nav-breadcrumbs'
-  | 'nav-timeline'
-  | 'nav-command-fab'
+  | 'nav-stepper'
+  | 'nav-tabs'
+  | 'nav-pagination'
+  | 'nav-speed-dial'
   | 'nav-bottom-nav'
   | 'nav-back-to-top'
   | 'feedback-badges-chips'
@@ -52,14 +56,19 @@ export type SectionId =
   | 'feedback-states'
   | 'overlays-tooltips'
   | 'overlays-dialogs'
-  | 'overlays-drawers'
+  | 'overlays-sheets'
   | 'overlays-context'
   | 'overlays-lightbox'
-  | 'layout-shell'
-  | 'layout-sidebar'
-  | 'layout-cards'
-  | 'composites-lists'
-  | 'composites-wizard-ai'
+  | 'surfaces-layouts'
+  | 'surfaces-main-layout'
+  | 'surfaces-collapsible'
+  | 'surfaces-cards'
+  | 'composites-transfer-list'
+  | 'composites-editable-collection'
+  | 'composites-kanban-board'
+  | 'composites-command-palette'
+  | 'composites-wizard'
+  | 'composites-ai-result'
   | 'composites-scheduler';
 
 const NAV_GROUPS: SidebarNavGroup[] = [
@@ -72,14 +81,24 @@ const NAV_GROUPS: SidebarNavGroup[] = [
     ],
   },
   {
-    label: 'Layout',
+    label: 'Surfaces',
     items: [
-      { id: 'layout-shell', label: 'Shell & Sidebar' },
-      { id: 'layout-sidebar', label: 'Grid & Stack' },
-      { id: 'layout-cards', label: 'Cards' },
-      { id: 'nav-tabs-stepper', label: 'Breadcrumbs & Tabs & Stepper' },
-      { id: 'nav-timeline', label: 'Timeline' },
-      { id: 'nav-command-fab', label: 'Palette & FAB' },
+      { id: 'surfaces-layouts', label: 'Layouts' },
+      { id: 'surfaces-main-layout', label: 'MainLayout' },
+      { id: 'surfaces-collapsible', label: 'Collapsible' },
+      { id: 'surfaces-cards', label: 'Cards' },
+    ],
+  },
+  {
+    label: 'Navigation',
+    items: [
+      { id: 'nav-navbar', label: 'Navbar' },
+      { id: 'nav-sidebars', label: 'Sidebar & SidebarNav' },
+      { id: 'nav-breadcrumbs', label: 'Breadcrumbs' },
+      { id: 'nav-stepper', label: 'Stepper' },
+      { id: 'nav-tabs', label: 'Tabs' },
+      { id: 'nav-pagination', label: 'Pagination' },
+      { id: 'nav-speed-dial', label: 'Speed Dial (FAB)' },
       { id: 'nav-bottom-nav', label: 'Bottom nav' },
       { id: 'nav-back-to-top', label: 'Back to top' },
     ],
@@ -100,21 +119,21 @@ const NAV_GROUPS: SidebarNavGroup[] = [
   {
     label: 'Data',
     items: [
-      { id: 'data-content', label: 'Code & Markdown' },
+      { id: 'data-tables', label: 'Tables' },
       { id: 'data-lists', label: 'Lists' },
+      { id: 'data-filters', label: 'Filters' },
       { id: 'data-tree', label: 'Tree' },
-      { id: 'data-cards', label: 'Accordion' },
       { id: 'data-media', label: 'Media' },
       { id: 'data-charts', label: 'Charts' },
-      { id: 'data-tables', label: 'Tables' },
+      { id: 'data-timeline', label: 'Timeline' },
     ],
   },
   {
     label: 'Feedback',
     items: [
-      { id: 'feedback-badges-chips', label: 'Badges & Chips & Stats' },
+      { id: 'feedback-badges-chips', label: 'Status & Notifications' },
       { id: 'feedback-progress', label: 'Progress' },
-      { id: 'feedback-alerts', label: 'Alerts & Banners & Toasts' },
+      { id: 'feedback-alerts', label: 'Alerts & Banners' },
       { id: 'feedback-states', label: 'Empty States' },
     ],
   },
@@ -123,16 +142,21 @@ const NAV_GROUPS: SidebarNavGroup[] = [
     items: [
       { id: 'overlays-tooltips', label: 'Tooltip & Popover' },
       { id: 'overlays-dialogs', label: 'Dialogs' },
-      { id: 'overlays-drawers', label: 'Drawers' },
+      { id: 'overlays-sheets', label: 'Sheets' },
       { id: 'overlays-context', label: 'Context Menu' },
-      { id: 'overlays-lightbox', label: 'Lightbox & Tour' },
+      { id: 'overlays-lightbox', label: 'Tour' },
     ],
   },
   {
     label: 'Composites',
     items: [
-      { id: 'composites-lists', label: 'Transfer & Kanban' },
-      { id: 'composites-wizard-ai', label: 'Wizard & AI' },
+      { id: 'data-content', label: 'Code & Markdown' },
+      { id: 'composites-transfer-list', label: 'TransferList' },
+      { id: 'composites-editable-collection', label: 'EditableCollection' },
+      { id: 'composites-kanban-board', label: 'KanbanBoard' },
+      { id: 'composites-command-palette', label: 'Command Palette' },
+      { id: 'composites-wizard', label: 'Wizard' },
+      { id: 'composites-ai-result', label: 'AI Result Panel' },
       { id: 'composites-scheduler', label: 'Scheduler' },
     ],
   },
@@ -188,17 +212,14 @@ const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
     description: 'FormField, FormGrid, FormLayout and ActionRow for structured and responsive form pages.',
   },
   'data-content': {
-    title: 'Data & Code & Markdown',
+    title: 'Composites & Code & Markdown',
     description:
-      'Kbd, CodeBlock, MarkdownRenderer and MarkdownEditDialog for documentation, code snippets and markdown editing.',
-  },
-  'data-cards': {
-    title: 'Data & Accordion',
-    description: 'Accordion, Collapsible and SectionCard for progressive disclosure and grouped content.',
+      'CodeBlock, MarkdownRenderer and MarkdownEditDialog for documentation, code snippets and markdown editing.',
   },
   'data-media': {
     title: 'Data & Media',
-    description: 'Avatar, AvatarGroup, Carousel, ImageGrid and Marquee for people, galleries and ticker-style content.',
+    description:
+      'Avatar, AvatarGroup, Carousel, ImageGrid, Lightbox and Marquee for people, galleries and ticker-style content.',
   },
   'data-charts': {
     title: 'Data & Charts',
@@ -213,47 +234,66 @@ const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
     title: 'Data & Lists',
     description: 'List and ListItem for structured rows with icons, secondary text and inline actions.',
   },
+  'data-filters': {
+    title: 'Data & Filters',
+    description: 'FilterBar for combining search queries, structured filters and removable active chips.',
+  },
+  'data-timeline': {
+    title: 'Data & Timeline',
+    description: 'Timeline for chronological lists of events, releases and activity history.',
+  },
   'data-tree': {
     title: 'Data & Tree',
     description: 'TreeView v2 with lazy loading, checkbox selection and drag-and-drop tree navigation.',
   },
-  'nav-tabs-stepper': {
-    title: 'Layout & Breadcrumbs & Tabs & Stepper',
-    description:
-      'Tabs, Stepper and Breadcrumbs for switching views, visualizing progress and showing hierarchical paths.',
+  'nav-navbar': {
+    title: 'Navigation & Navbar',
+    description: 'Navbar for top-level app navigation with brand, actions and responsive mobile menu.',
+  },
+  'nav-sidebars': {
+    title: 'Navigation & Sidebar & SidebarNav',
+    description: 'Sidebar and SidebarNav for nested app navigation and docs-like section menus.',
   },
   'nav-breadcrumbs': {
-    title: 'Layout & Breadcrumbs',
+    title: 'Navigation & Breadcrumbs',
     description: 'Breadcrumbs for displaying hierarchical location and quick parent navigation.',
   },
-  'nav-timeline': {
-    title: 'Layout & Timeline',
-    description: 'Timeline for chronological list of events.',
+  'nav-stepper': {
+    title: 'Navigation & Stepper',
+    description: 'Stepper for visualizing progress through ordered steps and multi-step flows.',
   },
-  'nav-command-fab': {
-    title: 'Layout & Command Palette & FAB',
-    description: 'CommandPalette for keyboard-driven navigation and SpeedDial for quick floating actions.',
+  'nav-tabs': {
+    title: 'Navigation & Tabs',
+    description: 'Tabs for switching between related views with underline and pill variants.',
+  },
+  'nav-pagination': {
+    title: 'Navigation & Pagination',
+    description: 'Pagination for navigating between pages of content and large lists.',
+  },
+  'nav-speed-dial': {
+    title: 'Navigation & Speed Dial (FAB)',
+    description: 'SpeedDial for quick floating actions with direction variants and labels.',
   },
   'nav-bottom-nav': {
-    title: 'Layout & Bottom nav',
+    title: 'Navigation & Bottom nav',
     description:
       'BottomNav for mobile navigation bars; use placement container when the bar sits only above main content.',
   },
   'nav-back-to-top': {
-    title: 'Layout & Back to top',
+    title: 'Navigation & Back to top',
     description: 'BackToTop floating control for long-scrolling pages.',
   },
   'feedback-badges-chips': {
-    title: 'Feedback & Badges & Chips & Stats',
-    description: 'Badge, Chip and StatCard for status, filters, tags and compact KPIs.',
+    title: 'Feedback & Status & Notifications',
+    description: 'Badge, Chip, ClosableChip, Kbd, Toast and StatCard for compact status and notification patterns.',
   },
   'feedback-progress': {
     title: 'Feedback & Progress',
     description: 'Progress, CircularProgress, Countdown, Spinner, Skeleton and LoadingContainer.',
   },
   'feedback-alerts': {
-    title: 'Feedback & Alerts & Banners & Toasts',
-    description: 'Alert, Banner, ErrorMessage and Toast for inline, full-width and global status messages.',
+    title: 'Feedback & Alerts & Banners',
+    description: 'Alert, Banner, ErrorMessage and NotificationCenter for inline and full-width status messaging.',
   },
   'feedback-states': {
     title: 'Feedback & Empty States',
@@ -267,39 +307,57 @@ const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
     title: 'Overlays & Dialogs',
     description: 'Dialog, ConfirmDialog and ConfirmAction for modal workflows and confirmation flows.',
   },
-  'overlays-drawers': {
-    title: 'Overlays & Drawers',
-    description: 'Drawer and Sheet for slide-in panels from any edge of the viewport.',
+  'overlays-sheets': {
+    title: 'Overlays & Sheets',
+    description: 'Sheet for slide-in panels from any edge, including right-side panels with action footer.',
   },
   'overlays-context': {
     title: 'Overlays & Context Menu',
     description: 'ContextMenu for right-click action menus.',
   },
   'overlays-lightbox': {
-    title: 'Overlays & Lightbox & Tour',
-    description: 'Lightbox for fullscreen image viewer and Tour for step-by-step onboarding spotlights.',
+    title: 'Overlays & Tour',
+    description: 'Tour for step-by-step onboarding spotlights and guided product walkthroughs.',
   },
-  'layout-shell': {
-    title: 'Layout & Shell & Sidebar',
-    description:
-      'Navbar, MainLayout, Footer and Sidebar for page shells, side navigation and composition-friendly layouts.',
-  },
-  'layout-sidebar': {
-    title: 'Layout & Grid & Stack',
+  'surfaces-layouts': {
+    title: 'Surfaces & Layouts',
     description: 'Grid, Stack, ResizablePanel and Divider for composition-friendly layouts.',
   },
-  'layout-cards': {
-    title: 'Layout & Cards',
+  'surfaces-main-layout': {
+    title: 'Surfaces & MainLayout',
+    description: 'MainLayout full shell composition with Navbar and Footer, without navigation items.',
+  },
+  'surfaces-collapsible': {
+    title: 'Surfaces & Collapsible',
+    description: 'Accordion and SectionCard for progressive disclosure and grouped content.',
+  },
+  'surfaces-cards': {
+    title: 'Surfaces & Cards',
     description: 'Card, DataCard and FlipCard for content containers and interactive layouts.',
   },
-  'composites-lists': {
-    title: 'Composites & Transfer & Kanban',
-    description:
-      'FilterBar, TransferList, EditableCollection and KanbanBoard for filter toolbars, moving items between groups and workflow columns.',
+  'composites-transfer-list': {
+    title: 'Composites & TransferList',
+    description: 'TransferList for moving items between source and target groups with search support.',
   },
-  'composites-wizard-ai': {
-    title: 'Composites & Wizard & AI',
-    description: 'Wizard for guided multi-step flows and AiResultPanel for AI-style result and scoring layouts.',
+  'composites-editable-collection': {
+    title: 'Composites & EditableCollection',
+    description: 'EditableCollection for adding, removing and editing dynamic form-like item lists.',
+  },
+  'composites-kanban-board': {
+    title: 'Composites & KanbanBoard',
+    description: 'KanbanBoard for drag-and-drop workflow columns and status changes.',
+  },
+  'composites-command-palette': {
+    title: 'Composites & Command Palette',
+    description: 'CommandPalette for keyboard-first command launching, grouped results and quick actions.',
+  },
+  'composites-wizard': {
+    title: 'Composites & Wizard',
+    description: 'Wizard for guided multi-step flows with progress, validation and finish actions.',
+  },
+  'composites-ai-result': {
+    title: 'Composites & AI Result Panel',
+    description: 'AiResultPanel showcase with full score, summary, sections and contextual actions.',
   },
   'composites-scheduler': {
     title: 'Composites & Scheduler',
@@ -369,7 +427,7 @@ const AppContent = () => {
           <Match when={activeSection().startsWith('overlays-')}>
             <OverlaysSection sectionId={activeSection()} />
           </Match>
-          <Match when={activeSection().startsWith('layout-')}>
+          <Match when={activeSection().startsWith('surfaces-')}>
             <LayoutSection sectionId={activeSection()} />
           </Match>
           <Match when={activeSection().startsWith('composites-')}>

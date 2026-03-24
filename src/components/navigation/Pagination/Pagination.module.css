@@ -16,29 +16,12 @@
   min-height: 32px;
   min-width: 32px;
   padding: 0 var(--spacing-sm);
-  font-size: var(--typography-scale-sm);
   transform: none;
 }
 
 .pageButton:hover,
 .navButton:hover {
   transform: none;
-}
-
-.pageButton:focus-visible,
-.navButton:focus-visible {
-  outline: 2px solid var(--color-focus-ring);
-  outline-offset: 2px;
-}
-
-.active {
-  font-weight: var(--typography-weight-semibold);
-}
-
-.pageButton:disabled,
-.navButton:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
 }
 
 .ellipsis {

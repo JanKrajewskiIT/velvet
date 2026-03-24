@@ -1,7 +1,9 @@
 import { FiCheck } from 'solid-icons/fi';
 import { For, Show } from 'solid-js';
 
+import Text from '~/components/typography/Text/Text';
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
 import styles from './Stepper.module.css';
 
@@ -25,21 +27,34 @@ const Stepper = (props: Props<StepperProps>) => {
     return 'pending';
   };
 
+  const stepStateClass = (index: number) => styles[getStepState(index)] ?? '';
+  const isStepCompleted = (index: number) => getStepState(index) === 'completed';
+  const isConnectorCompleted = (index: number) => getStepState(index) !== 'pending';
+
+  const labelTone = (index: number) => {
+    const state = getStepState(index);
+    if (state === 'active') return 'primary' as const;
+    if (state === 'completed') return 'default' as const;
+    return 'muted' as const;
+  };
+
   return (
-    <div class={`${styles.stepIndicator} ${props.class ?? ''}`} role="list">
+    <div class={classNames(styles.stepIndicator, props.class)} role="list">
       <For each={props.steps}>
         {(step, index) => (
           <>
             <Show when={index() > 0}>
-              <div class={`${styles.stepConnector} ${getStepState(index()) !== 'pending' ? styles.completed : ''}`} />
+              <div class={classNames(styles.stepConnector, isConnectorCompleted(index()) && styles.completed)} />
             </Show>
             <div class={styles.step} role="listitem">
-              <span class={`${styles.stepDot} ${styles[getStepState(index())] ?? ''}`}>
-                <Show when={getStepState(index()) === 'completed'} fallback={index() + 1}>
+              <span class={classNames(styles.stepDot, stepStateClass(index()))}>
+                <Show when={isStepCompleted(index())} fallback={index() + 1}>
                   <FiCheck />
                 </Show>
               </span>
-              <span class={`${styles.stepLabel} ${styles[getStepState(index())] ?? ''}`}>{step.label}</span>
+              <Text as="span" variant="bodySm" tone={labelTone(index())} class={styles.stepLabel}>
+                {step.label}
+              </Text>
             </div>
           </>
         )}

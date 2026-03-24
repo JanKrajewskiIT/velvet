@@ -46,19 +46,8 @@
 }
 
 .stepLabel {
-  font-size: var(--typography-scale-xs);
-  font-weight: var(--typography-weight-medium);
-  color: var(--color-text-muted);
   transition: color var(--duration-fast) var(--ease-out-expo);
   white-space: nowrap;
-}
-
-.stepLabel.active {
-  color: var(--color-primary);
-}
-
-.stepLabel.completed {
-  color: var(--color-text);
 }
 
 .stepConnector {

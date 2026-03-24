@@ -53,12 +53,50 @@ export const handleDropdownArrowNavigation = (
   }
 };
 
-export const focusFirstDropdownItem = (surface: HTMLElement): void => {
+export const focusDropdownItem = (surface: HTMLElement, target: 'first' | 'last'): void => {
   const items = getFocusableDropdownItems(surface);
+  if (target === 'last') {
+    items[items.length - 1]?.focus();
+    return;
+  }
   items[0]?.focus();
 };
 
-export const focusLastDropdownItem = (surface: HTMLElement): void => {
-  const items = getFocusableDropdownItems(surface);
-  items[items.length - 1]?.focus();
+interface CreateDropdownSurfaceKeyDownHandlerOptions {
+  getSurface: () => HTMLElement | undefined;
+  closeDropdown: () => void;
+  focusTrigger?: () => void;
+  focusTriggerOnTab?: boolean;
+}
+
+export const createDropdownSurfaceKeyDownHandler = ({
+  getSurface,
+  closeDropdown,
+  focusTrigger,
+  focusTriggerOnTab = false,
+}: CreateDropdownSurfaceKeyDownHandlerOptions) => {
+  return (event: KeyboardEvent): void => {
+    const surface = getSurface();
+    if (!surface) return;
+
+    const items = getFocusableDropdownItems(surface);
+    const current = document.activeElement as HTMLElement;
+    const currentIndex = items.indexOf(current as HTMLButtonElement);
+
+    if (handleDropdownArrowNavigation(event, items, currentIndex)) return;
+
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      closeDropdown();
+      focusTrigger?.();
+      return;
+    }
+
+    if (event.key === 'Tab') {
+      closeDropdown();
+      if (focusTriggerOnTab) {
+        focusTrigger?.();
+      }
+    }
+  };
 };

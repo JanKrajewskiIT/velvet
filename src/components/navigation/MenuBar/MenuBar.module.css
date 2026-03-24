@@ -1,0 +1,18 @@
+.menuBar {
+  height: 100%;
+}
+
+.menuList {
+  display: flex;
+  height: 100%;
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (width < 768px) {
+  .menuBar {
+    display: none;
+  }
+}

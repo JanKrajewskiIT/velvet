@@ -1,10 +1,10 @@
-import { createEffect, createSignal, createUniqueId, type JSX, Show, splitProps } from 'solid-js';
+import { createEffect, createSignal, type JSX, Show, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import Button from '../../buttons/Button/Button';
-import Text from '../../typography/Text/Text';
+import FieldBase from '../FieldBase/FieldBase';
 import type { InputSize } from '../Input/Input';
 import Input from '../Input/Input';
 import styles from './RichTextEditor.module.css';
@@ -13,7 +13,7 @@ interface RichTextEditorOwnProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
-  label?: string;
+  ariaLabel?: string;
   disabled?: boolean;
   minHeight?: string;
   size?: InputSize;
@@ -24,7 +24,7 @@ const RichTextEditor = (props: Props<RichTextEditorOwnProps>) => {
     'value',
     'onChange',
     'placeholder',
-    'label',
+    'ariaLabel',
     'disabled',
     'minHeight',
     'size',
@@ -32,9 +32,9 @@ const RichTextEditor = (props: Props<RichTextEditorOwnProps>) => {
   ]);
   let editorRef: HTMLDivElement | undefined;
   let linkInputRef: HTMLInputElement | undefined;
-  const labelId = createUniqueId();
   const [linkEditorOpen, setLinkEditorOpen] = createSignal(false);
   const [linkDraft, setLinkDraft] = createSignal('');
+  const editorAriaLabel = () => local.ariaLabel ?? 'Rich text editor';
 
   const syncEditorValue = () => {
     if (!editorRef) return;
@@ -121,12 +121,7 @@ const RichTextEditor = (props: Props<RichTextEditorOwnProps>) => {
 
   return (
     <div {...rest} class={classNames(styles.wrapper, local.class)}>
-      {local.label && (
-        <Text as="span" variant="labelMd" id={labelId} class={styles.label}>
-          {local.label}
-        </Text>
-      )}
-      <div class={classNames(styles.editorShell, local.disabled && styles.disabled)}>
+      <FieldBase as="div" size={null} focusStyle="within" disabled={local.disabled} class={styles.editorShell}>
         <div class={styles.toolbar}>
           <Button
             class={styles.toolButton}
@@ -231,10 +226,9 @@ const RichTextEditor = (props: Props<RichTextEditorOwnProps>) => {
           onInput={handleInput}
           role="textbox"
           aria-multiline="true"
-          aria-labelledby={local.label ? labelId : undefined}
-          aria-label={local.label ? undefined : 'Rich text editor'}
+          aria-label={editorAriaLabel()}
         />
-      </div>
+      </FieldBase>
     </div>
   );
 };

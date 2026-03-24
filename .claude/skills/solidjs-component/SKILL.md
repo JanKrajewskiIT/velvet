@@ -18,6 +18,16 @@ With HTML attribute spreading: `interface XOwnProps extends JSX.*HTMLAttributes`
 
 `typography/` (Heading, Text, CodeText), `inputs/`, `forms/`, `data-display/`, `navigation/`, `feedback/`, `overlays/`, `layout/`, `composites/`, `app/`.
 
+## Primitive-first design
+
+- Prefer existing VelvetUi primitives over introducing wrapper-only components
+- One primitive per role in a family (e.g. dropdown option, dropdown surface) -- avoid parallel item variants
+- Label-driven APIs should use explicit props like `label` instead of free-form `children`
+- Keep primitive styles in that primitive's own module file/directory (avoid catch-all base CSS)
+- Prefer `ComponentName.tsx` + `ComponentName.module.css` pairs; avoid standalone `*.module.css` without a corresponding component
+- Exception: shared primitive style modules can stay standalone when reused across different element types (e.g. button/select/input/div)
+- Never use `composes` in `*.module.css`; for shared styles import the source module in TSX and merge classes with `classNames()`
+
 ## Code / JSX separation
 
 - Define all handlers and computed values above `return` -- never inline multi-statement functions in JSX

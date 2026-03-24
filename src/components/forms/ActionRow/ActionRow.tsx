@@ -1,22 +1,44 @@
-import type { JSX } from 'solid-js';
+import { type JSX, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
+import Stack from '../../surfaces/Stack/Stack';
 import styles from './ActionRow.module.css';
 
-interface ActionRowProps {
+type ActionRowAlign = 'center' | 'start' | 'end';
+
+interface ActionRowOwnProps extends JSX.HTMLAttributes<HTMLDivElement> {
   align?: 'center' | 'start' | 'end';
   children: JSX.Element;
 }
 
-const ActionRow = (props: Props<ActionRowProps>) => {
-  const alignClass = () => {
-    const a = props.align ?? 'center';
-    return styles[a] ?? '';
+const alignToJustify: Record<ActionRowAlign, 'center' | 'start' | 'end'> = {
+  center: 'center',
+  start: 'start',
+  end: 'end',
+};
+
+const ActionRow = (props: Props<ActionRowOwnProps>) => {
+  const [local, rest] = splitProps(props, ['align', 'children', 'class']);
+
+  const justify = () => {
+    const align = local.align ?? 'center';
+    return alignToJustify[align];
   };
 
-  return <div class={classNames(styles.row, alignClass(), props.class)}>{props.children}</div>;
+  return (
+    <Stack
+      {...rest}
+      direction="horizontal"
+      align="center"
+      justify={justify()}
+      gap="md"
+      class={classNames(styles.row, local.class)}
+    >
+      {local.children}
+    </Stack>
+  );
 };
 
 export default ActionRow;

@@ -6,10 +6,17 @@ import classNames from '~/utils/classNames';
 import Text from '../../typography/Text/Text';
 import styles from './FormField.module.css';
 
+interface FormFieldControlProps {
+  id: string;
+  'aria-labelledby'?: string;
+  'aria-describedby'?: string;
+  'aria-invalid'?: true;
+}
+
 interface FormFieldOwnProps {
   label?: JSX.Element;
   id?: string;
-  children: JSX.Element;
+  children: JSX.Element | ((controlProps: FormFieldControlProps) => JSX.Element);
   description?: JSX.Element;
   error?: JSX.Element;
   required?: boolean;
@@ -38,6 +45,21 @@ const FormField = (props: Props<FormFieldOwnProps>) => {
     return ids.length > 0 ? ids.join(' ') : undefined;
   };
 
+  const controlProps = (): FormFieldControlProps => ({
+    id: fieldId(),
+    'aria-labelledby': local.label ? labelId() : undefined,
+    'aria-describedby': describedBy(),
+    'aria-invalid': local.invalid ? true : undefined,
+  });
+
+  const content = () => {
+    if (typeof local.children === 'function') {
+      return local.children(controlProps());
+    }
+
+    return local.children;
+  };
+
   return (
     <div
       class={classNames(styles.field, local.class)}
@@ -52,20 +74,20 @@ const FormField = (props: Props<FormFieldOwnProps>) => {
             {local.label}
           </Text>
           <Show when={local.required}>
-            <Text as="span" variant="labelMd" class={styles.required} aria-hidden="true">
+            <Text as="span" variant="labelMd" tone="primary" class={styles.required} aria-hidden="true">
               *
             </Text>
           </Show>
         </label>
       </Show>
-      {local.children}
+      {content()}
       <Show when={local.description}>
-        <Text as="p" variant="caption" tone="muted" class={styles.description} id={descriptionId()}>
+        <Text as="p" variant="caption" tone="muted" id={descriptionId()}>
           {local.description}
         </Text>
       </Show>
       <Show when={local.error}>
-        <Text as="p" variant="caption" class={styles.error} id={errorId()} role="alert">
+        <Text as="p" variant="caption" tone="primary" class={styles.error} id={errorId()} role="alert">
           {local.error}
         </Text>
       </Show>
@@ -73,5 +95,5 @@ const FormField = (props: Props<FormFieldOwnProps>) => {
   );
 };
 
-export type { FormFieldOwnProps as FormFieldProps };
+export type { FormFieldControlProps, FormFieldOwnProps as FormFieldProps };
 export default FormField;

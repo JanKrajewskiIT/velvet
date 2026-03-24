@@ -3,8 +3,10 @@ import { Portal } from 'solid-js/web';
 
 import useFocusTrap from '~/hooks/useFocusTrap';
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
 import styles from './Dialog.module.css';
+import { DialogContext } from './DialogContext';
 
 interface DialogProps {
   open: boolean;
@@ -60,12 +62,11 @@ const Dialog = (props: Props<DialogProps>) => {
     <Portal>
       <dialog
         ref={dialogRef}
-        class={`${styles.dialog} ${props.class ?? ''}`}
+        class={classNames(styles.dialog, props.class)}
         aria-labelledby={titleId}
-        data-dialog-title-id={titleId}
         onCancel={handleCancel}
       >
-        {props.children}
+        <DialogContext.Provider value={{ titleId }}>{props.children}</DialogContext.Provider>
       </dialog>
     </Portal>
   );

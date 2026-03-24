@@ -79,17 +79,16 @@ body {
   gap: var(--spacing-sm);
 }
 
+.showcaseContent :is([role='dialog'], [role='listbox']) {
+  z-index: var(--z-overlay);
+}
+
 .previewPanel {
   display: grid;
   gap: var(--spacing-md);
   position: relative;
   padding: var(--spacing-lg);
   overflow: visible;
-  z-index: 0;
-}
-
-.previewPanel:focus-within {
-  z-index: var(--z-dropdown);
 }
 
 .previewPanel.previewPanel {
@@ -159,6 +158,11 @@ body {
 
 .previewGroupSubtitle {
   margin: 0;
+}
+
+.affixButtonBadgeSpacer {
+  display: inline-block;
+  width: 10px;
 }
 
 .previewGroupContent {
@@ -545,6 +549,24 @@ body {
 
 .recronTitle {
   margin: 0;
+}
+
+.aiActionsRow {
+  width: 100%;
+  justify-content: center;
+  flex-wrap: nowrap;
+}
+
+.aiScenarioSelect {
+  min-width: 220px;
+}
+
+.aiActionButton {
+  white-space: nowrap;
+}
+
+.aiRunButton {
+  min-width: max-content;
 }
 
 @media (width < 640px) {

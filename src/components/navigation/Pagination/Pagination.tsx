@@ -61,7 +61,7 @@ const Pagination = (props: Props<PaginationOwnProps>) => {
   const pages = () => buildPageItems(current(), local.totalPages, local.maxVisible ?? 7);
 
   return (
-    <nav {...rest} class={`${styles.nav} ${local.class ?? ''}`} aria-label={local.ariaLabel ?? 'Pagination'}>
+    <nav {...rest} class={classNames(styles.nav, local.class)} aria-label={local.ariaLabel ?? 'Pagination'}>
       <Button
         variant="ghost"
         size="sm"
@@ -85,7 +85,7 @@ const Pagination = (props: Props<PaginationOwnProps>) => {
               <Button
                 variant={active() ? 'primary' : 'ghost'}
                 size="sm"
-                class={classNames(styles.pageButton, active() && styles.active)}
+                class={styles.pageButton}
                 aria-current={active() ? 'page' : undefined}
                 onClick={() => local.onChange(item)}
               >

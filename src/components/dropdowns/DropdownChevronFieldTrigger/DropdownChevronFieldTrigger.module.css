@@ -1,0 +1,16 @@
+.chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+  transition: transform var(--duration-fast) var(--ease-out-expo);
+}
+
+.chevronInverse {
+  color: var(--color-on-accent);
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}

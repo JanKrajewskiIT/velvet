@@ -10,7 +10,6 @@
 
 .content {
   flex: 1;
-  text-align: center;
 }
 
 .action {
@@ -19,17 +18,7 @@
 
 .closeBtn {
   flex-shrink: 0;
-  border-radius: var(--radius-sm);
   color: inherit;
-  opacity: 0.8;
-  transition:
-    opacity var(--duration-fast) var(--ease-out-expo),
-    background-color var(--duration-fast) var(--ease-out-expo);
-}
-
-.closeBtn:hover {
-  opacity: 1;
-  background-color: var(--color-glass);
 }
 
 .primary {

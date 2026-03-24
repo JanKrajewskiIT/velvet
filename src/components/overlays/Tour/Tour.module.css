@@ -29,17 +29,11 @@
 }
 
 .title {
-  font-weight: var(--typography-weight-semibold);
-  font-size: var(--typography-scale-base);
-  color: var(--color-text);
   margin-bottom: var(--spacing-xs);
 }
 
 .content {
-  font-size: var(--typography-scale-sm);
-  color: var(--color-text-secondary);
   margin-bottom: var(--spacing-md);
-  line-height: var(--typography-line-height-body);
 }
 
 .footer {
@@ -49,8 +43,7 @@
 }
 
 .steps {
-  font-size: var(--typography-scale-xs);
-  color: var(--color-text-muted);
+  display: inline-flex;
 }
 
 .actions {
@@ -62,16 +55,4 @@
   position: absolute;
   top: var(--spacing-xs);
   right: var(--spacing-xs);
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(4px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }

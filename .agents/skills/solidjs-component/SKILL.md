@@ -24,6 +24,14 @@ With HTML attribute spreading: `interface XOwnProps extends JSX.*HTMLAttributes`
 - One primitive per role in a family (e.g. dropdown option, dropdown surface) -- avoid parallel item variants
 - Label-driven APIs should use explicit props like `label` instead of free-form `children`
 - Keep primitive styles in that primitive's own module file/directory (avoid catch-all base CSS)
+- Prefer `ComponentName.tsx` + `ComponentName.module.css` pairs; avoid standalone `*.module.css` without a corresponding component
+- Exception: shared primitive style modules can stay standalone when reused across different element types (e.g. button/select/input/div)
+- Never use `composes` in `*.module.css`; for shared styles import the source module in TSX and merge classes with `classNames()`
+- `class`/`classList` on primitives is allowed only for layout/composition (positioning, sizing, spacing, flex/grid, alignment, overflow)
+- Do not skin primitives from host component classes (no typography/color/background/border/shadow/radius overrides on Text/Heading/CodeText/Button/IconButton/Input/TextArea)
+- Visual semantics of primitives must come from primitive API (`variant`/`tone`/`size`/state props). Extend primitive API if needed instead of local visual overrides
+- Wrapper components are valid only when they add real semantics/default behavior/state (not style-only pass-through)
+- For shared controls reused across components (e.g. media navigation), keep visual styling in the shared primitive module; host components should only position/place them
 
 ## Code / JSX separation
 
