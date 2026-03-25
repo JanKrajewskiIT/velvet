@@ -1,14 +1,18 @@
 import {
   Heading,
+  I18nProvider,
+  LocaleSwitcher,
   SidebarNav,
   type SidebarNavGroup,
   Text,
   ThemeProvider,
   ThemeToggle,
   ToastProvider,
+  useI18n,
 } from '@jankrajewskiit/ui';
-import { createSignal, Match, Switch } from 'solid-js';
+import { createMemo, createSignal, Match, Switch } from 'solid-js';
 
+import { type DemoI18nMessageKey, getDemoMessages } from './i18n/messages';
 import CompositesSection from './sections/CompositesSection';
 import DataDisplaySection from './sections/DataDisplaySection';
 import DeveloperSection from './sections/DeveloperSection';
@@ -71,331 +75,367 @@ export type SectionId =
   | 'composites-ai-result'
   | 'composites-scheduler';
 
-const NAV_GROUPS: SidebarNavGroup[] = [
+interface DemoNavItemConfig {
+  id: SectionId;
+  labelKey: DemoI18nMessageKey;
+}
+
+interface DemoNavGroupConfig {
+  labelKey: DemoI18nMessageKey;
+  items: DemoNavItemConfig[];
+}
+
+const NAV_GROUPS: DemoNavGroupConfig[] = [
   {
-    label: 'Start',
+    labelKey: 'demo.nav.start',
     items: [
-      { id: 'overview', label: 'Overview' },
-      { id: 'typography', label: 'Typography' },
-      { id: 'developer', label: 'Tooling' },
+      { id: 'overview', labelKey: 'demo.nav.item.overview' },
+      { id: 'typography', labelKey: 'demo.nav.item.typography' },
+      { id: 'developer', labelKey: 'demo.nav.item.developer' },
     ],
   },
   {
-    label: 'Surfaces',
+    labelKey: 'demo.nav.surfaces',
     items: [
-      { id: 'surfaces-layouts', label: 'Layouts' },
-      { id: 'surfaces-main-layout', label: 'MainLayout' },
-      { id: 'surfaces-collapsible', label: 'Collapsible' },
-      { id: 'surfaces-cards', label: 'Cards' },
+      { id: 'surfaces-layouts', labelKey: 'demo.nav.item.surfacesLayouts' },
+      { id: 'surfaces-main-layout', labelKey: 'demo.nav.item.surfacesMainLayout' },
+      { id: 'surfaces-collapsible', labelKey: 'demo.nav.item.surfacesCollapsible' },
+      { id: 'surfaces-cards', labelKey: 'demo.nav.item.surfacesCards' },
     ],
   },
   {
-    label: 'Navigation',
+    labelKey: 'demo.nav.navigation',
     items: [
-      { id: 'nav-navbar', label: 'Navbar' },
-      { id: 'nav-sidebars', label: 'Sidebar & SidebarNav' },
-      { id: 'nav-breadcrumbs', label: 'Breadcrumbs' },
-      { id: 'nav-stepper', label: 'Stepper' },
-      { id: 'nav-tabs', label: 'Tabs' },
-      { id: 'nav-pagination', label: 'Pagination' },
-      { id: 'nav-speed-dial', label: 'Speed Dial (FAB)' },
-      { id: 'nav-bottom-nav', label: 'Bottom nav' },
-      { id: 'nav-back-to-top', label: 'Back to top' },
+      { id: 'nav-navbar', labelKey: 'demo.nav.item.navbar' },
+      { id: 'nav-sidebars', labelKey: 'demo.nav.item.sidebars' },
+      { id: 'nav-breadcrumbs', labelKey: 'demo.nav.item.breadcrumbs' },
+      { id: 'nav-stepper', labelKey: 'demo.nav.item.stepper' },
+      { id: 'nav-tabs', labelKey: 'demo.nav.item.tabs' },
+      { id: 'nav-pagination', labelKey: 'demo.nav.item.pagination' },
+      { id: 'nav-speed-dial', labelKey: 'demo.nav.item.speedDial' },
+      { id: 'nav-bottom-nav', labelKey: 'demo.nav.item.bottomNav' },
+      { id: 'nav-back-to-top', labelKey: 'demo.nav.item.backToTop' },
     ],
   },
   {
-    label: 'Inputs',
+    labelKey: 'demo.nav.inputs',
     items: [
-      { id: 'inputs-buttons', label: 'Buttons' },
-      { id: 'inputs-switchers', label: 'Switchers' },
-      { id: 'inputs-pickers', label: 'Pickers' },
-      { id: 'inputs-dropdowns', label: 'Dropdowns' },
-      { id: 'inputs-fields', label: 'Fields' },
-      { id: 'inputs-datetime', label: 'Date & Time' },
-      { id: 'inputs-other', label: 'Upload' },
-      { id: 'inputs-form-layout', label: 'Form Layout' },
+      { id: 'inputs-buttons', labelKey: 'demo.nav.item.inputsButtons' },
+      { id: 'inputs-switchers', labelKey: 'demo.nav.item.inputsSwitchers' },
+      { id: 'inputs-pickers', labelKey: 'demo.nav.item.inputsPickers' },
+      { id: 'inputs-dropdowns', labelKey: 'demo.nav.item.inputsDropdowns' },
+      { id: 'inputs-fields', labelKey: 'demo.nav.item.inputsFields' },
+      { id: 'inputs-datetime', labelKey: 'demo.nav.item.inputsDateTime' },
+      { id: 'inputs-other', labelKey: 'demo.nav.item.inputsUpload' },
+      { id: 'inputs-form-layout', labelKey: 'demo.nav.item.inputsFormLayout' },
     ],
   },
   {
-    label: 'Data',
+    labelKey: 'demo.nav.data',
     items: [
-      { id: 'data-tables', label: 'Tables' },
-      { id: 'data-lists', label: 'Lists' },
-      { id: 'data-filters', label: 'Filters' },
-      { id: 'data-tree', label: 'Tree' },
-      { id: 'data-media', label: 'Media' },
-      { id: 'data-charts', label: 'Charts' },
-      { id: 'data-timeline', label: 'Timeline' },
+      { id: 'data-tables', labelKey: 'demo.nav.item.dataTables' },
+      { id: 'data-lists', labelKey: 'demo.nav.item.dataLists' },
+      { id: 'data-filters', labelKey: 'demo.nav.item.dataFilters' },
+      { id: 'data-tree', labelKey: 'demo.nav.item.dataTree' },
+      { id: 'data-media', labelKey: 'demo.nav.item.dataMedia' },
+      { id: 'data-charts', labelKey: 'demo.nav.item.dataCharts' },
+      { id: 'data-timeline', labelKey: 'demo.nav.item.dataTimeline' },
     ],
   },
   {
-    label: 'Feedback',
+    labelKey: 'demo.nav.feedback',
     items: [
-      { id: 'feedback-badges-chips', label: 'Status & Notifications' },
-      { id: 'feedback-progress', label: 'Progress' },
-      { id: 'feedback-alerts', label: 'Alerts & Banners' },
-      { id: 'feedback-states', label: 'Empty States' },
+      { id: 'feedback-badges-chips', labelKey: 'demo.nav.item.feedbackStatusNotifications' },
+      { id: 'feedback-progress', labelKey: 'demo.nav.item.feedbackProgress' },
+      { id: 'feedback-alerts', labelKey: 'demo.nav.item.feedbackAlertsBanners' },
+      { id: 'feedback-states', labelKey: 'demo.nav.item.feedbackEmptyStates' },
     ],
   },
   {
-    label: 'Overlays',
+    labelKey: 'demo.nav.overlays',
     items: [
-      { id: 'overlays-tooltips', label: 'Tooltip & Popover' },
-      { id: 'overlays-dialogs', label: 'Dialogs' },
-      { id: 'overlays-sheets', label: 'Sheets' },
-      { id: 'overlays-context', label: 'Context Menu' },
-      { id: 'overlays-lightbox', label: 'Tour' },
+      { id: 'overlays-tooltips', labelKey: 'demo.nav.item.overlaysTooltipPopover' },
+      { id: 'overlays-dialogs', labelKey: 'demo.nav.item.overlaysDialogs' },
+      { id: 'overlays-sheets', labelKey: 'demo.nav.item.overlaysSheets' },
+      { id: 'overlays-context', labelKey: 'demo.nav.item.overlaysContextMenu' },
+      { id: 'overlays-lightbox', labelKey: 'demo.nav.item.overlaysTour' },
     ],
   },
   {
-    label: 'Composites',
+    labelKey: 'demo.nav.composites',
     items: [
-      { id: 'data-content', label: 'Code & Markdown' },
-      { id: 'composites-transfer-list', label: 'TransferList' },
-      { id: 'composites-editable-collection', label: 'EditableCollection' },
-      { id: 'composites-kanban-board', label: 'KanbanBoard' },
-      { id: 'composites-command-palette', label: 'Command Palette' },
-      { id: 'composites-wizard', label: 'Wizard' },
-      { id: 'composites-ai-result', label: 'AI Result Panel' },
-      { id: 'composites-scheduler', label: 'Scheduler' },
+      { id: 'data-content', labelKey: 'demo.nav.item.codeMarkdown' },
+      { id: 'composites-transfer-list', labelKey: 'demo.nav.item.transferList' },
+      { id: 'composites-editable-collection', labelKey: 'demo.nav.item.editableCollection' },
+      { id: 'composites-kanban-board', labelKey: 'demo.nav.item.kanbanBoard' },
+      { id: 'composites-command-palette', labelKey: 'demo.nav.item.commandPalette' },
+      { id: 'composites-wizard', labelKey: 'demo.nav.item.wizard' },
+      { id: 'composites-ai-result', labelKey: 'demo.nav.item.aiResultPanel' },
+      { id: 'composites-scheduler', labelKey: 'demo.nav.item.scheduler' },
     ],
   },
 ];
 
-const PAGE_TITLES: Record<SectionId, { title: string; description: string }> = {
+const PAGE_META_KEYS: Record<SectionId, { titleKey: DemoI18nMessageKey; descriptionKey: DemoI18nMessageKey }> = {
   overview: {
-    title: 'VelvetUI Overview',
-    description: 'Start here for installation, library goals and a quick snapshot of what is included.',
+    titleKey: 'demo.page.overview.title',
+    descriptionKey: 'demo.page.overview.description',
   },
   typography: {
-    title: 'Typography',
-    description:
-      'Semantic heading, text and code primitives built on top of brand typography tokens for consistent UI copy.',
+    titleKey: 'demo.page.typography.title',
+    descriptionKey: 'demo.page.typography.description',
   },
   developer: {
-    title: 'Tooling',
-    description:
-      'ESLint, Prettier, Stylelint, TypeScript, Vite, lint-staged and Husky presets plus usage snippets and design principles.',
+    titleKey: 'demo.page.developer.title',
+    descriptionKey: 'demo.page.developer.description',
   },
   'inputs-buttons': {
-    title: 'Inputs & Buttons',
-    description: 'Button, AffixButton, IconButton, ActionRow, CopyButton, LocaleSwitcher and ThemeToggle.',
+    titleKey: 'demo.page.inputsButtons.title',
+    descriptionKey: 'demo.page.inputsButtons.description',
   },
   'inputs-switchers': {
-    title: 'Inputs & Switchers',
-    description: 'SegmentedControl, Checkbox, RadioGroup and Switch for binary and exclusive selection patterns.',
+    titleKey: 'demo.page.inputsSwitchers.title',
+    descriptionKey: 'demo.page.inputsSwitchers.description',
   },
   'inputs-dropdowns': {
-    title: 'Inputs & Dropdowns',
-    description:
-      'DropdownButton, DropdownMenu, Autocomplete, MultiSelect and Select for searchable menus and option selection.',
+    titleKey: 'demo.page.inputsDropdowns.title',
+    descriptionKey: 'demo.page.inputsDropdowns.description',
   },
   'inputs-fields': {
-    title: 'Inputs & Fields',
-    description:
-      'Input, TextArea, NumberInput, SearchInput, PasswordInput, TagInput, OtpInput, InlineEditableText and RichTextEditor.',
+    titleKey: 'demo.page.inputsFields.title',
+    descriptionKey: 'demo.page.inputsFields.description',
   },
   'inputs-pickers': {
-    title: 'Inputs & Pickers',
-    description: 'Slider, RangeSlider, Rating and ColorPicker for scalar, range and palette selection.',
+    titleKey: 'demo.page.inputsPickers.title',
+    descriptionKey: 'demo.page.inputsPickers.description',
   },
   'inputs-datetime': {
-    title: 'Inputs & Date & Time',
-    description: 'DatePicker, DateRangePicker, TimePicker and DateTimePicker for date/time scheduling workflows.',
+    titleKey: 'demo.page.inputsDateTime.title',
+    descriptionKey: 'demo.page.inputsDateTime.description',
   },
   'inputs-other': {
-    title: 'Inputs & Upload',
-    description: 'FileDropZone for drag-and-drop single and multi-file upload flows.',
+    titleKey: 'demo.page.inputsOther.title',
+    descriptionKey: 'demo.page.inputsOther.description',
   },
   'inputs-form-layout': {
-    title: 'Inputs & Form Layout',
-    description: 'FormField, FormGrid, FormLayout and ActionRow for structured and responsive form pages.',
+    titleKey: 'demo.page.inputsFormLayout.title',
+    descriptionKey: 'demo.page.inputsFormLayout.description',
   },
   'data-content': {
-    title: 'Composites & Code & Markdown',
-    description:
-      'CodeBlock, MarkdownRenderer and MarkdownEditDialog for documentation, code snippets and markdown editing.',
+    titleKey: 'demo.page.dataContent.title',
+    descriptionKey: 'demo.page.dataContent.description',
   },
   'data-media': {
-    title: 'Data & Media',
-    description:
-      'Avatar, AvatarGroup, Carousel, ImageGrid, Lightbox and Marquee for people, galleries and ticker-style content.',
+    titleKey: 'demo.page.dataMedia.title',
+    descriptionKey: 'demo.page.dataMedia.description',
   },
   'data-charts': {
-    title: 'Data & Charts',
-    description: 'ScoreRing, RadarChart and TradingViewChart for data visualization.',
+    titleKey: 'demo.page.dataCharts.title',
+    descriptionKey: 'demo.page.dataCharts.description',
   },
   'data-tables': {
-    title: 'Data & Tables',
-    description:
-      'Table primitives, DataTable v2, QueryBuilder, ColumnManager and DataGridPro v3 (virtualization, pinning, resizing, selection, visibility, reorder, JSON import/export).',
+    titleKey: 'demo.page.dataTables.title',
+    descriptionKey: 'demo.page.dataTables.description',
   },
   'data-lists': {
-    title: 'Data & Lists',
-    description: 'List and ListItem for structured rows with icons, secondary text and inline actions.',
+    titleKey: 'demo.page.dataLists.title',
+    descriptionKey: 'demo.page.dataLists.description',
   },
   'data-filters': {
-    title: 'Data & Filters',
-    description: 'FilterBar for combining search queries, structured filters and removable active chips.',
+    titleKey: 'demo.page.dataFilters.title',
+    descriptionKey: 'demo.page.dataFilters.description',
   },
   'data-timeline': {
-    title: 'Data & Timeline',
-    description: 'Timeline for chronological lists of events, releases and activity history.',
+    titleKey: 'demo.page.dataTimeline.title',
+    descriptionKey: 'demo.page.dataTimeline.description',
   },
   'data-tree': {
-    title: 'Data & Tree',
-    description: 'TreeView v2 with lazy loading, checkbox selection and drag-and-drop tree navigation.',
+    titleKey: 'demo.page.dataTree.title',
+    descriptionKey: 'demo.page.dataTree.description',
   },
   'nav-navbar': {
-    title: 'Navigation & Navbar',
-    description: 'Navbar for top-level app navigation with brand, actions and responsive mobile menu.',
+    titleKey: 'demo.page.navNavbar.title',
+    descriptionKey: 'demo.page.navNavbar.description',
   },
   'nav-sidebars': {
-    title: 'Navigation & Sidebar & SidebarNav',
-    description: 'Sidebar and SidebarNav for nested app navigation and docs-like section menus.',
+    titleKey: 'demo.page.navSidebars.title',
+    descriptionKey: 'demo.page.navSidebars.description',
   },
   'nav-breadcrumbs': {
-    title: 'Navigation & Breadcrumbs',
-    description: 'Breadcrumbs for displaying hierarchical location and quick parent navigation.',
+    titleKey: 'demo.page.navBreadcrumbs.title',
+    descriptionKey: 'demo.page.navBreadcrumbs.description',
   },
   'nav-stepper': {
-    title: 'Navigation & Stepper',
-    description: 'Stepper for visualizing progress through ordered steps and multi-step flows.',
+    titleKey: 'demo.page.navStepper.title',
+    descriptionKey: 'demo.page.navStepper.description',
   },
   'nav-tabs': {
-    title: 'Navigation & Tabs',
-    description: 'Tabs for switching between related views with underline and pill variants.',
+    titleKey: 'demo.page.navTabs.title',
+    descriptionKey: 'demo.page.navTabs.description',
   },
   'nav-pagination': {
-    title: 'Navigation & Pagination',
-    description: 'Pagination for navigating between pages of content and large lists.',
+    titleKey: 'demo.page.navPagination.title',
+    descriptionKey: 'demo.page.navPagination.description',
   },
   'nav-speed-dial': {
-    title: 'Navigation & Speed Dial (FAB)',
-    description: 'SpeedDial for quick floating actions with direction variants and labels.',
+    titleKey: 'demo.page.navSpeedDial.title',
+    descriptionKey: 'demo.page.navSpeedDial.description',
   },
   'nav-bottom-nav': {
-    title: 'Navigation & Bottom nav',
-    description:
-      'BottomNav for mobile navigation bars; use placement container when the bar sits only above main content.',
+    titleKey: 'demo.page.navBottomNav.title',
+    descriptionKey: 'demo.page.navBottomNav.description',
   },
   'nav-back-to-top': {
-    title: 'Navigation & Back to top',
-    description: 'BackToTop floating control for long-scrolling pages.',
+    titleKey: 'demo.page.navBackToTop.title',
+    descriptionKey: 'demo.page.navBackToTop.description',
   },
   'feedback-badges-chips': {
-    title: 'Feedback & Status & Notifications',
-    description: 'Badge, Chip, ClosableChip, Kbd, Toast and StatCard for compact status and notification patterns.',
+    titleKey: 'demo.page.feedbackBadgesChips.title',
+    descriptionKey: 'demo.page.feedbackBadgesChips.description',
   },
   'feedback-progress': {
-    title: 'Feedback & Progress',
-    description: 'Progress, CircularProgress, Countdown, Spinner, Skeleton and LoadingContainer.',
+    titleKey: 'demo.page.feedbackProgress.title',
+    descriptionKey: 'demo.page.feedbackProgress.description',
   },
   'feedback-alerts': {
-    title: 'Feedback & Alerts & Banners',
-    description: 'Alert, Banner, ErrorMessage and NotificationCenter for inline and full-width status messaging.',
+    titleKey: 'demo.page.feedbackAlerts.title',
+    descriptionKey: 'demo.page.feedbackAlerts.description',
   },
   'feedback-states': {
-    title: 'Feedback & Empty States',
-    description: 'ErrorFallback, EmptyState and AccessDenied for error, zero-data and permission-denied screens.',
+    titleKey: 'demo.page.feedbackStates.title',
+    descriptionKey: 'demo.page.feedbackStates.description',
   },
   'overlays-tooltips': {
-    title: 'Overlays & Tooltip & Popover',
-    description: 'Tooltip and Popover for contextual hints and click-triggered floating content around controls.',
+    titleKey: 'demo.page.overlaysTooltips.title',
+    descriptionKey: 'demo.page.overlaysTooltips.description',
   },
   'overlays-dialogs': {
-    title: 'Overlays & Dialogs',
-    description: 'Dialog, ConfirmDialog and ConfirmAction for modal workflows and confirmation flows.',
+    titleKey: 'demo.page.overlaysDialogs.title',
+    descriptionKey: 'demo.page.overlaysDialogs.description',
   },
   'overlays-sheets': {
-    title: 'Overlays & Sheets',
-    description: 'Sheet for slide-in panels from any edge, including right-side panels with action footer.',
+    titleKey: 'demo.page.overlaysSheets.title',
+    descriptionKey: 'demo.page.overlaysSheets.description',
   },
   'overlays-context': {
-    title: 'Overlays & Context Menu',
-    description: 'ContextMenu for right-click action menus.',
+    titleKey: 'demo.page.overlaysContext.title',
+    descriptionKey: 'demo.page.overlaysContext.description',
   },
   'overlays-lightbox': {
-    title: 'Overlays & Tour',
-    description: 'Tour for step-by-step onboarding spotlights and guided product walkthroughs.',
+    titleKey: 'demo.page.overlaysLightbox.title',
+    descriptionKey: 'demo.page.overlaysLightbox.description',
   },
   'surfaces-layouts': {
-    title: 'Surfaces & Layouts',
-    description: 'Grid, Stack, ResizablePanel and Divider for composition-friendly layouts.',
+    titleKey: 'demo.page.surfacesLayouts.title',
+    descriptionKey: 'demo.page.surfacesLayouts.description',
   },
   'surfaces-main-layout': {
-    title: 'Surfaces & MainLayout',
-    description: 'MainLayout full shell composition with Navbar and Footer, without navigation items.',
+    titleKey: 'demo.page.surfacesMainLayout.title',
+    descriptionKey: 'demo.page.surfacesMainLayout.description',
   },
   'surfaces-collapsible': {
-    title: 'Surfaces & Collapsible',
-    description: 'Accordion and SectionCard for progressive disclosure and grouped content.',
+    titleKey: 'demo.page.surfacesCollapsible.title',
+    descriptionKey: 'demo.page.surfacesCollapsible.description',
   },
   'surfaces-cards': {
-    title: 'Surfaces & Cards',
-    description: 'Card, DataCard and FlipCard for content containers and interactive layouts.',
+    titleKey: 'demo.page.surfacesCards.title',
+    descriptionKey: 'demo.page.surfacesCards.description',
   },
   'composites-transfer-list': {
-    title: 'Composites & TransferList',
-    description: 'TransferList for moving items between source and target groups with search support.',
+    titleKey: 'demo.page.compositesTransferList.title',
+    descriptionKey: 'demo.page.compositesTransferList.description',
   },
   'composites-editable-collection': {
-    title: 'Composites & EditableCollection',
-    description: 'EditableCollection for adding, removing and editing dynamic form-like item lists.',
+    titleKey: 'demo.page.compositesEditableCollection.title',
+    descriptionKey: 'demo.page.compositesEditableCollection.description',
   },
   'composites-kanban-board': {
-    title: 'Composites & KanbanBoard',
-    description: 'KanbanBoard for drag-and-drop workflow columns and status changes.',
+    titleKey: 'demo.page.compositesKanbanBoard.title',
+    descriptionKey: 'demo.page.compositesKanbanBoard.description',
   },
   'composites-command-palette': {
-    title: 'Composites & Command Palette',
-    description: 'CommandPalette for keyboard-first command launching, grouped results and quick actions.',
+    titleKey: 'demo.page.compositesCommandPalette.title',
+    descriptionKey: 'demo.page.compositesCommandPalette.description',
   },
   'composites-wizard': {
-    title: 'Composites & Wizard',
-    description: 'Wizard for guided multi-step flows with progress, validation and finish actions.',
+    titleKey: 'demo.page.compositesWizard.title',
+    descriptionKey: 'demo.page.compositesWizard.description',
   },
   'composites-ai-result': {
-    title: 'Composites & AI Result Panel',
-    description: 'AiResultPanel showcase with full score, summary, sections and contextual actions.',
+    titleKey: 'demo.page.compositesAiResult.title',
+    descriptionKey: 'demo.page.compositesAiResult.description',
   },
   'composites-scheduler': {
-    title: 'Composites & Scheduler',
-    description: 'Scheduler for month-based planning with multi-day events and drag-and-drop rescheduling.',
+    titleKey: 'demo.page.compositesScheduler.title',
+    descriptionKey: 'demo.page.compositesScheduler.description',
   },
 };
 
+function interpolate(template: string, params?: Record<string, string | number>): string {
+  if (!params) return template;
+  return template.replace(/\{([^}]+)\}/gu, (_match, token: string) => {
+    const value = params[token];
+    return value === undefined ? `{${token}}` : String(value);
+  });
+}
+
+function translate(
+  dictionary: Record<DemoI18nMessageKey, string>,
+  key: DemoI18nMessageKey,
+  params?: Record<string, string | number>
+): string {
+  const template = dictionary[key];
+  return interpolate(template, params);
+}
+
 const AppContent = () => {
+  const { locale } = useI18n();
+  const dictionary = createMemo(() => getDemoMessages(locale()));
   const [activeSection, setActiveSection] = createSignal<SectionId>('overview');
 
-  const meta = () => PAGE_TITLES[activeSection()];
+  const meta = () => PAGE_META_KEYS[activeSection()];
+  const navGroups = (): SidebarNavGroup[] => {
+    return NAV_GROUPS.map((group) => ({
+      label: translate(dictionary(), group.labelKey),
+      items: group.items.map((item) => ({
+        id: item.id,
+        label: translate(dictionary(), item.labelKey),
+      })),
+    }));
+  };
 
   return (
     <div class="layout">
       <SidebarNav
-        groups={NAV_GROUPS}
+        groups={navGroups()}
         activeId={activeSection()}
         onSelect={(id) => setActiveSection(id as SectionId)}
-        title="VelvetUI"
-        subtitle="Modern SolidJS component showcase"
-        navLabel="Component categories"
+        label={translate(dictionary(), 'demo.sidebar.title')}
+        subtitle={translate(dictionary(), 'demo.sidebar.subtitle')}
+        navLabel={translate(dictionary(), 'demo.sidebar.navLabel')}
         actions={
-          <div class="themeToggleBar">
-            <ThemeToggle lightLabel="Light mode" darkLabel="Dark mode" groupLabel="Theme" variant="light" />
-          </div>
+          <>
+            <LocaleSwitcher variant="ghost" />
+            <ThemeToggle
+              lightLabel={translate(dictionary(), 'demo.theme.light')}
+              darkLabel={translate(dictionary(), 'demo.theme.dark')}
+              groupLabel={translate(dictionary(), 'demo.theme.group')}
+              variant="light"
+            />
+          </>
         }
       />
 
       <main class="main">
         <div class="pageHeader">
           <Text as="p" variant="overline" tone="primary" class="pageEyebrow">
-            Component playground
+            {translate(dictionary(), 'demo.page.eyebrow')}
           </Text>
           <Heading level={1} variant="displayMd" class="pageTitle">
-            {meta().title}
+            {translate(dictionary(), meta().titleKey)}
           </Heading>
           <Text as="p" variant="bodySm" tone="muted" class="pageDescription">
-            {meta().description}
+            {translate(dictionary(), meta().descriptionKey)}
           </Text>
         </div>
 
@@ -441,11 +481,22 @@ const AppContent = () => {
 
 const App = () => {
   return (
-    <ThemeProvider>
-      <ToastProvider closeLabel="Close notification">
-        <AppContent />
-      </ToastProvider>
-    </ThemeProvider>
+    <I18nProvider storageKey="velvet-demo-library-locale">
+      <ThemeProvider>
+        <InnerApp />
+      </ThemeProvider>
+    </I18nProvider>
+  );
+};
+
+const InnerApp = () => {
+  const { locale } = useI18n();
+  const dictionary = createMemo(() => getDemoMessages(locale()));
+
+  return (
+    <ToastProvider closeLabel={translate(dictionary(), 'demo.toast.close')}>
+      <AppContent />
+    </ToastProvider>
   );
 };
 

@@ -20,6 +20,7 @@ import { createEffect, createMemo, createSignal, For, onCleanup, onMount, splitP
 import Button from '~/components/buttons/Button/Button';
 import Heading from '~/components/typography/Heading/Heading';
 import Text from '~/components/typography/Text/Text';
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -310,6 +311,7 @@ const isBusinessDay = (value: unknown): value is { year: number; month: number; 
   typeof value === 'object' && value !== null && 'year' in value && 'month' in value && 'day' in value;
 
 const TradingViewChart = (props: Props<TradingViewChartProps>) => {
+  const { t } = useI18n();
   const [local, rest] = splitProps(props, [
     'symbol',
     'data',
@@ -387,37 +389,37 @@ const TradingViewChart = (props: Props<TradingViewChartProps>) => {
   const toggleIndicatorControls = createMemo<ToolbarToggle[]>(() => [
     {
       id: 'volume',
-      label: 'Vol',
+      label: t('trading.volumeShort'),
       active: showVolume(),
       onClick: () => setShowVolume((value) => !value),
     },
     {
       id: 'sma',
-      label: 'SMA',
+      label: t('trading.smaShort'),
       active: showSma(),
       onClick: () => setShowSma((value) => !value),
     },
     {
       id: 'ema',
-      label: 'EMA',
+      label: t('trading.emaShort'),
       active: showEma(),
       onClick: () => setShowEma((value) => !value),
     },
     {
       id: 'bb',
-      label: 'BB',
+      label: t('trading.bbShort'),
       active: showBb(),
       onClick: () => setShowBb((value) => !value),
     },
     {
       id: 'rsi',
-      label: 'RSI',
+      label: t('trading.rsiShort'),
       active: showRsi(),
       onClick: () => setShowRsi((value) => !value),
     },
     {
       id: 'macd',
-      label: 'MACD',
+      label: t('trading.macdShort'),
       active: showMacd(),
       onClick: () => setShowMacd((value) => !value),
     },
@@ -425,19 +427,19 @@ const TradingViewChart = (props: Props<TradingViewChartProps>) => {
   const drawingControls = createMemo<ToolbarToggle[]>(() => [
     {
       id: 'trendline',
-      label: 'Trend',
+      label: t('trading.trendTool'),
       active: activeTool() === 'trendline',
       onClick: () => setActiveTool((tool) => (tool === 'trendline' ? 'none' : 'trendline')),
     },
     {
       id: 'level',
-      label: 'Level',
+      label: t('trading.levelTool'),
       active: activeTool() === 'level',
       onClick: () => setActiveTool((tool) => (tool === 'level' ? 'none' : 'level')),
     },
     {
       id: 'zone',
-      label: 'Zone',
+      label: t('trading.zoneTool'),
       active: activeTool() === 'zone',
       onClick: () => setActiveTool((tool) => (tool === 'zone' ? 'none' : 'zone')),
     },
@@ -458,6 +460,16 @@ const TradingViewChart = (props: Props<TradingViewChartProps>) => {
       `BB↓: ${toFixed(indicators?.bbLower ?? 0)}`,
     ];
   });
+  const clearLabel = () => t('common.clear');
+  const bbUpperTitle = () => t('trading.bbUpper');
+  const bbBasisTitle = () => t('trading.bbBasis');
+  const bbLowerTitle = () => t('trading.bbLower');
+  const smaTitle = () => t('trading.sma20');
+  const emaTitle = () => t('trading.ema50');
+  const rsiTitle = () => t('trading.rsi14');
+  const macdTitle = () => t('trading.macd');
+  const macdSignalTitle = () => t('trading.macdSignal');
+  const macdHistTitle = () => t('trading.macdHist');
 
   let wrapperRef: HTMLDivElement | undefined;
   let chartHostRef: HTMLDivElement | undefined;
@@ -835,7 +847,7 @@ const TradingViewChart = (props: Props<TradingViewChartProps>) => {
       autoSize: false,
       rightPriceScale: { scaleMargins: { top: 0.15, bottom: 0.22 } },
       timeScale: { timeVisible: true, secondsVisible: false, borderVisible: true },
-      localization: { locale: 'en-US' },
+      localization: { locale: t('trading.locale') },
       handleScroll: { mouseWheel: true, pressedMouseMove: true, horzTouchDrag: true, vertTouchDrag: true },
       handleScale: { axisPressedMouseMove: true, mouseWheel: true, pinch: true },
     });
@@ -852,32 +864,36 @@ const TradingViewChart = (props: Props<TradingViewChartProps>) => {
       1
     );
     bbUpperSeries = chart.addSeries(LineSeries, {
-      title: 'BB Upper',
+      title: bbUpperTitle(),
       priceLineVisible: false,
       lastValueVisible: false,
     });
     bbBasisSeries = chart.addSeries(LineSeries, {
-      title: 'BB Basis',
+      title: bbBasisTitle(),
       priceLineVisible: false,
       lastValueVisible: false,
     });
     bbLowerSeries = chart.addSeries(LineSeries, {
-      title: 'BB Lower',
+      title: bbLowerTitle(),
       priceLineVisible: false,
       lastValueVisible: false,
     });
-    smaSeries = chart.addSeries(LineSeries, { title: 'SMA 20', priceLineVisible: false, lastValueVisible: false });
-    emaSeries = chart.addSeries(LineSeries, { title: 'EMA 50', priceLineVisible: false, lastValueVisible: false });
-    rsiSeries = chart.addSeries(LineSeries, { title: 'RSI 14', priceLineVisible: false, lastValueVisible: false }, 2);
-    macdSeries = chart.addSeries(LineSeries, { title: 'MACD', priceLineVisible: false, lastValueVisible: false }, 3);
+    smaSeries = chart.addSeries(LineSeries, { title: smaTitle(), priceLineVisible: false, lastValueVisible: false });
+    emaSeries = chart.addSeries(LineSeries, { title: emaTitle(), priceLineVisible: false, lastValueVisible: false });
+    rsiSeries = chart.addSeries(LineSeries, { title: rsiTitle(), priceLineVisible: false, lastValueVisible: false }, 2);
+    macdSeries = chart.addSeries(
+      LineSeries,
+      { title: macdTitle(), priceLineVisible: false, lastValueVisible: false },
+      3
+    );
     macdSignalSeries = chart.addSeries(
       LineSeries,
-      { title: 'MACD Signal', priceLineVisible: false, lastValueVisible: false },
+      { title: macdSignalTitle(), priceLineVisible: false, lastValueVisible: false },
       3
     );
     macdHistogramSeries = chart.addSeries(
       HistogramSeries,
-      { title: 'MACD Hist', priceLineVisible: false, lastValueVisible: false },
+      { title: macdHistTitle(), priceLineVisible: false, lastValueVisible: false },
       3
     );
     volumeSeries.priceScale().applyOptions({ scaleMargins: { top: 0.7, bottom: 0 } });
@@ -1103,7 +1119,7 @@ const TradingViewChart = (props: Props<TradingViewChartProps>) => {
             )}
           </For>
           <Button type="button" variant="ghost" size="sm" onClick={clearCurrentTool}>
-            Clear
+            {clearLabel()}
           </Button>
         </div>
       </div>

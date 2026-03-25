@@ -63,7 +63,7 @@ const RequireAuth = (props: Props<RequireAuthProps>) => {
 
     return (
       <AccessDenied
-        title={defaultAccessDeniedProps.accessDeniedTitle}
+        label={defaultAccessDeniedProps.accessDeniedTitle}
         description={defaultAccessDeniedProps.accessDeniedDescription}
         goHomeLabel={defaultAccessDeniedProps.accessDeniedGoHomeLabel}
         goHomeHref={defaultAccessDeniedProps.accessDeniedGoHomeHref}

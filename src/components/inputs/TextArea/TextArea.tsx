@@ -1,20 +1,21 @@
-import type { JSX } from 'solid-js';
 import { splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
+import type { TextAreaCoreNativeProps } from '~/models/Props';
+import { resolveAriaInvalid } from '~/utils/aria';
 import classNames from '~/utils/classNames';
 
 import FieldBase from '../FieldBase/FieldBase';
 import type { InputSize } from '../Input/Input';
 import styles from './TextArea.module.css';
 
-interface TextAreaOwnProps extends JSX.TextareaHTMLAttributes<HTMLTextAreaElement> {
+interface TextAreaOwnProps extends TextAreaCoreNativeProps {
   size?: InputSize;
   invalid?: boolean;
 }
 
 const TextArea = (props: Props<TextAreaOwnProps>) => {
-  const [local, rest] = splitProps(props, ['class', 'size', 'invalid', 'readOnly']);
+  const [local, rest] = splitProps(props, ['class', 'size', 'invalid', 'readOnly', 'aria-invalid']);
 
   return (
     <FieldBase
@@ -25,10 +26,11 @@ const TextArea = (props: Props<TextAreaOwnProps>) => {
       readOnly={local.readOnly}
       disabled={rest.disabled}
       focusStyle="visible"
-      aria-invalid={local.invalid || undefined}
+      aria-invalid={resolveAriaInvalid(local.invalid, local['aria-invalid'] as boolean | 'true' | 'false' | undefined)}
       class={classNames(styles.root, local.class)}
     />
   );
 };
 
 export default TextArea;
+export type { TextAreaOwnProps };

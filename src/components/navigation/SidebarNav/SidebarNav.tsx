@@ -1,5 +1,6 @@
 import { For, type JSX, Show } from 'solid-js';
 
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -22,26 +23,29 @@ interface SidebarNavProps {
   groups: SidebarNavGroup[];
   activeId?: string;
   onSelect?: (id: string) => void;
-  title: JSX.Element;
-  subtitle?: JSX.Element;
+  label: string;
+  subtitle?: string;
   actions?: JSX.Element;
   navLabel?: string;
 }
 
 const SidebarNav = (props: Props<SidebarNavProps>) => {
+  const { t } = useI18n();
   const isActive = (id: string) => props.activeId === id;
 
   return (
-    <nav class={classNames(styles.root, props.class)} aria-label={props.navLabel ?? 'Component categories'}>
+    <nav class={classNames(styles.root, props.class)} aria-label={props.navLabel ?? t('sidebar.componentCategories')}>
       <div class={styles.brand}>
-        <div class={styles.brandHeader}>
-          <Heading level={3}>{props.title}</Heading>
-          <Show when={props.actions}>{props.actions}</Show>
-        </div>
+        <Heading level={3}>{props.label}</Heading>
         <Show when={props.subtitle}>
           <Text variant="bodySm" tone="muted">
             {props.subtitle}
           </Text>
+        </Show>
+        <Show when={props.actions}>
+          <div class={classNames(styles.brandActions, 'themeToggleBar')} data-sidebar-actions="true">
+            {props.actions}
+          </div>
         </Show>
       </div>
 

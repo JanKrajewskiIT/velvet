@@ -6,6 +6,7 @@ import useEscapeKey from '~/hooks/useEscapeKey';
 import useFocusTrap from '~/hooks/useFocusTrap';
 import useOverlayAnimation from '~/hooks/useOverlayAnimation';
 import type Props from '~/models/Props';
+import { joinAriaIds } from '~/utils/aria';
 import classNames from '~/utils/classNames';
 
 import IconButton from '../../buttons/IconButton/IconButton';
@@ -17,8 +18,8 @@ interface SheetProps {
   open: boolean;
   onClose: () => void;
   closeLabel: string;
-  title?: JSX.Element;
-  subtitle?: JSX.Element;
+  label?: string;
+  subtitle?: string;
   children?: JSX.Element;
   actions?: JSX.Element;
   side?: 'bottom' | 'left' | 'right';
@@ -28,6 +29,7 @@ interface SheetProps {
 const Sheet = (props: Props<SheetProps>) => {
   const [panelRef, setPanelRef] = createSignal<HTMLElement | undefined>();
   const titleId = createUniqueId();
+  const subtitleId = createUniqueId();
   const entered = useOverlayAnimation(() => props.open);
 
   const side = () => props.side ?? 'bottom';
@@ -56,25 +58,26 @@ const Sheet = (props: Props<SheetProps>) => {
           class={panelClass()}
           role="dialog"
           aria-modal="true"
-          aria-labelledby={props.title ? titleId : undefined}
+          aria-labelledby={joinAriaIds(props['aria-labelledby'], props.label && titleId)}
+          aria-describedby={joinAriaIds(props['aria-describedby'], props.subtitle && subtitleId)}
         >
           <Show when={side() === 'bottom'}>
             <div class={styles.dragHandle} />
           </Show>
           <div class={styles.header}>
             <div class={styles.titleBlock}>
-              <Show when={props.title}>
+              <Show when={props.label}>
                 <Heading as="h2" level={2} variant="titleLg" id={titleId}>
-                  {props.title}
+                  {props.label}
                 </Heading>
               </Show>
               <Show when={props.subtitle}>
-                <Text as="p" variant="bodySm" tone="muted">
+                <Text as="p" variant="bodySm" tone="muted" id={subtitleId}>
                   {props.subtitle}
                 </Text>
               </Show>
             </div>
-            <IconButton icon={<FiX />} title={props.closeLabel} onClick={() => props.onClose()} />
+            <IconButton icon={<FiX />} label={props.closeLabel} onClick={() => props.onClose()} />
           </div>
           <Show when={props.children}>
             <div class={styles.body}>{props.children}</div>

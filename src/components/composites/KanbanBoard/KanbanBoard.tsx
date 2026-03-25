@@ -1,6 +1,7 @@
 import type { JSX } from 'solid-js';
 import { createMemo, createSignal, For, Show } from 'solid-js';
 
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -30,6 +31,7 @@ interface KanbanBoardProps<T extends KanbanItemBase> {
 }
 
 const KanbanBoard = <T extends KanbanItemBase>(props: Props<KanbanBoardProps<T>>) => {
+  const { t } = useI18n();
   const [draggingId, setDraggingId] = createSignal<string | null>(null);
   const [dragOverColumnId, setDragOverColumnId] = createSignal<string | null>(null);
 
@@ -120,7 +122,7 @@ const KanbanBoard = <T extends KanbanItemBase>(props: Props<KanbanBoardProps<T>>
                     when={items().length > 0}
                     fallback={
                       <Text as="p" variant="caption" tone="muted" class={styles.empty}>
-                        {props.emptyLabel ?? 'No cards'}
+                        {props.emptyLabel ?? t('kanban.noCards')}
                       </Text>
                     }
                   >

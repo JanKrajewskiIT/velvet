@@ -2,6 +2,7 @@ import { createMemo } from 'solid-js';
 
 import type { InputSize } from '~/components/inputs/Input/Input';
 import type Props from '~/models/Props';
+import type { AriaFieldProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import type { DatePickerMessages } from '../DatePicker/DatePicker';
@@ -10,7 +11,7 @@ import type { TimePickerMessages } from '../TimePicker/TimePicker';
 import TimePicker from '../TimePicker/TimePicker';
 import styles from './DateTimePicker.module.css';
 
-interface DateTimePickerProps {
+interface DateTimePickerProps extends AriaFieldProps {
   id?: string;
   value?: string;
   onChange: (value: string) => void;
@@ -24,9 +25,6 @@ interface DateTimePickerProps {
   dateMessages?: DatePickerMessages;
   timeMessages?: TimePickerMessages;
   size?: InputSize;
-  'aria-labelledby'?: string;
-  'aria-describedby'?: string;
-  'aria-invalid'?: true;
 }
 
 const DateTimePicker = (props: Props<DateTimePickerProps>) => {

@@ -7,7 +7,11 @@ description: SolidJS component patterns for VelvetUi -- Props convention, compon
 
 `import type Props from '~/models/Props'` > interface > `(props: Props<X>) =>` > `export default`
 
-With HTML attribute spreading: `interface XOwnProps extends JSX.*HTMLAttributes` + `splitProps` + `{...rest}`.
+With HTML attribute spreading for public APIs, do not use full `JSX.*HTMLAttributes` directly.
+Use shared core subsets from `~/models/Props` (`ButtonCoreNativeProps`, `InputCoreNativeProps`, `TextAreaCoreNativeProps`, `SelectCoreNativeProps`, `ChoiceInputCoreNativeProps`, `SliderCoreNativeProps`, `TableHeaderCoreNativeProps`, `TableCellCoreNativeProps`) plus explicit semantic props.
+
+`Props<T>` already includes `class`, `id`, `aria-*`, and `data-*`.
+Do not duplicate those in local native picks.
 
 ## File structure
 
@@ -23,6 +27,10 @@ With HTML attribute spreading: `interface XOwnProps extends JSX.*HTMLAttributes`
 - Prefer existing VelvetUi primitives over introducing wrapper-only components
 - One primitive per role in a family (e.g. dropdown option, dropdown surface) -- avoid parallel item variants
 - Label-driven APIs should use explicit props like `label` instead of free-form `children`
+- For label-driven components, prefer `label`/`message` string props and block free-form text slots with `children?: never` where practical
+- Prefer `label` over `title` for component-level semantic labels; keep `title` only for domain model fields
+- Reuse shared label contracts from `~/models/Props` (`LabelOnlyProps`, `OptionalLabelOnlyProps`) instead of redefining equivalent local shapes
+- Render label/description via shared `LabelText` (or `Heading` when semantic heading is required) instead of duplicating inline `Text` stacks
 - Keep primitive styles in that primitive's own module file/directory (avoid catch-all base CSS)
 - Prefer `ComponentName.tsx` + `ComponentName.module.css` pairs; avoid standalone `*.module.css` without a corresponding component
 - Exception: shared primitive style modules can stay standalone when reused across different element types (e.g. button/select/input/div)
@@ -32,6 +40,13 @@ With HTML attribute spreading: `interface XOwnProps extends JSX.*HTMLAttributes`
 - Visual semantics of primitives must come from primitive API (`variant`/`tone`/`size`/state props). Extend primitive API if needed instead of local visual overrides
 - Wrapper components are valid only when they add real semantics/default behavior/state (not style-only pass-through)
 - For shared controls reused across components (e.g. media navigation), keep visual styling in the shared primitive module; host components should only position/place them
+- Keep native prop contracts narrow and intentional. Prefer dedicated semantic props over broad passthrough.
+- Keep `name` scoped to form-like controls; do not treat it as universal base component API
+
+## API migration notes
+
+- When replacing text `children` with semantic `label`/`message`, migrate both library components and demo usage in the same change
+- Add or extend lint guards (`no-restricted-syntax`) for components that should no longer accept text children
 
 ## Code / JSX separation
 

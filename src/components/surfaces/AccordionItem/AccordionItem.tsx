@@ -3,13 +3,14 @@ import { createMemo, createSignal, type JSX, splitProps } from 'solid-js';
 import Button from '~/components/buttons/Button/Button';
 import AccordionIcon from '~/components/surfaces/AccordionIcon/AccordionIcon';
 import Text from '~/components/typography/Text/Text';
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import styles from './AccordionItem.module.css';
 
-interface AccordionItemOwnProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'title' | 'onToggle'> {
-  title: JSX.Element;
+interface AccordionItemOwnProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'onToggle'> {
+  label: string;
   isOpen?: boolean;
   defaultOpen?: boolean;
   onToggle?: (isOpen: boolean) => void;
@@ -17,8 +18,9 @@ interface AccordionItemOwnProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>,
 }
 
 const AccordionItem = (props: Props<AccordionItemOwnProps>) => {
+  const { t } = useI18n();
   const [local, rest] = splitProps(props, [
-    'title',
+    'label',
     'children',
     'isOpen',
     'defaultOpen',
@@ -30,11 +32,11 @@ const AccordionItem = (props: Props<AccordionItemOwnProps>) => {
 
   const isOpen = createMemo(() => (local.isOpen !== undefined ? local.isOpen : internalOpen()));
   const ariaLabel = createMemo(() => {
-    if (typeof local.title === 'string' && local.title.trim().length > 0) {
-      return `Toggle ${local.title} section`;
+    if (typeof local.label === 'string' && local.label.trim().length > 0) {
+      return t('accordion.toggleSectionWithLabel', { label: local.label });
     }
 
-    return 'Toggle section';
+    return t('accordion.toggleSection');
   });
 
   const handleToggle = () => {
@@ -59,7 +61,7 @@ const AccordionItem = (props: Props<AccordionItemOwnProps>) => {
         aria-label={ariaLabel()}
       >
         <Text as="span" variant="labelLg" tone="secondary">
-          {local.title}
+          {local.label}
         </Text>
         <AccordionIcon isOpen={isOpen()} class={styles.icon} />
       </Button>

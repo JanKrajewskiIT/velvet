@@ -14,7 +14,7 @@ import styles from './MarkdownEditDialog.module.css';
 
 interface MarkdownEditDialogProps {
   open: boolean;
-  title: string;
+  label: string;
   initialValue: string;
   saveLabel: string;
   cancelLabel: string;
@@ -53,7 +53,7 @@ const MarkdownEditDialog = (props: Props<MarkdownEditDialogProps>) => {
   return (
     <Show when={props.open}>
       <Dialog open={props.open} onClose={handleCancel} class={props.class}>
-        <DialogTitle>{props.title}</DialogTitle>
+        <DialogTitle label={props.label} />
         <DialogBody>
           <div class={styles.body}>
             <TextArea rows={8} value={value()} onInput={handleInput} />
@@ -63,10 +63,8 @@ const MarkdownEditDialog = (props: Props<MarkdownEditDialogProps>) => {
           </div>
         </DialogBody>
         <DialogActions>
-          <Button variant="ghost" onClick={handleCancel}>
-            {props.cancelLabel}
-          </Button>
-          <Button onClick={handleSave}>{props.saveLabel}</Button>
+          <Button variant="ghost" onClick={handleCancel} label={props.cancelLabel} />
+          <Button onClick={handleSave} label={props.saveLabel} />
         </DialogActions>
       </Dialog>
     </Show>

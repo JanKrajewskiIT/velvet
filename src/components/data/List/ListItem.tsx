@@ -4,18 +4,20 @@ import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import Button from '../../buttons/Button/Button';
+import Text from '../../typography/Text/Text';
 import styles from './ListItem.module.css';
 
 interface ListItemOwnProps extends Omit<JSX.HTMLAttributes<HTMLLIElement>, 'onClick'> {
   icon?: JSX.Element;
-  secondary?: JSX.Element;
+  secondary?: string;
   action?: JSX.Element;
-  children: JSX.Element;
+  label: string;
+  children?: never;
   onClick?: JSX.EventHandlerUnion<HTMLButtonElement, MouseEvent>;
 }
 
 const ListItem = (props: Props<ListItemOwnProps>) => {
-  const [local, rest] = splitProps(props, ['icon', 'secondary', 'action', 'children', 'onClick', 'class']);
+  const [local, rest] = splitProps(props, ['icon', 'secondary', 'action', 'label', 'onClick', 'class']);
 
   const content = () => (
     <>
@@ -23,9 +25,13 @@ const ListItem = (props: Props<ListItemOwnProps>) => {
         <div class={styles.icon}>{local.icon}</div>
       </Show>
       <div class={styles.content}>
-        <span class={styles.primary}>{local.children}</span>
+        <Text as="span" variant="labelMd" tone="secondary" class={styles.primary}>
+          {local.label}
+        </Text>
         <Show when={local.secondary}>
-          <span class={styles.secondary}>{local.secondary}</span>
+          <Text as="span" variant="caption" tone="muted" class={styles.secondary}>
+            {local.secondary}
+          </Text>
         </Show>
       </div>
       <Show when={local.action}>

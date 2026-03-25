@@ -3,13 +3,14 @@ import { createSignal, type JSX, Show } from 'solid-js';
 import useClickOutside from '~/hooks/useClickOutside';
 import useEscapeKey from '~/hooks/useEscapeKey';
 import type Props from '~/models/Props';
+import type { ButtonCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import Text from '../../typography/Text/Text';
 import styles from './Popover.module.css';
 
 interface PopoverProps {
-  trigger: (triggerProps: JSX.ButtonHTMLAttributes<HTMLButtonElement>) => JSX.Element;
+  trigger: (triggerProps: ButtonCoreNativeProps) => JSX.Element;
   content: string;
   position?: 'top' | 'bottom' | 'left' | 'right';
   open?: boolean;
@@ -40,8 +41,6 @@ const Popover = (props: Props<PopoverProps>) => {
     <div ref={rootRef} class={classNames(styles.wrapper, props.class)}>
       {props.trigger({
         onClick: toggle,
-        'aria-haspopup': 'dialog',
-        'aria-expanded': isOpen(),
       })}
       <Show when={isOpen()}>
         <div class={classNames(styles.content, styles[position()])} role="dialog" aria-modal="false">

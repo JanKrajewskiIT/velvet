@@ -161,7 +161,7 @@ useFocusTrap(container, { enabled: () => dialogOpen() });`,
   renderItem={(item, { requestRemove }) => (
     <>
       <Input value={item.name} onInput={(e) => rename(item.id, e.currentTarget.value)} />
-      <IconButton title="Remove" icon={<TrashIcon />} onClick={requestRemove} />
+      <IconButton label="Remove" icon={<TrashIcon />} onClick={requestRemove} />
     </>
   )}
 />;`,

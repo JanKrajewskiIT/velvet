@@ -47,6 +47,7 @@ export function createEslintConfig({ tsconfigRootDir, ignorePaths = [] }) {
         ],
         'no-console': 'error',
         '@typescript-eslint/explicit-function-return-type': 'off',
+        '@typescript-eslint/no-unnecessary-type-arguments': 'off',
         '@typescript-eslint/no-unnecessary-condition': 'warn',
         '@typescript-eslint/no-unsafe-type-assertion': 'off',
         '@typescript-eslint/no-confusing-void-expression': 'off',
@@ -55,6 +56,105 @@ export function createEslintConfig({ tsconfigRootDir, ignorePaths = [] }) {
         'no-unassigned-vars': 'off',
         'solid/reactivity': 'warn',
         'require-unicode-regexp': ['error', { requireFlag: 'u' }],
+        'no-restricted-syntax': [
+          'error',
+          {
+            selector: "JSXElement[openingElement.name.name='DialogTitle'][openingElement.selfClosing=false]",
+            message: 'Use `label` prop on DialogTitle instead of children.',
+          },
+          {
+            selector: "JSXElement[openingElement.name.name='Alert'][openingElement.selfClosing=false]",
+            message: 'Use `message` prop on Alert instead of children.',
+          },
+          {
+            selector: "JSXElement[openingElement.name.name='Banner'][openingElement.selfClosing=false]",
+            message: 'Use `message` prop on Banner instead of children.',
+          },
+          {
+            selector: "JSXElement[openingElement.name.name='ErrorMessage'][openingElement.selfClosing=false]",
+            message: 'Use `message` prop on ErrorMessage instead of children.',
+          },
+          {
+            selector: "JSXElement[openingElement.name.name='ListItem'][openingElement.selfClosing=false]",
+            message: 'Use `label` prop on ListItem instead of children.',
+          },
+          {
+            selector: "JSXElement[openingElement.name.name='Chip'][openingElement.selfClosing=false]",
+            message: 'Use `label` prop on Chip instead of children.',
+          },
+          {
+            selector: "JSXElement[openingElement.name.name='EmptyState'][openingElement.selfClosing=false]",
+            message: 'Use `action` prop on EmptyState instead of children.',
+          },
+          {
+            selector: "JSXAttribute[name.name='title'][parent.name.name='IconButton']",
+            message: 'Use `label` prop on IconButton instead of `title`.',
+          },
+          {
+            selector: "JSXAttribute[name.name='title'][parent.name.name='RoundIconButton']",
+            message: 'Use `label` prop on RoundIconButton instead of `title`.',
+          },
+          {
+            selector: "JSXAttribute[name.name='title'][parent.name.name='MediaNavButton']",
+            message: 'Use `label` prop on MediaNavButton instead of `title`.',
+          },
+          {
+            selector: "JSXAttribute[name.name='title'][parent.name.name='Alert']",
+            message: 'Use `label` prop on Alert instead of `title`.',
+          },
+          {
+            selector: "JSXAttribute[name.name='title'][parent.name.name='SidebarNav']",
+            message: 'Use `label` prop on SidebarNav instead of `title`.',
+          },
+          {
+            selector: "JSXAttribute[name.name='title'][parent.name.name='Sheet']",
+            message: 'Use `label` prop on Sheet instead of `title`.',
+          },
+          {
+            selector: "JSXAttribute[name.name='title'][parent.name.name='AccordionItem']",
+            message: 'Use `label` prop on AccordionItem instead of `title`.',
+          },
+          {
+            selector: "JSXAttribute[name.name='title'][parent.name.name='SectionCard']",
+            message: 'Use `label` prop on SectionCard instead of `title`.',
+          },
+          {
+            selector: "JSXAttribute[name.name='title'][parent.name.name='ConfirmDialog']",
+            message: 'Use `label` prop on ConfirmDialog instead of `title`.',
+          },
+          {
+            selector: "JSXAttribute[name.name='title'][parent.name.name='ConfirmAction']",
+            message: 'Use `label` prop on ConfirmAction instead of `title`.',
+          },
+          {
+            selector: "JSXAttribute[name.name='title'][parent.name.name='MarkdownEditDialog']",
+            message: 'Use `label` prop on MarkdownEditDialog instead of `title`.',
+          },
+          {
+            selector: "JSXAttribute[name.name='title'][parent.name.name='ColumnManager']",
+            message: 'Use `label` prop on ColumnManager instead of `title`.',
+          },
+          {
+            selector: "JSXAttribute[name.name='title'][parent.name.name='QueryBuilder']",
+            message: 'Use `label` prop on QueryBuilder instead of `title`.',
+          },
+          {
+            selector: "JSXAttribute[name.name='title'][parent.name.name='NotificationCenter']",
+            message: 'Use `label` prop on NotificationCenter instead of `title`.',
+          },
+          {
+            selector: "JSXAttribute[name.name='title'][parent.name.name='FallbackState']",
+            message: 'Use `label` prop on FallbackState instead of `title`.',
+          },
+          {
+            selector: "JSXAttribute[name.name='title'][parent.name.name='ErrorFallback']",
+            message: 'Use `label` prop on ErrorFallback instead of `title`.',
+          },
+          {
+            selector: "JSXAttribute[name.name='title'][parent.name.name='AccessDenied']",
+            message: 'Use `label` prop on AccessDenied instead of `title`.',
+          },
+        ],
       },
     },
     {

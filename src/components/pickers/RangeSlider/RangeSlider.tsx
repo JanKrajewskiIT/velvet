@@ -1,7 +1,11 @@
 import { createMemo, For, type JSX, Show, splitProps } from 'solid-js';
 
 import Text from '~/components/typography/Text/Text';
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
+import type { AriaFieldProps } from '~/models/Props';
+import type { SliderCoreNativeProps } from '~/models/Props';
+import { resolveAriaInvalid } from '~/utils/aria';
 import classNames from '~/utils/classNames';
 
 import styles from './RangeSlider.module.css';
@@ -11,12 +15,9 @@ export interface SliderRangeValue {
   max: number;
 }
 
-interface RangeSliderOwnProps extends Omit<JSX.InputHTMLAttributes<HTMLInputElement>, 'type' | 'onChange' | 'value'> {
+interface RangeSliderOwnProps extends Omit<SliderCoreNativeProps, 'onChange' | 'value'>, AriaFieldProps {
   id?: string;
   groupAriaLabel?: string;
-  'aria-labelledby'?: string;
-  'aria-describedby'?: string;
-  'aria-invalid'?: true;
   value: SliderRangeValue;
   onChange: (value: SliderRangeValue) => void;
   min?: number;
@@ -27,6 +28,7 @@ interface RangeSliderOwnProps extends Omit<JSX.InputHTMLAttributes<HTMLInputElem
 }
 
 const RangeSlider = (props: Props<RangeSliderOwnProps>) => {
+  const { t } = useI18n();
   const [local, rest] = splitProps(props, [
     'value',
     'onChange',
@@ -214,7 +216,13 @@ const RangeSlider = (props: Props<RangeSliderOwnProps>) => {
           value={normalized().min}
           disabled={local.disabled}
           onInput={updateMin}
-          aria-label={local.groupAriaLabel ? `${local.groupAriaLabel} minimum` : 'Range minimum'}
+          aria-invalid={resolveAriaInvalid(undefined, local['aria-invalid'])}
+          aria-errormessage={props['aria-errormessage']}
+          aria-label={
+            local.groupAriaLabel
+              ? t('rangeSlider.minimumWithLabel', { label: local.groupAriaLabel })
+              : t('rangeSlider.minimum')
+          }
         />
         <input
           {...rest}
@@ -227,7 +235,13 @@ const RangeSlider = (props: Props<RangeSliderOwnProps>) => {
           value={normalized().max}
           disabled={local.disabled}
           onInput={updateMax}
-          aria-label={local.groupAriaLabel ? `${local.groupAriaLabel} maximum` : 'Range maximum'}
+          aria-invalid={resolveAriaInvalid(undefined, local['aria-invalid'])}
+          aria-errormessage={props['aria-errormessage']}
+          aria-label={
+            local.groupAriaLabel
+              ? t('rangeSlider.maximumWithLabel', { label: local.groupAriaLabel })
+              : t('rangeSlider.maximum')
+          }
         />
       </div>
       <Show when={marks().length > 0}>

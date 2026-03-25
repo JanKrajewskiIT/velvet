@@ -3,6 +3,8 @@ import { createMemo, createSignal, createUniqueId, For, Show, splitProps } from 
 import ClosableChip from '~/components/feedback/ClosableChip/ClosableChip';
 import type { InputSize } from '~/components/inputs/Input/Input';
 import type Props from '~/models/Props';
+import type { AriaFieldProps } from '~/models/Props';
+import { resolveAriaInvalid } from '~/utils/aria';
 import classNames from '~/utils/classNames';
 
 import DropdownInputTrigger from '../DropdownInputTrigger/DropdownInputTrigger';
@@ -11,7 +13,7 @@ import DropdownSurface from '../DropdownSurface/DropdownSurface';
 import useDropdownState from '../shared/useDropdownState';
 import styles from './Autocomplete.module.css';
 
-interface AutocompleteProps {
+interface AutocompleteProps extends AriaFieldProps {
   values: string[];
   options: string[];
   onChange: (values: string[]) => void;
@@ -21,9 +23,6 @@ interface AutocompleteProps {
   placeholder?: string;
   removeLabel?: string;
   size?: InputSize;
-  'aria-labelledby'?: string;
-  'aria-describedby'?: string;
-  'aria-invalid'?: true;
 }
 
 const Autocomplete = (props: Props<AutocompleteProps>) => {
@@ -193,15 +192,16 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
           placeholder={local.placeholder}
           disabled={local.disabled}
           open={dropdown.open()}
-          role="combobox"
           aria-expanded={dropdown.open() ? 'true' : 'false'}
           aria-controls={dropdown.open() ? dropdownId : undefined}
           aria-autocomplete="list"
           aria-activedescendant={activeOptionId()}
           aria-haspopup="listbox"
+          role="combobox"
           aria-labelledby={local['aria-labelledby']}
           aria-describedby={local['aria-describedby']}
-          aria-invalid={local['aria-invalid']}
+          aria-invalid={resolveAriaInvalid(undefined, props['aria-invalid'])}
+          aria-errormessage={props['aria-errormessage']}
         />
 
         <Show when={dropdown.open() && filteredOptions().length > 0}>
@@ -214,8 +214,10 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
                   role="option"
                   aria-selected={activeIndex() === index()}
                   selected={activeIndex() === index()}
-                  onMouseEnter={() => setActiveIndex(index())}
-                  onMouseDown={(e) => e.preventDefault()}
+                  onMouseDown={(e) => {
+                    setActiveIndex(index());
+                    e.preventDefault();
+                  }}
                   onClick={() => {
                     addValue(option);
                     inputRef?.focus();

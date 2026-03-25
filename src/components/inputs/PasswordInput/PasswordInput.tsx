@@ -1,7 +1,9 @@
 import { IoEye, IoEyeOutline } from 'solid-icons/io';
-import { createSignal, type JSX, splitProps } from 'solid-js';
+import { createSignal, splitProps } from 'solid-js';
 
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
+import type { InputCoreNativeProps } from '~/models/Props';
 
 import type { ButtonSize } from '../../buttons/Button/Button';
 import IconButton from '../../buttons/IconButton/IconButton';
@@ -14,7 +16,7 @@ interface PasswordInputMessages {
   hidePasswordLabel?: string;
 }
 
-interface PasswordInputProps extends Omit<JSX.InputHTMLAttributes<HTMLInputElement>, 'type'> {
+interface PasswordInputProps extends Omit<InputCoreNativeProps, 'type'> {
   showToggle?: boolean;
   visibilityLabel?: string;
   size?: InputSize;
@@ -22,6 +24,7 @@ interface PasswordInputProps extends Omit<JSX.InputHTMLAttributes<HTMLInputEleme
 }
 
 const PasswordInput = (props: Props<PasswordInputProps>) => {
+  const { t } = useI18n();
   const [local, rest] = splitProps(props, ['class', 'showToggle', 'visibilityLabel', 'size', 'messages']);
   const [visible, setVisible] = createSignal(false);
   const toggleButtonSize = (): ButtonSize => {
@@ -35,8 +38,8 @@ const PasswordInput = (props: Props<PasswordInputProps>) => {
   const visibilityButtonLabel = () => {
     if (local.visibilityLabel) return local.visibilityLabel;
     return visible()
-      ? (local.messages?.hidePasswordLabel ?? 'Hide password')
-      : (local.messages?.showPasswordLabel ?? 'Show password');
+      ? (local.messages?.hidePasswordLabel ?? t('password.hide'))
+      : (local.messages?.showPasswordLabel ?? t('password.show'));
   };
 
   const suffix = () => {
@@ -45,7 +48,7 @@ const PasswordInput = (props: Props<PasswordInputProps>) => {
     return (
       <IconButton
         icon={icon()}
-        title={visibilityButtonLabel()}
+        label={visibilityButtonLabel()}
         onClick={toggle}
         aria-pressed={visible()}
         disabled={rest.disabled}

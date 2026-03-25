@@ -6,6 +6,7 @@ import Card from '~/components/surfaces/Card/Card';
 import Heading from '~/components/typography/Heading/Heading';
 import Text from '~/components/typography/Text/Text';
 import useEscapeKey from '~/hooks/useEscapeKey';
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -103,6 +104,7 @@ const parseIsoDate = (isoDate?: string): { year: number; month: number; day: num
 };
 
 const Scheduler = (props: Props<SchedulerOwnProps>) => {
+  const { locale: currentLocale, t } = useI18n();
   const [local, rest] = splitProps(props, [
     'events',
     'onEventsChange',
@@ -133,29 +135,29 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
   const selectedDate = () => local.selectedDate ?? internalSelectedDate();
   const dayNames = () => local.dayNames ?? DAY_NAMES_DEFAULT;
   const messages = () => local.messages ?? {};
-  const previousMonthLabel = () => messages().previousMonthLabel ?? 'Previous month';
-  const nextMonthLabel = () => messages().nextMonthLabel ?? 'Next month';
-  const agendaTitle = () => messages().agendaTitle ?? 'Agenda';
-  const addEventLabel = () => messages().addEventLabel ?? 'Add event';
-  const todayLabel = () => messages().todayLabel ?? 'Today';
-  const eventTitlePlaceholder = () => messages().eventTitlePlaceholder ?? 'Event title';
-  const descriptionPlaceholder = () => messages().descriptionPlaceholder ?? 'Description (optional)';
-  const noEventsLabel = () => messages().noEventsLabel ?? 'No events scheduled for this day.';
-  const cancelLabel = () => messages().cancelLabel ?? 'Cancel';
-  const saveLabel = () => messages().saveLabel ?? 'Save';
-  const saveChangesLabel = () => messages().saveChangesLabel ?? 'Save changes';
-  const editLabel = () => messages().editLabel ?? 'Edit';
-  const deleteLabel = () => messages().deleteLabel ?? 'Delete';
-  const moveLabel = () => messages().moveLabel ?? 'Move';
-  const resizeEndLabel = () => messages().resizeEndLabel ?? 'Resize end';
-  const moveAriaLabel = (eventTitle: string) => messages().moveAriaLabel?.(eventTitle) ?? `Move ${eventTitle}`;
+  const previousMonthLabel = () => messages().previousMonthLabel ?? t('calendar.prevMonth');
+  const nextMonthLabel = () => messages().nextMonthLabel ?? t('calendar.nextMonth');
+  const agendaTitle = () => messages().agendaTitle ?? t('scheduler.agenda');
+  const addEventLabel = () => messages().addEventLabel ?? t('scheduler.addEvent');
+  const todayLabel = () => messages().todayLabel ?? t('common.today');
+  const eventTitlePlaceholder = () => messages().eventTitlePlaceholder ?? t('scheduler.eventTitle');
+  const descriptionPlaceholder = () => messages().descriptionPlaceholder ?? t('scheduler.descriptionOptional');
+  const noEventsLabel = () => messages().noEventsLabel ?? t('scheduler.noEventsForDay');
+  const cancelLabel = () => messages().cancelLabel ?? t('common.cancel');
+  const saveLabel = () => messages().saveLabel ?? t('common.save');
+  const saveChangesLabel = () => messages().saveChangesLabel ?? t('common.saveChanges');
+  const editLabel = () => messages().editLabel ?? t('common.edit');
+  const deleteLabel = () => messages().deleteLabel ?? t('common.delete');
+  const moveLabel = () => messages().moveLabel ?? t('scheduler.move');
+  const resizeEndLabel = () => messages().resizeEndLabel ?? t('scheduler.resizeEnd');
+  const moveAriaLabel = (eventTitle: string) =>
+    messages().moveAriaLabel?.(eventTitle) ?? t('scheduler.moveEvent', { title: eventTitle });
   const resizeEndAriaLabel = (eventTitle: string) =>
-    messages().resizeEndAriaLabel?.(eventTitle) ?? `Resize ${eventTitle} end`;
-  const deleteDialogTitle = () => messages().deleteDialogTitle ?? 'Delete event';
-  const deleteDialogMessage = () =>
-    messages().deleteDialogMessage ?? 'Do you want to remove this event from the schedule?';
-  const deleteDialogConfirmLabel = () => messages().deleteDialogConfirmLabel ?? 'Delete';
-  const deleteDialogCancelLabel = () => messages().deleteDialogCancelLabel ?? 'Cancel';
+    messages().resizeEndAriaLabel?.(eventTitle) ?? t('scheduler.resizeEventEnd', { title: eventTitle });
+  const deleteDialogTitle = () => messages().deleteDialogTitle ?? t('scheduler.deleteEvent');
+  const deleteDialogMessage = () => messages().deleteDialogMessage ?? t('scheduler.deleteEventMessage');
+  const deleteDialogConfirmLabel = () => messages().deleteDialogConfirmLabel ?? t('common.delete');
+  const deleteDialogCancelLabel = () => messages().deleteDialogCancelLabel ?? t('common.cancel');
   const showAdjacentDays = () => local.showAdjacentDays ?? true;
   const draggableEvents = () => local.draggableEvents ?? true;
   const canEditEvents = () => Boolean(local.onEventsChange);
@@ -175,7 +177,7 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
   let editTitleInputRef: HTMLInputElement | undefined;
 
   const monthLabel = createMemo(() =>
-    new Date(viewYear(), viewMonth(), 1).toLocaleString(local.locale ?? 'en', {
+    new Date(viewYear(), viewMonth(), 1).toLocaleString(local.locale ?? currentLocale(), {
       month: 'long',
       year: 'numeric',
     })
@@ -568,7 +570,7 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
       </Card>
       <ConfirmDialog
         open={deleteConfirmEventId() !== null}
-        title={deleteDialogTitle()}
+        label={deleteDialogTitle()}
         message={deleteDialogMessage()}
         confirmLabel={deleteDialogConfirmLabel()}
         cancelLabel={deleteDialogCancelLabel()}

@@ -6,6 +6,7 @@ import IconButton from '~/components/buttons/IconButton/IconButton';
 import Text from '~/components/typography/Text/Text';
 import useEscapeKey from '~/hooks/useEscapeKey';
 import useFocusTrap from '~/hooks/useFocusTrap';
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -36,6 +37,7 @@ interface LightboxOwnProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'onC
 }
 
 const Lightbox = (props: Props<LightboxOwnProps>) => {
+  const { t } = useI18n();
   const [local, rest] = splitProps(props, [
     'images',
     'open',
@@ -51,9 +53,9 @@ const Lightbox = (props: Props<LightboxOwnProps>) => {
   const [currentIndex, setCurrentIndex] = createSignal(0);
   let overlayRef: HTMLDivElement | undefined;
 
-  const closeLabel = () => local.messages?.closeLabel ?? local.closeLabel ?? 'Close';
-  const previousLabel = () => local.messages?.previousLabel ?? local.previousLabel ?? 'Previous';
-  const nextLabel = () => local.messages?.nextLabel ?? local.nextLabel ?? 'Next';
+  const closeLabel = () => local.messages?.closeLabel ?? local.closeLabel ?? t('common.close');
+  const previousLabel = () => local.messages?.previousLabel ?? local.previousLabel ?? t('common.previous');
+  const nextLabel = () => local.messages?.nextLabel ?? local.nextLabel ?? t('common.next');
   const total = () => local.images.length;
   const hasManyImages = () => total() > 1;
   const isVisible = () => local.open && total() > 0;
@@ -121,13 +123,13 @@ const Lightbox = (props: Props<LightboxOwnProps>) => {
           ref={overlayRef}
           role="dialog"
           aria-modal="true"
-          aria-label="Image viewer"
+          aria-label={t('lightbox.imageViewer')}
           class={classNames(styles.overlay, local.class)}
           onPointerDown={handleOverlayPointerDown}
         >
           <IconButton
             icon={<IoClose />}
-            title={closeLabel()}
+            label={closeLabel()}
             class={styles.close}
             variant="outline"
             size="sm"
@@ -144,7 +146,7 @@ const Lightbox = (props: Props<LightboxOwnProps>) => {
             <Show when={hasManyImages()}>
               <MediaNavButton
                 direction="prev"
-                title={previousLabel()}
+                label={previousLabel()}
                 class={classNames(styles.nav, styles.prev)}
                 onClick={goPrev}
               />
@@ -155,7 +157,7 @@ const Lightbox = (props: Props<LightboxOwnProps>) => {
             <Show when={hasManyImages()}>
               <MediaNavButton
                 direction="next"
-                title={nextLabel()}
+                label={nextLabel()}
                 class={classNames(styles.nav, styles.next)}
                 onClick={goNext}
               />

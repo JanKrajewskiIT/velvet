@@ -1,16 +1,16 @@
 import { FiChevronDown } from 'solid-icons/fi';
-import type { JSX } from 'solid-js';
 
 import type { InputSize } from '~/components/inputs/Input/Input';
 import type { TypographyTone } from '~/components/typography/Typography/Typography';
 import type Props from '~/models/Props';
+import type { ButtonCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import DropdownFieldTrigger from '../DropdownFieldTrigger/DropdownFieldTrigger';
 import styles from './DropdownChevronFieldTrigger.module.css';
 
-interface DropdownChevronFieldTriggerOwnProps extends Omit<JSX.ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
-  label: JSX.Element;
+interface DropdownChevronFieldTriggerOwnProps extends Omit<ButtonCoreNativeProps, 'children'> {
+  label: string;
   open: boolean;
   size?: InputSize;
   invalid?: boolean;

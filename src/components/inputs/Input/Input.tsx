@@ -1,19 +1,20 @@
-import type { JSX } from 'solid-js';
 import { splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
+import type { InputCoreNativeProps } from '~/models/Props';
+import { resolveAriaInvalid } from '~/utils/aria';
 
 import FieldBase from '../FieldBase/FieldBase';
 
 export type InputSize = 'sm' | 'md' | 'lg';
 
-interface InputOwnProps extends JSX.InputHTMLAttributes<HTMLInputElement> {
+interface InputOwnProps extends InputCoreNativeProps {
   size?: InputSize;
   invalid?: boolean;
 }
 
 const Input = (props: Props<InputOwnProps>) => {
-  const [local, rest] = splitProps(props, ['class', 'size', 'invalid', 'readOnly', 'placeholder']);
+  const [local, rest] = splitProps(props, ['class', 'size', 'invalid', 'readOnly', 'placeholder', 'aria-invalid']);
 
   return (
     <FieldBase
@@ -25,10 +26,11 @@ const Input = (props: Props<InputOwnProps>) => {
       disabled={rest.disabled}
       focusStyle="visible"
       placeholder={local.placeholder}
-      aria-invalid={local.invalid || undefined}
+      aria-invalid={resolveAriaInvalid(local.invalid, local['aria-invalid'] as boolean | 'true' | 'false' | undefined)}
       class={local.class}
     />
   );
 };
 
 export default Input;
+export type { InputOwnProps };

@@ -1,6 +1,7 @@
 import type { JSX } from 'solid-js';
 import { Show } from 'solid-js';
 
+import Text from '~/components/typography/Text/Text';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 import { getContrastTextColor } from '~/utils/color';
@@ -14,7 +15,9 @@ interface ChipProps {
   filled?: boolean;
   color?: string;
   onClick?: (e: MouseEvent) => void;
-  children: JSX.Element;
+  label: string;
+  endAdornment?: JSX.Element;
+  children?: never;
 }
 
 const Chip = (props: Props<ChipProps>) => {
@@ -43,17 +46,26 @@ const Chip = (props: Props<ChipProps>) => {
     } as JSX.CSSProperties;
   };
 
+  const content = () => (
+    <>
+      <Text as="span" variant="labelMd" tone="inherit">
+        {props.label}
+      </Text>
+      <Show when={props.endAdornment}>{props.endAdornment}</Show>
+    </>
+  );
+
   return (
     <Show
       when={props.onClick}
       fallback={
         <span class={chipClass()} style={inlineStyles()}>
-          {props.children}
+          {content()}
         </span>
       }
     >
       <button type="button" class={chipClass()} style={inlineStyles()} onClick={(event) => props.onClick?.(event)}>
-        {props.children}
+        {content()}
       </button>
     </Show>
   );

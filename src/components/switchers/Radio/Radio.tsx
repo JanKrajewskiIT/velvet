@@ -1,7 +1,6 @@
 import { createUniqueId, For, type JSX, splitProps } from 'solid-js';
 
 import ChoiceControl from '~/components/switchers/ChoiceControl/ChoiceControl';
-import LabelText from '~/components/typography/LabelText/LabelText';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -9,8 +8,8 @@ import styles from './Radio.module.css';
 
 export interface RadioOption<T extends string = string> {
   value: T;
-  label: JSX.Element;
-  description?: JSX.Element;
+  label: string;
+  description?: string;
   disabled?: boolean;
 }
 
@@ -33,7 +32,6 @@ const RadioGroup = <T extends string>(props: Props<RadioGroupOwnProps<T>>) => {
       <For each={local.options}>
         {(option, index) => {
           const optionId = () => `${groupName()}-${index()}`;
-          const optionLabel = () => `${optionId()}-label`;
 
           return (
             <ChoiceControl
@@ -43,16 +41,12 @@ const RadioGroup = <T extends string>(props: Props<RadioGroupOwnProps<T>>) => {
               value={option.value}
               checked={local.value === option.value}
               disabled={option.disabled}
-              labelId={optionLabel()}
               onChange={() => local.onChange(option.value)}
               controlClass={styles.control}
               inputClass={styles.input}
               indicatorClass={styles.indicator}
-              label={
-                <span id={optionLabel()}>
-                  <LabelText label={option.label} description={option.description} />
-                </span>
-              }
+              label={option.label}
+              description={option.description}
             />
           );
         }}

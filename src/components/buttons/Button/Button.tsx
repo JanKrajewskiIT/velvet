@@ -1,7 +1,9 @@
 import { type JSX, Show, splitProps } from 'solid-js';
 
 import Spinner from '~/components/feedback/Spinner/Spinner';
+import Text from '~/components/typography/Text/Text';
 import type Props from '~/models/Props';
+import type { ButtonCoreNativeProps, LabelOnlyProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import styles from './Button.module.css';
@@ -9,14 +11,22 @@ import styles from './Button.module.css';
 export type ButtonVariant = 'primary' | 'danger' | 'ghost' | 'dashed' | 'outline' | 'subtle' | 'navbar';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
-interface ButtonOwnProps extends Omit<JSX.ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
+interface ButtonBaseProps extends Omit<ButtonCoreNativeProps, 'children'> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   loading?: boolean;
   iconOnly?: boolean;
   round?: boolean;
-  children?: JSX.Element;
 }
+
+type ButtonLabelProps = ButtonBaseProps & LabelOnlyProps;
+
+type ButtonChildrenProps = ButtonBaseProps & {
+  children: JSX.Element;
+  label?: never;
+};
+
+type ButtonOwnProps = ButtonLabelProps | ButtonChildrenProps;
 
 const sizeToClass: Record<ButtonSize, string | undefined> = {
   sm: styles.sizeSm,
@@ -49,6 +59,7 @@ const Button = (props: Props<ButtonOwnProps>) => {
     'round',
     'class',
     'children',
+    'label',
     'disabled',
     'type',
   ]);
@@ -57,6 +68,7 @@ const Button = (props: Props<ButtonOwnProps>) => {
   const iconSizeClass = () => iconSizeToClass[local.size ?? 'md'];
   const variantClass = () => variantToClass[local.variant ?? 'primary'];
   const isDisabled = () => Boolean(local.disabled ?? local.loading);
+  const hasLabel = () => typeof local.label === 'string';
 
   return (
     <button
@@ -80,7 +92,13 @@ const Button = (props: Props<ButtonOwnProps>) => {
           <Spinner size="sm" />
         </span>
       </Show>
-      <span class={classNames(styles.content, local.loading && styles.contentHidden)}>{local.children}</span>
+      <span class={classNames(styles.content, local.loading && styles.contentHidden)}>
+        <Show when={hasLabel()} fallback={local.children}>
+          <Text as="span" variant="labelMd" tone="inherit">
+            {local.label}
+          </Text>
+        </Show>
+      </span>
     </button>
   );
 };

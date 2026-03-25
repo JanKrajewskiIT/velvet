@@ -1,5 +1,6 @@
 import { createEffect, createSignal, type JSX, Show, splitProps } from 'solid-js';
 
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -20,6 +21,7 @@ interface RichTextEditorOwnProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>
 }
 
 const RichTextEditor = (props: Props<RichTextEditorOwnProps>) => {
+  const { t } = useI18n();
   const [local, rest] = splitProps(props, [
     'value',
     'onChange',
@@ -34,7 +36,7 @@ const RichTextEditor = (props: Props<RichTextEditorOwnProps>) => {
   let linkInputRef: HTMLInputElement | undefined;
   const [linkEditorOpen, setLinkEditorOpen] = createSignal(false);
   const [linkDraft, setLinkDraft] = createSignal('');
-  const editorAriaLabel = () => local.ariaLabel ?? 'Rich text editor';
+  const editorAriaLabel = () => local.ariaLabel ?? t('richText.editor');
 
   const syncEditorValue = () => {
     if (!editorRef) return;
@@ -115,6 +117,10 @@ const RichTextEditor = (props: Props<RichTextEditorOwnProps>) => {
     emitValue();
   };
 
+  const handleLinkDraftInput: JSX.EventHandler<HTMLInputElement, InputEvent> = (event) => {
+    setLinkDraft(event.currentTarget.value);
+  };
+
   createEffect(() => {
     syncEditorValue();
   });
@@ -157,7 +163,7 @@ const RichTextEditor = (props: Props<RichTextEditorOwnProps>) => {
             onClick={() => applyCommand('insertUnorderedList')}
             disabled={local.disabled}
           >
-            List
+            {t('richText.list')}
           </Button>
           <Button
             class={styles.toolButton}
@@ -175,10 +181,10 @@ const RichTextEditor = (props: Props<RichTextEditorOwnProps>) => {
             onClick={openLinkEditor}
             disabled={local.disabled}
           >
-            Link
+            {t('richText.link')}
           </Button>
           <Button class={styles.toolButton} variant="subtle" size="sm" onClick={removeLink} disabled={local.disabled}>
-            Unlink
+            {t('richText.unlink')}
           </Button>
           <Button
             class={styles.toolButton}
@@ -187,7 +193,7 @@ const RichTextEditor = (props: Props<RichTextEditorOwnProps>) => {
             onClick={() => applyCommand('removeFormat')}
             disabled={local.disabled}
           >
-            Clear
+            {t('common.clear')}
           </Button>
         </div>
         <Show when={linkEditorOpen()}>
@@ -200,11 +206,11 @@ const RichTextEditor = (props: Props<RichTextEditorOwnProps>) => {
               placeholder="https://example.com"
               disabled={local.disabled}
               class={styles.linkInput}
-              onInput={(event) => setLinkDraft(event.currentTarget.value)}
+              onInput={handleLinkDraftInput}
               onKeyDown={handleLinkInputKeyDown}
             />
             <Button class={styles.linkAction} variant="primary" size="sm" onClick={applyLink} disabled={local.disabled}>
-              Apply
+              {t('common.apply')}
             </Button>
             <Button
               class={styles.linkAction}
@@ -213,7 +219,7 @@ const RichTextEditor = (props: Props<RichTextEditorOwnProps>) => {
               onClick={closeLinkEditor}
               disabled={local.disabled}
             >
-              Cancel
+              {t('common.cancel')}
             </Button>
           </div>
         </Show>
@@ -221,7 +227,7 @@ const RichTextEditor = (props: Props<RichTextEditorOwnProps>) => {
           ref={editorRef}
           class={styles.editor}
           contentEditable={!local.disabled}
-          data-placeholder={local.placeholder ?? 'Write rich text content...'}
+          data-placeholder={local.placeholder ?? t('richText.placeholder')}
           style={local.minHeight ? { '--editor-min-height': local.minHeight } : undefined}
           onInput={handleInput}
           role="textbox"

@@ -1,19 +1,18 @@
 import { createMemo, For, type JSX, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
+import type { AriaFieldProps } from '~/models/Props';
+import { resolveAriaInvalid } from '~/utils/aria';
 import classNames from '~/utils/classNames';
 
 import styles from './ColorPicker.module.css';
 
-interface ColorPickerProps {
+interface ColorPickerProps extends AriaFieldProps {
   id?: string;
   colors: string[];
   value: string;
   onChange: (color: string) => void;
   disabled?: boolean;
-  'aria-labelledby'?: string;
-  'aria-describedby'?: string;
-  'aria-invalid'?: true;
 }
 
 const ColorPicker = (props: Props<ColorPickerProps>) => {
@@ -84,7 +83,8 @@ const ColorPicker = (props: Props<ColorPickerProps>) => {
       role="radiogroup"
       aria-labelledby={local['aria-labelledby']}
       aria-describedby={local['aria-describedby']}
-      aria-invalid={local['aria-invalid']}
+      aria-invalid={resolveAriaInvalid(undefined, local['aria-invalid'])}
+      aria-errormessage={props['aria-errormessage']}
     >
       <For each={local.colors}>
         {(c, index) => (

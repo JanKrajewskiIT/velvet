@@ -2,6 +2,7 @@ import { IoChevronForward } from 'solid-icons/io';
 import { For, type JSX, Show } from 'solid-js';
 
 import Checkbox from '~/components/switchers/Checkbox/Checkbox';
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -38,6 +39,7 @@ interface TreeItemProps {
 }
 
 const TreeItem = (props: Props<TreeItemProps>) => {
+  const { t } = useI18n();
   const hasChildren = () => Boolean((props.node.children && props.node.children.length > 0) || props.node.hasChildren);
   const isExpanded = () => props.expanded.has(props.node.id);
   const isSelected = () => props.selectedId === props.node.id;
@@ -108,7 +110,7 @@ const TreeItem = (props: Props<TreeItemProps>) => {
             checked={isChecked()}
             onClick={handleCheckboxClick}
             onKeyDown={handleCheckboxKeyDown}
-            aria-label={`Toggle ${props.node.label}`}
+            aria-label={t('tree.toggleNode', { label: props.node.label })}
           />
         </Show>
         <Show when={hasChildren()} fallback={<span class={styles.chevronPlaceholder} />}>
@@ -123,7 +125,7 @@ const TreeItem = (props: Props<TreeItemProps>) => {
       </div>
       <Show when={hasChildren()}>
         <div class={classNames(styles.children, isExpanded() && styles.childrenExpanded)}>
-          <Show when={!props.isLoading} fallback={<div class={styles.loading}>Loading...</div>}>
+          <Show when={!props.isLoading} fallback={<div class={styles.loading}>{t('tree.loading')}</div>}>
             <ul class={classNames(styles.tree, styles.childrenInner)} role="group">
               <For each={props.node.children}>
                 {(child) => (

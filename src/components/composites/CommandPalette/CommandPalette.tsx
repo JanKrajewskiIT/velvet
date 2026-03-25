@@ -3,6 +3,7 @@ import { Portal } from 'solid-js/web';
 
 import useEscapeKey from '~/hooks/useEscapeKey';
 import useFocusTrap from '~/hooks/useFocusTrap';
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -42,6 +43,7 @@ interface CommandPaletteProps {
 }
 
 const CommandPalette = (props: Props<CommandPaletteProps>) => {
+  const { t } = useI18n();
   const [query, setQuery] = createSignal('');
   const [panelRef, setPanelRef] = createSignal<HTMLElement | undefined>();
 
@@ -91,11 +93,11 @@ const CommandPalette = (props: Props<CommandPaletteProps>) => {
     props.onClose();
   };
 
-  const placeholder = () => props.messages?.placeholder ?? props.placeholder ?? 'Search commands...';
-  const dialogLabel = () => props.messages?.dialogLabel ?? props.dialogLabel ?? 'Command palette';
-  const resultsLabel = () => props.messages?.resultsLabel ?? props.resultsLabel ?? 'Command results';
-  const emptyLabel = () => props.messages?.emptyLabel ?? props.emptyLabel ?? 'No results found';
-  const closeHintLabel = () => props.messages?.closeHintLabel ?? 'Esc to close';
+  const placeholder = () => props.messages?.placeholder ?? props.placeholder ?? t('commandPalette.searchCommands');
+  const dialogLabel = () => props.messages?.dialogLabel ?? props.dialogLabel ?? t('commandPalette.label');
+  const resultsLabel = () => props.messages?.resultsLabel ?? props.resultsLabel ?? t('commandPalette.results');
+  const emptyLabel = () => props.messages?.emptyLabel ?? props.emptyLabel ?? t('commandPalette.noResults');
+  const closeHintLabel = () => props.messages?.closeHintLabel ?? t('commandPalette.escToClose');
 
   return (
     <Show when={props.open}>

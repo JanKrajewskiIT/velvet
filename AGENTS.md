@@ -20,11 +20,23 @@ Branch from `main`, conventional commits (`feat:`, `fix:`, `refactor:`, `docs:`)
 - Generic, app-agnostic -- no i18n/auth/app logic, all text via props
 - Self-documenting -- no comments, no commented-out code, no `eslint-disable`
 - Always use `~/` path alias for hooks, utils, models -- never deep relative paths
+- Use `Props<T>` from `src/models/Props.ts` as the base public contract (`class`, `id`, `aria-*`, `data-*`)
+- For field-like components reuse ARIA contracts from `src/models/Props.ts` (`AriaLabelingProps`, `AriaValidationProps`, `AriaFieldProps`) instead of redefining local `aria-*` props
+- Merge generated and external ARIA id refs (`aria-labelledby`, `aria-describedby`) with `joinAriaIds()` from `src/utils/aria`
+- Derive validation ARIA with shared helpers from `src/utils/aria` (`resolveAriaInvalid`, `resolveAriaErrorMessage`) to keep defaults consistent
+- Reuse shared core native prop subsets from `src/models/Props.ts` (`ButtonCoreNativeProps`, `InputCoreNativeProps`, `TextAreaCoreNativeProps`, `SelectCoreNativeProps`, `ChoiceInputCoreNativeProps`, `SliderCoreNativeProps`, `TableHeaderCoreNativeProps`, `TableCellCoreNativeProps`)
+- Never expose full `JSX.*HTMLAttributes` on public component props; use narrow core subsets + explicit semantic props
+- Keep `name` local to form-like controls only; do not add it as a universal base prop
 - Use `classNames()` utility for conditional class composition -- never template literal concatenation for multi-condition classes
 - Use VelvetUi primitives (Heading, Text, Button, IconButton, ButtonBase, Input, TextArea) -- never raw HTML equivalents
 - Prefer extending existing primitives over wrapper-only components. If a wrapper adds no unique behavior/API, use the primitive directly
 - For reusable list/dropdown ecosystems, keep one primitive per role (e.g. one option primitive, one surface primitive) instead of parallel variants
 - Semantic text APIs should prefer dedicated props (e.g. `label`) over arbitrary `children` when the component contract is label-driven
+- For label-driven components, prefer `label`/`message` string props and block free-form text slots with `children?: never` when possible
+- Use shared label contracts from `src/models/Props.ts` (`LabelOnlyProps`, `OptionalLabelOnlyProps`) instead of redefining equivalent local types
+- Prefer `label` over `title` for component-level semantic labels (actions, item headers, section headers); reserve `title` for domain data where it is the actual model field
+- Label/description rendering should reuse `LabelText` instead of duplicating inline `Text` blocks
+- Label props should render through VelvetUi typography primitives (`Text`/`Heading`) with explicit `variant` and `tone`
 - Style prop must use object syntax `style={{ key: value }}` -- never string syntax (enforced by `solid/style-prop` lint rule)
 - Dynamic values go through CSS custom properties (`style={{ '--my-var': value }}` + `var(--my-var)` in `.module.css`) -- never direct inline CSS for what CSS can handle
 - Static styles belong in `.module.css` -- inline style only for truly dynamic runtime values (virtualization, user dimensions, DOM measurements)
@@ -38,3 +50,4 @@ Branch from `main`, conventional commits (`feat:`, `fix:`, `refactor:`, `docs:`)
 - Do not use `composes` in `*.module.css`; reuse shared styles by importing the primitive/component styles in TSX and combining classes with `classNames()`
 - Wrapper components are valid when they provide real semantic API/default behavior/state (not only style pass-through)
 - Demo app uses only library components and design tokens -- no inline styles, all layout via `demo.css` utility classes
+- When migrating from `children`/`title` to `label` APIs, update library + demo usage and add lint restrictions for deprecated JSX usage where practical

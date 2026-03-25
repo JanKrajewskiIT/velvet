@@ -4,6 +4,7 @@ import { createMemo, For, Show } from 'solid-js';
 
 import Card from '~/components/surfaces/Card/Card';
 import Text from '~/components/typography/Text/Text';
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -58,7 +59,7 @@ interface QueryBuilderOwnProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 
   fields: readonly QueryBuilderField[];
   value: QueryBuilderValue;
   onChange: (next: QueryBuilderValue) => void;
-  title?: string;
+  label?: string;
   description?: string;
   combinatorLabel?: string;
   addRuleLabel?: string;
@@ -83,20 +84,6 @@ const NUMBER_OPERATORS: QueryBuilderOperator[] = [
 ];
 const SELECT_OPERATORS: QueryBuilderOperator[] = ['equals', 'notEquals', 'isEmpty', 'isNotEmpty'];
 
-const OPERATOR_LABELS: Record<QueryBuilderOperator, string> = {
-  equals: 'Equals',
-  notEquals: 'Not equals',
-  contains: 'Contains',
-  startsWith: 'Starts with',
-  endsWith: 'Ends with',
-  gt: 'Greater than',
-  gte: 'Greater or equal',
-  lt: 'Less than',
-  lte: 'Less or equal',
-  isEmpty: 'Is empty',
-  isNotEmpty: 'Is not empty',
-};
-
 const getDefaultOperators = (field?: QueryBuilderField): QueryBuilderOperator[] => {
   if (!field) return FALLBACK_OPERATORS;
   if (field.operators && field.operators.length > 0) return [...field.operators];
@@ -113,8 +100,23 @@ const createRuleId = () => {
 const requiresValue = (operator: QueryBuilderOperator) => operator !== 'isEmpty' && operator !== 'isNotEmpty';
 
 const QueryBuilder = (props: Props<QueryBuilderOwnProps>) => {
+  const { t } = useI18n();
   const fieldByKey = createMemo(() => new Map(props.fields.map((field) => [field.key, field])));
   const hasRules = createMemo(() => props.value.rules.length > 0);
+
+  const getOperatorLabel = (operator: QueryBuilderOperator): string => {
+    if (operator === 'equals') return t('query.operator.equals');
+    if (operator === 'notEquals') return t('query.operator.notEquals');
+    if (operator === 'contains') return t('query.operator.contains');
+    if (operator === 'startsWith') return t('query.operator.startsWith');
+    if (operator === 'endsWith') return t('query.operator.endsWith');
+    if (operator === 'gt') return t('query.operator.gt');
+    if (operator === 'gte') return t('query.operator.gte');
+    if (operator === 'lt') return t('query.operator.lt');
+    if (operator === 'lte') return t('query.operator.lte');
+    if (operator === 'isEmpty') return t('query.operator.isEmpty');
+    return t('query.operator.isNotEmpty');
+  };
 
   const updateValue = (next: QueryBuilderValue) => {
     props.onChange(next);
@@ -138,6 +140,34 @@ const QueryBuilder = (props: Props<QueryBuilderOwnProps>) => {
         },
       ],
     });
+  };
+
+  const handleCombinatorChange: JSX.EventHandler<HTMLSelectElement, Event> = (event) => {
+    updateCombinator(event.currentTarget.value === 'or' ? 'or' : 'and');
+  };
+
+  const handleRuleFieldChange = (rule: QueryBuilderRule): JSX.EventHandler<HTMLSelectElement, Event> => {
+    return (event) => {
+      handleFieldChange(rule, event.currentTarget.value);
+    };
+  };
+
+  const handleRuleOperatorChange = (rule: QueryBuilderRule): JSX.EventHandler<HTMLSelectElement, Event> => {
+    return (event) => {
+      updateRule(rule.id, { operator: event.currentTarget.value as QueryBuilderOperator });
+    };
+  };
+
+  const handleRuleValueInput = (rule: QueryBuilderRule): JSX.EventHandler<HTMLInputElement, InputEvent> => {
+    return (event) => {
+      updateRule(rule.id, { value: event.currentTarget.value });
+    };
+  };
+
+  const handleRuleValueSelectChange = (rule: QueryBuilderRule): JSX.EventHandler<HTMLSelectElement, Event> => {
+    return (event) => {
+      updateRule(rule.id, { value: event.currentTarget.value });
+    };
   };
 
   const clearRules = () => {
@@ -199,7 +229,7 @@ const QueryBuilder = (props: Props<QueryBuilderOwnProps>) => {
       <div class={styles.header}>
         <div class={styles.headerCopy}>
           <Text as="h3" variant="labelLg">
-            {props.title ?? 'Query builder'}
+            {props.label ?? t('common.queryBuilder')}
           </Text>
           <Show when={props.description}>
             <Text as="p" variant="caption" tone="muted">
@@ -209,12 +239,12 @@ const QueryBuilder = (props: Props<QueryBuilderOwnProps>) => {
         </div>
         <div class={styles.headerActions}>
           <Button variant="ghost" size="sm" disabled={props.disabled || !hasRules()} onClick={clearRules}>
-            {props.clearLabel ?? 'Clear rules'}
+            {props.clearLabel ?? t('query.clearRules')}
           </Button>
           <Button variant="primary" size="sm" disabled={props.disabled || props.fields.length === 0} onClick={addRule}>
             <span class={styles.addButtonContent}>
               <IoAdd />
-              {props.addRuleLabel ?? 'Add rule'}
+              {props.addRuleLabel ?? t('query.addRule')}
             </span>
           </Button>
         </div>
@@ -226,13 +256,13 @@ const QueryBuilder = (props: Props<QueryBuilderOwnProps>) => {
             <Select
               {...fieldProps}
               size="sm"
-              aria-label={props.combinatorLabel ?? 'Match'}
+              aria-label={props.combinatorLabel ?? t('common.match')}
               value={props.value.combinator}
-              onChange={(e) => updateCombinator(e.currentTarget.value === 'or' ? 'or' : 'and')}
+              onChange={handleCombinatorChange}
               disabled={props.disabled}
             >
-              <option value="and">All rules (AND)</option>
-              <option value="or">Any rule (OR)</option>
+              <option value="and">{t('query.combinator.and')}</option>
+              <option value="or">{t('query.combinator.or')}</option>
             </Select>
           )}
         </FormField>
@@ -242,7 +272,7 @@ const QueryBuilder = (props: Props<QueryBuilderOwnProps>) => {
         when={hasRules()}
         fallback={
           <Text as="p" variant="bodySm" tone="muted">
-            {props.emptyLabel ?? 'No rules defined'}
+            {props.emptyLabel ?? t('query.empty')}
           </Text>
         }
       >
@@ -261,9 +291,9 @@ const QueryBuilder = (props: Props<QueryBuilderOwnProps>) => {
                         <Select
                           {...fieldProps}
                           size="sm"
-                          aria-label={props.fieldLabel ?? 'Field'}
+                          aria-label={props.fieldLabel ?? t('common.field')}
                           value={rule.fieldKey}
-                          onChange={(e) => handleFieldChange(rule, e.currentTarget.value)}
+                          onChange={handleRuleFieldChange(rule)}
                           disabled={props.disabled}
                         >
                           <For each={props.fields}>{(entry) => <option value={entry.key}>{entry.label}</option>}</For>
@@ -278,15 +308,13 @@ const QueryBuilder = (props: Props<QueryBuilderOwnProps>) => {
                         <Select
                           {...fieldProps}
                           size="sm"
-                          aria-label={props.operatorLabel ?? 'Operator'}
+                          aria-label={props.operatorLabel ?? t('common.operator')}
                           value={rule.operator}
-                          onChange={(e) =>
-                            updateRule(rule.id, { operator: e.currentTarget.value as QueryBuilderOperator })
-                          }
+                          onChange={handleRuleOperatorChange(rule)}
                           disabled={props.disabled}
                         >
                           <For each={operators()}>
-                            {(operator) => <option value={operator}>{OPERATOR_LABELS[operator]}</option>}
+                            {(operator) => <option value={operator}>{getOperatorLabel(operator)}</option>}
                           </For>
                         </Select>
                       )}
@@ -305,7 +333,7 @@ const QueryBuilder = (props: Props<QueryBuilderOwnProps>) => {
                               size="sm"
                               readOnly
                               disabled
-                              aria-label={props.valueLabel ?? 'Value'}
+                              aria-label={props.valueLabel ?? t('common.value')}
                               class={styles.inputDisabled}
                             />
                           }
@@ -318,8 +346,8 @@ const QueryBuilder = (props: Props<QueryBuilderOwnProps>) => {
                                 type={field()?.type === 'number' ? 'number' : 'text'}
                                 value={rule.value}
                                 size="sm"
-                                aria-label={props.valueLabel ?? 'Value'}
-                                onInput={(e) => updateRule(rule.id, { value: e.currentTarget.value })}
+                                aria-label={props.valueLabel ?? t('common.value')}
+                                onInput={handleRuleValueInput(rule)}
                                 disabled={props.disabled}
                               />
                             }
@@ -327,12 +355,12 @@ const QueryBuilder = (props: Props<QueryBuilderOwnProps>) => {
                             <Select
                               {...fieldProps}
                               size="sm"
-                              aria-label={props.valueLabel ?? 'Value'}
+                              aria-label={props.valueLabel ?? t('common.value')}
                               value={rule.value}
-                              onChange={(e) => updateRule(rule.id, { value: e.currentTarget.value })}
+                              onChange={handleRuleValueSelectChange(rule)}
                               disabled={props.disabled}
                             >
-                              <option value="">Select...</option>
+                              <option value="">{t('common.selectEllipsis')}</option>
                               <For each={field()?.options ?? []}>
                                 {(option) => <option value={option.value}>{option.label}</option>}
                               </For>
@@ -346,21 +374,21 @@ const QueryBuilder = (props: Props<QueryBuilderOwnProps>) => {
                   <div class={styles.ruleActions}>
                     <IconButton
                       icon={<IoArrowUp />}
-                      title="Move rule up"
+                      label={t('query.moveRuleUp')}
                       size="sm"
                       disabled={props.disabled || index() === 0}
                       onClick={() => moveRule(rule.id, -1)}
                     />
                     <IconButton
                       icon={<IoArrowDown />}
-                      title="Move rule down"
+                      label={t('query.moveRuleDown')}
                       size="sm"
                       disabled={props.disabled || index() === props.value.rules.length - 1}
                       onClick={() => moveRule(rule.id, 1)}
                     />
                     <IconButton
                       icon={<IoTrash />}
-                      title="Remove rule"
+                      label={t('query.removeRule')}
                       size="sm"
                       disabled={props.disabled}
                       onClick={() => removeRule(rule.id)}

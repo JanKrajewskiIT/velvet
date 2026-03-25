@@ -51,7 +51,7 @@ const SchedulerCalendar = (props: Props<SchedulerCalendarProps>) => {
       <header class={styles.calendarHeader}>
         <IconButton
           icon={<FiChevronLeft />}
-          title={props.previousMonthLabel}
+          label={props.previousMonthLabel}
           size="sm"
           variant="outline"
           onClick={props.onPreviousMonth}
@@ -61,7 +61,7 @@ const SchedulerCalendar = (props: Props<SchedulerCalendarProps>) => {
         </Heading>
         <IconButton
           icon={<FiChevronRight />}
-          title={props.nextMonthLabel}
+          label={props.nextMonthLabel}
           size="sm"
           variant="outline"
           onClick={props.onNextMonth}

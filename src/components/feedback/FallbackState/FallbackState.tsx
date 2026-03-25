@@ -8,7 +8,7 @@ import classNames from '~/utils/classNames';
 import styles from './FallbackState.module.css';
 
 interface FallbackStateOwnProps {
-  title: string;
+  label: string;
   description: string;
   icon?: JSX.Element;
   action?: JSX.Element;
@@ -22,7 +22,7 @@ const FallbackState = (props: Props<FallbackStateOwnProps>) => {
         <div class={classNames(styles.icon, props.iconClass)}>{props.icon}</div>
       </Show>
       <Heading as="h1" level={1}>
-        {props.title}
+        {props.label}
       </Heading>
       <Text tone="muted">{props.description}</Text>
       <Show when={props.action}>

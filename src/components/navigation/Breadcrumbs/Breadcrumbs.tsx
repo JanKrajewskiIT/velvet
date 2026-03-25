@@ -3,6 +3,7 @@ import { createMemo, createSignal, For, type JSX, Show } from 'solid-js';
 
 import Heading from '~/components/typography/Heading/Heading';
 import Text from '~/components/typography/Text/Text';
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -22,6 +23,7 @@ interface BreadcrumbsProps {
 }
 
 const Breadcrumbs = (props: Props<BreadcrumbsProps>) => {
+  const { t } = useI18n();
   const [expanded, setExpanded] = createSignal(false);
 
   const maxItems = () => props.maxItems ?? Infinity;
@@ -74,7 +76,7 @@ const Breadcrumbs = (props: Props<BreadcrumbsProps>) => {
   };
 
   return (
-    <nav aria-label="Breadcrumb" class={classNames(styles.breadcrumbs, props.class)}>
+    <nav aria-label={t('breadcrumbs.label')} class={classNames(styles.breadcrumbs, props.class)}>
       <ol class={styles.list}>
         <Show when={showEllipsis()}>
           <For each={visibleItems().slice(0, 1)}>
@@ -84,7 +86,7 @@ const Breadcrumbs = (props: Props<BreadcrumbsProps>) => {
             {separator()}
           </li>
           <li class={styles.item}>
-            <Button variant="subtle" size="sm" onClick={() => setExpanded(true)} aria-label="Show all breadcrumbs">
+            <Button variant="subtle" size="sm" onClick={() => setExpanded(true)} aria-label={t('breadcrumbs.showAll')}>
               &hellip;
             </Button>
           </li>

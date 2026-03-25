@@ -53,14 +53,10 @@ const useDataGridProState = <T extends Record<string, unknown>>(props: Props<Dat
   const [internalSortKey, setInternalSortKey] = createSignal<string | null>(null);
   const [internalSortDirection, setInternalSortDirection] = createSignal<DataGridProSortDirection>('asc');
   const [internalFilterQuery, setInternalFilterQuery] = createSignal(props.defaultFilterQuery ?? '');
-  const [internalSelectedRowIds, setInternalSelectedRowIds] = createSignal<string[]>(props.defaultSelectedRowIds ?? []);
+  const [internalSelectedRowIds, setInternalSelectedRowIds] = createSignal(props.defaultSelectedRowIds ?? []);
   const [internalColumnOrder, setInternalColumnOrder] = createSignal<string[]>([]);
-  const [internalColumnVisibility, setInternalColumnVisibility] = createSignal<Record<string, boolean>>(
-    props.defaultColumnVisibility ?? {}
-  );
-  const [internalColumnPinning, setInternalColumnPinning] = createSignal<DataGridProColumnPinning>(
-    props.defaultColumnPinning ?? {}
-  );
+  const [internalColumnVisibility, setInternalColumnVisibility] = createSignal(props.defaultColumnVisibility ?? {});
+  const [internalColumnPinning, setInternalColumnPinning] = createSignal(props.defaultColumnPinning ?? {});
   const [columnWidths, setColumnWidths] = createSignal<Record<string, number>>({});
   const [resizeState, setResizeState] = createSignal<ResizeState | null>(null);
   const [scrollTop, setScrollTop] = createSignal(0);

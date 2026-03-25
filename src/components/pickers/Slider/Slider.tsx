@@ -2,6 +2,9 @@ import { createMemo, For, type JSX, Show, splitProps } from 'solid-js';
 
 import Text from '~/components/typography/Text/Text';
 import type Props from '~/models/Props';
+import type { AriaFieldProps } from '~/models/Props';
+import type { SliderCoreNativeProps } from '~/models/Props';
+import { resolveAriaInvalid } from '~/utils/aria';
 import classNames from '~/utils/classNames';
 
 import styles from './Slider.module.css';
@@ -11,7 +14,7 @@ export interface SliderMark {
   label?: string;
 }
 
-export interface SliderProps extends Omit<JSX.InputHTMLAttributes<HTMLInputElement>, 'type' | 'onChange' | 'value'> {
+export interface SliderProps extends Omit<SliderCoreNativeProps, 'onChange' | 'value'>, AriaFieldProps {
   id?: string;
   value: number;
   onChange: (value: number) => void;
@@ -38,6 +41,7 @@ const Slider = (props: Props<SliderProps>) => {
     'aria-labelledby',
     'aria-describedby',
     'aria-invalid',
+    'aria-errormessage',
   ]);
 
   const min = () => local.min ?? 0;
@@ -116,7 +120,8 @@ const Slider = (props: Props<SliderProps>) => {
           disabled={local.disabled}
           aria-labelledby={local['aria-labelledby']}
           aria-describedby={local['aria-describedby']}
-          aria-invalid={local['aria-invalid']}
+          aria-invalid={resolveAriaInvalid(undefined, local['aria-invalid'])}
+          aria-errormessage={local['aria-errormessage']}
           onInput={handleInput}
         />
       </div>

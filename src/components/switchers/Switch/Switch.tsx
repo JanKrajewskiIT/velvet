@@ -1,16 +1,18 @@
-import { createUniqueId, type JSX, Show, splitProps } from 'solid-js';
+import { createUniqueId, Show, splitProps } from 'solid-js';
 
 import LabelText from '~/components/typography/LabelText/LabelText';
 import type Props from '~/models/Props';
+import type { ButtonCoreNativeProps } from '~/models/Props';
+import { joinAriaIds } from '~/utils/aria';
 import classNames from '~/utils/classNames';
 
 import styles from './Switch.module.css';
 
-interface SwitchOwnProps extends Omit<JSX.ButtonHTMLAttributes<HTMLButtonElement>, 'type' | 'onChange'> {
+interface SwitchOwnProps extends Omit<ButtonCoreNativeProps, 'type' | 'onChange'> {
   checked: boolean;
   onChange: (checked: boolean) => void;
-  label?: JSX.Element;
-  description?: JSX.Element;
+  label?: string;
+  description?: string;
 }
 
 const Switch = (props: Props<SwitchOwnProps>) => {
@@ -28,8 +30,7 @@ const Switch = (props: Props<SwitchOwnProps>) => {
   const hasText = () => Boolean(local.label || local.description);
   const textId = () => `${generatedId}-text`;
   const labelledBy = () => {
-    const ids = [local['aria-labelledby'], hasText() ? textId() : undefined].filter(Boolean);
-    return ids.length > 0 ? ids.join(' ') : undefined;
+    return joinAriaIds(local['aria-labelledby'], hasText() ? textId() : undefined);
   };
 
   return (
@@ -47,9 +48,7 @@ const Switch = (props: Props<SwitchOwnProps>) => {
         <span class={styles.thumb} />
       </button>
       <Show when={hasText()}>
-        <span id={textId()}>
-          <LabelText label={local.label} description={local.description} />
-        </span>
+        <LabelText id={textId()} label={local.label} description={local.description} />
       </Show>
     </div>
   );

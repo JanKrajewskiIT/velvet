@@ -4,8 +4,8 @@ import Accordion from '~/components/surfaces/Accordion/Accordion';
 import AccordionItem from '~/components/surfaces/AccordionItem/AccordionItem';
 import type Props from '~/models/Props';
 
-interface SectionCardProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'title' | 'onToggle'> {
-  title: JSX.Element;
+interface SectionCardProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'onToggle'> {
+  label: string;
   isOpen?: boolean;
   defaultOpen?: boolean;
   onToggle?: (isOpen: boolean) => void;
@@ -14,7 +14,7 @@ interface SectionCardProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'tit
 
 const SectionCard = (props: Props<SectionCardProps>) => {
   const [local, rest] = splitProps(props, [
-    'title',
+    'label',
     'isOpen',
     'defaultOpen',
     'onToggle',
@@ -27,7 +27,7 @@ const SectionCard = (props: Props<SectionCardProps>) => {
     <Accordion class={local.class}>
       <AccordionItem
         {...rest}
-        title={local.title}
+        label={local.label}
         isOpen={local.isOpen}
         onToggle={local.onToggle}
         disabled={local.disabled}

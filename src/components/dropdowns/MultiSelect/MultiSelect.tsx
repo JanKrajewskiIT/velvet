@@ -1,9 +1,12 @@
-import { createMemo, createUniqueId, For, type JSX, Show, splitProps } from 'solid-js';
+import { createMemo, createUniqueId, For, Show, splitProps } from 'solid-js';
 
 import ClosableChip from '~/components/feedback/ClosableChip/ClosableChip';
 import type { InputSize } from '~/components/inputs/Input/Input';
 import CheckboxIndicator from '~/components/switchers/CheckboxIndicator/CheckboxIndicator';
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
+import type { AriaFieldProps } from '~/models/Props';
+import { resolveAriaInvalid } from '~/utils/aria';
 import classNames from '~/utils/classNames';
 
 import DropdownChevronFieldTrigger from '../DropdownChevronFieldTrigger/DropdownChevronFieldTrigger';
@@ -23,7 +26,7 @@ export interface MultiSelectOption {
   disabled?: boolean;
 }
 
-interface MultiSelectOwnProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'onChange'> {
+interface MultiSelectOwnProps extends AriaFieldProps {
   value: string[];
   options: MultiSelectOption[];
   onChange: (next: string[]) => void;
@@ -36,6 +39,7 @@ interface MultiSelectOwnProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, '
 }
 
 const MultiSelect = (props: Props<MultiSelectOwnProps>) => {
+  const { t } = useI18n();
   const [local, rest] = splitProps(props, [
     'value',
     'options',
@@ -125,7 +129,7 @@ const MultiSelect = (props: Props<MultiSelectOwnProps>) => {
         <DropdownChevronFieldTrigger
           id={local.id}
           ref={triggerRef}
-          label={local.value.length > 0 ? selectedLabels() : (local.placeholder ?? 'Select options')}
+          label={local.value.length > 0 ? selectedLabels() : (local.placeholder ?? t('multiselect.selectOptions'))}
           open={dropdown.open()}
           class={classNames(styles.trigger, dropdown.open() && styles.triggerOpen)}
           size={local.size}
@@ -135,7 +139,8 @@ const MultiSelect = (props: Props<MultiSelectOwnProps>) => {
           aria-controls={dropdown.open() ? dropdownId : undefined}
           aria-labelledby={local['aria-labelledby']}
           aria-describedby={local['aria-describedby']}
-          aria-invalid={local['aria-invalid']}
+          aria-invalid={resolveAriaInvalid(undefined, props['aria-invalid'])}
+          aria-errormessage={props['aria-errormessage']}
           onClick={toggleOpen}
           onKeyDown={handleTriggerKeyDown}
         />
@@ -153,7 +158,7 @@ const MultiSelect = (props: Props<MultiSelectOwnProps>) => {
           >
             <Show
               when={local.options.length > 0}
-              fallback={<div class={styles.empty}>{local.emptyLabel ?? 'No options'}</div>}
+              fallback={<div class={styles.empty}>{local.emptyLabel ?? t('common.noOptions')}</div>}
             >
               <For each={local.options}>
                 {(option) => {

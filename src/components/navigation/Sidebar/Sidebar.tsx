@@ -1,6 +1,7 @@
 import { IoChevronBack, IoChevronForward } from 'solid-icons/io';
 import { createMemo, createSignal, For, type JSX, Show } from 'solid-js';
 
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -64,6 +65,7 @@ const filterSidebarItems = (items: SidebarItem[], query: string, onlyBadged: boo
 };
 
 const Sidebar = (props: Props<SidebarProps>) => {
+  const { t } = useI18n();
   const [query, setQuery] = createSignal('');
   const [onlyBadged, setOnlyBadged] = createSignal(false);
   const collapsed = () => props.collapsed ?? false;
@@ -97,7 +99,7 @@ const Sidebar = (props: Props<SidebarProps>) => {
                   <IoChevronForward />
                 </Show>
               }
-              title={collapsed() ? 'Expand sidebar' : 'Collapse sidebar'}
+              label={collapsed() ? t('sidebar.expand') : t('sidebar.collapse')}
               onClick={() => props.onToggle?.()}
             />
           </Show>
@@ -105,15 +107,19 @@ const Sidebar = (props: Props<SidebarProps>) => {
       </Show>
       <Show when={!collapsed()}>
         <div class={styles.tools}>
-          <SearchInput value={query()} onInput={setQuery} placeholder={props.searchPlaceholder ?? 'Search items...'} />
+          <SearchInput
+            value={query()}
+            onInput={setQuery}
+            placeholder={props.searchPlaceholder ?? t('sidebar.searchItems')}
+          />
           <div class={styles.toolsRow}>
             <Checkbox
               checked={onlyBadged()}
               onInput={handleBadgeFilterToggle}
-              label={props.badgeFilterLabel ?? 'Only with badges'}
+              label={props.badgeFilterLabel ?? t('sidebar.onlyBadges')}
             />
             <Button variant="dashed" onClick={clearFilters} disabled={query().length === 0 && !onlyBadged()}>
-              Clear
+              {t('common.clear')}
             </Button>
           </div>
         </div>
@@ -136,8 +142,8 @@ const Sidebar = (props: Props<SidebarProps>) => {
         <Show when={isEmpty()}>
           <EmptyState
             class={styles.emptyState}
-            message={props.emptyLabel ?? 'No matching items found.'}
-            hint={query().trim().length > 0 ? 'Try a broader search term.' : undefined}
+            message={props.emptyLabel ?? t('sidebar.noMatches')}
+            hint={query().trim().length > 0 ? t('sidebar.broaderHint') : undefined}
           />
         </Show>
       </nav>

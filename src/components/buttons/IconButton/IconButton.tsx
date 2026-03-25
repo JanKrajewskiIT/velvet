@@ -1,20 +1,21 @@
 import { type JSX, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
+import type { ButtonCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import Button, { type ButtonSize, type ButtonVariant } from '../Button/Button';
 import styles from './IconButton.module.css';
 
-interface IconButtonOwnProps extends Omit<JSX.ButtonHTMLAttributes<HTMLButtonElement>, 'children' | 'title'> {
+interface IconButtonOwnProps extends Omit<ButtonCoreNativeProps, 'children' | 'title'> {
   icon: JSX.Element;
-  title: string;
+  label: string;
   size?: ButtonSize;
   variant?: ButtonVariant;
 }
 
 const IconButton = (props: Props<IconButtonOwnProps>) => {
-  const [local, rest] = splitProps(props, ['icon', 'title', 'size', 'variant', 'class', 'type']);
+  const [local, rest] = splitProps(props, ['icon', 'label', 'size', 'variant', 'class', 'type']);
 
   return (
     <Button
@@ -24,8 +25,8 @@ const IconButton = (props: Props<IconButtonOwnProps>) => {
       size={local.size}
       variant={local.variant ?? 'subtle'}
       iconOnly
-      title={local.title}
-      aria-label={local.title}
+      title={local.label}
+      aria-label={local.label}
     >
       {local.icon}
     </Button>

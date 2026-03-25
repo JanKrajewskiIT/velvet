@@ -12,7 +12,8 @@ interface EmptyStateProps {
   icon?: JSX.Element;
   message: string;
   hint?: string;
-  children?: JSX.Element;
+  action?: JSX.Element;
+  children?: never;
 }
 
 const EmptyState = (props: Props<EmptyStateProps>) => {
@@ -31,8 +32,8 @@ const EmptyState = (props: Props<EmptyStateProps>) => {
           </Text>
         )}
       </Show>
-      <Show when={props.children}>
-        <div class={styles.content}>{props.children}</div>
+      <Show when={props.action}>
+        <div class={styles.content}>{props.action}</div>
       </Show>
     </div>
   );

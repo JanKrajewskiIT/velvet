@@ -15,11 +15,6 @@
   min-width: min(100%, 280px);
 }
 
-.resultsCount {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
-}
-
 .tableContainerWithPagination {
   border-bottom-left-radius: var(--radius-none);
   border-bottom-right-radius: var(--radius-none);
@@ -62,9 +57,4 @@
   border-bottom-left-radius: var(--radius-sm);
   border-bottom-right-radius: var(--radius-sm);
   background: var(--color-bg-elevated);
-}
-
-.pageInfo {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
 }

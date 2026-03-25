@@ -1,0 +1,403 @@
+export type DemoLocale = 'en' | 'pl';
+
+export const DEMO_SUPPORTED_LOCALES: DemoLocale[] = ['en', 'pl'];
+
+const enMessages = {
+  'demo.lang.switcher': 'Language',
+  'demo.theme.light': 'Light mode',
+  'demo.theme.dark': 'Dark mode',
+  'demo.theme.group': 'Theme',
+  'demo.toast.close': 'Close notification',
+  'demo.sidebar.title': 'VelvetUI',
+  'demo.sidebar.subtitle': 'Modern SolidJS component showcase',
+  'demo.sidebar.navLabel': 'Component categories',
+  'demo.page.eyebrow': 'Component playground',
+  'demo.nav.start': 'Start',
+  'demo.nav.surfaces': 'Surfaces',
+  'demo.nav.navigation': 'Navigation',
+  'demo.nav.inputs': 'Inputs',
+  'demo.nav.data': 'Data',
+  'demo.nav.feedback': 'Feedback',
+  'demo.nav.overlays': 'Overlays',
+  'demo.nav.composites': 'Composites',
+  'demo.nav.item.overview': 'Overview',
+  'demo.nav.item.typography': 'Typography',
+  'demo.nav.item.developer': 'Tooling',
+  'demo.nav.item.surfacesLayouts': 'Layouts',
+  'demo.nav.item.surfacesMainLayout': 'MainLayout',
+  'demo.nav.item.surfacesCollapsible': 'Collapsible',
+  'demo.nav.item.surfacesCards': 'Cards',
+  'demo.nav.item.navbar': 'Navbar',
+  'demo.nav.item.sidebars': 'Sidebar & SidebarNav',
+  'demo.nav.item.breadcrumbs': 'Breadcrumbs',
+  'demo.nav.item.stepper': 'Stepper',
+  'demo.nav.item.tabs': 'Tabs',
+  'demo.nav.item.pagination': 'Pagination',
+  'demo.nav.item.speedDial': 'Speed Dial (FAB)',
+  'demo.nav.item.bottomNav': 'Bottom nav',
+  'demo.nav.item.backToTop': 'Back to top',
+  'demo.nav.item.inputsButtons': 'Buttons',
+  'demo.nav.item.inputsSwitchers': 'Switchers',
+  'demo.nav.item.inputsPickers': 'Pickers',
+  'demo.nav.item.inputsDropdowns': 'Dropdowns',
+  'demo.nav.item.inputsFields': 'Fields',
+  'demo.nav.item.inputsDateTime': 'Date & Time',
+  'demo.nav.item.inputsUpload': 'Upload',
+  'demo.nav.item.inputsFormLayout': 'Form Layout',
+  'demo.nav.item.dataTables': 'Tables',
+  'demo.nav.item.dataLists': 'Lists',
+  'demo.nav.item.dataFilters': 'Filters',
+  'demo.nav.item.dataTree': 'Tree',
+  'demo.nav.item.dataMedia': 'Media',
+  'demo.nav.item.dataCharts': 'Charts',
+  'demo.nav.item.dataTimeline': 'Timeline',
+  'demo.nav.item.feedbackStatusNotifications': 'Status & Notifications',
+  'demo.nav.item.feedbackProgress': 'Progress',
+  'demo.nav.item.feedbackAlertsBanners': 'Alerts & Banners',
+  'demo.nav.item.feedbackEmptyStates': 'Empty States',
+  'demo.nav.item.overlaysTooltipPopover': 'Tooltip & Popover',
+  'demo.nav.item.overlaysDialogs': 'Dialogs',
+  'demo.nav.item.overlaysSheets': 'Sheets',
+  'demo.nav.item.overlaysContextMenu': 'Context Menu',
+  'demo.nav.item.overlaysTour': 'Tour',
+  'demo.nav.item.codeMarkdown': 'Code & Markdown',
+  'demo.nav.item.transferList': 'TransferList',
+  'demo.nav.item.editableCollection': 'EditableCollection',
+  'demo.nav.item.kanbanBoard': 'KanbanBoard',
+  'demo.nav.item.commandPalette': 'Command Palette',
+  'demo.nav.item.wizard': 'Wizard',
+  'demo.nav.item.aiResultPanel': 'AI Result Panel',
+  'demo.nav.item.scheduler': 'Scheduler',
+  'demo.page.overview.title': 'VelvetUI Overview',
+  'demo.page.overview.description':
+    'Start here for installation, library goals and a quick snapshot of what is included.',
+  'demo.page.typography.title': 'Typography',
+  'demo.page.typography.description':
+    'Semantic heading, text and code primitives built on top of brand typography tokens for consistent UI copy.',
+  'demo.page.developer.title': 'Tooling',
+  'demo.page.developer.description':
+    'ESLint, Prettier, Stylelint, TypeScript, Vite, lint-staged and Husky presets plus usage snippets and design principles.',
+  'demo.page.inputsButtons.title': 'Inputs & Buttons',
+  'demo.page.inputsButtons.description':
+    'Button, AffixButton, IconButton, ActionRow, CopyButton, LocaleSwitcher and ThemeToggle.',
+  'demo.page.inputsSwitchers.title': 'Inputs & Switchers',
+  'demo.page.inputsSwitchers.description':
+    'SegmentedControl, Checkbox, RadioGroup and Switch for binary and exclusive selection patterns.',
+  'demo.page.inputsDropdowns.title': 'Inputs & Dropdowns',
+  'demo.page.inputsDropdowns.description':
+    'DropdownButton, DropdownMenu, Autocomplete, MultiSelect and Select for searchable menus and option selection.',
+  'demo.page.inputsFields.title': 'Inputs & Fields',
+  'demo.page.inputsFields.description':
+    'Input, TextArea, NumberInput, SearchInput, PasswordInput, TagInput, OtpInput, InlineEditableText and RichTextEditor.',
+  'demo.page.inputsPickers.title': 'Inputs & Pickers',
+  'demo.page.inputsPickers.description':
+    'Slider, RangeSlider, Rating and ColorPicker for scalar, range and palette selection.',
+  'demo.page.inputsDateTime.title': 'Inputs & Date & Time',
+  'demo.page.inputsDateTime.description':
+    'DatePicker, DateRangePicker, TimePicker and DateTimePicker for date/time scheduling workflows.',
+  'demo.page.inputsOther.title': 'Inputs & Upload',
+  'demo.page.inputsOther.description': 'FileDropZone for drag-and-drop single and multi-file upload flows.',
+  'demo.page.inputsFormLayout.title': 'Inputs & Form Layout',
+  'demo.page.inputsFormLayout.description':
+    'FormField, FormGrid, FormLayout and ActionRow for structured and responsive form pages.',
+  'demo.page.dataContent.title': 'Composites & Code & Markdown',
+  'demo.page.dataContent.description':
+    'CodeBlock, MarkdownRenderer and MarkdownEditDialog for documentation, code snippets and markdown editing.',
+  'demo.page.dataMedia.title': 'Data & Media',
+  'demo.page.dataMedia.description':
+    'Avatar, AvatarGroup, Carousel, ImageGrid, Lightbox and Marquee for people, galleries and ticker-style content.',
+  'demo.page.dataCharts.title': 'Data & Charts',
+  'demo.page.dataCharts.description': 'ScoreRing, RadarChart and TradingViewChart for data visualization.',
+  'demo.page.dataTables.title': 'Data & Tables',
+  'demo.page.dataTables.description':
+    'Table primitives, DataTable v2, QueryBuilder, ColumnManager and DataGridPro v3 (virtualization, pinning, resizing, selection, visibility, reorder, JSON import/export).',
+  'demo.page.dataLists.title': 'Data & Lists',
+  'demo.page.dataLists.description':
+    'List and ListItem for structured rows with icons, secondary text and inline actions.',
+  'demo.page.dataFilters.title': 'Data & Filters',
+  'demo.page.dataFilters.description':
+    'FilterBar for combining search queries, structured filters and removable active chips.',
+  'demo.page.dataTimeline.title': 'Data & Timeline',
+  'demo.page.dataTimeline.description': 'Timeline for chronological lists of events, releases and activity history.',
+  'demo.page.dataTree.title': 'Data & Tree',
+  'demo.page.dataTree.description':
+    'TreeView v2 with lazy loading, checkbox selection and drag-and-drop tree navigation.',
+  'demo.page.navNavbar.title': 'Navigation & Navbar',
+  'demo.page.navNavbar.description':
+    'Navbar for top-level app navigation with brand, actions and responsive mobile menu.',
+  'demo.page.navSidebars.title': 'Navigation & Sidebar & SidebarNav',
+  'demo.page.navSidebars.description': 'Sidebar and SidebarNav for nested app navigation and docs-like section menus.',
+  'demo.page.navBreadcrumbs.title': 'Navigation & Breadcrumbs',
+  'demo.page.navBreadcrumbs.description':
+    'Breadcrumbs for displaying hierarchical location and quick parent navigation.',
+  'demo.page.navStepper.title': 'Navigation & Stepper',
+  'demo.page.navStepper.description': 'Stepper for visualizing progress through ordered steps and multi-step flows.',
+  'demo.page.navTabs.title': 'Navigation & Tabs',
+  'demo.page.navTabs.description': 'Tabs for switching between related views with underline and pill variants.',
+  'demo.page.navPagination.title': 'Navigation & Pagination',
+  'demo.page.navPagination.description': 'Pagination for navigating between pages of content and large lists.',
+  'demo.page.navSpeedDial.title': 'Navigation & Speed Dial (FAB)',
+  'demo.page.navSpeedDial.description': 'SpeedDial for quick floating actions with direction variants and labels.',
+  'demo.page.navBottomNav.title': 'Navigation & Bottom nav',
+  'demo.page.navBottomNav.description':
+    'BottomNav for mobile navigation bars; use placement container when the bar sits only above main content.',
+  'demo.page.navBackToTop.title': 'Navigation & Back to top',
+  'demo.page.navBackToTop.description': 'BackToTop floating control for long-scrolling pages.',
+  'demo.page.feedbackBadgesChips.title': 'Feedback & Status & Notifications',
+  'demo.page.feedbackBadgesChips.description':
+    'Badge, Chip, ClosableChip, Kbd, Toast and StatCard for compact status and notification patterns.',
+  'demo.page.feedbackProgress.title': 'Feedback & Progress',
+  'demo.page.feedbackProgress.description':
+    'Progress, CircularProgress, Countdown, Spinner, Skeleton and LoadingContainer.',
+  'demo.page.feedbackAlerts.title': 'Feedback & Alerts & Banners',
+  'demo.page.feedbackAlerts.description':
+    'Alert, Banner, ErrorMessage and NotificationCenter for inline and full-width status messaging.',
+  'demo.page.feedbackStates.title': 'Feedback & Empty States',
+  'demo.page.feedbackStates.description':
+    'ErrorFallback, EmptyState and AccessDenied for error, zero-data and permission-denied screens.',
+  'demo.page.overlaysTooltips.title': 'Overlays & Tooltip & Popover',
+  'demo.page.overlaysTooltips.description':
+    'Tooltip and Popover for contextual hints and click-triggered floating content around controls.',
+  'demo.page.overlaysDialogs.title': 'Overlays & Dialogs',
+  'demo.page.overlaysDialogs.description':
+    'Dialog, ConfirmDialog and ConfirmAction for modal workflows and confirmation flows.',
+  'demo.page.overlaysSheets.title': 'Overlays & Sheets',
+  'demo.page.overlaysSheets.description':
+    'Sheet for slide-in panels from any edge, including right-side panels with action footer.',
+  'demo.page.overlaysContext.title': 'Overlays & Context Menu',
+  'demo.page.overlaysContext.description': 'ContextMenu for right-click action menus.',
+  'demo.page.overlaysLightbox.title': 'Overlays & Tour',
+  'demo.page.overlaysLightbox.description':
+    'Tour for step-by-step onboarding spotlights and guided product walkthroughs.',
+  'demo.page.surfacesLayouts.title': 'Surfaces & Layouts',
+  'demo.page.surfacesLayouts.description': 'Grid, Stack, ResizablePanel and Divider for composition-friendly layouts.',
+  'demo.page.surfacesMainLayout.title': 'Surfaces & MainLayout',
+  'demo.page.surfacesMainLayout.description':
+    'MainLayout full shell composition with Navbar and Footer, without navigation items.',
+  'demo.page.surfacesCollapsible.title': 'Surfaces & Collapsible',
+  'demo.page.surfacesCollapsible.description':
+    'Accordion and SectionCard for progressive disclosure and grouped content.',
+  'demo.page.surfacesCards.title': 'Surfaces & Cards',
+  'demo.page.surfacesCards.description': 'Card, DataCard and FlipCard for content containers and interactive layouts.',
+  'demo.page.compositesTransferList.title': 'Composites & TransferList',
+  'demo.page.compositesTransferList.description':
+    'TransferList for moving items between source and target groups with search support.',
+  'demo.page.compositesEditableCollection.title': 'Composites & EditableCollection',
+  'demo.page.compositesEditableCollection.description':
+    'EditableCollection for adding, removing and editing dynamic form-like item lists.',
+  'demo.page.compositesKanbanBoard.title': 'Composites & KanbanBoard',
+  'demo.page.compositesKanbanBoard.description': 'KanbanBoard for drag-and-drop workflow columns and status changes.',
+  'demo.page.compositesCommandPalette.title': 'Composites & Command Palette',
+  'demo.page.compositesCommandPalette.description':
+    'CommandPalette for keyboard-first command launching, grouped results and quick actions.',
+  'demo.page.compositesWizard.title': 'Composites & Wizard',
+  'demo.page.compositesWizard.description':
+    'Wizard for guided multi-step flows with progress, validation and finish actions.',
+  'demo.page.compositesAiResult.title': 'Composites & AI Result Panel',
+  'demo.page.compositesAiResult.description':
+    'AiResultPanel showcase with full score, summary, sections and contextual actions.',
+  'demo.page.compositesScheduler.title': 'Composites & Scheduler',
+  'demo.page.compositesScheduler.description':
+    'Scheduler for month-based planning with multi-day events and drag-and-drop rescheduling.',
+} as const;
+
+type DemoMessageKey = keyof typeof enMessages;
+
+const plMessages: Record<DemoMessageKey, string> = {
+  'demo.lang.switcher': 'Jezyk',
+  'demo.theme.light': 'Tryb jasny',
+  'demo.theme.dark': 'Tryb ciemny',
+  'demo.theme.group': 'Motyw',
+  'demo.toast.close': 'Zamknij powiadomienie',
+  'demo.sidebar.title': 'VelvetUI',
+  'demo.sidebar.subtitle': 'Nowoczesny showcase komponentow SolidJS',
+  'demo.sidebar.navLabel': 'Kategorie komponentow',
+  'demo.page.eyebrow': 'Plac zabaw komponentow',
+  'demo.nav.start': 'Start',
+  'demo.nav.surfaces': 'Powierzchnie',
+  'demo.nav.navigation': 'Nawigacja',
+  'demo.nav.inputs': 'Pola',
+  'demo.nav.data': 'Dane',
+  'demo.nav.feedback': 'Informacja zwrotna',
+  'demo.nav.overlays': 'Nakladki',
+  'demo.nav.composites': 'Kompozyty',
+  'demo.nav.item.overview': 'Przeglad',
+  'demo.nav.item.typography': 'Typografia',
+  'demo.nav.item.developer': 'Narzedzia',
+  'demo.nav.item.surfacesLayouts': 'Uklady',
+  'demo.nav.item.surfacesMainLayout': 'MainLayout',
+  'demo.nav.item.surfacesCollapsible': 'Zwijalne',
+  'demo.nav.item.surfacesCards': 'Karty',
+  'demo.nav.item.navbar': 'Navbar',
+  'demo.nav.item.sidebars': 'Sidebar i SidebarNav',
+  'demo.nav.item.breadcrumbs': 'Okruszki',
+  'demo.nav.item.stepper': 'Kroki',
+  'demo.nav.item.tabs': 'Zakladki',
+  'demo.nav.item.pagination': 'Paginacja',
+  'demo.nav.item.speedDial': 'Speed Dial (FAB)',
+  'demo.nav.item.bottomNav': 'Dolna nawigacja',
+  'demo.nav.item.backToTop': 'Do gory',
+  'demo.nav.item.inputsButtons': 'Przyciski',
+  'demo.nav.item.inputsSwitchers': 'Przelaczniki',
+  'demo.nav.item.inputsPickers': 'Selektory',
+  'demo.nav.item.inputsDropdowns': 'Rozwijane',
+  'demo.nav.item.inputsFields': 'Pola',
+  'demo.nav.item.inputsDateTime': 'Data i czas',
+  'demo.nav.item.inputsUpload': 'Przesylanie',
+  'demo.nav.item.inputsFormLayout': 'Uklad formularza',
+  'demo.nav.item.dataTables': 'Tabele',
+  'demo.nav.item.dataLists': 'Listy',
+  'demo.nav.item.dataFilters': 'Filtry',
+  'demo.nav.item.dataTree': 'Drzewo',
+  'demo.nav.item.dataMedia': 'Media',
+  'demo.nav.item.dataCharts': 'Wykresy',
+  'demo.nav.item.dataTimeline': 'Os czasu',
+  'demo.nav.item.feedbackStatusNotifications': 'Status i powiadomienia',
+  'demo.nav.item.feedbackProgress': 'Postep',
+  'demo.nav.item.feedbackAlertsBanners': 'Alerty i bannery',
+  'demo.nav.item.feedbackEmptyStates': 'Stany puste',
+  'demo.nav.item.overlaysTooltipPopover': 'Tooltip i popover',
+  'demo.nav.item.overlaysDialogs': 'Dialogi',
+  'demo.nav.item.overlaysSheets': 'Arkusze',
+  'demo.nav.item.overlaysContextMenu': 'Menu kontekstowe',
+  'demo.nav.item.overlaysTour': 'Tour',
+  'demo.nav.item.codeMarkdown': 'Kod i Markdown',
+  'demo.nav.item.transferList': 'TransferList',
+  'demo.nav.item.editableCollection': 'EditableCollection',
+  'demo.nav.item.kanbanBoard': 'KanbanBoard',
+  'demo.nav.item.commandPalette': 'Paleta polecen',
+  'demo.nav.item.wizard': 'Kreator',
+  'demo.nav.item.aiResultPanel': 'Panel wynikow AI',
+  'demo.nav.item.scheduler': 'Harmonogram',
+  'demo.page.overview.title': 'Przeglad VelvetUI',
+  'demo.page.overview.description': 'Zacznij tutaj: instalacja, cele biblioteki i szybki przeglad zawartosci.',
+  'demo.page.typography.title': 'Typografia',
+  'demo.page.typography.description':
+    'Semantyczne headingi, tekst i kod oparte o tokeny typograficzne dla spojnego UI copy.',
+  'demo.page.developer.title': 'Narzedzia',
+  'demo.page.developer.description':
+    'Presety ESLint, Prettier, Stylelint, TypeScript, Vite, lint-staged i Husky oraz przyklady uzycia i zasady.',
+  'demo.page.inputsButtons.title': 'Pola i przyciski',
+  'demo.page.inputsButtons.description':
+    'Button, AffixButton, IconButton, ActionRow, CopyButton, LocaleSwitcher i ThemeToggle.',
+  'demo.page.inputsSwitchers.title': 'Pola i przelaczniki',
+  'demo.page.inputsSwitchers.description':
+    'SegmentedControl, Checkbox, RadioGroup i Switch dla wyboru binarnego i wzajemnie wykluczajacego.',
+  'demo.page.inputsDropdowns.title': 'Pola i listy rozwijane',
+  'demo.page.inputsDropdowns.description':
+    'DropdownButton, DropdownMenu, Autocomplete, MultiSelect i Select do wyszukiwania i wyboru opcji.',
+  'demo.page.inputsFields.title': 'Pola i edycja',
+  'demo.page.inputsFields.description':
+    'Input, TextArea, NumberInput, SearchInput, PasswordInput, TagInput, OtpInput, InlineEditableText i RichTextEditor.',
+  'demo.page.inputsPickers.title': 'Pola i selektory',
+  'demo.page.inputsPickers.description':
+    'Slider, RangeSlider, Rating i ColorPicker dla wartosci liczbowych, zakresow i palet.',
+  'demo.page.inputsDateTime.title': 'Pola i data/czas',
+  'demo.page.inputsDateTime.description':
+    'DatePicker, DateRangePicker, TimePicker i DateTimePicker dla workflow harmonogramowania.',
+  'demo.page.inputsOther.title': 'Pola i upload',
+  'demo.page.inputsOther.description': 'FileDropZone do przeciagania i upuszczania jednego lub wielu plikow.',
+  'demo.page.inputsFormLayout.title': 'Pola i uklad formularza',
+  'demo.page.inputsFormLayout.description':
+    'FormField, FormGrid, FormLayout i ActionRow dla strukturalnych i responsywnych formularzy.',
+  'demo.page.dataContent.title': 'Kompozyty i kod/Markdown',
+  'demo.page.dataContent.description':
+    'CodeBlock, MarkdownRenderer i MarkdownEditDialog dla dokumentacji, snippetow i edycji Markdown.',
+  'demo.page.dataMedia.title': 'Dane i media',
+  'demo.page.dataMedia.description':
+    'Avatar, AvatarGroup, Carousel, ImageGrid, Lightbox i Marquee dla osob, galerii i tickerow.',
+  'demo.page.dataCharts.title': 'Dane i wykresy',
+  'demo.page.dataCharts.description': 'ScoreRing, RadarChart i TradingViewChart do wizualizacji danych.',
+  'demo.page.dataTables.title': 'Dane i tabele',
+  'demo.page.dataTables.description':
+    'Prymitywy Table, DataTable v2, QueryBuilder, ColumnManager i DataGridPro v3 (wirtualizacja, przypinanie, resize, zaznaczanie, widocznosc, reorder, import/export JSON).',
+  'demo.page.dataLists.title': 'Dane i listy',
+  'demo.page.dataLists.description':
+    'List i ListItem dla strukturalnych wierszy z ikonami, tekstem pomocniczym i akcjami.',
+  'demo.page.dataFilters.title': 'Dane i filtry',
+  'demo.page.dataFilters.description': 'FilterBar do laczenia zapytan, filtrow strukturalnych i usuwalnych chipow.',
+  'demo.page.dataTimeline.title': 'Dane i os czasu',
+  'demo.page.dataTimeline.description': 'Timeline dla chronologicznych list zdarzen, wydan i historii aktywnosci.',
+  'demo.page.dataTree.title': 'Dane i drzewo',
+  'demo.page.dataTree.description': 'TreeView v2 z lazy loadingiem, checkboxami i drag-and-drop.',
+  'demo.page.navNavbar.title': 'Nawigacja i Navbar',
+  'demo.page.navNavbar.description': 'Navbar do nawigacji aplikacji z marka, akcjami i responsywnym menu mobilnym.',
+  'demo.page.navSidebars.title': 'Nawigacja i Sidebar/SidebarNav',
+  'demo.page.navSidebars.description': 'Sidebar i SidebarNav dla zagniezdzonej nawigacji i menu sekcji.',
+  'demo.page.navBreadcrumbs.title': 'Nawigacja i okruszki',
+  'demo.page.navBreadcrumbs.description': 'Breadcrumbs do pokazywania hierarchii lokalizacji i szybkiej nawigacji.',
+  'demo.page.navStepper.title': 'Nawigacja i kroki',
+  'demo.page.navStepper.description': 'Stepper do wizualizacji postepu w wieloetapowych przeplywach.',
+  'demo.page.navTabs.title': 'Nawigacja i zakladki',
+  'demo.page.navTabs.description': 'Tabs do przelaczania powiazanych widokow (underline i pill).',
+  'demo.page.navPagination.title': 'Nawigacja i paginacja',
+  'demo.page.navPagination.description': 'Pagination do przechodzenia po stronach tresci i duzych listach.',
+  'demo.page.navSpeedDial.title': 'Nawigacja i Speed Dial (FAB)',
+  'demo.page.navSpeedDial.description': 'SpeedDial dla szybkich akcji plywajacych z wariantami kierunku i etykiet.',
+  'demo.page.navBottomNav.title': 'Nawigacja i dolna nawigacja',
+  'demo.page.navBottomNav.description': 'BottomNav dla nawigacji mobilnej; mozna osadzic tylko nad glowna trescia.',
+  'demo.page.navBackToTop.title': 'Nawigacja i powrot do gory',
+  'demo.page.navBackToTop.description': 'BackToTop jako kontrolka dla dlugich stron.',
+  'demo.page.feedbackBadgesChips.title': 'Feedback i status/powiadomienia',
+  'demo.page.feedbackBadgesChips.description':
+    'Badge, Chip, ClosableChip, Kbd, Toast i StatCard dla zwiezlych komunikatow statusu.',
+  'demo.page.feedbackProgress.title': 'Feedback i postep',
+  'demo.page.feedbackProgress.description':
+    'Progress, CircularProgress, Countdown, Spinner, Skeleton i LoadingContainer.',
+  'demo.page.feedbackAlerts.title': 'Feedback i alerty/bannery',
+  'demo.page.feedbackAlerts.description':
+    'Alert, Banner, ErrorMessage i NotificationCenter dla komunikatow inline i full-width.',
+  'demo.page.feedbackStates.title': 'Feedback i stany puste',
+  'demo.page.feedbackStates.description':
+    'ErrorFallback, EmptyState i AccessDenied dla bledow, braku danych i braku uprawnien.',
+  'demo.page.overlaysTooltips.title': 'Nakladki i tooltip/popover',
+  'demo.page.overlaysTooltips.description': 'Tooltip i Popover dla kontekstowych podpowiedzi i klikanych paneli.',
+  'demo.page.overlaysDialogs.title': 'Nakladki i dialogi',
+  'demo.page.overlaysDialogs.description':
+    'Dialog, ConfirmDialog i ConfirmAction dla modalnych przeplywow i potwierdzen.',
+  'demo.page.overlaysSheets.title': 'Nakladki i sheets',
+  'demo.page.overlaysSheets.description': 'Sheet dla paneli wysuwanych z dowolnej krawedzi, takze z akcjami w stopce.',
+  'demo.page.overlaysContext.title': 'Nakladki i menu kontekstowe',
+  'demo.page.overlaysContext.description': 'ContextMenu dla menu pod prawym przyciskiem myszy.',
+  'demo.page.overlaysLightbox.title': 'Nakladki i tour',
+  'demo.page.overlaysLightbox.description': 'Tour dla onboardingowych walkthrough krok po kroku.',
+  'demo.page.surfacesLayouts.title': 'Powierzchnie i uklady',
+  'demo.page.surfacesLayouts.description': 'Grid, Stack, ResizablePanel i Divider dla kompozycji layoutu.',
+  'demo.page.surfacesMainLayout.title': 'Powierzchnie i MainLayout',
+  'demo.page.surfacesMainLayout.description':
+    'MainLayout jako pelny szablon shell z Navbar i Footer, bez elementow nawigacji.',
+  'demo.page.surfacesCollapsible.title': 'Powierzchnie i zwijanie',
+  'demo.page.surfacesCollapsible.description': 'Accordion i SectionCard dla progresywnego ujawniania tresci.',
+  'demo.page.surfacesCards.title': 'Powierzchnie i karty',
+  'demo.page.surfacesCards.description': 'Card, DataCard i FlipCard dla kontenerow tresci i interakcji.',
+  'demo.page.compositesTransferList.title': 'Kompozyty i TransferList',
+  'demo.page.compositesTransferList.description':
+    'TransferList do przenoszenia elementow miedzy listami z wyszukiwaniem.',
+  'demo.page.compositesEditableCollection.title': 'Kompozyty i EditableCollection',
+  'demo.page.compositesEditableCollection.description':
+    'EditableCollection do dodawania, usuwania i edycji dynamicznych pozycji.',
+  'demo.page.compositesKanbanBoard.title': 'Kompozyty i KanbanBoard',
+  'demo.page.compositesKanbanBoard.description': 'KanbanBoard do drag-and-drop miedzy kolumnami workflow.',
+  'demo.page.compositesCommandPalette.title': 'Kompozyty i Command Palette',
+  'demo.page.compositesCommandPalette.description':
+    'CommandPalette dla uruchamiania polecen klawiatura, z grupowaniem wynikow i szybkimi akcjami.',
+  'demo.page.compositesWizard.title': 'Kompozyty i Wizard',
+  'demo.page.compositesWizard.description': 'Wizard dla wieloetapowych przeplywow z postepem i walidacja.',
+  'demo.page.compositesAiResult.title': 'Kompozyty i panel wynikow AI',
+  'demo.page.compositesAiResult.description':
+    'AiResultPanel z wynikiem, podsumowaniem, sekcjami i akcjami kontekstowymi.',
+  'demo.page.compositesScheduler.title': 'Kompozyty i harmonogram',
+  'demo.page.compositesScheduler.description':
+    'Scheduler do planowania miesiecznego z wydarzeniami wielodniowymi i drag-and-drop.',
+};
+
+const dictionaries: Record<DemoLocale, Record<DemoMessageKey, string>> = {
+  en: enMessages,
+  pl: plMessages,
+};
+
+export type DemoI18nMessageKey = DemoMessageKey;
+
+export function getDemoMessages(locale: DemoLocale): Record<DemoI18nMessageKey, string> {
+  return dictionaries[locale];
+}

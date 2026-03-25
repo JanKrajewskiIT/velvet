@@ -11,7 +11,7 @@ export interface ConfirmActionRenderContext {
 }
 
 export interface ConfirmActionProps {
-  title: string;
+  label: string;
   message: string;
   confirmLabel: string;
   cancelLabel: string;
@@ -47,7 +47,7 @@ const ConfirmAction = (props: Props<ConfirmActionProps>) => {
       <ConfirmDialog
         class={props.class}
         open={open()}
-        title={props.title}
+        label={props.label}
         message={props.message}
         confirmLabel={props.confirmLabel}
         cancelLabel={props.cancelLabel}

@@ -4,6 +4,7 @@ import { createMemo, For, Show, splitProps } from 'solid-js';
 
 import Card from '~/components/surfaces/Card/Card';
 import Text from '~/components/typography/Text/Text';
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -35,7 +36,7 @@ interface ColumnManagerOwnProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>,
   defaultOrder?: readonly string[];
   defaultVisibility?: ColumnManagerVisibility;
   defaultPinning?: ColumnManagerPinning;
-  title?: string;
+  label?: string;
   description?: string;
   visibilityLabel?: string;
   pinLabel?: string;
@@ -52,6 +53,7 @@ const toPinValue = (raw: string): ColumnManagerPin => {
 };
 
 const ColumnManager = (props: Props<ColumnManagerOwnProps>) => {
+  const { t } = useI18n();
   const [local] = splitProps(props, [
     'columns',
     'order',
@@ -63,7 +65,7 @@ const ColumnManager = (props: Props<ColumnManagerOwnProps>) => {
     'defaultOrder',
     'defaultVisibility',
     'defaultPinning',
-    'title',
+    'label',
     'description',
     'visibilityLabel',
     'pinLabel',
@@ -137,7 +139,7 @@ const ColumnManager = (props: Props<ColumnManagerOwnProps>) => {
       <div class={styles.header}>
         <div class={styles.headerCopy}>
           <Text as="h3" variant="labelLg">
-            {local.title ?? 'Column manager'}
+            {local.label ?? t('columnManager.label')}
           </Text>
           <Show when={local.description}>
             <Text as="p" variant="caption" tone="muted">
@@ -146,7 +148,7 @@ const ColumnManager = (props: Props<ColumnManagerOwnProps>) => {
           </Show>
         </div>
         <Button variant="ghost" size="sm" onClick={resetAll} disabled={local.disabled}>
-          {local.resetLabel ?? 'Reset columns'}
+          {local.resetLabel ?? t('columnManager.resetColumns')}
         </Button>
       </div>
 
@@ -171,28 +173,30 @@ const ColumnManager = (props: Props<ColumnManagerOwnProps>) => {
                   <Select
                     class={styles.pin}
                     size="sm"
-                    aria-label={local.pinLabel ?? 'Pin'}
+                    aria-label={local.pinLabel ?? t('common.pin')}
                     value={pinValue() ?? ''}
                     disabled={local.disabled || !isVisible(column.key)}
-                    onChange={(e) => setPinning(column.key, toPinValue(e.currentTarget.value))}
+                    onChange={(event: Event & { currentTarget: HTMLSelectElement; target: HTMLSelectElement }) =>
+                      setPinning(column.key, toPinValue(event.currentTarget.value))
+                    }
                   >
-                    <option value="">{local.visibilityLabel ?? 'None'}</option>
-                    <option value="left">Left</option>
-                    <option value="right">Right</option>
+                    <option value="">{local.visibilityLabel ?? t('common.none')}</option>
+                    <option value="left">{t('dir.left')}</option>
+                    <option value="right">{t('dir.right')}</option>
                   </Select>
                 </Show>
 
                 <div class={styles.reorder}>
                   <IconButton
                     icon={<IoArrowUp />}
-                    title={local.moveUpLabel ?? 'Move up'}
+                    label={local.moveUpLabel ?? t('common.moveUp')}
                     size="sm"
                     disabled={local.disabled || index() === 0}
                     onClick={() => moveColumn(column.key, -1)}
                   />
                   <IconButton
                     icon={<IoArrowDown />}
-                    title={local.moveDownLabel ?? 'Move down'}
+                    label={local.moveDownLabel ?? t('common.moveDown')}
                     size="sm"
                     disabled={local.disabled || index() === orderedColumns().length - 1}
                     onClick={() => moveColumn(column.key, 1)}

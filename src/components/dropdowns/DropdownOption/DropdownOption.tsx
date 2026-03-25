@@ -4,15 +4,28 @@ import { splitProps } from 'solid-js';
 import Button from '~/components/buttons/Button/Button';
 import Text from '~/components/typography/Text/Text';
 import type Props from '~/models/Props';
+import type { ButtonCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import styles from './DropdownOption.module.css';
 
-export interface DropdownOptionProps extends Omit<JSX.ButtonHTMLAttributes<HTMLButtonElement>, 'children' | 'prefix'> {
+export interface DropdownOptionProps extends Omit<ButtonCoreNativeProps, 'children' | 'prefix'> {
   selected?: boolean;
-  label: JSX.Element;
+  label: string;
   prefix?: JSX.Element;
   tone?: 'default' | 'primary' | 'success' | 'error';
+  'aria-selected'?: boolean | 'true' | 'false';
+  'aria-checked'?: boolean | 'true' | 'false';
+  'aria-disabled'?: boolean | 'true' | 'false';
+  'aria-posinset'?: number;
+  'aria-setsize'?: number;
+  'aria-current'?: string;
+  'aria-haspopup'?: string;
+  'aria-controls'?: string;
+  'aria-expanded'?: boolean | 'true' | 'false';
+  'aria-description'?: string;
+  'aria-keyshortcuts'?: string;
+  'aria-roledescription'?: string;
 }
 
 const toneToClass: Record<NonNullable<DropdownOptionProps['tone']>, string | undefined> = {

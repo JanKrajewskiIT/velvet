@@ -11,7 +11,6 @@ import {
   ColorPicker,
   CopyButton,
   DatePicker,
-  type DateRange,
   DateRangePicker,
   DateTimePicker,
   DropdownButton,
@@ -73,9 +72,9 @@ const InputsSection = (props: InputsSectionProps) => {
   const [text, setText] = createSignal('');
   const [editableTitle, setEditableTitle] = createSignal('Release notes');
   const [selected, setSelected] = createSignal('');
-  const [frameworks, setFrameworks] = createSignal<string[]>(['solid', 'vue']);
-  const [tags, setTags] = createSignal<string[]>(['solid-js', 'vite']);
-  const [autoValues, setAutoValues] = createSignal<string[]>(['TypeScript']);
+  const [frameworks, setFrameworks] = createSignal(['solid', 'vue']);
+  const [tags, setTags] = createSignal(['solid-js', 'vite']);
+  const [autoValues, setAutoValues] = createSignal(['TypeScript']);
   const [color, setColor] = createSignal('#1467ff');
   const [newsletter, setNewsletter] = createSignal(true);
   const [notifications, setNotifications] = createSignal(false);
@@ -98,16 +97,19 @@ const InputsSection = (props: InputsSectionProps) => {
   const [quantity, setQuantity] = createSignal(5);
   const [search, setSearch] = createSignal('');
   const [affixValue, setAffixValue] = createSignal('hello@velvetui.dev');
-  const [range, setRange] = createSignal<DateRange>({ start: '', end: '' });
+  const [range, setRange] = createSignal({ start: '', end: '' });
   const [dateTime, setDateTime] = createSignal('');
   const [richText, setRichText] = createSignal('<p><strong>Release notes</strong> for <em>VelvetUi</em>.</p>');
   const [droppedFile, setDroppedFile] = createSignal<string | null>(null);
   const [droppedFiles, setDroppedFiles] = createSignal<string[]>([]);
-  const [locale, setLocale] = createSignal<'EN' | 'PL'>('EN');
 
   const simulateLoad = () => {
     setLoading(true);
     setTimeout(() => setLoading(false), 1400);
+  };
+
+  const handleSelectChange = (event: Event & { currentTarget: HTMLSelectElement; target: HTMLSelectElement }) => {
+    setSelected(event.currentTarget.value);
   };
 
   return (
@@ -189,11 +191,11 @@ const InputsSection = (props: InputsSectionProps) => {
           <PreviewPanel>
             <PreviewGroup title="Examples">
               <div class="row">
-                <IconButton icon={<IoPencil />} title="Edit" />
-                <IconButton icon={<IoTrash />} title="Delete" />
-                <IconButton icon={<IoAdd />} title="Add" size="sm" />
-                <IconButton icon={<IoDownload />} title="Download" size="md" />
-                <IconButton icon={<IoClose />} title="Close" disabled />
+                <IconButton icon={<IoPencil />} label="Edit" />
+                <IconButton icon={<IoTrash />} label="Delete" />
+                <IconButton icon={<IoAdd />} label="Add" size="sm" />
+                <IconButton icon={<IoDownload />} label="Download" size="md" />
+                <IconButton icon={<IoClose />} label="Close" disabled />
               </div>
             </PreviewGroup>
           </PreviewPanel>
@@ -202,10 +204,10 @@ const InputsSection = (props: InputsSectionProps) => {
           <PreviewPanel>
             <PreviewGroup title="Examples">
               <div class="row">
-                <RoundIconButton icon={<IoAdd />} title="Create" size="sm" />
-                <RoundIconButton icon={<IoDownload />} title="Export" size="md" elevation="popover" />
-                <RoundIconButton icon={<IoPencil />} title="Edit" size="lg" elevation="glow" />
-                <RoundIconButton icon={<IoClose />} title="Close" disabled />
+                <RoundIconButton icon={<IoAdd />} label="Create" size="sm" />
+                <RoundIconButton icon={<IoDownload />} label="Export" size="md" elevation="popover" />
+                <RoundIconButton icon={<IoPencil />} label="Edit" size="lg" elevation="glow" />
+                <RoundIconButton icon={<IoClose />} label="Close" disabled />
               </div>
             </PreviewGroup>
           </PreviewPanel>
@@ -226,14 +228,7 @@ const InputsSection = (props: InputsSectionProps) => {
           <PreviewPanel>
             <PreviewGroup title="On surface (variant)" subtitle="Ghost button for light page backgrounds">
               <div class="row">
-                <LocaleSwitcher
-                  variant="primary"
-                  text={locale()}
-                  switchLabel="Switch locale"
-                  onSwitch={() => {
-                    setLocale((current) => (current === 'EN' ? 'PL' : 'EN'));
-                  }}
-                />
+                <LocaleSwitcher variant="primary" />
               </div>
             </PreviewGroup>
           </PreviewPanel>
@@ -291,7 +286,7 @@ const InputsSection = (props: InputsSectionProps) => {
             <PreviewGroup title="Examples">
               <FormField label="Choose option">
                 {(fieldProps) => (
-                  <Select {...fieldProps} value={selected()} onChange={(e) => setSelected(e.currentTarget.value)}>
+                  <Select {...fieldProps} value={selected()} onChange={handleSelectChange}>
                     <option value="">-- select --</option>
                     <option value="a">Option A</option>
                     <option value="b">Option B</option>
@@ -404,7 +399,7 @@ const InputsSection = (props: InputsSectionProps) => {
                     suffix={
                       <IconButton
                         icon={<IoClose />}
-                        title="Clear value"
+                        label="Clear value"
                         onClick={() => setAffixValue('')}
                         size="sm"
                         variant="subtle"

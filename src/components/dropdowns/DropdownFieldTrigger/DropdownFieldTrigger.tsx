@@ -4,13 +4,14 @@ import FieldBase from '~/components/inputs/FieldBase/FieldBase';
 import type { InputSize } from '~/components/inputs/Input/Input';
 import type { TypographyTone } from '~/components/typography/Typography/Typography';
 import type Props from '~/models/Props';
+import type { ButtonCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import DropdownTriggerContent from '../DropdownTriggerContent/DropdownTriggerContent';
 import styles from './DropdownFieldTrigger.module.css';
 
-interface DropdownFieldTriggerOwnProps extends Omit<JSX.ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
-  label: JSX.Element;
+interface DropdownFieldTriggerOwnProps extends Omit<ButtonCoreNativeProps, 'children'> {
+  label: string;
   size?: InputSize;
   invalid?: boolean;
   readOnly?: boolean;

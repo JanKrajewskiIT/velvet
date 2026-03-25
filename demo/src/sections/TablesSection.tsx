@@ -181,10 +181,9 @@ const TablesSection = () => {
   const [gridFilterQuery, setGridFilterQuery] = createSignal('');
   const [gridSort, setGridSort] = createSignal<DataGridProSortState>({ key: 'downloads', direction: 'desc' });
   const [selectedRows, setSelectedRows] = createSignal<string[]>([]);
-  const [gridColumnOrder, setGridColumnOrder] = createSignal<string[]>(DATA_GRID_DEFAULT_ORDER);
-  const [gridColumnVisibility, setGridColumnVisibility] =
-    createSignal<Record<string, boolean>>(DATA_GRID_DEFAULT_VISIBILITY);
-  const [gridColumnPinning, setGridColumnPinning] = createSignal<DataGridProColumnPinning>(DATA_GRID_DEFAULT_PINNING);
+  const [gridColumnOrder, setGridColumnOrder] = createSignal(DATA_GRID_DEFAULT_ORDER);
+  const [gridColumnVisibility, setGridColumnVisibility] = createSignal(DATA_GRID_DEFAULT_VISIBILITY);
+  const [gridColumnPinning, setGridColumnPinning] = createSignal(DATA_GRID_DEFAULT_PINNING);
   const [advancedQuery, setAdvancedQuery] = createSignal<QueryBuilderValue>({
     combinator: 'and',
     rules: [

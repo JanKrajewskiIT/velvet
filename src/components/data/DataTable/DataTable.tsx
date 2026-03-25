@@ -10,6 +10,8 @@ import TableHeader from '~/components/data/Table/TableHeader';
 import TableRow from '~/components/data/Table/TableRow';
 import Input from '~/components/inputs/Input/Input';
 import Pagination from '~/components/navigation/Pagination/Pagination';
+import Text from '~/components/typography/Text/Text';
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 import { filterRows, sortRows, type TabularSortDirection } from '~/utils/tabularData';
@@ -46,6 +48,7 @@ interface DataTableProps<T> {
 }
 
 const DataTable = <T extends Record<string, unknown>>(props: Props<DataTableProps<T>>) => {
+  const { t } = useI18n();
   const [sortKey, setSortKey] = createSignal<string | null>(null);
   const [sortDirection, setSortDirection] = createSignal<TabularSortDirection>('asc');
   const [currentPage, setCurrentPage] = createSignal(1);
@@ -123,13 +126,13 @@ const DataTable = <T extends Record<string, unknown>>(props: Props<DataTableProp
             type="search"
             value={filterQuery()}
             onInput={handleFilterInput}
-            placeholder={props.filterPlaceholder ?? 'Filter rows...'}
+            placeholder={props.filterPlaceholder ?? t('table.filterRows')}
             class={styles.filterInput}
           />
           <Show when={props.showResultsCount ?? true}>
-            <span class={styles.resultsCount}>
-              {sortedData().length} result{sortedData().length === 1 ? '' : 's'}
-            </span>
+            <Text as="span" variant="caption" tone="muted">
+              {sortedData().length} {sortedData().length === 1 ? t('table.result') : t('table.results')}
+            </Text>
           </Show>
         </div>
       </Show>
@@ -167,7 +170,7 @@ const DataTable = <T extends Record<string, unknown>>(props: Props<DataTableProp
             fallback={
               <TableRow>
                 <TableCell class={styles.empty} colSpan={props.columns.length}>
-                  {props.emptyMessage ?? 'No data'}
+                  {props.emptyMessage ?? t('common.noData')}
                 </TableCell>
               </TableRow>
             }
@@ -190,16 +193,16 @@ const DataTable = <T extends Record<string, unknown>>(props: Props<DataTableProp
       </Table>
       <Show when={totalPages() > 1}>
         <div class={styles.pagination}>
-          <span class={styles.pageInfo}>
-            Page {currentPage()} of {totalPages()}
-          </span>
+          <Text as="span" variant="caption" tone="muted">
+            {t('table.pageOf', { current: currentPage(), total: totalPages() })}
+          </Text>
           <Pagination
             page={currentPage()}
             totalPages={totalPages()}
             onChange={handlePageChange}
-            previousLabel="Prev"
-            nextLabel="Next"
-            ariaLabel="Data table pages"
+            previousLabel={t('table.prev')}
+            nextLabel={t('table.next')}
+            ariaLabel={t('table.pagesAria')}
           />
         </div>
       </Show>

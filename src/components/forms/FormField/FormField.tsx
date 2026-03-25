@@ -1,24 +1,23 @@
 import { createUniqueId, type JSX, Show, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
+import type { AriaFieldProps } from '~/models/Props';
+import { joinAriaIds, resolveAriaErrorMessage, resolveAriaInvalid } from '~/utils/aria';
 import classNames from '~/utils/classNames';
 
 import Text from '../../typography/Text/Text';
 import styles from './FormField.module.css';
 
-interface FormFieldControlProps {
+interface FormFieldControlProps extends AriaFieldProps {
   id: string;
-  'aria-labelledby'?: string;
-  'aria-describedby'?: string;
-  'aria-invalid'?: true;
 }
 
-interface FormFieldOwnProps {
-  label?: JSX.Element;
+interface FormFieldOwnProps extends AriaFieldProps {
+  label?: string;
   id?: string;
   children: JSX.Element | ((controlProps: FormFieldControlProps) => JSX.Element);
-  description?: JSX.Element;
-  error?: JSX.Element;
+  description?: string;
+  error?: string;
   required?: boolean;
   invalid?: boolean;
 }
@@ -34,6 +33,10 @@ const FormField = (props: Props<FormFieldOwnProps>) => {
     'error',
     'required',
     'invalid',
+    'aria-labelledby',
+    'aria-describedby',
+    'aria-invalid',
+    'aria-errormessage',
   ]);
 
   const fieldId = () => local.id ?? generatedId;
@@ -41,15 +44,15 @@ const FormField = (props: Props<FormFieldOwnProps>) => {
   const descriptionId = () => `${fieldId()}-description`;
   const errorId = () => `${fieldId()}-error`;
   const describedBy = () => {
-    const ids = [local.description && descriptionId(), local.error && errorId()].filter(Boolean);
-    return ids.length > 0 ? ids.join(' ') : undefined;
+    return joinAriaIds(local['aria-describedby'], local.description && descriptionId(), local.error && errorId());
   };
 
   const controlProps = (): FormFieldControlProps => ({
     id: fieldId(),
-    'aria-labelledby': local.label ? labelId() : undefined,
+    'aria-labelledby': joinAriaIds(local['aria-labelledby'], local.label && labelId()),
     'aria-describedby': describedBy(),
-    'aria-invalid': local.invalid ? true : undefined,
+    'aria-invalid': resolveAriaInvalid(local.invalid, local['aria-invalid']),
+    'aria-errormessage': resolveAriaErrorMessage(describedBy(), local['aria-errormessage'], local.error && errorId()),
   });
 
   const content = () => {
@@ -64,7 +67,7 @@ const FormField = (props: Props<FormFieldOwnProps>) => {
     <div
       class={classNames(styles.field, local.class)}
       role="group"
-      aria-labelledby={local.label ? labelId() : undefined}
+      aria-labelledby={joinAriaIds(local['aria-labelledby'], local.label && labelId())}
       aria-describedby={describedBy()}
       data-invalid={local.invalid || undefined}
     >

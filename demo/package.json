@@ -23,12 +23,12 @@
     "@jankrajewskiit/ui": "file:..",
     "@solidjs/router": "^0.16.1",
     "solid-icons": "^1.2.0",
-    "solid-js": "^1.9.11",
+    "solid-js": "^1.9.12",
     "solid-markdown": "^2.1.1"
   },
   "devDependencies": {
     "typescript": "~5.9.3",
-    "vite": "^8.0.1",
+    "vite": "^8.0.2",
     "vite-plugin-solid": "^2.11.11"
   }
 }

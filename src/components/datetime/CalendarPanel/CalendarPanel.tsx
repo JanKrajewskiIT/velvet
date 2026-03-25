@@ -1,3 +1,4 @@
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 
 import CalendarGrid from '../CalendarGrid/CalendarGrid';
@@ -10,7 +11,6 @@ interface CalendarPanelProps {
   nextLabel: string;
   onPrevious: () => void;
   onNext: () => void;
-  dayLabels: string[];
   days: DayCell[];
   getDayClass: (cell: DayCell) => string;
   isDayDisabled?: (cell: DayCell) => boolean;
@@ -19,6 +19,17 @@ interface CalendarPanelProps {
 }
 
 const CalendarPanel = (props: Props<CalendarPanelProps>) => {
+  const { t } = useI18n();
+  const dayLabels = () => [
+    t('calendar.day.mo'),
+    t('calendar.day.tu'),
+    t('calendar.day.we'),
+    t('calendar.day.th'),
+    t('calendar.day.fr'),
+    t('calendar.day.sa'),
+    t('calendar.day.su'),
+  ];
+
   return (
     <div class={props.class}>
       <CalendarHeader
@@ -29,7 +40,7 @@ const CalendarPanel = (props: Props<CalendarPanelProps>) => {
         onNext={props.onNext}
       />
       <CalendarGrid
-        dayLabels={props.dayLabels}
+        dayLabels={dayLabels()}
         days={props.days}
         dayClass={props.getDayClass}
         isDayDisabled={props.isDayDisabled}

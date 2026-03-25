@@ -118,7 +118,6 @@ const SIDEBAR_NAV_GROUPS: SidebarNavGroup[] = [
 
 const NavigationSection = (props: { sectionId: SectionId }) => {
   const sectionId = () => props.sectionId;
-  const [locale, setLocale] = createSignal<'EN' | 'PL'>('EN');
   const [tab, setTab] = createSignal<TabValue>('preview');
   const [activeStep, setActiveStep] = createSignal('details');
   const [page, setPage] = createSignal(3);
@@ -126,10 +125,6 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
   const [sidebarActive, setSidebarActive] = createSignal('overview');
   const [sidebarCollapsed, setSidebarCollapsed] = createSignal(false);
   const [sidebarNavActive, setSidebarNavActive] = createSignal('nav-overview');
-
-  const toggleLocale = () => {
-    setLocale((current) => (current === 'EN' ? 'PL' : 'EN'));
-  };
 
   return (
     <div>
@@ -143,13 +138,7 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
                   logo={<BiLogosReact class="layoutNavbarLogo" />}
                   actions={
                     <div class="layoutNavbarActions">
-                      <LocaleSwitcher
-                        text={locale()}
-                        switchLabel="Switch language"
-                        onSwitch={toggleLocale}
-                        variant="navbar"
-                        size="sm"
-                      />
+                      <LocaleSwitcher variant="navbar" />
                       <ThemeToggle lightLabel="Light mode" darkLabel="Dark mode" groupLabel="Theme" variant="navbar" />
                     </div>
                   }
@@ -191,7 +180,7 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
                   groups={SIDEBAR_NAV_GROUPS}
                   activeId={sidebarNavActive()}
                   onSelect={setSidebarNavActive}
-                  title="VelvetUI"
+                  label="VelvetUI"
                   subtitle="Navigation preview"
                 />
                 <div class="sidebarPreviewBody">

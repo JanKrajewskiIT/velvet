@@ -59,7 +59,7 @@ const SidebarItemButton = (props: Props<SidebarItemButtonOwnProps>) => {
         class={styles.itemIconButton}
         icon={props.prefix}
         variant={props.active ? 'primary' : 'ghost'}
-        title={iconTitle()}
+        label={iconTitle()}
         onClick={() => props.onClick?.()}
         style={props.style}
       />

@@ -1,6 +1,7 @@
 import { FiUser } from 'solid-icons/fi';
 import { createMemo, createSignal, type JSX, Show, splitProps } from 'solid-js';
 
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -25,13 +26,14 @@ const getInitials = (name: string): string =>
     .toUpperCase();
 
 const Avatar = (props: Props<AvatarOwnProps>) => {
+  const { t } = useI18n();
   const [local, rest] = splitProps(props, ['src', 'alt', 'name', 'size', 'variant', 'class']);
   const [imgError, setImgError] = createSignal(false);
 
   const sizeClass = () => styles[local.size ?? 'md'];
   const showImage = () => Boolean(local.src) && !imgError();
   const showInitials = () => !showImage() && Boolean(local.name);
-  const fallbackLabel = createMemo(() => local.alt ?? local.name ?? 'Avatar');
+  const fallbackLabel = createMemo(() => local.alt ?? local.name ?? t('avatar.label'));
 
   return (
     <div

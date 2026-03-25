@@ -3,6 +3,9 @@ import { createEffect, createMemo, createSignal, createUniqueId, For, onMount, s
 
 import type { InputSize } from '~/components/inputs/Input/Input';
 import type Props from '~/models/Props';
+import type { AriaFieldProps } from '~/models/Props';
+import type { SelectCoreNativeProps } from '~/models/Props';
+import { resolveAriaInvalid } from '~/utils/aria';
 import classNames from '~/utils/classNames';
 
 import DropdownChevronFieldTrigger from '../DropdownChevronFieldTrigger/DropdownChevronFieldTrigger';
@@ -17,14 +20,25 @@ import {
 import useDropdownState from '../shared/useDropdownState';
 import styles from './Select.module.css';
 
-interface SelectOwnProps extends JSX.SelectHTMLAttributes<HTMLSelectElement> {
+interface SelectOwnProps extends SelectCoreNativeProps, AriaFieldProps {
   size?: InputSize;
   invalid?: boolean;
   readOnly?: boolean;
+  children?: JSX.Element;
 }
 
 const Select = (props: Props<SelectOwnProps>) => {
-  const [local, rest] = splitProps(props, ['class', 'size', 'children', 'value', 'disabled', 'invalid', 'readOnly']);
+  const [local, rest] = splitProps(props, [
+    'class',
+    'size',
+    'children',
+    'value',
+    'disabled',
+    'invalid',
+    'readOnly',
+    'aria-invalid',
+    'aria-errormessage',
+  ]);
   const [options, setOptions] = createSignal<{ value: string; label: string; disabled: boolean }[]>([]);
   const dropdownId = createUniqueId();
 
@@ -142,6 +156,8 @@ const Select = (props: Props<SelectOwnProps>) => {
         aria-expanded={dropdown.open()}
         aria-controls={dropdown.open() ? dropdownId : undefined}
         aria-readonly={local.readOnly || undefined}
+        aria-invalid={resolveAriaInvalid(local.invalid, props['aria-invalid'])}
+        aria-errormessage={props['aria-errormessage']}
       />
 
       {dropdown.open() && (

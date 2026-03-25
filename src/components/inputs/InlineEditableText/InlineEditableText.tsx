@@ -1,6 +1,7 @@
 import { IoCheckmark, IoCloseOutline, IoPencil } from 'solid-icons/io';
 import { createEffect, createSignal, type JSX, onMount, Show, splitProps } from 'solid-js';
 
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -31,6 +32,7 @@ interface InlineEditableTextProps {
 }
 
 const InlineEditableText = (props: Props<InlineEditableTextProps>) => {
+  const { t } = useI18n();
   const [local, rest] = splitProps(props, [
     'value',
     'onChange',
@@ -53,10 +55,10 @@ const InlineEditableText = (props: Props<InlineEditableTextProps>) => {
     setDraft(local.value);
   });
 
-  const emptyValueLabel = () => local.messages?.emptyValue ?? local.placeholder ?? 'Click edit';
-  const saveButtonLabel = () => local.messages?.saveButtonLabel ?? local.saveLabel ?? 'Save';
-  const cancelButtonLabel = () => local.messages?.cancelButtonLabel ?? local.cancelLabel ?? 'Cancel';
-  const editButtonLabel = () => local.messages?.editButtonLabel ?? local.editLabel ?? 'Edit value';
+  const emptyValueLabel = () => local.messages?.emptyValue ?? local.placeholder ?? t('inlineEditable.clickEdit');
+  const saveButtonLabel = () => local.messages?.saveButtonLabel ?? local.saveLabel ?? t('common.save');
+  const cancelButtonLabel = () => local.messages?.cancelButtonLabel ?? local.cancelLabel ?? t('common.cancel');
+  const editButtonLabel = () => local.messages?.editButtonLabel ?? local.editLabel ?? t('inlineEditable.editValue');
 
   createEffect(() => {
     if (!isEditing()) {
@@ -93,6 +95,10 @@ const InlineEditableText = (props: Props<InlineEditableTextProps>) => {
     }
   };
 
+  const handleDraftInput: JSX.EventHandler<HTMLInputElement, InputEvent> = (e) => {
+    setDraft(e.currentTarget.value);
+  };
+
   return (
     <div {...rest} class={classNames(styles.wrapper, local.class)}>
       <Show
@@ -104,7 +110,7 @@ const InlineEditableText = (props: Props<InlineEditableTextProps>) => {
             </Text>
             <IconButton
               icon={<IoPencil />}
-              title={editButtonLabel()}
+              label={editButtonLabel()}
               onClick={beginEdit}
               disabled={local.disabled}
               size="sm"
@@ -118,16 +124,16 @@ const InlineEditableText = (props: Props<InlineEditableTextProps>) => {
             type="text"
             size={local.size}
             value={draft()}
-            onInput={(e) => setDraft(e.currentTarget.value)}
+            onInput={handleDraftInput}
             onKeyDown={handleKeyDown}
             placeholder={local.placeholder}
-            aria-label={local.inputAriaLabel ?? 'Editable text input'}
+            aria-label={local.inputAriaLabel ?? t('inlineEditable.inputLabel')}
             autofocus
           />
-          <IconButton icon={<IoCheckmark />} title={saveButtonLabel()} onClick={saveEdit} size="sm" variant="subtle" />
+          <IconButton icon={<IoCheckmark />} label={saveButtonLabel()} onClick={saveEdit} size="sm" variant="subtle" />
           <IconButton
             icon={<IoCloseOutline />}
-            title={cancelButtonLabel()}
+            label={cancelButtonLabel()}
             onClick={cancelEdit}
             size="sm"
             variant="subtle"

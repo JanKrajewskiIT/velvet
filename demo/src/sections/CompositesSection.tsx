@@ -338,13 +338,13 @@ const AI_RUN_SCENARIOS: readonly AiRunScenario[] = [
 
 const CompositesSection = (props: { sectionId: SectionId }) => {
   const sectionId = () => props.sectionId;
-  const [sourceItems, setSourceItems] = createSignal<TransferItem[]>(INITIAL_SOURCE);
-  const [targetItems, setTargetItems] = createSignal<TransferItem[]>(INITIAL_TARGET);
+  const [sourceItems, setSourceItems] = createSignal(INITIAL_SOURCE);
+  const [targetItems, setTargetItems] = createSignal(INITIAL_TARGET);
   const [analysisState, setAnalysisState] = createSignal<AnalysisState>('idle');
   const [selectedScenarioId, setSelectedScenarioId] = createSignal(AI_RUN_SCENARIOS[0]?.id ?? '');
-  const [tasks, setTasks] = createSignal<TaskItem[]>([createTask(1), createTask(2)]);
-  const [kanbanItems, setKanbanItems] = createSignal<KanbanDemoItem[]>(INITIAL_KANBAN_ITEMS);
-  const [schedulerEvents, setSchedulerEvents] = createSignal<SchedulerEvent[]>(SCHEDULER_EVENTS);
+  const [tasks, setTasks] = createSignal([createTask(1), createTask(2)]);
+  const [kanbanItems, setKanbanItems] = createSignal(INITIAL_KANBAN_ITEMS);
+  const [schedulerEvents, setSchedulerEvents] = createSignal(SCHEDULER_EVENTS);
   const [commandOpen, setCommandOpen] = createSignal(false);
 
   const wizardSteps = [
@@ -410,10 +410,8 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
   const renderTaskItem = (item: TaskItem, { requestRemove }: { requestRemove: () => void }) => (
     <>
       <div class="editableHeader">
-        <Chip variant="subtle" size="sm">
-          {item.id.slice(0, 8)}
-        </Chip>
-        <IconButton icon={<IoTrash />} title="Remove task" size="sm" onClick={requestRemove} />
+        <Chip variant="subtle" size="sm" label={item.id.slice(0, 8)} />
+        <IconButton icon={<IoTrash />} label="Remove task" size="sm" onClick={requestRemove} />
       </div>
       <div class="editableGrid">
         <FormField label="Title">
@@ -445,12 +443,8 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
         {item.description}
       </Text>
       <div class="row justifyBetween">
-        <Chip variant="subtle" size="sm">
-          {item.owner}
-        </Chip>
-        <Chip variant="subtle" size="sm">
-          {item.priority}
-        </Chip>
+        <Chip variant="subtle" size="sm" label={item.owner} />
+        <Chip variant="subtle" size="sm" label={item.priority} />
       </div>
     </div>
   );
@@ -481,15 +475,15 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
         <ShowcaseSection title="EditableCollection" subtitle="Add/remove/edit list scaffold for dynamic forms">
           <PreviewPanel>
             <PreviewGroup title="Examples">
-              <EditableCollection
+              <EditableCollection<TaskItem>
                 items={tasks()}
                 getId={(item) => item.id}
                 onAdd={() => setTasks((current) => [...current, createTask(current.length + 1)])}
                 onRemove={(id) => setTasks((current) => current.filter((item) => item.id !== id))}
                 addLabel="Add task"
-                confirmTitle="Remove task"
+                confirmLabel="Remove task"
                 confirmMessage="Do you want to remove this task from the collection?"
-                confirmLabel="Remove"
+                confirmActionLabel="Remove"
                 cancelLabel="Cancel"
                 renderItem={renderTaskItem}
               />

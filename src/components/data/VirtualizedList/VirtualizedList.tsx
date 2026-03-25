@@ -1,5 +1,6 @@
 import { createMemo, createSignal, For, type JSX, Show, splitProps } from 'solid-js';
 
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -15,6 +16,7 @@ interface VirtualizedListOwnProps<T> extends Omit<JSX.HTMLAttributes<HTMLDivElem
 }
 
 const VirtualizedList = <T,>(props: Props<VirtualizedListOwnProps<T>>) => {
+  const { t } = useI18n();
   const [local, rest] = splitProps(props, [
     'items',
     'itemHeight',
@@ -53,7 +55,10 @@ const VirtualizedList = <T,>(props: Props<VirtualizedListOwnProps<T>>) => {
       onScroll={handleScroll}
       role="list"
     >
-      <Show when={local.items.length > 0} fallback={<div class={styles.empty}>{local.emptyState ?? 'No items'}</div>}>
+      <Show
+        when={local.items.length > 0}
+        fallback={<div class={styles.empty}>{local.emptyState ?? t('common.noItems')}</div>}
+      >
         <div class={styles.spacer} style={{ height: `${totalHeight()}px` }}>
           <div class={styles.inner} style={{ transform: `translateY(${offsetY()}px)` }}>
             <For each={visibleItems()}>

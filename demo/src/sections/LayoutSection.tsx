@@ -81,17 +81,17 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
         <ShowcaseSection title="Grid" subtitle="Responsive multi-column primitive">
           <PreviewPanel>
             <Grid columns={3} gap="sm">
-              <Chip variant="subtle">Column 1</Chip>
-              <Chip variant="subtle">Column 2</Chip>
-              <Chip variant="subtle">Column 3</Chip>
-              <Chip variant="subtle">Column 4</Chip>
-              <Chip variant="subtle">Column 5</Chip>
+              <Chip variant="subtle" label="Column 1" />
+              <Chip variant="subtle" label="Column 2" />
+              <Chip variant="subtle" label="Column 3" />
+              <Chip variant="subtle" label="Column 4" />
+              <Chip variant="subtle" label="Column 5" />
             </Grid>
             <Grid minColumnWidth="180px" gap="md">
-              <Chip variant="subtle">Auto-fit A</Chip>
-              <Chip variant="subtle">Auto-fit B</Chip>
-              <Chip variant="subtle">Auto-fit C</Chip>
-              <Chip variant="subtle">Auto-fit D</Chip>
+              <Chip variant="subtle" label="Auto-fit A" />
+              <Chip variant="subtle" label="Auto-fit B" />
+              <Chip variant="subtle" label="Auto-fit C" />
+              <Chip variant="subtle" label="Auto-fit D" />
             </Grid>
           </PreviewPanel>
           <ShowcaseMeta>
@@ -110,14 +110,14 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
         <ShowcaseSection title="Stack" subtitle="Flexible vertical and horizontal spacing layout">
           <PreviewPanel>
             <Stack gap="sm">
-              <Chip variant="subtle">First item</Chip>
-              <Chip variant="subtle">Second item</Chip>
-              <Chip variant="subtle">Third item</Chip>
+              <Chip variant="subtle" label="First item" />
+              <Chip variant="subtle" label="Second item" />
+              <Chip variant="subtle" label="Third item" />
             </Stack>
             <Stack direction="horizontal" gap="md" align="center" justify="between" wrap>
-              <Chip variant="subtle">Horizontal</Chip>
-              <Chip variant="subtle">Aligned center</Chip>
-              <Chip variant="subtle">Wrap enabled</Chip>
+              <Chip variant="subtle" label="Horizontal" />
+              <Chip variant="subtle" label="Aligned center" />
+              <Chip variant="subtle" label="Wrap enabled" />
             </Stack>
           </PreviewPanel>
           <ShowcaseMeta>
@@ -333,17 +333,17 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
           <PreviewPanel>
             <PreviewGroup title="Examples">
               <Accordion>
-                <AccordionItem title="What is VelvetUI?">
+                <AccordionItem label="What is VelvetUI?">
                   <Text as="p" variant="bodySm" tone="muted" class="mutedText">
                     VelvetUI is a SolidJS component library built with CSS Modules, TypeScript and Vite.
                   </Text>
                 </AccordionItem>
-                <AccordionItem title="How to install?">
+                <AccordionItem label="How to install?">
                   <Text as="p" variant="bodySm" tone="muted" class="mutedText">
                     npm install @jankrajewskiit/ui
                   </Text>
                 </AccordionItem>
-                <AccordionItem title="Disabled item" disabled>
+                <AccordionItem label="Disabled item" disabled>
                   <Text as="p" variant="bodySm" tone="muted" class="mutedText">
                     This content is not accessible.
                   </Text>
@@ -356,12 +356,12 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
         <ShowcaseSection title="SectionCard" subtitle="Collapsible card for grouped settings">
           <PreviewPanel>
             <PreviewGroup title="Examples">
-              <SectionCard title="Details" defaultOpen>
+              <SectionCard label="Details" defaultOpen>
                 <Text as="p" variant="bodySm" tone="muted" class="mutedText">
                   Collapsible card for grouped settings.
                 </Text>
               </SectionCard>
-              <SectionCard title="Advanced options">
+              <SectionCard label="Advanced options">
                 <Text as="p" variant="bodySm" tone="muted" class="mutedText">
                   Collapsed by default.
                 </Text>

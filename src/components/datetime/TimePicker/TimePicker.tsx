@@ -5,7 +5,10 @@ import DropdownFieldTrigger from '~/components/dropdowns/DropdownFieldTrigger/Dr
 import type { InputSize } from '~/components/inputs/Input/Input';
 import useClickOutside from '~/hooks/useClickOutside';
 import useEscapeKey from '~/hooks/useEscapeKey';
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
+import type { AriaFieldProps } from '~/models/Props';
+import { resolveAriaInvalid } from '~/utils/aria';
 
 import DateTimeFieldTrigger from '../DateTimeFieldTrigger/DateTimeFieldTrigger';
 import TimePanel from '../TimePanel/TimePanel';
@@ -17,7 +20,7 @@ export interface TimePickerMessages {
   optionsLabel?: string;
 }
 
-interface TimePickerProps {
+interface TimePickerProps extends AriaFieldProps {
   value?: string;
   onChange: (value: string) => void;
   placeholder?: string;
@@ -41,6 +44,7 @@ const generateTimeOptions = (step: number): string[] => {
 };
 
 const TimePicker = (props: Props<TimePickerProps>) => {
+  const { t } = useI18n();
   const [isOpen, setIsOpen] = createSignal(false);
   const dropdownId = createUniqueId();
   let wrapperRef: HTMLDivElement | undefined;
@@ -56,9 +60,10 @@ const TimePicker = (props: Props<TimePickerProps>) => {
   useEscapeKey(() => isOpen(), close);
 
   const timeOptions = createMemo(() => generateTimeOptions(props.step ?? 30));
-  const placeholder = () => props.messages?.placeholder ?? props.placeholder ?? 'HH:MM';
-  const openPickerLabel = () => props.messages?.openPickerLabel ?? props.openPickerLabel ?? 'Open time picker';
-  const optionsLabel = () => props.messages?.optionsLabel ?? props.optionsLabel ?? 'Time options';
+  const placeholder = () => props.messages?.placeholder ?? props.placeholder ?? t('time.hhmm');
+  const openPickerLabel = () =>
+    props.messages?.openPickerLabel ?? props.openPickerLabel ?? t('datetime.openTimePicker');
+  const optionsLabel = () => props.messages?.optionsLabel ?? props.optionsLabel ?? t('datetime.timeOptions');
 
   const scrollToSelected = () => {
     if (!dropdownRef || !props.value) return;
@@ -97,6 +102,8 @@ const TimePicker = (props: Props<TimePickerProps>) => {
           aria-haspopup="listbox"
           aria-expanded={isOpen()}
           aria-controls={isOpen() ? dropdownId : undefined}
+          aria-invalid={resolveAriaInvalid(undefined, props['aria-invalid'])}
+          aria-errormessage={props['aria-errormessage']}
         >
           <FiClock />
         </DropdownFieldTrigger>

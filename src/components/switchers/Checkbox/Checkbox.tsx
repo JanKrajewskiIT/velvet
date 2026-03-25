@@ -1,16 +1,16 @@
-import { createUniqueId, type JSX, splitProps } from 'solid-js';
+import { createUniqueId, splitProps } from 'solid-js';
 
 import CheckboxIndicator from '~/components/switchers/CheckboxIndicator/CheckboxIndicator';
 import ChoiceControl from '~/components/switchers/ChoiceControl/ChoiceControl';
-import LabelText from '~/components/typography/LabelText/LabelText';
 import type Props from '~/models/Props';
+import type { ChoiceInputCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import styles from './Checkbox.module.css';
 
-interface CheckboxOwnProps extends Omit<JSX.InputHTMLAttributes<HTMLInputElement>, 'type'> {
-  label?: JSX.Element;
-  description?: JSX.Element;
+interface CheckboxOwnProps extends Omit<ChoiceInputCoreNativeProps, 'type'> {
+  label?: string;
+  description?: string;
   labelId?: string;
   wrapperClass?: string;
 }
@@ -31,7 +31,8 @@ const Checkbox = (props: Props<CheckboxOwnProps>) => {
       inputClass={styles.input}
       indicator={<CheckboxIndicator class={styles.indicator} />}
       wrapperClass={local.wrapperClass}
-      label={<LabelText label={local.label} description={local.description} />}
+      label={local.label}
+      description={local.description}
       labelId={textId()}
     />
   );

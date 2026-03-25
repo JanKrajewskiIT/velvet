@@ -6,6 +6,7 @@ import { Show } from 'solid-js';
 import IconButton from '~/components/buttons/IconButton/IconButton';
 import Heading from '~/components/typography/Heading/Heading';
 import Text from '~/components/typography/Text/Text';
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -17,8 +18,9 @@ interface AlertMessages {
 
 interface AlertProps {
   variant: 'info' | 'success' | 'warning' | 'error' | 'danger' | 'tip';
-  title?: string;
-  children: JSX.Element;
+  label?: string;
+  message: string;
+  children?: never;
   onClose?: () => void;
   icon?: JSX.Element;
   closeLabel?: string;
@@ -35,6 +37,7 @@ const defaultIcons: Record<AlertProps['variant'], () => JSX.Element> = {
 };
 
 const Alert = (props: Props<AlertProps>) => {
+  const { t } = useI18n();
   const icon = () => props.icon ?? defaultIcons[props.variant]();
   const visualVariant = () => (props.variant === 'danger' ? 'error' : props.variant);
 
@@ -42,19 +45,19 @@ const Alert = (props: Props<AlertProps>) => {
     <div role="alert" class={classNames(styles.alert, styles[visualVariant()], props.class)}>
       <div class={styles.icon}>{icon()}</div>
       <div class={styles.content}>
-        <Show when={props.title}>
+        <Show when={props.label}>
           <Heading as="div" level={4} variant="titleMd">
-            {props.title}
+            {props.label}
           </Heading>
         </Show>
         <Text as="div" variant="bodySm" tone="secondary">
-          {props.children}
+          {props.message}
         </Text>
       </div>
       <Show when={props.onClose}>
         <IconButton
           icon={<FiX size={16} />}
-          title={props.messages?.closeButtonLabel ?? props.closeLabel ?? 'Close'}
+          label={props.messages?.closeButtonLabel ?? props.closeLabel ?? t('common.close')}
           class={styles.closeBtn}
           onClick={props.onClose}
           variant="subtle"

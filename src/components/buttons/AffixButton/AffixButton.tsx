@@ -2,12 +2,13 @@ import { type JSX, Show, splitProps } from 'solid-js';
 
 import Text from '~/components/typography/Text/Text';
 import type Props from '~/models/Props';
+import type { ButtonCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import Button, { type ButtonSize, type ButtonVariant } from '../Button/Button';
 import styles from './AffixButton.module.css';
 
-interface AffixButtonOwnProps extends Omit<JSX.ButtonHTMLAttributes<HTMLButtonElement>, 'children' | 'prefix'> {
+interface AffixButtonOwnProps extends Omit<ButtonCoreNativeProps, 'children' | 'prefix'> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   prefix?: JSX.Element;

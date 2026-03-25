@@ -9,7 +9,6 @@ import {
   CodeText,
   FilterBar,
   type FilterBarFilter,
-  type FilterBarValue,
   ImageGrid,
   type ImageGridItem,
   Lightbox,
@@ -230,7 +229,7 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
   const [lightboxOpen, setLightboxOpen] = createSignal(false);
   const [markdown, setMarkdown] = createSignal(MARKDOWN);
   const [filtersQuery, setFiltersQuery] = createSignal('');
-  const [filtersValue, setFiltersValue] = createSignal<FilterBarValue[]>([
+  const [filtersValue, setFiltersValue] = createSignal([
     { key: 'status', value: 'in-progress' },
     { key: 'priority', value: 'high' },
   ]);
@@ -358,7 +357,7 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
               <MarkdownRenderer content={markdown()} />
               <MarkdownEditDialog
                 open={editorOpen()}
-                title="Edit release notes"
+                label="Edit release notes"
                 initialValue={markdown()}
                 saveLabel="Save changes"
                 cancelLabel="Cancel"
@@ -375,23 +374,18 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
           <PreviewPanel>
             <PreviewGroup title="Examples">
               <List>
-                <ListItem icon={<IoFolder />} secondary="3 files">
-                  Documents
-                </ListItem>
-                <ListItem icon={<IoDocumentText />} secondary="Updated yesterday">
-                  Report.pdf
-                </ListItem>
-                <ListItem icon={<IoImage />} secondary="Click to preview" onClick={() => {}}>
-                  Photo.png
-                </ListItem>
+                <ListItem icon={<IoFolder />} secondary="3 files" label="Documents" />
+                <ListItem icon={<IoDocumentText />} secondary="Updated yesterday" label="Report.pdf" />
+                <ListItem icon={<IoImage />} secondary="Click to preview" onClick={() => {}} label="Photo.png" />
               </List>
               <List variant="bordered">
-                <ListItem icon={<IoFolder />} secondary="Shared folder">
-                  Projects
-                </ListItem>
-                <ListItem icon={<IoDocumentText />} secondary="Draft" action={<Button variant="ghost">Edit</Button>}>
-                  Notes.md
-                </ListItem>
+                <ListItem icon={<IoFolder />} secondary="Shared folder" label="Projects" />
+                <ListItem
+                  icon={<IoDocumentText />}
+                  secondary="Draft"
+                  action={<Button variant="ghost">Edit</Button>}
+                  label="Notes.md"
+                />
               </List>
             </PreviewGroup>
           </PreviewPanel>

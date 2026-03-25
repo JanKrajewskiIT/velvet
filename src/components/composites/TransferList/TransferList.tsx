@@ -5,6 +5,7 @@ import IconButton from '~/components/buttons/IconButton/IconButton';
 import SearchInput from '~/components/inputs/SearchInput/SearchInput';
 import Card from '~/components/surfaces/Card/Card';
 import Text from '~/components/typography/Text/Text';
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -26,8 +27,9 @@ interface TransferListProps {
 }
 
 const TransferList = (props: Props<TransferListProps>) => {
-  const [sourceChecked, setSourceChecked] = createSignal<Set<string>>(new Set());
-  const [targetChecked, setTargetChecked] = createSignal<Set<string>>(new Set());
+  const { t } = useI18n();
+  const [sourceChecked, setSourceChecked] = createSignal(new Set<string>());
+  const [targetChecked, setTargetChecked] = createSignal(new Set<string>());
   const [sourceFilter, setSourceFilter] = createSignal('');
   const [targetFilter, setTargetFilter] = createSignal('');
 
@@ -79,8 +81,8 @@ const TransferList = (props: Props<TransferListProps>) => {
     props.onChange([...props.sourceItems, ...props.targetItems], []);
   };
 
-  const sourceTitle = () => props.sourceTitle ?? 'Available';
-  const targetTitle = () => props.targetTitle ?? 'Selected';
+  const sourceTitle = () => props.sourceTitle ?? t('transfer.available');
+  const targetTitle = () => props.targetTitle ?? t('transfer.selected');
 
   const itemClass = (checked: boolean) => classNames(styles.item, checked && styles.itemChecked);
 
@@ -102,8 +104,8 @@ const TransferList = (props: Props<TransferListProps>) => {
               size="sm"
               value={sourceFilter()}
               onInput={setSourceFilter}
-              clearLabel="Clear source search"
-              inputAriaLabel={`${sourceTitle()} search`}
+              clearLabel={t('transfer.clearSourceSearch')}
+              inputAriaLabel={t('transfer.search', { label: sourceTitle() })}
             />
           </div>
         </Show>
@@ -116,7 +118,7 @@ const TransferList = (props: Props<TransferListProps>) => {
                   checked={sourceChecked().has(item.id)}
                   onChange={() => toggleSourceChecked(item.id)}
                   label={item.label}
-                  aria-label={`Select ${item.label}`}
+                  aria-label={t('transfer.selectItem', { label: item.label })}
                 />
               </div>
             )}
@@ -128,7 +130,7 @@ const TransferList = (props: Props<TransferListProps>) => {
         <IconButton
           disabled={sourceChecked().size === 0}
           onClick={moveSelectedRight}
-          title="Move selected to right"
+          label={t('transfer.moveSelectedRight')}
           icon={<IoChevronForward />}
           size="sm"
           variant="ghost"
@@ -136,7 +138,7 @@ const TransferList = (props: Props<TransferListProps>) => {
         <IconButton
           disabled={props.sourceItems.length === 0}
           onClick={moveAllRight}
-          title="Move all to right"
+          label={t('transfer.moveAllRight')}
           icon={<IoPlayForward />}
           size="sm"
           variant="ghost"
@@ -144,7 +146,7 @@ const TransferList = (props: Props<TransferListProps>) => {
         <IconButton
           disabled={targetChecked().size === 0}
           onClick={moveSelectedLeft}
-          title="Move selected to left"
+          label={t('transfer.moveSelectedLeft')}
           icon={<IoChevronBack />}
           size="sm"
           variant="ghost"
@@ -152,7 +154,7 @@ const TransferList = (props: Props<TransferListProps>) => {
         <IconButton
           disabled={props.targetItems.length === 0}
           onClick={moveAllLeft}
-          title="Move all to left"
+          label={t('transfer.moveAllLeft')}
           icon={<IoPlayBack />}
           size="sm"
           variant="ghost"
@@ -175,8 +177,8 @@ const TransferList = (props: Props<TransferListProps>) => {
               size="sm"
               value={targetFilter()}
               onInput={setTargetFilter}
-              clearLabel="Clear selected search"
-              inputAriaLabel={`${targetTitle()} search`}
+              clearLabel={t('transfer.clearSelectedSearch')}
+              inputAriaLabel={t('transfer.search', { label: targetTitle() })}
             />
           </div>
         </Show>
@@ -189,7 +191,7 @@ const TransferList = (props: Props<TransferListProps>) => {
                   checked={targetChecked().has(item.id)}
                   onChange={() => toggleTargetChecked(item.id)}
                   label={item.label}
-                  aria-label={`Select ${item.label}`}
+                  aria-label={t('transfer.selectItem', { label: item.label })}
                 />
               </div>
             )}

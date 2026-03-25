@@ -1,6 +1,7 @@
 import { IoArrowUp } from 'solid-icons/io';
 import { createEffect, createSignal, onCleanup } from 'solid-js';
 
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -15,11 +16,12 @@ interface BackToTopProps {
 }
 
 const BackToTop = (props: Props<BackToTopProps>) => {
+  const { t } = useI18n();
   const [visible, setVisible] = createSignal(false);
 
   const threshold = () => props.threshold ?? 300;
   const smooth = () => props.smooth ?? true;
-  const label = () => props.ariaLabel ?? 'Back to top';
+  const label = () => props.ariaLabel ?? t('backToTop.label');
 
   createEffect(() => {
     const root = props.scrollRoot?.() ?? null;
@@ -56,7 +58,7 @@ const BackToTop = (props: Props<BackToTopProps>) => {
       size="lg"
       elevation="popover"
       onClick={scrollToTop}
-      title={label()}
+      label={label()}
       icon={<IoArrowUp size={24} />}
     />
   );

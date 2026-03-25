@@ -3,6 +3,7 @@ import { type Accessor, For, type JSX, Show } from 'solid-js';
 import Button from '~/components/buttons/Button/Button';
 import Input from '~/components/inputs/Input/Input';
 import Checkbox from '~/components/switchers/Checkbox/Checkbox';
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -47,6 +48,7 @@ interface DataGridProToolbarProps {
 }
 
 const DataGridProToolbar = (props: Props<DataGridProToolbarProps>) => {
+  const { t } = useI18n();
   return (
     <Show when={props.show()}>
       <div class={classNames(styles.toolbar, props.class)}>
@@ -56,13 +58,13 @@ const DataGridProToolbar = (props: Props<DataGridProToolbarProps>) => {
               type="search"
               value={props.filterQuery()}
               onInput={props.onFilterInput}
-              placeholder={props.filterPlaceholder ?? 'Filter rows...'}
+              placeholder={props.filterPlaceholder ?? t('table.filterRows')}
               class={styles.filterInput}
             />
           </Show>
           <span class={styles.resultsCount}>
-            {props.rowCount()} rows
-            <Show when={props.selectable()}> - {props.selectedCount()} selected</Show>
+            {t('table.rowsCount', { count: props.rowCount() })}
+            <Show when={props.selectable()}> - {t('table.selectedCount', { count: props.selectedCount() })}</Show>
           </span>
           <Show when={props.hasPersistence()}>
             <span
@@ -72,8 +74,8 @@ const DataGridProToolbar = (props: Props<DataGridProToolbarProps>) => {
               )}
             >
               {props.hasPersistedLayout()
-                ? (props.persistedBadgeLabel ?? 'Persisted')
-                : (props.defaultBadgeLabel ?? 'Default')}
+                ? (props.persistedBadgeLabel ?? t('common.persisted'))
+                : (props.defaultBadgeLabel ?? t('common.default'))}
             </span>
           </Show>
         </div>
@@ -85,21 +87,21 @@ const DataGridProToolbar = (props: Props<DataGridProToolbarProps>) => {
             onClick={props.onClearSelection}
             disabled={props.selectedCount() === 0}
           >
-            Clear selection
+            {t('table.clearSelection')}
           </Button>
           <Button variant="ghost" size="sm" class={styles.toolbarButton} onClick={props.onResetView}>
-            Reset view
+            {t('table.resetView')}
           </Button>
           <Show when={props.hasPersistence()}>
             <Button variant="ghost" size="sm" class={styles.toolbarButton} onClick={props.onResetPersistedLayout}>
-              {props.resetPersistenceLabel ?? 'Reset saved layout'}
+              {props.resetPersistenceLabel ?? t('table.resetSavedLayout')}
             </Button>
           </Show>
           <Button variant="ghost" size="sm" class={styles.toolbarButton} onClick={props.onImportClick}>
-            {props.importSettingsLabel ?? 'Import JSON'}
+            {props.importSettingsLabel ?? t('common.importJson')}
           </Button>
           <Button variant="ghost" size="sm" class={styles.toolbarButton} onClick={props.onExportSettings}>
-            {props.exportSettingsLabel ?? 'Export JSON'}
+            {props.exportSettingsLabel ?? t('common.exportJson')}
           </Button>
           <input
             ref={props.setImportFileInputRef}
@@ -117,10 +119,10 @@ const DataGridProToolbar = (props: Props<DataGridProToolbarProps>) => {
               aria-haspopup="menu"
               aria-expanded={props.columnMenuOpen() ? 'true' : 'false'}
             >
-              Columns
+              {t('table.columns')}
             </Button>
             <Show when={props.columnMenuOpen()}>
-              <div class={styles.columnMenu} role="menu" aria-label="Column visibility">
+              <div class={styles.columnMenu} role="menu" aria-label={t('columnManager.columnVisibility')}>
                 <For each={props.orderedColumns()}>
                   {(column) => (
                     <Checkbox
@@ -133,7 +135,7 @@ const DataGridProToolbar = (props: Props<DataGridProToolbarProps>) => {
                   )}
                 </For>
                 <Button variant="ghost" size="sm" class={styles.toolbarButtonSmall} onClick={props.onResetColumns}>
-                  Reset columns
+                  {t('columnManager.resetColumns')}
                 </Button>
               </div>
             </Show>

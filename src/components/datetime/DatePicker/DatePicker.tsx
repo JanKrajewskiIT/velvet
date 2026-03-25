@@ -4,12 +4,15 @@ import { createMemo, createUniqueId, Show } from 'solid-js';
 import DropdownFieldTrigger from '~/components/dropdowns/DropdownFieldTrigger/DropdownFieldTrigger';
 import DropdownSurface from '~/components/dropdowns/DropdownSurface/DropdownSurface';
 import type { InputSize } from '~/components/inputs/Input/Input';
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
+import type { AriaFieldProps } from '~/models/Props';
+import { resolveAriaInvalid } from '~/utils/aria';
 import classNames from '~/utils/classNames';
 
 import CalendarPanel from '../CalendarPanel/CalendarPanel';
 import DateTimeFieldTrigger from '../DateTimeFieldTrigger/DateTimeFieldTrigger';
-import { buildDaysGrid, DAY_LABELS, type DayCell, toIso } from '../shared/calendar';
+import { buildDaysGrid, type DayCell, toIso } from '../shared/calendar';
 import useCalendarPopupState from '../shared/useCalendarPopupState';
 import styles from './DatePicker.module.css';
 
@@ -21,7 +24,7 @@ export interface DatePickerMessages {
   nextMonthLabel?: string;
 }
 
-interface DatePickerProps {
+interface DatePickerProps extends AriaFieldProps {
   value?: string;
   onChange: (value: string) => void;
   locale?: string;
@@ -38,6 +41,7 @@ interface DatePickerProps {
 }
 
 const DatePicker = (props: Props<DatePickerProps>) => {
+  const { locale: currentLocale, t } = useI18n();
   const dropdownId = createUniqueId();
 
   let wrapperRef: HTMLDivElement | undefined;
@@ -52,16 +56,18 @@ const DatePicker = (props: Props<DatePickerProps>) => {
   const todayIso = new Date().toISOString().slice(0, 10);
 
   const monthName = createMemo(() =>
-    new Date(popup.viewYear(), popup.viewMonth()).toLocaleString(props.locale ?? 'en', {
+    new Date(popup.viewYear(), popup.viewMonth()).toLocaleString(props.locale ?? currentLocale(), {
       month: 'long',
       year: 'numeric',
     })
   );
-  const placeholder = () => props.messages?.placeholder ?? props.placeholder ?? 'YYYY-MM-DD';
-  const openPickerLabel = () => props.messages?.openPickerLabel ?? props.openPickerLabel ?? 'Open date picker';
-  const calendarLabel = () => props.messages?.calendarLabel ?? props.calendarLabel ?? 'Calendar';
-  const previousMonthLabel = () => props.messages?.previousMonthLabel ?? props.previousMonthLabel ?? 'Previous month';
-  const nextMonthLabel = () => props.messages?.nextMonthLabel ?? props.nextMonthLabel ?? 'Next month';
+  const placeholder = () => props.messages?.placeholder ?? props.placeholder ?? t('date.yyyymmdd');
+  const openPickerLabel = () =>
+    props.messages?.openPickerLabel ?? props.openPickerLabel ?? t('datetime.openDatePicker');
+  const calendarLabel = () => props.messages?.calendarLabel ?? props.calendarLabel ?? t('calendar.label');
+  const previousMonthLabel = () =>
+    props.messages?.previousMonthLabel ?? props.previousMonthLabel ?? t('calendar.prevMonth');
+  const nextMonthLabel = () => props.messages?.nextMonthLabel ?? props.nextMonthLabel ?? t('calendar.nextMonth');
 
   const isDateDisabled = (iso: string): boolean => {
     if (props.min && iso < props.min) return true;
@@ -101,6 +107,8 @@ const DatePicker = (props: Props<DatePickerProps>) => {
           aria-haspopup="dialog"
           aria-expanded={popup.isOpen()}
           aria-controls={popup.isOpen() ? dropdownId : undefined}
+          aria-invalid={resolveAriaInvalid(undefined, props['aria-invalid'])}
+          aria-errormessage={props['aria-errormessage']}
         >
           <FiCalendar />
         </DropdownFieldTrigger>
@@ -124,7 +132,6 @@ const DatePicker = (props: Props<DatePickerProps>) => {
             nextLabel={nextMonthLabel()}
             onPrevious={popup.prevMonth}
             onNext={popup.nextMonth}
-            dayLabels={DAY_LABELS}
             days={daysGrid()}
             getDayClass={dayClass}
             isDayDisabled={isDayDisabled}

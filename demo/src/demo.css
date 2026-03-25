@@ -383,11 +383,6 @@ body {
   color: var(--color-text-inverse);
 }
 
-.themeToggleBar {
-  display: inline-flex;
-  margin-inline-end: var(--spacing-xs);
-}
-
 @media (width < 1080px) {
   .layout {
     grid-template-columns: 1fr;

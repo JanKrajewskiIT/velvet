@@ -50,13 +50,13 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
             <PreviewGroup title="Primary samples">
               <div class="row">
                 <Badge content={5}>
-                  <IconButton icon={<IoNotifications />} title="Notifications" />
+                  <IconButton icon={<IoNotifications />} label="Notifications" />
                 </Badge>
                 <Badge content={99} max={99}>
                   <Button variant="primary">Messages</Button>
                 </Badge>
                 <Badge dot>
-                  <IconButton icon={<IoMail />} title="Mail" />
+                  <IconButton icon={<IoMail />} label="Mail" />
                 </Badge>
               </div>
             </PreviewGroup>
@@ -92,38 +92,24 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
           <PreviewPanel>
             <PreviewGroup title="Preset variants">
               <div class="row">
-                <Chip variant="primary">Primary</Chip>
-                <Chip variant="primaryOutline">Outline</Chip>
-                <Chip variant="info">Info</Chip>
-                <Chip variant="success">Success</Chip>
-                <Chip variant="warning">Warning</Chip>
-                <Chip variant="error">Error</Chip>
-                <Chip variant="subtle">Subtle</Chip>
+                <Chip variant="primary" label="Primary" />
+                <Chip variant="primaryOutline" label="Outline" />
+                <Chip variant="info" label="Info" />
+                <Chip variant="success" label="Success" />
+                <Chip variant="warning" label="Warning" />
+                <Chip variant="error" label="Error" />
+                <Chip variant="subtle" label="Subtle" />
               </div>
             </PreviewGroup>
             <PreviewGroup title="Interactive and custom color">
               <div class="row">
-                <Chip variant="success" filled>
-                  Filled success
-                </Chip>
-                <Chip variant="error" filled>
-                  Filled error
-                </Chip>
-                <Chip variant="info" size="sm">
-                  Small
-                </Chip>
-                <Chip variant="primary" selected>
-                  Selected
-                </Chip>
-                <Chip variant="primary" onClick={() => {}}>
-                  Clickable
-                </Chip>
-                <Chip color="#2e7d32" selected>
-                  selected
-                </Chip>
-                <Chip color="#ed6c02" onClick={() => {}}>
-                  clickable
-                </Chip>
+                <Chip variant="success" filled label="Filled success" />
+                <Chip variant="error" filled label="Filled error" />
+                <Chip variant="info" size="sm" label="Small" />
+                <Chip variant="primary" selected label="Selected" />
+                <Chip variant="primary" onClick={() => {}} label="Clickable" />
+                <Chip color="#2e7d32" selected label="selected" />
+                <Chip color="#ed6c02" onClick={() => {}} label="clickable" />
               </div>
             </PreviewGroup>
           </PreviewPanel>
@@ -264,21 +250,11 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
         <ShowcaseSection title="Alert" subtitle="Contextual status messages">
           <PreviewPanel>
             <PreviewGroup title="Examples">
-              <Alert variant="info" title="Information">
-                Your account has been updated.
-              </Alert>
-              <Alert variant="success" title="Success">
-                File uploaded successfully.
-              </Alert>
-              <Alert variant="warning" onClose={() => {}}>
-                Disk space is running low.
-              </Alert>
-              <Alert variant="error" title="Error">
-                Failed to save changes.
-              </Alert>
-              <Alert variant="tip" title="Tip">
-                Use <Kbd>Ctrl</Kbd> + <Kbd>K</Kbd> to open the command palette.
-              </Alert>
+              <Alert variant="info" label="Information" message="Your account has been updated." />
+              <Alert variant="success" label="Success" message="File uploaded successfully." />
+              <Alert variant="warning" onClose={() => {}} message="Disk space is running low." />
+              <Alert variant="error" label="Error" message="Failed to save changes." />
+              <Alert variant="tip" label="Tip" message="Use Ctrl + K to open the command palette." />
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
@@ -288,20 +264,21 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
             <PreviewGroup title="Examples">
               <Banner
                 variant="primary"
+                message="New version available!"
                 action={
                   <Button variant="navbar" class="bannerActionInverse">
                     Update now
                   </Button>
                 }
-              >
-                New version available!
-              </Banner>
+              />
               {bannerVisible() && (
-                <Banner variant="warning" onClose={() => setBannerVisible(false)}>
-                  Scheduled maintenance tonight.
-                </Banner>
+                <Banner
+                  variant="warning"
+                  onClose={() => setBannerVisible(false)}
+                  message="Scheduled maintenance tonight."
+                />
               )}
-              <Banner variant="error">Service degraded in EU region.</Banner>
+              <Banner variant="error" message="Service degraded in EU region." />
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
@@ -357,8 +334,8 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
         <ShowcaseSection title="ErrorMessage" subtitle="Inline error alerts">
           <PreviewPanel>
             <PreviewGroup title="Examples">
-              <ErrorMessage>Failed to load data. Please try again.</ErrorMessage>
-              <ErrorMessage>Network error: connection timed out.</ErrorMessage>
+              <ErrorMessage message="Failed to load data. Please try again." />
+              <ErrorMessage message="Network error: connection timed out." />
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
@@ -380,7 +357,7 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
           <PreviewPanel>
             <PreviewGroup title="Examples">
               <AccessDenied
-                title="Access denied"
+                label="Access denied"
                 description="You do not have permission to view this page."
                 goHomeLabel="Go to homepage"
               />
@@ -392,7 +369,7 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
           <PreviewPanel>
             <PreviewGroup title="Examples">
               <ErrorFallback
-                title={retried() ? 'Still failing' : 'Something went wrong'}
+                label={retried() ? 'Still failing' : 'Something went wrong'}
                 description="An unexpected error occurred while loading this page."
                 retryLabel="Try again"
                 onRetry={() => setRetried(true)}

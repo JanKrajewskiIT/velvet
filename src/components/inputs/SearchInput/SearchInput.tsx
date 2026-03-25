@@ -1,7 +1,9 @@
 import { IoClose, IoSearch } from 'solid-icons/io';
 import { type JSX, onCleanup, Show, splitProps } from 'solid-js';
 
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
+import type { InputCoreNativeProps } from '~/models/Props';
 
 import IconButton from '../../buttons/IconButton/IconButton';
 import AffixInput from '../AffixInput/AffixInput';
@@ -14,7 +16,7 @@ interface SearchInputMessages {
   clearButtonLabel?: string;
 }
 
-interface SearchInputProps extends Omit<JSX.InputHTMLAttributes<HTMLInputElement>, 'value' | 'onInput' | 'size'> {
+interface SearchInputProps extends Omit<InputCoreNativeProps, 'value' | 'onInput'> {
   value: string;
   onInput: (value: string) => void;
   onClear?: () => void;
@@ -26,6 +28,7 @@ interface SearchInputProps extends Omit<JSX.InputHTMLAttributes<HTMLInputElement
 }
 
 const SearchInput = (props: Props<SearchInputProps>) => {
+  const { t } = useI18n();
   const [local, rest] = splitProps(props, [
     'value',
     'onInput',
@@ -44,8 +47,8 @@ const SearchInput = (props: Props<SearchInputProps>) => {
   let debounceTimer: ReturnType<typeof setTimeout> | undefined;
 
   const placeholderText = () =>
-    local.messages?.searchPlaceholder ?? local.messages?.placeholder ?? local.placeholder ?? 'Search...';
-  const clearButtonLabel = () => local.messages?.clearButtonLabel ?? local.clearLabel ?? 'Clear search';
+    local.messages?.searchPlaceholder ?? local.messages?.placeholder ?? local.placeholder ?? t('common.searchEllipsis');
+  const clearButtonLabel = () => local.messages?.clearButtonLabel ?? local.clearLabel ?? t('search.clear');
 
   const fireInput = (value: string) => {
     if (local.debounce && local.debounce > 0) {
@@ -94,7 +97,7 @@ const SearchInput = (props: Props<SearchInputProps>) => {
       prefix={<IoSearch class={styles.icon} />}
       suffix={
         <Show when={local.value.length > 0}>
-          <IconButton icon={<IoClose />} title={clearButtonLabel()} onClick={handleClear} size="sm" variant="subtle" />
+          <IconButton icon={<IoClose />} label={clearButtonLabel()} onClick={handleClear} size="sm" variant="subtle" />
         </Show>
       }
       class={local.class}

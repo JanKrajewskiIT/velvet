@@ -4,7 +4,7 @@ import type Props from '~/models/Props';
 import FallbackState from '../FallbackState/FallbackState';
 
 interface ErrorFallbackOwnProps {
-  title: string;
+  label: string;
   description: string;
   retryLabel: string;
   onRetry: () => void;
@@ -14,9 +14,9 @@ const ErrorFallback = (props: Props<ErrorFallbackOwnProps>) => {
   return (
     <FallbackState
       class={props.class}
-      title={props.title}
+      label={props.label}
       description={props.description}
-      action={<Button onClick={props.onRetry}>{props.retryLabel}</Button>}
+      action={<Button onClick={props.onRetry} label={props.retryLabel} />}
     />
   );
 };

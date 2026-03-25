@@ -27,7 +27,7 @@ const ToastViewport = (props: Props<ToastViewportBaseProps>) => {
               <Text as="span" variant="bodySm">
                 {toast.message}
               </Text>
-              <IconButton icon={<IoClose />} title={props.closeLabel} onClick={() => removeToast(toast.id)} />
+              <IconButton icon={<IoClose />} label={props.closeLabel} onClick={() => removeToast(toast.id)} />
             </div>
           )}
         </For>

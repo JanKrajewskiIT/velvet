@@ -94,12 +94,12 @@ const updateNodeChildren = (nodes: TreeNode[], targetId: string, children: TreeN
   });
 
 const TreeView = (props: Props<TreeViewProps>) => {
-  const [treeData, setTreeData] = createSignal<TreeNode[]>(untrack(() => cloneNodes(props.nodes)));
-  const [expanded, setExpanded] = createSignal<Set<string>>(new Set(props.defaultExpanded ?? []));
-  const [loadingIds, setLoadingIds] = createSignal<Set<string>>(new Set());
+  const [treeData, setTreeData] = createSignal(untrack(() => cloneNodes(props.nodes)));
+  const [expanded, setExpanded] = createSignal(new Set(props.defaultExpanded ?? []));
+  const [loadingIds, setLoadingIds] = createSignal(new Set());
   const [draggingId, setDraggingId] = createSignal<string | null>(null);
   const [dragOverId, setDragOverId] = createSignal<string | null>(null);
-  const [internalCheckedIds, setInternalCheckedIds] = createSignal<string[]>(props.defaultChecked ?? []);
+  const [internalCheckedIds, setInternalCheckedIds] = createSignal(props.defaultChecked ?? []);
   let treeRef: HTMLUListElement | undefined;
 
   const checkedSet = createMemo(() => new Set(props.checkedIds ?? internalCheckedIds()));

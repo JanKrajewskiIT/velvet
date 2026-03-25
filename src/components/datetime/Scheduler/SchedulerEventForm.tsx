@@ -33,24 +33,28 @@ const SchedulerEventForm = (props: Props<SchedulerEventFormProps>) => {
     props.onDateTimeChange(date, time);
   };
 
+  const handleTitleInput = (event: InputEvent & { currentTarget: HTMLInputElement }) => {
+    props.onTitleChange(event.currentTarget.value);
+  };
+
+  const handleDescriptionInput = (event: InputEvent & { currentTarget: HTMLTextAreaElement }) => {
+    props.onDescriptionChange(event.currentTarget.value);
+  };
+
   return (
     <form class={styles.createForm} onSubmit={(event) => props.onSubmit(event)}>
       <Input
-        ref={(element) => props.titleRef?.(element)}
+        ref={(element: HTMLInputElement) => props.titleRef?.(element)}
         type="text"
         placeholder={props.titlePlaceholder}
         value={props.title}
-        onInput={(event) => props.onTitleChange(event.currentTarget.value)}
+        onInput={handleTitleInput}
         required
       />
       <div class={styles.createRowSingle}>
         <DateTimePicker value={dateTimeValue()} onChange={handleDateTimeChange} />
       </div>
-      <TextArea
-        placeholder={props.descriptionPlaceholder}
-        value={props.description}
-        onInput={(event) => props.onDescriptionChange(event.currentTarget.value)}
-      />
+      <TextArea placeholder={props.descriptionPlaceholder} value={props.description} onInput={handleDescriptionInput} />
       <div class={styles.createActions}>
         <Button size="sm" variant="ghost" onClick={props.onCancel}>
           {props.cancelLabel}

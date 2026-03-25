@@ -96,7 +96,11 @@ export { default as DropdownButton } from './components/dropdowns/DropdownButton
 export { default as DropdownChevronFieldTrigger } from './components/dropdowns/DropdownChevronFieldTrigger/DropdownChevronFieldTrigger';
 export { default as DropdownDivider } from './components/dropdowns/DropdownDivider/DropdownDivider';
 export { default as DropdownInputTrigger } from './components/dropdowns/DropdownInputTrigger/DropdownInputTrigger';
-export { default as DropdownMenu } from './components/dropdowns/DropdownMenu/DropdownMenu';
+export {
+  default as DropdownMenu,
+  type DropdownMenuMessages,
+  type DropdownMenuProps,
+} from './components/dropdowns/DropdownMenu/DropdownMenu';
 export {
   default as DropdownOption,
   type DropdownOptionProps,
@@ -188,7 +192,7 @@ export { default as Sidebar } from './components/navigation/Sidebar/Sidebar';
 export { default as SidebarItemButton } from './components/navigation/SidebarItemButton/SidebarItemButton';
 export type { SidebarNavGroup, SidebarNavItem } from './components/navigation/SidebarNav/SidebarNav';
 export { default as SidebarNav } from './components/navigation/SidebarNav/SidebarNav';
-export type { SpeedDialAction } from './components/navigation/SpeedDial/SpeedDial';
+export type { SpeedDialAction, SpeedDialMessages, SpeedDialProps } from './components/navigation/SpeedDial/SpeedDial';
 export { default as SpeedDial } from './components/navigation/SpeedDial/SpeedDial';
 export { default as Stepper } from './components/navigation/Stepper/Stepper';
 export { default as Tabs } from './components/navigation/Tabs/Tabs';
@@ -242,6 +246,9 @@ export type { TradingViewPollingFeedOptions } from './hooks/useTradingViewPollin
 export { default as useTradingViewPollingFeed } from './hooks/useTradingViewPollingFeed';
 export type { TradingViewWsFeedOptions } from './hooks/useTradingViewWsFeed';
 export { default as useTradingViewWsFeed } from './hooks/useTradingViewWsFeed';
+export { I18nProvider, useI18n } from './i18n/I18nProvider';
+export type { Locale } from './i18n/messages';
+export { SUPPORTED_LOCALES } from './i18n/messages';
 export type { default as Props } from './models/Props';
 export type { ThemeChoice } from './theme/ThemeProvider';
 export { ThemeProvider, useTheme } from './theme/ThemeProvider';

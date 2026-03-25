@@ -20,7 +20,7 @@ const CalendarHeader = (props: Props<CalendarHeaderProps>) => {
     <div class={classNames(styles.header, props.class)}>
       <IconButton
         icon={<FiChevronLeft />}
-        title={props.previousLabel}
+        label={props.previousLabel}
         onClick={props.onPrevious}
         size="sm"
         variant="subtle"
@@ -28,7 +28,7 @@ const CalendarHeader = (props: Props<CalendarHeaderProps>) => {
       <Text as="span" variant="labelMd">
         {props.monthLabel}
       </Text>
-      <IconButton icon={<FiChevronRight />} title={props.nextLabel} onClick={props.onNext} size="sm" variant="subtle" />
+      <IconButton icon={<FiChevronRight />} label={props.nextLabel} onClick={props.onNext} size="sm" variant="subtle" />
     </div>
   );
 };

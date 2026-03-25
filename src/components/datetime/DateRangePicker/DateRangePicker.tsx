@@ -4,11 +4,13 @@ import DropdownFieldTrigger from '~/components/dropdowns/DropdownFieldTrigger/Dr
 import DropdownSurface from '~/components/dropdowns/DropdownSurface/DropdownSurface';
 import type { InputSize } from '~/components/inputs/Input/Input';
 import Text from '~/components/typography/Text/Text';
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
+import type { AriaFieldProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import CalendarPanel from '../CalendarPanel/CalendarPanel';
-import { buildDaysGrid, DAY_LABELS, type DayCell, toIso } from '../shared/calendar';
+import { buildDaysGrid, type DayCell, toIso } from '../shared/calendar';
 import useCalendarPopupState from '../shared/useCalendarPopupState';
 import styles from './DateRangePicker.module.css';
 
@@ -27,7 +29,7 @@ export interface DateRange {
   end: string;
 }
 
-interface DateRangePickerProps {
+interface DateRangePickerProps extends AriaFieldProps {
   id?: string;
   value: DateRange;
   onChange: (range: DateRange) => void;
@@ -44,12 +46,10 @@ interface DateRangePickerProps {
   previousMonthLabel?: string;
   nextMonthLabel?: string;
   messages?: DateRangePickerMessages;
-  'aria-labelledby'?: string;
-  'aria-describedby'?: string;
-  'aria-invalid'?: true;
 }
 
 const DateRangePicker = (props: Props<DateRangePickerProps>) => {
+  const { locale: currentLocale, t } = useI18n();
   const [activeField, setActiveField] = createSignal<'start' | 'end'>('start');
   const [pendingStart, setPendingStart] = createSignal<string | null>(null);
   const dropdownId = createUniqueId();
@@ -67,24 +67,29 @@ const DateRangePicker = (props: Props<DateRangePickerProps>) => {
   const todayIso = new Date().toISOString().slice(0, 10);
 
   const monthName = createMemo(() =>
-    new Date(popup.viewYear(), popup.viewMonth()).toLocaleString(props.locale ?? 'en', {
+    new Date(popup.viewYear(), popup.viewMonth()).toLocaleString(props.locale ?? currentLocale(), {
       month: 'long',
       year: 'numeric',
     })
   );
-  const startLabel = () => props.messages?.startLabel ?? props.startLabel ?? 'Start';
-  const endLabel = () => props.messages?.endLabel ?? props.endLabel ?? 'End';
+  const startLabel = () => props.messages?.startLabel ?? props.startLabel ?? t('common.start');
+  const endLabel = () => props.messages?.endLabel ?? props.endLabel ?? t('common.end');
   const startAriaLabel = () =>
     props.messages?.startAriaLabel ??
     props.startAriaLabel ??
     props.messages?.startLabel ??
     props.startLabel ??
-    'Start date';
+    t('datetime.startDate');
   const endAriaLabel = () =>
-    props.messages?.endAriaLabel ?? props.endAriaLabel ?? props.messages?.endLabel ?? props.endLabel ?? 'End date';
-  const calendarLabel = () => props.messages?.calendarLabel ?? props.calendarLabel ?? 'Date range calendar';
-  const previousMonthLabel = () => props.messages?.previousMonthLabel ?? props.previousMonthLabel ?? 'Previous month';
-  const nextMonthLabel = () => props.messages?.nextMonthLabel ?? props.nextMonthLabel ?? 'Next month';
+    props.messages?.endAriaLabel ??
+    props.endAriaLabel ??
+    props.messages?.endLabel ??
+    props.endLabel ??
+    t('datetime.endDate');
+  const calendarLabel = () => props.messages?.calendarLabel ?? props.calendarLabel ?? t('calendar.rangeLabel');
+  const previousMonthLabel = () =>
+    props.messages?.previousMonthLabel ?? props.previousMonthLabel ?? t('calendar.prevMonth');
+  const nextMonthLabel = () => props.messages?.nextMonthLabel ?? props.nextMonthLabel ?? t('calendar.nextMonth');
 
   const isDateDisabled = (iso: string): boolean => {
     if (props.min && iso < props.min) return true;
@@ -221,7 +226,6 @@ const DateRangePicker = (props: Props<DateRangePickerProps>) => {
             nextLabel={nextMonthLabel()}
             onPrevious={popup.prevMonth}
             onNext={popup.nextMonth}
-            dayLabels={DAY_LABELS}
             days={daysGrid()}
             getDayClass={dayClass}
             isDayDisabled={isDayDisabled}

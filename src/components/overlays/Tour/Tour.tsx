@@ -5,6 +5,7 @@ import Button from '~/components/buttons/Button/Button';
 import Heading from '~/components/typography/Heading/Heading';
 import Text from '~/components/typography/Text/Text';
 import useEscapeKey from '~/hooks/useEscapeKey';
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -51,15 +52,16 @@ const computeCardPosition = (
 };
 
 const Tour = (props: Props<TourProps>) => {
+  const { t } = useI18n();
   const [currentStep, setCurrentStep] = createSignal(0);
   const [spotlightStyle, setSpotlightStyle] = createSignal<Record<string, string>>({});
   const [cardStyle, setCardStyle] = createSignal<Record<string, string>>({});
   let cardRef: HTMLDivElement | undefined;
 
-  const nextLabel = () => props.nextLabel ?? 'Next';
-  const prevLabel = () => props.prevLabel ?? 'Back';
-  const finishLabel = () => props.finishLabel ?? 'Finish';
-  const skipLabel = () => props.skipLabel ?? 'Skip';
+  const nextLabel = () => props.nextLabel ?? t('common.next');
+  const prevLabel = () => props.prevLabel ?? t('common.back');
+  const finishLabel = () => props.finishLabel ?? t('common.finish');
+  const skipLabel = () => props.skipLabel ?? t('common.skip');
 
   const isLastStep = () => currentStep() === props.steps.length - 1;
 

@@ -16,7 +16,7 @@ import useDropdownState from '../shared/useDropdownState';
 import styles from './DropdownButton.module.css';
 
 interface DropdownButtonProps {
-  label: JSX.Element;
+  label: string;
   variant?: 'primary' | 'ghost';
   size?: ButtonSize;
   children: JSX.Element;

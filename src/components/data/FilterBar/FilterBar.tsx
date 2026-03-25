@@ -1,6 +1,7 @@
 import type { JSX } from 'solid-js';
 import { createMemo, For, Show } from 'solid-js';
 
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -42,6 +43,7 @@ interface FilterBarOwnProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'on
 }
 
 const FilterBar = (props: Props<FilterBarOwnProps>) => {
+  const { t } = useI18n();
   const selectedByKey = createMemo(() => {
     return new Map(props.value.map((entry) => [entry.key, entry.value]));
   });
@@ -99,10 +101,12 @@ const FilterBar = (props: Props<FilterBarOwnProps>) => {
                 class={styles.field}
                 aria-label={filter.label}
                 value={selectedByKey().get(filter.key) ?? ''}
-                onChange={(e) => setFilterValue(filter.key, e.currentTarget.value)}
+                onChange={(event: Event & { currentTarget: HTMLSelectElement; target: HTMLSelectElement }) =>
+                  setFilterValue(filter.key, event.currentTarget.value)
+                }
                 disabled={props.disabled}
               >
-                <option value="">{filter.placeholder ?? props.allLabel ?? 'All'}</option>
+                <option value="">{filter.placeholder ?? props.allLabel ?? t('common.all')}</option>
                 <For each={filter.options}>
                   {(option) => (
                     <option value={option.value} disabled={option.disabled}>
@@ -117,7 +121,7 @@ const FilterBar = (props: Props<FilterBarOwnProps>) => {
 
         <Show when={hasClearAction()}>
           <Button class={styles.clearButton} variant="ghost" size="md" onClick={clearAll} disabled={props.disabled}>
-            {props.clearAllLabel ?? 'Clear all'}
+            {props.clearAllLabel ?? t('filterBar.clearAll')}
           </Button>
         </Show>
       </div>

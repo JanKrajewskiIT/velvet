@@ -1,6 +1,7 @@
 import { IoCheckmark, IoCopy } from 'solid-icons/io';
 import { createSignal, onCleanup, Show } from 'solid-js';
 
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -19,6 +20,7 @@ interface CopyButtonProps {
 }
 
 const CopyButton = (props: Props<CopyButtonProps>) => {
+  const { t } = useI18n();
   const [copied, setCopied] = createSignal(false);
   const [failed, setFailed] = createSignal(false);
   let timeoutId: ReturnType<typeof setTimeout> | undefined;
@@ -60,10 +62,10 @@ const CopyButton = (props: Props<CopyButtonProps>) => {
       onClick={handleClick}
       text={
         copied()
-          ? (props.copiedLabel ?? 'Copied!')
+          ? (props.copiedLabel ?? t('common.copied'))
           : failed()
-            ? (props.errorLabel ?? 'Copy failed')
-            : (props.label ?? 'Copy')
+            ? (props.errorLabel ?? t('common.copyFailed'))
+            : (props.label ?? t('common.copy'))
       }
     />
   );

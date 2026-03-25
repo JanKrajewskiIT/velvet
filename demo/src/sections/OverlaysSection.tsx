@@ -128,7 +128,7 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
               </Button>
 
               <Dialog open={dialogOpen()} onClose={() => setDialogOpen(false)}>
-                <DialogTitle>Example dialog</DialogTitle>
+                <DialogTitle label="Example dialog" />
                 <DialogBody>
                   <Text as="p" variant="bodySm" tone="muted" class="mutedText">
                     This modal is built on the{' '}
@@ -160,7 +160,7 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
 
               <ConfirmDialog
                 open={confirmOpen()}
-                title="Delete item?"
+                label="Delete item?"
                 message="This action cannot be undone. The item will be permanently removed."
                 confirmLabel="Delete"
                 cancelLabel="Cancel"
@@ -176,7 +176,7 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
           <PreviewPanel>
             <PreviewGroup title="Examples">
               <ConfirmAction
-                title="Run destructive action?"
+                label="Run destructive action?"
                 message="This demo increments a counter so you can verify the flow."
                 confirmLabel="Run"
                 cancelLabel="Cancel"
@@ -190,7 +190,7 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
                     <Button variant="danger" onClick={openConfirm}>
                       Open confirmation
                     </Button>
-                    <Chip variant="subtle">Confirm opened: {isConfirmOpen() ? 'yes' : 'no'}</Chip>
+                    <Chip variant="subtle" label={`Confirm opened: ${isConfirmOpen() ? 'yes' : 'no'}`} />
                   </div>
                 )}
               </ConfirmAction>
@@ -216,7 +216,7 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
               <Sheet
                 open={sheetActionsOpen()}
                 onClose={() => setSheetActionsOpen(false)}
-                title="Settings"
+                label="Settings"
                 subtitle="Adjust your preferences"
                 closeLabel="Close settings panel"
                 side="right"
@@ -258,7 +258,7 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
               <Sheet
                 open={bottomSheetOpen()}
                 onClose={() => setBottomSheetOpen(false)}
-                title="Bottom sheet"
+                label="Bottom sheet"
                 closeLabel="Close bottom sheet"
                 side="bottom"
                 size="md"
@@ -271,7 +271,7 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
               <Sheet
                 open={leftSheetOpen()}
                 onClose={() => setLeftSheetOpen(false)}
-                title="Left sheet"
+                label="Left sheet"
                 closeLabel="Close left sheet"
                 side="left"
                 size="sm"
@@ -284,7 +284,7 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
               <Sheet
                 open={rightSheetOpen()}
                 onClose={() => setRightSheetOpen(false)}
-                title="Right sheet"
+                label="Right sheet"
                 closeLabel="Close right sheet"
                 side="right"
                 size="lg"

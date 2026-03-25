@@ -67,7 +67,7 @@ const Navbar = (props: Props<NavbarProps>) => {
           icon={menuOpen() ? <FiX /> : <FiMenu />}
           class={styles.hamburger}
           onClick={toggleMenu}
-          title={local.toggleMenuLabel}
+          label={local.toggleMenuLabel}
           aria-expanded={menuOpen()}
           variant="navbar"
           size="sm"

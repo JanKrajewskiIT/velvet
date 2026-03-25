@@ -1,5 +1,6 @@
 import { children, createEffect, createSignal, onCleanup, type ParentProps } from 'solid-js';
 
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -13,6 +14,7 @@ interface ResizablePanelProps {
 }
 
 const ResizablePanel = (props: ParentProps<Props<ResizablePanelProps>>) => {
+  const { t } = useI18n();
   const direction = () => props.direction ?? 'horizontal';
   const minSize = () => props.minSize ?? 10;
 
@@ -90,7 +92,7 @@ const ResizablePanel = (props: ParentProps<Props<ResizablePanelProps>>) => {
       </div>
       <button
         type="button"
-        aria-label="Resize"
+        aria-label={t('common.resize')}
         class={classNames(styles.handle, isHorizontal() ? styles.handleHorizontal : styles.handleVertical)}
         onMouseDown={handleMouseDown}
       >

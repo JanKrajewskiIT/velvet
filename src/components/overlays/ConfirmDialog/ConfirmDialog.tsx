@@ -13,7 +13,7 @@ import styles from './ConfirmDialog.module.css';
 
 interface ConfirmDialogProps {
   open: boolean;
-  title: string;
+  label: string;
   message: string;
   confirmLabel: string;
   cancelLabel: string;
@@ -27,7 +27,7 @@ const ConfirmDialog = (props: Props<ConfirmDialogProps>) => {
 
   return (
     <Dialog open={props.open} onClose={props.onClose} class={props.class}>
-      <DialogTitle>{props.title}</DialogTitle>
+      <DialogTitle label={props.label} />
       <DialogBody>
         <div class={classNames(styles.iconWrapper, isDanger() ? styles.iconDanger : styles.iconPrimary)}>
           {isDanger() ? <FiAlertTriangle /> : <FiHelpCircle />}
@@ -37,12 +37,8 @@ const ConfirmDialog = (props: Props<ConfirmDialogProps>) => {
         </Text>
       </DialogBody>
       <DialogActions>
-        <Button variant="ghost" onClick={() => props.onClose()}>
-          {props.cancelLabel}
-        </Button>
-        <Button variant={props.variant ?? 'primary'} onClick={() => props.onConfirm()}>
-          {props.confirmLabel}
-        </Button>
+        <Button variant="ghost" onClick={() => props.onClose()} label={props.cancelLabel} />
+        <Button variant={props.variant ?? 'primary'} onClick={() => props.onConfirm()} label={props.confirmLabel} />
       </DialogActions>
     </Dialog>
   );

@@ -1,6 +1,7 @@
 import { createSignal, createUniqueId, type JSX, onCleanup, Show, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
+import { joinAriaIds } from '~/utils/aria';
 import classNames from '~/utils/classNames';
 
 import Text from '../../typography/Text/Text';
@@ -15,7 +16,15 @@ interface TooltipOwnProps extends JSX.HTMLAttributes<HTMLDivElement> {
 
 const Tooltip = (props: Props<TooltipOwnProps>) => {
   const tooltipId = createUniqueId();
-  const [local, rest] = splitProps(props, ['content', 'position', 'delay', 'children', 'class', 'contentClass']);
+  const [local, rest] = splitProps(props, [
+    'content',
+    'position',
+    'delay',
+    'children',
+    'class',
+    'contentClass',
+    'aria-describedby',
+  ]);
   const [isVisible, setIsVisible] = createSignal(false);
   let timer: ReturnType<typeof setTimeout> | undefined;
 
@@ -40,8 +49,8 @@ const Tooltip = (props: Props<TooltipOwnProps>) => {
       onMouseLeave={hide}
       onFocus={show}
       onBlur={hide}
-      aria-describedby={isVisible() ? tooltipId : undefined}
       {...rest}
+      aria-describedby={joinAriaIds(local['aria-describedby'], isVisible() ? tooltipId : undefined)}
     >
       {local.children}
       <Show when={isVisible()}>

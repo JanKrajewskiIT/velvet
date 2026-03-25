@@ -19,9 +19,9 @@ export interface EditableCollectionProps<T> {
   onAdd: () => void;
   onRemove: (id: string) => void;
   addLabel: string;
-  confirmTitle: string;
-  confirmMessage: string;
   confirmLabel: string;
+  confirmMessage: string;
+  confirmActionLabel: string;
   cancelLabel: string;
   confirmVariant?: 'danger' | 'primary';
   addButtonVariant?: ButtonVariant;
@@ -62,9 +62,9 @@ const EditableCollection = <T,>(props: Props<EditableCollectionProps<T>>) => {
       </Button>
       <ConfirmDialog
         open={deleteId() !== null}
-        title={props.confirmTitle}
+        label={props.confirmLabel}
         message={props.confirmMessage}
-        confirmLabel={props.confirmLabel}
+        confirmLabel={props.confirmActionLabel}
         cancelLabel={props.cancelLabel}
         variant={props.confirmVariant ?? 'danger'}
         onConfirm={handleConfirmDelete}

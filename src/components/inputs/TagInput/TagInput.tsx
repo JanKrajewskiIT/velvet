@@ -1,6 +1,7 @@
 import { createSignal, For, type JSX, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
+import type { InputCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import ClosableChip from '../../feedback/ClosableChip/ClosableChip';
@@ -9,7 +10,7 @@ import Input, { type InputSize } from '../Input/Input';
 import fieldInputResetStyles from '../shared/fieldInputReset.module.css';
 import styles from './TagInput.module.css';
 
-interface TagInputOwnProps extends Omit<JSX.InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange'> {
+interface TagInputOwnProps extends Omit<InputCoreNativeProps, 'value' | 'onChange'> {
   value: string[];
   onChange: (tags: string[]) => void;
   placeholder?: string;
@@ -55,6 +56,10 @@ const TagInput = (props: Props<TagInputOwnProps>) => {
     }
   };
 
+  const handleInput: JSX.EventHandler<HTMLInputElement, InputEvent> = (e) => {
+    setInputValue(e.currentTarget.value);
+  };
+
   const removeTag = (tagToRemove: string) => {
     if (local.readOnly || local.disabled) return;
     local.onChange(local.value.filter((tag) => tag !== tagToRemove));
@@ -86,7 +91,7 @@ const TagInput = (props: Props<TagInputOwnProps>) => {
           class={classNames(fieldInputResetStyles.reset, styles.input)}
           size={local.size}
           value={inputValue()}
-          onInput={(e) => setInputValue(e.currentTarget.value)}
+          onInput={handleInput}
           onKeyDown={handleKeyDown}
           aria-label={local.inputAriaLabel}
           placeholder={local.value.length === 0 ? local.placeholder : ''}

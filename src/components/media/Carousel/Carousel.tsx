@@ -10,6 +10,7 @@ import {
   splitProps,
 } from 'solid-js';
 
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -25,6 +26,7 @@ interface CarouselOwnProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'chi
 }
 
 const Carousel = (props: Props<CarouselOwnProps>) => {
+  const { t } = useI18n();
   const [local, rest] = splitProps(props, ['children', 'autoPlay', 'interval', 'showDots', 'showArrows', 'class']);
 
   const resolved = resolveChildren(() => local.children);
@@ -103,13 +105,13 @@ const Carousel = (props: Props<CarouselOwnProps>) => {
           direction="prev"
           class={classNames(styles.arrow, styles.arrowPrev)}
           onClick={goPrev}
-          title="Previous slide"
+          label={t('carousel.previousSlide')}
         />
         <MediaNavButton
           direction="next"
           class={classNames(styles.arrow, styles.arrowNext)}
           onClick={goNext}
-          title="Next slide"
+          label={t('carousel.nextSlide')}
         />
       </Show>
 
@@ -121,7 +123,7 @@ const Carousel = (props: Props<CarouselOwnProps>) => {
                 type="button"
                 class={classNames(styles.dot, i() === activeIndex() && styles.dotActive)}
                 onClick={() => scrollTo(i())}
-                aria-label={`Go to slide ${i() + 1}`}
+                aria-label={t('carousel.goToSlide', { index: i() + 1 })}
               />
             )}
           </For>

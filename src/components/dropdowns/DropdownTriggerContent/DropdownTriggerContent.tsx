@@ -8,7 +8,7 @@ import classNames from '~/utils/classNames';
 import styles from './DropdownTriggerContent.module.css';
 
 export interface DropdownTriggerContentProps {
-  label: JSX.Element;
+  label: string;
   class?: string;
   tone?: 'default' | 'inverse';
   labelTone?: TypographyTone;

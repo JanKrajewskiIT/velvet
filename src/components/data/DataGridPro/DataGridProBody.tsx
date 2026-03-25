@@ -1,6 +1,8 @@
-import { type Accessor, For, type JSX, Show } from 'solid-js';
+import type { JSX } from 'solid-js';
+import { type Accessor, For, Show } from 'solid-js';
 
 import Checkbox from '~/components/switchers/Checkbox/Checkbox';
+import { useI18n } from '~/i18n/I18nProvider';
 import classNames from '~/utils/classNames';
 
 import styles from './DataGridPro.module.css';
@@ -30,12 +32,17 @@ interface DataGridProBodyProps<T extends Record<string, unknown>> {
 }
 
 const DataGridProBody = <T extends Record<string, unknown>>(props: DataGridProBodyProps<T>) => {
+  const { t } = useI18n();
+  const handleCheckboxClick = (event: MouseEvent & { currentTarget: HTMLInputElement }) => {
+    event.stopPropagation();
+  };
+
   return (
     <Show
       when={props.hasRows()}
       fallback={
         <div class={styles.empty} style={{ height: `${props.bodyHeight()}px` }}>
-          {props.emptyMessage ?? 'No rows to display'}
+          {props.emptyMessage ?? t('table.noRows')}
         </div>
       }
     >
@@ -48,9 +55,9 @@ const DataGridProBody = <T extends Record<string, unknown>>(props: DataGridProBo
                   <div class={classNames(styles.cell, styles.pinnedLeft, styles.selectionCell)}>
                     <Checkbox
                       checked={props.selectedSet().has(entry.id)}
-                      onClick={(e) => e.stopPropagation()}
+                      onClick={handleCheckboxClick}
                       onChange={() => props.onToggleRow(entry.id)}
-                      aria-label={`Select row ${entry.id}`}
+                      aria-label={t('table.selectRow', { id: entry.id })}
                     />
                   </div>
                 </Show>

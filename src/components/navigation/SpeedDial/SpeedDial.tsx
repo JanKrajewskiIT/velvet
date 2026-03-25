@@ -3,6 +3,7 @@ import { createSignal, createUniqueId, For, type JSX, Show } from 'solid-js';
 
 import useClickOutside from '~/hooks/useClickOutside';
 import useEscapeKey from '~/hooks/useEscapeKey';
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -17,6 +18,12 @@ export interface SpeedDialAction {
   onClick: () => void;
 }
 
+export interface SpeedDialMessages {
+  actionsAriaLabel?: string;
+  openAriaLabel?: string;
+  closeAriaLabel?: string;
+}
+
 interface SpeedDialProps {
   actions: SpeedDialAction[];
   icon?: JSX.Element;
@@ -25,9 +32,11 @@ interface SpeedDialProps {
   actionsLabel?: string;
   openLabel?: string;
   closeLabel?: string;
+  messages?: SpeedDialMessages;
 }
 
 const SpeedDial = (props: Props<SpeedDialProps>) => {
+  const { t } = useI18n();
   const [open, setOpen] = createSignal(false);
   const menuId = createUniqueId();
   let containerRef: HTMLDivElement | undefined;
@@ -42,10 +51,10 @@ const SpeedDial = (props: Props<SpeedDialProps>) => {
 
   const position = () => props.position ?? 'bottom-right';
   const direction = () => props.direction ?? 'up';
-  const actionsLabel = () => props.actionsLabel ?? 'Quick actions';
+  const actionsLabel = () => props.messages?.actionsAriaLabel ?? props.actionsLabel ?? t('speedDial.actions');
   const hasActions = () => props.actions.length > 0;
-  const openLabel = () => props.openLabel ?? 'Open quick actions';
-  const closeLabel = () => props.closeLabel ?? 'Close quick actions';
+  const openLabel = () => props.messages?.openAriaLabel ?? props.openLabel ?? t('speedDial.open');
+  const closeLabel = () => props.messages?.closeAriaLabel ?? props.closeLabel ?? t('speedDial.close');
 
   const toggle = () => {
     if (!hasActions()) return;
@@ -101,7 +110,7 @@ const SpeedDial = (props: Props<SpeedDialProps>) => {
         disabled={!hasActions()}
         aria-expanded={open()}
         aria-controls={menuId}
-        title={open() ? closeLabel() : openLabel()}
+        label={open() ? closeLabel() : openLabel()}
         elevation="glow"
         icon={<span class={styles.fabIcon}>{props.icon ?? <FiPlus size={24} />}</span>}
       />
@@ -110,3 +119,4 @@ const SpeedDial = (props: Props<SpeedDialProps>) => {
 };
 
 export default SpeedDial;
+export type { SpeedDialProps };

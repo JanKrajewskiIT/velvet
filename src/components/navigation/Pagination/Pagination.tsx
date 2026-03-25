@@ -1,5 +1,6 @@
 import { For, type JSX, splitProps } from 'solid-js';
 
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -46,6 +47,7 @@ const buildPageItems = (page: number, totalPages: number, maxVisible: number): P
 };
 
 const Pagination = (props: Props<PaginationOwnProps>) => {
+  const { t } = useI18n();
   const [local, rest] = splitProps(props, [
     'page',
     'totalPages',
@@ -61,7 +63,7 @@ const Pagination = (props: Props<PaginationOwnProps>) => {
   const pages = () => buildPageItems(current(), local.totalPages, local.maxVisible ?? 7);
 
   return (
-    <nav {...rest} class={classNames(styles.nav, local.class)} aria-label={local.ariaLabel ?? 'Pagination'}>
+    <nav {...rest} class={classNames(styles.nav, local.class)} aria-label={local.ariaLabel ?? t('common.pagination')}>
       <Button
         variant="ghost"
         size="sm"

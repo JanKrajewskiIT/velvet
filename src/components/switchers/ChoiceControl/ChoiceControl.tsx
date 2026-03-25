@@ -1,14 +1,18 @@
 import type { JSX } from 'solid-js';
 import { createUniqueId, Show, splitProps } from 'solid-js';
 
+import LabelText from '~/components/typography/LabelText/LabelText';
 import type Props from '~/models/Props';
+import type { ChoiceInputCoreNativeProps } from '~/models/Props';
+import { joinAriaIds } from '~/utils/aria';
 import classNames from '~/utils/classNames';
 
 import styles from './ChoiceControl.module.css';
 
-interface ChoiceControlOwnProps extends Omit<JSX.InputHTMLAttributes<HTMLInputElement>, 'type'> {
+interface ChoiceControlOwnProps extends Omit<ChoiceInputCoreNativeProps, 'type'> {
   type: 'checkbox' | 'radio';
-  label: JSX.Element;
+  label?: string;
+  description?: string;
   labelId?: string;
   wrapperClass?: string;
   controlClass?: string;
@@ -23,15 +27,17 @@ const ChoiceControl = (props: Props<ChoiceControlOwnProps>) => {
     'type',
     'class',
     'label',
+    'description',
     'labelId',
     'wrapperClass',
     'controlClass',
     'inputClass',
     'indicatorClass',
     'indicator',
+    'aria-labelledby',
   ]);
 
-  const hasLabel = () => local.label !== '';
+  const hasLabel = () => Boolean(local.label || local.description);
   const resolvedLabelId = () => (hasLabel() ? (local.labelId ?? generatedLabelId) : undefined);
 
   return (
@@ -41,12 +47,12 @@ const ChoiceControl = (props: Props<ChoiceControlOwnProps>) => {
           {...rest}
           type={local.type}
           class={classNames(styles.input, local.inputClass)}
-          aria-labelledby={resolvedLabelId()}
+          aria-labelledby={joinAriaIds(local['aria-labelledby'], resolvedLabelId())}
         />
         {local.indicator ?? <span class={classNames(styles.indicator, local.indicatorClass)} aria-hidden="true" />}
       </span>
       <Show when={hasLabel()}>
-        <span id={resolvedLabelId()}>{local.label}</span>
+        <LabelText id={resolvedLabelId()} label={local.label} description={local.description} />
       </Show>
     </label>
   );

@@ -6,6 +6,7 @@ import IconButton from '~/components/buttons/IconButton/IconButton';
 import Tooltip from '~/components/overlays/Tooltip/Tooltip';
 import Heading from '~/components/typography/Heading/Heading';
 import Text from '~/components/typography/Text/Text';
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -20,7 +21,7 @@ import {
 import styles from './NotificationCenter.module.css';
 
 interface NotificationCenterOwnProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'onChange'> {
-  title?: string;
+  label?: string;
   emptyMessage?: string;
   markAllLabel?: string;
   clearAllLabel?: string;
@@ -29,8 +30,9 @@ interface NotificationCenterOwnProps extends Omit<JSX.HTMLAttributes<HTMLDivElem
 }
 
 const NotificationCenter = (props: Props<NotificationCenterOwnProps>) => {
+  const { t } = useI18n();
   const [local, rest] = splitProps(props, [
-    'title',
+    'label',
     'emptyMessage',
     'markAllLabel',
     'clearAllLabel',
@@ -49,13 +51,13 @@ const NotificationCenter = (props: Props<NotificationCenterOwnProps>) => {
   const unreadCount = createMemo(() => notifications().filter((item) => !item.read).length);
 
   const formatDate = (timestamp: number): string => {
-    return new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return new Date(timestamp).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
   };
 
-  const readLabel = () => local.markAllLabel ?? 'Mark all as read';
-  const clearLabel = () => local.clearAllLabel ?? 'Clear all';
-  const dismissLabel = () => local.removeLabel ?? 'Dismiss';
-  const markReadLabel = () => 'Mark as read';
+  const readLabel = () => local.markAllLabel ?? t('notification.markAllRead');
+  const clearLabel = () => local.clearAllLabel ?? t('notification.clearAll');
+  const dismissLabel = () => local.removeLabel ?? t('common.dismiss');
+  const markReadLabel = () => t('notification.markRead');
   const hasNotifications = createMemo(() => notifications().length > 0);
   const handleItemRead = (id: string) => markNotificationRead(id);
   const handleItemRemove = (id: string) => removeNotification(id);
@@ -65,7 +67,7 @@ const NotificationCenter = (props: Props<NotificationCenterOwnProps>) => {
       <div class={styles.header}>
         <div class={styles.titleRow}>
           <Heading as="h3" level={5}>
-            {local.title ?? 'Notifications'}
+            {local.label ?? t('common.notifications')}
           </Heading>
           <Show when={unreadCount() > 0}>
             <Badge content={unreadCount()} variant="primarySoft" inline>
@@ -93,7 +95,7 @@ const NotificationCenter = (props: Props<NotificationCenterOwnProps>) => {
         when={items().length > 0}
         fallback={
           <Text as="p" variant="bodySm" tone="muted" class={styles.empty}>
-            {local.emptyMessage ?? 'No notifications yet.'}
+            {local.emptyMessage ?? t('notification.empty')}
           </Text>
         }
       >
@@ -127,7 +129,7 @@ const NotificationCenter = (props: Props<NotificationCenterOwnProps>) => {
                   <Tooltip content={markReadLabel()}>
                     <IconButton
                       icon={<IoCheckmarkDone />}
-                      title={markReadLabel()}
+                      label={markReadLabel()}
                       onClick={() => handleItemRead(item.id)}
                       size="sm"
                       variant="subtle"
@@ -136,7 +138,7 @@ const NotificationCenter = (props: Props<NotificationCenterOwnProps>) => {
                   <Tooltip content={dismissLabel()}>
                     <IconButton
                       icon={<IoTrash />}
-                      title={dismissLabel()}
+                      label={dismissLabel()}
                       onClick={() => handleItemRemove(item.id)}
                       size="sm"
                       variant="subtle"

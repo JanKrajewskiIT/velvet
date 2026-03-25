@@ -7,7 +7,7 @@ import FallbackState from '../FallbackState/FallbackState';
 import styles from './AccessDenied.module.css';
 
 interface AccessDeniedProps {
-  title: string;
+  label: string;
   description: string;
   goHomeLabel: string;
   goHomeHref?: string;
@@ -28,10 +28,10 @@ const AccessDenied = (props: Props<AccessDeniedProps>) => {
   return (
     <FallbackState
       class={props.class}
-      title={props.title}
+      label={props.label}
       description={props.description}
       icon={<IoLockClosedOutline class={styles.icon} aria-hidden />}
-      action={<Button onClick={navigateHome}>{props.goHomeLabel}</Button>}
+      action={<Button onClick={navigateHome} label={props.goHomeLabel} />}
     />
   );
 };

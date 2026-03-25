@@ -3,6 +3,7 @@ import { type Accessor, For, type JSX, Show } from 'solid-js';
 
 import Button from '~/components/buttons/Button/Button';
 import Checkbox from '~/components/switchers/Checkbox/Checkbox';
+import { useI18n } from '~/i18n/I18nProvider';
 import classNames from '~/utils/classNames';
 
 import styles from './DataGridPro.module.css';
@@ -32,6 +33,7 @@ interface DataGridProHeaderProps<T extends Record<string, unknown>> {
 }
 
 const DataGridProHeader = <T extends Record<string, unknown>>(props: DataGridProHeaderProps<T>) => {
+  const { t } = useI18n();
   return (
     <div class={styles.header} style={{ height: `${props.headerHeight()}px` }}>
       <Show when={props.selectable()}>
@@ -39,7 +41,7 @@ const DataGridProHeader = <T extends Record<string, unknown>>(props: DataGridPro
           <Checkbox
             checked={props.allVisibleSelected()}
             onChange={props.onToggleAllVisible}
-            aria-label="Select all visible rows"
+            aria-label={t('table.selectAllVisibleRows')}
           />
         </div>
       </Show>
@@ -92,7 +94,7 @@ const DataGridProHeader = <T extends Record<string, unknown>>(props: DataGridPro
                 size="sm"
                 iconOnly
                 class={styles.resizeHandle}
-                aria-label={`Resize ${column.header}`}
+                aria-label={t('table.resizeColumn', { label: column.header })}
                 onMouseDown={(e) => props.onResizeStart(key(), e)}
                 onClick={(e) => e.stopPropagation()}
               >

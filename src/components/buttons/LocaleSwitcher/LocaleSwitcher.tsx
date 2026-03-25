@@ -1,27 +1,28 @@
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
+import classNames from '~/utils/classNames';
 
-import Button, { type ButtonOwnProps, type ButtonVariant } from '../Button/Button';
+import Button, { type ButtonVariant } from '../Button/Button';
+import styles from './LocaleSwitcher.module.css';
 
-interface LocaleSwitcherProps extends Pick<ButtonOwnProps, 'size' | 'class'> {
-  text: string;
+interface LocaleSwitcherProps {
   variant?: ButtonVariant;
-  switchLabel: string;
-  onSwitch: () => void;
 }
 
 const LocaleSwitcher = (props: Props<LocaleSwitcherProps>) => {
+  const { locale, setLocale, t } = useI18n();
+  const nextLocale = () => (locale() === 'en' ? 'pl' : 'en');
+
   return (
     <Button
-      class={props.class}
-      style={{ width: '60px' }}
+      class={classNames(styles.root, props.class)}
+      size="sm"
       variant={props.variant}
-      size={props.size}
-      onClick={props.onSwitch}
-      aria-label={props.switchLabel}
-      title={props.switchLabel}
-    >
-      {props.text}
-    </Button>
+      onClick={() => setLocale(nextLocale())}
+      aria-label={t('locale.switchLanguage')}
+      data-locale={locale()}
+      label={locale().toUpperCase()}
+    />
   );
 };
 
