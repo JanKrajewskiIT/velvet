@@ -3,7 +3,7 @@ import { createEffect, createMemo, createSignal, For, type JSX, untrack } from '
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import TreeItem from './TreeItem';
+import TreeItem from './TreeItem/TreeItem';
 import styles from './TreeView.module.css';
 
 export interface TreeNode {

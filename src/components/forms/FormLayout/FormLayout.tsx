@@ -1,12 +1,13 @@
 import { type JSX, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
+import type { DivCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import Stack from '../../surfaces/Stack/Stack';
 import styles from './FormLayout.module.css';
 
-interface FormLayoutOwnProps extends JSX.HTMLAttributes<HTMLDivElement> {
+interface FormLayoutOwnProps extends DivCoreNativeProps {
   children: JSX.Element;
 }
 

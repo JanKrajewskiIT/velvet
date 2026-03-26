@@ -1,6 +1,6 @@
 import { createUniqueId, splitProps } from 'solid-js';
 
-import CheckboxIndicator from '~/components/switchers/CheckboxIndicator/CheckboxIndicator';
+import CheckboxIndicator from '~/components/switchers/Checkbox/CheckboxIndicator/CheckboxIndicator';
 import ChoiceControl from '~/components/switchers/ChoiceControl/ChoiceControl';
 import type Props from '~/models/Props';
 import type { ChoiceInputCoreNativeProps } from '~/models/Props';

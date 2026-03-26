@@ -3,11 +3,12 @@ import { createEffect, createSignal, type JSX, onMount, Show, splitProps } from 
 
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
+import type { ComponentSize } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import IconButton from '../../buttons/IconButton/IconButton';
 import Text from '../../typography/Text/Text';
-import Input, { type InputSize } from '../Input/Input';
+import Input from '../Input/Input';
 import styles from './InlineEditableText.module.css';
 
 interface InlineEditableTextMessages {
@@ -22,7 +23,7 @@ interface InlineEditableTextProps {
   onChange: (value: string) => void;
   placeholder?: string;
   disabled?: boolean;
-  size?: InputSize;
+  size?: ComponentSize;
   startInEditMode?: boolean;
   saveLabel?: string;
   cancelLabel?: string;
@@ -109,7 +110,7 @@ const InlineEditableText = (props: Props<InlineEditableTextProps>) => {
               {local.value || emptyValueLabel()}
             </Text>
             <IconButton
-              icon={<IoPencil />}
+              icon={IoPencil}
               label={editButtonLabel()}
               onClick={beginEdit}
               disabled={local.disabled}
@@ -130,9 +131,9 @@ const InlineEditableText = (props: Props<InlineEditableTextProps>) => {
             aria-label={local.inputAriaLabel ?? t('inlineEditable.inputLabel')}
             autofocus
           />
-          <IconButton icon={<IoCheckmark />} label={saveButtonLabel()} onClick={saveEdit} size="sm" variant="subtle" />
+          <IconButton icon={IoCheckmark} label={saveButtonLabel()} onClick={saveEdit} size="sm" variant="subtle" />
           <IconButton
-            icon={<IoCloseOutline />}
+            icon={IoCloseOutline}
             label={cancelButtonLabel()}
             onClick={cancelEdit}
             size="sm"

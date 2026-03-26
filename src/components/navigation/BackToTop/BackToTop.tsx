@@ -59,7 +59,8 @@ const BackToTop = (props: Props<BackToTopProps>) => {
       elevation="popover"
       onClick={scrollToTop}
       label={label()}
-      icon={<IoArrowUp size={24} />}
+      icon={IoArrowUp}
+      iconSize="lg"
     />
   );
 };

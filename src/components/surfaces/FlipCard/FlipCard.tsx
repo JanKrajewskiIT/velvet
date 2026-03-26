@@ -1,11 +1,12 @@
 import { createMemo, createSignal, type JSX, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
+import type { DivCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import styles from './FlipCard.module.css';
 
-interface FlipCardOwnProps extends JSX.HTMLAttributes<HTMLDivElement> {
+interface FlipCardOwnProps extends DivCoreNativeProps {
   front: JSX.Element;
   back: JSX.Element;
   isFlipped?: boolean;

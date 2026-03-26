@@ -2,6 +2,7 @@ import { A, useLocation } from '@solidjs/router';
 import { FiMenu, FiX } from 'solid-icons/fi';
 import { createEffect, createMemo, createSignal, For, type JSX, on, splitProps } from 'solid-js';
 
+import Icon from '~/components/media/Icon/Icon';
 import useEscapeKey from '~/hooks/useEscapeKey';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
@@ -64,7 +65,7 @@ const Navbar = (props: Props<NavbarProps>) => {
       <div class={styles.actions}>
         {local.actions}
         <IconButton
-          icon={menuOpen() ? <FiX /> : <FiMenu />}
+          icon={menuOpen() ? FiX : FiMenu}
           class={styles.hamburger}
           onClick={toggleMenu}
           label={local.toggleMenuLabel}
@@ -79,7 +80,7 @@ const Navbar = (props: Props<NavbarProps>) => {
           <For each={local.navItems}>
             {(item) => (
               <A href={item.href} class={styles.mobileNavLink}>
-                <item.icon class={styles.mobileNavIcon} />
+                <Icon icon={item.icon} class={styles.mobileNavIcon} />
                 <Text as="span" variant="labelLg">
                   {item.label}
                 </Text>

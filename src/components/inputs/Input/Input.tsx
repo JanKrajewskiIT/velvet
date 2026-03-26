@@ -1,15 +1,13 @@
 import { splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
-import type { InputCoreNativeProps } from '~/models/Props';
+import type { ComponentSize, InputCoreNativeProps } from '~/models/Props';
 import { resolveAriaInvalid } from '~/utils/aria';
 
 import FieldBase from '../FieldBase/FieldBase';
 
-export type InputSize = 'sm' | 'md' | 'lg';
-
 interface InputOwnProps extends InputCoreNativeProps {
-  size?: InputSize;
+  size?: ComponentSize;
   invalid?: boolean;
 }
 

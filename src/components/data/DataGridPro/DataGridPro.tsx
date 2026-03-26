@@ -10,9 +10,9 @@ import type {
   DataGridProProps,
   DataGridProSortState,
 } from './DataGridPro.types';
-import DataGridProBody from './DataGridProBody';
-import DataGridProHeader from './DataGridProHeader';
-import DataGridProToolbar from './DataGridProToolbar';
+import DataGridProBody from './DataGridProBody/DataGridProBody';
+import DataGridProHeader from './DataGridProHeader/DataGridProHeader';
+import DataGridProToolbar from './DataGridProToolbar/DataGridProToolbar';
 import useDataGridProState from './useDataGridProState';
 
 const DataGridPro = <T extends Record<string, unknown>>(props: Props<DataGridProProps<T>>) => {

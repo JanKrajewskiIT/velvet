@@ -1,12 +1,12 @@
 import { createSignal, For, type JSX, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
-import type { InputCoreNativeProps } from '~/models/Props';
+import type { ComponentSize, InputCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import ClosableChip from '../../feedback/ClosableChip/ClosableChip';
 import FieldBase from '../FieldBase/FieldBase';
-import Input, { type InputSize } from '../Input/Input';
+import Input from '../Input/Input';
 import fieldInputResetStyles from '../shared/fieldInputReset.module.css';
 import styles from './TagInput.module.css';
 
@@ -14,7 +14,7 @@ interface TagInputOwnProps extends Omit<InputCoreNativeProps, 'value' | 'onChang
   value: string[];
   onChange: (tags: string[]) => void;
   placeholder?: string;
-  size?: InputSize;
+  size?: ComponentSize;
   inputAriaLabel?: string;
   removeTagLabel?: (tag: string) => string;
 }

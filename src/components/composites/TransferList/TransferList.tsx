@@ -131,7 +131,7 @@ const TransferList = (props: Props<TransferListProps>) => {
           disabled={sourceChecked().size === 0}
           onClick={moveSelectedRight}
           label={t('transfer.moveSelectedRight')}
-          icon={<IoChevronForward />}
+          icon={IoChevronForward}
           size="sm"
           variant="ghost"
         />
@@ -139,7 +139,7 @@ const TransferList = (props: Props<TransferListProps>) => {
           disabled={props.sourceItems.length === 0}
           onClick={moveAllRight}
           label={t('transfer.moveAllRight')}
-          icon={<IoPlayForward />}
+          icon={IoPlayForward}
           size="sm"
           variant="ghost"
         />
@@ -147,7 +147,7 @@ const TransferList = (props: Props<TransferListProps>) => {
           disabled={targetChecked().size === 0}
           onClick={moveSelectedLeft}
           label={t('transfer.moveSelectedLeft')}
-          icon={<IoChevronBack />}
+          icon={IoChevronBack}
           size="sm"
           variant="ghost"
         />
@@ -155,7 +155,7 @@ const TransferList = (props: Props<TransferListProps>) => {
           disabled={props.targetItems.length === 0}
           onClick={moveAllLeft}
           label={t('transfer.moveAllLeft')}
-          icon={<IoPlayBack />}
+          icon={IoPlayBack}
           size="sm"
           variant="ghost"
         />

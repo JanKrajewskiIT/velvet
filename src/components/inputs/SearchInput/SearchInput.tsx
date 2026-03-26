@@ -1,13 +1,13 @@
 import { IoClose, IoSearch } from 'solid-icons/io';
 import { type JSX, onCleanup, Show, splitProps } from 'solid-js';
 
+import Icon from '~/components/media/Icon/Icon';
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
-import type { InputCoreNativeProps } from '~/models/Props';
+import type { ComponentSize, InputCoreNativeProps } from '~/models/Props';
 
 import IconButton from '../../buttons/IconButton/IconButton';
 import AffixInput from '../AffixInput/AffixInput';
-import type { InputSize } from '../Input/Input';
 import styles from './SearchInput.module.css';
 
 interface SearchInputMessages {
@@ -22,7 +22,7 @@ interface SearchInputProps extends Omit<InputCoreNativeProps, 'value' | 'onInput
   onClear?: () => void;
   debounce?: number;
   clearLabel?: string;
-  size?: InputSize;
+  size?: ComponentSize;
   inputAriaLabel?: string;
   messages?: SearchInputMessages;
 }
@@ -94,10 +94,10 @@ const SearchInput = (props: Props<SearchInputProps>) => {
       placeholder={placeholderText()}
       disabled={local.disabled}
       autofocus={local.autofocus}
-      prefix={<IoSearch class={styles.icon} />}
+      prefix={<Icon icon={IoSearch} class={styles.icon} />}
       suffix={
         <Show when={local.value.length > 0}>
-          <IconButton icon={<IoClose />} label={clearButtonLabel()} onClick={handleClear} size="sm" variant="subtle" />
+          <IconButton icon={IoClose} label={clearButtonLabel()} onClick={handleClear} size="sm" variant="subtle" />
         </Show>
       }
       class={local.class}

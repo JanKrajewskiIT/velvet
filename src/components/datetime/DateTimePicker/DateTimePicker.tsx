@@ -1,8 +1,7 @@
-import { createMemo } from 'solid-js';
+import { createMemo, splitProps } from 'solid-js';
 
-import type { InputSize } from '~/components/inputs/Input/Input';
 import type Props from '~/models/Props';
-import type { AriaFieldProps } from '~/models/Props';
+import type { AriaFieldProps, ComponentSize } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import type { DatePickerMessages } from '../DatePicker/DatePicker';
@@ -24,58 +23,87 @@ interface DateTimePickerProps extends AriaFieldProps {
   timePlaceholder?: string;
   dateMessages?: DatePickerMessages;
   timeMessages?: TimePickerMessages;
-  size?: InputSize;
+  size?: ComponentSize;
 }
 
 const DateTimePicker = (props: Props<DateTimePickerProps>) => {
+  const [local, rest] = splitProps(props, [
+    'id',
+    'class',
+    'value',
+    'onChange',
+    'disabled',
+    'locale',
+    'minDate',
+    'maxDate',
+    'step',
+    'datePlaceholder',
+    'timePlaceholder',
+    'dateMessages',
+    'timeMessages',
+    'size',
+    'aria-labelledby',
+    'aria-describedby',
+    'aria-invalid',
+    'aria-errormessage',
+  ]);
   const parts = createMemo(() => {
-    const value = props.value ?? '';
+    const value = local.value ?? '';
     const [date = '', time = ''] = value.split('T');
     return { date, time };
   });
 
   const handleDateChange = (date: string) => {
     const nextTime = parts().time || '00:00';
-    props.onChange(`${date}T${nextTime}`);
+    local.onChange(`${date}T${nextTime}`);
   };
 
   const handleTimeChange = (time: string) => {
     const nextDate = parts().date;
     if (!nextDate) {
-      props.onChange('');
+      local.onChange('');
       return;
     }
 
-    props.onChange(`${nextDate}T${time}`);
+    local.onChange(`${nextDate}T${time}`);
   };
 
   return (
     <div
-      id={props.id}
-      class={classNames(styles.wrapper, props.class)}
+      {...rest}
+      class={classNames(styles.wrapper, local.class)}
       role="group"
-      aria-labelledby={props['aria-labelledby']}
-      aria-describedby={props['aria-describedby']}
+      aria-labelledby={local['aria-labelledby']}
+      aria-describedby={local['aria-describedby']}
     >
       <DatePicker
+        id={local.id}
         value={parts().date}
         onChange={handleDateChange}
-        disabled={props.disabled}
-        locale={props.locale}
-        size={props.size}
-        min={props.minDate}
-        max={props.maxDate}
-        placeholder={props.datePlaceholder}
-        messages={props.dateMessages}
+        disabled={local.disabled}
+        locale={local.locale}
+        size={local.size}
+        min={local.minDate}
+        max={local.maxDate}
+        placeholder={local.datePlaceholder}
+        messages={local.dateMessages}
+        aria-labelledby={local['aria-labelledby']}
+        aria-describedby={local['aria-describedby']}
+        aria-invalid={local['aria-invalid']}
+        aria-errormessage={local['aria-errormessage']}
       />
       <TimePicker
         value={parts().time}
         onChange={handleTimeChange}
-        disabled={props.disabled || !parts().date}
-        size={props.size}
-        step={props.step}
-        placeholder={props.timePlaceholder}
-        messages={props.timeMessages}
+        disabled={local.disabled || !parts().date}
+        size={local.size}
+        step={local.step}
+        placeholder={local.timePlaceholder}
+        messages={local.timeMessages}
+        aria-labelledby={local['aria-labelledby']}
+        aria-describedby={local['aria-describedby']}
+        aria-invalid={local['aria-invalid']}
+        aria-errormessage={local['aria-errormessage']}
       />
     </div>
   );

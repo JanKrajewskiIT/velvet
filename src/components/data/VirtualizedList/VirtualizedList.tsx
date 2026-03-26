@@ -2,11 +2,12 @@ import { createMemo, createSignal, For, type JSX, Show, splitProps } from 'solid
 
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
+import type { DivCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import styles from './VirtualizedList.module.css';
 
-interface VirtualizedListOwnProps<T> extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'children'> {
+interface VirtualizedListOwnProps<T> extends Omit<DivCoreNativeProps, 'children'> {
   items: T[];
   itemHeight: number;
   height: number;

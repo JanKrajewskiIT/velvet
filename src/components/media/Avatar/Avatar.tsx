@@ -1,15 +1,17 @@
 import { FiUser } from 'solid-icons/fi';
-import { createMemo, createSignal, type JSX, Show, splitProps } from 'solid-js';
+import { createMemo, createSignal, Show, splitProps } from 'solid-js';
 
+import Icon from '~/components/media/Icon/Icon';
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
+import type { ComponentSize, DivCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import styles from './Avatar.module.css';
 
-type AvatarSize = 'sm' | 'md' | 'lg' | 'xl';
+type AvatarSize = ComponentSize | 'xl';
 
-interface AvatarOwnProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'children'> {
+interface AvatarOwnProps extends Omit<DivCoreNativeProps, 'children'> {
   src?: string;
   alt?: string;
   name?: string;
@@ -55,7 +57,7 @@ const Avatar = (props: Props<AvatarOwnProps>) => {
       </Show>
       <Show when={!showImage() && !showInitials()}>
         <span class={styles.icon}>
-          <FiUser />
+          <Icon icon={FiUser} />
         </span>
       </Show>
     </div>

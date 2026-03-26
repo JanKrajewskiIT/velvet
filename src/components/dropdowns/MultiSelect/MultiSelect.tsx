@@ -1,23 +1,17 @@
 import { createMemo, createUniqueId, For, Show, splitProps } from 'solid-js';
 
 import ClosableChip from '~/components/feedback/ClosableChip/ClosableChip';
-import type { InputSize } from '~/components/inputs/Input/Input';
-import CheckboxIndicator from '~/components/switchers/CheckboxIndicator/CheckboxIndicator';
+import CheckboxIndicator from '~/components/switchers/Checkbox/CheckboxIndicator/CheckboxIndicator';
+import useDropdownPanel from '~/hooks/useDropdownPanel';
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
-import type { AriaFieldProps } from '~/models/Props';
+import type { AriaFieldProps, ComponentSize } from '~/models/Props';
 import { resolveAriaInvalid } from '~/utils/aria';
 import classNames from '~/utils/classNames';
 
-import DropdownChevronFieldTrigger from '../DropdownChevronFieldTrigger/DropdownChevronFieldTrigger';
-import DropdownOption from '../DropdownOption/DropdownOption';
-import DropdownSurface from '../DropdownSurface/DropdownSurface';
-import {
-  createDropdownSurfaceKeyDownHandler,
-  focusDropdownItem,
-  getDropdownOpenTarget,
-} from '../shared/dropdownKeyboard';
-import useDropdownState from '../shared/useDropdownState';
+import DropdownChevronFieldTrigger from '../Dropdown/DropdownChevronFieldTrigger/DropdownChevronFieldTrigger';
+import DropdownOption from '../Dropdown/DropdownOption/DropdownOption';
+import DropdownSurface from '../Dropdown/DropdownSurface/DropdownSurface';
 import styles from './MultiSelect.module.css';
 
 export interface MultiSelectOption {
@@ -35,7 +29,7 @@ interface MultiSelectOwnProps extends AriaFieldProps {
   emptyLabel?: string;
   removeLabel?: string;
   disabled?: boolean;
-  size?: InputSize;
+  size?: ComponentSize;
 }
 
 const MultiSelect = (props: Props<MultiSelectOwnProps>) => {
@@ -60,7 +54,12 @@ const MultiSelect = (props: Props<MultiSelectOwnProps>) => {
   let triggerRef: HTMLButtonElement | undefined;
   let panelRef: HTMLDivElement | undefined;
   const dropdownId = createUniqueId();
-  const dropdown = useDropdownState(() => rootRef, { isInteractive: () => !local.disabled });
+  const dropdown = useDropdownPanel({
+    rootRef: () => rootRef,
+    panelRef: () => panelRef,
+    triggerRef: () => triggerRef,
+    isInteractive: () => !local.disabled,
+  });
 
   const labelsByValue = createMemo(() => {
     return new Map(local.options.map((option) => [option.value, option.label]));
@@ -101,27 +100,10 @@ const MultiSelect = (props: Props<MultiSelectOwnProps>) => {
     dropdown.toggle();
   };
 
-  const openAndFocus = (target: 'first' | 'last') => {
-    dropdown.openDropdown();
-    requestAnimationFrame(() => {
-      if (!panelRef) return;
-      focusDropdownItem(panelRef, target);
-    });
-  };
-
   const handleTriggerKeyDown = (e: KeyboardEvent) => {
-    if (local.disabled || dropdown.open()) return;
-
-    const target = getDropdownOpenTarget(e);
-    if (!target) return;
-    openAndFocus(target);
+    if (local.disabled) return;
+    dropdown.openFromKeyboard(e, { ignoreWhenOpen: true });
   };
-
-  const handleDropdownKeyDown = createDropdownSurfaceKeyDownHandler({
-    getSurface: () => panelRef,
-    closeDropdown: dropdown.close,
-    focusTrigger: () => triggerRef?.focus(),
-  });
 
   return (
     <div {...rest} ref={rootRef} class={classNames(styles.wrapper, local.class)}>
@@ -154,7 +136,7 @@ const MultiSelect = (props: Props<MultiSelectOwnProps>) => {
             origin="top"
             role="listbox"
             aria-multiselectable="true"
-            onKeyDown={handleDropdownKeyDown}
+            onKeyDown={dropdown.handlePanelKeyDown}
           >
             <Show
               when={local.options.length > 0}

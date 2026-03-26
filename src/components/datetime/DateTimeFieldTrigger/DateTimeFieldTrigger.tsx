@@ -1,11 +1,12 @@
 import { type JSX, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
+import type { DivCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import styles from './DateTimeFieldTrigger.module.css';
 
-interface DateTimeFieldTriggerOwnProps extends JSX.HTMLAttributes<HTMLDivElement> {
+interface DateTimeFieldTriggerOwnProps extends DivCoreNativeProps {
   open?: boolean;
   trigger: (triggerClass: string) => JSX.Element;
   children?: JSX.Element;

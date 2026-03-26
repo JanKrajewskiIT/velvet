@@ -2,17 +2,17 @@ import type { JSX } from 'solid-js';
 import { splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
-import type { InputCoreNativeProps } from '~/models/Props';
+import type { ComponentSize, InputCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 import getInputSizeClass from '~/utils/getInputSizeClass';
 
 import FieldBase from '../FieldBase/FieldBase';
-import Input, { type InputSize } from '../Input/Input';
+import Input from '../Input/Input';
 import fieldInputResetStyles from '../shared/fieldInputReset.module.css';
 import styles from './AffixInput.module.css';
 
 interface AffixInputOwnProps extends InputCoreNativeProps {
-  size?: InputSize;
+  size?: ComponentSize;
   invalid?: boolean;
   prefix?: JSX.Element;
   suffix?: JSX.Element;

@@ -1,16 +1,15 @@
 import { splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
-import type { TextAreaCoreNativeProps } from '~/models/Props';
+import type { ComponentSize, TextAreaCoreNativeProps } from '~/models/Props';
 import { resolveAriaInvalid } from '~/utils/aria';
 import classNames from '~/utils/classNames';
 
 import FieldBase from '../FieldBase/FieldBase';
-import type { InputSize } from '../Input/Input';
 import styles from './TextArea.module.css';
 
 interface TextAreaOwnProps extends TextAreaCoreNativeProps {
-  size?: InputSize;
+  size?: ComponentSize;
   invalid?: boolean;
 }
 

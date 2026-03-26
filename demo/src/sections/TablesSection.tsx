@@ -18,10 +18,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  Text,
+  useI18n,
 } from '@jankrajewskiit/ui';
 import { createMemo, createSignal } from 'solid-js';
 
 import { PreviewGroup, PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
+import { type DemoI18nMessageKey, getDemoMessages } from '../i18n/messages';
+import { interpolateText, renderRichText } from '../i18n/renderRichText';
 
 interface PackageRow extends Record<string, unknown> {
   id: string;
@@ -59,18 +63,6 @@ const DATA_GRID_ROWS: PackageRow[] = Array.from({ length: 2500 }, (_, index) => 
   };
 });
 
-const PACKAGE_COLUMNS: DataTableColumn<PackageRow>[] = [
-  { key: 'name', header: 'Package', sortable: true },
-  { key: 'version', header: 'Version' },
-  {
-    key: 'downloads',
-    header: 'Downloads',
-    sortable: true,
-    render: (val) => <span>{Number(val).toLocaleString()}</span>,
-  },
-  { key: 'license', header: 'License', sortable: true },
-];
-
 const DATA_GRID_COLUMNS: DataGridProColumn<PackageRow>[] = [
   { key: 'name', header: 'Package', pinned: 'left', width: 220, minWidth: 150, sortable: true },
   { key: 'version', header: 'Version', width: 120, minWidth: 90, sortable: true },
@@ -80,18 +72,15 @@ const DATA_GRID_COLUMNS: DataGridProColumn<PackageRow>[] = [
     width: 160,
     minWidth: 120,
     sortable: true,
-    render: (value) => <span>{Number(value).toLocaleString()}</span>,
+    render: (value) => (
+      <Text as="span" variant="bodySm">
+        {Number(value).toLocaleString()}
+      </Text>
+    ),
   },
   { key: 'license', header: 'License', width: 140, minWidth: 100, sortable: true },
   { key: 'category', header: 'Category', width: 160, minWidth: 120, sortable: true, pinned: 'right' },
 ];
-
-const DATA_GRID_COLUMN_SETTINGS: ColumnManagerColumn[] = DATA_GRID_COLUMNS.map((column) => ({
-  key: column.key,
-  label: column.header,
-  canHide: true,
-  canPin: true,
-}));
 
 const DATA_GRID_DEFAULT_ORDER = DATA_GRID_COLUMNS.map((column) => column.key);
 
@@ -177,6 +166,10 @@ const applyQueryBuilder = (rows: PackageRow[], query: QueryBuilderValue) => {
 };
 
 const TablesSection = () => {
+  const { locale } = useI18n();
+  const dictionary = createMemo(() => getDemoMessages(locale()));
+  const t = (key: DemoI18nMessageKey, params?: Record<string, string | number>): string =>
+    interpolateText(dictionary()[key], params);
   const [query, setQuery] = createSignal('');
   const [gridFilterQuery, setGridFilterQuery] = createSignal('');
   const [gridSort, setGridSort] = createSignal<DataGridProSortState>({ key: 'downloads', direction: 'desc' });
@@ -228,120 +221,223 @@ const TablesSection = () => {
     return sorted;
   });
 
+  const packageColumns = createMemo<DataTableColumn<PackageRow>[]>(() => [
+    { key: 'name', header: t('demo.text.tables.columns.package'), sortable: true },
+    { key: 'version', header: t('demo.text.tables.columns.version') },
+    {
+      key: 'downloads',
+      header: t('demo.text.tables.columns.downloads'),
+      sortable: true,
+      render: (val) => (
+        <Text as="span" variant="bodySm">
+          {Number(val).toLocaleString()}
+        </Text>
+      ),
+    },
+    { key: 'license', header: t('demo.text.tables.columns.license'), sortable: true },
+  ]);
+
+  const dataGridColumns = createMemo<DataGridProColumn<PackageRow>[]>(() => [
+    {
+      key: 'name',
+      header: t('demo.text.tables.columns.package'),
+      pinned: 'left',
+      width: 220,
+      minWidth: 150,
+      sortable: true,
+    },
+    { key: 'version', header: t('demo.text.tables.columns.version'), width: 120, minWidth: 90, sortable: true },
+    {
+      key: 'downloads',
+      header: t('demo.text.tables.columns.downloads'),
+      width: 160,
+      minWidth: 120,
+      sortable: true,
+      render: (value) => (
+        <Text as="span" variant="bodySm">
+          {Number(value).toLocaleString()}
+        </Text>
+      ),
+    },
+    { key: 'license', header: t('demo.text.tables.columns.license'), width: 140, minWidth: 100, sortable: true },
+    {
+      key: 'category',
+      header: t('demo.text.tables.columns.category'),
+      width: 160,
+      minWidth: 120,
+      sortable: true,
+      pinned: 'right',
+    },
+  ]);
+
+  const dataGridColumnSettings = createMemo<ColumnManagerColumn[]>(() =>
+    dataGridColumns().map((column) => ({
+      key: column.key,
+      label: column.header,
+      canHide: true,
+      canPin: true,
+    }))
+  );
+
+  const queryBuilderFields = createMemo<QueryBuilderField[]>(() => [
+    { key: 'name', label: t('demo.text.tables.columns.package'), type: 'text' },
+    { key: 'version', label: t('demo.text.tables.columns.version'), type: 'text' },
+    {
+      key: 'license',
+      label: t('demo.text.tables.columns.license'),
+      type: 'select',
+      options: [
+        { value: 'MIT', label: 'MIT' },
+        { value: 'Apache-2.0', label: 'Apache-2.0' },
+      ],
+    },
+    {
+      key: 'category',
+      label: t('demo.text.tables.columns.category'),
+      type: 'select',
+      options: [
+        { value: 'framework', label: t('demo.text.tables.category.framework') },
+        { value: 'tooling', label: t('demo.text.tables.category.tooling') },
+        { value: 'language', label: t('demo.text.tables.category.language') },
+        { value: 'testing', label: t('demo.text.tables.category.testing') },
+        { value: 'quality', label: t('demo.text.tables.category.quality') },
+        { value: 'css', label: t('demo.text.tables.category.css') },
+      ],
+    },
+    { key: 'downloads', label: t('demo.text.tables.columns.downloads'), type: 'number' },
+  ]);
+
+  const dataGridDefaultOrder = createMemo(() => dataGridColumns().map((column) => column.key));
+  const dataGridDefaultVisibility = createMemo(
+    () => Object.fromEntries(dataGridColumns().map((column) => [column.key, true])) as Record<string, boolean>
+  );
+  const dataGridDefaultPinning = createMemo<DataGridProColumnPinning>(() =>
+    Object.fromEntries(dataGridColumns().map((column) => [column.key, column.pinned ?? null]))
+  );
+
   return (
     <div>
-      <ShowcaseSection title="Table" subtitle="Composable table primitives for custom layouts">
+      <ShowcaseSection
+        title={t('demo.showcase.tables.table.title')}
+        subtitle={t('demo.showcase.tables.table.subtitle')}
+      >
         <PreviewPanel>
-          <PreviewGroup title="Examples">
+          <PreviewGroup title={t('demo.text.common.examples')}>
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableHeader>Name</TableHeader>
-                  <TableHeader>Version</TableHeader>
-                  <TableHeader>Status</TableHeader>
+                  <TableHeader>{t('demo.text.tables.simple.name')}</TableHeader>
+                  <TableHeader>{t('demo.text.tables.simple.version')}</TableHeader>
+                  <TableHeader>{t('demo.text.tables.simple.status')}</TableHeader>
                 </TableRow>
               </TableHead>
               <TableBody>
                 <TableRow>
                   <TableCell>solid-js</TableCell>
                   <TableCell>1.9.7</TableCell>
-                  <TableCell>stable</TableCell>
+                  <TableCell>{t('demo.text.tables.simple.stable')}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>vite</TableCell>
                   <TableCell>7.3.1</TableCell>
-                  <TableCell>stable</TableCell>
+                  <TableCell>{t('demo.text.tables.simple.stable')}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>typescript</TableCell>
                   <TableCell>5.9.3</TableCell>
-                  <TableCell>stable</TableCell>
+                  <TableCell>{t('demo.text.tables.simple.stable')}</TableCell>
                 </TableRow>
               </TableBody>
             </Table>
           </PreviewGroup>
         </PreviewPanel>
-        <ShowcaseMeta>
-          Use Table, TableHead, TableBody, TableRow, TableHeader and TableCell to build custom tables with full control.
-        </ShowcaseMeta>
+        <ShowcaseMeta>{t('demo.text.tables.simple.meta')}</ShowcaseMeta>
       </ShowcaseSection>
 
-      <ShowcaseSection title="DataTable" subtitle="Sortable and paginated data grid">
+      <ShowcaseSection
+        title={t('demo.showcase.tables.dataTable.title')}
+        subtitle={t('demo.showcase.tables.dataTable.subtitle')}
+      >
         <PreviewPanel>
-          <PreviewGroup title="Examples">
+          <PreviewGroup title={t('demo.text.common.examples')}>
             <DataTable<PackageRow>
               data={PACKAGE_DATA}
-              columns={PACKAGE_COLUMNS}
+              columns={packageColumns()}
               pageSize={4}
               sortable
               filterable
               filterQuery={query()}
               onFilterQueryChange={setQuery}
-              filterPlaceholder="Search package, version or license"
+              filterPlaceholder={t('demo.text.tables.dataTable.searchPlaceholder')}
               striped
               hoverable
             />
           </PreviewGroup>
         </PreviewPanel>
         <ShowcaseMeta>
-          Click column headers to sort and use built-in filtering API. Pagination with ellipsis appears when rows exceed{' '}
-          <CodeText as="span" class="codeInline">
-            pageSize
-          </CodeText>
-          . Supports custom cell render and column width.
+          {renderRichText(t('demo.text.tables.dataTable.meta'), {
+            pageSize: (
+              <CodeText as="span" class="codeInline">
+                pageSize
+              </CodeText>
+            ),
+          })}
         </ShowcaseMeta>
       </ShowcaseSection>
 
-      <ShowcaseSection title="DataTable empty state" subtitle="Custom message when there is no data">
+      <ShowcaseSection
+        title={t('demo.showcase.tables.dataTableEmptyState.title')}
+        subtitle={t('demo.showcase.tables.dataTableEmptyState.subtitle')}
+      >
         <PreviewPanel>
-          <PreviewGroup title="Examples">
+          <PreviewGroup title={t('demo.text.common.examples')}>
             <DataTable<PackageRow>
               data={[]}
-              columns={PACKAGE_COLUMNS}
+              columns={packageColumns()}
               pageSize={4}
-              emptyMessage="No packages match your filters."
+              emptyMessage={t('demo.text.tables.dataTable.emptyMessage')}
             />
           </PreviewGroup>
         </PreviewPanel>
       </ShowcaseSection>
 
       <ShowcaseSection
-        title="DataGridPro v3"
-        subtitle="Virtualized rows, pinning, resizing, selection, toolbar actions, visibility and reorder"
+        title={t('demo.showcase.tables.dataGridProV3.title')}
+        subtitle={t('demo.showcase.tables.dataGridProV3.subtitle')}
       >
         <PreviewPanel>
-          <PreviewGroup title="Examples">
+          <PreviewGroup title={t('demo.text.common.examples')}>
             <QueryBuilder
-              fields={QUERY_BUILDER_FIELDS}
+              fields={queryBuilderFields()}
               value={advancedQuery()}
               onChange={setAdvancedQuery}
-              description="Compose advanced filters with AND/OR logic before rendering the grid."
-              addRuleLabel="Add condition"
-              clearLabel="Clear conditions"
+              description={t('demo.text.tables.queryBuilder.description')}
+              addRuleLabel={t('demo.text.tables.queryBuilder.addCondition')}
+              clearLabel={t('demo.text.tables.queryBuilder.clearConditions')}
             />
             <ColumnManager
-              columns={DATA_GRID_COLUMN_SETTINGS}
+              columns={dataGridColumnSettings()}
               order={gridColumnOrder()}
               onOrderChange={setGridColumnOrder}
               visibility={gridColumnVisibility()}
               onVisibilityChange={setGridColumnVisibility}
               pinning={gridColumnPinning()}
               onPinningChange={setGridColumnPinning}
-              defaultOrder={DATA_GRID_DEFAULT_ORDER}
-              defaultVisibility={DATA_GRID_DEFAULT_VISIBILITY}
-              defaultPinning={DATA_GRID_DEFAULT_PINNING}
-              description="Configure order, visibility and pinning before rendering the grid."
-              resetLabel="Reset settings"
+              defaultOrder={dataGridDefaultOrder()}
+              defaultVisibility={dataGridDefaultVisibility()}
+              defaultPinning={dataGridDefaultPinning()}
+              description={t('demo.text.tables.columnManager.description')}
+              resetLabel={t('demo.text.tables.columnManager.resetSettings')}
             />
             <DataGridPro<PackageRow>
               data={serverRows()}
-              columns={DATA_GRID_COLUMNS}
+              columns={dataGridColumns()}
               persistenceKey="demo-packages-grid"
-              resetPersistenceLabel="Reset saved grid"
-              importSettingsLabel="Import layout JSON"
-              exportSettingsLabel="Export layout JSON"
-              persistedBadgeLabel="Persisted"
-              defaultBadgeLabel="Default"
+              resetPersistenceLabel={t('demo.text.tables.dataGrid.resetSavedGrid')}
+              importSettingsLabel={t('demo.text.tables.dataGrid.importLayoutJson')}
+              exportSettingsLabel={t('demo.text.tables.dataGrid.exportLayoutJson')}
+              persistedBadgeLabel={t('demo.text.tables.dataGrid.persisted')}
+              defaultBadgeLabel={t('demo.text.tables.dataGrid.default')}
               height={420}
               rowHeight={40}
               headerHeight={44}
@@ -350,7 +446,7 @@ const TablesSection = () => {
               filterable
               filterQuery={gridFilterQuery()}
               onFilterQueryChange={setGridFilterQuery}
-              filterPlaceholder="Server filter: package, version, license or category"
+              filterPlaceholder={t('demo.text.tables.dataGrid.serverFilterPlaceholder')}
               sortKey={gridSort().key}
               sortDirection={gridSort().direction}
               onSortChange={setGridSort}
@@ -370,13 +466,7 @@ const TablesSection = () => {
             />
           </PreviewGroup>
         </PreviewPanel>
-        <ShowcaseMeta>
-          QueryBuilder applies advanced AND/OR rules before DataGridPro sorting. Drag header separators to resize. Use
-          ColumnManager to control order, visibility and pinning, then verify the same layout in DataGridPro. Sorting
-          and filtering are in manual mode (server-style control), rows support checkbox selection, and the toolbar
-          still provides JSON import/export plus persisted/default layout badge. Use "Reset saved grid" to clear
-          persisted layout in localStorage. Selected: {selectedRows().length}.
-        </ShowcaseMeta>
+        <ShowcaseMeta>{t('demo.text.tables.dataGrid.meta', { count: selectedRows().length })}</ShowcaseMeta>
       </ShowcaseSection>
     </div>
   );

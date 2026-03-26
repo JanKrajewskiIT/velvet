@@ -1,7 +1,8 @@
-import { For, type JSX, splitProps } from 'solid-js';
+import { For, splitProps } from 'solid-js';
 
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
+import type { HTMLElementCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import Button from '../../buttons/Button/Button';
@@ -9,7 +10,7 @@ import styles from './Pagination.module.css';
 
 type PageItem = number | 'left-ellipsis' | 'right-ellipsis';
 
-interface PaginationOwnProps extends Omit<JSX.HTMLAttributes<HTMLElement>, 'onChange'> {
+interface PaginationOwnProps extends Omit<HTMLElementCoreNativeProps, 'onChange'> {
   page: number;
   totalPages: number;
   onChange: (page: number) => void;

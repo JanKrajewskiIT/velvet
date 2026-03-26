@@ -1,0 +1,21 @@
+.createForm {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  padding: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+  display: grid;
+  gap: var(--spacing-xs);
+}
+
+.createRowSingle {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-xs);
+}
+
+.createActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-xs);
+}

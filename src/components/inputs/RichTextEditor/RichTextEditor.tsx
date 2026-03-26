@@ -2,22 +2,22 @@ import { createEffect, createSignal, type JSX, Show, splitProps } from 'solid-js
 
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
+import type { ComponentSize, DivCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import Button from '../../buttons/Button/Button';
 import FieldBase from '../FieldBase/FieldBase';
-import type { InputSize } from '../Input/Input';
 import Input from '../Input/Input';
 import styles from './RichTextEditor.module.css';
 
-interface RichTextEditorOwnProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'onChange'> {
+interface RichTextEditorOwnProps extends Omit<DivCoreNativeProps, 'onChange'> {
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
   ariaLabel?: string;
   disabled?: boolean;
   minHeight?: string;
-  size?: InputSize;
+  size?: ComponentSize;
 }
 
 const RichTextEditor = (props: Props<RichTextEditorOwnProps>) => {
@@ -203,7 +203,7 @@ const RichTextEditor = (props: Props<RichTextEditorOwnProps>) => {
               type="url"
               size={local.size}
               value={linkDraft()}
-              placeholder="https://example.com"
+              placeholder={t('richText.linkPlaceholder')}
               disabled={local.disabled}
               class={styles.linkInput}
               onInput={handleLinkDraftInput}

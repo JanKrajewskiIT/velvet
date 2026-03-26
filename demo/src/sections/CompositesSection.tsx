@@ -19,6 +19,7 @@ import {
   Text,
   type TransferItem,
   TransferList,
+  useI18n,
   Wizard,
 } from '@jankrajewskiit/ui';
 import {
@@ -35,20 +36,12 @@ import {
   IoSettings,
   IoTrash,
 } from 'solid-icons/io';
-import { createMemo, createSignal, For, Show } from 'solid-js';
+import { createEffect, createMemo, createSignal, For, Show } from 'solid-js';
 
 import type { SectionId } from '../App';
 import { PreviewGroup, PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
-
-const INITIAL_SOURCE: TransferItem[] = [
-  { id: '1', label: 'TypeScript' },
-  { id: '2', label: 'CSS Modules' },
-  { id: '3', label: 'Vite' },
-  { id: '4', label: 'ESLint' },
-  { id: '5', label: 'Prettier' },
-];
-
-const INITIAL_TARGET: TransferItem[] = [{ id: '6', label: 'SolidJS' }];
+import { type DemoI18nMessageKey, getDemoMessages } from '../i18n/messages';
+import { renderRichText } from '../i18n/renderRichText';
 
 type AnalysisState = 'idle' | 'loading' | 'result' | 'error';
 
@@ -77,259 +70,270 @@ interface KanbanDemoItem extends KanbanItemBase {
   priority: 'low' | 'medium' | 'high';
 }
 
-const createTask = (index: number): TaskItem => ({
-  id: crypto.randomUUID(),
-  title: `Task ${index}`,
-  owner: 'Product Team',
-});
-
-const KANBAN_COLUMNS: KanbanColumn[] = [
-  { id: 'todo', title: 'To do' },
-  { id: 'in-progress', title: 'In progress' },
-  { id: 'done', title: 'Done' },
+const INITIAL_SOURCE: TransferItem[] = [
+  { id: '1', label: 'TypeScript' },
+  { id: '2', label: 'CSS Modules' },
+  { id: '3', label: 'Vite' },
+  { id: '4', label: 'ESLint' },
+  { id: '5', label: 'Prettier' },
 ];
 
-const INITIAL_KANBAN_ITEMS: KanbanDemoItem[] = [
+const INITIAL_TARGET: TransferItem[] = [{ id: '6', label: 'SolidJS' }];
+
+const createTask = (index: number, t: (key: DemoI18nMessageKey) => string): TaskItem => ({
+  id: crypto.randomUUID(),
+  title: `${t('demo.text.composites.editableCollection.taskLabel')} ${index}`,
+  owner: t('demo.text.composites.editableCollection.defaultOwner'),
+});
+
+const createKanbanColumns = (t: (key: DemoI18nMessageKey) => string): KanbanColumn[] => [
+  { id: 'todo', title: t('demo.text.composites.kanban.column.todo') },
+  { id: 'in-progress', title: t('demo.text.composites.kanban.column.inProgress') },
+  { id: 'done', title: t('demo.text.composites.kanban.column.done') },
+];
+
+const createInitialKanbanItems = (t: (key: DemoI18nMessageKey) => string): KanbanDemoItem[] => [
   {
     id: 'kanban-1',
     columnId: 'todo',
-    title: 'Design system review',
-    description: 'Audit inconsistent paddings in legacy cards.',
-    owner: 'Anna',
+    title: t('demo.text.composites.kanban.item.designSystemReview.title'),
+    description: t('demo.text.composites.kanban.item.designSystemReview.description'),
+    owner: t('demo.text.common.owner.anna'),
     priority: 'high',
   },
   {
     id: 'kanban-2',
     columnId: 'todo',
-    title: 'Write migration notes',
-    description: 'Summarize DataGridPro v3 API additions.',
-    owner: 'Marek',
+    title: t('demo.text.composites.kanban.item.writeMigrationNotes.title'),
+    description: t('demo.text.composites.kanban.item.writeMigrationNotes.description'),
+    owner: t('demo.text.common.owner.marek'),
     priority: 'medium',
   },
   {
     id: 'kanban-3',
     columnId: 'in-progress',
-    title: 'Polish interactions',
-    description: 'Finalize keyboard UX for grid toolbar.',
-    owner: 'Jan',
+    title: t('demo.text.composites.kanban.item.polishInteractions.title'),
+    description: t('demo.text.composites.kanban.item.polishInteractions.description'),
+    owner: t('demo.text.common.owner.jan'),
     priority: 'high',
   },
   {
     id: 'kanban-4',
     columnId: 'done',
-    title: 'Ship release notes',
-    description: 'Publish changelog to docs portal.',
-    owner: 'Kasia',
+    title: t('demo.text.composites.kanban.item.shipReleaseNotes.title'),
+    description: t('demo.text.composites.kanban.item.shipReleaseNotes.description'),
+    owner: t('demo.text.common.owner.kasia'),
     priority: 'low',
   },
 ];
 
-const SCHEDULER_EVENTS: SchedulerEvent[] = [
+const createSchedulerEvents = (t: (key: DemoI18nMessageKey) => string): SchedulerEvent[] => [
   {
     id: 'event-1',
-    title: 'Design review',
+    title: t('demo.text.composites.scheduler.event.designReview.title'),
     date: '2026-03-12',
     time: '09:30',
-    description: 'Review dashboard cards and interaction states.',
+    description: t('demo.text.composites.scheduler.event.designReview.description'),
   },
   {
     id: 'event-2',
-    title: 'API sync',
+    title: t('demo.text.composites.scheduler.event.apiSync.title'),
     date: '2026-03-12',
     time: '13:00',
-    description: 'Align contract for DataGrid server-side sorting.',
+    description: t('demo.text.composites.scheduler.event.apiSync.description'),
   },
   {
     id: 'event-3',
-    title: 'UX workshop sprint',
+    title: t('demo.text.composites.scheduler.event.uxWorkshopSprint.title'),
     date: '2026-03-14',
     endDate: '2026-03-16',
     time: '11:00',
-    description: 'Collect feedback for scheduling and planning flows during a multi-day workshop.',
+    description: t('demo.text.composites.scheduler.event.uxWorkshopSprint.description'),
   },
   {
     id: 'event-4',
-    title: 'Release prep',
+    title: t('demo.text.composites.scheduler.event.releasePrep.title'),
     date: '2026-03-19',
     time: '16:00',
-    description: 'Finalize changelog and migration notes.',
+    description: t('demo.text.composites.scheduler.event.releasePrep.description'),
   },
 ];
 
-const COMMAND_ITEMS = [
+const createCommandItems = (t: (key: DemoI18nMessageKey) => string) => [
   {
     id: 'dashboard',
-    label: 'Go to Dashboard',
-    description: 'Navigate to main dashboard',
-    group: 'Navigation',
+    label: t('demo.text.composites.commandPalette.item.dashboard.label'),
+    description: t('demo.text.composites.commandPalette.item.dashboard.description'),
+    group: t('demo.text.composites.commandPalette.group.navigation'),
     icon: <IoHome size={16} />,
     onSelect: () => {},
   },
   {
     id: 'settings',
-    label: 'Go to Settings',
-    description: 'Open app settings',
-    group: 'Navigation',
+    label: t('demo.text.composites.commandPalette.item.settings.label'),
+    description: t('demo.text.composites.commandPalette.item.settings.description'),
+    group: t('demo.text.composites.commandPalette.group.navigation'),
     icon: <IoSettings size={16} />,
     onSelect: () => {},
   },
   {
     id: 'projects',
-    label: 'Go to Projects',
-    description: 'Open projects workspace',
-    group: 'Navigation',
+    label: t('demo.text.composites.commandPalette.item.projects.label'),
+    description: t('demo.text.composites.commandPalette.item.projects.description'),
+    group: t('demo.text.composites.commandPalette.group.navigation'),
     icon: <IoDocumentText size={16} />,
     onSelect: () => {},
   },
   {
     id: 'inbox',
-    label: 'Go to Inbox',
-    description: 'Review recent updates and messages',
-    group: 'Navigation',
+    label: t('demo.text.composites.commandPalette.item.inbox.label'),
+    description: t('demo.text.composites.commandPalette.item.inbox.description'),
+    group: t('demo.text.composites.commandPalette.group.navigation'),
     icon: <IoMail size={16} />,
     onSelect: () => {},
   },
   {
     id: 'create',
-    label: 'Create new item',
-    description: 'Add a new entry',
-    group: 'Actions',
+    label: t('demo.text.composites.commandPalette.item.create.label'),
+    description: t('demo.text.composites.commandPalette.item.create.description'),
+    group: t('demo.text.composites.commandPalette.group.actions'),
     icon: <IoAdd size={16} />,
     onSelect: () => {},
   },
   {
     id: 'export',
-    label: 'Export data',
-    description: 'Download selected records as CSV',
-    group: 'Actions',
+    label: t('demo.text.composites.commandPalette.item.export.label'),
+    description: t('demo.text.composites.commandPalette.item.export.description'),
+    group: t('demo.text.composites.commandPalette.group.actions'),
     icon: <IoDownload size={16} />,
     onSelect: () => {},
   },
   {
     id: 'duplicate',
-    label: 'Duplicate item',
-    description: 'Create a copy of the current entry',
-    group: 'Actions',
+    label: t('demo.text.composites.commandPalette.item.duplicate.label'),
+    description: t('demo.text.composites.commandPalette.item.duplicate.description'),
+    group: t('demo.text.composites.commandPalette.group.actions'),
     icon: <IoCopy size={16} />,
     onSelect: () => {},
   },
   {
     id: 'bulk-archive',
-    label: 'Archive selected',
-    description: 'Move selected entries to archive',
-    group: 'Actions',
+    label: t('demo.text.composites.commandPalette.item.bulkArchive.label'),
+    description: t('demo.text.composites.commandPalette.item.bulkArchive.description'),
+    group: t('demo.text.composites.commandPalette.group.actions'),
     icon: <IoTrash size={16} />,
     onSelect: () => {},
   },
   {
     id: 'theme-light',
-    label: 'Switch to light theme',
-    description: 'Apply light mode colors',
-    group: 'Preferences',
+    label: t('demo.text.composites.commandPalette.item.themeLight.label'),
+    description: t('demo.text.composites.commandPalette.item.themeLight.description'),
+    group: t('demo.text.composites.commandPalette.group.preferences'),
     icon: <IoSettings size={16} />,
     onSelect: () => {},
   },
   {
     id: 'theme-dark',
-    label: 'Switch to dark theme',
-    description: 'Apply dark mode colors',
-    group: 'Preferences',
+    label: t('demo.text.composites.commandPalette.item.themeDark.label'),
+    description: t('demo.text.composites.commandPalette.item.themeDark.description'),
+    group: t('demo.text.composites.commandPalette.group.preferences'),
     icon: <IoNotifications size={16} />,
     onSelect: () => {},
   },
   {
     id: 'open-shortcuts',
-    label: 'Open keyboard shortcuts',
-    description: 'Show list of available hotkeys',
-    group: 'Preferences',
+    label: t('demo.text.composites.commandPalette.item.openShortcuts.label'),
+    description: t('demo.text.composites.commandPalette.item.openShortcuts.description'),
+    group: t('demo.text.composites.commandPalette.group.preferences'),
     icon: <IoSearch size={16} />,
     onSelect: () => {},
   },
   {
     id: 'schedule-review',
-    label: 'Schedule review',
-    description: 'Plan a calendar slot for design QA',
-    group: 'Preferences',
+    label: t('demo.text.composites.commandPalette.item.scheduleReview.label'),
+    description: t('demo.text.composites.commandPalette.item.scheduleReview.description'),
+    group: t('demo.text.composites.commandPalette.group.preferences'),
     icon: <IoCalendar size={16} />,
     onSelect: () => {},
   },
   {
     id: 'rename-item',
-    label: 'Rename current item',
-    description: 'Edit the title without leaving this view',
-    group: 'Actions',
+    label: t('demo.text.composites.commandPalette.item.renameItem.label'),
+    description: t('demo.text.composites.commandPalette.item.renameItem.description'),
+    group: t('demo.text.composites.commandPalette.group.actions'),
     icon: <IoPencil size={16} />,
     onSelect: () => {},
   },
 ];
 
-const AI_RUN_SCENARIOS: readonly AiRunScenario[] = [
+const createAiRunScenarios = (t: (key: DemoI18nMessageKey) => string): readonly AiRunScenario[] => [
   {
     id: 'a11y-audit',
-    label: 'Accessibility audit',
+    label: t('demo.text.composites.ai.scenario.a11yAudit.label'),
     state: 'result',
     score: 91,
-    scoreLabel: 'Accessibility compliance',
-    summary:
-      'Core primitives are now consistent for keyboard focus, but two complex composites still need aria regression checks.',
+    scoreLabel: t('demo.text.composites.ai.scenario.a11yAudit.scoreLabel'),
+    summary: t('demo.text.composites.ai.scenario.a11yAudit.summary'),
     sections: [
       {
         icon: 'success',
-        title: 'Strong areas',
+        title: t('demo.text.composites.ai.scenario.a11yAudit.strongAreas.title'),
         items: [
-          'Form controls expose accessible labels and descriptions',
-          'Heading hierarchy is consistent across key layouts',
-          'Color tokens keep contrast stable in both themes',
+          t('demo.text.composites.ai.scenario.a11yAudit.strongAreas.item1'),
+          t('demo.text.composites.ai.scenario.a11yAudit.strongAreas.item2'),
+          t('demo.text.composites.ai.scenario.a11yAudit.strongAreas.item3'),
         ],
       },
       {
         icon: 'info',
-        title: 'Suggested next steps',
+        title: t('demo.text.composites.ai.scenario.a11yAudit.nextSteps.title'),
         items: [
-          'Add keyboard e2e checks for DataGridPro drag and resize flows',
-          'Validate screen reader announcements for status-heavy components',
+          t('demo.text.composites.ai.scenario.a11yAudit.nextSteps.item1'),
+          t('demo.text.composites.ai.scenario.a11yAudit.nextSteps.item2'),
         ],
       },
     ],
   },
   {
     id: 'run-failure',
-    label: 'Error state',
+    label: t('demo.text.composites.ai.scenario.runFailure.label'),
     state: 'error',
     score: 0,
-    scoreLabel: 'Run failed',
-    summary: 'The analysis endpoint returned an internal error while building the latest component map.',
+    scoreLabel: t('demo.text.composites.ai.scenario.runFailure.scoreLabel'),
+    summary: t('demo.text.composites.ai.scenario.runFailure.summary'),
     sections: [
       {
         icon: 'danger',
-        title: 'Failure details',
-        items: ['Request timeout after 12s', 'Two input snapshots were incomplete in this run'],
+        title: t('demo.text.composites.ai.scenario.runFailure.failureDetails.title'),
+        items: [
+          t('demo.text.composites.ai.scenario.runFailure.failureDetails.item1'),
+          t('demo.text.composites.ai.scenario.runFailure.failureDetails.item2'),
+        ],
       },
     ],
   },
   {
     id: 'interaction-review',
-    label: 'Interaction review',
+    label: t('demo.text.composites.ai.scenario.interactionReview.label'),
     state: 'result',
     score: 84,
-    scoreLabel: 'Interaction consistency',
-    summary:
-      'Most action patterns are now unified, but there are still minor differences in secondary button emphasis.',
+    scoreLabel: t('demo.text.composites.ai.scenario.interactionReview.scoreLabel'),
+    summary: t('demo.text.composites.ai.scenario.interactionReview.summary'),
     sections: [
       {
         icon: 'success',
-        title: 'Progress made',
+        title: t('demo.text.composites.ai.scenario.interactionReview.progressMade.title'),
         items: [
-          'Toolbar actions use shared Button primitives',
-          'Filter and sorting behaviors are aligned between tabular composites',
+          t('demo.text.composites.ai.scenario.interactionReview.progressMade.item1'),
+          t('demo.text.composites.ai.scenario.interactionReview.progressMade.item2'),
         ],
       },
       {
         icon: 'danger',
-        title: 'Follow-up required',
+        title: t('demo.text.composites.ai.scenario.interactionReview.followUpRequired.title'),
         items: [
-          'Normalize ghost button contrast in dense table headers',
-          'Unify helper text spacing in edge-case field wrappers',
+          t('demo.text.composites.ai.scenario.interactionReview.followUpRequired.item1'),
+          t('demo.text.composites.ai.scenario.interactionReview.followUpRequired.item2'),
         ],
       },
     ],
@@ -338,51 +342,83 @@ const AI_RUN_SCENARIOS: readonly AiRunScenario[] = [
 
 const CompositesSection = (props: { sectionId: SectionId }) => {
   const sectionId = () => props.sectionId;
+  const { locale } = useI18n();
+  const dictionary = createMemo(() => getDemoMessages(locale()));
+  const t = (key: DemoI18nMessageKey): string => dictionary()[key];
+  const aiRunScenarios = createMemo(() => createAiRunScenarios(t));
+  const commandItems = createMemo(() => createCommandItems(t));
+  const kanbanColumns = createMemo(() => createKanbanColumns(t));
   const [sourceItems, setSourceItems] = createSignal(INITIAL_SOURCE);
   const [targetItems, setTargetItems] = createSignal(INITIAL_TARGET);
   const [analysisState, setAnalysisState] = createSignal<AnalysisState>('idle');
-  const [selectedScenarioId, setSelectedScenarioId] = createSignal(AI_RUN_SCENARIOS[0]?.id ?? '');
-  const [tasks, setTasks] = createSignal([createTask(1), createTask(2)]);
-  const [kanbanItems, setKanbanItems] = createSignal(INITIAL_KANBAN_ITEMS);
-  const [schedulerEvents, setSchedulerEvents] = createSignal(SCHEDULER_EVENTS);
+  const [selectedScenarioId, setSelectedScenarioId] = createSignal('a11y-audit');
+  const [tasks, setTasks] = createSignal<TaskItem[]>([]);
+  const [kanbanItems, setKanbanItems] = createSignal<KanbanDemoItem[]>([]);
+  const [schedulerEvents, setSchedulerEvents] = createSignal<SchedulerEvent[]>([]);
   const [commandOpen, setCommandOpen] = createSignal(false);
 
-  const wizardSteps = [
+  createEffect(() => {
+    if (tasks().length === 0) {
+      setTasks([createTask(1, t), createTask(2, t)]);
+    }
+    if (kanbanItems().length === 0) {
+      setKanbanItems(createInitialKanbanItems(t));
+    }
+    if (schedulerEvents().length === 0) {
+      setSchedulerEvents(createSchedulerEvents(t));
+    }
+  });
+
+  const wizardSteps = createMemo(() => [
     {
-      label: 'Account',
+      label: t('demo.text.composites.wizard.accountStep'),
       component: (
         <div class="col">
-          <FormField label="Email">
-            {(fieldProps) => <Input {...fieldProps} type="email" placeholder="you@example.com" />}
+          <FormField label={t('demo.text.composites.wizard.email')}>
+            {(fieldProps) => (
+              <Input {...fieldProps} type="email" placeholder={t('demo.text.composites.wizard.emailPlaceholder')} />
+            )}
           </FormField>
-          <FormField label="Username">
-            {(fieldProps) => <Input {...fieldProps} type="text" placeholder="jankowalski" />}
+          <FormField label={t('demo.text.composites.wizard.username')}>
+            {(fieldProps) => (
+              <Input {...fieldProps} type="text" placeholder={t('demo.text.composites.wizard.usernamePlaceholder')} />
+            )}
           </FormField>
         </div>
       ),
     },
     {
-      label: 'Profile',
+      label: t('demo.text.composites.wizard.profileStep'),
       component: (
         <div class="col">
-          <FormField label="Full name">
-            {(fieldProps) => <Input {...fieldProps} type="text" placeholder="Jan Kowalski" />}
+          <FormField label={t('demo.text.composites.wizard.fullName')}>
+            {(fieldProps) => (
+              <Input {...fieldProps} type="text" placeholder={t('demo.text.composites.wizard.fullNamePlaceholder')} />
+            )}
           </FormField>
-          <FormField label="Bio">
-            {(fieldProps) => <Input {...fieldProps} type="text" placeholder="Short bio..." />}
+          <FormField label={t('demo.text.composites.wizard.bio')}>
+            {(fieldProps) => (
+              <Input {...fieldProps} type="text" placeholder={t('demo.text.composites.wizard.bioPlaceholder')} />
+            )}
           </FormField>
         </div>
       ),
     },
     {
-      label: 'Confirm',
+      label: t('demo.text.composites.wizard.confirmStep'),
       component: (
         <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-          Review your information and click <strong>Finish</strong> to complete registration.
+          {renderRichText(t('demo.text.composites.wizard.confirmMessage'), {
+            finish: (
+              <Text as="span" variant="labelMd">
+                {t('demo.text.composites.wizard.finish')}
+              </Text>
+            ),
+          })}
         </Text>
       ),
     },
-  ];
+  ]);
 
   const runAnalysis = () => {
     setAnalysisState('loading');
@@ -395,7 +431,7 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
   };
 
   const selectedScenario = createMemo(
-    () => AI_RUN_SCENARIOS.find((scenario) => scenario.id === selectedScenarioId()) ?? AI_RUN_SCENARIOS[0]
+    () => aiRunScenarios().find((scenario) => scenario.id === selectedScenarioId()) ?? aiRunScenarios()[0]
   );
 
   const updateTask = (id: string, field: keyof TaskItem, value: string) => {
@@ -411,10 +447,15 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
     <>
       <div class="editableHeader">
         <Chip variant="subtle" size="sm" label={item.id.slice(0, 8)} />
-        <IconButton icon={<IoTrash />} label="Remove task" size="sm" onClick={requestRemove} />
+        <IconButton
+          icon={<IoTrash />}
+          label={t('demo.text.composites.editableCollection.removeTask')}
+          size="sm"
+          onClick={requestRemove}
+        />
       </div>
       <div class="editableGrid">
-        <FormField label="Title">
+        <FormField label={t('demo.text.composites.editableCollection.title')}>
           {(fieldProps) => (
             <Input
               {...fieldProps}
@@ -423,7 +464,7 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
             />
           )}
         </FormField>
-        <FormField label="Owner">
+        <FormField label={t('demo.text.composites.editableCollection.owner')}>
           {(fieldProps) => (
             <Input
               {...fieldProps}
@@ -438,13 +479,25 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
 
   const renderKanbanCard = (item: KanbanDemoItem) => (
     <div class="col colGap2xs">
-      <strong>{item.title}</strong>
+      <Text as="span" variant="labelMd">
+        {item.title}
+      </Text>
       <Text as="span" variant="bodySm" tone="muted" class="mutedText">
         {item.description}
       </Text>
       <div class="row justifyBetween">
         <Chip variant="subtle" size="sm" label={item.owner} />
-        <Chip variant="subtle" size="sm" label={item.priority} />
+        <Chip
+          variant="subtle"
+          size="sm"
+          label={
+            item.priority === 'high'
+              ? t('demo.text.composites.kanban.priority.high')
+              : item.priority === 'medium'
+                ? t('demo.text.composites.kanban.priority.medium')
+                : t('demo.text.composites.kanban.priority.low')
+          }
+        />
       </div>
     </div>
   );
@@ -452,39 +505,43 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
   return (
     <div>
       <Show when={sectionId() === 'composites-transfer-list'}>
-        <ShowcaseSection title="TransferList" subtitle="Dual-list picker for moving items between groups">
+        <ShowcaseSection
+          title={t('demo.showcase.composites.transferList.title')}
+          subtitle={t('demo.showcase.composites.transferList.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <TransferList
                 sourceItems={sourceItems()}
                 targetItems={targetItems()}
                 onChange={handleTransferChange}
-                sourceTitle="Available"
-                targetTitle="Selected"
+                sourceTitle={t('demo.text.composites.transferList.available')}
+                targetTitle={t('demo.text.composites.transferList.selected')}
                 searchable
               />
             </PreviewGroup>
           </PreviewPanel>
-          <ShowcaseMeta>
-            Check items and use the arrow buttons to transfer. Search filters within each panel.
-          </ShowcaseMeta>
+          <ShowcaseMeta>{t('demo.text.composites.transferList.meta')}</ShowcaseMeta>
         </ShowcaseSection>
       </Show>
 
       <Show when={sectionId() === 'composites-editable-collection'}>
-        <ShowcaseSection title="EditableCollection" subtitle="Add/remove/edit list scaffold for dynamic forms">
+        <ShowcaseSection
+          title={t('demo.showcase.composites.editableCollection.title')}
+          subtitle={t('demo.showcase.composites.editableCollection.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <EditableCollection<TaskItem>
                 items={tasks()}
                 getId={(item) => item.id}
-                onAdd={() => setTasks((current) => [...current, createTask(current.length + 1)])}
+                onAdd={() => setTasks((current) => [...current, createTask(current.length + 1, t)])}
                 onRemove={(id) => setTasks((current) => current.filter((item) => item.id !== id))}
-                addLabel="Add task"
-                confirmLabel="Remove task"
-                confirmMessage="Do you want to remove this task from the collection?"
-                confirmActionLabel="Remove"
-                cancelLabel="Cancel"
+                addLabel={t('demo.text.composites.editableCollection.addTask')}
+                confirmLabel={t('demo.text.composites.editableCollection.removeTask')}
+                confirmMessage={t('demo.text.composites.editableCollection.confirmMessage')}
+                confirmActionLabel={t('demo.text.composites.editableCollection.remove')}
+                cancelLabel={t('demo.text.composites.editableCollection.cancel')}
                 renderItem={renderTaskItem}
               />
             </PreviewGroup>
@@ -493,33 +550,39 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
       </Show>
 
       <Show when={sectionId() === 'composites-kanban-board'}>
-        <ShowcaseSection title="KanbanBoard" subtitle="Drag and drop cards between workflow columns">
+        <ShowcaseSection
+          title={t('demo.showcase.composites.kanbanBoard.title')}
+          subtitle={t('demo.showcase.composites.kanbanBoard.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <KanbanBoard
-                columns={KANBAN_COLUMNS}
+                columns={kanbanColumns()}
                 items={kanbanItems()}
                 onChange={setKanbanItems}
-                emptyLabel="Drop cards here"
+                emptyLabel={t('demo.text.composites.kanban.emptyLabel')}
                 renderCard={renderKanbanCard}
               />
             </PreviewGroup>
           </PreviewPanel>
-          <ShowcaseMeta>Drag cards between columns to update their status.</ShowcaseMeta>
+          <ShowcaseMeta>{t('demo.text.composites.kanban.meta')}</ShowcaseMeta>
         </ShowcaseSection>
       </Show>
 
       <Show when={sectionId() === 'composites-wizard'}>
-        <ShowcaseSection title="Wizard" subtitle="Multi-step guided workflow">
+        <ShowcaseSection
+          title={t('demo.showcase.composites.wizard.title')}
+          subtitle={t('demo.showcase.composites.wizard.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <Wizard
-                steps={wizardSteps}
-                backLabel="Back"
-                nextLabel="Next"
-                finishLabel="Finish"
+                steps={wizardSteps()}
+                backLabel={t('demo.text.composites.wizard.back')}
+                nextLabel={t('demo.text.composites.wizard.next')}
+                finishLabel={t('demo.text.composites.wizard.finish')}
                 onFinish={() => {
-                  addToast({ type: 'success', message: 'Registration complete!' });
+                  addToast({ type: 'success', message: t('demo.text.composites.wizard.doneToast') });
                 }}
               />
             </PreviewGroup>
@@ -528,41 +591,47 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
       </Show>
 
       <Show when={sectionId() === 'composites-command-palette'}>
-        <ShowcaseSection title="Command Palette" subtitle="Keyboard-driven command launcher with grouped results">
+        <ShowcaseSection
+          title={t('demo.showcase.composites.commandPalette.title')}
+          subtitle={t('demo.showcase.composites.commandPalette.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <Button variant="primary" onClick={() => setCommandOpen(true)}>
-                Open Command Palette (Ctrl+K)
+                {t('demo.text.composites.commandPalette.open')}
               </Button>
-              <CommandPalette open={commandOpen()} onClose={() => setCommandOpen(false)} items={COMMAND_ITEMS} />
+              <CommandPalette open={commandOpen()} onClose={() => setCommandOpen(false)} items={commandItems()} />
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
       </Show>
 
       <Show when={sectionId() === 'composites-ai-result'}>
-        <ShowcaseSection title="AiResultPanel" subtitle="Reusable result layout for AI and scoring flows">
+        <ShowcaseSection
+          title={t('demo.showcase.composites.aiResultPanel.title')}
+          subtitle={t('demo.showcase.composites.aiResultPanel.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <AiResultPanel
                 isPending={analysisState() === 'loading'}
-                loadingText="Analyzing design consistency..."
+                loadingText={t('demo.text.composites.ai.loading')}
                 hasError={analysisState() === 'error'}
-                errorText="Analysis timed out. Retry to generate a new report."
+                errorText={t('demo.text.composites.ai.error')}
                 onRetry={runAnalysis}
-                retryLabel="Retry"
+                retryLabel={t('demo.text.composites.ai.retry')}
                 score={selectedScenario()?.score ?? 0}
-                scoreLabel={selectedScenario()?.scoreLabel ?? 'Analysis'}
+                scoreLabel={selectedScenario()?.scoreLabel ?? t('demo.text.composites.ai.analysis')}
                 summary={selectedScenario()?.summary ?? ''}
                 sections={selectedScenario()?.sections ?? []}
                 hasResult={analysisState() === 'result'}
                 idle={
                   <div class="col colGap2xs">
                     <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                      Run analysis to generate a consistency report for the current component set.
+                      {t('demo.text.composites.ai.idlePrimary')}
                     </Text>
                     <Text as="p" variant="caption" tone="muted" class="mutedText">
-                      Choose a scenario and run analysis to preview a specific panel state.
+                      {t('demo.text.composites.ai.idleSecondary')}
                     </Text>
                   </div>
                 }
@@ -573,17 +642,17 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
                       class="aiScenarioSelect"
                       value={selectedScenarioId()}
                       onChange={(e) => setSelectedScenarioId(e.currentTarget.value)}
-                      aria-label="Select AI scenario"
+                      aria-label={t('demo.text.composites.ai.selectScenario')}
                     >
-                      <For each={AI_RUN_SCENARIOS}>
+                      <For each={aiRunScenarios()}>
                         {(scenario) => <option value={scenario.id}>{scenario.label}</option>}
                       </For>
                     </Select>
                     <Button size="sm" variant="ghost" class="aiActionButton" onClick={() => setAnalysisState('idle')}>
-                      Reset
+                      {t('demo.text.composites.ai.reset')}
                     </Button>
                     <Button size="sm" class="aiActionButton aiRunButton" onClick={runAnalysis}>
-                      Run analysis
+                      {t('demo.text.composites.ai.run')}
                     </Button>
                   </ActionRow>
                 }
@@ -594,9 +663,12 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
       </Show>
 
       <Show when={sectionId() === 'composites-scheduler'}>
-        <ShowcaseSection title="Scheduler" subtitle="Month calendar with per-day agenda panel">
+        <ShowcaseSection
+          title={t('demo.showcase.composites.scheduler.title')}
+          subtitle={t('demo.showcase.composites.scheduler.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <Scheduler
                 events={schedulerEvents()}
                 onEventsChange={setSchedulerEvents}
@@ -605,27 +677,33 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Navigate months, select a day, add events with{' '}
-            <CodeText as="span" class="codeInline">
-              Add event
-            </CodeText>{' '}
-            (or double-click a day), edit/delete entries inline, then drag{' '}
-            <CodeText as="span" class="codeInline">
-              Move
-            </CodeText>{' '}
-            or{' '}
-            <CodeText as="span" class="codeInline">
-              Resize end
-            </CodeText>{' '}
-            onto a calendar day. Use{' '}
-            <CodeText as="span" class="codeInline">
-              Esc
-            </CodeText>{' '}
-            to cancel forms and{' '}
-            <CodeText as="span" class="codeInline">
-              Ctrl+Enter
-            </CodeText>{' '}
-            to submit.
+            {renderRichText(t('demo.text.composites.scheduler.meta'), {
+              addEvent: (
+                <CodeText as="span" class="codeInline">
+                  {t('demo.text.composites.scheduler.action.addEvent')}
+                </CodeText>
+              ),
+              move: (
+                <CodeText as="span" class="codeInline">
+                  {t('demo.text.composites.scheduler.action.move')}
+                </CodeText>
+              ),
+              resizeEnd: (
+                <CodeText as="span" class="codeInline">
+                  {t('demo.text.composites.scheduler.action.resizeEnd')}
+                </CodeText>
+              ),
+              esc: (
+                <CodeText as="span" class="codeInline">
+                  {t('demo.text.composites.scheduler.action.esc')}
+                </CodeText>
+              ),
+              ctrlEnter: (
+                <CodeText as="span" class="codeInline">
+                  {t('demo.text.composites.scheduler.action.ctrlEnter')}
+                </CodeText>
+              ),
+            })}
           </ShowcaseMeta>
         </ShowcaseSection>
       </Show>

@@ -3,17 +3,16 @@ import { type JSX, Show, splitProps } from 'solid-js';
 import Spinner from '~/components/feedback/Spinner/Spinner';
 import Text from '~/components/typography/Text/Text';
 import type Props from '~/models/Props';
-import type { ButtonCoreNativeProps, LabelOnlyProps } from '~/models/Props';
+import type { ButtonCoreNativeProps, ComponentSize, LabelOnlyProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import styles from './Button.module.css';
 
 export type ButtonVariant = 'primary' | 'danger' | 'ghost' | 'dashed' | 'outline' | 'subtle' | 'navbar';
-export type ButtonSize = 'sm' | 'md' | 'lg';
 
 interface ButtonBaseProps extends Omit<ButtonCoreNativeProps, 'children'> {
   variant?: ButtonVariant;
-  size?: ButtonSize;
+  size?: ComponentSize;
   loading?: boolean;
   iconOnly?: boolean;
   round?: boolean;
@@ -28,13 +27,13 @@ type ButtonChildrenProps = ButtonBaseProps & {
 
 type ButtonOwnProps = ButtonLabelProps | ButtonChildrenProps;
 
-const sizeToClass: Record<ButtonSize, string | undefined> = {
+const sizeToClass: Record<ComponentSize, string | undefined> = {
   sm: styles.sizeSm,
   md: styles.sizeMd,
   lg: styles.sizeLg,
 };
 
-const iconSizeToClass: Record<ButtonSize, string | undefined> = {
+const iconSizeToClass: Record<ComponentSize, string | undefined> = {
   sm: styles.iconSizeSm,
   md: styles.iconSizeMd,
   lg: styles.iconSizeLg,

@@ -1,6 +1,7 @@
 import { type JSX, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
+import type { DivCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import Stack from '../../surfaces/Stack/Stack';
@@ -8,7 +9,7 @@ import styles from './ActionRow.module.css';
 
 type ActionRowAlign = 'center' | 'start' | 'end';
 
-interface ActionRowOwnProps extends JSX.HTMLAttributes<HTMLDivElement> {
+interface ActionRowOwnProps extends DivCoreNativeProps {
   align?: 'center' | 'start' | 'end';
   children: JSX.Element;
 }

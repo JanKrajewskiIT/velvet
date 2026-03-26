@@ -2,12 +2,14 @@ import { FiStar } from 'solid-icons/fi';
 import { createMemo, createSignal, For, type JSX, splitProps } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
 
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
+import type { DivCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import styles from './Rating.module.css';
 
-export interface RatingProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'onChange'> {
+export interface RatingProps extends Omit<DivCoreNativeProps, 'onChange'> {
   value: number;
   onChange?: (value: number) => void;
   max?: number;
@@ -16,6 +18,7 @@ export interface RatingProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'o
 }
 
 const Rating = (props: Props<RatingProps>) => {
+  const { t } = useI18n();
   const [local, rest] = splitProps(props, ['value', 'onChange', 'max', 'size', 'icon', 'class']);
   const [hoverIndex, setHoverIndex] = createSignal(-1);
   const itemRefs: (HTMLButtonElement | undefined)[] = [];
@@ -115,7 +118,7 @@ const Rating = (props: Props<RatingProps>) => {
             type={isInteractive() ? 'button' : undefined}
             role={isInteractive() ? 'radio' : undefined}
             aria-checked={isInteractive() ? selectedIndex() === index : undefined}
-            aria-label={`${index} of ${max()}`}
+            aria-label={t('rating.valueOf', { index, max: max() })}
             tabIndex={isInteractive() ? (tabStopIndex() === index ? 0 : -1) : undefined}
             ref={(element: HTMLButtonElement | HTMLSpanElement) => {
               if (!isInteractive()) return;

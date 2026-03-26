@@ -2,6 +2,7 @@ import { type JSX, splitProps } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
 
 import type Props from '~/models/Props';
+import type { HTMLElementCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import { toneClass, type TypographyTone } from '../Typography/Typography';
@@ -11,7 +12,7 @@ import styles from './CodeText.module.css';
 type CodeTextVariant = 'inline' | 'block';
 type CodeTextSize = 'sm' | 'md';
 
-interface CodeTextOwnProps extends JSX.HTMLAttributes<HTMLElement> {
+interface CodeTextOwnProps extends HTMLElementCoreNativeProps {
   as?: keyof JSX.IntrinsicElements;
   variant?: CodeTextVariant;
   size?: CodeTextSize;

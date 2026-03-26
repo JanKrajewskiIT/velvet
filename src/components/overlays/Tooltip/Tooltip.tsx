@@ -1,30 +1,22 @@
-import { createSignal, createUniqueId, type JSX, onCleanup, Show, splitProps } from 'solid-js';
+import { createSignal, createUniqueId, onCleanup, Show, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
+import type { DivCoreNativeProps } from '~/models/Props';
 import { joinAriaIds } from '~/utils/aria';
 import classNames from '~/utils/classNames';
 
 import Text from '../../typography/Text/Text';
 import styles from './Tooltip.module.css';
 
-interface TooltipOwnProps extends JSX.HTMLAttributes<HTMLDivElement> {
+interface TooltipOwnProps extends DivCoreNativeProps {
   content: string;
   position?: 'top' | 'bottom' | 'left' | 'right';
   delay?: number;
-  contentClass?: string;
 }
 
 const Tooltip = (props: Props<TooltipOwnProps>) => {
   const tooltipId = createUniqueId();
-  const [local, rest] = splitProps(props, [
-    'content',
-    'position',
-    'delay',
-    'children',
-    'class',
-    'contentClass',
-    'aria-describedby',
-  ]);
+  const [local, rest] = splitProps(props, ['content', 'position', 'delay', 'children', 'class', 'aria-describedby']);
   const [isVisible, setIsVisible] = createSignal(false);
   let timer: ReturnType<typeof setTimeout> | undefined;
 
@@ -54,11 +46,7 @@ const Tooltip = (props: Props<TooltipOwnProps>) => {
     >
       {local.children}
       <Show when={isVisible()}>
-        <div
-          id={tooltipId}
-          role="tooltip"
-          class={classNames(styles.tooltipContent, styles[local.position || 'top'], local.contentClass)}
-        >
+        <div id={tooltipId} role="tooltip" class={classNames(styles.tooltipContent, styles[local.position || 'top'])}>
           <Text as="span" variant="caption" tone="inverse">
             {local.content}
           </Text>

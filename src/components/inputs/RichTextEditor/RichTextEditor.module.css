@@ -37,22 +37,8 @@
 }
 
 .toolButton {
-  border-radius: var(--radius-sm);
-  font-size: var(--typography-scale-xs);
-  font-weight: var(--typography-weight-semibold);
-  padding: var(--spacing-2xs) var(--spacing-xs);
   width: auto;
   min-width: 32px;
-}
-
-.toolButton:hover {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
-}
-
-.toolButton:disabled {
-  opacity: var(--opacity-disabled);
-  cursor: not-allowed;
 }
 
 .editor {

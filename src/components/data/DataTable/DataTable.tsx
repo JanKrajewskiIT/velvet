@@ -3,11 +3,11 @@ import type { JSX } from 'solid-js';
 import { createEffect, createMemo, createSignal, For, Show } from 'solid-js';
 
 import Table from '~/components/data/Table/Table';
-import TableBody from '~/components/data/Table/TableBody';
-import TableCell from '~/components/data/Table/TableCell';
-import TableHead from '~/components/data/Table/TableHead';
-import TableHeader from '~/components/data/Table/TableHeader';
-import TableRow from '~/components/data/Table/TableRow';
+import TableBody from '~/components/data/Table/TableBody/TableBody';
+import TableCell from '~/components/data/Table/TableCell/TableCell';
+import TableHead from '~/components/data/Table/TableHead/TableHead';
+import TableHeader from '~/components/data/Table/TableHeader/TableHeader';
+import TableRow from '~/components/data/Table/TableRow/TableRow';
 import Input from '~/components/inputs/Input/Input';
 import Pagination from '~/components/navigation/Pagination/Pagination';
 import Text from '~/components/typography/Text/Text';

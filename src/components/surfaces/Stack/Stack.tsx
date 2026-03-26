@@ -2,11 +2,12 @@ import { type JSX, splitProps } from 'solid-js';
 
 import { resolveSpacingToken, type SpacingScale } from '~/components/surfaces/shared/spacing';
 import type Props from '~/models/Props';
+import type { DivCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import styles from './Stack.module.css';
 
-interface StackOwnProps extends JSX.HTMLAttributes<HTMLDivElement> {
+interface StackOwnProps extends DivCoreNativeProps {
   children: JSX.Element;
   direction?: 'vertical' | 'horizontal';
   gap?: SpacingScale;

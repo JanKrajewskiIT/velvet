@@ -1,17 +1,18 @@
 import { FiClock } from 'solid-icons/fi';
 import { createMemo, createSignal, createUniqueId, Show } from 'solid-js';
 
-import DropdownFieldTrigger from '~/components/dropdowns/DropdownFieldTrigger/DropdownFieldTrigger';
-import type { InputSize } from '~/components/inputs/Input/Input';
+import DropdownFieldTrigger from '~/components/dropdowns/Dropdown/DropdownFieldTrigger/DropdownFieldTrigger';
+import Icon from '~/components/media/Icon/Icon';
 import useClickOutside from '~/hooks/useClickOutside';
 import useEscapeKey from '~/hooks/useEscapeKey';
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
-import type { AriaFieldProps } from '~/models/Props';
-import { resolveAriaInvalid } from '~/utils/aria';
+import type { AriaFieldProps, ComponentSize } from '~/models/Props';
+import { joinAriaIds, resolveAriaInvalid } from '~/utils/aria';
+import { buildTimeOptions } from '~/utils/datetime';
 
 import DateTimeFieldTrigger from '../DateTimeFieldTrigger/DateTimeFieldTrigger';
-import TimePanel from '../TimePanel/TimePanel';
+import TimePanel from './TimePanel/TimePanel';
 import styles from './TimePicker.module.css';
 
 export interface TimePickerMessages {
@@ -26,27 +27,17 @@ interface TimePickerProps extends AriaFieldProps {
   placeholder?: string;
   disabled?: boolean;
   step?: number;
-  size?: InputSize;
+  size?: ComponentSize;
   openPickerLabel?: string;
   optionsLabel?: string;
   messages?: TimePickerMessages;
 }
 
-const pad = (n: number): string => String(n).padStart(2, '0');
-
-const generateTimeOptions = (step: number): string[] => {
-  const options: string[] = [];
-  const safeStep = Number.isFinite(step) && step > 0 ? Math.max(1, Math.floor(step)) : 30;
-  for (let m = 0; m < 1440; m += safeStep) {
-    options.push(`${pad(Math.floor(m / 60))}:${pad(m % 60)}`);
-  }
-  return options;
-};
-
 const TimePicker = (props: Props<TimePickerProps>) => {
   const { t } = useI18n();
   const [isOpen, setIsOpen] = createSignal(false);
   const dropdownId = createUniqueId();
+  const triggerLabelId = createUniqueId();
   let wrapperRef: HTMLDivElement | undefined;
   let dropdownRef: HTMLDivElement | undefined;
 
@@ -59,7 +50,7 @@ const TimePicker = (props: Props<TimePickerProps>) => {
   );
   useEscapeKey(() => isOpen(), close);
 
-  const timeOptions = createMemo(() => generateTimeOptions(props.step ?? 30));
+  const timeOptions = createMemo(() => buildTimeOptions(props.step ?? 30));
   const placeholder = () => props.messages?.placeholder ?? props.placeholder ?? t('time.hhmm');
   const openPickerLabel = () =>
     props.messages?.openPickerLabel ?? props.openPickerLabel ?? t('datetime.openTimePicker');
@@ -93,19 +84,23 @@ const TimePicker = (props: Props<TimePickerProps>) => {
       trigger={(triggerClass) => (
         <DropdownFieldTrigger
           size={props.size}
+          id={props.id}
           label={props.value || placeholder()}
+          labelId={triggerLabelId}
           labelTone={props.value ? 'default' : 'muted'}
           class={triggerClass}
           disabled={props.disabled}
           onClick={toggle}
-          aria-label={openPickerLabel()}
+          title={openPickerLabel()}
           aria-haspopup="listbox"
           aria-expanded={isOpen()}
           aria-controls={isOpen() ? dropdownId : undefined}
+          aria-labelledby={joinAriaIds(props['aria-labelledby'], triggerLabelId)}
+          aria-describedby={props['aria-describedby']}
           aria-invalid={resolveAriaInvalid(undefined, props['aria-invalid'])}
           aria-errormessage={props['aria-errormessage']}
         >
-          <FiClock />
+          <Icon icon={FiClock} />
         </DropdownFieldTrigger>
       )}
     >

@@ -22,6 +22,64 @@ type AriaValidationProps = {
 };
 
 type AriaFieldProps = AriaLabelingProps & AriaValidationProps;
+type ComponentSize = 'sm' | 'md' | 'lg';
+
+type HTMLElementCoreNativeProps = Partial<
+  Pick<
+    JSX.HTMLAttributes<HTMLElement>,
+    | 'children'
+    | 'role'
+    | 'tabIndex'
+    | 'title'
+    | 'draggable'
+    | 'hidden'
+    | 'onClick'
+    | 'onInput'
+    | 'onChange'
+    | 'onBlur'
+    | 'onFocus'
+    | 'onKeyDown'
+    | 'onKeyUp'
+    | 'onMouseDown'
+    | 'onMouseUp'
+    | 'onMouseLeave'
+    | 'onMouseEnter'
+    | 'onPointerDown'
+    | 'onPointerUp'
+    | 'onPointerLeave'
+    | 'onPointerEnter'
+    | 'onDragStart'
+    | 'onDragEnd'
+    | 'onContextMenu'
+  >
+>;
+
+type DivCoreNativeProps = Partial<Pick<JSX.HTMLAttributes<HTMLDivElement>, keyof HTMLElementCoreNativeProps>>;
+
+type SpanCoreNativeProps = Partial<Pick<JSX.HTMLAttributes<HTMLSpanElement>, keyof HTMLElementCoreNativeProps>>;
+
+type ListItemCoreNativeProps = Partial<Pick<JSX.HTMLAttributes<HTMLLIElement>, keyof HTMLElementCoreNativeProps>>;
+
+type TableCoreNativeProps = Partial<
+  Pick<
+    JSX.HTMLAttributes<HTMLTableElement>,
+    'children' | 'role' | 'tabIndex' | 'title' | 'onClick' | 'onBlur' | 'onFocus' | 'onKeyDown'
+  >
+>;
+
+type TableSectionCoreNativeProps = Partial<
+  Pick<
+    JSX.HTMLAttributes<HTMLTableSectionElement>,
+    'children' | 'role' | 'tabIndex' | 'title' | 'onClick' | 'onBlur' | 'onFocus' | 'onKeyDown'
+  >
+>;
+
+type TableRowCoreNativeProps = Partial<
+  Pick<
+    JSX.HTMLAttributes<HTMLTableRowElement>,
+    'children' | 'role' | 'tabIndex' | 'title' | 'onClick' | 'onBlur' | 'onFocus' | 'onKeyDown'
+  >
+>;
 
 type ButtonCoreNativeProps = Pick<
   JSX.ButtonHTMLAttributes<HTMLButtonElement>,
@@ -105,6 +163,21 @@ type SelectCoreNativeProps = Pick<
   | 'onKeyDown'
 >;
 
+type OptionCoreNativeProps = Pick<
+  JSX.OptionHTMLAttributes<HTMLOptionElement>,
+  | 'value'
+  | 'label'
+  | 'selected'
+  | 'disabled'
+  | 'onClick'
+  | 'onInput'
+  | 'onChange'
+  | 'onBlur'
+  | 'onFocus'
+  | 'onKeyDown'
+  | 'children'
+>;
+
 type ChoiceInputCoreNativeProps = Pick<
   JSX.InputHTMLAttributes<HTMLInputElement>,
   | 'name'
@@ -175,13 +248,22 @@ export type {
   AriaValidationProps,
   ButtonCoreNativeProps,
   ChoiceInputCoreNativeProps,
+  ComponentSize,
   Props as default,
+  DivCoreNativeProps,
+  HTMLElementCoreNativeProps,
   InputCoreNativeProps,
   LabelOnlyProps,
+  ListItemCoreNativeProps,
   OptionalLabelOnlyProps,
+  OptionCoreNativeProps,
   SelectCoreNativeProps,
   SliderCoreNativeProps,
+  SpanCoreNativeProps,
   TableCellCoreNativeProps,
+  TableCoreNativeProps,
   TableHeaderCoreNativeProps,
+  TableRowCoreNativeProps,
+  TableSectionCoreNativeProps,
   TextAreaCoreNativeProps,
 };

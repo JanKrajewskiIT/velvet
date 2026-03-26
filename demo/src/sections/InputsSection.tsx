@@ -43,12 +43,15 @@ import {
   TextArea,
   ThemeToggle,
   TimePicker,
+  useI18n,
 } from '@jankrajewskiit/ui';
 import { IoAdd, IoClose, IoDocument, IoDownload, IoEllipsisHorizontal, IoPencil, IoTrash } from 'solid-icons/io';
-import { createSignal, Show } from 'solid-js';
+import { createMemo, createSignal, Show } from 'solid-js';
 
 import type { SectionId } from '../App';
 import { PreviewGroup, PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
+import { type DemoI18nMessageKey, getDemoMessages } from '../i18n/messages';
+import { interpolateText, renderRichText } from '../i18n/renderRichText';
 
 const PRESET_COLORS = ['#1467ff', '#0c52cf', '#02a4ff', '#2e7d32', '#ed6c02', '#d32f2f', '#1b78ff', '#00838f'];
 const FRAMEWORK_OPTIONS: MultiSelectOption[] = [
@@ -68,9 +71,15 @@ interface InputsSectionProps {
 
 const InputsSection = (props: InputsSectionProps) => {
   const sectionId = () => props.sectionId;
+  const { locale } = useI18n();
+  const dictionary = createMemo(() => getDemoMessages(locale()));
+  const t = (key: DemoI18nMessageKey, params?: Record<string, string | number>): string =>
+    interpolateText(dictionary()[key], params);
+  const releaseNotesTitle = () => t('demo.text.inputs.inlineEditableText.initialValue');
+  const releaseNotesHtml = () => t('demo.text.inputs.richTextEditor.sampleHtml');
   const [loading, setLoading] = createSignal(false);
   const [text, setText] = createSignal('');
-  const [editableTitle, setEditableTitle] = createSignal('Release notes');
+  const [editableTitle, setEditableTitle] = createSignal(releaseNotesTitle());
   const [selected, setSelected] = createSignal('');
   const [frameworks, setFrameworks] = createSignal(['solid', 'vue']);
   const [tags, setTags] = createSignal(['solid-js', 'vite']);
@@ -99,7 +108,7 @@ const InputsSection = (props: InputsSectionProps) => {
   const [affixValue, setAffixValue] = createSignal('hello@velvetui.dev');
   const [range, setRange] = createSignal({ start: '', end: '' });
   const [dateTime, setDateTime] = createSignal('');
-  const [richText, setRichText] = createSignal('<p><strong>Release notes</strong> for <em>VelvetUi</em>.</p>');
+  const [richText, setRichText] = createSignal(releaseNotesHtml());
   const [droppedFile, setDroppedFile] = createSignal<string | null>(null);
   const [droppedFiles, setDroppedFiles] = createSignal<string[]>([]);
 
@@ -116,53 +125,56 @@ const InputsSection = (props: InputsSectionProps) => {
     <div>
       <Show when={sectionId() === 'inputs-buttons'}>
         <ShowcaseSection
-          title="Button variants"
-          subtitle="Primary, danger, ghost, dashed, outline and subtle action styles"
+          title={t('demo.showcase.inputs.buttonVariants.title')}
+          subtitle={t('demo.showcase.inputs.buttonVariants.subtitle')}
         >
           <PreviewPanel>
-            <PreviewGroup title="Variants">
+            <PreviewGroup title={t('demo.text.inputs.buttonVariants.variants.title')}>
               <div class="row">
-                <Button variant="primary">Primary</Button>
-                <Button variant="danger">Danger</Button>
-                <Button variant="ghost">Ghost</Button>
-                <Button variant="dashed">Dashed</Button>
-                <Button variant="outline">Outline</Button>
-                <Button variant="subtle">Subtle</Button>
+                <Button variant="primary">{t('demo.text.inputs.buttons.primary')}</Button>
+                <Button variant="danger">{t('demo.text.inputs.buttons.danger')}</Button>
+                <Button variant="ghost">{t('demo.text.inputs.buttons.ghost')}</Button>
+                <Button variant="dashed">{t('demo.text.inputs.buttons.dashed')}</Button>
+                <Button variant="outline">{t('demo.text.inputs.buttons.outline')}</Button>
+                <Button variant="subtle">{t('demo.text.inputs.buttons.subtle')}</Button>
               </div>
             </PreviewGroup>
-            <PreviewGroup title="States">
+            <PreviewGroup title={t('demo.text.inputs.buttonVariants.states.title')}>
               <div class="row">
                 <Button variant="primary" disabled>
-                  Disabled
+                  {t('demo.text.inputs.buttons.disabled')}
                 </Button>
                 <Button variant="primary" loading={loading()} onClick={simulateLoad}>
-                  {loading() ? 'Saving...' : 'Click to load'}
+                  {loading() ? t('demo.text.inputs.buttons.saving') : t('demo.text.inputs.buttons.clickToLoad')}
                 </Button>
               </div>
             </PreviewGroup>
-            <PreviewGroup title="Sizes">
+            <PreviewGroup title={t('demo.text.inputs.buttonVariants.sizes.title')}>
               <div class="row">
                 <Button variant="primary" size="sm">
-                  Small
+                  {t('demo.text.inputs.buttons.small')}
                 </Button>
                 <Button variant="primary" size="md">
-                  Medium
+                  {t('demo.text.inputs.buttons.medium')}
                 </Button>
                 <Button variant="primary" size="lg">
-                  Large
+                  {t('demo.text.inputs.buttons.large')}
                 </Button>
               </div>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="AffixButton" subtitle="Buttons with prefix, suffix and badge content slots">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.affixButton.title')}
+          subtitle={t('demo.showcase.inputs.affixButton.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="AffixButton">
+            <PreviewGroup title={t('demo.text.inputs.affixButton.examples.title')}>
               <div class="row">
                 <AffixButton
                   variant="ghost"
-                  text="Documents"
+                  text={t('demo.text.inputs.affixButton.documents')}
                   prefix={<IoDocument />}
                   suffix={
                     <Badge content={12}>
@@ -172,11 +184,16 @@ const InputsSection = (props: InputsSectionProps) => {
                 />
                 <AffixButton
                   variant="primary"
-                  text="Export report"
+                  text={t('demo.text.inputs.affixButton.exportReport')}
                   prefix={<IoDownload />}
                   suffix={<IoEllipsisHorizontal />}
                 />
-                <AffixButton variant="dashed" text="Create tag" prefix={<IoAdd />} suffix={<IoClose />} />
+                <AffixButton
+                  variant="dashed"
+                  text={t('demo.text.inputs.affixButton.createTag')}
+                  prefix={<IoAdd />}
+                  suffix={<IoClose />}
+                />
               </div>
             </PreviewGroup>
           </PreviewPanel>
@@ -184,49 +201,77 @@ const InputsSection = (props: InputsSectionProps) => {
             <CodeText as="span" class="codeInline">
               AffixButton
             </CodeText>{' '}
-            supports prefix icon and suffix element or badge in one API.
+            {t('demo.text.inputs.affixButton.meta')}
           </ShowcaseMeta>
         </ShowcaseSection>
-        <ShowcaseSection title="IconButton" subtitle="Compact controls for dense interfaces">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.iconButton.title')}
+          subtitle={t('demo.showcase.inputs.iconButton.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <div class="row">
-                <IconButton icon={<IoPencil />} label="Edit" />
-                <IconButton icon={<IoTrash />} label="Delete" />
-                <IconButton icon={<IoAdd />} label="Add" size="sm" />
-                <IconButton icon={<IoDownload />} label="Download" size="md" />
-                <IconButton icon={<IoClose />} label="Close" disabled />
+                <IconButton icon={<IoPencil />} label={t('demo.text.inputs.iconButton.edit')} />
+                <IconButton icon={<IoTrash />} label={t('demo.text.inputs.iconButton.delete')} />
+                <IconButton icon={<IoAdd />} label={t('demo.text.inputs.iconButton.add')} size="sm" />
+                <IconButton icon={<IoDownload />} label={t('demo.text.inputs.iconButton.download')} size="md" />
+                <IconButton icon={<IoClose />} label={t('demo.text.inputs.iconButton.close')} disabled />
               </div>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
-        <ShowcaseSection title="RoundIconButton" subtitle="Floating round icon action button">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.roundIconButton.title')}
+          subtitle={t('demo.showcase.inputs.roundIconButton.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <div class="row">
-                <RoundIconButton icon={<IoAdd />} label="Create" size="sm" />
-                <RoundIconButton icon={<IoDownload />} label="Export" size="md" elevation="popover" />
-                <RoundIconButton icon={<IoPencil />} label="Edit" size="lg" elevation="glow" />
-                <RoundIconButton icon={<IoClose />} label="Close" disabled />
+                <RoundIconButton icon={<IoAdd />} label={t('demo.text.inputs.roundIconButton.create')} size="sm" />
+                <RoundIconButton
+                  icon={<IoDownload />}
+                  label={t('demo.text.inputs.roundIconButton.export')}
+                  size="md"
+                  elevation="popover"
+                />
+                <RoundIconButton
+                  icon={<IoPencil />}
+                  label={t('demo.text.inputs.roundIconButton.edit')}
+                  size="lg"
+                  elevation="glow"
+                />
+                <RoundIconButton icon={<IoClose />} label={t('demo.text.inputs.roundIconButton.close')} disabled />
               </div>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
-        <ShowcaseSection title="CopyButton" subtitle="One-click clipboard copy with feedback">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.copyButton.title')}
+          subtitle={t('demo.showcase.inputs.copyButton.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <div class="row">
-                <CopyButton text="npm install @jankrajewskiit/ui" label="Copy command" />
-                <CopyButton text="Hello World" variant="outline" label="Outline" />
-                <CopyButton text="Small copy" size="sm" />
+                <CopyButton
+                  text="npm install @jankrajewskiit/ui"
+                  label={t('demo.text.inputs.copyButton.copyCommand')}
+                />
+                <CopyButton text="Hello World" variant="outline" label={t('demo.text.inputs.copyButton.outline')} />
+                <CopyButton text={t('demo.text.inputs.copyButton.smallCopyText')} size="sm" />
               </div>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="LocaleSwitcher" subtitle="Language toggle button">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.localeSwitcher.title')}
+          subtitle={t('demo.showcase.inputs.localeSwitcher.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="On surface (variant)" subtitle="Ghost button for light page backgrounds">
+            <PreviewGroup
+              title={t('demo.text.inputs.localeSwitcher.surfaceVariant.title')}
+              subtitle={t('demo.text.inputs.localeSwitcher.surfaceVariant.subtitle')}
+            >
               <div class="row">
                 <LocaleSwitcher variant="primary" />
               </div>
@@ -234,63 +279,110 @@ const InputsSection = (props: InputsSectionProps) => {
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="ThemeToggle" subtitle="Light and dark mode switch">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.themeToggle.title')}
+          subtitle={t('demo.showcase.inputs.themeToggle.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <div class="row">
-                <ThemeToggle lightLabel="Light mode" darkLabel="Dark mode" groupLabel="Theme" variant="light" />
+                <ThemeToggle
+                  lightLabel={t('demo.theme.light')}
+                  darkLabel={t('demo.theme.dark')}
+                  groupLabel={t('demo.theme.group')}
+                  variant="light"
+                />
               </div>
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Wraps{' '}
-            <CodeText as="span" class="codeInline">
-              useTheme()
-            </CodeText>{' '}
-            from ThemeProvider.
+            {renderRichText(t('demo.text.inputs.themeToggle.metaWithHook'), {
+              useTheme: (
+                <CodeText as="span" class="codeInline">
+                  useTheme()
+                </CodeText>
+              ),
+            })}
           </ShowcaseMeta>
         </ShowcaseSection>
       </Show>
 
       <Show when={sectionId() === 'inputs-dropdowns'}>
-        <ShowcaseSection title="DropdownButton" subtitle="Action menu trigger with dropdown content">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.dropdownButton.title')}
+          subtitle={t('demo.showcase.inputs.dropdownButton.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <div class="row">
-                <DropdownButton label="Actions" variant="primary">
-                  <DropdownOption role="menuitem" label="Edit" onClick={() => {}} />
-                  <DropdownOption role="menuitem" label="Duplicate" onClick={() => {}} />
-                  <DropdownOption role="menuitem" label="Archive" onClick={() => {}} />
+                <DropdownButton label={t('demo.text.inputs.dropdownButton.actions')} variant="primary">
+                  <DropdownOption
+                    role="menuitem"
+                    label={t('demo.text.inputs.dropdownButton.edit')}
+                    onClick={() => {}}
+                  />
+                  <DropdownOption
+                    role="menuitem"
+                    label={t('demo.text.inputs.dropdownButton.duplicate')}
+                    onClick={() => {}}
+                  />
+                  <DropdownOption
+                    role="menuitem"
+                    label={t('demo.text.inputs.dropdownButton.archive')}
+                    onClick={() => {}}
+                  />
                 </DropdownButton>
               </div>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="DropdownMenu" subtitle="Icon trigger with keyboard navigation">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.dropdownMenu.title')}
+          subtitle={t('demo.showcase.inputs.dropdownMenu.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <div class="row">
-                <DropdownMenu trigger={<IoEllipsisHorizontal />} label="More options">
-                  <DropdownOption role="menuitem" prefix={<IoPencil />} label="Settings" onClick={() => {}} />
-                  <DropdownOption role="menuitem" prefix={<IoDownload />} label="Export" onClick={() => {}} />
-                  <DropdownOption role="menuitem" prefix={<IoTrash />} tone="error" label="Delete" onClick={() => {}} />
+                <DropdownMenu trigger={<IoEllipsisHorizontal />} label={t('demo.text.inputs.dropdownMenu.moreOptions')}>
+                  <DropdownOption
+                    role="menuitem"
+                    prefix={<IoPencil />}
+                    label={t('demo.text.inputs.dropdownMenu.settings')}
+                    onClick={() => {}}
+                  />
+                  <DropdownOption
+                    role="menuitem"
+                    prefix={<IoDownload />}
+                    label={t('demo.text.inputs.dropdownMenu.export')}
+                    onClick={() => {}}
+                  />
+                  <DropdownOption
+                    role="menuitem"
+                    prefix={<IoTrash />}
+                    tone="error"
+                    label={t('demo.text.inputs.dropdownMenu.delete')}
+                    onClick={() => {}}
+                  />
                 </DropdownMenu>
               </div>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="Select" subtitle="Native select with custom styling">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.select.title')}
+          subtitle={t('demo.showcase.inputs.select.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <FormField label="Choose option">
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <FormField label={t('demo.text.inputs.select.chooseOption')}>
                 {(fieldProps) => (
                   <Select {...fieldProps} value={selected()} onChange={handleSelectChange}>
-                    <option value="">-- select --</option>
-                    <option value="a">Option A</option>
-                    <option value="b">Option B</option>
-                    <option value="c">Option C</option>
+                    <option value="">{t('demo.text.inputs.select.selectPlaceholder')}</option>
+                    <option value="a">{t('demo.text.inputs.select.optionA')}</option>
+                    <option value="b">{t('demo.text.inputs.select.optionB')}</option>
+                    <option value="c">{t('demo.text.inputs.select.optionC')}</option>
                   </Select>
                 )}
               </FormField>
@@ -298,43 +390,49 @@ const InputsSection = (props: InputsSectionProps) => {
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="MultiSelect" subtitle="Checkbox dropdown for selecting many options">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.multiSelect.title')}
+          subtitle={t('demo.showcase.inputs.multiSelect.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <FormField label="Frameworks">
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <FormField label={t('demo.text.inputs.multiSelect.frameworks')}>
                 {(fieldProps) => (
                   <MultiSelect
                     {...fieldProps}
                     value={frameworks()}
                     options={FRAMEWORK_OPTIONS}
                     onChange={setFrameworks}
-                    placeholder="Choose frameworks"
-                    removeLabel="Remove"
+                    placeholder={t('demo.text.inputs.multiSelect.chooseFrameworks')}
+                    removeLabel={t('demo.text.inputs.multiSelect.remove')}
                   />
                 )}
               </FormField>
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Selected:{' '}
+            {t('demo.text.inputs.multiSelect.selected')}:{' '}
             <CodeText as="span" class="codeInline">
-              {frameworks().join(', ') || 'none'}
+              {frameworks().join(', ') || t('demo.text.inputs.common.none')}
             </CodeText>
           </ShowcaseMeta>
         </ShowcaseSection>
 
-        <ShowcaseSection title="Autocomplete" subtitle="Multi-value select with filtering">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.autocomplete.title')}
+          subtitle={t('demo.showcase.inputs.autocomplete.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <FormField label="Technologies">
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <FormField label={t('demo.text.inputs.autocomplete.technologies')}>
                 {(fieldProps) => (
                   <Autocomplete
                     {...fieldProps}
                     values={autoValues()}
                     options={['TypeScript', 'JavaScript', 'SolidJS', 'React', 'Vue', 'Svelte', 'Vite', 'Tailwind']}
                     onChange={setAutoValues}
-                    placeholder="Type to search..."
-                    removeLabel="Remove"
+                    placeholder={t('demo.text.inputs.autocomplete.typeToSearch')}
+                    removeLabel={t('demo.text.inputs.autocomplete.remove')}
                   />
                 )}
               </FormField>
@@ -344,62 +442,79 @@ const InputsSection = (props: InputsSectionProps) => {
       </Show>
 
       <Show when={sectionId() === 'inputs-fields'}>
-        <ShowcaseSection title="Input" subtitle="Text and disabled field variants">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.input.title')}
+          subtitle={t('demo.showcase.inputs.input.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <form class="inputFieldStack" onSubmit={(e) => e.preventDefault()}>
-                <FormField label="Text input">
+                <FormField label={t('demo.text.inputs.fields.textInput')}>
                   {(fieldProps) => (
                     <Input
                       {...fieldProps}
                       type="text"
-                      placeholder="Enter text..."
+                      placeholder={t('demo.text.inputs.fields.enterText')}
                       value={text()}
                       onInput={(e) => setText(e.currentTarget.value)}
                     />
                   )}
                 </FormField>
-                <FormField label="Disabled input">
-                  {(fieldProps) => <Input {...fieldProps} type="text" value="Disabled" disabled />}
+                <FormField label={t('demo.text.inputs.fields.disabledInput')}>
+                  {(fieldProps) => (
+                    <Input {...fieldProps} type="text" value={t('demo.text.inputs.fields.disabledValue')} disabled />
+                  )}
                 </FormField>
               </form>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="Input sizes" subtitle="Small, medium and large control height">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.inputSizes.title')}
+          subtitle={t('demo.showcase.inputs.inputSizes.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <div class="inputSizesStack">
-                <FormField label="Small">
-                  {(fieldProps) => <Input {...fieldProps} size="sm" placeholder="Small input" />}
+                <FormField label={t('demo.text.inputs.inputSizes.small')}>
+                  {(fieldProps) => (
+                    <Input {...fieldProps} size="sm" placeholder={t('demo.text.inputs.inputSizes.smallInput')} />
+                  )}
                 </FormField>
-                <FormField label="Medium">
-                  {(fieldProps) => <Input {...fieldProps} size="md" placeholder="Medium input" />}
+                <FormField label={t('demo.text.inputs.inputSizes.medium')}>
+                  {(fieldProps) => (
+                    <Input {...fieldProps} size="md" placeholder={t('demo.text.inputs.inputSizes.mediumInput')} />
+                  )}
                 </FormField>
-                <FormField label="Large">
-                  {(fieldProps) => <Input {...fieldProps} size="lg" placeholder="Large input" />}
+                <FormField label={t('demo.text.inputs.inputSizes.large')}>
+                  {(fieldProps) => (
+                    <Input {...fieldProps} size="lg" placeholder={t('demo.text.inputs.inputSizes.largeInput')} />
+                  )}
                 </FormField>
               </div>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="AffixInput" subtitle="Input with optional prefix and suffix slots">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.affixInput.title')}
+          subtitle={t('demo.showcase.inputs.affixInput.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <FormField label="Email with actions">
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <FormField label={t('demo.text.inputs.affixInput.emailWithActions')}>
                 {(fieldProps) => (
                   <AffixInput
                     {...fieldProps}
                     value={affixValue()}
                     onInput={(e) => setAffixValue(e.currentTarget.value)}
-                    placeholder="name@example.com"
+                    placeholder={t('demo.text.inputs.affixInput.emailPlaceholder')}
                     prefix={<IoDocument />}
                     suffix={
                       <IconButton
                         icon={<IoClose />}
-                        label="Clear value"
+                        label={t('demo.text.inputs.affixInput.clearValue')}
                         onClick={() => setAffixValue('')}
                         size="sm"
                         variant="subtle"
@@ -408,12 +523,12 @@ const InputsSection = (props: InputsSectionProps) => {
                   />
                 )}
               </FormField>
-              <FormField label="Search style">
+              <FormField label={t('demo.text.inputs.affixInput.searchStyle')}>
                 {(fieldProps) => (
                   <AffixInput
                     {...fieldProps}
                     size="sm"
-                    placeholder="Filter by keyword"
+                    placeholder={t('demo.text.inputs.affixInput.filterByKeyword')}
                     prefix={<IoAdd />}
                     suffix={<IoEllipsisHorizontal />}
                   />
@@ -423,74 +538,101 @@ const InputsSection = (props: InputsSectionProps) => {
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="TextArea" subtitle="Long-form input control">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.textArea.title')}
+          subtitle={t('demo.showcase.inputs.textArea.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <FormField label="Description">
-                {(fieldProps) => <TextArea {...fieldProps} placeholder="Enter a longer description..." rows={4} />}
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <FormField label={t('demo.text.inputs.textArea.description')}>
+                {(fieldProps) => (
+                  <TextArea
+                    {...fieldProps}
+                    placeholder={t('demo.text.inputs.textArea.enterLongerDescription')}
+                    rows={4}
+                  />
+                )}
               </FormField>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="NumberInput" subtitle="Numeric stepper with increment and decrement">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.numberInput.title')}
+          subtitle={t('demo.showcase.inputs.numberInput.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <NumberInput
                 value={quantity()}
                 onChange={setQuantity}
                 min={0}
                 max={100}
                 size="md"
-                decrementLabel="Decrease"
-                incrementLabel="Increase"
+                decrementLabel={t('demo.text.inputs.numberInput.decrease')}
+                incrementLabel={t('demo.text.inputs.numberInput.increase')}
               />
               <NumberInput
                 value={1}
                 onChange={() => {}}
                 disabled
                 size="sm"
-                decrementLabel="Decrease"
-                incrementLabel="Increase"
+                decrementLabel={t('demo.text.inputs.numberInput.decrease')}
+                incrementLabel={t('demo.text.inputs.numberInput.increase')}
               />
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="SearchInput" subtitle="Filtered input with clear and debounce">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.searchInput.title')}
+          subtitle={t('demo.showcase.inputs.searchInput.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <SearchInput value={search()} onInput={setSearch} placeholder="Search components..." />
-              <SearchInput value="" onInput={() => {}} disabled placeholder="Disabled" />
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <SearchInput
+                value={search()}
+                onInput={setSearch}
+                placeholder={t('demo.text.inputs.searchInput.searchComponents')}
+              />
+              <SearchInput
+                value=""
+                onInput={() => {}}
+                disabled
+                placeholder={t('demo.text.inputs.searchInput.disabled')}
+              />
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Search value:{' '}
+            {t('demo.text.inputs.searchInput.searchValue')}:{' '}
             <CodeText as="span" class="codeInline">
               {search()}
             </CodeText>
           </ShowcaseMeta>
         </ShowcaseSection>
 
-        <ShowcaseSection title="PasswordInput" subtitle="Password field with visibility toggle">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.passwordInput.title')}
+          subtitle={t('demo.showcase.inputs.passwordInput.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <FormField label="Password">
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <FormField label={t('demo.text.inputs.passwordInput.password')}>
                 {(fieldProps) => (
                   <PasswordInput
                     {...fieldProps}
-                    placeholder="Enter password..."
-                    visibilityLabel="Toggle password visibility"
+                    placeholder={t('demo.text.inputs.passwordInput.enterPassword')}
+                    visibilityLabel={t('demo.text.inputs.passwordInput.toggleVisibility')}
                   />
                 )}
               </FormField>
-              <FormField label="Disabled">
+              <FormField label={t('demo.text.inputs.passwordInput.disabled')}>
                 {(fieldProps) => (
                   <PasswordInput
                     {...fieldProps}
                     value="secret123"
                     disabled
-                    visibilityLabel="Toggle password visibility"
+                    visibilityLabel={t('demo.text.inputs.passwordInput.toggleVisibility')}
                   />
                 )}
               </FormField>
@@ -498,59 +640,80 @@ const InputsSection = (props: InputsSectionProps) => {
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="TagInput" subtitle="Quick keyboard-driven tagging">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.tagInput.title')}
+          subtitle={t('demo.showcase.inputs.tagInput.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <FormField label="Tags">
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <FormField label={t('demo.text.inputs.tagInput.tags')}>
                 {(fieldProps) => (
-                  <TagInput {...fieldProps} value={tags()} onChange={setTags} placeholder="Add a tag and press Enter" />
+                  <TagInput
+                    {...fieldProps}
+                    value={tags()}
+                    onChange={setTags}
+                    placeholder={t('demo.text.inputs.tagInput.addTag')}
+                  />
                 )}
               </FormField>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="OtpInput" subtitle="One-time password entry">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.otpInput.title')}
+          subtitle={t('demo.showcase.inputs.otpInput.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <OtpInput value={otp()} onChange={setOtp} length={6} />
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Entered value:{' '}
+            {t('demo.text.inputs.otpInput.enteredValue')}:{' '}
             <CodeText as="span" class="codeInline">
               {otp()}
             </CodeText>
           </ShowcaseMeta>
         </ShowcaseSection>
 
-        <ShowcaseSection title="InlineEditableText" subtitle="Click-to-edit single line text">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.inlineEditableText.title')}
+          subtitle={t('demo.showcase.inputs.inlineEditableText.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <InlineEditableText value={editableTitle()} onChange={setEditableTitle} placeholder="Set a title" />
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <InlineEditableText
+                value={editableTitle()}
+                onChange={setEditableTitle}
+                placeholder={t('demo.text.inputs.inlineEditableText.setTitle')}
+              />
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Current value:{' '}
+            {t('demo.text.inputs.inlineEditableText.currentValue')}:{' '}
             <CodeText as="span" class="codeInline">
               {editableTitle()}
             </CodeText>
           </ShowcaseMeta>
         </ShowcaseSection>
 
-        <ShowcaseSection title="RichTextEditor" subtitle="WYSIWYG editor for formatted content">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.richTextEditor.title')}
+          subtitle={t('demo.showcase.inputs.richTextEditor.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <RichTextEditor
-                ariaLabel="Article body"
+                ariaLabel={t('demo.text.inputs.richTextEditor.articleBody')}
                 value={richText()}
                 onChange={setRichText}
-                placeholder="Start writing..."
+                placeholder={t('demo.text.inputs.richTextEditor.startWriting')}
               />
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            HTML length:{' '}
+            {t('demo.text.inputs.richTextEditor.htmlLength')}:{' '}
             <CodeText as="span" class="codeInline">
               {String(richText().length)}
             </CodeText>
@@ -559,16 +722,19 @@ const InputsSection = (props: InputsSectionProps) => {
       </Show>
 
       <Show when={sectionId() === 'inputs-switchers'}>
-        <ShowcaseSection title="SegmentedControl" subtitle="Mutually exclusive toggle group">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.segmentedControl.title')}
+          subtitle={t('demo.showcase.inputs.segmentedControl.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <SegmentedControl
                 value={segment()}
                 onChange={setSegment}
                 options={[
-                  { value: 'list', label: 'List' },
-                  { value: 'grid', label: 'Grid' },
-                  { value: 'board', label: 'Board' },
+                  { value: 'list', label: t('demo.text.inputs.segmented.list') },
+                  { value: 'grid', label: t('demo.text.inputs.segmented.grid') },
+                  { value: 'board', label: t('demo.text.inputs.segmented.board') },
                 ]}
               />
               <SegmentedControl
@@ -576,53 +742,76 @@ const InputsSection = (props: InputsSectionProps) => {
                 onChange={setBillingCycle}
                 size="sm"
                 options={[
-                  { value: 'monthly', label: 'Monthly' },
-                  { value: 'yearly', label: 'Yearly' },
+                  { value: 'monthly', label: t('demo.text.inputs.segmented.monthly') },
+                  { value: 'yearly', label: t('demo.text.inputs.segmented.yearly') },
                 ]}
               />
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="Checkbox" subtitle="Binary choice with optional label and description">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.checkbox.title')}
+          subtitle={t('demo.showcase.inputs.checkbox.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <Checkbox
                 checked={newsletter()}
                 onChange={(e) => setNewsletter(e.currentTarget.checked)}
-                label="Subscribe to newsletter"
-                description="Monthly product updates"
+                label={t('demo.text.inputs.checkbox.subscribeNewsletter')}
+                description={t('demo.text.inputs.checkbox.monthlyUpdates')}
               />
               <Checkbox
                 checked={termsAccepted()}
                 onChange={(e) => setTermsAccepted(e.currentTarget.checked)}
-                label="I accept the terms and conditions"
+                label={t('demo.text.inputs.checkbox.acceptTerms')}
               />
               <Checkbox
                 checked={marketingEmails()}
                 onChange={(e) => setMarketingEmails(e.currentTarget.checked)}
-                label="Send me product news and offers"
-                description="You can unsubscribe at any time"
+                label={t('demo.text.inputs.checkbox.productNews')}
+                description={t('demo.text.inputs.checkbox.unsubscribeAnytime')}
               />
-              <Checkbox checked={false} onChange={() => {}} label="Unchecked by default" />
-              <Checkbox checked disabled onChange={() => {}} label="Checked and disabled" />
-              <Checkbox checked={false} disabled onChange={() => {}} label="Unchecked and disabled" />
+              <Checkbox checked={false} onChange={() => {}} label={t('demo.text.inputs.checkbox.uncheckedDefault')} />
+              <Checkbox checked disabled onChange={() => {}} label={t('demo.text.inputs.checkbox.checkedDisabled')} />
+              <Checkbox
+                checked={false}
+                disabled
+                onChange={() => {}}
+                label={t('demo.text.inputs.checkbox.uncheckedDisabled')}
+              />
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="RadioGroup" subtitle="Single choice from a set of options">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.radioGroup.title')}
+          subtitle={t('demo.showcase.inputs.radioGroup.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <RadioGroup<RoleValue>
                 name="demo-role"
                 value={role()}
                 onChange={setRole}
                 direction="column"
                 options={[
-                  { value: 'admin', label: 'Admin', description: 'Full access' },
-                  { value: 'editor', label: 'Editor', description: 'Can edit resources' },
-                  { value: 'viewer', label: 'Viewer', description: 'Read-only access' },
+                  {
+                    value: 'admin',
+                    label: t('demo.text.inputs.radio.admin'),
+                    description: t('demo.text.inputs.radio.fullAccess'),
+                  },
+                  {
+                    value: 'editor',
+                    label: t('demo.text.inputs.radio.editor'),
+                    description: t('demo.text.inputs.radio.canEdit'),
+                  },
+                  {
+                    value: 'viewer',
+                    label: t('demo.text.inputs.radio.viewer'),
+                    description: t('demo.text.inputs.radio.readOnly'),
+                  },
                 ]}
               />
               <RadioGroup
@@ -631,9 +820,9 @@ const InputsSection = (props: InputsSectionProps) => {
                 onChange={setViewMode}
                 direction="row"
                 options={[
-                  { value: 'list', label: 'List' },
-                  { value: 'grid', label: 'Grid' },
-                  { value: 'board', label: 'Board' },
+                  { value: 'list', label: t('demo.text.inputs.segmented.list') },
+                  { value: 'grid', label: t('demo.text.inputs.segmented.grid') },
+                  { value: 'board', label: t('demo.text.inputs.segmented.board') },
                 ]}
               />
               <RadioGroup
@@ -642,45 +831,80 @@ const InputsSection = (props: InputsSectionProps) => {
                 onChange={setBillingCycle}
                 direction="column"
                 options={[
-                  { value: 'monthly', label: 'Monthly billing' },
-                  { value: 'yearly', label: 'Yearly billing', description: 'Save 20%' },
+                  { value: 'monthly', label: t('demo.text.inputs.radio.monthlyBilling') },
+                  {
+                    value: 'yearly',
+                    label: t('demo.text.inputs.radio.yearlyBilling'),
+                    description: t('demo.text.inputs.radio.save20'),
+                  },
                 ]}
               />
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="Switch" subtitle="Toggle control with optional label and description">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.switch.title')}
+          subtitle={t('demo.showcase.inputs.switch.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <Switch
                 checked={notifications()}
                 onChange={setNotifications}
-                label="Enable push notifications"
-                description="Receive alerts for important events"
-                aria-label="Enable push notifications"
+                label={t('demo.text.inputs.switch.enablePush')}
+                description={t('demo.text.inputs.switch.receiveAlerts')}
+                aria-label={t('demo.text.inputs.switch.enablePush')}
               />
               <Switch
                 checked={focusMode()}
                 onChange={setFocusMode}
-                label="Focus mode"
-                description="Hide sidebar and reduce distractions"
-                aria-label="Focus mode"
+                label={t('demo.text.inputs.switch.focusMode')}
+                description={t('demo.text.inputs.switch.hideSidebar')}
+                aria-label={t('demo.text.inputs.switch.focusMode')}
               />
-              <Switch checked={true} onChange={() => {}} label="On (controlled elsewhere)" aria-label="On" />
-              <Switch checked={false} onChange={() => {}} label="Off" aria-label="Off" />
-              <Switch checked disabled onChange={() => {}} label="Disabled on" aria-label="Disabled on" />
-              <Switch checked={false} disabled onChange={() => {}} label="Disabled off" aria-label="Disabled off" />
+              <Switch
+                checked={true}
+                onChange={() => {}}
+                label={t('demo.text.inputs.switch.onControlled')}
+                aria-label={t('demo.text.inputs.switch.on')}
+              />
+              <Switch
+                checked={false}
+                onChange={() => {}}
+                label={t('demo.text.inputs.switch.off')}
+                aria-label={t('demo.text.inputs.switch.off')}
+              />
+              <Switch
+                checked
+                disabled
+                onChange={() => {}}
+                label={t('demo.text.inputs.switch.disabledOn')}
+                aria-label={t('demo.text.inputs.switch.disabledOn')}
+              />
+              <Switch
+                checked={false}
+                disabled
+                onChange={() => {}}
+                label={t('demo.text.inputs.switch.disabledOff')}
+                aria-label={t('demo.text.inputs.switch.disabledOff')}
+              />
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
       </Show>
 
       <Show when={sectionId() === 'inputs-pickers'}>
-        <ShowcaseSection title="Slider" subtitle="Material-inspired slider with marks and value bubble">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.slider.title')}
+          subtitle={t('demo.showcase.inputs.slider.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <FormField label="Satisfaction" description={`Current value: ${String(sliderEnhancedValue())}`}>
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <FormField
+                label={t('demo.text.inputs.slider.satisfaction')}
+                description={`${t('demo.text.inputs.slider.currentValue')}: ${String(sliderEnhancedValue())}`}
+              >
                 {(fieldProps) => (
                   <Slider
                     {...fieldProps}
@@ -699,7 +923,7 @@ const InputsSection = (props: InputsSectionProps) => {
                   />
                 )}
               </FormField>
-              <FormField label="Without value bubble">
+              <FormField label={t('demo.text.inputs.slider.withoutValueBubble')}>
                 {(fieldProps) => (
                   <Slider
                     {...fieldProps}
@@ -709,28 +933,34 @@ const InputsSection = (props: InputsSectionProps) => {
                     max={100}
                     showValueLabel={false}
                     marks={[
-                      { value: 0, label: 'Low' },
-                      { value: 50, label: 'Mid' },
-                      { value: 100, label: 'High' },
+                      { value: 0, label: t('demo.text.inputs.slider.low') },
+                      { value: 50, label: t('demo.text.inputs.slider.mid') },
+                      { value: 100, label: t('demo.text.inputs.slider.high') },
                     ]}
                   />
                 )}
               </FormField>
-              <FormField label="Disabled">
+              <FormField label={t('demo.text.inputs.common.disabled')}>
                 {(fieldProps) => <Slider {...fieldProps} value={70} onChange={() => {}} min={0} max={100} disabled />}
               </FormField>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="RangeSlider" subtitle="Material-inspired range selection with dual thumbs">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.rangeSlider.title')}
+          subtitle={t('demo.showcase.inputs.rangeSlider.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <FormField label="Price range" description={`${String(priceRange().min)} - ${String(priceRange().max)}`}>
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <FormField
+                label={t('demo.text.inputs.rangeSlider.priceRange')}
+                description={`${String(priceRange().min)} - ${String(priceRange().max)}`}
+              >
                 {(fieldProps) => (
                   <RangeSlider
                     {...fieldProps}
-                    groupAriaLabel="Price range"
+                    groupAriaLabel={t('demo.text.inputs.rangeSlider.priceRange')}
                     value={priceRange()}
                     onChange={setPriceRange}
                     min={0}
@@ -746,20 +976,20 @@ const InputsSection = (props: InputsSectionProps) => {
                   />
                 )}
               </FormField>
-              <FormField label="Without value bubbles">
+              <FormField label={t('demo.text.inputs.rangeSlider.withoutValueBubbles')}>
                 {(fieldProps) => (
                   <RangeSlider
                     {...fieldProps}
-                    groupAriaLabel="Range without bubbles"
+                    groupAriaLabel={t('demo.text.inputs.rangeSlider.withoutBubblesAria')}
                     value={priceRangeNoBubbles()}
                     onChange={setPriceRangeNoBubbles}
                     min={0}
                     max={100}
                     showValueLabels={false}
                     marks={[
-                      { value: 0, label: 'Low' },
-                      { value: 50, label: 'Mid' },
-                      { value: 100, label: 'High' },
+                      { value: 0, label: t('demo.text.inputs.slider.low') },
+                      { value: 50, label: t('demo.text.inputs.slider.mid') },
+                      { value: 100, label: t('demo.text.inputs.slider.high') },
                     ]}
                   />
                 )}
@@ -768,9 +998,12 @@ const InputsSection = (props: InputsSectionProps) => {
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="Rating" subtitle="Star-based scoring control">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.rating.title')}
+          subtitle={t('demo.showcase.inputs.rating.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <div class="row">
                 <Rating value={rating()} onChange={setRating} />
                 <Rating value={3.5} />
@@ -780,10 +1013,13 @@ const InputsSection = (props: InputsSectionProps) => {
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="ColorPicker" subtitle="Palette-driven accent selection">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.colorPicker.title')}
+          subtitle={t('demo.showcase.inputs.colorPicker.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <FormField label="Brand color">
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <FormField label={t('demo.text.inputs.colorPicker.brandColor')}>
                 {(fieldProps) => (
                   <ColorPicker {...fieldProps} colors={PRESET_COLORS} value={color()} onChange={setColor} />
                 )}
@@ -791,7 +1027,7 @@ const InputsSection = (props: InputsSectionProps) => {
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Selected color:{' '}
+            {t('demo.text.inputs.colorPicker.selectedColor')}:{' '}
             <CodeText as="span" class="codeInline">
               {color()}
             </CodeText>
@@ -800,76 +1036,92 @@ const InputsSection = (props: InputsSectionProps) => {
       </Show>
 
       <Show when={sectionId() === 'inputs-datetime'}>
-        <ShowcaseSection title="DatePicker" subtitle="Calendar-driven date selection">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.datePicker.title')}
+          subtitle={t('demo.showcase.inputs.datePicker.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <FormField label="Start date">
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <FormField label={t('demo.text.inputs.dateTime.startDate')}>
                 {(fieldProps) => <DatePicker {...fieldProps} value={date()} onChange={setDate} />}
               </FormField>
-              <FormField label="Disabled">
+              <FormField label={t('demo.text.inputs.common.disabled')}>
                 {(fieldProps) => <DatePicker {...fieldProps} value="" onChange={() => {}} disabled />}
               </FormField>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="DateRangePicker" subtitle="Calendar-driven date range selection">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.dateRangePicker.title')}
+          subtitle={t('demo.showcase.inputs.dateRangePicker.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <DateRangePicker value={range()} onChange={setRange} />
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Range:{' '}
+            {t('demo.text.inputs.dateTime.range')}:{' '}
             <CodeText as="span" class="codeInline">
-              {range().start || '–'} → {range().end || '–'}
+              {range().start || t('demo.text.inputs.dateTime.notSetDash')} →{' '}
+              {range().end || t('demo.text.inputs.dateTime.notSetDash')}
             </CodeText>
           </ShowcaseMeta>
         </ShowcaseSection>
 
-        <ShowcaseSection title="TimePicker" subtitle="Scrollable time slot picker">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.timePicker.title')}
+          subtitle={t('demo.showcase.inputs.timePicker.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <FormField label="Meeting time">
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <FormField label={t('demo.text.inputs.dateTime.meetingTime')}>
                 {(fieldProps) => <TimePicker {...fieldProps} value={time()} onChange={setTime} step={30} />}
               </FormField>
-              <FormField label="Precise time">
+              <FormField label={t('demo.text.inputs.dateTime.preciseTime')}>
                 {(fieldProps) => <TimePicker {...fieldProps} value={time15()} onChange={setTime15} step={15} />}
               </FormField>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="DateTimePicker" subtitle="Combined date and time selection">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.dateTimePicker.title')}
+          subtitle={t('demo.showcase.inputs.dateTimePicker.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <FormField label="Publish at">
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <FormField label={t('demo.text.inputs.dateTime.publishAt')}>
                 {(fieldProps) => <DateTimePicker {...fieldProps} value={dateTime()} onChange={setDateTime} step={15} />}
               </FormField>
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            DateTime:{' '}
+            {t('demo.text.inputs.dateTime.dateTime')}:{' '}
             <CodeText as="span" class="codeInline">
-              {dateTime() || 'not set'}
+              {dateTime() || t('demo.text.inputs.dateTime.notSet')}
             </CodeText>
           </ShowcaseMeta>
         </ShowcaseSection>
       </Show>
 
       <Show when={sectionId() === 'inputs-other'}>
-        <ShowcaseSection title="FileDropZone" subtitle="Drag-and-drop file input with preview">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.fileDropZone.title')}
+          subtitle={t('demo.showcase.inputs.fileDropZone.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <div class="previewUploadFull">
                 <FileDropZone
-                  label="Drop a file here or click to browse"
-                  hint="Supports: .pdf, .jpg, .png"
+                  label={t('demo.text.inputs.fileDropZone.dropSingle')}
+                  hint={t('demo.text.inputs.fileDropZone.singleHint')}
                   accept=".pdf,.jpg,.png,image/*"
                   icon={<IoDocument size={28} />}
                   onFile={(f) => {
                     setDroppedFile(f.name);
-                    addToast({ type: 'success', message: `Picked: ${f.name}` });
+                    addToast({ type: 'success', message: `${t('demo.text.inputs.fileDropZone.picked')}: ${f.name}` });
                   }}
                 />
               </div>
@@ -877,24 +1129,33 @@ const InputsSection = (props: InputsSectionProps) => {
           </PreviewPanel>
           {droppedFile() && (
             <ShowcaseMeta>
-              Selected file: <strong>{droppedFile()}</strong>
+              {t('demo.text.inputs.fileDropZone.selectedFile')}:{' '}
+              <CodeText as="span" class="codeInline">
+                {droppedFile()}
+              </CodeText>
             </ShowcaseMeta>
           )}
         </ShowcaseSection>
 
-        <ShowcaseSection title="FileDropZone (multiple)" subtitle="Drag-and-drop upload for multiple files">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.fileDropZoneMultiple.title')}
+          subtitle={t('demo.showcase.inputs.fileDropZoneMultiple.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <div class="previewUploadFull">
                 <FileDropZone
                   accept="*"
                   multiple
-                  label="Drop multiple files here or click to browse"
-                  hint="You can select or drop multiple files at once"
+                  label={t('demo.text.inputs.fileDropZone.dropMultiple')}
+                  hint={t('demo.text.inputs.fileDropZone.multipleHint')}
                   icon={<IoDocument size={28} />}
                   onFiles={(files) => {
                     setDroppedFiles(files.map((file) => file.name));
-                    addToast({ type: 'success', message: `Picked ${String(files.length)} file(s)` });
+                    addToast({
+                      type: 'success',
+                      message: t('demo.text.inputs.fileDropZone.pickedCountMessage', { count: files.length }),
+                    });
                   }}
                 />
               </div>
@@ -902,46 +1163,81 @@ const InputsSection = (props: InputsSectionProps) => {
           </PreviewPanel>
           {droppedFiles().length > 0 && (
             <ShowcaseMeta>
-              Selected files: <strong>{droppedFiles().join(', ')}</strong>
+              {t('demo.text.inputs.fileDropZone.selectedFiles')}:{' '}
+              <CodeText as="span" class="codeInline">
+                {droppedFiles().join(', ')}
+              </CodeText>
             </ShowcaseMeta>
           )}
         </ShowcaseSection>
       </Show>
 
       <Show when={sectionId() === 'inputs-form-layout'}>
-        <ShowcaseSection title="FormField" subtitle="Label wrapper for form controls">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.formField.title')}
+          subtitle={t('demo.showcase.inputs.formField.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <FormField label="Full name">
-                {(fieldProps) => <Input {...fieldProps} type="text" placeholder="Jan Kowalski" />}
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <FormField label={t('demo.text.inputs.formField.fullName')}>
+                {(fieldProps) => (
+                  <Input
+                    {...fieldProps}
+                    type="text"
+                    placeholder={t('demo.text.inputs.formField.fullNamePlaceholder')}
+                  />
+                )}
               </FormField>
-              <FormField label="Email address">
-                {(fieldProps) => <Input {...fieldProps} type="email" placeholder="jan@example.com" />}
+              <FormField label={t('demo.text.inputs.formField.emailAddress')}>
+                {(fieldProps) => (
+                  <Input {...fieldProps} type="email" placeholder={t('demo.text.inputs.formField.emailPlaceholder')} />
+                )}
               </FormField>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="FormGrid" subtitle="Responsive multi-column form layout">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.formGrid.title')}
+          subtitle={t('demo.showcase.inputs.formGrid.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <FormLayout>
                 <FormGrid>
-                  <FormField label="First name">
-                    {(fieldProps) => <Input {...fieldProps} type="text" placeholder="Jan" />}
+                  <FormField label={t('demo.text.inputs.formGrid.firstName')}>
+                    {(fieldProps) => (
+                      <Input
+                        {...fieldProps}
+                        type="text"
+                        placeholder={t('demo.text.inputs.formGrid.firstNamePlaceholder')}
+                      />
+                    )}
                   </FormField>
-                  <FormField label="Last name">
-                    {(fieldProps) => <Input {...fieldProps} type="text" placeholder="Kowalski" />}
+                  <FormField label={t('demo.text.inputs.formGrid.lastName')}>
+                    {(fieldProps) => (
+                      <Input
+                        {...fieldProps}
+                        type="text"
+                        placeholder={t('demo.text.inputs.formGrid.lastNamePlaceholder')}
+                      />
+                    )}
                   </FormField>
-                  <FormField label="Email">
-                    {(fieldProps) => <Input {...fieldProps} type="email" placeholder="jan@example.com" />}
+                  <FormField label={t('demo.text.inputs.formGrid.email')}>
+                    {(fieldProps) => (
+                      <Input
+                        {...fieldProps}
+                        type="email"
+                        placeholder={t('demo.text.inputs.formGrid.emailPlaceholder')}
+                      />
+                    )}
                   </FormField>
-                  <FormField label="Role">
+                  <FormField label={t('demo.text.inputs.formGrid.role')}>
                     {(fieldProps) => (
                       <Select {...fieldProps}>
-                        <option value="">-- select role --</option>
-                        <option value="admin">Admin</option>
-                        <option value="user">User</option>
+                        <option value="">{t('demo.text.inputs.formGrid.selectRole')}</option>
+                        <option value="admin">{t('demo.text.inputs.radio.admin')}</option>
+                        <option value="user">{t('demo.text.inputs.radio.user')}</option>
                       </Select>
                     )}
                   </FormField>
@@ -951,108 +1247,154 @@ const InputsSection = (props: InputsSectionProps) => {
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="FormLayout" subtitle="Vertical form flow with consistent spacing">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.formLayout.title')}
+          subtitle={t('demo.showcase.inputs.formLayout.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <FormLayout>
-                <FormField label="Workspace name" description="Visible to your team members.">
-                  {(fieldProps) => <Input {...fieldProps} type="text" placeholder="Velvet product team" />}
-                </FormField>
-                <FormField label="Internal notes" description="These notes are private and only visible to admins.">
+                <FormField
+                  label={t('demo.text.inputs.formLayout.workspaceName')}
+                  description={t('demo.text.inputs.formLayout.workspaceNameDescription')}
+                >
                   {(fieldProps) => (
-                    <TextArea {...fieldProps} rows={3} placeholder="Roadmap, constraints, rollout plan..." />
+                    <Input
+                      {...fieldProps}
+                      type="text"
+                      placeholder={t('demo.text.inputs.formLayout.workspaceNamePlaceholder')}
+                    />
                   )}
                 </FormField>
-                <FormField label="Search scope" description="Debounced query field for dataset filtering.">
+                <FormField
+                  label={t('demo.text.inputs.formLayout.internalNotes')}
+                  description={t('demo.text.inputs.formLayout.internalNotesDescription')}
+                >
+                  {(fieldProps) => (
+                    <TextArea
+                      {...fieldProps}
+                      rows={3}
+                      placeholder={t('demo.text.inputs.formLayout.internalNotesPlaceholder')}
+                    />
+                  )}
+                </FormField>
+                <FormField
+                  label={t('demo.text.inputs.formLayout.searchScope')}
+                  description={t('demo.text.inputs.formLayout.searchScopeDescription')}
+                >
                   {(fieldProps) => (
                     <SearchInput
                       {...fieldProps}
                       value={search()}
                       onInput={setSearch}
-                      placeholder="Search records..."
+                      placeholder={t('demo.text.inputs.formLayout.searchRecords')}
                       debounce={300}
                     />
                   )}
                 </FormField>
                 <ActionRow align="start">
-                  <Button variant="primary">Save draft</Button>
-                  <Button variant="ghost">Discard</Button>
+                  <Button variant="primary">{t('demo.text.inputs.actions.saveDraft')}</Button>
+                  <Button variant="ghost">{t('demo.text.inputs.actions.discard')}</Button>
                 </ActionRow>
               </FormLayout>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="Complete form" subtitle="FormLayout + FormGrid + FormField + ActionRow">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.completeForm.title')}
+          subtitle={t('demo.showcase.inputs.completeForm.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <FormLayout>
                 <FormGrid>
-                  <FormField label="Team name">
-                    {(fieldProps) => <Input {...fieldProps} type="text" placeholder="Velocity Squad" />}
+                  <FormField label={t('demo.text.inputs.completeForm.teamName')}>
+                    {(fieldProps) => (
+                      <Input
+                        {...fieldProps}
+                        type="text"
+                        placeholder={t('demo.text.inputs.completeForm.teamNamePlaceholder')}
+                      />
+                    )}
                   </FormField>
-                  <FormField label="Contact email">
-                    {(fieldProps) => <Input {...fieldProps} type="email" placeholder="team@velvetui.dev" />}
+                  <FormField label={t('demo.text.inputs.completeForm.contactEmail')}>
+                    {(fieldProps) => (
+                      <Input
+                        {...fieldProps}
+                        type="email"
+                        placeholder={t('demo.text.inputs.completeForm.contactEmailPlaceholder')}
+                      />
+                    )}
                   </FormField>
-                  <FormField label="Password">
-                    {(fieldProps) => <PasswordInput {...fieldProps} placeholder="Set workspace password" />}
+                  <FormField label={t('demo.text.inputs.passwordInput.password')}>
+                    {(fieldProps) => (
+                      <PasswordInput
+                        {...fieldProps}
+                        placeholder={t('demo.text.inputs.completeForm.setWorkspacePassword')}
+                      />
+                    )}
                   </FormField>
-                  <FormField label="Role">
+                  <FormField label={t('demo.text.inputs.formGrid.role')}>
                     {(fieldProps) => (
                       <Select {...fieldProps} value={selected()} onChange={(e) => setSelected(e.currentTarget.value)}>
-                        <option value="">-- select role --</option>
-                        <option value="owner">Owner</option>
-                        <option value="editor">Editor</option>
-                        <option value="viewer">Viewer</option>
+                        <option value="">{t('demo.text.inputs.formGrid.selectRole')}</option>
+                        <option value="owner">{t('demo.text.inputs.completeForm.owner')}</option>
+                        <option value="editor">{t('demo.text.inputs.radio.editor')}</option>
+                        <option value="viewer">{t('demo.text.inputs.radio.viewer')}</option>
                       </Select>
                     )}
                   </FormField>
-                  <FormField label="Tech stack">
+                  <FormField label={t('demo.text.inputs.completeForm.techStack')}>
                     {(fieldProps) => (
                       <MultiSelect
                         {...fieldProps}
                         options={FRAMEWORK_OPTIONS}
                         value={frameworks()}
                         onChange={setFrameworks}
-                        placeholder="Pick frameworks"
+                        placeholder={t('demo.text.inputs.completeForm.pickFrameworks')}
                       />
                     )}
                   </FormField>
-                  <FormField label="Release window">
+                  <FormField label={t('demo.text.inputs.completeForm.releaseWindow')}>
                     {(fieldProps) => <DateRangePicker {...fieldProps} value={range()} onChange={setRange} />}
                   </FormField>
-                  <FormField label="Launch date and time">
+                  <FormField label={t('demo.text.inputs.completeForm.launchDateTime')}>
                     {(fieldProps) => (
                       <DateTimePicker {...fieldProps} value={dateTime()} onChange={setDateTime} step={15} />
                     )}
                   </FormField>
-                  <FormField label="Seats">
+                  <FormField label={t('demo.text.inputs.completeForm.seats')}>
                     {(fieldProps) => (
                       <NumberInput {...fieldProps} value={quantity()} onChange={setQuantity} min={1} max={50} />
                     )}
                   </FormField>
-                  <FormField label="Tags">
+                  <FormField label={t('demo.text.inputs.tagInput.tags')}>
                     {(fieldProps) => (
                       <TagInput
                         {...fieldProps}
                         value={tags()}
                         onChange={setTags}
-                        placeholder="Press Enter to add tag"
+                        placeholder={t('demo.text.inputs.completeForm.pressEnterTag')}
                       />
                     )}
                   </FormField>
-                  <FormField label="Accent color">
+                  <FormField label={t('demo.text.inputs.completeForm.accentColor')}>
                     {(fieldProps) => (
                       <ColorPicker {...fieldProps} colors={PRESET_COLORS} value={color()} onChange={setColor} />
                     )}
                   </FormField>
-                  <FormField label="Summary">
+                  <FormField label={t('demo.text.inputs.completeForm.summary')}>
                     {(fieldProps) => (
-                      <TextArea {...fieldProps} placeholder="Goals, scope, and rollout assumptions..." rows={4} />
+                      <TextArea
+                        {...fieldProps}
+                        placeholder={t('demo.text.inputs.completeForm.summaryPlaceholder')}
+                        rows={4}
+                      />
                     )}
                   </FormField>
                 </FormGrid>
-                <FormField label="Notifications">
+                <FormField label={t('demo.text.inputs.completeForm.notifications')}>
                   {(fieldProps) => (
                     <Switch
                       id={fieldProps.id}
@@ -1064,53 +1406,61 @@ const InputsSection = (props: InputsSectionProps) => {
                   )}
                 </FormField>
                 <ActionRow align="end">
-                  <Button variant="ghost">Cancel</Button>
-                  <Button variant="outline">Save draft</Button>
-                  <Button variant="primary">Create workspace</Button>
+                  <Button variant="ghost">{t('demo.text.inputs.actions.cancel')}</Button>
+                  <Button variant="outline">{t('demo.text.inputs.actions.saveDraft')}</Button>
+                  <Button variant="primary">{t('demo.text.inputs.completeForm.createWorkspace')}</Button>
                 </ActionRow>
               </FormLayout>
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Combine{' '}
-            <CodeText as="span" class="codeInline">
-              FormLayout
-            </CodeText>
-            ,{' '}
-            <CodeText as="span" class="codeInline">
-              FormGrid
-            </CodeText>
-            ,{' '}
-            <CodeText as="span" class="codeInline">
-              FormField
-            </CodeText>{' '}
-            and{' '}
-            <CodeText as="span" class="codeInline">
-              ActionRow
-            </CodeText>{' '}
-            for full-screen forms.
+            {renderRichText(t('demo.text.inputs.completeForm.meta'), {
+              formLayout: (
+                <CodeText as="span" class="codeInline">
+                  FormLayout
+                </CodeText>
+              ),
+              formGrid: (
+                <CodeText as="span" class="codeInline">
+                  FormGrid
+                </CodeText>
+              ),
+              formField: (
+                <CodeText as="span" class="codeInline">
+                  FormField
+                </CodeText>
+              ),
+              actionRow: (
+                <CodeText as="span" class="codeInline">
+                  ActionRow
+                </CodeText>
+              ),
+            })}
           </ShowcaseMeta>
         </ShowcaseSection>
 
-        <ShowcaseSection title="ActionRow" subtitle="Horizontal row for action buttons with alignment">
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.actionRow.title')}
+          subtitle={t('demo.showcase.inputs.actionRow.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <ActionRow align="start">
-                <Button variant="primary">Save draft</Button>
-                <Button variant="ghost">Cancel</Button>
+                <Button variant="primary">{t('demo.text.inputs.actions.saveDraft')}</Button>
+                <Button variant="ghost">{t('demo.text.inputs.actions.cancel')}</Button>
               </ActionRow>
               <ActionRow align="end">
-                <Button variant="dashed">Export</Button>
-                <Button variant="primary">Submit</Button>
+                <Button variant="dashed">{t('demo.text.inputs.actions.export')}</Button>
+                <Button variant="primary">{t('demo.text.inputs.actions.submit')}</Button>
               </ActionRow>
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Use{' '}
+            {t('demo.text.inputs.actionRow.use')}{' '}
             <CodeText as="span" class="codeInline">
               align
             </CodeText>{' '}
-            prop to control button positioning within the row.
+            {t('demo.text.inputs.actionRow.meta')}
           </ShowcaseMeta>
         </ShowcaseSection>
       </Show>

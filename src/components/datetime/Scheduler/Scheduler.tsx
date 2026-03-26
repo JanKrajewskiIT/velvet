@@ -1,4 +1,4 @@
-import { createEffect, createMemo, createSignal, For, type JSX, Show, splitProps } from 'solid-js';
+import { createEffect, createMemo, createSignal, For, Show, splitProps } from 'solid-js';
 
 import Button from '~/components/buttons/Button/Button';
 import ConfirmDialog from '~/components/overlays/ConfirmDialog/ConfirmDialog';
@@ -8,13 +8,15 @@ import Text from '~/components/typography/Text/Text';
 import useEscapeKey from '~/hooks/useEscapeKey';
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
+import type { DivCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
+import type { DayCell } from '~/utils/datetime';
+import { addDays, buildDaysGrid, getDateDiffInDays, parseDateParts, toIso } from '~/utils/datetime';
 
-import { buildDaysGrid, type DayCell, toIso } from '../shared/calendar';
 import styles from './Scheduler.module.css';
-import SchedulerCalendar from './SchedulerCalendar';
-import SchedulerEventForm from './SchedulerEventForm';
-import SchedulerEventItem from './SchedulerEventItem';
+import SchedulerCalendar from './SchedulerCalendar/SchedulerCalendar';
+import SchedulerEventForm from './SchedulerEventForm/SchedulerEventForm';
+import SchedulerEventItem from './SchedulerEventItem/SchedulerEventItem';
 
 type SchedulerDragType = 'move' | 'resize-end';
 
@@ -27,7 +29,7 @@ export interface SchedulerEvent {
   description?: string;
 }
 
-interface SchedulerOwnProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'onChange'> {
+interface SchedulerOwnProps extends Omit<DivCoreNativeProps, 'onChange'> {
   events: SchedulerEvent[];
   onEventsChange?: (events: SchedulerEvent[]) => void;
   selectedDate?: string;
@@ -66,43 +68,6 @@ interface SchedulerMessages {
   deleteDialogCancelLabel?: string;
 }
 
-const DAY_NAMES_DEFAULT = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-
-const MS_IN_DAY = 24 * 60 * 60 * 1000;
-const isoToDate = (iso: string): Date => {
-  const [yearRaw, monthRaw, dayRaw] = iso.split('-');
-  return new Date(Number(yearRaw), Number(monthRaw) - 1, Number(dayRaw));
-};
-
-const addDays = (iso: string, delta: number): string => {
-  const date = isoToDate(iso);
-  const next = new Date(date.getFullYear(), date.getMonth(), date.getDate() + delta);
-  return toIso(next.getFullYear(), next.getMonth(), next.getDate());
-};
-
-const getDateDiffInDays = (fromIso: string, toIso: string): number => {
-  const from = isoToDate(fromIso);
-  const to = isoToDate(toIso);
-  return Math.round((to.getTime() - from.getTime()) / MS_IN_DAY);
-};
-
-const parseIsoDate = (isoDate?: string): { year: number; month: number; day: number } => {
-  if (!isoDate) {
-    const now = new Date();
-    return { year: now.getFullYear(), month: now.getMonth(), day: now.getDate() };
-  }
-
-  const [yearRaw, monthRaw, dayRaw] = isoDate.split('-');
-  const year = Number(yearRaw);
-  const month = Number(monthRaw) - 1;
-  const day = Number(dayRaw);
-  if (Number.isNaN(year) || Number.isNaN(month) || Number.isNaN(day)) {
-    const now = new Date();
-    return { year: now.getFullYear(), month: now.getMonth(), day: now.getDate() };
-  }
-  return { year, month, day };
-};
-
 const Scheduler = (props: Props<SchedulerOwnProps>) => {
   const { locale: currentLocale, t } = useI18n();
   const [local, rest] = splitProps(props, [
@@ -127,13 +92,22 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
   const [viewYear, setViewYear] = createSignal(now.getFullYear());
   const [viewMonth, setViewMonth] = createSignal(now.getMonth());
   createEffect(() => {
-    const parts = parseIsoDate(local.selectedDate ?? internalSelectedDate());
+    const parts = parseDateParts(local.selectedDate ?? internalSelectedDate());
     setViewYear(parts.year);
     setViewMonth(parts.month);
   });
 
   const selectedDate = () => local.selectedDate ?? internalSelectedDate();
-  const dayNames = () => local.dayNames ?? DAY_NAMES_DEFAULT;
+  const dayNames = () =>
+    local.dayNames ?? [
+      t('calendar.day.mo'),
+      t('calendar.day.tu'),
+      t('calendar.day.we'),
+      t('calendar.day.th'),
+      t('calendar.day.fr'),
+      t('calendar.day.sa'),
+      t('calendar.day.su'),
+    ];
   const messages = () => local.messages ?? {};
   const previousMonthLabel = () => messages().previousMonthLabel ?? t('calendar.prevMonth');
   const nextMonthLabel = () => messages().nextMonthLabel ?? t('calendar.nextMonth');

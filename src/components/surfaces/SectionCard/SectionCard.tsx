@@ -1,10 +1,11 @@
-import { type JSX, splitProps } from 'solid-js';
+import { splitProps } from 'solid-js';
 
 import Accordion from '~/components/surfaces/Accordion/Accordion';
-import AccordionItem from '~/components/surfaces/AccordionItem/AccordionItem';
+import AccordionItem from '~/components/surfaces/Accordion/AccordionItem/AccordionItem';
 import type Props from '~/models/Props';
+import type { DivCoreNativeProps } from '~/models/Props';
 
-interface SectionCardProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'onToggle'> {
+interface SectionCardProps extends Omit<DivCoreNativeProps, 'onToggle'> {
   label: string;
   isOpen?: boolean;
   defaultOpen?: boolean;

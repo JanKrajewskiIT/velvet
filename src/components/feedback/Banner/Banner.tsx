@@ -38,7 +38,7 @@ const Banner = (props: Props<BannerProps>) => {
       </Show>
       <Show when={props.onClose}>
         <IconButton
-          icon={<FiX size={16} />}
+          icon={FiX}
           label={props.messages?.closeButtonLabel ?? props.closeLabel ?? t('common.close')}
           class={styles.closeBtn}
           onClick={props.onClose}

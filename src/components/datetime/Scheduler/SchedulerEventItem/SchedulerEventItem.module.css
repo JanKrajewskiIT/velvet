@@ -1,0 +1,39 @@
+.eventItem {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  padding: var(--spacing-sm);
+}
+
+.eventDragging {
+  opacity: 0.6;
+}
+
+.eventHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+}
+
+.eventDate {
+  margin: var(--spacing-2xs) 0 0;
+}
+
+.eventDescription {
+  margin: var(--spacing-2xs) 0 0;
+}
+
+.eventActions {
+  margin-top: var(--spacing-sm);
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.dragAction {
+  cursor: grab;
+}
+
+.dragAction:active {
+  cursor: grabbing;
+}

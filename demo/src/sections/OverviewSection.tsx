@@ -1,68 +1,83 @@
-import { CodeText, Heading, Text } from '@jankrajewskiit/ui';
-import { For } from 'solid-js';
+import { CodeText, Heading, Text, useI18n } from '@jankrajewskiit/ui';
+import { createMemo, For } from 'solid-js';
 
 import { PreviewGroup, PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
-
-const STATS = [
-  { label: 'Components', value: '58+' },
-  { label: 'Categories', value: '9' },
-  { label: 'Theme Modes', value: '3' },
-  { label: 'Hooks', value: '3' },
-  { label: 'Tooling Presets', value: '7' },
-];
+import { type DemoI18nMessageKey, getDemoMessages } from '../i18n/messages';
+import { renderRichText } from '../i18n/renderRichText';
 
 const OverviewSection = () => {
+  const { locale } = useI18n();
+  const dictionary = createMemo(() => getDemoMessages(locale()));
+  const t = (key: DemoI18nMessageKey): string => dictionary()[key];
+  const stats = createMemo(() => [
+    { label: t('demo.text.overview.stats.components'), value: '58+' },
+    { label: t('demo.text.overview.stats.categories'), value: '9' },
+    { label: t('demo.text.overview.stats.themeModes'), value: '3' },
+    { label: t('demo.text.overview.stats.hooks'), value: '3' },
+    { label: t('demo.text.overview.stats.toolingPresets'), value: '7' },
+  ]);
+
   return (
     <>
-      <ShowcaseSection title="What is VelvetUI?" subtitle="A reusable SolidJS UI component library">
+      <ShowcaseSection
+        title={t('demo.showcase.overview.whatIs.title')}
+        subtitle={t('demo.showcase.overview.whatIs.subtitle')}
+      >
         <PreviewPanel>
-          <PreviewGroup title="Core idea">
+          <PreviewGroup title={t('demo.text.overview.coreIdea.title')}>
             <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-              VelvetUI is an app-agnostic component library for SolidJS. It uses TypeScript and CSS Modules, and is{' '}
-              published as{' '}
-              <CodeText as="span" class="codeInline">
-                @jankrajewskiit/ui
-              </CodeText>
-              .
+              {renderRichText(t('demo.text.overview.coreIdea.message'), {
+                packageName: (
+                  <CodeText as="span" class="codeInline">
+                    @jankrajewskiit/ui
+                  </CodeText>
+                ),
+              })}
             </Text>
           </PreviewGroup>
 
-          <PreviewGroup title="Highlights" subtitle="What you get out of the box">
+          <PreviewGroup
+            title={t('demo.text.overview.highlights.title')}
+            subtitle={t('demo.text.overview.highlights.subtitle')}
+          >
             <ul class="overviewList">
-              <li>Works with SolidJS and @solidjs/router as peer dependencies</li>
-              <li>Supports light, dark and system theme modes</li>
-              <li>Exports component styles as @jankrajewskiit/ui/styles</li>
-              <li>
-                9 categories: inputs (including form layout), data-display, navigation, feedback, overlays, layout,
-                composites and app-specific
-              </li>
+              <li>{t('demo.text.overview.highlights.itemPeers')}</li>
+              <li>{t('demo.text.overview.highlights.itemThemes')}</li>
+              <li>{t('demo.text.overview.highlights.itemStyles')}</li>
+              <li>{t('demo.text.overview.highlights.itemCategories')}</li>
             </ul>
           </PreviewGroup>
         </PreviewPanel>
       </ShowcaseSection>
 
-      <ShowcaseSection title="Installation" subtitle="Install package and required peers">
+      <ShowcaseSection
+        title={t('demo.showcase.overview.installation.title')}
+        subtitle={t('demo.showcase.overview.installation.subtitle')}
+      >
         <PreviewPanel>
-          <PreviewGroup title="Install dependencies">
+          <PreviewGroup title={t('demo.text.overview.install.title')}>
             <CodeText as="pre" variant="block" size="md" class="installBlock">
               npm install @jankrajewskiit/ui solid-js @solidjs/router
             </CodeText>
           </PreviewGroup>
 
-          <PreviewGroup title="Import styles">
+          <PreviewGroup title={t('demo.text.overview.importStyles.title')}>
             <CodeText as="pre" variant="block" size="md" class="installBlock">
               import '@jankrajewskiit/ui/styles';
             </CodeText>
           </PreviewGroup>
         </PreviewPanel>
-        <ShowcaseMeta>Import styles once in your app entry point:</ShowcaseMeta>
+        <ShowcaseMeta>{t('demo.text.overview.importStyles.meta')}</ShowcaseMeta>
       </ShowcaseSection>
 
-      <ShowcaseSection title="Library Stats" subtitle="Quick snapshot of the current package scope">
+      <ShowcaseSection
+        title={t('demo.showcase.overview.libraryStats.title')}
+        subtitle={t('demo.showcase.overview.libraryStats.subtitle')}
+      >
         <PreviewPanel>
-          <PreviewGroup title="Current package shape">
+          <PreviewGroup title={t('demo.text.overview.packageShape.title')}>
             <div class="pageStats">
-              <For each={STATS}>
+              <For each={stats()}>
                 {(stat) => (
                   <div class="statPill">
                     <Text as="span" variant="overline" tone="tertiary" class="stat-label">

@@ -1,123 +1,43 @@
-import type {
-  BottomNavItem,
-  BreadcrumbItem,
-  NavItem,
-  SidebarItem,
-  SidebarNavGroup,
-  SpeedDialAction,
-} from '@jankrajewskiit/ui';
 import {
   BackToTop,
   BottomNav,
+  type BottomNavItem,
+  type BreadcrumbItem,
   Breadcrumbs,
   Button,
   CodeText,
   LocaleSwitcher,
   Navbar,
+  type NavItem,
   Pagination,
   Sidebar,
+  type SidebarItem,
   SidebarNav,
+  type SidebarNavGroup,
   SpeedDial,
+  type SpeedDialAction,
   Stepper,
   Tabs,
   Text,
   ThemeToggle,
+  useI18n,
 } from '@jankrajewskiit/ui';
 import { BiLogosReact } from 'solid-icons/bi';
 import { IoAdd, IoCalendar, IoHome, IoPencil, IoPerson, IoSearch, IoSettings, IoShareSocial } from 'solid-icons/io';
-import { createSignal, For, Show } from 'solid-js';
+import { createMemo, createSignal, For, Show } from 'solid-js';
 
 import type { SectionId } from '../App';
 import { PreviewGroup, PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
+import { type DemoI18nMessageKey, getDemoMessages } from '../i18n/messages';
+import { renderRichText } from '../i18n/renderRichText';
 
 type TabValue = 'preview' | 'code' | 'props';
 
-const BASIC_BREADCRUMBS: BreadcrumbItem[] = [
-  { label: 'Home', href: '#' },
-  { label: 'Products', href: '#' },
-  { label: 'Detail' },
-];
-
-const COLLAPSIBLE_BREADCRUMBS: BreadcrumbItem[] = [
-  { label: 'Home', href: '#' },
-  { label: 'Category', href: '#' },
-  { label: 'Subcategory', href: '#' },
-  { label: 'Products', href: '#' },
-  { label: 'Item', href: '#' },
-  { label: 'Detail' },
-];
-
-const getSpeedDialActions = (): SpeedDialAction[] => [
-  { icon: <IoAdd size={20} />, label: 'Add', onClick: () => {} },
-  { icon: <IoPencil size={20} />, label: 'Edit', onClick: () => {} },
-  { icon: <IoShareSocial size={20} />, label: 'Share', onClick: () => {} },
-];
-
-const SPEED_DIAL_DIRECTION_VARIANTS: Array<{
-  title: string;
-  direction: 'up' | 'down' | 'left' | 'right';
-}> = [
-  { title: 'Up', direction: 'up' },
-  { title: 'Down', direction: 'down' },
-  { title: 'Left', direction: 'left' },
-  { title: 'Right', direction: 'right' },
-];
-
-const STEPPER_STEPS = [
-  { value: 'info', label: 'Info' },
-  { value: 'details', label: 'Details' },
-  { value: 'review', label: 'Review' },
-  { value: 'done', label: 'Done' },
-];
-
-const getBottomNavItems = (): BottomNavItem[] => [
-  { id: 'home', label: 'Home', icon: <IoHome size={20} /> },
-  { id: 'search', label: 'Search', icon: <IoSearch size={20} /> },
-  { id: 'calendar', label: 'Calendar', icon: <IoCalendar size={20} />, badge: 2 },
-  { id: 'profile', label: 'Profile', icon: <IoPerson size={20} /> },
-];
-
-const NAVBAR_ITEMS: NavItem[] = [
-  { label: 'Dashboard', href: '/dashboard', icon: IoHome },
-  { label: 'Search', href: '/search', icon: IoSearch },
-  { label: 'Settings', href: '/settings', icon: IoSettings },
-];
-
-const getSidebarItems = (): SidebarItem[] => [
-  { id: 'overview', label: 'Overview', icon: <IoHome size={16} /> },
-  {
-    id: 'workspace',
-    label: 'Workspace',
-    icon: <IoCalendar size={16} />,
-    children: [
-      { id: 'reports', label: 'Reports', badge: 6 },
-      { id: 'tasks', label: 'Tasks', badge: 3 },
-      { id: 'archive', label: 'Archive' },
-    ],
-  },
-  { id: 'profile', label: 'Profile', icon: <IoPerson size={16} /> },
-];
-
-const SIDEBAR_NAV_GROUPS: SidebarNavGroup[] = [
-  {
-    label: 'Navigation',
-    items: [
-      { id: 'nav-overview', label: 'Overview' },
-      { id: 'nav-pages', label: 'Pages' },
-      { id: 'nav-settings', label: 'Settings' },
-    ],
-  },
-  {
-    label: 'Management',
-    items: [
-      { id: 'nav-users', label: 'Users' },
-      { id: 'nav-billing', label: 'Billing' },
-    ],
-  },
-];
-
 const NavigationSection = (props: { sectionId: SectionId }) => {
   const sectionId = () => props.sectionId;
+  const { locale } = useI18n();
+  const dictionary = createMemo(() => getDemoMessages(locale()));
+  const t = (key: DemoI18nMessageKey): string => dictionary()[key];
   const [tab, setTab] = createSignal<TabValue>('preview');
   const [activeStep, setActiveStep] = createSignal('details');
   const [page, setPage] = createSignal(3);
@@ -126,24 +46,113 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
   const [sidebarCollapsed, setSidebarCollapsed] = createSignal(false);
   const [sidebarNavActive, setSidebarNavActive] = createSignal('nav-overview');
 
+  const basicBreadcrumbs = createMemo<BreadcrumbItem[]>(() => [
+    { label: t('demo.text.navigation.breadcrumbs.home'), href: '#' },
+    { label: t('demo.text.navigation.breadcrumbs.products'), href: '#' },
+    { label: t('demo.text.navigation.breadcrumbs.detail') },
+  ]);
+
+  const collapsibleBreadcrumbs = createMemo<BreadcrumbItem[]>(() => [
+    { label: t('demo.text.navigation.breadcrumbs.home'), href: '#' },
+    { label: t('demo.text.navigation.breadcrumbs.category'), href: '#' },
+    { label: t('demo.text.navigation.breadcrumbs.subcategory'), href: '#' },
+    { label: t('demo.text.navigation.breadcrumbs.products'), href: '#' },
+    { label: t('demo.text.navigation.breadcrumbs.item'), href: '#' },
+    { label: t('demo.text.navigation.breadcrumbs.detail') },
+  ]);
+
+  const speedDialActions = createMemo<SpeedDialAction[]>(() => [
+    { icon: <IoAdd size={20} />, label: t('demo.text.navigation.speedDial.add'), onClick: () => {} },
+    { icon: <IoPencil size={20} />, label: t('demo.text.navigation.speedDial.edit'), onClick: () => {} },
+    { icon: <IoShareSocial size={20} />, label: t('demo.text.navigation.speedDial.share'), onClick: () => {} },
+  ]);
+
+  const speedDialDirectionVariants = createMemo(() => [
+    { title: t('demo.text.navigation.speedDial.up'), direction: 'up' as const },
+    { title: t('demo.text.navigation.speedDial.down'), direction: 'down' as const },
+    { title: t('demo.text.navigation.speedDial.left'), direction: 'left' as const },
+    { title: t('demo.text.navigation.speedDial.right'), direction: 'right' as const },
+  ]);
+
+  const stepperSteps = createMemo(() => [
+    { value: 'info', label: t('demo.text.navigation.stepper.info') },
+    { value: 'details', label: t('demo.text.navigation.stepper.details') },
+    { value: 'review', label: t('demo.text.navigation.stepper.review') },
+    { value: 'done', label: t('demo.text.navigation.stepper.done') },
+  ]);
+
+  const bottomNavItems = createMemo<BottomNavItem[]>(() => [
+    { id: 'home', label: t('demo.text.navigation.bottomNav.home'), icon: <IoHome size={20} /> },
+    { id: 'search', label: t('demo.text.navigation.bottomNav.search'), icon: <IoSearch size={20} /> },
+    { id: 'calendar', label: t('demo.text.navigation.bottomNav.calendar'), icon: <IoCalendar size={20} />, badge: 2 },
+    { id: 'profile', label: t('demo.text.navigation.bottomNav.profile'), icon: <IoPerson size={20} /> },
+  ]);
+
+  const navbarItems = createMemo<NavItem[]>(() => [
+    { label: t('demo.text.navigation.navbar.dashboard'), href: '/dashboard', icon: IoHome },
+    { label: t('demo.text.navigation.navbar.search'), href: '/search', icon: IoSearch },
+    { label: t('demo.text.navigation.navbar.settings'), href: '/settings', icon: IoSettings },
+  ]);
+
+  const sidebarItems = createMemo<SidebarItem[]>(() => [
+    { id: 'overview', label: t('demo.text.navigation.sidebars.overview'), icon: <IoHome size={16} /> },
+    {
+      id: 'workspace',
+      label: t('demo.text.navigation.sidebars.workspace'),
+      icon: <IoCalendar size={16} />,
+      children: [
+        { id: 'reports', label: t('demo.text.navigation.sidebars.reports'), badge: 6 },
+        { id: 'tasks', label: t('demo.text.navigation.sidebars.tasks'), badge: 3 },
+        { id: 'archive', label: t('demo.text.navigation.sidebars.archive') },
+      ],
+    },
+    { id: 'profile', label: t('demo.text.navigation.sidebars.profile'), icon: <IoPerson size={16} /> },
+  ]);
+
+  const sidebarNavGroups = createMemo<SidebarNavGroup[]>(() => [
+    {
+      label: t('demo.text.navigation.sidebars.groupNavigation'),
+      items: [
+        { id: 'nav-overview', label: t('demo.text.navigation.sidebars.overview') },
+        { id: 'nav-pages', label: t('demo.text.navigation.sidebars.pages') },
+        { id: 'nav-settings', label: t('demo.text.navigation.sidebars.settings') },
+      ],
+    },
+    {
+      label: t('demo.text.navigation.sidebars.groupManagement'),
+      items: [
+        { id: 'nav-users', label: t('demo.text.navigation.sidebars.users') },
+        { id: 'nav-billing', label: t('demo.text.navigation.sidebars.billing') },
+      ],
+    },
+  ]);
+
   return (
     <div>
       <Show when={sectionId() === 'nav-navbar'}>
-        <ShowcaseSection title="Navbar" subtitle="Top navigation with logo, actions and responsive menu">
+        <ShowcaseSection
+          title={t('demo.showcase.navigation.navbar.title')}
+          subtitle={t('demo.showcase.navigation.navbar.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <div class="layoutPreviewShell">
                 <Navbar
-                  navItems={NAVBAR_ITEMS}
+                  navItems={navbarItems()}
                   logo={<BiLogosReact class="layoutNavbarLogo" />}
                   actions={
                     <div class="layoutNavbarActions">
                       <LocaleSwitcher variant="navbar" />
-                      <ThemeToggle lightLabel="Light mode" darkLabel="Dark mode" groupLabel="Theme" variant="navbar" />
+                      <ThemeToggle
+                        lightLabel={t('demo.theme.light')}
+                        darkLabel={t('demo.theme.dark')}
+                        groupLabel={t('demo.theme.group')}
+                        variant="navbar"
+                      />
                     </div>
                   }
-                  toggleMenuLabel="Toggle navigation"
-                  navLabel="Main navigation"
+                  toggleMenuLabel={t('demo.text.navigation.navbar.toggleMenu')}
+                  navLabel={t('demo.text.navigation.navbar.mainNav')}
                 />
               </div>
             </PreviewGroup>
@@ -152,40 +161,49 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
       </Show>
 
       <Show when={sectionId() === 'nav-sidebars'}>
-        <ShowcaseSection title="Sidebar & SidebarNav" subtitle="Side navigation variants for app layout and docs menus">
+        <ShowcaseSection
+          title={t('demo.showcase.navigation.sidebarAndSidebarNav.title')}
+          subtitle={t('demo.showcase.navigation.sidebarAndSidebarNav.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Sidebar">
+            <PreviewGroup title={t('demo.text.navigation.sidebars.sidebar.title')}>
               <div class="sidebarPreviewShell">
                 <Sidebar
                   class="sidebarNavPreview"
-                  items={getSidebarItems()}
+                  items={sidebarItems()}
                   activeId={sidebarActive()}
                   onSelect={setSidebarActive}
                   collapsed={sidebarCollapsed()}
                   onToggle={() => setSidebarCollapsed((current) => !current)}
-                  header="Workspace"
+                  header={t('demo.text.navigation.sidebars.workspace')}
                 />
                 <div class="sidebarPreviewBody">
                   <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                    Active sidebar item: <strong>{sidebarActive()}</strong>
+                    {t('demo.text.navigation.sidebars.activeSidebar')}:{' '}
+                    <CodeText as="span" class="codeInline">
+                      {sidebarActive()}
+                    </CodeText>
                   </Text>
                 </div>
               </div>
             </PreviewGroup>
 
-            <PreviewGroup title="SidebarNav">
+            <PreviewGroup title={t('demo.text.navigation.sidebars.sidebarNav.title')}>
               <div class="sidebarPreviewShell">
                 <SidebarNav
                   class="sidebarNavPreview"
-                  groups={SIDEBAR_NAV_GROUPS}
+                  groups={sidebarNavGroups()}
                   activeId={sidebarNavActive()}
                   onSelect={setSidebarNavActive}
-                  label="VelvetUI"
-                  subtitle="Navigation preview"
+                  label={t('demo.text.navigation.sidebars.label')}
+                  subtitle={t('demo.text.navigation.sidebars.previewSubtitle')}
                 />
                 <div class="sidebarPreviewBody">
                   <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                    Active sidebar nav item: <strong>{sidebarNavActive()}</strong>
+                    {t('demo.text.navigation.sidebars.activeSidebarNav')}:{' '}
+                    <CodeText as="span" class="codeInline">
+                      {sidebarNavActive()}
+                    </CodeText>
                   </Text>
                 </div>
               </div>
@@ -195,23 +213,29 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
       </Show>
 
       <Show when={sectionId() === 'nav-breadcrumbs'}>
-        <ShowcaseSection title="Breadcrumbs" subtitle="Hierarchical path navigation with collapse">
+        <ShowcaseSection
+          title={t('demo.showcase.navigation.breadcrumbs.title')}
+          subtitle={t('demo.showcase.navigation.breadcrumbs.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <Breadcrumbs items={BASIC_BREADCRUMBS} />
-              <Breadcrumbs items={COLLAPSIBLE_BREADCRUMBS} maxItems={3} />
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <Breadcrumbs items={basicBreadcrumbs()} />
+              <Breadcrumbs items={collapsibleBreadcrumbs()} maxItems={3} />
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
       </Show>
 
       <Show when={sectionId() === 'nav-stepper'}>
-        <ShowcaseSection title="Stepper" subtitle="Visual progress through ordered steps">
+        <ShowcaseSection
+          title={t('demo.showcase.navigation.stepper.title')}
+          subtitle={t('demo.showcase.navigation.stepper.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <Stepper steps={STEPPER_STEPS} activeStep={activeStep()} />
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <Stepper steps={stepperSteps()} activeStep={activeStep()} />
               <div class="stepButtons">
-                <For each={STEPPER_STEPS}>
+                <For each={stepperSteps()}>
                   {(s) => (
                     <Button
                       variant={activeStep() === s.value ? 'primary' : 'ghost'}
@@ -229,26 +253,29 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
       </Show>
 
       <Show when={sectionId() === 'nav-tabs'}>
-        <ShowcaseSection title="Tabs" subtitle="Underline and pill variants">
+        <ShowcaseSection
+          title={t('demo.showcase.navigation.tabs.title')}
+          subtitle={t('demo.showcase.navigation.tabs.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Underline variant">
+            <PreviewGroup title={t('demo.text.navigation.tabs.underlineVariant.title')}>
               <Tabs<TabValue>
                 tabs={[
-                  { value: 'preview', label: 'Preview' },
-                  { value: 'code', label: 'Code' },
-                  { value: 'props', label: 'Props' },
+                  { value: 'preview', label: t('demo.text.navigation.tabs.preview') },
+                  { value: 'code', label: t('demo.text.navigation.tabs.code') },
+                  { value: 'props', label: t('demo.text.navigation.tabs.props') },
                 ]}
                 value={tab()}
                 onChange={setTab}
                 variant="underline"
               />
             </PreviewGroup>
-            <PreviewGroup title="Pill variant">
+            <PreviewGroup title={t('demo.text.navigation.tabs.pillVariant.title')}>
               <Tabs<TabValue>
                 tabs={[
-                  { value: 'preview', label: 'Preview' },
-                  { value: 'code', label: 'Code' },
-                  { value: 'props', label: 'Props' },
+                  { value: 'preview', label: t('demo.text.navigation.tabs.preview') },
+                  { value: 'code', label: t('demo.text.navigation.tabs.code') },
+                  { value: 'props', label: t('demo.text.navigation.tabs.props') },
                 ]}
                 value={tab()}
                 onChange={setTab}
@@ -257,7 +284,7 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Active tab:{' '}
+            {t('demo.text.navigation.tabs.activeTab')}:{' '}
             <CodeText as="span" class="codeInline">
               {tab()}
             </CodeText>
@@ -266,12 +293,24 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
       </Show>
 
       <Show when={sectionId() === 'nav-pagination'}>
-        <ShowcaseSection title="Pagination" subtitle="Navigate between list and content pages">
+        <ShowcaseSection
+          title={t('demo.showcase.navigation.pagination.title')}
+          subtitle={t('demo.showcase.navigation.pagination.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <Pagination page={page()} totalPages={24} onChange={setPage} previousLabel="Previous" nextLabel="Next" />
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <Pagination
+                page={page()}
+                totalPages={24}
+                onChange={setPage}
+                previousLabel={t('demo.text.navigation.pagination.previous')}
+                nextLabel={t('demo.text.navigation.pagination.next')}
+              />
               <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                Current page: <strong>{page()}</strong>
+                {t('demo.text.navigation.pagination.currentPage')}:{' '}
+                <CodeText as="span" class="codeInline">
+                  {page()}
+                </CodeText>
               </Text>
             </PreviewGroup>
           </PreviewPanel>
@@ -279,18 +318,21 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
       </Show>
 
       <Show when={sectionId() === 'nav-speed-dial'}>
-        <ShowcaseSection title="Speed Dial (FAB)" subtitle="Quick actions with tooltip labels">
+        <ShowcaseSection
+          title={t('demo.showcase.navigation.speedDial.title')}
+          subtitle={t('demo.showcase.navigation.speedDial.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Direction variants">
+            <PreviewGroup title={t('demo.text.navigation.speedDial.directionVariants.title')}>
               <div class="speedDialGrid">
-                <For each={SPEED_DIAL_DIRECTION_VARIANTS}>
+                <For each={speedDialDirectionVariants()}>
                   {(variant) => (
                     <div class="speedDialCard">
                       <Text as="p" variant="bodySm" tone="muted" class="mutedText">
                         {variant.title}
                       </Text>
                       <div class="speedDialAnchor">
-                        <SpeedDial actions={getSpeedDialActions()} position="inline" direction={variant.direction} />
+                        <SpeedDial actions={speedDialActions()} position="inline" direction={variant.direction} />
                       </div>
                     </div>
                   )}
@@ -302,41 +344,48 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
       </Show>
 
       <Show when={sectionId() === 'nav-bottom-nav'}>
-        <ShowcaseSection title="BottomNav" subtitle="Mobile bottom navigation bar">
+        <ShowcaseSection
+          title={t('demo.showcase.navigation.bottomNav.title')}
+          subtitle={t('demo.showcase.navigation.bottomNav.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <div class="bottomNavPreview">
                 <div class="bottomNavPreviewLabel">
                   <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                    Active: <strong>{activeBottomNav()}</strong>
+                    {t('demo.text.navigation.bottomNav.active')}:{' '}
+                    <CodeText as="span" class="codeInline">
+                      {activeBottomNav()}
+                    </CodeText>
                   </Text>
                 </div>
                 <BottomNav
                   placement="container"
-                  items={getBottomNavItems()}
+                  items={bottomNavItems()}
                   activeId={activeBottomNav()}
                   onChange={setActiveBottomNav}
                 />
               </div>
             </PreviewGroup>
           </PreviewPanel>
-          <ShowcaseMeta>
-            Supports badges. Use placement=&quot;viewport&quot; for full-width fixed bars; &quot;container&quot; keeps
-            the bar inside a positioned region (e.g. main column next to a sidebar).
-          </ShowcaseMeta>
+          <ShowcaseMeta>{t('demo.text.navigation.bottomNav.meta')}</ShowcaseMeta>
         </ShowcaseSection>
       </Show>
 
       <Show when={sectionId() === 'nav-back-to-top'}>
-        <ShowcaseSection title="BackToTop" subtitle="Floating scroll-to-top button">
+        <ShowcaseSection
+          title={t('demo.showcase.navigation.backToTop.title')}
+          subtitle={t('demo.showcase.navigation.backToTop.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                Scroll the <CodeText as="span">main</CodeText> column (not the sidebar). After ~200px scroll, the fixed
-                control appears bottom-right and returns this column to the top.
+                {renderRichText(t('demo.text.navigation.backToTop.meta'), {
+                  main: <CodeText as="span">main</CodeText>,
+                })}
               </Text>
               <BackToTop threshold={200} scrollRoot={() => document.querySelector<HTMLElement>('main.main')} />
-              <div class="backToTopScrollFiller" aria-label="Scroll preview — placeholder content">
+              <div class="backToTopScrollFiller" aria-label={t('demo.text.navigation.backToTop.scrollPreview')}>
                 <For each={Array.from({ length: 16 }, (_, i) => i)}>
                   {() => (
                     <div class="backToTopScrollFillerCard">

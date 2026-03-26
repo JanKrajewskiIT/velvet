@@ -1,0 +1,40 @@
+.button {
+  min-height: auto;
+  justify-content: flex-start;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-width: 0 0 2px;
+  border-color: transparent;
+  border-radius: 0;
+  background: none;
+}
+
+.button:hover:not(:disabled) {
+  border-color: transparent;
+  background: none;
+  box-shadow: none;
+}
+
+.button.button:active:not(:disabled) {
+  transform: none;
+  border-color: transparent;
+  background: none;
+  box-shadow: none;
+}
+
+.button:focus-visible {
+  outline-offset: -2px;
+}
+
+.selected,
+.selected:hover:not(:disabled),
+.selected.button:active:not(:disabled) {
+  border-bottom-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+@media (width < 768px) {
+  .button {
+    padding: var(--spacing-sm);
+    white-space: nowrap;
+  }
+}

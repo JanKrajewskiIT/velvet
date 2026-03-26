@@ -1,12 +1,12 @@
 import { For, type JSX, Show } from 'solid-js';
 
+import Heading from '~/components/typography/Heading/Heading';
+import Text from '~/components/typography/Text/Text';
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import Button from '../../buttons/Button/Button';
-import Heading from '../../typography/Heading/Heading';
-import Text from '../../typography/Text/Text';
+import SidebarItemButton from '../Sidebar/SidebarItemButton/SidebarItemButton';
 import styles from './SidebarNav.module.css';
 
 export interface SidebarNavItem {
@@ -57,15 +57,12 @@ const SidebarNav = (props: Props<SidebarNavProps>) => {
             </Text>
             <For each={group.items}>
               {(item) => (
-                <Button
-                  variant="ghost"
-                  class={classNames(styles.item, isActive(item.id) && styles.itemActive)}
+                <SidebarItemButton
+                  label={item.label}
+                  active={isActive(item.id)}
                   onClick={() => props.onSelect?.(item.id)}
-                >
-                  <Text variant="labelMd" tone="inherit" class={styles.itemLabel}>
-                    {item.label}
-                  </Text>
-                </Button>
+                  class={classNames(styles.item, isActive(item.id) && styles.itemActive)}
+                />
               )}
             </For>
           </div>

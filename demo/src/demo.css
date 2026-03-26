@@ -379,10 +379,6 @@ body {
   border-radius: var(--radius-md);
 }
 
-.bannerActionInverse {
-  color: var(--color-text-inverse);
-}
-
 @media (width < 1080px) {
   .layout {
     grid-template-columns: 1fr;

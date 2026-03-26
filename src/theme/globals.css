@@ -157,6 +157,7 @@
   --typography-scale-2xl: var(--typography-h2-font-size);
   --typography-scale-3xl: var(--typography-h1-font-size);
   --typography-scale-5xl: 3.125rem;
+  --typography-size-icon-sm: 1rem;
   --typography-size-icon-lg: 1.5rem;
   --typography-size-icon-md: 1.25rem;
   --typography-size-fluid-display: clamp(2rem, 6vw, 3rem);

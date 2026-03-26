@@ -3,13 +3,11 @@ import { type JSX, onCleanup, splitProps } from 'solid-js';
 
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
-import type { AriaFieldProps } from '~/models/Props';
+import type { AriaFieldProps, ComponentSize } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import type { ButtonSize } from '../../buttons/Button/Button';
 import IconButton from '../../buttons/IconButton/IconButton';
 import AffixInput from '../AffixInput/AffixInput';
-import type { InputSize } from '../Input/Input';
 import styles from './NumberInput.module.css';
 
 interface NumberInputMessages {
@@ -29,7 +27,7 @@ interface NumberInputOwnProps extends AriaFieldProps {
   readOnly?: boolean;
   required?: boolean;
   invalid?: boolean;
-  size?: InputSize;
+  size?: ComponentSize;
   decrementLabel?: string;
   incrementLabel?: string;
   messages?: NumberInputMessages;
@@ -66,7 +64,7 @@ const NumberInput = (props: Props<NumberInputOwnProps>) => {
     local.messages?.incrementButtonLabel ?? local.incrementLabel ?? t('number.increase');
   const clamp = (v: number) => Math.min(max(), Math.max(min(), v));
 
-  const controlSize = (): ButtonSize => {
+  const controlSize = (): ComponentSize => {
     const current = size();
     if (current === 'sm') return 'sm';
     if (current === 'lg') return 'md';
@@ -140,7 +138,7 @@ const NumberInput = (props: Props<NumberInputOwnProps>) => {
       onChange={handleInputChange}
       prefix={
         <IconButton
-          icon={<IoRemove />}
+          icon={IoRemove}
           label={decrementButtonLabel()}
           disabled={local.disabled || local.readOnly}
           onClick={decrement}
@@ -153,7 +151,7 @@ const NumberInput = (props: Props<NumberInputOwnProps>) => {
       }
       suffix={
         <IconButton
-          icon={<IoAdd />}
+          icon={IoAdd}
           label={incrementButtonLabel()}
           disabled={local.disabled || local.readOnly}
           onClick={increment}

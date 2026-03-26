@@ -19,7 +19,7 @@ const MediaNavButton = (props: Props<MediaNavButtonOwnProps>) => {
   return (
     <IconButton
       {...rest}
-      icon={local.direction === 'prev' ? <FiChevronLeft /> : <FiChevronRight />}
+      icon={local.direction === 'prev' ? FiChevronLeft : FiChevronRight}
       label={local.label}
       class={classNames(styles.button, local.class)}
       variant="outline"

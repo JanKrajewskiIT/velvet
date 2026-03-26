@@ -1,8 +1,8 @@
-import type { JSX } from 'solid-js';
 import { createMemo, For, Show } from 'solid-js';
 
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
+import type { DivCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import Button from '../../buttons/Button/Button';
@@ -29,7 +29,7 @@ export interface FilterBarValue {
   value: string;
 }
 
-interface FilterBarOwnProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'onChange'> {
+interface FilterBarOwnProps extends Omit<DivCoreNativeProps, 'onChange'> {
   filters: readonly FilterBarFilter[];
   value: readonly FilterBarValue[];
   onChange: (next: FilterBarValue[]) => void;

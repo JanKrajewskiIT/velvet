@@ -1,6 +1,7 @@
 import { AiFillMoon, AiFillSun } from 'solid-icons/ai';
 import { createMemo } from 'solid-js';
 
+import Icon from '~/components/media/Icon/Icon';
 import type { SegmentedControlOption } from '~/components/switchers/SegmentedControl/SegmentedControl';
 import SegmentedControl from '~/components/switchers/SegmentedControl/SegmentedControl';
 import type Props from '~/models/Props';
@@ -27,8 +28,8 @@ const ThemeToggle = (props: Props<ThemeToggleProps>) => {
   };
 
   const options = createMemo<SegmentedControlOption[]>(() => [
-    { value: 'light', label: <AiFillSun class={styles.icon} />, ariaLabel: props.lightLabel },
-    { value: 'dark', label: <AiFillMoon class={styles.icon} />, ariaLabel: props.darkLabel },
+    { value: 'light', label: <Icon icon={AiFillSun} class={styles.icon} />, ariaLabel: props.lightLabel },
+    { value: 'dark', label: <Icon icon={AiFillMoon} class={styles.icon} />, ariaLabel: props.darkLabel },
   ]);
 
   const handleThemeChange = (next: string) => {

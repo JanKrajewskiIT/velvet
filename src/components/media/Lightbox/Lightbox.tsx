@@ -8,6 +8,7 @@ import useEscapeKey from '~/hooks/useEscapeKey';
 import useFocusTrap from '~/hooks/useFocusTrap';
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
+import type { DivCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import MediaNavButton from '../MediaNavButton/MediaNavButton';
@@ -25,7 +26,7 @@ interface LightboxMessages {
   nextLabel?: string;
 }
 
-interface LightboxOwnProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'onClose'> {
+interface LightboxOwnProps extends Omit<DivCoreNativeProps, 'onClose'> {
   images: LightboxImage[];
   open: boolean;
   onClose: () => void;
@@ -128,7 +129,7 @@ const Lightbox = (props: Props<LightboxOwnProps>) => {
           onPointerDown={handleOverlayPointerDown}
         >
           <IconButton
-            icon={<IoClose />}
+            icon={IoClose}
             label={closeLabel()}
             class={styles.close}
             variant="outline"

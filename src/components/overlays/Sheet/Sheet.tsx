@@ -77,7 +77,7 @@ const Sheet = (props: Props<SheetProps>) => {
                 </Text>
               </Show>
             </div>
-            <IconButton icon={<FiX />} label={props.closeLabel} onClick={() => props.onClose()} />
+            <IconButton icon={FiX} label={props.closeLabel} onClick={() => props.onClose()} />
           </div>
           <Show when={props.children}>
             <div class={styles.body}>{props.children}</div>

@@ -11,8 +11,8 @@ import EmptyState from '../../feedback/EmptyState/EmptyState';
 import SearchInput from '../../inputs/SearchInput/SearchInput';
 import Checkbox from '../../switchers/Checkbox/Checkbox';
 import Heading from '../../typography/Heading/Heading';
-import SidebarItemRow from '../SidebarItemRow/SidebarItemRow';
 import styles from './Sidebar.module.css';
+import SidebarItemRow from './SidebarItemRow/SidebarItemRow';
 
 export interface SidebarItem {
   id: string;

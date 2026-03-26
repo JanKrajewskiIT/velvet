@@ -1,5 +1,5 @@
 import { IoCheckmarkDone, IoTrash } from 'solid-icons/io';
-import { createMemo, For, type JSX, Show, splitProps } from 'solid-js';
+import { createMemo, For, Show, splitProps } from 'solid-js';
 
 import Button from '~/components/buttons/Button/Button';
 import IconButton from '~/components/buttons/IconButton/IconButton';
@@ -8,6 +8,7 @@ import Heading from '~/components/typography/Heading/Heading';
 import Text from '~/components/typography/Text/Text';
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
+import type { DivCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import Badge from '../Badge/Badge';
@@ -20,7 +21,7 @@ import {
 } from '../Toast/Toast';
 import styles from './NotificationCenter.module.css';
 
-interface NotificationCenterOwnProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'onChange'> {
+interface NotificationCenterOwnProps extends Omit<DivCoreNativeProps, 'onChange'> {
   label?: string;
   emptyMessage?: string;
   markAllLabel?: string;
@@ -128,7 +129,7 @@ const NotificationCenter = (props: Props<NotificationCenterOwnProps>) => {
                 <div class={styles.itemActions}>
                   <Tooltip content={markReadLabel()}>
                     <IconButton
-                      icon={<IoCheckmarkDone />}
+                      icon={IoCheckmarkDone}
                       label={markReadLabel()}
                       onClick={() => handleItemRead(item.id)}
                       size="sm"
@@ -137,7 +138,7 @@ const NotificationCenter = (props: Props<NotificationCenterOwnProps>) => {
                   </Tooltip>
                   <Tooltip content={dismissLabel()}>
                     <IconButton
-                      icon={<IoTrash />}
+                      icon={IoTrash}
                       label={dismissLabel()}
                       onClick={() => handleItemRemove(item.id)}
                       size="sm"

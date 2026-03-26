@@ -3,10 +3,10 @@ import { For } from 'solid-js';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import MenuIndicator from '../MenuIndicator/MenuIndicator';
-import MenuItem from '../MenuItem/MenuItem';
 import type { NavItem } from '../Navbar/NavItem';
 import styles from './MenuBar.module.css';
+import MenuIndicator from './MenuIndicator/MenuIndicator';
+import MenuItem from './MenuItem/MenuItem';
 
 interface MenuBarProps {
   items: NavItem[];

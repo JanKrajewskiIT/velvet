@@ -2,10 +2,12 @@ import { IoAdd, IoArrowDown, IoArrowUp, IoTrash } from 'solid-icons/io';
 import type { JSX } from 'solid-js';
 import { createMemo, For, Show } from 'solid-js';
 
+import Icon from '~/components/media/Icon/Icon';
 import Card from '~/components/surfaces/Card/Card';
 import Text from '~/components/typography/Text/Text';
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
+import type { DivCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import Button from '../../buttons/Button/Button';
@@ -55,7 +57,7 @@ export interface QueryBuilderValue {
   rules: QueryBuilderRule[];
 }
 
-interface QueryBuilderOwnProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'onChange'> {
+interface QueryBuilderOwnProps extends Omit<DivCoreNativeProps, 'onChange'> {
   fields: readonly QueryBuilderField[];
   value: QueryBuilderValue;
   onChange: (next: QueryBuilderValue) => void;
@@ -243,7 +245,7 @@ const QueryBuilder = (props: Props<QueryBuilderOwnProps>) => {
           </Button>
           <Button variant="primary" size="sm" disabled={props.disabled || props.fields.length === 0} onClick={addRule}>
             <span class={styles.addButtonContent}>
-              <IoAdd />
+              <Icon icon={IoAdd} />
               {props.addRuleLabel ?? t('query.addRule')}
             </span>
           </Button>
@@ -373,21 +375,21 @@ const QueryBuilder = (props: Props<QueryBuilderOwnProps>) => {
 
                   <div class={styles.ruleActions}>
                     <IconButton
-                      icon={<IoArrowUp />}
+                      icon={IoArrowUp}
                       label={t('query.moveRuleUp')}
                       size="sm"
                       disabled={props.disabled || index() === 0}
                       onClick={() => moveRule(rule.id, -1)}
                     />
                     <IconButton
-                      icon={<IoArrowDown />}
+                      icon={IoArrowDown}
                       label={t('query.moveRuleDown')}
                       size="sm"
                       disabled={props.disabled || index() === props.value.rules.length - 1}
                       onClick={() => moveRule(rule.id, 1)}
                     />
                     <IconButton
-                      icon={<IoTrash />}
+                      icon={IoTrash}
                       label={t('query.removeRule')}
                       size="sm"
                       disabled={props.disabled}

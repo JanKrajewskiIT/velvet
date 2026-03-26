@@ -1,80 +1,101 @@
-import { CodeText, Heading, Text } from '@jankrajewskiit/ui';
+import { CodeText, Heading, Text, useI18n } from '@jankrajewskiit/ui';
+import { createMemo } from 'solid-js';
 
 import { PreviewGroup, PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
+import { type DemoI18nMessageKey, getDemoMessages } from '../i18n/messages';
+import { renderRichText } from '../i18n/renderRichText';
 
 const TypographySection = () => {
+  const { locale } = useI18n();
+  const dictionary = createMemo(() => getDemoMessages(locale()));
+  const t = (key: DemoI18nMessageKey): string => dictionary()[key];
+  const blockCodeTitle = () => t('demo.text.typography.blockCode.sectionTitle');
+  const blockCodeHelperText = () => t('demo.text.typography.blockCode.helperText');
+
   return (
     <div>
-      <ShowcaseSection title="Heading variants" subtitle="Display and heading hierarchy for page and section titles">
+      <ShowcaseSection
+        title={t('demo.showcase.typography.headingVariants.title')}
+        subtitle={t('demo.showcase.typography.headingVariants.subtitle')}
+      >
         <PreviewPanel>
-          <PreviewGroup title="Scale">
-            <Heading variant="displayLg">Display large heading</Heading>
-            <Heading variant="displayMd">Display medium heading</Heading>
+          <PreviewGroup title={t('demo.text.typography.scale.title')}>
+            <Heading variant="displayLg">{t('demo.text.typography.scale.displayLarge')}</Heading>
+            <Heading variant="displayMd">{t('demo.text.typography.scale.displayMedium')}</Heading>
             <Heading level={1} variant="h1">
-              Heading level 1
+              {t('demo.text.typography.scale.h1')}
             </Heading>
             <Heading level={2} variant="h2">
-              Heading level 2
+              {t('demo.text.typography.scale.h2')}
             </Heading>
             <Heading level={3} variant="h3">
-              Heading level 3
+              {t('demo.text.typography.scale.h3')}
             </Heading>
             <Heading level={4} variant="titleLg">
-              Title large
+              {t('demo.text.typography.scale.titleLarge')}
             </Heading>
             <Heading level={5} variant="titleMd">
-              Title medium
+              {t('demo.text.typography.scale.titleMedium')}
             </Heading>
           </PreviewGroup>
         </PreviewPanel>
       </ShowcaseSection>
 
-      <ShowcaseSection title="Text variants" subtitle="Body, label, caption and overline styles with semantic tones">
+      <ShowcaseSection
+        title={t('demo.showcase.typography.textVariants.title')}
+        subtitle={t('demo.showcase.typography.textVariants.subtitle')}
+      >
         <PreviewPanel>
-          <PreviewGroup title="Core text roles">
-            <Text variant="bodyLg">Body large text for highlighted content and intros.</Text>
-            <Text variant="bodyMd">Body medium text as the default reading style.</Text>
-            <Text variant="bodySm">Body small text for compact UI areas.</Text>
-            <Text variant="labelLg">Label large for controls and emphasized metadata.</Text>
-            <Text variant="labelMd">Label medium for dense interfaces and chips.</Text>
-            <Text variant="caption">Caption text for helper descriptions.</Text>
-            <Text variant="overline">Section label</Text>
+          <PreviewGroup title={t('demo.text.typography.roles.title')}>
+            <Text variant="bodyLg">{t('demo.text.typography.roles.bodyLarge')}</Text>
+            <Text variant="bodyMd">{t('demo.text.typography.roles.bodyMedium')}</Text>
+            <Text variant="bodySm">{t('demo.text.typography.roles.bodySmall')}</Text>
+            <Text variant="labelLg">{t('demo.text.typography.roles.labelLarge')}</Text>
+            <Text variant="labelMd">{t('demo.text.typography.roles.labelMedium')}</Text>
+            <Text variant="caption">{t('demo.text.typography.roles.caption')}</Text>
+            <Text variant="overline">{t('demo.text.typography.roles.overline')}</Text>
           </PreviewGroup>
-          <PreviewGroup title="Tone examples">
-            <Text tone="default">Default tone</Text>
-            <Text tone="secondary">Secondary tone</Text>
-            <Text tone="muted">Muted tone</Text>
-            <Text tone="tertiary">Tertiary tone</Text>
-            <Text tone="primary">Primary tone</Text>
+          <PreviewGroup title={t('demo.text.typography.tones.title')}>
+            <Text tone="default">{t('demo.text.typography.tones.default')}</Text>
+            <Text tone="secondary">{t('demo.text.typography.tones.secondary')}</Text>
+            <Text tone="muted">{t('demo.text.typography.tones.muted')}</Text>
+            <Text tone="tertiary">{t('demo.text.typography.tones.tertiary')}</Text>
+            <Text tone="primary">{t('demo.text.typography.tones.primary')}</Text>
           </PreviewGroup>
         </PreviewPanel>
       </ShowcaseSection>
 
-      <ShowcaseSection title="CodeText variants" subtitle="Inline and block code styles with mono typography">
+      <ShowcaseSection
+        title={t('demo.showcase.typography.codeTextVariants.title')}
+        subtitle={t('demo.showcase.typography.codeTextVariants.subtitle')}
+      >
         <PreviewPanel>
-          <PreviewGroup title="Inline code">
+          <PreviewGroup title={t('demo.text.typography.inlineCode.title')}>
             <Text>
-              Use{' '}
-              <CodeText as="span" class="codeInline">
-                &lt;Text variant="bodySm" /&gt;
-              </CodeText>{' '}
-              for compact descriptions and{' '}
-              <CodeText as="span" class="codeInline">
-                &lt;Heading variant="h2" /&gt;
-              </CodeText>{' '}
-              for section headers.
+              {renderRichText(t('demo.text.typography.inlineCode.message'), {
+                textCode: (
+                  <CodeText as="span" class="codeInline">
+                    &lt;Text variant="bodySm" /&gt;
+                  </CodeText>
+                ),
+                headingCode: (
+                  <CodeText as="span" class="codeInline">
+                    &lt;Heading variant="h2" /&gt;
+                  </CodeText>
+                ),
+              })}
             </Text>
           </PreviewGroup>
-          <PreviewGroup title="Block code">
+          <PreviewGroup title={t('demo.text.typography.blockCode.title')}>
             <CodeText as="pre" variant="block" size="md" class="installBlock">
               {`import { Heading, Text, CodeText } from '@jankrajewskiit/ui';
 
-<Heading variant="h2">Section title</Heading>
-<Text variant="bodySm" tone="muted">Helper text</Text>`}
+<Heading variant="h2">${blockCodeTitle()}</Heading>
+<Text variant="bodySm" tone="muted">${blockCodeHelperText()}</Text>`}
             </CodeText>
           </PreviewGroup>
         </PreviewPanel>
-        <ShowcaseMeta>Use typography primitives for content, and tokens in CSS for control internals.</ShowcaseMeta>
+        <ShowcaseMeta>{t('demo.text.typography.meta')}</ShowcaseMeta>
       </ShowcaseSection>
     </div>
   );

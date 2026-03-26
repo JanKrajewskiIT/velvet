@@ -2,10 +2,10 @@ import { For, type JSX, splitProps } from 'solid-js';
 
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
+import type { ComponentSize } from '~/models/Props';
 import classNames from '~/utils/classNames';
 import getInputSizeClass from '~/utils/getInputSizeClass';
 
-import type { InputSize } from '../Input/Input';
 import Input from '../Input/Input';
 import styles from './OtpInput.module.css';
 
@@ -14,7 +14,7 @@ interface OtpInputOwnProps {
   value: string;
   onChange: (value: string) => void;
   disabled?: boolean;
-  size?: InputSize;
+  size?: ComponentSize;
   groupAriaLabel?: string;
   inputAriaLabel?: (index: number) => string;
 }

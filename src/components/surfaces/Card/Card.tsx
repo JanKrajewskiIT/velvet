@@ -2,11 +2,12 @@ import type { JSX } from 'solid-js';
 import { splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
+import type { DivCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import styles from './Card.module.css';
 
-interface CardOwnProps extends JSX.HTMLAttributes<HTMLDivElement> {
+interface CardOwnProps extends DivCoreNativeProps {
   children?: JSX.Element;
   padding?: 'default' | 'none';
 }

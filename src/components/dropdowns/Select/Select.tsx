@@ -1,27 +1,20 @@
 import type { JSX } from 'solid-js';
 import { createEffect, createMemo, createSignal, createUniqueId, For, onMount, splitProps } from 'solid-js';
 
-import type { InputSize } from '~/components/inputs/Input/Input';
+import useDropdownPanel from '~/hooks/useDropdownPanel';
 import type Props from '~/models/Props';
-import type { AriaFieldProps } from '~/models/Props';
-import type { SelectCoreNativeProps } from '~/models/Props';
-import { resolveAriaInvalid } from '~/utils/aria';
+import type { AriaFieldProps, ComponentSize, SelectCoreNativeProps } from '~/models/Props';
+import { joinAriaIds, resolveAriaInvalid } from '~/utils/aria';
 import classNames from '~/utils/classNames';
 
-import DropdownChevronFieldTrigger from '../DropdownChevronFieldTrigger/DropdownChevronFieldTrigger';
-import DropdownOption from '../DropdownOption/DropdownOption';
-import dropdownOptionStyles from '../DropdownOption/DropdownOption.module.css';
-import DropdownSurface from '../DropdownSurface/DropdownSurface';
-import {
-  createDropdownSurfaceKeyDownHandler,
-  focusDropdownItem,
-  getDropdownOpenTarget,
-} from '../shared/dropdownKeyboard';
-import useDropdownState from '../shared/useDropdownState';
+import DropdownChevronFieldTrigger from '../Dropdown/DropdownChevronFieldTrigger/DropdownChevronFieldTrigger';
+import DropdownOption from '../Dropdown/DropdownOption/DropdownOption';
+import dropdownOptionStyles from '../Dropdown/DropdownOption/DropdownOption.module.css';
+import DropdownSurface from '../Dropdown/DropdownSurface/DropdownSurface';
 import styles from './Select.module.css';
 
 interface SelectOwnProps extends SelectCoreNativeProps, AriaFieldProps {
-  size?: InputSize;
+  size?: ComponentSize;
   invalid?: boolean;
   readOnly?: boolean;
   children?: JSX.Element;
@@ -33,14 +26,18 @@ const Select = (props: Props<SelectOwnProps>) => {
     'size',
     'children',
     'value',
+    'id',
     'disabled',
     'invalid',
     'readOnly',
+    'aria-labelledby',
+    'aria-describedby',
     'aria-invalid',
     'aria-errormessage',
   ]);
   const [options, setOptions] = createSignal<{ value: string; label: string; disabled: boolean }[]>([]);
   const dropdownId = createUniqueId();
+  const triggerLabelId = createUniqueId();
 
   let wrapperRef: HTMLDivElement | undefined;
   let nativeSelectRef: HTMLSelectElement | undefined;
@@ -48,15 +45,12 @@ const Select = (props: Props<SelectOwnProps>) => {
   let panelRef: HTMLDivElement | undefined;
 
   const isInteractive = () => !local.disabled && !local.readOnly;
-  const dropdown = useDropdownState(() => wrapperRef, { isInteractive });
-
-  const openAndFocus = (target: 'first' | 'last') => {
-    dropdown.openDropdown();
-    requestAnimationFrame(() => {
-      if (!panelRef) return;
-      focusDropdownItem(panelRef, target);
-    });
-  };
+  const dropdown = useDropdownPanel({
+    rootRef: () => wrapperRef,
+    panelRef: () => panelRef,
+    triggerRef: () => triggerRef,
+    isInteractive,
+  });
 
   const syncOptions = () => {
     if (!nativeSelectRef) return;
@@ -113,13 +107,7 @@ const Select = (props: Props<SelectOwnProps>) => {
   const handleTriggerKeyDown = (e: KeyboardEvent) => {
     if (!isInteractive()) return;
 
-    if (dropdown.open()) return;
-
-    const target = getDropdownOpenTarget(e);
-    if (target) {
-      openAndFocus(target);
-      return;
-    }
+    if (dropdown.openFromKeyboard(e, { ignoreWhenOpen: true })) return;
 
     if (e.key === 'PageDown') {
       e.preventDefault();
@@ -133,17 +121,13 @@ const Select = (props: Props<SelectOwnProps>) => {
     }
   };
 
-  const handleDropdownKeyDown = createDropdownSurfaceKeyDownHandler({
-    getSurface: () => panelRef,
-    closeDropdown: dropdown.close,
-    focusTrigger: () => triggerRef?.focus(),
-  });
-
   return (
     <div ref={wrapperRef} class={classNames(styles.selectWrapper, local.class)}>
       <DropdownChevronFieldTrigger
         ref={triggerRef}
+        id={local.id}
         label={selectedLabel()}
+        labelId={triggerLabelId}
         open={dropdown.open()}
         size={local.size}
         disabled={local.disabled}
@@ -155,6 +139,8 @@ const Select = (props: Props<SelectOwnProps>) => {
         aria-haspopup="listbox"
         aria-expanded={dropdown.open()}
         aria-controls={dropdown.open() ? dropdownId : undefined}
+        aria-labelledby={joinAriaIds(local['aria-labelledby'], triggerLabelId)}
+        aria-describedby={local['aria-describedby']}
         aria-readonly={local.readOnly || undefined}
         aria-invalid={resolveAriaInvalid(local.invalid, props['aria-invalid'])}
         aria-errormessage={props['aria-errormessage']}
@@ -168,7 +154,7 @@ const Select = (props: Props<SelectOwnProps>) => {
           align="fullWidth"
           origin="top"
           role="listbox"
-          onKeyDown={handleDropdownKeyDown}
+          onKeyDown={dropdown.handlePanelKeyDown}
         >
           <For each={options()}>
             {(option) => (

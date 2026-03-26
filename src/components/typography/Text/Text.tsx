@@ -2,13 +2,14 @@ import { type JSX, splitProps } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
 
 import type Props from '~/models/Props';
+import type { HTMLElementCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import { type TextVariant, textVariantClass, toneClass, type TypographyTone } from '../Typography/Typography';
 import typographyStyles from '../Typography/Typography.module.css';
 import styles from './Text.module.css';
 
-interface TextProps extends JSX.HTMLAttributes<HTMLElement> {
+interface TextProps extends HTMLElementCoreNativeProps {
   as?: keyof JSX.IntrinsicElements;
   variant?: TextVariant;
   tone?: TypographyTone;

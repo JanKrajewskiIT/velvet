@@ -1,7 +1,8 @@
-import { CodeText, Heading } from '@jankrajewskiit/ui';
-import { For } from 'solid-js';
+import { CodeText, Heading, useI18n } from '@jankrajewskiit/ui';
+import { createMemo, For } from 'solid-js';
 
 import { PreviewGroup, PreviewPanel, ShowcaseSection } from '../components/ShowcaseSection';
+import { type DemoI18nMessageKey, getDemoMessages } from '../i18n/messages';
 
 interface DocSnippet {
   title: string;
@@ -99,7 +100,7 @@ export default createLintStagedConfig();`,
   },
 ];
 
-const USAGE_SNIPPETS: DocSnippet[] = [
+const createUsageSnippets = (t: (key: DemoI18nMessageKey) => string): DocSnippet[] => [
   {
     title: 'useClickOutside',
     file: 'hooks/useClickOutside.ts',
@@ -129,16 +130,16 @@ useFocusTrap(container, { enabled: () => dialogOpen() });`,
     code: `import { ConfirmAction, Button } from '@jankrajewskiit/ui';
 
 <ConfirmAction
-  title="Delete item"
-  message="This action cannot be undone."
-  confirmLabel="Delete"
-  cancelLabel="Cancel"
+  title="${t('demo.text.overlays.confirmDialog.deleteItem')}"
+  message="${t('demo.text.overlays.confirmDialog.deleteItemMessage')}"
+  confirmLabel="${t('demo.text.overlays.confirmDialog.delete')}"
+  cancelLabel="${t('demo.text.overlays.confirmDialog.cancel')}"
   variant="danger"
   onConfirm={removeItem}
 >
   {({ openConfirm }) => (
     <Button variant="danger" onClick={openConfirm}>
-      Delete
+      ${t('demo.text.overlays.confirmDialog.delete')}
     </Button>
   )}
 </ConfirmAction>;`,
@@ -153,15 +154,15 @@ useFocusTrap(container, { enabled: () => dialogOpen() });`,
   getId={(item) => item.id}
   onAdd={addMember}
   onRemove={removeMember}
-  addLabel="Add member"
-  confirmTitle="Remove member"
-  confirmMessage="Do you want to remove this member?"
-  confirmLabel="Remove"
-  cancelLabel="Cancel"
+  addLabel="${t('demo.text.developer.snippets.addMember')}"
+  confirmTitle="${t('demo.text.developer.snippets.removeMember')}"
+  confirmMessage="${t('demo.text.developer.snippets.removeMemberQuestion')}"
+  confirmLabel="${t('demo.text.composites.editableCollection.remove')}"
+  cancelLabel="${t('demo.text.overlays.confirmDialog.cancel')}"
   renderItem={(item, { requestRemove }) => (
     <>
       <Input value={item.name} onInput={(e) => rename(item.id, e.currentTarget.value)} />
-      <IconButton label="Remove" icon={<TrashIcon />} onClick={requestRemove} />
+      <IconButton label="${t('demo.text.composites.editableCollection.remove')}" icon={<TrashIcon />} onClick={requestRemove} />
     </>
   )}
 />;`,
@@ -190,63 +191,46 @@ useFocusTrap(container, { enabled: () => dialogOpen() });`,
   onRedirect={() => {
     navigate('/dashboard', { replace: true });
   }}
-  fallback={<Spinner label="Redirecting..." />}
+  fallback={<Spinner label="${t('demo.text.developer.snippets.redirecting')}" />}
 />`,
   },
 ];
 
 const DeveloperSection = () => {
+  const { locale } = useI18n();
+  const dictionary = createMemo(() => getDemoMessages(locale()));
+  const t = (key: DemoI18nMessageKey): string => dictionary()[key];
+  const usageSnippets = createMemo(() => createUsageSnippets(t));
+
   return (
     <div>
-      <ShowcaseSection title="Component Categories" subtitle="9 categories organized by purpose">
+      <ShowcaseSection
+        title={t('demo.showcase.developer.componentCategories.title')}
+        subtitle={t('demo.showcase.developer.componentCategories.subtitle')}
+      >
         <PreviewPanel>
-          <PreviewGroup title="Examples">
+          <PreviewGroup title={t('demo.text.common.examples')}>
             <ul class="overviewList">
-              <li>
-                <strong>inputs/</strong> (11) - Button, IconButton, Checkbox, Input, Radio, Switch, Autocomplete,
-                ColorPicker, TagInput, DropdownButton, DropdownMenu
-              </li>
-              <li>
-                <strong>forms/</strong> (4) - FormField, FormGrid, FormLayout, ActionRow (shown under Inputs in this
-                demo)
-              </li>
-              <li>
-                <strong>data-display/</strong> (6) - Table, Accordion, MarkdownRenderer, ScoreRing, RadarChart,
-                SectionCard
-              </li>
-              <li>
-                <strong>navigation/</strong> (4) - Tabs, Stepper, Pagination, Timeline
-              </li>
-              <li>
-                <strong>feedback/</strong> (11) - Toast, Spinner, Skeleton, LoadingContainer, ErrorMessage, EmptyState,
-                ErrorFallback, AccessDenied, Chip, StatCard
-              </li>
-              <li>
-                <strong>overlays/</strong> (7) - Dialog, Tooltip, ConfirmDialog, ConfirmAction, ContextMenu, Lightbox,
-                Tour
-              </li>
-              <li>
-                <strong>layout/</strong> (3) - MainLayout, Navbar, Footer
-              </li>
-              <li>
-                <strong>composites/</strong> (6) - DataTable, EditableCollection, FileDropZone, FlipCard, Wizard,
-                AiResultPanel
-              </li>
-              <li>
-                <strong>app/</strong> (4) - LocaleSwitcher, ThemeToggle, AuthRedirect, RequireAuth (shown under Inputs ·
-                Buttons and Developer snippets)
-              </li>
+              <li>{t('demo.text.developer.categories.inputs')}</li>
+              <li>{t('demo.text.developer.categories.forms')}</li>
+              <li>{t('demo.text.developer.categories.dataDisplay')}</li>
+              <li>{t('demo.text.developer.categories.navigation')}</li>
+              <li>{t('demo.text.developer.categories.feedback')}</li>
+              <li>{t('demo.text.developer.categories.overlays')}</li>
+              <li>{t('demo.text.developer.categories.layout')}</li>
+              <li>{t('demo.text.developer.categories.composites')}</li>
+              <li>{t('demo.text.developer.categories.app')}</li>
             </ul>
           </PreviewGroup>
         </PreviewPanel>
       </ShowcaseSection>
 
       <ShowcaseSection
-        title="Shared Tooling Presets"
-        subtitle="Drop-in standards for linting, formatting, tsconfig and Vite"
+        title={t('demo.showcase.developer.sharedToolingPresets.title')}
+        subtitle={t('demo.showcase.developer.sharedToolingPresets.subtitle')}
       >
         <PreviewPanel>
-          <PreviewGroup title="Examples">
+          <PreviewGroup title={t('demo.text.common.examples')}>
             <div class="docsGrid">
               <For each={TOOLING_SNIPPETS}>
                 {(snippet) => (
@@ -271,13 +255,13 @@ const DeveloperSection = () => {
       </ShowcaseSection>
 
       <ShowcaseSection
-        title="Usage Snippets"
-        subtitle="Hooks (useClickOutside, useEscapeKey, useFocusTrap) and component patterns"
+        title={t('demo.showcase.developer.usageSnippets.title')}
+        subtitle={t('demo.showcase.developer.usageSnippets.subtitle')}
       >
         <PreviewPanel>
-          <PreviewGroup title="Examples">
+          <PreviewGroup title={t('demo.text.common.examples')}>
             <div class="docsGrid">
-              <For each={USAGE_SNIPPETS}>
+              <For each={usageSnippets()}>
                 {(snippet) => (
                   <div class="docsCard">
                     <div class="docsCardHeader">
@@ -299,15 +283,18 @@ const DeveloperSection = () => {
         </PreviewPanel>
       </ShowcaseSection>
 
-      <ShowcaseSection title="Design Principles" subtitle="Rules that keep VelvetUi reusable across apps">
+      <ShowcaseSection
+        title={t('demo.showcase.developer.designPrinciples.title')}
+        subtitle={t('demo.showcase.developer.designPrinciples.subtitle')}
+      >
         <PreviewPanel>
-          <PreviewGroup title="Examples">
+          <PreviewGroup title={t('demo.text.common.examples')}>
             <ul class="overviewList">
-              <li>Components are app-agnostic and avoid business logic coupling.</li>
-              <li>User-facing text is passed via props by the consuming app.</li>
-              <li>Layout components expose slots for flexible composition.</li>
-              <li>Every public component supports an optional class prop.</li>
-              <li>Shared tooling keeps lint, format and tsconfig consistent across repositories.</li>
+              <li>{t('demo.text.developer.principles.appAgnostic')}</li>
+              <li>{t('demo.text.developer.principles.userFacingText')}</li>
+              <li>{t('demo.text.developer.principles.layoutSlots')}</li>
+              <li>{t('demo.text.developer.principles.classProp')}</li>
+              <li>{t('demo.text.developer.principles.sharedTooling')}</li>
             </ul>
           </PreviewGroup>
         </PreviewPanel>

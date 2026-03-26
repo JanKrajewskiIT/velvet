@@ -31,11 +31,6 @@
   margin-bottom: var(--spacing-sm);
 }
 
-.root .item {
-  justify-content: flex-start;
-  text-align: start;
-}
-
 .item {
   display: flex;
   width: 100%;
@@ -44,16 +39,10 @@
   border: 1px solid transparent;
 }
 
-.itemLabel {
-  width: 100%;
-}
-
-.item:hover {
-  color: var(--color-text);
-}
-
-.itemActive {
+.itemActive,
+.itemActive:hover {
   border-color: var(--color-primary);
-  background: var(--color-primary-light);
+  background: var(--color-primary-light) !important;
   color: var(--color-primary);
+  box-shadow: none !important;
 }

@@ -1,12 +1,13 @@
 import { type JSX, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
+import type { DivCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import Grid from '../../surfaces/Grid/Grid';
 import styles from './FormGrid.module.css';
 
-interface FormGridOwnProps extends JSX.HTMLAttributes<HTMLDivElement> {
+interface FormGridOwnProps extends DivCoreNativeProps {
   children: JSX.Element;
 }
 

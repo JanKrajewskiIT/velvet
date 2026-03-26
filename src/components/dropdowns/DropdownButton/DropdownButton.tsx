@@ -1,24 +1,20 @@
 import { FiChevronDown } from 'solid-icons/fi';
 import { createUniqueId, type JSX, Show } from 'solid-js';
 
-import Button, { type ButtonSize } from '~/components/buttons/Button/Button';
+import Button from '~/components/buttons/Button/Button';
+import useDropdownPanel from '~/hooks/useDropdownPanel';
 import type Props from '~/models/Props';
+import type { ComponentSize } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import DropdownSurface from '../DropdownSurface/DropdownSurface';
-import DropdownTriggerContent from '../DropdownTriggerContent/DropdownTriggerContent';
-import {
-  createDropdownSurfaceKeyDownHandler,
-  focusDropdownItem,
-  getDropdownOpenTarget,
-} from '../shared/dropdownKeyboard';
-import useDropdownState from '../shared/useDropdownState';
+import DropdownSurface from '../Dropdown/DropdownSurface/DropdownSurface';
+import DropdownTriggerContent from '../Dropdown/DropdownTriggerContent/DropdownTriggerContent';
 import styles from './DropdownButton.module.css';
 
 interface DropdownButtonProps {
   label: string;
   variant?: 'primary' | 'ghost';
-  size?: ButtonSize;
+  size?: ComponentSize;
   children: JSX.Element;
 }
 
@@ -27,24 +23,16 @@ const DropdownButton = (props: Props<DropdownButtonProps>) => {
   let wrapperRef: HTMLDivElement | undefined;
   let panelRef: HTMLDivElement | undefined;
   let triggerRef: HTMLButtonElement | undefined;
-  const dropdown = useDropdownState(() => wrapperRef);
-
-  const handleTriggerKeyDown = (event: KeyboardEvent) => {
-    const target = getDropdownOpenTarget(event);
-    if (!target) return;
-    dropdown.openDropdown();
-    requestAnimationFrame(() => {
-      if (!panelRef) return;
-      focusDropdownItem(panelRef, target);
-    });
-  };
-
-  const handleMenuKeyDown = createDropdownSurfaceKeyDownHandler({
-    getSurface: () => panelRef,
-    closeDropdown: dropdown.close,
-    focusTrigger: () => triggerRef?.focus(),
+  const dropdown = useDropdownPanel({
+    rootRef: () => wrapperRef,
+    panelRef: () => panelRef,
+    triggerRef: () => triggerRef,
     focusTriggerOnTab: true,
   });
+
+  const handleTriggerKeyDown = (event: KeyboardEvent) => {
+    dropdown.openFromKeyboard(event, { ignoreWhenOpen: true });
+  };
 
   return (
     <div ref={wrapperRef} class={classNames(styles.wrapper, props.class)}>
@@ -78,7 +66,7 @@ const DropdownButton = (props: Props<DropdownButtonProps>) => {
           origin="topLeft"
           role="menu"
           tabIndex={-1}
-          onKeyDown={handleMenuKeyDown}
+          onKeyDown={dropdown.handlePanelKeyDown}
           onClick={dropdown.close}
           scrollable={false}
         >

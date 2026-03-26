@@ -1,11 +1,12 @@
 import { type JSX, mergeProps, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
+import type { DivCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import styles from './Skeleton.module.css';
 
-interface SkeletonOwnProps extends JSX.HTMLAttributes<HTMLDivElement> {
+interface SkeletonOwnProps extends DivCoreNativeProps {
   variant?: 'text' | 'circular' | 'rectangular';
   width?: string | number;
   height?: string | number;

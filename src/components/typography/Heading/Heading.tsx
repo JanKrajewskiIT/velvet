@@ -2,13 +2,14 @@ import { type JSX, splitProps } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
 
 import type Props from '~/models/Props';
+import type { HTMLElementCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import { type HeadingVariant, headingVariantClass, toneClass, type TypographyTone } from '../Typography/Typography';
 import typographyStyles from '../Typography/Typography.module.css';
 import styles from './Heading.module.css';
 
-interface HeadingOwnProps extends JSX.HTMLAttributes<HTMLElement> {
+interface HeadingOwnProps extends HTMLElementCoreNativeProps {
   as?: keyof JSX.IntrinsicElements;
   level?: 1 | 2 | 3 | 4 | 5 | 6;
   variant?: HeadingVariant;

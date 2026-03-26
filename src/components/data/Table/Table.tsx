@@ -1,12 +1,13 @@
-import { type JSX, splitProps } from 'solid-js';
+import { splitProps } from 'solid-js';
 
 import Card from '~/components/surfaces/Card/Card';
 import type Props from '~/models/Props';
+import type { TableCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import styles from './Table.module.css';
 
-interface TableOwnProps extends JSX.HTMLAttributes<HTMLTableElement> {
+interface TableOwnProps extends TableCoreNativeProps {
   containerClass?: string;
 }
 

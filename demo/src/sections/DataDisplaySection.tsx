@@ -26,29 +26,35 @@ import {
   type TradingViewChartPoint,
   type TreeNode,
   TreeView,
+  useI18n,
   useTradingViewPollingFeed,
   useTradingViewWsFeed,
   VirtualizedList,
 } from '@jankrajewskiit/ui';
 import type { UTCTimestamp } from 'lightweight-charts';
 import { IoDocumentText, IoFolder, IoImage } from 'solid-icons/io';
-import { createSignal, Show } from 'solid-js';
+import { createMemo, createSignal, Show } from 'solid-js';
 
 import type { SectionId } from '../App';
 import { PreviewGroup, PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
+import { type DemoI18nMessageKey, getDemoMessages } from '../i18n/messages';
+import { interpolateText, renderRichText } from '../i18n/renderRichText';
 
-const MARKDOWN = `
+const createMarkdown = (
+  t: (key: DemoI18nMessageKey, params?: Record<string, string | number>) => string,
+  buttonLabel: string
+) => `
 ## VelvetUI
 
-A **SolidJS** component library with:
+${t('demo.text.dataDisplay.markdown.description')}
 
-- CSS Modules theming
-- TypeScript strict mode
-- Dark and light mode support
+- ${t('demo.text.dataDisplay.markdown.bulletTheming')}
+- ${t('demo.text.dataDisplay.markdown.bulletStrictMode')}
+- ${t('demo.text.dataDisplay.markdown.bulletThemeSupport')}
 
 \`\`\`tsx
 import { Button } from '@jankrajewskiit/ui';
-<Button variant="primary">Click me</Button>
+<Button variant="primary">${buttonLabel}</Button>
 \`\`\`
 `;
 
@@ -130,104 +136,92 @@ const createTreeData = (): TreeNode[] => [
   },
 ];
 
-const CODE_SAMPLE = `import { Button } from '@jankrajewskiit/ui';
+const createCodeSample = (buttonLabel: string) => `import { Button } from '@jankrajewskiit/ui';
 
 const App = () => {
-  return <Button variant="primary">Click me</Button>;
+  return <Button variant="primary">${buttonLabel}</Button>;
 };
 
 export default App;`;
 
-const GALLERY_IMAGES: ImageGridItem[] = [
-  { src: 'https://picsum.photos/id/10/400/300', alt: 'Forest', caption: 'Misty forest' },
-  { src: 'https://picsum.photos/id/15/400/300', alt: 'Mountains', caption: 'Mountain sunrise' },
-  { src: 'https://picsum.photos/id/29/400/300', alt: 'Coast', caption: 'Rocky coastline' },
-  { src: 'https://picsum.photos/id/37/400/300', alt: 'Cliff', caption: 'Seaside cliff' },
-  { src: 'https://picsum.photos/id/42/400/300', alt: 'Night', caption: 'City at night' },
-  { src: 'https://picsum.photos/id/49/400/300', alt: 'Bridge', caption: 'Old bridge' },
-];
-
-const LIGHTBOX_IMAGES: LightboxImage[] = [
-  { src: 'https://picsum.photos/id/10/800/600', alt: 'Forest', caption: 'Misty forest trail' },
-  { src: 'https://picsum.photos/id/15/800/600', alt: 'Mountains', caption: 'Mountain sunrise' },
-  { src: 'https://picsum.photos/id/29/800/600', alt: 'Coast', caption: 'Rocky coastline' },
-];
-
-const VIRTUAL_ITEMS = Array.from({ length: 1200 }, (_, index) => ({
-  id: `item-${index + 1}`,
-  label: `Virtualized record #${index + 1}`,
-  status: index % 3 === 0 ? 'synced' : index % 3 === 1 ? 'queued' : 'draft',
-}));
-
-const TIMELINE_ITEMS = [
-  {
-    key: '1',
-    content: (
-      <span>
-        <strong>v0.3.3</strong> - Reorganized component categories
-      </span>
-    ),
-  },
-  {
-    key: '2',
-    content: (
-      <span>
-        <strong>v0.1.6</strong> - Added Wizard, Stepper and Timeline
-      </span>
-    ),
-  },
-  {
-    key: '3',
-    content: (
-      <span>
-        <strong>v0.1.0</strong> - Initial release
-      </span>
-    ),
-  },
-];
-
-const FILTER_DEFINITIONS: FilterBarFilter[] = [
-  {
-    key: 'status',
-    label: 'Status',
-    options: [
-      { value: 'todo', label: 'To do' },
-      { value: 'in-progress', label: 'In progress' },
-      { value: 'done', label: 'Done' },
-    ],
-    placeholder: 'Any status',
-  },
-  {
-    key: 'owner',
-    label: 'Owner',
-    options: [
-      { value: 'anna', label: 'Anna' },
-      { value: 'marek', label: 'Marek' },
-      { value: 'jan', label: 'Jan' },
-      { value: 'kasia', label: 'Kasia' },
-    ],
-    placeholder: 'Any owner',
-  },
-  {
-    key: 'priority',
-    label: 'Priority',
-    options: [
-      { value: 'low', label: 'Low' },
-      { value: 'medium', label: 'Medium' },
-      { value: 'high', label: 'High' },
-    ],
-    placeholder: 'Any priority',
-  },
-];
-
 const DataDisplaySection = (props: { sectionId: SectionId }) => {
   const sectionId = () => props.sectionId;
+  const { locale } = useI18n();
+  const dictionary = createMemo(() => getDemoMessages(locale()));
+  const t = (key: DemoI18nMessageKey, params?: Record<string, string | number>): string =>
+    interpolateText(dictionary()[key], params);
+  const clickMeLabel = () => t('demo.text.dataDisplay.codeBlock.clickMe');
   const [selectedNode, setSelectedNode] = createSignal('');
   const [checkedTreeNodes, setCheckedTreeNodes] = createSignal<string[]>([]);
   const [lastMove, setLastMove] = createSignal('');
   const [editorOpen, setEditorOpen] = createSignal(false);
   const [lightboxOpen, setLightboxOpen] = createSignal(false);
-  const [markdown, setMarkdown] = createSignal(MARKDOWN);
+  const galleryImages = createMemo<ImageGridItem[]>(() => [
+    {
+      src: 'https://picsum.photos/id/10/400/300',
+      alt: t('demo.text.dataDisplay.gallery.forestAlt'),
+      caption: t('demo.text.dataDisplay.gallery.forestCaption'),
+    },
+    {
+      src: 'https://picsum.photos/id/15/400/300',
+      alt: t('demo.text.dataDisplay.gallery.mountainsAlt'),
+      caption: t('demo.text.dataDisplay.gallery.mountainsCaption'),
+    },
+    {
+      src: 'https://picsum.photos/id/29/400/300',
+      alt: t('demo.text.dataDisplay.gallery.coastAlt'),
+      caption: t('demo.text.dataDisplay.gallery.coastCaption'),
+    },
+    {
+      src: 'https://picsum.photos/id/37/400/300',
+      alt: t('demo.text.dataDisplay.gallery.cliffAlt'),
+      caption: t('demo.text.dataDisplay.gallery.cliffCaption'),
+    },
+    {
+      src: 'https://picsum.photos/id/42/400/300',
+      alt: t('demo.text.dataDisplay.gallery.nightAlt'),
+      caption: t('demo.text.dataDisplay.gallery.nightCaption'),
+    },
+    {
+      src: 'https://picsum.photos/id/49/400/300',
+      alt: t('demo.text.dataDisplay.gallery.bridgeAlt'),
+      caption: t('demo.text.dataDisplay.gallery.bridgeCaption'),
+    },
+  ]);
+  const lightboxImages = createMemo<LightboxImage[]>(() => [
+    {
+      src: 'https://picsum.photos/id/10/800/600',
+      alt: t('demo.text.dataDisplay.gallery.forestAlt'),
+      caption: t('demo.text.dataDisplay.gallery.forestTrailCaption'),
+    },
+    {
+      src: 'https://picsum.photos/id/15/800/600',
+      alt: t('demo.text.dataDisplay.gallery.mountainsAlt'),
+      caption: t('demo.text.dataDisplay.gallery.mountainsCaption'),
+    },
+    {
+      src: 'https://picsum.photos/id/29/800/600',
+      alt: t('demo.text.dataDisplay.gallery.coastAlt'),
+      caption: t('demo.text.dataDisplay.gallery.coastCaption'),
+    },
+  ]);
+  const virtualItems = createMemo(() => {
+    const items = [];
+    for (let index = 0; index < 1200; index += 1) {
+      items.push({
+        id: `item-${index + 1}`,
+        label: t('demo.text.dataDisplay.virtualizedList.record', { index: index + 1 }),
+        status:
+          index % 3 === 0
+            ? t('demo.text.dataDisplay.virtualizedList.status.synced')
+            : index % 3 === 1
+              ? t('demo.text.dataDisplay.virtualizedList.status.queued')
+              : t('demo.text.dataDisplay.virtualizedList.status.draft'),
+      });
+    }
+    return items;
+  });
+  const [markdown, setMarkdown] = createSignal(createMarkdown(t, clickMeLabel()));
   const [filtersQuery, setFiltersQuery] = createSignal('');
   const [filtersValue, setFiltersValue] = createSignal([
     { key: 'status', value: 'in-progress' },
@@ -235,6 +229,76 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
   ]);
   const nextPollingBar = createBarGenerator(asUtcTimestamp(1705017600), 2103.9);
   const nextWsBar = createBarGenerator(asUtcTimestamp(1705017600), 2098.4);
+
+  const timelineItems = createMemo(() => [
+    {
+      key: '1',
+      content: (
+        <Text as="span" variant="bodySm">
+          <Text as="span" variant="labelMd">
+            v0.3.3
+          </Text>{' '}
+          - {t('demo.text.dataDisplay.timeline.v033')}
+        </Text>
+      ),
+    },
+    {
+      key: '2',
+      content: (
+        <Text as="span" variant="bodySm">
+          <Text as="span" variant="labelMd">
+            v0.1.6
+          </Text>{' '}
+          - {t('demo.text.dataDisplay.timeline.v016')}
+        </Text>
+      ),
+    },
+    {
+      key: '3',
+      content: (
+        <Text as="span" variant="bodySm">
+          <Text as="span" variant="labelMd">
+            v0.1.0
+          </Text>{' '}
+          - {t('demo.text.dataDisplay.timeline.v010')}
+        </Text>
+      ),
+    },
+  ]);
+
+  const filterDefinitions = createMemo<FilterBarFilter[]>(() => [
+    {
+      key: 'status',
+      label: t('demo.text.dataDisplay.filterBar.statusLabel'),
+      options: [
+        { value: 'todo', label: t('demo.text.dataDisplay.filterBar.statusTodo') },
+        { value: 'in-progress', label: t('demo.text.dataDisplay.filterBar.statusInProgress') },
+        { value: 'done', label: t('demo.text.dataDisplay.filterBar.statusDone') },
+      ],
+      placeholder: t('demo.text.dataDisplay.filterBar.statusPlaceholder'),
+    },
+    {
+      key: 'owner',
+      label: t('demo.text.dataDisplay.filterBar.ownerLabel'),
+      options: [
+        { value: 'anna', label: t('demo.text.dataDisplay.filterBar.ownerAnna') },
+        { value: 'marek', label: t('demo.text.dataDisplay.filterBar.ownerMarek') },
+        { value: 'jan', label: t('demo.text.dataDisplay.filterBar.ownerJan') },
+        { value: 'kasia', label: t('demo.text.dataDisplay.filterBar.ownerKasia') },
+      ],
+      placeholder: t('demo.text.dataDisplay.filterBar.ownerPlaceholder'),
+    },
+    {
+      key: 'priority',
+      label: t('demo.text.dataDisplay.filterBar.priorityLabel'),
+      options: [
+        { value: 'low', label: t('demo.text.dataDisplay.filterBar.priorityLow') },
+        { value: 'medium', label: t('demo.text.dataDisplay.filterBar.priorityMedium') },
+        { value: 'high', label: t('demo.text.dataDisplay.filterBar.priorityHigh') },
+      ],
+      placeholder: t('demo.text.dataDisplay.filterBar.priorityPlaceholder'),
+    },
+  ]);
 
   const pollingFeed = useTradingViewPollingFeed({
     intervalMs: 1800,
@@ -290,15 +354,15 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
 
   const handleTreeMove = (draggedId: string, targetId: string) => {
     setLastMove(`${draggedId} -> ${targetId}`);
-    addToast({ type: 'info', message: `Moved ${draggedId} to ${targetId}` });
+    addToast({ type: 'info', message: t('demo.text.dataDisplay.tree.movedToastMessage', { draggedId, targetId }) });
   };
 
-  const renderVirtualItem = (item: (typeof VIRTUAL_ITEMS)[number], index: number) => (
+  const renderVirtualItem = (item: ReturnType<typeof virtualItems>[number], index: number) => (
     <div class="virtualRow">
-      <Text as="span" variant="bodySm" class="virtual-label">
+      <Text as="span" variant="bodySm">
         {item.label}
       </Text>
-      <Text as="span" variant="overline" tone="muted" class="virtual-meta">
+      <Text as="span" variant="overline" tone="muted">
         #{index + 1} - {item.status}
       </Text>
     </div>
@@ -320,47 +384,58 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
   return (
     <div>
       <Show when={sectionId() === 'data-content'}>
-        <ShowcaseSection title="CodeBlock" subtitle="Code display with copy button and line numbers">
+        <ShowcaseSection
+          title={t('demo.showcase.dataDisplay.codeBlock.title')}
+          subtitle={t('demo.showcase.dataDisplay.codeBlock.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="TSX snippet">
-              <CodeBlock code={CODE_SAMPLE} language="tsx" showLineNumbers copyable />
+            <PreviewGroup title={t('demo.text.dataDisplay.codeBlock.tsxSnippet.title')}>
+              <CodeBlock code={createCodeSample(clickMeLabel())} language="tsx" showLineNumbers copyable />
             </PreviewGroup>
-            <PreviewGroup title="CLI snippet">
+            <PreviewGroup title={t('demo.text.dataDisplay.codeBlock.cliSnippet.title')}>
               <CodeBlock code="npm install @jankrajewskiit/ui" language="bash" />
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Supports{' '}
-            <CodeText as="span" class="codeInline">
-              showLineNumbers
-            </CodeText>{' '}
-            and one-click copy to clipboard.
+            {renderRichText(t('demo.text.dataDisplay.codeBlock.metaWithShowLineNumbers'), {
+              showLineNumbers: (
+                <CodeText as="span" class="codeInline">
+                  showLineNumbers
+                </CodeText>
+              ),
+            })}
           </ShowcaseMeta>
         </ShowcaseSection>
 
-        <ShowcaseSection title="MarkdownRenderer" subtitle="Rich markdown output">
+        <ShowcaseSection
+          title={t('demo.showcase.dataDisplay.markdownRenderer.title')}
+          subtitle={t('demo.showcase.dataDisplay.markdownRenderer.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <MarkdownRenderer content={MARKDOWN} />
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <MarkdownRenderer content={createMarkdown(t, clickMeLabel())} />
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="MarkdownEditDialog" subtitle="Edit and preview markdown in one flow">
+        <ShowcaseSection
+          title={t('demo.showcase.dataDisplay.markdownEditDialog.title')}
+          subtitle={t('demo.showcase.dataDisplay.markdownEditDialog.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <ActionRow align="start">
                 <Button variant="ghost" onClick={() => setEditorOpen(true)}>
-                  Open markdown editor
+                  {t('demo.text.dataDisplay.markdownEdit.openButton')}
                 </Button>
               </ActionRow>
               <MarkdownRenderer content={markdown()} />
               <MarkdownEditDialog
                 open={editorOpen()}
-                label="Edit release notes"
+                label={t('demo.text.dataDisplay.markdownEdit.label')}
                 initialValue={markdown()}
-                saveLabel="Save changes"
-                cancelLabel="Cancel"
+                saveLabel={t('demo.text.dataDisplay.markdownEdit.save')}
+                cancelLabel={t('demo.text.dataDisplay.markdownEdit.cancel')}
                 onSave={setMarkdown}
                 onClose={() => setEditorOpen(false)}
               />
@@ -370,32 +445,55 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
       </Show>
 
       <Show when={sectionId() === 'data-lists'}>
-        <ShowcaseSection title="List & ListItem" subtitle="Structured content rows with icons and actions">
+        <ShowcaseSection
+          title={t('demo.showcase.dataDisplay.listAndListItem.title')}
+          subtitle={t('demo.showcase.dataDisplay.listAndListItem.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <List>
-                <ListItem icon={<IoFolder />} secondary="3 files" label="Documents" />
-                <ListItem icon={<IoDocumentText />} secondary="Updated yesterday" label="Report.pdf" />
-                <ListItem icon={<IoImage />} secondary="Click to preview" onClick={() => {}} label="Photo.png" />
-              </List>
-              <List variant="bordered">
-                <ListItem icon={<IoFolder />} secondary="Shared folder" label="Projects" />
+                <ListItem
+                  icon={<IoFolder />}
+                  secondary={t('demo.text.dataDisplay.list.threeFiles')}
+                  label={t('demo.text.dataDisplay.list.documents')}
+                />
                 <ListItem
                   icon={<IoDocumentText />}
-                  secondary="Draft"
-                  action={<Button variant="ghost">Edit</Button>}
-                  label="Notes.md"
+                  secondary={t('demo.text.dataDisplay.list.updatedYesterday')}
+                  label={t('demo.text.dataDisplay.list.reportPdf')}
+                />
+                <ListItem
+                  icon={<IoImage />}
+                  secondary={t('demo.text.dataDisplay.list.clickToPreview')}
+                  onClick={() => {}}
+                  label={t('demo.text.dataDisplay.list.photoPng')}
+                />
+              </List>
+              <List variant="bordered">
+                <ListItem
+                  icon={<IoFolder />}
+                  secondary={t('demo.text.dataDisplay.list.sharedFolder')}
+                  label={t('demo.text.dataDisplay.list.projects')}
+                />
+                <ListItem
+                  icon={<IoDocumentText />}
+                  secondary={t('demo.text.dataDisplay.list.draft')}
+                  action={<Button variant="ghost">{t('demo.text.dataDisplay.list.edit')}</Button>}
+                  label={t('demo.text.dataDisplay.list.notesMd')}
                 />
               </List>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="VirtualizedList" subtitle="Efficient rendering for long datasets">
+        <ShowcaseSection
+          title={t('demo.showcase.dataDisplay.virtualizedList.title')}
+          subtitle={t('demo.showcase.dataDisplay.virtualizedList.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <VirtualizedList
-                items={VIRTUAL_ITEMS}
+                items={virtualItems()}
                 height={320}
                 itemHeight={46}
                 overscan={6}
@@ -403,50 +501,59 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
               />
             </PreviewGroup>
           </PreviewPanel>
-          <ShowcaseMeta>Try fast scrolling: only visible rows are rendered in the DOM.</ShowcaseMeta>
+          <ShowcaseMeta>{t('demo.text.dataDisplay.virtualizedList.meta')}</ShowcaseMeta>
         </ShowcaseSection>
       </Show>
 
       <Show when={sectionId() === 'data-filters'}>
-        <ShowcaseSection title="FilterBar" subtitle="Search + structured filters + active removable chips">
+        <ShowcaseSection
+          title={t('demo.showcase.dataDisplay.filterBar.title')}
+          subtitle={t('demo.showcase.dataDisplay.filterBar.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <FilterBar
-                filters={FILTER_DEFINITIONS}
+                filters={filterDefinitions()}
                 value={filtersValue()}
                 onChange={setFiltersValue}
                 search={filtersQuery()}
                 onSearchChange={setFiltersQuery}
-                searchPlaceholder="Search tasks..."
-                allLabel="All"
-                clearAllLabel="Clear filters"
-                removeFilterLabel="Remove filter"
+                searchPlaceholder={t('demo.text.dataDisplay.filterBar.searchPlaceholder')}
+                allLabel={t('demo.text.dataDisplay.filterBar.allLabel')}
+                clearAllLabel={t('demo.text.dataDisplay.filterBar.clearAllLabel')}
+                removeFilterLabel={t('demo.text.dataDisplay.filterBar.removeFilterLabel')}
               />
               <Text as="p" variant="caption" tone="muted" class="mutedText">
-                Query: {filtersQuery() || 'none'} | Active filters: {filtersValue().length}
+                {t('demo.text.dataDisplay.filterBar.query')}:{' '}
+                {filtersQuery() || t('demo.text.dataDisplay.filterBar.none')} |{' '}
+                {t('demo.text.dataDisplay.filterBar.activeFilters')}: {filtersValue().length}
               </Text>
             </PreviewGroup>
           </PreviewPanel>
-          <ShowcaseMeta>
-            Use the toolbar to compose search and filter criteria, then remove single filters via chips or reset all.
-          </ShowcaseMeta>
+          <ShowcaseMeta>{t('demo.text.dataDisplay.filterBar.meta')}</ShowcaseMeta>
         </ShowcaseSection>
       </Show>
 
       <Show when={sectionId() === 'data-timeline'}>
-        <ShowcaseSection title="Timeline" subtitle="Chronological list of events">
+        <ShowcaseSection
+          title={t('demo.showcase.dataDisplay.timeline.title')}
+          subtitle={t('demo.showcase.dataDisplay.timeline.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <Timeline items={TIMELINE_ITEMS} />
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <Timeline items={timelineItems()} />
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
       </Show>
 
       <Show when={sectionId() === 'data-tree'}>
-        <ShowcaseSection title="TreeView" subtitle="Hierarchical tree with lazy loading, checkboxes and drag and drop">
+        <ShowcaseSection
+          title={t('demo.showcase.dataDisplay.treeView.title')}
+          subtitle={t('demo.showcase.dataDisplay.treeView.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <TreeView
                 nodes={createTreeData()}
                 defaultExpanded={['src']}
@@ -462,28 +569,31 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Selected:{' '}
+            {t('demo.text.dataDisplay.tree.selected')}:{' '}
             <CodeText as="span" class="codeInline">
-              {selectedNode() || 'none'}
+              {selectedNode() || t('demo.text.dataDisplay.tree.none')}
             </CodeText>{' '}
-            | Checked:{' '}
+            | {t('demo.text.dataDisplay.tree.checked')}:{' '}
             <CodeText as="span" class="codeInline">
               {String(checkedTreeNodes().length)}
             </CodeText>{' '}
-            | Last move:{' '}
+            | {t('demo.text.dataDisplay.tree.lastMove')}:{' '}
             <CodeText as="span" class="codeInline">
-              {lastMove() || 'none'}
+              {lastMove() || t('demo.text.dataDisplay.tree.none')}
             </CodeText>
           </ShowcaseMeta>
         </ShowcaseSection>
       </Show>
 
       <Show when={sectionId() === 'data-media'}>
-        <ShowcaseSection title="Avatar & AvatarGroup" subtitle="User identity with image, initials or icon fallback">
+        <ShowcaseSection
+          title={t('demo.showcase.dataDisplay.avatarAndAvatarGroup.title')}
+          subtitle={t('demo.showcase.dataDisplay.avatarAndAvatarGroup.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <div class="row">
-                <Avatar src="https://i.pravatar.cc/150?u=a" alt="User photo" />
+                <Avatar src="https://i.pravatar.cc/150?u=a" alt={t('demo.text.dataDisplay.avatar.userPhotoAlt')} />
                 <Avatar name="Jan Krajewski" />
                 <Avatar />
               </div>
@@ -504,97 +614,137 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="Carousel" subtitle="Snap-scroll content slider">
+        <ShowcaseSection
+          title={t('demo.showcase.dataDisplay.carousel.title')}
+          subtitle={t('demo.showcase.dataDisplay.carousel.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <Carousel>
-                <div class="surfacePanel">Slide 1</div>
-                <div class="surfacePanel">Slide 2</div>
-                <div class="surfacePanel">Slide 3</div>
-                <div class="surfacePanel">Slide 4</div>
+                <div class="surfacePanel">{t('demo.text.dataDisplay.carousel.slide1')}</div>
+                <div class="surfacePanel">{t('demo.text.dataDisplay.carousel.slide2')}</div>
+                <div class="surfacePanel">{t('demo.text.dataDisplay.carousel.slide3')}</div>
+                <div class="surfacePanel">{t('demo.text.dataDisplay.carousel.slide4')}</div>
               </Carousel>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="Carousel with auto-play and dots" subtitle="Auto-advance and dot indicators">
+        <ShowcaseSection
+          title={t('demo.showcase.dataDisplay.carouselAutoPlayAndDots.title')}
+          subtitle={t('demo.showcase.dataDisplay.carouselAutoPlayAndDots.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <Carousel autoPlay interval={4000} showDots showArrows>
-                <div class="surfacePanel">Auto slide 1</div>
-                <div class="surfacePanel">Auto slide 2</div>
-                <div class="surfacePanel">Auto slide 3</div>
+                <div class="surfacePanel">{t('demo.text.dataDisplay.carousel.autoSlide1')}</div>
+                <div class="surfacePanel">{t('demo.text.dataDisplay.carousel.autoSlide2')}</div>
+                <div class="surfacePanel">{t('demo.text.dataDisplay.carousel.autoSlide3')}</div>
               </Carousel>
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            <CodeText as="span" class="codeInline">
-              autoPlay
-            </CodeText>{' '}
-            with{' '}
-            <CodeText as="span" class="codeInline">
-              interval
-            </CodeText>{' '}
-            (ms). Pauses on hover.{' '}
-            <CodeText as="span" class="codeInline">
-              showDots
-            </CodeText>{' '}
-            and{' '}
-            <CodeText as="span" class="codeInline">
-              showArrows
-            </CodeText>{' '}
-            configurable.
+            {renderRichText(t('demo.text.dataDisplay.carousel.meta'), {
+              autoPlay: (
+                <CodeText as="span" class="codeInline">
+                  autoPlay
+                </CodeText>
+              ),
+              interval: (
+                <CodeText as="span" class="codeInline">
+                  interval
+                </CodeText>
+              ),
+              showDots: (
+                <CodeText as="span" class="codeInline">
+                  showDots
+                </CodeText>
+              ),
+              showArrows: (
+                <CodeText as="span" class="codeInline">
+                  showArrows
+                </CodeText>
+              ),
+            })}
           </ShowcaseMeta>
         </ShowcaseSection>
 
-        <ShowcaseSection title="ImageGrid" subtitle="CSS Grid image gallery">
+        <ShowcaseSection
+          title={t('demo.showcase.dataDisplay.imageGrid.title')}
+          subtitle={t('demo.showcase.dataDisplay.imageGrid.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <ImageGrid images={GALLERY_IMAGES} columns={3} hoverable rounded />
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <ImageGrid images={galleryImages()} columns={3} hoverable rounded />
             </PreviewGroup>
           </PreviewPanel>
-          <ShowcaseMeta>
-            Configurable columns, gap, rounded corners and hover effects. Supports optional captions.
-          </ShowcaseMeta>
+          <ShowcaseMeta>{t('demo.text.dataDisplay.imageGrid.meta')}</ShowcaseMeta>
         </ShowcaseSection>
 
-        <ShowcaseSection title="Lightbox" subtitle="Fullscreen image viewer with navigation">
+        <ShowcaseSection
+          title={t('demo.showcase.dataDisplay.lightbox.title')}
+          subtitle={t('demo.showcase.dataDisplay.lightbox.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <Button variant="ghost" onClick={() => setLightboxOpen(true)}>
-                Open lightbox
+                {t('demo.text.dataDisplay.lightbox.openButton')}
               </Button>
-              <Lightbox images={LIGHTBOX_IMAGES} open={lightboxOpen()} onClose={() => setLightboxOpen(false)} />
+              <Lightbox images={lightboxImages()} open={lightboxOpen()} onClose={() => setLightboxOpen(false)} />
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="Marquee" subtitle="Infinite scrolling ticker">
+        <ShowcaseSection
+          title={t('demo.showcase.dataDisplay.marquee.title')}
+          subtitle={t('demo.showcase.dataDisplay.marquee.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <Marquee speed={20}>
-                <span class="marqueeTag">SolidJS</span>
-                <span class="marqueeTag">TypeScript</span>
-                <span class="marqueeTag">CSS Modules</span>
-                <span class="marqueeTag">Vite</span>
-                <span class="marqueeTag">VelvetUI</span>
+                <Text as="span" variant="labelMd" class="marqueeTag">
+                  {t('demo.text.dataDisplay.marquee.tagSolid')}
+                </Text>
+                <Text as="span" variant="labelMd" class="marqueeTag">
+                  {t('demo.text.dataDisplay.marquee.tagTypeScript')}
+                </Text>
+                <Text as="span" variant="labelMd" class="marqueeTag">
+                  {t('demo.text.dataDisplay.marquee.tagCssModules')}
+                </Text>
+                <Text as="span" variant="labelMd" class="marqueeTag">
+                  {t('demo.text.dataDisplay.marquee.tagVite')}
+                </Text>
+                <Text as="span" variant="labelMd" class="marqueeTag">
+                  {t('demo.text.dataDisplay.marquee.tagVelvetUi')}
+                </Text>
               </Marquee>
               <Marquee speed={25} direction="right">
-                <span class="marqueeTag">ESLint</span>
-                <span class="marqueeTag">Prettier</span>
-                <span class="marqueeTag">Vitest</span>
-                <span class="marqueeTag">PostCSS</span>
+                <Text as="span" variant="labelMd" class="marqueeTag">
+                  {t('demo.text.dataDisplay.marquee.tagEslint')}
+                </Text>
+                <Text as="span" variant="labelMd" class="marqueeTag">
+                  {t('demo.text.dataDisplay.marquee.tagPrettier')}
+                </Text>
+                <Text as="span" variant="labelMd" class="marqueeTag">
+                  {t('demo.text.dataDisplay.marquee.tagVitest')}
+                </Text>
+                <Text as="span" variant="labelMd" class="marqueeTag">
+                  {t('demo.text.dataDisplay.marquee.tagPostcss')}
+                </Text>
               </Marquee>
             </PreviewGroup>
           </PreviewPanel>
-          <ShowcaseMeta>Pauses on hover. Supports left and right directions with configurable speed.</ShowcaseMeta>
+          <ShowcaseMeta>{t('demo.text.dataDisplay.marquee.meta')}</ShowcaseMeta>
         </ShowcaseSection>
       </Show>
 
       <Show when={sectionId() === 'data-charts'}>
-        <ShowcaseSection title="ScoreRing" subtitle="Circular score visualization">
+        <ShowcaseSection
+          title={t('demo.showcase.dataDisplay.scoreRing.title')}
+          subtitle={t('demo.showcase.dataDisplay.scoreRing.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <div class="row">
                 <ScoreRing score={92} />
                 <ScoreRing score={68} />
@@ -605,21 +755,24 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="RadarChart" subtitle="Multi-axis data comparison">
+        <ShowcaseSection
+          title={t('demo.showcase.dataDisplay.radarChart.title')}
+          subtitle={t('demo.showcase.dataDisplay.radarChart.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <RadarChart
                 size={280}
                 axes={[
-                  { label: 'Performance', key: 'perf' },
-                  { label: 'Accessibility', key: 'a11y' },
-                  { label: 'Best Practices', key: 'bp' },
+                  { label: t('demo.text.dataDisplay.radar.performance'), key: 'perf' },
+                  { label: t('demo.text.dataDisplay.radar.accessibility'), key: 'a11y' },
+                  { label: t('demo.text.dataDisplay.radar.bestPractices'), key: 'bp' },
                   { label: 'SEO', key: 'seo' },
                   { label: 'PWA', key: 'pwa' },
                 ]}
                 datasets={[
-                  { label: 'Desktop', values: [92, 88, 95, 80, 60] },
-                  { label: 'Mobile', values: [74, 85, 90, 75, 55] },
+                  { label: t('demo.text.dataDisplay.radar.desktop'), values: [92, 88, 95, 80, 60] },
+                  { label: t('demo.text.dataDisplay.radar.mobile'), values: [74, 85, 90, 75, 55] },
                 ]}
               />
             </PreviewGroup>
@@ -627,11 +780,11 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
         </ShowcaseSection>
 
         <ShowcaseSection
-          title="TradingViewChart"
-          subtitle="Advanced candlestick chart with intervals, OHLC and overlays"
+          title={t('demo.showcase.dataDisplay.tradingViewChart.title')}
+          subtitle={t('demo.showcase.dataDisplay.tradingViewChart.subtitle')}
         >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <TradingViewChart symbol="XAUUSD" />
               <TradingViewChart symbol="XAUUSD custom feed" data={TRADING_VIEW_SAMPLE} height={420} />
               <TradingViewChart
@@ -662,16 +815,18 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Includes interval switching, volume, SMA/EMA plus RSI/MACD/BB, drawing tools (trend/level/zone) and live
-            feed API via polling or websocket callbacks. This demo uses helper hooks{' '}
-            <CodeText as="span" class="codeInline">
-              useTradingViewPollingFeed
-            </CodeText>{' '}
-            and{' '}
-            <CodeText as="span" class="codeInline">
-              useTradingViewWsFeed
-            </CodeText>
-            .
+            {renderRichText(t('demo.text.dataDisplay.trading.meta'), {
+              pollingFeed: (
+                <CodeText as="span" class="codeInline">
+                  useTradingViewPollingFeed
+                </CodeText>
+              ),
+              wsFeed: (
+                <CodeText as="span" class="codeInline">
+                  useTradingViewWsFeed
+                </CodeText>
+              ),
+            })}
           </ShowcaseMeta>
         </ShowcaseSection>
       </Show>

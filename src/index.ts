@@ -1,7 +1,7 @@
 import './theme/globals.css';
 
 export { default as AffixButton } from './components/buttons/AffixButton/AffixButton';
-export type { ButtonSize, ButtonVariant } from './components/buttons/Button/Button';
+export type { ButtonVariant } from './components/buttons/Button/Button';
 export { default as Button } from './components/buttons/Button/Button';
 export { default as CopyButton } from './components/buttons/CopyButton/CopyButton';
 export { default as IconButton } from './components/buttons/IconButton/IconButton';
@@ -64,7 +64,7 @@ export { DataTable } from './components/data/DataTable/DataTable';
 export type { FilterBarFilter, FilterBarOption, FilterBarValue } from './components/data/FilterBar/FilterBar';
 export { default as FilterBar } from './components/data/FilterBar/FilterBar';
 export { default as List } from './components/data/List/List';
-export { default as ListItem } from './components/data/List/ListItem';
+export { default as ListItem } from './components/data/List/ListItem/ListItem';
 export type {
   QueryBuilderCombinator,
   QueryBuilderField,
@@ -75,11 +75,11 @@ export type {
 } from './components/data/QueryBuilder/QueryBuilder';
 export { default as QueryBuilder } from './components/data/QueryBuilder/QueryBuilder';
 export { default as Table } from './components/data/Table/Table';
-export { default as TableBody } from './components/data/Table/TableBody';
-export { default as TableCell } from './components/data/Table/TableCell';
-export { default as TableHead } from './components/data/Table/TableHead';
-export { default as TableHeader } from './components/data/Table/TableHeader';
-export { default as TableRow } from './components/data/Table/TableRow';
+export { default as TableBody } from './components/data/Table/TableBody/TableBody';
+export { default as TableCell } from './components/data/Table/TableCell/TableCell';
+export { default as TableHead } from './components/data/Table/TableHead/TableHead';
+export { default as TableHeader } from './components/data/Table/TableHeader/TableHeader';
+export { default as TableRow } from './components/data/Table/TableRow/TableRow';
 export { default as Timeline } from './components/data/Timeline/Timeline';
 export type { TreeNode } from './components/data/TreeView/TreeView';
 export { default as TreeView } from './components/data/TreeView/TreeView';
@@ -92,27 +92,27 @@ export type { SchedulerEvent } from './components/datetime/Scheduler/Scheduler';
 export { default as Scheduler } from './components/datetime/Scheduler/Scheduler';
 export { default as TimePicker } from './components/datetime/TimePicker/TimePicker';
 export { default as Autocomplete } from './components/dropdowns/Autocomplete/Autocomplete';
+export { default as DropdownChevronFieldTrigger } from './components/dropdowns/Dropdown/DropdownChevronFieldTrigger/DropdownChevronFieldTrigger';
+export { default as DropdownDivider } from './components/dropdowns/Dropdown/DropdownDivider/DropdownDivider';
+export { default as DropdownInputTrigger } from './components/dropdowns/Dropdown/DropdownInputTrigger/DropdownInputTrigger';
+export {
+  default as DropdownOption,
+  type DropdownOptionProps,
+} from './components/dropdowns/Dropdown/DropdownOption/DropdownOption';
+export {
+  default as DropdownSurface,
+  type DropdownSurfaceProps,
+} from './components/dropdowns/Dropdown/DropdownSurface/DropdownSurface';
+export {
+  default as DropdownTriggerContent,
+  type DropdownTriggerContentProps,
+} from './components/dropdowns/Dropdown/DropdownTriggerContent/DropdownTriggerContent';
 export { default as DropdownButton } from './components/dropdowns/DropdownButton/DropdownButton';
-export { default as DropdownChevronFieldTrigger } from './components/dropdowns/DropdownChevronFieldTrigger/DropdownChevronFieldTrigger';
-export { default as DropdownDivider } from './components/dropdowns/DropdownDivider/DropdownDivider';
-export { default as DropdownInputTrigger } from './components/dropdowns/DropdownInputTrigger/DropdownInputTrigger';
 export {
   default as DropdownMenu,
   type DropdownMenuMessages,
   type DropdownMenuProps,
 } from './components/dropdowns/DropdownMenu/DropdownMenu';
-export {
-  default as DropdownOption,
-  type DropdownOptionProps,
-} from './components/dropdowns/DropdownOption/DropdownOption';
-export {
-  default as DropdownSurface,
-  type DropdownSurfaceProps,
-} from './components/dropdowns/DropdownSurface/DropdownSurface';
-export {
-  default as DropdownTriggerContent,
-  type DropdownTriggerContentProps,
-} from './components/dropdowns/DropdownTriggerContent/DropdownTriggerContent';
 export type { MultiSelectOption } from './components/dropdowns/MultiSelect/MultiSelect';
 export { default as MultiSelect } from './components/dropdowns/MultiSelect/MultiSelect';
 export { default as Select } from './components/dropdowns/Select/Select';
@@ -146,8 +146,8 @@ export {
   useToast,
   useToastNotifications,
 } from './components/feedback/Toast/Toast';
-export { default as ToastProvider } from './components/feedback/Toast/ToastProvider';
-export { default as ToastViewport } from './components/feedback/Toast/ToastViewport';
+export { default as ToastProvider } from './components/feedback/Toast/ToastProvider/ToastProvider';
+export { default as ToastViewport } from './components/feedback/Toast/ToastViewport/ToastViewport';
 export { default as ActionRow } from './components/forms/ActionRow/ActionRow';
 export { default as FormField, type FormFieldProps } from './components/forms/FormField/FormField';
 export { default as FormGrid } from './components/forms/FormGrid/FormGrid';
@@ -168,8 +168,9 @@ export { default as SearchInput } from './components/inputs/SearchInput/SearchIn
 export { default as TagInput } from './components/inputs/TagInput/TagInput';
 export { default as TextArea } from './components/inputs/TextArea/TextArea';
 export { default as Avatar } from './components/media/Avatar/Avatar';
-export { default as AvatarGroup } from './components/media/Avatar/AvatarGroup';
+export { default as AvatarGroup } from './components/media/Avatar/AvatarGroup/AvatarGroup';
 export { default as Carousel } from './components/media/Carousel/Carousel';
+export { default as Icon, type IconOwnProps, type IconVariant } from './components/media/Icon/Icon';
 export type { ImageGridItem } from './components/media/ImageGrid/ImageGrid';
 export { default as ImageGrid } from './components/media/ImageGrid/ImageGrid';
 export type { LightboxImage } from './components/media/Lightbox/Lightbox';
@@ -189,21 +190,22 @@ export type { NavItem } from './components/navigation/Navbar/NavItem';
 export { default as Pagination } from './components/navigation/Pagination/Pagination';
 export type { SidebarItem } from './components/navigation/Sidebar/Sidebar';
 export { default as Sidebar } from './components/navigation/Sidebar/Sidebar';
-export { default as SidebarItemButton } from './components/navigation/SidebarItemButton/SidebarItemButton';
+export { default as SidebarItemButton } from './components/navigation/Sidebar/SidebarItemButton/SidebarItemButton';
 export type { SidebarNavGroup, SidebarNavItem } from './components/navigation/SidebarNav/SidebarNav';
 export { default as SidebarNav } from './components/navigation/SidebarNav/SidebarNav';
 export type { SpeedDialAction, SpeedDialMessages, SpeedDialProps } from './components/navigation/SpeedDial/SpeedDial';
 export { default as SpeedDial } from './components/navigation/SpeedDial/SpeedDial';
 export { default as Stepper } from './components/navigation/Stepper/Stepper';
+export { default as TabButton } from './components/navigation/Tabs/TabButton/TabButton';
 export { default as Tabs } from './components/navigation/Tabs/Tabs';
 export type { ConfirmActionProps, ConfirmActionRenderContext } from './components/overlays/ConfirmAction/ConfirmAction';
 export { default as ConfirmAction } from './components/overlays/ConfirmAction/ConfirmAction';
 export { default as ConfirmDialog } from './components/overlays/ConfirmDialog/ConfirmDialog';
 export { default as ContextMenu } from './components/overlays/ContextMenu/ContextMenu';
 export { default as Dialog } from './components/overlays/Dialog/Dialog';
-export { default as DialogActions } from './components/overlays/DialogActions/DialogActions';
-export { default as DialogBody } from './components/overlays/DialogBody/DialogBody';
-export { default as DialogTitle } from './components/overlays/DialogTitle/DialogTitle';
+export { default as DialogActions } from './components/overlays/Dialog/DialogActions/DialogActions';
+export { default as DialogBody } from './components/overlays/Dialog/DialogBody/DialogBody';
+export { default as DialogTitle } from './components/overlays/Dialog/DialogTitle/DialogTitle';
 export { default as Popover } from './components/overlays/Popover/Popover';
 export { default as Sheet } from './components/overlays/Sheet/Sheet';
 export { default as Tooltip } from './components/overlays/Tooltip/Tooltip';
@@ -215,8 +217,8 @@ export { default as RangeSlider } from './components/pickers/RangeSlider/RangeSl
 export { default as Rating, type RatingProps } from './components/pickers/Rating/Rating';
 export { default as Slider, type SliderMark, type SliderProps } from './components/pickers/Slider/Slider';
 export { default as Accordion } from './components/surfaces/Accordion/Accordion';
-export { default as AccordionIcon } from './components/surfaces/AccordionIcon/AccordionIcon';
-export { default as AccordionItem } from './components/surfaces/AccordionItem/AccordionItem';
+export { default as AccordionIcon } from './components/surfaces/Accordion/AccordionIcon/AccordionIcon';
+export { default as AccordionItem } from './components/surfaces/Accordion/AccordionItem/AccordionItem';
 export { default as Card } from './components/surfaces/Card/Card';
 export { default as DataCard } from './components/surfaces/DataCard/DataCard';
 export { default as Divider } from './components/surfaces/Divider/Divider';
@@ -228,7 +230,7 @@ export { default as ResizablePanel } from './components/surfaces/ResizablePanel/
 export { default as SectionCard } from './components/surfaces/SectionCard/SectionCard';
 export { default as Stack } from './components/surfaces/Stack/Stack';
 export { default as Checkbox } from './components/switchers/Checkbox/Checkbox';
-export { default as CheckboxIndicator } from './components/switchers/CheckboxIndicator/CheckboxIndicator';
+export { default as CheckboxIndicator } from './components/switchers/Checkbox/CheckboxIndicator/CheckboxIndicator';
 export { RadioGroup, type RadioOption } from './components/switchers/Radio/Radio';
 export {
   default as SegmentedControl,
@@ -249,7 +251,7 @@ export { default as useTradingViewWsFeed } from './hooks/useTradingViewWsFeed';
 export { I18nProvider, useI18n } from './i18n/I18nProvider';
 export type { Locale } from './i18n/messages';
 export { SUPPORTED_LOCALES } from './i18n/messages';
-export type { default as Props } from './models/Props';
+export type { ComponentSize, default as Props } from './models/Props';
 export type { ThemeChoice } from './theme/ThemeProvider';
 export { ThemeProvider, useTheme } from './theme/ThemeProvider';
 export { getContrastTextColor } from './utils/color';

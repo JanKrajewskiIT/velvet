@@ -1,17 +1,12 @@
 import { createUniqueId, type JSX, Show } from 'solid-js';
 
 import IconButton from '~/components/buttons/IconButton/IconButton';
+import useDropdownPanel from '~/hooks/useDropdownPanel';
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import DropdownSurface from '../DropdownSurface/DropdownSurface';
-import {
-  createDropdownSurfaceKeyDownHandler,
-  focusDropdownItem,
-  getDropdownOpenTarget,
-} from '../shared/dropdownKeyboard';
-import useDropdownState from '../shared/useDropdownState';
+import DropdownSurface from '../Dropdown/DropdownSurface/DropdownSurface';
 import styles from './DropdownMenu.module.css';
 
 interface DropdownMenuMessages {
@@ -32,41 +27,26 @@ const DropdownMenu = (props: Props<DropdownMenuProps>) => {
   let menuRef: HTMLDivElement | undefined;
   let panelRef: HTMLDivElement | undefined;
   let triggerRef: HTMLButtonElement | undefined;
-  const dropdown = useDropdownState(() => menuRef);
+  const dropdown = useDropdownPanel({
+    rootRef: () => menuRef,
+    panelRef: () => panelRef,
+    triggerRef: () => triggerRef,
+    focusTriggerOnTab: true,
+  });
   const triggerAriaLabel = () => props.messages?.triggerAriaLabel ?? props.label ?? t('dropdown.openMenu');
   const menuAriaLabel = () => props.messages?.menuAriaLabel ?? t('common.menuOptions');
-
-  const openAndFocus = (target: 'first' | 'last') => {
-    dropdown.openDropdown();
-    requestAnimationFrame(() => {
-      if (!panelRef) return;
-      focusDropdownItem(panelRef, target);
-    });
-  };
 
   const toggle = () => {
     if (dropdown.open()) {
       dropdown.close();
       return;
     }
-    openAndFocus('first');
+    dropdown.openAndFocus('first');
   };
 
   const handleTriggerKeyDown = (e: KeyboardEvent) => {
-    if (dropdown.open()) return;
-
-    const target = getDropdownOpenTarget(e);
-    if (!target) return;
-
-    openAndFocus(target);
+    dropdown.openFromKeyboard(e, { ignoreWhenOpen: true });
   };
-
-  const handleMenuKeyDown = createDropdownSurfaceKeyDownHandler({
-    getSurface: () => panelRef,
-    closeDropdown: dropdown.close,
-    focusTrigger: () => triggerRef?.focus(),
-    focusTriggerOnTab: true,
-  });
 
   return (
     <div ref={menuRef} class={classNames(styles.wrapper, props.class)}>
@@ -92,7 +72,7 @@ const DropdownMenu = (props: Props<DropdownMenuProps>) => {
           role="menu"
           aria-label={menuAriaLabel()}
           tabIndex={-1}
-          onKeyDown={handleMenuKeyDown}
+          onKeyDown={dropdown.handlePanelKeyDown}
           onClick={dropdown.close}
         >
           {props.children}

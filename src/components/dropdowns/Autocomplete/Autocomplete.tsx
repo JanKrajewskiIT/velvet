@@ -1,16 +1,15 @@
 import { createMemo, createSignal, createUniqueId, For, Show, splitProps } from 'solid-js';
 
 import ClosableChip from '~/components/feedback/ClosableChip/ClosableChip';
-import type { InputSize } from '~/components/inputs/Input/Input';
+import useDropdownState from '~/hooks/useDropdownState';
 import type Props from '~/models/Props';
-import type { AriaFieldProps } from '~/models/Props';
+import type { AriaFieldProps, ComponentSize } from '~/models/Props';
 import { resolveAriaInvalid } from '~/utils/aria';
 import classNames from '~/utils/classNames';
 
-import DropdownInputTrigger from '../DropdownInputTrigger/DropdownInputTrigger';
-import DropdownOption from '../DropdownOption/DropdownOption';
-import DropdownSurface from '../DropdownSurface/DropdownSurface';
-import useDropdownState from '../shared/useDropdownState';
+import DropdownInputTrigger from '../Dropdown/DropdownInputTrigger/DropdownInputTrigger';
+import DropdownOption from '../Dropdown/DropdownOption/DropdownOption';
+import DropdownSurface from '../Dropdown/DropdownSurface/DropdownSurface';
 import styles from './Autocomplete.module.css';
 
 interface AutocompleteProps extends AriaFieldProps {
@@ -22,7 +21,7 @@ interface AutocompleteProps extends AriaFieldProps {
   disabled?: boolean;
   placeholder?: string;
   removeLabel?: string;
-  size?: InputSize;
+  size?: ComponentSize;
 }
 
 const Autocomplete = (props: Props<AutocompleteProps>) => {

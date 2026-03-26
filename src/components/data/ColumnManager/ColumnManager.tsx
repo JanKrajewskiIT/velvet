@@ -1,11 +1,11 @@
 import { IoArrowDown, IoArrowUp } from 'solid-icons/io';
-import type { JSX } from 'solid-js';
 import { createMemo, For, Show, splitProps } from 'solid-js';
 
 import Card from '~/components/surfaces/Card/Card';
 import Text from '~/components/typography/Text/Text';
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
+import type { DivCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import Button from '../../buttons/Button/Button';
@@ -25,7 +25,7 @@ export interface ColumnManagerColumn {
   canPin?: boolean;
 }
 
-interface ColumnManagerOwnProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'onChange'> {
+interface ColumnManagerOwnProps extends Omit<DivCoreNativeProps, 'onChange'> {
   columns: readonly ColumnManagerColumn[];
   order: readonly string[];
   visibility: ColumnManagerVisibility;
@@ -188,14 +188,14 @@ const ColumnManager = (props: Props<ColumnManagerOwnProps>) => {
 
                 <div class={styles.reorder}>
                   <IconButton
-                    icon={<IoArrowUp />}
+                    icon={IoArrowUp}
                     label={local.moveUpLabel ?? t('common.moveUp')}
                     size="sm"
                     disabled={local.disabled || index() === 0}
                     onClick={() => moveColumn(column.key, -1)}
                   />
                   <IconButton
-                    icon={<IoArrowDown />}
+                    icon={IoArrowDown}
                     label={local.moveDownLabel ?? t('common.moveDown')}
                     size="sm"
                     disabled={local.disabled || index() === orderedColumns().length - 1}

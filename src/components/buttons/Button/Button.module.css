@@ -168,7 +168,6 @@
 .variantSubtle:hover:not(:disabled) {
   background: var(--color-bg-hover);
   color: var(--color-text);
-  transform: scale(1.05);
 }
 
 .loading {

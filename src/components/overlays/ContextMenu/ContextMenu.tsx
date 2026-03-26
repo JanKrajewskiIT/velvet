@@ -6,9 +6,9 @@ import useEscapeKey from '~/hooks/useEscapeKey';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import DropdownDivider from '../../dropdowns/DropdownDivider/DropdownDivider';
-import DropdownOption from '../../dropdowns/DropdownOption/DropdownOption';
-import DropdownSurface from '../../dropdowns/DropdownSurface/DropdownSurface';
+import DropdownDivider from '../../dropdowns/Dropdown/DropdownDivider/DropdownDivider';
+import DropdownOption from '../../dropdowns/Dropdown/DropdownOption/DropdownOption';
+import DropdownSurface from '../../dropdowns/Dropdown/DropdownSurface/DropdownSurface';
 import styles from './ContextMenu.module.css';
 
 interface ContextMenuOption {

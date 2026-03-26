@@ -1,6 +1,7 @@
 import { createMemo, createSignal, For, type JSX, Show, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
+import type { DivCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import Button from '../../buttons/Button/Button';
@@ -13,7 +14,7 @@ export interface WizardStep {
   validate?: () => boolean | Promise<boolean>;
 }
 
-interface WizardOwnProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'children' | 'onFinish'> {
+interface WizardOwnProps extends Omit<DivCoreNativeProps, 'children' | 'onFinish'> {
   steps: WizardStep[];
   onFinish: () => void | Promise<void>;
   onStepChange?: (step: number) => void;

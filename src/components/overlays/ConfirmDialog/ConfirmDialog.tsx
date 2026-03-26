@@ -6,9 +6,9 @@ import classNames from '~/utils/classNames';
 import Button from '../../buttons/Button/Button';
 import Text from '../../typography/Text/Text';
 import Dialog from '../Dialog/Dialog';
-import DialogActions from '../DialogActions/DialogActions';
-import DialogBody from '../DialogBody/DialogBody';
-import DialogTitle from '../DialogTitle/DialogTitle';
+import DialogActions from '../Dialog/DialogActions/DialogActions';
+import DialogBody from '../Dialog/DialogBody/DialogBody';
+import DialogTitle from '../Dialog/DialogTitle/DialogTitle';
 import styles from './ConfirmDialog.module.css';
 
 interface ConfirmDialogProps {

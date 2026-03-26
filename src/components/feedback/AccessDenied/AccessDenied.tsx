@@ -1,6 +1,7 @@
 import { IoLockClosedOutline } from 'solid-icons/io';
 
 import Button from '~/components/buttons/Button/Button';
+import Icon from '~/components/media/Icon/Icon';
 import type Props from '~/models/Props';
 
 import FallbackState from '../FallbackState/FallbackState';
@@ -30,7 +31,7 @@ const AccessDenied = (props: Props<AccessDeniedProps>) => {
       class={props.class}
       label={props.label}
       description={props.description}
-      icon={<IoLockClosedOutline class={styles.icon} aria-hidden />}
+      icon={<Icon icon={IoLockClosedOutline} class={styles.icon} />}
       action={<Button onClick={navigateHome} label={props.goHomeLabel} />}
     />
   );

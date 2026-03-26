@@ -3,12 +3,10 @@ import { createSignal, splitProps } from 'solid-js';
 
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
-import type { InputCoreNativeProps } from '~/models/Props';
+import type { ComponentSize, InputCoreNativeProps } from '~/models/Props';
 
-import type { ButtonSize } from '../../buttons/Button/Button';
 import IconButton from '../../buttons/IconButton/IconButton';
 import AffixInput from '../AffixInput/AffixInput';
-import type { InputSize } from '../Input/Input';
 import styles from './PasswordInput.module.css';
 
 interface PasswordInputMessages {
@@ -19,7 +17,7 @@ interface PasswordInputMessages {
 interface PasswordInputProps extends Omit<InputCoreNativeProps, 'type'> {
   showToggle?: boolean;
   visibilityLabel?: string;
-  size?: InputSize;
+  size?: ComponentSize;
   messages?: PasswordInputMessages;
 }
 
@@ -27,14 +25,14 @@ const PasswordInput = (props: Props<PasswordInputProps>) => {
   const { t } = useI18n();
   const [local, rest] = splitProps(props, ['class', 'showToggle', 'visibilityLabel', 'size', 'messages']);
   const [visible, setVisible] = createSignal(false);
-  const toggleButtonSize = (): ButtonSize => {
+  const toggleButtonSize = (): ComponentSize => {
     if (local.size === 'sm') return 'sm';
     if (local.size === 'lg') return 'md';
     return 'sm';
   };
 
   const toggle = () => setVisible(!visible());
-  const icon = () => (visible() ? <IoEye /> : <IoEyeOutline />);
+  const icon = () => (visible() ? IoEye : IoEyeOutline);
   const visibilityButtonLabel = () => {
     if (local.visibilityLabel) return local.visibilityLabel;
     return visible()

@@ -1,7 +1,8 @@
-import { createUniqueId, For, type JSX, splitProps } from 'solid-js';
+import { createUniqueId, For, splitProps } from 'solid-js';
 
 import ChoiceControl from '~/components/switchers/ChoiceControl/ChoiceControl';
 import type Props from '~/models/Props';
+import type { DivCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import styles from './Radio.module.css';
@@ -13,7 +14,7 @@ export interface RadioOption<T extends string = string> {
   disabled?: boolean;
 }
 
-interface RadioGroupOwnProps<T extends string> extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'onChange'> {
+interface RadioGroupOwnProps<T extends string> extends Omit<DivCoreNativeProps, 'onChange'> {
   name?: string;
   value: T;
   options: RadioOption<T>[];

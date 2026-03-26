@@ -1,17 +1,17 @@
 import { createMemo, createSignal, createUniqueId, Show } from 'solid-js';
 
-import DropdownFieldTrigger from '~/components/dropdowns/DropdownFieldTrigger/DropdownFieldTrigger';
-import DropdownSurface from '~/components/dropdowns/DropdownSurface/DropdownSurface';
-import type { InputSize } from '~/components/inputs/Input/Input';
+import DropdownFieldTrigger from '~/components/dropdowns/Dropdown/DropdownFieldTrigger/DropdownFieldTrigger';
+import DropdownSurface from '~/components/dropdowns/Dropdown/DropdownSurface/DropdownSurface';
 import Text from '~/components/typography/Text/Text';
+import useCalendarPopupState from '~/hooks/useCalendarPopupState';
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
-import type { AriaFieldProps } from '~/models/Props';
+import type { AriaFieldProps, ComponentSize } from '~/models/Props';
+import { joinAriaIds, resolveAriaInvalid } from '~/utils/aria';
 import classNames from '~/utils/classNames';
+import { buildDaysGrid, type DayCell, getTodayIso, toIso } from '~/utils/datetime';
 
-import CalendarPanel from '../CalendarPanel/CalendarPanel';
-import { buildDaysGrid, type DayCell, toIso } from '../shared/calendar';
-import useCalendarPopupState from '../shared/useCalendarPopupState';
+import CalendarPanel from '../Calendar/CalendarPanel/CalendarPanel';
 import styles from './DateRangePicker.module.css';
 
 interface DateRangePickerMessages {
@@ -36,7 +36,7 @@ interface DateRangePickerProps extends AriaFieldProps {
   locale?: string;
   startLabel?: string;
   endLabel?: string;
-  size?: InputSize;
+  size?: ComponentSize;
   disabled?: boolean;
   min?: string;
   max?: string;
@@ -53,6 +53,8 @@ const DateRangePicker = (props: Props<DateRangePickerProps>) => {
   const [activeField, setActiveField] = createSignal<'start' | 'end'>('start');
   const [pendingStart, setPendingStart] = createSignal<string | null>(null);
   const dropdownId = createUniqueId();
+  const startTriggerLabelId = createUniqueId();
+  const endTriggerLabelId = createUniqueId();
 
   let wrapperRef: HTMLDivElement | undefined;
 
@@ -64,7 +66,7 @@ const DateRangePicker = (props: Props<DateRangePickerProps>) => {
   });
 
   const daysGrid = createMemo(() => buildDaysGrid(popup.viewYear(), popup.viewMonth()));
-  const todayIso = new Date().toISOString().slice(0, 10);
+  const todayIso = getTodayIso();
 
   const monthName = createMemo(() =>
     new Date(popup.viewYear(), popup.viewMonth()).toLocaleString(props.locale ?? currentLocale(), {
@@ -174,7 +176,6 @@ const DateRangePicker = (props: Props<DateRangePickerProps>) => {
 
   return (
     <div
-      id={props.id}
       ref={wrapperRef}
       class={classNames(styles.wrapper, props.class)}
       role="group"
@@ -182,16 +183,22 @@ const DateRangePicker = (props: Props<DateRangePickerProps>) => {
       aria-describedby={props['aria-describedby']}
     >
       <DropdownFieldTrigger
+        id={props.id}
         class={startFieldClass()}
         size={props.size}
         label={props.value.start || startLabel()}
+        labelId={startTriggerLabelId}
         labelTone={props.value.start ? 'default' : 'muted'}
         disabled={props.disabled}
         onClick={() => openCalendar('start')}
-        aria-label={startAriaLabel()}
+        title={startAriaLabel()}
         aria-haspopup="dialog"
         aria-expanded={popup.isOpen() && activeField() === 'start'}
         aria-controls={popup.isOpen() ? dropdownId : undefined}
+        aria-labelledby={joinAriaIds(props['aria-labelledby'], startTriggerLabelId)}
+        aria-describedby={props['aria-describedby']}
+        aria-invalid={resolveAriaInvalid(undefined, props['aria-invalid'])}
+        aria-errormessage={props['aria-errormessage']}
       />
       <Text as="span" variant="bodySm" tone="muted">
         {'\u2192'}
@@ -200,13 +207,18 @@ const DateRangePicker = (props: Props<DateRangePickerProps>) => {
         class={endFieldClass()}
         size={props.size}
         label={props.value.end || endLabel()}
+        labelId={endTriggerLabelId}
         labelTone={props.value.end ? 'default' : 'muted'}
         disabled={props.disabled}
         onClick={() => openCalendar('end')}
-        aria-label={endAriaLabel()}
+        title={endAriaLabel()}
         aria-haspopup="dialog"
         aria-expanded={popup.isOpen() && activeField() === 'end'}
         aria-controls={popup.isOpen() ? dropdownId : undefined}
+        aria-labelledby={joinAriaIds(props['aria-labelledby'], endTriggerLabelId)}
+        aria-describedby={props['aria-describedby']}
+        aria-invalid={resolveAriaInvalid(undefined, props['aria-invalid'])}
+        aria-errormessage={props['aria-errormessage']}
       />
       <Show when={popup.isOpen()}>
         <DropdownSurface

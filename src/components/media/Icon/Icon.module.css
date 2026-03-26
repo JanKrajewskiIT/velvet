@@ -1,0 +1,62 @@
+.icon {
+  --vu-icon-size: var(--typography-size-icon-md);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: var(--vu-icon-size);
+  line-height: var(--typography-line-height-zero);
+  color: inherit;
+}
+
+.glyph {
+  display: block;
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+}
+
+.sizeSm {
+  --vu-icon-size: var(--typography-size-icon-sm);
+}
+
+.sizeMd {
+  --vu-icon-size: var(--typography-size-icon-md);
+}
+
+.sizeLg {
+  --vu-icon-size: var(--typography-size-icon-lg);
+}
+
+.variantInherit {
+  color: inherit;
+}
+
+.variantMuted {
+  color: var(--color-text-muted);
+}
+
+.variantPrimary {
+  color: var(--color-primary);
+}
+
+.variantInfo {
+  color: var(--color-info);
+}
+
+.variantSuccess {
+  color: var(--color-success);
+}
+
+.variantWarning {
+  color: var(--color-warning);
+}
+
+.variantError {
+  color: var(--color-error);
+}
+
+.variantInverse {
+  color: var(--color-text-inverse);
+}

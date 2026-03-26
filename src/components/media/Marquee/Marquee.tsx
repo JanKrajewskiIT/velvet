@@ -1,11 +1,12 @@
 import { type JSX, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
+import type { DivCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import styles from './Marquee.module.css';
 
-interface MarqueeOwnProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'children'> {
+interface MarqueeOwnProps extends Omit<DivCoreNativeProps, 'children'> {
   children: JSX.Element;
   speed?: number;
   direction?: 'left' | 'right';

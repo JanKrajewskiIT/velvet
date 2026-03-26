@@ -17,41 +17,59 @@ import {
   SectionCard,
   Stack,
   Text,
+  useI18n,
 } from '@jankrajewskiit/ui';
-import { Show } from 'solid-js';
+import { createMemo, Show } from 'solid-js';
 
 import type { SectionId } from '../App';
 import { PreviewGroup, PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
+import { type DemoI18nMessageKey, getDemoMessages } from '../i18n/messages';
+import { renderRichText } from '../i18n/renderRichText';
 
 const LayoutSection = (props: { sectionId: SectionId }) => {
   const sectionId = () => props.sectionId;
   const year = new Date().getFullYear();
+  const { locale } = useI18n();
+  const dictionary = createMemo(() => getDemoMessages(locale()));
+  const t = (key: DemoI18nMessageKey): string => dictionary()[key];
 
   return (
     <div>
       <Show when={sectionId() === 'surfaces-main-layout'}>
-        <ShowcaseSection title="MainLayout" subtitle="Full page shell composition without navbar items">
+        <ShowcaseSection
+          title={t('demo.showcase.layout.mainLayout.title')}
+          subtitle={t('demo.showcase.layout.mainLayout.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Full shell" subtitle="Header, content and footer inside one layout primitive">
+            <PreviewGroup
+              title={t('demo.text.layout.mainLayout.fullShell.title')}
+              subtitle={t('demo.text.layout.mainLayout.fullShell.subtitle')}
+            >
               <div class="layoutPreviewShell">
                 <MainLayout
-                  navbar={<Navbar navItems={[]} toggleMenuLabel="Toggle navigation" navLabel="Main navigation" />}
+                  navbar={
+                    <Navbar
+                      navItems={[]}
+                      toggleMenuLabel={t('demo.text.layout.mainLayout.toggleNavigation')}
+                      navLabel={t('demo.text.layout.mainLayout.mainNavigation')}
+                    />
+                  }
                   footer={
                     <Footer
                       copyrightText={`(c) ${String(year)} MyApp`}
-                      privacyLabel="Privacy"
+                      privacyLabel={t('demo.text.layout.mainLayout.privacy')}
                       privacyHref="/privacy"
-                      builtWithText="Built with VelvetUi"
+                      builtWithText={t('demo.text.layout.mainLayout.builtWithVelvetUi')}
                     />
                   }
                 >
                   <div class="layoutShellContent">
                     <div class="recronHero">
                       <Heading as="h3" level={3} variant="titleLg" class="recronTitle">
-                        Dashboard
+                        {t('demo.text.layout.mainLayout.dashboard')}
                       </Heading>
                       <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                        Fixed-height card with scrollable page content and footer pinned to the bottom.
+                        {t('demo.text.layout.mainLayout.fixedHeightContent')}
                       </Text>
                     </div>
                   </div>
@@ -60,150 +78,196 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Use slots:{' '}
-            <CodeText as="span" class="codeInline">
-              navbar
-            </CodeText>{' '}
-            and{' '}
-            <CodeText as="span" class="codeInline">
-              footer
-            </CodeText>{' '}
-            in{' '}
-            <CodeText as="span" class="codeInline">
-              MainLayout
-            </CodeText>
-            .
+            {renderRichText(t('demo.text.layout.mainLayout.meta'), {
+              navbar: (
+                <CodeText as="span" class="codeInline">
+                  navbar
+                </CodeText>
+              ),
+              footer: (
+                <CodeText as="span" class="codeInline">
+                  footer
+                </CodeText>
+              ),
+              mainLayout: (
+                <CodeText as="span" class="codeInline">
+                  MainLayout
+                </CodeText>
+              ),
+            })}
           </ShowcaseMeta>
         </ShowcaseSection>
       </Show>
 
       <Show when={sectionId() === 'surfaces-layouts'}>
-        <ShowcaseSection title="Grid" subtitle="Responsive multi-column primitive">
+        <ShowcaseSection
+          title={t('demo.showcase.layout.grid.title')}
+          subtitle={t('demo.showcase.layout.grid.subtitle')}
+        >
           <PreviewPanel>
             <Grid columns={3} gap="sm">
-              <Chip variant="subtle" label="Column 1" />
-              <Chip variant="subtle" label="Column 2" />
-              <Chip variant="subtle" label="Column 3" />
-              <Chip variant="subtle" label="Column 4" />
-              <Chip variant="subtle" label="Column 5" />
+              <Chip variant="subtle" label={t('demo.text.layout.grid.column1')} />
+              <Chip variant="subtle" label={t('demo.text.layout.grid.column2')} />
+              <Chip variant="subtle" label={t('demo.text.layout.grid.column3')} />
+              <Chip variant="subtle" label={t('demo.text.layout.grid.column4')} />
+              <Chip variant="subtle" label={t('demo.text.layout.grid.column5')} />
             </Grid>
             <Grid minColumnWidth="180px" gap="md">
-              <Chip variant="subtle" label="Auto-fit A" />
-              <Chip variant="subtle" label="Auto-fit B" />
-              <Chip variant="subtle" label="Auto-fit C" />
-              <Chip variant="subtle" label="Auto-fit D" />
+              <Chip variant="subtle" label={t('demo.text.layout.grid.autoFitA')} />
+              <Chip variant="subtle" label={t('demo.text.layout.grid.autoFitB')} />
+              <Chip variant="subtle" label={t('demo.text.layout.grid.autoFitC')} />
+              <Chip variant="subtle" label={t('demo.text.layout.grid.autoFitD')} />
             </Grid>
           </PreviewPanel>
           <ShowcaseMeta>
-            Set fixed columns via{' '}
-            <CodeText as="span" class="codeInline">
-              columns
-            </CodeText>{' '}
-            or use responsive auto-fit with{' '}
-            <CodeText as="span" class="codeInline">
-              minColumnWidth
-            </CodeText>
-            .
+            {renderRichText(t('demo.text.layout.grid.meta'), {
+              columns: (
+                <CodeText as="span" class="codeInline">
+                  columns
+                </CodeText>
+              ),
+              minColumnWidth: (
+                <CodeText as="span" class="codeInline">
+                  minColumnWidth
+                </CodeText>
+              ),
+            })}
           </ShowcaseMeta>
         </ShowcaseSection>
 
-        <ShowcaseSection title="Stack" subtitle="Flexible vertical and horizontal spacing layout">
+        <ShowcaseSection
+          title={t('demo.showcase.layout.stack.title')}
+          subtitle={t('demo.showcase.layout.stack.subtitle')}
+        >
           <PreviewPanel>
             <Stack gap="sm">
-              <Chip variant="subtle" label="First item" />
-              <Chip variant="subtle" label="Second item" />
-              <Chip variant="subtle" label="Third item" />
+              <Chip variant="subtle" label={t('demo.text.layout.stack.firstItem')} />
+              <Chip variant="subtle" label={t('demo.text.layout.stack.secondItem')} />
+              <Chip variant="subtle" label={t('demo.text.layout.stack.thirdItem')} />
             </Stack>
             <Stack direction="horizontal" gap="md" align="center" justify="between" wrap>
-              <Chip variant="subtle" label="Horizontal" />
-              <Chip variant="subtle" label="Aligned center" />
-              <Chip variant="subtle" label="Wrap enabled" />
+              <Chip variant="subtle" label={t('demo.text.layout.stack.horizontal')} />
+              <Chip variant="subtle" label={t('demo.text.layout.stack.alignedCenter')} />
+              <Chip variant="subtle" label={t('demo.text.layout.stack.wrapEnabled')} />
             </Stack>
           </PreviewPanel>
           <ShowcaseMeta>
-            Use{' '}
-            <CodeText as="span" class="codeInline">
-              direction
-            </CodeText>
-            ,{' '}
-            <CodeText as="span" class="codeInline">
-              gap
-            </CodeText>
-            ,{' '}
-            <CodeText as="span" class="codeInline">
-              align
-            </CodeText>
-            ,{' '}
-            <CodeText as="span" class="codeInline">
-              justify
-            </CodeText>{' '}
-            and{' '}
-            <CodeText as="span" class="codeInline">
-              wrap
-            </CodeText>{' '}
-            to compose spacing layouts quickly.
+            {renderRichText(t('demo.text.layout.stack.meta'), {
+              direction: (
+                <CodeText as="span" class="codeInline">
+                  direction
+                </CodeText>
+              ),
+              gap: (
+                <CodeText as="span" class="codeInline">
+                  gap
+                </CodeText>
+              ),
+              align: (
+                <CodeText as="span" class="codeInline">
+                  align
+                </CodeText>
+              ),
+              justify: (
+                <CodeText as="span" class="codeInline">
+                  justify
+                </CodeText>
+              ),
+              wrap: (
+                <CodeText as="span" class="codeInline">
+                  wrap
+                </CodeText>
+              ),
+            })}
           </ShowcaseMeta>
         </ShowcaseSection>
 
-        <ShowcaseSection title="ResizablePanel" subtitle="Split panel with draggable handle">
+        <ShowcaseSection
+          title={t('demo.showcase.layout.resizablePanel.title')}
+          subtitle={t('demo.showcase.layout.resizablePanel.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Horizontal split" subtitle="Drag handle to adjust available width">
+            <PreviewGroup
+              title={t('demo.text.layout.resizable.horizontalSplit.title')}
+              subtitle={t('demo.text.layout.resizable.horizontalSplit.subtitle')}
+            >
               <div class="resizableDemoShell">
                 <ResizablePanel direction="horizontal" initialSplit={40} minSize={20}>
                   <div class="resizableDemoPanel">
-                    <strong>Left panel</strong>
+                    <Text as="span" variant="labelMd">
+                      {t('demo.text.layout.resizable.leftPanel')}
+                    </Text>
                     <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                      Drag the handle to resize.
+                      {t('demo.text.layout.resizable.dragHandle')}
                     </Text>
                   </div>
                   <div class="resizableDemoPanel">
-                    <strong>Right panel</strong>
+                    <Text as="span" variant="labelMd">
+                      {t('demo.text.layout.resizable.rightPanel')}
+                    </Text>
                     <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                      Content adjusts automatically.
+                      {t('demo.text.layout.resizable.contentAdjusts')}
                     </Text>
                   </div>
                 </ResizablePanel>
               </div>
             </PreviewGroup>
-            <PreviewGroup title="Vertical split" subtitle="Same API, vertical direction">
+            <PreviewGroup
+              title={t('demo.text.layout.resizable.verticalSplit.title')}
+              subtitle={t('demo.text.layout.resizable.verticalSplit.subtitle')}
+            >
               <div class="resizableDemoShell">
                 <ResizablePanel direction="vertical" initialSplit={50} minSize={20}>
                   <div class="resizableDemoPanel">
-                    <strong>Top panel</strong>
+                    <Text as="span" variant="labelMd">
+                      {t('demo.text.layout.resizable.topPanel')}
+                    </Text>
                   </div>
                   <div class="resizableDemoPanel">
-                    <strong>Bottom panel</strong>
+                    <Text as="span" variant="labelMd">
+                      {t('demo.text.layout.resizable.bottomPanel')}
+                    </Text>
                   </div>
                 </ResizablePanel>
               </div>
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Supports{' '}
-            <CodeText as="span" class="codeInline">
-              horizontal
-            </CodeText>{' '}
-            and{' '}
-            <CodeText as="span" class="codeInline">
-              vertical
-            </CodeText>{' '}
-            directions with configurable min size.
+            {renderRichText(t('demo.text.layout.resizable.meta'), {
+              horizontal: (
+                <CodeText as="span" class="codeInline">
+                  horizontal
+                </CodeText>
+              ),
+              vertical: (
+                <CodeText as="span" class="codeInline">
+                  vertical
+                </CodeText>
+              ),
+            })}
           </ShowcaseMeta>
         </ShowcaseSection>
 
-        <ShowcaseSection title="Divider" subtitle="Visual separator with optional label">
+        <ShowcaseSection
+          title={t('demo.showcase.layout.divider.title')}
+          subtitle={t('demo.showcase.layout.divider.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Horizontal variants">
+            <PreviewGroup title={t('demo.text.layout.divider.horizontalVariants.title')}>
               <Divider />
-              <Divider label="OR" />
+              <Divider label={t('demo.text.layout.divider.or')} />
               <Divider variant="dashed" />
-              <Divider variant="dashed" label="Section" />
+              <Divider variant="dashed" label={t('demo.text.layout.divider.section')} />
             </PreviewGroup>
-            <PreviewGroup title="Vertical variant">
+            <PreviewGroup title={t('demo.text.layout.divider.verticalVariant.title')}>
               <div class="row dividerVerticalDemo">
-                <span>Left</span>
+                <Text as="span" variant="bodySm">
+                  {t('demo.text.layout.divider.left')}
+                </Text>
                 <Divider orientation="vertical" />
-                <span>Right</span>
+                <Text as="span" variant="bodySm">
+                  {t('demo.text.layout.divider.right')}
+                </Text>
               </div>
             </PreviewGroup>
           </PreviewPanel>
@@ -211,82 +275,109 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
       </Show>
 
       <Show when={sectionId() === 'surfaces-cards'}>
-        <ShowcaseSection title="Card" subtitle="Basic bordered content container">
+        <ShowcaseSection
+          title={t('demo.showcase.layout.card.title')}
+          subtitle={t('demo.showcase.layout.card.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Base card">
+            <PreviewGroup title={t('demo.text.layout.card.baseCard.title')}>
               <Card>
                 <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                  Simple bordered container for arbitrary content.
+                  {t('demo.text.layout.card.baseBody')}
                 </Text>
               </Card>
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Use{' '}
-            <CodeText as="span" class="codeInline">
-              Card
-            </CodeText>{' '}
-            as a minimal wrapper for grouped content.
+            {renderRichText(t('demo.text.layout.card.meta'), {
+              card: (
+                <CodeText as="span" class="codeInline">
+                  Card
+                </CodeText>
+              ),
+            })}
           </ShowcaseMeta>
         </ShowcaseSection>
 
-        <ShowcaseSection title="DataCard variants" subtitle="Material-inspired filled, elevated and outlined styles">
+        <ShowcaseSection
+          title={t('demo.showcase.layout.dataCardVariants.title')}
+          subtitle={t('demo.showcase.layout.dataCardVariants.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Filled, elevated and outlined">
+            <PreviewGroup title={t('demo.text.layout.dataCard.variants.title')}>
               <div class="gridCards">
                 <DataCard
                   variant="filled"
                   hoverable
-                  header={<strong>Filled card</strong>}
-                  footer={<Button variant="primary">Continue</Button>}
+                  header={
+                    <Text as="span" variant="labelMd">
+                      {t('demo.text.layout.dataCard.filledHeader')}
+                    </Text>
+                  }
+                  footer={<Button variant="primary">{t('demo.text.layout.dataCard.continue')}</Button>}
                 >
                   <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                    Tonal variant inspired by modern Material surfaces.
+                    {t('demo.text.layout.dataCard.filledBody')}
                   </Text>
                 </DataCard>
                 <DataCard
                   variant="elevated"
                   hoverable
-                  header={<strong>Elevated card</strong>}
-                  footer={<Button variant="primary">Open</Button>}
+                  header={
+                    <Text as="span" variant="labelMd">
+                      {t('demo.text.layout.dataCard.elevatedHeader')}
+                    </Text>
+                  }
+                  footer={<Button variant="primary">{t('demo.text.layout.dataCard.open')}</Button>}
                 >
                   <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                    Balanced default with soft depth and strong readability.
+                    {t('demo.text.layout.dataCard.elevatedBody')}
                   </Text>
                 </DataCard>
                 <DataCard
                   variant="outlined"
                   hoverable
-                  header={<strong>Outlined card</strong>}
-                  footer={<Button variant="ghost">Details</Button>}
+                  header={
+                    <Text as="span" variant="labelMd">
+                      {t('demo.text.layout.dataCard.outlinedHeader')}
+                    </Text>
+                  }
+                  footer={<Button variant="ghost">{t('demo.text.layout.dataCard.details')}</Button>}
                 >
                   <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                    Clean and neutral variant for dense enterprise layouts.
+                    {t('demo.text.layout.dataCard.outlinedBody')}
                   </Text>
                 </DataCard>
               </div>
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            All variants support{' '}
-            <CodeText as="span" class="codeInline">
-              header
-            </CodeText>
-            , content,{' '}
-            <CodeText as="span" class="codeInline">
-              footer
-            </CodeText>{' '}
-            and optional{' '}
-            <CodeText as="span" class="codeInline">
-              hoverable
-            </CodeText>
-            .
+            {renderRichText(t('demo.text.layout.dataCard.meta'), {
+              header: (
+                <CodeText as="span" class="codeInline">
+                  header
+                </CodeText>
+              ),
+              footer: (
+                <CodeText as="span" class="codeInline">
+                  footer
+                </CodeText>
+              ),
+              hoverable: (
+                <CodeText as="span" class="codeInline">
+                  hoverable
+                </CodeText>
+              ),
+            })}
           </ShowcaseMeta>
         </ShowcaseSection>
 
-        <ShowcaseSection title="FlipCard" subtitle="Interactive front/back card">
+        <ShowcaseSection
+          title={t('demo.showcase.layout.flipCard.title')}
+          subtitle={t('demo.showcase.layout.flipCard.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Click and hover samples">
+            <PreviewGroup title={t('demo.text.layout.flipCard.samples.title')}>
               <div class="flipCardGrid">
                 <FlipCard
                   width="220px"
@@ -297,15 +388,17 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
                         VelvetUI
                       </Heading>
                       <Text as="span" variant="bodySm" tone="muted" class="flipCardHint">
-                        Click to flip
+                        {t('demo.text.layout.flipCard.clickToFlip')}
                       </Text>
                     </div>
                   }
                   back={
                     <div class="flipCardBack">
-                      <strong>SolidJS plus Vite</strong>
+                      <Text as="span" variant="labelMd">
+                        {t('demo.text.layout.flipCard.backStrong')}
+                      </Text>
                       <Text as="span" variant="bodySm" tone="muted" class="flipCardHint">
-                        TypeScript and CSS Modules
+                        {t('demo.text.layout.flipCard.backHint')}
                       </Text>
                     </div>
                   }
@@ -313,39 +406,45 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
                 <FlipCard
                   width="220px"
                   height="140px"
-                  front={<div class="flipCardFace">UI System</div>}
-                  back={<div class="flipCardSimple">Dark and light theme</div>}
+                  front={<div class="flipCardFace">{t('demo.text.layout.flipCard.uiSystem')}</div>}
+                  back={<div class="flipCardSimple">{t('demo.text.layout.flipCard.darkLight')}</div>}
                 />
               </div>
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            <CodeText as="span" class="codeInline">
-              FlipCard
-            </CodeText>{' '}
-            reveals back content on click or hover.
+            {renderRichText(t('demo.text.layout.flipCard.meta'), {
+              flipCard: (
+                <CodeText as="span" class="codeInline">
+                  FlipCard
+                </CodeText>
+              ),
+            })}
           </ShowcaseMeta>
         </ShowcaseSection>
       </Show>
 
       <Show when={sectionId() === 'surfaces-collapsible'}>
-        <ShowcaseSection title="Accordion" subtitle="Progressive disclosure for grouped content">
+        <ShowcaseSection
+          title={t('demo.showcase.layout.accordion.title')}
+          subtitle={t('demo.showcase.layout.accordion.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <Accordion>
-                <AccordionItem label="What is VelvetUI?">
+                <AccordionItem label={t('demo.text.layout.accordion.whatIs')}>
                   <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                    VelvetUI is a SolidJS component library built with CSS Modules, TypeScript and Vite.
+                    {t('demo.text.layout.accordion.whatIsBody')}
                   </Text>
                 </AccordionItem>
-                <AccordionItem label="How to install?">
+                <AccordionItem label={t('demo.text.layout.accordion.howInstall')}>
                   <Text as="p" variant="bodySm" tone="muted" class="mutedText">
                     npm install @jankrajewskiit/ui
                   </Text>
                 </AccordionItem>
-                <AccordionItem label="Disabled item" disabled>
+                <AccordionItem label={t('demo.text.layout.accordion.disabledItem')} disabled>
                   <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                    This content is not accessible.
+                    {t('demo.text.layout.accordion.disabledBody')}
                   </Text>
                 </AccordionItem>
               </Accordion>
@@ -353,17 +452,20 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="SectionCard" subtitle="Collapsible card for grouped settings">
+        <ShowcaseSection
+          title={t('demo.showcase.layout.sectionCard.title')}
+          subtitle={t('demo.showcase.layout.sectionCard.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <SectionCard label="Details" defaultOpen>
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <SectionCard label={t('demo.text.layout.sectionCard.details')} defaultOpen>
                 <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                  Collapsible card for grouped settings.
+                  {t('demo.text.layout.sectionCard.detailsBody')}
                 </Text>
               </SectionCard>
-              <SectionCard label="Advanced options">
+              <SectionCard label={t('demo.text.layout.sectionCard.advancedOptions')}>
                 <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                  Collapsed by default.
+                  {t('demo.text.layout.sectionCard.collapsedByDefault')}
                 </Text>
               </SectionCard>
             </PreviewGroup>
@@ -372,7 +474,7 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
             <CodeText as="span" class="codeInline">
               SectionCard
             </CodeText>{' '}
-            combines a card with built-in collapsible behavior.
+            {t('demo.text.layout.sectionCard.meta')}
           </ShowcaseMeta>
         </ShowcaseSection>
       </Show>

@@ -12,12 +12,13 @@ import {
 
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
+import type { DivCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import MediaNavButton from '../MediaNavButton/MediaNavButton';
 import styles from './Carousel.module.css';
 
-interface CarouselOwnProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'children'> {
+interface CarouselOwnProps extends Omit<DivCoreNativeProps, 'children'> {
   children: JSX.Element;
   autoPlay?: boolean;
   interval?: number;

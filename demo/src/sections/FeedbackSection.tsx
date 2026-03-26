@@ -21,6 +21,7 @@ import {
   Skeleton,
   Spinner,
   StatCard,
+  useI18n,
 } from '@jankrajewskiit/ui';
 import {
   IoAlertCircle,
@@ -32,53 +33,64 @@ import {
   IoSearch,
   IoStatsChart,
 } from 'solid-icons/io';
-import { createSignal, Show } from 'solid-js';
+import { createMemo, createSignal, Show } from 'solid-js';
 
 import type { SectionId } from '../App';
 import { PreviewGroup, PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
+import { type DemoI18nMessageKey, getDemoMessages } from '../i18n/messages';
+import { renderRichText } from '../i18n/renderRichText';
 
 const FeedbackSection = (props: { sectionId: SectionId }) => {
   const sectionId = () => props.sectionId;
+  const { locale } = useI18n();
+  const dictionary = createMemo(() => getDemoMessages(locale()));
+  const t = (key: DemoI18nMessageKey): string => dictionary()[key];
   const [retried, setRetried] = createSignal(false);
   const [bannerVisible, setBannerVisible] = createSignal(true);
 
   return (
     <div>
       <Show when={sectionId() === 'feedback-badges-chips'}>
-        <ShowcaseSection title="Badge" subtitle="Notification indicators on elements">
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.badge.title')}
+          subtitle={t('demo.showcase.feedback.badge.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Primary samples">
+            <PreviewGroup title={t('demo.text.feedback.badge.primarySamples.title')}>
               <div class="row">
                 <Badge content={5}>
-                  <IconButton icon={<IoNotifications />} label="Notifications" />
+                  <IconButton icon={<IoNotifications />} label={t('demo.text.feedback.badge.notifications')} />
                 </Badge>
                 <Badge content={99} max={99}>
-                  <Button variant="primary">Messages</Button>
+                  <Button variant="primary">{t('demo.text.feedback.badge.messages')}</Button>
                 </Badge>
                 <Badge dot>
-                  <IconButton icon={<IoMail />} label="Mail" />
+                  <IconButton icon={<IoMail />} label={t('demo.text.feedback.badge.mail')} />
                 </Badge>
               </div>
             </PreviewGroup>
-            <PreviewGroup title="Semantic variants">
+            <PreviewGroup title={t('demo.text.feedback.badge.semanticVariants.title')}>
               <div class="row">
                 <Badge variant="info" content={3}>
-                  <Button variant="ghost">Info</Button>
+                  <Button variant="ghost">{t('demo.text.feedback.badge.info')}</Button>
                 </Badge>
                 <Badge variant="success" content="OK">
-                  <Button variant="ghost">Status</Button>
+                  <Button variant="ghost">{t('demo.text.feedback.badge.status')}</Button>
                 </Badge>
                 <Badge variant="error" content={12}>
-                  <Button variant="ghost">Errors</Button>
+                  <Button variant="ghost">{t('demo.text.feedback.badge.errors')}</Button>
                 </Badge>
               </div>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="Kbd" subtitle="Styled keyboard shortcut keys">
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.kbd.title')}
+          subtitle={t('demo.showcase.feedback.kbd.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <div class="row">
                 <Kbd>Ctrl</Kbd> + <Kbd>K</Kbd>
                 <Kbd>⌘</Kbd> + <Kbd>Shift</Kbd> + <Kbd>P</Kbd>
@@ -88,53 +100,82 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="Chip" subtitle="Status, selection and clickable chips">
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.chip.title')}
+          subtitle={t('demo.showcase.feedback.chip.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Preset variants">
+            <PreviewGroup title={t('demo.text.feedback.chip.presetVariants.title')}>
               <div class="row">
-                <Chip variant="primary" label="Primary" />
-                <Chip variant="primaryOutline" label="Outline" />
-                <Chip variant="info" label="Info" />
-                <Chip variant="success" label="Success" />
-                <Chip variant="warning" label="Warning" />
-                <Chip variant="error" label="Error" />
-                <Chip variant="subtle" label="Subtle" />
+                <Chip variant="primary" label={t('demo.text.feedback.chip.primary')} />
+                <Chip variant="primaryOutline" label={t('demo.text.feedback.chip.outline')} />
+                <Chip variant="info" label={t('demo.text.feedback.chip.info')} />
+                <Chip variant="success" label={t('demo.text.feedback.chip.success')} />
+                <Chip variant="warning" label={t('demo.text.feedback.chip.warning')} />
+                <Chip variant="error" label={t('demo.text.feedback.chip.error')} />
+                <Chip variant="subtle" label={t('demo.text.feedback.chip.subtle')} />
               </div>
             </PreviewGroup>
-            <PreviewGroup title="Interactive and custom color">
+            <PreviewGroup title={t('demo.text.feedback.chip.interactiveCustomColor.title')}>
               <div class="row">
-                <Chip variant="success" filled label="Filled success" />
-                <Chip variant="error" filled label="Filled error" />
-                <Chip variant="info" size="sm" label="Small" />
-                <Chip variant="primary" selected label="Selected" />
-                <Chip variant="primary" onClick={() => {}} label="Clickable" />
-                <Chip color="#2e7d32" selected label="selected" />
-                <Chip color="#ed6c02" onClick={() => {}} label="clickable" />
-              </div>
-            </PreviewGroup>
-          </PreviewPanel>
-        </ShowcaseSection>
-
-        <ShowcaseSection title="ClosableChip" subtitle="Subtle chip with close affordance for dropdown selections">
-          <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <div class="row">
-                <ClosableChip label="JavaScript" onRemove={() => {}} />
-                <ClosableChip label="TypeScript" onRemove={() => {}} />
-                <ClosableChip label="SolidJS" onRemove={() => {}} />
+                <Chip variant="success" filled label={t('demo.text.feedback.chip.filledSuccess')} />
+                <Chip variant="error" filled label={t('demo.text.feedback.chip.filledError')} />
+                <Chip variant="info" size="sm" label={t('demo.text.feedback.chip.small')} />
+                <Chip variant="primary" selected label={t('demo.text.feedback.chip.selected')} />
+                <Chip variant="primary" onClick={() => {}} label={t('demo.text.feedback.chip.clickable')} />
+                <Chip color="#2e7d32" selected label={t('demo.text.feedback.chip.selectedLower')} />
+                <Chip color="#ed6c02" onClick={() => {}} label={t('demo.text.feedback.chip.clickableLower')} />
               </div>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="StatCard" subtitle="Compact KPI cards">
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.closableChip.title')}
+          subtitle={t('demo.showcase.feedback.closableChip.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <div class="row">
+                <ClosableChip label={t('demo.text.feedback.closableChip.javascript')} onRemove={() => {}} />
+                <ClosableChip label={t('demo.text.feedback.closableChip.typescript')} onRemove={() => {}} />
+                <ClosableChip label={t('demo.text.feedback.closableChip.solidjs')} onRemove={() => {}} />
+              </div>
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.statCard.title')}
+          subtitle={t('demo.showcase.feedback.statCard.subtitle')}
+        >
+          <PreviewPanel>
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <div class="gridCards">
-                <StatCard value="1 284" label="Active users" icon={<IoPeople />} colorClass="info" />
-                <StatCard value="98.7%" label="Uptime" icon={<IoCheckmarkCircle />} colorClass="success" />
-                <StatCard value="3" label="Open issues" icon={<IoAlertCircle />} colorClass="warning" />
-                <StatCard value="42" label="Deployments" icon={<IoStatsChart />} colorClass="error" />
+                <StatCard
+                  value="1 284"
+                  label={t('demo.text.feedback.statCard.activeUsers')}
+                  icon={<IoPeople />}
+                  colorClass="info"
+                />
+                <StatCard
+                  value="98.7%"
+                  label={t('demo.text.feedback.statCard.uptime')}
+                  icon={<IoCheckmarkCircle />}
+                  colorClass="success"
+                />
+                <StatCard
+                  value="3"
+                  label={t('demo.text.feedback.statCard.openIssues')}
+                  icon={<IoAlertCircle />}
+                  colorClass="warning"
+                />
+                <StatCard
+                  value="42"
+                  label={t('demo.text.feedback.statCard.deployments')}
+                  icon={<IoStatsChart />}
+                  colorClass="error"
+                />
               </div>
             </PreviewGroup>
           </PreviewPanel>
@@ -142,52 +183,83 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
             <CodeText as="span" class="codeInline">
               StatCard
             </CodeText>{' '}
-            for dashboards and metric summaries.
+            {t('demo.text.feedback.statCard.meta')}
           </ShowcaseMeta>
         </ShowcaseSection>
       </Show>
 
       <Show when={sectionId() === 'feedback-progress'}>
-        <ShowcaseSection title="Progress" subtitle="Determinate and indeterminate progress bars">
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.progress.title')}
+          subtitle={t('demo.showcase.feedback.progress.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <Progress value={75} variant="primary" label="Uploading" showValue />
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <Progress value={75} variant="primary" label={t('demo.text.feedback.progress.uploading')} showValue />
               <Progress value={45} variant="success" size="sm" />
               <Progress value={90} variant="warning" size="lg" showValue />
-              <Progress variant="info" label="Loading..." />
+              <Progress variant="info" label={t('demo.text.feedback.progress.loading')} />
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="CircularProgress" subtitle="SVG circular progress indicator">
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.circularProgress.title')}
+          subtitle={t('demo.showcase.feedback.circularProgress.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <div class="row">
-                <CircularProgress value={75} showValue variant="primary" label="Primary 75%" />
-                <CircularProgress value={50} showValue variant="success" label="Success 50%" />
-                <CircularProgress value={25} showValue variant="warning" label="Warning 25%" />
-                <CircularProgress value={90} showValue variant="error" label="Error 90%" />
+                <CircularProgress
+                  value={75}
+                  showValue
+                  variant="primary"
+                  label={t('demo.text.feedback.circular.primary75')}
+                />
+                <CircularProgress
+                  value={50}
+                  showValue
+                  variant="success"
+                  label={t('demo.text.feedback.circular.success50')}
+                />
+                <CircularProgress
+                  value={25}
+                  showValue
+                  variant="warning"
+                  label={t('demo.text.feedback.circular.warning25')}
+                />
+                <CircularProgress
+                  value={90}
+                  showValue
+                  variant="error"
+                  label={t('demo.text.feedback.circular.error90')}
+                />
               </div>
               <div class="row">
-                <CircularProgress value={60} size="sm" showValue label="Small" />
-                <CircularProgress value={60} size="md" showValue label="Medium" />
-                <CircularProgress value={60} size="lg" showValue label="Large" />
-                <CircularProgress label="Indeterminate" />
+                <CircularProgress value={60} size="sm" showValue label={t('demo.text.feedback.circular.small')} />
+                <CircularProgress value={60} size="md" showValue label={t('demo.text.feedback.circular.medium')} />
+                <CircularProgress value={60} size="lg" showValue label={t('demo.text.feedback.circular.large')} />
+                <CircularProgress label={t('demo.text.feedback.circular.indeterminate')} />
               </div>
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Determinate with{' '}
-            <CodeText as="span" class="codeInline">
-              value
-            </CodeText>{' '}
-            or indeterminate without. Supports size and variant props.
+            {renderRichText(t('demo.text.feedback.circular.meta'), {
+              value: (
+                <CodeText as="span" class="codeInline">
+                  value
+                </CodeText>
+              ),
+            })}
           </ShowcaseMeta>
         </ShowcaseSection>
 
-        <ShowcaseSection title="Countdown" subtitle="Animated countdown timer">
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.countdown.title')}
+          subtitle={t('demo.showcase.feedback.countdown.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <div class="row">
                 <Countdown seconds={90} format="mm:ss" size="lg" />
                 <Countdown seconds={3600} format="hh:mm:ss" />
@@ -197,22 +269,28 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="Spinner" subtitle="Progress indicators in multiple sizes">
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.spinner.title')}
+          subtitle={t('demo.showcase.feedback.spinner.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <div class="row">
-                <Spinner size="sm" label="Small spinner" />
-                <Spinner size="md" label="Medium spinner" />
-                <Spinner size="lg" label="Large spinner" />
+                <Spinner size="sm" label={t('demo.text.feedback.spinner.small')} />
+                <Spinner size="md" label={t('demo.text.feedback.spinner.medium')} />
+                <Spinner size="lg" label={t('demo.text.feedback.spinner.large')} />
               </div>
             </PreviewGroup>
           </PreviewPanel>
-          <ShowcaseMeta>Spinners inherit brand colors and support reduced-motion preferences.</ShowcaseMeta>
+          <ShowcaseMeta>{t('demo.text.feedback.spinner.meta')}</ShowcaseMeta>
         </ShowcaseSection>
 
-        <ShowcaseSection title="LoadingContainer" subtitle="Centered loading states for container surfaces">
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.loadingContainer.title')}
+          subtitle={t('demo.showcase.feedback.loadingContainer.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <div class="loaderRow">
                 <div class="loaderSample loaderSm">
                   <LoadingContainer size="sm" />
@@ -228,9 +306,12 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="Skeleton" subtitle="Loading placeholders with multiple variants">
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.skeleton.title')}
+          subtitle={t('demo.showcase.feedback.skeleton.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <div class="row">
                 <Skeleton variant="circular" width={48} height={48} />
                 <div class="col flex1">
@@ -247,153 +328,203 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
       </Show>
 
       <Show when={sectionId() === 'feedback-alerts'}>
-        <ShowcaseSection title="Alert" subtitle="Contextual status messages">
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.alert.title')}
+          subtitle={t('demo.showcase.feedback.alert.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <Alert variant="info" label="Information" message="Your account has been updated." />
-              <Alert variant="success" label="Success" message="File uploaded successfully." />
-              <Alert variant="warning" onClose={() => {}} message="Disk space is running low." />
-              <Alert variant="error" label="Error" message="Failed to save changes." />
-              <Alert variant="tip" label="Tip" message="Use Ctrl + K to open the command palette." />
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <Alert
+                variant="info"
+                label={t('demo.text.feedback.alert.information')}
+                message={t('demo.text.feedback.alert.accountUpdated')}
+              />
+              <Alert
+                variant="success"
+                label={t('demo.text.feedback.alert.success')}
+                message={t('demo.text.feedback.alert.fileUploaded')}
+              />
+              <Alert variant="warning" onClose={() => {}} message={t('demo.text.feedback.alert.diskLow')} />
+              <Alert
+                variant="error"
+                label={t('demo.text.feedback.alert.error')}
+                message={t('demo.text.feedback.alert.saveFailed')}
+              />
+              <Alert
+                variant="tip"
+                label={t('demo.text.feedback.alert.tip')}
+                message={t('demo.text.feedback.alert.commandPaletteTip')}
+              />
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="Banner" subtitle="Full-width status strip">
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.banner.title')}
+          subtitle={t('demo.showcase.feedback.banner.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <Banner
                 variant="primary"
-                message="New version available!"
-                action={
-                  <Button variant="navbar" class="bannerActionInverse">
-                    Update now
-                  </Button>
-                }
+                message={t('demo.text.feedback.banner.newVersion')}
+                action={<Button variant="navbar">{t('demo.text.feedback.banner.updateNow')}</Button>}
               />
               {bannerVisible() && (
                 <Banner
                   variant="warning"
                   onClose={() => setBannerVisible(false)}
-                  message="Scheduled maintenance tonight."
+                  message={t('demo.text.feedback.banner.maintenance')}
                 />
               )}
-              <Banner variant="error" message="Service degraded in EU region." />
+              <Banner variant="error" message={t('demo.text.feedback.banner.serviceDegraded')} />
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="Toast" subtitle="Global notifications from any action">
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.toast.title')}
+          subtitle={t('demo.showcase.feedback.toast.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <div class="row">
                 <Button
                   variant="primary"
                   onClick={() =>
                     addToast({
                       type: 'success',
-                      message: 'Changes saved successfully!',
+                      message: t('demo.text.feedback.toast.changesSaved'),
                     })
                   }
                 >
-                  Success toast
+                  {t('demo.text.feedback.toast.successButton')}
                 </Button>
-                <Button variant="danger" onClick={() => addToast({ type: 'error', message: 'Something went wrong.' })}>
-                  Error toast
+                <Button
+                  variant="danger"
+                  onClick={() => addToast({ type: 'error', message: t('demo.text.feedback.toast.somethingWrong') })}
+                >
+                  {t('demo.text.feedback.toast.errorButton')}
                 </Button>
-                <Button variant="ghost" onClick={() => addToast({ type: 'info', message: 'New version available.' })}>
-                  Info toast
+                <Button
+                  variant="ghost"
+                  onClick={() => addToast({ type: 'info', message: t('demo.text.feedback.toast.newVersion') })}
+                >
+                  {t('demo.text.feedback.toast.infoButton')}
                 </Button>
                 <Button
                   variant="dashed"
                   onClick={() =>
                     addToast({
                       type: 'warning',
-                      message: 'Disk space running low.',
+                      message: t('demo.text.feedback.toast.diskLow'),
                     })
                   }
                 >
-                  Warning toast
+                  {t('demo.text.feedback.toast.warningButton')}
                 </Button>
               </div>
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Wrap your app in{' '}
-            <CodeText as="span" class="codeInline">
-              ToastProvider
-            </CodeText>{' '}
-            and render{' '}
-            <CodeText as="span" class="codeInline">
-              ToastViewport
-            </CodeText>{' '}
-            (e.g. in root layout) for toasts to appear.
+            {renderRichText(t('demo.text.feedback.toast.meta'), {
+              toastProvider: (
+                <CodeText as="span" class="codeInline">
+                  ToastProvider
+                </CodeText>
+              ),
+              toastViewport: (
+                <CodeText as="span" class="codeInline">
+                  ToastViewport
+                </CodeText>
+              ),
+            })}
           </ShowcaseMeta>
         </ShowcaseSection>
 
-        <ShowcaseSection title="ErrorMessage" subtitle="Inline error alerts">
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.errorMessage.title')}
+          subtitle={t('demo.showcase.feedback.errorMessage.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <ErrorMessage message="Failed to load data. Please try again." />
-              <ErrorMessage message="Network error: connection timed out." />
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <ErrorMessage message={t('demo.text.feedback.errorMessage.loadFailed')} />
+              <ErrorMessage message={t('demo.text.feedback.errorMessage.networkTimeout')} />
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="NotificationCenter" subtitle="Persistent history powered by toast events">
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.notificationCenter.title')}
+          subtitle={t('demo.showcase.feedback.notificationCenter.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <NotificationCenter maxItems={6} />
             </PreviewGroup>
           </PreviewPanel>
-          <ShowcaseMeta>
-            Trigger toasts above to see them collected here. Use actions to mark as read or clear history.
-          </ShowcaseMeta>
+          <ShowcaseMeta>{t('demo.text.feedback.notificationCenter.meta')}</ShowcaseMeta>
         </ShowcaseSection>
       </Show>
 
       <Show when={sectionId() === 'feedback-states'}>
-        <ShowcaseSection title="AccessDenied" subtitle="Full-page permission denied screen">
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.accessDenied.title')}
+          subtitle={t('demo.showcase.feedback.accessDenied.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <AccessDenied
-                label="Access denied"
-                description="You do not have permission to view this page."
-                goHomeLabel="Go to homepage"
+                label={t('demo.text.feedback.states.accessDeniedLabel')}
+                description={t('demo.text.feedback.states.accessDeniedDescription')}
+                goHomeLabel={t('demo.text.feedback.states.goHome')}
               />
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="ErrorFallback" subtitle="Page-level failure handling">
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.errorFallback.title')}
+          subtitle={t('demo.showcase.feedback.errorFallback.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <ErrorFallback
-                label={retried() ? 'Still failing' : 'Something went wrong'}
-                description="An unexpected error occurred while loading this page."
-                retryLabel="Try again"
+                label={
+                  retried()
+                    ? t('demo.text.feedback.states.stillFailing')
+                    : t('demo.text.feedback.states.somethingWrong')
+                }
+                description={t('demo.text.feedback.states.unexpectedError')}
+                retryLabel={t('demo.text.feedback.states.tryAgain')}
                 onRetry={() => setRetried(true)}
               />
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="EmptyState - No results found" subtitle="Friendly zero-state for empty search">
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.emptyStateNoResults.title')}
+          subtitle={t('demo.showcase.feedback.emptyStateNoResults.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <EmptyState
                 icon={<IoSearch size={40} />}
-                message="No results found"
-                hint="Try adjusting your search query or filters."
+                message={t('demo.text.feedback.states.noResults')}
+                hint={t('demo.text.feedback.states.adjustSearch')}
               />
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="EmptyState - This folder is empty" subtitle="Friendly zero-state for empty collections">
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.emptyStateFolderEmpty.title')}
+          subtitle={t('demo.showcase.feedback.emptyStateFolderEmpty.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
-              <EmptyState icon={<IoFolder size={40} />} message="This folder is empty" />
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <EmptyState icon={<IoFolder size={40} />} message={t('demo.text.feedback.states.folderEmpty')} />
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>

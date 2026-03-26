@@ -2,19 +2,18 @@ import { type JSX, Show, splitProps } from 'solid-js';
 
 import Text from '~/components/typography/Text/Text';
 import type Props from '~/models/Props';
-import type { ButtonCoreNativeProps } from '~/models/Props';
+import type { ButtonCoreNativeProps, ComponentSize } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import Button, { type ButtonSize, type ButtonVariant } from '../Button/Button';
+import Button, { type ButtonVariant } from '../Button/Button';
 import styles from './AffixButton.module.css';
 
 interface AffixButtonOwnProps extends Omit<ButtonCoreNativeProps, 'children' | 'prefix'> {
   variant?: ButtonVariant;
-  size?: ButtonSize;
+  size?: ComponentSize;
   prefix?: JSX.Element;
   suffix?: JSX.Element;
   text: string;
-  contentClass?: string;
   prefixClass?: string;
   bodyClass?: string;
   suffixClass?: string;
@@ -28,7 +27,6 @@ const AffixButton = (props: Props<AffixButtonOwnProps>) => {
     'prefix',
     'suffix',
     'text',
-    'contentClass',
     'prefixClass',
     'bodyClass',
     'suffixClass',
@@ -42,7 +40,7 @@ const AffixButton = (props: Props<AffixButtonOwnProps>) => {
 
   return (
     <Button {...rest} variant={local.variant} size={local.size} class={local.class}>
-      <span class={classNames(local.class, styles.content)}>
+      <span class={styles.content}>
         <Show when={local.prefix}>
           <span class={classNames(styles.prefix, local.prefixClass)}>{local.prefix}</span>
         </Show>

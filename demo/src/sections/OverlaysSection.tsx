@@ -1,4 +1,3 @@
-import type { TourStep } from '@jankrajewskiit/ui';
 import {
   Button,
   Chip,
@@ -15,31 +14,22 @@ import {
   Text,
   Tooltip,
   Tour,
+  type TourStep,
+  useI18n,
 } from '@jankrajewskiit/ui';
 import { IoCopy, IoPencil, IoTrash } from 'solid-icons/io';
-import { createSignal, Show } from 'solid-js';
+import { createMemo, createSignal, Show } from 'solid-js';
 
 import type { SectionId } from '../App';
 import { PreviewGroup, PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
-
-const TOUR_STEPS: TourStep[] = [
-  { target: '.showcaseTitle', title: 'Welcome', content: 'This is the section title area.', placement: 'bottom' },
-  {
-    target: '.previewPanel',
-    title: 'Preview',
-    content: 'Each component is shown in a preview panel.',
-    placement: 'bottom',
-  },
-  {
-    target: '.themeToggleBar',
-    title: 'Theme',
-    content: 'Toggle between light and dark mode here.',
-    placement: 'top',
-  },
-];
+import { type DemoI18nMessageKey, getDemoMessages } from '../i18n/messages';
+import { renderRichText } from '../i18n/renderRichText';
 
 const OverlaysSection = (props: { sectionId: SectionId }) => {
   const sectionId = () => props.sectionId;
+  const { locale } = useI18n();
+  const dictionary = createMemo(() => getDemoMessages(locale()));
+  const t = (key: DemoI18nMessageKey): string => dictionary()[key];
   const [tourOpen, setTourOpen] = createSignal(false);
   const [dialogOpen, setDialogOpen] = createSignal(false);
   const [confirmOpen, setConfirmOpen] = createSignal(false);
@@ -49,68 +39,95 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
   const [leftSheetOpen, setLeftSheetOpen] = createSignal(false);
   const [rightSheetOpen, setRightSheetOpen] = createSignal(false);
 
+  const tourSteps = createMemo<TourStep[]>(() => [
+    {
+      target: '.showcaseTitle',
+      title: t('demo.text.overlays.tour.welcomeTitle'),
+      content: t('demo.text.overlays.tour.welcomeContent'),
+      placement: 'bottom',
+    },
+    {
+      target: '.previewPanel',
+      title: t('demo.text.overlays.tour.previewTitle'),
+      content: t('demo.text.overlays.tour.previewContent'),
+      placement: 'bottom',
+    },
+    {
+      target: '.themeToggleBar',
+      title: t('demo.text.overlays.tour.themeTitle'),
+      content: t('demo.text.overlays.tour.themeContent'),
+      placement: 'top',
+    },
+  ]);
+
   return (
     <div>
       <Show when={sectionId() === 'overlays-tooltips'}>
-        <ShowcaseSection title="Tooltip" subtitle="Contextual hints around interactive elements">
+        <ShowcaseSection
+          title={t('demo.showcase.overlays.tooltip.title')}
+          subtitle={t('demo.showcase.overlays.tooltip.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <div class="row">
-                <Tooltip content="Tooltip on top" position="top">
-                  <Button variant="ghost">Top</Button>
+                <Tooltip content={t('demo.text.overlays.tooltip.topContent')} position="top">
+                  <Button variant="ghost">{t('demo.text.overlays.tooltip.top')}</Button>
                 </Tooltip>
-                <Tooltip content="Tooltip on bottom" position="bottom">
-                  <Button variant="ghost">Bottom</Button>
+                <Tooltip content={t('demo.text.overlays.tooltip.bottomContent')} position="bottom">
+                  <Button variant="ghost">{t('demo.text.overlays.tooltip.bottom')}</Button>
                 </Tooltip>
-                <Tooltip content="Tooltip on left" position="left">
-                  <Button variant="ghost">Left</Button>
+                <Tooltip content={t('demo.text.overlays.tooltip.leftContent')} position="left">
+                  <Button variant="ghost">{t('demo.text.overlays.tooltip.left')}</Button>
                 </Tooltip>
-                <Tooltip content="Tooltip on right" position="right">
-                  <Button variant="ghost">Right</Button>
+                <Tooltip content={t('demo.text.overlays.tooltip.rightContent')} position="right">
+                  <Button variant="ghost">{t('demo.text.overlays.tooltip.right')}</Button>
                 </Tooltip>
               </div>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="Popover" subtitle="Click-triggered floating content">
+        <ShowcaseSection
+          title={t('demo.showcase.overlays.popover.title')}
+          subtitle={t('demo.showcase.overlays.popover.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <div class="row">
                 <Popover
                   trigger={(triggerProps) => (
                     <Button variant="ghost" {...triggerProps}>
-                      Top
+                      {t('demo.text.overlays.tooltip.top')}
                     </Button>
                   )}
-                  content="Popover content for top"
+                  content={t('demo.text.overlays.popover.topContent')}
                   position="top"
                 />
                 <Popover
                   trigger={(triggerProps) => (
                     <Button variant="ghost" {...triggerProps}>
-                      Bottom
+                      {t('demo.text.overlays.tooltip.bottom')}
                     </Button>
                   )}
-                  content="Popover content for bottom"
+                  content={t('demo.text.overlays.popover.bottomContent')}
                   position="bottom"
                 />
                 <Popover
                   trigger={(triggerProps) => (
                     <Button variant="ghost" {...triggerProps}>
-                      Left
+                      {t('demo.text.overlays.tooltip.left')}
                     </Button>
                   )}
-                  content="Popover content for left"
+                  content={t('demo.text.overlays.popover.leftContent')}
                   position="left"
                 />
                 <Popover
                   trigger={(triggerProps) => (
                     <Button variant="ghost" {...triggerProps}>
-                      Right
+                      {t('demo.text.overlays.tooltip.right')}
                     </Button>
                   )}
-                  content="Popover content for right"
+                  content={t('demo.text.overlays.popover.rightContent')}
                   position="right"
                 />
               </div>
@@ -120,30 +137,35 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
       </Show>
 
       <Show when={sectionId() === 'overlays-dialogs'}>
-        <ShowcaseSection title="Dialog" subtitle="Native dialog with smooth transitions">
+        <ShowcaseSection
+          title={t('demo.showcase.overlays.dialog.title')}
+          subtitle={t('demo.showcase.overlays.dialog.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <Button variant="primary" onClick={() => setDialogOpen(true)}>
-                Open dialog
+                {t('demo.text.overlays.dialog.openDialog')}
               </Button>
 
               <Dialog open={dialogOpen()} onClose={() => setDialogOpen(false)}>
-                <DialogTitle label="Example dialog" />
+                <DialogTitle label={t('demo.text.overlays.dialog.exampleTitle')} />
                 <DialogBody>
                   <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                    This modal is built on the{' '}
-                    <CodeText as="span" class="codeInline">
-                      &lt;dialog&gt;
-                    </CodeText>{' '}
-                    element and closes on Escape or backdrop click.
+                    {renderRichText(t('demo.text.overlays.dialog.meta'), {
+                      dialogElement: (
+                        <CodeText as="span" class="codeInline">
+                          &lt;dialog&gt;
+                        </CodeText>
+                      ),
+                    })}
                   </Text>
                 </DialogBody>
                 <DialogActions>
                   <Button variant="ghost" onClick={() => setDialogOpen(false)}>
-                    Cancel
+                    {t('demo.text.overlays.dialog.cancel')}
                   </Button>
                   <Button variant="primary" onClick={() => setDialogOpen(false)}>
-                    Confirm
+                    {t('demo.text.overlays.dialog.confirm')}
                   </Button>
                 </DialogActions>
               </Dialog>
@@ -151,19 +173,22 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="ConfirmDialog" subtitle="Preconfigured danger confirmation flow">
+        <ShowcaseSection
+          title={t('demo.showcase.overlays.confirmDialog.title')}
+          subtitle={t('demo.showcase.overlays.confirmDialog.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <Button variant="danger" onClick={() => setConfirmOpen(true)}>
-                Delete item
+                {t('demo.text.overlays.confirmDialog.deleteItem')}
               </Button>
 
               <ConfirmDialog
                 open={confirmOpen()}
-                label="Delete item?"
-                message="This action cannot be undone. The item will be permanently removed."
-                confirmLabel="Delete"
-                cancelLabel="Cancel"
+                label={t('demo.text.overlays.confirmDialog.deleteItemQuestion')}
+                message={t('demo.text.overlays.confirmDialog.deleteItemMessage')}
+                confirmLabel={t('demo.text.overlays.confirmDialog.delete')}
+                cancelLabel={t('demo.text.overlays.confirmDialog.cancel')}
                 variant="danger"
                 onConfirm={() => setConfirmOpen(false)}
                 onClose={() => setConfirmOpen(false)}
@@ -172,14 +197,17 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="ConfirmAction" subtitle="Headless confirmation flow wrapped around your own trigger">
+        <ShowcaseSection
+          title={t('demo.showcase.overlays.confirmAction.title')}
+          subtitle={t('demo.showcase.overlays.confirmAction.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <ConfirmAction
-                label="Run destructive action?"
-                message="This demo increments a counter so you can verify the flow."
-                confirmLabel="Run"
-                cancelLabel="Cancel"
+                label={t('demo.text.overlays.confirmAction.runDestructive')}
+                message={t('demo.text.overlays.confirmAction.message')}
+                confirmLabel={t('demo.text.overlays.confirmAction.run')}
+                cancelLabel={t('demo.text.overlays.confirmAction.cancel')}
                 variant="danger"
                 onConfirm={() => {
                   setConfirmRuns((current) => current + 1);
@@ -188,16 +216,19 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
                 {({ openConfirm, isConfirmOpen }) => (
                   <div class="row">
                     <Button variant="danger" onClick={openConfirm}>
-                      Open confirmation
+                      {t('demo.text.overlays.confirmAction.openConfirmation')}
                     </Button>
-                    <Chip variant="subtle" label={`Confirm opened: ${isConfirmOpen() ? 'yes' : 'no'}`} />
+                    <Chip
+                      variant="subtle"
+                      label={`${t('demo.text.overlays.confirmAction.confirmOpened')}: ${isConfirmOpen() ? t('demo.text.overlays.confirmAction.yes') : t('demo.text.overlays.confirmAction.no')}`}
+                    />
                   </div>
                 )}
               </ConfirmAction>
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
-            Confirmed actions:{' '}
+            {t('demo.text.overlays.confirmAction.confirmedActions')}:{' '}
             <CodeText as="span" class="codeInline">
               {String(confirmRuns())}
             </CodeText>
@@ -206,91 +237,97 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
       </Show>
 
       <Show when={sectionId() === 'overlays-sheets'}>
-        <ShowcaseSection title="Sheet (right with actions)" subtitle="Slide-in side panel with optional footer actions">
+        <ShowcaseSection
+          title={t('demo.showcase.overlays.sheetRightWithActions.title')}
+          subtitle={t('demo.showcase.overlays.sheetRightWithActions.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <Button variant="ghost" onClick={() => setSheetActionsOpen(true)}>
-                Open right sheet
+                {t('demo.text.overlays.sheets.openRightSheet')}
               </Button>
 
               <Sheet
                 open={sheetActionsOpen()}
                 onClose={() => setSheetActionsOpen(false)}
-                label="Settings"
-                subtitle="Adjust your preferences"
-                closeLabel="Close settings panel"
+                label={t('demo.text.overlays.sheets.settings')}
+                subtitle={t('demo.text.overlays.sheets.adjustPreferences')}
+                closeLabel={t('demo.text.overlays.sheets.closeSettingsPanel')}
                 side="right"
                 size="lg"
                 actions={
                   <>
                     <Button variant="ghost" onClick={() => setSheetActionsOpen(false)}>
-                      Cancel
+                      {t('demo.text.overlays.sheets.cancel')}
                     </Button>
                     <Button variant="primary" onClick={() => setSheetActionsOpen(false)}>
-                      Save changes
+                      {t('demo.text.overlays.sheets.saveChanges')}
                     </Button>
                   </>
                 }
               >
                 <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                  Sheet content goes here. It works well for settings panels, side-by-side forms and detail views.
+                  {t('demo.text.overlays.sheets.settingsContent')}
                 </Text>
               </Sheet>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
 
-        <ShowcaseSection title="Sheets" subtitle="Panels from bottom, left and right edges">
+        <ShowcaseSection
+          title={t('demo.showcase.overlays.sheets.title')}
+          subtitle={t('demo.showcase.overlays.sheets.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <div class="row">
                 <Button variant="ghost" onClick={() => setBottomSheetOpen(true)}>
-                  Bottom sheet
+                  {t('demo.text.overlays.sheets.bottomSheet')}
                 </Button>
                 <Button variant="ghost" onClick={() => setLeftSheetOpen(true)}>
-                  Left sheet
+                  {t('demo.text.overlays.sheets.leftSheet')}
                 </Button>
                 <Button variant="ghost" onClick={() => setRightSheetOpen(true)}>
-                  Right sheet
+                  {t('demo.text.overlays.sheets.rightSheet')}
                 </Button>
               </div>
 
               <Sheet
                 open={bottomSheetOpen()}
                 onClose={() => setBottomSheetOpen(false)}
-                label="Bottom sheet"
-                closeLabel="Close bottom sheet"
+                label={t('demo.text.overlays.sheets.bottomSheet')}
+                closeLabel={t('demo.text.overlays.sheets.closeBottomSheet')}
                 side="bottom"
                 size="md"
               >
                 <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                  This sheet slides up from the bottom edge of the viewport.
+                  {t('demo.text.overlays.sheets.bottomContent')}
                 </Text>
               </Sheet>
 
               <Sheet
                 open={leftSheetOpen()}
                 onClose={() => setLeftSheetOpen(false)}
-                label="Left sheet"
-                closeLabel="Close left sheet"
+                label={t('demo.text.overlays.sheets.leftSheet')}
+                closeLabel={t('demo.text.overlays.sheets.closeLeftSheet')}
                 side="left"
                 size="sm"
               >
                 <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                  This sheet slides in from the left edge of the viewport.
+                  {t('demo.text.overlays.sheets.leftContent')}
                 </Text>
               </Sheet>
 
               <Sheet
                 open={rightSheetOpen()}
                 onClose={() => setRightSheetOpen(false)}
-                label="Right sheet"
-                closeLabel="Close right sheet"
+                label={t('demo.text.overlays.sheets.rightSheet')}
+                closeLabel={t('demo.text.overlays.sheets.closeRightSheet')}
                 side="right"
                 size="lg"
               >
                 <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                  This sheet slides in from the right edge of the viewport.
+                  {t('demo.text.overlays.sheets.rightContent')}
                 </Text>
               </Sheet>
             </PreviewGroup>
@@ -299,46 +336,55 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
       </Show>
 
       <Show when={sectionId() === 'overlays-context'}>
-        <ShowcaseSection title="ContextMenu" subtitle="Right-click action menus">
+        <ShowcaseSection
+          title={t('demo.showcase.overlays.contextMenu.title')}
+          subtitle={t('demo.showcase.overlays.contextMenu.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <ContextMenu
                 items={[
-                  { label: 'Edit', icon: <IoPencil />, onClick: () => {} },
-                  { label: 'Duplicate', icon: <IoCopy />, onClick: () => {} },
+                  { label: t('demo.text.overlays.contextMenu.edit'), icon: <IoPencil />, onClick: () => {} },
+                  { label: t('demo.text.overlays.contextMenu.duplicate'), icon: <IoCopy />, onClick: () => {} },
                   'separator',
-                  { label: 'Delete', icon: <IoTrash />, onClick: () => {}, danger: true },
+                  {
+                    label: t('demo.text.overlays.contextMenu.delete'),
+                    icon: <IoTrash />,
+                    onClick: () => {},
+                    danger: true,
+                  },
                 ]}
               >
-                <div class="contextMenuTarget">Right-click here</div>
+                <div class="contextMenuTarget">{t('demo.text.overlays.contextMenu.rightClickHere')}</div>
               </ContextMenu>
             </PreviewGroup>
           </PreviewPanel>
-          <ShowcaseMeta>Try right-clicking the dashed area above.</ShowcaseMeta>
+          <ShowcaseMeta>{t('demo.text.overlays.contextMenu.meta')}</ShowcaseMeta>
         </ShowcaseSection>
       </Show>
 
       <Show when={sectionId() === 'overlays-lightbox'}>
-        <ShowcaseSection title="Tour" subtitle="Step-by-step onboarding spotlight">
+        <ShowcaseSection
+          title={t('demo.showcase.overlays.tour.title')}
+          subtitle={t('demo.showcase.overlays.tour.subtitle')}
+        >
           <PreviewPanel>
-            <PreviewGroup title="Examples">
+            <PreviewGroup title={t('demo.text.common.examples')}>
               <Button variant="primary" onClick={() => setTourOpen(true)}>
-                Start tour
+                {t('demo.text.overlays.tour.startTour')}
               </Button>
               <Tour
-                steps={TOUR_STEPS}
+                steps={tourSteps()}
                 open={tourOpen()}
                 onClose={() => setTourOpen(false)}
-                nextLabel="Next"
-                prevLabel="Back"
-                finishLabel="Done"
-                skipLabel="Skip"
+                nextLabel={t('demo.text.overlays.tour.next')}
+                prevLabel={t('demo.text.overlays.tour.back')}
+                finishLabel={t('demo.text.overlays.tour.done')}
+                skipLabel={t('demo.text.overlays.tour.skip')}
               />
             </PreviewGroup>
           </PreviewPanel>
-          <ShowcaseMeta>
-            Highlights DOM elements by CSS selector. Supports top, bottom, left and right placements.
-          </ShowcaseMeta>
+          <ShowcaseMeta>{t('demo.text.overlays.tour.meta')}</ShowcaseMeta>
         </ShowcaseSection>
       </Show>
     </div>
