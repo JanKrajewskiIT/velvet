@@ -15,7 +15,12 @@ export async function resolve(specifier, context, defaultResolve) {
   if (specifier.startsWith('~/')) {
     const specPath = specifier.slice(2);
     const basePath = path.join(tmpSrcRoot, specPath);
-    const candidates = [`${basePath}.js`, `${basePath}.jsx`, path.join(basePath, 'index.js'), path.join(basePath, 'index.jsx')];
+    const candidates = [
+      `${basePath}.js`,
+      `${basePath}.jsx`,
+      path.join(basePath, 'index.js'),
+      path.join(basePath, 'index.jsx'),
+    ];
     const mappedPath = candidates.find((candidate) => fs.existsSync(candidate)) ?? `${basePath}.js`;
     return {
       shortCircuit: true,

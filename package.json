@@ -7,11 +7,11 @@
     "type": "git",
     "url": "git+https://github.com/JanKrajewskiIT/velvet.git"
   },
-  "module": "./dist/index.js",
+  "module": "./dist/src/index.js",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/src/index.js"
     },
     "./styles": "./dist/velvet-ui.css",
     "./eslint-config": "./config/eslint.mjs",
