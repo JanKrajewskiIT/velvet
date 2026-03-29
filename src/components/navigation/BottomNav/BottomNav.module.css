@@ -46,6 +46,14 @@
   transform: none;
 }
 
+.active {
+  color: var(--color-primary);
+}
+
+.active .label {
+  color: var(--color-primary);
+}
+
 .icon {
   position: relative;
   font-size: var(--typography-size-icon-md);

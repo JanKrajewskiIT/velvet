@@ -8,9 +8,7 @@
   background: var(--color-bg-elevated);
   color: var(--color-text);
   box-shadow: var(--shadow-card);
-  animation: fadeInUp var(--duration-normal) var(--ease-out-expo);
   transition:
-    transform var(--duration-fast) var(--ease-out-expo),
     box-shadow var(--duration-fast) var(--ease-out-expo),
     border-color var(--duration-normal) var(--ease-out-expo),
     background-color var(--duration-normal) var(--ease-out-expo);
@@ -37,17 +35,15 @@
 }
 
 .hoverable:hover {
-  transform: translateY(-1px);
-  border-color: var(--color-primary);
+  border-color: var(--color-border-strong);
 }
 
 .elevated.hoverable:hover {
-  box-shadow: var(--shadow-popover);
+  box-shadow: var(--shadow-hover);
 }
 
 .filled.hoverable:hover {
-  box-shadow: var(--shadow-hover);
-  background: var(--color-bg-elevated);
+  box-shadow: var(--shadow-sm);
 }
 
 .outlined.hoverable:hover {
@@ -78,11 +74,6 @@
   display: block;
   width: 100%;
   max-width: 100%;
-  transition: transform var(--duration-normal) var(--ease-out-expo);
-}
-
-.hoverable:hover .media > :first-child {
-  transform: scale(1.02);
 }
 
 .header {

@@ -1,5 +1,5 @@
 import { IoArrowUp } from 'solid-icons/io';
-import { createEffect, createSignal, onCleanup } from 'solid-js';
+import { createEffect, createMemo, createSignal, onCleanup, splitProps } from 'solid-js';
 
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
@@ -17,14 +17,15 @@ interface BackToTopProps {
 
 const BackToTop = (props: Props<BackToTopProps>) => {
   const { t } = useI18n();
+  const [local, rest] = splitProps(props, ['class', 'threshold', 'smooth', 'ariaLabel', 'scrollRoot']);
   const [visible, setVisible] = createSignal(false);
 
-  const threshold = () => props.threshold ?? 300;
-  const smooth = () => props.smooth ?? true;
-  const label = () => props.ariaLabel ?? t('backToTop.label');
+  const threshold = createMemo(() => local.threshold ?? 300);
+  const smooth = createMemo(() => local.smooth ?? true);
+  const label = createMemo(() => local.ariaLabel ?? t('backToTop.label'));
 
   createEffect(() => {
-    const root = props.scrollRoot?.() ?? null;
+    const root = local.scrollRoot?.() ?? null;
     const update = () => {
       if (root) {
         setVisible(root.scrollTop >= threshold());
@@ -44,7 +45,7 @@ const BackToTop = (props: Props<BackToTopProps>) => {
   });
 
   const scrollToTop = () => {
-    const root = props.scrollRoot?.() ?? null;
+    const root = local.scrollRoot?.() ?? null;
     if (root) {
       root.scrollTo({ top: 0, behavior: smooth() ? 'smooth' : 'auto' });
     } else {
@@ -54,7 +55,8 @@ const BackToTop = (props: Props<BackToTopProps>) => {
 
   return (
     <RoundIconButton
-      class={classNames(styles.button, visible() ? styles.visible : styles.hidden, props.class)}
+      {...rest}
+      class={classNames(styles.button, visible() ? styles.visible : styles.hidden, local.class)}
       size="lg"
       elevation="popover"
       onClick={scrollToTop}

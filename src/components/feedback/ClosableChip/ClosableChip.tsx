@@ -1,7 +1,6 @@
 import { IoCloseOutline } from 'solid-icons/io';
-import { splitProps } from 'solid-js';
+import { createMemo, splitProps } from 'solid-js';
 
-import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 
 import Chip from '../Chip/Chip';
@@ -14,9 +13,11 @@ interface ClosableChipOwnProps {
   disabled?: boolean;
 }
 
+const DEFAULT_REMOVE_LABEL = 'Remove';
+
 const ClosableChip = (props: Props<ClosableChipOwnProps>) => {
-  const { t } = useI18n();
   const [local] = splitProps(props, ['label', 'onRemove', 'removeLabel', 'disabled', 'class']);
+  const removeButtonLabel = createMemo(() => local.removeLabel ?? DEFAULT_REMOVE_LABEL);
 
   return (
     <Chip
@@ -28,7 +29,7 @@ const ClosableChip = (props: Props<ClosableChipOwnProps>) => {
         <button
           type="button"
           class={styles.removeButton}
-          aria-label={local.removeLabel ?? t('common.remove')}
+          aria-label={removeButtonLabel()}
           disabled={local.disabled}
           onClick={() => local.onRemove()}
         >

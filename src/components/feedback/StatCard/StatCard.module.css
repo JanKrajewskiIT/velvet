@@ -1,7 +1,4 @@
 .card {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
   padding: var(--spacing-md) var(--spacing-lg);
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border);
@@ -45,6 +42,5 @@
 }
 
 .content {
-  display: flex;
-  flex-direction: column;
+  min-width: 0;
 }

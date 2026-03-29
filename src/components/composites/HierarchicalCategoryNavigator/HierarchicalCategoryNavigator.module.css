@@ -1,0 +1,9 @@
+.navigator {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.children {
+  animation: fadeInUp var(--duration-normal) var(--ease-out-expo) both;
+}

@@ -58,6 +58,11 @@ type DivCoreNativeProps = Partial<Pick<JSX.HTMLAttributes<HTMLDivElement>, keyof
 
 type SpanCoreNativeProps = Partial<Pick<JSX.HTMLAttributes<HTMLSpanElement>, keyof HTMLElementCoreNativeProps>>;
 
+type AnchorCoreNativeProps = Pick<
+  JSX.AnchorHTMLAttributes<HTMLAnchorElement>,
+  'href' | 'target' | 'rel' | 'download' | 'hreflang' | 'referrerpolicy'
+>;
+
 type ListItemCoreNativeProps = Partial<Pick<JSX.HTMLAttributes<HTMLLIElement>, keyof HTMLElementCoreNativeProps>>;
 
 type TableCoreNativeProps = Partial<
@@ -116,11 +121,15 @@ type InputCoreNativeProps = Pick<
   | 'autofocus'
   | 'autocomplete'
   | 'inputmode'
+  | 'list'
   | 'maxlength'
   | 'maxLength'
+  | 'max'
   | 'minlength'
   | 'minLength'
+  | 'min'
   | 'pattern'
+  | 'step'
   | 'type'
   | 'onInput'
   | 'onChange'
@@ -243,6 +252,7 @@ type OptionalLabelOnlyProps = {
 type Props<T = object> = T & BaseProps;
 
 export type {
+  AnchorCoreNativeProps,
   AriaFieldProps,
   AriaLabelingProps,
   AriaValidationProps,

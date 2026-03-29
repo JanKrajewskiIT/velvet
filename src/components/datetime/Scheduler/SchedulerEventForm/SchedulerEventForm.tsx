@@ -4,6 +4,7 @@ import Button from '~/components/buttons/Button/Button';
 import Input from '~/components/inputs/Input/Input';
 import TextArea from '~/components/inputs/TextArea/TextArea';
 import type Props from '~/models/Props';
+import { splitDateTimeValue } from '~/utils/datetime';
 
 import DateTimePicker from '../../DateTimePicker/DateTimePicker';
 import styles from './SchedulerEventForm.module.css';
@@ -29,7 +30,7 @@ const SchedulerEventForm = (props: Props<SchedulerEventFormProps>) => {
   const dateTimeValue = createMemo(() => (props.time ? `${props.date}T${props.time}` : props.date));
 
   const handleDateTimeChange = (value: string) => {
-    const [date = '', time = ''] = value.split('T');
+    const { date, time } = splitDateTimeValue(value);
     props.onDateTimeChange(date, time);
   };
 

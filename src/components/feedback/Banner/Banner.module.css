@@ -1,15 +1,19 @@
 .banner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-md);
   width: 100%;
   padding: var(--spacing-sm) var(--spacing-lg);
+  border-bottom: 1px solid rgb(255 255 255 / 12%);
   animation: slideInDown var(--duration-normal) var(--ease-out-expo);
+}
+
+.body {
+  flex: 1;
+  min-width: 0;
 }
 
 .content {
   flex: 1;
+  min-width: 16rem;
+  color: inherit;
 }
 
 .action {
@@ -44,4 +48,19 @@
 .error {
   background-color: var(--color-error);
   color: var(--color-on-accent);
+}
+
+@media (width < 640px) {
+  .banner {
+    align-items: flex-start;
+  }
+
+  .body {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .content {
+    min-width: 0;
+  }
 }

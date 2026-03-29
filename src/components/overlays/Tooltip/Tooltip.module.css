@@ -7,13 +7,9 @@
   position: absolute;
   z-index: var(--z-modal);
   padding: var(--spacing-xs) var(--spacing-sm);
-  background-color: var(--color-tooltip);
-  backdrop-filter: var(--blur-overlay);
-  border-radius: var(--radius-sm);
   white-space: nowrap;
   pointer-events: none;
   animation: scaleIn var(--duration-fast) var(--ease-out-back);
-  box-shadow: var(--shadow-popover);
 }
 
 .top {

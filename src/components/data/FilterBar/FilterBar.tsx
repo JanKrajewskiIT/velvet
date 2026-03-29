@@ -1,4 +1,4 @@
-import { createMemo, For, Show } from 'solid-js';
+import { createMemo, For, Show, splitProps } from 'solid-js';
 
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
@@ -6,6 +6,7 @@ import type { DivCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import Button from '../../buttons/Button/Button';
+import type { SelectOption } from '../../dropdowns/Select/Select';
 import Select from '../../dropdowns/Select/Select';
 import ClosableChip from '../../feedback/ClosableChip/ClosableChip';
 import SearchInput from '../../inputs/SearchInput/SearchInput';
@@ -44,32 +45,47 @@ interface FilterBarOwnProps extends Omit<DivCoreNativeProps, 'onChange'> {
 
 const FilterBar = (props: Props<FilterBarOwnProps>) => {
   const { t } = useI18n();
+  const [local, rest] = splitProps(props, [
+    'filters',
+    'value',
+    'onChange',
+    'search',
+    'onSearchChange',
+    'searchPlaceholder',
+    'clearAllLabel',
+    'allLabel',
+    'removeFilterLabel',
+    'disabled',
+    'class',
+  ]);
   const selectedByKey = createMemo(() => {
-    return new Map(props.value.map((entry) => [entry.key, entry.value]));
+    return new Map(local.value.map((entry) => [entry.key, entry.value]));
   });
 
-  const hasSearch = createMemo(() => Boolean(props.search?.trim()));
-  const hasActiveFilters = createMemo(() => props.value.length > 0);
+  const hasSearch = createMemo(() => Boolean(local.search?.trim()));
+  const hasActiveFilters = createMemo(() => local.value.length > 0);
   const hasClearAction = createMemo(() => hasSearch() || hasActiveFilters());
+  const clearAllLabel = createMemo(() => local.clearAllLabel ?? t('filterBar.clearAll'));
+  const allLabel = createMemo(() => local.allLabel ?? t('common.all'));
 
   const setFilterValue = (key: string, nextValue: string) => {
-    const next = props.value.filter((entry) => entry.key !== key);
+    const next = local.value.filter((entry) => entry.key !== key);
     if (!nextValue) {
-      props.onChange(next);
+      local.onChange(next);
       return;
     }
 
-    props.onChange([...next, { key, value: nextValue }]);
+    local.onChange([...next, { key, value: nextValue }]);
   };
 
   const clearAll = () => {
-    props.onChange([]);
-    props.onSearchChange?.('');
+    local.onChange([]);
+    local.onSearchChange?.('');
   };
 
   const activeFilters = createMemo(() => {
-    return props.value.map((entry) => {
-      const filter = props.filters.find((candidate) => candidate.key === entry.key);
+    return local.value.map((entry) => {
+      const filter = local.filters.find((candidate) => candidate.key === entry.key);
       const label = filter?.options.find((option) => option.value === entry.value)?.label ?? entry.value;
 
       return {
@@ -79,22 +95,26 @@ const FilterBar = (props: Props<FilterBarOwnProps>) => {
       };
     });
   });
+  const getSelectOptions = (filter: FilterBarFilter): SelectOption[] => [
+    { value: '', label: filter.placeholder ?? allLabel() },
+    ...filter.options.map((option) => ({ value: option.value, label: option.label, disabled: option.disabled })),
+  ];
 
   return (
-    <div class={classNames(styles.root, props.disabled && styles.disabled, props.class)}>
+    <div {...rest} class={classNames(styles.root, local.disabled && styles.disabled, local.class)}>
       <div class={styles.controls}>
-        <Show when={props.onSearchChange}>
+        <Show when={local.onSearchChange}>
           <SearchInput
             class={styles.search}
-            value={props.search ?? ''}
-            onInput={(next) => props.onSearchChange?.(next)}
-            placeholder={props.searchPlaceholder}
-            clearLabel={props.clearAllLabel}
-            disabled={props.disabled}
+            value={local.search ?? ''}
+            onInput={(next) => local.onSearchChange?.(next)}
+            placeholder={local.searchPlaceholder}
+            clearLabel={clearAllLabel()}
+            disabled={local.disabled}
           />
         </Show>
 
-        <For each={props.filters}>
+        <For each={local.filters}>
           {(filter) => {
             return (
               <Select
@@ -104,24 +124,16 @@ const FilterBar = (props: Props<FilterBarOwnProps>) => {
                 onChange={(event: Event & { currentTarget: HTMLSelectElement; target: HTMLSelectElement }) =>
                   setFilterValue(filter.key, event.currentTarget.value)
                 }
-                disabled={props.disabled}
-              >
-                <option value="">{filter.placeholder ?? props.allLabel ?? t('common.all')}</option>
-                <For each={filter.options}>
-                  {(option) => (
-                    <option value={option.value} disabled={option.disabled}>
-                      {option.label}
-                    </option>
-                  )}
-                </For>
-              </Select>
+                disabled={local.disabled}
+                options={getSelectOptions(filter)}
+              />
             );
           }}
         </For>
 
         <Show when={hasClearAction()}>
-          <Button class={styles.clearButton} variant="ghost" size="md" onClick={clearAll} disabled={props.disabled}>
-            {props.clearAllLabel ?? t('filterBar.clearAll')}
+          <Button class={styles.clearButton} variant="ghost" size="md" onClick={clearAll} disabled={local.disabled}>
+            {clearAllLabel()}
           </Button>
         </Show>
       </div>
@@ -133,7 +145,7 @@ const FilterBar = (props: Props<FilterBarOwnProps>) => {
               <ClosableChip
                 label={`${entry.filterLabel}: ${entry.valueLabel}`}
                 onRemove={() => setFilterValue(entry.key, '')}
-                removeLabel={props.removeFilterLabel ? `${props.removeFilterLabel} ${entry.filterLabel}` : undefined}
+                removeLabel={local.removeFilterLabel ? `${local.removeFilterLabel} ${entry.filterLabel}` : undefined}
               />
             )}
           </For>

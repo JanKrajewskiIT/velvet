@@ -1,5 +1,5 @@
 import { IoClose, IoSearch } from 'solid-icons/io';
-import { type JSX, onCleanup, Show, splitProps } from 'solid-js';
+import { createMemo, type JSX, onCleanup, Show, splitProps } from 'solid-js';
 
 import Icon from '~/components/media/Icon/Icon';
 import { useI18n } from '~/i18n/I18nProvider';
@@ -46,9 +46,14 @@ const SearchInput = (props: Props<SearchInputProps>) => {
   ]);
   let debounceTimer: ReturnType<typeof setTimeout> | undefined;
 
-  const placeholderText = () =>
-    local.messages?.searchPlaceholder ?? local.messages?.placeholder ?? local.placeholder ?? t('common.searchEllipsis');
-  const clearButtonLabel = () => local.messages?.clearButtonLabel ?? local.clearLabel ?? t('search.clear');
+  const placeholderText = createMemo(
+    () =>
+      local.messages?.searchPlaceholder ??
+      local.messages?.placeholder ??
+      local.placeholder ??
+      t('common.searchEllipsis')
+  );
+  const clearButtonLabel = createMemo(() => local.messages?.clearButtonLabel ?? local.clearLabel ?? t('search.clear'));
 
   const fireInput = (value: string) => {
     if (local.debounce && local.debounce > 0) {

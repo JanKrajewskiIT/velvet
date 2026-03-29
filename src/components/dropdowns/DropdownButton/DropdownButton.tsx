@@ -1,5 +1,5 @@
 import { FiChevronDown } from 'solid-icons/fi';
-import { createUniqueId, type JSX, Show } from 'solid-js';
+import { createMemo, createUniqueId, type JSX, Show, splitProps } from 'solid-js';
 
 import Button from '~/components/buttons/Button/Button';
 import useDropdownPanel from '~/hooks/useDropdownPanel';
@@ -19,6 +19,7 @@ interface DropdownButtonProps {
 }
 
 const DropdownButton = (props: Props<DropdownButtonProps>) => {
+  const [local, rest] = splitProps(props, ['class', 'label', 'variant', 'size', 'children']);
   const menuId = createUniqueId();
   let wrapperRef: HTMLDivElement | undefined;
   let panelRef: HTMLDivElement | undefined;
@@ -33,25 +34,25 @@ const DropdownButton = (props: Props<DropdownButtonProps>) => {
   const handleTriggerKeyDown = (event: KeyboardEvent) => {
     dropdown.openFromKeyboard(event, { ignoreWhenOpen: true });
   };
+  const variant = createMemo(() => local.variant ?? 'ghost');
+  const size = createMemo(() => local.size ?? 'md');
+  const triggerTone = createMemo(() => (variant() === 'primary' ? 'inverse' : 'default'));
+  const wrapperClass = createMemo(() => classNames(styles.wrapper, local.class));
 
   return (
-    <div ref={wrapperRef} class={classNames(styles.wrapper, props.class)}>
+    <div {...rest} ref={wrapperRef} class={wrapperClass()}>
       <Button
         ref={triggerRef}
         class={styles.trigger}
-        variant={props.variant ?? 'ghost'}
-        size={props.size ?? 'md'}
+        variant={variant()}
+        size={size()}
         onClick={dropdown.toggle}
         onKeyDown={handleTriggerKeyDown}
         aria-haspopup="menu"
         aria-expanded={dropdown.open()}
         aria-controls={dropdown.open() ? menuId : undefined}
       >
-        <DropdownTriggerContent
-          label={props.label}
-          tone={props.variant === 'primary' ? 'inverse' : 'default'}
-          class={styles.triggerContent}
-        >
+        <DropdownTriggerContent label={local.label} tone={triggerTone()} class={styles.triggerContent}>
           <span class={classNames(styles.chevron, dropdown.open() && styles.chevronOpen)}>
             <FiChevronDown />
           </span>
@@ -70,7 +71,7 @@ const DropdownButton = (props: Props<DropdownButtonProps>) => {
           onClick={dropdown.close}
           scrollable={false}
         >
-          {props.children}
+          {local.children}
         </DropdownSurface>
       </Show>
     </div>

@@ -4,17 +4,16 @@ import { Portal } from 'solid-js/web';
 
 import IconButton from '~/components/buttons/IconButton/IconButton';
 import Text from '~/components/typography/Text/Text';
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import { removeToast, toasts } from '../Toast';
 import styles from './ToastViewport.module.css';
 
-interface ToastViewportBaseProps {
-  closeLabel: string;
-}
+const ToastViewport = (props: Props) => {
+  const { t } = useI18n();
 
-const ToastViewport = (props: Props<ToastViewportBaseProps>) => {
   return (
     <Portal>
       <div class={classNames(styles.toastContainer, props.class)} role="region" aria-live="polite" aria-atomic="false">
@@ -27,7 +26,7 @@ const ToastViewport = (props: Props<ToastViewportBaseProps>) => {
               <Text as="span" variant="bodySm">
                 {toast.message}
               </Text>
-              <IconButton icon={IoClose} label={props.closeLabel} onClick={() => removeToast(toast.id)} />
+              <IconButton icon={IoClose} label={t('common.close')} onClick={() => removeToast(toast.id)} />
             </div>
           )}
         </For>

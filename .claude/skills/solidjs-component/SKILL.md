@@ -3,64 +3,86 @@ name: solidjs-component
 description: SolidJS component patterns for VelvetUi -- Props convention, component inventory, hooks, toast system, overlay pattern, shared utils. Use when creating or modifying components.
 ---
 
-## Standard component
+## Standard Component Shape
 
-`import type Props from '~/models/Props'` > interface > `(props: Props<X>) =>` > `export default`
+`import type Props from "~/models/Props"` -> semantic interface -> `(props: Props<X>) =>` -> `export default`
 
-With HTML attribute spreading: `interface XOwnProps extends JSX.*HTMLAttributes` + `splitProps` + `{...rest}`.
+Use shared core native subsets from `~/models/Props.ts` instead of exposing full `JSX.*HTMLAttributes`.
+`Props<T>` already covers `class`, `id`, `aria-*`, and `data-*`.
 
-## File structure
+## File Structure
 
-`ComponentName/ComponentName.tsx` + `.module.css`. Export from `src/index.ts` as `{ default as X }`.
-`ThemeProvider`/`ToastProvider` use `ParentProps` (no own DOM, no `Props<T>`).
+`ComponentName/ComponentName.tsx` + `ComponentName.module.css`
 
-## Inventory
+Export from `src/index.ts` as `{ default as X }`.
+`ThemeProvider` and `ToastProvider` use `ParentProps` because they do not expose DOM-like public contracts.
 
-`typography/` (Heading, Text, CodeText), `inputs/`, `forms/`, `data-display/`, `navigation/`, `feedback/`, `overlays/`, `layout/`, `composites/`, `app/`.
+## Primitive-first Design
 
-## Primitive-first design
+- Prefer extending existing VelvetUi primitives over wrapper-only components
+- Keep one primitive per role in a family
+- Label-driven APIs should use explicit semantic props like `label`, `message`, `description`
+- Prefer `label` over `title` for component-level labels
+- Reuse shared label contracts from `~/models/Props.ts`
+- Render labels and descriptions through VelvetUi typography primitives, preferably `LabelText`
+- Wrapper components are valid only when they add real semantics, defaults, or state
 
-- Prefer existing VelvetUi primitives over introducing wrapper-only components
-- One primitive per role in a family (e.g. dropdown option, dropdown surface) -- avoid parallel item variants
-- Label-driven APIs should use explicit props like `label` instead of free-form `children`
-- Keep primitive styles in that primitive's own module file/directory (avoid catch-all base CSS)
-- Prefer `ComponentName.tsx` + `ComponentName.module.css` pairs; avoid standalone `*.module.css` without a corresponding component
-- Exception: shared primitive style modules can stay standalone when reused across different element types (e.g. button/select/input/div)
-- Never use `composes` in `*.module.css`; for shared styles import the source module in TSX and merge classes with `classNames()`
+## Built-in Copy Philosophy
 
-## Code / JSX separation
+- VelvetUi owns generic reusable copy
+- Do not push all text to props by default
+- Preferred resolution order:
+  - semantic prop override when truly justified
+  - `messages` override
+  - built-in `useI18n()` default
+- If a component needs a new built-in label, add it to `src/i18n/messages.ts`
+- Do not leave user-facing fallback strings in component logic when the library should own them
 
-- Define all handlers and computed values above `return` -- never inline multi-statement functions in JSX
-- Simple one-liner delegations in JSX are OK (e.g. `onClick={() => props.onClose()}`)
-- Prefer `createMemo` for derived state; reserve `createEffect` for true side effects (DOM manipulation, timers, event listeners)
+## Code / JSX Separation
 
-## Toast
+- Define handlers and computed values above `return`
+- Prefer `createMemo` for derived state
+- Reserve `createEffect` for real side effects
+- Keep JSX focused on rendering, not business logic
 
-`addToast({ message, type?, duration? })` / `removeToast(id)`. `ToastProvider` + `ToastViewport` in app shell.
+## Styling Expectations
 
-## Hooks (all from `~/hooks/`)
+- Primitive visuals stay neutral by default
+- Do not make base `Card`, `Button`, `Input`, `Chip`, or similar primitives promotional or animated by default
+- Hover lift, spotlight, strong motion, or decorative emphasis must be explicit and justified
+- Keep shared primitive visuals inside the primitive module; hosts should position, not reskin
 
-- `useClickOutside(ref, isActive, cb)` -- close on outside click
-- `useEscapeKey(isActive, cb)` -- close on Escape
-- `useFocusTrap(ref, isActive)` -- trap focus inside overlays
-- `useOverlayAnimation(isOpen)` -- enter/exit CSS transitions for overlays
+## Hooks
 
-## Overlay pattern
+Use shared hooks from `~/hooks/` when applicable:
 
-Overlays (Dialog, Sheet, Drawer, Popover, ContextMenu) follow a shared pattern:
+- `useClickOutside`
+- `useEscapeKey`
+- `useFocusTrap`
+- `useOverlayAnimation`
 
-- `useEscapeKey` + `useFocusTrap` for keyboard/focus management
+## Overlay Pattern
+
+Overlays follow a shared pattern:
+
+- `useEscapeKey` + `useFocusTrap` for keyboard/focus handling
 - `useOverlayAnimation` for enter/exit transitions
-- `classNames()` for conditional class composition (open/closed states)
-- `Heading` for overlay titles -- never raw `<h1>`–`<h6>`
-- `IconButton` for close buttons -- never raw `<button>` with icon
+- `classNames()` for conditional class composition
+- `Heading` for titles
+- `IconButton` for close actions
 
-## Utils (all from `~/utils/`)
+## Utilities
 
-- `classNames(...args)` -- conditional class string builder, preferred over template literals
-- `getContrastTextColor(hex)` -- accessible text color for a given background
-- `orEmpty()`, `numberToString()`, `emptyToNull()`, `parseFloatOrNull()` -- form value helpers
+Use shared utilities from `~/utils/`:
 
-## Shared modules
+- `classNames(...)`
+- `joinAriaIds(...)`
+- `resolveAriaInvalid(...)`
+- `resolveAriaErrorMessage(...)`
+- Form and color helpers already present in the repo
 
-- `~/components/inputs/shared/calendar` -- `DAY_LABELS`, `DayCell`, `pad`, `toIso`, `buildDaysGrid`, `parseDate` (used by DatePicker, DateRangePicker)
+## Extraction Guidance
+
+- When bringing app code into VelvetUi, extract reusable patterns, not product-specific workflows 1:1
+- Rename contracts to neutral generic names where possible
+- If a component is still strongly domain-shaped, either generalize it before export or treat it as a template/business-layer piece

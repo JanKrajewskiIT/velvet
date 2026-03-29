@@ -1,4 +1,4 @@
-import { Show } from 'solid-js';
+import { createMemo, Show, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
@@ -13,9 +13,11 @@ interface DividerProps {
 }
 
 const Divider = (props: Props<DividerProps>) => {
-  const orientation = () => props.orientation ?? 'horizontal';
-  const variant = () => props.variant ?? 'solid';
-  const hasLabel = () => orientation() === 'horizontal' && !!props.label;
+  const [local, rest] = splitProps(props, ['class', 'orientation', 'label', 'variant']);
+  const orientation = createMemo(() => local.orientation ?? 'horizontal');
+  const variant = createMemo(() => local.variant ?? 'solid');
+  const hasLabel = createMemo(() => orientation() === 'horizontal' && Boolean(local.label));
+  const dashedClass = createMemo(() => variant() === 'dashed' && styles.dashed);
 
   return (
     <Show
@@ -25,22 +27,20 @@ const Divider = (props: Props<DividerProps>) => {
           when={orientation() === 'horizontal'}
           fallback={
             <div
+              {...rest}
               role="separator"
               aria-orientation="vertical"
-              class={classNames(styles.vertical, variant() === 'dashed' && styles.dashed, props.class)}
+              class={classNames(styles.vertical, dashedClass(), local.class)}
             />
           }
         >
-          <hr class={classNames(styles.horizontalPlain, variant() === 'dashed' && styles.dashed, props.class)} />
+          <hr {...rest} class={classNames(styles.horizontalPlain, dashedClass(), local.class)} />
         </Show>
       }
     >
-      <div
-        role="separator"
-        class={classNames(styles.divider, styles.horizontal, variant() === 'dashed' && styles.dashed, props.class)}
-      >
+      <div {...rest} role="separator" class={classNames(styles.divider, styles.horizontal, dashedClass(), local.class)}>
         <Text as="span" variant="bodySm" tone="muted" class={styles.label}>
-          {props.label}
+          {local.label}
         </Text>
       </div>
     </Show>

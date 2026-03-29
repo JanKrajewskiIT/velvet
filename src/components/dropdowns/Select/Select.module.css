@@ -22,9 +22,10 @@
 
 .selectTriggerOpen {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px var(--color-focus-ring);
+  box-shadow: var(--shadow-focus);
 }
 
 .selectDropdown {
   width: 100%;
+  margin-top: var(--spacing-xs);
 }

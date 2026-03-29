@@ -1,4 +1,4 @@
-import { type JSX, splitProps } from 'solid-js';
+import { createMemo, type JSX, splitProps } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
 
 import type Props from '~/models/Props';
@@ -27,21 +27,20 @@ const levelToVariant = (level: number): HeadingVariant => {
 const Heading = (props: Props<HeadingOwnProps>) => {
   const [local, rest] = splitProps(props, ['as', 'level', 'variant', 'tone', 'class', 'children']);
 
-  const level = () => local.level ?? 2;
-  const component = () => local.as ?? (`h${String(level())}` as keyof JSX.IntrinsicElements);
-  const variant = () => local.variant ?? levelToVariant(level());
+  const level = createMemo(() => local.level ?? 2);
+  const component = createMemo(() => local.as ?? (`h${String(level())}` as keyof JSX.IntrinsicElements));
+  const variant = createMemo(() => local.variant ?? levelToVariant(level()));
+  const headingClass = createMemo(() =>
+    classNames(
+      styles.heading,
+      headingVariantClass(typographyStyles, variant()),
+      toneClass(typographyStyles, local.tone),
+      local.class
+    )
+  );
 
   return (
-    <Dynamic
-      component={component()}
-      {...rest}
-      class={classNames(
-        styles.heading,
-        headingVariantClass(typographyStyles, variant()),
-        toneClass(typographyStyles, local.tone),
-        local.class
-      )}
-    >
+    <Dynamic component={component()} {...rest} class={headingClass()}>
       {local.children}
     </Dynamic>
   );

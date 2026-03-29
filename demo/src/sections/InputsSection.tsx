@@ -6,7 +6,10 @@ import {
   Autocomplete,
   Badge,
   Button,
+  CalendarEventButton,
+  CalendarHeader,
   Checkbox,
+  CheckboxIndicator,
   CodeText,
   ColorPicker,
   CopyButton,
@@ -40,6 +43,7 @@ import {
   Slider,
   Switch,
   TagInput,
+  Text,
   TextArea,
   ThemeToggle,
   TimePicker,
@@ -108,6 +112,7 @@ const InputsSection = (props: InputsSectionProps) => {
   const [affixValue, setAffixValue] = createSignal('hello@velvetui.dev');
   const [range, setRange] = createSignal({ start: '', end: '' });
   const [dateTime, setDateTime] = createSignal('');
+  const [calendarPreviewUrl, setCalendarPreviewUrl] = createSignal('');
   const [richText, setRichText] = createSignal(releaseNotesHtml());
   const [droppedFile, setDroppedFile] = createSignal<string | null>(null);
   const [droppedFiles, setDroppedFiles] = createSignal<string[]>([]);
@@ -120,6 +125,20 @@ const InputsSection = (props: InputsSectionProps) => {
   const handleSelectChange = (event: Event & { currentTarget: HTMLSelectElement; target: HTMLSelectElement }) => {
     setSelected(event.currentTarget.value);
   };
+
+  const handleCalendarEventOpen = (url: string) => {
+    setCalendarPreviewUrl(url);
+    addToast({ type: 'info', message: 'Calendar URL generated.' });
+  };
+
+  const calendarEventPreview = () => ({
+    title: 'VelvetUi planning session',
+    start: dateTime() || new Date().toISOString(),
+    durationMinutes: 60,
+    details: 'Review component roadmap and release notes.',
+    location: 'Google Meet',
+    synced: false,
+  });
 
   return (
     <div>
@@ -378,12 +397,17 @@ const InputsSection = (props: InputsSectionProps) => {
             <PreviewGroup title={t('demo.text.common.examples')}>
               <FormField label={t('demo.text.inputs.select.chooseOption')}>
                 {(fieldProps) => (
-                  <Select {...fieldProps} value={selected()} onChange={handleSelectChange}>
-                    <option value="">{t('demo.text.inputs.select.selectPlaceholder')}</option>
-                    <option value="a">{t('demo.text.inputs.select.optionA')}</option>
-                    <option value="b">{t('demo.text.inputs.select.optionB')}</option>
-                    <option value="c">{t('demo.text.inputs.select.optionC')}</option>
-                  </Select>
+                  <Select
+                    {...fieldProps}
+                    value={selected()}
+                    onChange={handleSelectChange}
+                    options={[
+                      { value: '', label: t('demo.text.inputs.select.selectPlaceholder') },
+                      { value: 'a', label: t('demo.text.inputs.select.optionA') },
+                      { value: 'b', label: t('demo.text.inputs.select.optionB') },
+                      { value: 'c', label: t('demo.text.inputs.select.optionC') },
+                    ]}
+                  />
                 )}
               </FormField>
             </PreviewGroup>
@@ -785,6 +809,17 @@ const InputsSection = (props: InputsSectionProps) => {
           </PreviewPanel>
         </ShowcaseSection>
 
+        <ShowcaseSection title="CheckboxIndicator" subtitle="Low-level visual indicator used by Checkbox">
+          <PreviewPanel>
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <div class="row">
+                <CheckboxIndicator checked={false} />
+                <CheckboxIndicator checked />
+              </div>
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+
         <ShowcaseSection
           title={t('demo.showcase.inputs.radioGroup.title')}
           subtitle={t('demo.showcase.inputs.radioGroup.subtitle')}
@@ -1042,6 +1077,13 @@ const InputsSection = (props: InputsSectionProps) => {
         >
           <PreviewPanel>
             <PreviewGroup title={t('demo.text.common.examples')}>
+              <CalendarHeader
+                monthLabel="March 2026"
+                previousLabel={t('demo.text.navigation.pagination.previous')}
+                nextLabel={t('demo.text.navigation.pagination.next')}
+                onPrevious={() => {}}
+                onNext={() => {}}
+              />
               <FormField label={t('demo.text.inputs.dateTime.startDate')}>
                 {(fieldProps) => <DatePicker {...fieldProps} value={date()} onChange={setDate} />}
               </FormField>
@@ -1103,6 +1145,28 @@ const InputsSection = (props: InputsSectionProps) => {
               {dateTime() || t('demo.text.inputs.dateTime.notSet')}
             </CodeText>
           </ShowcaseMeta>
+        </ShowcaseSection>
+
+        <ShowcaseSection title="CalendarEventButton" subtitle={t('demo.recron.showcase.calendarEventButton.subtitle')}>
+          <PreviewPanel>
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <div class="row">
+                <CalendarEventButton
+                  event={calendarEventPreview()}
+                  addLabel={t('demo.recron.interview.calendar.addLabel')}
+                  syncedLabel={t('demo.recron.interview.calendar.syncedLabel')}
+                  onOpen={handleCalendarEventOpen}
+                />
+              </div>
+              <Show when={calendarPreviewUrl()}>
+                {(url) => (
+                  <Text as="p" variant="bodySm" tone="muted">
+                    {url()}
+                  </Text>
+                )}
+              </Show>
+            </PreviewGroup>
+          </PreviewPanel>
         </ShowcaseSection>
       </Show>
 
@@ -1234,11 +1298,14 @@ const InputsSection = (props: InputsSectionProps) => {
                   </FormField>
                   <FormField label={t('demo.text.inputs.formGrid.role')}>
                     {(fieldProps) => (
-                      <Select {...fieldProps}>
-                        <option value="">{t('demo.text.inputs.formGrid.selectRole')}</option>
-                        <option value="admin">{t('demo.text.inputs.radio.admin')}</option>
-                        <option value="user">{t('demo.text.inputs.radio.user')}</option>
-                      </Select>
+                      <Select
+                        {...fieldProps}
+                        options={[
+                          { value: '', label: t('demo.text.inputs.formGrid.selectRole') },
+                          { value: 'admin', label: t('demo.text.inputs.radio.admin') },
+                          { value: 'user', label: t('demo.text.inputs.radio.user') },
+                        ]}
+                      />
                     )}
                   </FormField>
                 </FormGrid>
@@ -1337,12 +1404,17 @@ const InputsSection = (props: InputsSectionProps) => {
                   </FormField>
                   <FormField label={t('demo.text.inputs.formGrid.role')}>
                     {(fieldProps) => (
-                      <Select {...fieldProps} value={selected()} onChange={(e) => setSelected(e.currentTarget.value)}>
-                        <option value="">{t('demo.text.inputs.formGrid.selectRole')}</option>
-                        <option value="owner">{t('demo.text.inputs.completeForm.owner')}</option>
-                        <option value="editor">{t('demo.text.inputs.radio.editor')}</option>
-                        <option value="viewer">{t('demo.text.inputs.radio.viewer')}</option>
-                      </Select>
+                      <Select
+                        {...fieldProps}
+                        value={selected()}
+                        onChange={(e) => setSelected(e.currentTarget.value)}
+                        options={[
+                          { value: '', label: t('demo.text.inputs.formGrid.selectRole') },
+                          { value: 'owner', label: t('demo.text.inputs.completeForm.owner') },
+                          { value: 'editor', label: t('demo.text.inputs.radio.editor') },
+                          { value: 'viewer', label: t('demo.text.inputs.radio.viewer') },
+                        ]}
+                      />
                     )}
                   </FormField>
                   <FormField label={t('demo.text.inputs.completeForm.techStack')}>

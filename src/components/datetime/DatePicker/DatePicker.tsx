@@ -22,9 +22,10 @@ export interface DatePickerMessages {
   calendarLabel?: string;
   previousMonthLabel?: string;
   nextMonthLabel?: string;
+  dayLabels?: readonly string[];
 }
 
-interface DatePickerProps extends AriaFieldProps {
+export interface DatePickerProps extends AriaFieldProps {
   value?: string;
   onChange: (value: string) => void;
   locale?: string;
@@ -41,7 +42,7 @@ interface DatePickerProps extends AriaFieldProps {
 }
 
 const DatePicker = (props: Props<DatePickerProps>) => {
-  const { locale: currentLocale, t } = useI18n();
+  const { t } = useI18n();
   const dropdownId = createUniqueId();
   const triggerLabelId = createUniqueId();
 
@@ -55,12 +56,25 @@ const DatePicker = (props: Props<DatePickerProps>) => {
 
   const daysGrid = createMemo(() => buildDaysGrid(popup.viewYear(), popup.viewMonth()));
   const todayIso = getTodayIso();
+  const locale = createMemo(() => props.locale ?? Intl.DateTimeFormat().resolvedOptions().locale);
 
   const monthName = createMemo(() =>
-    new Date(popup.viewYear(), popup.viewMonth()).toLocaleString(props.locale ?? currentLocale(), {
+    new Date(popup.viewYear(), popup.viewMonth()).toLocaleString(locale(), {
       month: 'long',
       year: 'numeric',
     })
+  );
+  const dayLabels = createMemo(
+    () =>
+      props.messages?.dayLabels ?? [
+        t('calendar.day.mo'),
+        t('calendar.day.tu'),
+        t('calendar.day.we'),
+        t('calendar.day.th'),
+        t('calendar.day.fr'),
+        t('calendar.day.sa'),
+        t('calendar.day.su'),
+      ]
   );
   const placeholder = () => props.messages?.placeholder ?? props.placeholder ?? t('date.yyyymmdd');
   const openPickerLabel = () =>
@@ -142,6 +156,7 @@ const DatePicker = (props: Props<DatePickerProps>) => {
             isDayDisabled={isDayDisabled}
             getDayAriaLabel={(cell) => toIso(cell.year, cell.month, cell.day)}
             onSelectDay={selectDay}
+            dayLabels={dayLabels()}
           />
         </DropdownSurface>
       </Show>

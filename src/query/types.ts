@@ -1,0 +1,65 @@
+import type { Accessor } from 'solid-js';
+
+export type QueryKeyPart = unknown;
+export type QueryKey = readonly QueryKeyPart[];
+
+export type QueryStatus = 'idle' | 'loading' | 'success' | 'error';
+export type MutationStatus = 'idle' | 'pending' | 'success' | 'error';
+export type QueryRetry = number | ((attempt: number, error: Error) => boolean);
+
+export interface QueryState<TData> {
+  status: QueryStatus;
+  data: TData | undefined;
+  error: Error | undefined;
+  updatedAt: number | undefined;
+  isFetching: boolean;
+}
+
+export interface MutationState<TData> {
+  status: MutationStatus;
+  data: TData | undefined;
+  error: Error | undefined;
+}
+
+export interface QuerySignal<TData> {
+  status: Accessor<QueryStatus>;
+  data: Accessor<TData | undefined>;
+  error: Accessor<Error | undefined>;
+  updatedAt: Accessor<number | undefined>;
+  isFetching: Accessor<boolean>;
+  isStale: Accessor<boolean>;
+  refetch: () => Promise<TData>;
+  invalidate: () => void;
+  setData: (updater: TData | ((previous: TData | undefined) => TData)) => void;
+}
+
+export interface MutationSignal<TData, TVariables> {
+  status: Accessor<MutationStatus>;
+  data: Accessor<TData | undefined>;
+  error: Accessor<Error | undefined>;
+  run: (variables: TVariables) => Promise<TData>;
+  reset: () => void;
+}
+
+export interface QueryOptions<TData> {
+  staleTime?: number;
+  retry?: QueryRetry;
+  enabled?: Accessor<boolean>;
+  initialData?: TData;
+}
+
+export interface QueryDefaults {
+  staleTime: number;
+  retry: QueryRetry;
+}
+
+export interface CreateQueryClientOptions {
+  defaultOptions?: {
+    queries?: Partial<QueryDefaults>;
+  };
+}
+
+export interface MutationOptions<TData, TVariables> {
+  onSuccess?: (result: TData, variables: TVariables) => void;
+  onError?: (error: Error, variables: TVariables) => void;
+}

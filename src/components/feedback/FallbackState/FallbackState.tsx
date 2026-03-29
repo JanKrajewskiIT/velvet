@@ -1,4 +1,4 @@
-import { type JSX, Show } from 'solid-js';
+import { createMemo, type JSX, Show, splitProps } from 'solid-js';
 
 import Heading from '~/components/typography/Heading/Heading';
 import Text from '~/components/typography/Text/Text';
@@ -16,17 +16,20 @@ interface FallbackStateOwnProps {
 }
 
 const FallbackState = (props: Props<FallbackStateOwnProps>) => {
+  const [local, rest] = splitProps(props, ['class', 'label', 'description', 'icon', 'action', 'iconClass']);
+  const containerClass = createMemo(() => classNames(styles.container, local.class));
+
   return (
-    <div class={classNames(styles.container, props.class)}>
-      <Show when={props.icon}>
-        <div class={classNames(styles.icon, props.iconClass)}>{props.icon}</div>
+    <div {...rest} class={containerClass()}>
+      <Show when={local.icon}>
+        <div class={classNames(styles.icon, local.iconClass)}>{local.icon}</div>
       </Show>
-      <Heading as="h1" level={1}>
-        {props.label}
+      <Heading as="div" level={2} variant="titleLg">
+        {local.label}
       </Heading>
-      <Text tone="muted">{props.description}</Text>
-      <Show when={props.action}>
-        <div class={styles.action}>{props.action}</div>
+      <Text tone="muted">{local.description}</Text>
+      <Show when={local.action}>
+        <div class={styles.action}>{local.action}</div>
       </Show>
     </div>
   );

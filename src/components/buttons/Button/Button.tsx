@@ -1,4 +1,4 @@
-import { type JSX, Show, splitProps } from 'solid-js';
+import { createMemo, type JSX, Show, splitProps } from 'solid-js';
 
 import Spinner from '~/components/feedback/Spinner/Spinner';
 import Text from '~/components/typography/Text/Text';
@@ -63,11 +63,20 @@ const Button = (props: Props<ButtonOwnProps>) => {
     'type',
   ]);
 
-  const sizeClass = () => sizeToClass[local.size ?? 'md'];
-  const iconSizeClass = () => iconSizeToClass[local.size ?? 'md'];
-  const variantClass = () => variantToClass[local.variant ?? 'primary'];
-  const isDisabled = () => Boolean(local.disabled ?? local.loading);
-  const hasLabel = () => typeof local.label === 'string';
+  const sizeClass = createMemo(() => sizeToClass[local.size ?? 'md']);
+  const iconSizeClass = createMemo(() => iconSizeToClass[local.size ?? 'md']);
+  const variantClass = createMemo(() => variantToClass[local.variant ?? 'primary']);
+  const isDisabled = createMemo(() => Boolean(local.disabled ?? local.loading));
+  const hasLabel = createMemo(() => typeof local.label === 'string');
+  const content = createMemo(() =>
+    hasLabel() ? (
+      <Text as="span" variant="labelMd" tone="inherit">
+        {local.label}
+      </Text>
+    ) : (
+      local.children
+    )
+  );
 
   return (
     <button
@@ -91,13 +100,7 @@ const Button = (props: Props<ButtonOwnProps>) => {
           <Spinner size="sm" />
         </span>
       </Show>
-      <span class={classNames(styles.content, local.loading && styles.contentHidden)}>
-        <Show when={hasLabel()} fallback={local.children}>
-          <Text as="span" variant="labelMd" tone="inherit">
-            {local.label}
-          </Text>
-        </Show>
-      </span>
+      <span class={classNames(styles.content, local.loading && styles.contentHidden)}>{content()}</span>
     </button>
   );
 };

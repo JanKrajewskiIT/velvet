@@ -17,6 +17,7 @@ interface AvatarOwnProps extends Omit<DivCoreNativeProps, 'children'> {
   name?: string;
   size?: AvatarSize;
   variant?: 'circle' | 'rounded';
+  fallbackLabel?: string;
 }
 
 const getInitials = (name: string): string =>
@@ -29,13 +30,13 @@ const getInitials = (name: string): string =>
 
 const Avatar = (props: Props<AvatarOwnProps>) => {
   const { t } = useI18n();
-  const [local, rest] = splitProps(props, ['src', 'alt', 'name', 'size', 'variant', 'class']);
+  const [local, rest] = splitProps(props, ['src', 'alt', 'name', 'size', 'variant', 'fallbackLabel', 'class']);
   const [imgError, setImgError] = createSignal(false);
 
-  const sizeClass = () => styles[local.size ?? 'md'];
-  const showImage = () => Boolean(local.src) && !imgError();
-  const showInitials = () => !showImage() && Boolean(local.name);
-  const fallbackLabel = createMemo(() => local.alt ?? local.name ?? t('avatar.label'));
+  const sizeClass = createMemo(() => styles[local.size ?? 'md']);
+  const showImage = createMemo(() => Boolean(local.src) && !imgError());
+  const showInitials = createMemo(() => !showImage() && Boolean(local.name));
+  const fallbackLabel = createMemo(() => local.alt ?? local.name ?? local.fallbackLabel ?? t('avatar.label'));
 
   return (
     <div

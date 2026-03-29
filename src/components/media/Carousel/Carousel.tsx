@@ -24,11 +24,24 @@ interface CarouselOwnProps extends Omit<DivCoreNativeProps, 'children'> {
   interval?: number;
   showDots?: boolean;
   showArrows?: boolean;
+  previousSlideLabel?: string;
+  nextSlideLabel?: string;
+  slideButtonLabel?: (index: number) => string;
 }
 
 const Carousel = (props: Props<CarouselOwnProps>) => {
   const { t } = useI18n();
-  const [local, rest] = splitProps(props, ['children', 'autoPlay', 'interval', 'showDots', 'showArrows', 'class']);
+  const [local, rest] = splitProps(props, [
+    'children',
+    'autoPlay',
+    'interval',
+    'showDots',
+    'showArrows',
+    'previousSlideLabel',
+    'nextSlideLabel',
+    'slideButtonLabel',
+    'class',
+  ]);
 
   const resolved = resolveChildren(() => local.children);
   const [activeIndex, setActiveIndex] = createSignal(0);
@@ -39,9 +52,14 @@ const Carousel = (props: Props<CarouselOwnProps>) => {
     const c = resolved();
     return Array.isArray(c) ? c : [c];
   });
+  const slideCount = createMemo(() => slides().length);
+  const previousSlideLabel = createMemo(() => local.previousSlideLabel ?? t('carousel.previousSlide'));
+  const nextSlideLabel = createMemo(() => local.nextSlideLabel ?? t('carousel.nextSlide'));
+  const showArrows = createMemo(() => local.showArrows ?? true);
+  const showDots = createMemo(() => local.showDots ?? true);
 
   const scrollTo = (index: number) => {
-    const count = slides().length;
+    const count = slideCount();
     if (count === 0) return;
     const clamped = Math.max(0, Math.min(index, count - 1));
     setActiveIndex(clamped);
@@ -54,12 +72,12 @@ const Carousel = (props: Props<CarouselOwnProps>) => {
   };
 
   const goNext = () => {
-    const count = slides().length;
+    const count = slideCount();
     scrollTo(activeIndex() >= count - 1 ? 0 : activeIndex() + 1);
   };
 
   const goPrev = () => {
-    const count = slides().length;
+    const count = slideCount();
     scrollTo(activeIndex() <= 0 ? count - 1 : activeIndex() - 1);
   };
 
@@ -86,9 +104,8 @@ const Carousel = (props: Props<CarouselOwnProps>) => {
     el.addEventListener('scroll', syncFromScroll);
     onCleanup(() => el.removeEventListener('scroll', syncFromScroll));
   });
-
-  const showArrows = () => local.showArrows ?? true;
-  const showDots = () => local.showDots ?? true;
+  const resolveSlideButtonLabel = (index: number) =>
+    local.slideButtonLabel?.(index) ?? t('carousel.goToSlide', { index: index + 1 });
 
   return (
     <div
@@ -106,13 +123,13 @@ const Carousel = (props: Props<CarouselOwnProps>) => {
           direction="prev"
           class={classNames(styles.arrow, styles.arrowPrev)}
           onClick={goPrev}
-          label={t('carousel.previousSlide')}
+          label={previousSlideLabel()}
         />
         <MediaNavButton
           direction="next"
           class={classNames(styles.arrow, styles.arrowNext)}
           onClick={goNext}
-          label={t('carousel.nextSlide')}
+          label={nextSlideLabel()}
         />
       </Show>
 
@@ -124,7 +141,7 @@ const Carousel = (props: Props<CarouselOwnProps>) => {
                 type="button"
                 class={classNames(styles.dot, i() === activeIndex() && styles.dotActive)}
                 onClick={() => scrollTo(i())}
-                aria-label={t('carousel.goToSlide', { index: i() + 1 })}
+                aria-label={resolveSlideButtonLabel(i())}
               />
             )}
           </For>

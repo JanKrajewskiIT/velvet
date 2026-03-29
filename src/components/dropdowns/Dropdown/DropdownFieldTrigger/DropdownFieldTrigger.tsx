@@ -9,7 +9,7 @@ import classNames from '~/utils/classNames';
 import DropdownTriggerContent from '../DropdownTriggerContent/DropdownTriggerContent';
 import styles from './DropdownFieldTrigger.module.css';
 
-interface DropdownFieldTriggerOwnProps extends Omit<ButtonCoreNativeProps, 'children'> {
+export interface DropdownFieldTriggerProps extends Omit<ButtonCoreNativeProps, 'children'> {
   label: string;
   labelId?: string;
   size?: ComponentSize;
@@ -20,7 +20,7 @@ interface DropdownFieldTriggerOwnProps extends Omit<ButtonCoreNativeProps, 'chil
   children?: JSX.Element;
 }
 
-const DropdownFieldTrigger = (props: Props<DropdownFieldTriggerOwnProps>) => {
+const DropdownFieldTrigger = (props: Props<DropdownFieldTriggerProps>) => {
   const [local, rest] = splitProps(props, [
     'label',
     'labelId',

@@ -5,58 +5,60 @@ paths:
 
 # SolidJS TSX
 
-## Language and reactivity
+## Language and Reactivity
 
 - Arrow functions only, never `function` declarations
-- Never JS-destructure props -- breaks reactivity
+- Never JS-destructure props
 - Never React patterns (`useState`, `useEffect`, `className`)
-- `splitProps` + `{...rest}` only for HTML wrapper components extending `JSX.*HTMLAttributes`
-- Without HTML spreading: access `props.name` directly
-- Prefer `createMemo` over `createEffect` for derived state; use `createEffect` only for true side effects (DOM, timers, listeners)
-- Separate logic from JSX: define all handlers/methods above `return`, never inline multi-statement functions in JSX
+- `splitProps` + `{...rest}` only for real HTML wrapper components with intentional passthrough
+- Prefer `createMemo` over `createEffect` for derived state
+- Keep multi-step logic out of JSX; define handlers and computed values above `return`
 
-## Props and exports
+## Props and Exports
 
-- `import type Props from '~/models/Props'` -- path alias, never relative
-- Inline `Props<T>` in signature: `(props: Props<MyProps>) =>` -- no intermediate type alias
-- One component per file, ~150 lines max
-- `export default` (exception: generic components use named export)
-- Icons: `solid-icons` only
+- `import type Props from "~/models/Props"` - never deep relative paths
+- Inline `Props<T>` in the component signature
+- Reuse shared contracts from `~/models/Props.ts` instead of redefining common `aria-*`, `label`, or native props
+- Never expose full `JSX.*HTMLAttributes` on public component APIs; use narrow shared subsets plus explicit semantic props
+- Keep `name` local to form-like controls only
+- `export default` unless generic typing makes a named export clearly better
 
-## Imports -- always `~/` path alias
+## Imports and Shared Utilities
 
-- `~/models/Props`, `~/utils/classNames`, `~/utils/color`, `~/utils/form`
-- `~/hooks/useClickOutside`, `~/hooks/useEscapeKey`, `~/hooks/useFocusTrap`, `~/hooks/useOverlayAnimation`
-- Never `../../../hooks/` or `../../../utils/` -- always `~/`
+- Always use `~/` path aliases for hooks, utils, and models
+- Use `classNames()` for conditional classes
+- Merge ARIA ids with `joinAriaIds()` and derive validation ARIA with `resolveAriaInvalid()` / `resolveAriaErrorMessage()` when applicable
 
-## Style prop -- object syntax only
+## Primitive Hierarchy
 
-- Always use object syntax `style={{ key: value }}` -- never string syntax `style={\`...\`}`(violates`solid/style-prop` lint rule)
-- For dynamic values consumed by CSS, inject CSS custom properties: `style={{ '--fill-percent': \`${value()}%\` }}`and use`var(--fill-percent)`in`.module.css`
-- Static styles belong in `.module.css` -- never inline what can be a class
-- Acceptable inline `style` uses: truly dynamic runtime values (virtualization offsets, user-provided dimensions, DOM measurements, color pass-through from props)
-- Extract style computation above `return` when it involves logic (e.g. `const columnStyle = () => ({ ... })`)
+- Use VelvetUi primitives instead of raw HTML equivalents wherever possible:
+  - `Heading` for headings
+  - `Text` for body copy
+  - `Button` / `IconButton` / `ButtonBase` for actions and triggers
+  - `Input` / `TextArea` / `InputBase` for text fields
+- Label-driven APIs should prefer semantic props like `label`, `message`, `description`
+- Prefer `label` over `title` for component-level labels; reserve `title` for real domain data
+- Use `LabelText` for label/description rendering instead of duplicating inline text stacks
 
-## Class forwarding -- prefer `classNames()`
+## Built-in Copy and i18n
 
-- Use `classNames()` from `~/utils/classNames` for multi-condition class strings
-- `classNames(styles.root, cond && styles.active, props.class)` -- clean, no trailing spaces
-- Simple single-class: `` `${styles.x} ${props.class ?? ''}` `` is acceptable
-- Never `||` for class fallback -- always `??`
+- Generic reusable copy belongs in VelvetUi i18n
+- Do not leave hardcoded user-facing fallback strings in component logic when the library should own that copy
+- Resolution order for reusable text:
+  - semantic prop override when justified
+  - `messages` override
+  - built-in `useI18n()` default
+- When adding new built-in copy, add the key to `src/i18n/messages.ts`
+- Only expose text props when customization is part of the real component contract, not as a reflex
 
-## Primitive hierarchy -- never reinvent
+## Style Prop and Dynamic Styling
 
-- **Headings**: always `Heading` -- never raw `<h1>`–`<h6>`
-- **Body text**: always `Text` -- never raw `<p>` for display text
-- **Close / icon-only buttons**: `IconButton` -- never raw `<button>` with just an icon
-- **Triggers** (dropdown, popover, accordion, collapsible): `ButtonBase`
-- **Text action buttons** (Save, Cancel, Delete): `Button` with appropriate `variant`
-- **Inputs**: `Input` / `TextArea` / `InputBase` -- never raw `<input type="text">` or `<textarea>`
-- **Dropdowns**: `DropdownSurface` / `DropdownOption` for option lists and menus
-- Raw tags only when native behavior is required: checkbox, radio, range, file, switch, color swatch, calendar day cell, resize handle, hamburger toggle
+- Always use object syntax: `style={{ key: value }}`
+- Dynamic CSS values should go through CSS custom properties
+- Static styles belong in `.module.css`
+- Inline style is reserved for truly runtime-driven values
 
-## i18n labels -- `messages` bag pattern
+## Extraction Guidance
 
-- Components with user-facing strings accept a `messages?: XMessages` bag plus flat fallback props
-- Resolution order: `props.messages?.key ?? props.flatProp ?? 'default'`
-- `messages` always takes priority over flat props
+- When extracting app code into VelvetUi, generalize patterns before export
+- Prefer reusable shells, cards, selectors, panels, and workflows over business-specific flows copied verbatim

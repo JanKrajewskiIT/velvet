@@ -5,6 +5,11 @@ export interface DayCell {
   outside: boolean;
 }
 
+export interface DateTimeParts {
+  date: string;
+  time: string;
+}
+
 const MS_IN_DAY = 24 * 60 * 60 * 1000;
 
 const getNow = (): Date => new Date();
@@ -102,4 +107,15 @@ export const parseDateParts = (isoDate?: string): { year: number; month: number;
   }
 
   return { year, month, day };
+};
+
+export const splitDateTimeValue = (value?: string): DateTimeParts => {
+  const safeValue = value ?? '';
+  const [date = '', time = ''] = safeValue.split('T');
+  return { date, time };
+};
+
+export const joinDateTimeValue = (date: string, time?: string): string => {
+  if (!date) return '';
+  return `${date}T${time || '00:00'}`;
 };

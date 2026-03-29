@@ -1,5 +1,5 @@
 import { IoCheckmark, IoCloseOutline, IoPencil } from 'solid-icons/io';
-import { createEffect, createSignal, type JSX, onMount, Show, splitProps } from 'solid-js';
+import { createEffect, createMemo, createSignal, type JSX, onMount, Show, splitProps } from 'solid-js';
 
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
@@ -56,10 +56,17 @@ const InlineEditableText = (props: Props<InlineEditableTextProps>) => {
     setDraft(local.value);
   });
 
-  const emptyValueLabel = () => local.messages?.emptyValue ?? local.placeholder ?? t('inlineEditable.clickEdit');
-  const saveButtonLabel = () => local.messages?.saveButtonLabel ?? local.saveLabel ?? t('common.save');
-  const cancelButtonLabel = () => local.messages?.cancelButtonLabel ?? local.cancelLabel ?? t('common.cancel');
-  const editButtonLabel = () => local.messages?.editButtonLabel ?? local.editLabel ?? t('inlineEditable.editValue');
+  const emptyValueLabel = createMemo(
+    () => local.messages?.emptyValue ?? local.placeholder ?? t('inlineEditable.clickEdit')
+  );
+  const saveButtonLabel = createMemo(() => local.messages?.saveButtonLabel ?? local.saveLabel ?? t('common.save'));
+  const cancelButtonLabel = createMemo(
+    () => local.messages?.cancelButtonLabel ?? local.cancelLabel ?? t('common.cancel')
+  );
+  const editButtonLabel = createMemo(
+    () => local.messages?.editButtonLabel ?? local.editLabel ?? t('inlineEditable.editValue')
+  );
+  const inputAriaLabel = createMemo(() => local.inputAriaLabel ?? t('inlineEditable.inputLabel'));
 
   createEffect(() => {
     if (!isEditing()) {
@@ -128,7 +135,7 @@ const InlineEditableText = (props: Props<InlineEditableTextProps>) => {
             onInput={handleDraftInput}
             onKeyDown={handleKeyDown}
             placeholder={local.placeholder}
-            aria-label={local.inputAriaLabel ?? t('inlineEditable.inputLabel')}
+            aria-label={inputAriaLabel()}
             autofocus
           />
           <IconButton icon={IoCheckmark} label={saveButtonLabel()} onClick={saveEdit} size="sm" variant="subtle" />

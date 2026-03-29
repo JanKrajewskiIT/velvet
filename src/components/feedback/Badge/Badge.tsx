@@ -1,5 +1,4 @@
-import type { JSX } from 'solid-js';
-import { Show } from 'solid-js';
+import { createMemo, type JSX, Show, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
@@ -16,23 +15,25 @@ interface BadgeProps {
 }
 
 const Badge = (props: Props<BadgeProps>) => {
-  const variantClass = () => styles[props.variant ?? 'primary'];
+  const [local, rest] = splitProps(props, ['class', 'content', 'variant', 'max', 'dot', 'inline', 'children']);
+  const variantClass = createMemo(() => styles[local.variant ?? 'primary']);
+  const displayContent = createMemo(() => {
+    const value = local.content;
+    if (value === undefined) return '';
+    if (typeof value === 'number' && local.max !== undefined && value > local.max) return `${local.max}+`;
 
-  const displayContent = () => {
-    const val = props.content;
-    if (val === undefined) return '';
-    if (typeof val === 'number' && props.max !== undefined && val > props.max) return `${props.max}+`;
-    return String(val);
-  };
+    return String(value);
+  });
+  const showContent = createMemo(() => !local.dot && local.content !== undefined);
 
   return (
-    <div class={classNames(styles.wrapper, props.inline && styles.inlineWrapper, props.class)}>
-      {props.children}
-      <Show when={props.dot}>
-        <span class={classNames(styles.badge, props.inline && styles.inlineBadge, styles.dot, variantClass())} />
+    <div {...rest} class={classNames(styles.wrapper, local.inline && styles.inlineWrapper, local.class)}>
+      {local.children}
+      <Show when={local.dot}>
+        <span class={classNames(styles.badge, local.inline && styles.inlineBadge, styles.dot, variantClass())} />
       </Show>
-      <Show when={!props.dot && props.content !== undefined}>
-        <span class={classNames(styles.badge, props.inline && styles.inlineBadge, variantClass())}>
+      <Show when={showContent()}>
+        <span class={classNames(styles.badge, local.inline && styles.inlineBadge, variantClass())}>
           {displayContent()}
         </span>
       </Show>

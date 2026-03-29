@@ -1,7 +1,6 @@
 import type { JSX } from 'solid-js';
-import { createMemo, createSignal, For, Show } from 'solid-js';
+import { createMemo, createSignal, For, Show, splitProps } from 'solid-js';
 
-import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -30,18 +29,20 @@ interface KanbanBoardProps<T extends KanbanItemBase> {
   emptyLabel?: string;
 }
 
+const DEFAULT_KANBAN_EMPTY_LABEL = 'No cards';
+
 const KanbanBoard = <T extends KanbanItemBase>(props: Props<KanbanBoardProps<T>>) => {
-  const { t } = useI18n();
+  const [local, rest] = splitProps(props, ['columns', 'items', 'onChange', 'renderCard', 'emptyLabel', 'class']);
   const [draggingId, setDraggingId] = createSignal<string | null>(null);
   const [dragOverColumnId, setDragOverColumnId] = createSignal<string | null>(null);
 
   const groupedItems = createMemo(() => {
     const map = new Map<string, T[]>();
-    for (const column of props.columns) {
+    for (const column of local.columns) {
       map.set(column.id, []);
     }
 
-    for (const item of props.items) {
+    for (const item of local.items) {
       if (!map.has(item.columnId)) {
         map.set(item.columnId, []);
       }
@@ -73,11 +74,11 @@ const KanbanBoard = <T extends KanbanItemBase>(props: Props<KanbanBoardProps<T>>
     setDraggingId(null);
     if (!itemId) return;
 
-    const moved = props.items.find((item) => item.id === itemId);
+    const moved = local.items.find((item) => item.id === itemId);
     if (!moved || moved.columnId === columnId) return;
 
-    const next = props.items.map((item) => (item.id === itemId ? { ...item, columnId } : item));
-    props.onChange(next);
+    const next = local.items.map((item) => (item.id === itemId ? { ...item, columnId } : item));
+    local.onChange(next);
   };
 
   const defaultCard = (item: T) => (
@@ -94,8 +95,8 @@ const KanbanBoard = <T extends KanbanItemBase>(props: Props<KanbanBoardProps<T>>
   );
 
   return (
-    <div class={classNames(styles.board, props.class)}>
-      <For each={props.columns}>
+    <div {...rest} class={classNames(styles.board, local.class)}>
+      <For each={local.columns}>
         {(column) => {
           const items = () => groupedItems().get(column.id) ?? [];
 
@@ -122,7 +123,7 @@ const KanbanBoard = <T extends KanbanItemBase>(props: Props<KanbanBoardProps<T>>
                     when={items().length > 0}
                     fallback={
                       <Text as="p" variant="caption" tone="muted" class={styles.empty}>
-                        {props.emptyLabel ?? t('kanban.noCards')}
+                        {local.emptyLabel ?? DEFAULT_KANBAN_EMPTY_LABEL}
                       </Text>
                     }
                   >
@@ -135,7 +136,7 @@ const KanbanBoard = <T extends KanbanItemBase>(props: Props<KanbanBoardProps<T>>
                           onDragEnd={handleDragEnd}
                         >
                           <Card class={styles.cardSurface}>
-                            {props.renderCard ? props.renderCard(item) : defaultCard(item)}
+                            {local.renderCard ? local.renderCard(item) : defaultCard(item)}
                           </Card>
                         </article>
                       )}

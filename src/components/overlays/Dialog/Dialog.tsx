@@ -1,4 +1,4 @@
-import { createEffect, createUniqueId, type JSX, onCleanup, splitProps } from 'solid-js';
+import { createEffect, createMemo, createUniqueId, type JSX, on, onCleanup, splitProps } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
 import useFocusTrap from '~/hooks/useFocusTrap';
@@ -6,6 +6,7 @@ import type Props from '~/models/Props';
 import { joinAriaIds } from '~/utils/aria';
 import classNames from '~/utils/classNames';
 
+import Surface from '../../surfaces/Surface/Surface';
 import styles from './Dialog.module.css';
 import { DialogContext } from './DialogContext';
 
@@ -16,9 +17,17 @@ interface DialogProps {
 }
 
 const Dialog = (props: Props<DialogProps>) => {
-  const [local] = splitProps(props, ['open', 'onClose', 'children', 'class', 'aria-labelledby', 'aria-describedby']);
+  const [local, rest] = splitProps(props, [
+    'open',
+    'onClose',
+    'children',
+    'class',
+    'aria-labelledby',
+    'aria-describedby',
+  ]);
   let dialogRef: HTMLDialogElement | undefined;
   const titleId = createUniqueId();
+  const labelledBy = createMemo(() => joinAriaIds(local['aria-labelledby'], titleId));
 
   useFocusTrap(
     () => dialogRef,
@@ -37,39 +46,54 @@ const Dialog = (props: Props<DialogProps>) => {
   };
 
   createEffect(() => {
-    const el = dialogRef;
-    if (!el) return;
+    const element = dialogRef;
+    if (!element) return;
 
-    if (local.open) {
-      if (!el.open) {
-        el.showModal();
-      }
-      el.addEventListener('click', handleClick);
-    } else {
-      if (el.open) {
-        el.close();
-      }
-      el.removeEventListener('click', handleClick);
-    }
+    element.addEventListener('click', handleClick);
 
     onCleanup(() => {
-      el.removeEventListener('click', handleClick);
-      if (el.open) {
-        el.close();
+      element.removeEventListener('click', handleClick);
+      if (element.open) {
+        element.close();
       }
     });
   });
+
+  createEffect(
+    on(
+      () => local.open,
+      (open) => {
+        const el = dialogRef;
+        if (!el) return;
+
+        if (open) {
+          if (!el.open) {
+            el.showModal();
+          }
+          return;
+        }
+
+        if (el.open) {
+          el.close();
+        }
+      }
+    )
+  );
 
   return (
     <Portal>
       <dialog
         ref={dialogRef}
-        class={classNames(styles.dialog, local.class)}
-        aria-labelledby={joinAriaIds(local['aria-labelledby'], titleId)}
+        {...rest}
+        class={styles.dialog}
+        aria-modal="true"
+        aria-labelledby={labelledBy()}
         aria-describedby={local['aria-describedby']}
         onCancel={handleCancel}
       >
-        <DialogContext.Provider value={{ titleId }}>{local.children}</DialogContext.Provider>
+        <Surface class={classNames(styles.panel, local.class)} elevation="dialog">
+          <DialogContext.Provider value={{ titleId }}>{local.children}</DialogContext.Provider>
+        </Surface>
       </dialog>
     </Portal>
   );

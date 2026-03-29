@@ -1,4 +1,5 @@
 import {
+  Button,
   CodeText,
   ColumnManager,
   type ColumnManagerColumn,
@@ -8,11 +9,13 @@ import {
   type DataGridProSortState,
   DataTable,
   type DataTableColumn,
+  Heading,
   QueryBuilder,
   type QueryBuilderField,
   type QueryBuilderRule,
   type QueryBuilderValue,
   Table,
+  TableAddRowAction,
   TableBody,
   TableCell,
   TableHead,
@@ -165,6 +168,18 @@ const applyQueryBuilder = (rows: PackageRow[], query: QueryBuilderValue) => {
   return rows.filter((row) => query.rules.every((rule) => matchesRule(row, rule)));
 };
 
+const createDefaultAdvancedQuery = (): QueryBuilderValue => ({
+  combinator: 'and',
+  rules: [
+    {
+      id: 'query-default-1',
+      fieldKey: 'category',
+      operator: 'notEquals',
+      value: 'css',
+    },
+  ],
+});
+
 const TablesSection = () => {
   const { locale } = useI18n();
   const dictionary = createMemo(() => getDemoMessages(locale()));
@@ -177,17 +192,7 @@ const TablesSection = () => {
   const [gridColumnOrder, setGridColumnOrder] = createSignal(DATA_GRID_DEFAULT_ORDER);
   const [gridColumnVisibility, setGridColumnVisibility] = createSignal(DATA_GRID_DEFAULT_VISIBILITY);
   const [gridColumnPinning, setGridColumnPinning] = createSignal(DATA_GRID_DEFAULT_PINNING);
-  const [advancedQuery, setAdvancedQuery] = createSignal<QueryBuilderValue>({
-    combinator: 'and',
-    rules: [
-      {
-        id: 'query-default-1',
-        fieldKey: 'category',
-        operator: 'notEquals',
-        value: 'css',
-      },
-    ],
-  });
+  const [advancedQuery, setAdvancedQuery] = createSignal<QueryBuilderValue>(createDefaultAdvancedQuery());
 
   const serverRows = createMemo(() => {
     const filter = gridFilterQuery().trim().toLowerCase();
@@ -314,6 +319,15 @@ const TablesSection = () => {
   const dataGridDefaultPinning = createMemo<DataGridProColumnPinning>(() =>
     Object.fromEntries(dataGridColumns().map((column) => [column.key, column.pinned ?? null]))
   );
+  const resetGridWorkspace = () => {
+    setGridFilterQuery('');
+    setGridSort({ key: 'downloads', direction: 'desc' });
+    setSelectedRows([]);
+    setAdvancedQuery(createDefaultAdvancedQuery());
+    setGridColumnOrder(dataGridDefaultOrder());
+    setGridColumnVisibility(dataGridDefaultVisibility());
+    setGridColumnPinning(dataGridDefaultPinning());
+  };
 
   return (
     <div>
@@ -401,69 +415,146 @@ const TablesSection = () => {
         </PreviewPanel>
       </ShowcaseSection>
 
+      <ShowcaseSection title="TableAddRowAction" subtitle={t('demo.recron.showcase.tableAddRowAction.subtitle')}>
+        <PreviewPanel>
+          <PreviewGroup title={t('demo.text.common.examples')}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableHeader>{t('demo.text.tables.columns.package')}</TableHeader>
+                  <TableHeader>{t('demo.text.tables.columns.version')}</TableHeader>
+                  <TableHeader>{t('demo.text.tables.columns.downloads')}</TableHeader>
+                  <TableHeader>{t('demo.text.tables.columns.license')}</TableHeader>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableAddRowAction
+                  colSpan={4}
+                  label={t('demo.recron.offer.tableAddRow.label')}
+                  onClick={() => undefined}
+                />
+              </TableBody>
+            </Table>
+          </PreviewGroup>
+        </PreviewPanel>
+      </ShowcaseSection>
+
       <ShowcaseSection
         title={t('demo.showcase.tables.dataGridProV3.title')}
         subtitle={t('demo.showcase.tables.dataGridProV3.subtitle')}
       >
         <PreviewPanel>
           <PreviewGroup title={t('demo.text.common.examples')}>
-            <QueryBuilder
-              fields={queryBuilderFields()}
-              value={advancedQuery()}
-              onChange={setAdvancedQuery}
-              description={t('demo.text.tables.queryBuilder.description')}
-              addRuleLabel={t('demo.text.tables.queryBuilder.addCondition')}
-              clearLabel={t('demo.text.tables.queryBuilder.clearConditions')}
-            />
-            <ColumnManager
-              columns={dataGridColumnSettings()}
-              order={gridColumnOrder()}
-              onOrderChange={setGridColumnOrder}
-              visibility={gridColumnVisibility()}
-              onVisibilityChange={setGridColumnVisibility}
-              pinning={gridColumnPinning()}
-              onPinningChange={setGridColumnPinning}
-              defaultOrder={dataGridDefaultOrder()}
-              defaultVisibility={dataGridDefaultVisibility()}
-              defaultPinning={dataGridDefaultPinning()}
-              description={t('demo.text.tables.columnManager.description')}
-              resetLabel={t('demo.text.tables.columnManager.resetSettings')}
-            />
-            <DataGridPro<PackageRow>
-              data={serverRows()}
-              columns={dataGridColumns()}
-              persistenceKey="demo-packages-grid"
-              resetPersistenceLabel={t('demo.text.tables.dataGrid.resetSavedGrid')}
-              importSettingsLabel={t('demo.text.tables.dataGrid.importLayoutJson')}
-              exportSettingsLabel={t('demo.text.tables.dataGrid.exportLayoutJson')}
-              persistedBadgeLabel={t('demo.text.tables.dataGrid.persisted')}
-              defaultBadgeLabel={t('demo.text.tables.dataGrid.default')}
-              height={420}
-              rowHeight={40}
-              headerHeight={44}
-              overscan={8}
-              sortable
-              filterable
-              filterQuery={gridFilterQuery()}
-              onFilterQueryChange={setGridFilterQuery}
-              filterPlaceholder={t('demo.text.tables.dataGrid.serverFilterPlaceholder')}
-              sortKey={gridSort().key}
-              sortDirection={gridSort().direction}
-              onSortChange={setGridSort}
-              manualFiltering
-              manualSorting
-              selectable
-              selectedRowIds={selectedRows()}
-              onSelectedRowIdsChange={setSelectedRows}
-              columnOrder={gridColumnOrder()}
-              onColumnOrderChange={setGridColumnOrder}
-              columnVisibility={gridColumnVisibility()}
-              onColumnVisibilityChange={setGridColumnVisibility}
-              columnPinning={gridColumnPinning()}
-              onColumnPinningChange={setGridColumnPinning}
-              getRowId={(row) => row.id}
-              striped
-            />
+            <div class="scenarioShell">
+              <div class="scenarioHeader">
+                <div class="scenarioHeaderCopy">
+                  <Text as="p" variant="overline" tone="primary">
+                    {t('demo.page.dataTables.title')}
+                  </Text>
+                  <Heading level={3} variant="titleLg">
+                    {t('demo.page.dataTables.description')}
+                  </Heading>
+                </div>
+                <div class="scenarioMetricRow">
+                  <div class="scenarioMetric">
+                    <Text as="span" variant="overline" tone="tertiary">
+                      {t('demo.text.tables.columns.package')}
+                    </Text>
+                    <Text as="span" variant="labelLg">
+                      {serverRows().length}
+                    </Text>
+                  </div>
+                  <div class="scenarioMetric">
+                    <Text as="span" variant="overline" tone="tertiary">
+                      {t('demo.text.tables.dataGrid.selectedRows')}
+                    </Text>
+                    <Text as="span" variant="labelLg">
+                      {selectedRows().length}
+                    </Text>
+                  </div>
+                  <div class="scenarioMetric">
+                    <Text as="span" variant="overline" tone="tertiary">
+                      {t('demo.text.tables.columns.category')}
+                    </Text>
+                    <Text as="span" variant="labelLg">
+                      {advancedQuery().rules.length}
+                    </Text>
+                  </div>
+                </div>
+              </div>
+
+              <div class="actionCluster">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setAdvancedQuery(createDefaultAdvancedQuery())}
+                >
+                  {t('demo.text.tables.queryBuilder.clearConditions')}
+                </Button>
+                <Button type="button" variant="ghost" size="sm" onClick={resetGridWorkspace}>
+                  {t('demo.text.tables.dataGrid.resetSavedGrid')}
+                </Button>
+              </div>
+
+              <QueryBuilder
+                fields={queryBuilderFields()}
+                value={advancedQuery()}
+                onChange={setAdvancedQuery}
+                description={t('demo.text.tables.queryBuilder.description')}
+                addRuleLabel={t('demo.text.tables.queryBuilder.addCondition')}
+                clearLabel={t('demo.text.tables.queryBuilder.clearConditions')}
+              />
+              <ColumnManager
+                columns={dataGridColumnSettings()}
+                order={gridColumnOrder()}
+                onOrderChange={setGridColumnOrder}
+                visibility={gridColumnVisibility()}
+                onVisibilityChange={setGridColumnVisibility}
+                pinning={gridColumnPinning()}
+                onPinningChange={setGridColumnPinning}
+                defaultOrder={dataGridDefaultOrder()}
+                defaultVisibility={dataGridDefaultVisibility()}
+                defaultPinning={dataGridDefaultPinning()}
+                description={t('demo.text.tables.columnManager.description')}
+                resetLabel={t('demo.text.tables.columnManager.resetSettings')}
+              />
+              <DataGridPro<PackageRow>
+                data={serverRows()}
+                columns={dataGridColumns()}
+                persistenceKey="demo-packages-grid"
+                resetPersistenceLabel={t('demo.text.tables.dataGrid.resetSavedGrid')}
+                importSettingsLabel={t('demo.text.tables.dataGrid.importLayoutJson')}
+                exportSettingsLabel={t('demo.text.tables.dataGrid.exportLayoutJson')}
+                persistedBadgeLabel={t('demo.text.tables.dataGrid.persisted')}
+                defaultBadgeLabel={t('demo.text.tables.dataGrid.default')}
+                height={420}
+                rowHeight={40}
+                headerHeight={44}
+                overscan={8}
+                sortable
+                filterable
+                filterQuery={gridFilterQuery()}
+                onFilterQueryChange={setGridFilterQuery}
+                filterPlaceholder={t('demo.text.tables.dataGrid.serverFilterPlaceholder')}
+                sortKey={gridSort().key}
+                sortDirection={gridSort().direction}
+                onSortChange={setGridSort}
+                manualFiltering
+                manualSorting
+                selectable
+                selectedRowIds={selectedRows()}
+                onSelectedRowIdsChange={setSelectedRows}
+                columnOrder={gridColumnOrder()}
+                onColumnOrderChange={setGridColumnOrder}
+                columnVisibility={gridColumnVisibility()}
+                onColumnVisibilityChange={setGridColumnVisibility}
+                columnPinning={gridColumnPinning()}
+                onColumnPinningChange={setGridColumnPinning}
+                getRowId={(row) => row.id}
+                striped
+              />
+            </div>
           </PreviewGroup>
         </PreviewPanel>
         <ShowcaseMeta>{t('demo.text.tables.dataGrid.meta', { count: selectedRows().length })}</ShowcaseMeta>

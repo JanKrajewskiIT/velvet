@@ -1,9 +1,9 @@
-import type { JSX } from 'solid-js';
-import { Show } from 'solid-js';
+import { createMemo, type JSX, Show, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
+import Stack from '../../surfaces/Stack/Stack';
 import Heading from '../../typography/Heading/Heading';
 import Text from '../../typography/Text/Text';
 import styles from './StatCard.module.css';
@@ -16,20 +16,25 @@ interface StatCardProps {
 }
 
 const StatCard = (props: Props<StatCardProps>) => {
+  const [local, rest] = splitProps(props, ['class', 'value', 'label', 'icon', 'colorClass']);
+  const cardClass = createMemo(() =>
+    classNames(styles.card, local.colorClass && styles[local.colorClass], local.class)
+  );
+
   return (
-    <div class={classNames(styles.card, props.colorClass && styles[props.colorClass], props.class)}>
-      <Show when={props.icon}>
-        <div class={styles.icon}>{props.icon}</div>
+    <Stack {...rest} direction="horizontal" align="center" gap="md" class={cardClass()}>
+      <Show when={local.icon}>
+        <div class={styles.icon}>{local.icon}</div>
       </Show>
-      <div class={styles.content}>
+      <Stack gap="2xs" class={styles.content}>
         <Heading as="span" level={3} variant="h2">
-          {props.value}
+          {local.value}
         </Heading>
         <Text as="span" variant="bodySm" tone="muted">
-          {props.label}
+          {local.label}
         </Text>
-      </div>
-    </div>
+      </Stack>
+    </Stack>
   );
 };
 

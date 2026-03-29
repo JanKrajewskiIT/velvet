@@ -1,6 +1,5 @@
-import { children, createEffect, createSignal, onCleanup, type ParentProps } from 'solid-js';
+import { children, createEffect, createMemo, createSignal, onCleanup, type ParentProps } from 'solid-js';
 
-import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -11,12 +10,15 @@ interface ResizablePanelProps {
   initialSplit?: number;
   minSize?: number;
   onResize?: (split: number) => void;
+  resizeLabel?: string;
 }
 
+const DEFAULT_RESIZABLE_PANEL_LABEL = 'Resize panels';
+
 const ResizablePanel = (props: ParentProps<Props<ResizablePanelProps>>) => {
-  const { t } = useI18n();
-  const direction = () => props.direction ?? 'horizontal';
-  const minSize = () => props.minSize ?? 10;
+  const direction = createMemo(() => props.direction ?? 'horizontal');
+  const minSize = createMemo(() => props.minSize ?? 10);
+  const resizeLabel = createMemo(() => props.resizeLabel ?? DEFAULT_RESIZABLE_PANEL_LABEL);
 
   const [split, setSplit] = createSignal(props.initialSplit ?? 50);
   const [dragging, setDragging] = createSignal(false);
@@ -92,7 +94,7 @@ const ResizablePanel = (props: ParentProps<Props<ResizablePanelProps>>) => {
       </div>
       <button
         type="button"
-        aria-label={t('common.resize')}
+        aria-label={resizeLabel()}
         class={classNames(styles.handle, isHorizontal() ? styles.handleHorizontal : styles.handleVertical)}
         onMouseDown={handleMouseDown}
       >

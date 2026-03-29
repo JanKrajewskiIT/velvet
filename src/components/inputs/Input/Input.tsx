@@ -1,4 +1,4 @@
-import { splitProps } from 'solid-js';
+import { createMemo, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
 import type { ComponentSize, InputCoreNativeProps } from '~/models/Props';
@@ -7,12 +7,23 @@ import { resolveAriaInvalid } from '~/utils/aria';
 import FieldBase from '../FieldBase/FieldBase';
 
 interface InputOwnProps extends InputCoreNativeProps {
-  size?: ComponentSize;
+  size?: ComponentSize | null;
   invalid?: boolean;
 }
 
 const Input = (props: Props<InputOwnProps>) => {
-  const [local, rest] = splitProps(props, ['class', 'size', 'invalid', 'readOnly', 'placeholder', 'aria-invalid']);
+  const [local, rest] = splitProps(props, [
+    'class',
+    'size',
+    'invalid',
+    'readOnly',
+    'placeholder',
+    'disabled',
+    'aria-invalid',
+  ]);
+  const ariaInvalid = createMemo(() =>
+    resolveAriaInvalid(local.invalid, local['aria-invalid'] as boolean | 'true' | 'false' | undefined)
+  );
 
   return (
     <FieldBase
@@ -21,10 +32,10 @@ const Input = (props: Props<InputOwnProps>) => {
       size={local.size}
       invalid={local.invalid}
       readOnly={local.readOnly}
-      disabled={rest.disabled}
+      disabled={local.disabled}
       focusStyle="visible"
       placeholder={local.placeholder}
-      aria-invalid={resolveAriaInvalid(local.invalid, local['aria-invalid'] as boolean | 'true' | 'false' | undefined)}
+      aria-invalid={ariaInvalid()}
       class={local.class}
     />
   );

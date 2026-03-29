@@ -1,5 +1,4 @@
-import type { JSX } from 'solid-js';
-import { createEffect, createMemo, createSignal, createUniqueId, For, onMount, splitProps } from 'solid-js';
+import { createEffect, createMemo, createSignal, createUniqueId, For, on, splitProps } from 'solid-js';
 
 import useDropdownPanel from '~/hooks/useDropdownPanel';
 import type Props from '~/models/Props';
@@ -17,14 +16,20 @@ interface SelectOwnProps extends SelectCoreNativeProps, AriaFieldProps {
   size?: ComponentSize;
   invalid?: boolean;
   readOnly?: boolean;
-  children?: JSX.Element;
+  options: readonly SelectOption[];
+}
+
+export interface SelectOption {
+  value: string;
+  label: string;
+  disabled?: boolean;
 }
 
 const Select = (props: Props<SelectOwnProps>) => {
   const [local, rest] = splitProps(props, [
     'class',
     'size',
-    'children',
+    'options',
     'value',
     'id',
     'disabled',
@@ -35,7 +40,7 @@ const Select = (props: Props<SelectOwnProps>) => {
     'aria-invalid',
     'aria-errormessage',
   ]);
-  const [options, setOptions] = createSignal<{ value: string; label: string; disabled: boolean }[]>([]);
+  const [internalValue, setInternalValue] = createSignal('');
   const dropdownId = createUniqueId();
   const triggerLabelId = createUniqueId();
 
@@ -52,39 +57,61 @@ const Select = (props: Props<SelectOwnProps>) => {
     isInteractive,
   });
 
-  const syncOptions = () => {
-    if (!nativeSelectRef) return;
-    setOptions(
-      Array.from(nativeSelectRef.options).map((option) => ({
-        value: option.value,
-        label: option.text,
-        disabled: option.disabled,
-      }))
-    );
-  };
+  createEffect(
+    on(
+      () => [local.value, local.options],
+      () => {
+        if (local.value !== undefined) {
+          setInternalValue(String(local.value));
+          return;
+        }
 
-  onMount(() => syncOptions());
-
-  createEffect(() => {
-    void local.children;
-    void local.value;
-    syncOptions();
-  });
+        const current = internalValue();
+        const hasCurrent = local.options.some((option) => option.value === current);
+        if (!hasCurrent) {
+          setInternalValue(local.options[0]?.value ?? '');
+        }
+      }
+    )
+  );
 
   const currentValue = createMemo(() => {
     if (local.value !== undefined) return String(local.value);
-    return nativeSelectRef?.value ?? '';
+    return internalValue();
   });
+  const enabledOptions = createMemo(() => local.options.filter((option) => !option.disabled));
+  const selectedOption = createMemo(() => local.options.find((option) => option.value === currentValue()));
+  const isOpen = createMemo(() => dropdown.open());
+  const describedBy = createMemo(() => local['aria-describedby']);
+  const labelledBy = createMemo(() => joinAriaIds(local['aria-labelledby'], triggerLabelId));
 
   const selectedLabel = createMemo(() => {
-    const selected = options().find((option) => option.value === currentValue());
+    const selected = selectedOption();
     if (selected) return selected.label;
-    return options()[0]?.label ?? '';
+    return local.options[0]?.label ?? '';
   });
+  const focusSelectedOption = () => {
+    requestAnimationFrame(() => {
+      const panel = panelRef;
+      if (!panel) return;
+      const selected = panel.querySelector<HTMLButtonElement>('[aria-selected="true"]:not(:disabled)');
+      if (selected) {
+        selected.focus();
+        return;
+      }
+      const first = panel.querySelector<HTMLButtonElement>('button:not(:disabled)');
+      first?.focus();
+    });
+  };
 
   const selectValue = (value: string) => {
-    if (local.readOnly) return;
+    if (local.readOnly || local.disabled) return;
     if (!nativeSelectRef) return;
+
+    if (local.value === undefined) {
+      setInternalValue(value);
+    }
+
     if (nativeSelectRef.value !== value) {
       nativeSelectRef.value = value;
       nativeSelectRef.dispatchEvent(new Event('input', { bubbles: true }));
@@ -94,13 +121,12 @@ const Select = (props: Props<SelectOwnProps>) => {
   };
 
   const moveSelection = (direction: 1 | -1) => {
-    const enabledOptions = options().filter((option) => !option.disabled);
-    if (enabledOptions.length === 0) return;
+    if (enabledOptions().length === 0) return;
 
-    const currentIndex = enabledOptions.findIndex((option) => option.value === currentValue());
+    const currentIndex = enabledOptions().findIndex((option) => option.value === currentValue());
     const startIndex = currentIndex === -1 ? (direction === 1 ? -1 : 0) : currentIndex;
-    const nextIndex = (startIndex + direction + enabledOptions.length) % enabledOptions.length;
-    const next = enabledOptions[nextIndex];
+    const nextIndex = (startIndex + direction + enabledOptions().length) % enabledOptions().length;
+    const next = enabledOptions()[nextIndex];
     if (next) selectValue(next.value);
   };
 
@@ -121,6 +147,18 @@ const Select = (props: Props<SelectOwnProps>) => {
     }
   };
 
+  const handleTriggerClick = () => {
+    if (!isInteractive()) return;
+
+    if (isOpen()) {
+      dropdown.close();
+      return;
+    }
+
+    dropdown.openDropdown();
+    focusSelectedOption();
+  };
+
   return (
     <div ref={wrapperRef} class={classNames(styles.selectWrapper, local.class)}>
       <DropdownChevronFieldTrigger
@@ -128,25 +166,25 @@ const Select = (props: Props<SelectOwnProps>) => {
         id={local.id}
         label={selectedLabel()}
         labelId={triggerLabelId}
-        open={dropdown.open()}
+        open={isOpen()}
         size={local.size}
         disabled={local.disabled}
         invalid={local.invalid}
         readOnly={local.readOnly}
-        class={classNames(styles.selectTrigger, dropdown.open() && styles.selectTriggerOpen)}
-        onClick={dropdown.toggle}
+        class={classNames(styles.selectTrigger, isOpen() && styles.selectTriggerOpen)}
+        onClick={handleTriggerClick}
         onKeyDown={handleTriggerKeyDown}
         aria-haspopup="listbox"
-        aria-expanded={dropdown.open()}
-        aria-controls={dropdown.open() ? dropdownId : undefined}
-        aria-labelledby={joinAriaIds(local['aria-labelledby'], triggerLabelId)}
-        aria-describedby={local['aria-describedby']}
+        aria-expanded={isOpen()}
+        aria-controls={isOpen() ? dropdownId : undefined}
+        aria-labelledby={labelledBy()}
+        aria-describedby={describedBy()}
         aria-readonly={local.readOnly || undefined}
         aria-invalid={resolveAriaInvalid(local.invalid, props['aria-invalid'])}
         aria-errormessage={props['aria-errormessage']}
       />
 
-      {dropdown.open() && (
+      {isOpen() && (
         <DropdownSurface
           ref={panelRef}
           id={dropdownId}
@@ -156,14 +194,14 @@ const Select = (props: Props<SelectOwnProps>) => {
           role="listbox"
           onKeyDown={dropdown.handlePanelKeyDown}
         >
-          <For each={options()}>
+          <For each={local.options}>
             {(option) => (
               <DropdownOption
                 class={classNames(dropdownOptionStyles.item, option.disabled && dropdownOptionStyles.itemDisabled)}
-                selected={option.value === currentValue()}
+                selected={option.value === selectedOption()?.value}
                 label={option.label}
                 role="option"
-                aria-selected={option.value === currentValue()}
+                aria-selected={option.value === selectedOption()?.value}
                 disabled={option.disabled || !!local.readOnly}
                 onClick={() => selectValue(option.value)}
               />
@@ -175,16 +213,23 @@ const Select = (props: Props<SelectOwnProps>) => {
       <select
         {...rest}
         ref={nativeSelectRef}
-        value={local.value}
+        value={currentValue()}
         disabled={local.disabled}
         class={styles.selectNative}
         tabIndex={-1}
         aria-hidden="true"
       >
-        {local.children}
+        <For each={local.options}>
+          {(option) => (
+            <option value={option.value} disabled={option.disabled}>
+              {option.label}
+            </option>
+          )}
+        </For>
       </select>
     </div>
   );
 };
 
+export type { SelectOwnProps as SelectProps };
 export default Select;

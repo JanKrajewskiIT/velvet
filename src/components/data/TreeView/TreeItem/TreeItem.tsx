@@ -2,6 +2,7 @@ import { IoChevronForward } from 'solid-icons/io';
 import { For, type JSX, Show } from 'solid-js';
 
 import Checkbox from '~/components/switchers/Checkbox/Checkbox';
+import Text from '~/components/typography/Text/Text';
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
@@ -36,6 +37,8 @@ interface TreeItemProps {
   onDrop: (id: string, event: DragEvent) => void;
   onDragLeave: () => void;
   onSelect?: (id: string) => void;
+  toggleNodeLabel?: (label: string) => string;
+  loadingLabel?: string;
 }
 
 const TreeItem = (props: Props<TreeItemProps>) => {
@@ -44,6 +47,9 @@ const TreeItem = (props: Props<TreeItemProps>) => {
   const isExpanded = () => props.expanded.has(props.node.id);
   const isSelected = () => props.selectedId === props.node.id;
   const isChecked = () => props.checkedSet.has(props.node.id);
+  const toggleLabel = () =>
+    props.toggleNodeLabel?.(props.node.label) ?? t('tree.toggleNode', { label: props.node.label });
+  const loadingLabel = () => props.loadingLabel ?? t('tree.loading');
 
   const handleClick = () => {
     if (hasChildren()) {
@@ -110,7 +116,7 @@ const TreeItem = (props: Props<TreeItemProps>) => {
             checked={isChecked()}
             onClick={handleCheckboxClick}
             onKeyDown={handleCheckboxKeyDown}
-            aria-label={t('tree.toggleNode', { label: props.node.label })}
+            aria-label={toggleLabel()}
           />
         </Show>
         <Show when={hasChildren()} fallback={<span class={styles.chevronPlaceholder} />}>
@@ -121,11 +127,13 @@ const TreeItem = (props: Props<TreeItemProps>) => {
         <Show when={props.node.icon}>
           <span class={styles.icon}>{props.node.icon}</span>
         </Show>
-        <span class={styles.label}>{props.node.label}</span>
+        <Text as="span" variant="bodySm" tone="muted">
+          {props.node.label}
+        </Text>
       </div>
       <Show when={hasChildren()}>
         <div class={classNames(styles.children, isExpanded() && styles.childrenExpanded)}>
-          <Show when={!props.isLoading} fallback={<div class={styles.loading}>{t('tree.loading')}</div>}>
+          <Show when={!props.isLoading} fallback={<div class={styles.loading}>{loadingLabel()}</div>}>
             <ul class={classNames(styles.tree, styles.childrenInner)} role="group">
               <For each={props.node.children}>
                 {(child) => (
@@ -150,6 +158,8 @@ const TreeItem = (props: Props<TreeItemProps>) => {
                     onDrop={props.onDrop}
                     onDragLeave={props.onDragLeave}
                     onSelect={props.onSelect}
+                    toggleNodeLabel={props.toggleNodeLabel}
+                    loadingLabel={props.loadingLabel}
                   />
                 )}
               </For>

@@ -1,5 +1,6 @@
 import {
   Accordion,
+  AccordionIcon,
   AccordionItem,
   Button,
   Card,
@@ -16,6 +17,7 @@ import {
   ResizablePanel,
   SectionCard,
   Stack,
+  Surface,
   Text,
   useI18n,
 } from '@jankrajewskiit/ui';
@@ -280,6 +282,13 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
           subtitle={t('demo.showcase.layout.card.subtitle')}
         >
           <PreviewPanel>
+            <PreviewGroup title={t('demo.text.layout.surface.baseSurface.title')}>
+              <Surface>
+                <Text as="p" variant="bodySm" tone="muted" class="mutedText">
+                  {t('demo.text.layout.surface.baseBody')}
+                </Text>
+              </Surface>
+            </PreviewGroup>
             <PreviewGroup title={t('demo.text.layout.card.baseCard.title')}>
               <Card>
                 <Text as="p" variant="bodySm" tone="muted" class="mutedText">
@@ -289,6 +298,13 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
+            {renderRichText(t('demo.text.layout.surface.meta'), {
+              surface: (
+                <CodeText as="span" class="codeInline">
+                  Surface
+                </CodeText>
+              ),
+            })}{' '}
             {renderRichText(t('demo.text.layout.card.meta'), {
               card: (
                 <CodeText as="span" class="codeInline">
@@ -448,6 +464,12 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
                   </Text>
                 </AccordionItem>
               </Accordion>
+            </PreviewGroup>
+            <PreviewGroup title="AccordionIcon">
+              <div class="row">
+                <AccordionIcon />
+                <AccordionIcon isOpen />
+              </div>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>

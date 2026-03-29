@@ -1,144 +1,152 @@
 import { IoChevronBack, IoChevronForward, IoPlayBack, IoPlayForward } from 'solid-icons/io';
-import { createMemo, createSignal, For, Show } from 'solid-js';
+import { createEffect, createMemo, createSignal, splitProps } from 'solid-js';
 
 import IconButton from '~/components/buttons/IconButton/IconButton';
-import SearchInput from '~/components/inputs/SearchInput/SearchInput';
-import Card from '~/components/surfaces/Card/Card';
-import Text from '~/components/typography/Text/Text';
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import Checkbox from '../../switchers/Checkbox/Checkbox';
 import styles from './TransferList.module.css';
+import {
+  filterTransferItems,
+  moveAllTransferItems,
+  moveSelectedTransferItems,
+  pruneTransferSelection,
+  toggleTransferSelection,
+} from './TransferList.utils';
+import TransferListPanel from './TransferListPanel';
 
 export interface TransferItem {
   id: string;
   label: string;
 }
 
-interface TransferListProps {
-  sourceItems: TransferItem[];
-  targetItems: TransferItem[];
+export interface TransferListProps {
+  sourceItems: readonly TransferItem[];
+  targetItems: readonly TransferItem[];
   onChange: (source: TransferItem[], target: TransferItem[]) => void;
   sourceTitle?: string;
   targetTitle?: string;
   searchable?: boolean;
+  messages?: TransferListMessages;
+}
+
+export interface TransferListMessages {
+  sourceTitle?: string;
+  targetTitle?: string;
+  clearSourceSearchLabel?: string;
+  clearTargetSearchLabel?: string;
+  searchLabel?: (label: string) => string;
+  selectItemLabel?: (label: string) => string;
+  moveSelectedRightLabel?: string;
+  moveAllRightLabel?: string;
+  moveSelectedLeftLabel?: string;
+  moveAllLeftLabel?: string;
 }
 
 const TransferList = (props: Props<TransferListProps>) => {
   const { t } = useI18n();
+  const [local, rest] = splitProps(props, [
+    'sourceItems',
+    'targetItems',
+    'onChange',
+    'sourceTitle',
+    'targetTitle',
+    'searchable',
+    'messages',
+    'class',
+  ]);
   const [sourceChecked, setSourceChecked] = createSignal(new Set<string>());
   const [targetChecked, setTargetChecked] = createSignal(new Set<string>());
   const [sourceFilter, setSourceFilter] = createSignal('');
   const [targetFilter, setTargetFilter] = createSignal('');
 
-  const normalizeQuery = (query: string) => query.trim().toLowerCase();
-  const filterItems = (items: TransferItem[], query: string) => {
-    const normalized = normalizeQuery(query);
-    if (!normalized) return items;
-    return items.filter((item) => item.label.toLowerCase().includes(normalized));
-  };
+  const filteredSource = createMemo(() => filterTransferItems(local.sourceItems, sourceFilter()));
+  const filteredTarget = createMemo(() => filterTransferItems(local.targetItems, targetFilter()));
+  const sourceTitle = createMemo(() => local.messages?.sourceTitle ?? local.sourceTitle ?? t('transfer.available'));
+  const targetTitle = createMemo(() => local.messages?.targetTitle ?? local.targetTitle ?? t('transfer.selected'));
+  const clearSourceSearchLabel = createMemo(
+    () => local.messages?.clearSourceSearchLabel ?? t('transfer.clearSourceSearch')
+  );
+  const clearTargetSearchLabel = createMemo(
+    () => local.messages?.clearTargetSearchLabel ?? t('transfer.clearSelectedSearch')
+  );
+  const searchLabel = (label: string) => local.messages?.searchLabel?.(label) ?? t('transfer.search', { label });
+  const selectItemLabel = (label: string) =>
+    local.messages?.selectItemLabel?.(label) ?? t('transfer.selectItem', { label });
+  const moveSelectedRightLabel = createMemo(
+    () => local.messages?.moveSelectedRightLabel ?? t('transfer.moveSelectedRight')
+  );
+  const moveAllRightLabel = createMemo(() => local.messages?.moveAllRightLabel ?? t('transfer.moveAllRight'));
+  const moveSelectedLeftLabel = createMemo(
+    () => local.messages?.moveSelectedLeftLabel ?? t('transfer.moveSelectedLeft')
+  );
+  const moveAllLeftLabel = createMemo(() => local.messages?.moveAllLeftLabel ?? t('transfer.moveAllLeft'));
 
-  const filteredSource = createMemo(() => filterItems(props.sourceItems, sourceFilter()));
+  const toggleSourceChecked = (id: string) => setSourceChecked((current) => toggleTransferSelection(current, id));
+  const toggleTargetChecked = (id: string) => setTargetChecked((current) => toggleTransferSelection(current, id));
 
-  const filteredTarget = createMemo(() => filterItems(props.targetItems, targetFilter()));
+  createEffect(() => {
+    setSourceChecked((current) => pruneTransferSelection(current, local.sourceItems));
+  });
 
-  const toggleChecked = (checked: Set<string>, setChecked: (next: Set<string>) => void, id: string) => {
-    const next = new Set(checked);
-    if (next.has(id)) next.delete(id);
-    else next.add(id);
-    setChecked(next);
-  };
-
-  const toggleSourceChecked = (id: string) => toggleChecked(sourceChecked(), setSourceChecked, id);
-
-  const toggleTargetChecked = (id: string) => toggleChecked(targetChecked(), setTargetChecked, id);
+  createEffect(() => {
+    setTargetChecked((current) => pruneTransferSelection(current, local.targetItems));
+  });
 
   const moveSelectedRight = () => {
-    const checked = sourceChecked();
-    const moving = props.sourceItems.filter((item) => checked.has(item.id));
-    const remaining = props.sourceItems.filter((item) => !checked.has(item.id));
+    const next = moveSelectedTransferItems(local.sourceItems, local.targetItems, sourceChecked());
     setSourceChecked(new Set<string>());
-    props.onChange(remaining, [...props.targetItems, ...moving]);
+    local.onChange(next.source, next.target);
   };
 
   const moveAllRight = () => {
+    const next = moveAllTransferItems(local.sourceItems, local.targetItems);
     setSourceChecked(new Set<string>());
-    props.onChange([], [...props.targetItems, ...props.sourceItems]);
+    local.onChange(next.source, next.target);
   };
 
   const moveSelectedLeft = () => {
-    const checked = targetChecked();
-    const moving = props.targetItems.filter((item) => checked.has(item.id));
-    const remaining = props.targetItems.filter((item) => !checked.has(item.id));
+    const next = moveSelectedTransferItems(local.targetItems, local.sourceItems, targetChecked());
     setTargetChecked(new Set<string>());
-    props.onChange([...props.sourceItems, ...moving], remaining);
+    local.onChange(next.target, next.source);
   };
 
   const moveAllLeft = () => {
+    const next = moveAllTransferItems(local.targetItems, local.sourceItems);
     setTargetChecked(new Set<string>());
-    props.onChange([...props.sourceItems, ...props.targetItems], []);
+    local.onChange(next.target, next.source);
   };
 
-  const sourceTitle = () => props.sourceTitle ?? t('transfer.available');
-  const targetTitle = () => props.targetTitle ?? t('transfer.selected');
-
-  const itemClass = (checked: boolean) => classNames(styles.item, checked && styles.itemChecked);
-
   return (
-    <div class={classNames(styles.wrapper, props.class)}>
-      <Card padding="none" class={styles.panel}>
-        <div class={styles.header}>
-          <Text as="span" variant="labelMd">
-            {sourceTitle()}
-          </Text>
-          <Text as="span" variant="caption" tone="muted">
-            {props.sourceItems.length}
-          </Text>
-        </div>
-        <Show when={props.searchable}>
-          <div class={styles.search}>
-            <SearchInput
-              class={styles.searchInput}
-              size="sm"
-              value={sourceFilter()}
-              onInput={setSourceFilter}
-              clearLabel={t('transfer.clearSourceSearch')}
-              inputAriaLabel={t('transfer.search', { label: sourceTitle() })}
-            />
-          </div>
-        </Show>
-        <div class={styles.list}>
-          <For each={filteredSource()}>
-            {(item) => (
-              <div class={itemClass(sourceChecked().has(item.id))}>
-                <Checkbox
-                  wrapperClass={styles.checkboxField}
-                  checked={sourceChecked().has(item.id)}
-                  onChange={() => toggleSourceChecked(item.id)}
-                  label={item.label}
-                  aria-label={t('transfer.selectItem', { label: item.label })}
-                />
-              </div>
-            )}
-          </For>
-        </div>
-      </Card>
+    <div {...rest} class={classNames(styles.wrapper, local.class)}>
+      <TransferListPanel
+        title={sourceTitle()}
+        items={filteredSource()}
+        itemCount={local.sourceItems.length}
+        filterValue={sourceFilter()}
+        searchable={local.searchable}
+        clearSearchLabel={clearSourceSearchLabel()}
+        searchInputLabel={searchLabel(sourceTitle())}
+        selectItemLabel={selectItemLabel}
+        checkedIds={sourceChecked()}
+        onFilterChange={setSourceFilter}
+        onToggleItem={toggleSourceChecked}
+      />
 
       <div class={styles.controls}>
         <IconButton
           disabled={sourceChecked().size === 0}
           onClick={moveSelectedRight}
-          label={t('transfer.moveSelectedRight')}
+          label={moveSelectedRightLabel()}
           icon={IoChevronForward}
           size="sm"
           variant="ghost"
         />
         <IconButton
-          disabled={props.sourceItems.length === 0}
+          disabled={local.sourceItems.length === 0}
           onClick={moveAllRight}
-          label={t('transfer.moveAllRight')}
+          label={moveAllRightLabel()}
           icon={IoPlayForward}
           size="sm"
           variant="ghost"
@@ -146,58 +154,34 @@ const TransferList = (props: Props<TransferListProps>) => {
         <IconButton
           disabled={targetChecked().size === 0}
           onClick={moveSelectedLeft}
-          label={t('transfer.moveSelectedLeft')}
+          label={moveSelectedLeftLabel()}
           icon={IoChevronBack}
           size="sm"
           variant="ghost"
         />
         <IconButton
-          disabled={props.targetItems.length === 0}
+          disabled={local.targetItems.length === 0}
           onClick={moveAllLeft}
-          label={t('transfer.moveAllLeft')}
+          label={moveAllLeftLabel()}
           icon={IoPlayBack}
           size="sm"
           variant="ghost"
         />
       </div>
 
-      <Card padding="none" class={styles.panel}>
-        <div class={styles.header}>
-          <Text as="span" variant="labelMd">
-            {targetTitle()}
-          </Text>
-          <Text as="span" variant="caption" tone="muted">
-            {props.targetItems.length}
-          </Text>
-        </div>
-        <Show when={props.searchable}>
-          <div class={styles.search}>
-            <SearchInput
-              class={styles.searchInput}
-              size="sm"
-              value={targetFilter()}
-              onInput={setTargetFilter}
-              clearLabel={t('transfer.clearSelectedSearch')}
-              inputAriaLabel={t('transfer.search', { label: targetTitle() })}
-            />
-          </div>
-        </Show>
-        <div class={styles.list}>
-          <For each={filteredTarget()}>
-            {(item) => (
-              <div class={itemClass(targetChecked().has(item.id))}>
-                <Checkbox
-                  wrapperClass={styles.checkboxField}
-                  checked={targetChecked().has(item.id)}
-                  onChange={() => toggleTargetChecked(item.id)}
-                  label={item.label}
-                  aria-label={t('transfer.selectItem', { label: item.label })}
-                />
-              </div>
-            )}
-          </For>
-        </div>
-      </Card>
+      <TransferListPanel
+        title={targetTitle()}
+        items={filteredTarget()}
+        itemCount={local.targetItems.length}
+        filterValue={targetFilter()}
+        searchable={local.searchable}
+        clearSearchLabel={clearTargetSearchLabel()}
+        searchInputLabel={searchLabel(targetTitle())}
+        selectItemLabel={selectItemLabel}
+        checkedIds={targetChecked()}
+        onFilterChange={setTargetFilter}
+        onToggleItem={toggleTargetChecked}
+      />
     </div>
   );
 };

@@ -17,7 +17,12 @@ const MenuItem = (props: Props<MenuItemProps>) => {
   return (
     <li class={classNames(styles.menuItem, props.isActive && styles.active, props.class)}>
       <Tooltip position="bottom" content={props.item.label} class={styles.menuItemTooltip}>
-        <A href={props.item.href} aria-label={props.item.label} class={styles.menuItemLink}>
+        <A
+          href={props.item.href}
+          aria-label={props.item.label}
+          aria-current={props.isActive ? 'page' : undefined}
+          class={styles.menuItemLink}
+        >
           <Icon icon={props.item.icon} class={styles.menuIcon} />
         </A>
       </Tooltip>

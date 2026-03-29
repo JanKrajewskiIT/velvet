@@ -89,7 +89,7 @@ const TagInput = (props: Props<TagInputOwnProps>) => {
           {...rest}
           type="text"
           class={classNames(fieldInputResetStyles.reset, styles.input)}
-          size={local.size}
+          size={null}
           value={inputValue()}
           onInput={handleInput}
           onKeyDown={handleKeyDown}

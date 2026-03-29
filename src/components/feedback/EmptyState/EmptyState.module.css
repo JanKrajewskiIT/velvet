@@ -1,13 +1,35 @@
 .empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-xl) var(--spacing-md);
+  padding: var(--spacing-xl) var(--spacing-lg);
   text-align: center;
+  border: 1px dashed color-mix(in srgb, var(--color-border) 86%, transparent);
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--color-surface) 84%, transparent);
   animation: fadeInUp var(--duration-slow) var(--ease-out-expo);
 }
 
-.content {
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--color-primary-light) 42%, var(--color-bg));
+  color: var(--color-primary);
+}
+
+.copy {
+  max-width: 32rem;
+}
+
+.message {
+  color: var(--color-text);
+}
+
+.hint {
+  max-width: 30rem;
+}
+
+.actions {
   margin-top: var(--spacing-xs);
 }

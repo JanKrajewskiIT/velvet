@@ -7,7 +7,7 @@ import type Props from '~/models/Props';
 interface TimePanelProps {
   id: string;
   ariaLabel: string;
-  options: string[];
+  options: readonly string[];
   value?: string;
   onSelect: (time: string) => void;
   panelClass?: string;

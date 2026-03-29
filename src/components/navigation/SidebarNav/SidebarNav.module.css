@@ -28,7 +28,19 @@
 .group {
   display: grid;
   gap: var(--spacing-xs);
-  margin-bottom: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.groupList {
+  list-style: none;
+  display: grid;
+  gap: var(--spacing-2xs);
+  margin: 0;
+  padding: 0;
+}
+
+.groupListItem {
+  min-width: 0;
 }
 
 .item {
@@ -37,6 +49,16 @@
   justify-content: flex-start;
   background: transparent;
   border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  transition:
+    border-color var(--duration-fast) ease,
+    background-color var(--duration-fast) ease,
+    color var(--duration-fast) ease;
+}
+
+.item:hover {
+  border-color: color-mix(in srgb, var(--color-border) 86%, transparent);
+  background: color-mix(in srgb, var(--color-bg-elevated) 88%, var(--color-surface));
 }
 
 .itemActive,

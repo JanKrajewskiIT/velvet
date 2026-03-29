@@ -3,6 +3,7 @@ import { createMemo, splitProps } from 'solid-js';
 import type Props from '~/models/Props';
 import type { AriaFieldProps, ComponentSize } from '~/models/Props';
 import classNames from '~/utils/classNames';
+import { joinDateTimeValue, splitDateTimeValue } from '~/utils/datetime';
 
 import type { DatePickerMessages } from '../DatePicker/DatePicker';
 import DatePicker from '../DatePicker/DatePicker';
@@ -10,7 +11,7 @@ import type { TimePickerMessages } from '../TimePicker/TimePicker';
 import TimePicker from '../TimePicker/TimePicker';
 import styles from './DateTimePicker.module.css';
 
-interface DateTimePickerProps extends AriaFieldProps {
+export interface DateTimePickerProps extends AriaFieldProps {
   id?: string;
   value?: string;
   onChange: (value: string) => void;
@@ -48,14 +49,11 @@ const DateTimePicker = (props: Props<DateTimePickerProps>) => {
     'aria-errormessage',
   ]);
   const parts = createMemo(() => {
-    const value = local.value ?? '';
-    const [date = '', time = ''] = value.split('T');
-    return { date, time };
+    return splitDateTimeValue(local.value);
   });
 
   const handleDateChange = (date: string) => {
-    const nextTime = parts().time || '00:00';
-    local.onChange(`${date}T${nextTime}`);
+    local.onChange(joinDateTimeValue(date, parts().time));
   };
 
   const handleTimeChange = (time: string) => {
@@ -65,7 +63,7 @@ const DateTimePicker = (props: Props<DateTimePickerProps>) => {
       return;
     }
 
-    local.onChange(`${nextDate}T${time}`);
+    local.onChange(joinDateTimeValue(nextDate, time));
   };
 
   return (

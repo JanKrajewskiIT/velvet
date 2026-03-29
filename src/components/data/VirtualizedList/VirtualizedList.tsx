@@ -29,7 +29,7 @@ const VirtualizedList = <T,>(props: Props<VirtualizedListOwnProps<T>>) => {
   ]);
   const [scrollTop, setScrollTop] = createSignal(0);
 
-  const overscan = () => local.overscan ?? 4;
+  const overscan = createMemo(() => local.overscan ?? 4);
   const visibleCount = createMemo(() => Math.ceil(local.height / local.itemHeight) + overscan() * 2);
   const startIndex = createMemo(() => Math.max(0, Math.floor(scrollTop() / local.itemHeight) - overscan()));
   const endIndex = createMemo(() => Math.min(local.items.length, startIndex() + visibleCount()));
@@ -43,6 +43,9 @@ const VirtualizedList = <T,>(props: Props<VirtualizedListOwnProps<T>>) => {
 
   const totalHeight = createMemo(() => local.items.length * local.itemHeight);
   const offsetY = createMemo(() => startIndex() * local.itemHeight);
+  const viewportStyle = createMemo(() => ({ height: `${local.height}px` }));
+  const spacerStyle = createMemo(() => ({ height: `${totalHeight()}px` }));
+  const innerStyle = createMemo(() => ({ transform: `translateY(${offsetY()}px)` }));
 
   const handleScroll: JSX.EventHandler<HTMLDivElement, Event> = (e) => {
     setScrollTop(e.currentTarget.scrollTop);
@@ -52,7 +55,7 @@ const VirtualizedList = <T,>(props: Props<VirtualizedListOwnProps<T>>) => {
     <div
       {...rest}
       class={classNames(styles.viewport, local.class)}
-      style={{ height: `${local.height}px` }}
+      style={viewportStyle()}
       onScroll={handleScroll}
       role="list"
     >
@@ -60,8 +63,8 @@ const VirtualizedList = <T,>(props: Props<VirtualizedListOwnProps<T>>) => {
         when={local.items.length > 0}
         fallback={<div class={styles.empty}>{local.emptyState ?? t('common.noItems')}</div>}
       >
-        <div class={styles.spacer} style={{ height: `${totalHeight()}px` }}>
-          <div class={styles.inner} style={{ transform: `translateY(${offsetY()}px)` }}>
+        <div class={styles.spacer} style={spacerStyle()}>
+          <div class={styles.inner} style={innerStyle()}>
             <For each={visibleItems()}>
               {(entry) => (
                 <div class={styles.item} style={{ height: `${local.itemHeight}px` }} role="listitem">

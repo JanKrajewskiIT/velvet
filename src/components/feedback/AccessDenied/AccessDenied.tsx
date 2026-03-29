@@ -1,4 +1,5 @@
 import { IoLockClosedOutline } from 'solid-icons/io';
+import { splitProps } from 'solid-js';
 
 import Button from '~/components/buttons/Button/Button';
 import Icon from '~/components/media/Icon/Icon';
@@ -16,23 +17,26 @@ interface AccessDeniedProps {
 }
 
 const AccessDenied = (props: Props<AccessDeniedProps>) => {
+  const [local, rest] = splitProps(props, ['class', 'label', 'description', 'goHomeLabel', 'goHomeHref', 'onGoHome']);
+
   const navigateHome = () => {
-    if (props.onGoHome) {
-      props.onGoHome();
+    if (local.onGoHome) {
+      local.onGoHome();
       return;
     }
 
     if (typeof window === 'undefined') return;
-    window.location.href = props.goHomeHref ?? '/';
+    window.location.href = local.goHomeHref ?? '/';
   };
 
   return (
     <FallbackState
-      class={props.class}
-      label={props.label}
-      description={props.description}
+      {...rest}
+      class={local.class}
+      label={local.label}
+      description={local.description}
       icon={<Icon icon={IoLockClosedOutline} class={styles.icon} />}
-      action={<Button onClick={navigateHome} label={props.goHomeLabel} />}
+      action={<Button onClick={navigateHome} label={local.goHomeLabel} />}
     />
   );
 };

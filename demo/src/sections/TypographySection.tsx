@@ -1,4 +1,4 @@
-import { CodeText, Heading, Text, useI18n } from '@jankrajewskiit/ui';
+import { CodeText, Heading, LabelText, Text, useI18n } from '@jankrajewskiit/ui';
 import { createMemo } from 'solid-js';
 
 import { PreviewGroup, PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
@@ -61,6 +61,13 @@ const TypographySection = () => {
             <Text tone="muted">{t('demo.text.typography.tones.muted')}</Text>
             <Text tone="tertiary">{t('demo.text.typography.tones.tertiary')}</Text>
             <Text tone="primary">{t('demo.text.typography.tones.primary')}</Text>
+          </PreviewGroup>
+          <PreviewGroup title="LabelText">
+            <LabelText label={t('demo.text.typography.roles.labelLarge')} />
+            <LabelText
+              label={t('demo.text.typography.scale.titleMedium')}
+              description={t('demo.text.typography.tones.muted')}
+            />
           </PreviewGroup>
         </PreviewPanel>
       </ShowcaseSection>

@@ -1,4 +1,4 @@
-import { For, splitProps } from 'solid-js';
+import { createMemo, For, splitProps } from 'solid-js';
 
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
@@ -14,8 +14,8 @@ interface PaginationOwnProps extends Omit<HTMLElementCoreNativeProps, 'onChange'
   page: number;
   totalPages: number;
   onChange: (page: number) => void;
-  previousLabel: string;
-  nextLabel: string;
+  previousLabel?: string;
+  nextLabel?: string;
   maxVisible?: number;
   ariaLabel?: string;
 }
@@ -60,11 +60,14 @@ const Pagination = (props: Props<PaginationOwnProps>) => {
     'class',
   ]);
 
-  const current = () => Math.min(Math.max(local.page, 1), local.totalPages);
-  const pages = () => buildPageItems(current(), local.totalPages, local.maxVisible ?? 7);
+  const current = createMemo(() => Math.min(Math.max(local.page, 1), local.totalPages));
+  const pages = createMemo(() => buildPageItems(current(), local.totalPages, local.maxVisible ?? 7));
+  const ariaLabel = createMemo(() => local.ariaLabel ?? t('common.pagination'));
+  const previousLabel = createMemo(() => local.previousLabel ?? t('common.previous'));
+  const nextLabel = createMemo(() => local.nextLabel ?? t('common.next'));
 
   return (
-    <nav {...rest} class={classNames(styles.nav, local.class)} aria-label={local.ariaLabel ?? t('common.pagination')}>
+    <nav {...rest} class={classNames(styles.nav, local.class)} aria-label={ariaLabel()}>
       <Button
         variant="ghost"
         size="sm"
@@ -72,7 +75,7 @@ const Pagination = (props: Props<PaginationOwnProps>) => {
         disabled={current() <= 1}
         onClick={() => local.onChange(current() - 1)}
       >
-        {local.previousLabel}
+        {previousLabel()}
       </Button>
 
       <div class={styles.pages}>
@@ -106,7 +109,7 @@ const Pagination = (props: Props<PaginationOwnProps>) => {
         disabled={current() >= local.totalPages}
         onClick={() => local.onChange(current() + 1)}
       >
-        {local.nextLabel}
+        {nextLabel()}
       </Button>
     </nav>
   );

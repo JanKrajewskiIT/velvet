@@ -7,8 +7,8 @@ import type { DayCell } from '~/utils/datetime';
 import styles from './CalendarGrid.module.css';
 
 interface CalendarGridProps {
-  dayLabels: string[];
-  days: DayCell[];
+  dayLabels: readonly string[];
+  days: readonly DayCell[];
   weekdayLabelClass?: string;
   dayClass: (cell: DayCell) => string;
   isDayDisabled?: (cell: DayCell) => boolean;
@@ -25,6 +25,8 @@ interface CalendarGridProps {
 }
 
 const CalendarGrid = (props: Props<CalendarGridProps>) => {
+  const shouldRenderDay = (cell: DayCell) => !props.filterDay || props.filterDay(cell);
+
   return (
     <div class={classNames(styles.calendarGrid, props.class)}>
       <For each={props.dayLabels}>
@@ -32,7 +34,7 @@ const CalendarGrid = (props: Props<CalendarGridProps>) => {
       </For>
       <For each={props.days}>
         {(cell) => {
-          if (props.filterDay && !props.filterDay(cell)) {
+          if (!shouldRenderDay(cell)) {
             return null;
           }
 

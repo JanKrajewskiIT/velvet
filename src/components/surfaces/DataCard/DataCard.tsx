@@ -1,4 +1,4 @@
-import { type JSX, Show, splitProps } from 'solid-js';
+import { createMemo, type JSX, Show, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
 import type { DivCoreNativeProps } from '~/models/Props';
@@ -17,15 +17,17 @@ interface DataCardOwnProps extends DivCoreNativeProps {
 
 const DataCard = (props: Props<DataCardOwnProps>) => {
   const [local, rest] = splitProps(props, ['media', 'header', 'footer', 'children', 'variant', 'hoverable', 'class']);
-
-  const variantClass = () => {
+  const variantClass = createMemo(() => {
     if (local.variant === 'filled') return styles.filled;
     if (local.variant === 'outlined') return styles.outlined;
     return styles.elevated;
-  };
+  });
+  const cardClass = createMemo(() =>
+    classNames(styles.card, variantClass(), local.hoverable && styles.hoverable, local.class)
+  );
 
   return (
-    <div class={classNames(styles.card, variantClass(), local.hoverable && styles.hoverable, local.class)} {...rest}>
+    <div {...rest} class={cardClass()}>
       <Show when={local.media}>
         <div class={styles.media}>{local.media}</div>
       </Show>

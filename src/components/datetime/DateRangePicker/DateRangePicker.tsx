@@ -14,7 +14,7 @@ import { buildDaysGrid, type DayCell, getTodayIso, toIso } from '~/utils/datetim
 import CalendarPanel from '../Calendar/CalendarPanel/CalendarPanel';
 import styles from './DateRangePicker.module.css';
 
-interface DateRangePickerMessages {
+export interface DateRangePickerMessages {
   startLabel?: string;
   endLabel?: string;
   startAriaLabel?: string;
@@ -22,6 +22,7 @@ interface DateRangePickerMessages {
   calendarLabel?: string;
   previousMonthLabel?: string;
   nextMonthLabel?: string;
+  dayLabels?: readonly string[];
 }
 
 export interface DateRange {
@@ -29,7 +30,7 @@ export interface DateRange {
   end: string;
 }
 
-interface DateRangePickerProps extends AriaFieldProps {
+export interface DateRangePickerProps extends AriaFieldProps {
   id?: string;
   value: DateRange;
   onChange: (range: DateRange) => void;
@@ -49,7 +50,7 @@ interface DateRangePickerProps extends AriaFieldProps {
 }
 
 const DateRangePicker = (props: Props<DateRangePickerProps>) => {
-  const { locale: currentLocale, t } = useI18n();
+  const { t } = useI18n();
   const [activeField, setActiveField] = createSignal<'start' | 'end'>('start');
   const [pendingStart, setPendingStart] = createSignal<string | null>(null);
   const dropdownId = createUniqueId();
@@ -67,12 +68,25 @@ const DateRangePicker = (props: Props<DateRangePickerProps>) => {
 
   const daysGrid = createMemo(() => buildDaysGrid(popup.viewYear(), popup.viewMonth()));
   const todayIso = getTodayIso();
+  const locale = createMemo(() => props.locale ?? Intl.DateTimeFormat().resolvedOptions().locale);
 
   const monthName = createMemo(() =>
-    new Date(popup.viewYear(), popup.viewMonth()).toLocaleString(props.locale ?? currentLocale(), {
+    new Date(popup.viewYear(), popup.viewMonth()).toLocaleString(locale(), {
       month: 'long',
       year: 'numeric',
     })
+  );
+  const dayLabels = createMemo(
+    () =>
+      props.messages?.dayLabels ?? [
+        t('calendar.day.mo'),
+        t('calendar.day.tu'),
+        t('calendar.day.we'),
+        t('calendar.day.th'),
+        t('calendar.day.fr'),
+        t('calendar.day.sa'),
+        t('calendar.day.su'),
+      ]
   );
   const startLabel = () => props.messages?.startLabel ?? props.startLabel ?? t('common.start');
   const endLabel = () => props.messages?.endLabel ?? props.endLabel ?? t('common.end');
@@ -243,6 +257,7 @@ const DateRangePicker = (props: Props<DateRangePickerProps>) => {
             isDayDisabled={isDayDisabled}
             getDayAriaLabel={(cell) => toIso(cell.year, cell.month, cell.day)}
             onSelectDay={selectDay}
+            dayLabels={dayLabels()}
           />
         </DropdownSurface>
       </Show>

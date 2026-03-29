@@ -5,18 +5,21 @@ import type Props from '~/models/Props';
 import type { DivCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
+import Surface from '../Surface/Surface';
 import styles from './Card.module.css';
 
-interface CardOwnProps extends DivCoreNativeProps {
+export interface CardOwnProps extends DivCoreNativeProps {
+  as?: keyof JSX.IntrinsicElements;
   children?: JSX.Element;
   padding?: 'default' | 'none';
 }
 
 const Card = (props: Props<CardOwnProps>) => {
-  const [local, rest] = splitProps(props, ['children', 'padding', 'class']);
+  const [local, rest] = splitProps(props, ['as', 'children', 'padding', 'class']);
 
   return (
-    <div
+    <Surface
+      as={local.as ?? 'div'}
       class={classNames(
         styles.card,
         local.padding === 'none' ? styles.paddingNone : styles.paddingDefault,
@@ -25,7 +28,7 @@ const Card = (props: Props<CardOwnProps>) => {
       {...rest}
     >
       {local.children}
-    </div>
+    </Surface>
   );
 };
 

@@ -1,5 +1,5 @@
 import { FiChevronRight } from 'solid-icons/fi';
-import { createMemo, createSignal, For, type JSX, Show } from 'solid-js';
+import { createMemo, createSignal, For, type JSX, Show, splitProps } from 'solid-js';
 
 import Heading from '~/components/typography/Heading/Heading';
 import Text from '~/components/typography/Text/Text';
@@ -18,29 +18,37 @@ export interface BreadcrumbItem {
 
 interface BreadcrumbsProps {
   items: BreadcrumbItem[];
-  separator?: JSX.Element;
+  separator?: JSX.Element | (() => JSX.Element);
   maxItems?: number;
+  ariaLabel?: string;
+  showAllLabel?: string;
 }
 
 const Breadcrumbs = (props: Props<BreadcrumbsProps>) => {
   const { t } = useI18n();
+  const [local, rest] = splitProps(props, ['class', 'items', 'separator', 'maxItems', 'ariaLabel', 'showAllLabel']);
   const [expanded, setExpanded] = createSignal(false);
 
-  const maxItems = () => props.maxItems ?? Infinity;
+  const maxItems = createMemo(() => local.maxItems ?? Infinity);
 
-  const shouldCollapse = () => props.items.length > maxItems() && !expanded();
+  const shouldCollapse = createMemo(() => local.items.length > maxItems() && !expanded());
+  const ariaLabel = createMemo(() => local.ariaLabel ?? t('breadcrumbs.label'));
+  const showAllLabel = createMemo(() => local.showAllLabel ?? t('breadcrumbs.showAll'));
+  const renderSeparator = () => {
+    const separator = local.separator;
+    if (typeof separator === 'function') return separator();
+    return separator ?? <FiChevronRight size={14} />;
+  };
 
   const visibleItems = createMemo<BreadcrumbItem[]>(() => {
-    if (!shouldCollapse()) return props.items;
+    if (!shouldCollapse()) return local.items;
     const tail = maxItems() - 1;
-    const first = props.items[0];
-    if (!first) return props.items;
-    return [first, ...props.items.slice(-tail)];
+    const first = local.items[0];
+    if (!first) return local.items;
+    return [first, ...local.items.slice(-tail)];
   });
 
-  const showEllipsis = () => shouldCollapse();
-
-  const separator = () => props.separator ?? <FiChevronRight size={14} />;
+  const showEllipsis = createMemo(() => shouldCollapse());
 
   const renderItem = (item: BreadcrumbItem, isCurrentPage: boolean) => {
     if (isCurrentPage) {
@@ -76,22 +84,22 @@ const Breadcrumbs = (props: Props<BreadcrumbsProps>) => {
   };
 
   return (
-    <nav aria-label={t('breadcrumbs.label')} class={classNames(styles.breadcrumbs, props.class)}>
+    <nav {...rest} aria-label={ariaLabel()} class={classNames(styles.breadcrumbs, local.class)}>
       <ol class={styles.list}>
         <Show when={showEllipsis()}>
           <For each={visibleItems().slice(0, 1)}>
             {(item) => <li class={styles.item}>{renderItem(item, false)}</li>}
           </For>
           <li class={styles.separator} aria-hidden="true">
-            {separator()}
+            {renderSeparator()}
           </li>
           <li class={styles.item}>
-            <Button variant="subtle" size="sm" onClick={() => setExpanded(true)} aria-label={t('breadcrumbs.showAll')}>
+            <Button variant="subtle" size="sm" onClick={() => setExpanded(true)} aria-label={showAllLabel()}>
               &hellip;
             </Button>
           </li>
           <li class={styles.separator} aria-hidden="true">
-            {separator()}
+            {renderSeparator()}
           </li>
           <For each={visibleItems().slice(1)}>
             {(item, index) => (
@@ -99,7 +107,7 @@ const Breadcrumbs = (props: Props<BreadcrumbsProps>) => {
                 <li class={styles.item}>{renderItem(item, index() === visibleItems().length - 2)}</li>
                 <Show when={index() < visibleItems().length - 2}>
                   <li class={styles.separator} aria-hidden="true">
-                    {separator()}
+                    {renderSeparator()}
                   </li>
                 </Show>
               </>
@@ -113,7 +121,7 @@ const Breadcrumbs = (props: Props<BreadcrumbsProps>) => {
                 <li class={styles.item}>{renderItem(item, index() === visibleItems().length - 1)}</li>
                 <Show when={index() < visibleItems().length - 1}>
                   <li class={styles.separator} aria-hidden="true">
-                    {separator()}
+                    {renderSeparator()}
                   </li>
                 </Show>
               </>

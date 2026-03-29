@@ -1,3 +1,5 @@
+import { splitProps } from 'solid-js';
+
 import Button from '~/components/buttons/Button/Button';
 import type Props from '~/models/Props';
 
@@ -11,12 +13,15 @@ interface ErrorFallbackOwnProps {
 }
 
 const ErrorFallback = (props: Props<ErrorFallbackOwnProps>) => {
+  const [local, rest] = splitProps(props, ['class', 'label', 'description', 'retryLabel', 'onRetry']);
+
   return (
     <FallbackState
-      class={props.class}
-      label={props.label}
-      description={props.description}
-      action={<Button onClick={props.onRetry} label={props.retryLabel} />}
+      {...rest}
+      class={local.class}
+      label={local.label}
+      description={local.description}
+      action={<Button onClick={local.onRetry} label={local.retryLabel} />}
     />
   );
 };

@@ -8,6 +8,7 @@ import {
   CommandPalette,
   EditableCollection,
   FormField,
+  Heading,
   IconButton,
   Input,
   KanbanBoard,
@@ -356,6 +357,13 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
   const [kanbanItems, setKanbanItems] = createSignal<KanbanDemoItem[]>([]);
   const [schedulerEvents, setSchedulerEvents] = createSignal<SchedulerEvent[]>([]);
   const [commandOpen, setCommandOpen] = createSignal(false);
+  const commandGroupSummary = createMemo(() => {
+    const grouped = new Map<string, number>();
+    for (const item of commandItems()) {
+      grouped.set(item.group, (grouped.get(item.group) ?? 0) + 1);
+    }
+    return Array.from(grouped.entries()).map(([label, count]) => ({ label, count }));
+  });
 
   createEffect(() => {
     if (tasks().length === 0) {
@@ -597,9 +605,49 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
         >
           <PreviewPanel>
             <PreviewGroup title={t('demo.text.common.examples')}>
-              <Button variant="primary" onClick={() => setCommandOpen(true)}>
-                {t('demo.text.composites.commandPalette.open')}
-              </Button>
+              <div class="scenarioShell">
+                <div class="scenarioHeader">
+                  <div class="scenarioHeaderCopy">
+                    <Text as="p" variant="overline" tone="primary">
+                      {t('demo.page.compositesCommandPalette.title')}
+                    </Text>
+                    <Heading level={3} variant="titleLg">
+                      {t('demo.page.compositesCommandPalette.description')}
+                    </Heading>
+                  </div>
+                  <div class="scenarioMetricRow">
+                    <For each={commandGroupSummary()}>
+                      {(group) => (
+                        <div class="scenarioMetric">
+                          <Text as="span" variant="overline" tone="tertiary">
+                            {group.label}
+                          </Text>
+                          <Text as="span" variant="labelLg">
+                            {group.count}
+                          </Text>
+                        </div>
+                      )}
+                    </For>
+                  </div>
+                </div>
+                <div class="shortcutRow">
+                  <CodeText as="span">Ctrl K</CodeText>
+                  <CodeText as="span">Enter</CodeText>
+                  <CodeText as="span">Esc</CodeText>
+                </div>
+                <div class="actionCluster">
+                  <For each={commandItems().slice(0, 4)}>
+                    {(item) => (
+                      <Button type="button" variant="ghost" size="sm" onClick={() => setCommandOpen(true)}>
+                        {item.label}
+                      </Button>
+                    )}
+                  </For>
+                </div>
+                <Button variant="primary" onClick={() => setCommandOpen(true)}>
+                  {t('demo.text.composites.commandPalette.open')}
+                </Button>
+              </div>
               <CommandPalette open={commandOpen()} onClose={() => setCommandOpen(false)} items={commandItems()} />
             </PreviewGroup>
           </PreviewPanel>
@@ -613,6 +661,23 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
         >
           <PreviewPanel>
             <PreviewGroup title={t('demo.text.common.examples')}>
+              <div class="actionCluster">
+                <For each={aiRunScenarios()}>
+                  {(scenario) => (
+                    <Button
+                      type="button"
+                      variant={selectedScenarioId() === scenario.id ? 'primary' : 'ghost'}
+                      size="sm"
+                      onClick={() => {
+                        setSelectedScenarioId(scenario.id);
+                        setAnalysisState('idle');
+                      }}
+                    >
+                      {scenario.label}
+                    </Button>
+                  )}
+                </For>
+              </div>
               <AiResultPanel
                 isPending={analysisState() === 'loading'}
                 loadingText={t('demo.text.composites.ai.loading')}
@@ -643,11 +708,8 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
                       value={selectedScenarioId()}
                       onChange={(e) => setSelectedScenarioId(e.currentTarget.value)}
                       aria-label={t('demo.text.composites.ai.selectScenario')}
-                    >
-                      <For each={aiRunScenarios()}>
-                        {(scenario) => <option value={scenario.id}>{scenario.label}</option>}
-                      </For>
-                    </Select>
+                      options={aiRunScenarios().map((scenario) => ({ value: scenario.id, label: scenario.label }))}
+                    />
                     <Button size="sm" variant="ghost" class="aiActionButton" onClick={() => setAnalysisState('idle')}>
                       {t('demo.text.composites.ai.reset')}
                     </Button>

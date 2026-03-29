@@ -1,7 +1,8 @@
-import { createEffect, createSignal, onCleanup, Show } from 'solid-js';
+import { createEffect, createMemo, createSignal, onCleanup, Show, splitProps } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
 import Button from '~/components/buttons/Button/Button';
+import Surface from '~/components/surfaces/Surface/Surface';
 import Heading from '~/components/typography/Heading/Heading';
 import Text from '~/components/typography/Text/Text';
 import useEscapeKey from '~/hooks/useEscapeKey';
@@ -30,7 +31,6 @@ interface TourProps {
 }
 
 const VIEWPORT_PADDING = 16;
-
 const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
 
 const computeCardPosition = (
@@ -53,25 +53,36 @@ const computeCardPosition = (
 
 const Tour = (props: Props<TourProps>) => {
   const { t } = useI18n();
+  const [local, rest] = splitProps(props, [
+    'steps',
+    'open',
+    'onClose',
+    'onComplete',
+    'nextLabel',
+    'prevLabel',
+    'finishLabel',
+    'skipLabel',
+    'class',
+  ]);
   const [currentStep, setCurrentStep] = createSignal(0);
   const [spotlightStyle, setSpotlightStyle] = createSignal<Record<string, string>>({});
   const [cardStyle, setCardStyle] = createSignal<Record<string, string>>({});
   let cardRef: HTMLDivElement | undefined;
 
-  const nextLabel = () => props.nextLabel ?? t('common.next');
-  const prevLabel = () => props.prevLabel ?? t('common.back');
-  const finishLabel = () => props.finishLabel ?? t('common.finish');
-  const skipLabel = () => props.skipLabel ?? t('common.skip');
-
-  const isLastStep = () => currentStep() === props.steps.length - 1;
+  const nextLabel = createMemo(() => local.nextLabel ?? t('common.next'));
+  const prevLabel = createMemo(() => local.prevLabel ?? t('common.back'));
+  const finishLabel = createMemo(() => local.finishLabel ?? t('common.finish'));
+  const skipLabel = createMemo(() => local.skipLabel ?? t('common.skip'));
+  const currentStepData = createMemo(() => local.steps[currentStep()]);
+  const isLastStep = createMemo(() => currentStep() === local.steps.length - 1);
 
   useEscapeKey(
-    () => props.open,
-    () => props.onClose()
+    () => local.open,
+    () => local.onClose()
   );
 
   const updatePosition = () => {
-    const step = props.steps[currentStep()];
+    const step = currentStepData();
     if (!step) return;
 
     const el = document.querySelector(step.target);
@@ -106,7 +117,7 @@ const Tour = (props: Props<TourProps>) => {
   };
 
   createEffect(() => {
-    if (!props.open) {
+    if (!local.open) {
       setCurrentStep(0);
       return;
     }
@@ -128,8 +139,8 @@ const Tour = (props: Props<TourProps>) => {
 
   const handleNext = () => {
     if (isLastStep()) {
-      props.onComplete?.();
-      props.onClose();
+      local.onComplete?.();
+      local.onClose();
     } else {
       setCurrentStep((prev) => prev + 1);
     }
@@ -140,27 +151,34 @@ const Tour = (props: Props<TourProps>) => {
   };
 
   const handleSkip = () => {
-    props.onClose();
+    local.onClose();
   };
 
   return (
-    <Show when={props.open}>
+    <Show when={local.open}>
       <Portal>
-        <div class={classNames(styles.overlay, props.class)}>
+        <div {...rest} class={classNames(styles.overlay, local.class)}>
           <div class={styles.spotlight} style={spotlightStyle()} />
-          <div ref={cardRef} class={styles.card} style={cardStyle()}>
+          <Surface
+            ref={(element) => {
+              cardRef = element;
+            }}
+            class={styles.card}
+            style={cardStyle()}
+            elevation="popover"
+          >
             <Button variant="ghost" size="sm" class={styles.skip} onClick={handleSkip}>
               {skipLabel()}
             </Button>
             <Heading as="h3" variant="titleMd" class={styles.title}>
-              {props.steps[currentStep()]?.title}
+              {currentStepData()?.title}
             </Heading>
             <Text as="p" variant="bodySm" tone="muted" class={styles.content}>
-              {props.steps[currentStep()]?.content}
+              {currentStepData()?.content}
             </Text>
             <div class={styles.footer}>
               <Text as="span" variant="caption" tone="muted" class={styles.steps}>
-                {currentStep() + 1} / {props.steps.length}
+                {currentStep() + 1} / {local.steps.length}
               </Text>
               <div class={styles.actions}>
                 <Show when={currentStep() > 0}>
@@ -173,7 +191,7 @@ const Tour = (props: Props<TourProps>) => {
                 </Button>
               </div>
             </div>
-          </div>
+          </Surface>
         </div>
       </Portal>
     </Show>

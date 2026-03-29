@@ -1,17 +1,22 @@
 .alert {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--spacing-md);
   padding: var(--spacing-md);
   border-radius: var(--radius-md);
-  border-left: 3px solid transparent;
+  border: 1px solid transparent;
+  border-left-width: 3px;
+  box-shadow: 0 1px 0 rgb(255 255 255 / 35%) inset;
   animation: fadeInUp var(--duration-normal) var(--ease-out-expo);
 }
 
 .icon {
   display: flex;
   flex-shrink: 0;
-  padding-top: 2px;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  margin-top: 1px;
+  border-radius: var(--radius-full);
+  background: rgb(255 255 255 / 55%);
 }
 
 .content {
@@ -19,13 +24,21 @@
   min-width: 0;
 }
 
+.label,
+.message {
+  color: inherit;
+}
+
 .closeBtn {
   flex-shrink: 0;
+  color: inherit;
 }
 
 .info {
-  background-color: var(--color-info-light);
+  background-color: color-mix(in srgb, var(--color-info-light) 72%, var(--color-bg-elevated));
+  border-color: color-mix(in srgb, var(--color-info) 20%, var(--color-border));
   border-left-color: var(--color-info);
+  color: color-mix(in srgb, var(--color-info) 82%, var(--color-text));
 }
 
 .info .icon {
@@ -33,8 +46,10 @@
 }
 
 .success {
-  background-color: var(--color-success-light);
+  background-color: color-mix(in srgb, var(--color-success-light) 72%, var(--color-bg-elevated));
+  border-color: color-mix(in srgb, var(--color-success) 20%, var(--color-border));
   border-left-color: var(--color-success);
+  color: color-mix(in srgb, var(--color-success) 82%, var(--color-text));
 }
 
 .success .icon {
@@ -42,8 +57,10 @@
 }
 
 .warning {
-  background-color: var(--color-warning-light);
+  background-color: color-mix(in srgb, var(--color-warning-light) 72%, var(--color-bg-elevated));
+  border-color: color-mix(in srgb, var(--color-warning) 20%, var(--color-border));
   border-left-color: var(--color-warning);
+  color: color-mix(in srgb, var(--color-warning) 85%, var(--color-text));
 }
 
 .warning .icon {
@@ -51,8 +68,10 @@
 }
 
 .error {
-  background-color: var(--color-error-light);
+  background-color: color-mix(in srgb, var(--color-error-light) 72%, var(--color-bg-elevated));
+  border-color: color-mix(in srgb, var(--color-error) 20%, var(--color-border));
   border-left-color: var(--color-error);
+  color: color-mix(in srgb, var(--color-error) 82%, var(--color-text));
 }
 
 .error .icon {
@@ -60,8 +79,10 @@
 }
 
 .tip {
-  background-color: var(--color-primary-light);
+  background-color: color-mix(in srgb, var(--color-primary-light) 72%, var(--color-bg-elevated));
+  border-color: color-mix(in srgb, var(--color-primary) 20%, var(--color-border));
   border-left-color: var(--color-primary);
+  color: color-mix(in srgb, var(--color-primary) 82%, var(--color-text));
 }
 
 .tip .icon {

@@ -1,4 +1,4 @@
-import { createEffect, createMemo, createSignal, For, type JSX, Show } from 'solid-js';
+import { createEffect, createMemo, createSignal, For, type JSX, Show, splitProps } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
 import useEscapeKey from '~/hooks/useEscapeKey';
@@ -9,6 +9,7 @@ import classNames from '~/utils/classNames';
 
 import Button from '../../buttons/Button/Button';
 import SearchInput from '../../inputs/SearchInput/SearchInput';
+import Surface from '../../surfaces/Surface/Surface';
 import Text from '../../typography/Text/Text';
 import styles from './CommandPalette.module.css';
 
@@ -44,66 +45,162 @@ interface CommandPaletteProps {
 
 const CommandPalette = (props: Props<CommandPaletteProps>) => {
   const { t } = useI18n();
+  const [local, rest] = splitProps(props, [
+    'open',
+    'onClose',
+    'items',
+    'placeholder',
+    'dialogLabel',
+    'resultsLabel',
+    'emptyLabel',
+    'messages',
+    'class',
+  ]);
   const [query, setQuery] = createSignal('');
+  const [activeIndex, setActiveIndex] = createSignal(-1);
   const [panelRef, setPanelRef] = createSignal<HTMLElement | undefined>();
+  let resultsRef: HTMLDivElement | undefined;
 
   useEscapeKey(
-    () => props.open,
-    () => props.onClose()
+    () => local.open,
+    () => local.onClose()
   );
 
-  useFocusTrap(panelRef, () => props.open);
+  useFocusTrap(panelRef, () => local.open);
 
   const filtered = createMemo(() => {
     const q = query().toLowerCase();
-    if (!q) return props.items;
-    return props.items.filter(
+    if (!q) return local.items;
+    return local.items.filter(
       (item) => item.label.toLowerCase().includes(q) || (item.description?.toLowerCase().includes(q) ?? false)
     );
   });
 
   const grouped = createMemo(() => {
-    const groups: { name: string | undefined; items: CommandItem[] }[] = [];
-    const map = new Map<string | undefined, CommandItem[]>();
-    for (const item of filtered()) {
+    const groups: { name: string | undefined; items: (CommandItem & { flatIndex: number })[] }[] = [];
+    const map = new Map<string | undefined, (CommandItem & { flatIndex: number })[]>();
+    filtered().forEach((item, flatIndex) => {
       const key = item.group;
       const existing = map.get(key);
+      const indexedItem = { ...item, flatIndex };
       if (existing) {
-        existing.push(item);
+        existing.push(indexedItem);
       } else {
-        const arr = [item];
+        const arr = [indexedItem];
         map.set(key, arr);
         groups.push({ name: key, items: arr });
       }
-    }
+    });
     return groups;
   });
 
   createEffect(() => {
-    if (!props.open) return;
+    if (!local.open) return;
     setQuery('');
+    setActiveIndex(local.items.length > 0 ? 0 : -1);
+  });
+
+  createEffect(() => {
+    const items = filtered();
+    if (items.length === 0) {
+      if (activeIndex() !== -1) {
+        setActiveIndex(-1);
+      }
+      return;
+    }
+
+    const current = activeIndex();
+    if (current < 0 || current >= items.length) {
+      setActiveIndex(0);
+    }
+  });
+
+  createEffect(() => {
+    if (!local.open) return;
+
+    const index = activeIndex();
+    if (index < 0) return;
+
+    const activeItem = resultsRef?.querySelector<HTMLElement>(`[data-command-index="${String(index)}"]`);
+    activeItem?.scrollIntoView({ block: 'nearest' });
   });
 
   const handleOverlayClick = (e: MouseEvent) => {
-    if (e.target === e.currentTarget) props.onClose();
+    if (e.target === e.currentTarget) local.onClose();
   };
 
   const handleItemClick = (item: CommandItem) => {
     item.onSelect();
-    props.onClose();
+    local.onClose();
+  };
+  const moveActiveIndex = (direction: 1 | -1) => {
+    const items = filtered();
+    if (items.length === 0) {
+      setActiveIndex(-1);
+      return;
+    }
+
+    const current = activeIndex();
+    const startIndex = current >= 0 ? current : direction === 1 ? -1 : 0;
+    const nextIndex = (startIndex + direction + items.length) % items.length;
+    setActiveIndex(nextIndex);
+  };
+  const handleSearchKeyDown = (event: KeyboardEvent) => {
+    switch (event.key) {
+      case 'ArrowDown':
+        event.preventDefault();
+        moveActiveIndex(1);
+        return;
+      case 'ArrowUp':
+        event.preventDefault();
+        moveActiveIndex(-1);
+        return;
+      case 'Home':
+        if (filtered().length === 0) return;
+        event.preventDefault();
+        setActiveIndex(0);
+        return;
+      case 'End':
+        if (filtered().length === 0) return;
+        event.preventDefault();
+        setActiveIndex(filtered().length - 1);
+        return;
+      case 'Enter': {
+        const activeItem = filtered()[activeIndex()];
+        if (!activeItem) return;
+        event.preventDefault();
+        handleItemClick(activeItem);
+        return;
+      }
+      default:
+        return;
+    }
   };
 
-  const placeholder = () => props.messages?.placeholder ?? props.placeholder ?? t('commandPalette.searchCommands');
-  const dialogLabel = () => props.messages?.dialogLabel ?? props.dialogLabel ?? t('commandPalette.label');
-  const resultsLabel = () => props.messages?.resultsLabel ?? props.resultsLabel ?? t('commandPalette.results');
-  const emptyLabel = () => props.messages?.emptyLabel ?? props.emptyLabel ?? t('commandPalette.noResults');
-  const closeHintLabel = () => props.messages?.closeHintLabel ?? t('commandPalette.escToClose');
+  const placeholder = createMemo(
+    () => local.messages?.placeholder ?? local.placeholder ?? t('commandPalette.searchCommands')
+  );
+  const dialogLabel = createMemo(() => local.messages?.dialogLabel ?? local.dialogLabel ?? t('commandPalette.label'));
+  const resultsLabel = createMemo(
+    () => local.messages?.resultsLabel ?? local.resultsLabel ?? t('commandPalette.results')
+  );
+  const emptyLabel = createMemo(() => local.messages?.emptyLabel ?? local.emptyLabel ?? t('commandPalette.noResults'));
+  const navigateHintLabel = createMemo(() => local.messages?.navigateHintLabel ?? t('commandPalette.navigate'));
+  const selectHintLabel = createMemo(() => local.messages?.selectHintLabel ?? t('commandPalette.select'));
+  const closeHintLabel = createMemo(() => local.messages?.closeHintLabel ?? t('commandPalette.escToClose'));
 
   return (
-    <Show when={props.open}>
+    <Show when={local.open}>
       <Portal>
-        <div role="presentation" class={classNames(styles.overlay, props.class)} onClick={handleOverlayClick}>
-          <div ref={setPanelRef} class={styles.panel} role="dialog" aria-modal="true" aria-label={dialogLabel()}>
+        <div {...rest} role="presentation" class={classNames(styles.overlay, local.class)} onClick={handleOverlayClick}>
+          <Surface
+            ref={setPanelRef}
+            class={styles.panel}
+            role="dialog"
+            aria-modal="true"
+            aria-label={dialogLabel()}
+            elevation="dialog"
+          >
             <div class={styles.searchWrap} role="search">
               <SearchInput
                 class={styles.searchInput}
@@ -112,10 +209,11 @@ const CommandPalette = (props: Props<CommandPaletteProps>) => {
                 value={query()}
                 onInput={setQuery}
                 onClear={() => setQuery('')}
+                onKeyDown={handleSearchKeyDown}
                 autofocus
               />
             </div>
-            <div class={styles.results} role="list" aria-label={resultsLabel()}>
+            <div ref={resultsRef} class={styles.results} role="list" aria-label={resultsLabel()}>
               <Show
                 when={filtered().length > 0}
                 fallback={
@@ -138,8 +236,13 @@ const CommandPalette = (props: Props<CommandPaletteProps>) => {
                             type="button"
                             variant="subtle"
                             size="sm"
-                            class={styles.resultItem}
+                            class={classNames(
+                              styles.resultItem,
+                              activeIndex() === item.flatIndex && styles.resultItemActive
+                            )}
+                            data-command-index={String(item.flatIndex)}
                             onClick={() => handleItemClick(item)}
+                            onMouseEnter={() => setActiveIndex(item.flatIndex)}
                           >
                             <Show when={item.icon}>
                               <span class={styles.itemIcon}>{item.icon}</span>
@@ -162,10 +265,16 @@ const CommandPalette = (props: Props<CommandPaletteProps>) => {
             </div>
             <div class={styles.footer}>
               <Text as="span" variant="caption" tone="muted">
+                {navigateHintLabel()}
+              </Text>
+              <Text as="span" variant="caption" tone="muted">
+                {selectHintLabel()}
+              </Text>
+              <Text as="span" variant="caption" tone="muted">
                 {closeHintLabel()}
               </Text>
             </div>
-          </div>
+          </Surface>
         </div>
       </Portal>
     </Show>

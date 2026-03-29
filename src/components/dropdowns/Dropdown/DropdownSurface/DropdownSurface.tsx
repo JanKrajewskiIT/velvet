@@ -1,9 +1,11 @@
+import type { JSX } from 'solid-js';
 import { splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
 import type { DivCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
+import Surface from '../../../surfaces/Surface/Surface';
 import styles from './DropdownSurface.module.css';
 
 export interface DropdownSurfaceProps extends DivCoreNativeProps {
@@ -11,10 +13,11 @@ export interface DropdownSurfaceProps extends DivCoreNativeProps {
   panel?: boolean;
   align?: 'left' | 'right' | 'fullWidth';
   origin?: 'top' | 'topLeft';
+  ref?: JSX.HTMLAttributes<HTMLDivElement>['ref'];
 }
 
 const DropdownSurface = (props: Props<DropdownSurfaceProps>) => {
-  const [local, rest] = splitProps(props, ['class', 'scrollable', 'panel', 'align', 'origin']);
+  const [local, rest] = splitProps(props, ['class', 'scrollable', 'panel', 'align', 'origin', 'ref']);
 
   const alignClass = () => {
     if (local.align === 'right') return styles.panelRight;
@@ -28,8 +31,12 @@ const DropdownSurface = (props: Props<DropdownSurfaceProps>) => {
   };
 
   return (
-    <div
+    <Surface
       {...rest}
+      ref={local.ref}
+      radius="md"
+      elevation="popover"
+      blur
       class={classNames(
         styles.surface,
         local.panel !== false && styles.panel,

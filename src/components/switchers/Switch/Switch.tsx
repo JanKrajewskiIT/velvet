@@ -1,4 +1,4 @@
-import { createUniqueId, Show, splitProps } from 'solid-js';
+import { createMemo, createUniqueId, Show, splitProps } from 'solid-js';
 
 import LabelText from '~/components/typography/LabelText/LabelText';
 import type Props from '~/models/Props';
@@ -26,15 +26,13 @@ const Switch = (props: Props<SwitchOwnProps>) => {
     'disabled',
     'aria-labelledby',
   ]);
-
-  const hasText = () => Boolean(local.label || local.description);
-  const textId = () => `${generatedId}-text`;
-  const labelledBy = () => {
-    return joinAriaIds(local['aria-labelledby'], hasText() ? textId() : undefined);
-  };
+  const hasText = createMemo(() => Boolean(local.label || local.description));
+  const textId = createMemo(() => `${generatedId}-text`);
+  const labelledBy = createMemo(() => joinAriaIds(local['aria-labelledby'], hasText() ? textId() : undefined));
+  const wrapperClass = createMemo(() => classNames(styles.wrapper, local.class));
 
   return (
-    <div class={classNames(styles.wrapper, local.class)}>
+    <div class={wrapperClass()}>
       <button
         {...rest}
         class={classNames(styles.switch, local.checked && styles.checked)}

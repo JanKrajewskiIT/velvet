@@ -1,0 +1,13 @@
+.selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.button {
+  flex: 0 0 auto;
+}
+
+.buttonSelected {
+  box-shadow: var(--shadow-sm);
+}

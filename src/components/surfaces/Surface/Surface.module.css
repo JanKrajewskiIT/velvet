@@ -1,0 +1,77 @@
+.surface {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  color: var(--surface-text, var(--color-text));
+  background: var(--surface-bg, var(--color-bg-elevated));
+  border: 1px solid transparent;
+  border-radius: var(--surface-radius, var(--radius-lg));
+  box-shadow: var(--surface-shadow, var(--shadow-sm));
+  overflow: visible;
+}
+
+.border {
+  border-color: var(--surface-border, var(--color-border));
+}
+
+.toneDefault {
+  --surface-bg: var(--color-bg-elevated);
+  --surface-border: var(--color-border);
+  --surface-text: var(--color-text);
+}
+
+.toneSubtle {
+  --surface-bg: color-mix(in srgb, var(--color-surface) 88%, transparent);
+  --surface-border: color-mix(in srgb, var(--color-border) 82%, transparent);
+  --surface-text: var(--color-text);
+}
+
+.toneInverse {
+  --surface-bg: var(--color-tooltip);
+  --surface-border: color-mix(in srgb, var(--color-tooltip) 70%, var(--color-border));
+  --surface-text: var(--color-text-inverse);
+}
+
+.elevationFlat {
+  --surface-shadow: none;
+}
+
+.elevationSm {
+  --surface-shadow: var(--shadow-sm);
+}
+
+.elevationCard {
+  --surface-shadow: var(--shadow-card);
+}
+
+.elevationPopover {
+  --surface-shadow: var(--shadow-popover);
+}
+
+.elevationDialog {
+  --surface-shadow: var(--shadow-dialog);
+}
+
+.elevationDrawer {
+  --surface-shadow: var(--shadow-drawer);
+}
+
+.radiusSm {
+  --surface-radius: var(--radius-sm);
+}
+
+.radiusMd {
+  --surface-radius: var(--radius-md);
+}
+
+.radiusLg {
+  --surface-radius: var(--radius-lg);
+}
+
+.blur {
+  backdrop-filter: var(--blur-overlay);
+}
+
+.clip {
+  overflow: hidden;
+}

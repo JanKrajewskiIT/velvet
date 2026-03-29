@@ -15,11 +15,12 @@ export interface RatingProps extends Omit<DivCoreNativeProps, 'onChange'> {
   max?: number;
   size?: 'sm' | 'md' | 'lg';
   icon?: JSX.Element;
+  getValueLabel?: (index: number, max: number) => string;
 }
 
 const Rating = (props: Props<RatingProps>) => {
   const { t } = useI18n();
-  const [local, rest] = splitProps(props, ['value', 'onChange', 'max', 'size', 'icon', 'class']);
+  const [local, rest] = splitProps(props, ['value', 'onChange', 'max', 'size', 'icon', 'getValueLabel', 'class']);
   const [hoverIndex, setHoverIndex] = createSignal(-1);
   const itemRefs: (HTMLButtonElement | undefined)[] = [];
 
@@ -118,7 +119,7 @@ const Rating = (props: Props<RatingProps>) => {
             type={isInteractive() ? 'button' : undefined}
             role={isInteractive() ? 'radio' : undefined}
             aria-checked={isInteractive() ? selectedIndex() === index : undefined}
-            aria-label={t('rating.valueOf', { index, max: max() })}
+            aria-label={local.getValueLabel?.(index, max()) ?? t('rating.valueOf', { index, max: max() })}
             tabIndex={isInteractive() ? (tabStopIndex() === index ? 0 : -1) : undefined}
             ref={(element: HTMLButtonElement | HTMLSpanElement) => {
               if (!isInteractive()) return;

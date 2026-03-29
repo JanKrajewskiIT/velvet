@@ -1,4 +1,6 @@
 import {
+  Button,
+  Card,
   Heading,
   I18nProvider,
   LocaleSwitcher,
@@ -10,7 +12,7 @@ import {
   ToastProvider,
   useI18n,
 } from '@jankrajewskiit/ui';
-import { createMemo, createSignal, Match, Switch } from 'solid-js';
+import { createMemo, createSignal, For, Match, Switch } from 'solid-js';
 
 import { type DemoI18nMessageKey, getDemoMessages } from './i18n/messages';
 import CompositesSection from './sections/CompositesSection';
@@ -22,6 +24,7 @@ import LayoutSection from './sections/LayoutSection';
 import NavigationSection from './sections/NavigationSection';
 import OverlaysSection from './sections/OverlaysSection';
 import OverviewSection from './sections/OverviewSection';
+import RecronExtractsSection from './sections/RecronExtractsSection';
 import TablesSection from './sections/TablesSection';
 import TypographySection from './sections/TypographySection';
 
@@ -73,7 +76,8 @@ export type SectionId =
   | 'composites-command-palette'
   | 'composites-wizard'
   | 'composites-ai-result'
-  | 'composites-scheduler';
+  | 'composites-scheduler'
+  | 'composites-recron-extracts';
 
 interface DemoNavItemConfig {
   id: SectionId;
@@ -172,6 +176,7 @@ const NAV_GROUPS: DemoNavGroupConfig[] = [
       { id: 'composites-wizard', labelKey: 'demo.nav.item.wizard' },
       { id: 'composites-ai-result', labelKey: 'demo.nav.item.aiResultPanel' },
       { id: 'composites-scheduler', labelKey: 'demo.nav.item.scheduler' },
+      { id: 'composites-recron-extracts', labelKey: 'demo.nav.item.recronExtracts' },
     ],
   },
 ];
@@ -369,7 +374,26 @@ const PAGE_META_KEYS: Record<SectionId, { titleKey: DemoI18nMessageKey; descript
     titleKey: 'demo.page.compositesScheduler.title',
     descriptionKey: 'demo.page.compositesScheduler.description',
   },
+  'composites-recron-extracts': {
+    titleKey: 'demo.page.compositesRecronExtracts.title',
+    descriptionKey: 'demo.page.compositesRecronExtracts.description',
+  },
 };
+
+const HEADER_SECTION_IDS: SectionId[] = [
+  'surfaces-main-layout',
+  'data-tables',
+  'inputs-fields',
+  'feedback-alerts',
+  'composites-recron-extracts',
+];
+
+const OVERVIEW_TRACKS: { id: SectionId; groupKey: DemoI18nMessageKey }[] = [
+  { id: 'surfaces-main-layout', groupKey: 'demo.nav.surfaces' },
+  { id: 'inputs-form-layout', groupKey: 'demo.nav.inputs' },
+  { id: 'data-tables', groupKey: 'demo.nav.data' },
+  { id: 'composites-recron-extracts', groupKey: 'demo.nav.composites' },
+];
 
 function interpolate(template: string, params?: Record<string, string | number>): string {
   if (!params) return template;
@@ -392,8 +416,13 @@ const AppContent = () => {
   const { locale } = useI18n();
   const dictionary = createMemo(() => getDemoMessages(locale()));
   const [activeSection, setActiveSection] = createSignal<SectionId>('overview');
+  const sectionCount = NAV_GROUPS.reduce((total, group) => total + group.items.length, 0);
 
   const meta = () => PAGE_META_KEYS[activeSection()];
+  const activeGroupLabel = createMemo(() => {
+    const group = NAV_GROUPS.find((entry) => entry.items.some((item) => item.id === activeSection()));
+    return translate(dictionary(), group?.labelKey ?? 'demo.nav.start');
+  });
   const navGroups = (): SidebarNavGroup[] => {
     return NAV_GROUPS.map((group) => ({
       label: translate(dictionary(), group.labelKey),
@@ -403,6 +432,31 @@ const AppContent = () => {
       })),
     }));
   };
+  const quickJumpSections = createMemo(() =>
+    HEADER_SECTION_IDS.map((id) => ({
+      id,
+      label: translate(dictionary(), PAGE_META_KEYS[id].titleKey),
+    }))
+  );
+  const overviewTracks = createMemo(() =>
+    OVERVIEW_TRACKS.map((item) => ({
+      id: item.id,
+      label: translate(dictionary(), item.groupKey),
+      description: translate(dictionary(), PAGE_META_KEYS[item.id].descriptionKey),
+      count: NAV_GROUPS.find((group) => group.labelKey === item.groupKey)?.items.length ?? 0,
+    }))
+  );
+  const featuredSections = createMemo(() =>
+    HEADER_SECTION_IDS.map((id) => {
+      const group = NAV_GROUPS.find((entry) => entry.items.some((item) => item.id === id));
+      return {
+        id,
+        label: translate(dictionary(), PAGE_META_KEYS[id].titleKey),
+        description: translate(dictionary(), PAGE_META_KEYS[id].descriptionKey),
+        eyebrow: translate(dictionary(), group?.labelKey ?? 'demo.nav.start'),
+      };
+    })
+  );
 
   return (
     <div class="layout">
@@ -427,21 +481,77 @@ const AppContent = () => {
       />
 
       <main class="main">
-        <div class="pageHeader">
-          <Text as="p" variant="overline" tone="primary" class="pageEyebrow">
-            {translate(dictionary(), 'demo.page.eyebrow')}
-          </Text>
-          <Heading level={1} variant="displayMd" class="pageTitle">
-            {translate(dictionary(), meta().titleKey)}
-          </Heading>
-          <Text as="p" variant="bodySm" tone="muted" class="pageDescription">
-            {translate(dictionary(), meta().descriptionKey)}
-          </Text>
-        </div>
+        <Card class="pageHeader">
+          <div class="pageHeaderIntro">
+            <Text as="p" variant="overline" tone="primary" class="pageEyebrow">
+              {translate(dictionary(), 'demo.page.eyebrow')}
+            </Text>
+            <Heading level={1} variant="displayMd" class="pageTitle">
+              {translate(dictionary(), meta().titleKey)}
+            </Heading>
+            <Text as="p" variant="bodySm" tone="muted" class="pageDescription">
+              {translate(dictionary(), meta().descriptionKey)}
+            </Text>
+            <div class="pageStats">
+              <div class="statPill">
+                <Text as="span" variant="overline" tone="tertiary">
+                  {translate(dictionary(), 'demo.page.header.currentTrack')}
+                </Text>
+                <Heading as="span" level={4} variant="titleLg">
+                  {activeGroupLabel()}
+                </Heading>
+              </div>
+              <div class="statPill">
+                <Text as="span" variant="overline" tone="tertiary">
+                  {translate(dictionary(), 'demo.page.header.groups')}
+                </Text>
+                <Heading as="span" level={4} variant="titleLg">
+                  {NAV_GROUPS.length}
+                </Heading>
+              </div>
+              <div class="statPill">
+                <Text as="span" variant="overline" tone="tertiary">
+                  {translate(dictionary(), 'demo.page.header.pages')}
+                </Text>
+                <Heading as="span" level={4} variant="titleLg">
+                  {sectionCount}
+                </Heading>
+              </div>
+            </div>
+          </div>
+          <div class="pageHeaderActions">
+            <div class="pageHeaderActionsCopy">
+              <Text as="p" variant="labelMd" tone="secondary">
+                {translate(dictionary(), 'demo.page.header.quickJump')}
+              </Text>
+              <Text as="p" variant="bodySm" tone="muted">
+                {translate(dictionary(), 'demo.page.header.demoPurpose')}
+              </Text>
+            </div>
+            <div class="pageHeaderActionGrid">
+              <For each={quickJumpSections()}>
+                {(section) => (
+                  <Button
+                    type="button"
+                    variant={activeSection() === section.id ? 'primary' : 'ghost'}
+                    size="sm"
+                    onClick={() => setActiveSection(section.id)}
+                  >
+                    {section.label}
+                  </Button>
+                )}
+              </For>
+            </div>
+          </div>
+        </Card>
 
         <Switch>
           <Match when={activeSection() === 'overview'}>
-            <OverviewSection />
+            <OverviewSection
+              tracks={overviewTracks()}
+              featuredSections={featuredSections()}
+              onNavigate={(id) => setActiveSection(id as SectionId)}
+            />
           </Match>
           <Match when={activeSection() === 'developer'}>
             <DeveloperSection />
@@ -470,6 +580,9 @@ const AppContent = () => {
           <Match when={activeSection().startsWith('surfaces-')}>
             <LayoutSection sectionId={activeSection()} />
           </Match>
+          <Match when={activeSection() === 'composites-recron-extracts'}>
+            <RecronExtractsSection />
+          </Match>
           <Match when={activeSection().startsWith('composites-')}>
             <CompositesSection sectionId={activeSection()} />
           </Match>
@@ -490,11 +603,8 @@ const App = () => {
 };
 
 const InnerApp = () => {
-  const { locale } = useI18n();
-  const dictionary = createMemo(() => getDemoMessages(locale()));
-
   return (
-    <ToastProvider closeLabel={translate(dictionary(), 'demo.toast.close')}>
+    <ToastProvider>
       <AppContent />
     </ToastProvider>
   );

@@ -1,4 +1,4 @@
-import { splitProps } from 'solid-js';
+import { createMemo, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
 import type { ComponentSize, TextAreaCoreNativeProps } from '~/models/Props';
@@ -14,7 +14,10 @@ interface TextAreaOwnProps extends TextAreaCoreNativeProps {
 }
 
 const TextArea = (props: Props<TextAreaOwnProps>) => {
-  const [local, rest] = splitProps(props, ['class', 'size', 'invalid', 'readOnly', 'aria-invalid']);
+  const [local, rest] = splitProps(props, ['class', 'size', 'invalid', 'readOnly', 'disabled', 'aria-invalid']);
+  const ariaInvalid = createMemo(() =>
+    resolveAriaInvalid(local.invalid, local['aria-invalid'] as boolean | 'true' | 'false' | undefined)
+  );
 
   return (
     <FieldBase
@@ -23,9 +26,9 @@ const TextArea = (props: Props<TextAreaOwnProps>) => {
       size={local.size}
       invalid={local.invalid}
       readOnly={local.readOnly}
-      disabled={rest.disabled}
+      disabled={local.disabled}
       focusStyle="visible"
-      aria-invalid={resolveAriaInvalid(local.invalid, local['aria-invalid'] as boolean | 'true' | 'false' | undefined)}
+      aria-invalid={ariaInvalid()}
       class={classNames(styles.root, local.class)}
     />
   );

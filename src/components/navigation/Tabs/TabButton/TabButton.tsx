@@ -27,6 +27,7 @@ const TabButton = (props: Props<TabButtonOwnProps>) => {
       class={classNames(
         visualVariant() === 'underline' && styles.button,
         visualVariant() === 'underline' && local.selected && styles.selected,
+        visualVariant() === 'pill' && local.selected && styles.pillSelected,
         local.class
       )}
     >

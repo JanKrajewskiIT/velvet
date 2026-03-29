@@ -58,6 +58,33 @@ type FieldBaseProps =
   | FieldBaseOptionProps
   | FieldBaseDefaultProps;
 
+const resolveFieldFocusClass = (stylesMap: typeof styles, focusStyle?: FieldBaseFocusStyle) => {
+  if (focusStyle === 'within') return stylesMap.fieldFocusWithin;
+  if (focusStyle === 'none') return undefined;
+  return stylesMap.fieldFocusVisible;
+};
+
+const resolveFieldStateAttributes = (
+  component: keyof JSX.IntrinsicElements,
+  disabled?: boolean,
+  readOnly?: boolean
+) => {
+  if (component === 'input' || component === 'textarea') {
+    return {
+      disabled,
+      readOnly,
+    };
+  }
+
+  if (component === 'button' || component === 'select' || component === 'option') {
+    return {
+      disabled,
+    };
+  }
+
+  return {};
+};
+
 const FieldBase = (props: FieldBaseProps) => {
   const [local, rest] = splitProps(props, [
     'as',
@@ -72,31 +99,8 @@ const FieldBase = (props: FieldBaseProps) => {
 
   const component = () => local.as ?? 'div';
   const sizeClass = () => (local.size === null ? undefined : getInputSizeClass(styles, local.size ?? undefined));
-
-  const focusClass = () => {
-    if (local.focusStyle === 'within') return styles.fieldFocusWithin;
-    if (local.focusStyle === 'none') return undefined;
-    return styles.fieldFocusVisible;
-  };
-
-  const stateAttributes = () => {
-    const currentComponent = component();
-
-    if (currentComponent === 'input' || currentComponent === 'textarea') {
-      return {
-        disabled: local.disabled,
-        readOnly: local.readOnly,
-      };
-    }
-
-    if (currentComponent === 'button' || currentComponent === 'select' || currentComponent === 'option') {
-      return {
-        disabled: local.disabled,
-      };
-    }
-
-    return {};
-  };
+  const focusClass = () => resolveFieldFocusClass(styles, local.focusStyle);
+  const stateAttributes = () => resolveFieldStateAttributes(component(), local.disabled, local.readOnly);
 
   return (
     <Dynamic

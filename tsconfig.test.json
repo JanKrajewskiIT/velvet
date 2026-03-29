@@ -1,13 +1,25 @@
 {
   "extends": "./config/tsconfig.node.json",
   "compilerOptions": {
+    "lib": ["ES2024", "DOM", "DOM.Iterable"],
     "noEmit": false,
     "outDir": "./.tmp-tests",
     "rootDir": ".",
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["src/*"]
+    },
     "allowImportingTsExtensions": false,
     "declaration": false,
     "emitDeclarationOnly": false,
     "types": ["node"]
   },
-  "include": ["src/utils/**/*.ts", "tests/**/*.ts"]
+  "include": [
+    "src/utils/**/*.ts",
+    "src/http/**/*.ts",
+    "src/store/**/*.ts",
+    "src/query/**/*.ts",
+    "src/auth/**/*.ts",
+    "tests/**/*.ts"
+  ]
 }

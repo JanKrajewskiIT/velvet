@@ -1,0 +1,35 @@
+.wrapper {
+  position: relative;
+  display: inline-flex;
+  min-width: 0;
+}
+
+.trigger {
+  appearance: none;
+  min-width: 0;
+  padding-right: var(--spacing-xs);
+}
+
+.triggerText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--duration-fast) var(--ease-out-expo);
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.menu {
+  display: flex;
+  min-width: 12rem;
+  flex-direction: column;
+  gap: var(--spacing-2xs);
+}

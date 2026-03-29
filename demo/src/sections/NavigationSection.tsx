@@ -5,18 +5,22 @@ import {
   type BreadcrumbItem,
   Breadcrumbs,
   Button,
+  Card,
   CodeText,
+  Heading,
   LocaleSwitcher,
   Navbar,
   type NavItem,
   Pagination,
   Sidebar,
   type SidebarItem,
+  SidebarItemButton,
   SidebarNav,
   type SidebarNavGroup,
   SpeedDial,
   type SpeedDialAction,
   Stepper,
+  TabButton,
   Tabs,
   Text,
   ThemeToggle,
@@ -45,6 +49,19 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
   const [sidebarActive, setSidebarActive] = createSignal('overview');
   const [sidebarCollapsed, setSidebarCollapsed] = createSignal(false);
   const [sidebarNavActive, setSidebarNavActive] = createSignal('nav-overview');
+  const tabCodeSample = createMemo(
+    () => `<Tabs
+  tabs={[
+    { value: 'preview', label: '${t('demo.text.navigation.tabs.preview')}' },
+    { value: 'code', label: '${t('demo.text.navigation.tabs.code')}' },
+    { value: 'props', label: '${t('demo.text.navigation.tabs.props')}' },
+  ]}
+  value={tab()}
+  onChange={setTab}
+  variant="underline"
+/>`
+  );
+  const tabProps = ['variant', 'activationMode', 'panelId', 'disabled'];
 
   const basicBreadcrumbs = createMemo<BreadcrumbItem[]>(() => [
     { label: t('demo.text.navigation.breadcrumbs.home'), href: '#' },
@@ -178,12 +195,52 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
                   header={t('demo.text.navigation.sidebars.workspace')}
                 />
                 <div class="sidebarPreviewBody">
-                  <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                    {t('demo.text.navigation.sidebars.activeSidebar')}:{' '}
-                    <CodeText as="span" class="codeInline">
-                      {sidebarActive()}
-                    </CodeText>
-                  </Text>
+                  <div class="scenarioShell scenarioShellCompact">
+                    <div class="scenarioHeader">
+                      <div class="scenarioHeaderCopy">
+                        <Text as="p" variant="overline" tone="primary">
+                          {t('demo.page.navSidebars.title')}
+                        </Text>
+                        <Heading level={3} variant="titleLg">
+                          {t('demo.page.navSidebars.description')}
+                        </Heading>
+                      </div>
+                      <div class="scenarioMetricRow">
+                        <div class="scenarioMetric">
+                          <Text as="span" variant="overline" tone="tertiary">
+                            {t('demo.text.navigation.sidebars.activeSidebar')}
+                          </Text>
+                          <CodeText as="span">{sidebarActive()}</CodeText>
+                        </div>
+                        <div class="scenarioMetric">
+                          <Text as="span" variant="overline" tone="tertiary">
+                            {t('demo.text.navigation.sidebars.pages')}
+                          </Text>
+                          <Text as="span" variant="labelLg">
+                            {sidebarItems().length}
+                          </Text>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="scenarioGrid">
+                      <div class="scenarioCard">
+                        <Text as="p" variant="labelMd">
+                          {t('demo.text.navigation.sidebars.reports')}
+                        </Text>
+                        <Text as="p" variant="bodySm" tone="muted">
+                          {t('demo.text.navigation.sidebars.tasks')}
+                        </Text>
+                      </div>
+                      <div class="scenarioCard">
+                        <Text as="p" variant="labelMd">
+                          {t('demo.text.navigation.sidebars.archive')}
+                        </Text>
+                        <Text as="p" variant="bodySm" tone="muted">
+                          {t('demo.text.navigation.sidebars.profile')}
+                        </Text>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </PreviewGroup>
@@ -199,13 +256,52 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
                   subtitle={t('demo.text.navigation.sidebars.previewSubtitle')}
                 />
                 <div class="sidebarPreviewBody">
-                  <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                    {t('demo.text.navigation.sidebars.activeSidebarNav')}:{' '}
-                    <CodeText as="span" class="codeInline">
-                      {sidebarNavActive()}
-                    </CodeText>
-                  </Text>
+                  <div class="scenarioShell scenarioShellCompact">
+                    <div class="scenarioHeaderCopy">
+                      <Text as="p" variant="overline" tone="primary">
+                        {t('demo.text.navigation.sidebars.groupNavigation')}
+                      </Text>
+                      <Text as="p" variant="bodySm" tone="muted">
+                        {t('demo.text.navigation.sidebars.activeSidebarNav')}:{' '}
+                        <CodeText as="span" class="codeInline">
+                          {sidebarNavActive()}
+                        </CodeText>
+                      </Text>
+                    </div>
+                    <div class="scenarioGrid">
+                      <div class="scenarioCard">
+                        <Text as="p" variant="labelMd">
+                          {t('demo.text.navigation.sidebars.users')}
+                        </Text>
+                        <Text as="p" variant="bodySm" tone="muted">
+                          {t('demo.text.navigation.sidebars.billing')}
+                        </Text>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+              </div>
+            </PreviewGroup>
+
+            <PreviewGroup title="SidebarItemButton">
+              <div class="row">
+                <SidebarItemButton
+                  label={t('demo.text.navigation.sidebars.workspace')}
+                  prefix={<IoCalendar size={16} />}
+                  active
+                  badge={3}
+                />
+                <SidebarItemButton
+                  label={t('demo.text.navigation.sidebars.settings')}
+                  prefix={<IoSettings size={16} />}
+                  hasChildren
+                  expanded
+                />
+                <SidebarItemButton
+                  label={t('demo.text.navigation.sidebars.profile')}
+                  prefix={<IoPerson size={16} />}
+                  collapsed
+                />
               </div>
             </PreviewGroup>
           </PreviewPanel>
@@ -281,6 +377,58 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
                 onChange={setTab}
                 variant="pill"
               />
+              <div class="tabShowcasePanel">
+                <div class="scenarioHeaderCopy">
+                  <Text as="p" variant="overline" tone="primary">
+                    {t('demo.text.navigation.tabs.activeTab')}
+                  </Text>
+                  <Heading level={3} variant="titleLg">
+                    {tab() === 'preview'
+                      ? t('demo.text.navigation.tabs.preview')
+                      : tab() === 'code'
+                        ? t('demo.text.navigation.tabs.code')
+                        : t('demo.text.navigation.tabs.props')}
+                  </Heading>
+                </div>
+                <Show when={tab() === 'preview'}>
+                  <div class="scenarioGrid">
+                    <div class="scenarioCard">
+                      <Text as="p" variant="labelMd">
+                        {t('demo.text.navigation.tabs.preview')}
+                      </Text>
+                      <Text as="p" variant="bodySm" tone="muted">
+                        {t('demo.page.navTabs.description')}
+                      </Text>
+                    </div>
+                    <div class="scenarioCard">
+                      <Text as="p" variant="labelMd">
+                        {t('demo.text.navigation.tabs.props')}
+                      </Text>
+                      <Text as="p" variant="bodySm" tone="muted">
+                        {t('demo.page.navPagination.description')}
+                      </Text>
+                    </div>
+                  </div>
+                </Show>
+                <Show when={tab() === 'code'}>
+                  <CodeText as="pre" variant="block" size="md">
+                    {tabCodeSample()}
+                  </CodeText>
+                </Show>
+                <Show when={tab() === 'props'}>
+                  <div class="shortcutRow">
+                    <For each={tabProps}>{(item) => <CodeText as="span">{item}</CodeText>}</For>
+                  </div>
+                </Show>
+              </div>
+            </PreviewGroup>
+            <PreviewGroup title="TabButton">
+              <div class="row">
+                <TabButton label={t('demo.text.navigation.tabs.preview')} selected variant="underline" />
+                <TabButton label={t('demo.text.navigation.tabs.code')} variant="underline" />
+                <TabButton label={t('demo.text.navigation.tabs.preview')} selected variant="pill" />
+                <TabButton label={t('demo.text.navigation.tabs.props')} variant="pill" />
+              </div>
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
@@ -327,14 +475,14 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
               <div class="speedDialGrid">
                 <For each={speedDialDirectionVariants()}>
                   {(variant) => (
-                    <div class="speedDialCard">
+                    <Card class="speedDialCard">
                       <Text as="p" variant="bodySm" tone="muted" class="mutedText">
                         {variant.title}
                       </Text>
                       <div class="speedDialAnchor">
                         <SpeedDial actions={speedDialActions()} position="inline" direction={variant.direction} />
                       </div>
-                    </div>
+                    </Card>
                   )}
                 </For>
               </div>

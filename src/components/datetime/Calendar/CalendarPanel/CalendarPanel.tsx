@@ -1,9 +1,10 @@
-import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import type { DayCell } from '~/utils/datetime';
 
 import CalendarGrid from '../CalendarGrid/CalendarGrid';
 import CalendarHeader from '../CalendarHeader/CalendarHeader';
+
+const DEFAULT_DAY_LABELS = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'] as const;
 
 interface CalendarPanelProps {
   monthLabel: string;
@@ -16,20 +17,10 @@ interface CalendarPanelProps {
   isDayDisabled?: (cell: DayCell) => boolean;
   getDayAriaLabel: (cell: DayCell) => string;
   onSelectDay: (cell: DayCell) => void;
+  dayLabels?: readonly string[];
 }
 
 const CalendarPanel = (props: Props<CalendarPanelProps>) => {
-  const { t } = useI18n();
-  const dayLabels = () => [
-    t('calendar.day.mo'),
-    t('calendar.day.tu'),
-    t('calendar.day.we'),
-    t('calendar.day.th'),
-    t('calendar.day.fr'),
-    t('calendar.day.sa'),
-    t('calendar.day.su'),
-  ];
-
   return (
     <div class={props.class}>
       <CalendarHeader
@@ -40,7 +31,7 @@ const CalendarPanel = (props: Props<CalendarPanelProps>) => {
         onNext={props.onNext}
       />
       <CalendarGrid
-        dayLabels={dayLabels()}
+        dayLabels={props.dayLabels ?? DEFAULT_DAY_LABELS}
         days={props.days}
         dayClass={props.getDayClass}
         isDayDisabled={props.isDayDisabled}

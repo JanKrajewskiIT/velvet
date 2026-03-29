@@ -1,4 +1,4 @@
-import { createUniqueId, type JSX, Show } from 'solid-js';
+import { createMemo, createUniqueId, type JSX, Show, splitProps } from 'solid-js';
 
 import IconButton from '~/components/buttons/IconButton/IconButton';
 import useDropdownPanel from '~/hooks/useDropdownPanel';
@@ -23,6 +23,7 @@ interface DropdownMenuProps {
 
 const DropdownMenu = (props: Props<DropdownMenuProps>) => {
   const { t } = useI18n();
+  const [local, rest] = splitProps(props, ['class', 'trigger', 'children', 'label', 'messages']);
   const menuId = createUniqueId();
   let menuRef: HTMLDivElement | undefined;
   let panelRef: HTMLDivElement | undefined;
@@ -33,8 +34,8 @@ const DropdownMenu = (props: Props<DropdownMenuProps>) => {
     triggerRef: () => triggerRef,
     focusTriggerOnTab: true,
   });
-  const triggerAriaLabel = () => props.messages?.triggerAriaLabel ?? props.label ?? t('dropdown.openMenu');
-  const menuAriaLabel = () => props.messages?.menuAriaLabel ?? t('common.menuOptions');
+  const triggerAriaLabel = createMemo(() => local.messages?.triggerAriaLabel ?? local.label ?? t('dropdown.openMenu'));
+  const menuAriaLabel = createMemo(() => local.messages?.menuAriaLabel ?? t('common.menuOptions'));
 
   const toggle = () => {
     if (dropdown.open()) {
@@ -49,10 +50,10 @@ const DropdownMenu = (props: Props<DropdownMenuProps>) => {
   };
 
   return (
-    <div ref={menuRef} class={classNames(styles.wrapper, props.class)}>
+    <div {...rest} ref={menuRef} class={classNames(styles.wrapper, local.class)}>
       <IconButton
         ref={triggerRef}
-        icon={props.trigger}
+        icon={local.trigger}
         label={triggerAriaLabel()}
         onClick={toggle}
         onKeyDown={handleTriggerKeyDown}
@@ -75,7 +76,7 @@ const DropdownMenu = (props: Props<DropdownMenuProps>) => {
           onKeyDown={dropdown.handlePanelKeyDown}
           onClick={dropdown.close}
         >
-          {props.children}
+          {local.children}
         </DropdownSurface>
       </Show>
     </div>

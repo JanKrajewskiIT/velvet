@@ -66,6 +66,7 @@
 
 .menuItem:not(.active):hover .menuIcon,
 .menuItem:not(.active) .menuItemLink:focus-visible .menuIcon {
+  transform: translateY(-1px) scale(1.08) rotate(7deg);
   color: var(--color-gray-0);
   opacity: 1;
   filter: drop-shadow(0 0 0.45rem color-mix(in srgb, var(--indicator-color) 26%, transparent));

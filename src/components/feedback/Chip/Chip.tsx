@@ -1,5 +1,5 @@
 import type { JSX } from 'solid-js';
-import { Show } from 'solid-js';
+import { createMemo, Show } from 'solid-js';
 
 import Text from '~/components/typography/Text/Text';
 import type Props from '~/models/Props';
@@ -21,10 +21,10 @@ interface ChipProps {
 }
 
 const Chip = (props: Props<ChipProps>) => {
-  const usesCustomColor = () => Boolean(props.color);
-  const isColorFilled = () => Boolean(props.color && (props.selected || props.filled));
+  const usesCustomColor = createMemo(() => Boolean(props.color));
+  const isColorFilled = createMemo(() => Boolean(props.color && (props.selected || props.filled)));
 
-  const chipClass = () =>
+  const chipClass = createMemo(() =>
     classNames(
       styles.chip,
       usesCustomColor() && styles.customColor,
@@ -34,9 +34,10 @@ const Chip = (props: Props<ChipProps>) => {
       props.filled && styles.filled,
       props.onClick && styles.interactive,
       props.class
-    );
+    )
+  );
 
-  const inlineStyles = () => {
+  const inlineStyles = createMemo(() => {
     if (!props.color) return undefined;
 
     return {
@@ -44,16 +45,16 @@ const Chip = (props: Props<ChipProps>) => {
       '--chip-text-color': isColorFilled() ? getContrastTextColor(props.color) : props.color,
       '--chip-background-color': isColorFilled() ? props.color : 'transparent',
     } as JSX.CSSProperties;
-  };
+  });
 
-  const content = () => (
+  const content = createMemo(() => (
     <>
       <Text as="span" variant="labelMd" tone="inherit">
         {props.label}
       </Text>
       <Show when={props.endAdornment}>{props.endAdornment}</Show>
     </>
-  );
+  ));
 
   return (
     <Show

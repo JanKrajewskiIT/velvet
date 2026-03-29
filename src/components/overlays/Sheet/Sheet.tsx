@@ -10,6 +10,7 @@ import { joinAriaIds } from '~/utils/aria';
 import classNames from '~/utils/classNames';
 
 import IconButton from '../../buttons/IconButton/IconButton';
+import Surface from '../../surfaces/Surface/Surface';
 import Heading from '../../typography/Heading/Heading';
 import Text from '../../typography/Text/Text';
 import styles from './Sheet.module.css';
@@ -53,17 +54,16 @@ const Sheet = (props: Props<SheetProps>) => {
           aria-hidden="true"
           onClick={() => props.onClose()}
         />
-        <div
+        <Surface
           ref={setPanelRef}
           class={panelClass()}
+          elevation="drawer"
           role="dialog"
+          tabIndex={-1}
           aria-modal="true"
           aria-labelledby={joinAriaIds(props['aria-labelledby'], props.label && titleId)}
           aria-describedby={joinAriaIds(props['aria-describedby'], props.subtitle && subtitleId)}
         >
-          <Show when={side() === 'bottom'}>
-            <div class={styles.dragHandle} />
-          </Show>
           <div class={styles.header}>
             <div class={styles.titleBlock}>
               <Show when={props.label}>
@@ -85,7 +85,7 @@ const Sheet = (props: Props<SheetProps>) => {
           <Show when={props.actions}>
             <div class={styles.footer}>{props.actions}</div>
           </Show>
-        </div>
+        </Surface>
       </Portal>
     </Show>
   );

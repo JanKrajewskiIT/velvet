@@ -18,6 +18,19 @@ interface RichTextEditorOwnProps extends Omit<DivCoreNativeProps, 'onChange'> {
   disabled?: boolean;
   minHeight?: string;
   size?: ComponentSize;
+  messages?: RichTextEditorMessages;
+}
+
+interface RichTextEditorMessages {
+  editorLabel?: string;
+  placeholder?: string;
+  listButtonLabel?: string;
+  linkButtonLabel?: string;
+  unlinkButtonLabel?: string;
+  clearButtonLabel?: string;
+  linkPlaceholder?: string;
+  applyButtonLabel?: string;
+  cancelButtonLabel?: string;
 }
 
 const RichTextEditor = (props: Props<RichTextEditorOwnProps>) => {
@@ -30,13 +43,22 @@ const RichTextEditor = (props: Props<RichTextEditorOwnProps>) => {
     'disabled',
     'minHeight',
     'size',
+    'messages',
     'class',
   ]);
   let editorRef: HTMLDivElement | undefined;
   let linkInputRef: HTMLInputElement | undefined;
   const [linkEditorOpen, setLinkEditorOpen] = createSignal(false);
   const [linkDraft, setLinkDraft] = createSignal('');
-  const editorAriaLabel = () => local.ariaLabel ?? t('richText.editor');
+  const editorAriaLabel = () => local.ariaLabel ?? local.messages?.editorLabel ?? t('richText.editor');
+  const placeholderText = () => local.placeholder ?? local.messages?.placeholder ?? t('richText.placeholder');
+  const listButtonLabel = () => local.messages?.listButtonLabel ?? t('richText.list');
+  const linkButtonLabel = () => local.messages?.linkButtonLabel ?? t('richText.link');
+  const unlinkButtonLabel = () => local.messages?.unlinkButtonLabel ?? t('richText.unlink');
+  const clearButtonLabel = () => local.messages?.clearButtonLabel ?? t('richText.clear');
+  const linkPlaceholder = () => local.messages?.linkPlaceholder ?? t('richText.linkPlaceholder');
+  const applyButtonLabel = () => local.messages?.applyButtonLabel ?? t('common.apply');
+  const cancelButtonLabel = () => local.messages?.cancelButtonLabel ?? t('common.cancel');
 
   const syncEditorValue = () => {
     if (!editorRef) return;
@@ -163,7 +185,7 @@ const RichTextEditor = (props: Props<RichTextEditorOwnProps>) => {
             onClick={() => applyCommand('insertUnorderedList')}
             disabled={local.disabled}
           >
-            {t('richText.list')}
+            {listButtonLabel()}
           </Button>
           <Button
             class={styles.toolButton}
@@ -181,10 +203,10 @@ const RichTextEditor = (props: Props<RichTextEditorOwnProps>) => {
             onClick={openLinkEditor}
             disabled={local.disabled}
           >
-            {t('richText.link')}
+            {linkButtonLabel()}
           </Button>
           <Button class={styles.toolButton} variant="subtle" size="sm" onClick={removeLink} disabled={local.disabled}>
-            {t('richText.unlink')}
+            {unlinkButtonLabel()}
           </Button>
           <Button
             class={styles.toolButton}
@@ -193,7 +215,7 @@ const RichTextEditor = (props: Props<RichTextEditorOwnProps>) => {
             onClick={() => applyCommand('removeFormat')}
             disabled={local.disabled}
           >
-            {t('common.clear')}
+            {clearButtonLabel()}
           </Button>
         </div>
         <Show when={linkEditorOpen()}>
@@ -203,14 +225,14 @@ const RichTextEditor = (props: Props<RichTextEditorOwnProps>) => {
               type="url"
               size={local.size}
               value={linkDraft()}
-              placeholder={t('richText.linkPlaceholder')}
+              placeholder={linkPlaceholder()}
               disabled={local.disabled}
               class={styles.linkInput}
               onInput={handleLinkDraftInput}
               onKeyDown={handleLinkInputKeyDown}
             />
             <Button class={styles.linkAction} variant="primary" size="sm" onClick={applyLink} disabled={local.disabled}>
-              {t('common.apply')}
+              {applyButtonLabel()}
             </Button>
             <Button
               class={styles.linkAction}
@@ -219,7 +241,7 @@ const RichTextEditor = (props: Props<RichTextEditorOwnProps>) => {
               onClick={closeLinkEditor}
               disabled={local.disabled}
             >
-              {t('common.cancel')}
+              {cancelButtonLabel()}
             </Button>
           </div>
         </Show>
@@ -227,7 +249,7 @@ const RichTextEditor = (props: Props<RichTextEditorOwnProps>) => {
           ref={editorRef}
           class={styles.editor}
           contentEditable={!local.disabled}
-          data-placeholder={local.placeholder ?? t('richText.placeholder')}
+          data-placeholder={placeholderText()}
           style={local.minHeight ? { '--editor-min-height': local.minHeight } : undefined}
           onInput={handleInput}
           role="textbox"

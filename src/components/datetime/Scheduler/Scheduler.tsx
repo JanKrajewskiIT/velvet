@@ -1,24 +1,32 @@
-import { createEffect, createMemo, createSignal, For, Show, splitProps } from 'solid-js';
+import { createEffect, createMemo, createSignal, splitProps } from 'solid-js';
 
-import Button from '~/components/buttons/Button/Button';
 import ConfirmDialog from '~/components/overlays/ConfirmDialog/ConfirmDialog';
 import Card from '~/components/surfaces/Card/Card';
-import Heading from '~/components/typography/Heading/Heading';
-import Text from '~/components/typography/Text/Text';
 import useEscapeKey from '~/hooks/useEscapeKey';
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import type { DivCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 import type { DayCell } from '~/utils/datetime';
-import { addDays, buildDaysGrid, getDateDiffInDays, parseDateParts, toIso } from '~/utils/datetime';
+import { buildDaysGrid, parseDateParts, toIso } from '~/utils/datetime';
 
 import styles from './Scheduler.module.css';
+import {
+  buildSchedulerEventsByDate,
+  createSchedulerEvent,
+  deleteSchedulerEvent,
+  getSchedulerEventLabel,
+  moveSchedulerEvent,
+  resizeSchedulerEventEnd,
+  saveSchedulerEventEdit,
+} from './Scheduler.utils';
 import SchedulerCalendar from './SchedulerCalendar/SchedulerCalendar';
-import SchedulerEventForm from './SchedulerEventForm/SchedulerEventForm';
-import SchedulerEventItem from './SchedulerEventItem/SchedulerEventItem';
+import SchedulerEventsPanel from './SchedulerEventsPanel';
 
 type SchedulerDragType = 'move' | 'resize-end';
+
+const DEFAULT_DAY_NAMES = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'] as const;
+const DEFAULT_DELETE_LABEL = 'Delete';
 
 export interface SchedulerEvent {
   id: string;
@@ -29,7 +37,7 @@ export interface SchedulerEvent {
   description?: string;
 }
 
-interface SchedulerOwnProps extends Omit<DivCoreNativeProps, 'onChange'> {
+export interface SchedulerProps extends Omit<DivCoreNativeProps, 'onChange'> {
   events: SchedulerEvent[];
   onEventsChange?: (events: SchedulerEvent[]) => void;
   selectedDate?: string;
@@ -44,7 +52,7 @@ interface SchedulerOwnProps extends Omit<DivCoreNativeProps, 'onChange'> {
   messages?: SchedulerMessages;
 }
 
-interface SchedulerMessages {
+export interface SchedulerMessages {
   previousMonthLabel?: string;
   nextMonthLabel?: string;
   agendaTitle?: string;
@@ -68,8 +76,8 @@ interface SchedulerMessages {
   deleteDialogCancelLabel?: string;
 }
 
-const Scheduler = (props: Props<SchedulerOwnProps>) => {
-  const { locale: currentLocale, t } = useI18n();
+const Scheduler = (props: Props<SchedulerProps>) => {
+  const { t } = useI18n();
   const [local, rest] = splitProps(props, [
     'events',
     'onEventsChange',
@@ -85,6 +93,7 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
     'messages',
     'class',
   ]);
+  const resolvedLocale = createMemo(() => local.locale ?? Intl.DateTimeFormat().resolvedOptions().locale);
   const now = new Date();
   const [internalSelectedDate, setInternalSelectedDate] = createSignal(
     local.defaultSelectedDate ?? toIso(now.getFullYear(), now.getMonth(), now.getDate())
@@ -98,16 +107,7 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
   });
 
   const selectedDate = () => local.selectedDate ?? internalSelectedDate();
-  const dayNames = () =>
-    local.dayNames ?? [
-      t('calendar.day.mo'),
-      t('calendar.day.tu'),
-      t('calendar.day.we'),
-      t('calendar.day.th'),
-      t('calendar.day.fr'),
-      t('calendar.day.sa'),
-      t('calendar.day.su'),
-    ];
+  const dayNames = () => local.dayNames ?? DEFAULT_DAY_NAMES;
   const messages = () => local.messages ?? {};
   const previousMonthLabel = () => messages().previousMonthLabel ?? t('calendar.prevMonth');
   const nextMonthLabel = () => messages().nextMonthLabel ?? t('calendar.nextMonth');
@@ -130,10 +130,10 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
     messages().resizeEndAriaLabel?.(eventTitle) ?? t('scheduler.resizeEventEnd', { title: eventTitle });
   const deleteDialogTitle = () => messages().deleteDialogTitle ?? t('scheduler.deleteEvent');
   const deleteDialogMessage = () => messages().deleteDialogMessage ?? t('scheduler.deleteEventMessage');
-  const deleteDialogConfirmLabel = () => messages().deleteDialogConfirmLabel ?? t('common.delete');
+  const deleteDialogConfirmLabel = () => messages().deleteDialogConfirmLabel ?? DEFAULT_DELETE_LABEL;
   const deleteDialogCancelLabel = () => messages().deleteDialogCancelLabel ?? t('common.cancel');
-  const showAdjacentDays = () => local.showAdjacentDays ?? true;
-  const draggableEvents = () => local.draggableEvents ?? true;
+  const showAdjacentDays = () => local.showAdjacentDays !== false;
+  const draggableEvents = () => local.draggableEvents !== false;
   const canEditEvents = () => Boolean(local.onEventsChange);
   const [dragState, setDragState] = createSignal<{ eventId: string; type: SchedulerDragType } | null>(null);
   const [dragOverDate, setDragOverDate] = createSignal<string | null>(null);
@@ -151,31 +151,14 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
   let editTitleInputRef: HTMLInputElement | undefined;
 
   const monthLabel = createMemo(() =>
-    new Date(viewYear(), viewMonth(), 1).toLocaleString(local.locale ?? currentLocale(), {
+    new Date(viewYear(), viewMonth(), 1).toLocaleString(resolvedLocale(), {
       month: 'long',
       year: 'numeric',
     })
   );
 
   const gridDays = createMemo(() => buildDaysGrid(viewYear(), viewMonth()));
-
-  const eventsByDate = createMemo(() => {
-    const map = new Map<string, SchedulerEvent[]>();
-    for (const event of local.events) {
-      const endDate = event.endDate ?? event.date;
-      const startDate = event.date <= endDate ? event.date : endDate;
-      const finishDate = event.date <= endDate ? endDate : event.date;
-      const spanInDays = Math.max(0, getDateDiffInDays(startDate, finishDate));
-      for (let offset = 0; offset <= spanInDays; offset += 1) {
-        const dayIso = addDays(startDate, offset);
-        if (!map.has(dayIso)) {
-          map.set(dayIso, []);
-        }
-        map.get(dayIso)?.push(event);
-      }
-    }
-    return map;
-  });
+  const eventsByDate = createMemo(() => buildSchedulerEventsByDate(local.events));
 
   const selectedDayEvents = createMemo(() => eventsByDate().get(selectedDate()) ?? []);
   const todayIso = toIso(now.getFullYear(), now.getMonth(), now.getDate());
@@ -246,13 +229,12 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
 
     const descriptionValue = draftDescription().trim();
 
-    const nextEvent: SchedulerEvent = {
-      id: typeof crypto !== 'undefined' ? crypto.randomUUID() : `event-${Date.now()}`,
+    const nextEvent = createSchedulerEvent({
       title,
       date: selectedDate(),
-      time: draftTime() || undefined,
-      description: descriptionValue || undefined,
-    };
+      time: draftTime(),
+      description: descriptionValue,
+    });
     local.onEventsChange([...local.events, nextEvent]);
     closeCreate();
   };
@@ -275,30 +257,20 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
     const source = local.events.find((item) => item.id === eventId);
     if (!source) return;
 
-    const nextDate = editDate() || source.date;
-    const dateOffset = getDateDiffInDays(source.date, nextDate);
-    const nextEndDate = source.endDate ? addDays(source.endDate, dateOffset) : undefined;
     const descriptionValue = editDescription().trim();
-
-    const nextEvents = local.events.map((item) =>
-      item.id === eventId
-        ? {
-            ...item,
-            date: nextDate,
-            title,
-            time: editTime() || undefined,
-            endDate: nextEndDate,
-            description: descriptionValue || undefined,
-          }
-        : item
-    );
+    const nextEvents = saveSchedulerEventEdit(local.events, eventId, {
+      date: editDate() || source.date,
+      title,
+      time: editTime(),
+      description: descriptionValue,
+    });
     local.onEventsChange(nextEvents);
     resetEdit();
   };
 
   const deleteEvent = (eventId: string) => {
     if (!local.onEventsChange) return;
-    local.onEventsChange(local.events.filter((item) => item.id !== eventId));
+    local.onEventsChange(deleteSchedulerEvent(local.events, eventId));
     if (editingEventId() === eventId) {
       resetEdit();
     }
@@ -311,43 +283,11 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
   };
 
   const moveEventToDate = (eventId: string, targetDate: string) => {
-    const event = local.events.find((item) => item.id === eventId);
-    if (!event) return;
-    if (event.date === targetDate) return;
-
-    const offset = getDateDiffInDays(event.date, targetDate);
-    const nextStartDate = targetDate;
-    const nextEndDate = event.endDate ? addDays(event.endDate, offset) : undefined;
-    const nextEvents = local.events.map((item) =>
-      item.id === eventId
-        ? {
-            ...item,
-            date: nextStartDate,
-            endDate: nextEndDate,
-          }
-        : item
-    );
-    local.onEventsChange?.(nextEvents);
+    local.onEventsChange?.(moveSchedulerEvent(local.events, eventId, targetDate));
   };
 
   const resizeEventEndDate = (eventId: string, targetDate: string) => {
-    const event = local.events.find((item) => item.id === eventId);
-    if (!event) return;
-    const nextEndDate = targetDate < event.date ? event.date : targetDate;
-    const nextEvents = local.events.map((item) =>
-      item.id === eventId
-        ? {
-            ...item,
-            endDate: nextEndDate === item.date ? undefined : nextEndDate,
-          }
-        : item
-    );
-    local.onEventsChange?.(nextEvents);
-  };
-
-  const eventLabel = (event: SchedulerEvent): string => {
-    if (!event.endDate || event.endDate === event.date) return event.date;
-    return `${event.date} - ${event.endDate}`;
+    local.onEventsChange?.(resizeSchedulerEventEnd(local.events, eventId, targetDate));
   };
 
   const handleDayDragOver = (cell: DayCell, e: DragEvent) => {
@@ -448,100 +388,68 @@ const Scheduler = (props: Props<SchedulerOwnProps>) => {
         />
       </Card>
 
-      <Card class={styles.eventsPanel} style={{ overflow: 'visible', position: 'relative', 'z-index': 2 }}>
-        <div class={styles.eventsHeader}>
-          <Heading as="h4" level={4} variant="titleMd">
-            {agendaTitle()}
-          </Heading>
-          <div class={styles.eventsHeaderActions}>
-            <Show when={canEditEvents()}>
-              <Button size="sm" variant="primary" onClick={() => openCreateForDate(selectedDate())}>
-                {addEventLabel()}
-              </Button>
-            </Show>
-            <Button size="sm" variant="ghost" onClick={goToToday}>
-              {todayLabel()}
-            </Button>
-          </div>
-        </div>
-        <Text as="p" variant="bodySm" tone="secondary">
-          {selectedDate()}
-        </Text>
-        <Show when={createOpen()}>
-          <SchedulerEventForm
-            titleRef={(element) => {
-              createTitleInputRef = element;
-            }}
-            title={draftTitle()}
-            onTitleChange={setDraftTitle}
-            date={selectedDate()}
-            time={draftTime()}
-            onDateTimeChange={(date, time) => {
-              if (date) setSelectedDate(date);
-              setDraftTime(time);
-            }}
-            description={draftDescription()}
-            onDescriptionChange={setDraftDescription}
-            titlePlaceholder={eventTitlePlaceholder()}
-            descriptionPlaceholder={descriptionPlaceholder()}
-            cancelLabel={cancelLabel()}
-            submitLabel={saveLabel()}
-            onCancel={closeCreate}
-            onSubmit={createEvent}
-          />
-        </Show>
-        <div class={styles.eventsList}>
-          <Show
-            when={selectedDayEvents().length > 0}
-            fallback={
-              <Text as="p" variant="bodySm" tone="muted">
-                {local.emptyDayLabel ?? noEventsLabel()}
-              </Text>
-            }
-          >
-            <For each={selectedDayEvents()}>
-              {(event) => (
-                <SchedulerEventItem
-                  event={event}
-                  isDragging={dragState()?.eventId === event.id}
-                  isEditing={editingEventId() === event.id}
-                  canEditEvents={canEditEvents()}
-                  canDragEvents={draggableEvents() && Boolean(local.onEventsChange)}
-                  editLabel={editLabel()}
-                  deleteLabel={deleteLabel()}
-                  moveLabel={moveLabel()}
-                  resizeEndLabel={resizeEndLabel()}
-                  moveAriaLabel={moveAriaLabel(event.title)}
-                  resizeEndAriaLabel={resizeEndAriaLabel(event.title)}
-                  cancelLabel={cancelLabel()}
-                  saveChangesLabel={saveChangesLabel()}
-                  editTitle={editTitle()}
-                  editDate={editDate()}
-                  editTime={editTime()}
-                  editDescription={editDescription()}
-                  onOpenEdit={() => openEdit(event)}
-                  onRequestDelete={() => requestDeleteEvent(event.id)}
-                  onMoveDragStart={(e) => handleEventDragStart(event.id, 'move', e)}
-                  onResizeDragStart={(e) => handleEventDragStart(event.id, 'resize-end', e)}
-                  onDragEnd={handleEventDragEnd}
-                  onEditTitleChange={setEditTitle}
-                  onEditDateTimeChange={(date, time) => {
-                    if (date) setEditDate(date);
-                    setEditTime(time);
-                  }}
-                  onEditDescriptionChange={setEditDescription}
-                  onCancelEdit={resetEdit}
-                  onSaveEdit={(submitEvent) => saveEdit(event.id, submitEvent)}
-                  editTitleRef={(element) => {
-                    editTitleInputRef = element;
-                  }}
-                  eventLabel={eventLabel(event)}
-                />
-              )}
-            </For>
-          </Show>
-        </div>
-      </Card>
+      <SchedulerEventsPanel
+        agendaTitle={agendaTitle()}
+        canEditEvents={canEditEvents()}
+        addEventLabel={addEventLabel()}
+        todayLabel={todayLabel()}
+        selectedDate={selectedDate()}
+        onOpenCreate={() => openCreateForDate(selectedDate())}
+        onGoToToday={goToToday}
+        createOpen={createOpen()}
+        draftTitle={draftTitle()}
+        onDraftTitleChange={setDraftTitle}
+        draftDate={selectedDate()}
+        draftTime={draftTime()}
+        onDraftDateTimeChange={(date, time) => {
+          if (date) setSelectedDate(date);
+          setDraftTime(time);
+        }}
+        draftDescription={draftDescription()}
+        onDraftDescriptionChange={setDraftDescription}
+        eventTitlePlaceholder={eventTitlePlaceholder()}
+        descriptionPlaceholder={descriptionPlaceholder()}
+        cancelLabel={cancelLabel()}
+        saveLabel={saveLabel()}
+        onCancelCreate={closeCreate}
+        onCreateSubmit={createEvent}
+        titleRef={(element) => {
+          createTitleInputRef = element;
+        }}
+        events={selectedDayEvents()}
+        emptyDayLabel={local.emptyDayLabel ?? noEventsLabel()}
+        isDraggingEventId={dragState()?.eventId ?? null}
+        editingEventId={editingEventId()}
+        canDragEvents={draggableEvents() && Boolean(local.onEventsChange)}
+        editLabel={editLabel()}
+        deleteLabel={deleteLabel()}
+        moveLabel={moveLabel()}
+        resizeEndLabel={resizeEndLabel()}
+        getMoveAriaLabel={moveAriaLabel}
+        getResizeEndAriaLabel={resizeEndAriaLabel}
+        saveChangesLabel={saveChangesLabel()}
+        editTitle={editTitle()}
+        editDate={editDate()}
+        editTime={editTime()}
+        editDescription={editDescription()}
+        onOpenEdit={openEdit}
+        onRequestDelete={requestDeleteEvent}
+        onMoveDragStart={(eventId, event) => handleEventDragStart(eventId, 'move', event)}
+        onResizeDragStart={(eventId, event) => handleEventDragStart(eventId, 'resize-end', event)}
+        onDragEnd={handleEventDragEnd}
+        onEditTitleChange={setEditTitle}
+        onEditDateTimeChange={(date, time) => {
+          if (date) setEditDate(date);
+          setEditTime(time);
+        }}
+        onEditDescriptionChange={setEditDescription}
+        onCancelEdit={resetEdit}
+        onSaveEdit={saveEdit}
+        editTitleRef={(element) => {
+          editTitleInputRef = element;
+        }}
+        getEventLabel={getSchedulerEventLabel}
+      />
       <ConfirmDialog
         open={deleteConfirmEventId() !== null}
         label={deleteDialogTitle()}

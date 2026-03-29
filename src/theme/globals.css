@@ -23,7 +23,9 @@
   --color-primary-hover: var(--brand-hover);
   --color-primary-light: rgb(139 0 54 / 6%);
   --color-border: var(--color-gray-20);
+  --color-border-strong: var(--color-gray-30);
   --color-surface: var(--color-gray-10);
+  --color-surface-raised: rgb(255 255 255 / 92%);
   --color-bg-hover: var(--color-gray-10);
   --color-bg-inverse: var(--color-gray-100);
   --color-skeleton: rgb(0 0 0 / 11%);
@@ -179,11 +181,13 @@
   --radius-full: 50%;
   --radius-pill: 999px;
   --shadow-sm: 0 1px 3px rgb(0 0 0 / 8%);
-  --shadow-card: 0 2px 8px rgb(0 0 0 / 8%);
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 6%);
   --shadow-popover: 0 4px 16px rgb(0 0 0 / 12%);
   --shadow-dialog: 0 8px 32px rgb(0 0 0 / 20%);
   --shadow-drawer: -4px 0 24px rgb(0 0 0 / 15%);
-  --shadow-hover: 0 4px 16px rgb(0 0 0 / 10%);
+  --shadow-hover: 0 2px 8px rgb(0 0 0 / 8%);
+  --shadow-interactive: 0 4px 12px rgb(0 0 0 / 10%);
+  --shadow-focus: 0 0 0 4px var(--color-focus-ring);
   --z-header: 100;
   --z-overlay: 999;
   --z-modal: 1000;
@@ -210,7 +214,10 @@
   --theme-toggle-light-selected-bg: var(--color-primary);
   --theme-toggle-light-selected-border: var(--color-primary);
   --theme-toggle-light-selected-fg: var(--color-gray-0);
-  --gradient-surface: linear-gradient(145deg, var(--color-bg-elevated), var(--color-surface));
+  --gradient-surface: var(--color-surface);
+  --gradient-brand: var(--color-primary);
+  --gradient-card: var(--color-bg-elevated);
+  --gradient-field: var(--color-bg);
   --loader-duration-in: 0.2s;
   --loader-duration-out: 0.6s;
 
@@ -238,7 +245,9 @@
   --color-primary-hover: #e05a82;
   --color-primary-light: rgb(212 68 110 / 8%);
   --color-border: var(--color-gray-80);
+  --color-border-strong: var(--color-gray-60);
   --color-surface: var(--color-gray-90);
+  --color-surface-raised: rgb(81 88 101 / 92%);
   --color-bg-hover: var(--color-gray-90);
   --color-bg-inverse: var(--color-gray-10);
   --color-skeleton: rgb(255 255 255 / 13%);
@@ -265,11 +274,13 @@
   --header-control-border-hover: rgb(255 255 255 / 50%);
   --header-control-focus-ring: rgb(255 255 255 / 50%);
   --shadow-sm: 0 1px 3px rgb(0 0 0 / 20%);
-  --shadow-card: 0 2px 8px rgb(0 0 0 / 20%);
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 22%);
   --shadow-popover: 0 4px 16px rgb(0 0 0 / 30%);
   --shadow-dialog: 0 8px 32px rgb(0 0 0 / 40%);
   --shadow-drawer: -4px 0 24px rgb(0 0 0 / 35%);
-  --shadow-hover: 0 4px 16px rgb(0 0 0 / 20%);
+  --shadow-hover: 0 2px 8px rgb(0 0 0 / 24%);
+  --shadow-interactive: 0 4px 12px rgb(0 0 0 / 28%);
+  --shadow-focus: 0 0 0 4px var(--color-focus-ring);
   --shadow-glow: 0 0 20px rgb(212 68 110 / 30%), 0 4px 12px rgb(212 68 110 / 20%);
   --shadow-glow-sm: 0 0 12px rgb(212 68 110 / 25%);
   --color-glass: rgb(45 49 56 / 75%);
@@ -278,6 +289,9 @@
   --theme-toggle-light-selected-bg: var(--color-primary);
   --theme-toggle-light-selected-border: var(--color-bg-elevated);
   --theme-toggle-light-selected-fg: var(--color-bg-elevated);
+  --gradient-brand: var(--color-primary);
+  --gradient-card: var(--color-bg-elevated);
+  --gradient-field: var(--color-bg);
 }
 
 *,

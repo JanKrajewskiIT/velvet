@@ -1,11 +1,31 @@
-import { CodeText, Heading, Text, useI18n } from '@jankrajewskiit/ui';
+import { Button, Card, CodeText, Heading, Text, useI18n } from '@jankrajewskiit/ui';
 import { createMemo, For } from 'solid-js';
 
 import { PreviewGroup, PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
 import { type DemoI18nMessageKey, getDemoMessages } from '../i18n/messages';
 import { renderRichText } from '../i18n/renderRichText';
 
-const OverviewSection = () => {
+interface OverviewTrack {
+  id: string;
+  label: string;
+  description: string;
+  count: number;
+}
+
+interface OverviewFeaturedSection {
+  id: string;
+  label: string;
+  description: string;
+  eyebrow: string;
+}
+
+interface OverviewSectionProps {
+  tracks: OverviewTrack[];
+  featuredSections: OverviewFeaturedSection[];
+  onNavigate: (id: string) => void;
+}
+
+const OverviewSection = (props: OverviewSectionProps) => {
   const { locale } = useI18n();
   const dictionary = createMemo(() => getDemoMessages(locale()));
   const t = (key: DemoI18nMessageKey): string => dictionary()[key];
@@ -23,30 +43,82 @@ const OverviewSection = () => {
         title={t('demo.showcase.overview.whatIs.title')}
         subtitle={t('demo.showcase.overview.whatIs.subtitle')}
       >
-        <PreviewPanel>
+        <PreviewPanel class="overviewHeroPanel">
           <PreviewGroup title={t('demo.text.overview.coreIdea.title')}>
-            <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-              {renderRichText(t('demo.text.overview.coreIdea.message'), {
-                packageName: (
-                  <CodeText as="span" class="codeInline">
-                    @jankrajewskiit/ui
-                  </CodeText>
-                ),
-              })}
-            </Text>
+            <div class="overviewLead">
+              <Text as="p" variant="bodySm" tone="muted" class="mutedText">
+                {renderRichText(t('demo.text.overview.coreIdea.message'), {
+                  packageName: (
+                    <CodeText as="span" class="codeInline">
+                      @jankrajewskiit/ui
+                    </CodeText>
+                  ),
+                })}
+              </Text>
+              <ul class="overviewList">
+                <li>{t('demo.text.overview.highlights.itemPeers')}</li>
+                <li>{t('demo.text.overview.highlights.itemThemes')}</li>
+                <li>{t('demo.text.overview.highlights.itemStyles')}</li>
+                <li>{t('demo.text.overview.highlights.itemCategories')}</li>
+              </ul>
+            </div>
           </PreviewGroup>
 
           <PreviewGroup
-            title={t('demo.text.overview.highlights.title')}
-            subtitle={t('demo.text.overview.highlights.subtitle')}
+            title={t('demo.showcase.overview.paths.title')}
+            subtitle={t('demo.showcase.overview.paths.subtitle')}
           >
-            <ul class="overviewList">
-              <li>{t('demo.text.overview.highlights.itemPeers')}</li>
-              <li>{t('demo.text.overview.highlights.itemThemes')}</li>
-              <li>{t('demo.text.overview.highlights.itemStyles')}</li>
-              <li>{t('demo.text.overview.highlights.itemCategories')}</li>
-            </ul>
+            <div class="overviewTrackGrid">
+              <For each={props.tracks}>
+                {(track) => (
+                  <Card class="overviewTrackCard">
+                    <Text as="p" variant="overline" tone="primary" class="overviewCardEyebrow">
+                      {track.count}
+                    </Text>
+                    <Heading level={3} variant="titleMd" class="overviewCardTitle">
+                      {track.label}
+                    </Heading>
+                    <Text as="p" variant="bodySm" tone="muted" class="overviewCardBody">
+                      {track.description}
+                    </Text>
+                    <Button type="button" variant="ghost" size="sm" onClick={() => props.onNavigate(track.id)}>
+                      {t('demo.showcase.overview.paths.action')}
+                    </Button>
+                  </Card>
+                )}
+              </For>
+            </div>
           </PreviewGroup>
+        </PreviewPanel>
+      </ShowcaseSection>
+
+      <ShowcaseSection
+        title={t('demo.showcase.overview.featured.title')}
+        subtitle={t('demo.showcase.overview.featured.subtitle')}
+      >
+        <PreviewPanel>
+          <div class="overviewFeatureGrid">
+            <For each={props.featuredSections}>
+              {(section) => (
+                <Card class="overviewFeatureCard">
+                  <Text as="p" variant="overline" tone="primary" class="overviewCardEyebrow">
+                    {section.eyebrow}
+                  </Text>
+                  <Heading level={3} variant="titleMd" class="overviewCardTitle">
+                    {section.label}
+                  </Heading>
+                  <Text as="p" variant="bodySm" tone="muted" class="overviewCardBody">
+                    {section.description}
+                  </Text>
+                  <div class="overviewCardActions">
+                    <Button type="button" variant="ghost" size="sm" onClick={() => props.onNavigate(section.id)}>
+                      {t('demo.showcase.overview.featured.action')}
+                    </Button>
+                  </div>
+                </Card>
+              )}
+            </For>
+          </div>
         </PreviewPanel>
       </ShowcaseSection>
 

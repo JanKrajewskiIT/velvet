@@ -1,6 +1,5 @@
-import { For, type JSX, splitProps } from 'solid-js';
+import { createMemo, For, type JSX, splitProps } from 'solid-js';
 
-import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import type { ComponentSize } from '~/models/Props';
 import classNames from '~/utils/classNames';
@@ -19,8 +18,10 @@ interface OtpInputOwnProps {
   inputAriaLabel?: (index: number) => string;
 }
 
+const DEFAULT_OTP_GROUP_LABEL = 'Verification code';
+const DEFAULT_OTP_INPUT_LABEL = 'Code digit';
+
 const OtpInput = (props: Props<OtpInputOwnProps>) => {
-  const { t } = useI18n();
   const [local, rest] = splitProps(props, [
     'length',
     'value',
@@ -33,10 +34,10 @@ const OtpInput = (props: Props<OtpInputOwnProps>) => {
   ]);
   const refs: HTMLInputElement[] = [];
 
-  const length = () => local.length ?? 6;
-  const digits = () => Array.from({ length: length() }, (_, i) => i);
-  const groupLabel = () => local.groupAriaLabel ?? t('otp.group');
-  const inputLabel = (index: number) => local.inputAriaLabel?.(index) ?? t('otp.digit', { index: index + 1 });
+  const length = createMemo(() => local.length ?? 6);
+  const digits = createMemo(() => Array.from({ length: length() }, (_, i) => i));
+  const groupLabel = createMemo(() => local.groupAriaLabel ?? DEFAULT_OTP_GROUP_LABEL);
+  const inputLabel = (index: number) => local.inputAriaLabel?.(index) ?? `${DEFAULT_OTP_INPUT_LABEL} ${index + 1}`;
 
   const focusAt = (index: number) => {
     const target = refs[index];
@@ -76,7 +77,7 @@ const OtpInput = (props: Props<OtpInputOwnProps>) => {
     const nextIndex = Math.min(chars.length, length() - 1);
     focusAt(nextIndex);
   };
-  const sizeClass = () => getInputSizeClass(styles, local.size);
+  const sizeClass = createMemo(() => getInputSizeClass(styles, local.size));
 
   return (
     <div

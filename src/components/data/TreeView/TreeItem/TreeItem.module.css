@@ -68,12 +68,6 @@
   flex-shrink: 0;
 }
 
-.label {
-  flex: 1;
-  font-size: var(--font-size-sm);
-  color: var(--color-text);
-}
-
 .children {
   display: grid;
   grid-template-rows: 0fr;

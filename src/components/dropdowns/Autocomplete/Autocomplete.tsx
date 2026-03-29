@@ -2,6 +2,7 @@ import { createMemo, createSignal, createUniqueId, For, Show, splitProps } from 
 
 import ClosableChip from '~/components/feedback/ClosableChip/ClosableChip';
 import useDropdownState from '~/hooks/useDropdownState';
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import type { AriaFieldProps, ComponentSize } from '~/models/Props';
 import { resolveAriaInvalid } from '~/utils/aria';
@@ -21,10 +22,12 @@ interface AutocompleteProps extends AriaFieldProps {
   disabled?: boolean;
   placeholder?: string;
   removeLabel?: string;
+  emptyLabel?: string;
   size?: ComponentSize;
 }
 
 const Autocomplete = (props: Props<AutocompleteProps>) => {
+  const { t } = useI18n();
   const [local, rest] = splitProps(props, [
     'values',
     'options',
@@ -34,6 +37,7 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
     'disabled',
     'placeholder',
     'removeLabel',
+    'emptyLabel',
     'size',
     'aria-labelledby',
     'aria-describedby',
@@ -54,6 +58,7 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
     if (!query) return available;
     return available.filter((r) => r.toLowerCase().includes(query));
   });
+  const emptyLabel = createMemo(() => local.emptyLabel ?? t('common.noOptions'));
 
   const addValue = (value: string) => {
     if (!local.values.includes(value)) {
@@ -66,6 +71,7 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
   };
 
   const removeValue = (value: string) => {
+    if (local.disabled) return;
     local.onChange(local.values.filter((r) => r !== value));
   };
 
@@ -107,6 +113,15 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
 
   const handleKeyDown = (e: KeyboardEvent) => {
     if (local.disabled) return;
+
+    if (e.key === 'Backspace' && inputValue().length === 0) {
+      const lastValue = local.values[local.values.length - 1];
+      if (lastValue !== undefined) {
+        e.preventDefault();
+        removeValue(lastValue);
+      }
+      return;
+    }
 
     if ((e.key === 'Enter' || e.key === ' ') && dropdown.open()) {
       const index = activeIndex();
@@ -162,12 +177,13 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
 
   return (
     <div {...rest} ref={rootRef} class={classNames(styles.wrapper, local.class)}>
-      <div class={styles.selectedTags}>
+      <div class={styles.selectedTags} aria-live="polite">
         <For each={local.values}>
           {(value) => (
             <ClosableChip
               label={value}
               removeLabel={local.removeLabel ? `${local.removeLabel} ${value}` : undefined}
+              disabled={local.disabled}
               onRemove={() => removeValue(value)}
             />
           )}
@@ -203,27 +219,30 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
           aria-errormessage={props['aria-errormessage']}
         />
 
-        <Show when={dropdown.open() && filteredOptions().length > 0}>
+        <Show when={dropdown.open()}>
           <DropdownSurface id={dropdownId} class={styles.dropdown} align="fullWidth" origin="top" role="listbox">
-            <For each={filteredOptions()}>
-              {(option, index) => (
-                <DropdownOption
-                  id={`${dropdownId}-option-${String(index())}`}
-                  label={option}
-                  role="option"
-                  aria-selected={activeIndex() === index()}
-                  selected={activeIndex() === index()}
-                  onMouseDown={(e) => {
-                    setActiveIndex(index());
-                    e.preventDefault();
-                  }}
-                  onClick={() => {
-                    addValue(option);
-                    inputRef?.focus();
-                  }}
-                />
-              )}
-            </For>
+            <Show when={filteredOptions().length > 0} fallback={<div class={styles.empty}>{emptyLabel()}</div>}>
+              <For each={filteredOptions()}>
+                {(option, index) => (
+                  <DropdownOption
+                    id={`${dropdownId}-option-${String(index())}`}
+                    label={option}
+                    role="option"
+                    aria-selected={activeIndex() === index()}
+                    selected={activeIndex() === index()}
+                    onMouseDown={(e) => {
+                      setActiveIndex(index());
+                      e.preventDefault();
+                    }}
+                    onMouseEnter={() => setActiveIndex(index())}
+                    onClick={() => {
+                      addValue(option);
+                      inputRef?.focus();
+                    }}
+                  />
+                )}
+              </For>
+            </Show>
           </DropdownSurface>
         </Show>
       </div>

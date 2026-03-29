@@ -42,7 +42,7 @@ const SidebarItemRow = (props: Props<SidebarItemRowProps>) => {
         expanded={isExpanded()}
         active={isActive()}
         collapsed={props.collapsed}
-        onClick={handleClick}
+        onClick={hasChildren() || props.onSelect ? handleClick : undefined}
         style={props.collapsed ? undefined : nestedPadding()}
       />
       <Show when={hasChildren() && isExpanded() && !props.collapsed}>

@@ -15,121 +15,43 @@ import {
   type UTCTimestamp,
 } from 'lightweight-charts';
 import type { JSX } from 'solid-js';
-import { createEffect, createMemo, createSignal, For, onCleanup, onMount, splitProps } from 'solid-js';
+import { createEffect, createMemo, createSignal, onCleanup, onMount, splitProps } from 'solid-js';
 
-import Button from '~/components/buttons/Button/Button';
-import Heading from '~/components/typography/Heading/Heading';
-import Text from '~/components/typography/Text/Text';
-import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
-import type { DivCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import styles from './TradingViewChart.module.css';
-
-interface TradingViewChartPoint {
-  time: UTCTimestamp;
-  open: number;
-  high: number;
-  low: number;
-  close: number;
-  volume: number;
-}
-
-interface TradingViewDrawPoint {
-  time: UTCTimestamp;
-  price: number;
-}
-
-interface TradingViewTrendLine {
-  id: string;
-  from: TradingViewDrawPoint;
-  to: TradingViewDrawPoint;
-  color?: string;
-}
-
-interface TradingViewLevelLine {
-  id: string;
-  price: number;
-  color?: string;
-}
-
-interface TradingViewZone {
-  id: string;
-  fromTime: UTCTimestamp;
-  toTime: UTCTimestamp;
-  low: number;
-  high: number;
-  color?: string;
-}
-
-interface TradingViewDrawings {
-  trendLines: TradingViewTrendLine[];
-  levels: TradingViewLevelLine[];
-  zones: TradingViewZone[];
-}
-
-type TradingViewDrawingTool = 'none' | 'trendline' | 'level' | 'zone';
-type TradingViewLiveFeedMode = 'polling' | 'websocket';
-
-interface TradingViewFeedContext {
-  symbol: string;
-  interval: string;
-  lastBar?: TradingViewChartPoint;
-}
-
-interface TradingViewLiveFeedConfig {
-  mode: TradingViewLiveFeedMode;
-  enabled?: boolean;
-  intervalMs?: number;
-  poll?: (
-    context: TradingViewFeedContext
-  ) =>
-    | TradingViewChartPoint
-    | TradingViewChartPoint[]
-    | null
-    | Promise<TradingViewChartPoint | TradingViewChartPoint[] | null>;
-  subscribe?: (
-    emit: (bars: TradingViewChartPoint | TradingViewChartPoint[]) => void,
-    context: TradingViewFeedContext
-  ) => (() => void) | undefined;
-}
-
-interface TradingViewChartProps extends DivCoreNativeProps {
-  symbol?: string;
-  data?: TradingViewChartPoint[];
-  height?: number;
-  intervalOptions?: string[];
-  defaultInterval?: string;
-  maxPoints?: number;
-  liveFeed?: TradingViewLiveFeedConfig;
-  drawings?: Partial<TradingViewDrawings>;
-  defaultDrawingTool?: TradingViewDrawingTool;
-  onDrawingsChange?: (drawings: TradingViewDrawings) => void;
-}
-
-interface ToolbarToggle {
-  id: string;
-  label: string;
-  active: boolean;
-  onClick: () => void;
-}
-
-const DEFAULT_HEIGHT = 520;
-const DEFAULT_POINTS = 240;
-const INTERVALS = ['1m', '5m', '15m', '1h', '4h', '1d'];
-const INTERVAL_SECONDS: Record<string, number> = {
-  '1m': 60,
-  '5m': 5 * 60,
-  '15m': 15 * 60,
-  '1h': 60 * 60,
-  '4h': 4 * 60 * 60,
-  '1d': 24 * 60 * 60,
-};
+import type {
+  TradingViewChartPoint,
+  TradingViewChartProps,
+  TradingViewDrawingTool,
+  TradingViewDrawPoint,
+  TradingViewFeedContext,
+  TradingViewLevelLine,
+  TradingViewTrendLine,
+  TradingViewZone,
+} from './TradingViewChart.types';
+import {
+  createBollingerBands,
+  createExponentialMovingAverage,
+  createMacd,
+  createRsi,
+  createSimpleMovingAverage,
+  DEFAULT_HEIGHT,
+  DEFAULT_POINTS,
+  generateDemoData,
+  getDrawingId,
+  INTERVALS,
+  intervalToSeconds,
+  isBusinessDay,
+  timeKey,
+} from './TradingViewChart.utils';
+import TradingViewChartMetrics from './TradingViewChartMetrics';
+import TradingViewChartOverlay from './TradingViewChartOverlay';
+import TradingViewChartToolbar, { type TradingViewChartToolbarToggle } from './TradingViewChartToolbar';
 
 interface ChartPalette {
   bg: string;
-  surface: string;
   border: string;
   text: string;
   mutedText: string;
@@ -145,7 +67,6 @@ const readToken = (element: HTMLElement, token: string) =>
 
 const resolvePalette = (element: HTMLElement): ChartPalette => ({
   bg: readToken(element, '--color-bg'),
-  surface: readToken(element, '--color-bg-elevated'),
   border: readToken(element, '--color-border'),
   text: readToken(element, '--color-text'),
   mutedText: readToken(element, '--color-text-muted'),
@@ -157,146 +78,29 @@ const resolvePalette = (element: HTMLElement): ChartPalette => ({
 });
 
 const toFixed = (value: number, digits = 2) => value.toFixed(digits);
-
-const intervalToSeconds = (interval: string) => INTERVAL_SECONDS[interval] ?? 60 * 60;
-const getDrawingId = (prefix: string) => `${prefix}-${Date.now()}-${Math.floor(Math.random() * 10_000)}`;
-
-const generateDemoData = (interval: string, size = DEFAULT_POINTS): TradingViewChartPoint[] => {
-  const step = intervalToSeconds(interval);
-  const end = Math.floor(Date.now() / 1000);
-  const start = end - step * size;
-  let previousClose = 2890;
-
-  return Array.from({ length: size }, (_, index) => {
-    const time = (start + index * step) as UTCTimestamp;
-    const trend = Math.sin(index / 13) * 8 + Math.cos(index / 34) * 5;
-    const drift = Math.sin(index / 71) * 3.5;
-    const open = previousClose;
-    const close = Math.max(1, open + trend * 0.18 + drift * 0.12);
-    const high = Math.max(open, close) + Math.abs(Math.sin(index / 7)) * 4.2 + 0.4;
-    const low = Math.min(open, close) - Math.abs(Math.cos(index / 9)) * 4.1 - 0.4;
-    const volume = 1200 + Math.abs(close - open) * 550 + Math.abs(Math.sin(index / 5)) * 900;
-    previousClose = close;
-
-    return {
-      time,
-      open: Number(open.toFixed(2)),
-      high: Number(high.toFixed(2)),
-      low: Number(low.toFixed(2)),
-      close: Number(close.toFixed(2)),
-      volume: Number(volume.toFixed(0)),
-    };
-  });
-};
-
-const createSimpleMovingAverage = (data: TradingViewChartPoint[], period: number) =>
-  data.map((entry, index) => {
-    const start = Math.max(0, index - period + 1);
-    const window = data.slice(start, index + 1);
-    const average = window.reduce((sum, item) => sum + item.close, 0) / Math.max(window.length, 1);
-    return { time: entry.time, value: Number(average.toFixed(2)) };
-  });
-
-const createExponentialMovingAverage = (data: TradingViewChartPoint[], period: number) => {
-  const multiplier = 2 / (period + 1);
-  let previousEma = data[0]?.close ?? 0;
-  return data.map((entry, index) => {
-    if (index === 0) {
-      previousEma = entry.close;
-      return { time: entry.time, value: Number(previousEma.toFixed(2)) };
-    }
-    previousEma = entry.close * multiplier + previousEma * (1 - multiplier);
-    return { time: entry.time, value: Number(previousEma.toFixed(2)) };
-  });
-};
-
-const createRsi = (data: TradingViewChartPoint[], period: number) => {
-  if (data.length === 0) return [];
-  const result: Array<{ time: UTCTimestamp; value: number }> = [];
-  const first = data[0];
-  if (!first) return result;
-  let averageGain = 0;
-  let averageLoss = 0;
-  for (let i = 1; i <= period && i < data.length; i++) {
-    const current = data[i];
-    const previous = data[i - 1];
-    if (!current || !previous) continue;
-    const diff = current.close - previous.close;
-    if (diff >= 0) averageGain += diff;
-    else averageLoss += Math.abs(diff);
-  }
-  averageGain /= period;
-  averageLoss /= period;
-  result.push({ time: first.time, value: 50 });
-  for (let i = 1; i < data.length; i++) {
-    const current = data[i];
-    const previous = data[i - 1];
-    if (!current || !previous) continue;
-    const diff = current.close - previous.close;
-    const gain = Math.max(diff, 0);
-    const loss = Math.max(-diff, 0);
-    if (i <= period) {
-      const rs = averageLoss === 0 ? 100 : averageGain / averageLoss;
-      const rsi = 100 - 100 / (1 + rs);
-      result.push({ time: current.time, value: Number(rsi.toFixed(2)) });
-      continue;
-    }
-    averageGain = (averageGain * (period - 1) + gain) / period;
-    averageLoss = (averageLoss * (period - 1) + loss) / period;
-    const rs = averageLoss === 0 ? 100 : averageGain / averageLoss;
-    const rsi = 100 - 100 / (1 + rs);
-    result.push({ time: current.time, value: Number(rsi.toFixed(2)) });
-  }
-  return result;
-};
-
-const createMacd = (data: TradingViewChartPoint[]) => {
-  const fast = createExponentialMovingAverage(data, 12);
-  const slow = createExponentialMovingAverage(data, 26);
-  const macdLine = data.map((item, index) => {
-    const value = (fast[index]?.value ?? 0) - (slow[index]?.value ?? 0);
-    return { time: item.time, value: Number(value.toFixed(4)) };
-  });
-  const signalInput = macdLine.map((item) => ({ ...item, close: item.value }));
-  const signalLine = createExponentialMovingAverage(
-    signalInput.map((item) => ({
-      time: item.time,
-      open: item.close,
-      high: item.close,
-      low: item.close,
-      close: item.close,
-      volume: 0,
-    })),
-    9
-  );
-  const histogram = macdLine.map((item, index) => {
-    const signal = signalLine[index]?.value ?? 0;
-    const value = Number((item.value - signal).toFixed(4));
-    return { time: item.time, value };
-  });
-  return { macdLine, signalLine, histogram };
-};
-
-const createBollingerBands = (data: TradingViewChartPoint[], period: number, multiplier: number) => {
-  const basis = createSimpleMovingAverage(data, period);
-  const upper = data.map((item, index) => {
-    const start = Math.max(0, index - period + 1);
-    const window = data.slice(start, index + 1).map((entry) => entry.close);
-    const mean = basis[index]?.value ?? item.close;
-    const variance = window.reduce((sum, value) => sum + (value - mean) ** 2, 0) / Math.max(window.length, 1);
-    const standardDeviation = Math.sqrt(variance);
-    return { time: item.time, value: Number((mean + standardDeviation * multiplier).toFixed(2)) };
-  });
-  const lower = data.map((item, index) => {
-    const start = Math.max(0, index - period + 1);
-    const window = data.slice(start, index + 1).map((entry) => entry.close);
-    const mean = basis[index]?.value ?? item.close;
-    const variance = window.reduce((sum, value) => sum + (value - mean) ** 2, 0) / Math.max(window.length, 1);
-    const standardDeviation = Math.sqrt(variance);
-    return { time: item.time, value: Number((mean - standardDeviation * multiplier).toFixed(2)) };
-  });
-  return { basis, upper, lower };
-};
+const getBarDirectionColor = (entry: TradingViewChartPoint, palette?: Pick<ChartPalette, 'success' | 'error'>) =>
+  entry.close >= entry.open ? (palette?.success ?? 'currentColor') : (palette?.error ?? 'currentColor');
+const DEFAULT_VOLUME_SHORT_LABEL = 'Vol';
+const DEFAULT_SMA_SHORT_LABEL = 'SMA';
+const DEFAULT_EMA_SHORT_LABEL = 'EMA';
+const DEFAULT_BB_SHORT_LABEL = 'BB';
+const DEFAULT_RSI_SHORT_LABEL = 'RSI';
+const DEFAULT_MACD_SHORT_LABEL = 'MACD';
+const DEFAULT_TREND_TOOL_LABEL = 'Trend';
+const DEFAULT_LEVEL_TOOL_LABEL = 'Level';
+const DEFAULT_ZONE_TOOL_LABEL = 'Zone';
+const DEFAULT_CLEAR_LABEL = 'Clear';
+const DEFAULT_BB_UPPER_TITLE = 'BB Upper';
+const DEFAULT_BB_BASIS_TITLE = 'BB Basis';
+const DEFAULT_BB_LOWER_TITLE = 'BB Lower';
+const DEFAULT_SMA_TITLE = 'SMA 20';
+const DEFAULT_EMA_TITLE = 'EMA 50';
+const DEFAULT_RSI_TITLE = 'RSI 14';
+const DEFAULT_MACD_TITLE = 'MACD';
+const DEFAULT_MACD_SIGNAL_TITLE = 'MACD Signal';
+const DEFAULT_MACD_HISTOGRAM_TITLE = 'MACD Histogram';
+const DEFAULT_BB_UP_METRIC_LABEL = 'BB Up';
+const DEFAULT_BB_LOW_METRIC_LABEL = 'BB Low';
 
 const isCandlestickData = (value: unknown): value is CandlestickData =>
   typeof value === 'object' &&
@@ -307,16 +111,12 @@ const isCandlestickData = (value: unknown): value is CandlestickData =>
   'close' in value &&
   'time' in value;
 
-const timeKey = (time: Time) => (typeof time === 'object' ? `${time.year}-${time.month}-${time.day}` : String(time));
-const isBusinessDay = (value: unknown): value is { year: number; month: number; day: number } =>
-  typeof value === 'object' && value !== null && 'year' in value && 'month' in value && 'day' in value;
-
 const TradingViewChart = (props: Props<TradingViewChartProps>) => {
-  const { t } = useI18n();
   const [local, rest] = splitProps(props, [
     'symbol',
     'data',
     'height',
+    'locale',
     'intervalOptions',
     'defaultInterval',
     'class',
@@ -325,6 +125,7 @@ const TradingViewChart = (props: Props<TradingViewChartProps>) => {
     'drawings',
     'defaultDrawingTool',
     'onDrawingsChange',
+    'messages',
   ]);
   const [showVolume, setShowVolume] = createSignal(true);
   const [showSma, setShowSma] = createSignal(true);
@@ -334,7 +135,7 @@ const TradingViewChart = (props: Props<TradingViewChartProps>) => {
   const [showBb, setShowBb] = createSignal(true);
   const [hoveredBar, setHoveredBar] = createSignal<TradingViewChartPoint | undefined>();
   const [runtimeData, setRuntimeData] = createSignal<TradingViewChartPoint[]>([]);
-  const [activeInterval, setActiveInterval] = createSignal(local.defaultInterval ?? INTERVALS[3] ?? '1h');
+  const [activeInterval, setActiveInterval] = createSignal(local.defaultInterval ?? '1h');
   const [activeTool, setActiveTool] = createSignal<TradingViewDrawingTool>(local.defaultDrawingTool ?? 'none');
   const [draftPoint, setDraftPoint] = createSignal<TradingViewDrawPoint | undefined>();
   const [trendLines, setTrendLines] = createSignal<TradingViewTrendLine[]>([]);
@@ -349,6 +150,8 @@ const TradingViewChart = (props: Props<TradingViewChartProps>) => {
   );
   const chartData = createMemo(() => runtimeData());
   const chartDataByTime = createMemo(() => new Map(chartData().map((item) => [String(item.time), item])));
+  const resolvedLocale = createMemo(() => local.locale ?? Intl.DateTimeFormat().resolvedOptions().locale);
+  const messages = createMemo(() => local.messages ?? {});
   const businessDayToTimestamp = createMemo(() => {
     const map = new Map<string, UTCTimestamp>();
     for (const item of chartData()) {
@@ -387,60 +190,69 @@ const TradingViewChart = (props: Props<TradingViewChartProps>) => {
     const point = draftPoint();
     return point ? [point] : [];
   });
-  const toggleIndicatorControls = createMemo<ToolbarToggle[]>(() => [
+  const volumeShortLabel = () => messages().volumeShortLabel ?? DEFAULT_VOLUME_SHORT_LABEL;
+  const smaShortLabel = () => messages().smaShortLabel ?? DEFAULT_SMA_SHORT_LABEL;
+  const emaShortLabel = () => messages().emaShortLabel ?? DEFAULT_EMA_SHORT_LABEL;
+  const bbShortLabel = () => messages().bbShortLabel ?? DEFAULT_BB_SHORT_LABEL;
+  const rsiShortLabel = () => messages().rsiShortLabel ?? DEFAULT_RSI_SHORT_LABEL;
+  const macdShortLabel = () => messages().macdShortLabel ?? DEFAULT_MACD_SHORT_LABEL;
+  const trendToolLabel = () => messages().trendToolLabel ?? DEFAULT_TREND_TOOL_LABEL;
+  const levelToolLabel = () => messages().levelToolLabel ?? DEFAULT_LEVEL_TOOL_LABEL;
+  const zoneToolLabel = () => messages().zoneToolLabel ?? DEFAULT_ZONE_TOOL_LABEL;
+  const toggleIndicatorControls = createMemo<TradingViewChartToolbarToggle[]>(() => [
     {
       id: 'volume',
-      label: t('trading.volumeShort'),
+      label: volumeShortLabel(),
       active: showVolume(),
       onClick: () => setShowVolume((value) => !value),
     },
     {
       id: 'sma',
-      label: t('trading.smaShort'),
+      label: smaShortLabel(),
       active: showSma(),
       onClick: () => setShowSma((value) => !value),
     },
     {
       id: 'ema',
-      label: t('trading.emaShort'),
+      label: emaShortLabel(),
       active: showEma(),
       onClick: () => setShowEma((value) => !value),
     },
     {
       id: 'bb',
-      label: t('trading.bbShort'),
+      label: bbShortLabel(),
       active: showBb(),
       onClick: () => setShowBb((value) => !value),
     },
     {
       id: 'rsi',
-      label: t('trading.rsiShort'),
+      label: rsiShortLabel(),
       active: showRsi(),
       onClick: () => setShowRsi((value) => !value),
     },
     {
       id: 'macd',
-      label: t('trading.macdShort'),
+      label: macdShortLabel(),
       active: showMacd(),
       onClick: () => setShowMacd((value) => !value),
     },
   ]);
-  const drawingControls = createMemo<ToolbarToggle[]>(() => [
+  const drawingControls = createMemo<TradingViewChartToolbarToggle[]>(() => [
     {
       id: 'trendline',
-      label: t('trading.trendTool'),
+      label: trendToolLabel(),
       active: activeTool() === 'trendline',
       onClick: () => setActiveTool((tool) => (tool === 'trendline' ? 'none' : 'trendline')),
     },
     {
       id: 'level',
-      label: t('trading.levelTool'),
+      label: levelToolLabel(),
       active: activeTool() === 'level',
       onClick: () => setActiveTool((tool) => (tool === 'level' ? 'none' : 'level')),
     },
     {
       id: 'zone',
-      label: t('trading.zoneTool'),
+      label: zoneToolLabel(),
       active: activeTool() === 'zone',
       onClick: () => setActiveTool((tool) => (tool === 'zone' ? 'none' : 'zone')),
     },
@@ -459,18 +271,35 @@ const TradingViewChart = (props: Props<TradingViewChartProps>) => {
       `SIG: ${toFixed(indicators?.signal ?? 0, 4)}`,
       `BB↑: ${toFixed(indicators?.bbUpper ?? 0)}`,
       `BB↓: ${toFixed(indicators?.bbLower ?? 0)}`,
+    ] as const;
+  });
+  const displayMetricItems = createMemo(() => {
+    const [open, high, low, close, volume, rsi, macd, signal] = metricItems();
+    const indicators = indicatorSnapshot();
+
+    return [
+      open,
+      high,
+      low,
+      close,
+      volume,
+      rsi,
+      macd,
+      signal,
+      `${DEFAULT_BB_UP_METRIC_LABEL}: ${toFixed(indicators?.bbUpper ?? 0)}`,
+      `${DEFAULT_BB_LOW_METRIC_LABEL}: ${toFixed(indicators?.bbLower ?? 0)}`,
     ];
   });
-  const clearLabel = () => t('common.clear');
-  const bbUpperTitle = () => t('trading.bbUpper');
-  const bbBasisTitle = () => t('trading.bbBasis');
-  const bbLowerTitle = () => t('trading.bbLower');
-  const smaTitle = () => t('trading.sma20');
-  const emaTitle = () => t('trading.ema50');
-  const rsiTitle = () => t('trading.rsi14');
-  const macdTitle = () => t('trading.macd');
-  const macdSignalTitle = () => t('trading.macdSignal');
-  const macdHistTitle = () => t('trading.macdHist');
+  const clearLabel = () => messages().clearLabel ?? DEFAULT_CLEAR_LABEL;
+  const bbUpperTitle = () => messages().bbUpperTitle ?? DEFAULT_BB_UPPER_TITLE;
+  const bbBasisTitle = () => messages().bbBasisTitle ?? DEFAULT_BB_BASIS_TITLE;
+  const bbLowerTitle = () => messages().bbLowerTitle ?? DEFAULT_BB_LOWER_TITLE;
+  const smaTitle = () => messages().smaTitle ?? DEFAULT_SMA_TITLE;
+  const emaTitle = () => messages().emaTitle ?? DEFAULT_EMA_TITLE;
+  const rsiTitle = () => messages().rsiTitle ?? DEFAULT_RSI_TITLE;
+  const macdTitle = () => messages().macdTitle ?? DEFAULT_MACD_TITLE;
+  const macdSignalTitle = () => messages().macdSignalTitle ?? DEFAULT_MACD_SIGNAL_TITLE;
+  const macdHistTitle = () => messages().macdHistogramTitle ?? DEFAULT_MACD_HISTOGRAM_TITLE;
 
   let wrapperRef: HTMLDivElement | undefined;
   let chartHostRef: HTMLDivElement | undefined;
@@ -600,7 +429,7 @@ const TradingViewChart = (props: Props<TradingViewChartProps>) => {
     const histogram: HistogramData<UTCTimestamp>[] = chartData().map((entry) => ({
       time: entry.time,
       value: entry.volume,
-      color: entry.close >= entry.open ? (palette?.success ?? 'currentColor') : (palette?.error ?? 'currentColor'),
+      color: getBarDirectionColor(entry, palette),
     }));
 
     candleSeries.setData(candles);
@@ -653,10 +482,7 @@ const TradingViewChart = (props: Props<TradingViewChartProps>) => {
       volumeSeries.update({
         time: latestPoint.time,
         value: latestPoint.volume,
-        color:
-          latestPoint.close >= latestPoint.open
-            ? (palette?.success ?? 'currentColor')
-            : (palette?.error ?? 'currentColor'),
+        color: getBarDirectionColor(latestPoint, palette),
       });
     }
 
@@ -779,6 +605,17 @@ const TradingViewChart = (props: Props<TradingViewChartProps>) => {
       })
       .filter(Boolean) as Array<TradingViewZone & { left: number; top: number; width: number; height: number }>;
   });
+  const projectedDraftPoints = createMemo(() => {
+    overlayRevision();
+    return draftPoints()
+      .map((point) => {
+        const x = timeToX(point.time);
+        const y = priceToY(point.price);
+        if (x === null || y === null) return null;
+        return { ...point, x, y };
+      })
+      .filter(Boolean) as Array<TradingViewDrawPoint & { x: number; y: number }>;
+  });
 
   const onDrawingsChange = () => {
     local.onDrawingsChange?.({
@@ -848,7 +685,7 @@ const TradingViewChart = (props: Props<TradingViewChartProps>) => {
       autoSize: false,
       rightPriceScale: { scaleMargins: { top: 0.15, bottom: 0.22 } },
       timeScale: { timeVisible: true, secondsVisible: false, borderVisible: true },
-      localization: { locale: t('trading.locale') },
+      localization: { locale: resolvedLocale() },
       handleScroll: { mouseWheel: true, pressedMouseMove: true, horzTouchDrag: true, vertTouchDrag: true },
       handleScale: { axisPressedMouseMove: true, mouseWheel: true, pinch: true },
     });
@@ -1081,88 +918,34 @@ const TradingViewChart = (props: Props<TradingViewChartProps>) => {
 
   return (
     <div {...rest} ref={wrapperRef} class={classNames(styles.root, local.class)}>
-      <div class={styles.toolbar}>
-        <div class={styles.toolbarGroup}>
-          <Heading as="span" variant="titleMd" class={styles.symbol}>
-            {chartSymbol()}
-          </Heading>
-          <For each={intervals()}>
-            {(interval) => (
-              <Button
-                type="button"
-                variant={activeInterval() === interval ? 'primary' : 'ghost'}
-                size="sm"
-                disabled={Boolean(local.data?.length)}
-                onClick={() => setActiveInterval(interval)}
-              >
-                {interval}
-              </Button>
-            )}
-          </For>
-        </div>
+      <TradingViewChartToolbar
+        symbol={chartSymbol()}
+        intervals={intervals()}
+        activeInterval={activeInterval()}
+        intervalSelectionDisabled={Boolean(local.data?.length)}
+        onIntervalSelect={setActiveInterval}
+        indicatorControls={toggleIndicatorControls()}
+        drawingControls={drawingControls()}
+        clearLabel={clearLabel()}
+        onClear={clearCurrentTool}
+      />
 
-        <div class={styles.toolbarGroup}>
-          <For each={toggleIndicatorControls()}>
-            {(control) => (
-              <Button type="button" variant={control.active ? 'primary' : 'ghost'} size="sm" onClick={control.onClick}>
-                {control.label}
-              </Button>
-            )}
-          </For>
-        </div>
-
-        <div class={styles.toolbarGroup}>
-          <For each={drawingControls()}>
-            {(control) => (
-              <Button type="button" variant={control.active ? 'primary' : 'ghost'} size="sm" onClick={control.onClick}>
-                {control.label}
-              </Button>
-            )}
-          </For>
-          <Button type="button" variant="ghost" size="sm" onClick={clearCurrentTool}>
-            {clearLabel()}
-          </Button>
-        </div>
-      </div>
-
-      <div class={styles.ohlcPanel}>
-        <For each={metricItems()}>
-          {(item) => (
-            <Text as="span" variant="caption" tone="secondary">
-              {item}
-            </Text>
-          )}
-        </For>
-      </div>
+      <TradingViewChartMetrics items={displayMetricItems()} />
 
       <div class={styles.chartShell}>
         <div ref={chartHostRef} class={styles.chartHost} />
-        <svg
-          ref={overlayRef}
-          class={styles.drawingOverlay}
-          viewBox={`0 0 ${chartSize().width || 1} ${chartSize().height || 1}`}
+        <TradingViewChartOverlay
+          overlayRef={(element) => {
+            overlayRef = element;
+          }}
+          width={chartSize().width}
+          height={chartSize().height}
           onPointerDown={handleOverlayPointerDown}
-        >
-          <For each={projectedZones()}>
-            {(zone) => (
-              <rect x={zone.left} y={zone.top} width={zone.width} height={zone.height} class={styles.zoneRect} />
-            )}
-          </For>
-          <For each={projectedTrendLines()}>
-            {(line) => <line x1={line.x1} y1={line.y1} x2={line.x2} y2={line.y2} class={styles.trendLine} />}
-          </For>
-          <For each={projectedLevels()}>
-            {(level) => <line x1="0" y1={level.y} x2={level.x2} y2={level.y} class={styles.levelLine} />}
-          </For>
-          <For each={draftPoints()}>
-            {(point) => {
-              const x = timeToX(point.time);
-              const y = priceToY(point.price);
-              if (x === null || y === null) return null;
-              return <circle cx={x} cy={y} r="4" class={styles.draftPoint} />;
-            }}
-          </For>
-        </svg>
+          zones={projectedZones()}
+          trendLines={projectedTrendLines()}
+          levels={projectedLevels()}
+          draftPoints={projectedDraftPoints()}
+        />
       </div>
     </div>
   );
@@ -1170,6 +953,7 @@ const TradingViewChart = (props: Props<TradingViewChartProps>) => {
 
 export default TradingViewChart;
 export type {
+  TradingViewChartMessages,
   TradingViewChartPoint,
   TradingViewChartProps,
   TradingViewDrawings,
@@ -1180,4 +964,4 @@ export type {
   TradingViewLiveFeedMode,
   TradingViewTrendLine,
   TradingViewZone,
-};
+} from './TradingViewChart.types';

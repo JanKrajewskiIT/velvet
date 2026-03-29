@@ -24,6 +24,7 @@ interface LightboxMessages {
   closeLabel?: string;
   previousLabel?: string;
   nextLabel?: string;
+  viewerLabel?: string;
 }
 
 interface LightboxOwnProps extends Omit<DivCoreNativeProps, 'onClose'> {
@@ -54,12 +55,13 @@ const Lightbox = (props: Props<LightboxOwnProps>) => {
   const [currentIndex, setCurrentIndex] = createSignal(0);
   let overlayRef: HTMLDivElement | undefined;
 
-  const closeLabel = () => local.messages?.closeLabel ?? local.closeLabel ?? t('common.close');
-  const previousLabel = () => local.messages?.previousLabel ?? local.previousLabel ?? t('common.previous');
-  const nextLabel = () => local.messages?.nextLabel ?? local.nextLabel ?? t('common.next');
-  const total = () => local.images.length;
-  const hasManyImages = () => total() > 1;
-  const isVisible = () => local.open && total() > 0;
+  const closeLabel = createMemo(() => local.messages?.closeLabel ?? local.closeLabel ?? t('common.close'));
+  const previousLabel = createMemo(() => local.messages?.previousLabel ?? local.previousLabel ?? t('common.previous'));
+  const nextLabel = createMemo(() => local.messages?.nextLabel ?? local.nextLabel ?? t('common.next'));
+  const viewerLabel = createMemo(() => local.messages?.viewerLabel ?? t('lightbox.imageViewer'));
+  const total = createMemo(() => local.images.length);
+  const hasManyImages = createMemo(() => total() > 1);
+  const isVisible = createMemo(() => local.open && total() > 0);
   const currentImage = createMemo(() => local.images[currentIndex()]);
 
   const goPrev = () => {
@@ -124,7 +126,7 @@ const Lightbox = (props: Props<LightboxOwnProps>) => {
           ref={overlayRef}
           role="dialog"
           aria-modal="true"
-          aria-label={t('lightbox.imageViewer')}
+          aria-label={viewerLabel()}
           class={classNames(styles.overlay, local.class)}
           onPointerDown={handleOverlayPointerDown}
         >

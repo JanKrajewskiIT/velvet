@@ -6,19 +6,26 @@ alwaysApply: false
 
 # CSS Modules
 
-- camelCase classes (`.menuItem`) -- never kebab/PascalCase
-- Design tokens from `globals.css`: `var(--color-*)`, `var(--spacing-*)`, `var(--font-size-*)`, `var(--radius-*)`, `var(--shadow-*)`
-- Never hardcode colors/spacing/shadows
-- Do not use `composes` in `*.module.css`
-- Reuse shared primitive styles by importing their CSS modules in TSX and combining classes with `classNames()`
-- Shared style-module imports should come from dedicated primitive/style folders (`inputs/shared`, equivalent shared folders), not arbitrary sibling components
-- Prefer `ComponentName.tsx` + `ComponentName.module.css` pairs; avoid standalone `*.module.css` without a corresponding component
-- Exception: shared primitive style modules can stay standalone when reused across different element types (e.g. button/select/input/div)
-- Dark theme via semantic tokens -- never target `[data-theme='dark']`
+- camelCase classes only
+- Use design tokens from `src/theme/globals.css`
+- Never hardcode colors, spacing, radius, or shadows
+- Do not use `composes`
+- Reuse shared styles by importing CSS modules in TSX and combining classes with `classNames()`
+- Prefer `ComponentName.tsx` + `ComponentName.module.css` pairs
+- Shared standalone style modules are allowed only when they are truly reused across multiple primitives
+- Dark theme should flow through semantic tokens, never manual `[data-theme="dark"]` targeting
 
-## CSS custom properties for dynamic values
+## Neutral Primitive Styling
 
-- When a component needs JS-driven values (percentages, offsets, delays), inject them as CSS custom properties via `style={{ '--my-var': value }}` and consume with `var(--my-var)` in the `.module.css`
-- Always provide a fallback: `var(--my-var, <default>)`
-- Prefer this pattern over direct inline CSS properties (`width`, `left`, `animation-delay`) -- keeps styling logic in CSS
-- Static values that look dynamic but have a fixed set (e.g. size variants sm/md/lg) should use variant classes instead of custom properties
+- Base primitives and shared surfaces must stay visually neutral by default
+- Do not add gradients, glow, spotlight effects, hover lift, scale, or translate motion to default primitive styles
+- `Card` is a baseline surface, not an attention-seeking one
+- If hover elevation or promotional emphasis is needed, create an explicit opt-in variant or separate component
+- Parent components may position primitives, but should not reskin their core visual semantics from host CSS
+
+## CSS Custom Properties for Dynamic Values
+
+- JS-driven values should be passed as CSS custom properties via `style={{ "--my-var": value }}`
+- Consume them with `var(--my-var, <fallback>)` in CSS
+- Prefer this over direct inline CSS properties when CSS can own the styling
+- Fixed discrete variants should use classes, not runtime custom properties

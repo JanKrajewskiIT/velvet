@@ -1,4 +1,4 @@
-import { CodeText, Heading, useI18n } from '@jankrajewskiit/ui';
+import { Card, CodeText, Heading, useI18n } from '@jankrajewskiit/ui';
 import { createMemo, For } from 'solid-js';
 
 import { PreviewGroup, PreviewPanel, ShowcaseSection } from '../components/ShowcaseSection';
@@ -234,7 +234,7 @@ const DeveloperSection = () => {
             <div class="docsGrid">
               <For each={TOOLING_SNIPPETS}>
                 {(snippet) => (
-                  <div class="docsCard">
+                  <Card class="docsCard">
                     <div class="docsCardHeader">
                       <Heading as="p" level={4} variant="titleMd" class="docsCardTitle">
                         {snippet.title}
@@ -246,7 +246,7 @@ const DeveloperSection = () => {
                     <CodeText as="pre" variant="block" size="md" class="installBlock">
                       {snippet.code}
                     </CodeText>
-                  </div>
+                  </Card>
                 )}
               </For>
             </div>
@@ -263,7 +263,7 @@ const DeveloperSection = () => {
             <div class="docsGrid">
               <For each={usageSnippets()}>
                 {(snippet) => (
-                  <div class="docsCard">
+                  <Card class="docsCard">
                     <div class="docsCardHeader">
                       <Heading as="p" level={4} variant="titleMd" class="docsCardTitle">
                         {snippet.title}
@@ -275,7 +275,7 @@ const DeveloperSection = () => {
                     <CodeText as="pre" variant="block" size="md" class="installBlock">
                       {snippet.code}
                     </CodeText>
-                  </div>
+                  </Card>
                 )}
               </For>
             </div>

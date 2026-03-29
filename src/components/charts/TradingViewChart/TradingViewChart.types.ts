@@ -1,0 +1,108 @@
+import type { UTCTimestamp } from 'lightweight-charts';
+
+import type { DivCoreNativeProps } from '~/models/Props';
+
+export interface TradingViewChartPoint {
+  time: UTCTimestamp;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+}
+
+export interface TradingViewDrawPoint {
+  time: UTCTimestamp;
+  price: number;
+}
+
+export interface TradingViewTrendLine {
+  id: string;
+  from: TradingViewDrawPoint;
+  to: TradingViewDrawPoint;
+  color?: string;
+}
+
+export interface TradingViewLevelLine {
+  id: string;
+  price: number;
+  color?: string;
+}
+
+export interface TradingViewZone {
+  id: string;
+  fromTime: UTCTimestamp;
+  toTime: UTCTimestamp;
+  low: number;
+  high: number;
+  color?: string;
+}
+
+export interface TradingViewDrawings {
+  trendLines: TradingViewTrendLine[];
+  levels: TradingViewLevelLine[];
+  zones: TradingViewZone[];
+}
+
+export type TradingViewDrawingTool = 'none' | 'trendline' | 'level' | 'zone';
+export type TradingViewLiveFeedMode = 'polling' | 'websocket';
+
+export interface TradingViewFeedContext {
+  symbol: string;
+  interval: string;
+  lastBar?: TradingViewChartPoint;
+}
+
+export interface TradingViewLiveFeedConfig {
+  mode: TradingViewLiveFeedMode;
+  enabled?: boolean;
+  intervalMs?: number;
+  poll?: (
+    context: TradingViewFeedContext
+  ) =>
+    | TradingViewChartPoint
+    | TradingViewChartPoint[]
+    | null
+    | Promise<TradingViewChartPoint | TradingViewChartPoint[] | null>;
+  subscribe?: (
+    emit: (bars: TradingViewChartPoint | TradingViewChartPoint[]) => void,
+    context: TradingViewFeedContext
+  ) => (() => void) | undefined;
+}
+
+export interface TradingViewChartMessages {
+  volumeShortLabel?: string;
+  smaShortLabel?: string;
+  emaShortLabel?: string;
+  bbShortLabel?: string;
+  rsiShortLabel?: string;
+  macdShortLabel?: string;
+  trendToolLabel?: string;
+  levelToolLabel?: string;
+  zoneToolLabel?: string;
+  clearLabel?: string;
+  bbUpperTitle?: string;
+  bbBasisTitle?: string;
+  bbLowerTitle?: string;
+  smaTitle?: string;
+  emaTitle?: string;
+  rsiTitle?: string;
+  macdTitle?: string;
+  macdSignalTitle?: string;
+  macdHistogramTitle?: string;
+}
+
+export interface TradingViewChartProps extends DivCoreNativeProps {
+  symbol?: string;
+  data?: TradingViewChartPoint[];
+  height?: number;
+  locale?: string;
+  intervalOptions?: string[];
+  defaultInterval?: string;
+  maxPoints?: number;
+  liveFeed?: TradingViewLiveFeedConfig;
+  drawings?: Partial<TradingViewDrawings>;
+  defaultDrawingTool?: TradingViewDrawingTool;
+  onDrawingsChange?: (drawings: TradingViewDrawings) => void;
+  messages?: TradingViewChartMessages;
+}

@@ -21,7 +21,7 @@ export interface TimePickerMessages {
   optionsLabel?: string;
 }
 
-interface TimePickerProps extends AriaFieldProps {
+export interface TimePickerProps extends AriaFieldProps {
   value?: string;
   onChange: (value: string) => void;
   placeholder?: string;

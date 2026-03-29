@@ -1,5 +1,5 @@
 import { IoCheckmark, IoCopy } from 'solid-icons/io';
-import { createSignal, onCleanup, Show } from 'solid-js';
+import { createMemo, createSignal, onCleanup, Show, splitProps } from 'solid-js';
 
 import Icon from '~/components/media/Icon/Icon';
 import { useI18n } from '~/i18n/I18nProvider';
@@ -22,13 +22,29 @@ interface CopyButtonProps {
 
 const CopyButton = (props: Props<CopyButtonProps>) => {
   const { t } = useI18n();
+  const [local] = splitProps(props, [
+    'class',
+    'text',
+    'label',
+    'copiedLabel',
+    'errorLabel',
+    'timeout',
+    'variant',
+    'size',
+  ]);
   const [copied, setCopied] = createSignal(false);
   const [failed, setFailed] = createSignal(false);
   let timeoutId: ReturnType<typeof setTimeout> | undefined;
+  const buttonText = createMemo(() => {
+    if (copied()) return local.copiedLabel ?? t('common.copied');
+    if (failed()) return local.errorLabel ?? t('common.copyFailed');
+    return local.label ?? t('common.copy');
+  });
+  const buttonClass = createMemo(() => classNames(copied() && styles.copied, failed() && styles.failed, local.class));
 
   const handleClick = () => {
-    const timeout = props.timeout ?? 2000;
-    const text = props.text;
+    const timeout = local.timeout ?? 2000;
+    const text = local.text;
     void navigator.clipboard
       .writeText(text)
       .then(() => {
@@ -49,10 +65,10 @@ const CopyButton = (props: Props<CopyButtonProps>) => {
 
   return (
     <AffixButton
-      class={classNames(copied() && styles.copied, failed() && styles.failed, props.class)}
+      class={buttonClass()}
       type="button"
-      variant={props.variant ?? 'ghost'}
-      size={props.size}
+      variant={local.variant ?? 'ghost'}
+      size={local.size}
       prefix={
         <span class={styles.icon}>
           <Show when={copied()} fallback={<Icon icon={IoCopy} />}>
@@ -61,13 +77,7 @@ const CopyButton = (props: Props<CopyButtonProps>) => {
         </span>
       }
       onClick={handleClick}
-      text={
-        copied()
-          ? (props.copiedLabel ?? t('common.copied'))
-          : failed()
-            ? (props.errorLabel ?? t('common.copyFailed'))
-            : (props.label ?? t('common.copy'))
-      }
+      text={buttonText()}
     />
   );
 };

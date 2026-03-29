@@ -1,4 +1,4 @@
-import { type JSX, splitProps } from 'solid-js';
+import { createMemo, type JSX, splitProps } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
 
 import type Props from '~/models/Props';
@@ -21,28 +21,27 @@ interface CodeTextOwnProps extends HTMLElementCoreNativeProps {
 
 const CodeText = (props: Props<CodeTextOwnProps>) => {
   const [local, rest] = splitProps(props, ['as', 'variant', 'size', 'tone', 'class', 'children']);
+  const variant = createMemo(() => local.variant ?? 'inline');
 
-  const variant = () => local.variant ?? 'inline';
-
-  const component = () => {
+  const component = createMemo(() => {
     if (local.as) return local.as;
     return variant() === 'block' ? 'pre' : 'code';
-  };
+  });
 
-  const resolvedTone = () => local.tone ?? (variant() === 'block' ? 'default' : 'secondary');
+  const resolvedTone = createMemo(() => local.tone ?? (variant() === 'block' ? 'default' : 'secondary'));
+
+  const composedClass = createMemo(() =>
+    classNames(
+      styles.codeText,
+      variant() === 'block' ? styles.block : styles.inline,
+      local.size === 'md' ? styles.sizeMd : styles.sizeSm,
+      toneClass(typographyStyles, resolvedTone()),
+      local.class
+    )
+  );
 
   return (
-    <Dynamic
-      component={component()}
-      {...rest}
-      class={classNames(
-        styles.codeText,
-        variant() === 'block' ? styles.block : styles.inline,
-        local.size === 'md' ? styles.sizeMd : styles.sizeSm,
-        toneClass(typographyStyles, resolvedTone()),
-        local.class
-      )}
-    >
+    <Dynamic component={component()} {...rest} class={composedClass()}>
       {local.children}
     </Dynamic>
   );

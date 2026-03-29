@@ -1,0 +1,94 @@
+.dialog {
+  max-width: 960px;
+}
+
+.prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg) var(--spacing-md);
+  animation: fadeIn var(--duration-normal) var(--ease-out-expo) both;
+}
+
+.promptText {
+  margin: 0;
+  text-align: center;
+}
+
+.selectionSummary {
+  margin: 0;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: var(--spacing-xl);
+  animation: fadeIn var(--duration-normal) var(--ease-out-expo) both;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  animation: fadeInUp var(--duration-normal) var(--ease-out-expo) both;
+}
+
+.chartSection {
+  display: flex;
+  justify-content: center;
+  padding: var(--spacing-sm) 0;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.criteriaHeader {
+  width: 160px;
+  min-width: 160px;
+}
+
+.offerHeader {
+  min-width: 148px;
+  border-bottom: 3px solid var(--accent-color, var(--color-primary));
+}
+
+.offerLabel {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.offerDescription {
+  display: block;
+  margin-top: var(--spacing-2xs);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.criteriaCell {
+  white-space: nowrap;
+}
+
+.valueCell {
+  color: var(--color-text);
+}
+
+@media (width < 640px) {
+  .dialog {
+    max-width: 95vw;
+  }
+
+  .criteriaHeader {
+    width: 112px;
+    min-width: 112px;
+  }
+}

@@ -1,5 +1,5 @@
 import { IoEye, IoEyeOutline } from 'solid-icons/io';
-import { createSignal, splitProps } from 'solid-js';
+import { createMemo, createSignal, splitProps } from 'solid-js';
 
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
@@ -25,22 +25,22 @@ const PasswordInput = (props: Props<PasswordInputProps>) => {
   const { t } = useI18n();
   const [local, rest] = splitProps(props, ['class', 'showToggle', 'visibilityLabel', 'size', 'messages']);
   const [visible, setVisible] = createSignal(false);
-  const toggleButtonSize = (): ComponentSize => {
+  const toggleButtonSize = createMemo<ComponentSize>(() => {
     if (local.size === 'sm') return 'sm';
     if (local.size === 'lg') return 'md';
     return 'sm';
-  };
+  });
 
   const toggle = () => setVisible(!visible());
-  const icon = () => (visible() ? IoEye : IoEyeOutline);
-  const visibilityButtonLabel = () => {
+  const icon = createMemo(() => (visible() ? IoEye : IoEyeOutline));
+  const visibilityButtonLabel = createMemo(() => {
     if (local.visibilityLabel) return local.visibilityLabel;
     return visible()
       ? (local.messages?.hidePasswordLabel ?? t('password.hide'))
       : (local.messages?.showPasswordLabel ?? t('password.show'));
-  };
+  });
 
-  const suffix = () => {
+  const suffix = createMemo(() => {
     if (local.showToggle === false) return undefined;
 
     return (
@@ -54,7 +54,7 @@ const PasswordInput = (props: Props<PasswordInputProps>) => {
         size={toggleButtonSize()}
       />
     );
-  };
+  });
 
   return (
     <AffixInput

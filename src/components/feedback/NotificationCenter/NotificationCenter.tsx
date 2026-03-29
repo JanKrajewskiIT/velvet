@@ -4,6 +4,7 @@ import { createMemo, For, Show, splitProps } from 'solid-js';
 import Button from '~/components/buttons/Button/Button';
 import IconButton from '~/components/buttons/IconButton/IconButton';
 import Tooltip from '~/components/overlays/Tooltip/Tooltip';
+import Stack from '~/components/surfaces/Stack/Stack';
 import Heading from '~/components/typography/Heading/Heading';
 import Text from '~/components/typography/Text/Text';
 import { useI18n } from '~/i18n/I18nProvider';
@@ -27,6 +28,7 @@ interface NotificationCenterOwnProps extends Omit<DivCoreNativeProps, 'onChange'
   markAllLabel?: string;
   clearAllLabel?: string;
   removeLabel?: string;
+  markReadLabel?: string;
   maxItems?: number;
 }
 
@@ -38,7 +40,11 @@ const NotificationCenter = (props: Props<NotificationCenterOwnProps>) => {
     'markAllLabel',
     'clearAllLabel',
     'removeLabel',
+    'markReadLabel',
     'maxItems',
+    'role',
+    'aria-label',
+    'aria-labelledby',
     'class',
   ]);
 
@@ -55,28 +61,38 @@ const NotificationCenter = (props: Props<NotificationCenterOwnProps>) => {
     return new Date(timestamp).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
   };
 
-  const readLabel = () => local.markAllLabel ?? t('notification.markAllRead');
-  const clearLabel = () => local.clearAllLabel ?? t('notification.clearAll');
-  const dismissLabel = () => local.removeLabel ?? t('common.dismiss');
-  const markReadLabel = () => t('notification.markRead');
+  const panelLabel = createMemo(() => local.label ?? t('common.notifications'));
+  const readLabel = createMemo(() => local.markAllLabel ?? t('notification.markAllRead'));
+  const clearLabel = createMemo(() => local.clearAllLabel ?? t('notification.clearAll'));
+  const dismissLabel = createMemo(() => local.removeLabel ?? t('common.dismiss'));
+  const markReadLabel = createMemo(() => local.markReadLabel ?? t('notification.markRead'));
+  const emptyMessage = createMemo(() => local.emptyMessage ?? t('notification.empty'));
   const hasNotifications = createMemo(() => notifications().length > 0);
   const handleItemRead = (id: string) => markNotificationRead(id);
   const handleItemRemove = (id: string) => removeNotification(id);
 
   return (
-    <div {...rest} class={classNames(styles.wrapper, local.class)}>
-      <div class={styles.header}>
-        <div class={styles.titleRow}>
+    <Stack
+      {...rest}
+      gap="md"
+      role={local.role ?? 'region'}
+      aria-label={local['aria-labelledby'] ? undefined : (local['aria-label'] ?? panelLabel())}
+      aria-labelledby={local['aria-labelledby']}
+      aria-live="polite"
+      class={classNames(styles.wrapper, local.class)}
+    >
+      <Stack direction="horizontal" align="center" justify="between" gap="md" wrap>
+        <Stack direction="horizontal" align="center" gap="xs">
           <Heading as="h3" level={5}>
-            {local.label ?? t('common.notifications')}
+            {panelLabel()}
           </Heading>
           <Show when={unreadCount() > 0}>
             <Badge content={unreadCount()} variant="primarySoft" inline>
               <span class={styles.badgeAnchor} />
             </Badge>
           </Show>
-        </div>
-        <div class={styles.actions}>
+        </Stack>
+        <Stack direction="horizontal" gap="xs" wrap>
           <Button
             type="button"
             variant="ghost"
@@ -89,53 +105,54 @@ const NotificationCenter = (props: Props<NotificationCenterOwnProps>) => {
           <Button type="button" variant="ghost" size="sm" onClick={clearNotifications} disabled={!hasNotifications()}>
             {clearLabel()}
           </Button>
-        </div>
-      </div>
+        </Stack>
+      </Stack>
 
       <Show
         when={items().length > 0}
         fallback={
-          <Text as="p" variant="bodySm" tone="muted" class={styles.empty}>
-            {local.emptyMessage ?? t('notification.empty')}
-          </Text>
+          <div class={styles.empty} role="status">
+            <Text as="p" variant="bodySm" tone="muted">
+              {emptyMessage()}
+            </Text>
+          </div>
         }
       >
         <ul class={styles.list}>
           <For each={items()}>
             {(item) => (
               <li class={classNames(styles.item, !item.read && styles.itemUnread)}>
-                <button
-                  type="button"
-                  class={styles.itemMain}
-                  onClick={() => handleItemRead(item.id)}
-                  aria-label={markReadLabel()}
-                >
+                <button type="button" class={styles.itemMain} onClick={() => handleItemRead(item.id)}>
                   <Show when={!item.read} fallback={<span class={styles.dotPlaceholder} />}>
                     <Badge dot class={styles.dotBadge}>
                       <span class={styles.dotAnchor} />
                     </Badge>
                   </Show>
-                  <Text
-                    as="span"
-                    variant="bodySm"
-                    class={classNames(styles.message, !item.read && styles.messageWithBadge)}
-                  >
-                    {item.message}
-                  </Text>
-                  <Text as="span" variant="caption" tone="muted">
-                    {formatDate(item.createdAt)}
-                  </Text>
+                  <Stack gap="2xs" class={styles.itemCopy}>
+                    <Text
+                      as="span"
+                      variant="bodySm"
+                      class={classNames(styles.message, !item.read && styles.messageWithBadge)}
+                    >
+                      {item.message}
+                    </Text>
+                    <Text as="span" variant="caption" tone="muted" class={styles.timestamp}>
+                      {formatDate(item.createdAt)}
+                    </Text>
+                  </Stack>
                 </button>
-                <div class={styles.itemActions}>
-                  <Tooltip content={markReadLabel()}>
-                    <IconButton
-                      icon={IoCheckmarkDone}
-                      label={markReadLabel()}
-                      onClick={() => handleItemRead(item.id)}
-                      size="sm"
-                      variant="subtle"
-                    />
-                  </Tooltip>
+                <Stack direction="horizontal" align="center" gap="2xs" class={styles.itemActions}>
+                  <Show when={!item.read}>
+                    <Tooltip content={markReadLabel()}>
+                      <IconButton
+                        icon={IoCheckmarkDone}
+                        label={markReadLabel()}
+                        onClick={() => handleItemRead(item.id)}
+                        size="sm"
+                        variant="subtle"
+                      />
+                    </Tooltip>
+                  </Show>
                   <Tooltip content={dismissLabel()}>
                     <IconButton
                       icon={IoTrash}
@@ -145,13 +162,13 @@ const NotificationCenter = (props: Props<NotificationCenterOwnProps>) => {
                       variant="subtle"
                     />
                   </Tooltip>
-                </div>
+                </Stack>
               </li>
             )}
           </For>
         </ul>
       </Show>
-    </div>
+    </Stack>
   );
 };
 

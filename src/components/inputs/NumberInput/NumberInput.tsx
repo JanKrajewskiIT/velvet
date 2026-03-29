@@ -1,5 +1,5 @@
 import { IoAdd, IoRemove } from 'solid-icons/io';
-import { type JSX, onCleanup, splitProps } from 'solid-js';
+import { createMemo, type JSX, onCleanup, splitProps } from 'solid-js';
 
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
@@ -54,22 +54,23 @@ const NumberInput = (props: Props<NumberInputOwnProps>) => {
     'class',
   ]);
 
-  const min = () => local.min ?? -Infinity;
-  const max = () => local.max ?? Infinity;
-  const step = () => local.step ?? 1;
-  const size = () => local.size ?? 'md';
-  const decrementButtonLabel = () =>
-    local.messages?.decrementButtonLabel ?? local.decrementLabel ?? t('number.decrease');
-  const incrementButtonLabel = () =>
-    local.messages?.incrementButtonLabel ?? local.incrementLabel ?? t('number.increase');
-  const clamp = (v: number) => Math.min(max(), Math.max(min(), v));
-
-  const controlSize = (): ComponentSize => {
+  const min = createMemo(() => local.min ?? -Infinity);
+  const max = createMemo(() => local.max ?? Infinity);
+  const step = createMemo(() => local.step ?? 1);
+  const size = createMemo(() => local.size ?? 'md');
+  const decrementButtonLabel = createMemo(
+    () => local.messages?.decrementButtonLabel ?? local.decrementLabel ?? t('number.decrease')
+  );
+  const incrementButtonLabel = createMemo(
+    () => local.messages?.incrementButtonLabel ?? local.incrementLabel ?? t('number.increase')
+  );
+  const controlSize = createMemo<ComponentSize>(() => {
     const current = size();
     if (current === 'sm') return 'sm';
     if (current === 'lg') return 'md';
     return 'sm';
-  };
+  });
+  const clamp = (value: number) => Math.min(max(), Math.max(min(), value));
 
   const increment = () => {
     if (local.disabled || local.readOnly) return;

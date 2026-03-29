@@ -1,6 +1,7 @@
 .dropdown {
   display: block;
   padding: var(--spacing-md);
+  width: min(296px, calc(100vw - (var(--spacing-lg) * 2)));
   z-index: var(--z-overlay);
 }
 

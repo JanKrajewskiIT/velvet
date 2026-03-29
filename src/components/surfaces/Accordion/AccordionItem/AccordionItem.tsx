@@ -16,6 +16,7 @@ interface AccordionItemOwnProps extends Omit<DivCoreNativeProps, 'onToggle'> {
   defaultOpen?: boolean;
   onToggle?: (isOpen: boolean) => void;
   disabled?: boolean;
+  toggleLabel?: string;
 }
 
 const AccordionItem = (props: Props<AccordionItemOwnProps>) => {
@@ -27,16 +28,17 @@ const AccordionItem = (props: Props<AccordionItemOwnProps>) => {
     'defaultOpen',
     'onToggle',
     'disabled',
+    'toggleLabel',
     'class',
   ]);
   const [internalOpen, setInternalOpen] = createSignal(local.defaultOpen ?? false);
 
   const isOpen = createMemo(() => (local.isOpen !== undefined ? local.isOpen : internalOpen()));
   const ariaLabel = createMemo(() => {
-    if (typeof local.label === 'string' && local.label.trim().length > 0) {
+    if (local.toggleLabel) return local.toggleLabel;
+    if (local.label.trim().length > 0) {
       return t('accordion.toggleSectionWithLabel', { label: local.label });
     }
-
     return t('accordion.toggleSection');
   });
 

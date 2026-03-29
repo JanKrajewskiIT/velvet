@@ -6,6 +6,7 @@ import type Props from '~/models/Props';
 import type { ButtonCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
+import Surface from '../../surfaces/Surface/Surface';
 import Text from '../../typography/Text/Text';
 import styles from './Popover.module.css';
 
@@ -43,11 +44,18 @@ const Popover = (props: Props<PopoverProps>) => {
         onClick: toggle,
       })}
       <Show when={isOpen()}>
-        <div class={classNames(styles.content, styles[position()])} role="dialog" aria-modal="false">
+        <Surface
+          class={classNames(styles.content, styles[position()])}
+          role="dialog"
+          aria-modal="false"
+          radius="md"
+          elevation="popover"
+          blur
+        >
           <Text as="p" variant="bodySm" tone="muted">
             {props.content}
           </Text>
-        </div>
+        </Surface>
       </Show>
     </div>
   );

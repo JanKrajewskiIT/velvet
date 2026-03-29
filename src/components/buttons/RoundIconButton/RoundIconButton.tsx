@@ -1,25 +1,23 @@
-import type { IconTypes } from 'solid-icons';
-import { type JSX, splitProps } from 'solid-js';
+import { createMemo, splitProps } from 'solid-js';
 
-import Icon, { type IconVariant } from '~/components/media/Icon/Icon';
 import type Props from '~/models/Props';
 import type { ButtonCoreNativeProps, ComponentSize } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import Button, { type ButtonVariant } from '../Button/Button';
+import { type ButtonIcon, renderButtonIcon } from '../shared/renderButtonIcon';
 import styles from './RoundIconButton.module.css';
 
 type RoundIconButtonElevation = 'popover' | 'glow';
-type RoundIconButtonIcon = IconTypes | JSX.Element;
 
 interface RoundIconButtonOwnProps extends Omit<ButtonCoreNativeProps, 'children' | 'title'> {
-  icon: RoundIconButtonIcon;
+  icon: ButtonIcon;
   label: string;
   size?: ComponentSize;
   variant?: ButtonVariant;
   elevation?: RoundIconButtonElevation;
   iconSize?: ComponentSize;
-  iconVariant?: IconVariant;
+  iconVariant?: import('~/components/media/Icon/Icon').IconVariant;
 }
 
 const RoundIconButton = (props: Props<RoundIconButtonOwnProps>) => {
@@ -34,13 +32,8 @@ const RoundIconButton = (props: Props<RoundIconButtonOwnProps>) => {
     'class',
     'type',
   ]);
-  const resolvedIconSize = (): ComponentSize => local.iconSize ?? local.size ?? 'md';
-  const renderedIcon = () =>
-    typeof local.icon === 'function' ? (
-      <Icon icon={local.icon} size={resolvedIconSize()} variant={local.iconVariant} />
-    ) : (
-      local.icon
-    );
+  const resolvedIconSize = createMemo<ComponentSize>(() => local.iconSize ?? local.size ?? 'md');
+  const renderedIcon = createMemo(() => renderButtonIcon(local.icon, resolvedIconSize(), local.iconVariant));
 
   return (
     <Button

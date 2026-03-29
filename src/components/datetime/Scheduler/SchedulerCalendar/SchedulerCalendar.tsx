@@ -1,7 +1,5 @@
-import { FiChevronLeft, FiChevronRight } from 'solid-icons/fi';
 import { Show } from 'solid-js';
 
-import IconButton from '~/components/buttons/IconButton/IconButton';
 import Heading from '~/components/typography/Heading/Heading';
 import Text from '~/components/typography/Text/Text';
 import type Props from '~/models/Props';
@@ -10,19 +8,20 @@ import type { DayCell } from '~/utils/datetime';
 import { toIso } from '~/utils/datetime';
 
 import CalendarGrid from '../../Calendar/CalendarGrid/CalendarGrid';
+import CalendarHeader from '../../Calendar/CalendarHeader/CalendarHeader';
 import styles from './SchedulerCalendar.module.css';
 
 interface SchedulerCalendarProps {
   monthLabel: string;
   previousMonthLabel: string;
   nextMonthLabel: string;
-  dayNames: string[];
-  gridDays: DayCell[];
+  dayNames: readonly string[];
+  gridDays: readonly DayCell[];
   selectedDate: string;
   todayIso: string;
   dragOverDate: string | null;
   showAdjacentDays: boolean;
-  eventsByDate: Map<string, unknown[]>;
+  eventsByDate: ReadonlyMap<string, readonly unknown[]>;
   onPreviousMonth: () => void;
   onNextMonth: () => void;
   onSelectDate: (iso: string) => void;
@@ -34,6 +33,7 @@ interface SchedulerCalendarProps {
 
 const SchedulerCalendar = (props: Props<SchedulerCalendarProps>) => {
   const cellIso = (cell: DayCell): string => toIso(cell.year, cell.month, cell.day);
+  const getEventsCount = (iso: string) => props.eventsByDate.get(iso)?.length ?? 0;
 
   const dayButtonClass = (cell: DayCell): string => {
     const iso = cellIso(cell);
@@ -49,25 +49,20 @@ const SchedulerCalendar = (props: Props<SchedulerCalendarProps>) => {
 
   return (
     <>
-      <header class={styles.calendarHeader}>
-        <IconButton
-          icon={FiChevronLeft}
-          label={props.previousMonthLabel}
-          size="sm"
-          variant="outline"
-          onClick={props.onPreviousMonth}
-        />
-        <Heading as="h3" level={3}>
-          {props.monthLabel}
-        </Heading>
-        <IconButton
-          icon={FiChevronRight}
-          label={props.nextMonthLabel}
-          size="sm"
-          variant="outline"
-          onClick={props.onNextMonth}
-        />
-      </header>
+      <CalendarHeader
+        class={styles.calendarHeader}
+        monthLabel={props.monthLabel}
+        previousLabel={props.previousMonthLabel}
+        nextLabel={props.nextMonthLabel}
+        onPrevious={props.onPreviousMonth}
+        onNext={props.onNextMonth}
+        navigationVariant="outline"
+        titleContent={
+          <Heading as="h3" level={3}>
+            {props.monthLabel}
+          </Heading>
+        }
+      />
 
       <div class={styles.grid}>
         <CalendarGrid
@@ -85,7 +80,7 @@ const SchedulerCalendar = (props: Props<SchedulerCalendarProps>) => {
           filterDay={(cell) => props.showAdjacentDays || !cell.outside}
           getDayContent={(cell) => {
             const iso = cellIso(cell);
-            const eventsCount = props.eventsByDate.get(iso)?.length ?? 0;
+            const eventsCount = getEventsCount(iso);
 
             return (
               <>

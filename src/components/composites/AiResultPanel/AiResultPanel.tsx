@@ -7,6 +7,7 @@ import classNames from '~/utils/classNames';
 import Button from '../../buttons/Button/Button';
 import ScoreRing from '../../charts/ScoreRing/ScoreRing';
 import Spinner from '../../feedback/Spinner/Spinner';
+import Stack from '../../surfaces/Stack/Stack';
 import CodeText from '../../typography/CodeText/CodeText';
 import Heading from '../../typography/Heading/Heading';
 import Text from '../../typography/Text/Text';
@@ -51,38 +52,38 @@ const iconClassMap = {
 
 const AiResultPanel = (props: Props<AiResultPanelProps>) => {
   return (
-    <div class={classNames(styles.panel, props.class)}>
+    <Stack gap="md" class={classNames(styles.panel, props.class)}>
       <Show when={props.isPending}>
-        <div class={styles.loading}>
+        <Stack align="center" gap="sm" class={styles.loading}>
           <Spinner size="md" />
           <Text as="p" variant="bodySm" tone="muted">
             {props.loadingText}
           </Text>
-        </div>
+        </Stack>
       </Show>
 
       <Show when={props.hasError && !props.hasResult && !props.isPending}>
-        <div class={styles.errorState}>
+        <Stack align="center" gap="sm" class={styles.errorState}>
           <Text as="p" variant="bodySm" tone="primary" class={styles.errorText}>
             {props.errorText}
           </Text>
           <Button variant="ghost" onClick={props.onRetry}>
             {props.retryLabel}
           </Button>
-        </div>
+        </Stack>
       </Show>
 
       <Show when={props.hasResult && !props.isPending}>
-        <div class={styles.result}>
+        <Stack gap="md" class={styles.result}>
           <Show when={props.score !== undefined}>
-            <div class={styles.scoreSection}>
+            <Stack align="center" gap="xs" class={styles.scoreSection}>
               <ScoreRing score={props.score ?? 0} />
               <Show when={props.scoreLabel}>
                 <CodeText as="span" size="sm" tone="muted" class={styles.scoreLabel}>
                   {props.scoreLabel}
                 </CodeText>
               </Show>
-            </div>
+            </Stack>
           </Show>
 
           <Show when={props.summary}>
@@ -96,13 +97,13 @@ const AiResultPanel = (props: Props<AiResultPanelProps>) => {
           <For each={props.sections ?? []}>
             {(section) => (
               <Show when={section.items.length > 0}>
-                <div class={styles.listSection}>
-                  <div class={styles.listTitle}>
+                <Stack gap="xs" class={styles.listSection}>
+                  <Stack direction="horizontal" align="center" gap="xs" class={styles.listTitle}>
                     {iconMap[section.icon](classNames(styles.icon, iconClassMap[section.icon]))}
                     <Heading as="h4" level={4} variant="titleMd">
                       {section.title}
                     </Heading>
-                  </div>
+                  </Stack>
                   <ul class={styles.list}>
                     <For each={section.items}>
                       {(item) => (
@@ -114,21 +115,23 @@ const AiResultPanel = (props: Props<AiResultPanelProps>) => {
                       )}
                     </For>
                   </ul>
-                </div>
+                </Stack>
               </Show>
             )}
           </For>
 
           <Show when={props.children}>{props.children}</Show>
-        </div>
+        </Stack>
       </Show>
 
       <Show when={!props.isPending && !props.hasResult && !props.hasError && props.idle}>{props.idle}</Show>
 
       <Show when={!props.isPending && props.actions}>
-        <div class={styles.actions}>{props.actions}</div>
+        <Stack direction="horizontal" justify="center" gap="sm" class={styles.actions}>
+          {props.actions}
+        </Stack>
       </Show>
-    </div>
+    </Stack>
   );
 };
 

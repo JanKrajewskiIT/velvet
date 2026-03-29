@@ -9,6 +9,7 @@ import {
   CodeText,
   FilterBar,
   type FilterBarFilter,
+  Heading,
   ImageGrid,
   type ImageGridItem,
   Lightbox,
@@ -33,7 +34,7 @@ import {
 } from '@jankrajewskiit/ui';
 import type { UTCTimestamp } from 'lightweight-charts';
 import { IoDocumentText, IoFolder, IoImage } from 'solid-icons/io';
-import { createMemo, createSignal, Show } from 'solid-js';
+import { createMemo, createSignal, For, Show } from 'solid-js';
 
 import type { SectionId } from '../App';
 import { PreviewGroup, PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
@@ -227,6 +228,68 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
     { key: 'status', value: 'in-progress' },
     { key: 'priority', value: 'high' },
   ]);
+  const reviewQueueItems = createMemo(() => [
+    {
+      id: 'review-1',
+      label: t('demo.text.dataDisplay.virtualizedList.record', { index: 12 }),
+      owner: t('demo.text.common.owner.anna'),
+      ownerValue: 'anna',
+      statusValue: 'in-progress',
+      statusLabel: t('demo.text.dataDisplay.filterBar.statusInProgress'),
+      priorityValue: 'high',
+      priorityLabel: t('demo.text.dataDisplay.filterBar.priorityHigh'),
+    },
+    {
+      id: 'review-2',
+      label: t('demo.text.dataDisplay.virtualizedList.record', { index: 18 }),
+      owner: t('demo.text.common.owner.marek'),
+      ownerValue: 'marek',
+      statusValue: 'todo',
+      statusLabel: t('demo.text.dataDisplay.filterBar.statusTodo'),
+      priorityValue: 'medium',
+      priorityLabel: t('demo.text.dataDisplay.filterBar.priorityMedium'),
+    },
+    {
+      id: 'review-3',
+      label: t('demo.text.dataDisplay.virtualizedList.record', { index: 24 }),
+      owner: t('demo.text.common.owner.kasia'),
+      ownerValue: 'kasia',
+      statusValue: 'done',
+      statusLabel: t('demo.text.dataDisplay.filterBar.statusDone'),
+      priorityValue: 'low',
+      priorityLabel: t('demo.text.dataDisplay.filterBar.priorityLow'),
+    },
+    {
+      id: 'review-4',
+      label: t('demo.text.dataDisplay.virtualizedList.record', { index: 31 }),
+      owner: t('demo.text.common.owner.jan'),
+      ownerValue: 'jan',
+      statusValue: 'in-progress',
+      statusLabel: t('demo.text.dataDisplay.filterBar.statusInProgress'),
+      priorityValue: 'high',
+      priorityLabel: t('demo.text.dataDisplay.filterBar.priorityHigh'),
+    },
+  ]);
+  const filteredReviewQueueItems = createMemo(() => {
+    const query = filtersQuery().trim().toLowerCase();
+    return reviewQueueItems().filter((item) => {
+      const matchesQuery =
+        !query ||
+        item.label.toLowerCase().includes(query) ||
+        item.owner.toLowerCase().includes(query) ||
+        item.statusLabel.toLowerCase().includes(query) ||
+        item.priorityLabel.toLowerCase().includes(query);
+
+      const matchesFilters = filtersValue().every((filter) => {
+        if (filter.key === 'status') return item.statusValue === filter.value;
+        if (filter.key === 'owner') return item.ownerValue === filter.value;
+        if (filter.key === 'priority') return item.priorityValue === filter.value;
+        return true;
+      });
+
+      return matchesQuery && matchesFilters;
+    });
+  });
   const nextPollingBar = createBarGenerator(asUtcTimestamp(1705017600), 2103.9);
   const nextWsBar = createBarGenerator(asUtcTimestamp(1705017600), 2098.4);
 
@@ -512,22 +575,69 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
         >
           <PreviewPanel>
             <PreviewGroup title={t('demo.text.common.examples')}>
-              <FilterBar
-                filters={filterDefinitions()}
-                value={filtersValue()}
-                onChange={setFiltersValue}
-                search={filtersQuery()}
-                onSearchChange={setFiltersQuery}
-                searchPlaceholder={t('demo.text.dataDisplay.filterBar.searchPlaceholder')}
-                allLabel={t('demo.text.dataDisplay.filterBar.allLabel')}
-                clearAllLabel={t('demo.text.dataDisplay.filterBar.clearAllLabel')}
-                removeFilterLabel={t('demo.text.dataDisplay.filterBar.removeFilterLabel')}
-              />
-              <Text as="p" variant="caption" tone="muted" class="mutedText">
-                {t('demo.text.dataDisplay.filterBar.query')}:{' '}
-                {filtersQuery() || t('demo.text.dataDisplay.filterBar.none')} |{' '}
-                {t('demo.text.dataDisplay.filterBar.activeFilters')}: {filtersValue().length}
-              </Text>
+              <div class="scenarioShell">
+                <div class="scenarioHeader">
+                  <div class="scenarioHeaderCopy">
+                    <Text as="p" variant="overline" tone="primary">
+                      {t('demo.page.dataFilters.title')}
+                    </Text>
+                    <Heading level={3} variant="titleLg">
+                      {t('demo.page.dataFilters.description')}
+                    </Heading>
+                  </div>
+                  <div class="scenarioMetricRow">
+                    <div class="scenarioMetric">
+                      <Text as="span" variant="overline" tone="tertiary">
+                        {t('demo.text.dataDisplay.filterBar.activeFilters')}
+                      </Text>
+                      <Text as="span" variant="labelLg">
+                        {filtersValue().length}
+                      </Text>
+                    </div>
+                    <div class="scenarioMetric">
+                      <Text as="span" variant="overline" tone="tertiary">
+                        {t('demo.text.dataDisplay.filterBar.query')}
+                      </Text>
+                      <Text as="span" variant="labelLg">
+                        {filtersQuery() || t('demo.text.dataDisplay.filterBar.none')}
+                      </Text>
+                    </div>
+                    <div class="scenarioMetric">
+                      <Text as="span" variant="overline" tone="tertiary">
+                        {t('demo.page.dataTables.title')}
+                      </Text>
+                      <Text as="span" variant="labelLg">
+                        {filteredReviewQueueItems().length}
+                      </Text>
+                    </div>
+                  </div>
+                </div>
+
+                <FilterBar
+                  filters={filterDefinitions()}
+                  value={filtersValue()}
+                  onChange={setFiltersValue}
+                  search={filtersQuery()}
+                  onSearchChange={setFiltersQuery}
+                  searchPlaceholder={t('demo.text.dataDisplay.filterBar.searchPlaceholder')}
+                  allLabel={t('demo.text.dataDisplay.filterBar.allLabel')}
+                  clearAllLabel={t('demo.text.dataDisplay.filterBar.clearAllLabel')}
+                  removeFilterLabel={t('demo.text.dataDisplay.filterBar.removeFilterLabel')}
+                />
+
+                <div class="scenarioBody">
+                  <List variant="bordered">
+                    <For each={filteredReviewQueueItems()}>
+                      {(item) => (
+                        <ListItem
+                          label={item.label}
+                          secondary={`${item.owner} • ${item.statusLabel} • ${item.priorityLabel}`}
+                        />
+                      )}
+                    </For>
+                  </List>
+                </div>
+              </div>
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>{t('demo.text.dataDisplay.filterBar.meta')}</ShowcaseMeta>

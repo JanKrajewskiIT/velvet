@@ -1,5 +1,4 @@
-import type { JSX } from 'solid-js';
-import { createUniqueId, Show, splitProps } from 'solid-js';
+import { createMemo, createUniqueId, type JSX, Show, splitProps } from 'solid-js';
 
 import LabelText from '~/components/typography/LabelText/LabelText';
 import type Props from '~/models/Props';
@@ -36,9 +35,9 @@ const ChoiceControl = (props: Props<ChoiceControlOwnProps>) => {
     'indicator',
     'aria-labelledby',
   ]);
-
-  const hasLabel = () => Boolean(local.label || local.description);
-  const resolvedLabelId = () => (hasLabel() ? (local.labelId ?? generatedLabelId) : undefined);
+  const hasLabel = createMemo(() => Boolean(local.label || local.description));
+  const resolvedLabelId = createMemo(() => (hasLabel() ? (local.labelId ?? generatedLabelId) : undefined));
+  const labelledBy = createMemo(() => joinAriaIds(local['aria-labelledby'], resolvedLabelId()));
 
   return (
     <label class={classNames(styles.field, local.wrapperClass)}>
@@ -47,7 +46,7 @@ const ChoiceControl = (props: Props<ChoiceControlOwnProps>) => {
           {...rest}
           type={local.type}
           class={classNames(styles.input, local.inputClass)}
-          aria-labelledby={joinAriaIds(local['aria-labelledby'], resolvedLabelId())}
+          aria-labelledby={labelledBy()}
         />
         {local.indicator ?? <span class={classNames(styles.indicator, local.indicatorClass)} aria-hidden="true" />}
       </span>

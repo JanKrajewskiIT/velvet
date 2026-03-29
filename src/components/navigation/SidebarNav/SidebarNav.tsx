@@ -1,4 +1,4 @@
-import { For, type JSX, Show } from 'solid-js';
+import { For, type JSX, Show, splitProps } from 'solid-js';
 
 import Heading from '~/components/typography/Heading/Heading';
 import Text from '~/components/typography/Text/Text';
@@ -31,41 +31,56 @@ interface SidebarNavProps {
 
 const SidebarNav = (props: Props<SidebarNavProps>) => {
   const { t } = useI18n();
-  const isActive = (id: string) => props.activeId === id;
+  const [local, rest] = splitProps(props, [
+    'class',
+    'groups',
+    'activeId',
+    'onSelect',
+    'label',
+    'subtitle',
+    'actions',
+    'navLabel',
+  ]);
+  const isActive = (id: string) => local.activeId === id;
 
   return (
-    <nav class={classNames(styles.root, props.class)} aria-label={props.navLabel ?? t('sidebar.componentCategories')}>
+    <nav {...rest} class={classNames(styles.root, local.class)} aria-label={local.navLabel ?? t('sidebar.navigation')}>
       <div class={styles.brand}>
-        <Heading level={3}>{props.label}</Heading>
-        <Show when={props.subtitle}>
+        <Heading level={3}>{local.label}</Heading>
+        <Show when={local.subtitle}>
           <Text variant="bodySm" tone="muted">
-            {props.subtitle}
+            {local.subtitle}
           </Text>
         </Show>
-        <Show when={props.actions}>
+        <Show when={local.actions}>
           <div class={classNames(styles.brandActions, 'themeToggleBar')} data-sidebar-actions="true">
-            {props.actions}
+            {local.actions}
           </div>
         </Show>
       </div>
 
-      <For each={props.groups}>
+      <For each={local.groups}>
         {(group) => (
-          <div class={styles.group}>
+          <section class={styles.group} aria-label={group.label}>
             <Text as="p" variant="overline" tone="tertiary">
               {group.label}
             </Text>
-            <For each={group.items}>
-              {(item) => (
-                <SidebarItemButton
-                  label={item.label}
-                  active={isActive(item.id)}
-                  onClick={() => props.onSelect?.(item.id)}
-                  class={classNames(styles.item, isActive(item.id) && styles.itemActive)}
-                />
-              )}
-            </For>
-          </div>
+            <ul class={styles.groupList}>
+              <For each={group.items}>
+                {(item) => (
+                  <li class={styles.groupListItem}>
+                    <SidebarItemButton
+                      label={item.label}
+                      active={isActive(item.id)}
+                      aria-current={isActive(item.id) ? 'page' : undefined}
+                      onClick={() => local.onSelect?.(item.id)}
+                      class={classNames(styles.item, isActive(item.id) && styles.itemActive)}
+                    />
+                  </li>
+                )}
+              </For>
+            </ul>
+          </section>
         )}
       </For>
     </nav>

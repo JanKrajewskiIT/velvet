@@ -15,7 +15,14 @@ export interface SliderRangeValue {
   max: number;
 }
 
-interface RangeSliderOwnProps extends Omit<SliderCoreNativeProps, 'onChange' | 'value'>, AriaFieldProps {
+export interface RangeSliderMessages {
+  minimumLabel?: string;
+  maximumLabel?: string;
+  minimumWithLabel?: (label: string) => string;
+  maximumWithLabel?: (label: string) => string;
+}
+
+export interface RangeSliderProps extends Omit<SliderCoreNativeProps, 'onChange' | 'value'>, AriaFieldProps {
   id?: string;
   groupAriaLabel?: string;
   value: SliderRangeValue;
@@ -25,9 +32,10 @@ interface RangeSliderOwnProps extends Omit<SliderCoreNativeProps, 'onChange' | '
   step?: number;
   marks?: Array<{ value: number; label?: string }>;
   showValueLabels?: boolean;
+  messages?: RangeSliderMessages;
 }
 
-const RangeSlider = (props: Props<RangeSliderOwnProps>) => {
+const RangeSlider = (props: Props<RangeSliderProps>) => {
   const { t } = useI18n();
   const [local, rest] = splitProps(props, [
     'value',
@@ -45,6 +53,7 @@ const RangeSlider = (props: Props<RangeSliderOwnProps>) => {
     'class',
     'disabled',
     'name',
+    'messages',
   ]);
   const minLimit = () => local.min ?? 0;
   const maxLimit = () => local.max ?? 100;
@@ -125,6 +134,14 @@ const RangeSlider = (props: Props<RangeSliderOwnProps>) => {
   };
 
   const minThumbAboveMax = createMemo(() => normalized().min >= normalized().max);
+  const minimumLabel = createMemo(() => local.messages?.minimumLabel ?? t('rangeSlider.minimum'));
+  const maximumLabel = createMemo(() => local.messages?.maximumLabel ?? t('rangeSlider.maximum'));
+  const minimumWithGroupLabel = createMemo(
+    () => local.messages?.minimumWithLabel ?? ((label: string) => t('rangeSlider.minimumWithLabel', { label }))
+  );
+  const maximumWithGroupLabel = createMemo(
+    () => local.messages?.maximumWithLabel ?? ((label: string) => t('rangeSlider.maximumWithLabel', { label }))
+  );
 
   const updateFromTrackPress: JSX.EventHandler<HTMLDivElement, PointerEvent> = (event) => {
     if (local.disabled) return;
@@ -218,11 +235,7 @@ const RangeSlider = (props: Props<RangeSliderOwnProps>) => {
           onInput={updateMin}
           aria-invalid={resolveAriaInvalid(undefined, local['aria-invalid'])}
           aria-errormessage={props['aria-errormessage']}
-          aria-label={
-            local.groupAriaLabel
-              ? t('rangeSlider.minimumWithLabel', { label: local.groupAriaLabel })
-              : t('rangeSlider.minimum')
-          }
+          aria-label={local.groupAriaLabel ? minimumWithGroupLabel()(local.groupAriaLabel) : minimumLabel()}
         />
         <input
           {...rest}
@@ -237,11 +250,7 @@ const RangeSlider = (props: Props<RangeSliderOwnProps>) => {
           onInput={updateMax}
           aria-invalid={resolveAriaInvalid(undefined, local['aria-invalid'])}
           aria-errormessage={props['aria-errormessage']}
-          aria-label={
-            local.groupAriaLabel
-              ? t('rangeSlider.maximumWithLabel', { label: local.groupAriaLabel })
-              : t('rangeSlider.maximum')
-          }
+          aria-label={local.groupAriaLabel ? maximumWithGroupLabel()(local.groupAriaLabel) : maximumLabel()}
         />
       </div>
       <Show when={marks().length > 0}>

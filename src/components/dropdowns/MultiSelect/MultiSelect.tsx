@@ -6,7 +6,7 @@ import useDropdownPanel from '~/hooks/useDropdownPanel';
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import type { AriaFieldProps, ComponentSize } from '~/models/Props';
-import { resolveAriaInvalid } from '~/utils/aria';
+import { joinAriaIds, resolveAriaInvalid } from '~/utils/aria';
 import classNames from '~/utils/classNames';
 
 import DropdownChevronFieldTrigger from '../Dropdown/DropdownChevronFieldTrigger/DropdownChevronFieldTrigger';
@@ -54,6 +54,7 @@ const MultiSelect = (props: Props<MultiSelectOwnProps>) => {
   let triggerRef: HTMLButtonElement | undefined;
   let panelRef: HTMLDivElement | undefined;
   const dropdownId = createUniqueId();
+  const triggerLabelId = createUniqueId();
   const dropdown = useDropdownPanel({
     rootRef: () => rootRef,
     panelRef: () => panelRef,
@@ -77,6 +78,11 @@ const MultiSelect = (props: Props<MultiSelectOwnProps>) => {
       .map((option) => option.label)
       .join(', ')
   );
+  const triggerLabel = createMemo(() =>
+    local.value.length > 0 ? selectedLabels() : (local.placeholder ?? t('multiselect.selectOptions'))
+  );
+  const emptyLabel = createMemo(() => local.emptyLabel ?? t('common.noOptions'));
+  const labelledBy = createMemo(() => joinAriaIds(local['aria-labelledby'], triggerLabelId));
 
   const isSelected = (value: string) => local.value.includes(value);
 
@@ -96,8 +102,27 @@ const MultiSelect = (props: Props<MultiSelectOwnProps>) => {
     local.onChange(local.value.filter((entry) => entry !== value));
   };
 
+  const focusSelectedOption = () => {
+    requestAnimationFrame(() => {
+      const panel = panelRef;
+      if (!panel) return;
+      const selected = panel.querySelector<HTMLButtonElement>('[aria-selected="true"]:not(:disabled)');
+      if (selected) {
+        selected.focus();
+        return;
+      }
+      const first = panel.querySelector<HTMLButtonElement>('button:not(:disabled)');
+      first?.focus();
+    });
+  };
   const toggleOpen = () => {
-    dropdown.toggle();
+    if (dropdown.open()) {
+      dropdown.close();
+      return;
+    }
+
+    dropdown.openDropdown();
+    focusSelectedOption();
   };
 
   const handleTriggerKeyDown = (e: KeyboardEvent) => {
@@ -111,7 +136,8 @@ const MultiSelect = (props: Props<MultiSelectOwnProps>) => {
         <DropdownChevronFieldTrigger
           id={local.id}
           ref={triggerRef}
-          label={local.value.length > 0 ? selectedLabels() : (local.placeholder ?? t('multiselect.selectOptions'))}
+          label={triggerLabel()}
+          labelId={triggerLabelId}
           open={dropdown.open()}
           class={classNames(styles.trigger, dropdown.open() && styles.triggerOpen)}
           size={local.size}
@@ -119,7 +145,7 @@ const MultiSelect = (props: Props<MultiSelectOwnProps>) => {
           aria-haspopup="listbox"
           aria-expanded={dropdown.open() ? 'true' : 'false'}
           aria-controls={dropdown.open() ? dropdownId : undefined}
-          aria-labelledby={local['aria-labelledby']}
+          aria-labelledby={labelledBy()}
           aria-describedby={local['aria-describedby']}
           aria-invalid={resolveAriaInvalid(undefined, props['aria-invalid'])}
           aria-errormessage={props['aria-errormessage']}
@@ -138,10 +164,7 @@ const MultiSelect = (props: Props<MultiSelectOwnProps>) => {
             aria-multiselectable="true"
             onKeyDown={dropdown.handlePanelKeyDown}
           >
-            <Show
-              when={local.options.length > 0}
-              fallback={<div class={styles.empty}>{local.emptyLabel ?? t('common.noOptions')}</div>}
-            >
+            <Show when={local.options.length > 0} fallback={<div class={styles.empty}>{emptyLabel()}</div>}>
               <For each={local.options}>
                 {(option) => {
                   const selected = () => isSelected(option.value);
@@ -166,7 +189,7 @@ const MultiSelect = (props: Props<MultiSelectOwnProps>) => {
       </div>
 
       <Show when={selectedOptions().length > 0}>
-        <div class={styles.selected}>
+        <div class={styles.selected} aria-live="polite">
           <For each={selectedOptions()}>
             {(option) => (
               <ClosableChip

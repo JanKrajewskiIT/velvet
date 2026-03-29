@@ -32,6 +32,11 @@
   color: var(--color-primary);
 }
 
+.pillSelected,
+.pillSelected:hover:not(:disabled) {
+  box-shadow: var(--shadow-sm);
+}
+
 @media (width < 768px) {
   .button {
     padding: var(--spacing-sm);

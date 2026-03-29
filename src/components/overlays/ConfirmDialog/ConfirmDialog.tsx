@@ -28,11 +28,11 @@ const ConfirmDialog = (props: Props<ConfirmDialogProps>) => {
   return (
     <Dialog open={props.open} onClose={props.onClose} class={props.class}>
       <DialogTitle label={props.label} />
-      <DialogBody>
+      <DialogBody class={styles.body}>
         <div class={classNames(styles.iconWrapper, isDanger() ? styles.iconDanger : styles.iconPrimary)}>
           {isDanger() ? <FiAlertTriangle /> : <FiHelpCircle />}
         </div>
-        <Text as="p" variant="bodyMd" tone="muted">
+        <Text as="p" variant="bodyMd" tone="muted" class={styles.message}>
           {props.message}
         </Text>
       </DialogBody>

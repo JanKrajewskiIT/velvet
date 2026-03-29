@@ -16,4 +16,8 @@
 .input {
   flex: 1 1 96px;
   min-width: 96px;
+  width: auto;
+  border-radius: 0;
+  appearance: none;
+  cursor: text;
 }

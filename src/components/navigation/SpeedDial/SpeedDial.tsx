@@ -1,5 +1,5 @@
 import { FiPlus } from 'solid-icons/fi';
-import { createSignal, createUniqueId, For, type JSX, Show } from 'solid-js';
+import { createMemo, createSignal, createUniqueId, For, type JSX, Show, splitProps } from 'solid-js';
 
 import useClickOutside from '~/hooks/useClickOutside';
 import useEscapeKey from '~/hooks/useEscapeKey';
@@ -37,6 +37,17 @@ interface SpeedDialProps {
 
 const SpeedDial = (props: Props<SpeedDialProps>) => {
   const { t } = useI18n();
+  const [local, rest] = splitProps(props, [
+    'class',
+    'actions',
+    'icon',
+    'position',
+    'direction',
+    'actionsLabel',
+    'openLabel',
+    'closeLabel',
+    'messages',
+  ]);
   const [open, setOpen] = createSignal(false);
   const menuId = createUniqueId();
   let containerRef: HTMLDivElement | undefined;
@@ -49,12 +60,14 @@ const SpeedDial = (props: Props<SpeedDialProps>) => {
 
   useEscapeKey(open, () => setOpen(false));
 
-  const position = () => props.position ?? 'bottom-right';
-  const direction = () => props.direction ?? 'up';
-  const actionsLabel = () => props.messages?.actionsAriaLabel ?? props.actionsLabel ?? t('speedDial.actions');
-  const hasActions = () => props.actions.length > 0;
-  const openLabel = () => props.messages?.openAriaLabel ?? props.openLabel ?? t('speedDial.open');
-  const closeLabel = () => props.messages?.closeAriaLabel ?? props.closeLabel ?? t('speedDial.close');
+  const position = createMemo(() => local.position ?? 'bottom-right');
+  const direction = createMemo(() => local.direction ?? 'up');
+  const actionsLabel = createMemo(
+    () => local.messages?.actionsAriaLabel ?? local.actionsLabel ?? t('speedDial.actions')
+  );
+  const hasActions = createMemo(() => local.actions.length > 0);
+  const openLabel = createMemo(() => local.messages?.openAriaLabel ?? local.openLabel ?? t('speedDial.open'));
+  const closeLabel = createMemo(() => local.messages?.closeAriaLabel ?? local.closeLabel ?? t('speedDial.close'));
 
   const toggle = () => {
     if (!hasActions()) return;
@@ -66,15 +79,15 @@ const SpeedDial = (props: Props<SpeedDialProps>) => {
     setOpen(false);
   };
 
-  const tooltipPosition = (): 'top' | 'bottom' | 'left' | 'right' => {
+  const tooltipPosition = createMemo<'top' | 'bottom' | 'left' | 'right'>(() => {
     if (direction() === 'left') return 'top';
     if (direction() === 'right') return 'top';
     if (position() === 'bottom-right' || position() === 'top-right') return 'left';
     return 'right';
-  };
+  });
 
   return (
-    <div ref={containerRef} class={classNames(styles.speedDial, styles[position()], props.class)}>
+    <div {...rest} ref={containerRef} class={classNames(styles.speedDial, styles[position()], local.class)}>
       <Show when={open() && hasActions()}>
         <div
           id={menuId}
@@ -82,7 +95,7 @@ const SpeedDial = (props: Props<SpeedDialProps>) => {
           role="menu"
           aria-label={actionsLabel()}
         >
-          <For each={props.actions}>
+          <For each={local.actions}>
             {(action, index) => (
               <div class={styles.actionWrapper} style={{ '--action-delay': `${index() * 30}ms` }}>
                 <Tooltip content={action.label} position={tooltipPosition()}>
@@ -112,7 +125,7 @@ const SpeedDial = (props: Props<SpeedDialProps>) => {
         aria-controls={menuId}
         label={open() ? closeLabel() : openLabel()}
         elevation="glow"
-        icon={<span class={styles.fabIcon}>{props.icon ?? <FiPlus size={24} />}</span>}
+        icon={<span class={styles.fabIcon}>{local.icon ?? <FiPlus size={24} />}</span>}
       />
     </div>
   );

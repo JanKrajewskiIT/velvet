@@ -9,6 +9,7 @@ import {
   DialogActions,
   DialogBody,
   DialogTitle,
+  Heading,
   Popover,
   Sheet,
   Text,
@@ -143,9 +144,47 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
         >
           <PreviewPanel>
             <PreviewGroup title={t('demo.text.common.examples')}>
-              <Button variant="primary" onClick={() => setDialogOpen(true)}>
-                {t('demo.text.overlays.dialog.openDialog')}
-              </Button>
+              <div class="scenarioShell">
+                <div class="scenarioHeader">
+                  <div class="scenarioHeaderCopy">
+                    <Text as="p" variant="overline" tone="primary">
+                      {t('demo.page.overlaysDialogs.title')}
+                    </Text>
+                    <Heading level={3} variant="titleLg">
+                      {t('demo.page.overlaysDialogs.description')}
+                    </Heading>
+                  </div>
+                  <div class="scenarioMetricRow">
+                    <div class="scenarioMetric">
+                      <Text as="span" variant="overline" tone="tertiary">
+                        {t('demo.text.overlays.confirmAction.confirmedActions')}
+                      </Text>
+                      <Text as="span" variant="labelLg">
+                        {confirmRuns()}
+                      </Text>
+                    </div>
+                    <div class="scenarioMetric">
+                      <Text as="span" variant="overline" tone="tertiary">
+                        {t('demo.text.overlays.confirmAction.confirmOpened')}
+                      </Text>
+                      <Text as="span" variant="labelLg">
+                        {dialogOpen()
+                          ? t('demo.text.overlays.confirmAction.yes')
+                          : t('demo.text.overlays.confirmAction.no')}
+                      </Text>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="actionCluster">
+                  <Button variant="primary" onClick={() => setDialogOpen(true)}>
+                    {t('demo.text.overlays.dialog.openDialog')}
+                  </Button>
+                  <Button variant="danger" onClick={() => setConfirmOpen(true)}>
+                    {t('demo.text.overlays.confirmDialog.deleteItem')}
+                  </Button>
+                </div>
+              </div>
 
               <Dialog open={dialogOpen()} onClose={() => setDialogOpen(false)}>
                 <DialogTitle label={t('demo.text.overlays.dialog.exampleTitle')} />
@@ -238,43 +277,6 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
 
       <Show when={sectionId() === 'overlays-sheets'}>
         <ShowcaseSection
-          title={t('demo.showcase.overlays.sheetRightWithActions.title')}
-          subtitle={t('demo.showcase.overlays.sheetRightWithActions.subtitle')}
-        >
-          <PreviewPanel>
-            <PreviewGroup title={t('demo.text.common.examples')}>
-              <Button variant="ghost" onClick={() => setSheetActionsOpen(true)}>
-                {t('demo.text.overlays.sheets.openRightSheet')}
-              </Button>
-
-              <Sheet
-                open={sheetActionsOpen()}
-                onClose={() => setSheetActionsOpen(false)}
-                label={t('demo.text.overlays.sheets.settings')}
-                subtitle={t('demo.text.overlays.sheets.adjustPreferences')}
-                closeLabel={t('demo.text.overlays.sheets.closeSettingsPanel')}
-                side="right"
-                size="lg"
-                actions={
-                  <>
-                    <Button variant="ghost" onClick={() => setSheetActionsOpen(false)}>
-                      {t('demo.text.overlays.sheets.cancel')}
-                    </Button>
-                    <Button variant="primary" onClick={() => setSheetActionsOpen(false)}>
-                      {t('demo.text.overlays.sheets.saveChanges')}
-                    </Button>
-                  </>
-                }
-              >
-                <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                  {t('demo.text.overlays.sheets.settingsContent')}
-                </Text>
-              </Sheet>
-            </PreviewGroup>
-          </PreviewPanel>
-        </ShowcaseSection>
-
-        <ShowcaseSection
           title={t('demo.showcase.overlays.sheets.title')}
           subtitle={t('demo.showcase.overlays.sheets.subtitle')}
         >
@@ -289,6 +291,9 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
                 </Button>
                 <Button variant="ghost" onClick={() => setRightSheetOpen(true)}>
                   {t('demo.text.overlays.sheets.rightSheet')}
+                </Button>
+                <Button variant="ghost" onClick={() => setSheetActionsOpen(true)}>
+                  {t('demo.text.overlays.sheets.openRightSheet')}
                 </Button>
               </div>
 
@@ -328,6 +333,30 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
               >
                 <Text as="p" variant="bodySm" tone="muted" class="mutedText">
                   {t('demo.text.overlays.sheets.rightContent')}
+                </Text>
+              </Sheet>
+
+              <Sheet
+                open={sheetActionsOpen()}
+                onClose={() => setSheetActionsOpen(false)}
+                label={t('demo.text.overlays.sheets.settings')}
+                subtitle={t('demo.text.overlays.sheets.adjustPreferences')}
+                closeLabel={t('demo.text.overlays.sheets.closeSettingsPanel')}
+                side="right"
+                size="lg"
+                actions={
+                  <>
+                    <Button variant="ghost" onClick={() => setSheetActionsOpen(false)}>
+                      {t('demo.text.overlays.sheets.cancel')}
+                    </Button>
+                    <Button variant="primary" onClick={() => setSheetActionsOpen(false)}>
+                      {t('demo.text.overlays.sheets.saveChanges')}
+                    </Button>
+                  </>
+                }
+              >
+                <Text as="p" variant="bodySm" tone="muted" class="mutedText">
+                  {t('demo.text.overlays.sheets.settingsContent')}
                 </Text>
               </Sheet>
             </PreviewGroup>

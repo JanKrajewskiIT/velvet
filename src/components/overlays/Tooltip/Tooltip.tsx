@@ -5,6 +5,7 @@ import type { DivCoreNativeProps } from '~/models/Props';
 import { joinAriaIds } from '~/utils/aria';
 import classNames from '~/utils/classNames';
 
+import Surface from '../../surfaces/Surface/Surface';
 import Text from '../../typography/Text/Text';
 import styles from './Tooltip.module.css';
 
@@ -46,11 +47,19 @@ const Tooltip = (props: Props<TooltipOwnProps>) => {
     >
       {local.children}
       <Show when={isVisible()}>
-        <div id={tooltipId} role="tooltip" class={classNames(styles.tooltipContent, styles[local.position || 'top'])}>
+        <Surface
+          id={tooltipId}
+          role="tooltip"
+          class={classNames(styles.tooltipContent, styles[local.position || 'top'])}
+          tone="inverse"
+          elevation="popover"
+          radius="sm"
+          border={false}
+        >
           <Text as="span" variant="caption" tone="inverse">
             {local.content}
           </Text>
-        </div>
+        </Surface>
       </Show>
     </div>
   );
