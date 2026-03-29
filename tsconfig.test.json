@@ -7,7 +7,6 @@
     "noEmit": false,
     "outDir": "./.tmp-tests",
     "rootDir": ".",
-    "baseUrl": ".",
     "paths": {
       "~/*": ["src/*"]
     },
