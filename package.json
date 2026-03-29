@@ -37,8 +37,8 @@
   ],
   "packageManager": "npm@11.12.1",
   "files": [
-    "dist",
-    "config"
+    "dist/**/*",
+    "config/**/*"
   ],
   "engines": {
     "node": ">=20"
