@@ -1,23 +1,12 @@
-import { createContext, type ParentProps, splitProps, untrack, useContext } from 'solid-js';
+import { type ParentProps, splitProps, untrack } from 'solid-js';
 
 import { createQueryClient, type QueryClient } from '~/query/createQueryClient';
+import { QueryClientContext } from '~/query/queryClientContext';
 import type { CreateQueryClientOptions } from '~/query/types';
 
 interface QueryClientProviderProps extends ParentProps {
   client?: QueryClient;
   options?: CreateQueryClientOptions;
-}
-
-const QueryClientContext = createContext<QueryClient>();
-
-let defaultQueryClient: QueryClient | undefined;
-
-function getDefaultQueryClient(): QueryClient {
-  if (!defaultQueryClient) {
-    defaultQueryClient = createQueryClient();
-  }
-
-  return defaultQueryClient;
 }
 
 const QueryClientProvider = (props: QueryClientProviderProps) => {
@@ -28,13 +17,4 @@ const QueryClientProvider = (props: QueryClientProviderProps) => {
 };
 
 export type { QueryClientProviderProps };
-export { getDefaultQueryClient, QueryClientProvider };
-
-export function useQueryClient(): QueryClient {
-  const context = useContext(QueryClientContext);
-  if (context) {
-    return context;
-  }
-
-  return getDefaultQueryClient();
-}
+export { QueryClientProvider };

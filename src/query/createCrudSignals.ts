@@ -2,7 +2,7 @@ import type { HttpClient } from '~/http/types';
 import { createMutationSignal } from '~/query/createMutationSignal';
 import type { QueryClient } from '~/query/createQueryClient';
 import { createQuerySignal } from '~/query/createQuerySignal';
-import { useQueryClient } from '~/query/QueryClientProvider';
+import { useQueryClient } from '~/query/queryClientContext';
 import type { MutationSignal, QuerySignal } from '~/query/types';
 
 export interface CrudSignals<TEntity, TCreate, TUpdate, TId extends string | number> {

@@ -51,7 +51,7 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test": "tsc -p tsconfig.test.json && node --test .tmp-tests/tests/*.test.js",
+    "test": "tsc -p tsconfig.test.json && node --loader ./tests/alias-loader.mjs --test .tmp-tests/tests/*.test.js",
     "lint:css": "stylelint \"src/**/*.css\"",
     "lint:css:fix": "stylelint \"src/**/*.css\" --fix",
     "verify": "npm run typecheck && npm run lint && npm run lint:css && npm run build && npm run test && npm run verify:pkg",

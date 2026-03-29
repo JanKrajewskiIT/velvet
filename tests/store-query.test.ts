@@ -6,7 +6,7 @@ import { createSignal } from 'solid-js';
 import { createQueryClient } from '../src/query/createQueryClient.js';
 import { createQuerySignal } from '../src/query/createQuerySignal.js';
 import { hashQueryKey } from '../src/query/key.js';
-import { getDefaultQueryClient } from '../src/query/QueryClientProvider.js';
+import { getDefaultQueryClient } from '../src/query/queryClientContext.js';
 import { createAutosaveSignal } from '../src/store/createAutosaveSignal.js';
 import { createEntityStore } from '../src/store/createEntityStore.js';
 import { createSelectionStore } from '../src/store/createSelectionStore.js';

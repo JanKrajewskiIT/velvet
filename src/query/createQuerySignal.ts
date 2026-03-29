@@ -1,7 +1,7 @@
 import { createEffect, createMemo, createSignal, on } from 'solid-js';
 
 import type { QueryClient } from '~/query/createQueryClient';
-import { useQueryClient } from '~/query/QueryClientProvider';
+import { useQueryClient } from '~/query/queryClientContext';
 import type { QueryKey, QueryOptions, QueryRetry, QuerySignal, QueryState } from '~/query/types';
 
 export interface CreateQuerySignalOptions<TData> extends QueryOptions<TData> {

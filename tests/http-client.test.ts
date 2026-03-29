@@ -164,9 +164,9 @@ void test('createApiClients builds clients from provided map', async () => {
   await clients.account.get('/profile');
 
   assert.deepEqual(urls, [
-    'https://api.example.com/organizer/offers',
-    'https://api.example.com/questions/questions',
-    'https://api.example.com/users/profile',
+    'https://api.example.com/offers',
+    'https://api.example.com/questions',
+    'https://api.example.com/profile',
   ]);
 });
 

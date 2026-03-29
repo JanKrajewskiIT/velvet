@@ -1,4 +1,4 @@
-import { type Accessor, createMemo, createSignal } from 'solid-js';
+import { type Accessor, createSignal } from 'solid-js';
 
 export interface EntityStore<T, Id extends PropertyKey> {
   ids: Accessor<Id[]>;
@@ -21,8 +21,8 @@ export function createEntityStore<T, Id extends PropertyKey>(
 ): EntityStore<T, Id> {
   const [entities, setEntities] = createSignal(new Map<Id, T>());
 
-  const ids = createMemo<Id[]>(() => Array.from(entities().keys()));
-  const list = createMemo<T[]>(() => Array.from(entities().values()));
+  const ids: Accessor<Id[]> = () => Array.from(entities().keys());
+  const list: Accessor<T[]> = () => Array.from(entities().values());
 
   const setAll = (items: T[]) => {
     const next = new Map<Id, T>();

@@ -6,8 +6,9 @@ export { createQueryClient } from '~/query/createQueryClient';
 export type { CreateQuerySignalOptions } from '~/query/createQuerySignal';
 export { createQuerySignal } from '~/query/createQuerySignal';
 export { hashQueryKey, matchesPartialKey, normalizeQueryKey } from '~/query/key';
+export { getDefaultQueryClient, useQueryClient } from '~/query/queryClientContext';
 export type { QueryClientProviderProps } from '~/query/QueryClientProvider';
-export { getDefaultQueryClient, QueryClientProvider, useQueryClient } from '~/query/QueryClientProvider';
+export { QueryClientProvider } from '~/query/QueryClientProvider';
 export type {
   CreateQueryClientOptions,
   MutationOptions,

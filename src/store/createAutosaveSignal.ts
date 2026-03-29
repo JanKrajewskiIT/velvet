@@ -55,6 +55,7 @@ export function createAutosaveSignal<TData>(options: CreateAutosaveSignalOptions
       debounceTimer = undefined;
     }
 
+    latestSnapshot = options.source();
     await executeSave(latestSnapshot);
   };
 
