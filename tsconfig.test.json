@@ -2,6 +2,8 @@
   "extends": "./config/tsconfig.node.json",
   "compilerOptions": {
     "lib": ["ES2024", "DOM", "DOM.Iterable"],
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
     "noEmit": false,
     "outDir": "./.tmp-tests",
     "rootDir": ".",
@@ -19,6 +21,7 @@
     "src/http/**/*.ts",
     "src/store/**/*.ts",
     "src/query/**/*.ts",
+    "src/query/**/*.tsx",
     "src/auth/**/*.ts",
     "tests/**/*.ts"
   ]

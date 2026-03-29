@@ -2,7 +2,7 @@ import { createEffect, createMemo, createSignal, on } from 'solid-js';
 
 import type { QueryClient } from '~/query/createQueryClient';
 import { useQueryClient } from '~/query/QueryClientProvider';
-import type { QueryKey, QueryOptions, QueryRetry, QuerySignal } from '~/query/types';
+import type { QueryKey, QueryOptions, QueryRetry, QuerySignal, QueryState } from '~/query/types';
 
 export interface CreateQuerySignalOptions<TData> extends QueryOptions<TData> {
   key: QueryKey;
@@ -73,7 +73,7 @@ export function createQuerySignal<TData>(options: CreateQuerySignalOptions<TData
     const controller = new AbortController();
     setActiveAbort(controller);
 
-    entry.setState((previous) => ({
+    entry.setState((previous: QueryState<TData>) => ({
       ...previous,
       status: previous.status === 'idle' ? 'loading' : previous.status,
       isFetching: true,
@@ -93,7 +93,7 @@ export function createQuerySignal<TData>(options: CreateQuerySignalOptions<TData
       })
       .catch((error: unknown) => {
         const normalized = error instanceof Error ? error : new Error('Query failed');
-        entry.setState((previous) => ({
+        entry.setState((previous: QueryState<TData>) => ({
           ...previous,
           status: 'error',
           error: normalized,
