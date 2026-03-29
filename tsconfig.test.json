@@ -8,7 +8,7 @@
     "outDir": "./.tmp-tests",
     "rootDir": ".",
     "paths": {
-      "~/*": ["src/*"]
+      "~/*": ["./src/*"]
     },
     "allowImportingTsExtensions": false,
     "declaration": false,
