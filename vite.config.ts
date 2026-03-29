@@ -35,7 +35,7 @@ export default defineConfig({
       output: {
         preserveModules: true,
         preserveModulesRoot: 'src',
-        entryFileNames: '[name].js',
+        entryFileNames: (chunkInfo) => `${chunkInfo.name.replace(/^src[\\/]/u, '')}.js`,
       },
     },
     cssCodeSplit: false,

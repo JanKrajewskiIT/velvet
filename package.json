@@ -7,11 +7,11 @@
     "type": "git",
     "url": "git+https://github.com/JanKrajewskiIT/velvet.git"
   },
-  "module": "./dist/src/index.js",
+  "module": "./dist/index.js",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/src/index.js"
+      "import": "./dist/index.js"
     },
     "./styles": "./dist/velvet-ui.css",
     "./eslint-config": "./config/eslint.mjs",
@@ -55,7 +55,7 @@
     "lint:css": "stylelint \"src/**/*.css\"",
     "lint:css:fix": "stylelint \"src/**/*.css\" --fix",
     "verify": "npm run typecheck && npm run lint && npm run lint:css && npm run build && npm run test && npm run verify:pkg",
-    "verify:pkg": "publint && attw --pack . --entrypoints . --profile esm-only --ignore-rules internal-resolution-error",
+    "verify:pkg": "npm run build && publint && attw --pack . --entrypoints . --profile esm-only --ignore-rules internal-resolution-error",
     "size": "size-limit",
     "prepare": "husky"
   },
