@@ -4,6 +4,9 @@ paths:
   - 'demo/**/*.css'
 ---
 
+> Type: Rule (normative constraints)
+> Source of truth: Rules define mandatory constraints; skills define operational playbooks.
+
 # Demo App Conventions
 
 ## Use Library Components
@@ -32,3 +35,10 @@ paths:
 - One section component per major category or theme
 - Keep examples realistic, readable, and short
 - Prefer multiple focused examples over one giant overloaded showcase block
+
+## Component Documentation Expectations
+
+- New public components should get at least one default usage example in demo
+- If a component has important state variants, showcase only meaningful ones (not every permutation)
+- Demonstrate the default API first, then customization variants
+- For renamed or deprecated APIs, demo must use the current recommended API

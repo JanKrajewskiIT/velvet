@@ -3,6 +3,9 @@ paths:
   - 'src/**/*.module.css'
 ---
 
+> Type: Rule (normative constraints)
+> Source of truth: Rules define mandatory constraints; skills define operational playbooks.
+
 # CSS Modules
 
 - camelCase classes only

@@ -1,8 +1,10 @@
 ---
-description: CSS Modules conventions for VelvetUi
-globs: src/**/*.module.css
-alwaysApply: false
+paths:
+  - 'src/**/*.module.css'
 ---
+
+> Type: Rule (normative constraints)
+> Source of truth: Rules define mandatory constraints; skills define operational playbooks.
 
 # CSS Modules
 

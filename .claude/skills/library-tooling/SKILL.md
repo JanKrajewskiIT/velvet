@@ -3,6 +3,9 @@ name: library-tooling
 description: Vite library build, TypeScript config, shared config presets, npm publishing, adding new components. Use when modifying build config or tooling.
 ---
 
+> Type: Skill (operational playbook)
+> Source of truth: Rules define mandatory constraints; skills describe execution patterns.
+
 ## Build
 
 Vite + `vite-plugin-solid` + `vite-plugin-dts`. Entry `src/index.ts`, formats `es`+`umd`.

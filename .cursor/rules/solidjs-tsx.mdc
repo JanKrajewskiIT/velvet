@@ -1,8 +1,10 @@
 ---
-description: SolidJS TSX component conventions for VelvetUi
-globs: src/**/*.tsx
-alwaysApply: false
+paths:
+  - 'src/**/*.tsx'
 ---
+
+> Type: Rule (normative constraints)
+> Source of truth: Rules define mandatory constraints; skills define operational playbooks.
 
 # SolidJS TSX
 
@@ -58,6 +60,28 @@ alwaysApply: false
 - Dynamic CSS values should go through CSS custom properties
 - Static styles belong in `.module.css`
 - Inline style is reserved for truly runtime-driven values
+
+## Accessibility Definition of Done
+
+- Every interactive control must be keyboard reachable and operable
+- Focus state must be visible and use shared focus tokens
+- Field-like components must wire `aria-invalid`, `aria-errormessage`, and `aria-describedby` via shared aria helpers
+- Component semantics must expose correct role and accessible name by default
+- If label text is visually hidden or composed, keep semantic labeling intact
+
+## Component Test Baseline
+
+- New reusable components should include tests for render and core interaction behavior
+- Cover at least key states that change behavior: disabled, loading, error, selected, expanded, or equivalent
+- Validate keyboard interactions for actionable controls
+- Add an accessibility smoke assertion for semantic rendering where practical
+
+## Performance and SSR Safety
+
+- Keep derived state in `createMemo` and avoid effect chains for pure computation
+- Avoid expensive calculations inside JSX render paths
+- Guard browser-only APIs (`window`, `document`, `ResizeObserver`) with `onMount` or environment checks
+- Keep list identity stable with deterministic keys to avoid unnecessary remounts
 
 ## Extraction Guidance
 

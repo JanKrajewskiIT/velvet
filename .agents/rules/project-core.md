@@ -3,6 +3,9 @@ paths:
   - '**/*'
 ---
 
+> Type: Rule (normative constraints)
+> Source of truth: Rules define mandatory constraints; skills define operational playbooks.
+
 # VelvetUi - Core Principles
 
 ## Overview

@@ -3,6 +3,9 @@ name: design-tokens
 description: CSS custom properties reference from globals.css -- colors, spacing, typography, shadows, z-index, animations. Use when styling components.
 ---
 
+> Type: Skill (operational playbook)
+> Source of truth: Rules define mandatory constraints; skills describe execution patterns.
+
 All tokens live in `src/theme/globals.css`. Always use tokens instead of hardcoded values.
 
 ## Colors
@@ -35,10 +38,8 @@ All tokens live in `src/theme/globals.css`. Always use tokens instead of hardcod
 - Easings: `--ease-{out-expo,out-back,spring}`
 - Keyframes available in `globals.css`
 
-## Styling Rules
+## Usage Checklist
 
-- Prefer semantic tokens over raw grayscale tokens
-- Dark theme should flow through semantic tokens automatically
-- Base primitives and shared surfaces should remain visually neutral by default
-- Do not add gradients, glow, or hover-lift styling to primitive defaults unless the component is explicitly a high-emphasis variant
-- `Card` should read as a baseline surface first; spotlighted surfaces should be explicit opt-in components or variants
+- Prefer semantic tokens over raw grayscale values
+- Use CSS custom properties for runtime values instead of direct inline visual styling
+- Follow visual-neutral and component styling constraints from `project-core` and `css-modules` rules

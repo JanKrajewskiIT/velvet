@@ -1,7 +1,10 @@
 ---
-description: Core VelvetUi project principles and high-level constraints
-alwaysApply: true
+paths:
+  - '**/*'
 ---
+
+> Type: Rule (normative constraints)
+> Source of truth: Rules define mandatory constraints; skills define operational playbooks.
 
 # VelvetUi - Core Principles
 

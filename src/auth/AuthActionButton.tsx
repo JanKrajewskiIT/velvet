@@ -1,6 +1,7 @@
 import { FiLogIn, FiLogOut } from 'solid-icons/fi';
 import { createMemo, createSignal, splitProps } from 'solid-js';
 
+import type { ButtonVariant } from '~/components/buttons/Button/Button';
 import IconButton from '~/components/buttons/IconButton/IconButton';
 import Icon from '~/components/media/Icon/Icon';
 import { useI18n } from '~/i18n/I18nProvider';
@@ -12,10 +13,11 @@ import { getCurrentReturnUrl } from './utils';
 
 interface AuthActionButtonProps extends Omit<ButtonCoreNativeProps, 'title'> {
   returnUrl?: string;
+  variant?: ButtonVariant;
 }
 
 const AuthActionButton = (props: Props<AuthActionButtonProps>) => {
-  const [local, rest] = splitProps(props, ['returnUrl', 'disabled', 'onClick']);
+  const [local, rest] = splitProps(props, ['returnUrl', 'variant', 'disabled', 'onClick']);
   const auth = useAuth();
   const { t } = useI18n();
   const [isAuthenticating, setIsAuthenticating] = createSignal(false);
@@ -58,6 +60,7 @@ const AuthActionButton = (props: Props<AuthActionButtonProps>) => {
       icon={icon()}
       label={label()}
       onClick={handleAuthAction}
+      variant={local.variant}
       disabled={local.disabled || isAuthenticating()}
       aria-busy={isAuthenticating() ? 'true' : undefined}
       data-state={auth.isAuthenticated() ? 'authenticated' : 'anonymous'}

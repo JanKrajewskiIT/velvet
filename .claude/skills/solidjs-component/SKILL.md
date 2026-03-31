@@ -3,6 +3,11 @@ name: solidjs-component
 description: SolidJS component patterns for VelvetUi -- Props convention, component inventory, hooks, toast system, overlay pattern, shared utils. Use when creating or modifying components.
 ---
 
+> Type: Skill (operational playbook)
+> Source of truth: Rules define mandatory constraints; skills describe execution patterns.
+
+Operational playbook for building components. Normative constraints live in rules (`project-core`, `solidjs-tsx`, `css-modules`, `demo-app`, `git-standards`).
+
 ## Standard Component Shape
 
 `import type Props from "~/models/Props"` -> semantic interface -> `(props: Props<X>) =>` -> `export default`
@@ -45,12 +50,10 @@ Export from `src/index.ts` as `{ default as X }`.
 - Reserve `createEffect` for real side effects
 - Keep JSX focused on rendering, not business logic
 
-## Styling Expectations
+## Styling Ownership
 
-- Primitive visuals stay neutral by default
-- Do not make base `Card`, `Button`, `Input`, `Chip`, or similar primitives promotional or animated by default
-- Hover lift, spotlight, strong motion, or decorative emphasis must be explicit and justified
-- Keep shared primitive visuals inside the primitive module; hosts should position, not reskin
+- Keep shared primitive visuals inside the primitive module; host components should position, not reskin
+- For neutral/default visual constraints and allowed emphasis variants, follow `project-core` and `css-modules` rules
 
 ## Hooks
 
