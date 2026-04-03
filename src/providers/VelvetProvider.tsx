@@ -1,11 +1,11 @@
-import { createMemo, ErrorBoundary, type JSX, type ParentProps } from 'solid-js';
+﻿import { createMemo, ErrorBoundary, type JSX, type ParentProps } from 'solid-js';
 
 import type { OidcAuthConfig } from '~/auth/AuthProvider';
 import { AuthProvider } from '~/auth/AuthProvider';
 import ErrorFallback from '~/components/feedback/ErrorFallback/ErrorFallback';
 import ToastProvider from '~/components/feedback/Toast/ToastProvider/ToastProvider';
 import { I18nProvider, useI18n } from '~/i18n/I18nProvider';
-import type { Locale } from '~/i18n/messages';
+import type { I18nDictionary, Locale } from '~/i18n/messages';
 import { QueryClientProvider, type QueryClientProviderProps } from '~/query/QueryClientProvider';
 import { ThemeProvider } from '~/theme/ThemeProvider';
 
@@ -13,26 +13,20 @@ interface VelvetProviderProps extends ParentProps {
   themeStorageKey?: string;
   localeStorageKey?: string;
   initialLocale?: Locale;
+  localeDictionaries?: Partial<Record<Locale, I18nDictionary>>;
   authConfig: OidcAuthConfig;
   query?: Omit<QueryClientProviderProps, 'children'>;
   errorFallback?: JSX.Element;
 }
 
 const DefaultErrorFallback = (props: { error: unknown; reset: () => void }) => {
-  const { t } = useI18n();
+  const { ts } = useI18n();
 
   const description = createMemo(() =>
-    props.error instanceof Error && props.error.message ? props.error.message : t('error.description')
+    props.error instanceof Error && props.error.message ? props.error.message : ts('error.description'),
   );
 
-  return (
-    <ErrorFallback
-      label={t('error.title')}
-      description={description()}
-      retryLabel={t('error.retry')}
-      onRetry={props.reset}
-    />
-  );
+  return <ErrorFallback label={ts('error.title')} description={description()} onRetry={props.reset} />;
 };
 
 const VelvetProvider = (props: VelvetProviderProps) => {
@@ -46,7 +40,11 @@ const VelvetProvider = (props: VelvetProviderProps) => {
 
   return (
     <ThemeProvider storageKey={props.themeStorageKey}>
-      <I18nProvider storageKey={props.localeStorageKey} initialLocale={props.initialLocale}>
+      <I18nProvider
+        storageKey={props.localeStorageKey}
+        initialLocale={props.initialLocale}
+        dictionaries={props.localeDictionaries}
+      >
         <QueryClientProvider client={props.query?.client} options={props.query?.options}>
           <AuthProvider config={props.authConfig}>
             <ToastProvider>

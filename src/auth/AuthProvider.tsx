@@ -1,4 +1,4 @@
-import { type User, UserManager, WebStorageStateStore } from 'oidc-client-ts';
+import { User, UserManager, WebStorageStateStore } from 'oidc-client-ts';
 import {
   type Accessor,
   createContext,
@@ -7,10 +7,23 @@ import {
   onCleanup,
   onMount,
   type ParentProps,
+  untrack,
   useContext,
 } from 'solid-js';
 
-import { extractRolesFromAccessToken, getCurrentReturnUrl, isBrowserRuntime, withTimeout } from '~/auth/utils';
+import {
+  extractRolesFromAccessToken,
+  getCurrentReturnUrl,
+  getStoredUser,
+  isBrowserRuntime,
+  isOidcCallbackReturnUrl,
+  matchesAnyRole,
+  matchesRole,
+  normalizeReturnUrl,
+  resolveCallbackReturnUrl,
+  resolveProfileValue,
+  withTimeout,
+} from '~/auth/utils';
 
 interface AuthState {
   user: User | null;
@@ -89,13 +102,15 @@ const DEFAULT_AUTH_CONTEXT_VALUE: AuthContextValue = {
   isAdminOrModerator: () => false,
 };
 
-let userManagerInstance: UserManager | null = null;
-let userManagerCacheKey: string | null = null;
-let userManagerFactory: ((config: OidcAuthUserManagerFactoryConfig) => UserManager) | null = null;
+const userManagerCache = {
+  instance: null as UserManager | null,
+  cacheKey: null as string | null,
+  factory: null as ((config: OidcAuthUserManagerFactoryConfig) => UserManager) | null,
+};
 
-function getUserManagerFactory(): (config: OidcAuthUserManagerFactoryConfig) => UserManager {
-  if (userManagerFactory) {
-    return userManagerFactory;
+const getResolvedFactory = (): ((config: OidcAuthUserManagerFactoryConfig) => UserManager) => {
+  if (userManagerCache.factory) {
+    return userManagerCache.factory;
   }
 
   return (config) =>
@@ -108,66 +123,52 @@ function getUserManagerFactory(): (config: OidcAuthUserManagerFactoryConfig) => 
       userStore: new WebStorageStateStore({ store: sessionStorage }),
       automaticSilentRenew: config.automaticSilentRenew ?? true,
     });
-}
+};
 
-function setAuthUserManagerFactory(factory: ((config: OidcAuthUserManagerFactoryConfig) => UserManager) | null): void {
-  userManagerFactory = factory;
-  userManagerInstance = null;
-  userManagerCacheKey = null;
-}
+const setAuthUserManagerFactory = (
+  factory: ((config: OidcAuthUserManagerFactoryConfig) => UserManager) | null,
+): void => {
+  userManagerCache.factory = factory;
+  userManagerCache.instance = null;
+  userManagerCache.cacheKey = null;
+};
 
-function buildUserManagerCacheKey(config: OidcAuthConfig): string {
-  return `${config.authority}::${config.clientId}::${config.appUrl}::${config.silentRedirectUri ?? ''}`;
-}
+const buildCacheKey = (config: OidcAuthConfig): string =>
+  `${config.authority}::${config.clientId}::${config.appUrl}::${config.silentRedirectUri ?? ''}`;
 
-function getUserManager(config: OidcAuthConfig): UserManager {
+const getUserManager = (config: OidcAuthConfig): UserManager => {
   if (!isBrowserRuntime()) {
     throw new Error('AuthProvider requires browser runtime.');
   }
 
-  const cacheKey = buildUserManagerCacheKey(config);
-  if (!userManagerInstance || userManagerCacheKey !== cacheKey) {
-    userManagerInstance = getUserManagerFactory()({
+  const cacheKey = buildCacheKey(config);
+  if (!userManagerCache.instance || userManagerCache.cacheKey !== cacheKey) {
+    userManagerCache.instance = getResolvedFactory()({
       authority: config.authority,
       clientId: config.clientId,
       appUrl: config.appUrl,
       silentRedirectUri: config.silentRedirectUri,
       automaticSilentRenew: true,
     });
-    userManagerCacheKey = cacheKey;
+    userManagerCache.cacheKey = cacheKey;
   }
 
-  return userManagerInstance;
-}
+  return userManagerCache.instance;
+};
 
-function getTimeoutMs(config: OidcAuthConfig): number {
-  return config.timeoutMs ?? DEFAULT_TIMEOUT_MS;
-}
+const getTimeoutMs = (config: OidcAuthConfig): number => config.timeoutMs ?? DEFAULT_TIMEOUT_MS;
 
-function normalizeReturnUrl(value: string | undefined): string {
-  if (!value) {
-    return '/';
-  }
-
-  if (!value.startsWith('/')) {
-    return '/';
-  }
-
-  if (value.startsWith('//')) {
-    return '/';
-  }
-
-  return value;
-}
-
-function getReturnUrlStorageKey(config: OidcAuthConfig): string {
-  return config.returnUrlStorageKey ?? DEFAULT_RETURN_URL_STORAGE_KEY;
-}
+const getReturnUrlStorageKey = (config: OidcAuthConfig): string =>
+  config.returnUrlStorageKey ?? DEFAULT_RETURN_URL_STORAGE_KEY;
 
 const AuthProvider = (props: AuthProviderProps) => {
+  const initialConfig = untrack(() => props.config);
+  const hasCallbackQuery =
+    isBrowserRuntime() && (window.location.search.includes('code=') || window.location.search.includes('error='));
+
   const [state, setState] = createSignal<AuthState>({
-    user: null,
-    isLoading: true,
+    user: getStoredUser(initialConfig.authority, initialConfig.clientId),
+    isLoading: hasCallbackQuery,
     error: null,
   });
 
@@ -181,67 +182,47 @@ const AuthProvider = (props: AuthProviderProps) => {
   const isAuthenticated = createMemo(() => state().user !== null && state().user?.expired === false);
   const accessToken = createMemo(() => state().user?.access_token);
   const roles = createMemo(() => extractRolesFromAccessToken(accessToken()));
-  const userProfile = createMemo(() => state().user?.profile as Record<string, unknown> | undefined);
 
-  const resolveProfileValue = (keys: string[]): string => {
-    const profile = userProfile();
-    if (!profile) {
-      return '';
-    }
+  const firstName = createMemo(() => resolveProfileValue(user(), ['given_name', 'first_name']));
+  const lastName = createMemo(() => resolveProfileValue(user(), ['family_name', 'last_name']));
+  const email = createMemo(() => resolveProfileValue(user(), ['email']));
+  const username = createMemo(() => resolveProfileValue(user(), ['preferred_username', 'name', 'sub']));
 
-    for (const key of keys) {
-      const value = profile[key];
-      if (typeof value === 'string' && value.length > 0) {
-        return value;
-      }
-    }
-
-    return '';
-  };
-
-  const firstName = createMemo(() => resolveProfileValue(['given_name', 'first_name']));
-  const lastName = createMemo(() => resolveProfileValue(['family_name', 'last_name']));
-  const email = createMemo(() => resolveProfileValue(['email']));
-  const username = createMemo(() => resolveProfileValue(['preferred_username', 'name', 'sub']));
-
-  const isAdmin = createMemo(() => roles().some((role) => role.toLowerCase() === 'admin'));
-  const isModerator = createMemo(() => roles().some((role) => role.toLowerCase() === 'moderator'));
+  const isAdmin = createMemo(() => matchesRole(roles(), 'admin'));
+  const isModerator = createMemo(() => matchesRole(roles(), 'moderator'));
   const isAdminOrModerator = createMemo(() => isAdmin() || isModerator());
 
   const accountUrl = createMemo(() => props.config.accountUrl ?? `${props.config.authority}/account`);
 
-  function hasRole(role: string): boolean {
-    return roles().some((entry) => entry.toLowerCase() === role.toLowerCase());
-  }
+  const hasRole = (role: string): boolean => matchesRole(roles(), role);
+  const hasAnyRole = (...requiredRoles: string[]): boolean => matchesAnyRole(roles(), ...requiredRoles);
 
-  function hasAnyRole(...requiredRoles: string[]): boolean {
-    if (requiredRoles.length === 0) {
-      return true;
-    }
-
-    return requiredRoles.some((requiredRole) => hasRole(requiredRole));
-  }
-
-  async function signIn(returnUrl?: string): Promise<void> {
+  const signIn = async (returnUrl?: string): Promise<void> => {
     if (!isBrowserRuntime()) {
       return;
     }
 
     try {
-      if (returnUrl) {
-        sessionStorage.setItem(returnUrlStorageKey(), normalizeReturnUrl(returnUrl));
+      const normalizedReturnUrl = returnUrl ? normalizeReturnUrl(returnUrl) : undefined;
+      const safeReturnUrl =
+        normalizedReturnUrl && !isOidcCallbackReturnUrl(normalizedReturnUrl, props.config.appUrl)
+          ? normalizedReturnUrl
+          : undefined;
+
+      if (safeReturnUrl) {
+        sessionStorage.setItem(returnUrlStorageKey(), safeReturnUrl);
       }
 
-      await userManager().signinRedirect();
+      await userManager().signinRedirect(safeReturnUrl ? { state: { returnUrl: safeReturnUrl } } : undefined);
     } catch (unknownError) {
       setState((previous) => ({
         ...previous,
         error: unknownError instanceof Error ? unknownError.message : 'Sign in failed',
       }));
     }
-  }
+  };
 
-  async function signOut(): Promise<void> {
+  const signOut = async (): Promise<void> => {
     if (!isBrowserRuntime()) {
       return;
     }
@@ -254,9 +235,9 @@ const AuthProvider = (props: AuthProviderProps) => {
         error: unknownError instanceof Error ? unknownError.message : 'Sign out failed',
       }));
     }
-  }
+  };
 
-  async function signInSilent(): Promise<void> {
+  const signInSilent = async (): Promise<void> => {
     if (!isBrowserRuntime()) {
       return;
     }
@@ -271,7 +252,7 @@ const AuthProvider = (props: AuthProviderProps) => {
         error: unknownError instanceof Error ? unknownError.message : 'Silent sign in failed',
       }));
     }
-  }
+  };
 
   onMount(() => {
     if (!isBrowserRuntime()) {
@@ -285,16 +266,21 @@ const AuthProvider = (props: AuthProviderProps) => {
           const callbackUser = await withTimeout(
             userManager().signinRedirectCallback(),
             timeoutMs(),
-            'Sign in callback timed out'
+            'Sign in callback timed out',
           );
           setState({ user: callbackUser, isLoading: false, error: null });
 
-          const returnUrl = normalizeReturnUrl(sessionStorage.getItem(returnUrlStorageKey()) ?? undefined);
+          const storedReturnUrl = sessionStorage.getItem(returnUrlStorageKey()) ?? undefined;
           sessionStorage.removeItem(returnUrlStorageKey());
+          const stateReturnUrl = resolveCallbackReturnUrl(callbackUser.state, props.config.appUrl);
+          const safeStoredReturnUrl =
+            storedReturnUrl && !isOidcCallbackReturnUrl(storedReturnUrl, props.config.appUrl)
+              ? normalizeReturnUrl(storedReturnUrl)
+              : undefined;
+          const targetReturnUrl = stateReturnUrl ?? safeStoredReturnUrl ?? '/';
 
-          const targetUrl = returnUrl;
-          if (getCurrentReturnUrl() !== targetUrl) {
-            window.location.replace(targetUrl);
+          if (getCurrentReturnUrl() !== targetReturnUrl) {
+            window.location.replace(targetReturnUrl);
           } else {
             window.history.replaceState({}, document.title, window.location.pathname + window.location.hash);
           }
@@ -387,23 +373,47 @@ export { AuthProvider };
 export type { AuthContextValue, OidcAuthConfig, OidcAuthUserManagerFactoryConfig };
 export { setAuthUserManagerFactory };
 
-export function useAuth(): AuthContextValue {
-  const context = useContext(AuthContext);
-  if (context) {
-    return context;
+export const useAuth = (): AuthContextValue => useContext(AuthContext) ?? DEFAULT_AUTH_CONTEXT_VALUE;
+
+export const handleAuthRedirectCallback = async (config: OidcAuthConfig): Promise<boolean> => {
+  if (!isBrowserRuntime()) {
+    return false;
   }
 
-  return DEFAULT_AUTH_CONTEXT_VALUE;
-}
+  if (!isOidcCallbackReturnUrl(window.location.href, config.appUrl)) {
+    return false;
+  }
 
-export async function getAuthAccessToken(config: OidcAuthConfig): Promise<string | undefined> {
+  const callbackUser = await getUserManager(config).signinRedirectCallback(window.location.href);
+  const stateReturnUrl = resolveCallbackReturnUrl(callbackUser.state, config.appUrl);
+  const storageKey = getReturnUrlStorageKey(config);
+  const storedReturnUrl = sessionStorage.getItem(storageKey) ?? undefined;
+  sessionStorage.removeItem(storageKey);
+
+  const safeStoredReturnUrl =
+    storedReturnUrl && !isOidcCallbackReturnUrl(storedReturnUrl, config.appUrl)
+      ? normalizeReturnUrl(storedReturnUrl)
+      : undefined;
+  const targetUrl = stateReturnUrl ?? safeStoredReturnUrl ?? '/';
+  const currentReturnUrl = getCurrentReturnUrl();
+
+  if (currentReturnUrl !== targetUrl) {
+    window.location.replace(targetUrl);
+    return true;
+  }
+
+  window.history.replaceState({}, document.title, window.location.pathname + window.location.hash);
+  return false;
+};
+
+export const getAuthAccessToken = async (config: OidcAuthConfig): Promise<string | undefined> => {
   if (!isBrowserRuntime()) {
     return undefined;
   }
 
-  const userManager = getUserManager(config);
-  const timeoutMs = getTimeoutMs(config);
-  const user = await withTimeout(userManager.getUser(), timeoutMs, 'Access token lookup timed out');
+  const manager = getUserManager(config);
+  const timeout = getTimeoutMs(config);
+  const user = await withTimeout(manager.getUser(), timeout, 'Access token lookup timed out');
 
   if (!user) {
     return undefined;
@@ -411,7 +421,7 @@ export async function getAuthAccessToken(config: OidcAuthConfig): Promise<string
 
   if (user.expired) {
     try {
-      const renewedUser = await withTimeout(userManager.signinSilent(), timeoutMs, 'Silent token renew timed out');
+      const renewedUser = await withTimeout(manager.signinSilent(), timeout, 'Silent token renew timed out');
       return renewedUser?.access_token;
     } catch {
       return undefined;
@@ -419,4 +429,4 @@ export async function getAuthAccessToken(config: OidcAuthConfig): Promise<string
   }
 
   return user.access_token;
-}
+};

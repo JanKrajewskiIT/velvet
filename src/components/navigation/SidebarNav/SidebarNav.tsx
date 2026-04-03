@@ -26,25 +26,15 @@ interface SidebarNavProps {
   label: string;
   subtitle?: string;
   actions?: JSX.Element;
-  navLabel?: string;
 }
 
 const SidebarNav = (props: Props<SidebarNavProps>) => {
-  const { t } = useI18n();
-  const [local, rest] = splitProps(props, [
-    'class',
-    'groups',
-    'activeId',
-    'onSelect',
-    'label',
-    'subtitle',
-    'actions',
-    'navLabel',
-  ]);
+  const { ts } = useI18n();
+  const [local, rest] = splitProps(props, ['class', 'groups', 'activeId', 'onSelect', 'label', 'subtitle', 'actions']);
   const isActive = (id: string) => local.activeId === id;
 
   return (
-    <nav {...rest} class={classNames(styles.root, local.class)} aria-label={local.navLabel ?? t('sidebar.navigation')}>
+    <nav {...rest} class={classNames(styles.root, local.class)} aria-label={ts('sidebar.navigation')}>
       <div class={styles.brand}>
         <Heading level={3}>{local.label}</Heading>
         <Show when={local.subtitle}>

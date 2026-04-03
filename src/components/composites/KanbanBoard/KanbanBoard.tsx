@@ -1,6 +1,7 @@
 import type { JSX } from 'solid-js';
 import { createMemo, createSignal, For, Show, splitProps } from 'solid-js';
 
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -11,7 +12,7 @@ import styles from './KanbanBoard.module.css';
 
 export interface KanbanColumn {
   id: string;
-  title: string;
+  label: string;
 }
 
 export interface KanbanItemBase {
@@ -26,13 +27,11 @@ interface KanbanBoardProps<T extends KanbanItemBase> {
   items: T[];
   onChange: (items: T[]) => void;
   renderCard?: (item: T) => JSX.Element;
-  emptyLabel?: string;
 }
 
-const DEFAULT_KANBAN_EMPTY_LABEL = 'No cards';
-
 const KanbanBoard = <T extends KanbanItemBase>(props: Props<KanbanBoardProps<T>>) => {
-  const [local, rest] = splitProps(props, ['columns', 'items', 'onChange', 'renderCard', 'emptyLabel', 'class']);
+  const { ts } = useI18n();
+  const [local, rest] = splitProps(props, ['columns', 'items', 'onChange', 'renderCard', 'class']);
   const [draggingId, setDraggingId] = createSignal<string | null>(null);
   const [dragOverColumnId, setDragOverColumnId] = createSignal<string | null>(null);
 
@@ -83,11 +82,11 @@ const KanbanBoard = <T extends KanbanItemBase>(props: Props<KanbanBoardProps<T>>
 
   const defaultCard = (item: T) => (
     <div class={styles.cardContent}>
-      <Text as="span" variant="labelMd" tone="secondary" class={styles.cardTitle}>
+      <Text as="span" variant="labelMd" tone="secondary">
         {item.title}
       </Text>
       <Show when={item.description}>
-        <Text as="span" variant="caption" tone="muted" class={styles.cardDescription}>
+        <Text as="span" variant="caption" tone="muted">
           {item.description}
         </Text>
       </Show>
@@ -111,8 +110,8 @@ const KanbanBoard = <T extends KanbanItemBase>(props: Props<KanbanBoardProps<T>>
                 class={classNames(styles.column, dragOverColumnId() === column.id && styles.columnDragOver)}
               >
                 <header class={styles.columnHeader}>
-                  <Heading as="h4" level={4} class={styles.columnTitle}>
-                    {column.title}
+                  <Heading as="h4" level={4}>
+                    {column.label}
                   </Heading>
                   <Text as="span" variant="caption" tone="secondary" class={styles.columnCount}>
                     {items().length}
@@ -123,7 +122,7 @@ const KanbanBoard = <T extends KanbanItemBase>(props: Props<KanbanBoardProps<T>>
                     when={items().length > 0}
                     fallback={
                       <Text as="p" variant="caption" tone="muted" class={styles.empty}>
-                        {local.emptyLabel ?? DEFAULT_KANBAN_EMPTY_LABEL}
+                        {ts('kanban.noCards')}
                       </Text>
                     }
                   >

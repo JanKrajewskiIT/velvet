@@ -85,7 +85,7 @@ const useCalendarPopupState = (options: UseCalendarPopupStateOptions) => {
   useClickOutside(
     () => options.rootRef(),
     () => isOpen(),
-    close
+    close,
   );
   useEscapeKey(() => isOpen(), close);
 

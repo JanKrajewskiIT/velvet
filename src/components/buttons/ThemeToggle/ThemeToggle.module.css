@@ -1,18 +1,21 @@
-.group {
+.group.group {
   display: flex;
   align-items: center;
   gap: 0;
   overflow: visible;
+  background: transparent;
 }
 
-.segmented {
+.segmented.segmented {
   background: transparent;
   padding: 0;
   gap: 0;
   border-radius: 0;
+  border: 0;
+  box-shadow: none;
 }
 
-.toggle {
+.toggle.toggle {
   min-width: var(--spacing-xl);
   width: var(--spacing-xl);
   height: var(--spacing-xl);
@@ -31,55 +34,56 @@
     transform var(--duration-normal) var(--ease-out-expo);
 }
 
-.toggle + .toggle {
+.toggle.toggle + .toggle.toggle {
   margin-left: -2px;
 }
 
-.toggle:hover:not(.selected) {
-  transform: scale(1.1);
+.toggle.toggle:hover:not(.selected) {
   opacity: 0.85;
+  transform: scale(1.1);
 }
 
-.toggle:active:not(.selected) {
+.toggle.toggle:active:not(.selected) {
+  opacity: 1;
   transform: scale(1.06);
 }
 
-.toggle:focus-visible {
+.toggle.toggle:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
 
-.toggle.selected {
+.toggle.toggle.selected {
   color: var(--color-primary);
   background-color: var(--color-gray-0);
   box-shadow: none;
   font-weight: var(--typography-weight-regular);
   opacity: 1;
-  transform: scale(1.25) rotate(360deg);
   pointer-events: none;
-}
-
-.toggle.selected:hover {
   transform: scale(1.25) rotate(360deg);
 }
 
-.light .toggle {
+.toggle.toggle.selected:hover {
+  transform: scale(1.3) rotate(360deg);
+}
+
+.light .toggle.toggle {
   border-color: var(--theme-toggle-light-border);
   color: var(--theme-toggle-light-border);
 }
 
-.light .toggle.selected {
+.light .toggle.toggle.selected {
   color: var(--theme-toggle-light-selected-fg);
   border-color: var(--theme-toggle-light-selected-border);
   background-color: var(--theme-toggle-light-selected-bg);
 }
 
-.navbar .toggle {
+.navbar .toggle.toggle {
   border-color: color-mix(in srgb, var(--header-text) 55%, transparent);
   color: var(--header-text);
 }
 
-.navbar .toggle.selected {
+.navbar .toggle.toggle.selected {
   color: var(--header-bg);
   border-color: color-mix(in srgb, var(--header-text) 45%, transparent);
   background-color: var(--header-text);

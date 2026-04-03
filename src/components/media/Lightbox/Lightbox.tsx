@@ -20,45 +20,24 @@ export interface LightboxImage {
   caption?: string;
 }
 
-interface LightboxMessages {
-  closeLabel?: string;
-  previousLabel?: string;
-  nextLabel?: string;
-  viewerLabel?: string;
-}
-
 interface LightboxOwnProps extends Omit<DivCoreNativeProps, 'onClose'> {
   images: LightboxImage[];
   open: boolean;
   onClose: () => void;
   startIndex?: number;
-  closeLabel?: string;
-  previousLabel?: string;
-  nextLabel?: string;
-  messages?: LightboxMessages;
 }
 
 const Lightbox = (props: Props<LightboxOwnProps>) => {
-  const { t } = useI18n();
-  const [local, rest] = splitProps(props, [
-    'images',
-    'open',
-    'onClose',
-    'startIndex',
-    'closeLabel',
-    'previousLabel',
-    'nextLabel',
-    'messages',
-    'class',
-  ]);
+  const { ts } = useI18n();
+  const [local, rest] = splitProps(props, ['images', 'open', 'onClose', 'startIndex', 'class']);
 
   const [currentIndex, setCurrentIndex] = createSignal(0);
   let overlayRef: HTMLDivElement | undefined;
 
-  const closeLabel = createMemo(() => local.messages?.closeLabel ?? local.closeLabel ?? t('common.close'));
-  const previousLabel = createMemo(() => local.messages?.previousLabel ?? local.previousLabel ?? t('common.previous'));
-  const nextLabel = createMemo(() => local.messages?.nextLabel ?? local.nextLabel ?? t('common.next'));
-  const viewerLabel = createMemo(() => local.messages?.viewerLabel ?? t('lightbox.imageViewer'));
+  const closeLabel = createMemo(() => ts('common.close'));
+  const previousLabel = createMemo(() => ts('common.previous'));
+  const nextLabel = createMemo(() => ts('common.next'));
+  const viewerLabel = createMemo(() => ts('lightbox.imageViewer'));
   const total = createMemo(() => local.images.length);
   const hasManyImages = createMemo(() => total() > 1);
   const isVisible = createMemo(() => local.open && total() > 0);
@@ -87,12 +66,12 @@ const Lightbox = (props: Props<LightboxOwnProps>) => {
 
   useEscapeKey(
     () => isVisible(),
-    () => local.onClose()
+    () => local.onClose(),
   );
 
   useFocusTrap(
     () => overlayRef,
-    () => isVisible()
+    () => isVisible(),
   );
 
   createEffect(() => {

@@ -10,6 +10,7 @@ import {
   CalendarHeader,
   Checkbox,
   CheckboxIndicator,
+  ChipOptionSwitcher,
   CodeText,
   ColorPicker,
   CopyButton,
@@ -23,13 +24,17 @@ import {
   FormField,
   FormGrid,
   FormLayout,
+  HierarchicalOptionNavigator,
   IconButton,
+  IconOptionSwitcher,
+  ImportSourcesDialog,
   InlineEditableText,
   Input,
   LocaleSwitcher,
   MultiSelect,
   type MultiSelectOption,
   NumberInput,
+  OptionMenuChip,
   OtpInput,
   PasswordInput,
   RadioGroup,
@@ -49,7 +54,19 @@ import {
   TimePicker,
   useI18n,
 } from '@jankrajewskiit/ui';
-import { IoAdd, IoClose, IoDocument, IoDownload, IoEllipsisHorizontal, IoPencil, IoTrash } from 'solid-icons/io';
+import {
+  IoAdd,
+  IoAddSharp,
+  IoCalendar,
+  IoClose,
+  IoDocument,
+  IoDownload,
+  IoEllipsisHorizontal,
+  IoMail,
+  IoPencil,
+  IoSearch,
+  IoTrash,
+} from 'solid-icons/io';
 import { createMemo, createSignal, Show } from 'solid-js';
 
 import type { SectionId } from '../App';
@@ -103,6 +120,10 @@ const InputsSection = (props: InputsSectionProps) => {
   const [rating, setRating] = createSignal(3);
   const [segment, setSegment] = createSignal('list');
   const [billingCycle, setBillingCycle] = createSignal('monthly');
+  const [iconCategory, setIconCategory] = createSignal('solid');
+  const [chipCategory, setChipCategory] = createSignal<string | null>('solid-basics');
+  const [hierarchicalMainCategory, setHierarchicalMainCategory] = createSignal<string | null>('frontend');
+  const [hierarchicalChildCategory, setHierarchicalChildCategory] = createSignal<string | null>('solidjs');
   const [otp, setOtp] = createSignal('');
   const [date, setDate] = createSignal('');
   const [time, setTime] = createSignal('');
@@ -112,10 +133,66 @@ const InputsSection = (props: InputsSectionProps) => {
   const [affixValue, setAffixValue] = createSignal('hello@velvetui.dev');
   const [range, setRange] = createSignal({ start: '', end: '' });
   const [dateTime, setDateTime] = createSignal('');
+  const [menuOption, setMenuOption] = createSignal('in-review');
   const [calendarPreviewUrl, setCalendarPreviewUrl] = createSignal('');
   const [richText, setRichText] = createSignal(releaseNotesHtml());
   const [droppedFile, setDroppedFile] = createSignal<string | null>(null);
   const [droppedFiles, setDroppedFiles] = createSignal<string[]>([]);
+  const [importOpen, setImportOpen] = createSignal(false);
+  const [importBusy, setImportBusy] = createSignal(false);
+
+  const optionMenuItems = createMemo(() => [
+    { value: 'draft', label: t('demo.text.inputs.optionMenuChip.option.draft'), variant: 'subtle' as const },
+    { value: 'in-review', label: t('demo.text.inputs.optionMenuChip.option.inReview'), variant: 'info' as const },
+    { value: 'approved', label: t('demo.text.inputs.optionMenuChip.option.approved'), variant: 'success' as const },
+    { value: 'archived', label: t('demo.text.inputs.optionMenuChip.option.archived'), variant: 'warning' as const },
+  ]);
+
+  const chipSelectorItems = createMemo(() => [
+    { id: 'solid-basics', label: 'SolidJS / Basics' },
+    { id: 'solid-performance', label: 'SolidJS / Performance' },
+    { id: 'ts-advanced', label: 'TypeScript / Advanced' },
+    { id: 'css-architecture', label: 'CSS / Architecture' },
+  ]);
+
+  const iconSelectorItems = createMemo(() => [
+    { id: 'solid', label: 'SolidJS', icon: <IoSearch /> },
+    { id: 'testing', label: 'Testing', icon: <IoMail /> },
+    { id: 'architecture', label: 'Architecture', icon: <IoCalendar /> },
+    { id: 'delivery', label: 'Delivery', icon: <IoAddSharp /> },
+  ]);
+
+  const categoryNavigatorItems = createMemo(() => [
+    {
+      id: 'frontend',
+      label: 'Frontend',
+      icon: <IoSearch />,
+      children: [
+        { id: 'solidjs', label: 'SolidJS' },
+        { id: 'reactivity', label: 'Reactivity' },
+        { id: 'styling', label: 'Styling' },
+      ],
+    },
+    {
+      id: 'backend',
+      label: 'Backend',
+      icon: <IoMail />,
+      children: [
+        { id: 'apis', label: 'APIs' },
+        { id: 'auth', label: 'Auth' },
+        { id: 'queues', label: 'Queues' },
+      ],
+    },
+    {
+      id: 'delivery',
+      label: 'Delivery',
+      icon: <IoCalendar />,
+      children: [
+        { id: 'ownership', label: 'Ownership' },
+        { id: 'communication', label: 'Communication' },
+      ],
+    },
+  ]);
 
   const simulateLoad = () => {
     setLoading(true);
@@ -129,6 +206,19 @@ const InputsSection = (props: InputsSectionProps) => {
   const handleCalendarEventOpen = (url: string) => {
     setCalendarPreviewUrl(url);
     addToast({ type: 'info', message: 'Calendar URL generated.' });
+  };
+
+  const closeImportDialog = () => {
+    setImportOpen(false);
+    setImportBusy(false);
+  };
+
+  const handleImportSubmit = async () => {
+    setImportBusy(true);
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    setImportBusy(false);
+    setImportOpen(false);
+    addToast({ type: 'success', message: 'Import finished.' });
   };
 
   const calendarEventPreview = () => ({
@@ -271,11 +361,8 @@ const InputsSection = (props: InputsSectionProps) => {
           <PreviewPanel>
             <PreviewGroup title={t('demo.text.common.examples')}>
               <div class="row">
-                <CopyButton
-                  text="npm install @jankrajewskiit/ui"
-                  label={t('demo.text.inputs.copyButton.copyCommand')}
-                />
-                <CopyButton text="Hello World" variant="outline" label={t('demo.text.inputs.copyButton.outline')} />
+                <CopyButton text="npm install @jankrajewskiit/ui" />
+                <CopyButton text="Hello World" variant="outline" />
                 <CopyButton text={t('demo.text.inputs.copyButton.smallCopyText')} size="sm" />
               </div>
             </PreviewGroup>
@@ -305,12 +392,7 @@ const InputsSection = (props: InputsSectionProps) => {
           <PreviewPanel>
             <PreviewGroup title={t('demo.text.common.examples')}>
               <div class="row">
-                <ThemeToggle
-                  lightLabel={t('demo.theme.light')}
-                  darkLabel={t('demo.theme.dark')}
-                  groupLabel={t('demo.theme.group')}
-                  variant="light"
-                />
+                <ThemeToggle variant="light" />
               </div>
             </PreviewGroup>
           </PreviewPanel>
@@ -390,6 +472,22 @@ const InputsSection = (props: InputsSectionProps) => {
         </ShowcaseSection>
 
         <ShowcaseSection
+          title={t('demo.showcase.inputs.optionMenuChip.title')}
+          subtitle={t('demo.showcase.inputs.optionMenuChip.subtitle')}
+        >
+          <PreviewPanel>
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <OptionMenuChip
+                value={menuOption()}
+                options={optionMenuItems()}
+                menuLabel={t('demo.text.inputs.optionMenuChip.menuLabel')}
+                onChange={setMenuOption}
+              />
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection
           title={t('demo.showcase.inputs.select.title')}
           subtitle={t('demo.showcase.inputs.select.subtitle')}
         >
@@ -427,8 +525,6 @@ const InputsSection = (props: InputsSectionProps) => {
                     value={frameworks()}
                     options={FRAMEWORK_OPTIONS}
                     onChange={setFrameworks}
-                    placeholder={t('demo.text.inputs.multiSelect.chooseFrameworks')}
-                    removeLabel={t('demo.text.inputs.multiSelect.remove')}
                   />
                 )}
               </FormField>
@@ -455,8 +551,6 @@ const InputsSection = (props: InputsSectionProps) => {
                     values={autoValues()}
                     options={['TypeScript', 'JavaScript', 'SolidJS', 'React', 'Vue', 'Svelte', 'Vite', 'Tailwind']}
                     onChange={setAutoValues}
-                    placeholder={t('demo.text.inputs.autocomplete.typeToSearch')}
-                    removeLabel={t('demo.text.inputs.autocomplete.remove')}
                   />
                 )}
               </FormField>
@@ -587,23 +681,8 @@ const InputsSection = (props: InputsSectionProps) => {
         >
           <PreviewPanel>
             <PreviewGroup title={t('demo.text.common.examples')}>
-              <NumberInput
-                value={quantity()}
-                onChange={setQuantity}
-                min={0}
-                max={100}
-                size="md"
-                decrementLabel={t('demo.text.inputs.numberInput.decrease')}
-                incrementLabel={t('demo.text.inputs.numberInput.increase')}
-              />
-              <NumberInput
-                value={1}
-                onChange={() => {}}
-                disabled
-                size="sm"
-                decrementLabel={t('demo.text.inputs.numberInput.decrease')}
-                incrementLabel={t('demo.text.inputs.numberInput.increase')}
-              />
+              <NumberInput value={quantity()} onChange={setQuantity} min={0} max={100} size="md" />
+              <NumberInput value={1} onChange={() => {}} disabled size="sm" />
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
@@ -614,17 +693,8 @@ const InputsSection = (props: InputsSectionProps) => {
         >
           <PreviewPanel>
             <PreviewGroup title={t('demo.text.common.examples')}>
-              <SearchInput
-                value={search()}
-                onInput={setSearch}
-                placeholder={t('demo.text.inputs.searchInput.searchComponents')}
-              />
-              <SearchInput
-                value=""
-                onInput={() => {}}
-                disabled
-                placeholder={t('demo.text.inputs.searchInput.disabled')}
-              />
+              <SearchInput value={search()} onInput={setSearch} />
+              <SearchInput value="" onInput={() => {}} disabled />
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
@@ -643,22 +713,11 @@ const InputsSection = (props: InputsSectionProps) => {
             <PreviewGroup title={t('demo.text.common.examples')}>
               <FormField label={t('demo.text.inputs.passwordInput.password')}>
                 {(fieldProps) => (
-                  <PasswordInput
-                    {...fieldProps}
-                    placeholder={t('demo.text.inputs.passwordInput.enterPassword')}
-                    visibilityLabel={t('demo.text.inputs.passwordInput.toggleVisibility')}
-                  />
+                  <PasswordInput {...fieldProps} placeholder={t('demo.text.inputs.passwordInput.enterPassword')} />
                 )}
               </FormField>
               <FormField label={t('demo.text.inputs.passwordInput.disabled')}>
-                {(fieldProps) => (
-                  <PasswordInput
-                    {...fieldProps}
-                    value="secret123"
-                    disabled
-                    visibilityLabel={t('demo.text.inputs.passwordInput.toggleVisibility')}
-                  />
-                )}
+                {(fieldProps) => <PasswordInput {...fieldProps} value="secret123" disabled />}
               </FormField>
             </PreviewGroup>
           </PreviewPanel>
@@ -671,14 +730,7 @@ const InputsSection = (props: InputsSectionProps) => {
           <PreviewPanel>
             <PreviewGroup title={t('demo.text.common.examples')}>
               <FormField label={t('demo.text.inputs.tagInput.tags')}>
-                {(fieldProps) => (
-                  <TagInput
-                    {...fieldProps}
-                    value={tags()}
-                    onChange={setTags}
-                    placeholder={t('demo.text.inputs.tagInput.addTag')}
-                  />
-                )}
+                {(fieldProps) => <TagInput {...fieldProps} value={tags()} onChange={setTags} />}
               </FormField>
             </PreviewGroup>
           </PreviewPanel>
@@ -728,12 +780,7 @@ const InputsSection = (props: InputsSectionProps) => {
         >
           <PreviewPanel>
             <PreviewGroup title={t('demo.text.common.examples')}>
-              <RichTextEditor
-                ariaLabel={t('demo.text.inputs.richTextEditor.articleBody')}
-                value={richText()}
-                onChange={setRichText}
-                placeholder={t('demo.text.inputs.richTextEditor.startWriting')}
-              />
+              <RichTextEditor value={richText()} onChange={setRichText} />
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>
@@ -746,30 +793,13 @@ const InputsSection = (props: InputsSectionProps) => {
       </Show>
 
       <Show when={sectionId() === 'inputs-switchers'}>
-        <ShowcaseSection
-          title={t('demo.showcase.inputs.segmentedControl.title')}
-          subtitle={t('demo.showcase.inputs.segmentedControl.subtitle')}
-        >
+        <ShowcaseSection title="CheckboxIndicator" subtitle="Low-level visual indicator used by Checkbox">
           <PreviewPanel>
             <PreviewGroup title={t('demo.text.common.examples')}>
-              <SegmentedControl
-                value={segment()}
-                onChange={setSegment}
-                options={[
-                  { value: 'list', label: t('demo.text.inputs.segmented.list') },
-                  { value: 'grid', label: t('demo.text.inputs.segmented.grid') },
-                  { value: 'board', label: t('demo.text.inputs.segmented.board') },
-                ]}
-              />
-              <SegmentedControl
-                value={billingCycle()}
-                onChange={setBillingCycle}
-                size="sm"
-                options={[
-                  { value: 'monthly', label: t('demo.text.inputs.segmented.monthly') },
-                  { value: 'yearly', label: t('demo.text.inputs.segmented.yearly') },
-                ]}
-              />
+              <div class="row">
+                <CheckboxIndicator checked={false} />
+                <CheckboxIndicator checked />
+              </div>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
@@ -805,17 +835,6 @@ const InputsSection = (props: InputsSectionProps) => {
                 onChange={() => {}}
                 label={t('demo.text.inputs.checkbox.uncheckedDisabled')}
               />
-            </PreviewGroup>
-          </PreviewPanel>
-        </ShowcaseSection>
-
-        <ShowcaseSection title="CheckboxIndicator" subtitle="Low-level visual indicator used by Checkbox">
-          <PreviewPanel>
-            <PreviewGroup title={t('demo.text.common.examples')}>
-              <div class="row">
-                <CheckboxIndicator checked={false} />
-                <CheckboxIndicator checked />
-              </div>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
@@ -927,6 +946,94 @@ const InputsSection = (props: InputsSectionProps) => {
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
+
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.segmentedControl.title')}
+          subtitle={t('demo.showcase.inputs.segmentedControl.subtitle')}
+        >
+          <PreviewPanel>
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <SegmentedControl
+                value={segment()}
+                onChange={setSegment}
+                options={[
+                  { value: 'list', label: t('demo.text.inputs.segmented.list') },
+                  { value: 'grid', label: t('demo.text.inputs.segmented.grid') },
+                  { value: 'board', label: t('demo.text.inputs.segmented.board') },
+                ]}
+              />
+              <SegmentedControl
+                value={billingCycle()}
+                onChange={setBillingCycle}
+                size="sm"
+                options={[
+                  { value: 'monthly', label: t('demo.text.inputs.segmented.monthly') },
+                  { value: 'yearly', label: t('demo.text.inputs.segmented.yearly') },
+                ]}
+              />
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.iconOptionSwitcher.title')}
+          subtitle={t('demo.showcase.inputs.iconOptionSwitcher.subtitle')}
+        >
+          <PreviewPanel>
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <div class="recronDemoWide recronDemoSurface">
+                <IconOptionSwitcher
+                  aria-label={t('demo.text.inputs.iconOptionSwitcher.ariaLabel')}
+                  items={iconSelectorItems()}
+                  selectedId={iconCategory()}
+                  onSelect={setIconCategory}
+                />
+              </div>
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.chipOptionSwitcher.title')}
+          subtitle={t('demo.showcase.inputs.chipOptionSwitcher.subtitle')}
+        >
+          <PreviewPanel>
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <div class="recronDemoWide recronDemoSurface">
+                <ChipOptionSwitcher
+                  items={chipSelectorItems()}
+                  selectedId={chipCategory()}
+                  onSelect={setChipCategory}
+                />
+              </div>
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          title={t('demo.showcase.inputs.groupedOptionNavigator.title')}
+          subtitle={t('demo.showcase.inputs.groupedOptionNavigator.subtitle')}
+        >
+          <PreviewPanel>
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <div class="recronDemoWide recronDemoSurface">
+                <HierarchicalOptionNavigator
+                  items={categoryNavigatorItems()}
+                  selectedMainId={hierarchicalMainCategory()}
+                  selectedChildId={hierarchicalChildCategory()}
+                  align="center"
+                  onMainSelect={(id) => {
+                    setHierarchicalMainCategory(id);
+                    const selectedItem = categoryNavigatorItems().find((item) => item.id === id);
+                    const firstChild = selectedItem?.children[0]?.id ?? null;
+                    setHierarchicalChildCategory(firstChild);
+                  }}
+                  onChildSelect={setHierarchicalChildCategory}
+                />
+              </div>
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
       </Show>
 
       <Show when={sectionId() === 'inputs-pickers'}>
@@ -966,7 +1073,6 @@ const InputsSection = (props: InputsSectionProps) => {
                     onChange={setSliderNoBubbleValue}
                     min={0}
                     max={100}
-                    showValueLabel={false}
                     marks={[
                       { value: 0, label: t('demo.text.inputs.slider.low') },
                       { value: 50, label: t('demo.text.inputs.slider.mid') },
@@ -995,7 +1101,6 @@ const InputsSection = (props: InputsSectionProps) => {
                 {(fieldProps) => (
                   <RangeSlider
                     {...fieldProps}
-                    groupAriaLabel={t('demo.text.inputs.rangeSlider.priceRange')}
                     value={priceRange()}
                     onChange={setPriceRange}
                     min={0}
@@ -1015,12 +1120,10 @@ const InputsSection = (props: InputsSectionProps) => {
                 {(fieldProps) => (
                   <RangeSlider
                     {...fieldProps}
-                    groupAriaLabel={t('demo.text.inputs.rangeSlider.withoutBubblesAria')}
                     value={priceRangeNoBubbles()}
                     onChange={setPriceRangeNoBubbles}
                     min={0}
                     max={100}
-                    showValueLabels={false}
                     marks={[
                       { value: 0, label: t('demo.text.inputs.slider.low') },
                       { value: 50, label: t('demo.text.inputs.slider.mid') },
@@ -1077,13 +1180,7 @@ const InputsSection = (props: InputsSectionProps) => {
         >
           <PreviewPanel>
             <PreviewGroup title={t('demo.text.common.examples')}>
-              <CalendarHeader
-                monthLabel="March 2026"
-                previousLabel={t('demo.text.navigation.pagination.previous')}
-                nextLabel={t('demo.text.navigation.pagination.next')}
-                onPrevious={() => {}}
-                onNext={() => {}}
-              />
+              <CalendarHeader monthLabel="March 2026" onPrevious={() => {}} onNext={() => {}} />
               <FormField label={t('demo.text.inputs.dateTime.startDate')}>
                 {(fieldProps) => <DatePicker {...fieldProps} value={date()} onChange={setDate} />}
               </FormField>
@@ -1233,6 +1330,41 @@ const InputsSection = (props: InputsSectionProps) => {
               </CodeText>
             </ShowcaseMeta>
           )}
+        </ShowcaseSection>
+
+        <ShowcaseSection title="ImportSourcesDialog" subtitle={t('demo.recron.showcase.importSourcesDialog.subtitle')}>
+          <PreviewPanel>
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <Button label={t('demo.recron.hero.action.import')} onClick={() => setImportOpen(true)} />
+              <ImportSourcesDialog
+                open={importOpen()}
+                title={t('demo.recron.hero.action.import')}
+                sources={[
+                  {
+                    value: 'portfolio-url',
+                    label: t('demo.recron.ai.import.source.url.label'),
+                    kind: 'url',
+                    inputLabel: t('demo.recron.ai.import.source.url.inputLabel'),
+                    inputPlaceholder: 'https://example.com/cv',
+                    helperText: t('demo.recron.ai.import.source.url.helperText'),
+                  },
+                  {
+                    value: 'portfolio-file',
+                    label: t('demo.recron.ai.import.source.file.label'),
+                    kind: 'file',
+                    accept: '.pdf,.docx',
+                    dropLabel: t('demo.recron.ai.import.source.file.dropLabel'),
+                    dropHint: t('demo.recron.ai.import.source.file.dropHint'),
+                    clearLabel: t('demo.recron.ai.import.source.file.clearLabel'),
+                  },
+                ]}
+                submitLabel={t('demo.recron.ai.import.submitLabel')}
+                busy={importBusy()}
+                onClose={closeImportDialog}
+                onSubmit={handleImportSubmit}
+              />
+            </PreviewGroup>
+          </PreviewPanel>
         </ShowcaseSection>
       </Show>
 
@@ -1424,7 +1556,6 @@ const InputsSection = (props: InputsSectionProps) => {
                         options={FRAMEWORK_OPTIONS}
                         value={frameworks()}
                         onChange={setFrameworks}
-                        placeholder={t('demo.text.inputs.completeForm.pickFrameworks')}
                       />
                     )}
                   </FormField>

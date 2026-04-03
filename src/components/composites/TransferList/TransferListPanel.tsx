@@ -7,16 +7,13 @@ import classNames from '~/utils/classNames';
 
 import Checkbox from '../../switchers/Checkbox/Checkbox';
 import type { TransferItem } from './TransferList';
-import styles from './TransferList.module.css';
+import styles from './TransferListPanel.module.css';
 
 interface TransferListPanelProps {
   title: string;
   items: readonly TransferItem[];
-  itemCount: number;
   filterValue: string;
   searchable?: boolean;
-  clearSearchLabel: string;
-  searchInputLabel: string;
   selectItemLabel: (label: string) => string;
   checkedIds: ReadonlySet<string>;
   onFilterChange: (value: string) => void;
@@ -33,19 +30,12 @@ const TransferListPanel = (props: TransferListPanelProps) => {
           {props.title}
         </Text>
         <Text as="span" variant="caption" tone="muted">
-          {props.itemCount}
+          {props.items.length}
         </Text>
       </div>
       <Show when={props.searchable}>
         <div class={styles.search}>
-          <SearchInput
-            class={styles.searchInput}
-            size="sm"
-            value={props.filterValue}
-            onInput={props.onFilterChange}
-            clearLabel={props.clearSearchLabel}
-            inputAriaLabel={props.searchInputLabel}
-          />
+          <SearchInput class={styles.searchInput} size="sm" value={props.filterValue} onInput={props.onFilterChange} />
         </div>
       </Show>
       <div class={styles.list}>
@@ -53,7 +43,7 @@ const TransferListPanel = (props: TransferListPanelProps) => {
           {(item) => (
             <div class={getItemClass(props.checkedIds.has(item.id))}>
               <Checkbox
-                wrapperClass={styles.checkboxField}
+                class={styles.checkboxField}
                 checked={props.checkedIds.has(item.id)}
                 onChange={() => props.onToggleItem(item.id)}
                 label={item.label}

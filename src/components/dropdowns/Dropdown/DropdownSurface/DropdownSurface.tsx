@@ -43,7 +43,7 @@ const DropdownSurface = (props: Props<DropdownSurfaceProps>) => {
         local.panel !== false && alignClass(),
         local.panel !== false && originClass(),
         local.scrollable !== false && styles.scrollable,
-        local.class
+        local.class,
       )}
     />
   );

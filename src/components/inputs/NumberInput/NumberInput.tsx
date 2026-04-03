@@ -10,11 +10,6 @@ import IconButton from '../../buttons/IconButton/IconButton';
 import AffixInput from '../AffixInput/AffixInput';
 import styles from './NumberInput.module.css';
 
-interface NumberInputMessages {
-  decrementButtonLabel?: string;
-  incrementButtonLabel?: string;
-}
-
 interface NumberInputOwnProps extends AriaFieldProps {
   value: number;
   onChange: (value: number) => void;
@@ -28,13 +23,10 @@ interface NumberInputOwnProps extends AriaFieldProps {
   required?: boolean;
   invalid?: boolean;
   size?: ComponentSize;
-  decrementLabel?: string;
-  incrementLabel?: string;
-  messages?: NumberInputMessages;
 }
 
 const NumberInput = (props: Props<NumberInputOwnProps>) => {
-  const { t } = useI18n();
+  const { ts } = useI18n();
   const [local, rest] = splitProps(props, [
     'value',
     'onChange',
@@ -48,9 +40,6 @@ const NumberInput = (props: Props<NumberInputOwnProps>) => {
     'required',
     'invalid',
     'size',
-    'decrementLabel',
-    'incrementLabel',
-    'messages',
     'class',
   ]);
 
@@ -58,12 +47,6 @@ const NumberInput = (props: Props<NumberInputOwnProps>) => {
   const max = createMemo(() => local.max ?? Infinity);
   const step = createMemo(() => local.step ?? 1);
   const size = createMemo(() => local.size ?? 'md');
-  const decrementButtonLabel = createMemo(
-    () => local.messages?.decrementButtonLabel ?? local.decrementLabel ?? t('number.decrease')
-  );
-  const incrementButtonLabel = createMemo(
-    () => local.messages?.incrementButtonLabel ?? local.incrementLabel ?? t('number.increase')
-  );
   const controlSize = createMemo<ComponentSize>(() => {
     const current = size();
     if (current === 'sm') return 'sm';
@@ -140,7 +123,7 @@ const NumberInput = (props: Props<NumberInputOwnProps>) => {
       prefix={
         <IconButton
           icon={IoRemove}
-          label={decrementButtonLabel()}
+          label={ts('number.decrease')}
           disabled={local.disabled || local.readOnly}
           onClick={decrement}
           onMouseDown={() => startRepeat(decrement)}
@@ -153,7 +136,7 @@ const NumberInput = (props: Props<NumberInputOwnProps>) => {
       suffix={
         <IconButton
           icon={IoAdd}
-          label={incrementButtonLabel()}
+          label={ts('number.increase')}
           disabled={local.disabled || local.readOnly}
           onClick={increment}
           onMouseDown={() => startRepeat(increment)}

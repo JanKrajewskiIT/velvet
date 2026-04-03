@@ -13,15 +13,30 @@ interface ProgressProps {
   showValue?: boolean;
 }
 
+const sizeClassByValue: Record<NonNullable<ProgressProps['size']>, string | undefined> = {
+  sm: styles.sm,
+  md: styles.md,
+  lg: styles.lg,
+};
+
+const variantClassByValue: Record<NonNullable<ProgressProps['variant']>, string | undefined> = {
+  primary: styles.primary,
+  info: styles.info,
+  success: styles.success,
+  warning: styles.warning,
+  error: styles.error,
+};
+
 const Progress = (props: Props<ProgressProps>) => {
   const variant = () => props.variant ?? 'primary';
   const size = () => props.size ?? 'md';
   const isDeterminate = () => props.value !== undefined;
   const clampedValue = () => Math.min(100, Math.max(0, props.value ?? 0));
 
-  const trackClass = () => classNames(styles.track, styles[size()], props.class);
+  const trackClass = () => classNames(styles.track, sizeClassByValue[size()], props.class);
 
-  const fillClass = () => classNames(styles.fill, styles[variant()], !isDeterminate() && styles.indeterminate);
+  const fillClass = () =>
+    classNames(styles.fill, variantClassByValue[variant()], !isDeterminate() && styles.indeterminate);
 
   return (
     <div class={trackClass()}>

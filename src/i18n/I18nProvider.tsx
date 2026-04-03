@@ -1,27 +1,38 @@
 import { createContext, createEffect, createMemo, createSignal, type ParentProps, useContext } from 'solid-js';
 
-import { getMessages, type I18nMessageKey, type Locale, SUPPORTED_LOCALES } from './messages';
+import { getVelvetRuntimeConfig } from '~/providers/velvet-config';
+
+import {
+  flattenI18nDictionary,
+  getMessages,
+  type I18nDictionary,
+  type I18nMessageKey,
+  type Locale,
+  SUPPORTED_LOCALES,
+} from './messages';
+
+type FlatDictionary = Record<string, string>;
 
 interface I18nContextValue {
   locale: () => Locale;
   setLocale: (locale: Locale) => void;
-  t: (key: I18nMessageKey, params?: Record<string, string | number>) => string;
+  t: (key: string, params?: Record<string, string | number>) => string;
+  ts: (key: I18nMessageKey, params?: Record<string, string | number>) => string;
 }
-
-const DEFAULT_STORAGE_KEY = 'velvet-locale';
 
 const I18nContext = createContext<I18nContextValue>();
 
-function interpolate(template: string, params?: Record<string, string | number>): string {
+const interpolate = (template: string, params?: Record<string, string | number>): string => {
   if (!params) return template;
 
-  return template.replace(/\{([^}]+)\}/gu, (_m, token: string) => {
+  return template.replace(/\{\{\s*([^}]+?)\s*\}\}|\{\s*([^}]+?)\s*\}/gu, (_match, mustacheToken, braceToken) => {
+    const token = (mustacheToken ?? braceToken) as string;
     const value = params[token];
-    return value === undefined ? `{${token}}` : String(value);
+    return value === undefined ? _match : String(value);
   });
-}
+};
 
-function getStoredLocale(storageKey: string): Locale {
+const getStoredLocale = (storageKey: string): Locale => {
   if (typeof window === 'undefined') return 'en';
   const stored = localStorage.getItem(storageKey);
   if (stored && SUPPORTED_LOCALES.includes(stored as Locale)) {
@@ -34,17 +45,30 @@ function getStoredLocale(storageKey: string): Locale {
   }
 
   return 'en';
-}
+};
 
 interface I18nProviderProps extends ParentProps {
   storageKey?: string;
   initialLocale?: Locale;
+  dictionaries?: Partial<Record<Locale, I18nDictionary>>;
 }
 
 const I18nProvider = (props: I18nProviderProps) => {
-  const storageKey = () => props.storageKey ?? DEFAULT_STORAGE_KEY;
+  const storageKey = () => props.storageKey ?? getVelvetRuntimeConfig().localeStorageKey;
   const [locale, setLocale] = createSignal<Locale>(props.initialLocale ?? getStoredLocale(storageKey()));
-  const dictionary = createMemo(() => getMessages(locale()));
+
+  const fallbackDictionary = createMemo<FlatDictionary>(() => ({
+    ...getMessages('en'),
+    ...flattenI18nDictionary(getVelvetRuntimeConfig().localeDictionaries.en),
+    ...flattenI18nDictionary(props.dictionaries?.en),
+  }));
+
+  const dictionary = createMemo<FlatDictionary>(() => ({
+    ...fallbackDictionary(),
+    ...(locale() === 'en' ? {} : getMessages(locale())),
+    ...flattenI18nDictionary(getVelvetRuntimeConfig().localeDictionaries[locale()]),
+    ...flattenI18nDictionary(props.dictionaries?.[locale()]),
+  }));
 
   createEffect(() => {
     const nextLocale = props.initialLocale;
@@ -64,24 +88,29 @@ const I18nProvider = (props: I18nProviderProps) => {
     }
   });
 
-  const t = (key: I18nMessageKey, params?: Record<string, string | number>): string => {
-    const template = dictionary()[key] || getMessages('en')[key] || key;
+  const t = (key: string, params?: Record<string, string | number>): string => {
+    const template = dictionary()[key] || fallbackDictionary()[key] || key;
     return interpolate(template, params);
   };
 
-  return <I18nContext.Provider value={{ locale, setLocale, t }}>{props.children}</I18nContext.Provider>;
+  const ts = (key: I18nMessageKey, params?: Record<string, string | number>): string => t(key, params);
+
+  return <I18nContext.Provider value={{ locale, setLocale, t, ts }}>{props.children}</I18nContext.Provider>;
 };
 
 export { I18nProvider };
 
-export function useI18n(): I18nContextValue {
+export const useI18n = (): I18nContextValue => {
   const context = useContext(I18nContext);
   if (context) return context;
 
   const fallbackLocale = (): Locale => 'en';
+  const fallbackDictionary = getMessages('en');
+
   return {
     locale: fallbackLocale,
     setLocale: () => undefined,
-    t: (key, params) => interpolate(getMessages('en')[key] || key, params),
+    t: (key, params) => interpolate(fallbackDictionary[key] || key, params),
+    ts: (key, params) => interpolate(fallbackDictionary[key] || key, params),
   };
-}
+};

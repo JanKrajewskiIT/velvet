@@ -1,5 +1,6 @@
 import { children, createEffect, createMemo, createSignal, onCleanup, type ParentProps } from 'solid-js';
 
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -10,15 +11,13 @@ interface ResizablePanelProps {
   initialSplit?: number;
   minSize?: number;
   onResize?: (split: number) => void;
-  resizeLabel?: string;
 }
 
-const DEFAULT_RESIZABLE_PANEL_LABEL = 'Resize panels';
-
 const ResizablePanel = (props: ParentProps<Props<ResizablePanelProps>>) => {
+  const { ts } = useI18n();
   const direction = createMemo(() => props.direction ?? 'horizontal');
   const minSize = createMemo(() => props.minSize ?? 10);
-  const resizeLabel = createMemo(() => props.resizeLabel ?? DEFAULT_RESIZABLE_PANEL_LABEL);
+  const resizeLabel = createMemo(() => ts('resizablePanel.resizePanels'));
 
   const [split, setSplit] = createSignal(props.initialSplit ?? 50);
   const [dragging, setDragging] = createSignal(false);
@@ -86,7 +85,7 @@ const ResizablePanel = (props: ParentProps<Props<ResizablePanelProps>>) => {
         styles.wrapper,
         isHorizontal() ? styles.horizontal : styles.vertical,
         dragging() && styles.dragging,
-        props.class
+        props.class,
       )}
     >
       <div class={styles.panelFirst} style={firstStyle()}>

@@ -54,21 +54,17 @@
   opacity: 0.97;
   will-change: transform, color;
   transition:
-    transform var(--duration-fast) var(--ease-out-expo),
     color var(--duration-fast) var(--ease-out-expo),
     opacity var(--duration-fast) var(--ease-out-expo),
+    transform var(--duration-fast) var(--ease-out-expo),
     filter var(--duration-fast) var(--ease-out-expo);
-}
-
-.menuIcon:hover {
-  transform: translateY(-1px) scale(1.08) rotate(7deg);
 }
 
 .menuItem:not(.active):hover .menuIcon,
 .menuItem:not(.active) .menuItemLink:focus-visible .menuIcon {
-  transform: translateY(-1px) scale(1.08) rotate(7deg);
   color: var(--color-gray-0);
   opacity: 1;
+  transform: translateY(-1px) scale(1.08) rotate(7deg);
   filter: drop-shadow(0 0 0.45rem color-mix(in srgb, var(--indicator-color) 26%, transparent));
 }
 

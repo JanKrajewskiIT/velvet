@@ -25,37 +25,12 @@ export interface TransferListProps {
   sourceItems: readonly TransferItem[];
   targetItems: readonly TransferItem[];
   onChange: (source: TransferItem[], target: TransferItem[]) => void;
-  sourceTitle?: string;
-  targetTitle?: string;
   searchable?: boolean;
-  messages?: TransferListMessages;
-}
-
-export interface TransferListMessages {
-  sourceTitle?: string;
-  targetTitle?: string;
-  clearSourceSearchLabel?: string;
-  clearTargetSearchLabel?: string;
-  searchLabel?: (label: string) => string;
-  selectItemLabel?: (label: string) => string;
-  moveSelectedRightLabel?: string;
-  moveAllRightLabel?: string;
-  moveSelectedLeftLabel?: string;
-  moveAllLeftLabel?: string;
 }
 
 const TransferList = (props: Props<TransferListProps>) => {
-  const { t } = useI18n();
-  const [local, rest] = splitProps(props, [
-    'sourceItems',
-    'targetItems',
-    'onChange',
-    'sourceTitle',
-    'targetTitle',
-    'searchable',
-    'messages',
-    'class',
-  ]);
+  const { ts } = useI18n();
+  const [local, rest] = splitProps(props, ['sourceItems', 'targetItems', 'onChange', 'searchable', 'class']);
   const [sourceChecked, setSourceChecked] = createSignal(new Set<string>());
   const [targetChecked, setTargetChecked] = createSignal(new Set<string>());
   const [sourceFilter, setSourceFilter] = createSignal('');
@@ -63,25 +38,9 @@ const TransferList = (props: Props<TransferListProps>) => {
 
   const filteredSource = createMemo(() => filterTransferItems(local.sourceItems, sourceFilter()));
   const filteredTarget = createMemo(() => filterTransferItems(local.targetItems, targetFilter()));
-  const sourceTitle = createMemo(() => local.messages?.sourceTitle ?? local.sourceTitle ?? t('transfer.available'));
-  const targetTitle = createMemo(() => local.messages?.targetTitle ?? local.targetTitle ?? t('transfer.selected'));
-  const clearSourceSearchLabel = createMemo(
-    () => local.messages?.clearSourceSearchLabel ?? t('transfer.clearSourceSearch')
-  );
-  const clearTargetSearchLabel = createMemo(
-    () => local.messages?.clearTargetSearchLabel ?? t('transfer.clearSelectedSearch')
-  );
-  const searchLabel = (label: string) => local.messages?.searchLabel?.(label) ?? t('transfer.search', { label });
-  const selectItemLabel = (label: string) =>
-    local.messages?.selectItemLabel?.(label) ?? t('transfer.selectItem', { label });
-  const moveSelectedRightLabel = createMemo(
-    () => local.messages?.moveSelectedRightLabel ?? t('transfer.moveSelectedRight')
-  );
-  const moveAllRightLabel = createMemo(() => local.messages?.moveAllRightLabel ?? t('transfer.moveAllRight'));
-  const moveSelectedLeftLabel = createMemo(
-    () => local.messages?.moveSelectedLeftLabel ?? t('transfer.moveSelectedLeft')
-  );
-  const moveAllLeftLabel = createMemo(() => local.messages?.moveAllLeftLabel ?? t('transfer.moveAllLeft'));
+  const sourceTitle = createMemo(() => ts('transfer.available'));
+  const targetTitle = createMemo(() => ts('transfer.selected'));
+  const selectItemLabel = (label: string) => ts('transfer.selectItem', { label });
 
   const toggleSourceChecked = (id: string) => setSourceChecked((current) => toggleTransferSelection(current, id));
   const toggleTargetChecked = (id: string) => setTargetChecked((current) => toggleTransferSelection(current, id));
@@ -123,11 +82,8 @@ const TransferList = (props: Props<TransferListProps>) => {
       <TransferListPanel
         title={sourceTitle()}
         items={filteredSource()}
-        itemCount={local.sourceItems.length}
         filterValue={sourceFilter()}
         searchable={local.searchable}
-        clearSearchLabel={clearSourceSearchLabel()}
-        searchInputLabel={searchLabel(sourceTitle())}
         selectItemLabel={selectItemLabel}
         checkedIds={sourceChecked()}
         onFilterChange={setSourceFilter}
@@ -138,7 +94,7 @@ const TransferList = (props: Props<TransferListProps>) => {
         <IconButton
           disabled={sourceChecked().size === 0}
           onClick={moveSelectedRight}
-          label={moveSelectedRightLabel()}
+          label={ts('transfer.moveSelectedRight')}
           icon={IoChevronForward}
           size="sm"
           variant="ghost"
@@ -146,7 +102,7 @@ const TransferList = (props: Props<TransferListProps>) => {
         <IconButton
           disabled={local.sourceItems.length === 0}
           onClick={moveAllRight}
-          label={moveAllRightLabel()}
+          label={ts('transfer.moveAllRight')}
           icon={IoPlayForward}
           size="sm"
           variant="ghost"
@@ -154,7 +110,7 @@ const TransferList = (props: Props<TransferListProps>) => {
         <IconButton
           disabled={targetChecked().size === 0}
           onClick={moveSelectedLeft}
-          label={moveSelectedLeftLabel()}
+          label={ts('transfer.moveSelectedLeft')}
           icon={IoChevronBack}
           size="sm"
           variant="ghost"
@@ -162,7 +118,7 @@ const TransferList = (props: Props<TransferListProps>) => {
         <IconButton
           disabled={local.targetItems.length === 0}
           onClick={moveAllLeft}
-          label={moveAllLeftLabel()}
+          label={ts('transfer.moveAllLeft')}
           icon={IoPlayBack}
           size="sm"
           variant="ghost"
@@ -172,11 +128,8 @@ const TransferList = (props: Props<TransferListProps>) => {
       <TransferListPanel
         title={targetTitle()}
         items={filteredTarget()}
-        itemCount={local.targetItems.length}
         filterValue={targetFilter()}
         searchable={local.searchable}
-        clearSearchLabel={clearTargetSearchLabel()}
-        searchInputLabel={searchLabel(targetTitle())}
         selectItemLabel={selectItemLabel}
         checkedIds={targetChecked()}
         onFilterChange={setTargetFilter}

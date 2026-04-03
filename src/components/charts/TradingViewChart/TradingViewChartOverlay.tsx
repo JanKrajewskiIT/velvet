@@ -3,7 +3,7 @@ import { For, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
 
-import styles from './TradingViewChart.module.css';
+import styles from './TradingViewChartOverlay.module.css';
 
 interface ProjectedTrendLine {
   id: string;

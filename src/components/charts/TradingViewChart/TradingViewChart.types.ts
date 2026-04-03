@@ -58,7 +58,7 @@ export interface TradingViewLiveFeedConfig {
   enabled?: boolean;
   intervalMs?: number;
   poll?: (
-    context: TradingViewFeedContext
+    context: TradingViewFeedContext,
   ) =>
     | TradingViewChartPoint
     | TradingViewChartPoint[]
@@ -66,30 +66,8 @@ export interface TradingViewLiveFeedConfig {
     | Promise<TradingViewChartPoint | TradingViewChartPoint[] | null>;
   subscribe?: (
     emit: (bars: TradingViewChartPoint | TradingViewChartPoint[]) => void,
-    context: TradingViewFeedContext
+    context: TradingViewFeedContext,
   ) => (() => void) | undefined;
-}
-
-export interface TradingViewChartMessages {
-  volumeShortLabel?: string;
-  smaShortLabel?: string;
-  emaShortLabel?: string;
-  bbShortLabel?: string;
-  rsiShortLabel?: string;
-  macdShortLabel?: string;
-  trendToolLabel?: string;
-  levelToolLabel?: string;
-  zoneToolLabel?: string;
-  clearLabel?: string;
-  bbUpperTitle?: string;
-  bbBasisTitle?: string;
-  bbLowerTitle?: string;
-  smaTitle?: string;
-  emaTitle?: string;
-  rsiTitle?: string;
-  macdTitle?: string;
-  macdSignalTitle?: string;
-  macdHistogramTitle?: string;
 }
 
 export interface TradingViewChartProps extends DivCoreNativeProps {
@@ -104,5 +82,4 @@ export interface TradingViewChartProps extends DivCoreNativeProps {
   drawings?: Partial<TradingViewDrawings>;
   defaultDrawingTool?: TradingViewDrawingTool;
   onDrawingsChange?: (drawings: TradingViewDrawings) => void;
-  messages?: TradingViewChartMessages;
 }

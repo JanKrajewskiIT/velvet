@@ -1,6 +1,7 @@
 import { FiCheck, FiInfo, FiTarget, FiX } from 'solid-icons/fi';
 import { For, type JSX, Show } from 'solid-js';
 
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -21,11 +22,8 @@ interface AiResultSection {
 
 interface AiResultPanelProps {
   isPending: boolean;
-  loadingText: string;
-  errorText?: string;
   hasError: boolean;
   onRetry: () => void;
-  retryLabel: string;
   score?: number;
   scoreLabel?: string;
   summary?: string;
@@ -51,13 +49,15 @@ const iconClassMap = {
 };
 
 const AiResultPanel = (props: Props<AiResultPanelProps>) => {
+  const { ts } = useI18n();
+
   return (
-    <Stack gap="md" class={classNames(styles.panel, props.class)}>
+    <Stack gap="md" class={props.class}>
       <Show when={props.isPending}>
         <Stack align="center" gap="sm" class={styles.loading}>
           <Spinner size="md" />
           <Text as="p" variant="bodySm" tone="muted">
-            {props.loadingText}
+            {ts('common.loading')}
           </Text>
         </Stack>
       </Show>
@@ -65,18 +65,18 @@ const AiResultPanel = (props: Props<AiResultPanelProps>) => {
       <Show when={props.hasError && !props.hasResult && !props.isPending}>
         <Stack align="center" gap="sm" class={styles.errorState}>
           <Text as="p" variant="bodySm" tone="primary" class={styles.errorText}>
-            {props.errorText}
+            {ts('error.description')}
           </Text>
           <Button variant="ghost" onClick={props.onRetry}>
-            {props.retryLabel}
+            {ts('error.retry')}
           </Button>
         </Stack>
       </Show>
 
       <Show when={props.hasResult && !props.isPending}>
-        <Stack gap="md" class={styles.result}>
+        <Stack gap="md">
           <Show when={props.score !== undefined}>
-            <Stack align="center" gap="xs" class={styles.scoreSection}>
+            <Stack align="center" gap="xs">
               <ScoreRing score={props.score ?? 0} />
               <Show when={props.scoreLabel}>
                 <CodeText as="span" size="sm" tone="muted" class={styles.scoreLabel}>
@@ -97,7 +97,7 @@ const AiResultPanel = (props: Props<AiResultPanelProps>) => {
           <For each={props.sections ?? []}>
             {(section) => (
               <Show when={section.items.length > 0}>
-                <Stack gap="xs" class={styles.listSection}>
+                <Stack gap="xs">
                   <Stack direction="horizontal" align="center" gap="xs" class={styles.listTitle}>
                     {iconMap[section.icon](classNames(styles.icon, iconClassMap[section.icon]))}
                     <Heading as="h4" level={4} variant="titleMd">

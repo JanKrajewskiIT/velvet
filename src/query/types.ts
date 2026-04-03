@@ -6,6 +6,7 @@ export type QueryKey = readonly QueryKeyPart[];
 export type QueryStatus = 'idle' | 'loading' | 'success' | 'error';
 export type MutationStatus = 'idle' | 'pending' | 'success' | 'error';
 export type QueryRetry = number | ((attempt: number, error: Error) => boolean);
+export type QueryRetryDelay = number | ((attempt: number) => number);
 
 export interface QueryState<TData> {
   status: QueryStatus;
@@ -44,13 +45,18 @@ export interface MutationSignal<TData, TVariables> {
 export interface QueryOptions<TData> {
   staleTime?: number;
   retry?: QueryRetry;
+  retryDelay?: QueryRetryDelay;
   enabled?: Accessor<boolean>;
   initialData?: TData;
 }
 
+export type QueryKeyInput = QueryKey | Accessor<QueryKey>;
+
 export interface QueryDefaults {
   staleTime: number;
   retry: QueryRetry;
+  retryDelay: QueryRetryDelay;
+  gcTime: number;
 }
 
 export interface CreateQueryClientOptions {

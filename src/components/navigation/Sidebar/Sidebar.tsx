@@ -1,6 +1,7 @@
 import { IoChevronBack, IoChevronForward } from 'solid-icons/io';
 import { createMemo, createSignal, For, type JSX, Show, splitProps } from 'solid-js';
 
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -29,23 +30,9 @@ interface SidebarProps {
   collapsible?: boolean;
   onToggle?: () => void;
   header?: JSX.Element;
-  searchPlaceholder?: string;
-  badgeFilterLabel?: string;
-  emptyLabel?: string;
-  broaderHint?: string;
-  expandLabel?: string;
-  collapseLabel?: string;
-  clearLabel?: string;
 }
 
 const hasBadge = (item: SidebarItem) => item.badge !== undefined;
-const DEFAULT_SIDEBAR_EXPAND_LABEL = 'Expand sidebar';
-const DEFAULT_SIDEBAR_COLLAPSE_LABEL = 'Collapse sidebar';
-const DEFAULT_SIDEBAR_SEARCH_PLACEHOLDER = 'Search items';
-const DEFAULT_SIDEBAR_BADGE_FILTER_LABEL = 'Only items with badges';
-const DEFAULT_SIDEBAR_CLEAR_LABEL = 'Clear';
-const DEFAULT_SIDEBAR_EMPTY_LABEL = 'No matches';
-const DEFAULT_SIDEBAR_BROADER_HINT = 'Try a broader search';
 
 const filterSidebarItems = (items: SidebarItem[], query: string, onlyBadged: boolean): SidebarItem[] => {
   const normalizedQuery = query.trim().toLowerCase();
@@ -75,6 +62,7 @@ const filterSidebarItems = (items: SidebarItem[], query: string, onlyBadged: boo
 };
 
 const Sidebar = (props: Props<SidebarProps>) => {
+  const { ts } = useI18n();
   const [local, rest] = splitProps(props, [
     'items',
     'activeId',
@@ -83,13 +71,6 @@ const Sidebar = (props: Props<SidebarProps>) => {
     'collapsible',
     'onToggle',
     'header',
-    'searchPlaceholder',
-    'badgeFilterLabel',
-    'emptyLabel',
-    'broaderHint',
-    'expandLabel',
-    'collapseLabel',
-    'clearLabel',
     'class',
   ]);
   const [query, setQuery] = createSignal('');
@@ -99,13 +80,6 @@ const Sidebar = (props: Props<SidebarProps>) => {
   const forceExpanded = () => query().trim().length > 0;
   const filteredItems = createMemo(() => filterSidebarItems(local.items, query(), onlyBadged()));
   const isEmpty = createMemo(() => filteredItems().length === 0);
-  const expandLabel = createMemo(() => local.expandLabel ?? DEFAULT_SIDEBAR_EXPAND_LABEL);
-  const collapseLabel = createMemo(() => local.collapseLabel ?? DEFAULT_SIDEBAR_COLLAPSE_LABEL);
-  const searchPlaceholder = createMemo(() => local.searchPlaceholder ?? DEFAULT_SIDEBAR_SEARCH_PLACEHOLDER);
-  const badgeFilterLabel = createMemo(() => local.badgeFilterLabel ?? DEFAULT_SIDEBAR_BADGE_FILTER_LABEL);
-  const clearLabel = createMemo(() => local.clearLabel ?? DEFAULT_SIDEBAR_CLEAR_LABEL);
-  const emptyLabel = createMemo(() => local.emptyLabel ?? DEFAULT_SIDEBAR_EMPTY_LABEL);
-  const broaderHint = createMemo(() => local.broaderHint ?? DEFAULT_SIDEBAR_BROADER_HINT);
 
   const handleBadgeFilterToggle = (e: InputEvent) => {
     setOnlyBadged((e.currentTarget as HTMLInputElement).checked);
@@ -132,7 +106,7 @@ const Sidebar = (props: Props<SidebarProps>) => {
                   <IoChevronForward />
                 </Show>
               }
-              label={collapsed() ? expandLabel() : collapseLabel()}
+              label={collapsed() ? ts('sidebar.expand') : ts('sidebar.collapse')}
               onClick={local.onToggle}
             />
           </Show>
@@ -140,11 +114,11 @@ const Sidebar = (props: Props<SidebarProps>) => {
       </Show>
       <Show when={!collapsed()}>
         <div class={styles.tools}>
-          <SearchInput value={query()} onInput={setQuery} placeholder={searchPlaceholder()} />
+          <SearchInput value={query()} onInput={setQuery} placeholder={ts('sidebar.searchItems')} />
           <div class={styles.toolsRow}>
-            <Checkbox checked={onlyBadged()} onInput={handleBadgeFilterToggle} label={badgeFilterLabel()} />
+            <Checkbox checked={onlyBadged()} onInput={handleBadgeFilterToggle} label={ts('sidebar.onlyBadges')} />
             <Button variant="dashed" onClick={clearFilters} disabled={query().length === 0 && !onlyBadged()}>
-              {clearLabel()}
+              {ts('common.clear')}
             </Button>
           </div>
         </div>
@@ -167,8 +141,8 @@ const Sidebar = (props: Props<SidebarProps>) => {
         <Show when={isEmpty()}>
           <EmptyState
             class={styles.emptyState}
-            message={emptyLabel()}
-            hint={query().trim().length > 0 ? broaderHint() : undefined}
+            message={ts('sidebar.noMatches')}
+            hint={query().trim().length > 0 ? ts('sidebar.broaderHint') : undefined}
           />
         </Show>
       </nav>

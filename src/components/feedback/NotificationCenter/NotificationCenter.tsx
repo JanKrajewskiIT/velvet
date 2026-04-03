@@ -24,29 +24,12 @@ import styles from './NotificationCenter.module.css';
 
 interface NotificationCenterOwnProps extends Omit<DivCoreNativeProps, 'onChange'> {
   label?: string;
-  emptyMessage?: string;
-  markAllLabel?: string;
-  clearAllLabel?: string;
-  removeLabel?: string;
-  markReadLabel?: string;
   maxItems?: number;
 }
 
 const NotificationCenter = (props: Props<NotificationCenterOwnProps>) => {
-  const { t } = useI18n();
-  const [local, rest] = splitProps(props, [
-    'label',
-    'emptyMessage',
-    'markAllLabel',
-    'clearAllLabel',
-    'removeLabel',
-    'markReadLabel',
-    'maxItems',
-    'role',
-    'aria-label',
-    'aria-labelledby',
-    'class',
-  ]);
+  const { ts } = useI18n();
+  const [local, rest] = splitProps(props, ['label', 'maxItems', 'role', 'aria-label', 'aria-labelledby', 'class']);
 
   const items = createMemo(() => {
     const list = notifications();
@@ -61,12 +44,12 @@ const NotificationCenter = (props: Props<NotificationCenterOwnProps>) => {
     return new Date(timestamp).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
   };
 
-  const panelLabel = createMemo(() => local.label ?? t('common.notifications'));
-  const readLabel = createMemo(() => local.markAllLabel ?? t('notification.markAllRead'));
-  const clearLabel = createMemo(() => local.clearAllLabel ?? t('notification.clearAll'));
-  const dismissLabel = createMemo(() => local.removeLabel ?? t('common.dismiss'));
-  const markReadLabel = createMemo(() => local.markReadLabel ?? t('notification.markRead'));
-  const emptyMessage = createMemo(() => local.emptyMessage ?? t('notification.empty'));
+  const panelLabel = createMemo(() => local.label ?? ts('common.notifications'));
+  const readLabel = createMemo(() => ts('notification.markAllRead'));
+  const clearLabel = createMemo(() => ts('notification.clearAll'));
+  const dismissLabel = createMemo(() => ts('common.dismiss'));
+  const markReadLabel = createMemo(() => ts('notification.markRead'));
+  const emptyMessage = createMemo(() => ts('notification.empty'));
   const hasNotifications = createMemo(() => notifications().length > 0);
   const handleItemRead = (id: string) => markNotificationRead(id);
   const handleItemRemove = (id: string) => removeNotification(id);

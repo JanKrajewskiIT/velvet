@@ -13,10 +13,6 @@ interface ChoiceControlOwnProps extends Omit<ChoiceInputCoreNativeProps, 'type'>
   label?: string;
   description?: string;
   labelId?: string;
-  wrapperClass?: string;
-  controlClass?: string;
-  inputClass?: string;
-  indicatorClass?: string;
   indicator?: JSX.Element;
 }
 
@@ -28,10 +24,6 @@ const ChoiceControl = (props: Props<ChoiceControlOwnProps>) => {
     'label',
     'description',
     'labelId',
-    'wrapperClass',
-    'controlClass',
-    'inputClass',
-    'indicatorClass',
     'indicator',
     'aria-labelledby',
   ]);
@@ -40,15 +32,10 @@ const ChoiceControl = (props: Props<ChoiceControlOwnProps>) => {
   const labelledBy = createMemo(() => joinAriaIds(local['aria-labelledby'], resolvedLabelId()));
 
   return (
-    <label class={classNames(styles.field, local.wrapperClass)}>
-      <span class={classNames(styles.control, local.controlClass, local.class)}>
-        <input
-          {...rest}
-          type={local.type}
-          class={classNames(styles.input, local.inputClass)}
-          aria-labelledby={labelledBy()}
-        />
-        {local.indicator ?? <span class={classNames(styles.indicator, local.indicatorClass)} aria-hidden="true" />}
+    <label class={classNames(styles.field, local.class)} data-type={local.type}>
+      <span class={styles.control}>
+        <input {...rest} type={local.type} class={styles.input} aria-labelledby={labelledBy()} />
+        {local.indicator ?? <span class={styles.indicator} aria-hidden="true" />}
       </span>
       <Show when={hasLabel()}>
         <LabelText id={resolvedLabelId()} label={local.label} description={local.description} />

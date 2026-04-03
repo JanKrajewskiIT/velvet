@@ -6,6 +6,7 @@ import type { SelectOption } from '~/components/dropdowns/Select/Select';
 import Select from '~/components/dropdowns/Select/Select';
 import FormField from '~/components/forms/FormField/FormField';
 import Input from '~/components/inputs/Input/Input';
+import { useI18n } from '~/i18n/I18nProvider';
 
 import type { QueryBuilderField, QueryBuilderOperator, QueryBuilderRule } from './QueryBuilder';
 import styles from './QueryBuilder.module.css';
@@ -16,13 +17,6 @@ interface QueryBuilderRuleRowProps {
   fields: readonly QueryBuilderField[];
   field?: QueryBuilderField;
   operators: readonly QueryBuilderOperator[];
-  fieldLabel: string;
-  operatorLabel: string;
-  valueLabel: string;
-  selectPlaceholderLabel: string;
-  moveRuleUpLabel: string;
-  moveRuleDownLabel: string;
-  removeRuleLabel: string;
   getOperatorLabel: (operator: QueryBuilderOperator) => string;
   disabled?: boolean;
   isFirst: boolean;
@@ -37,18 +31,19 @@ interface QueryBuilderRuleRowProps {
 }
 
 const QueryBuilderRuleRow = (props: QueryBuilderRuleRowProps) => {
+  const { ts } = useI18n();
   const valueRequired = createMemo(() => requiresValue(props.rule.operator));
   const selectableOptions = createMemo(() => props.field?.options ?? []);
   const hasSelectableOptions = createMemo(() => props.field?.type === 'select' && selectableOptions().length > 0);
   const inputType = createMemo(() => (props.field?.type === 'number' ? 'number' : 'text'));
   const fieldSelectOptions = createMemo<SelectOption[]>(() =>
-    props.fields.map((field) => ({ value: field.key, label: field.label }))
+    props.fields.map((field) => ({ value: field.key, label: field.label })),
   );
   const operatorSelectOptions = createMemo<SelectOption[]>(() =>
-    props.operators.map((operator) => ({ value: operator, label: props.getOperatorLabel(operator) }))
+    props.operators.map((operator) => ({ value: operator, label: props.getOperatorLabel(operator) })),
   );
   const valueSelectOptions = createMemo<SelectOption[]>(() => [
-    { value: '', label: props.selectPlaceholderLabel },
+    { value: '', label: ts('common.selectEllipsis') },
     ...selectableOptions().map((option) => ({ value: option.value, label: option.label })),
   ]);
 
@@ -60,7 +55,7 @@ const QueryBuilderRuleRow = (props: QueryBuilderRuleRowProps) => {
             <Select
               {...fieldProps}
               size="sm"
-              aria-label={props.fieldLabel}
+              aria-label={ts('common.field')}
               value={props.rule.fieldKey}
               onChange={props.onFieldChange}
               disabled={props.disabled}
@@ -76,7 +71,7 @@ const QueryBuilderRuleRow = (props: QueryBuilderRuleRowProps) => {
             <Select
               {...fieldProps}
               size="sm"
-              aria-label={props.operatorLabel}
+              aria-label={ts('common.operator')}
               value={props.rule.operator}
               onChange={props.onOperatorChange}
               disabled={props.disabled}
@@ -98,7 +93,7 @@ const QueryBuilderRuleRow = (props: QueryBuilderRuleRowProps) => {
                   size="sm"
                   readOnly
                   disabled
-                  aria-label={props.valueLabel}
+                  aria-label={ts('common.value')}
                   class={styles.inputDisabled}
                 />
               }
@@ -111,7 +106,7 @@ const QueryBuilderRuleRow = (props: QueryBuilderRuleRowProps) => {
                     type={inputType()}
                     value={props.rule.value}
                     size="sm"
-                    aria-label={props.valueLabel}
+                    aria-label={ts('common.value')}
                     onInput={props.onValueInput}
                     disabled={props.disabled}
                   />
@@ -120,7 +115,7 @@ const QueryBuilderRuleRow = (props: QueryBuilderRuleRowProps) => {
                 <Select
                   {...fieldProps}
                   size="sm"
-                  aria-label={props.valueLabel}
+                  aria-label={ts('common.value')}
                   value={props.rule.value}
                   onChange={props.onValueSelectChange}
                   disabled={props.disabled}
@@ -135,21 +130,21 @@ const QueryBuilderRuleRow = (props: QueryBuilderRuleRowProps) => {
       <div class={styles.ruleActions}>
         <IconButton
           icon={IoArrowUp}
-          label={props.moveRuleUpLabel}
+          label={ts('query.moveRuleUp')}
           size="sm"
           disabled={props.disabled || props.isFirst}
           onClick={props.onMoveUp}
         />
         <IconButton
           icon={IoArrowDown}
-          label={props.moveRuleDownLabel}
+          label={ts('query.moveRuleDown')}
           size="sm"
           disabled={props.disabled || props.isLast}
           onClick={props.onMoveDown}
         />
         <IconButton
           icon={IoTrash}
-          label={props.removeRuleLabel}
+          label={ts('query.removeRule')}
           size="sm"
           disabled={props.disabled}
           onClick={props.onRemove}

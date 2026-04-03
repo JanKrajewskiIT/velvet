@@ -59,7 +59,7 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
   value={tab()}
   onChange={setTab}
   variant="underline"
-/>`
+/>`,
   );
   const tabProps = ['variant', 'activationMode', 'panelId', 'disabled'];
 
@@ -160,16 +160,9 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
                   actions={
                     <div class="layoutNavbarActions">
                       <LocaleSwitcher variant="navbar" />
-                      <ThemeToggle
-                        lightLabel={t('demo.theme.light')}
-                        darkLabel={t('demo.theme.dark')}
-                        groupLabel={t('demo.theme.group')}
-                        variant="navbar"
-                      />
+                      <ThemeToggle variant="navbar" />
                     </div>
                   }
-                  toggleMenuLabel={t('demo.text.navigation.navbar.toggleMenu')}
-                  navLabel={t('demo.text.navigation.navbar.mainNav')}
                 />
               </div>
             </PreviewGroup>
@@ -447,13 +440,7 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
         >
           <PreviewPanel>
             <PreviewGroup title={t('demo.text.common.examples')}>
-              <Pagination
-                page={page()}
-                totalPages={24}
-                onChange={setPage}
-                previousLabel={t('demo.text.navigation.pagination.previous')}
-                nextLabel={t('demo.text.navigation.pagination.next')}
-              />
+              <Pagination page={page()} totalPages={24} onChange={setPage} />
               <Text as="p" variant="bodySm" tone="muted" class="mutedText">
                 {t('demo.text.navigation.pagination.currentPage')}:{' '}
                 <CodeText as="span" class="codeInline">

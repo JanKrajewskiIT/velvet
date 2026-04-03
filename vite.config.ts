@@ -22,7 +22,6 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(import.meta.dirname, 'src/index.ts'),
-      name: 'VelvetUi',
       fileName: 'velvet-ui',
       formats: ['es'],
     },
@@ -30,7 +29,7 @@ export default defineConfig({
       external: (id) =>
         id.includes('node_modules') ||
         /^(solid-js|@solidjs\/router|solid-icons|solid-markdown|dompurify|remark-gfm|lightweight-charts)(\/|$)/u.test(
-          id
+          id,
         ),
       output: {
         preserveModules: true,

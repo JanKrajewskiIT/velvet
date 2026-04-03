@@ -23,7 +23,7 @@ export const getDropdownOpenTarget = (event: KeyboardEvent): 'first' | 'last' | 
 export const handleDropdownArrowNavigation = (
   event: KeyboardEvent,
   items: HTMLButtonElement[],
-  currentIndex: number
+  currentIndex: number,
 ): boolean => {
   switch (event.key) {
     case 'ArrowDown': {

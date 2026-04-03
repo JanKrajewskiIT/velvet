@@ -126,7 +126,7 @@ export const createMacd = (data: TradingViewChartPoint[]) => {
       close: item.close,
       volume: 0,
     })),
-    9
+    9,
   );
   const histogram = macdLine.map((item, index) => {
     const signal = signalLine[index]?.value ?? 0;

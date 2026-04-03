@@ -6,7 +6,6 @@ import {
   For,
   type JSX,
   onCleanup,
-  Show,
   splitProps,
 } from 'solid-js';
 
@@ -22,26 +21,11 @@ interface CarouselOwnProps extends Omit<DivCoreNativeProps, 'children'> {
   children: JSX.Element;
   autoPlay?: boolean;
   interval?: number;
-  showDots?: boolean;
-  showArrows?: boolean;
-  previousSlideLabel?: string;
-  nextSlideLabel?: string;
-  slideButtonLabel?: (index: number) => string;
 }
 
 const Carousel = (props: Props<CarouselOwnProps>) => {
-  const { t } = useI18n();
-  const [local, rest] = splitProps(props, [
-    'children',
-    'autoPlay',
-    'interval',
-    'showDots',
-    'showArrows',
-    'previousSlideLabel',
-    'nextSlideLabel',
-    'slideButtonLabel',
-    'class',
-  ]);
+  const { ts } = useI18n();
+  const [local, rest] = splitProps(props, ['children', 'autoPlay', 'interval', 'class']);
 
   const resolved = resolveChildren(() => local.children);
   const [activeIndex, setActiveIndex] = createSignal(0);
@@ -53,11 +37,8 @@ const Carousel = (props: Props<CarouselOwnProps>) => {
     return Array.isArray(c) ? c : [c];
   });
   const slideCount = createMemo(() => slides().length);
-  const previousSlideLabel = createMemo(() => local.previousSlideLabel ?? t('carousel.previousSlide'));
-  const nextSlideLabel = createMemo(() => local.nextSlideLabel ?? t('carousel.nextSlide'));
-  const showArrows = createMemo(() => local.showArrows ?? true);
-  const showDots = createMemo(() => local.showDots ?? true);
-
+  const previousSlideLabel = createMemo(() => ts('carousel.previousSlide'));
+  const nextSlideLabel = createMemo(() => ts('carousel.nextSlide'));
   const scrollTo = (index: number) => {
     const count = slideCount();
     if (count === 0) return;
@@ -104,13 +85,15 @@ const Carousel = (props: Props<CarouselOwnProps>) => {
     el.addEventListener('scroll', syncFromScroll);
     onCleanup(() => el.removeEventListener('scroll', syncFromScroll));
   });
-  const resolveSlideButtonLabel = (index: number) =>
-    local.slideButtonLabel?.(index) ?? t('carousel.goToSlide', { index: index + 1 });
+
+  const resolveSlideButtonLabel = (index: number) => ts('carousel.goToSlide', { index: index + 1 });
 
   return (
     <div
       {...rest}
       class={classNames(styles.carousel, local.class)}
+      role="region"
+      aria-roledescription="carousel"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
@@ -118,35 +101,31 @@ const Carousel = (props: Props<CarouselOwnProps>) => {
         <For each={slides()}>{(slide) => <div class={styles.slide}>{slide}</div>}</For>
       </div>
 
-      <Show when={showArrows()}>
-        <MediaNavButton
-          direction="prev"
-          class={classNames(styles.arrow, styles.arrowPrev)}
-          onClick={goPrev}
-          label={previousSlideLabel()}
-        />
-        <MediaNavButton
-          direction="next"
-          class={classNames(styles.arrow, styles.arrowNext)}
-          onClick={goNext}
-          label={nextSlideLabel()}
-        />
-      </Show>
+      <MediaNavButton
+        direction="prev"
+        class={classNames(styles.arrow, styles.arrowPrev)}
+        onClick={goPrev}
+        label={previousSlideLabel()}
+      />
+      <MediaNavButton
+        direction="next"
+        class={classNames(styles.arrow, styles.arrowNext)}
+        onClick={goNext}
+        label={nextSlideLabel()}
+      />
 
-      <Show when={showDots()}>
-        <div class={styles.dots}>
-          <For each={slides()}>
-            {(_, i) => (
-              <button
-                type="button"
-                class={classNames(styles.dot, i() === activeIndex() && styles.dotActive)}
-                onClick={() => scrollTo(i())}
-                aria-label={resolveSlideButtonLabel(i())}
-              />
-            )}
-          </For>
-        </div>
-      </Show>
+      <div class={styles.dots}>
+        <For each={slides()}>
+          {(_, i) => (
+            <button
+              type="button"
+              class={classNames(styles.dot, i() === activeIndex() && styles.dotActive)}
+              onClick={() => scrollTo(i())}
+              aria-label={resolveSlideButtonLabel(i())}
+            />
+          )}
+        </For>
+      </div>
     </div>
   );
 };

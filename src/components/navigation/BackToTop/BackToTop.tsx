@@ -11,18 +11,16 @@ import styles from './BackToTop.module.css';
 interface BackToTopProps {
   threshold?: number;
   smooth?: boolean;
-  ariaLabel?: string;
   scrollRoot?: () => HTMLElement | null | undefined;
 }
 
 const BackToTop = (props: Props<BackToTopProps>) => {
-  const { t } = useI18n();
-  const [local, rest] = splitProps(props, ['class', 'threshold', 'smooth', 'ariaLabel', 'scrollRoot']);
+  const { ts } = useI18n();
+  const [local, rest] = splitProps(props, ['class', 'threshold', 'smooth', 'scrollRoot']);
   const [visible, setVisible] = createSignal(false);
 
   const threshold = createMemo(() => local.threshold ?? 300);
   const smooth = createMemo(() => local.smooth ?? true);
-  const label = createMemo(() => local.ariaLabel ?? t('backToTop.label'));
 
   createEffect(() => {
     const root = local.scrollRoot?.() ?? null;
@@ -60,7 +58,7 @@ const BackToTop = (props: Props<BackToTopProps>) => {
       size="lg"
       elevation="popover"
       onClick={scrollToTop}
-      label={label()}
+      label={ts('backToTop.label')}
       icon={IoArrowUp}
       iconSize="lg"
     />

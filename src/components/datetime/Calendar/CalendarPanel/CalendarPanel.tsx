@@ -8,8 +8,6 @@ const DEFAULT_DAY_LABELS = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'] as const;
 
 interface CalendarPanelProps {
   monthLabel: string;
-  previousLabel: string;
-  nextLabel: string;
   onPrevious: () => void;
   onNext: () => void;
   days: DayCell[];
@@ -23,13 +21,7 @@ interface CalendarPanelProps {
 const CalendarPanel = (props: Props<CalendarPanelProps>) => {
   return (
     <div class={props.class}>
-      <CalendarHeader
-        monthLabel={props.monthLabel}
-        previousLabel={props.previousLabel}
-        nextLabel={props.nextLabel}
-        onPrevious={props.onPrevious}
-        onNext={props.onNext}
-      />
+      <CalendarHeader monthLabel={props.monthLabel} onPrevious={props.onPrevious} onNext={props.onNext} />
       <CalendarGrid
         dayLabels={props.dayLabels ?? DEFAULT_DAY_LABELS}
         days={props.days}

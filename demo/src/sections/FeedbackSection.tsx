@@ -1,3 +1,4 @@
+import type { ColorLabel } from '@jankrajewskiit/ui';
 import {
   AccessDenied,
   addToast,
@@ -9,7 +10,10 @@ import {
   CircularProgress,
   ClosableChip,
   CodeText,
+  ColorLabelManagerDialog,
+  ColorLabelSelectionDialog,
   Countdown,
+  DualFilterBar,
   EmptyState,
   ErrorFallback,
   ErrorMessage,
@@ -18,27 +22,34 @@ import {
   LoadingContainer,
   NotificationCenter,
   Progress,
+  SelectableChips,
   Skeleton,
   Spinner,
-  StatCard,
+  Text,
   useI18n,
 } from '@jankrajewskiit/ui';
-import {
-  IoAlertCircle,
-  IoCheckmarkCircle,
-  IoFolder,
-  IoMail,
-  IoNotifications,
-  IoPeople,
-  IoSearch,
-  IoStatsChart,
-} from 'solid-icons/io';
+import { IoFolder, IoMail, IoNotifications, IoSearch } from 'solid-icons/io';
 import { createMemo, createSignal, Show } from 'solid-js';
 
 import type { SectionId } from '../App';
 import { PreviewGroup, PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
 import { type DemoI18nMessageKey, getDemoMessages } from '../i18n/messages';
 import { renderRichText } from '../i18n/renderRichText';
+
+const colorLabelItems = [
+  { value: 'tag-1', label: 'Remote', color: '#1d4ed8' },
+  { value: 'tag-2', label: 'Senior', color: '#7c3aed' },
+  { value: 'tag-3', label: 'Fintech', color: '#0f766e' },
+  { value: 'tag-4', label: 'Urgent', color: '#dc2626' },
+];
+
+const selectableFilterItems = [
+  { value: 'new', label: 'New', count: 12, variant: 'primary' as const },
+  { value: 'screening', label: 'Screening', count: 5, variant: 'info' as const },
+  { value: 'interview', label: 'Interview', count: 3, variant: 'warning' as const },
+  { value: 'offer', label: 'Offer', count: 2, variant: 'success' as const },
+  { value: 'rejected', label: 'Rejected', count: 7, variant: 'error' as const },
+];
 
 const FeedbackSection = (props: { sectionId: SectionId }) => {
   const sectionId = () => props.sectionId;
@@ -47,9 +58,201 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
   const t = (key: DemoI18nMessageKey): string => dictionary()[key];
   const [retried, setRetried] = createSignal(false);
   const [bannerVisible, setBannerVisible] = createSignal(true);
+  const [selectedLabelIds, setSelectedLabelIds] = createSignal<string[]>(['tag-1', 'tag-2']);
+  const [managedLabels, setManagedLabels] = createSignal<ColorLabel[]>([
+    { id: 'tag-1', name: 'Remote', color: '#1d4ed8' },
+    { id: 'tag-2', name: 'Top pick', color: '#7c3aed' },
+    { id: 'tag-3', name: 'Fast track', color: '#dc2626' },
+  ]);
+  const [multiFilterValue, setMultiFilterValue] = createSignal<string[]>(['new', 'interview']);
+  const [labelManagerOpen, setLabelManagerOpen] = createSignal(false);
+  const [labelSelectionOpen, setLabelSelectionOpen] = createSignal(false);
+  const [dualFilterValue, setDualFilterValue] = createSignal('all');
+  const [dualSortValue, setDualSortValue] = createSignal('order');
+
+  const dualFilterItems = createMemo(() => [
+    { value: 'all', label: t('demo.text.dataDisplay.dualFilterBar.filter.all') },
+    { value: 'learning', label: t('demo.text.dataDisplay.dualFilterBar.filter.learning') },
+    { value: 'voted', label: t('demo.text.dataDisplay.dualFilterBar.filter.voted') },
+    { value: 'pending', label: t('demo.text.dataDisplay.dualFilterBar.filter.pending') },
+    { value: 'unanswered', label: t('demo.text.dataDisplay.dualFilterBar.filter.unanswered') },
+  ]);
+
+  const dualSortItems = createMemo(() => [
+    { value: 'order', label: t('demo.text.dataDisplay.dualFilterBar.sort.order') },
+    { value: 'popular', label: t('demo.text.dataDisplay.dualFilterBar.sort.popular') },
+  ]);
+
+  const handleLabelSelectionSubmit = (value: string[]) => {
+    setSelectedLabelIds(value);
+    addToast({ type: 'success', message: 'Label selection updated.' });
+  };
+
+  const handleLabelCreate = (item: ColorLabel) => {
+    setManagedLabels((current) => [...current, item]);
+  };
+
+  const handleLabelUpdate = (item: ColorLabel) => {
+    setManagedLabels((current) => current.map((entry) => (entry.id === item.id ? item : entry)));
+  };
+
+  const handleLabelDelete = (id: string) => {
+    setManagedLabels((current) => current.filter((entry) => entry.id !== id));
+  };
 
   return (
     <div>
+      <Show when={sectionId() === 'feedback-chips-tags'}>
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.chip.title')}
+          subtitle={t('demo.showcase.feedback.chip.subtitle')}
+        >
+          <PreviewPanel>
+            <PreviewGroup title={t('demo.text.feedback.chip.presetVariants.title')}>
+              <div class="row">
+                <Chip variant="primary" label={t('demo.text.feedback.chip.primary')} />
+                <Chip variant="primaryOutline" label={t('demo.text.feedback.chip.outline')} />
+                <Chip variant="info" label={t('demo.text.feedback.chip.info')} />
+                <Chip variant="success" label={t('demo.text.feedback.chip.success')} />
+                <Chip variant="warning" label={t('demo.text.feedback.chip.warning')} />
+                <Chip variant="error" label={t('demo.text.feedback.chip.error')} />
+                <Chip variant="subtle" label={t('demo.text.feedback.chip.subtle')} />
+              </div>
+            </PreviewGroup>
+            <PreviewGroup title={t('demo.text.feedback.chip.interactiveCustomColor.title')}>
+              <div class="row">
+                <Chip variant="success" filled label={t('demo.text.feedback.chip.filledSuccess')} />
+                <Chip variant="error" filled label={t('demo.text.feedback.chip.filledError')} />
+                <Chip variant="info" size="sm" label={t('demo.text.feedback.chip.small')} />
+                <Chip variant="primary" selected label={t('demo.text.feedback.chip.selected')} />
+                <Chip variant="primary" onClick={() => {}} label={t('demo.text.feedback.chip.clickable')} />
+                <Chip color="#2e7d32" selected label={t('demo.text.feedback.chip.selectedLower')} />
+                <Chip color="#ed6c02" onClick={() => {}} label={t('demo.text.feedback.chip.clickableLower')} />
+              </div>
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.closableChip.title')}
+          subtitle={t('demo.showcase.feedback.closableChip.subtitle')}
+        >
+          <PreviewPanel>
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <div class="row">
+                <ClosableChip label={t('demo.text.feedback.closableChip.javascript')} onRemove={() => {}} />
+                <ClosableChip label={t('demo.text.feedback.closableChip.typescript')} onRemove={() => {}} />
+                <ClosableChip label={t('demo.text.feedback.closableChip.solidjs')} onRemove={() => {}} />
+              </div>
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection title="SelectableChips" subtitle={t('demo.text.feedback.chipsTags.selectableChips.subtitle')}>
+          <PreviewPanel>
+            <PreviewGroup title="Example">
+              <div class="chipsCasesGrid">
+                <div class="chipsCaseCard">
+                  <Text as="p" variant="labelMd" tone="default">
+                    {t('demo.text.feedback.chipsTags.selectableChips.colorCaseLabel')}
+                  </Text>
+                  <Text as="p" variant="bodySm" tone="muted">
+                    {t('demo.text.feedback.chipsTags.selectableChips.colorCaseDescription')}
+                  </Text>
+                  <SelectableChips
+                    label={t('demo.recron.status.tagCloud.label')}
+                    description={t('demo.recron.status.tagCloud.description')}
+                    items={colorLabelItems}
+                    value={selectedLabelIds()}
+                    onChange={setSelectedLabelIds}
+                  />
+                </div>
+                <div class="chipsCaseCard">
+                  <Text as="p" variant="labelMd" tone="default">
+                    {t('demo.text.feedback.chipsTags.selectableChips.filterCaseLabel')}
+                  </Text>
+                  <Text as="p" variant="bodySm" tone="muted">
+                    {t('demo.text.feedback.chipsTags.selectableChips.filterCaseDescription')}
+                  </Text>
+                  <SelectableChips
+                    label={t('demo.recron.status.filters.label')}
+                    items={selectableFilterItems}
+                    value={multiFilterValue()}
+                    onChange={setMultiFilterValue}
+                  />
+                </div>
+              </div>
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          title="ColorLabelSelectionDialog"
+          subtitle={t('demo.recron.showcase.colorTagSelectionDialog.subtitle')}
+        >
+          <PreviewPanel>
+            <PreviewGroup title="Example">
+              <Button
+                label={t('demo.recron.status.tagSelection.trigger')}
+                onClick={() => setLabelSelectionOpen(true)}
+              />
+              <ColorLabelSelectionDialog
+                open={labelSelectionOpen()}
+                label={t('demo.recron.status.tagSelection.title')}
+                description={t('demo.recron.status.tagSelection.description')}
+                items={colorLabelItems}
+                value={selectedLabelIds()}
+                chipsLabel={t('demo.recron.status.tagSelection.label')}
+                cancelLabel={t('demo.recron.status.tagSelection.cancel')}
+                onClose={() => setLabelSelectionOpen(false)}
+                onSubmit={handleLabelSelectionSubmit}
+              />
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          title="ColorLabelManagerDialog"
+          subtitle={t('demo.recron.showcase.colorTagManagerDialog.subtitle')}
+        >
+          <PreviewPanel>
+            <PreviewGroup title="Example">
+              <Button label={t('demo.recron.status.tagManager.trigger')} onClick={() => setLabelManagerOpen(true)} />
+              <ColorLabelManagerDialog
+                open={labelManagerOpen()}
+                label={t('demo.recron.status.tagManager.title')}
+                items={managedLabels()}
+                colors={['#1d4ed8', '#7c3aed', '#0f766e', '#dc2626', '#f59e0b']}
+                onClose={() => setLabelManagerOpen(false)}
+                onCreate={handleLabelCreate}
+                onUpdate={handleLabelUpdate}
+                onDelete={handleLabelDelete}
+              />
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          title={t('demo.showcase.dataDisplay.dualFilterBar.title')}
+          subtitle={t('demo.showcase.dataDisplay.dualFilterBar.subtitle')}
+        >
+          <PreviewPanel>
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <div class="recronDemoWide recronDemoSurface">
+                <DualFilterBar
+                  filterItems={dualFilterItems()}
+                  sortItems={dualSortItems()}
+                  activeFilter={dualFilterValue()}
+                  activeSort={dualSortValue()}
+                  onFilterChange={setDualFilterValue}
+                  onSortChange={setDualSortValue}
+                />
+              </div>
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+      </Show>
+
       <Show when={sectionId() === 'feedback-badges-chips'}>
         <ShowcaseSection
           title={t('demo.showcase.feedback.badge.title')}
@@ -98,93 +301,6 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
               </div>
             </PreviewGroup>
           </PreviewPanel>
-        </ShowcaseSection>
-
-        <ShowcaseSection
-          title={t('demo.showcase.feedback.chip.title')}
-          subtitle={t('demo.showcase.feedback.chip.subtitle')}
-        >
-          <PreviewPanel>
-            <PreviewGroup title={t('demo.text.feedback.chip.presetVariants.title')}>
-              <div class="row">
-                <Chip variant="primary" label={t('demo.text.feedback.chip.primary')} />
-                <Chip variant="primaryOutline" label={t('demo.text.feedback.chip.outline')} />
-                <Chip variant="info" label={t('demo.text.feedback.chip.info')} />
-                <Chip variant="success" label={t('demo.text.feedback.chip.success')} />
-                <Chip variant="warning" label={t('demo.text.feedback.chip.warning')} />
-                <Chip variant="error" label={t('demo.text.feedback.chip.error')} />
-                <Chip variant="subtle" label={t('demo.text.feedback.chip.subtle')} />
-              </div>
-            </PreviewGroup>
-            <PreviewGroup title={t('demo.text.feedback.chip.interactiveCustomColor.title')}>
-              <div class="row">
-                <Chip variant="success" filled label={t('demo.text.feedback.chip.filledSuccess')} />
-                <Chip variant="error" filled label={t('demo.text.feedback.chip.filledError')} />
-                <Chip variant="info" size="sm" label={t('demo.text.feedback.chip.small')} />
-                <Chip variant="primary" selected label={t('demo.text.feedback.chip.selected')} />
-                <Chip variant="primary" onClick={() => {}} label={t('demo.text.feedback.chip.clickable')} />
-                <Chip color="#2e7d32" selected label={t('demo.text.feedback.chip.selectedLower')} />
-                <Chip color="#ed6c02" onClick={() => {}} label={t('demo.text.feedback.chip.clickableLower')} />
-              </div>
-            </PreviewGroup>
-          </PreviewPanel>
-        </ShowcaseSection>
-
-        <ShowcaseSection
-          title={t('demo.showcase.feedback.closableChip.title')}
-          subtitle={t('demo.showcase.feedback.closableChip.subtitle')}
-        >
-          <PreviewPanel>
-            <PreviewGroup title={t('demo.text.common.examples')}>
-              <div class="row">
-                <ClosableChip label={t('demo.text.feedback.closableChip.javascript')} onRemove={() => {}} />
-                <ClosableChip label={t('demo.text.feedback.closableChip.typescript')} onRemove={() => {}} />
-                <ClosableChip label={t('demo.text.feedback.closableChip.solidjs')} onRemove={() => {}} />
-              </div>
-            </PreviewGroup>
-          </PreviewPanel>
-        </ShowcaseSection>
-
-        <ShowcaseSection
-          title={t('demo.showcase.feedback.statCard.title')}
-          subtitle={t('demo.showcase.feedback.statCard.subtitle')}
-        >
-          <PreviewPanel>
-            <PreviewGroup title={t('demo.text.common.examples')}>
-              <div class="gridCards">
-                <StatCard
-                  value="1 284"
-                  label={t('demo.text.feedback.statCard.activeUsers')}
-                  icon={<IoPeople />}
-                  colorClass="info"
-                />
-                <StatCard
-                  value="98.7%"
-                  label={t('demo.text.feedback.statCard.uptime')}
-                  icon={<IoCheckmarkCircle />}
-                  colorClass="success"
-                />
-                <StatCard
-                  value="3"
-                  label={t('demo.text.feedback.statCard.openIssues')}
-                  icon={<IoAlertCircle />}
-                  colorClass="warning"
-                />
-                <StatCard
-                  value="42"
-                  label={t('demo.text.feedback.statCard.deployments')}
-                  icon={<IoStatsChart />}
-                  colorClass="error"
-                />
-              </div>
-            </PreviewGroup>
-          </PreviewPanel>
-          <ShowcaseMeta>
-            <CodeText as="span" class="codeInline">
-              StatCard
-            </CodeText>{' '}
-            {t('demo.text.feedback.statCard.meta')}
-          </ShowcaseMeta>
         </ShowcaseSection>
       </Show>
 
@@ -496,7 +612,6 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
                     : t('demo.text.feedback.states.somethingWrong')
                 }
                 description={t('demo.text.feedback.states.unexpectedError')}
-                retryLabel={t('demo.text.feedback.states.tryAgain')}
                 onRetry={() => setRetried(true)}
               />
             </PreviewGroup>

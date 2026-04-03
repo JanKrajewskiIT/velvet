@@ -133,7 +133,6 @@ useFocusTrap(container, { enabled: () => dialogOpen() });`,
   title="${t('demo.text.overlays.confirmDialog.deleteItem')}"
   message="${t('demo.text.overlays.confirmDialog.deleteItemMessage')}"
   confirmLabel="${t('demo.text.overlays.confirmDialog.delete')}"
-  cancelLabel="${t('demo.text.overlays.confirmDialog.cancel')}"
   variant="danger"
   onConfirm={removeItem}
 >
@@ -154,11 +153,6 @@ useFocusTrap(container, { enabled: () => dialogOpen() });`,
   getId={(item) => item.id}
   onAdd={addMember}
   onRemove={removeMember}
-  addLabel="${t('demo.text.developer.snippets.addMember')}"
-  confirmTitle="${t('demo.text.developer.snippets.removeMember')}"
-  confirmMessage="${t('demo.text.developer.snippets.removeMemberQuestion')}"
-  confirmLabel="${t('demo.text.composites.editableCollection.remove')}"
-  cancelLabel="${t('demo.text.overlays.confirmDialog.cancel')}"
   renderItem={(item, { requestRemove }) => (
     <>
       <Input value={item.name} onInput={(e) => rename(item.id, e.currentTarget.value)} />

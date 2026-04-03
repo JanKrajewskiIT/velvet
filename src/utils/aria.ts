@@ -5,7 +5,7 @@ export function joinAriaIds(...ids: Array<string | null | undefined | false>): s
 
 export function resolveAriaInvalid(
   invalid?: boolean,
-  explicit?: boolean | 'true' | 'false'
+  explicit?: boolean | 'true' | 'false',
 ): boolean | 'true' | 'false' | undefined {
   if (explicit !== undefined) return explicit;
   return invalid ? true : undefined;
@@ -14,7 +14,7 @@ export function resolveAriaInvalid(
 export function resolveAriaErrorMessage(
   describedBy: string | undefined,
   explicit?: string,
-  fallback?: string
+  fallback?: string,
 ): string | undefined {
   if (explicit) return explicit;
   if (fallback && describedBy) return fallback;

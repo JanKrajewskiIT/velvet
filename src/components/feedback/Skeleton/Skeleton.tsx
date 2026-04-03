@@ -31,9 +31,21 @@ const Skeleton = (props: Props<SkeletonOwnProps>) => {
     return s as JSX.CSSProperties;
   };
 
+  const variantClass = () => {
+    if (local.variant === 'circular') return styles.circular;
+    if (local.variant === 'rectangular') return styles.rectangular;
+    return styles.text;
+  };
+
+  const animationClass = () => {
+    if (local.animation === 'pulse') return styles.pulse;
+    if (local.animation === 'wave') return styles.wave;
+    return undefined;
+  };
+
   return (
     <div
-      class={classNames(styles.skeleton, styles[local.variant], styles[local.animation], local.class)}
+      class={classNames(styles.skeleton, variantClass(), animationClass(), local.class)}
       style={baseStyle()}
       {...rest}
     />

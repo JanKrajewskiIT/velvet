@@ -27,8 +27,6 @@ interface SchedulerEventsPanelProps {
   onDraftDateTimeChange: (date: string, time: string) => void;
   draftDescription: string;
   onDraftDescriptionChange: (value: string) => void;
-  eventTitlePlaceholder: string;
-  descriptionPlaceholder: string;
   cancelLabel: string;
   saveLabel: string;
   onCancelCreate: () => void;
@@ -97,8 +95,6 @@ const SchedulerEventsPanel = (props: Props<SchedulerEventsPanelProps>) => {
           onDateTimeChange={props.onDraftDateTimeChange}
           description={props.draftDescription}
           onDescriptionChange={props.onDraftDescriptionChange}
-          titlePlaceholder={props.eventTitlePlaceholder}
-          descriptionPlaceholder={props.descriptionPlaceholder}
           cancelLabel={props.cancelLabel}
           submitLabel={props.saveLabel}
           onCancel={props.onCancelCreate}

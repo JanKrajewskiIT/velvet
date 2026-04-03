@@ -14,6 +14,6 @@ if (root) {
         <Route path="/*" component={App} />
       </Router>
     ),
-    root
+    root,
   );
 }

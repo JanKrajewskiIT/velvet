@@ -4,7 +4,7 @@ export type AutosaveStatus = 'idle' | 'saving' | 'saved' | 'error';
 
 export interface CreateAutosaveSignalOptions<TData> {
   source: Accessor<TData>;
-  save: (data: TData) => Promise<void>;
+  save: (data: TData, signal: AbortSignal) => Promise<void>;
   delayMs?: number;
   saveFeedbackMs?: number;
 }
@@ -16,7 +16,7 @@ export interface AutosaveSignal {
   flush: () => Promise<void>;
 }
 
-export function createAutosaveSignal<TData>(options: CreateAutosaveSignalOptions<TData>): AutosaveSignal {
+export const createAutosaveSignal = <TData>(options: CreateAutosaveSignalOptions<TData>): AutosaveSignal => {
   const delayMs = options.delayMs ?? 500;
   const saveFeedbackMs = options.saveFeedbackMs ?? 3000;
 
@@ -25,14 +25,23 @@ export function createAutosaveSignal<TData>(options: CreateAutosaveSignalOptions
 
   let debounceTimer: ReturnType<typeof setTimeout> | undefined;
   let feedbackTimer: ReturnType<typeof setTimeout> | undefined;
-  let latestSnapshot = options.source();
+  let activeAbort: AbortController | undefined;
 
   const executeSave = async (snapshot: TData): Promise<void> => {
+    activeAbort?.abort();
+    const controller = new AbortController();
+    activeAbort = controller;
+
     setStatus('saving');
     setError(undefined);
 
     try {
-      await options.save(snapshot);
+      await options.save(snapshot, controller.signal);
+
+      if (controller.signal.aborted) {
+        return;
+      }
+
       setStatus('saved');
 
       if (feedbackTimer) {
@@ -43,6 +52,10 @@ export function createAutosaveSignal<TData>(options: CreateAutosaveSignalOptions
         setStatus('idle');
       }, saveFeedbackMs);
     } catch (unknownError) {
+      if (controller.signal.aborted) {
+        return;
+      }
+
       const normalized = unknownError instanceof Error ? unknownError : new Error('Autosave failed');
       setError(normalized);
       setStatus('error');
@@ -55,16 +68,13 @@ export function createAutosaveSignal<TData>(options: CreateAutosaveSignalOptions
       debounceTimer = undefined;
     }
 
-    latestSnapshot = options.source();
-    await executeSave(latestSnapshot);
+    await executeSave(options.source());
   };
 
   createEffect(
     on(
       options.source,
       (snapshot) => {
-        latestSnapshot = snapshot;
-
         if (debounceTimer) {
           clearTimeout(debounceTimer);
         }
@@ -73,11 +83,13 @@ export function createAutosaveSignal<TData>(options: CreateAutosaveSignalOptions
           void executeSave(snapshot);
         }, delayMs);
       },
-      { defer: true }
-    )
+      { defer: true },
+    ),
   );
 
   onCleanup(() => {
+    activeAbort?.abort();
+
     if (debounceTimer) {
       clearTimeout(debounceTimer);
     }
@@ -87,10 +99,7 @@ export function createAutosaveSignal<TData>(options: CreateAutosaveSignalOptions
     }
   });
 
-  const isSaving = createMemo(() => {
-    const currentStatus = status();
-    return currentStatus === 'saving';
-  });
+  const isSaving = createMemo(() => status() === 'saving');
 
   return {
     status,
@@ -98,4 +107,4 @@ export function createAutosaveSignal<TData>(options: CreateAutosaveSignalOptions
     isSaving,
     flush,
   };
-}
+};

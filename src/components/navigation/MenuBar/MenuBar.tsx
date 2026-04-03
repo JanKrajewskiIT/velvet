@@ -1,5 +1,6 @@
 import { For } from 'solid-js';
 
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -11,12 +12,13 @@ import MenuItem from './MenuItem/MenuItem';
 interface MenuBarProps {
   items: NavItem[];
   activeIndex: number;
-  navLabel?: string;
 }
 
 const MenuBar = (props: Props<MenuBarProps>) => {
+  const { ts } = useI18n();
+
   return (
-    <nav class={classNames(styles.menuBar, props.class)} aria-label={props.navLabel}>
+    <nav class={classNames(styles.menuBar, props.class)} aria-label={ts('navbar.navigation')}>
       <ul class={styles.menuList}>
         <For each={props.items}>
           {(item, index) => <MenuItem item={item} isActive={props.activeIndex === index()} />}

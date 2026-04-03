@@ -34,7 +34,7 @@ const IconButton = (props: Props<IconButtonOwnProps>) => {
   return (
     <Button
       {...rest}
-      class={classNames(styles.iconButton, local.class)}
+      class={classNames(styles.iconButton, local.variant === 'navbar' && styles.navbarVariant, local.class)}
       type={local.type ?? 'button'}
       size={local.size}
       variant={local.variant ?? 'subtle'}

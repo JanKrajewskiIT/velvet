@@ -13,8 +13,6 @@ import styles from './SchedulerCalendar.module.css';
 
 interface SchedulerCalendarProps {
   monthLabel: string;
-  previousMonthLabel: string;
-  nextMonthLabel: string;
   dayNames: readonly string[];
   gridDays: readonly DayCell[];
   selectedDate: string;
@@ -43,7 +41,7 @@ const SchedulerCalendar = (props: Props<SchedulerCalendarProps>) => {
       cell.outside && styles.dayOutside,
       iso === props.selectedDate && styles.daySelected,
       iso === props.todayIso && styles.dayToday,
-      props.dragOverDate === iso && styles.dayDragOver
+      props.dragOverDate === iso && styles.dayDragOver,
     );
   };
 
@@ -52,11 +50,8 @@ const SchedulerCalendar = (props: Props<SchedulerCalendarProps>) => {
       <CalendarHeader
         class={styles.calendarHeader}
         monthLabel={props.monthLabel}
-        previousLabel={props.previousMonthLabel}
-        nextLabel={props.nextMonthLabel}
         onPrevious={props.onPreviousMonth}
         onNext={props.onNextMonth}
-        navigationVariant="outline"
         titleContent={
           <Heading as="h3" level={3}>
             {props.monthLabel}

@@ -1,4 +1,6 @@
-import { createContext, createEffect, createSignal, onCleanup, type ParentProps, untrack, useContext } from 'solid-js';
+﻿import { createContext, createEffect, createSignal, onCleanup, type ParentProps, untrack, useContext } from 'solid-js';
+
+import { getVelvetRuntimeConfig } from '~/providers/velvet-config';
 
 export type ThemeChoice = 'light' | 'dark' | 'system';
 type ResolvedTheme = 'light' | 'dark';
@@ -9,8 +11,6 @@ interface ThemeContextValue {
   setTheme: (value: ThemeChoice) => void;
   toggleTheme: () => void;
 }
-
-const DEFAULT_STORAGE_KEY = 'velvet-theme';
 
 const ThemeContext = createContext<ThemeContextValue>();
 
@@ -43,8 +43,8 @@ interface ThemeProviderProps extends ParentProps {
 }
 
 const ThemeProvider = (props: ThemeProviderProps) => {
-  const storageKey = () => props.storageKey ?? DEFAULT_STORAGE_KEY;
-  const initialTheme = getStoredTheme(untrack(() => props.storageKey) ?? DEFAULT_STORAGE_KEY);
+  const storageKey = () => props.storageKey ?? getVelvetRuntimeConfig().themeStorageKey;
+  const initialTheme = getStoredTheme(untrack(storageKey));
   const initialSystem = getSystemTheme();
 
   const [theme, setTheme] = createSignal<ThemeChoice>(initialTheme);
@@ -56,8 +56,8 @@ const ThemeProvider = (props: ThemeProviderProps) => {
 
   if (typeof window !== 'undefined') {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handleChange = (e: MediaQueryListEvent) => {
-      setSystemTheme(e.matches ? 'dark' : 'light');
+    const handleChange = (event: MediaQueryListEvent) => {
+      setSystemTheme(event.matches ? 'dark' : 'light');
     };
     mediaQuery.addEventListener('change', handleChange);
     onCleanup(() => {

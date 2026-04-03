@@ -72,14 +72,14 @@ const RadarChart = (props: Props<RadarChartProps>) => {
     props.axes.map((_, i) => {
       const { x, y } = polarToCartesian(i * angleStep(), radius(), center());
       return { x1: center(), y1: center(), x2: x, y2: y };
-    })
+    }),
   );
 
   const axisLabels = createMemo(() =>
     props.axes.map((axis, i) => {
       const { x, y } = polarToCartesian(i * angleStep(), radius() + LABEL_OFFSET, center());
       return { ...axis, x, y };
-    })
+    }),
   );
 
   const datasetPolygons = createMemo(() =>
@@ -95,7 +95,7 @@ const RadarChart = (props: Props<RadarChartProps>) => {
         points,
         color: datasetColor(dataset.color, datasetIndex),
       };
-    })
+    }),
   );
 
   const dataPoints = createMemo(() =>
@@ -108,8 +108,8 @@ const RadarChart = (props: Props<RadarChartProps>) => {
           y,
           color: datasetColor(dataset.color, datasetIndex),
         };
-      })
-    )
+      }),
+    ),
   );
 
   return (

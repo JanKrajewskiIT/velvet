@@ -15,26 +15,56 @@ export interface QueryClient {
   getQueryData(key: QueryKey): unknown;
   setQueryData<TData>(key: QueryKey, updater: TData | ((previous: TData | undefined) => TData)): void;
   invalidateQueries(partialKey?: QueryKey): void;
+  removeQueries(partialKey?: QueryKey): void;
   defaults: QueryDefaults;
 }
 
 const DEFAULT_QUERY_DEFAULTS: QueryDefaults = {
   staleTime: 0,
   retry: 0,
+  retryDelay: (attempt: number) => Math.min(1000 * 2 ** (attempt - 1), 30000),
+  gcTime: 5 * 60 * 1000,
 };
 
-export function createQueryClient(options: CreateQueryClientOptions = {}): QueryClient {
-  const cache = new Map<string, { key: QueryKey; entry: QueryClientEntry<unknown> }>();
+export const createQueryClient = (options: CreateQueryClientOptions = {}): QueryClient => {
+  const cache = new Map<string, { key: QueryKey; entry: QueryClientEntry<unknown>; lastAccessedAt: number }>();
   const defaults: QueryDefaults = {
     ...DEFAULT_QUERY_DEFAULTS,
     ...(options.defaultOptions?.queries ?? {}),
   };
 
+  let gcTimer: ReturnType<typeof setInterval> | undefined;
+
+  const startGc = () => {
+    if (gcTimer || defaults.gcTime <= 0) {
+      return;
+    }
+
+    gcTimer = setInterval(
+      () => {
+        const now = Date.now();
+        cache.forEach((record, hash) => {
+          const state = record.entry.state();
+          if (!record.entry.inFlight && state.status !== 'loading' && now - record.lastAccessedAt > defaults.gcTime) {
+            cache.delete(hash);
+          }
+        });
+
+        if (cache.size === 0 && gcTimer) {
+          clearInterval(gcTimer);
+          gcTimer = undefined;
+        }
+      },
+      Math.max(defaults.gcTime / 2, 30000),
+    );
+  };
+
   const ensureQuery = <TData>(key: QueryKey): QueryClientEntry<TData> => {
     const keyHash = hashQueryKey(key);
-    const existing = cache.get(keyHash)?.entry;
+    const existing = cache.get(keyHash);
     if (existing) {
-      return existing as QueryClientEntry<TData>;
+      existing.lastAccessedAt = Date.now();
+      return existing.entry as QueryClientEntry<TData>;
     }
 
     const [state, setState] = createSignal<QueryState<TData>>({
@@ -57,7 +87,8 @@ export function createQueryClient(options: CreateQueryClientOptions = {}): Query
       },
     };
 
-    cache.set(keyHash, { key, entry: entry as QueryClientEntry<unknown> });
+    cache.set(keyHash, { key, entry: entry as QueryClientEntry<unknown>, lastAccessedAt: Date.now() });
+    startGc();
     return entry;
   };
 
@@ -68,6 +99,7 @@ export function createQueryClient(options: CreateQueryClientOptions = {}): Query
       return undefined;
     }
 
+    record.lastAccessedAt = Date.now();
     return record.entry.state().data;
   };
 
@@ -100,11 +132,25 @@ export function createQueryClient(options: CreateQueryClientOptions = {}): Query
     });
   };
 
+  const removeQueries = (partialKey?: QueryKey): void => {
+    if (!partialKey) {
+      cache.clear();
+      return;
+    }
+
+    cache.forEach((record, hash) => {
+      if (matchesPartialKey(record.key, partialKey)) {
+        cache.delete(hash);
+      }
+    });
+  };
+
   return {
     ensureQuery,
     getQueryData,
     setQueryData,
     invalidateQueries,
+    removeQueries,
     defaults,
   };
-}
+};

@@ -88,11 +88,11 @@ const DATA_GRID_COLUMNS: DataGridProColumn<PackageRow>[] = [
 const DATA_GRID_DEFAULT_ORDER = DATA_GRID_COLUMNS.map((column) => column.key);
 
 const DATA_GRID_DEFAULT_VISIBILITY = Object.fromEntries(
-  DATA_GRID_COLUMNS.map((column) => [column.key, true])
+  DATA_GRID_COLUMNS.map((column) => [column.key, true]),
 ) as Record<string, boolean>;
 
 const DATA_GRID_DEFAULT_PINNING: DataGridProColumnPinning = Object.fromEntries(
-  DATA_GRID_COLUMNS.map((column) => [column.key, column.pinned ?? null])
+  DATA_GRID_COLUMNS.map((column) => [column.key, column.pinned ?? null]),
 );
 
 const QUERY_BUILDER_FIELDS: QueryBuilderField[] = [
@@ -204,7 +204,7 @@ const TablesSection = () => {
           row.name.toLowerCase().includes(filter) ||
           row.version.toLowerCase().includes(filter) ||
           row.license.toLowerCase().includes(filter) ||
-          row.category.toLowerCase().includes(filter)
+          row.category.toLowerCase().includes(filter),
       );
     }
 
@@ -281,7 +281,7 @@ const TablesSection = () => {
       label: column.header,
       canHide: true,
       canPin: true,
-    }))
+    })),
   );
 
   const queryBuilderFields = createMemo<QueryBuilderField[]>(() => [
@@ -314,10 +314,10 @@ const TablesSection = () => {
 
   const dataGridDefaultOrder = createMemo(() => dataGridColumns().map((column) => column.key));
   const dataGridDefaultVisibility = createMemo(
-    () => Object.fromEntries(dataGridColumns().map((column) => [column.key, true])) as Record<string, boolean>
+    () => Object.fromEntries(dataGridColumns().map((column) => [column.key, true])) as Record<string, boolean>,
   );
   const dataGridDefaultPinning = createMemo<DataGridProColumnPinning>(() =>
-    Object.fromEntries(dataGridColumns().map((column) => [column.key, column.pinned ?? null]))
+    Object.fromEntries(dataGridColumns().map((column) => [column.key, column.pinned ?? null])),
   );
   const resetGridWorkspace = () => {
     setGridFilterQuery('');
@@ -382,7 +382,6 @@ const TablesSection = () => {
               filterable
               filterQuery={query()}
               onFilterQueryChange={setQuery}
-              filterPlaceholder={t('demo.text.tables.dataTable.searchPlaceholder')}
               striped
               hoverable
             />
@@ -405,12 +404,7 @@ const TablesSection = () => {
       >
         <PreviewPanel>
           <PreviewGroup title={t('demo.text.common.examples')}>
-            <DataTable<PackageRow>
-              data={[]}
-              columns={packageColumns()}
-              pageSize={4}
-              emptyMessage={t('demo.text.tables.dataTable.emptyMessage')}
-            />
+            <DataTable<PackageRow> data={[]} columns={packageColumns()} pageSize={4} />
           </PreviewGroup>
         </PreviewPanel>
       </ShowcaseSection>
@@ -502,8 +496,6 @@ const TablesSection = () => {
                 value={advancedQuery()}
                 onChange={setAdvancedQuery}
                 description={t('demo.text.tables.queryBuilder.description')}
-                addRuleLabel={t('demo.text.tables.queryBuilder.addCondition')}
-                clearLabel={t('demo.text.tables.queryBuilder.clearConditions')}
               />
               <ColumnManager
                 columns={dataGridColumnSettings()}
@@ -517,17 +509,11 @@ const TablesSection = () => {
                 defaultVisibility={dataGridDefaultVisibility()}
                 defaultPinning={dataGridDefaultPinning()}
                 description={t('demo.text.tables.columnManager.description')}
-                resetLabel={t('demo.text.tables.columnManager.resetSettings')}
               />
               <DataGridPro<PackageRow>
                 data={serverRows()}
                 columns={dataGridColumns()}
                 persistenceKey="demo-packages-grid"
-                resetPersistenceLabel={t('demo.text.tables.dataGrid.resetSavedGrid')}
-                importSettingsLabel={t('demo.text.tables.dataGrid.importLayoutJson')}
-                exportSettingsLabel={t('demo.text.tables.dataGrid.exportLayoutJson')}
-                persistedBadgeLabel={t('demo.text.tables.dataGrid.persisted')}
-                defaultBadgeLabel={t('demo.text.tables.dataGrid.default')}
                 height={420}
                 rowHeight={40}
                 headerHeight={44}
@@ -536,7 +522,6 @@ const TablesSection = () => {
                 filterable
                 filterQuery={gridFilterQuery()}
                 onFilterQueryChange={setGridFilterQuery}
-                filterPlaceholder={t('demo.text.tables.dataGrid.serverFilterPlaceholder')}
                 sortKey={gridSort().key}
                 sortDirection={gridSort().direction}
                 onSortChange={setGridSort}

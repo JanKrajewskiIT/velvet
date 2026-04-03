@@ -71,7 +71,7 @@ const Surface = (props: Props<SurfaceOwnProps>) => {
         local.border !== false && styles.border,
         local.blur && styles.blur,
         local.clip && styles.clip,
-        local.class
+        local.class,
       )}
       {...rest}
     >

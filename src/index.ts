@@ -1,15 +1,27 @@
-import './theme/globals.css';
+﻿import './theme/globals.css';
 
 export type { AuthActionButtonProps } from './auth/AuthActionButton';
 export { default as AuthActionButton } from './auth/AuthActionButton';
 export type { AuthGuardProps } from './auth/AuthGuard';
 export { default as AuthGuard } from './auth/AuthGuard';
 export type { AuthContextValue, OidcAuthConfig, OidcAuthUserManagerFactoryConfig } from './auth/AuthProvider';
-export { AuthProvider, getAuthAccessToken, setAuthUserManagerFactory, useAuth } from './auth/AuthProvider';
+export {
+  AuthProvider,
+  getAuthAccessToken,
+  handleAuthRedirectCallback,
+  setAuthUserManagerFactory,
+  useAuth,
+} from './auth/AuthProvider';
 export type { AuthRedirectProps } from './auth/AuthRedirect';
 export { default as AuthRedirect } from './auth/AuthRedirect';
+export { createAuthContextWithSessionFallback } from './auth/createAuthContextWithSessionFallback';
+export type { CreateCachedOidcUserManagerFactoryOptions } from './auth/createCachedOidcUserManagerFactory';
+export { createCachedOidcUserManagerFactory } from './auth/createCachedOidcUserManagerFactory';
 export type { RequireAuthProps } from './auth/RequireAuth';
 export { default as RequireAuth } from './auth/RequireAuth';
+export { getStoredUser } from './auth/utils';
+export type { CreateVelvetBootstrapOptions } from './bootstrap/createVelvetBootstrap';
+export { bootstrapVelvetApp, sanitizeAuthQueryParams } from './bootstrap/createVelvetBootstrap';
 export { default as AffixButton } from './components/buttons/AffixButton/AffixButton';
 export type { ButtonVariant } from './components/buttons/Button/Button';
 export { default as Button } from './components/buttons/Button/Button';
@@ -22,10 +34,19 @@ export {
   type RoundIconButtonOwnProps,
 } from './components/buttons/RoundIconButton/RoundIconButton';
 export { default as ThemeToggle, type ThemeToggleVariant } from './components/buttons/ThemeToggle/ThemeToggle';
+export type {
+  ComparisonInsightsAxis,
+  ComparisonInsightsColumn,
+  ComparisonInsightsDataset,
+  ComparisonInsightsDialogProps,
+  ComparisonInsightsRow,
+} from './components/charts/ComparisonInsightsDialog/ComparisonInsightsDialog';
+export { default as ComparisonInsightsDialog } from './components/charts/ComparisonInsightsDialog/ComparisonInsightsDialog';
+export type { ComparisonSelectionBarProps } from './components/charts/ComparisonSelectionBar/ComparisonSelectionBar';
+export { default as ComparisonSelectionBar } from './components/charts/ComparisonSelectionBar/ComparisonSelectionBar';
 export { default as RadarChart } from './components/charts/RadarChart/RadarChart';
 export { default as ScoreRing } from './components/charts/ScoreRing/ScoreRing';
 export type {
-  TradingViewChartMessages,
   TradingViewChartPoint,
   TradingViewChartProps,
   TradingViewDrawings,
@@ -47,128 +68,49 @@ export type {
   AtsRecommendationSeverity,
 } from './components/composites/AtsAnalysisPanel/AtsAnalysisPanel';
 export { default as AtsAnalysisPanel } from './components/composites/AtsAnalysisPanel/AtsAnalysisPanel';
-export type {
-  ChipCategorySelectorItem,
-  ChipCategorySelectorProps,
-} from './components/composites/ChipCategorySelector/ChipCategorySelector';
-export { default as ChipCategorySelector } from './components/composites/ChipCategorySelector/ChipCategorySelector';
 export { default as CodeBlock } from './components/composites/CodeBlock/CodeBlock';
-export type { ColorTagCloudItem, ColorTagCloudProps } from './components/composites/ColorTagCloud/ColorTagCloud';
-export { default as ColorTagCloud } from './components/composites/ColorTagCloud/ColorTagCloud';
-export type {
-  ColorTag,
-  ColorTagManagerDialogProps,
-} from './components/composites/ColorTagManagerDialog/ColorTagManagerDialog';
-export { default as ColorTagManagerDialog } from './components/composites/ColorTagManagerDialog/ColorTagManagerDialog';
-export type { ColorTagSelectionDialogProps } from './components/composites/ColorTagSelectionDialog/ColorTagSelectionDialog';
-export { default as ColorTagSelectionDialog } from './components/composites/ColorTagSelectionDialog/ColorTagSelectionDialog';
 export type { CommandItem } from './components/composites/CommandPalette/CommandPalette';
 export { default as CommandPalette } from './components/composites/CommandPalette/CommandPalette';
-export type {
-  ComparisonInsightsAxis,
-  ComparisonInsightsColumn,
-  ComparisonInsightsDataset,
-  ComparisonInsightsDialogProps,
-  ComparisonInsightsRow,
-} from './components/composites/ComparisonInsightsDialog/ComparisonInsightsDialog';
-export { default as ComparisonInsightsDialog } from './components/composites/ComparisonInsightsDialog/ComparisonInsightsDialog';
-export type { ComparisonSelectionBarProps } from './components/composites/ComparisonSelectionBar/ComparisonSelectionBar';
-export { default as ComparisonSelectionBar } from './components/composites/ComparisonSelectionBar/ComparisonSelectionBar';
 export type {
   EditableCollectionProps,
   EditableCollectionRenderContext,
 } from './components/composites/EditableCollection/EditableCollection';
 export { default as EditableCollection } from './components/composites/EditableCollection/EditableCollection';
-export type { FlashcardQuizCardProps } from './components/composites/FlashcardQuizCard/FlashcardQuizCard';
-export { default as FlashcardQuizCard } from './components/composites/FlashcardQuizCard/FlashcardQuizCard';
-export type {
-  FlashcardQuizResult,
-  FlashcardQuizSessionProps,
-} from './components/composites/FlashcardQuizSession/FlashcardQuizSession';
-export { default as FlashcardQuizSession } from './components/composites/FlashcardQuizSession/FlashcardQuizSession';
-export type { FlashcardQuizSummaryProps } from './components/composites/FlashcardQuizSummary/FlashcardQuizSummary';
-export { default as FlashcardQuizSummary } from './components/composites/FlashcardQuizSummary/FlashcardQuizSummary';
-export type {
-  HierarchicalCategoryChildItem,
-  HierarchicalCategoryItem,
-  HierarchicalCategoryNavigatorProps,
-} from './components/composites/HierarchicalCategoryNavigator/HierarchicalCategoryNavigator';
-export { default as HierarchicalCategoryNavigator } from './components/composites/HierarchicalCategoryNavigator/HierarchicalCategoryNavigator';
-export type {
-  IconCategorySelectorItem,
-  IconCategorySelectorProps,
-} from './components/composites/IconCategorySelector/IconCategorySelector';
-export { default as IconCategorySelector } from './components/composites/IconCategorySelector/IconCategorySelector';
-export type {
-  FileImportSource,
-  ImportSourceOption,
-  ImportSourcesDialogProps,
-  ImportSourcesDialogSubmitPayload,
-  UrlImportSource,
-} from './components/composites/ImportSourcesDialog/ImportSourcesDialog';
-export { default as ImportSourcesDialog } from './components/composites/ImportSourcesDialog/ImportSourcesDialog';
 export type {
   IndexedContentCardProps,
   IndexedContentCardTone,
 } from './components/composites/IndexedContentCard/IndexedContentCard';
 export { default as IndexedContentCard } from './components/composites/IndexedContentCard/IndexedContentCard';
-export type {
-  InterviewSessionCardLabels,
-  InterviewSessionCardProps,
-  InterviewSessionCardValue,
-  InterviewSessionOption,
-} from './components/composites/InterviewSessionCard/InterviewSessionCard';
-export { default as InterviewSessionCard } from './components/composites/InterviewSessionCard/InterviewSessionCard';
 export type { KanbanColumn, KanbanItemBase } from './components/composites/KanbanBoard/KanbanBoard';
 export { default as KanbanBoard } from './components/composites/KanbanBoard/KanbanBoard';
 export { default as MarkdownEditDialog } from './components/composites/MarkdownEditDialog/MarkdownEditDialog';
 export { default as MarkdownRenderer } from './components/composites/MarkdownRenderer/MarkdownRenderer';
 export type { QuestionAnswerPanelProps } from './components/composites/QuestionAnswerPanel/QuestionAnswerPanel';
 export { default as QuestionAnswerPanel } from './components/composites/QuestionAnswerPanel/QuestionAnswerPanel';
-export type {
-  QuestionFilterBarOption,
-  QuestionFilterBarProps,
-} from './components/composites/QuestionFilterBar/QuestionFilterBar';
-export { default as QuestionFilterBar } from './components/composites/QuestionFilterBar/QuestionFilterBar';
-export type {
-  QuizSetupPanelCategory,
-  QuizSetupPanelProps,
-  QuizSetupPanelSubmitValue,
-} from './components/composites/QuizSetupPanel/QuizSetupPanel';
-export { default as QuizSetupPanel } from './components/composites/QuizSetupPanel/QuizSetupPanel';
-export type {
-  ScoredInsightsPanelLabels,
-  ScoredInsightsPanelProps,
-  ScoredInsightsResult,
-} from './components/composites/ScoredInsightsPanel/ScoredInsightsPanel';
-export { default as ScoredInsightsPanel } from './components/composites/ScoredInsightsPanel/ScoredInsightsPanel';
-export type {
-  StatusFilterChipItem,
-  StatusFilterChipsProps,
-  StatusFilterChipVariant,
-} from './components/composites/StatusFilterChips/StatusFilterChips';
-export { default as StatusFilterChips } from './components/composites/StatusFilterChips/StatusFilterChips';
-export type { StatusMenuChipOption, StatusMenuChipProps } from './components/composites/StatusMenuChip/StatusMenuChip';
-export { default as StatusMenuChip } from './components/composites/StatusMenuChip/StatusMenuChip';
-export type {
-  TransferItem,
-  TransferListMessages,
-  TransferListProps,
-} from './components/composites/TransferList/TransferList';
+export type { TransferItem, TransferListProps } from './components/composites/TransferList/TransferList';
 export { default as TransferList } from './components/composites/TransferList/TransferList';
 export type { WizardStep } from './components/composites/Wizard/Wizard';
 export { default as Wizard } from './components/composites/Wizard/Wizard';
 export type { FilterBarFilter, FilterBarOption, FilterBarValue } from './components/data/FilterBar/FilterBar';
 export { default as FilterBar } from './components/data/FilterBar/FilterBar';
-export type {
-  InterviewJourneyTimelineItem,
-  InterviewJourneyTimelineProps,
-  InterviewJourneyTimelineStatusTone,
-} from './components/data/InterviewJourneyTimeline/InterviewJourneyTimeline';
-export { default as InterviewJourneyTimeline } from './components/data/InterviewJourneyTimeline/InterviewJourneyTimeline';
 export { default as List } from './components/data/List/List';
 export { default as ListItem } from './components/data/List/ListItem/ListItem';
+export type {
+  StatusTimelineItem,
+  StatusTimelineProps,
+  StatusTimelineStatusTone,
+} from './components/data/StatusTimeline/StatusTimeline';
+export { default as StatusTimeline } from './components/data/StatusTimeline/StatusTimeline';
 export { default as Timeline } from './components/data/Timeline/Timeline';
+export type {
+  TimelineCardData,
+  TimelineCardLabels,
+  TimelineCardOption,
+  TimelineCardProps,
+} from './components/data/TimelineCard/TimelineCard';
+export { default as TimelineCard } from './components/data/TimelineCard/TimelineCard';
+export type { TimelineCardEditDialogProps } from './components/data/TimelineCard/TimelineCardEditDialog';
+export { default as TimelineCardEditDialog } from './components/data/TimelineCard/TimelineCardEditDialog';
 export type { TreeNode, TreeViewProps } from './components/data/TreeView/TreeView';
 export { default as TreeView } from './components/data/TreeView/TreeView';
 export { default as VirtualizedList } from './components/data/VirtualizedList/VirtualizedList';
@@ -177,13 +119,9 @@ export { default as CalendarHeader } from './components/datetime/Calendar/Calend
 export type { CalendarEventButtonEvent } from './components/datetime/CalendarEventButton/CalendarEventButton';
 export { default as CalendarEventButton } from './components/datetime/CalendarEventButton/CalendarEventButton';
 export { buildGoogleCalendarUrl } from './components/datetime/CalendarEventButton/CalendarEventButton';
-export type { DatePickerMessages, DatePickerProps } from './components/datetime/DatePicker/DatePicker';
+export type { DatePickerProps } from './components/datetime/DatePicker/DatePicker';
 export { default as DatePicker } from './components/datetime/DatePicker/DatePicker';
-export type {
-  DateRange,
-  DateRangePickerMessages,
-  DateRangePickerProps,
-} from './components/datetime/DateRangePicker/DateRangePicker';
+export type { DateRange, DateRangePickerProps } from './components/datetime/DateRangePicker/DateRangePicker';
 export { default as DateRangePicker } from './components/datetime/DateRangePicker/DateRangePicker';
 export type { DateTimeFieldTriggerProps } from './components/datetime/DateTimeFieldTrigger/DateTimeFieldTrigger';
 export { default as DateTimeFieldTrigger } from './components/datetime/DateTimeFieldTrigger/DateTimeFieldTrigger';
@@ -191,9 +129,9 @@ export {
   default as DateTimePicker,
   type DateTimePickerProps,
 } from './components/datetime/DateTimePicker/DateTimePicker';
-export type { SchedulerEvent, SchedulerMessages, SchedulerProps } from './components/datetime/Scheduler/Scheduler';
+export type { SchedulerEvent, SchedulerProps } from './components/datetime/Scheduler/Scheduler';
 export { default as Scheduler } from './components/datetime/Scheduler/Scheduler';
-export type { TimePickerMessages, TimePickerProps } from './components/datetime/TimePicker/TimePicker';
+export type { TimePickerProps } from './components/datetime/TimePicker/TimePicker';
 export { default as TimePicker } from './components/datetime/TimePicker/TimePicker';
 export { default as Autocomplete } from './components/dropdowns/Autocomplete/Autocomplete';
 export { default as DropdownChevronFieldTrigger } from './components/dropdowns/Dropdown/DropdownChevronFieldTrigger/DropdownChevronFieldTrigger';
@@ -216,13 +154,11 @@ export {
   type DropdownTriggerContentProps,
 } from './components/dropdowns/Dropdown/DropdownTriggerContent/DropdownTriggerContent';
 export { default as DropdownButton } from './components/dropdowns/DropdownButton/DropdownButton';
-export {
-  default as DropdownMenu,
-  type DropdownMenuMessages,
-  type DropdownMenuProps,
-} from './components/dropdowns/DropdownMenu/DropdownMenu';
+export { default as DropdownMenu, type DropdownMenuProps } from './components/dropdowns/DropdownMenu/DropdownMenu';
 export type { MultiSelectOption } from './components/dropdowns/MultiSelect/MultiSelect';
 export { default as MultiSelect } from './components/dropdowns/MultiSelect/MultiSelect';
+export type { OptionMenuChipOption, OptionMenuChipProps } from './components/dropdowns/OptionMenuChip/OptionMenuChip';
+export { default as OptionMenuChip } from './components/dropdowns/OptionMenuChip/OptionMenuChip';
 export { default as Select } from './components/dropdowns/Select/Select';
 export { default as AccessDenied } from './components/feedback/AccessDenied/AccessDenied';
 export { default as Alert } from './components/feedback/Alert/Alert';
@@ -231,7 +167,16 @@ export { default as Banner } from './components/feedback/Banner/Banner';
 export { default as Chip } from './components/feedback/Chip/Chip';
 export { default as CircularProgress } from './components/feedback/CircularProgress/CircularProgress';
 export { default as ClosableChip } from './components/feedback/ClosableChip/ClosableChip';
+export type {
+  ColorLabel,
+  ColorLabelManagerDialogProps,
+} from './components/feedback/ColorLabelManagerDialog/ColorLabelManagerDialog';
+export { default as ColorLabelManagerDialog } from './components/feedback/ColorLabelManagerDialog/ColorLabelManagerDialog';
+export type { ColorLabelSelectionDialogProps } from './components/feedback/ColorLabelSelectionDialog/ColorLabelSelectionDialog';
+export { default as ColorLabelSelectionDialog } from './components/feedback/ColorLabelSelectionDialog/ColorLabelSelectionDialog';
 export { default as Countdown } from './components/feedback/Countdown/Countdown';
+export type { DualFilterBarOption, DualFilterBarProps } from './components/feedback/DualFilterBar/DualFilterBar';
+export { default as DualFilterBar } from './components/feedback/DualFilterBar/DualFilterBar';
 export { default as EmptyState } from './components/feedback/EmptyState/EmptyState';
 export { default as ErrorFallback } from './components/feedback/ErrorFallback/ErrorFallback';
 export { default as ErrorMessage } from './components/feedback/ErrorMessage/ErrorMessage';
@@ -239,9 +184,14 @@ export { default as Kbd } from './components/feedback/Kbd/Kbd';
 export { default as LoadingContainer } from './components/feedback/LoadingContainer/LoadingContainer';
 export { default as NotificationCenter } from './components/feedback/NotificationCenter/NotificationCenter';
 export { default as Progress } from './components/feedback/Progress/Progress';
+export type {
+  SelectableChipItem,
+  SelectableChipsProps,
+  SelectableChipVariant,
+} from './components/feedback/SelectableChips/SelectableChips';
+export { default as SelectableChips } from './components/feedback/SelectableChips/SelectableChips';
 export { default as Skeleton } from './components/feedback/Skeleton/Skeleton';
 export { default as Spinner } from './components/feedback/Spinner/Spinner';
-export { default as StatCard } from './components/feedback/StatCard/StatCard';
 export type { ToastMessage, ToastNotification } from './components/feedback/Toast/Toast';
 export {
   addToast,
@@ -262,6 +212,14 @@ export { default as FormGrid } from './components/forms/FormGrid/FormGrid';
 export { default as FormLayout } from './components/forms/FormLayout/FormLayout';
 export { default as AffixInput } from './components/inputs/AffixInput/AffixInput';
 export { default as FileDropZone } from './components/inputs/FileDropZone/FileDropZone';
+export type {
+  FileImportSource,
+  ImportSourceOption,
+  ImportSourcesDialogProps,
+  ImportSourcesDialogSubmitPayload,
+  UrlImportSource,
+} from './components/inputs/ImportSourcesDialog/ImportSourcesDialog';
+export { default as ImportSourcesDialog } from './components/inputs/ImportSourcesDialog/ImportSourcesDialog';
 export { default as InlineEditableText } from './components/inputs/InlineEditableText/InlineEditableText';
 export { default as Input } from './components/inputs/Input/Input';
 export { default as NumberInput } from './components/inputs/NumberInput/NumberInput';
@@ -297,7 +255,7 @@ export { default as Sidebar } from './components/navigation/Sidebar/Sidebar';
 export { default as SidebarItemButton } from './components/navigation/Sidebar/SidebarItemButton/SidebarItemButton';
 export type { SidebarNavGroup, SidebarNavItem } from './components/navigation/SidebarNav/SidebarNav';
 export { default as SidebarNav } from './components/navigation/SidebarNav/SidebarNav';
-export type { SpeedDialAction, SpeedDialMessages, SpeedDialProps } from './components/navigation/SpeedDial/SpeedDial';
+export type { SpeedDialAction, SpeedDialProps } from './components/navigation/SpeedDial/SpeedDial';
 export { default as SpeedDial } from './components/navigation/SpeedDial/SpeedDial';
 export { default as Stepper } from './components/navigation/Stepper/Stepper';
 export { default as TabButton } from './components/navigation/Tabs/TabButton/TabButton';
@@ -316,11 +274,7 @@ export { default as Tooltip } from './components/overlays/Tooltip/Tooltip';
 export type { TourStep } from './components/overlays/Tour/Tour';
 export { default as Tour } from './components/overlays/Tour/Tour';
 export { default as ColorPicker } from './components/pickers/ColorPicker/ColorPicker';
-export type {
-  RangeSliderMessages,
-  RangeSliderProps,
-  SliderRangeValue,
-} from './components/pickers/RangeSlider/RangeSlider';
+export type { RangeSliderProps, SliderRangeValue } from './components/pickers/RangeSlider/RangeSlider';
 export { default as RangeSlider } from './components/pickers/RangeSlider/RangeSlider';
 export { default as Rating, type RatingProps } from './components/pickers/Rating/Rating';
 export { default as Slider, type SliderMark, type SliderProps } from './components/pickers/Slider/Slider';
@@ -330,13 +284,31 @@ export { default as AccordionItem } from './components/surfaces/Accordion/Accord
 export { default as Card } from './components/surfaces/Card/Card';
 export { default as DataCard } from './components/surfaces/DataCard/DataCard';
 export { default as Divider } from './components/surfaces/Divider/Divider';
+export type { FeatureCardProps } from './components/surfaces/FeatureCard/FeatureCard';
+export { default as FeatureCard } from './components/surfaces/FeatureCard/FeatureCard';
+export type { FlashcardPracticeCardProps } from './components/surfaces/FlashcardPracticeCard/FlashcardPracticeCard';
+export { default as FlashcardPracticeCard } from './components/surfaces/FlashcardPracticeCard/FlashcardPracticeCard';
+export type {
+  FlashcardPracticeResult,
+  FlashcardPracticeSessionProps,
+} from './components/surfaces/FlashcardPracticeSession/FlashcardPracticeSession';
+export { default as FlashcardPracticeSession } from './components/surfaces/FlashcardPracticeSession/FlashcardPracticeSession';
+export type { FlashcardPracticeSummaryProps } from './components/surfaces/FlashcardPracticeSummary/FlashcardPracticeSummary';
+export { default as FlashcardPracticeSummary } from './components/surfaces/FlashcardPracticeSummary/FlashcardPracticeSummary';
 export { default as FlipCard } from './components/surfaces/FlipCard/FlipCard';
 export { default as Footer } from './components/surfaces/Footer/Footer';
 export { default as Grid } from './components/surfaces/Grid/Grid';
 export { default as MainLayout } from './components/surfaces/MainLayout/MainLayout';
+export type {
+  PracticeSetupPanelCategory,
+  PracticeSetupPanelProps,
+  PracticeSetupPanelSubmitValue,
+} from './components/surfaces/PracticeSetupPanel/PracticeSetupPanel';
+export { default as PracticeSetupPanel } from './components/surfaces/PracticeSetupPanel/PracticeSetupPanel';
 export { default as ResizablePanel } from './components/surfaces/ResizablePanel/ResizablePanel';
 export { default as SectionCard } from './components/surfaces/SectionCard/SectionCard';
 export { default as Stack } from './components/surfaces/Stack/Stack';
+export { default as StatCard } from './components/surfaces/StatCard/StatCard';
 export type {
   SurfaceElevation,
   SurfaceOwnProps,
@@ -346,6 +318,22 @@ export type {
 export { default as Surface } from './components/surfaces/Surface/Surface';
 export { default as Checkbox } from './components/switchers/Checkbox/Checkbox';
 export { default as CheckboxIndicator } from './components/switchers/Checkbox/CheckboxIndicator/CheckboxIndicator';
+export type {
+  ChipOptionSwitcherItem,
+  ChipOptionSwitcherProps,
+} from './components/switchers/ChipOptionSwitcher/ChipOptionSwitcher';
+export { default as ChipOptionSwitcher } from './components/switchers/ChipOptionSwitcher/ChipOptionSwitcher';
+export type {
+  HierarchicalOptionChildItem,
+  HierarchicalOptionItem,
+  HierarchicalOptionNavigatorProps,
+} from './components/switchers/HierarchicalOptionNavigator/HierarchicalOptionNavigator';
+export { default as HierarchicalOptionNavigator } from './components/switchers/HierarchicalOptionNavigator/HierarchicalOptionNavigator';
+export type {
+  IconOptionSwitcherItem,
+  IconOptionSwitcherProps,
+} from './components/switchers/IconOptionSwitcher/IconOptionSwitcher';
+export { default as IconOptionSwitcher } from './components/switchers/IconOptionSwitcher/IconOptionSwitcher';
 export { RadioGroup, type RadioOption } from './components/switchers/Radio/Radio';
 export {
   default as SegmentedControl,
@@ -363,7 +351,6 @@ export type {
   DataGridProColumn,
   DataGridProColumnPin,
   DataGridProColumnPinning,
-  DataGridProMessages,
   DataGridProProps,
   DataGridProSortState,
 } from './components/table/DataGridPro/DataGridPro';
@@ -374,7 +361,6 @@ export type {
   QueryBuilderCombinator,
   QueryBuilderField,
   QueryBuilderFieldOption,
-  QueryBuilderMessages,
   QueryBuilderOperator,
   QueryBuilderProps,
   QueryBuilderRule,
@@ -404,6 +390,8 @@ export type { CreateApiClientsOptions, DefaultApiClientMap, HttpClientMap } from
 export { createApiClients } from './http/createApiClients';
 export { createHttpClient } from './http/createHttpClient';
 export { ApiError, normalizeHttpError } from './http/errors';
+export type { ResolveApiBaseUrlOptions } from './http/resolveApiBaseUrl';
+export { resolveApiBaseUrl } from './http/resolveApiBaseUrl';
 export type {
   HttpClient,
   HttpClientConfig,
@@ -411,17 +399,25 @@ export type {
   HttpQueryValue,
   HttpRequestOptions,
 } from './http/types';
+export { unwrapCollectionResponse } from './http/unwrapCollectionResponse';
+export type { DictionaryKeyOf, TypedI18nContextValue } from './i18n/createTypedI18n';
+export { createTypedI18n } from './i18n/createTypedI18n';
 export { I18nProvider, useI18n } from './i18n/I18nProvider';
 export type { Locale } from './i18n/messages';
 export { SUPPORTED_LOCALES } from './i18n/messages';
 export type { ComponentSize, default as Props } from './models/Props';
+export { configureVelvet } from './providers/velvet-config';
 export type { VelvetProviderProps } from './providers/VelvetProvider';
 export { default as VelvetProvider } from './providers/VelvetProvider';
 export type {
+  AppMutationResult,
+  AppQueryResult,
+  CreateAppQueryOptions,
   CreateCrudSignalsOptions,
   CreateQueryClientOptions,
   CreateQuerySignalOptions,
   CrudSignals,
+  MutationCallbacks,
   MutationOptions,
   MutationSignal,
   MutationStatus,
@@ -437,12 +433,15 @@ export type {
   QueryStatus,
 } from './query';
 export {
+  createAppMutation,
+  createAppQuery,
   createCrudSignals,
   createMutationSignal,
   createQueryClient,
   createQuerySignal,
   getDefaultQueryClient,
   hashQueryKey,
+  invalidateQuery,
   matchesPartialKey,
   normalizeQueryKey,
   QueryClientProvider,

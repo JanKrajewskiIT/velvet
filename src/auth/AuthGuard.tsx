@@ -15,7 +15,7 @@ interface AuthGuardProps {
 
 const AuthGuard = (props: Props<AuthGuardProps>) => {
   const auth = useAuth();
-  const { t } = useI18n();
+  const { ts } = useI18n();
 
   const handleUnauthenticated = () => {
     const returnUrl = getCurrentReturnUrl();
@@ -31,9 +31,9 @@ const AuthGuard = (props: Props<AuthGuardProps>) => {
       hasAnyRole={auth.hasAnyRole}
       onUnauthenticated={handleUnauthenticated}
       accessDeniedFallback={props.fallback}
-      accessDeniedTitle={t('accessDenied.forbidden.title')}
-      accessDeniedDescription={t('accessDenied.forbidden.description')}
-      accessDeniedGoHomeLabel={t('accessDenied.goHome')}
+      accessDeniedTitle={ts('accessDenied.forbidden.title')}
+      accessDeniedDescription={ts('accessDenied.forbidden.description')}
+      accessDeniedGoHomeLabel={ts('accessDenied.goHome')}
     >
       {props.children}
     </RequireAuth>

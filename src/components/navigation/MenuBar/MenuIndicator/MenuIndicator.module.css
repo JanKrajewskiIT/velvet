@@ -11,6 +11,7 @@
   border: 1px solid var(--color-header-border);
   box-shadow: var(--header-shadow), var(--shadow-glow-sm);
   backdrop-filter: blur(4px) saturate(130%);
+  transform: translateX(calc(var(--header-height) * var(--indicator-offset, 0)));
   transition: transform var(--duration-slow) var(--ease-out-back);
   pointer-events: none;
   caret-color: transparent;

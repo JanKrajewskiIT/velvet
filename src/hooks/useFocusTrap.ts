@@ -6,7 +6,7 @@ const FOCUSABLE =
 
 const getFocusableElements = (container: HTMLElement): HTMLElement[] =>
   Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE)).filter(
-    (el) => el.offsetParent !== null && !el.hasAttribute('aria-hidden')
+    (el) => el.offsetParent !== null && !el.hasAttribute('aria-hidden'),
   );
 
 const focusFirst = (container: HTMLElement): void => {
@@ -17,7 +17,7 @@ const focusFirst = (container: HTMLElement): void => {
 const useFocusTrap = (
   containerRef: Accessor<HTMLElement | undefined>,
   isActive: Accessor<boolean>,
-  options?: { restoreFocusRef?: Accessor<HTMLElement | undefined> }
+  options?: { restoreFocusRef?: Accessor<HTMLElement | undefined> },
 ): void => {
   let previousActive = false;
   let previouslyFocused: HTMLElement | null = null;

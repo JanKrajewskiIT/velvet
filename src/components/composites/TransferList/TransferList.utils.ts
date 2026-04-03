@@ -23,7 +23,7 @@ export const pruneTransferSelection = (checked: ReadonlySet<string>, items: read
 export const moveSelectedTransferItems = (
   sourceItems: readonly TransferItem[],
   targetItems: readonly TransferItem[],
-  checkedIds: ReadonlySet<string>
+  checkedIds: ReadonlySet<string>,
 ): { source: TransferItem[]; target: TransferItem[] } => {
   const moving = sourceItems.filter((item) => checkedIds.has(item.id));
   const remaining = sourceItems.filter((item) => !checkedIds.has(item.id));
@@ -35,7 +35,7 @@ export const moveSelectedTransferItems = (
 
 export const moveAllTransferItems = (
   sourceItems: readonly TransferItem[],
-  targetItems: readonly TransferItem[]
+  targetItems: readonly TransferItem[],
 ): { source: TransferItem[]; target: TransferItem[] } => ({
   source: [],
   target: [...targetItems, ...sourceItems],

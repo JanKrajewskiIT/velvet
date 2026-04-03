@@ -3,7 +3,7 @@ import { For } from 'solid-js';
 import Text from '~/components/typography/Text/Text';
 import type Props from '~/models/Props';
 
-import styles from './TradingViewChart.module.css';
+import styles from './TradingViewChartMetrics.module.css';
 
 interface TradingViewChartMetricsProps {
   items: readonly string[];

@@ -36,25 +36,17 @@ interface FilterBarOwnProps extends Omit<DivCoreNativeProps, 'onChange'> {
   onChange: (next: FilterBarValue[]) => void;
   search?: string;
   onSearchChange?: (next: string) => void;
-  searchPlaceholder?: string;
-  clearAllLabel?: string;
-  allLabel?: string;
-  removeFilterLabel?: string;
   disabled?: boolean;
 }
 
 const FilterBar = (props: Props<FilterBarOwnProps>) => {
-  const { t } = useI18n();
+  const { ts } = useI18n();
   const [local, rest] = splitProps(props, [
     'filters',
     'value',
     'onChange',
     'search',
     'onSearchChange',
-    'searchPlaceholder',
-    'clearAllLabel',
-    'allLabel',
-    'removeFilterLabel',
     'disabled',
     'class',
   ]);
@@ -65,8 +57,6 @@ const FilterBar = (props: Props<FilterBarOwnProps>) => {
   const hasSearch = createMemo(() => Boolean(local.search?.trim()));
   const hasActiveFilters = createMemo(() => local.value.length > 0);
   const hasClearAction = createMemo(() => hasSearch() || hasActiveFilters());
-  const clearAllLabel = createMemo(() => local.clearAllLabel ?? t('filterBar.clearAll'));
-  const allLabel = createMemo(() => local.allLabel ?? t('common.all'));
 
   const setFilterValue = (key: string, nextValue: string) => {
     const next = local.value.filter((entry) => entry.key !== key);
@@ -96,7 +86,7 @@ const FilterBar = (props: Props<FilterBarOwnProps>) => {
     });
   });
   const getSelectOptions = (filter: FilterBarFilter): SelectOption[] => [
-    { value: '', label: filter.placeholder ?? allLabel() },
+    { value: '', label: filter.placeholder ?? ts('common.all') },
     ...filter.options.map((option) => ({ value: option.value, label: option.label, disabled: option.disabled })),
   ];
 
@@ -108,8 +98,7 @@ const FilterBar = (props: Props<FilterBarOwnProps>) => {
             class={styles.search}
             value={local.search ?? ''}
             onInput={(next) => local.onSearchChange?.(next)}
-            placeholder={local.searchPlaceholder}
-            clearLabel={clearAllLabel()}
+            placeholder={ts('common.searchEllipsis')}
             disabled={local.disabled}
           />
         </Show>
@@ -133,7 +122,7 @@ const FilterBar = (props: Props<FilterBarOwnProps>) => {
 
         <Show when={hasClearAction()}>
           <Button class={styles.clearButton} variant="ghost" size="md" onClick={clearAll} disabled={local.disabled}>
-            {clearAllLabel()}
+            {ts('filterBar.clearAll')}
           </Button>
         </Show>
       </div>
@@ -145,7 +134,6 @@ const FilterBar = (props: Props<FilterBarOwnProps>) => {
               <ClosableChip
                 label={`${entry.filterLabel}: ${entry.valueLabel}`}
                 onRemove={() => setFilterValue(entry.key, '')}
-                removeLabel={local.removeFilterLabel ? `${local.removeFilterLabel} ${entry.filterLabel}` : undefined}
               />
             )}
           </For>

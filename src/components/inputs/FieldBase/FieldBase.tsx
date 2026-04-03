@@ -11,9 +11,9 @@ import type {
   TextAreaCoreNativeProps,
 } from '~/models/Props';
 import classNames from '~/utils/classNames';
-import getInputSizeClass from '~/utils/getInputSizeClass';
 
 import styles from './FieldBase.module.css';
+import focusStyles from './FieldBaseFocus.module.css';
 
 type FieldBaseSize = ComponentSize;
 type FieldBaseFocusStyle = 'visible' | 'within' | 'none';
@@ -58,16 +58,22 @@ type FieldBaseProps =
   | FieldBaseOptionProps
   | FieldBaseDefaultProps;
 
-const resolveFieldFocusClass = (stylesMap: typeof styles, focusStyle?: FieldBaseFocusStyle) => {
-  if (focusStyle === 'within') return stylesMap.fieldFocusWithin;
+const resolveFieldFocusClass = (focusStyle?: FieldBaseFocusStyle) => {
+  if (focusStyle === 'within') return focusStyles.fieldFocusWithin;
   if (focusStyle === 'none') return undefined;
-  return stylesMap.fieldFocusVisible;
+  return focusStyles.fieldFocusVisible;
+};
+
+const sizeClassByValue: Record<FieldBaseSize, string | undefined> = {
+  sm: styles.sizeSm,
+  md: styles.sizeMd,
+  lg: styles.sizeLg,
 };
 
 const resolveFieldStateAttributes = (
   component: keyof JSX.IntrinsicElements,
   disabled?: boolean,
-  readOnly?: boolean
+  readOnly?: boolean,
 ) => {
   if (component === 'input' || component === 'textarea') {
     return {
@@ -98,8 +104,8 @@ const FieldBase = (props: FieldBaseProps) => {
   ]);
 
   const component = () => local.as ?? 'div';
-  const sizeClass = () => (local.size === null ? undefined : getInputSizeClass(styles, local.size ?? undefined));
-  const focusClass = () => resolveFieldFocusClass(styles, local.focusStyle);
+  const sizeClass = () => (local.size === null ? undefined : sizeClassByValue[local.size ?? 'md']);
+  const focusClass = () => resolveFieldFocusClass(local.focusStyle);
   const stateAttributes = () => resolveFieldStateAttributes(component(), local.disabled, local.readOnly);
 
   return (
@@ -114,7 +120,7 @@ const FieldBase = (props: FieldBaseProps) => {
         local.invalid && styles.fieldInvalid,
         local.readOnly && styles.fieldReadOnly,
         local.disabled && styles.fieldDisabled,
-        local.class
+        local.class,
       )}
     >
       {local.children}

@@ -31,7 +31,7 @@ const Dialog = (props: Props<DialogProps>) => {
 
   useFocusTrap(
     () => dialogRef,
-    () => local.open
+    () => local.open,
   );
 
   const handleClick = (e: MouseEvent) => {
@@ -76,8 +76,8 @@ const Dialog = (props: Props<DialogProps>) => {
         if (el.open) {
           el.close();
         }
-      }
-    )
+      },
+    ),
   );
 
   return (

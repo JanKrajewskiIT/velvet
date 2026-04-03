@@ -4,8 +4,15 @@ import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import type { AvatarSize } from '../Avatar';
-import avatarStyles from '../Avatar.module.css';
 import styles from './AvatarGroup.module.css';
+import avatarStyles from './AvatarGroupAvatar.module.css';
+
+const sizeClassByValue: Record<AvatarSize, string | undefined> = {
+  sm: avatarStyles.sm,
+  md: avatarStyles.md,
+  lg: avatarStyles.lg,
+  xl: avatarStyles.xl,
+};
 
 interface AvatarGroupProps {
   max?: number;
@@ -23,7 +30,7 @@ const AvatarGroup = (props: Props<AvatarGroupProps>) => {
     return { visible: all.slice(0, max), overflow: Math.max(0, all.length - max) };
   });
 
-  const sizeClass = () => avatarStyles[props.size ?? 'md'];
+  const sizeClass = () => sizeClassByValue[props.size ?? 'md'];
   const overflowCount = () => items().overflow;
   const visibleItems = () => [...items().visible].reverse();
 

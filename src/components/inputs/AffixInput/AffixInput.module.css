@@ -35,6 +35,6 @@
   --affix-gap: var(--spacing-xs);
 }
 
-.sizeLg {
+.root.sizeLg {
   --affix-padding-inline: var(--spacing-md);
 }

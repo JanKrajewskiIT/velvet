@@ -15,28 +15,18 @@ export interface SliderRangeValue {
   max: number;
 }
 
-export interface RangeSliderMessages {
-  minimumLabel?: string;
-  maximumLabel?: string;
-  minimumWithLabel?: (label: string) => string;
-  maximumWithLabel?: (label: string) => string;
-}
-
 export interface RangeSliderProps extends Omit<SliderCoreNativeProps, 'onChange' | 'value'>, AriaFieldProps {
   id?: string;
-  groupAriaLabel?: string;
   value: SliderRangeValue;
   onChange: (value: SliderRangeValue) => void;
   min?: number;
   max?: number;
   step?: number;
   marks?: Array<{ value: number; label?: string }>;
-  showValueLabels?: boolean;
-  messages?: RangeSliderMessages;
 }
 
 const RangeSlider = (props: Props<RangeSliderProps>) => {
-  const { t } = useI18n();
+  const { ts } = useI18n();
   const [local, rest] = splitProps(props, [
     'value',
     'onChange',
@@ -44,16 +34,14 @@ const RangeSlider = (props: Props<RangeSliderProps>) => {
     'max',
     'step',
     'marks',
-    'showValueLabels',
     'id',
-    'groupAriaLabel',
     'aria-labelledby',
     'aria-describedby',
     'aria-invalid',
+    'aria-errormessage',
     'class',
     'disabled',
     'name',
-    'messages',
   ]);
   const minLimit = () => local.min ?? 0;
   const maxLimit = () => local.max ?? 100;
@@ -134,14 +122,6 @@ const RangeSlider = (props: Props<RangeSliderProps>) => {
   };
 
   const minThumbAboveMax = createMemo(() => normalized().min >= normalized().max);
-  const minimumLabel = createMemo(() => local.messages?.minimumLabel ?? t('rangeSlider.minimum'));
-  const maximumLabel = createMemo(() => local.messages?.maximumLabel ?? t('rangeSlider.maximum'));
-  const minimumWithGroupLabel = createMemo(
-    () => local.messages?.minimumWithLabel ?? ((label: string) => t('rangeSlider.minimumWithLabel', { label }))
-  );
-  const maximumWithGroupLabel = createMemo(
-    () => local.messages?.maximumWithLabel ?? ((label: string) => t('rangeSlider.maximumWithLabel', { label }))
-  );
 
   const updateFromTrackPress: JSX.EventHandler<HTMLDivElement, PointerEvent> = (event) => {
     if (local.disabled) return;
@@ -184,7 +164,6 @@ const RangeSlider = (props: Props<RangeSliderProps>) => {
       id={local.id}
       class={classNames(styles.root, local.class, local.disabled && styles.disabled)}
       role="group"
-      aria-label={local.groupAriaLabel}
       aria-labelledby={local['aria-labelledby']}
       aria-describedby={local['aria-describedby']}
     >
@@ -194,34 +173,32 @@ const RangeSlider = (props: Props<RangeSliderProps>) => {
           class={styles.range}
           style={{ '--range-left': `${leftPercent()}%`, '--range-width': `${rangeWidth()}%` } as JSX.CSSProperties}
         />
-        <Show when={local.showValueLabels !== false}>
-          <Text
-            as="span"
-            variant="labelMd"
-            tone="inverse"
-            class={styles.valueLabel}
-            style={
-              {
-                '--range-label-left': `calc((100% - var(--range-thumb-size)) * ${leftRatio()} + (var(--range-thumb-size) / 2))`,
-              } as JSX.CSSProperties
-            }
-          >
-            {normalized().min}
-          </Text>
-          <Text
-            as="span"
-            variant="labelMd"
-            tone="inverse"
-            class={styles.valueLabel}
-            style={
-              {
-                '--range-label-left': `calc((100% - var(--range-thumb-size)) * ${rightRatio()} + (var(--range-thumb-size) / 2))`,
-              } as JSX.CSSProperties
-            }
-          >
-            {normalized().max}
-          </Text>
-        </Show>
+        <Text
+          as="span"
+          variant="labelMd"
+          tone="inverse"
+          class={styles.valueLabel}
+          style={
+            {
+              '--range-label-left': `calc((100% - var(--range-thumb-size)) * ${leftRatio()} + (var(--range-thumb-size) / 2))`,
+            } as JSX.CSSProperties
+          }
+        >
+          {normalized().min}
+        </Text>
+        <Text
+          as="span"
+          variant="labelMd"
+          tone="inverse"
+          class={styles.valueLabel}
+          style={
+            {
+              '--range-label-left': `calc((100% - var(--range-thumb-size)) * ${rightRatio()} + (var(--range-thumb-size) / 2))`,
+            } as JSX.CSSProperties
+          }
+        >
+          {normalized().max}
+        </Text>
         <input
           {...rest}
           type="range"
@@ -234,8 +211,8 @@ const RangeSlider = (props: Props<RangeSliderProps>) => {
           disabled={local.disabled}
           onInput={updateMin}
           aria-invalid={resolveAriaInvalid(undefined, local['aria-invalid'])}
-          aria-errormessage={props['aria-errormessage']}
-          aria-label={local.groupAriaLabel ? minimumWithGroupLabel()(local.groupAriaLabel) : minimumLabel()}
+          aria-errormessage={local['aria-errormessage']}
+          aria-label={ts('rangeSlider.minimum')}
         />
         <input
           {...rest}
@@ -249,8 +226,8 @@ const RangeSlider = (props: Props<RangeSliderProps>) => {
           disabled={local.disabled}
           onInput={updateMax}
           aria-invalid={resolveAriaInvalid(undefined, local['aria-invalid'])}
-          aria-errormessage={props['aria-errormessage']}
-          aria-label={local.groupAriaLabel ? maximumWithGroupLabel()(local.groupAriaLabel) : maximumLabel()}
+          aria-errormessage={local['aria-errormessage']}
+          aria-label={ts('rangeSlider.maximum')}
         />
       </div>
       <Show when={marks().length > 0}>
@@ -260,7 +237,7 @@ const RangeSlider = (props: Props<RangeSliderProps>) => {
               <div
                 class={classNames(
                   styles.mark,
-                  mark.value >= normalized().min && mark.value <= normalized().max && styles.markActive
+                  mark.value >= normalized().min && mark.value <= normalized().max && styles.markActive,
                 )}
                 style={{ '--range-mark-left': `${mark.percent}%` } as JSX.CSSProperties}
               >

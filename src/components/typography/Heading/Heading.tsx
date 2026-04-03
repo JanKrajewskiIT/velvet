@@ -5,8 +5,8 @@ import type Props from '~/models/Props';
 import type { HTMLElementCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import { type HeadingVariant, headingVariantClass, toneClass, type TypographyTone } from '../Typography/Typography';
-import typographyStyles from '../Typography/Typography.module.css';
+import { type HeadingVariant, type TypographyTone } from '../Typography/Typography';
+import { headingVariantClassByValue, typographyToneClassByValue } from '../Typography/TypographyClasses';
 import styles from './Heading.module.css';
 
 interface HeadingOwnProps extends HTMLElementCoreNativeProps {
@@ -33,10 +33,10 @@ const Heading = (props: Props<HeadingOwnProps>) => {
   const headingClass = createMemo(() =>
     classNames(
       styles.heading,
-      headingVariantClass(typographyStyles, variant()),
-      toneClass(typographyStyles, local.tone),
-      local.class
-    )
+      headingVariantClassByValue[variant()],
+      typographyToneClassByValue[local.tone ?? 'default'],
+      local.class,
+    ),
   );
 
   return (

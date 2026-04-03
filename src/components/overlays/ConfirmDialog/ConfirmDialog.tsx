@@ -1,5 +1,6 @@
 import { FiAlertTriangle, FiHelpCircle } from 'solid-icons/fi';
 
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -16,13 +17,13 @@ interface ConfirmDialogProps {
   label: string;
   message: string;
   confirmLabel: string;
-  cancelLabel: string;
   variant?: 'primary' | 'danger';
   onConfirm: () => void;
   onClose: () => void;
 }
 
 const ConfirmDialog = (props: Props<ConfirmDialogProps>) => {
+  const { ts } = useI18n();
   const isDanger = () => (props.variant ?? 'primary') === 'danger';
 
   return (
@@ -37,7 +38,7 @@ const ConfirmDialog = (props: Props<ConfirmDialogProps>) => {
         </Text>
       </DialogBody>
       <DialogActions>
-        <Button variant="ghost" onClick={() => props.onClose()} label={props.cancelLabel} />
+        <Button variant="ghost" onClick={() => props.onClose()} label={ts('common.cancel')} />
         <Button variant={props.variant ?? 'primary'} onClick={() => props.onConfirm()} label={props.confirmLabel} />
       </DialogActions>
     </Dialog>

@@ -20,9 +20,9 @@ export interface CreateCrudSignalsOptions {
   staleTime?: number;
 }
 
-export function createCrudSignals<TEntity, TCreate, TUpdate, TId extends string | number>(
-  options: CreateCrudSignalsOptions
-): CrudSignals<TEntity, TCreate, TUpdate, TId> {
+export const createCrudSignals = <TEntity, TCreate, TUpdate, TId extends string | number>(
+  options: CreateCrudSignalsOptions,
+): CrudSignals<TEntity, TCreate, TUpdate, TId> => {
   const queryClient = options.queryClient ?? useQueryClient();
 
   const list = createQuerySignal<TEntity[]>({
@@ -41,7 +41,7 @@ export function createCrudSignals<TEntity, TCreate, TUpdate, TId extends string 
       onSuccess: () => {
         queryClient.invalidateQueries(options.queryKey);
       },
-    }
+    },
   );
 
   const update = createMutationSignal<TEntity, { id: TId; body: TUpdate }>(
@@ -50,7 +50,7 @@ export function createCrudSignals<TEntity, TCreate, TUpdate, TId extends string 
       onSuccess: () => {
         queryClient.invalidateQueries(options.queryKey);
       },
-    }
+    },
   );
 
   const remove = createMutationSignal<undefined, TId>(
@@ -59,7 +59,7 @@ export function createCrudSignals<TEntity, TCreate, TUpdate, TId extends string 
       onSuccess: () => {
         queryClient.invalidateQueries(options.queryKey);
       },
-    }
+    },
   );
 
   return {
@@ -68,4 +68,4 @@ export function createCrudSignals<TEntity, TCreate, TUpdate, TId extends string 
     update,
     remove,
   };
-}
+};

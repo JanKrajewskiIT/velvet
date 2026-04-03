@@ -5,7 +5,6 @@ import Heading from '~/components/typography/Heading/Heading';
 import Text from '~/components/typography/Text/Text';
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
-import classNames from '~/utils/classNames';
 
 import Button from '../../buttons/Button/Button';
 import styles from './Breadcrumbs.module.css';
@@ -20,20 +19,16 @@ interface BreadcrumbsProps {
   items: BreadcrumbItem[];
   separator?: JSX.Element | (() => JSX.Element);
   maxItems?: number;
-  ariaLabel?: string;
-  showAllLabel?: string;
 }
 
 const Breadcrumbs = (props: Props<BreadcrumbsProps>) => {
-  const { t } = useI18n();
-  const [local, rest] = splitProps(props, ['class', 'items', 'separator', 'maxItems', 'ariaLabel', 'showAllLabel']);
+  const { ts } = useI18n();
+  const [local, rest] = splitProps(props, ['class', 'items', 'separator', 'maxItems']);
   const [expanded, setExpanded] = createSignal(false);
 
   const maxItems = createMemo(() => local.maxItems ?? Infinity);
 
   const shouldCollapse = createMemo(() => local.items.length > maxItems() && !expanded());
-  const ariaLabel = createMemo(() => local.ariaLabel ?? t('breadcrumbs.label'));
-  const showAllLabel = createMemo(() => local.showAllLabel ?? t('breadcrumbs.showAll'));
   const renderSeparator = () => {
     const separator = local.separator;
     if (typeof separator === 'function') return separator();
@@ -84,7 +79,7 @@ const Breadcrumbs = (props: Props<BreadcrumbsProps>) => {
   };
 
   return (
-    <nav {...rest} aria-label={ariaLabel()} class={classNames(styles.breadcrumbs, local.class)}>
+    <nav {...rest} aria-label={ts('breadcrumbs.label')} class={local.class}>
       <ol class={styles.list}>
         <Show when={showEllipsis()}>
           <For each={visibleItems().slice(0, 1)}>
@@ -94,7 +89,7 @@ const Breadcrumbs = (props: Props<BreadcrumbsProps>) => {
             {renderSeparator()}
           </li>
           <li class={styles.item}>
-            <Button variant="subtle" size="sm" onClick={() => setExpanded(true)} aria-label={showAllLabel()}>
+            <Button variant="subtle" size="sm" onClick={() => setExpanded(true)} aria-label={ts('breadcrumbs.showAll')}>
               &hellip;
             </Button>
           </li>

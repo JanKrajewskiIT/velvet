@@ -23,7 +23,7 @@ const Card = (props: Props<CardOwnProps>) => {
       class={classNames(
         styles.card,
         local.padding === 'none' ? styles.paddingNone : styles.paddingDefault,
-        local.class
+        local.class,
       )}
       {...rest}
     >

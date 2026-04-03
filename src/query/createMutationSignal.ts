@@ -2,10 +2,10 @@ import { createMemo, createSignal } from 'solid-js';
 
 import type { MutationOptions, MutationSignal, MutationState } from '~/query/types';
 
-export function createMutationSignal<TData, TVariables>(
+export const createMutationSignal = <TData, TVariables>(
   mutate: (variables: TVariables) => Promise<TData>,
-  options: MutationOptions<TData, TVariables> = {}
-): MutationSignal<TData, TVariables> {
+  options: MutationOptions<TData, TVariables> = {},
+): MutationSignal<TData, TVariables> => {
   const [state, setState] = createSignal<MutationState<TData>>({
     status: 'idle',
     data: undefined,
@@ -48,20 +48,9 @@ export function createMutationSignal<TData, TVariables>(
     });
   };
 
-  const status = createMemo(() => {
-    const current = state();
-    return current.status;
-  });
-
-  const data = createMemo(() => {
-    const current = state();
-    return current.data;
-  });
-
-  const error = createMemo(() => {
-    const current = state();
-    return current.error;
-  });
+  const status = createMemo(() => state().status);
+  const data = createMemo(() => state().data);
+  const error = createMemo(() => state().error);
 
   return {
     status,
@@ -70,4 +59,4 @@ export function createMutationSignal<TData, TVariables>(
     run,
     reset,
   };
-}
+};

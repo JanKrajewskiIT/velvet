@@ -35,6 +35,11 @@ const justifyToClass: Record<NonNullable<StackOwnProps['justify']>, string | und
   evenly: styles.justifyEvenly,
 };
 
+const directionClassByValue: Record<NonNullable<StackOwnProps['direction']>, string | undefined> = {
+  vertical: styles.vertical,
+  horizontal: styles.horizontal,
+};
+
 const Stack = (props: Props<StackOwnProps>) => {
   const [local, rest] = splitProps(props, [
     'children',
@@ -47,7 +52,7 @@ const Stack = (props: Props<StackOwnProps>) => {
     'class',
   ]);
 
-  const directionClass = () => styles[local.direction ?? 'vertical'];
+  const directionClass = () => directionClassByValue[local.direction ?? 'vertical'];
   const alignClass = () => alignToClass[local.align ?? 'stretch'];
   const justifyClass = () => justifyToClass[local.justify ?? 'start'];
 
@@ -69,7 +74,7 @@ const Stack = (props: Props<StackOwnProps>) => {
         alignClass(),
         justifyClass(),
         local.wrap && styles.wrap,
-        local.class
+        local.class,
       )}
     >
       {local.children}

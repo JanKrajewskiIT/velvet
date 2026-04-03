@@ -4,7 +4,7 @@ import Button from '~/components/buttons/Button/Button';
 import Heading from '~/components/typography/Heading/Heading';
 import type Props from '~/models/Props';
 
-import styles from './TradingViewChart.module.css';
+import styles from './TradingViewChartToolbar.module.css';
 
 export interface TradingViewChartToolbarToggle {
   id: string;

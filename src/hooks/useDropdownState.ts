@@ -31,7 +31,7 @@ const useDropdownState = (rootRef: Accessor<HTMLElement | undefined>, options?: 
   useClickOutside(
     () => rootRef(),
     () => open(),
-    close
+    close,
   );
 
   return {

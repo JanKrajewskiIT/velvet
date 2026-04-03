@@ -1,5 +1,5 @@
 import { IoCheckmark, IoCloseOutline, IoPencil } from 'solid-icons/io';
-import { createEffect, createMemo, createSignal, type JSX, onMount, Show, splitProps } from 'solid-js';
+import { createEffect, createSignal, type JSX, onMount, Show, splitProps } from 'solid-js';
 
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
@@ -11,13 +11,6 @@ import Text from '../../typography/Text/Text';
 import Input from '../Input/Input';
 import styles from './InlineEditableText.module.css';
 
-interface InlineEditableTextMessages {
-  emptyValue?: string;
-  saveButtonLabel?: string;
-  cancelButtonLabel?: string;
-  editButtonLabel?: string;
-}
-
 interface InlineEditableTextProps {
   value: string;
   onChange: (value: string) => void;
@@ -25,15 +18,10 @@ interface InlineEditableTextProps {
   disabled?: boolean;
   size?: ComponentSize;
   startInEditMode?: boolean;
-  saveLabel?: string;
-  cancelLabel?: string;
-  editLabel?: string;
-  messages?: InlineEditableTextMessages;
-  inputAriaLabel?: string;
 }
 
 const InlineEditableText = (props: Props<InlineEditableTextProps>) => {
-  const { t } = useI18n();
+  const { ts } = useI18n();
   const [local, rest] = splitProps(props, [
     'value',
     'onChange',
@@ -41,11 +29,6 @@ const InlineEditableText = (props: Props<InlineEditableTextProps>) => {
     'disabled',
     'size',
     'startInEditMode',
-    'saveLabel',
-    'cancelLabel',
-    'editLabel',
-    'messages',
-    'inputAriaLabel',
     'class',
   ]);
   const [isEditing, setIsEditing] = createSignal(false);
@@ -55,18 +38,6 @@ const InlineEditableText = (props: Props<InlineEditableTextProps>) => {
     setIsEditing(Boolean(local.startInEditMode));
     setDraft(local.value);
   });
-
-  const emptyValueLabel = createMemo(
-    () => local.messages?.emptyValue ?? local.placeholder ?? t('inlineEditable.clickEdit')
-  );
-  const saveButtonLabel = createMemo(() => local.messages?.saveButtonLabel ?? local.saveLabel ?? t('common.save'));
-  const cancelButtonLabel = createMemo(
-    () => local.messages?.cancelButtonLabel ?? local.cancelLabel ?? t('common.cancel')
-  );
-  const editButtonLabel = createMemo(
-    () => local.messages?.editButtonLabel ?? local.editLabel ?? t('inlineEditable.editValue')
-  );
-  const inputAriaLabel = createMemo(() => local.inputAriaLabel ?? t('inlineEditable.inputLabel'));
 
   createEffect(() => {
     if (!isEditing()) {
@@ -114,11 +85,11 @@ const InlineEditableText = (props: Props<InlineEditableTextProps>) => {
         fallback={
           <div class={styles.readMode}>
             <Text as="span" variant="bodyMd">
-              {local.value || emptyValueLabel()}
+              {local.value || local.placeholder || ts('inlineEditable.clickEdit')}
             </Text>
             <IconButton
               icon={IoPencil}
-              label={editButtonLabel()}
+              label={ts('inlineEditable.editValue')}
               onClick={beginEdit}
               disabled={local.disabled}
               size="sm"
@@ -135,13 +106,13 @@ const InlineEditableText = (props: Props<InlineEditableTextProps>) => {
             onInput={handleDraftInput}
             onKeyDown={handleKeyDown}
             placeholder={local.placeholder}
-            aria-label={inputAriaLabel()}
+            aria-label={ts('inlineEditable.inputLabel')}
             autofocus
           />
-          <IconButton icon={IoCheckmark} label={saveButtonLabel()} onClick={saveEdit} size="sm" variant="subtle" />
+          <IconButton icon={IoCheckmark} label={ts('common.save')} onClick={saveEdit} size="sm" variant="subtle" />
           <IconButton
             icon={IoCloseOutline}
-            label={cancelButtonLabel()}
+            label={ts('common.cancel')}
             onClick={cancelEdit}
             size="sm"
             variant="subtle"

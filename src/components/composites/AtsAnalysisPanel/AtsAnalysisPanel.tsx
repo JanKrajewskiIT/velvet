@@ -11,6 +11,7 @@ import FormField from '~/components/forms/FormField/FormField';
 import TextArea from '~/components/inputs/TextArea/TextArea';
 import Heading from '~/components/typography/Heading/Heading';
 import Text from '~/components/typography/Text/Text';
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -43,16 +44,8 @@ interface AtsAnalysisPanelProps {
   result?: AtsAnalysisResult | null;
   loading?: boolean;
   errorMessage?: string;
-  errorLabel?: string;
   inputLabel?: string;
-  inputPlaceholder: string;
   inputHint?: string;
-  loadingLabel: string;
-  scoreLabel: string;
-  categoriesLabel: string;
-  recommendationsLabel: string;
-  submitLabel: string;
-  tryAgainLabel: string;
 }
 
 const toProgressVariant = (score: number): 'error' | 'warning' | 'success' | 'primary' => {
@@ -69,6 +62,7 @@ const toAlertVariant = (severity: AtsRecommendationSeverity): 'danger' | 'warnin
 };
 
 const AtsAnalysisPanel = (props: Props<AtsAnalysisPanelProps>) => {
+  const { ts } = useI18n();
   const categories = createMemo(() => props.result?.categories ?? []);
   const recommendations = createMemo(() => props.result?.recommendations ?? []);
 
@@ -77,14 +71,14 @@ const AtsAnalysisPanel = (props: Props<AtsAnalysisPanelProps>) => {
       <Show when={props.loading}>
         <div class={styles.loading}>
           <Spinner size="md" />
-          <Text as="p">{props.loadingLabel}</Text>
+          <Text as="p">{ts('common.loading')}</Text>
         </div>
       </Show>
 
       <Show when={!props.loading && props.errorMessage && !props.result}>
         <div class={styles.error}>
-          <Alert variant="danger" label={props.errorLabel} message={props.errorMessage ?? ''} />
-          <Button variant="ghost" label={props.tryAgainLabel} onClick={props.onReset} />
+          <Alert variant="danger" label={ts('error.title')} message={props.errorMessage ?? ''} />
+          <Button variant="ghost" label={ts('error.retry')} onClick={props.onReset} />
         </div>
       </Show>
 
@@ -92,13 +86,13 @@ const AtsAnalysisPanel = (props: Props<AtsAnalysisPanelProps>) => {
         <div class={styles.result}>
           <div class={styles.scoreBlock}>
             <ScoreRing score={props.result?.overallScore ?? 0} />
-            <Text as="p">{props.scoreLabel}</Text>
+            <Text as="p">{ts('analysis.score')}</Text>
           </div>
 
           <Show when={categories().length > 0}>
             <div class={styles.categories}>
               <Heading level={4} variant="titleMd">
-                {props.categoriesLabel}
+                {ts('analysis.categories')}
               </Heading>
               <For each={categories()}>
                 {(category) => (
@@ -116,7 +110,7 @@ const AtsAnalysisPanel = (props: Props<AtsAnalysisPanelProps>) => {
           <Show when={recommendations().length > 0}>
             <div class={styles.recommendations}>
               <Heading level={4} variant="titleMd">
-                {props.recommendationsLabel}
+                {ts('analysis.recommendations')}
               </Heading>
               <For each={recommendations()}>
                 {(recommendation) => (
@@ -133,7 +127,7 @@ const AtsAnalysisPanel = (props: Props<AtsAnalysisPanelProps>) => {
           <ActionRow align="end">
             <Button variant="ghost" onClick={props.onReset}>
               <FiRefreshCw />
-              {props.tryAgainLabel}
+              {ts('error.retry')}
             </Button>
           </ActionRow>
         </div>
@@ -146,7 +140,7 @@ const AtsAnalysisPanel = (props: Props<AtsAnalysisPanelProps>) => {
               <FormField label={label()}>
                 <TextArea
                   value={props.value}
-                  placeholder={props.inputPlaceholder}
+                  placeholder={ts('analysis.inputPlaceholder')}
                   onInput={(event) => props.onValueChange(event.currentTarget.value)}
                 />
               </FormField>
@@ -155,7 +149,7 @@ const AtsAnalysisPanel = (props: Props<AtsAnalysisPanelProps>) => {
           <Show when={!props.inputLabel}>
             <TextArea
               value={props.value}
-              placeholder={props.inputPlaceholder}
+              placeholder={ts('analysis.inputPlaceholder')}
               onInput={(event) => props.onValueChange(event.currentTarget.value)}
             />
           </Show>
@@ -166,7 +160,7 @@ const AtsAnalysisPanel = (props: Props<AtsAnalysisPanelProps>) => {
               </Text>
             )}
           </Show>
-          <Button label={props.submitLabel} onClick={() => void props.onSubmit()} />
+          <Button label={ts('analysis.analyze')} onClick={() => void props.onSubmit()} />
         </div>
       </Show>
     </div>

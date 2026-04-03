@@ -39,14 +39,6 @@ interface ColumnManagerOwnProps extends Omit<DivCoreNativeProps, 'onChange'> {
   defaultPinning?: ColumnManagerPinning;
   label?: string;
   description?: string;
-  visibilityLabel?: string;
-  pinLabel?: string;
-  moveUpLabel?: string;
-  moveDownLabel?: string;
-  resetLabel?: string;
-  noneLabel?: string;
-  leftLabel?: string;
-  rightLabel?: string;
   disabled?: boolean;
 }
 
@@ -57,7 +49,7 @@ const toPinValue = (raw: string): ColumnManagerPin => {
 };
 
 const ColumnManager = (props: Props<ColumnManagerOwnProps>) => {
-  const { t } = useI18n();
+  const { ts } = useI18n();
   const [local, rest] = splitProps(props, [
     'columns',
     'order',
@@ -71,14 +63,6 @@ const ColumnManager = (props: Props<ColumnManagerOwnProps>) => {
     'defaultPinning',
     'label',
     'description',
-    'visibilityLabel',
-    'pinLabel',
-    'moveUpLabel',
-    'moveDownLabel',
-    'resetLabel',
-    'noneLabel',
-    'leftLabel',
-    'rightLabel',
     'disabled',
     'class',
   ]);
@@ -95,18 +79,11 @@ const ColumnManager = (props: Props<ColumnManagerOwnProps>) => {
   const isVisible = (key: string) => local.visibility[key] !== false;
   const isHidable = (column: ColumnManagerColumn) => column.canHide !== false;
   const visibleCount = createMemo(() => orderedColumns().filter((column) => isVisible(column.key)).length);
-  const panelLabel = createMemo(() => local.label ?? t('table.columns'));
-  const resetButtonLabel = createMemo(() => local.resetLabel ?? t('columnManager.resetColumns'));
-  const pinFieldLabel = createMemo(() => local.pinLabel ?? t('common.pin'));
-  const noneLabel = createMemo(() => local.noneLabel ?? local.visibilityLabel ?? t('common.none'));
-  const leftLabel = createMemo(() => local.leftLabel ?? t('dir.left'));
-  const rightLabel = createMemo(() => local.rightLabel ?? t('dir.right'));
-  const moveUpLabel = createMemo(() => local.moveUpLabel ?? t('common.moveUp'));
-  const moveDownLabel = createMemo(() => local.moveDownLabel ?? t('common.moveDown'));
+  const panelLabel = createMemo(() => local.label ?? ts('table.columns'));
   const pinOptions = createMemo<SelectOption[]>(() => [
-    { value: '', label: noneLabel() },
-    { value: 'left', label: leftLabel() },
-    { value: 'right', label: rightLabel() },
+    { value: '', label: ts('common.none') },
+    { value: 'left', label: ts('dir.left') },
+    { value: 'right', label: ts('dir.right') },
   ]);
 
   const toggleVisibility = (column: ColumnManagerColumn) => {
@@ -168,7 +145,7 @@ const ColumnManager = (props: Props<ColumnManagerOwnProps>) => {
           </Show>
         </div>
         <Button variant="ghost" size="sm" onClick={resetAll} disabled={local.disabled}>
-          {resetButtonLabel()}
+          {ts('columnManager.resetColumns')}
         </Button>
       </div>
 
@@ -182,7 +159,7 @@ const ColumnManager = (props: Props<ColumnManagerOwnProps>) => {
             return (
               <div class={styles.row}>
                 <Checkbox
-                  wrapperClass={styles.visibility}
+                  class={styles.visibility}
                   checked={isVisible(column.key)}
                   disabled={disableVisibilityToggle()}
                   onChange={() => toggleVisibility(column)}
@@ -193,7 +170,7 @@ const ColumnManager = (props: Props<ColumnManagerOwnProps>) => {
                   <Select
                     class={styles.pin}
                     size="sm"
-                    aria-label={pinFieldLabel()}
+                    aria-label={ts('common.pin')}
                     value={pinValue() ?? ''}
                     disabled={local.disabled || !isVisible(column.key)}
                     options={pinOptions()}
@@ -206,14 +183,14 @@ const ColumnManager = (props: Props<ColumnManagerOwnProps>) => {
                 <div class={styles.reorder}>
                   <IconButton
                     icon={IoArrowUp}
-                    label={moveUpLabel()}
+                    label={ts('common.moveUp')}
                     size="sm"
                     disabled={local.disabled || index() === 0}
                     onClick={() => moveColumn(column.key, -1)}
                   />
                   <IconButton
                     icon={IoArrowDown}
-                    label={moveDownLabel()}
+                    label={ts('common.moveDown')}
                     size="sm"
                     disabled={local.disabled || index() === orderedColumns().length - 1}
                     onClick={() => moveColumn(column.key, 1)}

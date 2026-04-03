@@ -14,17 +14,6 @@ import { buildDaysGrid, type DayCell, getTodayIso, toIso } from '~/utils/datetim
 import CalendarPanel from '../Calendar/CalendarPanel/CalendarPanel';
 import styles from './DateRangePicker.module.css';
 
-export interface DateRangePickerMessages {
-  startLabel?: string;
-  endLabel?: string;
-  startAriaLabel?: string;
-  endAriaLabel?: string;
-  calendarLabel?: string;
-  previousMonthLabel?: string;
-  nextMonthLabel?: string;
-  dayLabels?: readonly string[];
-}
-
 export interface DateRange {
   start: string;
   end: string;
@@ -35,22 +24,14 @@ export interface DateRangePickerProps extends AriaFieldProps {
   value: DateRange;
   onChange: (range: DateRange) => void;
   locale?: string;
-  startLabel?: string;
-  endLabel?: string;
   size?: ComponentSize;
   disabled?: boolean;
   min?: string;
   max?: string;
-  startAriaLabel?: string;
-  endAriaLabel?: string;
-  calendarLabel?: string;
-  previousMonthLabel?: string;
-  nextMonthLabel?: string;
-  messages?: DateRangePickerMessages;
 }
 
 const DateRangePicker = (props: Props<DateRangePickerProps>) => {
-  const { t } = useI18n();
+  const { ts } = useI18n();
   const [activeField, setActiveField] = createSignal<'start' | 'end'>('start');
   const [pendingStart, setPendingStart] = createSignal<string | null>(null);
   const dropdownId = createUniqueId();
@@ -74,38 +55,22 @@ const DateRangePicker = (props: Props<DateRangePickerProps>) => {
     new Date(popup.viewYear(), popup.viewMonth()).toLocaleString(locale(), {
       month: 'long',
       year: 'numeric',
-    })
+    }),
   );
-  const dayLabels = createMemo(
-    () =>
-      props.messages?.dayLabels ?? [
-        t('calendar.day.mo'),
-        t('calendar.day.tu'),
-        t('calendar.day.we'),
-        t('calendar.day.th'),
-        t('calendar.day.fr'),
-        t('calendar.day.sa'),
-        t('calendar.day.su'),
-      ]
-  );
-  const startLabel = () => props.messages?.startLabel ?? props.startLabel ?? t('common.start');
-  const endLabel = () => props.messages?.endLabel ?? props.endLabel ?? t('common.end');
-  const startAriaLabel = () =>
-    props.messages?.startAriaLabel ??
-    props.startAriaLabel ??
-    props.messages?.startLabel ??
-    props.startLabel ??
-    t('datetime.startDate');
-  const endAriaLabel = () =>
-    props.messages?.endAriaLabel ??
-    props.endAriaLabel ??
-    props.messages?.endLabel ??
-    props.endLabel ??
-    t('datetime.endDate');
-  const calendarLabel = () => props.messages?.calendarLabel ?? props.calendarLabel ?? t('calendar.rangeLabel');
-  const previousMonthLabel = () =>
-    props.messages?.previousMonthLabel ?? props.previousMonthLabel ?? t('calendar.prevMonth');
-  const nextMonthLabel = () => props.messages?.nextMonthLabel ?? props.nextMonthLabel ?? t('calendar.nextMonth');
+  const dayLabels = createMemo(() => [
+    ts('calendar.day.mo'),
+    ts('calendar.day.tu'),
+    ts('calendar.day.we'),
+    ts('calendar.day.th'),
+    ts('calendar.day.fr'),
+    ts('calendar.day.sa'),
+    ts('calendar.day.su'),
+  ]);
+  const startLabel = () => ts('common.start');
+  const endLabel = () => ts('common.end');
+  const startAriaLabel = () => ts('datetime.startDate');
+  const endAriaLabel = () => ts('datetime.endDate');
+  const calendarLabel = () => ts('calendar.rangeLabel');
 
   const isDateDisabled = (iso: string): boolean => {
     if (props.min && iso < props.min) return true;
@@ -166,7 +131,7 @@ const DateRangePicker = (props: Props<DateRangePickerProps>) => {
       start && end && start === end && iso === start && styles.rangeSingle,
       start && iso === start && styles.rangeStart,
       end && iso === end && styles.rangeEnd,
-      start && end && iso > start && iso < end && styles.inRange
+      start && end && iso > start && iso < end && styles.inRange,
     );
   };
 
@@ -176,16 +141,16 @@ const DateRangePicker = (props: Props<DateRangePickerProps>) => {
     classNames(
       styles.field,
       popup.isOpen() && activeField() === 'start' && styles.fieldActive,
-      props.disabled && styles.fieldDisabled
-    )
+      props.disabled && styles.fieldDisabled,
+    ),
   );
 
   const endFieldClass = createMemo(() =>
     classNames(
       styles.field,
       popup.isOpen() && activeField() === 'end' && styles.fieldActive,
-      props.disabled && styles.fieldDisabled
-    )
+      props.disabled && styles.fieldDisabled,
+    ),
   );
 
   return (
@@ -248,8 +213,6 @@ const DateRangePicker = (props: Props<DateRangePickerProps>) => {
         >
           <CalendarPanel
             monthLabel={monthName()}
-            previousLabel={previousMonthLabel()}
-            nextLabel={nextMonthLabel()}
             onPrevious={popup.prevMonth}
             onNext={popup.nextMonth}
             days={daysGrid()}

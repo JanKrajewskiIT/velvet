@@ -22,7 +22,7 @@ const Input = (props: Props<InputOwnProps>) => {
     'aria-invalid',
   ]);
   const ariaInvalid = createMemo(() =>
-    resolveAriaInvalid(local.invalid, local['aria-invalid'] as boolean | 'true' | 'false' | undefined)
+    resolveAriaInvalid(local.invalid, local['aria-invalid'] as boolean | 'true' | 'false' | undefined),
   );
 
   return (

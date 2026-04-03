@@ -15,26 +15,18 @@ import DateTimeFieldTrigger from '../DateTimeFieldTrigger/DateTimeFieldTrigger';
 import TimePanel from './TimePanel/TimePanel';
 import styles from './TimePicker.module.css';
 
-export interface TimePickerMessages {
-  placeholder?: string;
-  openPickerLabel?: string;
-  optionsLabel?: string;
-}
+export type TimePickerMessages = Record<string, never>;
 
 export interface TimePickerProps extends AriaFieldProps {
   value?: string;
   onChange: (value: string) => void;
-  placeholder?: string;
   disabled?: boolean;
   step?: number;
   size?: ComponentSize;
-  openPickerLabel?: string;
-  optionsLabel?: string;
-  messages?: TimePickerMessages;
 }
 
 const TimePicker = (props: Props<TimePickerProps>) => {
-  const { t } = useI18n();
+  const { ts } = useI18n();
   const [isOpen, setIsOpen] = createSignal(false);
   const dropdownId = createUniqueId();
   const triggerLabelId = createUniqueId();
@@ -46,15 +38,14 @@ const TimePicker = (props: Props<TimePickerProps>) => {
   useClickOutside(
     () => wrapperRef,
     () => isOpen(),
-    close
+    close,
   );
   useEscapeKey(() => isOpen(), close);
 
   const timeOptions = createMemo(() => buildTimeOptions(props.step ?? 30));
-  const placeholder = () => props.messages?.placeholder ?? props.placeholder ?? t('time.hhmm');
-  const openPickerLabel = () =>
-    props.messages?.openPickerLabel ?? props.openPickerLabel ?? t('datetime.openTimePicker');
-  const optionsLabel = () => props.messages?.optionsLabel ?? props.optionsLabel ?? t('datetime.timeOptions');
+  const placeholder = () => ts('time.hhmm');
+  const openPickerLabel = () => ts('datetime.openTimePicker');
+  const optionsLabel = () => ts('datetime.timeOptions');
 
   const scrollToSelected = () => {
     if (!dropdownRef || !props.value) return;

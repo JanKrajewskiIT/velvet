@@ -11,33 +11,27 @@ import classNames from '~/utils/classNames';
 
 import styles from './Banner.module.css';
 
-interface BannerMessages {
-  closeButtonLabel?: string;
-}
-
 interface BannerProps extends DivCoreNativeProps {
   variant?: 'info' | 'success' | 'warning' | 'error' | 'primary';
   message: string;
   children?: never;
   onClose?: () => void;
   action?: JSX.Element;
-  closeLabel?: string;
-  messages?: BannerMessages;
 }
 
+const variantClassByValue: Record<NonNullable<BannerProps['variant']>, string | undefined> = {
+  info: styles.info,
+  success: styles.success,
+  warning: styles.warning,
+  error: styles.error,
+  primary: styles.primary,
+};
+
 const Banner = (props: Props<BannerProps>) => {
-  const { t } = useI18n();
-  const [local, rest] = splitProps(props, [
-    'class',
-    'variant',
-    'message',
-    'onClose',
-    'action',
-    'closeLabel',
-    'messages',
-  ]);
+  const { ts } = useI18n();
+  const [local, rest] = splitProps(props, ['class', 'variant', 'message', 'onClose', 'action']);
   const variant = createMemo(() => local.variant ?? 'primary');
-  const closeButtonLabel = createMemo(() => local.messages?.closeButtonLabel ?? local.closeLabel ?? t('common.close'));
+  const closeButtonLabel = createMemo(() => ts('banner.close'));
 
   return (
     <Stack
@@ -47,7 +41,7 @@ const Banner = (props: Props<BannerProps>) => {
       justify="between"
       gap="md"
       role={rest.role ?? 'status'}
-      class={classNames(styles.banner, styles[variant()], local.class)}
+      class={classNames(styles.banner, variantClassByValue[variant()], local.class)}
     >
       <Stack direction="horizontal" align="center" gap="md" wrap class={styles.body}>
         <Text as="div" variant="labelLg" tone="inherit" class={styles.content}>

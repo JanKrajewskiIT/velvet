@@ -7,6 +7,8 @@ import {
   Carousel,
   CodeBlock,
   CodeText,
+  ComparisonInsightsDialog,
+  ComparisonSelectionBar,
   FilterBar,
   type FilterBarFilter,
   Heading,
@@ -21,8 +23,11 @@ import {
   Marquee,
   RadarChart,
   ScoreRing,
+  StatusTimeline,
   Text,
   Timeline,
+  TimelineCard,
+  TimelineCardEditDialog,
   TradingViewChart,
   type TradingViewChartPoint,
   type TreeNode,
@@ -34,7 +39,7 @@ import {
 } from '@jankrajewskiit/ui';
 import type { UTCTimestamp } from 'lightweight-charts';
 import { IoDocumentText, IoFolder, IoImage } from 'solid-icons/io';
-import { createMemo, createSignal, For, Show } from 'solid-js';
+import { type ComponentProps, createMemo, createSignal, For, Show } from 'solid-js';
 
 import type { SectionId } from '../App';
 import { PreviewGroup, PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
@@ -43,7 +48,7 @@ import { interpolateText, renderRichText } from '../i18n/renderRichText';
 
 const createMarkdown = (
   t: (key: DemoI18nMessageKey, params?: Record<string, string | number>) => string,
-  buttonLabel: string
+  buttonLabel: string,
 ) => `
 ## VelvetUI
 
@@ -98,6 +103,29 @@ const createBarGenerator = (initialTime: UTCTimestamp, initialPrice: number) => 
     };
   };
 };
+
+const comparisonAxes = [
+  { key: 'salary', label: 'Salary' },
+  { key: 'stack', label: 'Tech stack' },
+  { key: 'growth', label: 'Growth' },
+  { key: 'flexibility', label: 'Flexibility' },
+];
+
+const comparisonDatasets = [
+  { label: 'Velvet Labs', values: [88, 92, 84, 73], color: '#1d4ed8' },
+  { label: 'Signal Forge', values: [79, 86, 77, 91], color: '#059669' },
+];
+
+const comparisonColumns = [
+  { label: 'Velvet Labs', description: 'Platform team', accentColor: '#1d4ed8' },
+  { label: 'Signal Forge', description: 'Product engineering', accentColor: '#059669' },
+];
+
+const comparisonRows = [
+  { label: 'Compensation', values: ['22-28k PLN B2B', '20-25k PLN B2B'] },
+  { label: 'Work mode', values: ['Hybrid, 2 days office', 'Remote first'] },
+  { label: 'Hiring process', values: ['3 stages', '4 stages'] },
+];
 
 const isTradingPoint = (value: unknown): value is TradingViewChartPoint => {
   if (!value || typeof value !== 'object') return false;
@@ -157,6 +185,45 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
   const [lastMove, setLastMove] = createSignal('');
   const [editorOpen, setEditorOpen] = createSignal(false);
   const [lightboxOpen, setLightboxOpen] = createSignal(false);
+  const [comparisonOpen, setComparisonOpen] = createSignal(false);
+  const [comparisonPending, setComparisonPending] = createSignal(false);
+  const [comparisonReady, setComparisonReady] = createSignal(false);
+  const [comparisonSelectionCount] = createSignal(2);
+  const [timelineCardValue, setTimelineCardValue] = createSignal<ComponentProps<typeof TimelineCard>['value']>({
+    id: 'session-1',
+    category: 'review',
+    status: 'in-progress',
+    dateTime: '2026-03-29T13:30:00.000Z',
+    duration: '60',
+    location: 'Product sync room',
+    notes: 'Review integration checklist and **final acceptance criteria**.',
+    isSynced: true,
+  });
+  const [timelineCardPlannedValue, setTimelineCardPlannedValue] = createSignal<
+    ComponentProps<typeof TimelineCard>['value']
+  >({
+    id: 'session-2',
+    category: 'implementation',
+    status: 'scheduled',
+    dateTime: null,
+    duration: '',
+    location: '',
+    notes: '',
+    isSynced: false,
+  });
+  const [timelineCardCompletedValue, setTimelineCardCompletedValue] = createSignal<
+    ComponentProps<typeof TimelineCard>['value']
+  >({
+    id: 'session-3',
+    category: 'release',
+    status: 'completed',
+    dateTime: '2026-03-31T09:00:00.000Z',
+    duration: '90',
+    location: 'Release room',
+    notes: 'Release retrospective completed. Notes archived in **Delivery hub**.',
+    isSynced: true,
+  });
+  const [timelineCardAddOpen, setTimelineCardAddOpen] = createSignal(false);
   const galleryImages = createMemo<ImageGridItem[]>(() => [
     {
       src: 'https://picsum.photos/id/10/400/300',
@@ -293,6 +360,105 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
   const nextPollingBar = createBarGenerator(asUtcTimestamp(1705017600), 2103.9);
   const nextWsBar = createBarGenerator(asUtcTimestamp(1705017600), 2098.4);
 
+  const timelineCardCategoryOptions = createMemo(() => [
+    {
+      value: 'review',
+      label: t('demo.text.dataDisplay.timelineCard.stage.review'),
+      icon: IoDocumentText,
+      chipVariant: 'info' as const,
+    },
+    {
+      value: 'implementation',
+      label: t('demo.text.dataDisplay.timelineCard.stage.implementation'),
+      icon: IoFolder,
+      chipVariant: 'warning' as const,
+    },
+    {
+      value: 'release',
+      label: t('demo.text.dataDisplay.timelineCard.stage.release'),
+      icon: IoImage,
+      chipVariant: 'success' as const,
+    },
+  ]);
+
+  const timelineCardStatusOptions = createMemo(() => [
+    {
+      value: 'scheduled',
+      label: t('demo.text.dataDisplay.timelineCard.status.scheduled'),
+      chipVariant: 'info' as const,
+    },
+    {
+      value: 'in-progress',
+      label: t('demo.text.dataDisplay.timelineCard.status.inProgress'),
+      chipVariant: 'warning' as const,
+    },
+    {
+      value: 'completed',
+      label: t('demo.text.dataDisplay.timelineCard.status.completed'),
+      chipVariant: 'success' as const,
+    },
+  ]);
+
+  const timelineCardLabels = createMemo(() => ({
+    category: t('demo.text.dataDisplay.timelineCard.label.category'),
+    status: t('demo.text.dataDisplay.timelineCard.label.status'),
+    dateTime: t('demo.text.dataDisplay.timelineCard.label.dateTime'),
+    duration: t('demo.text.dataDisplay.timelineCard.label.duration'),
+    location: t('demo.text.dataDisplay.timelineCard.label.location'),
+    notes: t('demo.text.dataDisplay.timelineCard.label.notes'),
+    editLabel: t('demo.text.dataDisplay.timelineCard.label.edit'),
+    deleteLabel: t('demo.text.dataDisplay.timelineCard.label.delete'),
+    editDialogLabel: t('demo.text.dataDisplay.timelineCard.label.editDialog'),
+    deleteDialogLabel: t('demo.text.dataDisplay.timelineCard.label.deleteDialog'),
+    deleteDialogMessage: t('demo.text.dataDisplay.timelineCard.label.deleteMessage'),
+    deleteConfirmLabel: t('demo.text.dataDisplay.timelineCard.label.deleteConfirm'),
+    deleteCancelLabel: t('demo.text.dataDisplay.timelineCard.label.deleteCancel'),
+    editNotesLabel: t('demo.text.dataDisplay.timelineCard.label.editNotes'),
+    saveLabel: t('demo.text.dataDisplay.timelineCard.label.save'),
+    syncedLabel: t('demo.text.dataDisplay.timelineCard.label.synced'),
+    notSetLabel: t('demo.text.dataDisplay.timelineCard.label.notSet'),
+  }));
+
+  const createTimelineCardSave = (
+    setter: (value: ComponentProps<typeof TimelineCard>['value']) => void,
+  ): NonNullable<ComponentProps<typeof TimelineCard>['onSave']> => {
+    return async (value) => {
+      await new Promise((resolve) => setTimeout(resolve, 250));
+      setter(value);
+    };
+  };
+
+  const handleTimelineCardSave = createTimelineCardSave(setTimelineCardValue);
+  const handleTimelineCardPlannedSave = createTimelineCardSave(setTimelineCardPlannedValue);
+  const handleTimelineCardCompletedSave = createTimelineCardSave(setTimelineCardCompletedValue);
+
+  const handleTimelineCardDelete: NonNullable<ComponentProps<typeof TimelineCard>['onDelete']> = async () => {
+    await new Promise((resolve) => setTimeout(resolve, 200));
+    addToast({ type: 'info', message: t('demo.text.dataDisplay.timelineCard.deletedToast') });
+  };
+
+  const runComparison = async () => {
+    setComparisonPending(true);
+    await new Promise((resolve) => setTimeout(resolve, 700));
+    setComparisonPending(false);
+    setComparisonReady(true);
+  };
+
+  const handleComparisonClose = () => {
+    setComparisonOpen(false);
+    setComparisonReady(false);
+    setComparisonPending(false);
+  };
+
+  const handleTimelineCardAddSave: NonNullable<ComponentProps<typeof TimelineCardEditDialog>['onSave']> = async (
+    value,
+  ) => {
+    await new Promise((resolve) => setTimeout(resolve, 250));
+    setTimelineCardPlannedValue({ ...value, id: `session-new-${Date.now().toString()}` });
+    setTimelineCardAddOpen(false);
+    addToast({ type: 'success', message: t('demo.text.dataDisplay.timelineCard.addedToast') });
+  };
+
   const timelineItems = createMemo(() => [
     {
       key: '1',
@@ -371,7 +537,7 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
         new Response(JSON.stringify(nextPollingBar()), {
           status: 200,
           headers: { 'content-type': 'application/json' },
-        })
+        }),
       ),
     mapData: (payload) => (isTradingPoint(payload) ? payload : null),
   });
@@ -453,21 +619,13 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
         >
           <PreviewPanel>
             <PreviewGroup title={t('demo.text.dataDisplay.codeBlock.tsxSnippet.title')}>
-              <CodeBlock code={createCodeSample(clickMeLabel())} language="tsx" showLineNumbers copyable />
+              <CodeBlock code={createCodeSample(clickMeLabel())} language="tsx" />
             </PreviewGroup>
             <PreviewGroup title={t('demo.text.dataDisplay.codeBlock.cliSnippet.title')}>
               <CodeBlock code="npm install @jankrajewskiit/ui" language="bash" />
             </PreviewGroup>
           </PreviewPanel>
-          <ShowcaseMeta>
-            {renderRichText(t('demo.text.dataDisplay.codeBlock.metaWithShowLineNumbers'), {
-              showLineNumbers: (
-                <CodeText as="span" class="codeInline">
-                  showLineNumbers
-                </CodeText>
-              ),
-            })}
-          </ShowcaseMeta>
+          <ShowcaseMeta>{t('demo.text.dataDisplay.codeBlock.meta')}</ShowcaseMeta>
         </ShowcaseSection>
 
         <ShowcaseSection
@@ -497,8 +655,6 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
                 open={editorOpen()}
                 label={t('demo.text.dataDisplay.markdownEdit.label')}
                 initialValue={markdown()}
-                saveLabel={t('demo.text.dataDisplay.markdownEdit.save')}
-                cancelLabel={t('demo.text.dataDisplay.markdownEdit.cancel')}
                 onSave={setMarkdown}
                 onClose={() => setEditorOpen(false)}
               />
@@ -619,10 +775,6 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
                   onChange={setFiltersValue}
                   search={filtersQuery()}
                   onSearchChange={setFiltersQuery}
-                  searchPlaceholder={t('demo.text.dataDisplay.filterBar.searchPlaceholder')}
-                  allLabel={t('demo.text.dataDisplay.filterBar.allLabel')}
-                  clearAllLabel={t('demo.text.dataDisplay.filterBar.clearAllLabel')}
-                  removeFilterLabel={t('demo.text.dataDisplay.filterBar.removeFilterLabel')}
                 />
 
                 <div class="scenarioBody">
@@ -652,6 +804,165 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
           <PreviewPanel>
             <PreviewGroup title={t('demo.text.common.examples')}>
               <Timeline items={timelineItems()} />
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          title={t('demo.showcase.dataDisplay.statusTimeline.title')}
+          subtitle={t('demo.showcase.dataDisplay.statusTimeline.subtitle')}
+        >
+          <PreviewPanel>
+            <PreviewGroup title="Example">
+              <div class="recronDemoMedium">
+                <StatusTimeline
+                  emptyMessage={t('demo.text.dataDisplay.statusTimeline.emptyMessage')}
+                  items={[
+                    {
+                      key: 'timeline-1',
+                      statusTone: 'success',
+                      content: <Text as="p">{t('demo.text.dataDisplay.statusTimeline.item.done')}</Text>,
+                    },
+                    {
+                      key: 'timeline-2',
+                      statusTone: 'default',
+                      content: <Text as="p">{t('demo.text.dataDisplay.statusTimeline.item.inProgress')}</Text>,
+                    },
+                    {
+                      key: 'timeline-3',
+                      statusTone: 'muted',
+                      content: <Text as="p">{t('demo.text.dataDisplay.statusTimeline.item.todo')}</Text>,
+                    },
+                  ]}
+                  action={<Button size="sm" variant="ghost" label={t('demo.text.dataDisplay.statusTimeline.action')} />}
+                />
+              </div>
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection title="TimelineCard" subtitle={t('demo.showcase.dataDisplay.timelineCardComposite.subtitle')}>
+          <PreviewPanel>
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <div class="recronDemoMedium">
+                <TimelineCard
+                  value={timelineCardValue()}
+                  labels={timelineCardLabels()}
+                  categoryOptions={timelineCardCategoryOptions()}
+                  statusOptions={timelineCardStatusOptions()}
+                  calendarAction={
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      label={t('demo.text.dataDisplay.timelineCard.label.calendarAction')}
+                    />
+                  }
+                  onSave={handleTimelineCardSave}
+                  onDelete={handleTimelineCardDelete}
+                />
+              </div>
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          title={t('demo.showcase.dataDisplay.timelineCardComposite.title')}
+          subtitle={t('demo.showcase.dataDisplay.timelineCardComposite.subtitle')}
+        >
+          <PreviewPanel>
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <div class="timelineCompositeDemo">
+                <StatusTimeline
+                  emptyMessage={t('demo.text.dataDisplay.statusTimeline.emptyMessage')}
+                  items={[
+                    {
+                      key: 'composite-session-1',
+                      statusTone: 'default',
+                      content: (
+                        <TimelineCard
+                          value={timelineCardValue()}
+                          labels={timelineCardLabels()}
+                          categoryOptions={timelineCardCategoryOptions()}
+                          statusOptions={timelineCardStatusOptions()}
+                          calendarAction={
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              label={t('demo.text.dataDisplay.timelineCard.label.calendarAction')}
+                            />
+                          }
+                          onSave={handleTimelineCardSave}
+                          onDelete={handleTimelineCardDelete}
+                        />
+                      ),
+                    },
+                    {
+                      key: 'composite-session-2',
+                      statusTone: 'muted',
+                      content: (
+                        <TimelineCard
+                          value={timelineCardPlannedValue()}
+                          labels={timelineCardLabels()}
+                          categoryOptions={timelineCardCategoryOptions()}
+                          statusOptions={timelineCardStatusOptions()}
+                          onSave={handleTimelineCardPlannedSave}
+                          onDelete={handleTimelineCardDelete}
+                        />
+                      ),
+                    },
+                    {
+                      key: 'composite-session-3',
+                      statusTone: 'success',
+                      content: (
+                        <TimelineCard
+                          value={timelineCardCompletedValue()}
+                          labels={timelineCardLabels()}
+                          categoryOptions={timelineCardCategoryOptions()}
+                          statusOptions={timelineCardStatusOptions()}
+                          calendarAction={
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              label={t('demo.text.dataDisplay.timelineCard.label.calendarAction')}
+                            />
+                          }
+                          onSave={handleTimelineCardCompletedSave}
+                          onDelete={handleTimelineCardDelete}
+                        />
+                      ),
+                    },
+                  ]}
+                  action={
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      label={t('demo.text.dataDisplay.timelineCard.label.addAction')}
+                      onClick={() => setTimelineCardAddOpen(true)}
+                    />
+                  }
+                />
+                <TimelineCardEditDialog
+                  open={timelineCardAddOpen()}
+                  value={{
+                    id: 'session-new',
+                    category: timelineCardCategoryOptions()[0]?.value ?? 'review',
+                    status: timelineCardStatusOptions()[0]?.value ?? 'scheduled',
+                    dateTime: null,
+                    duration: '',
+                    location: '',
+                    notes: '',
+                    isSynced: false,
+                  }}
+                  labels={{
+                    ...timelineCardLabels(),
+                    editDialogLabel: t('demo.text.dataDisplay.timelineCard.label.addDialog'),
+                  }}
+                  categoryOptions={timelineCardCategoryOptions()}
+                  statusOptions={timelineCardStatusOptions()}
+                  onClose={() => setTimelineCardAddOpen(false)}
+                  onSave={handleTimelineCardAddSave}
+                />
+              </div>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>
@@ -746,7 +1057,7 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
         >
           <PreviewPanel>
             <PreviewGroup title={t('demo.text.common.examples')}>
-              <Carousel autoPlay interval={4000} showDots showArrows>
+              <Carousel autoPlay interval={4000}>
                 <div class="surfacePanel">{t('demo.text.dataDisplay.carousel.autoSlide1')}</div>
                 <div class="surfacePanel">{t('demo.text.dataDisplay.carousel.autoSlide2')}</div>
                 <div class="surfacePanel">{t('demo.text.dataDisplay.carousel.autoSlide3')}</div>
@@ -885,6 +1196,38 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
                   { label: t('demo.text.dataDisplay.radar.mobile'), values: [74, 85, 90, 75, 55] },
                 ]}
               />
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          title="ComparisonSelectionBar"
+          subtitle={t('demo.recron.showcase.comparisonSelectionBar.subtitle')}
+        >
+          <PreviewPanel>
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <div class="recronDemoWide recronDemoSurface">
+                <ComparisonSelectionBar
+                  selectedCount={comparisonSelectionCount()}
+                  compareDisabled={comparisonSelectionCount() < 2 || comparisonSelectionCount() > 5}
+                  onClear={() => addToast({ type: 'info', message: 'Selection cleared in demo.' })}
+                  onCompare={() => setComparisonOpen(true)}
+                />
+                <ComparisonInsightsDialog
+                  open={comparisonOpen()}
+                  title={t('demo.recron.offer.comparison.dialog.title')}
+                  prompt={t('demo.recron.offer.comparison.dialog.prompt')}
+                  isPending={comparisonPending()}
+                  hasResult={comparisonReady()}
+                  selectionSummary={t('demo.recron.offer.comparison.dialog.selectionSummary')}
+                  axes={comparisonAxes}
+                  datasets={comparisonDatasets}
+                  columns={comparisonColumns}
+                  rows={comparisonRows}
+                  onClose={handleComparisonClose}
+                  onCompare={runComparison}
+                />
+              </div>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>

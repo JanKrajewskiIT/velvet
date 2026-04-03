@@ -6,21 +6,14 @@ const QueryClientContext = createContext<QueryClient>();
 
 let defaultQueryClient: QueryClient | undefined;
 
-function getDefaultQueryClient(): QueryClient {
+const getDefaultQueryClient = (): QueryClient => {
   if (!defaultQueryClient) {
     defaultQueryClient = createQueryClient();
   }
 
   return defaultQueryClient;
-}
+};
 
-function useQueryClient(): QueryClient {
-  const context = useContext(QueryClientContext);
-  if (context) {
-    return context;
-  }
-
-  return getDefaultQueryClient();
-}
+const useQueryClient = (): QueryClient => useContext(QueryClientContext) ?? getDefaultQueryClient();
 
 export { getDefaultQueryClient, QueryClientContext, useQueryClient };

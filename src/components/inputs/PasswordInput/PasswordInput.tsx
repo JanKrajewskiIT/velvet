@@ -9,21 +9,13 @@ import IconButton from '../../buttons/IconButton/IconButton';
 import AffixInput from '../AffixInput/AffixInput';
 import styles from './PasswordInput.module.css';
 
-interface PasswordInputMessages {
-  showPasswordLabel?: string;
-  hidePasswordLabel?: string;
-}
-
 interface PasswordInputProps extends Omit<InputCoreNativeProps, 'type'> {
-  showToggle?: boolean;
-  visibilityLabel?: string;
   size?: ComponentSize;
-  messages?: PasswordInputMessages;
 }
 
 const PasswordInput = (props: Props<PasswordInputProps>) => {
-  const { t } = useI18n();
-  const [local, rest] = splitProps(props, ['class', 'showToggle', 'visibilityLabel', 'size', 'messages']);
+  const { ts } = useI18n();
+  const [local, rest] = splitProps(props, ['class', 'size']);
   const [visible, setVisible] = createSignal(false);
   const toggleButtonSize = createMemo<ComponentSize>(() => {
     if (local.size === 'sm') return 'sm';
@@ -33,28 +25,18 @@ const PasswordInput = (props: Props<PasswordInputProps>) => {
 
   const toggle = () => setVisible(!visible());
   const icon = createMemo(() => (visible() ? IoEye : IoEyeOutline));
-  const visibilityButtonLabel = createMemo(() => {
-    if (local.visibilityLabel) return local.visibilityLabel;
-    return visible()
-      ? (local.messages?.hidePasswordLabel ?? t('password.hide'))
-      : (local.messages?.showPasswordLabel ?? t('password.show'));
-  });
 
-  const suffix = createMemo(() => {
-    if (local.showToggle === false) return undefined;
-
-    return (
-      <IconButton
-        icon={icon()}
-        label={visibilityButtonLabel()}
-        onClick={toggle}
-        aria-pressed={visible()}
-        disabled={rest.disabled}
-        variant="subtle"
-        size={toggleButtonSize()}
-      />
-    );
-  });
+  const suffix = createMemo(() => (
+    <IconButton
+      icon={icon()}
+      label={visible() ? ts('password.hide') : ts('password.show')}
+      onClick={toggle}
+      aria-pressed={visible()}
+      disabled={rest.disabled}
+      variant="subtle"
+      size={toggleButtonSize()}
+    />
+  ));
 
   return (
     <AffixInput

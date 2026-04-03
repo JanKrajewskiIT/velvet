@@ -6,6 +6,7 @@ import MarkdownRenderer from '~/components/composites/MarkdownRenderer/MarkdownR
 import ErrorMessage from '~/components/feedback/ErrorMessage/ErrorMessage';
 import Spinner from '~/components/feedback/Spinner/Spinner';
 import Text from '~/components/typography/Text/Text';
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -15,12 +16,11 @@ interface QuestionAnswerPanelProps {
   content?: string | null;
   loading?: boolean;
   errorMessage?: string;
-  loadingLabel: string;
-  askLabel: string;
   onAsk?: () => void;
 }
 
 const QuestionAnswerPanel = (props: Props<QuestionAnswerPanelProps>) => {
+  const { ts } = useI18n();
   const hasContent = () => Boolean(props.content?.trim());
 
   return (
@@ -29,7 +29,7 @@ const QuestionAnswerPanel = (props: Props<QuestionAnswerPanelProps>) => {
         <div class={styles.loading}>
           <Spinner size="md" />
           <Text as="span" variant="bodySm" tone="muted">
-            {props.loadingLabel}
+            {ts('common.loading')}
           </Text>
         </div>
       </Show>
@@ -46,7 +46,7 @@ const QuestionAnswerPanel = (props: Props<QuestionAnswerPanelProps>) => {
         <Button variant="ghost" class={styles.askButton} onClick={() => props.onAsk?.()}>
           <>
             <FaSolidWandMagicSparkles size={14} />
-            <span>{props.askLabel}</span>
+            <span>{ts('questionAnswer.ask')}</span>
           </>
         </Button>
       </Show>

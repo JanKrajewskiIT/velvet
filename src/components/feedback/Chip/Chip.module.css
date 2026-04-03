@@ -112,6 +112,12 @@
   border-color: var(--color-primary-hover);
 }
 
+.selected.subtle {
+  background-color: color-mix(in srgb, var(--color-primary-light) 78%, var(--color-bg-elevated));
+  border-color: color-mix(in srgb, var(--color-primary) 40%, transparent);
+  color: var(--color-primary);
+}
+
 .filled {
   border: none;
 }
@@ -134,4 +140,14 @@
 .filled.error {
   background-color: var(--color-error);
   color: var(--color-on-accent);
+}
+
+.filled.primaryOutline {
+  background-color: color-mix(in srgb, var(--color-primary) 85%, var(--color-bg));
+  color: var(--color-on-accent);
+}
+
+.filled.subtle {
+  background-color: var(--color-surface);
+  color: var(--color-text);
 }

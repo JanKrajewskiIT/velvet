@@ -1,0 +1,23 @@
+.sm {
+  width: 28px;
+  height: 28px;
+  font-size: var(--typography-scale-xs);
+}
+
+.md {
+  width: 36px;
+  height: 36px;
+  font-size: var(--typography-scale-sm);
+}
+
+.lg {
+  width: 48px;
+  height: 48px;
+  font-size: var(--typography-scale-md);
+}
+
+.xl {
+  width: 64px;
+  height: 64px;
+  font-size: var(--typography-scale-lg);
+}

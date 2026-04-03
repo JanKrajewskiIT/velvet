@@ -12,10 +12,10 @@ export class ApiError extends Error {
   }
 }
 
-export function normalizeHttpError(error: unknown, fallback = 'Request failed'): Error {
+export const normalizeHttpError = (error: unknown, fallback = 'Request failed'): Error => {
   if (error instanceof Error) {
     return error;
   }
 
   return new Error(fallback);
-}
+};

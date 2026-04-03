@@ -1,0 +1,40 @@
+.card {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-elevated);
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.info .icon {
+  background-color: var(--color-info-light);
+  color: var(--color-info);
+}
+
+.warning .icon {
+  background-color: var(--color-warning-light);
+  color: var(--color-warning);
+}
+
+.success .icon {
+  background-color: var(--color-success-light);
+  color: var(--color-success);
+}
+
+.error .icon {
+  background-color: var(--color-error-light);
+  color: var(--color-error);
+}
+
+.content {
+  min-width: 0;
+}

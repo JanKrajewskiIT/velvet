@@ -18,36 +18,31 @@ export interface SpeedDialAction {
   onClick: () => void;
 }
 
-export interface SpeedDialMessages {
-  actionsAriaLabel?: string;
-  openAriaLabel?: string;
-  closeAriaLabel?: string;
-}
-
 interface SpeedDialProps {
   actions: SpeedDialAction[];
   icon?: JSX.Element;
   position?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left' | 'inline';
   direction?: 'up' | 'down' | 'left' | 'right';
-  actionsLabel?: string;
-  openLabel?: string;
-  closeLabel?: string;
-  messages?: SpeedDialMessages;
 }
 
+const positionClassByValue: Record<NonNullable<SpeedDialProps['position']>, string | undefined> = {
+  'bottom-right': styles.bottomRight,
+  'bottom-left': styles.bottomLeft,
+  'top-right': styles.topRight,
+  'top-left': styles.topLeft,
+  inline: styles.inline,
+};
+
+const directionClassByValue: Record<NonNullable<SpeedDialProps['direction']>, string | undefined> = {
+  up: styles.up,
+  down: styles.down,
+  left: styles.left,
+  right: styles.right,
+};
+
 const SpeedDial = (props: Props<SpeedDialProps>) => {
-  const { t } = useI18n();
-  const [local, rest] = splitProps(props, [
-    'class',
-    'actions',
-    'icon',
-    'position',
-    'direction',
-    'actionsLabel',
-    'openLabel',
-    'closeLabel',
-    'messages',
-  ]);
+  const { ts } = useI18n();
+  const [local, rest] = splitProps(props, ['class', 'actions', 'icon', 'position', 'direction']);
   const [open, setOpen] = createSignal(false);
   const menuId = createUniqueId();
   let containerRef: HTMLDivElement | undefined;
@@ -55,19 +50,14 @@ const SpeedDial = (props: Props<SpeedDialProps>) => {
   useClickOutside(
     () => containerRef,
     open,
-    () => setOpen(false)
+    () => setOpen(false),
   );
 
   useEscapeKey(open, () => setOpen(false));
 
   const position = createMemo(() => local.position ?? 'bottom-right');
   const direction = createMemo(() => local.direction ?? 'up');
-  const actionsLabel = createMemo(
-    () => local.messages?.actionsAriaLabel ?? local.actionsLabel ?? t('speedDial.actions')
-  );
   const hasActions = createMemo(() => local.actions.length > 0);
-  const openLabel = createMemo(() => local.messages?.openAriaLabel ?? local.openLabel ?? t('speedDial.open'));
-  const closeLabel = createMemo(() => local.messages?.closeAriaLabel ?? local.closeLabel ?? t('speedDial.close'));
 
   const toggle = () => {
     if (!hasActions()) return;
@@ -87,13 +77,17 @@ const SpeedDial = (props: Props<SpeedDialProps>) => {
   });
 
   return (
-    <div {...rest} ref={containerRef} class={classNames(styles.speedDial, styles[position()], local.class)}>
+    <div
+      {...rest}
+      ref={containerRef}
+      class={classNames(styles.speedDial, positionClassByValue[position()], local.class)}
+    >
       <Show when={open() && hasActions()}>
         <div
           id={menuId}
-          class={classNames(styles.actions, styles[direction()])}
+          class={classNames(styles.actions, directionClassByValue[direction()])}
           role="menu"
-          aria-label={actionsLabel()}
+          aria-label={ts('speedDial.actions')}
         >
           <For each={local.actions}>
             {(action, index) => (
@@ -123,7 +117,7 @@ const SpeedDial = (props: Props<SpeedDialProps>) => {
         disabled={!hasActions()}
         aria-expanded={open()}
         aria-controls={menuId}
-        label={open() ? closeLabel() : openLabel()}
+        label={open() ? ts('speedDial.close') : ts('speedDial.open')}
         elevation="glow"
         icon={<span class={styles.fabIcon}>{local.icon ?? <FiPlus size={24} />}</span>}
       />

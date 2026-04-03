@@ -1,6 +1,6 @@
 import { IoCaretDown, IoCaretUp } from 'solid-icons/io';
 import type { JSX } from 'solid-js';
-import { createEffect, createMemo, createSignal, For, Show } from 'solid-js';
+import { createEffect, createMemo, createSignal, For, on, Show } from 'solid-js';
 
 import Input from '~/components/inputs/Input/Input';
 import Pagination from '~/components/navigation/Pagination/Pagination';
@@ -11,6 +11,7 @@ import TableHead from '~/components/table/Table/TableHead/TableHead';
 import TableHeader from '~/components/table/Table/TableHeader/TableHeader';
 import TableRow from '~/components/table/Table/TableRow/TableRow';
 import Text from '~/components/typography/Text/Text';
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 import { filterRows, sortRows, type TabularSortDirection } from '~/utils/tabularData';
@@ -37,32 +38,14 @@ interface DataTableProps<T> {
   sortable?: boolean;
   striped?: boolean;
   hoverable?: boolean;
-  emptyMessage?: string;
   filterable?: boolean;
   filterQuery?: string;
   onFilterQueryChange?: (query: string) => void;
-  filterPlaceholder?: string;
   filterFn?: (row: T, query: string) => boolean;
-  showResultsCount?: boolean;
-  noDataLabel?: string;
-  resultLabel?: string;
-  resultsLabel?: string;
-  pageOfLabel?: (current: number, total: number) => string;
-  previousPageLabel?: string;
-  nextPageLabel?: string;
-  pagesAriaLabel?: string;
 }
 
-const DEFAULT_TABLE_FILTER_PLACEHOLDER = 'Filter rows';
-const DEFAULT_TABLE_RESULT_LABEL = 'result';
-const DEFAULT_TABLE_RESULTS_LABEL = 'results';
-const DEFAULT_TABLE_NO_DATA_LABEL = 'No data';
-const DEFAULT_TABLE_PAGE_OF_LABEL = (current: number, total: number) => `Page ${current} of ${total}`;
-const DEFAULT_TABLE_PREVIOUS_LABEL = 'Previous';
-const DEFAULT_TABLE_NEXT_LABEL = 'Next';
-const DEFAULT_TABLE_PAGES_ARIA_LABEL = 'Table pages';
-
 const DataTable = <T extends Record<string, unknown>>(props: Props<DataTableProps<T>>) => {
+  const { ts } = useI18n();
   const [sortKey, setSortKey] = createSignal<string | null>(null);
   const [sortDirection, setSortDirection] = createSignal<TabularSortDirection>('asc');
   const [currentPage, setCurrentPage] = createSignal(1);
@@ -91,17 +74,7 @@ const DataTable = <T extends Record<string, unknown>>(props: Props<DataTableProp
   });
 
   const totalPages = createMemo(() => Math.max(1, Math.ceil(sortedData().length / pageSize())));
-  const filterPlaceholder = createMemo(() => props.filterPlaceholder ?? DEFAULT_TABLE_FILTER_PLACEHOLDER);
-  const resultsCountLabel = createMemo(() =>
-    sortedData().length === 1
-      ? (props.resultLabel ?? DEFAULT_TABLE_RESULT_LABEL)
-      : (props.resultsLabel ?? DEFAULT_TABLE_RESULTS_LABEL)
-  );
-  const noDataLabel = createMemo(() => props.emptyMessage ?? props.noDataLabel ?? DEFAULT_TABLE_NO_DATA_LABEL);
-  const pageOfLabel = createMemo(() => props.pageOfLabel ?? DEFAULT_TABLE_PAGE_OF_LABEL);
-  const previousPageLabel = createMemo(() => props.previousPageLabel ?? DEFAULT_TABLE_PREVIOUS_LABEL);
-  const nextPageLabel = createMemo(() => props.nextPageLabel ?? DEFAULT_TABLE_NEXT_LABEL);
-  const pagesAriaLabel = createMemo(() => props.pagesAriaLabel ?? DEFAULT_TABLE_PAGES_ARIA_LABEL);
+  const resultsCountLabel = createMemo(() => (sortedData().length === 1 ? ts('table.result') : ts('table.results')));
 
   const paginatedData = createMemo(() => {
     const start = (currentPage() - 1) * pageSize();
@@ -138,10 +111,7 @@ const DataTable = <T extends Record<string, unknown>>(props: Props<DataTableProp
     props.onFilterQueryChange?.(next);
   };
 
-  createEffect(() => {
-    filterQuery();
-    setCurrentPage(1);
-  });
+  createEffect(on(filterQuery, () => setCurrentPage(1), { defer: true }));
 
   return (
     <div class={classNames(styles.wrapper, props.class)}>
@@ -151,10 +121,10 @@ const DataTable = <T extends Record<string, unknown>>(props: Props<DataTableProp
             type="search"
             value={filterQuery()}
             onInput={handleFilterInput}
-            placeholder={filterPlaceholder()}
+            placeholder={ts('table.filterRows')}
             class={styles.filterInput}
           />
-          <Show when={props.showResultsCount ?? true}>
+          <Show when={props.filterable}>
             <Text as="span" variant="caption" tone="muted">
               {sortedData().length} {resultsCountLabel()}
             </Text>
@@ -195,7 +165,7 @@ const DataTable = <T extends Record<string, unknown>>(props: Props<DataTableProp
             fallback={
               <TableRow>
                 <TableCell class={styles.empty} colSpan={props.columns.length}>
-                  {noDataLabel()}
+                  {ts('common.noData')}
                 </TableCell>
               </TableRow>
             }
@@ -219,16 +189,9 @@ const DataTable = <T extends Record<string, unknown>>(props: Props<DataTableProp
       <Show when={totalPages() > 1}>
         <div class={styles.pagination}>
           <Text as="span" variant="caption" tone="muted">
-            {pageOfLabel()(currentPage(), totalPages())}
+            {ts('table.pageOf', { current: currentPage(), total: totalPages() })}
           </Text>
-          <Pagination
-            page={currentPage()}
-            totalPages={totalPages()}
-            onChange={handlePageChange}
-            previousLabel={previousPageLabel()}
-            nextLabel={nextPageLabel()}
-            ariaLabel={pagesAriaLabel()}
-          />
+          <Pagination page={currentPage()} totalPages={totalPages()} onChange={handlePageChange} />
         </div>
       </Show>
     </div>

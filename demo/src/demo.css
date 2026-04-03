@@ -588,6 +588,34 @@ body {
   width: min(100%, 70rem);
 }
 
+.timelineCompositeDemo {
+  width: min(100%, 42rem);
+  display: grid;
+  gap: var(--spacing-md);
+}
+
+.chipsCasesGrid {
+  width: min(100%, 70rem);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-md);
+}
+
+.chipsCaseCard {
+  display: grid;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-bg-elevated);
+}
+
+@media (width < 768px) {
+  .chipsCasesGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .recronDemoSurface {
   padding: var(--spacing-lg);
   background: var(--color-bg-elevated);

@@ -29,7 +29,7 @@ interface TreeItemProps {
     e: KeyboardEvent,
     hasChildren: boolean,
     isExpanded: boolean,
-    parentId: string | null
+    parentId: string | null,
   ) => void;
   onToggle: (id: string) => void;
   onDragStart: (id: string, event: DragEvent) => void;
@@ -38,18 +38,17 @@ interface TreeItemProps {
   onDragLeave: () => void;
   onSelect?: (id: string) => void;
   toggleNodeLabel?: (label: string) => string;
-  loadingLabel?: string;
 }
 
 const TreeItem = (props: Props<TreeItemProps>) => {
-  const { t } = useI18n();
+  const { ts } = useI18n();
   const hasChildren = () => Boolean((props.node.children && props.node.children.length > 0) || props.node.hasChildren);
   const isExpanded = () => props.expanded.has(props.node.id);
   const isSelected = () => props.selectedId === props.node.id;
   const isChecked = () => props.checkedSet.has(props.node.id);
   const toggleLabel = () =>
-    props.toggleNodeLabel?.(props.node.label) ?? t('tree.toggleNode', { label: props.node.label });
-  const loadingLabel = () => props.loadingLabel ?? t('tree.loading');
+    props.toggleNodeLabel?.(props.node.label) ?? ts('tree.toggleNode', { label: props.node.label });
+  const loadingLabel = () => ts('tree.loading');
 
   const handleClick = () => {
     if (hasChildren()) {
@@ -93,7 +92,7 @@ const TreeItem = (props: Props<TreeItemProps>) => {
         class={classNames(
           styles.row,
           isSelected() && styles.selected,
-          props.dragOverId === props.node.id && styles.dragOver
+          props.dragOverId === props.node.id && styles.dragOver,
         )}
         role="treeitem"
         tabIndex={props.focusedId === props.node.id ? 0 : -1}
@@ -159,7 +158,6 @@ const TreeItem = (props: Props<TreeItemProps>) => {
                     onDragLeave={props.onDragLeave}
                     onSelect={props.onSelect}
                     toggleNodeLabel={props.toggleNodeLabel}
-                    loadingLabel={props.loadingLabel}
                   />
                 )}
               </For>

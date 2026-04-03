@@ -42,14 +42,6 @@
   min-width: 2.5em;
 }
 
-.mono {
-  font-family: var(--font-family-mono);
-}
-
-.code {
-  padding: var(--spacing-sm);
-}
-
 .codeBlock {
   border: none;
   border-radius: 0;

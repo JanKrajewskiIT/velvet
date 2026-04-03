@@ -24,10 +24,6 @@ interface TourProps {
   open: boolean;
   onClose: () => void;
   onComplete?: () => void;
-  nextLabel?: string;
-  prevLabel?: string;
-  finishLabel?: string;
-  skipLabel?: string;
 }
 
 const VIEWPORT_PADDING = 16;
@@ -37,7 +33,7 @@ const computeCardPosition = (
   rect: DOMRect,
   placement: 'top' | 'bottom' | 'left' | 'right',
   cardWidth: number,
-  cardHeight: number
+  cardHeight: number,
 ) => {
   switch (placement) {
     case 'top':
@@ -52,33 +48,18 @@ const computeCardPosition = (
 };
 
 const Tour = (props: Props<TourProps>) => {
-  const { t } = useI18n();
-  const [local, rest] = splitProps(props, [
-    'steps',
-    'open',
-    'onClose',
-    'onComplete',
-    'nextLabel',
-    'prevLabel',
-    'finishLabel',
-    'skipLabel',
-    'class',
-  ]);
+  const { ts } = useI18n();
+  const [local, rest] = splitProps(props, ['steps', 'open', 'onClose', 'onComplete', 'class']);
   const [currentStep, setCurrentStep] = createSignal(0);
   const [spotlightStyle, setSpotlightStyle] = createSignal<Record<string, string>>({});
   const [cardStyle, setCardStyle] = createSignal<Record<string, string>>({});
   let cardRef: HTMLDivElement | undefined;
-
-  const nextLabel = createMemo(() => local.nextLabel ?? t('common.next'));
-  const prevLabel = createMemo(() => local.prevLabel ?? t('common.back'));
-  const finishLabel = createMemo(() => local.finishLabel ?? t('common.finish'));
-  const skipLabel = createMemo(() => local.skipLabel ?? t('common.skip'));
   const currentStepData = createMemo(() => local.steps[currentStep()]);
   const isLastStep = createMemo(() => currentStep() === local.steps.length - 1);
 
   useEscapeKey(
     () => local.open,
-    () => local.onClose()
+    () => local.onClose(),
   );
 
   const updatePosition = () => {
@@ -168,7 +149,7 @@ const Tour = (props: Props<TourProps>) => {
             elevation="popover"
           >
             <Button variant="ghost" size="sm" class={styles.skip} onClick={handleSkip}>
-              {skipLabel()}
+              {ts('common.skip')}
             </Button>
             <Heading as="h3" variant="titleMd" class={styles.title}>
               {currentStepData()?.title}
@@ -183,11 +164,11 @@ const Tour = (props: Props<TourProps>) => {
               <div class={styles.actions}>
                 <Show when={currentStep() > 0}>
                   <Button variant="ghost" size="sm" onClick={handlePrev}>
-                    {prevLabel()}
+                    {ts('common.back')}
                   </Button>
                 </Show>
                 <Button variant="primary" size="sm" onClick={handleNext}>
-                  {isLastStep() ? finishLabel() : nextLabel()}
+                  {isLastStep() ? ts('common.finish') : ts('common.next')}
                 </Button>
               </div>
             </div>

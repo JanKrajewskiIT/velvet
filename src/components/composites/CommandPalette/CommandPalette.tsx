@@ -22,40 +22,15 @@ export interface CommandItem {
   onSelect: () => void;
 }
 
-interface CommandPaletteMessages {
-  closeHintLabel?: string;
-  navigateHintLabel?: string;
-  selectHintLabel?: string;
-  placeholder?: string;
-  dialogLabel?: string;
-  resultsLabel?: string;
-  emptyLabel?: string;
-}
-
 interface CommandPaletteProps {
   open: boolean;
   onClose: () => void;
   items: CommandItem[];
-  placeholder?: string;
-  dialogLabel?: string;
-  resultsLabel?: string;
-  emptyLabel?: string;
-  messages?: CommandPaletteMessages;
 }
 
 const CommandPalette = (props: Props<CommandPaletteProps>) => {
-  const { t } = useI18n();
-  const [local, rest] = splitProps(props, [
-    'open',
-    'onClose',
-    'items',
-    'placeholder',
-    'dialogLabel',
-    'resultsLabel',
-    'emptyLabel',
-    'messages',
-    'class',
-  ]);
+  const { ts } = useI18n();
+  const [local, rest] = splitProps(props, ['open', 'onClose', 'items', 'class']);
   const [query, setQuery] = createSignal('');
   const [activeIndex, setActiveIndex] = createSignal(-1);
   const [panelRef, setPanelRef] = createSignal<HTMLElement | undefined>();
@@ -63,7 +38,7 @@ const CommandPalette = (props: Props<CommandPaletteProps>) => {
 
   useEscapeKey(
     () => local.open,
-    () => local.onClose()
+    () => local.onClose(),
   );
 
   useFocusTrap(panelRef, () => local.open);
@@ -72,7 +47,7 @@ const CommandPalette = (props: Props<CommandPaletteProps>) => {
     const q = query().toLowerCase();
     if (!q) return local.items;
     return local.items.filter(
-      (item) => item.label.toLowerCase().includes(q) || (item.description?.toLowerCase().includes(q) ?? false)
+      (item) => item.label.toLowerCase().includes(q) || (item.description?.toLowerCase().includes(q) ?? false),
     );
   });
 
@@ -177,18 +152,6 @@ const CommandPalette = (props: Props<CommandPaletteProps>) => {
     }
   };
 
-  const placeholder = createMemo(
-    () => local.messages?.placeholder ?? local.placeholder ?? t('commandPalette.searchCommands')
-  );
-  const dialogLabel = createMemo(() => local.messages?.dialogLabel ?? local.dialogLabel ?? t('commandPalette.label'));
-  const resultsLabel = createMemo(
-    () => local.messages?.resultsLabel ?? local.resultsLabel ?? t('commandPalette.results')
-  );
-  const emptyLabel = createMemo(() => local.messages?.emptyLabel ?? local.emptyLabel ?? t('commandPalette.noResults'));
-  const navigateHintLabel = createMemo(() => local.messages?.navigateHintLabel ?? t('commandPalette.navigate'));
-  const selectHintLabel = createMemo(() => local.messages?.selectHintLabel ?? t('commandPalette.select'));
-  const closeHintLabel = createMemo(() => local.messages?.closeHintLabel ?? t('commandPalette.escToClose'));
-
   return (
     <Show when={local.open}>
       <Portal>
@@ -198,14 +161,14 @@ const CommandPalette = (props: Props<CommandPaletteProps>) => {
             class={styles.panel}
             role="dialog"
             aria-modal="true"
-            aria-label={dialogLabel()}
+            aria-label={ts('commandPalette.label')}
             elevation="dialog"
           >
             <div class={styles.searchWrap} role="search">
               <SearchInput
                 class={styles.searchInput}
                 size="lg"
-                placeholder={placeholder()}
+                placeholder={ts('commandPalette.searchCommands')}
                 value={query()}
                 onInput={setQuery}
                 onClear={() => setQuery('')}
@@ -213,12 +176,12 @@ const CommandPalette = (props: Props<CommandPaletteProps>) => {
                 autofocus
               />
             </div>
-            <div ref={resultsRef} class={styles.results} role="list" aria-label={resultsLabel()}>
+            <div ref={resultsRef} class={styles.results} role="list" aria-label={ts('commandPalette.results')}>
               <Show
                 when={filtered().length > 0}
                 fallback={
                   <Text as="p" variant="bodySm" tone="muted" class={styles.empty}>
-                    {emptyLabel()}
+                    {ts('commandPalette.noResults')}
                   </Text>
                 }
               >
@@ -238,7 +201,7 @@ const CommandPalette = (props: Props<CommandPaletteProps>) => {
                             size="sm"
                             class={classNames(
                               styles.resultItem,
-                              activeIndex() === item.flatIndex && styles.resultItemActive
+                              activeIndex() === item.flatIndex && styles.resultItemActive,
                             )}
                             data-command-index={String(item.flatIndex)}
                             onClick={() => handleItemClick(item)}
@@ -265,13 +228,13 @@ const CommandPalette = (props: Props<CommandPaletteProps>) => {
             </div>
             <div class={styles.footer}>
               <Text as="span" variant="caption" tone="muted">
-                {navigateHintLabel()}
+                {ts('commandPalette.navigate')}
               </Text>
               <Text as="span" variant="caption" tone="muted">
-                {selectHintLabel()}
+                {ts('commandPalette.select')}
               </Text>
               <Text as="span" variant="caption" tone="muted">
-                {closeHintLabel()}
+                {ts('commandPalette.escToClose')}
               </Text>
             </div>
           </Surface>

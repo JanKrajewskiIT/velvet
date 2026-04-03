@@ -49,7 +49,7 @@ export const collectTreeNodeIds = (nodes: readonly TreeNode[]): Set<string> => {
 
 export const removeTreeNodeById = (
   nodes: readonly TreeNode[],
-  id: string
+  id: string,
 ): { nodes: TreeNode[]; removed: TreeNode | null } => {
   let removed: TreeNode | null = null;
   const next = nodes
@@ -83,7 +83,7 @@ export const insertTreeNodeAsChild = (nodes: readonly TreeNode[], targetId: stri
 export const updateTreeNodeChildren = (
   nodes: readonly TreeNode[],
   targetId: string,
-  children: TreeNode[]
+  children: TreeNode[],
 ): TreeNode[] =>
   nodes.map((node) => {
     if (node.id === targetId) {

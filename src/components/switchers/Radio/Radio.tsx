@@ -22,6 +22,11 @@ interface RadioGroupOwnProps<T extends string> extends Omit<DivCoreNativeProps, 
   direction?: 'row' | 'column';
 }
 
+const directionClassByValue: Record<NonNullable<RadioGroupOwnProps<string>['direction']>, string | undefined> = {
+  row: styles.row,
+  column: styles.column,
+};
+
 const RadioGroup = <T extends string>(props: Props<RadioGroupOwnProps<T>>) => {
   const generatedName = createUniqueId();
   const [local, rest] = splitProps(props, ['name', 'value', 'options', 'onChange', 'direction', 'class']);
@@ -29,7 +34,11 @@ const RadioGroup = <T extends string>(props: Props<RadioGroupOwnProps<T>>) => {
   const groupName = () => local.name || generatedName;
 
   return (
-    <div {...rest} class={classNames(styles.group, styles[local.direction ?? 'column'], local.class)} role="radiogroup">
+    <div
+      {...rest}
+      class={classNames(styles.group, directionClassByValue[local.direction ?? 'column'], local.class)}
+      role="radiogroup"
+    >
       <For each={local.options}>
         {(option, index) => {
           const optionId = () => `${groupName()}-${index()}`;
@@ -43,9 +52,6 @@ const RadioGroup = <T extends string>(props: Props<RadioGroupOwnProps<T>>) => {
               checked={local.value === option.value}
               disabled={option.disabled}
               onChange={() => local.onChange(option.value)}
-              controlClass={styles.control}
-              inputClass={styles.input}
-              indicatorClass={styles.indicator}
               label={option.label}
               description={option.description}
             />

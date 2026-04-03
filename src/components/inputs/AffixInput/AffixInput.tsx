@@ -4,7 +4,6 @@ import { splitProps } from 'solid-js';
 import type Props from '~/models/Props';
 import type { ComponentSize, InputCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
-import getInputSizeClass from '~/utils/getInputSizeClass';
 
 import FieldBase from '../FieldBase/FieldBase';
 import Input from '../Input/Input';
@@ -23,7 +22,7 @@ interface AffixInputOwnProps extends InputCoreNativeProps {
 const AffixInput = (props: Props<AffixInputOwnProps>) => {
   const [local, rest] = splitProps(props, ['class', 'inputClass', 'size', 'invalid', 'readOnly', 'prefix', 'suffix']);
 
-  const affixSizeClass = () => getInputSizeClass(styles, local.size);
+  const affixSizeClass = () => (local.size === 'lg' ? styles.sizeLg : undefined);
 
   const hasPrefix = () => local.prefix !== undefined && local.prefix !== null;
   const hasSuffix = () => local.suffix !== undefined && local.suffix !== null;
@@ -41,7 +40,7 @@ const AffixInput = (props: Props<AffixInputOwnProps>) => {
         affixSizeClass(),
         hasPrefix() && styles.hasPrefix,
         hasSuffix() && styles.hasSuffix,
-        local.class
+        local.class,
       )}
     >
       {hasPrefix() && <span class={styles.prefix}>{local.prefix}</span>}

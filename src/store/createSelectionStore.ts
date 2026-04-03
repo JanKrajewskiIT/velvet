@@ -1,33 +1,35 @@
 import { type Accessor, createMemo, createSignal } from 'solid-js';
 
-export interface SelectionStore {
-  selectedId: Accessor<string | null>;
+export interface SelectionStore<TId = string, TSort = string> {
+  selectedId: Accessor<TId | null>;
   filter: Accessor<string>;
-  sortBy: Accessor<string | null>;
+  sortBy: Accessor<TSort | null>;
   hasSelection: Accessor<boolean>;
-  setSelectedId: (id: string | null) => void;
+  setSelectedId: (id: TId | null) => void;
   setFilter: (value: string) => void;
-  setSortBy: (value: string | null) => void;
+  setSortBy: (value: TSort | null) => void;
   clear: () => void;
 }
 
-export interface CreateSelectionStoreOptions {
-  initialSelectedId?: string | null;
+export interface CreateSelectionStoreOptions<TId = string, TSort = string> {
+  initialSelectedId?: TId | null;
   initialFilter?: string;
-  initialSortBy?: string | null;
+  initialSortBy?: TSort | null;
 }
 
-export function createSelectionStore(options: CreateSelectionStoreOptions = {}): SelectionStore {
-  const [selectedId, setSelectedId] = createSignal<string | null>(options.initialSelectedId ?? null);
+export const createSelectionStore = <TId = string, TSort = string>(
+  options: CreateSelectionStoreOptions<TId, TSort> = {},
+): SelectionStore<TId, TSort> => {
+  const [selectedId, setSelectedId] = createSignal<TId | null>((options.initialSelectedId ?? null) as TId | null);
   const [filter, setFilter] = createSignal(options.initialFilter ?? '');
-  const [sortBy, setSortBy] = createSignal<string | null>(options.initialSortBy ?? null);
+  const [sortBy, setSortBy] = createSignal<TSort | null>((options.initialSortBy ?? null) as TSort | null);
 
   const hasSelection = createMemo(() => selectedId() !== null);
 
   const clear = () => {
-    setSelectedId(null);
+    setSelectedId(() => null);
     setFilter('');
-    setSortBy(null);
+    setSortBy(() => null);
   };
 
   return {
@@ -40,4 +42,4 @@ export function createSelectionStore(options: CreateSelectionStoreOptions = {}):
     setSortBy,
     clear,
   };
-}
+};

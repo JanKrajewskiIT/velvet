@@ -28,7 +28,7 @@ const TabButton = (props: Props<TabButtonOwnProps>) => {
         visualVariant() === 'underline' && styles.button,
         visualVariant() === 'underline' && local.selected && styles.selected,
         visualVariant() === 'pill' && local.selected && styles.pillSelected,
-        local.class
+        local.class,
       )}
     >
       <Show when={typeof local.label === 'string'} fallback={local.label}>

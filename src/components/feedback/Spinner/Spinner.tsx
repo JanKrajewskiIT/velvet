@@ -11,11 +11,17 @@ interface SpinnerProps {
   label?: string;
 }
 
+const sizeClassByValue: Record<NonNullable<SpinnerProps['size']>, string | undefined> = {
+  sm: styles.sm,
+  md: styles.md,
+  lg: styles.lg,
+};
+
 const Spinner = (props: Props<SpinnerProps>) => {
-  const { t } = useI18n();
+  const { ts } = useI18n();
   const [local, rest] = splitProps(props, ['class', 'size', 'label']);
-  const ariaLabel = createMemo(() => local.label ?? t('spinner.loading'));
-  const sizeClass = createMemo(() => styles[local.size ?? 'lg']);
+  const ariaLabel = createMemo(() => local.label ?? ts('spinner.loading'));
+  const sizeClass = createMemo(() => sizeClassByValue[local.size ?? 'lg']);
 
   return (
     <div

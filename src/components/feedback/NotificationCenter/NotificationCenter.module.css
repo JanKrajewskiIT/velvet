@@ -57,6 +57,11 @@
 
 .itemMain:hover,
 .itemMain:focus-visible {
+  background: transparent;
+}
+
+.item:hover,
+.item:focus-within {
   background: color-mix(in srgb, var(--color-bg-hover) 70%, transparent);
 }
 
@@ -109,6 +114,15 @@
 .itemActions {
   padding: var(--spacing-xs);
   padding-left: 0;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  transition: background-color var(--transition-fast);
+}
+
+.itemMain:hover + .itemActions,
+.itemMain:focus-visible + .itemActions,
+.itemActions:hover,
+.item:focus-within .itemActions {
+  background: transparent;
 }
 
 .empty {

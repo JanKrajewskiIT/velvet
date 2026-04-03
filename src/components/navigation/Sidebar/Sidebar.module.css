@@ -51,15 +51,6 @@
   padding: var(--spacing-sm);
 }
 
-.badge {
-  margin-left: 0;
-}
-
-.collapsedItem {
-  justify-content: center;
-  padding-left: 0 !important;
-}
-
 .emptyState {
   margin: var(--spacing-sm) 0 0;
   padding: var(--spacing-sm);

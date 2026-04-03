@@ -8,7 +8,6 @@ import classNames from '~/utils/classNames';
 
 import DropdownChevronFieldTrigger from '../Dropdown/DropdownChevronFieldTrigger/DropdownChevronFieldTrigger';
 import DropdownOption from '../Dropdown/DropdownOption/DropdownOption';
-import dropdownOptionStyles from '../Dropdown/DropdownOption/DropdownOption.module.css';
 import DropdownSurface from '../Dropdown/DropdownSurface/DropdownSurface';
 import styles from './Select.module.css';
 
@@ -71,8 +70,8 @@ const Select = (props: Props<SelectOwnProps>) => {
         if (!hasCurrent) {
           setInternalValue(local.options[0]?.value ?? '');
         }
-      }
-    )
+      },
+    ),
   );
 
   const currentValue = createMemo(() => {
@@ -197,7 +196,6 @@ const Select = (props: Props<SelectOwnProps>) => {
           <For each={local.options}>
             {(option) => (
               <DropdownOption
-                class={classNames(dropdownOptionStyles.item, option.disabled && dropdownOptionStyles.itemDisabled)}
                 selected={option.value === selectedOption()?.value}
                 label={option.label}
                 role="option"

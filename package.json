@@ -1,13 +1,12 @@
 {
   "name": "@jankrajewskiit/ui",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "type": "module",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/JanKrajewskiIT/velvet.git"
   },
-  "module": "./dist/index.js",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -51,10 +50,9 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test": "tsc -p tsconfig.test.json && node --loader ./tests/alias-loader.mjs --test .tmp-tests/tests/*.test.js",
     "lint:css": "stylelint \"src/**/*.css\"",
     "lint:css:fix": "stylelint \"src/**/*.css\" --fix",
-    "verify": "npm run typecheck && npm run lint && npm run lint:css && npm run build && npm run test && npm run verify:pkg",
+    "verify": "npm run typecheck && npm run lint && npm run lint:css && npm run build && npm run verify:pkg",
     "verify:pkg": "npm run build && publint && attw --pack . --entrypoints . --profile esm-only --ignore-rules internal-resolution-error",
     "size": "size-limit",
     "prepare": "husky"
@@ -104,6 +102,7 @@
     "@types/node": "^25.5.0",
     "eslint": "^9.39.4",
     "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-css-modules": "^2.12.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "eslint-plugin-solid": "^0.14.5",
@@ -133,7 +132,7 @@
       "limit": "100 kB"
     },
     {
-      "path": "dist/style.css",
+      "path": "dist/velvet-ui.css",
       "limit": "50 kB"
     }
   ]

@@ -15,10 +15,6 @@ import classNames from '~/utils/classNames';
 
 import styles from './Alert.module.css';
 
-interface AlertMessages {
-  closeButtonLabel?: string;
-}
-
 interface AlertProps extends DivCoreNativeProps {
   variant: 'info' | 'success' | 'warning' | 'error' | 'danger' | 'tip';
   label?: string;
@@ -26,8 +22,6 @@ interface AlertProps extends DivCoreNativeProps {
   children?: never;
   onClose?: () => void;
   icon?: JSX.Element | IconTypes;
-  closeLabel?: string;
-  messages?: AlertMessages;
 }
 
 const defaultIcons: Record<AlertProps['variant'], IconTypes> = {
@@ -39,6 +33,14 @@ const defaultIcons: Record<AlertProps['variant'], IconTypes> = {
   tip: IoFlash,
 };
 
+const variantClassByValue: Record<Exclude<AlertProps['variant'], 'danger'> | 'error', string | undefined> = {
+  info: styles.info,
+  success: styles.success,
+  warning: styles.warning,
+  error: styles.error,
+  tip: styles.tip,
+};
+
 const renderAlertIcon = (icon: JSX.Element | IconTypes): JSX.Element => {
   if (typeof icon === 'function') {
     return <Icon icon={icon} />;
@@ -48,21 +50,12 @@ const renderAlertIcon = (icon: JSX.Element | IconTypes): JSX.Element => {
 };
 
 const Alert = (props: Props<AlertProps>) => {
-  const { t } = useI18n();
-  const [local, rest] = splitProps(props, [
-    'class',
-    'variant',
-    'label',
-    'message',
-    'onClose',
-    'icon',
-    'closeLabel',
-    'messages',
-  ]);
+  const { ts } = useI18n();
+  const [local, rest] = splitProps(props, ['class', 'variant', 'label', 'message', 'onClose', 'icon']);
   const icon = createMemo(() => local.icon ?? defaultIcons[local.variant]);
   const visualVariant = createMemo(() => (local.variant === 'danger' ? 'error' : local.variant));
   const renderedIcon = createMemo(() => renderAlertIcon(icon()));
-  const closeButtonLabel = createMemo(() => local.messages?.closeButtonLabel ?? local.closeLabel ?? t('alert.close'));
+  const closeButtonLabel = createMemo(() => ts('alert.close'));
 
   return (
     <Stack
@@ -71,7 +64,7 @@ const Alert = (props: Props<AlertProps>) => {
       align="start"
       gap="md"
       role={rest.role ?? 'alert'}
-      class={classNames(styles.alert, styles[visualVariant()], local.class)}
+      class={classNames(styles.alert, variantClassByValue[visualVariant()], local.class)}
     >
       <div class={styles.icon}>{renderedIcon()}</div>
       <Stack gap="2xs" class={styles.content}>

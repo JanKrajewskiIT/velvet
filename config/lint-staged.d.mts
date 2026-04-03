@@ -1,6 +1,7 @@
 export interface CreateLintStagedConfigOptions {
   eslintTarget?: string;
   prettierTarget?: string;
+  stylelintTarget?: string;
 }
 
 export type LintStagedConfig = Record<string, string[]>;

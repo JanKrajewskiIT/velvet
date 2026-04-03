@@ -14,10 +14,6 @@ interface PaginationOwnProps extends Omit<HTMLElementCoreNativeProps, 'onChange'
   page: number;
   totalPages: number;
   onChange: (page: number) => void;
-  previousLabel?: string;
-  nextLabel?: string;
-  maxVisible?: number;
-  ariaLabel?: string;
 }
 
 const buildPageItems = (page: number, totalPages: number, maxVisible: number): PageItem[] => {
@@ -48,26 +44,14 @@ const buildPageItems = (page: number, totalPages: number, maxVisible: number): P
 };
 
 const Pagination = (props: Props<PaginationOwnProps>) => {
-  const { t } = useI18n();
-  const [local, rest] = splitProps(props, [
-    'page',
-    'totalPages',
-    'onChange',
-    'previousLabel',
-    'nextLabel',
-    'maxVisible',
-    'ariaLabel',
-    'class',
-  ]);
+  const { ts } = useI18n();
+  const [local, rest] = splitProps(props, ['page', 'totalPages', 'onChange', 'class']);
 
   const current = createMemo(() => Math.min(Math.max(local.page, 1), local.totalPages));
-  const pages = createMemo(() => buildPageItems(current(), local.totalPages, local.maxVisible ?? 7));
-  const ariaLabel = createMemo(() => local.ariaLabel ?? t('common.pagination'));
-  const previousLabel = createMemo(() => local.previousLabel ?? t('common.previous'));
-  const nextLabel = createMemo(() => local.nextLabel ?? t('common.next'));
+  const pages = createMemo(() => buildPageItems(current(), local.totalPages, 7));
 
   return (
-    <nav {...rest} class={classNames(styles.nav, local.class)} aria-label={ariaLabel()}>
+    <nav {...rest} class={classNames(styles.nav, local.class)} aria-label={ts('common.pagination')}>
       <Button
         variant="ghost"
         size="sm"
@@ -75,7 +59,7 @@ const Pagination = (props: Props<PaginationOwnProps>) => {
         disabled={current() <= 1}
         onClick={() => local.onChange(current() - 1)}
       >
-        {previousLabel()}
+        {ts('common.previous')}
       </Button>
 
       <div class={styles.pages}>
@@ -109,7 +93,7 @@ const Pagination = (props: Props<PaginationOwnProps>) => {
         disabled={current() >= local.totalPages}
         onClick={() => local.onChange(current() + 1)}
       >
-        {nextLabel()}
+        {ts('common.next')}
       </Button>
     </nav>
   );

@@ -48,7 +48,7 @@ export const buildSchedulerEventsByDate = (events: readonly SchedulerEvent[]) =>
 export const saveSchedulerEventEdit = (
   events: readonly SchedulerEvent[],
   eventId: string,
-  draft: SchedulerEventEditDraft
+  draft: SchedulerEventEditDraft,
 ): SchedulerEvent[] => {
   const source = events.find((item) => item.id === eventId);
   if (!source) return [...events];
@@ -67,7 +67,7 @@ export const saveSchedulerEventEdit = (
           endDate: nextEndDate,
           description: draft.description || undefined,
         }
-      : item
+      : item,
   );
 };
 
@@ -77,7 +77,7 @@ export const deleteSchedulerEvent = (events: readonly SchedulerEvent[], eventId:
 export const moveSchedulerEvent = (
   events: readonly SchedulerEvent[],
   eventId: string,
-  targetDate: string
+  targetDate: string,
 ): SchedulerEvent[] => {
   const event = events.find((item) => item.id === eventId);
   if (!event || event.date === targetDate) return [...events];
@@ -92,14 +92,14 @@ export const moveSchedulerEvent = (
           date: targetDate,
           endDate: nextEndDate,
         }
-      : item
+      : item,
   );
 };
 
 export const resizeSchedulerEventEnd = (
   events: readonly SchedulerEvent[],
   eventId: string,
-  targetDate: string
+  targetDate: string,
 ): SchedulerEvent[] => {
   const event = events.find((item) => item.id === eventId);
   if (!event) return [...events];
@@ -112,7 +112,7 @@ export const resizeSchedulerEventEnd = (
           ...item,
           endDate: nextEndDate === item.date ? undefined : nextEndDate,
         }
-      : item
+      : item,
   );
 };
 

@@ -20,6 +20,16 @@ interface ChipProps {
   children?: never;
 }
 
+const variantClassByValue: Record<NonNullable<ChipProps['variant']>, string | undefined> = {
+  info: styles.info,
+  warning: styles.warning,
+  success: styles.success,
+  error: styles.error,
+  primary: styles.primary,
+  primaryOutline: styles.primaryOutline,
+  subtle: styles.subtle,
+};
+
 const Chip = (props: Props<ChipProps>) => {
   const usesCustomColor = createMemo(() => Boolean(props.color));
   const isColorFilled = createMemo(() => Boolean(props.color && (props.selected || props.filled)));
@@ -28,13 +38,13 @@ const Chip = (props: Props<ChipProps>) => {
     classNames(
       styles.chip,
       usesCustomColor() && styles.customColor,
-      !usesCustomColor() && styles[props.variant ?? 'primary'],
+      !usesCustomColor() && variantClassByValue[props.variant ?? 'primary'],
       props.size === 'sm' && styles.sm,
       props.selected && styles.selected,
       props.filled && styles.filled,
       props.onClick && styles.interactive,
-      props.class
-    )
+      props.class,
+    ),
   );
 
   const inlineStyles = createMemo(() => {

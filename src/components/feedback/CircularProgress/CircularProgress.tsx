@@ -16,6 +16,19 @@ interface CircularProgressProps {
 
 const SIZE_MAP = { sm: 32, md: 48, lg: 64 } as const;
 
+const sizeClassByValue: Record<NonNullable<CircularProgressProps['size']>, string | undefined> = {
+  sm: styles.sm,
+  md: styles.md,
+  lg: styles.lg,
+};
+
+const variantClassByValue: Record<NonNullable<CircularProgressProps['variant']>, string | undefined> = {
+  primary: styles.primary,
+  success: styles.success,
+  warning: styles.warning,
+  error: styles.error,
+};
+
 const CircularProgress = (props: Props<CircularProgressProps>) => {
   const size = () => props.size ?? 'md';
   const variant = () => props.variant ?? 'primary';
@@ -31,11 +44,12 @@ const CircularProgress = (props: Props<CircularProgressProps>) => {
 
   const viewBox = () => `0 0 ${dimension()} ${dimension()}`;
 
-  const wrapperClass = () => classNames(styles.wrapper, styles[size()], props.class);
+  const wrapperClass = () => classNames(styles.wrapper, sizeClassByValue[size()], props.class);
 
   const svgClass = () => classNames(styles.svg, !isDeterminate() && styles.indeterminate);
 
-  const barClass = () => classNames(styles.bar, styles[variant()], !isDeterminate() && styles.indeterminateBar);
+  const barClass = () =>
+    classNames(styles.bar, variantClassByValue[variant()], !isDeterminate() && styles.indeterminateBar);
 
   return (
     <div

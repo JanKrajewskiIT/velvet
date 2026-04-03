@@ -17,17 +17,25 @@ interface StepperProps {
   activeStep: string;
 }
 
+type StepState = 'completed' | 'active' | 'pending';
+
+const stepStateClassByValue: Record<StepState, string | undefined> = {
+  completed: styles.completed,
+  active: styles.active,
+  pending: undefined,
+};
+
 const Stepper = (props: Props<StepperProps>) => {
   const activeIndex = () => props.steps.findIndex((s) => s.value === props.activeStep);
 
-  const getStepState = (index: number) => {
+  const getStepState = (index: number): StepState => {
     const current = activeIndex();
     if (index < current) return 'completed';
     if (index === current) return 'active';
     return 'pending';
   };
 
-  const stepStateClass = (index: number) => styles[getStepState(index)] ?? '';
+  const stepStateClass = (index: number) => stepStateClassByValue[getStepState(index)] ?? '';
   const isStepCompleted = (index: number) => getStepState(index) === 'completed';
   const isConnectorCompleted = (index: number) => getStepState(index) !== 'pending';
 

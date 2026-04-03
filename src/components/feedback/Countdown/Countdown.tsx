@@ -13,6 +13,12 @@ interface CountdownProps {
   size?: 'sm' | 'md' | 'lg';
 }
 
+const sizeClassByValue: Record<NonNullable<CountdownProps['size']>, string | undefined> = {
+  sm: styles.sm,
+  md: styles.md,
+  lg: styles.lg,
+};
+
 const pad = (n: number) => String(n).padStart(2, '0');
 
 const formatTime = (totalSeconds: number, format: 'hh:mm:ss' | 'mm:ss' | 'ss'): string[] => {
@@ -55,7 +61,7 @@ const Countdown = (props: Props<CountdownProps>) => {
   const isUrgent = () => remaining() > 0 && remaining() < 10;
 
   return (
-    <div class={classNames(styles.countdown, styles[size()], isUrgent() && styles.urgent, props.class)}>
+    <div class={classNames(styles.countdown, sizeClassByValue[size()], isUrgent() && styles.urgent, props.class)}>
       <For each={segments()}>
         {(segment, index) => (
           <>

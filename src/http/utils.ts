@@ -1,6 +1,6 @@
 import type { HttpRequestOptions } from '~/http/types';
 
-export function buildUrl(baseUrl: string, path: string, query?: HttpRequestOptions['query']): string {
+export const buildUrl = (baseUrl: string, path: string, query?: HttpRequestOptions['query']): string => {
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;
   const base = baseUrl.replace(/\/+$/u, '');
   const isAbsoluteBase = /^https?:\/\//u.test(base);
@@ -32,12 +32,14 @@ export function buildUrl(baseUrl: string, path: string, query?: HttpRequestOptio
   }
 
   return `${base}${url.pathname}${url.search}`;
-}
+};
 
-export function resolveRequestBody(body: HttpRequestOptions['body']): {
+export const resolveRequestBody = (
+  body: HttpRequestOptions['body'],
+): {
   body: BodyInit | undefined;
   contentType?: string;
-} {
+} => {
   if (body === undefined || body === null) {
     return { body: undefined };
   }
@@ -50,9 +52,9 @@ export function resolveRequestBody(body: HttpRequestOptions['body']): {
     body: JSON.stringify(body),
     contentType: 'application/json',
   };
-}
+};
 
-export async function parseResponseBody(response: Response): Promise<unknown> {
+export const parseResponseBody = async (response: Response): Promise<unknown> => {
   if (response.status === 204) {
     return undefined;
   }
@@ -63,4 +65,4 @@ export async function parseResponseBody(response: Response): Promise<unknown> {
   }
 
   return response.text();
-}
+};

@@ -15,20 +15,22 @@ export interface CreateApiClientsOptions<TClients extends Record<string, string>
   clients?: TClients;
 }
 
-function resolveApiBase(baseUrl: string, path: string): string {
+const resolveApiBase = (baseUrl: string, path: string): string => {
   const normalizedBase = baseUrl.replace(/\/+$/u, '');
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;
   return `${normalizedBase}${normalizedPath}`;
-}
+};
 
-export function createApiClients<TClients extends Record<string, string> = DefaultApiClientMap>(
-  options: CreateApiClientsOptions<TClients>
-): HttpClientMap<TClients> {
+export const createApiClients = <TClients extends Record<string, string> = DefaultApiClientMap>(
+  options: CreateApiClientsOptions<TClients>,
+): HttpClientMap<TClients> => {
   const sharedConfig: Omit<HttpClientConfig, 'baseUrl'> = {
     headers: options.headers,
     fetch: options.fetch,
     getAccessToken: options.getAccessToken,
     onUnauthorized: options.onUnauthorized,
+    requestInterceptors: options.requestInterceptors,
+    responseInterceptors: options.responseInterceptors,
   };
 
   const clients = {} as HttpClientMap<TClients>;
@@ -43,4 +45,4 @@ export function createApiClients<TClients extends Record<string, string> = Defau
   });
 
   return clients;
-}
+};

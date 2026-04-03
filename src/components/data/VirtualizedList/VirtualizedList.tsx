@@ -17,7 +17,7 @@ interface VirtualizedListOwnProps<T> extends Omit<DivCoreNativeProps, 'children'
 }
 
 const VirtualizedList = <T,>(props: Props<VirtualizedListOwnProps<T>>) => {
-  const { t } = useI18n();
+  const { ts } = useI18n();
   const [local, rest] = splitProps(props, [
     'items',
     'itemHeight',
@@ -38,7 +38,7 @@ const VirtualizedList = <T,>(props: Props<VirtualizedListOwnProps<T>>) => {
     local.items.slice(startIndex(), endIndex()).map((item, offset) => ({
       item,
       index: startIndex() + offset,
-    }))
+    })),
   );
 
   const totalHeight = createMemo(() => local.items.length * local.itemHeight);
@@ -61,7 +61,7 @@ const VirtualizedList = <T,>(props: Props<VirtualizedListOwnProps<T>>) => {
     >
       <Show
         when={local.items.length > 0}
-        fallback={<div class={styles.empty}>{local.emptyState ?? t('common.noItems')}</div>}
+        fallback={<div class={styles.empty}>{local.emptyState ?? ts('common.noItems')}</div>}
       >
         <div class={styles.spacer} style={spacerStyle()}>
           <div class={styles.inner} style={innerStyle()}>

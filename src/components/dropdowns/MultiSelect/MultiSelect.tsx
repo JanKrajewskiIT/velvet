@@ -25,23 +25,17 @@ interface MultiSelectOwnProps extends AriaFieldProps {
   options: MultiSelectOption[];
   onChange: (next: string[]) => void;
   name?: string;
-  placeholder?: string;
-  emptyLabel?: string;
-  removeLabel?: string;
   disabled?: boolean;
   size?: ComponentSize;
 }
 
 const MultiSelect = (props: Props<MultiSelectOwnProps>) => {
-  const { t } = useI18n();
+  const { ts } = useI18n();
   const [local, rest] = splitProps(props, [
     'value',
     'options',
     'onChange',
     'name',
-    'placeholder',
-    'emptyLabel',
-    'removeLabel',
     'disabled',
     'size',
     'id',
@@ -76,12 +70,10 @@ const MultiSelect = (props: Props<MultiSelectOwnProps>) => {
   const selectedLabels = createMemo(() =>
     selectedOptions()
       .map((option) => option.label)
-      .join(', ')
+      .join(', '),
   );
-  const triggerLabel = createMemo(() =>
-    local.value.length > 0 ? selectedLabels() : (local.placeholder ?? t('multiselect.selectOptions'))
-  );
-  const emptyLabel = createMemo(() => local.emptyLabel ?? t('common.noOptions'));
+  const triggerLabel = createMemo(() => (local.value.length > 0 ? selectedLabels() : ts('multiselect.selectOptions')));
+  const emptyLabel = createMemo(() => ts('common.noOptions'));
   const labelledBy = createMemo(() => joinAriaIds(local['aria-labelledby'], triggerLabelId));
 
   const isSelected = (value: string) => local.value.includes(value);
@@ -192,12 +184,7 @@ const MultiSelect = (props: Props<MultiSelectOwnProps>) => {
         <div class={styles.selected} aria-live="polite">
           <For each={selectedOptions()}>
             {(option) => (
-              <ClosableChip
-                label={option.label}
-                removeLabel={local.removeLabel ? `${local.removeLabel} ${option.label}` : undefined}
-                disabled={local.disabled}
-                onRemove={() => removeValue(option.value)}
-              />
+              <ClosableChip label={option.label} disabled={local.disabled} onRemove={() => removeValue(option.value)} />
             )}
           </For>
         </div>

@@ -16,7 +16,7 @@ interface TextAreaOwnProps extends TextAreaCoreNativeProps {
 const TextArea = (props: Props<TextAreaOwnProps>) => {
   const [local, rest] = splitProps(props, ['class', 'size', 'invalid', 'readOnly', 'disabled', 'aria-invalid']);
   const ariaInvalid = createMemo(() =>
-    resolveAriaInvalid(local.invalid, local['aria-invalid'] as boolean | 'true' | 'false' | undefined)
+    resolveAriaInvalid(local.invalid, local['aria-invalid'] as boolean | 'true' | 'false' | undefined),
   );
 
   return (

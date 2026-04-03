@@ -14,7 +14,6 @@ export interface ConfirmActionProps {
   label: string;
   message: string;
   confirmLabel: string;
-  cancelLabel: string;
   variant?: 'primary' | 'danger';
   onConfirm: () => void | Promise<void>;
   onClose?: () => void;
@@ -50,7 +49,6 @@ const ConfirmAction = (props: Props<ConfirmActionProps>) => {
         label={props.label}
         message={props.message}
         confirmLabel={props.confirmLabel}
-        cancelLabel={props.cancelLabel}
         variant={props.variant}
         onConfirm={handleConfirm}
         onClose={closeConfirm}

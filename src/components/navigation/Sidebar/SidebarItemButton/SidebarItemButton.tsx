@@ -48,7 +48,6 @@ const SidebarItemButton = (props: Props<SidebarItemButtonOwnProps>) => {
           suffix={resolvedSuffix()}
           class={classNames(styles.itemButton, props.class)}
           bodyClass={styles.label}
-          suffixClass={styles.expandIcon}
           style={props.style}
           onClick={() => props.onClick?.()}
         />

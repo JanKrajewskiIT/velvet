@@ -23,7 +23,7 @@ const DataCard = (props: Props<DataCardOwnProps>) => {
     return styles.elevated;
   });
   const cardClass = createMemo(() =>
-    classNames(styles.card, variantClass(), local.hoverable && styles.hoverable, local.class)
+    classNames(styles.card, variantClass(), local.hoverable && styles.hoverable, local.class),
   );
 
   return (

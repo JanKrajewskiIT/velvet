@@ -1,5 +1,5 @@
 import { IoClose, IoSearch } from 'solid-icons/io';
-import { createMemo, type JSX, onCleanup, Show, splitProps } from 'solid-js';
+import { type JSX, onCleanup, Show, splitProps } from 'solid-js';
 
 import Icon from '~/components/media/Icon/Icon';
 import { useI18n } from '~/i18n/I18nProvider';
@@ -10,50 +10,28 @@ import IconButton from '../../buttons/IconButton/IconButton';
 import AffixInput from '../AffixInput/AffixInput';
 import styles from './SearchInput.module.css';
 
-interface SearchInputMessages {
-  searchPlaceholder?: string;
-  placeholder?: string;
-  clearButtonLabel?: string;
-}
-
 interface SearchInputProps extends Omit<InputCoreNativeProps, 'value' | 'onInput'> {
   value: string;
   onInput: (value: string) => void;
   onClear?: () => void;
   debounce?: number;
-  clearLabel?: string;
   size?: ComponentSize;
-  inputAriaLabel?: string;
-  messages?: SearchInputMessages;
 }
 
 const SearchInput = (props: Props<SearchInputProps>) => {
-  const { t } = useI18n();
+  const { ts } = useI18n();
   const [local, rest] = splitProps(props, [
     'value',
     'onInput',
     'onClear',
-    'placeholder',
     'debounce',
     'disabled',
     'autofocus',
-    'clearLabel',
     'size',
-    'inputAriaLabel',
-    'messages',
     'onKeyDown',
     'class',
   ]);
   let debounceTimer: ReturnType<typeof setTimeout> | undefined;
-
-  const placeholderText = createMemo(
-    () =>
-      local.messages?.searchPlaceholder ??
-      local.messages?.placeholder ??
-      local.placeholder ??
-      t('common.searchEllipsis')
-  );
-  const clearButtonLabel = createMemo(() => local.messages?.clearButtonLabel ?? local.clearLabel ?? t('search.clear'));
 
   const fireInput = (value: string) => {
     if (local.debounce && local.debounce > 0) {
@@ -95,14 +73,14 @@ const SearchInput = (props: Props<SearchInputProps>) => {
       value={local.value}
       onInput={handleInput}
       onKeyDown={handleKeyDown}
-      aria-label={local.inputAriaLabel}
-      placeholder={placeholderText()}
+      aria-label={ts('common.search')}
+      placeholder={ts('common.searchEllipsis')}
       disabled={local.disabled}
       autofocus={local.autofocus}
       prefix={<Icon icon={IoSearch} class={styles.icon} />}
       suffix={
         <Show when={local.value.length > 0}>
-          <IconButton icon={IoClose} label={clearButtonLabel()} onClick={handleClear} size="sm" variant="subtle" />
+          <IconButton icon={IoClose} label={ts('search.clear')} onClick={handleClear} size="sm" variant="subtle" />
         </Show>
       }
       class={local.class}

@@ -9,3 +9,17 @@
 .iconButton > svg {
   display: block;
 }
+
+.iconButton.navbarVariant {
+  border-color: transparent;
+  background-color: transparent;
+  backdrop-filter: none;
+  box-shadow: none;
+}
+
+.iconButton.navbarVariant:hover:not(:disabled),
+.iconButton.navbarVariant:active:not(:disabled) {
+  border-color: transparent;
+  background-color: transparent;
+  box-shadow: none;
+}

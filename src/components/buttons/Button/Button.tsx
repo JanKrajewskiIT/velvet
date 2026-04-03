@@ -75,7 +75,7 @@ const Button = (props: Props<ButtonOwnProps>) => {
       </Text>
     ) : (
       local.children
-    )
+    ),
   );
 
   return (
@@ -89,7 +89,7 @@ const Button = (props: Props<ButtonOwnProps>) => {
         local.iconOnly && iconSizeClass(),
         local.round && styles.round,
         local.loading && styles.loading,
-        local.class
+        local.class,
       )}
       type={local.type ?? 'button'}
       disabled={isDisabled()}

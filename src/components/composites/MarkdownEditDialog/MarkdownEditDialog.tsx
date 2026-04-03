@@ -1,5 +1,6 @@
 import { createEffect, createSignal, on, Show } from 'solid-js';
 
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 
 import Button from '../../buttons/Button/Button';
@@ -16,13 +17,12 @@ interface MarkdownEditDialogProps {
   open: boolean;
   label: string;
   initialValue: string;
-  saveLabel: string;
-  cancelLabel: string;
   onSave: (value: string) => void;
   onClose: () => void;
 }
 
 const MarkdownEditDialog = (props: Props<MarkdownEditDialogProps>) => {
+  const { ts } = useI18n();
   const [value, setValue] = createSignal(props.initialValue);
 
   createEffect(
@@ -32,8 +32,8 @@ const MarkdownEditDialog = (props: Props<MarkdownEditDialogProps>) => {
         if (isOpen) {
           setValue(props.initialValue);
         }
-      }
-    )
+      },
+    ),
   );
 
   const handleSave = () => {
@@ -63,8 +63,8 @@ const MarkdownEditDialog = (props: Props<MarkdownEditDialogProps>) => {
           </div>
         </DialogBody>
         <DialogActions>
-          <Button variant="ghost" onClick={handleCancel} label={props.cancelLabel} />
-          <Button onClick={handleSave} label={props.saveLabel} />
+          <Button variant="ghost" onClick={handleCancel} label={ts('common.cancel')} />
+          <Button onClick={handleSave} label={ts('common.save')} />
         </DialogActions>
       </Dialog>
     </Show>

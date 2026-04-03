@@ -22,7 +22,6 @@ export interface SliderProps extends Omit<SliderCoreNativeProps, 'onChange' | 'v
   max?: number;
   step?: number;
   marks?: SliderMark[];
-  showValueLabel?: boolean;
 }
 
 const Slider = (props: Props<SliderProps>) => {
@@ -35,7 +34,6 @@ const Slider = (props: Props<SliderProps>) => {
     'max',
     'step',
     'marks',
-    'showValueLabel',
     'class',
     'disabled',
     'aria-labelledby',
@@ -92,21 +90,19 @@ const Slider = (props: Props<SliderProps>) => {
       <div class={styles.railWrap}>
         <div class={styles.rail} />
         <div class={styles.track} style={{ '--slider-fill': `${percentage()}%` } as JSX.CSSProperties} />
-        <Show when={local.showValueLabel !== false}>
-          <Text
-            as="span"
-            variant="labelMd"
-            tone="inverse"
-            class={styles.valueLabel}
-            style={
-              {
-                '--slider-value-left': `calc((100% - var(--slider-thumb-size)) * ${thumbRatio()} + (var(--slider-thumb-size) / 2))`,
-              } as JSX.CSSProperties
-            }
-          >
-            {normalizedValue()}
-          </Text>
-        </Show>
+        <Text
+          as="span"
+          variant="labelMd"
+          tone="inverse"
+          class={styles.valueLabel}
+          style={
+            {
+              '--slider-value-left': `calc((100% - var(--slider-thumb-size)) * ${thumbRatio()} + (var(--slider-thumb-size) / 2))`,
+            } as JSX.CSSProperties
+          }
+        >
+          {normalizedValue()}
+        </Text>
         <input
           {...rest}
           id={local.id}

@@ -49,7 +49,7 @@ const FormField = (props: Props<FormFieldOwnProps>) => {
   const labelledBy = createMemo(() => joinAriaIds(local['aria-labelledby'], labelId()));
   const ariaInvalid = createMemo(() => resolveAriaInvalid(local.invalid, local['aria-invalid']));
   const ariaErrorMessage = createMemo(() =>
-    resolveAriaErrorMessage(describedBy(), local['aria-errormessage'], errorId())
+    resolveAriaErrorMessage(describedBy(), local['aria-errormessage'], errorId()),
   );
 
   const controlProps = createMemo<FormFieldControlProps>(() => ({

@@ -5,6 +5,7 @@ import globals from 'globals';
 import prettier from 'eslint-config-prettier';
 import solidPlugin from 'eslint-plugin-solid/configs/typescript';
 import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
+import cssModulesPlugin from 'eslint-plugin-css-modules';
 import simpleImportSortPlugin from 'eslint-plugin-simple-import-sort';
 import unusedImportsPlugin from 'eslint-plugin-unused-imports';
 
@@ -31,10 +32,13 @@ export function createEslintConfig({ tsconfigRootDir, ignorePaths = [] }) {
       plugins: {
         'unused-imports': unusedImportsPlugin,
         'simple-import-sort': simpleImportSortPlugin,
+        'css-modules': cssModulesPlugin,
       },
       rules: {
         'simple-import-sort/imports': 'error',
         'simple-import-sort/exports': 'error',
+        'css-modules/no-undef-class': 'warn',
+        'css-modules/no-unused-class': ['warn', { camelCase: true }],
         'unused-imports/no-unused-imports': 'error',
         'unused-imports/no-unused-vars': [
           'error',
@@ -53,7 +57,6 @@ export function createEslintConfig({ tsconfigRootDir, ignorePaths = [] }) {
         '@typescript-eslint/no-confusing-void-expression': 'off',
         '@typescript-eslint/restrict-template-expressions': 'off',
         '@typescript-eslint/no-misused-promises': 'warn',
-        'no-unassigned-vars': 'off',
         'solid/reactivity': 'warn',
         'require-unicode-regexp': ['error', { requireFlag: 'u' }],
         'no-restricted-syntax': [
@@ -158,13 +161,20 @@ export function createEslintConfig({ tsconfigRootDir, ignorePaths = [] }) {
       },
     },
     {
-      files: ['tests/**/*.ts'],
-      languageOptions: {
-        parserOptions: {
-          projectService: false,
-          project: ['./tsconfig.test.json'],
-          tsconfigRootDir,
-        },
+      files: ['src/**/*.{ts,tsx,js,jsx}'],
+      rules: {
+        'no-restricted-syntax': [
+          'error',
+          {
+            selector: "CallExpression[callee.name='t'][arguments.0.type='Literal'][arguments.0.value!=null]",
+            message: 'Use `ts()` for literal i18n keys. Keep `t()` for dynamic keys only.',
+          },
+          {
+            selector:
+              "CallExpression[callee.name='t'][arguments.0.type='TemplateLiteral'][arguments.0.expressions.length=0]",
+            message: 'Use `ts()` for literal i18n keys. Keep `t()` for dynamic keys only.',
+          },
+        ],
       },
     },
   ]);

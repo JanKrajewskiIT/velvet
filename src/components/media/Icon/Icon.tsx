@@ -18,6 +18,23 @@ interface IconOwnProps extends Omit<SpanCoreNativeProps, 'children'> {
   children?: never;
 }
 
+const sizeClassBySize: Record<ComponentSize, string | undefined> = {
+  sm: styles.sizeSm,
+  md: styles.sizeMd,
+  lg: styles.sizeLg,
+};
+
+const variantClassByVariant: Record<IconVariant, string | undefined> = {
+  inherit: styles.variantInherit,
+  muted: styles.variantMuted,
+  primary: styles.variantPrimary,
+  info: styles.variantInfo,
+  success: styles.variantSuccess,
+  warning: styles.variantWarning,
+  error: styles.variantError,
+  inverse: styles.variantInverse,
+};
+
 const Icon = (props: Props<IconOwnProps>) => {
   const [local, rest] = splitProps(props, [
     'icon',
@@ -31,6 +48,8 @@ const Icon = (props: Props<IconOwnProps>) => {
   ]);
 
   const resolvedLabel = () => local['aria-label'] ?? local.label;
+  const resolvedSize = () => local.size ?? 'md';
+  const resolvedVariant = () => local.variant ?? 'inherit';
   const resolvedAriaHidden = (): boolean | 'true' | 'false' | undefined => {
     const ariaHidden = local['aria-hidden'];
 
@@ -46,11 +65,9 @@ const Icon = (props: Props<IconOwnProps>) => {
       {...rest}
       class={classNames(
         styles.icon,
-        styles[`size${(local.size ?? 'md').charAt(0).toUpperCase()}${(local.size ?? 'md').slice(1)}`],
-        styles[
-          `variant${(local.variant ?? 'inherit').charAt(0).toUpperCase()}${(local.variant ?? 'inherit').slice(1)}`
-        ],
-        local.class
+        sizeClassBySize[resolvedSize()],
+        variantClassByVariant[resolvedVariant()],
+        local.class,
       )}
       role={local.role ?? (resolvedLabel() ? 'img' : undefined)}
       aria-label={resolvedLabel()}

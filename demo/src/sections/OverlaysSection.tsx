@@ -227,7 +227,6 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
                 label={t('demo.text.overlays.confirmDialog.deleteItemQuestion')}
                 message={t('demo.text.overlays.confirmDialog.deleteItemMessage')}
                 confirmLabel={t('demo.text.overlays.confirmDialog.delete')}
-                cancelLabel={t('demo.text.overlays.confirmDialog.cancel')}
                 variant="danger"
                 onConfirm={() => setConfirmOpen(false)}
                 onClose={() => setConfirmOpen(false)}
@@ -246,7 +245,6 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
                 label={t('demo.text.overlays.confirmAction.runDestructive')}
                 message={t('demo.text.overlays.confirmAction.message')}
                 confirmLabel={t('demo.text.overlays.confirmAction.run')}
-                cancelLabel={t('demo.text.overlays.confirmAction.cancel')}
                 variant="danger"
                 onConfirm={() => {
                   setConfirmRuns((current) => current + 1);
@@ -301,7 +299,6 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
                 open={bottomSheetOpen()}
                 onClose={() => setBottomSheetOpen(false)}
                 label={t('demo.text.overlays.sheets.bottomSheet')}
-                closeLabel={t('demo.text.overlays.sheets.closeBottomSheet')}
                 side="bottom"
                 size="md"
               >
@@ -314,7 +311,6 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
                 open={leftSheetOpen()}
                 onClose={() => setLeftSheetOpen(false)}
                 label={t('demo.text.overlays.sheets.leftSheet')}
-                closeLabel={t('demo.text.overlays.sheets.closeLeftSheet')}
                 side="left"
                 size="sm"
               >
@@ -327,7 +323,6 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
                 open={rightSheetOpen()}
                 onClose={() => setRightSheetOpen(false)}
                 label={t('demo.text.overlays.sheets.rightSheet')}
-                closeLabel={t('demo.text.overlays.sheets.closeRightSheet')}
                 side="right"
                 size="lg"
               >
@@ -341,7 +336,6 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
                 onClose={() => setSheetActionsOpen(false)}
                 label={t('demo.text.overlays.sheets.settings')}
                 subtitle={t('demo.text.overlays.sheets.adjustPreferences')}
-                closeLabel={t('demo.text.overlays.sheets.closeSettingsPanel')}
                 side="right"
                 size="lg"
                 actions={
@@ -402,15 +396,7 @@ const OverlaysSection = (props: { sectionId: SectionId }) => {
               <Button variant="primary" onClick={() => setTourOpen(true)}>
                 {t('demo.text.overlays.tour.startTour')}
               </Button>
-              <Tour
-                steps={tourSteps()}
-                open={tourOpen()}
-                onClose={() => setTourOpen(false)}
-                nextLabel={t('demo.text.overlays.tour.next')}
-                prevLabel={t('demo.text.overlays.tour.back')}
-                finishLabel={t('demo.text.overlays.tour.done')}
-                skipLabel={t('demo.text.overlays.tour.skip')}
-              />
+              <Tour steps={tourSteps()} open={tourOpen()} onClose={() => setTourOpen(false)} />
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>{t('demo.text.overlays.tour.meta')}</ShowcaseMeta>

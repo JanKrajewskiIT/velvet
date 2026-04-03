@@ -26,7 +26,6 @@ import SchedulerEventsPanel from './SchedulerEventsPanel';
 type SchedulerDragType = 'move' | 'resize-end';
 
 const DEFAULT_DAY_NAMES = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'] as const;
-const DEFAULT_DELETE_LABEL = 'Delete';
 
 export interface SchedulerEvent {
   id: string;
@@ -45,39 +44,12 @@ export interface SchedulerProps extends Omit<DivCoreNativeProps, 'onChange'> {
   onSelectedDateChange?: (date: string) => void;
   onMonthChange?: (monthIso: string) => void;
   locale?: string;
-  showAdjacentDays?: boolean;
   draggableEvents?: boolean;
-  emptyDayLabel?: string;
   dayNames?: string[];
-  messages?: SchedulerMessages;
-}
-
-export interface SchedulerMessages {
-  previousMonthLabel?: string;
-  nextMonthLabel?: string;
-  agendaTitle?: string;
-  addEventLabel?: string;
-  todayLabel?: string;
-  eventTitlePlaceholder?: string;
-  descriptionPlaceholder?: string;
-  noEventsLabel?: string;
-  cancelLabel?: string;
-  saveLabel?: string;
-  saveChangesLabel?: string;
-  editLabel?: string;
-  deleteLabel?: string;
-  moveLabel?: string;
-  resizeEndLabel?: string;
-  moveAriaLabel?: (eventTitle: string) => string;
-  resizeEndAriaLabel?: (eventTitle: string) => string;
-  deleteDialogTitle?: string;
-  deleteDialogMessage?: string;
-  deleteDialogConfirmLabel?: string;
-  deleteDialogCancelLabel?: string;
 }
 
 const Scheduler = (props: Props<SchedulerProps>) => {
-  const { t } = useI18n();
+  const { ts } = useI18n();
   const [local, rest] = splitProps(props, [
     'events',
     'onEventsChange',
@@ -86,17 +58,14 @@ const Scheduler = (props: Props<SchedulerProps>) => {
     'onSelectedDateChange',
     'onMonthChange',
     'locale',
-    'showAdjacentDays',
     'draggableEvents',
-    'emptyDayLabel',
     'dayNames',
-    'messages',
     'class',
   ]);
   const resolvedLocale = createMemo(() => local.locale ?? Intl.DateTimeFormat().resolvedOptions().locale);
   const now = new Date();
   const [internalSelectedDate, setInternalSelectedDate] = createSignal(
-    local.defaultSelectedDate ?? toIso(now.getFullYear(), now.getMonth(), now.getDate())
+    local.defaultSelectedDate ?? toIso(now.getFullYear(), now.getMonth(), now.getDate()),
   );
   const [viewYear, setViewYear] = createSignal(now.getFullYear());
   const [viewMonth, setViewMonth] = createSignal(now.getMonth());
@@ -108,31 +77,22 @@ const Scheduler = (props: Props<SchedulerProps>) => {
 
   const selectedDate = () => local.selectedDate ?? internalSelectedDate();
   const dayNames = () => local.dayNames ?? DEFAULT_DAY_NAMES;
-  const messages = () => local.messages ?? {};
-  const previousMonthLabel = () => messages().previousMonthLabel ?? t('calendar.prevMonth');
-  const nextMonthLabel = () => messages().nextMonthLabel ?? t('calendar.nextMonth');
-  const agendaTitle = () => messages().agendaTitle ?? t('scheduler.agenda');
-  const addEventLabel = () => messages().addEventLabel ?? t('scheduler.addEvent');
-  const todayLabel = () => messages().todayLabel ?? t('common.today');
-  const eventTitlePlaceholder = () => messages().eventTitlePlaceholder ?? t('scheduler.eventTitle');
-  const descriptionPlaceholder = () => messages().descriptionPlaceholder ?? t('scheduler.descriptionOptional');
-  const noEventsLabel = () => messages().noEventsLabel ?? t('scheduler.noEventsForDay');
-  const cancelLabel = () => messages().cancelLabel ?? t('common.cancel');
-  const saveLabel = () => messages().saveLabel ?? t('common.save');
-  const saveChangesLabel = () => messages().saveChangesLabel ?? t('common.saveChanges');
-  const editLabel = () => messages().editLabel ?? t('common.edit');
-  const deleteLabel = () => messages().deleteLabel ?? t('common.delete');
-  const moveLabel = () => messages().moveLabel ?? t('scheduler.move');
-  const resizeEndLabel = () => messages().resizeEndLabel ?? t('scheduler.resizeEnd');
-  const moveAriaLabel = (eventTitle: string) =>
-    messages().moveAriaLabel?.(eventTitle) ?? t('scheduler.moveEvent', { title: eventTitle });
-  const resizeEndAriaLabel = (eventTitle: string) =>
-    messages().resizeEndAriaLabel?.(eventTitle) ?? t('scheduler.resizeEventEnd', { title: eventTitle });
-  const deleteDialogTitle = () => messages().deleteDialogTitle ?? t('scheduler.deleteEvent');
-  const deleteDialogMessage = () => messages().deleteDialogMessage ?? t('scheduler.deleteEventMessage');
-  const deleteDialogConfirmLabel = () => messages().deleteDialogConfirmLabel ?? DEFAULT_DELETE_LABEL;
-  const deleteDialogCancelLabel = () => messages().deleteDialogCancelLabel ?? t('common.cancel');
-  const showAdjacentDays = () => local.showAdjacentDays !== false;
+  const agendaTitle = () => ts('scheduler.agenda');
+  const addEventLabel = () => ts('scheduler.addEvent');
+  const todayLabel = () => ts('common.today');
+  const noEventsLabel = () => ts('scheduler.noEventsForDay');
+  const cancelLabel = () => ts('common.cancel');
+  const saveLabel = () => ts('common.save');
+  const saveChangesLabel = () => ts('common.saveChanges');
+  const editLabel = () => ts('common.edit');
+  const deleteLabel = () => ts('common.delete');
+  const moveLabel = () => ts('scheduler.move');
+  const resizeEndLabel = () => ts('scheduler.resizeEnd');
+  const moveAriaLabel = (eventTitle: string) => ts('scheduler.moveEvent', { title: eventTitle });
+  const resizeEndAriaLabel = (eventTitle: string) => ts('scheduler.resizeEventEnd', { title: eventTitle });
+  const deleteDialogTitle = () => ts('scheduler.deleteEvent');
+  const deleteDialogMessage = () => ts('scheduler.deleteEventMessage');
+  const deleteDialogConfirmLabel = () => ts('common.delete');
   const draggableEvents = () => local.draggableEvents !== false;
   const canEditEvents = () => Boolean(local.onEventsChange);
   const [dragState, setDragState] = createSignal<{ eventId: string; type: SchedulerDragType } | null>(null);
@@ -154,7 +114,7 @@ const Scheduler = (props: Props<SchedulerProps>) => {
     new Date(viewYear(), viewMonth(), 1).toLocaleString(resolvedLocale(), {
       month: 'long',
       year: 'numeric',
-    })
+    }),
   );
 
   const gridDays = createMemo(() => buildDaysGrid(viewYear(), viewMonth()));
@@ -341,7 +301,7 @@ const Scheduler = (props: Props<SchedulerProps>) => {
       if (createOpen()) {
         closeCreate();
       }
-    }
+    },
   );
 
   createEffect(() => {
@@ -369,14 +329,12 @@ const Scheduler = (props: Props<SchedulerProps>) => {
       <Card class={styles.calendarPanel} style={{ overflow: 'visible', position: 'relative', 'z-index': 1 }}>
         <SchedulerCalendar
           monthLabel={monthLabel()}
-          previousMonthLabel={previousMonthLabel()}
-          nextMonthLabel={nextMonthLabel()}
           dayNames={dayNames()}
           gridDays={gridDays()}
           selectedDate={selectedDate()}
           todayIso={todayIso}
           dragOverDate={dragOverDate()}
-          showAdjacentDays={showAdjacentDays()}
+          showAdjacentDays={true}
           eventsByDate={eventsByDate()}
           onPreviousMonth={goToPreviousMonth}
           onNextMonth={goToNextMonth}
@@ -407,8 +365,6 @@ const Scheduler = (props: Props<SchedulerProps>) => {
         }}
         draftDescription={draftDescription()}
         onDraftDescriptionChange={setDraftDescription}
-        eventTitlePlaceholder={eventTitlePlaceholder()}
-        descriptionPlaceholder={descriptionPlaceholder()}
         cancelLabel={cancelLabel()}
         saveLabel={saveLabel()}
         onCancelCreate={closeCreate}
@@ -417,7 +373,7 @@ const Scheduler = (props: Props<SchedulerProps>) => {
           createTitleInputRef = element;
         }}
         events={selectedDayEvents()}
-        emptyDayLabel={local.emptyDayLabel ?? noEventsLabel()}
+        emptyDayLabel={noEventsLabel()}
         isDraggingEventId={dragState()?.eventId ?? null}
         editingEventId={editingEventId()}
         canDragEvents={draggableEvents() && Boolean(local.onEventsChange)}
@@ -455,7 +411,6 @@ const Scheduler = (props: Props<SchedulerProps>) => {
         label={deleteDialogTitle()}
         message={deleteDialogMessage()}
         confirmLabel={deleteDialogConfirmLabel()}
-        cancelLabel={deleteDialogCancelLabel()}
         variant="danger"
         onClose={() => setDeleteConfirmEventId(null)}
         onConfirm={() => {

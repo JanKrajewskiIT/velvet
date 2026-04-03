@@ -20,14 +20,11 @@ interface AutocompleteProps extends AriaFieldProps {
   id?: string;
   name?: string;
   disabled?: boolean;
-  placeholder?: string;
-  removeLabel?: string;
-  emptyLabel?: string;
   size?: ComponentSize;
 }
 
 const Autocomplete = (props: Props<AutocompleteProps>) => {
-  const { t } = useI18n();
+  const { ts } = useI18n();
   const [local, rest] = splitProps(props, [
     'values',
     'options',
@@ -35,9 +32,6 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
     'id',
     'name',
     'disabled',
-    'placeholder',
-    'removeLabel',
-    'emptyLabel',
     'size',
     'aria-labelledby',
     'aria-describedby',
@@ -58,7 +52,7 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
     if (!query) return available;
     return available.filter((r) => r.toLowerCase().includes(query));
   });
-  const emptyLabel = createMemo(() => local.emptyLabel ?? t('common.noOptions'));
+  const emptyLabel = createMemo(() => ts('common.noOptions'));
 
   const addValue = (value: string) => {
     if (!local.values.includes(value)) {
@@ -179,14 +173,7 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
     <div {...rest} ref={rootRef} class={classNames(styles.wrapper, local.class)}>
       <div class={styles.selectedTags} aria-live="polite">
         <For each={local.values}>
-          {(value) => (
-            <ClosableChip
-              label={value}
-              removeLabel={local.removeLabel ? `${local.removeLabel} ${value}` : undefined}
-              disabled={local.disabled}
-              onRemove={() => removeValue(value)}
-            />
-          )}
+          {(value) => <ClosableChip label={value} disabled={local.disabled} onRemove={() => removeValue(value)} />}
         </For>
       </div>
 
@@ -204,7 +191,7 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
           }}
           onBlur={handleBlur}
           onKeyDown={handleKeyDown}
-          placeholder={local.placeholder}
+          placeholder={ts('common.searchEllipsis')}
           disabled={local.disabled}
           open={dropdown.open()}
           aria-expanded={dropdown.open() ? 'true' : 'false'}

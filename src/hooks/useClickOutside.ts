@@ -4,7 +4,7 @@ import { createEffect, onCleanup } from 'solid-js';
 export default function useClickOutside(
   ref: Accessor<HTMLElement | undefined>,
   isActive: Accessor<boolean>,
-  onClickOutside: () => void
+  onClickOutside: () => void,
 ): void {
   const handleClick = (e: PointerEvent): void => {
     const el = ref();

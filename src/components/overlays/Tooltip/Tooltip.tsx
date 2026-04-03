@@ -12,12 +12,18 @@ import styles from './Tooltip.module.css';
 interface TooltipOwnProps extends DivCoreNativeProps {
   content: string;
   position?: 'top' | 'bottom' | 'left' | 'right';
-  delay?: number;
 }
+
+const positionClassByValue: Record<NonNullable<TooltipOwnProps['position']>, string | undefined> = {
+  top: styles.top,
+  bottom: styles.bottom,
+  left: styles.left,
+  right: styles.right,
+};
 
 const Tooltip = (props: Props<TooltipOwnProps>) => {
   const tooltipId = createUniqueId();
-  const [local, rest] = splitProps(props, ['content', 'position', 'delay', 'children', 'class', 'aria-describedby']);
+  const [local, rest] = splitProps(props, ['content', 'position', 'children', 'class', 'aria-describedby']);
   const [isVisible, setIsVisible] = createSignal(false);
   let timer: ReturnType<typeof setTimeout> | undefined;
 
@@ -27,7 +33,7 @@ const Tooltip = (props: Props<TooltipOwnProps>) => {
 
   const show = () => {
     if (timer) clearTimeout(timer);
-    timer = setTimeout(() => setIsVisible(true), local.delay || 200);
+    timer = setTimeout(() => setIsVisible(true), 200);
   };
 
   const hide = () => {
@@ -50,7 +56,7 @@ const Tooltip = (props: Props<TooltipOwnProps>) => {
         <Surface
           id={tooltipId}
           role="tooltip"
-          class={classNames(styles.tooltipContent, styles[local.position || 'top'])}
+          class={classNames(styles.tooltipContent, positionClassByValue[local.position ?? 'top'])}
           tone="inverse"
           elevation="popover"
           radius="sm"

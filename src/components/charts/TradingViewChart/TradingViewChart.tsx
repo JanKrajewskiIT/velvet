@@ -17,6 +17,7 @@ import {
 import type { JSX } from 'solid-js';
 import { createEffect, createMemo, createSignal, onCleanup, onMount, splitProps } from 'solid-js';
 
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -80,27 +81,6 @@ const resolvePalette = (element: HTMLElement): ChartPalette => ({
 const toFixed = (value: number, digits = 2) => value.toFixed(digits);
 const getBarDirectionColor = (entry: TradingViewChartPoint, palette?: Pick<ChartPalette, 'success' | 'error'>) =>
   entry.close >= entry.open ? (palette?.success ?? 'currentColor') : (palette?.error ?? 'currentColor');
-const DEFAULT_VOLUME_SHORT_LABEL = 'Vol';
-const DEFAULT_SMA_SHORT_LABEL = 'SMA';
-const DEFAULT_EMA_SHORT_LABEL = 'EMA';
-const DEFAULT_BB_SHORT_LABEL = 'BB';
-const DEFAULT_RSI_SHORT_LABEL = 'RSI';
-const DEFAULT_MACD_SHORT_LABEL = 'MACD';
-const DEFAULT_TREND_TOOL_LABEL = 'Trend';
-const DEFAULT_LEVEL_TOOL_LABEL = 'Level';
-const DEFAULT_ZONE_TOOL_LABEL = 'Zone';
-const DEFAULT_CLEAR_LABEL = 'Clear';
-const DEFAULT_BB_UPPER_TITLE = 'BB Upper';
-const DEFAULT_BB_BASIS_TITLE = 'BB Basis';
-const DEFAULT_BB_LOWER_TITLE = 'BB Lower';
-const DEFAULT_SMA_TITLE = 'SMA 20';
-const DEFAULT_EMA_TITLE = 'EMA 50';
-const DEFAULT_RSI_TITLE = 'RSI 14';
-const DEFAULT_MACD_TITLE = 'MACD';
-const DEFAULT_MACD_SIGNAL_TITLE = 'MACD Signal';
-const DEFAULT_MACD_HISTOGRAM_TITLE = 'MACD Histogram';
-const DEFAULT_BB_UP_METRIC_LABEL = 'BB Up';
-const DEFAULT_BB_LOW_METRIC_LABEL = 'BB Low';
 
 const isCandlestickData = (value: unknown): value is CandlestickData =>
   typeof value === 'object' &&
@@ -112,6 +92,7 @@ const isCandlestickData = (value: unknown): value is CandlestickData =>
   'time' in value;
 
 const TradingViewChart = (props: Props<TradingViewChartProps>) => {
+  const { ts } = useI18n();
   const [local, rest] = splitProps(props, [
     'symbol',
     'data',
@@ -125,7 +106,6 @@ const TradingViewChart = (props: Props<TradingViewChartProps>) => {
     'drawings',
     'defaultDrawingTool',
     'onDrawingsChange',
-    'messages',
   ]);
   const [showVolume, setShowVolume] = createSignal(true);
   const [showSma, setShowSma] = createSignal(true);
@@ -146,12 +126,11 @@ const TradingViewChart = (props: Props<TradingViewChartProps>) => {
 
   const intervals = createMemo(() => local.intervalOptions ?? INTERVALS);
   const baseData = createMemo(() =>
-    local.data?.length ? local.data : generateDemoData(activeInterval(), DEFAULT_POINTS)
+    local.data?.length ? local.data : generateDemoData(activeInterval(), DEFAULT_POINTS),
   );
   const chartData = createMemo(() => runtimeData());
   const chartDataByTime = createMemo(() => new Map(chartData().map((item) => [String(item.time), item])));
   const resolvedLocale = createMemo(() => local.locale ?? Intl.DateTimeFormat().resolvedOptions().locale);
-  const messages = createMemo(() => local.messages ?? {});
   const businessDayToTimestamp = createMemo(() => {
     const map = new Map<string, UTCTimestamp>();
     for (const item of chartData()) {
@@ -170,7 +149,7 @@ const TradingViewChart = (props: Props<TradingViewChartProps>) => {
   const rsiDataByTime = createMemo(() => new Map(rsiData().map((item) => [String(item.time), item.value])));
   const macdDataByTime = createMemo(() => new Map(macdData().macdLine.map((item) => [String(item.time), item.value])));
   const macdSignalByTime = createMemo(
-    () => new Map(macdData().signalLine.map((item) => [String(item.time), item.value]))
+    () => new Map(macdData().signalLine.map((item) => [String(item.time), item.value])),
   );
   const bbUpperByTime = createMemo(() => new Map(bollingerData().upper.map((item) => [String(item.time), item.value])));
   const bbLowerByTime = createMemo(() => new Map(bollingerData().lower.map((item) => [String(item.time), item.value])));
@@ -190,49 +169,40 @@ const TradingViewChart = (props: Props<TradingViewChartProps>) => {
     const point = draftPoint();
     return point ? [point] : [];
   });
-  const volumeShortLabel = () => messages().volumeShortLabel ?? DEFAULT_VOLUME_SHORT_LABEL;
-  const smaShortLabel = () => messages().smaShortLabel ?? DEFAULT_SMA_SHORT_LABEL;
-  const emaShortLabel = () => messages().emaShortLabel ?? DEFAULT_EMA_SHORT_LABEL;
-  const bbShortLabel = () => messages().bbShortLabel ?? DEFAULT_BB_SHORT_LABEL;
-  const rsiShortLabel = () => messages().rsiShortLabel ?? DEFAULT_RSI_SHORT_LABEL;
-  const macdShortLabel = () => messages().macdShortLabel ?? DEFAULT_MACD_SHORT_LABEL;
-  const trendToolLabel = () => messages().trendToolLabel ?? DEFAULT_TREND_TOOL_LABEL;
-  const levelToolLabel = () => messages().levelToolLabel ?? DEFAULT_LEVEL_TOOL_LABEL;
-  const zoneToolLabel = () => messages().zoneToolLabel ?? DEFAULT_ZONE_TOOL_LABEL;
   const toggleIndicatorControls = createMemo<TradingViewChartToolbarToggle[]>(() => [
     {
       id: 'volume',
-      label: volumeShortLabel(),
+      label: ts('trading.volumeShort'),
       active: showVolume(),
       onClick: () => setShowVolume((value) => !value),
     },
     {
       id: 'sma',
-      label: smaShortLabel(),
+      label: ts('trading.smaShort'),
       active: showSma(),
       onClick: () => setShowSma((value) => !value),
     },
     {
       id: 'ema',
-      label: emaShortLabel(),
+      label: ts('trading.emaShort'),
       active: showEma(),
       onClick: () => setShowEma((value) => !value),
     },
     {
       id: 'bb',
-      label: bbShortLabel(),
+      label: ts('trading.bbShort'),
       active: showBb(),
       onClick: () => setShowBb((value) => !value),
     },
     {
       id: 'rsi',
-      label: rsiShortLabel(),
+      label: ts('trading.rsiShort'),
       active: showRsi(),
       onClick: () => setShowRsi((value) => !value),
     },
     {
       id: 'macd',
-      label: macdShortLabel(),
+      label: ts('trading.macdShort'),
       active: showMacd(),
       onClick: () => setShowMacd((value) => !value),
     },
@@ -240,19 +210,19 @@ const TradingViewChart = (props: Props<TradingViewChartProps>) => {
   const drawingControls = createMemo<TradingViewChartToolbarToggle[]>(() => [
     {
       id: 'trendline',
-      label: trendToolLabel(),
+      label: ts('trading.trendTool'),
       active: activeTool() === 'trendline',
       onClick: () => setActiveTool((tool) => (tool === 'trendline' ? 'none' : 'trendline')),
     },
     {
       id: 'level',
-      label: levelToolLabel(),
+      label: ts('trading.levelTool'),
       active: activeTool() === 'level',
       onClick: () => setActiveTool((tool) => (tool === 'level' ? 'none' : 'level')),
     },
     {
       id: 'zone',
-      label: zoneToolLabel(),
+      label: ts('trading.zoneTool'),
       active: activeTool() === 'zone',
       onClick: () => setActiveTool((tool) => (tool === 'zone' ? 'none' : 'zone')),
     },
@@ -286,20 +256,20 @@ const TradingViewChart = (props: Props<TradingViewChartProps>) => {
       rsi,
       macd,
       signal,
-      `${DEFAULT_BB_UP_METRIC_LABEL}: ${toFixed(indicators?.bbUpper ?? 0)}`,
-      `${DEFAULT_BB_LOW_METRIC_LABEL}: ${toFixed(indicators?.bbLower ?? 0)}`,
+      `BB Up: ${toFixed(indicators?.bbUpper ?? 0)}`,
+      `BB Low: ${toFixed(indicators?.bbLower ?? 0)}`,
     ];
   });
-  const clearLabel = () => messages().clearLabel ?? DEFAULT_CLEAR_LABEL;
-  const bbUpperTitle = () => messages().bbUpperTitle ?? DEFAULT_BB_UPPER_TITLE;
-  const bbBasisTitle = () => messages().bbBasisTitle ?? DEFAULT_BB_BASIS_TITLE;
-  const bbLowerTitle = () => messages().bbLowerTitle ?? DEFAULT_BB_LOWER_TITLE;
-  const smaTitle = () => messages().smaTitle ?? DEFAULT_SMA_TITLE;
-  const emaTitle = () => messages().emaTitle ?? DEFAULT_EMA_TITLE;
-  const rsiTitle = () => messages().rsiTitle ?? DEFAULT_RSI_TITLE;
-  const macdTitle = () => messages().macdTitle ?? DEFAULT_MACD_TITLE;
-  const macdSignalTitle = () => messages().macdSignalTitle ?? DEFAULT_MACD_SIGNAL_TITLE;
-  const macdHistTitle = () => messages().macdHistogramTitle ?? DEFAULT_MACD_HISTOGRAM_TITLE;
+  const clearLabel = () => ts('common.clear');
+  const bbUpperTitle = () => ts('trading.bbUpper');
+  const bbBasisTitle = () => ts('trading.bbBasis');
+  const bbLowerTitle = () => ts('trading.bbLower');
+  const smaTitle = () => ts('trading.sma20');
+  const emaTitle = () => ts('trading.ema50');
+  const rsiTitle = () => ts('trading.rsi14');
+  const macdTitle = () => ts('trading.macd');
+  const macdSignalTitle = () => ts('trading.macdSignal');
+  const macdHistTitle = () => ts('trading.macdHist');
 
   let wrapperRef: HTMLDivElement | undefined;
   let chartHostRef: HTMLDivElement | undefined;
@@ -449,7 +419,7 @@ const TradingViewChart = (props: Props<TradingViewChartProps>) => {
             value: item.value,
             color: item.value >= 0 ? (palette?.success ?? 'currentColor') : (palette?.error ?? 'currentColor'),
           }))
-        : []
+        : [],
     );
   };
 
@@ -699,7 +669,7 @@ const TradingViewChart = (props: Props<TradingViewChartProps>) => {
         lastValueVisible: false,
         priceLineVisible: false,
       },
-      1
+      1,
     );
     bbUpperSeries = chart.addSeries(LineSeries, {
       title: bbUpperTitle(),
@@ -722,17 +692,17 @@ const TradingViewChart = (props: Props<TradingViewChartProps>) => {
     macdSeries = chart.addSeries(
       LineSeries,
       { title: macdTitle(), priceLineVisible: false, lastValueVisible: false },
-      3
+      3,
     );
     macdSignalSeries = chart.addSeries(
       LineSeries,
       { title: macdSignalTitle(), priceLineVisible: false, lastValueVisible: false },
-      3
+      3,
     );
     macdHistogramSeries = chart.addSeries(
       HistogramSeries,
       { title: macdHistTitle(), priceLineVisible: false, lastValueVisible: false },
-      3
+      3,
     );
     volumeSeries.priceScale().applyOptions({ scaleMargins: { top: 0.7, bottom: 0 } });
     rsiSeries.priceScale().applyOptions({ scaleMargins: { top: 0.15, bottom: 0.15 } });
@@ -879,7 +849,7 @@ const TradingViewChart = (props: Props<TradingViewChartProps>) => {
         () => {
           void runPoll();
         },
-        local.liveFeed.intervalMs ?? intervalToSeconds(activeInterval()) * 1000
+        local.liveFeed.intervalMs ?? intervalToSeconds(activeInterval()) * 1000,
       );
     }
 
@@ -953,7 +923,6 @@ const TradingViewChart = (props: Props<TradingViewChartProps>) => {
 
 export default TradingViewChart;
 export type {
-  TradingViewChartMessages,
   TradingViewChartPoint,
   TradingViewChartProps,
   TradingViewDrawings,

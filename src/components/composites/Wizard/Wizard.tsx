@@ -1,5 +1,6 @@
 import { createMemo, createSignal, For, type JSX, Show, splitProps } from 'solid-js';
 
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import type { DivCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
@@ -19,22 +20,11 @@ interface WizardOwnProps extends Omit<DivCoreNativeProps, 'children' | 'onFinish
   onFinish: () => void | Promise<void>;
   onStepChange?: (step: number) => void;
   initialStep?: number;
-  backLabel: string;
-  nextLabel: string;
-  finishLabel: string;
 }
 
 const Wizard = (props: Props<WizardOwnProps>) => {
-  const [local, rest] = splitProps(props, [
-    'steps',
-    'onFinish',
-    'onStepChange',
-    'initialStep',
-    'class',
-    'backLabel',
-    'nextLabel',
-    'finishLabel',
-  ]);
+  const [local, rest] = splitProps(props, ['steps', 'onFinish', 'onStepChange', 'initialStep', 'class']);
+  const { ts } = useI18n();
   const [currentStep, setCurrentStep] = createSignal(local.initialStep ?? 0);
   const [isLoading, setIsLoading] = createSignal(false);
 
@@ -95,10 +85,10 @@ const Wizard = (props: Props<WizardOwnProps>) => {
       </div>
       <div class={styles.actions}>
         <Button variant="ghost" disabled={currentStep() === 0 || isLoading()} onClick={handleBack}>
-          {local.backLabel}
+          {ts('common.back')}
         </Button>
         <Button variant="primary" disabled={isLoading()} onClick={handleNextClick} loading={isLoading()}>
-          {isLastStep() ? local.finishLabel : local.nextLabel}
+          {isLastStep() ? ts('common.finish') : ts('common.next')}
         </Button>
       </div>
     </div>

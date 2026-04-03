@@ -63,7 +63,7 @@ const filterRows = <T, TColumn extends TabularFilterColumn<T>>(options: FilterRo
     options.columns.some((column) => {
       if (options.shouldUseColumn && !options.shouldUseColumn(column)) return false;
       return matchesColumnQuery(row, column, query);
-    })
+    }),
   );
 };
 

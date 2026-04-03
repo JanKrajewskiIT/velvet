@@ -26,7 +26,7 @@ const DropdownChevronFieldTrigger = (props: Props<DropdownChevronFieldTriggerOwn
         class={classNames(
           styles.chevron,
           props.tone === 'inverse' && styles.chevronInverse,
-          props.open && styles.chevronOpen
+          props.open && styles.chevronOpen,
         )}
       >
         <FiChevronDown />

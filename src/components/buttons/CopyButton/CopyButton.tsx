@@ -12,38 +12,25 @@ import styles from './CopyButton.module.css';
 
 interface CopyButtonProps {
   text: string;
-  label?: string;
-  copiedLabel?: string;
-  errorLabel?: string;
-  timeout?: number;
   variant?: 'ghost' | 'outline';
   size?: ComponentSize;
 }
 
 const CopyButton = (props: Props<CopyButtonProps>) => {
-  const { t } = useI18n();
-  const [local] = splitProps(props, [
-    'class',
-    'text',
-    'label',
-    'copiedLabel',
-    'errorLabel',
-    'timeout',
-    'variant',
-    'size',
-  ]);
+  const { ts } = useI18n();
+  const [local] = splitProps(props, ['class', 'text', 'variant', 'size']);
   const [copied, setCopied] = createSignal(false);
   const [failed, setFailed] = createSignal(false);
   let timeoutId: ReturnType<typeof setTimeout> | undefined;
   const buttonText = createMemo(() => {
-    if (copied()) return local.copiedLabel ?? t('common.copied');
-    if (failed()) return local.errorLabel ?? t('common.copyFailed');
-    return local.label ?? t('common.copy');
+    if (copied()) return ts('common.copied');
+    if (failed()) return ts('common.copyFailed');
+    return ts('common.copy');
   });
   const buttonClass = createMemo(() => classNames(copied() && styles.copied, failed() && styles.failed, local.class));
 
   const handleClick = () => {
-    const timeout = local.timeout ?? 2000;
+    const timeout = 2000;
     const text = local.text;
     void navigator.clipboard
       .writeText(text)

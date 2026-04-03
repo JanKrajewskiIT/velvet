@@ -22,7 +22,7 @@ interface IndexedContentCardProps {
 
 const IndexedContentCard = (props: Props<IndexedContentCardProps>) => {
   const resolvedIndex = createMemo(() =>
-    typeof props.index === 'number' ? String(props.index + 1).padStart(2, '0') : props.index
+    typeof props.index === 'number' ? String(props.index + 1).padStart(2, '0') : props.index,
   );
   const toneClass = createMemo(() => {
     if (props.tone === 'primary') return styles.tonePrimary;

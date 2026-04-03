@@ -7,7 +7,7 @@ import type {
 interface TradingViewWsFeedOptions {
   mapData: (
     payload: unknown,
-    context: TradingViewFeedContext
+    context: TradingViewFeedContext,
   ) => TradingViewChartPoint | TradingViewChartPoint[] | null;
   url: string | ((context: TradingViewFeedContext) => string);
   enabled?: boolean;
@@ -16,7 +16,7 @@ interface TradingViewWsFeedOptions {
   parseMessage?: (event: MessageEvent, context: TradingViewFeedContext) => unknown;
   buildSubscribeMessage?: (context: TradingViewFeedContext) => string | ArrayBufferLike | Blob | ArrayBufferView | null;
   buildUnsubscribeMessage?: (
-    context: TradingViewFeedContext
+    context: TradingViewFeedContext,
   ) => string | ArrayBufferLike | Blob | ArrayBufferView | null;
   onOpen?: (event: Event, context: TradingViewFeedContext) => void;
   onError?: (event: Event, context: TradingViewFeedContext) => void;

@@ -2,13 +2,11 @@ import type { JSX } from 'solid-js';
 import { type Accessor, For, Show } from 'solid-js';
 
 import Checkbox from '~/components/switchers/Checkbox/Checkbox';
+import { useI18n } from '~/i18n/I18nProvider';
 import classNames from '~/utils/classNames';
 
 import type { DataGridProColumn } from '../DataGridPro.types';
 import styles from './DataGridProBody.module.css';
-
-const DEFAULT_NO_ROWS_LABEL = 'No rows';
-const DEFAULT_SELECT_ROW_LABEL = (id: string) => `Select row ${id}`;
 
 interface VisibleRow<T extends Record<string, unknown>> {
   row: T;
@@ -18,7 +16,6 @@ interface VisibleRow<T extends Record<string, unknown>> {
 
 interface DataGridProBodyProps<T extends Record<string, unknown>> {
   hasRows: Accessor<boolean>;
-  emptyMessage: string | undefined;
   bodyHeight: Accessor<number>;
   totalRowsHeight: Accessor<number>;
   offsetY: Accessor<number>;
@@ -31,11 +28,11 @@ interface DataGridProBodyProps<T extends Record<string, unknown>> {
   visibleColumns: Accessor<readonly DataGridProColumn<T>[]>;
   getColumnPin: (column: DataGridProColumn<T>) => 'left' | 'right' | null;
   getColumnStyle: (column: DataGridProColumn<T>) => JSX.CSSProperties;
-  noRowsLabel?: string;
-  selectRowLabel?: (id: string) => string;
 }
 
 const DataGridProBody = <T extends Record<string, unknown>>(props: DataGridProBodyProps<T>) => {
+  const { ts } = useI18n();
+
   const handleCheckboxClick = (event: MouseEvent & { currentTarget: HTMLInputElement }) => {
     event.stopPropagation();
   };
@@ -45,7 +42,7 @@ const DataGridProBody = <T extends Record<string, unknown>>(props: DataGridProBo
       when={props.hasRows()}
       fallback={
         <div class={styles.empty} role="status" style={{ height: `${props.bodyHeight()}px` }}>
-          {props.emptyMessage ?? props.noRowsLabel ?? DEFAULT_NO_ROWS_LABEL}
+          {ts('table.noRows')}
         </div>
       }
     >
@@ -59,7 +56,7 @@ const DataGridProBody = <T extends Record<string, unknown>>(props: DataGridProBo
                 class={classNames(
                   styles.row,
                   props.striped() && entry.index % 2 === 1 && styles.striped,
-                  props.selectedSet().has(entry.id) && styles.rowSelected
+                  props.selectedSet().has(entry.id) && styles.rowSelected,
                 )}
                 style={{ height: `${props.rowHeight()}px` }}
               >
@@ -70,7 +67,7 @@ const DataGridProBody = <T extends Record<string, unknown>>(props: DataGridProBo
                       checked={props.selectedSet().has(entry.id)}
                       onClick={handleCheckboxClick}
                       onChange={() => props.onToggleRow(entry.id)}
-                      aria-label={(props.selectRowLabel ?? DEFAULT_SELECT_ROW_LABEL)(entry.id)}
+                      aria-label={ts('table.selectRow', { id: entry.id })}
                     />
                   </div>
                 </Show>
@@ -81,7 +78,7 @@ const DataGridProBody = <T extends Record<string, unknown>>(props: DataGridProBo
                       class={classNames(
                         styles.cell,
                         props.getColumnPin(column) === 'left' && styles.pinnedLeft,
-                        props.getColumnPin(column) === 'right' && styles.pinnedRight
+                        props.getColumnPin(column) === 'right' && styles.pinnedRight,
                       )}
                       style={props.getColumnStyle(column)}
                     >

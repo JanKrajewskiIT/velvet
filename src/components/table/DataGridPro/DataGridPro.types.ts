@@ -26,20 +26,6 @@ export interface DataGridProSortState {
   direction: DataGridProSortDirection;
 }
 
-export interface DataGridProMessages {
-  selectAllVisibleRowsLabel?: string;
-  resizeColumnLabel?: (label: string) => string;
-  noRowsLabel?: string;
-  selectRowLabel?: (id: string) => string;
-  rowsCountLabel?: (count: number) => string;
-  selectedCountLabel?: (count: number) => string;
-  clearSelectionLabel?: string;
-  resetViewLabel?: string;
-  columnsLabel?: string;
-  columnVisibilityLabel?: string;
-  resetColumnsLabel?: string;
-}
-
 export interface DataGridProProps<T> {
   data: T[];
   columns: DataGridProColumn<T>[];
@@ -49,7 +35,6 @@ export interface DataGridProProps<T> {
   overscan?: number;
   sortable?: boolean;
   striped?: boolean;
-  emptyMessage?: string;
   getRowId?: (row: T, index: number) => string;
   selectable?: boolean;
   selectedRowIds?: string[];
@@ -59,7 +44,6 @@ export interface DataGridProProps<T> {
   filterQuery?: string;
   defaultFilterQuery?: string;
   onFilterQueryChange?: (query: string) => void;
-  filterPlaceholder?: string;
   filterFn?: (row: T, query: string) => boolean;
   manualFiltering?: boolean;
   sortKey?: string | null;
@@ -78,11 +62,5 @@ export interface DataGridProProps<T> {
   defaultColumnPinning?: DataGridProColumnPinning;
   onColumnPinningChange?: (pinning: DataGridProColumnPinning) => void;
   persistenceKey?: string;
-  resetPersistenceLabel?: string;
   onPersistenceReset?: () => void;
-  importSettingsLabel?: string;
-  exportSettingsLabel?: string;
-  persistedBadgeLabel?: string;
-  defaultBadgeLabel?: string;
-  messages?: DataGridProMessages;
 }

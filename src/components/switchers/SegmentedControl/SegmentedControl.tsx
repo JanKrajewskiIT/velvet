@@ -23,6 +23,11 @@ interface SegmentedControlOwnProps extends Omit<DivCoreNativeProps, 'onChange'> 
   activeOptionClass?: string;
 }
 
+const sizeClassByValue: Record<NonNullable<SegmentedControlOwnProps['size']>, string | undefined> = {
+  sm: styles.sm,
+  md: undefined,
+};
+
 const SegmentedControl = (props: Props<SegmentedControlOwnProps>) => {
   const [local, rest] = splitProps(props, [
     'options',
@@ -110,7 +115,7 @@ const SegmentedControl = (props: Props<SegmentedControlOwnProps>) => {
   return (
     <div
       {...rest}
-      class={classNames(styles.container, styles[size()], local.disabled && styles.disabled, local.class)}
+      class={classNames(styles.container, sizeClassByValue[size()], local.disabled && styles.disabled, local.class)}
       role="radiogroup"
     >
       <For each={local.options}>
@@ -120,7 +125,7 @@ const SegmentedControl = (props: Props<SegmentedControlOwnProps>) => {
               styles.option,
               local.optionClass,
               local.value === option.value && styles.active,
-              local.value === option.value && local.activeOptionClass
+              local.value === option.value && local.activeOptionClass,
             )}
             type="button"
             role="radio"

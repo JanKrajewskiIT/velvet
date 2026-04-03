@@ -11,8 +11,15 @@ import classNames from '~/utils/classNames';
 import { removeToast, toasts } from '../Toast';
 import styles from './ToastViewport.module.css';
 
+const toastTypeClassByValue = {
+  success: styles.success,
+  error: styles.error,
+  info: styles.info,
+  warning: styles.warning,
+} as const;
+
 const ToastViewport = (props: Props) => {
-  const { t } = useI18n();
+  const { ts } = useI18n();
 
   return (
     <Portal>
@@ -20,13 +27,13 @@ const ToastViewport = (props: Props) => {
         <For each={toasts()}>
           {(toast) => (
             <div
-              class={classNames(styles.toast, styles[toast.type])}
+              class={classNames(styles.toast, toastTypeClassByValue[toast.type])}
               role={toast.type === 'error' ? 'alert' : 'status'}
             >
               <Text as="span" variant="bodySm">
                 {toast.message}
               </Text>
-              <IconButton icon={IoClose} label={t('common.close')} onClick={() => removeToast(toast.id)} />
+              <IconButton icon={IoClose} label={ts('common.close')} onClick={() => removeToast(toast.id)} />
             </div>
           )}
         </For>

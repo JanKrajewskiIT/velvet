@@ -1,5 +1,6 @@
 import { createSignal, For, type JSX, splitProps } from 'solid-js';
 
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import type { ComponentSize, InputCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
@@ -13,28 +14,13 @@ import styles from './TagInput.module.css';
 interface TagInputOwnProps extends Omit<InputCoreNativeProps, 'value' | 'onChange'> {
   value: string[];
   onChange: (tags: string[]) => void;
-  placeholder?: string;
   size?: ComponentSize;
-  inputAriaLabel?: string;
-  removeTagLabel?: (tag: string) => string;
 }
 
 const TagInput = (props: Props<TagInputOwnProps>) => {
-  const [local, rest] = splitProps(props, [
-    'value',
-    'onChange',
-    'placeholder',
-    'size',
-    'class',
-    'disabled',
-    'readOnly',
-    'inputAriaLabel',
-    'removeTagLabel',
-    'onKeyDown',
-  ]);
+  const { ts } = useI18n();
+  const [local, rest] = splitProps(props, ['value', 'onChange', 'size', 'class', 'disabled', 'readOnly', 'onKeyDown']);
   const [inputValue, setInputValue] = createSignal('');
-
-  const removeLabel = (tag: string) => local.removeTagLabel?.(tag) ?? `Remove ${tag}`;
 
   const handleKeyDown: JSX.EventHandler<HTMLInputElement, KeyboardEvent> = (e) => {
     if (typeof local.onKeyDown === 'function') {
@@ -77,12 +63,7 @@ const TagInput = (props: Props<TagInputOwnProps>) => {
       <div class={styles.tagsContainer}>
         <For each={local.value}>
           {(tag) => (
-            <ClosableChip
-              label={tag}
-              removeLabel={removeLabel(tag)}
-              onRemove={() => removeTag(tag)}
-              disabled={local.disabled || local.readOnly}
-            />
+            <ClosableChip label={tag} onRemove={() => removeTag(tag)} disabled={local.disabled || local.readOnly} />
           )}
         </For>
         <Input
@@ -93,8 +74,8 @@ const TagInput = (props: Props<TagInputOwnProps>) => {
           value={inputValue()}
           onInput={handleInput}
           onKeyDown={handleKeyDown}
-          aria-label={local.inputAriaLabel}
-          placeholder={local.value.length === 0 ? local.placeholder : ''}
+          aria-label={ts('common.search')}
+          placeholder={local.value.length === 0 ? ts('common.searchEllipsis') : ''}
           disabled={local.disabled}
           readOnly={local.readOnly}
         />

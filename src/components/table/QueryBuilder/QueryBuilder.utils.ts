@@ -48,7 +48,7 @@ export const appendQueryBuilderRule = (value: QueryBuilderValue, field: QueryBui
 
 export const updateQueryBuilderCombinator = (
   value: QueryBuilderValue,
-  combinator: QueryBuilderCombinator
+  combinator: QueryBuilderCombinator,
 ): QueryBuilderValue => ({
   ...value,
   combinator,
@@ -62,23 +62,23 @@ export const replaceQueryBuilderRules = (value: QueryBuilderValue, rules: QueryB
 export const patchQueryBuilderRule = (
   value: QueryBuilderValue,
   ruleId: string,
-  next: Partial<QueryBuilderRule>
+  next: Partial<QueryBuilderRule>,
 ): QueryBuilderValue =>
   replaceQueryBuilderRules(
     value,
-    value.rules.map((rule) => (rule.id === ruleId ? { ...rule, ...next } : rule))
+    value.rules.map((rule) => (rule.id === ruleId ? { ...rule, ...next } : rule)),
   );
 
 export const removeQueryBuilderRuleById = (value: QueryBuilderValue, ruleId: string): QueryBuilderValue =>
   replaceQueryBuilderRules(
     value,
-    value.rules.filter((rule) => rule.id !== ruleId)
+    value.rules.filter((rule) => rule.id !== ruleId),
   );
 
 export const moveQueryBuilderRuleById = (
   value: QueryBuilderValue,
   ruleId: string,
-  direction: -1 | 1
+  direction: -1 | 1,
 ): QueryBuilderValue => {
   const index = value.rules.findIndex((rule) => rule.id === ruleId);
   const nextIndex = index + direction;

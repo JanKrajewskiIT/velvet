@@ -16,11 +16,10 @@ interface AccordionItemOwnProps extends Omit<DivCoreNativeProps, 'onToggle'> {
   defaultOpen?: boolean;
   onToggle?: (isOpen: boolean) => void;
   disabled?: boolean;
-  toggleLabel?: string;
 }
 
 const AccordionItem = (props: Props<AccordionItemOwnProps>) => {
-  const { t } = useI18n();
+  const { ts } = useI18n();
   const [local, rest] = splitProps(props, [
     'label',
     'children',
@@ -28,18 +27,16 @@ const AccordionItem = (props: Props<AccordionItemOwnProps>) => {
     'defaultOpen',
     'onToggle',
     'disabled',
-    'toggleLabel',
     'class',
   ]);
   const [internalOpen, setInternalOpen] = createSignal(local.defaultOpen ?? false);
 
   const isOpen = createMemo(() => (local.isOpen !== undefined ? local.isOpen : internalOpen()));
   const ariaLabel = createMemo(() => {
-    if (local.toggleLabel) return local.toggleLabel;
     if (local.label.trim().length > 0) {
-      return t('accordion.toggleSectionWithLabel', { label: local.label });
+      return ts('accordion.toggleSectionWithLabel', { label: local.label });
     }
-    return t('accordion.toggleSection');
+    return ts('accordion.toggleSection');
   });
 
   const handleToggle = () => {
@@ -50,10 +47,7 @@ const AccordionItem = (props: Props<AccordionItemOwnProps>) => {
   };
 
   return (
-    <div
-      class={classNames(styles.item, isOpen() && styles.open, local.disabled && styles.disabled, local.class)}
-      {...rest}
-    >
+    <div class={classNames(styles.item, local.disabled && styles.disabled, local.class)} {...rest}>
       <Button
         type="button"
         class={styles.header}

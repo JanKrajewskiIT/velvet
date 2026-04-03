@@ -16,7 +16,6 @@ interface AffixButtonOwnProps extends Omit<ButtonCoreNativeProps, 'children' | '
   text: string;
   prefixClass?: string;
   bodyClass?: string;
-  suffixClass?: string;
 }
 
 const AffixButton = (props: Props<AffixButtonOwnProps>) => {
@@ -29,7 +28,6 @@ const AffixButton = (props: Props<AffixButtonOwnProps>) => {
     'text',
     'prefixClass',
     'bodyClass',
-    'suffixClass',
   ]);
 
   const textTone = () => {
@@ -48,7 +46,7 @@ const AffixButton = (props: Props<AffixButtonOwnProps>) => {
           {local.text}
         </Text>
         <Show when={local.suffix}>
-          <span class={classNames(styles.suffix, local.suffixClass)}>{local.suffix}</span>
+          <span class={styles.suffix}>{local.suffix}</span>
         </Show>
       </span>
     </Button>

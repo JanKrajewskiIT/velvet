@@ -37,7 +37,6 @@ export interface TreeViewProps {
   draggable?: boolean;
   onMove?: (draggedId: string, targetId: string) => void;
   toggleNodeLabel?: (label: string) => string;
-  loadingLabel?: string;
 }
 
 const TreeView = (props: Props<TreeViewProps>) => {
@@ -54,7 +53,6 @@ const TreeView = (props: Props<TreeViewProps>) => {
     'draggable',
     'onMove',
     'toggleNodeLabel',
-    'loadingLabel',
     'class',
   ]);
   const [treeData, setTreeData] = createSignal(untrack(() => cloneTreeNodes(local.nodes)));
@@ -148,7 +146,7 @@ const TreeView = (props: Props<TreeViewProps>) => {
     event: KeyboardEvent,
     hasChildren: boolean,
     isExpanded: boolean,
-    parentId: string | null
+    parentId: string | null,
   ) => {
     const currentVisible = visibleNodes();
     const index = currentVisible.findIndex((item) => item.id === id);
@@ -270,7 +268,6 @@ const TreeView = (props: Props<TreeViewProps>) => {
             onDragLeave={() => setDragOverId(null)}
             onSelect={local.onSelect}
             toggleNodeLabel={local.toggleNodeLabel}
-            loadingLabel={local.loadingLabel}
           />
         )}
       </For>

@@ -4,6 +4,7 @@ import { createMemo } from 'solid-js';
 import Icon from '~/components/media/Icon/Icon';
 import type { SegmentedControlOption } from '~/components/switchers/SegmentedControl/SegmentedControl';
 import SegmentedControl from '~/components/switchers/SegmentedControl/SegmentedControl';
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import { useTheme } from '~/theme/ThemeProvider';
 import classNames from '~/utils/classNames';
@@ -12,24 +13,24 @@ import styles from './ThemeToggle.module.css';
 
 export type ThemeToggleVariant = 'light' | 'navbar' | 'dark';
 
+const variantClassByValue: Record<ThemeToggleVariant, string | undefined> = {
+  light: styles.light,
+  navbar: styles.navbar,
+  dark: undefined,
+};
+
 interface ThemeToggleProps {
-  lightLabel: string;
-  darkLabel: string;
-  groupLabel?: string;
   variant?: ThemeToggleVariant;
 }
 
 const ThemeToggle = (props: Props<ThemeToggleProps>) => {
+  const { ts } = useI18n();
   const { resolved, setTheme } = useTheme();
-  const variantClass = () => {
-    const variant = props.variant ?? 'light';
-    if (variant === 'dark') return styles.navbar;
-    return styles[variant];
-  };
+  const variantClass = () => variantClassByValue[props.variant ?? 'light'];
 
   const options = createMemo<SegmentedControlOption[]>(() => [
-    { value: 'light', label: <Icon icon={AiFillSun} class={styles.icon} />, ariaLabel: props.lightLabel },
-    { value: 'dark', label: <Icon icon={AiFillMoon} class={styles.icon} />, ariaLabel: props.darkLabel },
+    { value: 'light', label: <Icon icon={AiFillSun} class={styles.icon} />, ariaLabel: ts('theme.light') },
+    { value: 'dark', label: <Icon icon={AiFillMoon} class={styles.icon} />, ariaLabel: ts('theme.dark') },
   ]);
 
   const handleThemeChange = (next: string) => {
@@ -39,11 +40,7 @@ const ThemeToggle = (props: Props<ThemeToggleProps>) => {
   };
 
   return (
-    <div
-      class={classNames(styles.group, variantClass(), props.class)}
-      role="group"
-      aria-label={props.groupLabel ?? props.darkLabel}
-    >
+    <div class={classNames(styles.group, variantClass(), props.class)} role="group" aria-label={ts('theme.label')}>
       <SegmentedControl
         class={styles.segmented}
         options={options()}

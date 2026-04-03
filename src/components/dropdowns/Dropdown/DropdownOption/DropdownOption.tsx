@@ -14,18 +14,6 @@ export interface DropdownOptionProps extends Omit<ButtonCoreNativeProps, 'childr
   label: string;
   prefix?: JSX.Element;
   tone?: 'default' | 'primary' | 'success' | 'error';
-  'aria-selected'?: boolean | 'true' | 'false';
-  'aria-checked'?: boolean | 'true' | 'false';
-  'aria-disabled'?: boolean | 'true' | 'false';
-  'aria-posinset'?: number;
-  'aria-setsize'?: number;
-  'aria-current'?: string;
-  'aria-haspopup'?: string;
-  'aria-controls'?: string;
-  'aria-expanded'?: boolean | 'true' | 'false';
-  'aria-description'?: string;
-  'aria-keyshortcuts'?: string;
-  'aria-roledescription'?: string;
 }
 
 const toneToClass: Record<NonNullable<DropdownOptionProps['tone']>, string | undefined> = {
@@ -36,7 +24,7 @@ const toneToClass: Record<NonNullable<DropdownOptionProps['tone']>, string | und
 };
 
 const DropdownOption = (props: Props<DropdownOptionProps>) => {
-  const [local, rest] = splitProps(props, ['class', 'selected', 'type', 'label', 'prefix', 'tone']);
+  const [local, rest] = splitProps(props, ['class', 'selected', 'type', 'label', 'prefix', 'tone', 'disabled']);
 
   return (
     <Button
@@ -47,8 +35,9 @@ const DropdownOption = (props: Props<DropdownOptionProps>) => {
       class={classNames(
         styles.item,
         local.selected && styles.itemSelected,
+        local.disabled && styles.itemDisabled,
         toneToClass[local.tone ?? 'default'],
-        local.class
+        local.class,
       )}
     >
       {local.prefix ? <span class={styles.itemPrefix}>{local.prefix}</span> : undefined}

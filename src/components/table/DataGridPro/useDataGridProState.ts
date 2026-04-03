@@ -317,7 +317,7 @@ const useDataGridProState = <T extends Record<string, unknown>>(props: Props<Dat
         row,
         index: startIndex() + offset,
         id: getRowId(row, startIndex() + offset),
-      }))
+      })),
   );
 
   const orderedColumns = createMemo(() => {
@@ -331,7 +331,7 @@ const useDataGridProState = <T extends Record<string, unknown>>(props: Props<Dat
   });
 
   const visibleColumns = createMemo(() =>
-    orderedColumns().filter((column) => currentColumnVisibility()[column.key] !== false)
+    orderedColumns().filter((column) => currentColumnVisibility()[column.key] !== false),
   );
 
   const getColumnPin = (column: DataGridProColumn<T>): DataGridProColumnPin => {
@@ -551,11 +551,11 @@ const useDataGridProState = <T extends Record<string, unknown>>(props: Props<Dat
   useClickOutside(
     () => columnMenuWrapRef,
     columnMenuOpen,
-    () => setColumnMenuOpen(false)
+    () => setColumnMenuOpen(false),
   );
   useEscapeKey(
     () => columnMenuOpen(),
-    () => setColumnMenuOpen(false)
+    () => setColumnMenuOpen(false),
   );
 
   createEffect(() => {
@@ -595,7 +595,7 @@ const useDataGridProState = <T extends Record<string, unknown>>(props: Props<Dat
     const widths = columnWidths();
     return visibleColumns().reduce(
       (acc, column) => acc + (widths[column.key] ?? DEFAULT_COLUMN_WIDTH),
-      selectable() ? SELECTION_COLUMN_WIDTH : 0
+      selectable() ? SELECTION_COLUMN_WIDTH : 0,
     );
   });
 

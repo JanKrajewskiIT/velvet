@@ -69,7 +69,7 @@ const Grid = (props: Props<GridOwnProps>) => {
         styles.grid,
         alignToClass[local.alignItems ?? 'stretch'],
         justifyToClass[local.justifyItems ?? 'stretch'],
-        local.class
+        local.class,
       )}
     >
       {local.children}

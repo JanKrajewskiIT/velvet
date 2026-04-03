@@ -7,7 +7,7 @@ import type {
 interface TradingViewPollingFeedOptions {
   mapData: (
     payload: unknown,
-    context: TradingViewFeedContext
+    context: TradingViewFeedContext,
   ) => TradingViewChartPoint | TradingViewChartPoint[] | null;
   url: string | ((context: TradingViewFeedContext) => string);
   enabled?: boolean;

@@ -11,7 +11,7 @@ export interface CreatePersistedSignalOptions<T> {
   deserialize?: (value: string) => T;
 }
 
-function getDefaultStorage(): PersistStorage | undefined {
+const getDefaultStorage = (): PersistStorage | undefined => {
   if (typeof globalThis === 'undefined') {
     return undefined;
   }
@@ -21,13 +21,13 @@ function getDefaultStorage(): PersistStorage | undefined {
   }
 
   return globalThis.localStorage as PersistStorage;
-}
+};
 
-export function createPersistedSignal<T>(
+export const createPersistedSignal = <T>(
   key: string,
   initialValue: T,
-  options: CreatePersistedSignalOptions<T> = {}
-): [Accessor<T>, (next: T | ((previous: T) => T)) => void] {
+  options: CreatePersistedSignalOptions<T> = {},
+): [Accessor<T>, (next: T | ((previous: T) => T)) => void] => {
   const storage = options.storage ?? getDefaultStorage();
   const serialize = options.serialize ?? JSON.stringify;
   const deserialize = options.deserialize ?? ((value: string) => JSON.parse(value) as T);
@@ -62,4 +62,4 @@ export function createPersistedSignal<T>(
   };
 
   return [value, setPersistedValue];
-}
+};

@@ -1,32 +1,80 @@
+import type { FlashcardPracticeResult } from '@jankrajewskiit/ui';
 import {
   Accordion,
   AccordionIcon,
   AccordionItem,
+  addToast,
   Button,
   Card,
   Chip,
   CodeText,
   DataCard,
   Divider,
+  FeatureCard,
+  FlashcardPracticeCard,
+  FlashcardPracticeSession,
+  FlashcardPracticeSummary,
   FlipCard,
   Footer,
   Grid,
   Heading,
   MainLayout,
   Navbar,
+  PracticeSetupPanel,
   ResizablePanel,
   SectionCard,
   Stack,
+  StatCard,
   Surface,
   Text,
   useI18n,
 } from '@jankrajewskiit/ui';
-import { createMemo, Show } from 'solid-js';
+import type { IconTypes } from 'solid-icons';
+import { FaSolidBriefcase, FaSolidWandMagicSparkles } from 'solid-icons/fa';
+import { FiBookOpen, FiFileText } from 'solid-icons/fi';
+import { IoAlertCircle, IoCheckmarkCircle, IoPeople, IoStatsChart } from 'solid-icons/io';
+import { createMemo, createSignal, For, Show } from 'solid-js';
 
 import type { SectionId } from '../App';
 import { PreviewGroup, PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
 import { type DemoI18nMessageKey, getDemoMessages } from '../i18n/messages';
 import { renderRichText } from '../i18n/renderRichText';
+
+const flashcardItems = [
+  {
+    id: 'fc-1',
+    category: 'SolidJS',
+    question: 'What problem does `createMemo` solve?',
+    answer: 'It caches derived values and only recomputes when tracked dependencies change.',
+  },
+  {
+    id: 'fc-2',
+    category: 'TypeScript',
+    question: 'When would you prefer a discriminated union?',
+    answer: 'When state variants need precise narrowing and exhaustiveness checks.',
+  },
+  {
+    id: 'fc-3',
+    category: 'CSS',
+    question: 'What is the benefit of CSS custom properties?',
+    answer: 'They allow dynamic theming and composition directly in the cascade.',
+  },
+];
+
+const practiceSetupCategories = [
+  { value: 'solid-basics', label: 'SolidJS / Basics' },
+  { value: 'solid-performance', label: 'SolidJS / Performance' },
+  { value: 'ts-advanced', label: 'TypeScript / Advanced' },
+  { value: 'css-architecture', label: 'CSS / Architecture' },
+];
+
+const fallbackQuizResults: FlashcardPracticeResult<(typeof flashcardItems)[number]>[] = flashcardItems.map(
+  (item, index) => ({
+    id: item.id,
+    item,
+    known: index !== 1,
+  }),
+);
 
 const LayoutSection = (props: { sectionId: SectionId }) => {
   const sectionId = () => props.sectionId;
@@ -34,6 +82,52 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
   const { locale } = useI18n();
   const dictionary = createMemo(() => getDemoMessages(locale()));
   const t = (key: DemoI18nMessageKey): string => dictionary()[key];
+  const featureCards = createMemo<{ icon: IconTypes; title: string; description: string }[]>(() => [
+    {
+      icon: FaSolidBriefcase,
+      title: t('demo.recron.featureCard.organizer.title'),
+      description: t('demo.recron.featureCard.organizer.description'),
+    },
+    {
+      icon: FiBookOpen,
+      title: t('demo.recron.featureCard.questions.title'),
+      description: t('demo.recron.featureCard.questions.description'),
+    },
+    {
+      icon: FiFileText,
+      title: t('demo.recron.featureCard.portfolio.title'),
+      description: t('demo.recron.featureCard.portfolio.description'),
+    },
+    {
+      icon: FaSolidWandMagicSparkles,
+      title: t('demo.recron.featureCard.ai.title'),
+      description: t('demo.recron.featureCard.ai.description'),
+    },
+  ]);
+  const [quizFlipped, setQuizFlipped] = createSignal(false);
+  const [quizSessionItems, setQuizSessionItems] = createSignal([...flashcardItems]);
+  const [quizResults, setQuizResults] = createSignal<FlashcardPracticeResult<(typeof flashcardItems)[number]>[]>([]);
+
+  const handleQuizFinish = (results: FlashcardPracticeResult<(typeof flashcardItems)[number]>[]) => {
+    setQuizResults(results);
+    addToast({ type: 'success', message: 'Quiz session finished.' });
+  };
+
+  const handleQuizSummaryBack = () => {
+    addToast({ type: 'info', message: 'Back action triggered.' });
+  };
+
+  const handleQuizRestart = () => {
+    setQuizResults([]);
+    setQuizSessionItems([...flashcardItems]);
+  };
+
+  const handlePracticeSetupStart = (value: { categoryId: string | null; count: number }) => {
+    addToast({
+      type: 'success',
+      message: `Practice configured for ${value.categoryId ?? 'all categories'} with ${String(value.count)} cards.`,
+    });
+  };
 
   return (
     <div>
@@ -49,13 +143,7 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
             >
               <div class="layoutPreviewShell">
                 <MainLayout
-                  navbar={
-                    <Navbar
-                      navItems={[]}
-                      toggleMenuLabel={t('demo.text.layout.mainLayout.toggleNavigation')}
-                      navLabel={t('demo.text.layout.mainLayout.mainNavigation')}
-                    />
-                  }
+                  navbar={<Navbar navItems={[]} />}
                   footer={
                     <Footer
                       copyrightText={`(c) ${String(year)} MyApp`}
@@ -388,10 +476,71 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
           </ShowcaseMeta>
         </ShowcaseSection>
 
+        <ShowcaseSection title="FeatureCard" subtitle={t('demo.recron.showcase.featureCard.subtitle')}>
+          <PreviewPanel>
+            <PreviewGroup title="Example">
+              <div class="gridCards">
+                <For each={featureCards()}>
+                  {(feature, index) => (
+                    <FeatureCard
+                      icon={feature.icon}
+                      label={feature.title}
+                      description={feature.description}
+                      iconSize="lg"
+                      animationOrder={index()}
+                    />
+                  )}
+                </For>
+              </div>
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+
         <ShowcaseSection
-          title={t('demo.showcase.layout.flipCard.title')}
-          subtitle={t('demo.showcase.layout.flipCard.subtitle')}
+          title={t('demo.showcase.feedback.statCard.title')}
+          subtitle={t('demo.showcase.feedback.statCard.subtitle')}
         >
+          <PreviewPanel>
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <div class="gridCards">
+                <StatCard
+                  value="1 284"
+                  label={t('demo.text.feedback.statCard.activeUsers')}
+                  icon={IoPeople}
+                  colorClass="info"
+                />
+                <StatCard
+                  value="98.7%"
+                  label={t('demo.text.feedback.statCard.uptime')}
+                  icon={IoCheckmarkCircle}
+                  colorClass="success"
+                />
+                <StatCard
+                  value="3"
+                  label={t('demo.text.feedback.statCard.openIssues')}
+                  icon={IoAlertCircle}
+                  colorClass="warning"
+                />
+                <StatCard
+                  value="42"
+                  label={t('demo.text.feedback.statCard.deployments')}
+                  icon={IoStatsChart}
+                  colorClass="error"
+                />
+              </div>
+            </PreviewGroup>
+          </PreviewPanel>
+          <ShowcaseMeta>
+            <CodeText as="span" class="codeInline">
+              StatCard
+            </CodeText>{' '}
+            {t('demo.text.feedback.statCard.meta')}
+          </ShowcaseMeta>
+        </ShowcaseSection>
+      </Show>
+
+      <Show when={sectionId() === 'surfaces-interactive-cards'}>
+        <ShowcaseSection title="FlipCard" subtitle={t('demo.showcase.layout.flipCard.subtitle')}>
           <PreviewPanel>
             <PreviewGroup title={t('demo.text.layout.flipCard.samples.title')}>
               <div class="flipCardGrid">
@@ -437,6 +586,81 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
               ),
             })}
           </ShowcaseMeta>
+        </ShowcaseSection>
+
+        <ShowcaseSection title="FlashcardPracticeCard" subtitle={t('demo.recron.showcase.flashcardQuizCard.subtitle')}>
+          <PreviewPanel>
+            <PreviewGroup title="Example">
+              <div class="recronDemoMedium">
+                <FlashcardPracticeCard
+                  front={<Text as="p">{t('demo.recron.knowledge.flashcard.card.front')}</Text>}
+                  back={<Text as="p">{t('demo.recron.knowledge.flashcard.card.back')}</Text>}
+                  badgeLabel={t('demo.recron.knowledge.flashcard.card.badgeLabel')}
+                  flipped={quizFlipped()}
+                  onFlip={setQuizFlipped}
+                />
+              </div>
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          title="FlashcardPracticeSession"
+          subtitle={t('demo.recron.showcase.flashcardQuizSession.subtitle')}
+        >
+          <PreviewPanel>
+            <PreviewGroup title="Example">
+              <div class="recronDemoWide">
+                <FlashcardPracticeSession
+                  items={quizSessionItems()}
+                  getId={(item) => item.id}
+                  getBadgeLabel={(item) => item.category}
+                  renderFront={(item) => <Text as="p">{item.question}</Text>}
+                  renderBack={(item) => <Text as="p">{item.answer}</Text>}
+                  emptyMessage={t('demo.recron.knowledge.flashcard.session.emptyMessage')}
+                  onQuit={() =>
+                    addToast({ type: 'info', message: t('demo.recron.knowledge.flashcard.session.quitToast') })
+                  }
+                  onFinish={handleQuizFinish}
+                />
+              </div>
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          title="FlashcardPracticeSummary"
+          subtitle={t('demo.recron.showcase.flashcardQuizSummary.subtitle')}
+        >
+          <PreviewPanel>
+            <PreviewGroup title="Example">
+              <div class="recronDemoMedium">
+                <FlashcardPracticeSummary
+                  results={quizResults().length > 0 ? quizResults() : fallbackQuizResults}
+                  title={t('demo.recron.knowledge.flashcard.summary.title')}
+                  onBack={handleQuizSummaryBack}
+                  onRestart={handleQuizRestart}
+                />
+              </div>
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection title="PracticeSetupPanel" subtitle={t('demo.recron.showcase.quizSetupPanel.subtitle')}>
+          <PreviewPanel>
+            <PreviewGroup title="Example">
+              <div class="recronDemoMedium">
+                <PracticeSetupPanel
+                  title={t('demo.recron.knowledge.quizSetup.title')}
+                  description={t('demo.recron.knowledge.quizSetup.description')}
+                  categories={practiceSetupCategories}
+                  countOptions={[10, 20, 30, 50]}
+                  initialCount={20}
+                  onStart={handlePracticeSetupStart}
+                />
+              </div>
+            </PreviewGroup>
+          </PreviewPanel>
         </ShowcaseSection>
       </Show>
 

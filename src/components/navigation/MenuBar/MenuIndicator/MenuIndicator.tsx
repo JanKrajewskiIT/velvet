@@ -11,7 +11,7 @@ const MenuIndicator = (props: Props<MenuIndicatorProps>) => {
   return (
     <div
       class={classNames(styles.indicator, props.class)}
-      style={{ transform: `translateX(calc(var(--header-height) * ${props.offset}))` }}
+      style={{ '--indicator-offset': String(props.offset) }}
       aria-hidden="true"
     >
       <span class={styles.indicatorRing} />

@@ -10,6 +10,11 @@ import styles from './RoundIconButton.module.css';
 
 type RoundIconButtonElevation = 'popover' | 'glow';
 
+const elevationClassByValue: Record<RoundIconButtonElevation, string | undefined> = {
+  popover: styles.popover,
+  glow: styles.glow,
+};
+
 interface RoundIconButtonOwnProps extends Omit<ButtonCoreNativeProps, 'children' | 'title'> {
   icon: ButtonIcon;
   label: string;
@@ -38,7 +43,7 @@ const RoundIconButton = (props: Props<RoundIconButtonOwnProps>) => {
   return (
     <Button
       {...rest}
-      class={classNames(styles.button, styles[local.elevation ?? 'popover'], local.class)}
+      class={classNames(styles.button, elevationClassByValue[local.elevation ?? 'popover'], local.class)}
       type={local.type ?? 'button'}
       size={local.size}
       variant={local.variant ?? 'primary'}

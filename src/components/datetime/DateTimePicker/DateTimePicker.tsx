@@ -5,9 +5,7 @@ import type { AriaFieldProps, ComponentSize } from '~/models/Props';
 import classNames from '~/utils/classNames';
 import { joinDateTimeValue, splitDateTimeValue } from '~/utils/datetime';
 
-import type { DatePickerMessages } from '../DatePicker/DatePicker';
 import DatePicker from '../DatePicker/DatePicker';
-import type { TimePickerMessages } from '../TimePicker/TimePicker';
 import TimePicker from '../TimePicker/TimePicker';
 import styles from './DateTimePicker.module.css';
 
@@ -20,10 +18,6 @@ export interface DateTimePickerProps extends AriaFieldProps {
   minDate?: string;
   maxDate?: string;
   step?: number;
-  datePlaceholder?: string;
-  timePlaceholder?: string;
-  dateMessages?: DatePickerMessages;
-  timeMessages?: TimePickerMessages;
   size?: ComponentSize;
 }
 
@@ -38,10 +32,6 @@ const DateTimePicker = (props: Props<DateTimePickerProps>) => {
     'minDate',
     'maxDate',
     'step',
-    'datePlaceholder',
-    'timePlaceholder',
-    'dateMessages',
-    'timeMessages',
     'size',
     'aria-labelledby',
     'aria-describedby',
@@ -83,8 +73,6 @@ const DateTimePicker = (props: Props<DateTimePickerProps>) => {
         size={local.size}
         min={local.minDate}
         max={local.maxDate}
-        placeholder={local.datePlaceholder}
-        messages={local.dateMessages}
         aria-labelledby={local['aria-labelledby']}
         aria-describedby={local['aria-describedby']}
         aria-invalid={local['aria-invalid']}
@@ -96,12 +84,8 @@ const DateTimePicker = (props: Props<DateTimePickerProps>) => {
         disabled={local.disabled || !parts().date}
         size={local.size}
         step={local.step}
-        placeholder={local.timePlaceholder}
-        messages={local.timeMessages}
         aria-labelledby={local['aria-labelledby']}
         aria-describedby={local['aria-describedby']}
-        aria-invalid={local['aria-invalid']}
-        aria-errormessage={local['aria-errormessage']}
       />
     </div>
   );

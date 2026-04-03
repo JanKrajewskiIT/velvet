@@ -9,21 +9,15 @@ import classNames from '~/utils/classNames';
 import DropdownSurface from '../Dropdown/DropdownSurface/DropdownSurface';
 import styles from './DropdownMenu.module.css';
 
-interface DropdownMenuMessages {
-  triggerAriaLabel?: string;
-  menuAriaLabel?: string;
-}
-
 interface DropdownMenuProps {
   trigger: JSX.Element;
   children: JSX.Element;
   label?: string;
-  messages?: DropdownMenuMessages;
 }
 
 const DropdownMenu = (props: Props<DropdownMenuProps>) => {
-  const { t } = useI18n();
-  const [local, rest] = splitProps(props, ['class', 'trigger', 'children', 'label', 'messages']);
+  const { ts } = useI18n();
+  const [local, rest] = splitProps(props, ['class', 'trigger', 'children', 'label']);
   const menuId = createUniqueId();
   let menuRef: HTMLDivElement | undefined;
   let panelRef: HTMLDivElement | undefined;
@@ -34,8 +28,8 @@ const DropdownMenu = (props: Props<DropdownMenuProps>) => {
     triggerRef: () => triggerRef,
     focusTriggerOnTab: true,
   });
-  const triggerAriaLabel = createMemo(() => local.messages?.triggerAriaLabel ?? local.label ?? t('dropdown.openMenu'));
-  const menuAriaLabel = createMemo(() => local.messages?.menuAriaLabel ?? t('common.menuOptions'));
+  const triggerAriaLabel = createMemo(() => local.label ?? ts('dropdown.openMenu'));
+  const menuAriaLabel = createMemo(() => ts('common.menuOptions'));
 
   const toggle = () => {
     if (dropdown.open()) {
@@ -84,4 +78,4 @@ const DropdownMenu = (props: Props<DropdownMenuProps>) => {
 };
 
 export default DropdownMenu;
-export type { DropdownMenuMessages, DropdownMenuProps };
+export type { DropdownMenuProps };

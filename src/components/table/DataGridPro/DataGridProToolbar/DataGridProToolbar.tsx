@@ -20,22 +20,16 @@ interface DataGridProToolbarProps {
   filterable: boolean | undefined;
   filterQuery: Accessor<string>;
   onFilterInput: JSX.EventHandler<HTMLInputElement, InputEvent>;
-  filterPlaceholder: string | undefined;
   rowCount: Accessor<number>;
   selectable: Accessor<boolean>;
   selectedCount: Accessor<number>;
   hasPersistence: Accessor<boolean>;
   hasPersistedLayout: Accessor<boolean>;
-  persistedBadgeLabel: string | undefined;
-  defaultBadgeLabel: string | undefined;
   onClearSelection: () => void;
   onResetView: () => void;
   onResetPersistedLayout: () => void;
-  resetPersistenceLabel: string | undefined;
   onImportClick: () => void;
-  importSettingsLabel: string | undefined;
   onExportSettings: () => void;
-  exportSettingsLabel: string | undefined;
   setImportFileInputRef: (value: HTMLInputElement) => void;
   onImportFile: JSX.EventHandler<HTMLInputElement, Event>;
   setColumnMenuWrapRef: (value: HTMLDivElement) => void;
@@ -46,31 +40,10 @@ interface DataGridProToolbarProps {
   disableUncheckColumn: (key: string) => boolean;
   onToggleColumnVisibility: (key: string) => void;
   onResetColumns: () => void;
-  rowsCountLabel?: (count: number) => string;
-  selectedCountLabel?: (count: number) => string;
-  clearSelectionLabel?: string;
-  resetViewLabel?: string;
-  columnsLabel?: string;
-  columnVisibilityLabel?: string;
-  resetColumnsLabel?: string;
 }
 
 const DataGridProToolbar = (props: Props<DataGridProToolbarProps>) => {
-  const { t } = useI18n();
-  const filterPlaceholder = () => props.filterPlaceholder ?? t('table.filterRows');
-  const rowsCountLabel = (count: number) => props.rowsCountLabel?.(count) ?? t('table.rowsCount', { count });
-  const selectedCountLabel = (count: number) =>
-    props.selectedCountLabel?.(count) ?? t('table.selectedCount', { count });
-  const persistedBadgeLabel = () => props.persistedBadgeLabel ?? t('common.persisted');
-  const defaultBadgeLabel = () => props.defaultBadgeLabel ?? t('common.default');
-  const clearSelectionLabel = () => props.clearSelectionLabel ?? t('table.clearSelection');
-  const resetViewLabel = () => props.resetViewLabel ?? t('table.resetView');
-  const resetSavedLayoutLabel = () => props.resetPersistenceLabel ?? t('table.resetSavedLayout');
-  const importJsonLabel = () => props.importSettingsLabel ?? t('common.importJson');
-  const exportJsonLabel = () => props.exportSettingsLabel ?? t('common.exportJson');
-  const columnsLabel = () => props.columnsLabel ?? t('table.columns');
-  const columnVisibilityLabel = () => props.columnVisibilityLabel ?? t('columnManager.columnVisibility');
-  const resetColumnsLabel = () => props.resetColumnsLabel ?? t('columnManager.resetColumns');
+  const { ts } = useI18n();
 
   return (
     <Show when={props.show()}>
@@ -82,18 +55,18 @@ const DataGridProToolbar = (props: Props<DataGridProToolbarProps>) => {
                 type="search"
                 value={props.filterQuery()}
                 onInput={props.onFilterInput}
-                placeholder={filterPlaceholder()}
+                placeholder={ts('table.filterRows')}
                 class={styles.filterInput}
               />
             </div>
           </Show>
           <div class={styles.summary}>
             <Text as="span" variant="labelMd" tone="secondary" class={styles.resultsCount}>
-              {rowsCountLabel(props.rowCount())}
+              {ts('table.rowsCount', { count: props.rowCount() })}
             </Text>
             <Show when={props.selectable() && props.selectedCount() > 0}>
               <Text as="span" variant="caption" tone="primary" class={styles.selectionSummary}>
-                {selectedCountLabel(props.selectedCount())}
+                {ts('table.selectedCount', { count: props.selectedCount() })}
               </Text>
             </Show>
           </div>
@@ -101,10 +74,10 @@ const DataGridProToolbar = (props: Props<DataGridProToolbarProps>) => {
             <span
               class={classNames(
                 styles.persistenceBadge,
-                props.hasPersistedLayout() ? styles.badgePersisted : styles.badgeDefault
+                props.hasPersistedLayout() ? styles.badgePersisted : styles.badgeDefault,
               )}
             >
-              {props.hasPersistedLayout() ? persistedBadgeLabel() : defaultBadgeLabel()}
+              {props.hasPersistedLayout() ? ts('common.persisted') : ts('common.default')}
             </span>
           </Show>
         </div>
@@ -117,23 +90,23 @@ const DataGridProToolbar = (props: Props<DataGridProToolbarProps>) => {
               onClick={props.onClearSelection}
               disabled={props.selectedCount() === 0}
             >
-              {clearSelectionLabel()}
+              {ts('table.clearSelection')}
             </Button>
             <Button variant="ghost" size="sm" class={styles.toolbarButton} onClick={props.onResetView}>
-              {resetViewLabel()}
+              {ts('table.resetView')}
             </Button>
             <Show when={props.hasPersistence()}>
               <Button variant="ghost" size="sm" class={styles.toolbarButton} onClick={props.onResetPersistedLayout}>
-                {resetSavedLayoutLabel()}
+                {ts('table.resetSavedLayout')}
               </Button>
             </Show>
           </div>
           <div class={styles.toolbarGroup}>
             <Button variant="ghost" size="sm" class={styles.toolbarButton} onClick={props.onImportClick}>
-              {importJsonLabel()}
+              {ts('common.importJson')}
             </Button>
             <Button variant="ghost" size="sm" class={styles.toolbarButton} onClick={props.onExportSettings}>
-              {exportJsonLabel()}
+              {ts('common.exportJson')}
             </Button>
           </div>
           <input
@@ -152,14 +125,14 @@ const DataGridProToolbar = (props: Props<DataGridProToolbarProps>) => {
               aria-haspopup="dialog"
               aria-expanded={props.columnMenuOpen() ? 'true' : 'false'}
             >
-              {columnsLabel()}
+              {ts('table.columns')}
             </Button>
             <Show when={props.columnMenuOpen()}>
-              <div class={styles.columnMenu} role="group" aria-label={columnVisibilityLabel()}>
+              <div class={styles.columnMenu} role="group" aria-label={ts('columnManager.columnVisibility')}>
                 <For each={props.orderedColumns()}>
                   {(column) => (
                     <Checkbox
-                      wrapperClass={styles.columnOption}
+                      class={styles.columnOption}
                       checked={props.isColumnVisible(column.key)}
                       disabled={props.disableUncheckColumn(column.key)}
                       onChange={() => props.onToggleColumnVisibility(column.key)}
@@ -168,7 +141,7 @@ const DataGridProToolbar = (props: Props<DataGridProToolbarProps>) => {
                   )}
                 </For>
                 <Button variant="ghost" size="sm" class={styles.toolbarButtonSmall} onClick={props.onResetColumns}>
-                  {resetColumnsLabel()}
+                  {ts('columnManager.resetColumns')}
                 </Button>
               </div>
             </Show>

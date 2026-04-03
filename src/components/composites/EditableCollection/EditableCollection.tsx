@@ -2,6 +2,7 @@ import type { JSX } from 'solid-js';
 import { createSignal, For } from 'solid-js';
 
 import Button, { type ButtonVariant } from '~/components/buttons/Button/Button';
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -18,19 +19,12 @@ export interface EditableCollectionProps<T> {
   renderItem: (item: T, context: EditableCollectionRenderContext) => JSX.Element;
   onAdd: () => void;
   onRemove: (id: string) => void;
-  addLabel: string;
-  confirmLabel: string;
-  confirmMessage: string;
-  confirmActionLabel: string;
-  cancelLabel: string;
   confirmVariant?: 'danger' | 'primary';
   addButtonVariant?: ButtonVariant;
-  listClass?: string;
-  itemClass?: string;
-  addButtonClass?: string;
 }
 
 const EditableCollection = <T,>(props: Props<EditableCollectionProps<T>>) => {
+  const { ts } = useI18n();
   const [deleteId, setDeleteId] = createSignal<string | null>(null);
 
   const handleConfirmDelete = () => {
@@ -41,10 +35,10 @@ const EditableCollection = <T,>(props: Props<EditableCollectionProps<T>>) => {
   };
 
   return (
-    <div class={classNames(styles.list, props.listClass, props.class)}>
+    <div class={classNames(styles.list, props.class)}>
       <For each={props.items}>
         {(item) => (
-          <div class={classNames(styles.item, props.itemClass)}>
+          <div class={styles.item}>
             {props.renderItem(item, {
               requestRemove: () => {
                 setDeleteId(props.getId(item));
@@ -53,19 +47,14 @@ const EditableCollection = <T,>(props: Props<EditableCollectionProps<T>>) => {
           </div>
         )}
       </For>
-      <Button
-        class={classNames(styles.addButton, props.addButtonClass)}
-        variant={props.addButtonVariant ?? 'ghost'}
-        onClick={props.onAdd}
-      >
-        {props.addLabel}
+      <Button class={styles.addButton} variant={props.addButtonVariant ?? 'ghost'} onClick={props.onAdd}>
+        {ts('common.add')}
       </Button>
       <ConfirmDialog
         open={deleteId() !== null}
-        label={props.confirmLabel}
-        message={props.confirmMessage}
-        confirmLabel={props.confirmActionLabel}
-        cancelLabel={props.cancelLabel}
+        label={ts('common.confirm')}
+        message={ts('editableCollection.deleteConfirmMessage')}
+        confirmLabel={ts('common.delete')}
         variant={props.confirmVariant ?? 'danger'}
         onConfirm={handleConfirmDelete}
         onClose={() => setDeleteId(null)}

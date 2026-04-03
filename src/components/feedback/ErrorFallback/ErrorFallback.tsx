@@ -1,6 +1,7 @@
 import { splitProps } from 'solid-js';
 
 import Button from '~/components/buttons/Button/Button';
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 
 import FallbackState from '../FallbackState/FallbackState';
@@ -8,12 +9,12 @@ import FallbackState from '../FallbackState/FallbackState';
 interface ErrorFallbackOwnProps {
   label: string;
   description: string;
-  retryLabel: string;
   onRetry: () => void;
 }
 
 const ErrorFallback = (props: Props<ErrorFallbackOwnProps>) => {
-  const [local, rest] = splitProps(props, ['class', 'label', 'description', 'retryLabel', 'onRetry']);
+  const { ts } = useI18n();
+  const [local, rest] = splitProps(props, ['class', 'label', 'description', 'onRetry']);
 
   return (
     <FallbackState
@@ -21,7 +22,7 @@ const ErrorFallback = (props: Props<ErrorFallbackOwnProps>) => {
       class={local.class}
       label={local.label}
       description={local.description}
-      action={<Button onClick={local.onRetry} label={local.retryLabel} />}
+      action={<Button onClick={local.onRetry} label={ts('error.retry')} />}
     />
   );
 };

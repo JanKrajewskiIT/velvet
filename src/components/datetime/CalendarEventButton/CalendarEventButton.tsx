@@ -49,6 +49,12 @@ export const buildGoogleCalendarUrl = (event: CalendarEventButtonEvent): string 
 
 const CalendarEventButton = (props: Props<CalendarEventButtonProps>) => {
   const size = () => props.size ?? 'sm';
+  const sizeClassBySize: Record<ComponentSize, string | undefined> = {
+    sm: styles.sizeSm,
+    md: styles.sizeMd,
+    lg: styles.sizeLg,
+  };
+
   const handleOpen = () => {
     const url = buildGoogleCalendarUrl(props.event);
     if (!url) return;
@@ -76,13 +82,7 @@ const CalendarEventButton = (props: Props<CalendarEventButtonProps>) => {
         />
       }
     >
-      <span
-        class={classNames(
-          styles.status,
-          styles[`size${size().charAt(0).toUpperCase()}${size().slice(1)}`],
-          props.class
-        )}
-      >
+      <span class={classNames(styles.status, sizeClassBySize[size()], props.class)}>
         <Icon icon={FiCheck} size={size()} variant="success" label={props.syncedLabel} />
       </span>
     </Show>

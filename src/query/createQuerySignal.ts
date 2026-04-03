@@ -1,29 +1,56 @@
-import { createEffect, createMemo, createSignal, on } from 'solid-js';
+import { createEffect, createMemo, createSignal, onCleanup } from 'solid-js';
 
 import type { QueryClient } from '~/query/createQueryClient';
 import { useQueryClient } from '~/query/queryClientContext';
-import type { QueryKey, QueryOptions, QueryRetry, QuerySignal, QueryState } from '~/query/types';
+import type { QueryKeyInput, QueryOptions, QueryRetry, QueryRetryDelay, QuerySignal, QueryState } from '~/query/types';
 
 export interface CreateQuerySignalOptions<TData> extends QueryOptions<TData> {
-  key: QueryKey;
+  key: QueryKeyInput;
   query: (signal?: AbortSignal) => Promise<TData>;
   client?: QueryClient;
 }
 
-export function createQuerySignal<TData>(options: CreateQuerySignalOptions<TData>): QuerySignal<TData> {
+const resolveRetryDelay = (attempt: number, retryDelay: QueryRetryDelay): number => {
+  if (typeof retryDelay === 'number') {
+    return retryDelay;
+  }
+
+  return retryDelay(attempt);
+};
+
+const shouldRetry = (attempt: number, error: Error, retryOption: QueryRetry): boolean => {
+  if (typeof retryOption === 'number') {
+    return attempt <= retryOption;
+  }
+
+  return retryOption(attempt, error);
+};
+
+const delay = (ms: number, signal: AbortSignal): Promise<void> =>
+  new Promise((resolve, reject) => {
+    if (signal.aborted) {
+      reject(signal.reason as Error);
+      return;
+    }
+
+    const timer = setTimeout(resolve, ms);
+    const onAbort = () => {
+      clearTimeout(timer);
+      reject(signal.reason as Error);
+    };
+
+    signal.addEventListener('abort', onAbort, { once: true });
+  });
+
+export const createQuerySignal = <TData>(options: CreateQuerySignalOptions<TData>): QuerySignal<TData> => {
   const client = options.client ?? useQueryClient();
   const staleTime = options.staleTime ?? client.defaults.staleTime;
   const retry = options.retry ?? client.defaults.retry;
+  const retryDelay = options.retryDelay ?? client.defaults.retryDelay;
   const [activeAbort, setActiveAbort] = createSignal<AbortController | undefined>(undefined);
-  const entry = client.ensureQuery<TData>(options.key);
 
-  const shouldRetry = (attempt: number, error: Error, retryOption: QueryRetry): boolean => {
-    if (typeof retryOption === 'number') {
-      return attempt <= retryOption;
-    }
-
-    return retryOption(attempt, error);
-  };
+  const resolveKey = () => (typeof options.key === 'function' ? options.key() : options.key);
+  const resolveEntry = () => client.ensureQuery<TData>(resolveKey());
 
   const runQueryWithRetry = async (signal: AbortSignal): Promise<TData> => {
     let attempt = 0;
@@ -33,26 +60,40 @@ export function createQuerySignal<TData>(options: CreateQuerySignalOptions<TData
       try {
         return await options.query(signal);
       } catch (error: unknown) {
+        if (signal.aborted) {
+          throw error instanceof Error ? error : new Error('Query aborted');
+        }
+
         const normalized = error instanceof Error ? error : new Error('Query failed');
         if (!shouldRetry(attempt, normalized, retry)) {
           throw normalized;
+        }
+
+        const delayMs = resolveRetryDelay(attempt, retryDelay);
+        if (delayMs > 0) {
+          await delay(delayMs, signal);
         }
       }
     }
   };
 
-  if (options.initialData !== undefined && entry.state().status === 'idle') {
-    entry.setState({
+  createEffect(() => {
+    const currentEntry = resolveEntry();
+    if (options.initialData === undefined || currentEntry.state().status !== 'idle') {
+      return;
+    }
+
+    currentEntry.setState({
       status: 'success',
       data: options.initialData,
       error: undefined,
-      updatedAt: Date.now(),
+      updatedAt: undefined,
       isFetching: false,
     });
-  }
+  });
 
   const isStale = createMemo(() => {
-    const state = entry.state();
+    const state = resolveEntry().state();
     if (state.updatedAt === undefined) {
       return true;
     }
@@ -65,15 +106,17 @@ export function createQuerySignal<TData>(options: CreateQuerySignalOptions<TData
   });
 
   const refetch = async (): Promise<TData> => {
-    if (entry.inFlight) {
-      return entry.inFlight;
+    const currentEntry = resolveEntry();
+
+    if (currentEntry.inFlight) {
+      return currentEntry.inFlight;
     }
 
     activeAbort()?.abort();
     const controller = new AbortController();
     setActiveAbort(controller);
 
-    entry.setState((previous: QueryState<TData>) => ({
+    currentEntry.setState((previous: QueryState<TData>) => ({
       ...previous,
       status: previous.status === 'idle' ? 'loading' : previous.status,
       isFetching: true,
@@ -82,7 +125,7 @@ export function createQuerySignal<TData>(options: CreateQuerySignalOptions<TData
 
     const pending = runQueryWithRetry(controller.signal)
       .then((data) => {
-        entry.setState({
+        currentEntry.setState({
           status: 'success',
           data,
           error: undefined,
@@ -92,8 +135,12 @@ export function createQuerySignal<TData>(options: CreateQuerySignalOptions<TData
         return data;
       })
       .catch((error: unknown) => {
+        if (controller.signal.aborted) {
+          throw error instanceof Error ? error : new Error('Query aborted');
+        }
+
         const normalized = error instanceof Error ? error : new Error('Query failed');
-        entry.setState((previous: QueryState<TData>) => ({
+        currentEntry.setState((previous: QueryState<TData>) => ({
           ...previous,
           status: 'error',
           error: normalized,
@@ -102,61 +149,45 @@ export function createQuerySignal<TData>(options: CreateQuerySignalOptions<TData
         throw normalized;
       })
       .finally(() => {
-        if (Object.is(entry.inFlight, pending)) {
-          entry.inFlight = null;
+        if (Object.is(currentEntry.inFlight, pending)) {
+          currentEntry.inFlight = null;
         }
       });
 
-    entry.inFlight = pending;
+    currentEntry.inFlight = pending;
     return pending;
   };
 
   const invalidate = () => {
-    entry.invalidate();
+    resolveEntry().invalidate();
   };
 
   const setData = (updater: TData | ((previous: TData | undefined) => TData)) => {
-    client.setQueryData(options.key, updater);
+    client.setQueryData(resolveKey(), updater);
   };
 
-  const status = createMemo(() => {
-    const current = entry.state();
-    return current.status;
+  const status = createMemo(() => resolveEntry().state().status);
+  const data = createMemo(() => resolveEntry().state().data);
+  const error = createMemo(() => resolveEntry().state().error);
+  const updatedAt = createMemo(() => resolveEntry().state().updatedAt);
+  const isFetching = createMemo(() => resolveEntry().state().isFetching);
+
+  createEffect(() => {
+    resolveKey();
+    const enabled = options.enabled?.() ?? true;
+    const stale = isStale();
+
+    if (!enabled || !stale) {
+      return;
+    }
+
+    activeAbort()?.abort();
+    void refetch();
   });
 
-  const data = createMemo(() => {
-    const current = entry.state();
-    return current.data;
+  onCleanup(() => {
+    activeAbort()?.abort();
   });
-
-  const error = createMemo(() => {
-    const current = entry.state();
-    return current.error;
-  });
-
-  const updatedAt = createMemo(() => {
-    const current = entry.state();
-    return current.updatedAt;
-  });
-
-  const isFetching = createMemo(() => {
-    const current = entry.state();
-    return current.isFetching;
-  });
-
-  createEffect(
-    on(
-      () => [options.enabled?.() ?? true, isStale()] as const,
-      ([enabled, stale]) => {
-        if (!enabled || !stale) {
-          return;
-        }
-
-        void refetch();
-      },
-      { defer: true }
-    )
-  );
 
   return {
     status,
@@ -169,4 +200,4 @@ export function createQuerySignal<TData>(options: CreateQuerySignalOptions<TData
     invalidate,
     setData,
   };
-}
+};

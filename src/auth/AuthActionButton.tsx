@@ -19,17 +19,17 @@ interface AuthActionButtonProps extends Omit<ButtonCoreNativeProps, 'title'> {
 const AuthActionButton = (props: Props<AuthActionButtonProps>) => {
   const [local, rest] = splitProps(props, ['returnUrl', 'variant', 'disabled', 'onClick']);
   const auth = useAuth();
-  const { t } = useI18n();
+  const { ts } = useI18n();
   const [isAuthenticating, setIsAuthenticating] = createSignal(false);
 
-  const label = createMemo(() => (auth.isAuthenticated() ? t('common.logOut') : t('common.logIn')));
+  const label = createMemo(() => (auth.isAuthenticated() ? ts('common.logOut') : ts('common.logIn')));
 
   const icon = createMemo(() =>
     auth.isAuthenticated() ? (
       <Icon icon={FiLogOut} />
     ) : (
       <Icon icon={FiLogIn} variant={isAuthenticating() ? 'primary' : 'inherit'} />
-    )
+    ),
   );
 
   const handleAuthAction: ButtonCoreNativeProps['onClick'] = (event) => {

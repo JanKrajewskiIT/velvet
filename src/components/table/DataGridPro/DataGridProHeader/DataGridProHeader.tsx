@@ -3,6 +3,7 @@ import { type Accessor, For, type JSX, Show } from 'solid-js';
 
 import Button from '~/components/buttons/Button/Button';
 import Checkbox from '~/components/switchers/Checkbox/Checkbox';
+import { useI18n } from '~/i18n/I18nProvider';
 import classNames from '~/utils/classNames';
 
 import type { DataGridProColumn } from '../DataGridPro.types';
@@ -29,11 +30,11 @@ interface DataGridProHeaderProps<T extends Record<string, unknown>> {
   onHeaderDrop: (key: string, event: DragEvent) => void;
   onHeaderDragEnd: () => void;
   onResizeStart: (key: string, event: MouseEvent) => void;
-  selectAllVisibleRowsLabel?: string;
-  resizeColumnLabel?: (label: string) => string;
 }
 
 const DataGridProHeader = <T extends Record<string, unknown>>(props: DataGridProHeaderProps<T>) => {
+  const { ts } = useI18n();
+
   return (
     <div class={styles.header} role="row" style={{ height: `${props.headerHeight()}px` }}>
       <Show when={props.selectable()}>
@@ -42,7 +43,7 @@ const DataGridProHeader = <T extends Record<string, unknown>>(props: DataGridPro
             class={styles.selectionCheckbox}
             checked={props.allVisibleSelected()}
             onChange={props.onToggleAllVisible}
-            aria-label={props.selectAllVisibleRowsLabel}
+            aria-label={ts('table.selectAllVisibleRows')}
           />
         </div>
       </Show>
@@ -65,7 +66,7 @@ const DataGridProHeader = <T extends Record<string, unknown>>(props: DataGridPro
                 props.draggingColumnKey() === key() && styles.headerDragging,
                 props.dragOverColumnKey() === key() && styles.headerDragOver,
                 props.getColumnPin(column) === 'left' && styles.pinnedLeft,
-                props.getColumnPin(column) === 'right' && styles.pinnedRight
+                props.getColumnPin(column) === 'right' && styles.pinnedRight,
               )}
               style={props.getColumnStyle(column)}
               draggable={props.reorderable()}
@@ -95,7 +96,7 @@ const DataGridProHeader = <T extends Record<string, unknown>>(props: DataGridPro
                 size="sm"
                 iconOnly
                 class={styles.resizeHandle}
-                aria-label={props.resizeColumnLabel?.(column.header)}
+                aria-label={ts('table.resizeColumn', { label: column.header })}
                 onMouseDown={(e) => props.onResizeStart(key(), e)}
                 onClick={(e) => e.stopPropagation()}
               >

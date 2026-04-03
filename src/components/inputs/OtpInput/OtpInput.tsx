@@ -1,9 +1,9 @@
 import { createMemo, For, type JSX, splitProps } from 'solid-js';
 
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import type { ComponentSize } from '~/models/Props';
 import classNames from '~/utils/classNames';
-import getInputSizeClass from '~/utils/getInputSizeClass';
 
 import Input from '../Input/Input';
 import styles from './OtpInput.module.css';
@@ -14,30 +14,21 @@ interface OtpInputOwnProps {
   onChange: (value: string) => void;
   disabled?: boolean;
   size?: ComponentSize;
-  groupAriaLabel?: string;
-  inputAriaLabel?: (index: number) => string;
 }
 
-const DEFAULT_OTP_GROUP_LABEL = 'Verification code';
-const DEFAULT_OTP_INPUT_LABEL = 'Code digit';
+const sizeClassByValue: Record<ComponentSize, string | undefined> = {
+  sm: styles.sizeSm,
+  md: styles.sizeMd,
+  lg: styles.sizeLg,
+};
 
 const OtpInput = (props: Props<OtpInputOwnProps>) => {
-  const [local, rest] = splitProps(props, [
-    'length',
-    'value',
-    'onChange',
-    'disabled',
-    'size',
-    'groupAriaLabel',
-    'inputAriaLabel',
-    'class',
-  ]);
+  const { ts } = useI18n();
+  const [local, rest] = splitProps(props, ['length', 'value', 'onChange', 'disabled', 'size', 'class']);
   const refs: HTMLInputElement[] = [];
 
   const length = createMemo(() => local.length ?? 6);
   const digits = createMemo(() => Array.from({ length: length() }, (_, i) => i));
-  const groupLabel = createMemo(() => local.groupAriaLabel ?? DEFAULT_OTP_GROUP_LABEL);
-  const inputLabel = (index: number) => local.inputAriaLabel?.(index) ?? `${DEFAULT_OTP_INPUT_LABEL} ${index + 1}`;
 
   const focusAt = (index: number) => {
     const target = refs[index];
@@ -77,14 +68,14 @@ const OtpInput = (props: Props<OtpInputOwnProps>) => {
     const nextIndex = Math.min(chars.length, length() - 1);
     focusAt(nextIndex);
   };
-  const sizeClass = createMemo(() => getInputSizeClass(styles, local.size));
+  const sizeClass = createMemo(() => sizeClassByValue[local.size ?? 'md']);
 
   return (
     <div
       {...rest}
       class={classNames(styles.wrapper, local.disabled && styles.disabled, local.class)}
       role="group"
-      aria-label={groupLabel()}
+      aria-label={ts('otp.group')}
       onPaste={handlePaste}
     >
       <For each={digits()}>
@@ -99,7 +90,7 @@ const OtpInput = (props: Props<OtpInputOwnProps>) => {
             maxlength={1}
             disabled={local.disabled}
             autocomplete="one-time-code"
-            aria-label={inputLabel(index)}
+            aria-label={ts('otp.digit', { index: String(index + 1) })}
             value={local.value[index] ?? ''}
             style={{ '--delay': `${index * 50}ms` }}
             onInput={(event) => handleInput(index, event)}

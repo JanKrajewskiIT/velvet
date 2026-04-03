@@ -4,10 +4,6 @@
   justify-content: flex-start;
 }
 
-.itemContent {
-  gap: var(--spacing-sm);
-}
-
 .itemIconButton:hover {
   transform: translateX(var(--spacing-2xs));
 }

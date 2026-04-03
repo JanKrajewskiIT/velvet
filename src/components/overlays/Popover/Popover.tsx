@@ -18,6 +18,13 @@ interface PopoverProps {
   onOpenChange?: (open: boolean) => void;
 }
 
+const positionClassByValue: Record<NonNullable<PopoverProps['position']>, string | undefined> = {
+  top: styles.top,
+  bottom: styles.bottom,
+  left: styles.left,
+  right: styles.right,
+};
+
 const Popover = (props: Props<PopoverProps>) => {
   const [internalOpen, setInternalOpen] = createSignal(false);
   let rootRef: HTMLDivElement | undefined;
@@ -45,7 +52,7 @@ const Popover = (props: Props<PopoverProps>) => {
       })}
       <Show when={isOpen()}>
         <Surface
-          class={classNames(styles.content, styles[position()])}
+          class={classNames(styles.content, positionClassByValue[position()])}
           role="dialog"
           aria-modal="false"
           radius="md"

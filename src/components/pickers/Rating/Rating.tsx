@@ -19,7 +19,7 @@ export interface RatingProps extends Omit<DivCoreNativeProps, 'onChange'> {
 }
 
 const Rating = (props: Props<RatingProps>) => {
-  const { t } = useI18n();
+  const { ts } = useI18n();
   const [local, rest] = splitProps(props, ['value', 'onChange', 'max', 'size', 'icon', 'getValueLabel', 'class']);
   const [hoverIndex, setHoverIndex] = createSignal(-1);
   const itemRefs: (HTMLButtonElement | undefined)[] = [];
@@ -119,7 +119,7 @@ const Rating = (props: Props<RatingProps>) => {
             type={isInteractive() ? 'button' : undefined}
             role={isInteractive() ? 'radio' : undefined}
             aria-checked={isInteractive() ? selectedIndex() === index : undefined}
-            aria-label={local.getValueLabel?.(index, max()) ?? t('rating.valueOf', { index, max: max() })}
+            aria-label={local.getValueLabel?.(index, max()) ?? ts('rating.valueOf', { index, max: max() })}
             tabIndex={isInteractive() ? (tabStopIndex() === index ? 0 : -1) : undefined}
             ref={(element: HTMLButtonElement | HTMLSpanElement) => {
               if (!isInteractive()) return;
@@ -130,7 +130,7 @@ const Rating = (props: Props<RatingProps>) => {
               sizeClass(),
               isFilled(index) && styles.filled,
               isPartiallyFilled(index) && styles.partial,
-              isInteractive() && styles.interactive
+              isInteractive() && styles.interactive,
             )}
             onClick={isInteractive() ? () => handleClick(index) : undefined}
             onMouseEnter={isInteractive() ? () => handleMouseEnter(index) : undefined}

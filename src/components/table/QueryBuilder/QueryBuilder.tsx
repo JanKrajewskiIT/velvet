@@ -71,81 +71,31 @@ interface QueryBuilderOwnProps extends Omit<DivCoreNativeProps, 'onChange'> {
   onChange: (next: QueryBuilderValue) => void;
   label?: string;
   description?: string;
-  combinatorLabel?: string;
-  addRuleLabel?: string;
-  clearLabel?: string;
-  fieldLabel?: string;
-  operatorLabel?: string;
-  valueLabel?: string;
-  emptyLabel?: string;
   disabled?: boolean;
-  messages?: QueryBuilderMessages;
 }
 
 export type QueryBuilderProps = QueryBuilderOwnProps;
 
-export interface QueryBuilderMessages {
-  titleLabel?: string;
-  clearRulesLabel?: string;
-  addRuleLabel?: string;
-  matchLabel?: string;
-  combinatorAndLabel?: string;
-  combinatorOrLabel?: string;
-  fieldLabel?: string;
-  operatorLabel?: string;
-  valueLabel?: string;
-  emptyLabel?: string;
-  selectPlaceholderLabel?: string;
-  moveRuleUpLabel?: string;
-  moveRuleDownLabel?: string;
-  removeRuleLabel?: string;
-  operatorLabels?: Partial<Record<QueryBuilderOperator, string>>;
-}
-
 const QueryBuilder = (props: Props<QueryBuilderProps>) => {
-  const { t } = useI18n();
+  const { ts, t } = useI18n();
   const [local, cardProps] = splitProps(props, [
     'fields',
     'value',
     'onChange',
     'label',
     'description',
-    'combinatorLabel',
-    'addRuleLabel',
-    'clearLabel',
-    'fieldLabel',
-    'operatorLabel',
-    'valueLabel',
-    'emptyLabel',
     'disabled',
-    'messages',
     'class',
   ]);
   const fieldByKey = createMemo(() => new Map(local.fields.map((field) => [field.key, field])));
   const hasRules = createMemo(() => local.value.rules.length > 0);
-  const titleLabel = createMemo(() => local.label ?? local.messages?.titleLabel ?? t('common.queryBuilder'));
-  const clearRulesLabel = createMemo(
-    () => local.clearLabel ?? local.messages?.clearRulesLabel ?? t('query.clearRules')
-  );
-  const addRuleLabel = createMemo(() => local.addRuleLabel ?? local.messages?.addRuleLabel ?? t('query.addRule'));
-  const matchLabel = createMemo(() => local.combinatorLabel ?? local.messages?.matchLabel ?? t('common.match'));
-  const combinatorAndLabel = createMemo(() => local.messages?.combinatorAndLabel ?? t('query.combinator.and'));
-  const combinatorOrLabel = createMemo(() => local.messages?.combinatorOrLabel ?? t('query.combinator.or'));
-  const fieldLabel = createMemo(() => local.fieldLabel ?? local.messages?.fieldLabel ?? t('common.field'));
-  const operatorLabel = createMemo(() => local.operatorLabel ?? local.messages?.operatorLabel ?? t('common.operator'));
-  const valueLabel = createMemo(() => local.valueLabel ?? local.messages?.valueLabel ?? t('common.value'));
-  const emptyLabel = createMemo(() => local.emptyLabel ?? local.messages?.emptyLabel ?? t('query.empty'));
-  const selectPlaceholderLabel = createMemo(() => local.messages?.selectPlaceholderLabel ?? t('common.selectEllipsis'));
-  const moveRuleUpLabel = createMemo(() => local.messages?.moveRuleUpLabel ?? t('query.moveRuleUp'));
-  const moveRuleDownLabel = createMemo(() => local.messages?.moveRuleDownLabel ?? t('query.moveRuleDown'));
-  const removeRuleLabel = createMemo(() => local.messages?.removeRuleLabel ?? t('query.removeRule'));
+  const titleLabel = createMemo(() => local.label ?? ts('common.queryBuilder'));
   const combinatorOptions = createMemo<SelectOption[]>(() => [
-    { value: 'and', label: combinatorAndLabel() },
-    { value: 'or', label: combinatorOrLabel() },
+    { value: 'and', label: ts('query.combinator.and') },
+    { value: 'or', label: ts('query.combinator.or') },
   ]);
 
-  const getOperatorLabel = (operator: QueryBuilderOperator): string =>
-    local.messages?.operatorLabels?.[operator] ?? t(`query.operator.${operator}` as const);
+  const getOperatorLabel = (operator: QueryBuilderOperator): string => t(`query.operator.${operator}` as const);
 
   const updateValue = (next: QueryBuilderValue) => {
     local.onChange(next);
@@ -203,12 +153,12 @@ const QueryBuilder = (props: Props<QueryBuilderProps>) => {
         </div>
         <div class={styles.headerActions}>
           <Button variant="ghost" size="sm" disabled={local.disabled || !hasRules()} onClick={clearRules}>
-            {clearRulesLabel()}
+            {ts('query.clearRules')}
           </Button>
           <Button variant="primary" size="sm" disabled={local.disabled || local.fields.length === 0} onClick={addRule}>
             <span class={styles.addButtonContent}>
               <Icon icon={IoAdd} />
-              {addRuleLabel()}
+              {ts('query.addRule')}
             </span>
           </Button>
         </div>
@@ -220,7 +170,7 @@ const QueryBuilder = (props: Props<QueryBuilderProps>) => {
             <Select
               {...fieldProps}
               size="sm"
-              aria-label={matchLabel()}
+              aria-label={ts('common.match')}
               value={local.value.combinator}
               onChange={handleCombinatorChange}
               disabled={local.disabled}
@@ -234,7 +184,7 @@ const QueryBuilder = (props: Props<QueryBuilderProps>) => {
         when={hasRules()}
         fallback={
           <Text as="p" variant="bodySm" tone="muted">
-            {emptyLabel()}
+            {ts('query.empty')}
           </Text>
         }
       >
@@ -250,13 +200,6 @@ const QueryBuilder = (props: Props<QueryBuilderProps>) => {
                   fields={local.fields}
                   field={selectedField()}
                   operators={operators()}
-                  fieldLabel={fieldLabel()}
-                  operatorLabel={operatorLabel()}
-                  valueLabel={valueLabel()}
-                  selectPlaceholderLabel={selectPlaceholderLabel()}
-                  moveRuleUpLabel={moveRuleUpLabel()}
-                  moveRuleDownLabel={moveRuleDownLabel()}
-                  removeRuleLabel={removeRuleLabel()}
                   getOperatorLabel={getOperatorLabel}
                   disabled={local.disabled}
                   isFirst={index() === 0}

@@ -14,9 +14,18 @@ interface BadgeProps {
   children: JSX.Element;
 }
 
+const variantClassByValue: Record<NonNullable<BadgeProps['variant']>, string | undefined> = {
+  primary: styles.primary,
+  primarySoft: styles.primarySoft,
+  info: styles.info,
+  success: styles.success,
+  warning: styles.warning,
+  error: styles.error,
+};
+
 const Badge = (props: Props<BadgeProps>) => {
   const [local, rest] = splitProps(props, ['class', 'content', 'variant', 'max', 'dot', 'inline', 'children']);
-  const variantClass = createMemo(() => styles[local.variant ?? 'primary']);
+  const variantClass = createMemo(() => variantClassByValue[local.variant ?? 'primary']);
   const displayContent = createMemo(() => {
     const value = local.content;
     if (value === undefined) return '';

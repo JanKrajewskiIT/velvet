@@ -1,6 +1,7 @@
 import { createMemo, createUniqueId, For, type JSX, splitProps } from 'solid-js';
 
 import TabButton from '~/components/navigation/Tabs/TabButton/TabButton';
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -21,10 +22,15 @@ interface TabsProps<T extends string> {
   variant?: 'underline' | 'pill';
   disabled?: boolean;
   activationMode?: 'automatic' | 'manual';
-  tabListLabel?: string;
 }
 
+const variantClassByValue: Record<NonNullable<TabsProps<string>['variant']>, string | undefined> = {
+  underline: styles.underline,
+  pill: styles.pill,
+};
+
 const Tabs = <T extends string>(props: Props<TabsProps<T>>) => {
+  const { ts } = useI18n();
   const generatedId = createUniqueId();
   const [local, rest] = splitProps(props, [
     'tabs',
@@ -33,7 +39,6 @@ const Tabs = <T extends string>(props: Props<TabsProps<T>>) => {
     'variant',
     'disabled',
     'activationMode',
-    'tabListLabel',
     'class',
     'id',
   ]);
@@ -44,7 +49,7 @@ const Tabs = <T extends string>(props: Props<TabsProps<T>>) => {
     tabs()
       .map((tab, index) => ({ tab, index }))
       .filter(({ tab }) => !tab.disabled)
-      .map(({ index }) => index)
+      .map(({ index }) => index),
   );
   const getTabId = (tab: Tab<T>, index: number) => tab.id ?? `${local.id ?? generatedId}-tab-${String(index)}`;
   const focusTabAtIndex = (index: number) => {
@@ -105,9 +110,9 @@ const Tabs = <T extends string>(props: Props<TabsProps<T>>) => {
     <div
       {...rest}
       id={local.id ?? generatedId}
-      class={classNames(styles.tabs, styles[variant()], local.class)}
+      class={classNames(styles.tabs, variantClassByValue[variant()], local.class)}
       role="tablist"
-      aria-label={local.tabListLabel}
+      aria-label={ts('tabs.tabList')}
       aria-orientation="horizontal"
     >
       <For each={tabs()}>

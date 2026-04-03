@@ -6,8 +6,8 @@ import type { AnchorCoreNativeProps } from '~/models/Props';
 import type { HTMLElementCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import { type TextVariant, textVariantClass, toneClass, type TypographyTone } from '../Typography/Typography';
-import typographyStyles from '../Typography/Typography.module.css';
+import { type TextVariant, type TypographyTone } from '../Typography/Typography';
+import { textVariantClassByValue, typographyToneClassByValue } from '../Typography/TypographyClasses';
 import styles from './Text.module.css';
 
 interface TextProps extends HTMLElementCoreNativeProps, AnchorCoreNativeProps {
@@ -24,10 +24,10 @@ const Text = (props: Props<TextProps>) => {
   const textClass = createMemo(() =>
     classNames(
       styles.text,
-      textVariantClass(typographyStyles, local.variant),
-      toneClass(typographyStyles, local.tone),
-      local.class
-    )
+      textVariantClassByValue[local.variant ?? 'bodyMd'],
+      typographyToneClassByValue[local.tone ?? 'default'],
+      local.class,
+    ),
   );
 
   return (

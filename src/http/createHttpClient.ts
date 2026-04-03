@@ -2,16 +2,15 @@ import { ApiError } from '~/http/errors';
 import type { HttpClient, HttpClientConfig, HttpRequestOptions } from '~/http/types';
 import { buildUrl, parseResponseBody, resolveRequestBody } from '~/http/utils';
 
-export function createHttpClient(config: HttpClientConfig = {}): HttpClient {
+export const createHttpClient = (config: HttpClientConfig = {}): HttpClient => {
   const fetchImpl = config.fetch ?? globalThis.fetch;
-
   const baseUrl = config.baseUrl ?? '';
 
-  async function request<T>(method: string, path: string, options: HttpRequestOptions = {}): Promise<T> {
+  const request = async <T>(method: string, path: string, options: HttpRequestOptions = {}): Promise<T> => {
     const token = await config.getAccessToken?.();
     const resolvedBody = resolveRequestBody(options.body);
 
-    const headers = {
+    const headers: Record<string, string> = {
       Accept: 'application/json',
       ...(resolvedBody.contentType ? { 'Content-Type': resolvedBody.contentType } : {}),
       ...(config.headers ?? {}),
@@ -21,12 +20,26 @@ export function createHttpClient(config: HttpClientConfig = {}): HttpClient {
 
     const url = buildUrl(baseUrl, path, options.query);
 
-    const response = await fetchImpl(url, {
+    let init: RequestInit = {
       method,
       headers,
       body: resolvedBody.body,
       signal: options.signal,
-    });
+    };
+
+    if (config.requestInterceptors) {
+      for (const interceptor of config.requestInterceptors) {
+        init = await interceptor(url, init);
+      }
+    }
+
+    let response = await fetchImpl(url, init);
+
+    if (config.responseInterceptors) {
+      for (const interceptor of config.responseInterceptors) {
+        response = await interceptor(response, url);
+      }
+    }
 
     const data = await parseResponseBody(response);
 
@@ -48,7 +61,7 @@ export function createHttpClient(config: HttpClientConfig = {}): HttpClient {
     }
 
     return data as T;
-  }
+  };
 
   return {
     request,
@@ -58,4 +71,4 @@ export function createHttpClient(config: HttpClientConfig = {}): HttpClient {
     patch: (path, body, options) => request('PATCH', path, { ...options, body }),
     delete: (path, options) => request('DELETE', path, options),
   };
-}
+};

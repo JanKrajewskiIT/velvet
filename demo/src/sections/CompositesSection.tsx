@@ -2,6 +2,7 @@ import {
   ActionRow,
   addToast,
   AiResultPanel,
+  AtsAnalysisPanel,
   Button,
   Chip,
   CodeText,
@@ -14,6 +15,7 @@ import {
   KanbanBoard,
   type KanbanColumn,
   type KanbanItemBase,
+  QuestionAnswerPanel,
   Scheduler,
   type SchedulerEvent,
   Select,
@@ -88,9 +90,9 @@ const createTask = (index: number, t: (key: DemoI18nMessageKey) => string): Task
 });
 
 const createKanbanColumns = (t: (key: DemoI18nMessageKey) => string): KanbanColumn[] => [
-  { id: 'todo', title: t('demo.text.composites.kanban.column.todo') },
-  { id: 'in-progress', title: t('demo.text.composites.kanban.column.inProgress') },
-  { id: 'done', title: t('demo.text.composites.kanban.column.done') },
+  { id: 'todo', label: t('demo.text.composites.kanban.column.todo') },
+  { id: 'in-progress', label: t('demo.text.composites.kanban.column.inProgress') },
+  { id: 'done', label: t('demo.text.composites.kanban.column.done') },
 ];
 
 const createInitialKanbanItems = (t: (key: DemoI18nMessageKey) => string): KanbanDemoItem[] => [
@@ -353,6 +355,17 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
   const [targetItems, setTargetItems] = createSignal(INITIAL_TARGET);
   const [analysisState, setAnalysisState] = createSignal<AnalysisState>('idle');
   const [selectedScenarioId, setSelectedScenarioId] = createSignal('a11y-audit');
+  const [atsInput, setAtsInput] = createSignal('SolidJS, TypeScript, Design systems, accessibility');
+  const [atsLoading, setAtsLoading] = createSignal(false);
+  const [atsError, setAtsError] = createSignal<string | undefined>();
+  const [atsResult, setAtsResult] = createSignal<{
+    overallScore: number;
+    categories: { label: string; score: number }[];
+    recommendations: { label: string; message: string; severity: 'critical' | 'warning' | 'suggestion' }[];
+  } | null>(null);
+  const [questionAnswerContent, setQuestionAnswerContent] = createSignal<string | null>(null);
+  const [questionAnswerLoading, setQuestionAnswerLoading] = createSignal(false);
+  const [questionAnswerError, setQuestionAnswerError] = createSignal<string | undefined>();
   const [tasks, setTasks] = createSignal<TaskItem[]>([]);
   const [kanbanItems, setKanbanItems] = createSignal<KanbanDemoItem[]>([]);
   const [schedulerEvents, setSchedulerEvents] = createSignal<SchedulerEvent[]>([]);
@@ -438,8 +451,58 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
     }, 1200);
   };
 
+  const runAtsAnalysis = async () => {
+    setAtsLoading(true);
+    setAtsError(undefined);
+    setAtsResult(null);
+    await new Promise((resolve) => setTimeout(resolve, 700));
+
+    if (!atsInput().trim()) {
+      setAtsLoading(false);
+      setAtsError('Paste a resume excerpt before running the ATS analysis.');
+      return;
+    }
+
+    setAtsResult({
+      overallScore: 86,
+      categories: [
+        { label: 'Keyword match', score: 91 },
+        { label: 'Structure', score: 83 },
+        { label: 'Readability', score: 78 },
+      ],
+      recommendations: [
+        {
+          label: 'Add measurable outcomes',
+          message: 'Highlight impact with numbers in two recent experience bullets.',
+          severity: 'warning',
+        },
+        {
+          label: 'Mirror required stack',
+          message: 'Mention testing and accessibility closer to the top of the profile.',
+          severity: 'suggestion',
+        },
+      ],
+    });
+    setAtsLoading(false);
+  };
+
+  const resetAtsAnalysis = () => {
+    setAtsResult(null);
+    setAtsError(undefined);
+  };
+
+  const handleQuestionAnswerAsk = async () => {
+    setQuestionAnswerLoading(true);
+    setQuestionAnswerError(undefined);
+    await new Promise((resolve) => setTimeout(resolve, 600));
+    setQuestionAnswerContent(
+      'Use `createMemo` for derived state that depends on reactive inputs.\n\n- It caches the computed result\n- It reruns only when tracked dependencies change\n- It keeps expensive derivations out of plain render code',
+    );
+    setQuestionAnswerLoading(false);
+  };
+
   const selectedScenario = createMemo(
-    () => aiRunScenarios().find((scenario) => scenario.id === selectedScenarioId()) ?? aiRunScenarios()[0]
+    () => aiRunScenarios().find((scenario) => scenario.id === selectedScenarioId()) ?? aiRunScenarios()[0],
   );
 
   const updateTask = (id: string, field: keyof TaskItem, value: string) => {
@@ -523,8 +586,6 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
                 sourceItems={sourceItems()}
                 targetItems={targetItems()}
                 onChange={handleTransferChange}
-                sourceTitle={t('demo.text.composites.transferList.available')}
-                targetTitle={t('demo.text.composites.transferList.selected')}
                 searchable
               />
             </PreviewGroup>
@@ -545,11 +606,6 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
                 getId={(item) => item.id}
                 onAdd={() => setTasks((current) => [...current, createTask(current.length + 1, t)])}
                 onRemove={(id) => setTasks((current) => current.filter((item) => item.id !== id))}
-                addLabel={t('demo.text.composites.editableCollection.addTask')}
-                confirmLabel={t('demo.text.composites.editableCollection.removeTask')}
-                confirmMessage={t('demo.text.composites.editableCollection.confirmMessage')}
-                confirmActionLabel={t('demo.text.composites.editableCollection.remove')}
-                cancelLabel={t('demo.text.composites.editableCollection.cancel')}
                 renderItem={renderTaskItem}
               />
             </PreviewGroup>
@@ -568,7 +624,6 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
                 columns={kanbanColumns()}
                 items={kanbanItems()}
                 onChange={setKanbanItems}
-                emptyLabel={t('demo.text.composites.kanban.emptyLabel')}
                 renderCard={renderKanbanCard}
               />
             </PreviewGroup>
@@ -586,9 +641,6 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
             <PreviewGroup title={t('demo.text.common.examples')}>
               <Wizard
                 steps={wizardSteps()}
-                backLabel={t('demo.text.composites.wizard.back')}
-                nextLabel={t('demo.text.composites.wizard.next')}
-                finishLabel={t('demo.text.composites.wizard.finish')}
                 onFinish={() => {
                   addToast({ type: 'success', message: t('demo.text.composites.wizard.doneToast') });
                 }}
@@ -680,11 +732,8 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
               </div>
               <AiResultPanel
                 isPending={analysisState() === 'loading'}
-                loadingText={t('demo.text.composites.ai.loading')}
                 hasError={analysisState() === 'error'}
-                errorText={t('demo.text.composites.ai.error')}
                 onRetry={runAnalysis}
-                retryLabel={t('demo.text.composites.ai.retry')}
                 score={selectedScenario()?.score ?? 0}
                 scoreLabel={selectedScenario()?.scoreLabel ?? t('demo.text.composites.ai.analysis')}
                 summary={selectedScenario()?.summary ?? ''}
@@ -719,6 +768,41 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
                   </ActionRow>
                 }
               />
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection title="AtsAnalysisPanel" subtitle={t('demo.recron.showcase.atsAnalysisPanel.subtitle')}>
+          <PreviewPanel>
+            <PreviewGroup title="Example">
+              <div class="recronDemoWide">
+                <AtsAnalysisPanel
+                  value={atsInput()}
+                  onValueChange={setAtsInput}
+                  onSubmit={runAtsAnalysis}
+                  onReset={resetAtsAnalysis}
+                  result={atsResult()}
+                  loading={atsLoading()}
+                  errorMessage={atsError()}
+                  inputLabel={t('demo.recron.ai.ats.inputLabel')}
+                  inputHint={t('demo.recron.ai.ats.inputHint')}
+                />
+              </div>
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection title="QuestionAnswerPanel" subtitle={t('demo.recron.showcase.questionAnswerPanel.subtitle')}>
+          <PreviewPanel>
+            <PreviewGroup title="Example">
+              <div class="recronDemoWide">
+                <QuestionAnswerPanel
+                  content={questionAnswerContent()}
+                  loading={questionAnswerLoading()}
+                  errorMessage={questionAnswerError()}
+                  onAsk={() => void handleQuestionAnswerAsk()}
+                />
+              </div>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>

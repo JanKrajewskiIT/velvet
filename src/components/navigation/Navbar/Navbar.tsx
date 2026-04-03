@@ -4,6 +4,7 @@ import { createEffect, createMemo, createSignal, For, type JSX, on, splitProps }
 
 import Icon from '~/components/media/Icon/Icon';
 import useEscapeKey from '~/hooks/useEscapeKey';
+import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -17,14 +18,13 @@ interface NavbarProps {
   navItems: NavItem[];
   logo?: JSX.Element;
   actions?: JSX.Element;
-  toggleMenuLabel: string;
-  navLabel?: string;
 }
 
 const hasExactMatch = (path: string, href: string) => path === href;
 
 const Navbar = (props: Props<NavbarProps>) => {
-  const [local, rest] = splitProps(props, ['navItems', 'logo', 'actions', 'toggleMenuLabel', 'navLabel', 'class']);
+  const { ts } = useI18n();
+  const [local, rest] = splitProps(props, ['navItems', 'logo', 'actions', 'class']);
   const [menuOpen, setMenuOpen] = createSignal(false);
   const location = useLocation();
 
@@ -47,8 +47,8 @@ const Navbar = (props: Props<NavbarProps>) => {
       () => location.pathname,
       () => {
         setMenuOpen(false);
-      }
-    )
+      },
+    ),
   );
 
   const toggleMenu = () => {
@@ -61,14 +61,14 @@ const Navbar = (props: Props<NavbarProps>) => {
       <Text variant="labelLg" tone="inverse" class={styles.activeLabel}>
         {activeLabel()}
       </Text>
-      <MenuBar items={local.navItems} activeIndex={activeIndex()} navLabel={local.navLabel} />
+      <MenuBar items={local.navItems} activeIndex={activeIndex()} />
       <div class={styles.actions}>
         {local.actions}
         <IconButton
           icon={menuOpen() ? FiX : FiMenu}
           class={styles.hamburger}
           onClick={toggleMenu}
-          label={local.toggleMenuLabel}
+          label={ts('navbar.toggleMenu')}
           aria-expanded={menuOpen()}
           variant="navbar"
           size="sm"
@@ -76,7 +76,7 @@ const Navbar = (props: Props<NavbarProps>) => {
       </div>
 
       <div class={classNames(styles.mobileOverlay, menuOpen() && styles.open)}>
-        <nav class={styles.mobileNav} aria-label={local.navLabel}>
+        <nav class={styles.mobileNav} aria-label={ts('navbar.navigation')}>
           <For each={local.navItems}>
             {(item) => (
               <A href={item.href} class={styles.mobileNavLink}>

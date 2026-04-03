@@ -16,33 +16,18 @@ import CalendarPanel from '../Calendar/CalendarPanel/CalendarPanel';
 import DateTimeFieldTrigger from '../DateTimeFieldTrigger/DateTimeFieldTrigger';
 import styles from './DatePicker.module.css';
 
-export interface DatePickerMessages {
-  placeholder?: string;
-  openPickerLabel?: string;
-  calendarLabel?: string;
-  previousMonthLabel?: string;
-  nextMonthLabel?: string;
-  dayLabels?: readonly string[];
-}
-
 export interface DatePickerProps extends AriaFieldProps {
   value?: string;
   onChange: (value: string) => void;
   locale?: string;
-  placeholder?: string;
   disabled?: boolean;
   min?: string;
   max?: string;
   size?: ComponentSize;
-  openPickerLabel?: string;
-  calendarLabel?: string;
-  previousMonthLabel?: string;
-  nextMonthLabel?: string;
-  messages?: DatePickerMessages;
 }
 
 const DatePicker = (props: Props<DatePickerProps>) => {
-  const { t } = useI18n();
+  const { ts } = useI18n();
   const dropdownId = createUniqueId();
   const triggerLabelId = createUniqueId();
 
@@ -62,27 +47,20 @@ const DatePicker = (props: Props<DatePickerProps>) => {
     new Date(popup.viewYear(), popup.viewMonth()).toLocaleString(locale(), {
       month: 'long',
       year: 'numeric',
-    })
+    }),
   );
-  const dayLabels = createMemo(
-    () =>
-      props.messages?.dayLabels ?? [
-        t('calendar.day.mo'),
-        t('calendar.day.tu'),
-        t('calendar.day.we'),
-        t('calendar.day.th'),
-        t('calendar.day.fr'),
-        t('calendar.day.sa'),
-        t('calendar.day.su'),
-      ]
-  );
-  const placeholder = () => props.messages?.placeholder ?? props.placeholder ?? t('date.yyyymmdd');
-  const openPickerLabel = () =>
-    props.messages?.openPickerLabel ?? props.openPickerLabel ?? t('datetime.openDatePicker');
-  const calendarLabel = () => props.messages?.calendarLabel ?? props.calendarLabel ?? t('calendar.label');
-  const previousMonthLabel = () =>
-    props.messages?.previousMonthLabel ?? props.previousMonthLabel ?? t('calendar.prevMonth');
-  const nextMonthLabel = () => props.messages?.nextMonthLabel ?? props.nextMonthLabel ?? t('calendar.nextMonth');
+  const dayLabels = createMemo(() => [
+    ts('calendar.day.mo'),
+    ts('calendar.day.tu'),
+    ts('calendar.day.we'),
+    ts('calendar.day.th'),
+    ts('calendar.day.fr'),
+    ts('calendar.day.sa'),
+    ts('calendar.day.su'),
+  ]);
+  const placeholder = () => ts('date.yyyymmdd');
+  const openPickerLabel = () => ts('datetime.openDatePicker');
+  const calendarLabel = () => ts('calendar.label');
 
   const isDateDisabled = (iso: string): boolean => {
     if (props.min && iso < props.min) return true;
@@ -147,8 +125,6 @@ const DatePicker = (props: Props<DatePickerProps>) => {
         >
           <CalendarPanel
             monthLabel={monthName()}
-            previousLabel={previousMonthLabel()}
-            nextLabel={nextMonthLabel()}
             onPrevious={popup.prevMonth}
             onNext={popup.nextMonth}
             days={daysGrid()}

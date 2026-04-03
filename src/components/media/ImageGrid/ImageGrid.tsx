@@ -30,7 +30,7 @@ const ImageGrid = (props: Props<ImageGridProps>) => {
   const cellClass = (clickable: boolean) =>
     classNames(styles.cell, rounded() && styles.rounded, clickable && styles.clickable);
 
-  const imageClass = () => classNames(styles.image, hoverable() && styles.hoverableImage);
+  const imageClass = () => classNames(styles.image, hoverable() && styles.hoverable);
 
   const handleImageClick = (index: number) => {
     props.onImageClick?.(index);

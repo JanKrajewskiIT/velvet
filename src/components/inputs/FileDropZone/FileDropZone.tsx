@@ -94,7 +94,7 @@ const FileDropZone = (props: Props<FileDropZoneProps>) => {
           styles.dropZone,
           dragActive() && styles.dropZoneActive,
           props.disabled && styles.dropZoneDisabled,
-          props.class
+          props.class,
         )}
         onClick={() => fileInputRef?.click()}
         onDrop={handleDrop}

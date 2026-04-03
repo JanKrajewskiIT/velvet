@@ -58,6 +58,7 @@ export type SectionId =
   | 'nav-bottom-nav'
   | 'nav-back-to-top'
   | 'feedback-badges-chips'
+  | 'feedback-chips-tags'
   | 'feedback-progress'
   | 'feedback-alerts'
   | 'feedback-states'
@@ -70,6 +71,7 @@ export type SectionId =
   | 'surfaces-main-layout'
   | 'surfaces-collapsible'
   | 'surfaces-cards'
+  | 'surfaces-interactive-cards'
   | 'composites-transfer-list'
   | 'composites-editable-collection'
   | 'composites-kanban-board'
@@ -105,6 +107,7 @@ const NAV_GROUPS: DemoNavGroupConfig[] = [
       { id: 'surfaces-main-layout', labelKey: 'demo.nav.item.surfacesMainLayout' },
       { id: 'surfaces-collapsible', labelKey: 'demo.nav.item.surfacesCollapsible' },
       { id: 'surfaces-cards', labelKey: 'demo.nav.item.surfacesCards' },
+      { id: 'surfaces-interactive-cards', labelKey: 'demo.nav.item.surfacesInteractiveCards' },
     ],
   },
   {
@@ -125,10 +128,10 @@ const NAV_GROUPS: DemoNavGroupConfig[] = [
     labelKey: 'demo.nav.inputs',
     items: [
       { id: 'inputs-buttons', labelKey: 'demo.nav.item.inputsButtons' },
+      { id: 'inputs-fields', labelKey: 'demo.nav.item.inputsFields' },
       { id: 'inputs-switchers', labelKey: 'demo.nav.item.inputsSwitchers' },
       { id: 'inputs-pickers', labelKey: 'demo.nav.item.inputsPickers' },
       { id: 'inputs-dropdowns', labelKey: 'demo.nav.item.inputsDropdowns' },
-      { id: 'inputs-fields', labelKey: 'demo.nav.item.inputsFields' },
       { id: 'inputs-datetime', labelKey: 'demo.nav.item.inputsDateTime' },
       { id: 'inputs-other', labelKey: 'demo.nav.item.inputsUpload' },
       { id: 'inputs-form-layout', labelKey: 'demo.nav.item.inputsFormLayout' },
@@ -149,6 +152,7 @@ const NAV_GROUPS: DemoNavGroupConfig[] = [
   {
     labelKey: 'demo.nav.feedback',
     items: [
+      { id: 'feedback-chips-tags', labelKey: 'demo.nav.item.feedbackChipsTags' },
       { id: 'feedback-badges-chips', labelKey: 'demo.nav.item.feedbackStatusNotifications' },
       { id: 'feedback-progress', labelKey: 'demo.nav.item.feedbackProgress' },
       { id: 'feedback-alerts', labelKey: 'demo.nav.item.feedbackAlertsBanners' },
@@ -298,6 +302,10 @@ const PAGE_META_KEYS: Record<SectionId, { titleKey: DemoI18nMessageKey; descript
     titleKey: 'demo.page.feedbackBadgesChips.title',
     descriptionKey: 'demo.page.feedbackBadgesChips.description',
   },
+  'feedback-chips-tags': {
+    titleKey: 'demo.page.feedbackChipsTags.title',
+    descriptionKey: 'demo.page.feedbackChipsTags.description',
+  },
   'feedback-progress': {
     titleKey: 'demo.page.feedbackProgress.title',
     descriptionKey: 'demo.page.feedbackProgress.description',
@@ -345,6 +353,10 @@ const PAGE_META_KEYS: Record<SectionId, { titleKey: DemoI18nMessageKey; descript
   'surfaces-cards': {
     titleKey: 'demo.page.surfacesCards.title',
     descriptionKey: 'demo.page.surfacesCards.description',
+  },
+  'surfaces-interactive-cards': {
+    titleKey: 'demo.page.surfacesInteractiveCards.title',
+    descriptionKey: 'demo.page.surfacesInteractiveCards.description',
   },
   'composites-transfer-list': {
     titleKey: 'demo.page.compositesTransferList.title',
@@ -406,7 +418,7 @@ function interpolate(template: string, params?: Record<string, string | number>)
 function translate(
   dictionary: Record<DemoI18nMessageKey, string>,
   key: DemoI18nMessageKey,
-  params?: Record<string, string | number>
+  params?: Record<string, string | number>,
 ): string {
   const template = dictionary[key];
   return interpolate(template, params);
@@ -436,7 +448,7 @@ const AppContent = () => {
     HEADER_SECTION_IDS.map((id) => ({
       id,
       label: translate(dictionary(), PAGE_META_KEYS[id].titleKey),
-    }))
+    })),
   );
   const overviewTracks = createMemo(() =>
     OVERVIEW_TRACKS.map((item) => ({
@@ -444,7 +456,7 @@ const AppContent = () => {
       label: translate(dictionary(), item.groupKey),
       description: translate(dictionary(), PAGE_META_KEYS[item.id].descriptionKey),
       count: NAV_GROUPS.find((group) => group.labelKey === item.groupKey)?.items.length ?? 0,
-    }))
+    })),
   );
   const featuredSections = createMemo(() =>
     HEADER_SECTION_IDS.map((id) => {
@@ -455,7 +467,7 @@ const AppContent = () => {
         description: translate(dictionary(), PAGE_META_KEYS[id].descriptionKey),
         eyebrow: translate(dictionary(), group?.labelKey ?? 'demo.nav.start'),
       };
-    })
+    }),
   );
 
   return (
@@ -466,16 +478,10 @@ const AppContent = () => {
         onSelect={(id) => setActiveSection(id as SectionId)}
         label={translate(dictionary(), 'demo.sidebar.title')}
         subtitle={translate(dictionary(), 'demo.sidebar.subtitle')}
-        navLabel={translate(dictionary(), 'demo.sidebar.navLabel')}
         actions={
           <>
             <LocaleSwitcher variant="ghost" />
-            <ThemeToggle
-              lightLabel={translate(dictionary(), 'demo.theme.light')}
-              darkLabel={translate(dictionary(), 'demo.theme.dark')}
-              groupLabel={translate(dictionary(), 'demo.theme.group')}
-              variant="light"
-            />
+            <ThemeToggle variant="light" />
           </>
         }
       />

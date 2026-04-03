@@ -8,12 +8,18 @@ export interface HttpRequestOptions {
   signal?: AbortSignal;
 }
 
+export type HttpRequestInterceptor = (url: string, init: RequestInit) => RequestInit | Promise<RequestInit>;
+
+export type HttpResponseInterceptor = (response: Response, url: string) => Response | Promise<Response>;
+
 export interface HttpClientConfig {
   baseUrl?: string;
   headers?: Record<string, string>;
   fetch?: typeof fetch;
   getAccessToken?: () => string | undefined | Promise<string | undefined>;
   onUnauthorized?: () => void | Promise<void>;
+  requestInterceptors?: HttpRequestInterceptor[];
+  responseInterceptors?: HttpResponseInterceptor[];
 }
 
 export interface HttpClient {

@@ -1,33 +1,6 @@
 import type { QueryKey, QueryKeyPart } from '~/query/types';
 
-function normalizeQueryKeyPart(part: QueryKeyPart): unknown {
-  if (part === undefined) {
-    return '__undefined__';
-  }
-
-  if (part === null || typeof part === 'string' || typeof part === 'number' || typeof part === 'boolean') {
-    return part;
-  }
-
-  if (Array.isArray(part)) {
-    return part.map((entry) => normalizeUnknown(entry));
-  }
-
-  if (typeof part === 'object') {
-    const entries = Object.entries(part as Record<string, unknown>).sort(([left], [right]) =>
-      left.localeCompare(right)
-    );
-    const normalizedObject: Record<string, unknown> = {};
-    entries.forEach(([key, value]) => {
-      normalizedObject[key] = normalizeUnknown(value);
-    });
-    return normalizedObject;
-  }
-
-  return Object.prototype.toString.call(part);
-}
-
-function normalizeUnknown(value: unknown): unknown {
+const normalizeValue = (value: unknown): unknown => {
   if (value === undefined) {
     return '__undefined__';
   }
@@ -37,32 +10,28 @@ function normalizeUnknown(value: unknown): unknown {
   }
 
   if (Array.isArray(value)) {
-    return value.map((entry) => normalizeUnknown(entry));
+    return value.map((entry) => normalizeValue(entry));
   }
 
   if (typeof value === 'object') {
     const entries = Object.entries(value as Record<string, unknown>).sort(([left], [right]) =>
-      left.localeCompare(right)
+      left.localeCompare(right),
     );
     const normalizedObject: Record<string, unknown> = {};
     entries.forEach(([key, entry]) => {
-      normalizedObject[key] = normalizeUnknown(entry);
+      normalizedObject[key] = normalizeValue(entry);
     });
     return normalizedObject;
   }
 
   return Object.prototype.toString.call(value);
-}
+};
 
-export function normalizeQueryKey(key: QueryKey): unknown[] {
-  return key.map((part) => normalizeQueryKeyPart(part));
-}
+export const normalizeQueryKey = (key: QueryKey): unknown[] => key.map((part: QueryKeyPart) => normalizeValue(part));
 
-export function hashQueryKey(key: QueryKey): string {
-  return JSON.stringify(normalizeQueryKey(key));
-}
+export const hashQueryKey = (key: QueryKey): string => JSON.stringify(normalizeQueryKey(key));
 
-export function matchesPartialKey(full: QueryKey, partial: QueryKey): boolean {
+export const matchesPartialKey = (full: QueryKey, partial: QueryKey): boolean => {
   if (partial.length > full.length) {
     return false;
   }
@@ -77,4 +46,4 @@ export function matchesPartialKey(full: QueryKey, partial: QueryKey): boolean {
   }
 
   return true;
-}
+};
