@@ -1,6 +1,7 @@
 .chip {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: var(--spacing-xs);
   min-height: 30px;
   padding: calc(var(--spacing-xs) + 1px) calc(var(--spacing-sm) + 2px);
@@ -39,6 +40,7 @@
 }
 
 .sm {
+  min-width: 28px;
   min-height: 26px;
   padding: var(--spacing-2xs) var(--spacing-sm);
   font-size: var(--typography-scale-xs);
@@ -102,6 +104,7 @@
   color: var(--color-on-accent);
 }
 
+.selected.primaryOutline,
 .selected.primary {
   background: var(--color-primary);
   color: var(--color-on-accent);

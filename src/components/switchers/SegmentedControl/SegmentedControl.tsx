@@ -1,4 +1,4 @@
-import { createMemo, For, type JSX, splitProps } from 'solid-js';
+import { createEffect, createMemo, createSignal, For, type JSX, on, Show, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
 import type { DivCoreNativeProps } from '~/models/Props';
@@ -21,6 +21,7 @@ interface SegmentedControlOwnProps extends Omit<DivCoreNativeProps, 'onChange'> 
   disabled?: boolean;
   optionClass?: string;
   activeOptionClass?: string;
+  indicator?: boolean;
 }
 
 const sizeClassByValue: Record<NonNullable<SegmentedControlOwnProps['size']>, string | undefined> = {
@@ -37,10 +38,12 @@ const SegmentedControl = (props: Props<SegmentedControlOwnProps>) => {
     'disabled',
     'optionClass',
     'activeOptionClass',
+    'indicator',
     'class',
   ]);
 
   const optionRefs: (HTMLButtonElement | undefined)[] = [];
+  let containerRef: HTMLDivElement | undefined;
 
   const size = () => local.size ?? 'md';
 
@@ -112,12 +115,41 @@ const SegmentedControl = (props: Props<SegmentedControlOwnProps>) => {
     }
   };
 
+  const activeIndex = createMemo(() => local.options.findIndex((option) => option.value === local.value));
+
+  const [indicatorStyle, setIndicatorStyle] = createSignal<JSX.CSSProperties>({});
+
+  createEffect(
+    on(activeIndex, (index) => {
+      if (index < 0 || !containerRef) {
+        setIndicatorStyle({});
+        return;
+      }
+      const button = optionRefs[index];
+      if (!button) {
+        setIndicatorStyle({});
+        return;
+      }
+      const containerRect = containerRef.getBoundingClientRect();
+      const buttonRect = button.getBoundingClientRect();
+      setIndicatorStyle({
+        '--indicator-offset': `${String(buttonRect.left - containerRect.left)}px`,
+        '--indicator-width': `${String(buttonRect.width)}px`,
+      });
+    }),
+  );
+
   return (
     <div
       {...rest}
       class={classNames(styles.container, sizeClassByValue[size()], local.disabled && styles.disabled, local.class)}
       role="radiogroup"
+      ref={containerRef}
+      style={indicatorStyle()}
     >
+      <Show when={(local.indicator ?? true) && activeIndex() >= 0}>
+        <span class={styles.indicator} />
+      </Show>
       <For each={local.options}>
         {(option, index) => (
           <button

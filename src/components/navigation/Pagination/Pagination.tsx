@@ -1,5 +1,6 @@
 import { createMemo, For, splitProps } from 'solid-js';
 
+import Text from '~/components/typography/Text/Text';
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import type { HTMLElementCoreNativeProps } from '~/models/Props';
@@ -66,7 +67,11 @@ const Pagination = (props: Props<PaginationOwnProps>) => {
         <For each={pages()}>
           {(item) => {
             if (typeof item !== 'number') {
-              return <span class={styles.ellipsis}>...</span>;
+              return (
+                <Text as="span" variant="bodySm" tone="muted" class={styles.ellipsis}>
+                  ...
+                </Text>
+              );
             }
 
             const active = () => item === current();

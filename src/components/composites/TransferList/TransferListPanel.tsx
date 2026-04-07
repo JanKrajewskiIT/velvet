@@ -1,8 +1,9 @@
 import { For, Show } from 'solid-js';
 
+import Chip from '~/components/feedback/Chip/Chip';
 import SearchInput from '~/components/inputs/SearchInput/SearchInput';
 import Card from '~/components/surfaces/Card/Card';
-import Text from '~/components/typography/Text/Text';
+import Heading from '~/components/typography/Heading/Heading';
 import classNames from '~/utils/classNames';
 
 import Checkbox from '../../switchers/Checkbox/Checkbox';
@@ -26,12 +27,8 @@ const TransferListPanel = (props: TransferListPanelProps) => {
   return (
     <Card padding="none" class={styles.panel}>
       <div class={styles.header}>
-        <Text as="span" variant="labelMd">
-          {props.title}
-        </Text>
-        <Text as="span" variant="caption" tone="muted">
-          {props.items.length}
-        </Text>
+        <Heading level={5}>{props.title}</Heading>
+        <Chip size="sm" variant="subtle" label={props.items.length.toString()} />
       </div>
       <Show when={props.searchable}>
         <div class={styles.search}>
@@ -40,8 +37,11 @@ const TransferListPanel = (props: TransferListPanelProps) => {
       </Show>
       <div class={styles.list}>
         <For each={props.items}>
-          {(item) => (
-            <div class={getItemClass(props.checkedIds.has(item.id))}>
+          {(item, index) => (
+            <div
+              class={getItemClass(props.checkedIds.has(item.id))}
+              style={{ '--transfer-item-index': String(index()) }}
+            >
               <Checkbox
                 class={styles.checkboxField}
                 checked={props.checkedIds.has(item.id)}

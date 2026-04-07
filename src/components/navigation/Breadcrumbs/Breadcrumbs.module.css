@@ -14,10 +14,11 @@
 }
 
 .separator {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   color: var(--color-text-tertiary);
   line-height: var(--typography-line-height-zero);
+  transition: transform var(--duration-fast) ease;
 }
 
 .link {
@@ -27,10 +28,28 @@
   border: none;
   padding: 0;
   cursor: pointer;
+  position: relative;
   transition: color var(--duration-fast) var(--ease-out-expo);
+}
+
+.link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--color-primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--duration-fast) var(--ease-out-expo);
 }
 
 .link:hover {
   color: var(--color-primary);
-  text-decoration: underline;
+  text-decoration: none;
+}
+
+.link:hover::after {
+  transform: scaleX(1);
 }

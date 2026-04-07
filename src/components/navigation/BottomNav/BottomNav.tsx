@@ -2,6 +2,7 @@ import type { JSX } from 'solid-js';
 import { For } from 'solid-js';
 
 import Badge from '~/components/feedback/Badge/Badge';
+import Text from '~/components/typography/Text/Text';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -41,7 +42,9 @@ const BottomNav = (props: Props<BottomNavProps>) => {
                 <span class={styles.icon}>{item.icon}</span>
               </Badge>
             </span>
-            <span class={styles.label}>{item.label}</span>
+            <Text as="span" variant="caption" tone="inherit" class={styles.label}>
+              {item.label}
+            </Text>
           </Button>
         )}
       </For>

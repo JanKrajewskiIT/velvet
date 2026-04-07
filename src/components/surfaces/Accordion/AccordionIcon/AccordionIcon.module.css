@@ -2,10 +2,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform var(--duration-normal) var(--ease-spring);
+  transition:
+    transform var(--duration-normal) var(--ease-spring),
+    color var(--duration-normal) var(--ease-out-expo);
   color: var(--color-text-secondary);
 }
 
 .open {
   transform: rotate(180deg);
+  color: var(--color-primary);
 }

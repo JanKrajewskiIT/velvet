@@ -111,7 +111,7 @@ const NotificationCenter = (props: Props<NotificationCenterOwnProps>) => {
                       <span class={styles.dotAnchor} />
                     </Badge>
                   </Show>
-                  <Stack gap="2xs" class={styles.itemCopy}>
+                  <div class={styles.itemCopy}>
                     <Text
                       as="span"
                       variant="bodySm"
@@ -122,7 +122,7 @@ const NotificationCenter = (props: Props<NotificationCenterOwnProps>) => {
                     <Text as="span" variant="caption" tone="muted" class={styles.timestamp}>
                       {formatDate(item.createdAt)}
                     </Text>
-                  </Stack>
+                  </div>
                 </button>
                 <Stack direction="horizontal" align="center" gap="2xs" class={styles.itemActions}>
                   <Show when={!item.read}>

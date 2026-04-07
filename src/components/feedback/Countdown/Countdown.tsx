@@ -1,5 +1,6 @@
 import { createEffect, createSignal, For, onCleanup } from 'solid-js';
 
+import Text from '~/components/typography/Text/Text';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -65,8 +66,14 @@ const Countdown = (props: Props<CountdownProps>) => {
       <For each={segments()}>
         {(segment, index) => (
           <>
-            {index() > 0 && <span class={styles.separator}>:</span>}
-            <span class={styles.digit}>{segment}</span>
+            {index() > 0 && (
+              <Text as="span" variant="bodyLg" tone="inherit" class={styles.separator}>
+                :
+              </Text>
+            )}
+            <Text as="span" variant="bodyLg" tone="inherit" class={styles.digit}>
+              {segment}
+            </Text>
           </>
         )}
       </For>

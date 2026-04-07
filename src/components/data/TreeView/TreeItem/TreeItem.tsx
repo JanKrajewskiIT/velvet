@@ -126,7 +126,7 @@ const TreeItem = (props: Props<TreeItemProps>) => {
         <Show when={props.node.icon}>
           <span class={styles.icon}>{props.node.icon}</span>
         </Show>
-        <Text as="span" variant="bodySm" tone="muted">
+        <Text as="span" variant="bodySm">
           {props.node.label}
         </Text>
       </div>

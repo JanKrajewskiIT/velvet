@@ -76,7 +76,6 @@ export type SectionId =
   | 'composites-editable-collection'
   | 'composites-kanban-board'
   | 'composites-command-palette'
-  | 'composites-wizard'
   | 'composites-ai-result'
   | 'composites-scheduler'
   | 'composites-recron-extracts';
@@ -177,7 +176,6 @@ const NAV_GROUPS: DemoNavGroupConfig[] = [
       { id: 'composites-editable-collection', labelKey: 'demo.nav.item.editableCollection' },
       { id: 'composites-kanban-board', labelKey: 'demo.nav.item.kanbanBoard' },
       { id: 'composites-command-palette', labelKey: 'demo.nav.item.commandPalette' },
-      { id: 'composites-wizard', labelKey: 'demo.nav.item.wizard' },
       { id: 'composites-ai-result', labelKey: 'demo.nav.item.aiResultPanel' },
       { id: 'composites-scheduler', labelKey: 'demo.nav.item.scheduler' },
       { id: 'composites-recron-extracts', labelKey: 'demo.nav.item.recronExtracts' },
@@ -373,10 +371,6 @@ const PAGE_META_KEYS: Record<SectionId, { titleKey: DemoI18nMessageKey; descript
   'composites-command-palette': {
     titleKey: 'demo.page.compositesCommandPalette.title',
     descriptionKey: 'demo.page.compositesCommandPalette.description',
-  },
-  'composites-wizard': {
-    titleKey: 'demo.page.compositesWizard.title',
-    descriptionKey: 'demo.page.compositesWizard.description',
   },
   'composites-ai-result': {
     titleKey: 'demo.page.compositesAiResult.title',

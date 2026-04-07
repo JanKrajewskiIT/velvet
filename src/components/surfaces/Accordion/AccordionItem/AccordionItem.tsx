@@ -1,6 +1,7 @@
-import { createMemo, createSignal, splitProps } from 'solid-js';
+import { createMemo, createSignal, createUniqueId, onCleanup, onMount, splitProps } from 'solid-js';
 
 import Button from '~/components/buttons/Button/Button';
+import { useAccordionContext } from '~/components/surfaces/Accordion/AccordionContext';
 import AccordionIcon from '~/components/surfaces/Accordion/AccordionIcon/AccordionIcon';
 import Text from '~/components/typography/Text/Text';
 import { useI18n } from '~/i18n/I18nProvider';
@@ -20,6 +21,7 @@ interface AccordionItemOwnProps extends Omit<DivCoreNativeProps, 'onToggle'> {
 
 const AccordionItem = (props: Props<AccordionItemOwnProps>) => {
   const { ts } = useI18n();
+  const accordion = useAccordionContext();
   const [local, rest] = splitProps(props, [
     'label',
     'children',
@@ -29,6 +31,7 @@ const AccordionItem = (props: Props<AccordionItemOwnProps>) => {
     'disabled',
     'class',
   ]);
+  const itemId = createUniqueId();
   const [internalOpen, setInternalOpen] = createSignal(local.defaultOpen ?? false);
 
   const isOpen = createMemo(() => (local.isOpen !== undefined ? local.isOpen : internalOpen()));
@@ -42,12 +45,31 @@ const AccordionItem = (props: Props<AccordionItemOwnProps>) => {
   const handleToggle = () => {
     if (local.disabled) return;
     const nextState = !isOpen();
+    if (nextState) accordion?.requestOpen(itemId);
     if (local.isOpen === undefined) setInternalOpen(nextState);
     local.onToggle?.(nextState);
   };
 
+  onMount(() => {
+    accordion?.registerItem(itemId, {
+      isOpen,
+      setOpen: (nextState, options) => {
+        if (isOpen() === nextState) return;
+        if (local.isOpen === undefined) setInternalOpen(nextState);
+        if (options?.notify) local.onToggle?.(nextState);
+      },
+    });
+  });
+
+  onCleanup(() => {
+    accordion?.unregisterItem(itemId);
+  });
+
   return (
-    <div class={classNames(styles.item, local.disabled && styles.disabled, local.class)} {...rest}>
+    <div
+      class={classNames(styles.item, isOpen() && styles.itemExpanded, local.disabled && styles.disabled, local.class)}
+      {...rest}
+    >
       <Button
         type="button"
         class={styles.header}
@@ -57,7 +79,7 @@ const AccordionItem = (props: Props<AccordionItemOwnProps>) => {
         size="md"
         aria-label={ariaLabel()}
       >
-        <Text as="span" variant="labelLg" tone="secondary">
+        <Text as="span" variant="labelLg" tone="inherit">
           {local.label}
         </Text>
         <AccordionIcon isOpen={isOpen()} class={styles.icon} />

@@ -17,11 +17,19 @@
   min-width: 32px;
   padding: 0 var(--spacing-sm);
   transform: none;
+  transition: all var(--duration-fast) var(--ease-out-expo);
 }
 
 .pageButton:hover,
 .navButton:hover {
   transform: none;
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+}
+
+.pageButton[aria-current='page'] {
+  transform: scale(1.08);
+  box-shadow: var(--shadow-sm);
 }
 
 .ellipsis {

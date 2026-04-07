@@ -48,6 +48,7 @@ const ThemeToggle = (props: Props<ThemeToggleProps>) => {
         onChange={handleThemeChange}
         optionClass={styles.toggle}
         activeOptionClass={styles.selected}
+        indicator={false}
         size="sm"
       />
     </div>

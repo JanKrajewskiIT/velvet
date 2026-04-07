@@ -81,11 +81,11 @@ const SchedulerEventItem = (props: Props<SchedulerEventItemProps>) => {
             </Text>
           </Show>
         </header>
-        <Text as="p" variant="caption" tone="secondary" class={styles.eventDate}>
+        <Text as="p" variant="caption" tone="muted" class={styles.eventDate}>
           {props.eventLabel}
         </Text>
         <Show when={props.event.description}>
-          <Text as="p" variant="bodySm" tone="muted" class={styles.eventDescription}>
+          <Text as="p" variant="caption" tone="muted" class={styles.eventDescription}>
             {props.event.description}
           </Text>
         </Show>

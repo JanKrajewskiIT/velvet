@@ -1,6 +1,5 @@
 import {
   ActionRow,
-  addToast,
   AiResultPanel,
   AtsAnalysisPanel,
   Button,
@@ -23,7 +22,6 @@ import {
   type TransferItem,
   TransferList,
   useI18n,
-  Wizard,
 } from '@jankrajewskiit/ui';
 import {
   IoAdd,
@@ -168,7 +166,7 @@ const createCommandItems = (t: (key: DemoI18nMessageKey) => string) => [
     label: t('demo.text.composites.commandPalette.item.dashboard.label'),
     description: t('demo.text.composites.commandPalette.item.dashboard.description'),
     group: t('demo.text.composites.commandPalette.group.navigation'),
-    icon: <IoHome size={16} />,
+    icon: IoHome,
     onSelect: () => {},
   },
   {
@@ -176,7 +174,7 @@ const createCommandItems = (t: (key: DemoI18nMessageKey) => string) => [
     label: t('demo.text.composites.commandPalette.item.settings.label'),
     description: t('demo.text.composites.commandPalette.item.settings.description'),
     group: t('demo.text.composites.commandPalette.group.navigation'),
-    icon: <IoSettings size={16} />,
+    icon: IoSettings,
     onSelect: () => {},
   },
   {
@@ -184,7 +182,7 @@ const createCommandItems = (t: (key: DemoI18nMessageKey) => string) => [
     label: t('demo.text.composites.commandPalette.item.projects.label'),
     description: t('demo.text.composites.commandPalette.item.projects.description'),
     group: t('demo.text.composites.commandPalette.group.navigation'),
-    icon: <IoDocumentText size={16} />,
+    icon: IoDocumentText,
     onSelect: () => {},
   },
   {
@@ -192,7 +190,7 @@ const createCommandItems = (t: (key: DemoI18nMessageKey) => string) => [
     label: t('demo.text.composites.commandPalette.item.inbox.label'),
     description: t('demo.text.composites.commandPalette.item.inbox.description'),
     group: t('demo.text.composites.commandPalette.group.navigation'),
-    icon: <IoMail size={16} />,
+    icon: IoMail,
     onSelect: () => {},
   },
   {
@@ -200,7 +198,7 @@ const createCommandItems = (t: (key: DemoI18nMessageKey) => string) => [
     label: t('demo.text.composites.commandPalette.item.create.label'),
     description: t('demo.text.composites.commandPalette.item.create.description'),
     group: t('demo.text.composites.commandPalette.group.actions'),
-    icon: <IoAdd size={16} />,
+    icon: IoAdd,
     onSelect: () => {},
   },
   {
@@ -208,7 +206,7 @@ const createCommandItems = (t: (key: DemoI18nMessageKey) => string) => [
     label: t('demo.text.composites.commandPalette.item.export.label'),
     description: t('demo.text.composites.commandPalette.item.export.description'),
     group: t('demo.text.composites.commandPalette.group.actions'),
-    icon: <IoDownload size={16} />,
+    icon: IoDownload,
     onSelect: () => {},
   },
   {
@@ -216,7 +214,7 @@ const createCommandItems = (t: (key: DemoI18nMessageKey) => string) => [
     label: t('demo.text.composites.commandPalette.item.duplicate.label'),
     description: t('demo.text.composites.commandPalette.item.duplicate.description'),
     group: t('demo.text.composites.commandPalette.group.actions'),
-    icon: <IoCopy size={16} />,
+    icon: IoCopy,
     onSelect: () => {},
   },
   {
@@ -224,7 +222,7 @@ const createCommandItems = (t: (key: DemoI18nMessageKey) => string) => [
     label: t('demo.text.composites.commandPalette.item.bulkArchive.label'),
     description: t('demo.text.composites.commandPalette.item.bulkArchive.description'),
     group: t('demo.text.composites.commandPalette.group.actions'),
-    icon: <IoTrash size={16} />,
+    icon: IoTrash,
     onSelect: () => {},
   },
   {
@@ -232,7 +230,7 @@ const createCommandItems = (t: (key: DemoI18nMessageKey) => string) => [
     label: t('demo.text.composites.commandPalette.item.themeLight.label'),
     description: t('demo.text.composites.commandPalette.item.themeLight.description'),
     group: t('demo.text.composites.commandPalette.group.preferences'),
-    icon: <IoSettings size={16} />,
+    icon: IoSettings,
     onSelect: () => {},
   },
   {
@@ -240,7 +238,7 @@ const createCommandItems = (t: (key: DemoI18nMessageKey) => string) => [
     label: t('demo.text.composites.commandPalette.item.themeDark.label'),
     description: t('demo.text.composites.commandPalette.item.themeDark.description'),
     group: t('demo.text.composites.commandPalette.group.preferences'),
-    icon: <IoNotifications size={16} />,
+    icon: IoNotifications,
     onSelect: () => {},
   },
   {
@@ -248,7 +246,7 @@ const createCommandItems = (t: (key: DemoI18nMessageKey) => string) => [
     label: t('demo.text.composites.commandPalette.item.openShortcuts.label'),
     description: t('demo.text.composites.commandPalette.item.openShortcuts.description'),
     group: t('demo.text.composites.commandPalette.group.preferences'),
-    icon: <IoSearch size={16} />,
+    icon: IoSearch,
     onSelect: () => {},
   },
   {
@@ -256,7 +254,7 @@ const createCommandItems = (t: (key: DemoI18nMessageKey) => string) => [
     label: t('demo.text.composites.commandPalette.item.scheduleReview.label'),
     description: t('demo.text.composites.commandPalette.item.scheduleReview.description'),
     group: t('demo.text.composites.commandPalette.group.preferences'),
-    icon: <IoCalendar size={16} />,
+    icon: IoCalendar,
     onSelect: () => {},
   },
   {
@@ -264,7 +262,7 @@ const createCommandItems = (t: (key: DemoI18nMessageKey) => string) => [
     label: t('demo.text.composites.commandPalette.item.renameItem.label'),
     description: t('demo.text.composites.commandPalette.item.renameItem.description'),
     group: t('demo.text.composites.commandPalette.group.actions'),
-    icon: <IoPencil size={16} />,
+    icon: IoPencil,
     onSelect: () => {},
   },
 ];
@@ -389,57 +387,6 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
       setSchedulerEvents(createSchedulerEvents(t));
     }
   });
-
-  const wizardSteps = createMemo(() => [
-    {
-      label: t('demo.text.composites.wizard.accountStep'),
-      component: (
-        <div class="col">
-          <FormField label={t('demo.text.composites.wizard.email')}>
-            {(fieldProps) => (
-              <Input {...fieldProps} type="email" placeholder={t('demo.text.composites.wizard.emailPlaceholder')} />
-            )}
-          </FormField>
-          <FormField label={t('demo.text.composites.wizard.username')}>
-            {(fieldProps) => (
-              <Input {...fieldProps} type="text" placeholder={t('demo.text.composites.wizard.usernamePlaceholder')} />
-            )}
-          </FormField>
-        </div>
-      ),
-    },
-    {
-      label: t('demo.text.composites.wizard.profileStep'),
-      component: (
-        <div class="col">
-          <FormField label={t('demo.text.composites.wizard.fullName')}>
-            {(fieldProps) => (
-              <Input {...fieldProps} type="text" placeholder={t('demo.text.composites.wizard.fullNamePlaceholder')} />
-            )}
-          </FormField>
-          <FormField label={t('demo.text.composites.wizard.bio')}>
-            {(fieldProps) => (
-              <Input {...fieldProps} type="text" placeholder={t('demo.text.composites.wizard.bioPlaceholder')} />
-            )}
-          </FormField>
-        </div>
-      ),
-    },
-    {
-      label: t('demo.text.composites.wizard.confirmStep'),
-      component: (
-        <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-          {renderRichText(t('demo.text.composites.wizard.confirmMessage'), {
-            finish: (
-              <Text as="span" variant="labelMd">
-                {t('demo.text.composites.wizard.finish')}
-              </Text>
-            ),
-          })}
-        </Text>
-      ),
-    },
-  ]);
 
   const runAnalysis = () => {
     setAnalysisState('loading');
@@ -629,24 +576,6 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
             </PreviewGroup>
           </PreviewPanel>
           <ShowcaseMeta>{t('demo.text.composites.kanban.meta')}</ShowcaseMeta>
-        </ShowcaseSection>
-      </Show>
-
-      <Show when={sectionId() === 'composites-wizard'}>
-        <ShowcaseSection
-          title={t('demo.showcase.composites.wizard.title')}
-          subtitle={t('demo.showcase.composites.wizard.subtitle')}
-        >
-          <PreviewPanel>
-            <PreviewGroup title={t('demo.text.common.examples')}>
-              <Wizard
-                steps={wizardSteps()}
-                onFinish={() => {
-                  addToast({ type: 'success', message: t('demo.text.composites.wizard.doneToast') });
-                }}
-              />
-            </PreviewGroup>
-          </PreviewPanel>
         </ShowcaseSection>
       </Show>
 

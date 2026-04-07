@@ -6,5 +6,5 @@
 
 .preview {
   min-height: 100px;
-  padding: 0;
+  padding: var(--spacing-md);
 }

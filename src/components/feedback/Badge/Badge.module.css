@@ -25,7 +25,9 @@
   color: var(--color-on-accent);
   white-space: nowrap;
   pointer-events: none;
-  animation: scaleIn var(--duration-fast) var(--ease-out-back);
+  overflow: hidden;
+  font-variant-numeric: tabular-nums;
+  animation: scaleIn 0.2s var(--ease-out-back);
 }
 
 .inlineBadge {

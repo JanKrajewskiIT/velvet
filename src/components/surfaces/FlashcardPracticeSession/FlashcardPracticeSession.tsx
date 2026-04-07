@@ -79,7 +79,7 @@ const FlashcardPracticeSession = <T,>(props: Props<FlashcardPracticeSessionProps
     <Show when={total() > 0} fallback={<EmptyState class={props.class} message={props.emptyMessage} />}>
       <div class={classNames(styles.session, props.class)}>
         <div class={styles.header}>
-          <Text as="span" variant="bodySm" class={styles.progress}>
+          <Text as="span" variant="bodySm" tone="muted" class={styles.progress}>
             {currentIndex() + 1} / {total()}
           </Text>
           <div class={styles.score}>

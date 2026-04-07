@@ -47,11 +47,21 @@
   height: 100%;
   width: var(--fill-percent, 0%);
   border-radius: var(--radius-pill);
-  transition: width var(--duration-normal) var(--ease-out-expo);
+  transition: width var(--duration-slow) var(--ease-out-expo);
+  position: relative;
+  overflow: hidden;
+}
+
+.fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgb(255 255 255 / 25%) 50%, transparent 100%);
+  animation: progressShimmer 2s linear infinite;
 }
 
 .primary {
-  background: var(--color-primary);
+  background: var(--gradient-brand);
   box-shadow: 0 0 8px color-mix(in srgb, var(--color-primary) 30%, transparent);
 }
 
@@ -91,8 +101,22 @@
   }
 }
 
+@keyframes progressShimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .indeterminate {
+    animation: none;
+  }
+
+  .fill::after {
     animation: none;
   }
 }

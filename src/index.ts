@@ -89,8 +89,6 @@ export type { QuestionAnswerPanelProps } from './components/composites/QuestionA
 export { default as QuestionAnswerPanel } from './components/composites/QuestionAnswerPanel/QuestionAnswerPanel';
 export type { TransferItem, TransferListProps } from './components/composites/TransferList/TransferList';
 export { default as TransferList } from './components/composites/TransferList/TransferList';
-export type { WizardStep } from './components/composites/Wizard/Wizard';
-export { default as Wizard } from './components/composites/Wizard/Wizard';
 export type { FilterBarFilter, FilterBarOption, FilterBarValue } from './components/data/FilterBar/FilterBar';
 export { default as FilterBar } from './components/data/FilterBar/FilterBar';
 export { default as List } from './components/data/List/List';
@@ -229,6 +227,7 @@ export { default as RichTextEditor } from './components/inputs/RichTextEditor/Ri
 export { default as SearchInput } from './components/inputs/SearchInput/SearchInput';
 export { default as TagInput } from './components/inputs/TagInput/TagInput';
 export { default as TextArea } from './components/inputs/TextArea/TextArea';
+export type { AvatarOwnProps, AvatarSize, AvatarStatus } from './components/media/Avatar/Avatar';
 export { default as Avatar } from './components/media/Avatar/Avatar';
 export { default as AvatarGroup } from './components/media/Avatar/AvatarGroup/AvatarGroup';
 export { default as Carousel } from './components/media/Carousel/Carousel';
@@ -260,6 +259,8 @@ export { default as SpeedDial } from './components/navigation/SpeedDial/SpeedDia
 export { default as Stepper } from './components/navigation/Stepper/Stepper';
 export { default as TabButton } from './components/navigation/Tabs/TabButton/TabButton';
 export { default as Tabs } from './components/navigation/Tabs/Tabs';
+export type { WizardStep } from './components/navigation/Wizard/Wizard';
+export { default as Wizard } from './components/navigation/Wizard/Wizard';
 export type { ConfirmActionProps, ConfirmActionRenderContext } from './components/overlays/ConfirmAction/ConfirmAction';
 export { default as ConfirmAction } from './components/overlays/ConfirmAction/ConfirmAction';
 export { default as ConfirmDialog } from './components/overlays/ConfirmDialog/ConfirmDialog';
@@ -278,9 +279,10 @@ export type { RangeSliderProps, SliderRangeValue } from './components/pickers/Ra
 export { default as RangeSlider } from './components/pickers/RangeSlider/RangeSlider';
 export { default as Rating, type RatingProps } from './components/pickers/Rating/Rating';
 export { default as Slider, type SliderMark, type SliderProps } from './components/pickers/Slider/Slider';
-export { default as Accordion } from './components/surfaces/Accordion/Accordion';
+export { default as Accordion, type AccordionOwnProps } from './components/surfaces/Accordion/Accordion';
 export { default as AccordionIcon } from './components/surfaces/Accordion/AccordionIcon/AccordionIcon';
 export { default as AccordionItem } from './components/surfaces/Accordion/AccordionItem/AccordionItem';
+export type { CardOwnProps } from './components/surfaces/Card/Card';
 export { default as Card } from './components/surfaces/Card/Card';
 export { default as DataCard } from './components/surfaces/DataCard/DataCard';
 export { default as Divider } from './components/surfaces/Divider/Divider';
@@ -295,6 +297,7 @@ export type {
 export { default as FlashcardPracticeSession } from './components/surfaces/FlashcardPracticeSession/FlashcardPracticeSession';
 export type { FlashcardPracticeSummaryProps } from './components/surfaces/FlashcardPracticeSummary/FlashcardPracticeSummary';
 export { default as FlashcardPracticeSummary } from './components/surfaces/FlashcardPracticeSummary/FlashcardPracticeSummary';
+export type { FlipAxis } from './components/surfaces/FlipCard/FlipCard';
 export { default as FlipCard } from './components/surfaces/FlipCard/FlipCard';
 export { default as Footer } from './components/surfaces/Footer/Footer';
 export { default as Grid } from './components/surfaces/Grid/Grid';
@@ -461,6 +464,7 @@ export type {
 export { createAutosaveSignal, createEntityStore, createPersistedSignal, createSelectionStore } from './store';
 export type { ThemeChoice } from './theme/ThemeProvider';
 export { ThemeProvider, useTheme } from './theme/ThemeProvider';
+export { default as classNames } from './utils/classNames';
 export { getContrastTextColor } from './utils/color';
 export { emptyToNull, numberToString, orEmpty, parseFloatOrNull } from './utils/form';
 export { default as getInputSizeClass } from './utils/getInputSizeClass';

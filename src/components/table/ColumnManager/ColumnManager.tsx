@@ -2,6 +2,7 @@ import { IoArrowDown, IoArrowUp } from 'solid-icons/io';
 import { createMemo, For, Show, splitProps } from 'solid-js';
 
 import Card from '~/components/surfaces/Card/Card';
+import Heading from '~/components/typography/Heading/Heading';
 import Text from '~/components/typography/Text/Text';
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
@@ -135,9 +136,9 @@ const ColumnManager = (props: Props<ColumnManagerOwnProps>) => {
     <Card {...rest} class={classNames(styles.card, local.class)}>
       <div class={styles.header}>
         <div class={styles.headerCopy}>
-          <Text as="h3" variant="labelLg">
+          <Heading as="h3" level={3} variant="titleMd">
             {panelLabel()}
-          </Text>
+          </Heading>
           <Show when={local.description}>
             <Text as="p" variant="caption" tone="muted">
               {local.description}

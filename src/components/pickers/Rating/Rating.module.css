@@ -15,8 +15,9 @@
   font-size: var(--rating-icon-size, 24px);
   color: var(--color-border);
   transition:
-    transform var(--duration-fast) var(--ease-spring),
-    color var(--duration-fast) var(--ease-out-expo);
+    transform var(--duration-fast) var(--ease-out-expo),
+    color var(--duration-fast) var(--ease-out-expo),
+    filter var(--duration-fast) var(--ease-out-expo);
   user-select: none;
   line-height: var(--typography-line-height-none);
 }
@@ -58,6 +59,8 @@
 
 .filled {
   color: var(--color-warning);
+  filter: drop-shadow(0 0 4px rgb(255 193 7 / 40%));
+  transition-delay: calc(var(--star-index, 0) * 30ms);
 }
 
 .filled .iconFill,
@@ -70,7 +73,12 @@
 }
 
 .interactive:hover {
-  transform: scale(1.2);
+  transform: scale(1.15);
+  filter: drop-shadow(0 0 4px rgb(255 193 7 / 40%));
+}
+
+.interactive:active {
+  transform: scale(0.9);
 }
 
 .interactive:focus-visible {

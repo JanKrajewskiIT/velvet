@@ -147,7 +147,7 @@ const ImportSourcesDialog = (props: Props<ImportSourcesDialogProps>) => {
                 </FormField>
                 <Show when={(currentSource() as UrlImportSource | undefined)?.helperText}>
                   {(helperText) => (
-                    <Text as="p" tone="muted" class={styles.helperText}>
+                    <Text as="p" variant="caption" tone="muted" class={styles.helperText}>
                       {helperText()}
                     </Text>
                   )}

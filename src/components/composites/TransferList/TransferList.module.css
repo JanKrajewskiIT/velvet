@@ -11,3 +11,11 @@
   justify-content: center;
   gap: var(--spacing-xs);
 }
+
+.controls > button {
+  transition: transform var(--duration-fast) var(--ease-out-expo);
+}
+
+.controls > button:hover {
+  transform: scale(1.1);
+}

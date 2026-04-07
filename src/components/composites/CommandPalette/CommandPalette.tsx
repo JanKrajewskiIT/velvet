@@ -1,4 +1,5 @@
-import { createEffect, createMemo, createSignal, For, type JSX, Show, splitProps } from 'solid-js';
+import type { IconTypes } from 'solid-icons';
+import { createEffect, createMemo, createSignal, For, Show, splitProps } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
 import useEscapeKey from '~/hooks/useEscapeKey';
@@ -9,6 +10,7 @@ import classNames from '~/utils/classNames';
 
 import Button from '../../buttons/Button/Button';
 import SearchInput from '../../inputs/SearchInput/SearchInput';
+import Icon from '../../media/Icon/Icon';
 import Surface from '../../surfaces/Surface/Surface';
 import Text from '../../typography/Text/Text';
 import styles from './CommandPalette.module.css';
@@ -17,7 +19,7 @@ export interface CommandItem {
   id: string;
   label: string;
   description?: string;
-  icon?: JSX.Element;
+  icon?: IconTypes;
   group?: string;
   onSelect: () => void;
 }
@@ -120,6 +122,7 @@ const CommandPalette = (props: Props<CommandPaletteProps>) => {
     const nextIndex = (startIndex + direction + items.length) % items.length;
     setActiveIndex(nextIndex);
   };
+
   const handleSearchKeyDown = (event: KeyboardEvent) => {
     switch (event.key) {
       case 'ArrowDown':
@@ -203,13 +206,12 @@ const CommandPalette = (props: Props<CommandPaletteProps>) => {
                               styles.resultItem,
                               activeIndex() === item.flatIndex && styles.resultItemActive,
                             )}
+                            style={{ '--command-item-index': String(item.flatIndex) }}
                             data-command-index={String(item.flatIndex)}
                             onClick={() => handleItemClick(item)}
                             onMouseEnter={() => setActiveIndex(item.flatIndex)}
                           >
-                            <Show when={item.icon}>
-                              <span class={styles.itemIcon}>{item.icon}</span>
-                            </Show>
+                            <Show when={item.icon}>{(icon) => <Icon icon={icon()} size="sm" variant="muted" />}</Show>
                             <Text as="span" variant="bodySm" class={styles.itemLabel}>
                               {item.label}
                             </Text>

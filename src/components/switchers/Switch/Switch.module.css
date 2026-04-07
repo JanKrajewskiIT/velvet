@@ -17,8 +17,8 @@
   align-items: center;
   justify-content: flex-start;
   transition:
-    border-color var(--duration-fast) var(--ease-out-expo),
-    background-color var(--duration-fast) var(--ease-out-expo),
+    background-color var(--duration-normal) var(--ease-out-expo),
+    border-color var(--duration-normal) var(--ease-out-expo),
     box-shadow var(--duration-fast) var(--ease-out-expo);
   cursor: pointer;
 }
@@ -48,12 +48,10 @@
   background: var(--color-bg);
   box-shadow: var(--shadow-sm);
   transform: translateX(0);
-  transition:
-    transform var(--duration-normal) var(--ease-spring),
-    box-shadow var(--duration-fast) var(--ease-out-expo);
+  transition: all var(--duration-normal) var(--ease-spring);
 }
 
 .checked .thumb {
-  transform: translateX(18px);
+  transform: translateX(18px) scale(1.05);
   box-shadow: var(--shadow-glow-sm);
 }

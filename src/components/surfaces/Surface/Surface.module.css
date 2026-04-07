@@ -32,6 +32,13 @@
   --surface-text: var(--color-text-inverse);
 }
 
+.toneGlass {
+  --surface-bg: var(--color-glass);
+  --surface-border: var(--color-glass-border);
+
+  backdrop-filter: var(--blur-glass);
+}
+
 .elevationFlat {
   --surface-shadow: none;
 }

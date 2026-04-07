@@ -8,15 +8,18 @@
   opacity: 1;
   transform: scale(1) translateY(0);
   transition:
-    opacity var(--duration-normal) var(--ease-out-expo),
-    transform var(--duration-normal) var(--ease-out-expo),
-    overlay var(--duration-normal) var(--ease-out-expo) allow-discrete,
-    display var(--duration-normal) var(--ease-out-expo) allow-discrete;
+    opacity 300ms var(--ease-out-expo),
+    transform 300ms var(--ease-out-expo),
+    overlay 300ms var(--ease-out-expo) allow-discrete,
+    display 300ms var(--ease-out-expo) allow-discrete;
 }
 
 .panel {
   width: min(92vw, 720px);
   max-height: 88vh;
+  box-shadow:
+    var(--shadow-dialog),
+    0 0 60px rgb(0 0 0 / 5%);
 }
 
 @starting-style {
@@ -29,26 +32,39 @@
 .dialog:not([open]) {
   opacity: 0;
   transform: scale(0.96) translateY(8px);
+  transition:
+    opacity 180ms var(--ease-out-expo),
+    transform 180ms var(--ease-out-expo),
+    overlay 180ms var(--ease-out-expo) allow-discrete,
+    display 180ms var(--ease-out-expo) allow-discrete;
 }
 
 .dialog::backdrop {
   background-color: var(--color-overlay);
-  backdrop-filter: var(--blur-overlay);
+  backdrop-filter: blur(8px);
   opacity: 1;
   transition:
-    opacity var(--duration-normal) var(--ease-out-expo),
-    overlay var(--duration-normal) var(--ease-out-expo) allow-discrete,
-    display var(--duration-normal) var(--ease-out-expo) allow-discrete;
+    opacity 300ms var(--ease-out-expo),
+    backdrop-filter 300ms var(--ease-out-expo),
+    overlay 300ms var(--ease-out-expo) allow-discrete,
+    display 300ms var(--ease-out-expo) allow-discrete;
 }
 
 @starting-style {
   .dialog[open]::backdrop {
     opacity: 0;
+    backdrop-filter: blur(0);
   }
 }
 
 .dialog:not([open])::backdrop {
   opacity: 0;
+  backdrop-filter: blur(0);
+  transition:
+    opacity 180ms var(--ease-out-expo),
+    backdrop-filter 180ms var(--ease-out-expo),
+    overlay 180ms var(--ease-out-expo) allow-discrete,
+    display 180ms var(--ease-out-expo) allow-discrete;
 }
 
 @media (prefers-reduced-motion: reduce) {

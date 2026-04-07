@@ -39,8 +39,16 @@
   position: absolute;
   inset: 0;
   transform: translateX(-100%);
-  background-image: linear-gradient(90deg, transparent, var(--color-glass), transparent);
-  animation: wave 1.5s infinite;
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    transparent 20%,
+    var(--color-glass) 40%,
+    var(--color-glass) 60%,
+    transparent 80%,
+    transparent 100%
+  );
+  animation: wave 1.8s ease-in-out infinite;
   content: '';
 }
 

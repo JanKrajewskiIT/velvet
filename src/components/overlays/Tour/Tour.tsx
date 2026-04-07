@@ -56,6 +56,13 @@ const Tour = (props: Props<TourProps>) => {
   let cardRef: HTMLDivElement | undefined;
   const currentStepData = createMemo(() => local.steps[currentStep()]);
   const isLastStep = createMemo(() => currentStep() === local.steps.length - 1);
+  const cardPlacementClass = createMemo(() => {
+    const placement = currentStepData()?.placement ?? 'bottom';
+    if (placement === 'top') return styles.cardTop;
+    if (placement === 'left') return styles.cardLeft;
+    if (placement === 'right') return styles.cardRight;
+    return styles.cardBottom;
+  });
 
   useEscapeKey(
     () => local.open,
@@ -144,7 +151,7 @@ const Tour = (props: Props<TourProps>) => {
             ref={(element) => {
               cardRef = element;
             }}
-            class={styles.card}
+            class={classNames(styles.card, cardPlacementClass())}
             style={cardStyle()}
             elevation="popover"
           >

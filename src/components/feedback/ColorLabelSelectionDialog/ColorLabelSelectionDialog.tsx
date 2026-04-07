@@ -63,7 +63,7 @@ const ColorLabelSelectionDialog = (props: Props<ColorLabelSelectionDialogProps>)
         <DialogTitle label={props.label} />
         <DialogBody>
           <Show when={props.description}>
-            <Text as="p" variant="bodyMd" tone="muted" class={styles.description}>
+            <Text as="p" variant="bodySm" tone="muted" class={styles.description}>
               {props.description}
             </Text>
           </Show>

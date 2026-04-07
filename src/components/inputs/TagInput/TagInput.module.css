@@ -13,6 +13,11 @@
   min-width: 0;
 }
 
+.tagsContainer > *:not(.input) {
+  animation: scaleIn 0.15s var(--ease-out-back);
+  transition: opacity var(--duration-fast) var(--ease-out-expo);
+}
+
 .input {
   flex: 1 1 96px;
   min-width: 96px;

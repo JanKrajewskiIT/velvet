@@ -19,6 +19,12 @@
 
 .boxFilled {
   background: var(--color-surface);
+  animation: checkBounce 0.2s var(--ease-out-back);
+  transform: scale(1);
+}
+
+.box:focus {
+  box-shadow: var(--shadow-focus-primary);
 }
 
 .disabled {

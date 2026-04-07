@@ -3,6 +3,7 @@ import { type Accessor, For, type JSX, Show } from 'solid-js';
 
 import Button from '~/components/buttons/Button/Button';
 import Checkbox from '~/components/switchers/Checkbox/Checkbox';
+import Text from '~/components/typography/Text/Text';
 import { useI18n } from '~/i18n/I18nProvider';
 import classNames from '~/utils/classNames';
 
@@ -82,7 +83,9 @@ const DataGridProHeader = <T extends Record<string, unknown>>(props: DataGridPro
                 disabled={!sortable()}
                 onClick={() => props.onSort(column)}
               >
-                <span class={styles.headerLabel}>{column.header}</span>
+                <Text as="span" variant="labelMd" tone="inherit" class={styles.headerLabel}>
+                  {column.header}
+                </Text>
                 <Show when={sortable()}>
                   <span class={classNames(styles.sortIcon, activeSort() && styles.sortActive)}>
                     <Show when={activeSort() && props.sortDirection() === 'desc'} fallback={<IoCaretUp />}>

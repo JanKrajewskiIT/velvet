@@ -66,25 +66,27 @@ const SearchInput = (props: Props<SearchInputProps>) => {
   onCleanup(() => clearTimeout(debounceTimer));
 
   return (
-    <AffixInput
-      {...rest}
-      type="text"
-      size={local.size}
-      value={local.value}
-      onInput={handleInput}
-      onKeyDown={handleKeyDown}
-      aria-label={ts('common.search')}
-      placeholder={ts('common.searchEllipsis')}
-      disabled={local.disabled}
-      autofocus={local.autofocus}
-      prefix={<Icon icon={IoSearch} class={styles.icon} />}
-      suffix={
-        <Show when={local.value.length > 0}>
-          <IconButton icon={IoClose} label={ts('search.clear')} onClick={handleClear} size="sm" variant="subtle" />
-        </Show>
-      }
-      class={local.class}
-    />
+    <div class={styles.wrapper}>
+      <AffixInput
+        {...rest}
+        type="text"
+        size={local.size}
+        value={local.value}
+        onInput={handleInput}
+        onKeyDown={handleKeyDown}
+        aria-label={ts('common.search')}
+        placeholder={ts('common.searchEllipsis')}
+        disabled={local.disabled}
+        autofocus={local.autofocus}
+        prefix={<Icon icon={IoSearch} class={styles.icon} />}
+        suffix={
+          <Show when={local.value.length > 0}>
+            <IconButton icon={IoClose} label={ts('search.clear')} onClick={handleClear} size="sm" variant="subtle" />
+          </Show>
+        }
+        class={local.class}
+      />
+    </div>
   );
 };
 

@@ -6,6 +6,8 @@ import classNames from '~/utils/classNames';
 
 import styles from './FlipCard.module.css';
 
+type FlipAxis = 'vertical' | 'horizontal';
+
 interface FlipCardOwnProps extends DivCoreNativeProps {
   front: JSX.Element;
   back: JSX.Element;
@@ -13,10 +15,11 @@ interface FlipCardOwnProps extends DivCoreNativeProps {
   onFlip?: (flipped: boolean) => void;
   width?: string;
   height?: string;
+  axis?: FlipAxis;
 }
 
 const FlipCard = (props: Props<FlipCardOwnProps>) => {
-  const [local, rest] = splitProps(props, ['front', 'back', 'isFlipped', 'onFlip', 'width', 'height', 'class']);
+  const [local, rest] = splitProps(props, ['front', 'back', 'isFlipped', 'onFlip', 'width', 'height', 'axis', 'class']);
   const [internalFlipped, setInternalFlipped] = createSignal(false);
 
   const isFlipped = createMemo(() => (local.isFlipped !== undefined ? local.isFlipped : internalFlipped()));
@@ -40,7 +43,7 @@ const FlipCard = (props: Props<FlipCardOwnProps>) => {
 
   return (
     <div
-      class={classNames(styles.flipCard, local.class)}
+      class={classNames(styles.flipCard, local.axis === 'horizontal' && styles.horizontal, local.class)}
       style={{ width: local.width || '100%', height: local.height || '200px' }}
       onClick={handleFlip}
       onKeyDown={handleKeyDown}
@@ -56,4 +59,5 @@ const FlipCard = (props: Props<FlipCardOwnProps>) => {
   );
 };
 
+export type { FlipAxis };
 export default FlipCard;

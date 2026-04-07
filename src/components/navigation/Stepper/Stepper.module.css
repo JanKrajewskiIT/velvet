@@ -43,6 +43,17 @@
   border-color: var(--color-primary);
   background-color: var(--color-primary-light);
   color: var(--color-primary);
+  animation: scaleIn 0.3s var(--ease-out-back);
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0);
+  }
+
+  to {
+    transform: scale(1);
+  }
 }
 
 .stepLabel {
@@ -67,7 +78,7 @@
   background-color: var(--color-primary);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform var(--duration-normal) var(--ease-out-expo);
+  transition: transform var(--duration-slow) var(--ease-out-expo);
 }
 
 .stepConnector.completed::after {

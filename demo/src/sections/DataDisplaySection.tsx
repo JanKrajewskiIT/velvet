@@ -629,17 +629,6 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
         </ShowcaseSection>
 
         <ShowcaseSection
-          title={t('demo.showcase.dataDisplay.markdownRenderer.title')}
-          subtitle={t('demo.showcase.dataDisplay.markdownRenderer.subtitle')}
-        >
-          <PreviewPanel>
-            <PreviewGroup title={t('demo.text.common.examples')}>
-              <MarkdownRenderer content={createMarkdown(t, clickMeLabel())} />
-            </PreviewGroup>
-          </PreviewPanel>
-        </ShowcaseSection>
-
-        <ShowcaseSection
           title={t('demo.showcase.dataDisplay.markdownEditDialog.title')}
           subtitle={t('demo.showcase.dataDisplay.markdownEditDialog.subtitle')}
         >
@@ -650,7 +639,6 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
                   {t('demo.text.dataDisplay.markdownEdit.openButton')}
                 </Button>
               </ActionRow>
-              <MarkdownRenderer content={markdown()} />
               <MarkdownEditDialog
                 open={editorOpen()}
                 label={t('demo.text.dataDisplay.markdownEdit.label')}
@@ -658,6 +646,17 @@ const DataDisplaySection = (props: { sectionId: SectionId }) => {
                 onSave={setMarkdown}
                 onClose={() => setEditorOpen(false)}
               />
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          title={t('demo.showcase.dataDisplay.markdownRenderer.title')}
+          subtitle={t('demo.showcase.dataDisplay.markdownRenderer.subtitle')}
+        >
+          <PreviewPanel>
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <MarkdownRenderer content={markdown()} />
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>

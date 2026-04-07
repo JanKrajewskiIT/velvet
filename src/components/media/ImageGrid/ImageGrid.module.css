@@ -33,11 +33,28 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform var(--duration-normal) var(--ease-out-expo);
+  transition:
+    transform var(--duration-normal) var(--ease-out-expo),
+    box-shadow var(--duration-normal) var(--ease-out-expo);
 }
 
 .hoverable:hover {
-  transform: scale(1.05);
+  transform: scale(1.02);
+  box-shadow: var(--shadow-hover);
+}
+
+.cell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgb(0 0 0 / 30%) 0%, transparent 50%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--duration-normal) var(--ease-out-expo);
+}
+
+.cell:hover::after {
+  opacity: 1;
 }
 
 .caption {
@@ -51,9 +68,10 @@
   font-size: var(--typography-scale-xs);
   opacity: 0;
   transform: translateY(4px);
+  z-index: 1;
   transition:
-    opacity var(--duration-fast),
-    transform var(--duration-fast);
+    opacity var(--duration-normal) var(--ease-out-expo),
+    transform var(--duration-normal) var(--ease-out-expo);
 }
 
 .cell:hover .caption {

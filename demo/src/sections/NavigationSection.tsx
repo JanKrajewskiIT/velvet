@@ -1,4 +1,5 @@
 import {
+  addToast,
   BackToTop,
   BottomNav,
   type BottomNavItem,
@@ -7,7 +8,9 @@ import {
   Button,
   Card,
   CodeText,
+  FormField,
   Heading,
+  Input,
   LocaleSwitcher,
   Navbar,
   type NavItem,
@@ -25,6 +28,7 @@ import {
   Text,
   ThemeToggle,
   useI18n,
+  Wizard,
 } from '@jankrajewskiit/ui';
 import { BiLogosReact } from 'solid-icons/bi';
 import { IoAdd, IoCalendar, IoHome, IoPencil, IoPerson, IoSearch, IoSettings, IoShareSocial } from 'solid-icons/io';
@@ -96,6 +100,57 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
     { value: 'details', label: t('demo.text.navigation.stepper.details') },
     { value: 'review', label: t('demo.text.navigation.stepper.review') },
     { value: 'done', label: t('demo.text.navigation.stepper.done') },
+  ]);
+
+  const wizardSteps = createMemo(() => [
+    {
+      label: t('demo.text.composites.wizard.accountStep'),
+      component: (
+        <div class="col">
+          <FormField label={t('demo.text.composites.wizard.email')}>
+            {(fieldProps) => (
+              <Input {...fieldProps} type="email" placeholder={t('demo.text.composites.wizard.emailPlaceholder')} />
+            )}
+          </FormField>
+          <FormField label={t('demo.text.composites.wizard.username')}>
+            {(fieldProps) => (
+              <Input {...fieldProps} type="text" placeholder={t('demo.text.composites.wizard.usernamePlaceholder')} />
+            )}
+          </FormField>
+        </div>
+      ),
+    },
+    {
+      label: t('demo.text.composites.wizard.profileStep'),
+      component: (
+        <div class="col">
+          <FormField label={t('demo.text.composites.wizard.fullName')}>
+            {(fieldProps) => (
+              <Input {...fieldProps} type="text" placeholder={t('demo.text.composites.wizard.fullNamePlaceholder')} />
+            )}
+          </FormField>
+          <FormField label={t('demo.text.composites.wizard.bio')}>
+            {(fieldProps) => (
+              <Input {...fieldProps} type="text" placeholder={t('demo.text.composites.wizard.bioPlaceholder')} />
+            )}
+          </FormField>
+        </div>
+      ),
+    },
+    {
+      label: t('demo.text.composites.wizard.confirmStep'),
+      component: (
+        <Text as="p" variant="bodySm" tone="muted" class="mutedText">
+          {renderRichText(t('demo.text.composites.wizard.confirmMessage'), {
+            finish: (
+              <Text as="span" variant="labelMd">
+                {t('demo.text.composites.wizard.finish')}
+              </Text>
+            ),
+          })}
+        </Text>
+      ),
+    },
   ]);
 
   const bottomNavItems = createMemo<BottomNavItem[]>(() => [
@@ -316,29 +371,47 @@ const NavigationSection = (props: { sectionId: SectionId }) => {
       </Show>
 
       <Show when={sectionId() === 'nav-stepper'}>
-        <ShowcaseSection
-          title={t('demo.showcase.navigation.stepper.title')}
-          subtitle={t('demo.showcase.navigation.stepper.subtitle')}
-        >
-          <PreviewPanel>
-            <PreviewGroup title={t('demo.text.common.examples')}>
-              <Stepper steps={stepperSteps()} activeStep={activeStep()} />
-              <div class="stepButtons">
-                <For each={stepperSteps()}>
-                  {(s) => (
-                    <Button
-                      variant={activeStep() === s.value ? 'primary' : 'ghost'}
-                      size="sm"
-                      onClick={() => setActiveStep(s.value)}
-                    >
-                      {s.label}
-                    </Button>
-                  )}
-                </For>
-              </div>
-            </PreviewGroup>
-          </PreviewPanel>
-        </ShowcaseSection>
+        <>
+          <ShowcaseSection
+            title={t('demo.showcase.navigation.stepper.title')}
+            subtitle={t('demo.showcase.navigation.stepper.subtitle')}
+          >
+            <PreviewPanel>
+              <PreviewGroup title={t('demo.text.common.examples')}>
+                <Stepper steps={stepperSteps()} activeStep={activeStep()} />
+                <div class="stepButtons">
+                  <For each={stepperSteps()}>
+                    {(s) => (
+                      <Button
+                        variant={activeStep() === s.value ? 'primary' : 'ghost'}
+                        size="sm"
+                        onClick={() => setActiveStep(s.value)}
+                      >
+                        {s.label}
+                      </Button>
+                    )}
+                  </For>
+                </div>
+              </PreviewGroup>
+            </PreviewPanel>
+          </ShowcaseSection>
+
+          <ShowcaseSection
+            title={t('demo.showcase.composites.wizard.title')}
+            subtitle={t('demo.showcase.composites.wizard.subtitle')}
+          >
+            <PreviewPanel>
+              <PreviewGroup title={t('demo.text.common.examples')}>
+                <Wizard
+                  steps={wizardSteps()}
+                  onFinish={() => {
+                    addToast({ type: 'success', message: t('demo.text.composites.wizard.doneToast') });
+                  }}
+                />
+              </PreviewGroup>
+            </PreviewPanel>
+          </ShowcaseSection>
+        </>
       </Show>
 
       <Show when={sectionId() === 'nav-tabs'}>

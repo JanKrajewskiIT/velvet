@@ -29,11 +29,13 @@ const ToastViewport = (props: Props) => {
             <div
               class={classNames(styles.toast, toastTypeClassByValue[toast.type])}
               role={toast.type === 'error' ? 'alert' : 'status'}
+              style={{ '--toast-duration': `${toast.duration !== undefined ? toast.duration : 3000}ms` }}
             >
-              <Text as="span" variant="bodySm">
+              <Text as="span" variant="bodySm" tone="inherit">
                 {toast.message}
               </Text>
               <IconButton icon={IoClose} label={ts('common.close')} onClick={() => removeToast(toast.id)} />
+              <div class={styles.progressBar} />
             </div>
           )}
         </For>

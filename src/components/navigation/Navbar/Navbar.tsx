@@ -81,7 +81,7 @@ const Navbar = (props: Props<NavbarProps>) => {
             {(item) => (
               <A href={item.href} class={styles.mobileNavLink}>
                 <Icon icon={item.icon} class={styles.mobileNavIcon} />
-                <Text as="span" variant="labelLg">
+                <Text as="span" variant="labelLg" tone="inherit">
                   {item.label}
                 </Text>
               </A>

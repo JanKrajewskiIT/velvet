@@ -31,7 +31,7 @@ const DualFilterBar = (props: Props<DualFilterBarProps>) => {
           {(item) => (
             <Chip
               size="sm"
-              variant="primaryOutline"
+              variant="subtle"
               label={item.label}
               selected={props.activeFilter === item.value}
               onClick={() => props.onFilterChange(item.value)}

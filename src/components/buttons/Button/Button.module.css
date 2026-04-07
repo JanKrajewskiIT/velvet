@@ -14,15 +14,21 @@
   cursor: pointer;
   user-select: none;
   transition:
-    background-color var(--duration-fast) ease,
-    border-color var(--duration-fast) ease,
-    color var(--duration-fast) ease,
-    box-shadow var(--duration-fast) ease;
+    background-color var(--duration-fast) var(--ease-out-expo),
+    border-color var(--duration-fast) var(--ease-out-expo),
+    color var(--duration-fast) var(--ease-out-expo),
+    box-shadow var(--duration-fast) var(--ease-out-expo),
+    transform var(--duration-fast) var(--ease-out-expo);
 }
 
 .base:focus-visible {
   outline: none;
   box-shadow: var(--shadow-focus);
+}
+
+.base:active:not(:disabled) {
+  transform: scale(0.97);
+  transition-duration: 80ms;
 }
 
 .base:disabled {
@@ -87,13 +93,19 @@
 
 .variantPrimary {
   border-color: var(--color-primary);
-  background: var(--color-primary);
+  background: var(--gradient-brand);
   color: var(--color-on-accent);
 }
 
 .variantPrimary:hover:not(:disabled) {
   border-color: var(--color-primary-hover);
-  background: var(--color-primary-hover);
+  background: var(--gradient-brand);
+  box-shadow: var(--shadow-glow-sm);
+  filter: brightness(1.08);
+}
+
+.variantPrimary:focus-visible {
+  box-shadow: var(--shadow-focus-primary);
 }
 
 .variantNavbar {
@@ -111,13 +123,19 @@
 
 .variantDanger {
   border-color: var(--color-error);
-  background: var(--color-error);
+  background: linear-gradient(135deg, var(--color-error) 0%, color-mix(in srgb, var(--color-error) 85%, #ff6b6b) 100%);
   color: var(--color-on-accent);
 }
 
 .variantDanger:hover:not(:disabled) {
   border-color: var(--color-error-hover);
-  background: var(--color-error-hover);
+  background: linear-gradient(
+    135deg,
+    var(--color-error-hover) 0%,
+    color-mix(in srgb, var(--color-error) 80%, #ff6b6b) 100%
+  );
+  box-shadow: 0 0 12px rgb(211 47 47 / 20%);
+  filter: brightness(1.06);
 }
 
 .variantGhost {
@@ -130,6 +148,7 @@
   border-color: var(--color-border-strong);
   background: var(--color-surface);
   color: var(--color-text);
+  box-shadow: var(--shadow-sm);
 }
 
 .variantOutline {
@@ -141,6 +160,7 @@
 .variantOutline:hover:not(:disabled) {
   border-color: var(--color-border-strong);
   background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
 }
 
 .variantDashed {
@@ -171,12 +191,26 @@
   pointer-events: none;
 }
 
+.loading::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, transparent 0%, rgb(255 255 255 / 12%) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
 .spinner {
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: inherit;
+
+  --spinner-color: currentcolor;
+
   z-index: 1;
 }
 

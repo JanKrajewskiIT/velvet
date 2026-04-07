@@ -57,7 +57,7 @@ const MarkdownEditDialog = (props: Props<MarkdownEditDialogProps>) => {
         <DialogBody>
           <div class={styles.body}>
             <TextArea rows={8} value={value()} onInput={handleInput} />
-            <Card padding="none" class={styles.preview}>
+            <Card class={styles.preview}>
               <MarkdownRenderer content={value()} />
             </Card>
           </div>

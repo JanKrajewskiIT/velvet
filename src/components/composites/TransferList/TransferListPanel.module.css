@@ -7,6 +7,8 @@
 .header {
   padding: var(--spacing-sm) var(--spacing-md);
   border-bottom: 1px solid var(--color-border);
+  border-top-left-radius: var(--radius-lg);
+  border-top-right-radius: var(--radius-lg);
   background: var(--color-bg-elevated);
   display: flex;
   justify-content: space-between;
@@ -35,6 +37,8 @@
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: var(--transition-fast);
+  animation: fadeInUp 0.15s var(--ease-out-expo) both;
+  animation-delay: calc(var(--transfer-item-index, 0) * 25ms);
 }
 
 .checkboxField {
@@ -55,4 +59,6 @@
 
 .itemChecked {
   background: var(--color-primary-light);
+  border-left: 3px solid var(--color-primary);
+  padding-left: calc(var(--spacing-sm) - 3px);
 }

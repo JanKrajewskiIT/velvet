@@ -1,5 +1,6 @@
 import { createSignal, type JSX } from 'solid-js';
 
+import Text from '~/components/typography/Text/Text';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -103,8 +104,14 @@ const FileDropZone = (props: Props<FileDropZoneProps>) => {
         disabled={props.disabled}
       >
         {props.icon && <span class={styles.dropIcon}>{props.icon}</span>}
-        <span class={styles.dropText}>{props.label}</span>
-        {props.hint && <span class={styles.dropHint}>{props.hint}</span>}
+        <Text as="span" variant="labelLg" class={styles.dropText}>
+          {props.label}
+        </Text>
+        {props.hint && (
+          <Text as="span" variant="caption" tone="muted" class={styles.dropHint}>
+            {props.hint}
+          </Text>
+        )}
       </button>
       <input
         ref={fileInputRef}

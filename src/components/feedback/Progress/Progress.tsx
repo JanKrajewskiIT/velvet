@@ -1,5 +1,6 @@
 import { Show } from 'solid-js';
 
+import Text from '~/components/typography/Text/Text';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -43,10 +44,14 @@ const Progress = (props: Props<ProgressProps>) => {
       <Show when={props.label || props.showValue}>
         <div class={styles.header}>
           <Show when={props.label}>
-            <span class={styles.label}>{props.label}</span>
+            <Text as="span" variant="caption" tone="secondary" class={styles.label}>
+              {props.label}
+            </Text>
           </Show>
           <Show when={props.showValue && isDeterminate()}>
-            <span class={styles.value}>{clampedValue()}%</span>
+            <Text as="span" variant="caption" tone="muted" class={styles.value}>
+              {clampedValue()}%
+            </Text>
           </Show>
         </div>
       </Show>

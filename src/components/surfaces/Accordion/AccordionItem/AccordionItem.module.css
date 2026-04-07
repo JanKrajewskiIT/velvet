@@ -1,9 +1,30 @@
 .item {
-  border-bottom: 1px solid var(--color-border);
+  position: relative;
 }
 
-.item:last-child {
-  border-bottom: none;
+.item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 3px;
+  background: transparent;
+  transition: background-color var(--duration-normal) var(--ease-out-expo);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.item + .item {
+  border-top: 1px solid var(--color-border);
+}
+
+.itemExpanded {
+  --accordion-item-accent: var(--color-primary);
+}
+
+.itemExpanded::before {
+  background: var(--accordion-item-accent);
 }
 
 .header {
@@ -12,12 +33,29 @@
   justify-content: space-between;
   width: 100%;
   border-radius: 0;
-  padding: var(--spacing-xs) var(--spacing-xs) var(--spacing-xs) var(--spacing-lg);
+  padding: var(--spacing-sm) var(--spacing-md);
   cursor: pointer;
+  color: var(--color-text);
+}
+
+.item:first-child .header {
+  border-top-left-radius: var(--radius-md);
+  border-top-right-radius: var(--radius-md);
+}
+
+.item:last-child .header {
+  border-bottom-left-radius: var(--radius-md);
+  border-bottom-right-radius: var(--radius-md);
+}
+
+.itemExpanded .header {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 .header:hover:not(:disabled) {
   transform: none;
+  background: var(--color-primary-light);
 }
 
 .header:active:not(:disabled) {
@@ -33,7 +71,6 @@
   display: grid;
   grid-template-rows: 0fr;
   transition: grid-template-rows var(--duration-slow) var(--ease-out-expo);
-  background: var(--color-surface);
 }
 
 .contentOpen {
@@ -50,7 +87,7 @@
 }
 
 .contentOpen .contentInner {
-  padding: var(--spacing-md) var(--spacing-lg);
+  padding: var(--spacing-sm) var(--spacing-lg) var(--spacing-md);
   opacity: 1;
 }
 

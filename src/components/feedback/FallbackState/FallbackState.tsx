@@ -27,7 +27,9 @@ const FallbackState = (props: Props<FallbackStateOwnProps>) => {
       <Heading as="div" level={2} variant="titleLg">
         {local.label}
       </Heading>
-      <Text tone="muted">{local.description}</Text>
+      <Text as="p" variant="bodySm" tone="muted">
+        {local.description}
+      </Text>
       <Show when={local.action}>
         <div class={styles.action}>{local.action}</div>
       </Show>

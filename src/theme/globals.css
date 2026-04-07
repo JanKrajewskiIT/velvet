@@ -180,14 +180,15 @@
   --radius-lg: 12px;
   --radius-full: 50%;
   --radius-pill: 999px;
-  --shadow-sm: 0 1px 3px rgb(0 0 0 / 8%);
-  --shadow-card: 0 1px 2px rgb(0 0 0 / 6%);
-  --shadow-popover: 0 4px 16px rgb(0 0 0 / 12%);
-  --shadow-dialog: 0 8px 32px rgb(0 0 0 / 20%);
-  --shadow-drawer: -4px 0 24px rgb(0 0 0 / 15%);
-  --shadow-hover: 0 2px 8px rgb(0 0 0 / 8%);
-  --shadow-interactive: 0 4px 12px rgb(0 0 0 / 10%);
-  --shadow-focus: 0 0 0 4px var(--color-focus-ring);
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 5%), 0 1px 3px rgb(0 0 0 / 6%);
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 4%), 0 2px 8px rgb(0 0 0 / 3%);
+  --shadow-popover: 0 4px 8px rgb(0 0 0 / 6%), 0 12px 40px rgb(0 0 0 / 10%);
+  --shadow-dialog: 0 8px 16px rgb(0 0 0 / 10%), 0 24px 48px rgb(0 0 0 / 14%);
+  --shadow-drawer: -2px 0 8px rgb(0 0 0 / 6%), -8px 0 32px rgb(0 0 0 / 12%);
+  --shadow-hover: 0 2px 4px rgb(0 0 0 / 4%), 0 8px 24px rgb(0 0 0 / 6%);
+  --shadow-interactive: 0 2px 6px rgb(0 0 0 / 5%), 0 8px 20px rgb(0 0 0 / 8%);
+  --shadow-focus: 0 0 0 3px var(--color-focus-ring);
+  --shadow-focus-primary: 0 0 0 3px var(--color-focus-ring), 0 0 12px rgb(139 0 54 / 12%);
   --z-header: 100;
   --z-overlay: 999;
   --z-modal: 1000;
@@ -202,22 +203,32 @@
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --ease-in-out-smooth: cubic-bezier(0.4, 0, 0.2, 1);
   --opacity-disabled: 0.5;
   --blur-overlay: blur(12px) saturate(180%);
+  --blur-glass: blur(16px) saturate(180%);
   --shadow-glow: 0 0 20px rgb(139 0 54 / 25%), 0 4px 12px rgb(139 0 54 / 15%);
   --shadow-glow-sm: 0 0 12px rgb(139 0 54 / 20%);
-  --color-glass: rgb(255 255 255 / 80%);
+  --shadow-glow-lg: 0 0 30px rgb(139 0 54 / 30%), 0 8px 20px rgb(139 0 54 / 18%);
+  --color-glass: rgb(255 255 255 / 72%);
+  --color-glass-border: rgb(255 255 255 / 40%);
   --color-tooltip: rgb(45 49 56 / 90%);
   --color-surface-alt: var(--color-surface);
-  --color-border-hover: var(--color-border);
+  --color-border-hover: var(--color-gray-30);
   --theme-toggle-light-border: var(--color-primary);
   --theme-toggle-light-selected-bg: var(--color-primary);
   --theme-toggle-light-selected-border: var(--color-primary);
   --theme-toggle-light-selected-fg: var(--color-gray-0);
-  --gradient-surface: var(--color-surface);
-  --gradient-brand: var(--color-primary);
+  --gradient-surface: linear-gradient(135deg, var(--color-bg) 0%, var(--color-surface) 100%);
+  --gradient-brand: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    color-mix(in srgb, var(--color-primary) 80%, #ff4081) 100%
+  );
+  --gradient-brand-subtle: linear-gradient(135deg, rgb(139 0 54 / 6%) 0%, rgb(139 0 54 / 2%) 100%);
   --gradient-card: var(--color-bg-elevated);
   --gradient-field: var(--color-bg);
+  --gradient-shimmer: linear-gradient(90deg, transparent 0%, rgb(255 255 255 / 5%) 50%, transparent 100%);
   --loader-duration-in: 0.2s;
   --loader-duration-out: 0.6s;
 
@@ -273,25 +284,35 @@
   --header-control-bg-active: rgb(255 255 255 / 12%);
   --header-control-border-hover: rgb(255 255 255 / 50%);
   --header-control-focus-ring: rgb(255 255 255 / 50%);
-  --shadow-sm: 0 1px 3px rgb(0 0 0 / 20%);
-  --shadow-card: 0 1px 2px rgb(0 0 0 / 22%);
-  --shadow-popover: 0 4px 16px rgb(0 0 0 / 30%);
-  --shadow-dialog: 0 8px 32px rgb(0 0 0 / 40%);
-  --shadow-drawer: -4px 0 24px rgb(0 0 0 / 35%);
-  --shadow-hover: 0 2px 8px rgb(0 0 0 / 24%);
-  --shadow-interactive: 0 4px 12px rgb(0 0 0 / 28%);
-  --shadow-focus: 0 0 0 4px var(--color-focus-ring);
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 16%), 0 2px 4px rgb(0 0 0 / 14%);
+  --shadow-card: 0 1px 3px rgb(0 0 0 / 18%), 0 2px 8px rgb(0 0 0 / 12%);
+  --shadow-popover: 0 4px 8px rgb(0 0 0 / 18%), 0 16px 48px rgb(0 0 0 / 22%);
+  --shadow-dialog: 0 8px 16px rgb(0 0 0 / 20%), 0 32px 64px rgb(0 0 0 / 26%);
+  --shadow-drawer: -2px 0 8px rgb(0 0 0 / 16%), -12px 0 40px rgb(0 0 0 / 24%);
+  --shadow-hover: 0 2px 6px rgb(0 0 0 / 14%), 0 10px 28px rgb(0 0 0 / 16%);
+  --shadow-interactive: 0 2px 8px rgb(0 0 0 / 16%), 0 10px 24px rgb(0 0 0 / 20%);
+  --shadow-focus: 0 0 0 3px var(--color-focus-ring);
+  --shadow-focus-primary: 0 0 0 3px var(--color-focus-ring), 0 0 12px rgb(212 68 110 / 15%);
   --shadow-glow: 0 0 20px rgb(212 68 110 / 30%), 0 4px 12px rgb(212 68 110 / 20%);
   --shadow-glow-sm: 0 0 12px rgb(212 68 110 / 25%);
-  --color-glass: rgb(45 49 56 / 75%);
+  --shadow-glow-lg: 0 0 30px rgb(212 68 110 / 35%), 0 8px 20px rgb(212 68 110 / 22%);
+  --color-glass: rgb(45 49 56 / 68%);
+  --color-glass-border: rgb(255 255 255 / 12%);
   --color-tooltip: rgb(238 239 241 / 92%);
+  --color-border-hover: var(--color-gray-60);
   --theme-toggle-light-border: var(--color-primary);
   --theme-toggle-light-selected-bg: var(--color-primary);
   --theme-toggle-light-selected-border: var(--color-bg-elevated);
   --theme-toggle-light-selected-fg: var(--color-bg-elevated);
-  --gradient-brand: var(--color-primary);
+  --gradient-brand: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    color-mix(in srgb, var(--color-primary) 80%, #ff6b9d) 100%
+  );
+  --gradient-brand-subtle: linear-gradient(135deg, rgb(212 68 110 / 8%) 0%, rgb(212 68 110 / 3%) 100%);
   --gradient-card: var(--color-bg-elevated);
   --gradient-field: var(--color-bg);
+  --gradient-shimmer: linear-gradient(90deg, transparent 0%, rgb(255 255 255 / 3%) 50%, transparent 100%);
 }
 
 *,
@@ -470,6 +491,116 @@ body.transitionsReady {
 
   100% {
     background-position: 200% 0;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes morphIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+    filter: blur(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  20%,
+  60% {
+    transform: translateX(-4px);
+  }
+
+  40%,
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+@keyframes drawCheck {
+  from {
+    stroke-dashoffset: 20;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes gradientSpin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes countUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes countDown {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  to {
+    transform: translateY(-100%);
+    opacity: 0;
   }
 }
 

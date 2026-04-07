@@ -65,14 +65,14 @@ const Breadcrumbs = (props: Props<BreadcrumbsProps>) => {
     if (item.onClick) {
       return (
         <Button variant="subtle" size="sm" onClick={item.onClick}>
-          <Text as="span" variant="bodySm">
+          <Text as="span" variant="bodySm" tone="secondary">
             {item.label}
           </Text>
         </Button>
       );
     }
     return (
-      <Text as="span" variant="bodySm">
+      <Text as="span" variant="bodySm" tone="secondary">
         {item.label}
       </Text>
     );

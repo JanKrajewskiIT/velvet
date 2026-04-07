@@ -71,7 +71,9 @@ const AtsAnalysisPanel = (props: Props<AtsAnalysisPanelProps>) => {
       <Show when={props.loading}>
         <div class={styles.loading}>
           <Spinner size="md" />
-          <Text as="p">{ts('common.loading')}</Text>
+          <Text as="p" variant="bodySm" tone="muted">
+            {ts('common.loading')}
+          </Text>
         </div>
       </Show>
 
@@ -86,7 +88,9 @@ const AtsAnalysisPanel = (props: Props<AtsAnalysisPanelProps>) => {
         <div class={styles.result}>
           <div class={styles.scoreBlock}>
             <ScoreRing score={props.result?.overallScore ?? 0} />
-            <Text as="p">{ts('analysis.score')}</Text>
+            <Text as="p" variant="labelMd" tone="secondary">
+              {ts('analysis.score')}
+            </Text>
           </div>
 
           <Show when={categories().length > 0}>
@@ -155,7 +159,7 @@ const AtsAnalysisPanel = (props: Props<AtsAnalysisPanelProps>) => {
           </Show>
           <Show when={props.inputHint}>
             {(hint) => (
-              <Text as="p" tone="muted" class={styles.inputHint}>
+              <Text as="p" variant="caption" tone="muted" class={styles.inputHint}>
                 {hint()}
               </Text>
             )}

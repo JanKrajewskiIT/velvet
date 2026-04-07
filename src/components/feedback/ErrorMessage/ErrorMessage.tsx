@@ -16,7 +16,7 @@ const ErrorMessage = (props: Props<ErrorMessageProps>) => {
   return (
     <div class={classNames(styles.error, props.class)}>
       <Icon icon={FiAlertCircle} class={styles.icon} />
-      <Text as="p" role="alert" variant="bodySm" class={styles.message}>
+      <Text as="p" role="alert" variant="bodySm" tone="inherit" class={styles.message}>
         {props.message}
       </Text>
     </div>

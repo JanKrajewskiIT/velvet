@@ -8,7 +8,7 @@ import classNames from '~/utils/classNames';
 
 import styles from './Surface.module.css';
 
-type SurfaceTone = 'default' | 'subtle' | 'inverse';
+type SurfaceTone = 'default' | 'subtle' | 'inverse' | 'glass';
 type SurfaceElevation = 'flat' | 'sm' | 'card' | 'popover' | 'dialog' | 'drawer';
 type SurfaceRadius = 'sm' | 'md' | 'lg';
 
@@ -41,6 +41,7 @@ const Surface = (props: Props<SurfaceOwnProps>) => {
   const toneClass = () => {
     if (local.tone === 'subtle') return styles.toneSubtle;
     if (local.tone === 'inverse') return styles.toneInverse;
+    if (local.tone === 'glass') return styles.toneGlass;
     return styles.toneDefault;
   };
 

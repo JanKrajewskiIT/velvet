@@ -6,7 +6,7 @@ import type { DivCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import Button from '../../buttons/Button/Button';
-import Stepper from '../../navigation/Stepper/Stepper';
+import Stepper from '../Stepper/Stepper';
 import styles from './Wizard.module.css';
 
 export interface WizardStep {

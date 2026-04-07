@@ -1,5 +1,6 @@
 import { Show } from 'solid-js';
 
+import Text from '~/components/typography/Text/Text';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -74,7 +75,9 @@ const CircularProgress = (props: Props<CircularProgressProps>) => {
         />
       </svg>
       <Show when={props.showValue && isDeterminate()}>
-        <span class={styles.value}>{clampedValue()}%</span>
+        <Text as="span" variant="caption" tone="secondary" class={styles.value}>
+          {clampedValue()}%
+        </Text>
       </Show>
     </div>
   );

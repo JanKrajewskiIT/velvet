@@ -1,6 +1,7 @@
 import type { JSX } from 'solid-js';
 import { createMemo, createSignal, For, Show, splitProps } from 'solid-js';
 
+import Chip from '~/components/feedback/Chip/Chip';
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
@@ -82,7 +83,7 @@ const KanbanBoard = <T extends KanbanItemBase>(props: Props<KanbanBoardProps<T>>
 
   const defaultCard = (item: T) => (
     <div class={styles.cardContent}>
-      <Text as="span" variant="labelMd" tone="secondary">
+      <Text as="span" variant="labelMd">
         {item.title}
       </Text>
       <Show when={item.description}>
@@ -113,9 +114,7 @@ const KanbanBoard = <T extends KanbanItemBase>(props: Props<KanbanBoardProps<T>>
                   <Heading as="h4" level={4}>
                     {column.label}
                   </Heading>
-                  <Text as="span" variant="caption" tone="secondary" class={styles.columnCount}>
-                    {items().length}
-                  </Text>
+                  <Chip size="sm" variant="subtle" label={items().length.toString()} />
                 </header>
                 <div class={styles.columnBody}>
                   <Show

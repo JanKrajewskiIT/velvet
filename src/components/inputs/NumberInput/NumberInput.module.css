@@ -16,3 +16,14 @@
   appearance: none;
   margin: 0;
 }
+
+.controls button {
+  transition:
+    transform var(--duration-fast) var(--ease-out-expo),
+    background-color var(--duration-fast) var(--ease-out-expo);
+}
+
+.controls button:active:not(:disabled) {
+  transform: scale(0.9);
+  background-color: color-mix(in srgb, var(--color-surface) 70%, var(--color-primary-light));
+}

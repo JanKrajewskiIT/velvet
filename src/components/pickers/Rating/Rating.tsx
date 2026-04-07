@@ -125,6 +125,7 @@ const Rating = (props: Props<RatingProps>) => {
               if (!isInteractive()) return;
               itemRefs[loopIndex()] = element as HTMLButtonElement;
             }}
+            style={{ '--star-index': String(loopIndex()) }}
             class={classNames(
               styles.star,
               sizeClass(),

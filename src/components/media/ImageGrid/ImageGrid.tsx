@@ -1,5 +1,6 @@
 import { For, Show } from 'solid-js';
 
+import Text from '~/components/typography/Text/Text';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -40,7 +41,9 @@ const ImageGrid = (props: Props<ImageGridProps>) => {
     <>
       <img class={imageClass()} src={item.src} alt={item.alt ?? ''} loading="lazy" />
       <Show when={item.caption}>
-        <div class={styles.caption}>{item.caption}</div>
+        <Text as="div" variant="caption" tone="inverse" class={styles.caption}>
+          {item.caption}
+        </Text>
       </Show>
     </>
   );
