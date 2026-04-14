@@ -1,0 +1,86 @@
+.loader {
+  --honeycomb-loader-primary: var(--color-primary);
+  --honeycomb-loader-dark: color-mix(in srgb, var(--honeycomb-loader-primary) 72%, var(--color-bg-inverse));
+  --honeycomb-loader-soft: color-mix(in srgb, var(--honeycomb-loader-primary) 40%, var(--color-bg));
+
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+
+.socket {
+  position: absolute;
+  inset: 0;
+}
+
+.gel {
+  --gel-x: 0px;
+  --gel-y: 0px;
+  --gel-delay: 0s;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 30px;
+  height: 30px;
+  margin-left: var(--gel-x);
+  margin-top: var(--gel-y);
+  animation: gelPulse 2s infinite;
+  animation-delay: var(--gel-delay);
+  transition: transform var(--duration-normal) var(--ease-out-expo);
+}
+
+.hexBrick {
+  position: absolute;
+  top: 5px;
+  width: 30px;
+  height: 17px;
+  background: var(--honeycomb-loader-primary);
+  animation: hexFade 2s infinite;
+  animation-delay: var(--gel-delay);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--honeycomb-loader-primary) 35%, transparent);
+}
+
+.h1 {
+  transform: rotate(0deg);
+}
+
+.h2 {
+  transform: rotate(60deg);
+}
+
+.h3 {
+  transform: rotate(-60deg);
+}
+
+@keyframes gelPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.01);
+  }
+}
+
+@keyframes hexFade {
+  0% {
+    background: var(--honeycomb-loader-soft);
+  }
+
+  50% {
+    background: var(--honeycomb-loader-primary);
+  }
+
+  100% {
+    background: var(--honeycomb-loader-dark);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gel,
+  .hexBrick {
+    animation: none;
+  }
+}

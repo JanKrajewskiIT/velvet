@@ -1,0 +1,389 @@
+.loader {
+  position: relative;
+  width: 72px;
+  height: 72px;
+}
+
+.box {
+  position: relative;
+  float: left;
+  width: 20px;
+  height: 20px;
+  margin-right: 6px;
+}
+
+.box::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-primary);
+}
+
+.box:nth-child(3n) {
+  margin-right: 0;
+  margin-bottom: 6px;
+}
+
+.box:nth-child(1)::before,
+.box:nth-child(4)::before {
+  margin-left: 26px;
+}
+
+.box:nth-child(3)::before {
+  margin-top: 52px;
+}
+
+.box:last-child {
+  margin-bottom: 0;
+}
+
+.box:nth-child(1) {
+  animation: moveBox1 4s infinite;
+}
+
+.box:nth-child(2) {
+  animation: moveBox2 4s infinite;
+}
+
+.box:nth-child(3) {
+  animation: moveBox3 4s infinite;
+}
+
+.box:nth-child(4) {
+  animation: moveBox4 4s infinite;
+}
+
+.box:nth-child(5) {
+  animation: moveBox5 4s infinite;
+}
+
+.box:nth-child(6) {
+  animation: moveBox6 4s infinite;
+}
+
+.box:nth-child(7) {
+  animation: moveBox7 4s infinite;
+}
+
+.box:nth-child(8) {
+  animation: moveBox8 4s infinite;
+}
+
+.box:nth-child(9) {
+  animation: moveBox9 4s infinite;
+}
+
+@keyframes moveBox1 {
+  9.0909% {
+    transform: translate(-26px, 0);
+  }
+
+  18.1818%,
+  27.2727% {
+    transform: translate(0, 0);
+  }
+
+  36.3636% {
+    transform: translate(26px, 0);
+  }
+
+  45.4545%,
+  54.5455%,
+  63.6364% {
+    transform: translate(26px, 26px);
+  }
+
+  72.7273% {
+    transform: translate(26px, 0);
+  }
+
+  81.8182% {
+    transform: translate(0, 0);
+  }
+
+  90.9091% {
+    transform: translate(-26px, 0);
+  }
+
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes moveBox2 {
+  9.0909% {
+    transform: translate(0, 0);
+  }
+
+  18.1818% {
+    transform: translate(26px, 0);
+  }
+
+  27.2727% {
+    transform: translate(0, 0);
+  }
+
+  36.3636% {
+    transform: translate(26px, 0);
+  }
+
+  45.4545%,
+  54.5455%,
+  63.6364%,
+  72.7273% {
+    transform: translate(26px, 26px);
+  }
+
+  81.8182%,
+  90.9091% {
+    transform: translate(0, 26px);
+  }
+
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes moveBox3 {
+  9.0909%,
+  18.1818% {
+    transform: translate(-26px, 0);
+  }
+
+  27.2727% {
+    transform: translate(0, 0);
+  }
+
+  36.3636%,
+  45.4545%,
+  54.5455%,
+  63.6364%,
+  72.7273% {
+    transform: translate(-26px, 0);
+  }
+
+  81.8182% {
+    transform: translate(-26px, -26px);
+  }
+
+  90.9091% {
+    transform: translate(0, -26px);
+  }
+
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes moveBox4 {
+  9.0909%,
+  18.1818% {
+    transform: translate(-26px, 0);
+  }
+
+  27.2727% {
+    transform: translate(-26px, -26px);
+  }
+
+  36.3636% {
+    transform: translate(0, -26px);
+  }
+
+  45.4545% {
+    transform: translate(0, 0);
+  }
+
+  54.5455%,
+  63.6364%,
+  72.7273% {
+    transform: translate(0, -26px);
+  }
+
+  81.8182% {
+    transform: translate(-26px, -26px);
+  }
+
+  90.9091% {
+    transform: translate(-26px, 0);
+  }
+
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes moveBox5 {
+  9.0909%,
+  18.1818%,
+  27.2727% {
+    transform: translate(0, 0);
+  }
+
+  36.3636%,
+  45.4545%,
+  54.5455%,
+  63.6364%,
+  72.7273% {
+    transform: translate(26px, 0);
+  }
+
+  81.8182% {
+    transform: translate(26px, -26px);
+  }
+
+  90.9091% {
+    transform: translate(0, -26px);
+  }
+
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes moveBox6 {
+  9.0909% {
+    transform: translate(0, 0);
+  }
+
+  18.1818%,
+  27.2727% {
+    transform: translate(-26px, 0);
+  }
+
+  36.3636%,
+  45.4545%,
+  54.5455%,
+  63.6364% {
+    transform: translate(0, 0);
+  }
+
+  72.7273% {
+    transform: translate(0, 26px);
+  }
+
+  81.8182% {
+    transform: translate(-26px, 26px);
+  }
+
+  90.9091% {
+    transform: translate(-26px, 0);
+  }
+
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes moveBox7 {
+  9.0909%,
+  18.1818%,
+  27.2727% {
+    transform: translate(26px, 0);
+  }
+
+  36.3636% {
+    transform: translate(0, 0);
+  }
+
+  45.4545% {
+    transform: translate(0, -26px);
+  }
+
+  54.5455% {
+    transform: translate(26px, -26px);
+  }
+
+  63.6364%,
+  72.7273% {
+    transform: translate(0, -26px);
+  }
+
+  81.8182% {
+    transform: translate(0, 0);
+  }
+
+  90.9091% {
+    transform: translate(26px, 0);
+  }
+
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes moveBox8 {
+  9.0909% {
+    transform: translate(0, 0);
+  }
+
+  18.1818% {
+    transform: translate(-26px, 0);
+  }
+
+  27.2727% {
+    transform: translate(-26px, -26px);
+  }
+
+  36.3636%,
+  45.4545%,
+  54.5455%,
+  63.6364%,
+  72.7273% {
+    transform: translate(0, -26px);
+  }
+
+  81.8182% {
+    transform: translate(26px, -26px);
+  }
+
+  90.9091% {
+    transform: translate(26px, 0);
+  }
+
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes moveBox9 {
+  9.0909%,
+  18.1818% {
+    transform: translate(-26px, 0);
+  }
+
+  27.2727% {
+    transform: translate(0, 0);
+  }
+
+  36.3636% {
+    transform: translate(-26px, 0);
+  }
+
+  45.4545%,
+  54.5455% {
+    transform: translate(0, 0);
+  }
+
+  63.6364%,
+  72.7273% {
+    transform: translate(-26px, 0);
+  }
+
+  81.8182% {
+    transform: translate(-52px, 0);
+  }
+
+  90.9091% {
+    transform: translate(-26px, 0);
+  }
+
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .box {
+    animation: none;
+  }
+}

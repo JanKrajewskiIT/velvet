@@ -4,11 +4,11 @@ import { createEffect, createMemo, createSignal, Match, Show, Switch } from 'sol
 import Button from '~/components/buttons/Button/Button';
 import IconButton from '~/components/buttons/IconButton/IconButton';
 import ErrorMessage from '~/components/feedback/ErrorMessage/ErrorMessage';
-import Spinner from '~/components/feedback/Spinner/Spinner';
 import FormField from '~/components/forms/FormField/FormField';
 import FormLayout from '~/components/forms/FormLayout/FormLayout';
 import FileDropZone from '~/components/inputs/FileDropZone/FileDropZone';
 import Input from '~/components/inputs/Input/Input';
+import Spinner from '~/components/loaders/Spinner/Spinner';
 import Tabs from '~/components/navigation/Tabs/Tabs';
 import Dialog from '~/components/overlays/Dialog/Dialog';
 import DialogActions from '~/components/overlays/Dialog/DialogActions/DialogActions';

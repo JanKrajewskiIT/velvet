@@ -1,0 +1,70 @@
+.loader {
+  --corner-loader-size: 3rem;
+  --corner-dot-size: 1.2rem;
+  --corner-loader-color: var(--color-primary);
+
+  position: relative;
+  width: var(--corner-loader-size);
+  height: var(--corner-loader-size);
+  animation: cornerSpin 2s linear infinite;
+}
+
+.circle {
+  position: absolute;
+  width: var(--corner-dot-size);
+  height: var(--corner-dot-size);
+  border-radius: var(--radius-full);
+  background: var(--corner-loader-color);
+}
+
+.circle:nth-child(1) {
+  top: 0;
+  left: 0;
+}
+
+.circle:nth-child(2) {
+  top: 0;
+  right: 0;
+}
+
+.circle:nth-child(3) {
+  right: 0;
+  bottom: 0;
+}
+
+.circle:nth-child(4) {
+  bottom: 0;
+  left: 0;
+}
+
+@keyframes cornerSpin {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+
+  20%,
+  25% {
+    transform: scale(1.3) rotate(90deg);
+  }
+
+  45%,
+  50% {
+    transform: scale(1) rotate(180deg);
+  }
+
+  70%,
+  75% {
+    transform: scale(1.3) rotate(270deg);
+  }
+
+  95%,
+  100% {
+    transform: scale(1) rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loader {
+    animation: none;
+  }
+}

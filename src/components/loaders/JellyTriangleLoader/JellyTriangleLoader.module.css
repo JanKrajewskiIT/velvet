@@ -1,0 +1,92 @@
+.loader {
+  --jelly-size: 2.8rem;
+  --jelly-speed: 1.75s;
+  --jelly-color: var(--color-primary);
+  --jelly-glow: color-mix(in srgb, var(--jelly-color) 30%, transparent);
+  --jelly-filter: none;
+
+  position: relative;
+  width: var(--jelly-size);
+  height: var(--jelly-size);
+  filter: var(--jelly-filter);
+}
+
+.dot,
+.loader::before,
+.loader::after,
+.traveler {
+  content: '';
+  position: absolute;
+  width: 33%;
+  height: 33%;
+  border-radius: var(--radius-full);
+  background: var(--jelly-color);
+  box-shadow: 0 0 20px var(--jelly-glow);
+}
+
+.dot {
+  top: 6%;
+  left: 30%;
+  animation: jellyGrow var(--jelly-speed) ease infinite;
+}
+
+.loader::before {
+  right: 0;
+  bottom: 6%;
+  animation: jellyGrow var(--jelly-speed) ease calc(var(--jelly-speed) * -0.666) infinite;
+}
+
+.loader::after {
+  left: 0;
+  bottom: 6%;
+  animation: jellyGrow var(--jelly-speed) ease calc(var(--jelly-speed) * -0.333) infinite;
+}
+
+.traveler {
+  top: 6%;
+  left: 30%;
+  animation: jellyTriangulate var(--jelly-speed) ease infinite;
+}
+
+.filterDefs {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+@keyframes jellyTriangulate {
+  0%,
+  100% {
+    transform: none;
+  }
+
+  33.333% {
+    transform: translate(120%, 175%);
+  }
+
+  66.666% {
+    transform: translate(-95%, 175%);
+  }
+}
+
+@keyframes jellyGrow {
+  0%,
+  100% {
+    transform: scale(1.5);
+  }
+
+  20%,
+  70% {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dot,
+  .loader::before,
+  .loader::after,
+  .traveler {
+    animation: none;
+    transform: none;
+  }
+}

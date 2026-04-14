@@ -4,7 +4,8 @@ import type Props from '~/models/Props';
 import type { ButtonCoreNativeProps, ComponentSize } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import Button, { type ButtonVariant } from '../Button/Button';
+import Button from '../Button/Button';
+import { type ButtonVariant, DEFAULT_ICON_BUTTON_VARIANT } from '../shared/buttonVariants';
 import { type ButtonIcon, renderButtonIcon } from '../shared/renderButtonIcon';
 import styles from './IconButton.module.css';
 
@@ -37,7 +38,7 @@ const IconButton = (props: Props<IconButtonOwnProps>) => {
       class={classNames(styles.iconButton, local.variant === 'navbar' && styles.navbarVariant, local.class)}
       type={local.type ?? 'button'}
       size={local.size}
-      variant={local.variant ?? 'subtle'}
+      variant={local.variant ?? DEFAULT_ICON_BUTTON_VARIANT}
       iconOnly
       title={local.label}
       aria-label={local.label}

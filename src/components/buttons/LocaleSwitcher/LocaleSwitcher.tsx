@@ -4,7 +4,8 @@ import { SUPPORTED_LOCALES } from '~/i18n/messages';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import Button, { type ButtonVariant } from '../Button/Button';
+import Button from '../Button/Button';
+import type { ButtonVariant } from '../shared/buttonVariants';
 import styles from './LocaleSwitcher.module.css';
 
 interface LocaleSwitcherProps {

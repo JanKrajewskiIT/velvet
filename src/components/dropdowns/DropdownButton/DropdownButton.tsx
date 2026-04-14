@@ -2,6 +2,11 @@ import { FiChevronDown } from 'solid-icons/fi';
 import { createMemo, createUniqueId, type JSX, Show, splitProps } from 'solid-js';
 
 import Button from '~/components/buttons/Button/Button';
+import {
+  type ButtonVariant,
+  DEFAULT_DROPDOWN_BUTTON_VARIANT,
+  resolveDropdownTriggerTone,
+} from '~/components/buttons/shared/buttonVariants';
 import useDropdownPanel from '~/hooks/useDropdownPanel';
 import type Props from '~/models/Props';
 import type { ComponentSize } from '~/models/Props';
@@ -13,7 +18,7 @@ import styles from './DropdownButton.module.css';
 
 interface DropdownButtonProps {
   label: string;
-  variant?: 'primary' | 'ghost';
+  variant?: ButtonVariant;
   size?: ComponentSize;
   children: JSX.Element;
 }
@@ -34,9 +39,9 @@ const DropdownButton = (props: Props<DropdownButtonProps>) => {
   const handleTriggerKeyDown = (event: KeyboardEvent) => {
     dropdown.openFromKeyboard(event, { ignoreWhenOpen: true });
   };
-  const variant = createMemo(() => local.variant ?? 'ghost');
+  const variant = createMemo<ButtonVariant>(() => local.variant ?? DEFAULT_DROPDOWN_BUTTON_VARIANT);
   const size = createMemo(() => local.size ?? 'md');
-  const triggerTone = createMemo(() => (variant() === 'primary' ? 'inverse' : 'default'));
+  const triggerTone = createMemo(() => resolveDropdownTriggerTone(variant()));
   const wrapperClass = createMemo(() => classNames(styles.wrapper, local.class));
 
   return (
@@ -52,7 +57,7 @@ const DropdownButton = (props: Props<DropdownButtonProps>) => {
         aria-expanded={dropdown.open()}
         aria-controls={dropdown.open() ? menuId : undefined}
       >
-        <DropdownTriggerContent label={local.label} tone={triggerTone()} class={styles.triggerContent}>
+        <DropdownTriggerContent label={local.label} tone={triggerTone()} size={size()} class={styles.triggerContent}>
           <span class={classNames(styles.chevron, dropdown.open() && styles.chevronOpen)}>
             <FiChevronDown />
           </span>

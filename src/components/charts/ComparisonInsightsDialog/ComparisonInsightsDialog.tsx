@@ -2,7 +2,7 @@ import { For, Show } from 'solid-js';
 
 import Button from '~/components/buttons/Button/Button';
 import RadarChart from '~/components/charts/RadarChart/RadarChart';
-import Spinner from '~/components/feedback/Spinner/Spinner';
+import Spinner from '~/components/loaders/Spinner/Spinner';
 import Dialog from '~/components/overlays/Dialog/Dialog';
 import DialogActions from '~/components/overlays/Dialog/DialogActions/DialogActions';
 import DialogBody from '~/components/overlays/Dialog/DialogBody/DialogBody';

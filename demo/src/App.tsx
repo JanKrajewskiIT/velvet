@@ -24,7 +24,6 @@ import LayoutSection from './sections/LayoutSection';
 import NavigationSection from './sections/NavigationSection';
 import OverlaysSection from './sections/OverlaysSection';
 import OverviewSection from './sections/OverviewSection';
-import RecronExtractsSection from './sections/RecronExtractsSection';
 import TablesSection from './sections/TablesSection';
 import TypographySection from './sections/TypographySection';
 
@@ -60,6 +59,7 @@ export type SectionId =
   | 'feedback-badges-chips'
   | 'feedback-chips-tags'
   | 'feedback-progress'
+  | 'feedback-loaders'
   | 'feedback-alerts'
   | 'feedback-states'
   | 'overlays-tooltips'
@@ -77,8 +77,7 @@ export type SectionId =
   | 'composites-kanban-board'
   | 'composites-command-palette'
   | 'composites-ai-result'
-  | 'composites-scheduler'
-  | 'composites-recron-extracts';
+  | 'composites-scheduler';
 
 interface DemoNavItemConfig {
   id: SectionId;
@@ -154,6 +153,7 @@ const NAV_GROUPS: DemoNavGroupConfig[] = [
       { id: 'feedback-chips-tags', labelKey: 'demo.nav.item.feedbackChipsTags' },
       { id: 'feedback-badges-chips', labelKey: 'demo.nav.item.feedbackStatusNotifications' },
       { id: 'feedback-progress', labelKey: 'demo.nav.item.feedbackProgress' },
+      { id: 'feedback-loaders', labelKey: 'demo.nav.item.feedbackLoaders' },
       { id: 'feedback-alerts', labelKey: 'demo.nav.item.feedbackAlertsBanners' },
       { id: 'feedback-states', labelKey: 'demo.nav.item.feedbackEmptyStates' },
     ],
@@ -178,7 +178,6 @@ const NAV_GROUPS: DemoNavGroupConfig[] = [
       { id: 'composites-command-palette', labelKey: 'demo.nav.item.commandPalette' },
       { id: 'composites-ai-result', labelKey: 'demo.nav.item.aiResultPanel' },
       { id: 'composites-scheduler', labelKey: 'demo.nav.item.scheduler' },
-      { id: 'composites-recron-extracts', labelKey: 'demo.nav.item.recronExtracts' },
     ],
   },
 ];
@@ -308,6 +307,10 @@ const PAGE_META_KEYS: Record<SectionId, { titleKey: DemoI18nMessageKey; descript
     titleKey: 'demo.page.feedbackProgress.title',
     descriptionKey: 'demo.page.feedbackProgress.description',
   },
+  'feedback-loaders': {
+    titleKey: 'demo.page.feedbackLoaders.title',
+    descriptionKey: 'demo.page.feedbackLoaders.description',
+  },
   'feedback-alerts': {
     titleKey: 'demo.page.feedbackAlerts.title',
     descriptionKey: 'demo.page.feedbackAlerts.description',
@@ -380,25 +383,14 @@ const PAGE_META_KEYS: Record<SectionId, { titleKey: DemoI18nMessageKey; descript
     titleKey: 'demo.page.compositesScheduler.title',
     descriptionKey: 'demo.page.compositesScheduler.description',
   },
-  'composites-recron-extracts': {
-    titleKey: 'demo.page.compositesRecronExtracts.title',
-    descriptionKey: 'demo.page.compositesRecronExtracts.description',
-  },
 };
 
-const HEADER_SECTION_IDS: SectionId[] = [
-  'surfaces-main-layout',
-  'data-tables',
-  'inputs-fields',
-  'feedback-alerts',
-  'composites-recron-extracts',
-];
+const HEADER_SECTION_IDS: SectionId[] = ['surfaces-main-layout', 'data-tables', 'inputs-fields', 'feedback-alerts'];
 
 const OVERVIEW_TRACKS: { id: SectionId; groupKey: DemoI18nMessageKey }[] = [
   { id: 'surfaces-main-layout', groupKey: 'demo.nav.surfaces' },
   { id: 'inputs-form-layout', groupKey: 'demo.nav.inputs' },
   { id: 'data-tables', groupKey: 'demo.nav.data' },
-  { id: 'composites-recron-extracts', groupKey: 'demo.nav.composites' },
 ];
 
 function interpolate(template: string, params?: Record<string, string | number>): string {
@@ -579,9 +571,6 @@ const AppContent = () => {
           </Match>
           <Match when={activeSection().startsWith('surfaces-')}>
             <LayoutSection sectionId={activeSection()} />
-          </Match>
-          <Match when={activeSection() === 'composites-recron-extracts'}>
-            <RecronExtractsSection />
           </Match>
           <Match when={activeSection().startsWith('composites-')}>
             <CompositesSection sectionId={activeSection()} />

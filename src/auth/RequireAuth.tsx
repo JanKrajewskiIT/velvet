@@ -1,7 +1,7 @@
 import { createMemo, type JSX, Show } from 'solid-js';
 
 import AccessDenied from '~/components/feedback/AccessDenied/AccessDenied';
-import LoadingContainer from '~/components/feedback/LoadingContainer/LoadingContainer';
+import PageLoader from '~/components/loaders/PageLoader/PageLoader';
 import type Props from '~/models/Props';
 
 import AuthRedirect from './AuthRedirect';
@@ -73,7 +73,7 @@ const RequireAuth = (props: Props<RequireAuthProps>) => {
   });
 
   return (
-    <Show when={!props.isLoading} fallback={props.loadingFallback ?? <LoadingContainer />}>
+    <Show when={!props.isLoading} fallback={props.loadingFallback ?? <PageLoader />}>
       <Show when={props.isAuthenticated} fallback={unauthenticatedFallback()}>
         <Show when={resolvedHasAccess()} fallback={accessDeniedFallback()}>
           {props.children}

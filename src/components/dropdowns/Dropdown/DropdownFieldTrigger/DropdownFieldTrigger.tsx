@@ -1,5 +1,6 @@
 import { type JSX, splitProps } from 'solid-js';
 
+import { type ButtonVariant, resolveDropdownTriggerTone } from '~/components/buttons/shared/buttonVariants';
 import FieldBase from '~/components/inputs/FieldBase/FieldBase';
 import type { TypographyTone } from '~/components/typography/Typography/Typography';
 import type Props from '~/models/Props';
@@ -15,6 +16,7 @@ export interface DropdownFieldTriggerProps extends Omit<ButtonCoreNativeProps, '
   size?: ComponentSize;
   invalid?: boolean;
   readOnly?: boolean;
+  variant?: ButtonVariant;
   tone?: 'default' | 'inverse';
   labelTone?: TypographyTone;
   children?: JSX.Element;
@@ -27,12 +29,15 @@ const DropdownFieldTrigger = (props: Props<DropdownFieldTriggerProps>) => {
     'size',
     'invalid',
     'readOnly',
+    'variant',
     'tone',
     'labelTone',
     'children',
     'class',
     'type',
   ]);
+
+  const resolvedTone = () => local.tone ?? resolveDropdownTriggerTone(local.variant);
 
   return (
     <FieldBase
@@ -48,7 +53,8 @@ const DropdownFieldTrigger = (props: Props<DropdownFieldTriggerProps>) => {
       <DropdownTriggerContent
         label={local.label}
         labelId={local.labelId}
-        tone={local.tone}
+        size={local.size}
+        tone={resolvedTone()}
         labelTone={local.labelTone}
         class={styles.content}
       >

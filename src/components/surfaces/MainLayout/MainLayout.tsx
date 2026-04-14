@@ -1,9 +1,9 @@
 import { type JSX, type ParentProps, splitProps, Suspense } from 'solid-js';
 
+import PageLoader from '~/components/loaders/PageLoader/PageLoader';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import LoadingContainer from '../../feedback/LoadingContainer/LoadingContainer';
 import styles from './MainLayout.module.css';
 
 interface MainLayoutProps {
@@ -19,7 +19,7 @@ const MainLayout = (props: ParentProps<Props<MainLayoutProps>>) => {
       {local.navbar}
       <main class={styles.main}>
         <div class={styles.container}>
-          <Suspense fallback={<LoadingContainer />}>{local.children}</Suspense>
+          <Suspense fallback={<PageLoader />}>{local.children}</Suspense>
         </div>
       </main>
       {local.footer}

@@ -1,0 +1,39 @@
+.loader {
+  width: 48px;
+  height: 48px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--color-primary);
+}
+
+.bar {
+  --equalizer-delay: 0s;
+
+  width: 8px;
+  height: 48px;
+  border-radius: 4px;
+  background: currentcolor;
+  transform-origin: center;
+  animation: equalizerBars 0.3s linear infinite alternate;
+  animation-delay: var(--equalizer-delay);
+}
+
+@keyframes equalizerBars {
+  0% {
+    transform: scaleY(1);
+  }
+
+  100% {
+    transform: scaleY(0.0833);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loader,
+  .bar {
+    animation: none;
+  }
+}

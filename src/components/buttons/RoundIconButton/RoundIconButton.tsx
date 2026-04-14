@@ -4,7 +4,8 @@ import type Props from '~/models/Props';
 import type { ButtonCoreNativeProps, ComponentSize } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import Button, { type ButtonVariant } from '../Button/Button';
+import Button from '../Button/Button';
+import { type ButtonVariant, DEFAULT_ROUND_ICON_BUTTON_VARIANT } from '../shared/buttonVariants';
 import { type ButtonIcon, renderButtonIcon } from '../shared/renderButtonIcon';
 import styles from './RoundIconButton.module.css';
 
@@ -46,7 +47,7 @@ const RoundIconButton = (props: Props<RoundIconButtonOwnProps>) => {
       class={classNames(styles.button, elevationClassByValue[local.elevation ?? 'popover'], local.class)}
       type={local.type ?? 'button'}
       size={local.size}
-      variant={local.variant ?? 'primary'}
+      variant={local.variant ?? DEFAULT_ROUND_ICON_BUTTON_VARIANT}
       round
       title={local.label}
       aria-label={local.label}

@@ -54,17 +54,17 @@
 .sizeMd {
   min-height: 44px;
   padding: calc(var(--spacing-sm) + 1px) calc(var(--spacing-sm) + 2px);
-  font-size: var(--typography-body-md-font-size);
-  line-height: var(--typography-body-md-line-height);
-  font-weight: var(--typography-body-md-font-weight);
-  letter-spacing: var(--typography-body-md-letter-spacing);
+  font-size: var(--typography-body-sm-font-size);
+  line-height: var(--typography-body-sm-line-height);
+  font-weight: var(--typography-body-sm-font-weight);
+  letter-spacing: var(--typography-body-sm-letter-spacing);
 }
 
 .sizeLg {
   min-height: 52px;
   padding: calc(var(--spacing-sm) + 3px) calc(var(--spacing-md) + 2px);
-  font-size: var(--typography-body-lg-font-size);
-  line-height: var(--typography-body-lg-line-height);
-  font-weight: var(--typography-body-lg-font-weight);
-  letter-spacing: var(--typography-body-lg-letter-spacing);
+  font-size: var(--typography-body-md-font-size);
+  line-height: var(--typography-body-md-line-height);
+  font-weight: var(--typography-body-md-font-weight);
+  letter-spacing: var(--typography-body-md-letter-spacing);
 }

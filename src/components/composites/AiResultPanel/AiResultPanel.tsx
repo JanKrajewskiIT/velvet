@@ -7,7 +7,7 @@ import classNames from '~/utils/classNames';
 
 import Button from '../../buttons/Button/Button';
 import ScoreRing from '../../charts/ScoreRing/ScoreRing';
-import Spinner from '../../feedback/Spinner/Spinner';
+import Spinner from '../../loaders/Spinner/Spinner';
 import Stack from '../../surfaces/Stack/Stack';
 import CodeText from '../../typography/CodeText/CodeText';
 import Heading from '../../typography/Heading/Heading';

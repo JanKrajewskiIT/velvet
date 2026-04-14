@@ -5,7 +5,8 @@ import type Props from '~/models/Props';
 import type { ButtonCoreNativeProps, ComponentSize } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
-import Button, { type ButtonVariant } from '../Button/Button';
+import Button from '../Button/Button';
+import { type ButtonVariant, resolveButtonContentTone } from '../shared/buttonVariants';
 import styles from './AffixButton.module.css';
 
 interface AffixButtonOwnProps extends Omit<ButtonCoreNativeProps, 'children' | 'prefix'> {
@@ -30,19 +31,18 @@ const AffixButton = (props: Props<AffixButtonOwnProps>) => {
     'bodyClass',
   ]);
 
-  const textTone = () => {
-    const variant = local.variant ?? 'primary';
-    if (variant === 'primary' || variant === 'danger') return 'inverse';
-    return 'default';
-  };
-
   return (
     <Button {...rest} variant={local.variant} size={local.size} class={local.class}>
       <span class={styles.content}>
         <Show when={local.prefix}>
           <span class={classNames(styles.prefix, local.prefixClass)}>{local.prefix}</span>
         </Show>
-        <Text as="span" variant="labelMd" tone={textTone()} class={classNames(styles.body, local.bodyClass)}>
+        <Text
+          as="span"
+          variant="labelMd"
+          tone={resolveButtonContentTone(local.variant)}
+          class={classNames(styles.body, local.bodyClass)}
+        >
           {local.text}
         </Text>
         <Show when={local.suffix}>

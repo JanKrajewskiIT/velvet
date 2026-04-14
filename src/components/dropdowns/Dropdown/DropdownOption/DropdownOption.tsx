@@ -41,7 +41,7 @@ const DropdownOption = (props: Props<DropdownOptionProps>) => {
       )}
     >
       {local.prefix ? <span class={styles.itemPrefix}>{local.prefix}</span> : undefined}
-      <Text as="span" variant="bodySm">
+      <Text as="span" variant="bodySm" tone="inherit">
         {local.label}
       </Text>
     </Button>

@@ -5,6 +5,8 @@ import {
   Alert,
   Badge,
   Banner,
+  BikeLoader,
+  BouncingDotsLoader,
   Button,
   Chip,
   CircularProgress,
@@ -12,17 +14,29 @@ import {
   CodeText,
   ColorLabelManagerDialog,
   ColorLabelSelectionDialog,
+  ConcentricPulseLoader,
+  CornerPulseLoader,
   Countdown,
   DualFilterBar,
+  DualPlaneSpinner,
+  EllipsisLoader,
   EmptyState,
+  EqualizerLoader,
   ErrorFallback,
   ErrorMessage,
+  HoneycombLoader,
   IconButton,
+  JellyTriangleLoader,
   Kbd,
-  LoadingContainer,
   NotificationCenter,
+  OrbitSquaresLoader,
+  PageLoader,
   Progress,
+  PulseRingLoader,
+  RippleDotsLoader,
   SelectableChips,
+  ShapeTrailLoader,
+  ShuffleGridLoader,
   Skeleton,
   Spinner,
   Text,
@@ -386,43 +400,6 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
         </ShowcaseSection>
 
         <ShowcaseSection
-          title={t('demo.showcase.feedback.spinner.title')}
-          subtitle={t('demo.showcase.feedback.spinner.subtitle')}
-        >
-          <PreviewPanel>
-            <PreviewGroup title={t('demo.text.common.examples')}>
-              <div class="row">
-                <Spinner size="sm" label={t('demo.text.feedback.spinner.small')} />
-                <Spinner size="md" label={t('demo.text.feedback.spinner.medium')} />
-                <Spinner size="lg" label={t('demo.text.feedback.spinner.large')} />
-              </div>
-            </PreviewGroup>
-          </PreviewPanel>
-          <ShowcaseMeta>{t('demo.text.feedback.spinner.meta')}</ShowcaseMeta>
-        </ShowcaseSection>
-
-        <ShowcaseSection
-          title={t('demo.showcase.feedback.loadingContainer.title')}
-          subtitle={t('demo.showcase.feedback.loadingContainer.subtitle')}
-        >
-          <PreviewPanel>
-            <PreviewGroup title={t('demo.text.common.examples')}>
-              <div class="loaderRow">
-                <div class="loaderSample loaderSm">
-                  <LoadingContainer size="sm" />
-                </div>
-                <div class="loaderSample loaderMd">
-                  <LoadingContainer size="md" />
-                </div>
-                <div class="loaderSample loaderLg">
-                  <LoadingContainer size="lg" />
-                </div>
-              </div>
-            </PreviewGroup>
-          </PreviewPanel>
-        </ShowcaseSection>
-
-        <ShowcaseSection
           title={t('demo.showcase.feedback.skeleton.title')}
           subtitle={t('demo.showcase.feedback.skeleton.subtitle')}
         >
@@ -439,6 +416,221 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
               <Skeleton variant="rectangular" height={120} animation="pulse" />
               <Skeleton variant="text" width="80%" animation="none" />
             </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+      </Show>
+
+      <Show when={sectionId() === 'feedback-loaders'}>
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.spinner.title')}
+          subtitle={t('demo.showcase.feedback.spinner.subtitle')}
+        >
+          <PreviewPanel>
+            <div class="previewGroupContent">
+              <div class="row loaderPreviewRow">
+                <Spinner size="sm" label={t('demo.text.feedback.spinner.small')} />
+                <Spinner size="md" label={t('demo.text.feedback.spinner.medium')} />
+                <Spinner size="lg" label={t('demo.text.feedback.spinner.large')} />
+              </div>
+            </div>
+          </PreviewPanel>
+          <ShowcaseMeta>{t('demo.text.feedback.spinner.meta')}</ShowcaseMeta>
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.pulseRingLoader.title')}
+          subtitle={t('demo.showcase.feedback.pulseRingLoader.subtitle')}
+        >
+          <PreviewPanel>
+            <div class="previewGroupContent">
+              <div class="row loaderPreviewRow">
+                <PulseRingLoader label={t('demo.text.feedback.pulseRingLoader.loading')} />
+              </div>
+            </div>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.cornerPulseLoader.title')}
+          subtitle={t('demo.showcase.feedback.cornerPulseLoader.subtitle')}
+        >
+          <PreviewPanel>
+            <div class="previewGroupContent">
+              <div class="row loaderPreviewRow">
+                <CornerPulseLoader label={t('demo.text.feedback.cornerPulseLoader.loading')} />
+              </div>
+            </div>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.jellyTriangleLoader.title')}
+          subtitle={t('demo.showcase.feedback.jellyTriangleLoader.subtitle')}
+        >
+          <PreviewPanel>
+            <div class="previewGroupContent">
+              <div class="row loaderPreviewRow">
+                <JellyTriangleLoader label={t('demo.text.feedback.jellyTriangleLoader.loading')} />
+              </div>
+            </div>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.dualPlaneSpinner.title')}
+          subtitle={t('demo.showcase.feedback.dualPlaneSpinner.subtitle')}
+        >
+          <PreviewPanel>
+            <div class="previewGroupContent">
+              <div class="row loaderPreviewRow">
+                <DualPlaneSpinner label={t('demo.text.feedback.dualPlaneSpinner.loading')} />
+              </div>
+            </div>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.equalizerLoader.title')}
+          subtitle={t('demo.showcase.feedback.equalizerLoader.subtitle')}
+        >
+          <PreviewPanel>
+            <div class="previewGroupContent">
+              <div class="row loaderPreviewRow">
+                <EqualizerLoader label={t('demo.text.feedback.equalizerLoader.loading')} />
+              </div>
+            </div>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.ellipsisLoader.title')}
+          subtitle={t('demo.showcase.feedback.ellipsisLoader.subtitle')}
+        >
+          <PreviewPanel>
+            <div class="previewGroupContent">
+              <div class="row loaderPreviewRow">
+                <EllipsisLoader label={t('demo.text.feedback.ellipsisLoader.loading')} />
+              </div>
+            </div>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.bouncingDotsLoader.title')}
+          subtitle={t('demo.showcase.feedback.bouncingDotsLoader.subtitle')}
+        >
+          <PreviewPanel>
+            <div class="previewGroupContent">
+              <div class="row loaderPreviewRow">
+                <BouncingDotsLoader label={t('demo.text.feedback.bouncingDotsLoader.loading')} />
+              </div>
+            </div>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.rippleDotsLoader.title')}
+          subtitle={t('demo.showcase.feedback.rippleDotsLoader.subtitle')}
+        >
+          <PreviewPanel>
+            <div class="previewGroupContent">
+              <div class="row loaderPreviewRow">
+                <RippleDotsLoader label={t('demo.text.feedback.rippleDotsLoader.loading')} />
+              </div>
+            </div>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.shapeTrailLoader.title')}
+          subtitle={t('demo.showcase.feedback.shapeTrailLoader.subtitle')}
+        >
+          <PreviewPanel>
+            <div class="previewGroupContent">
+              <div class="row loaderPreviewRow">
+                <ShapeTrailLoader shape="circle" label={t('demo.text.feedback.shapeTrailLoader.circle')} />
+                <ShapeTrailLoader shape="triangle" label={t('demo.text.feedback.shapeTrailLoader.triangle')} />
+                <ShapeTrailLoader shape="square" label={t('demo.text.feedback.shapeTrailLoader.square')} />
+              </div>
+            </div>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.orbitSquaresLoader.title')}
+          subtitle={t('demo.showcase.feedback.orbitSquaresLoader.subtitle')}
+        >
+          <PreviewPanel>
+            <div class="previewGroupContent">
+              <div class="row loaderPreviewRow">
+                <OrbitSquaresLoader label={t('demo.text.feedback.orbitSquaresLoader.loading')} />
+              </div>
+            </div>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.shuffleGridLoader.title')}
+          subtitle={t('demo.showcase.feedback.shuffleGridLoader.subtitle')}
+        >
+          <PreviewPanel>
+            <div class="previewGroupContent">
+              <div class="row loaderPreviewRow">
+                <ShuffleGridLoader label={t('demo.text.feedback.shuffleGridLoader.loading')} />
+              </div>
+            </div>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.concentricPulseLoader.title')}
+          subtitle={t('demo.showcase.feedback.concentricPulseLoader.subtitle')}
+        >
+          <PreviewPanel>
+            <div class="previewGroupContent">
+              <div class="row loaderPreviewRow">
+                <ConcentricPulseLoader label={t('demo.text.feedback.concentricPulseLoader.loading')} />
+              </div>
+            </div>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.bikeLoader.title')}
+          subtitle={t('demo.showcase.feedback.bikeLoader.subtitle')}
+        >
+          <PreviewPanel>
+            <div class="previewGroupContent">
+              <div class="row loaderPreviewRow">
+                <BikeLoader label={t('demo.text.feedback.bikeLoader.loading')} />
+              </div>
+            </div>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.honeycombLoader.title')}
+          subtitle={t('demo.showcase.feedback.honeycombLoader.subtitle')}
+        >
+          <PreviewPanel>
+            <div class="previewGroupContent">
+              <div class="row loaderPreviewRow">
+                <HoneycombLoader label={t('demo.text.feedback.honeycombLoader.loading')} />
+              </div>
+            </div>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          title={t('demo.showcase.feedback.pageLoader.title')}
+          subtitle={t('demo.showcase.feedback.pageLoader.subtitle')}
+        >
+          <PreviewPanel>
+            <div class="previewGroupContent">
+              <div class="pageLoaderPreview">
+                <PageLoader fullScreen={false} label={t('demo.text.feedback.pageLoader.reloading')} />
+              </div>
+            </div>
           </PreviewPanel>
         </ShowcaseSection>
       </Show>

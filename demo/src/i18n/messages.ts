@@ -54,6 +54,7 @@ const enMessages = {
   'demo.nav.item.feedbackChipsTags': 'Chips & Tags',
   'demo.nav.item.feedbackStatusNotifications': 'Status & Notifications',
   'demo.nav.item.feedbackProgress': 'Progress',
+  'demo.nav.item.feedbackLoaders': 'Loaders',
   'demo.nav.item.feedbackAlertsBanners': 'Alerts & Banners',
   'demo.nav.item.feedbackEmptyStates': 'Empty States',
   'demo.nav.item.overlaysTooltipPopover': 'Tooltip & Popover',
@@ -69,7 +70,6 @@ const enMessages = {
   'demo.nav.item.wizard': 'Wizard',
   'demo.nav.item.aiResultPanel': 'AI Result Panel',
   'demo.nav.item.scheduler': 'Scheduler',
-  'demo.nav.item.recronExtracts': 'Organizer Extracts',
   'demo.page.overview.title': 'VelvetUI Overview',
   'demo.page.overview.description':
     'Start here for installation, library goals and a quick snapshot of what is included.',
@@ -151,8 +151,10 @@ const enMessages = {
   'demo.page.feedbackChipsTags.description':
     'Chip and tag controls, including clouds, selection dialogs, management dialogs and multi-filter chips.',
   'demo.page.feedbackProgress.title': 'Feedback & Progress',
-  'demo.page.feedbackProgress.description':
-    'Progress, CircularProgress, Countdown, Spinner, Skeleton and LoadingContainer.',
+  'demo.page.feedbackProgress.description': 'Progress, CircularProgress, Countdown and Skeleton.',
+  'demo.page.feedbackLoaders.title': 'Feedback & Loaders',
+  'demo.page.feedbackLoaders.description':
+    'Spinner, HoneycombLoader, DualPlaneSpinner, PulseRingLoader, CornerPulseLoader, BouncingDotsLoader, JellyTriangleLoader, OrbitSquaresLoader, EllipsisLoader, ShapeTrailLoader, EqualizerLoader, RippleDotsLoader, ConcentricPulseLoader, PageLoader, BikeLoader and ShuffleGridLoader for inline and page-level loading states.',
   'demo.page.feedbackAlerts.title': 'Feedback & Alerts & Banners',
   'demo.page.feedbackAlerts.description':
     'Alert, Banner, ErrorMessage and NotificationCenter for inline and full-width status messaging.',
@@ -225,9 +227,6 @@ const enMessages = {
   'demo.page.compositesScheduler.title': 'Composites & Scheduler',
   'demo.page.compositesScheduler.description':
     'Scheduler for month-based planning with multi-day events and drag-and-drop rescheduling.',
-  'demo.page.compositesRecronExtracts.title': 'Composites & Organizer Extracts',
-  'demo.page.compositesRecronExtracts.description':
-    'Recent organizer-oriented components extracted from Recron, each previewed in a dedicated demo section.',
   'demo.recron.hero.action.import': 'Import source',
   'demo.recron.status.tagCloud.label': 'Active tags',
   'demo.recron.status.tagCloud.description': 'Use the same cloud for assignment, filtering or plain display.',
@@ -255,22 +254,8 @@ const enMessages = {
   'demo.recron.ai.import.source.file.clearLabel': 'Remove file',
   'demo.recron.ai.import.submitLabel': 'Import',
   'demo.recron.ai.import.loadingLabel': 'Importing...',
-  'demo.recron.lane.identity.eyebrow': 'Identity and resume',
-  'demo.recron.lane.identity.title': 'Read-only profile surfaces and reusable CV templates.',
-  'demo.recron.lane.identity.description':
-    'This part turns imported candidate data into polished previews without leaving the same framework language.',
   'demo.recron.interview.calendar.addLabel': 'Add to calendar',
   'demo.recron.interview.calendar.syncedLabel': 'Already synced',
-  'demo.recron.lane.knowledge.eyebrow': 'Knowledge and prep',
-  'demo.recron.lane.knowledge.title': 'Question flows, study setup and practice loops.',
-  'demo.recron.lane.knowledge.description':
-    'The last lane shows how the same domain pack can extend into interview prep and knowledge workflows.',
-  'demo.recron.knowledge.indexedCard.label': 'How does SolidJS track reactivity?',
-  'demo.recron.knowledge.indexedCard.summary':
-    'Solid tracks dependencies at read time and updates only the precise computations that used them.',
-  'demo.recron.knowledge.indexedCard.action': 'Open',
-  'demo.recron.knowledge.indexedCard.detail':
-    'Signals are read inside tracked scopes such as JSX expressions, memos and effects.',
   'demo.recron.knowledge.quizSetup.title': 'Start a study session',
   'demo.recron.knowledge.quizSetup.description':
     'Choose a focused category or mix everything into one shorter practice run.',
@@ -289,8 +274,6 @@ const enMessages = {
   'demo.recron.showcase.importSourcesDialog.subtitle': 'Import dialog with URL and file flows.',
   'demo.recron.showcase.calendarEventButton.subtitle': 'Compact action for opening a prefilled calendar event.',
   'demo.recron.showcase.questionAnswerPanel.subtitle': 'Markdown answer block with loading, error and ask-AI fallback.',
-  'demo.recron.showcase.indexedContentCard.subtitle':
-    'Reusable numbered content card for FAQs, ranked lists and knowledge items.',
   'demo.recron.showcase.featureCard.subtitle':
     'Standalone feature tile for landing sections and product capability highlights.',
   'demo.recron.featureCard.organizer.title': 'Offer organizer',
@@ -401,16 +384,47 @@ const enMessages = {
   'demo.showcase.feedback.errorMessage.title': 'ErrorMessage',
   'demo.showcase.feedback.kbd.subtitle': 'Styled keyboard shortcut keys',
   'demo.showcase.feedback.kbd.title': 'Kbd',
-  'demo.showcase.feedback.loadingContainer.subtitle': 'Centered loading states for container surfaces',
-  'demo.showcase.feedback.loadingContainer.title': 'LoadingContainer',
+  'demo.showcase.feedback.honeycombLoader.subtitle':
+    'Animated honeycomb indicator extracted from the PageLoader center stage',
+  'demo.showcase.feedback.honeycombLoader.title': 'HoneycombLoader',
+  'demo.showcase.feedback.dualPlaneSpinner.subtitle': 'Dual-plane 3D spinner with counter-rotating rings',
+  'demo.showcase.feedback.dualPlaneSpinner.title': 'DualPlaneSpinner',
+  'demo.showcase.feedback.pulseRingLoader.subtitle': 'Eight-dot radial pulse for compact inline waits',
+  'demo.showcase.feedback.pulseRingLoader.title': 'PulseRingLoader',
+  'demo.showcase.feedback.cornerPulseLoader.subtitle': 'Four-corner pulse orbit with rhythmic scale',
+  'demo.showcase.feedback.cornerPulseLoader.title': 'CornerPulseLoader',
+  'demo.showcase.feedback.bikeLoader.subtitle': 'Animated line bike with rotating wheels, spokes and pedals',
+  'demo.showcase.feedback.bikeLoader.title': 'BikeLoader',
+  'demo.showcase.feedback.bouncingDotsLoader.subtitle': 'Three bouncing brand dots with dynamic soft shadows',
+  'demo.showcase.feedback.bouncingDotsLoader.title': 'BouncingDotsLoader',
+  'demo.showcase.feedback.concentricPulseLoader.subtitle':
+    'Three concentric circles scaling in with layered soft shadows',
+  'demo.showcase.feedback.concentricPulseLoader.title': 'ConcentricPulseLoader',
+  'demo.showcase.feedback.jellyTriangleLoader.subtitle': 'Organic triangle pulse with jelly-style blending',
+  'demo.showcase.feedback.jellyTriangleLoader.title': 'JellyTriangleLoader',
   'demo.showcase.feedback.notificationCenter.subtitle': 'Persistent history powered by toast events',
   'demo.showcase.feedback.notificationCenter.title': 'NotificationCenter',
+  'demo.showcase.feedback.orbitSquaresLoader.subtitle': 'Rotating square convoy traveling through a grid path',
+  'demo.showcase.feedback.orbitSquaresLoader.title': 'OrbitSquaresLoader',
+  'demo.showcase.feedback.pageLoader.subtitle': 'Full-page loading overlay for route and document refresh transitions',
+  'demo.showcase.feedback.pageLoader.title': 'PageLoader',
   'demo.showcase.feedback.progress.subtitle': 'Determinate and indeterminate progress bars',
   'demo.showcase.feedback.progress.title': 'Progress',
   'demo.showcase.feedback.skeleton.subtitle': 'Loading placeholders with multiple variants',
   'demo.showcase.feedback.skeleton.title': 'Skeleton',
   'demo.showcase.feedback.spinner.subtitle': 'Progress indicators in multiple sizes',
   'demo.showcase.feedback.spinner.title': 'Spinner',
+  'demo.showcase.feedback.shapeTrailLoader.subtitle': 'Animated dot tracing circle, triangle and square outlines',
+  'demo.showcase.feedback.shapeTrailLoader.title': 'ShapeTrailLoader',
+  'demo.showcase.feedback.rippleDotsLoader.subtitle': 'Five pulsing dots with rippling glow and staggered timing',
+  'demo.showcase.feedback.rippleDotsLoader.title': 'RippleDotsLoader',
+  'demo.showcase.feedback.shuffleGridLoader.subtitle': 'Nine-square shuffle grid with staggered tile choreography',
+  'demo.showcase.feedback.shuffleGridLoader.title': 'ShuffleGridLoader',
+  'demo.showcase.feedback.ellipsisLoader.subtitle': 'Sequential dot ellipsis for compact inline loading states',
+  'demo.showcase.feedback.ellipsisLoader.title': 'EllipsisLoader',
+  'demo.showcase.feedback.equalizerLoader.subtitle':
+    'Three-bar equalizer pulse for compact playback and activity states',
+  'demo.showcase.feedback.equalizerLoader.title': 'EqualizerLoader',
   'demo.showcase.feedback.statCard.subtitle': 'Compact KPI cards',
   'demo.showcase.feedback.statCard.title': 'StatCard',
   'demo.showcase.feedback.toast.subtitle': 'Global notifications from any action',
@@ -646,7 +660,7 @@ const enMessages = {
     'data-display/ (6) - Table, Accordion, MarkdownRenderer, ScoreRing, RadarChart, SectionCard',
   'demo.text.developer.categories.navigation': 'navigation/ (4) - Tabs, Stepper, Pagination, Timeline',
   'demo.text.developer.categories.feedback':
-    'feedback/ (10) - Toast, Spinner, Skeleton, LoadingContainer, ErrorMessage, EmptyState, ErrorFallback, AccessDenied, Chip',
+    'feedback/ (14) - Toast, Spinner, HoneycombLoader, BouncingDotsLoader, JellyTriangleLoader, OrbitSquaresLoader, EllipsisLoader, Skeleton, PageLoader, ErrorMessage, EmptyState, ErrorFallback, AccessDenied, Chip',
   'demo.text.developer.categories.overlays':
     'overlays/ (7) - Dialog, Tooltip, ConfirmDialog, ConfirmAction, ContextMenu, Lightbox, Tour',
   'demo.text.developer.categories.layout': 'layout/ (3) - MainLayout, Navbar, Footer',
@@ -1031,8 +1045,25 @@ const enMessages = {
   'demo.text.feedback.closableChip.typescript': 'Typescript',
   'demo.text.feedback.errorMessage.loadFailed': 'Load Failed',
   'demo.text.feedback.errorMessage.networkTimeout': 'Network Timeout',
+  'demo.text.feedback.ellipsisLoader.loading': 'Loading records',
+  'demo.text.feedback.bikeLoader.loading': 'Cycling through tasks',
+  'demo.text.feedback.bouncingDotsLoader.loading': 'Syncing modules',
+  'demo.text.feedback.concentricPulseLoader.loading': 'Stacking layers',
+  'demo.text.feedback.equalizerLoader.loading': 'Streaming activity',
+  'demo.text.feedback.honeycombLoader.loading': 'Loading workspace',
+  'demo.text.feedback.dualPlaneSpinner.loading': 'Rendering scene',
+  'demo.text.feedback.pulseRingLoader.loading': 'Resolving queue',
+  'demo.text.feedback.cornerPulseLoader.loading': 'Preparing canvas',
+  'demo.text.feedback.jellyTriangleLoader.loading': 'Analyzing data',
   'demo.text.feedback.notificationCenter.meta': 'Manage alerts and updates in one place.',
+  'demo.text.feedback.orbitSquaresLoader.loading': 'Preparing layout',
+  'demo.text.feedback.pageLoader.reloading': 'Refreshing workspace...',
   'demo.text.feedback.progress.loading': 'Loading...',
+  'demo.text.feedback.rippleDotsLoader.loading': 'Pinging services',
+  'demo.text.feedback.shuffleGridLoader.loading': 'Shuffling queue',
+  'demo.text.feedback.shapeTrailLoader.circle': 'Tracing circle path',
+  'demo.text.feedback.shapeTrailLoader.square': 'Tracing square path',
+  'demo.text.feedback.shapeTrailLoader.triangle': 'Tracing triangle path',
   'demo.text.feedback.progress.uploading': 'Uploading',
   'demo.text.feedback.spinner.large': 'Large',
   'demo.text.feedback.spinner.medium': 'Medium',
@@ -1457,6 +1488,7 @@ const plMessages: Record<DemoMessageKey, string> = {
   'demo.nav.item.feedbackChipsTags': 'Chips i tagi',
   'demo.nav.item.feedbackStatusNotifications': 'Status i powiadomienia',
   'demo.nav.item.feedbackProgress': 'Postęp',
+  'demo.nav.item.feedbackLoaders': 'Loaders',
   'demo.nav.item.feedbackAlertsBanners': 'Alerty i bannery',
   'demo.nav.item.feedbackEmptyStates': 'Stany puste',
   'demo.nav.item.overlaysTooltipPopover': 'Tooltip i popover',
@@ -1472,7 +1504,6 @@ const plMessages: Record<DemoMessageKey, string> = {
   'demo.nav.item.wizard': 'Kreator',
   'demo.nav.item.aiResultPanel': 'Panel wyników AI',
   'demo.nav.item.scheduler': 'Harmonogram',
-  'demo.nav.item.recronExtracts': 'Ekstrakty organizera',
   'demo.page.overview.title': 'Przegląd VelvetUI',
   'demo.page.overview.description': 'Zacznij tutaj: instalacja, cele biblioteki i szybki przegląd zawartości.',
   'demo.page.typography.title': 'Typografia',
@@ -1548,8 +1579,10 @@ const plMessages: Record<DemoMessageKey, string> = {
   'demo.page.feedbackChipsTags.description':
     'Kontrolki chip/tag, w tym chmury, dialogi wyboru, dialogi zarzadzania oraz wielofiltrowe chipy.',
   'demo.page.feedbackProgress.title': 'Informacja zwrotna i postęp',
-  'demo.page.feedbackProgress.description':
-    'Progress, CircularProgress, Countdown, Spinner, Skeleton i LoadingContainer.',
+  'demo.page.feedbackProgress.description': 'Progress, CircularProgress, Countdown i Skeleton.',
+  'demo.page.feedbackLoaders.title': 'Informacja zwrotna i Loaders',
+  'demo.page.feedbackLoaders.description':
+    'Spinner, HoneycombLoader, DualPlaneSpinner, PulseRingLoader, CornerPulseLoader, BouncingDotsLoader, JellyTriangleLoader, OrbitSquaresLoader, EllipsisLoader, ShapeTrailLoader, EqualizerLoader, RippleDotsLoader, ConcentricPulseLoader, PageLoader, BikeLoader i ShuffleGridLoader dla stanów ładowania inline oraz całych widoków.',
   'demo.page.feedbackAlerts.title': 'Informacja zwrotna i alerty/bannery',
   'demo.page.feedbackAlerts.description':
     'Alert, Banner, ErrorMessage i NotificationCenter dla komunikatów inline i full-width.',
@@ -1616,7 +1649,6 @@ const plMessages: Record<DemoMessageKey, string> = {
   'demo.page.compositesAiResult.description':
     'AiResultPanel z wynikiem, podsumowaniem, sekcjami i akcjami kontekstowymi.',
   'demo.page.compositesScheduler.title': 'Kompozyty i harmonogram',
-  'demo.page.compositesRecronExtracts.title': 'Kompozyty i ekstrakty organizera',
   'demo.recron.hero.action.import': 'Importuj zrodlo',
   'demo.recron.status.tagCloud.label': 'Aktywne tagi',
   'demo.recron.status.tagCloud.description':
@@ -1645,22 +1677,8 @@ const plMessages: Record<DemoMessageKey, string> = {
   'demo.recron.ai.import.source.file.clearLabel': 'Usun plik',
   'demo.recron.ai.import.submitLabel': 'Importuj',
   'demo.recron.ai.import.loadingLabel': 'Importowanie...',
-  'demo.recron.lane.identity.eyebrow': 'Tozsamosc i CV',
-  'demo.recron.lane.identity.title': 'Read-only profile surfaces i wielokrotnie uzywalne szablony CV.',
-  'demo.recron.lane.identity.description':
-    'Ta czesc zamienia zaimportowane dane kandydata w dopracowane podglady bez wychodzenia z tego samego jezyka frameworka.',
   'demo.recron.interview.calendar.addLabel': 'Dodaj do kalendarza',
   'demo.recron.interview.calendar.syncedLabel': 'Juz zsynchronizowane',
-  'demo.recron.lane.knowledge.eyebrow': 'Wiedza i przygotowanie',
-  'demo.recron.lane.knowledge.title': 'Przeplywy pytan, setup nauki i petle cwiczen.',
-  'demo.recron.lane.knowledge.description':
-    'Ostatnia sciezka pokazuje, jak ten sam pakiet domenowy moze rozszerzac sie o przygotowanie do rozmow i przeplywy wiedzy.',
-  'demo.recron.knowledge.indexedCard.label': 'Jak SolidJS sledzi reaktywnosc?',
-  'demo.recron.knowledge.indexedCard.summary':
-    'Solid sledzi zaleznosci w momencie odczytu i aktualizuje tylko te obliczenia, ktore faktycznie z nich korzystaly.',
-  'demo.recron.knowledge.indexedCard.action': 'Otworz',
-  'demo.recron.knowledge.indexedCard.detail':
-    'Signaly sa odczytywane wewnatrz sledzonych zakresow, takich jak JSX, memo i efekty.',
   'demo.recron.knowledge.quizSetup.title': 'Rozpocznij sesje nauki',
   'demo.recron.knowledge.quizSetup.description':
     'Wybierz skupiona kategorie albo polacz wszystko w jedna krotsza sesje cwiczen.',
@@ -1683,8 +1701,6 @@ const plMessages: Record<DemoMessageKey, string> = {
     'Kompaktowa akcja do otwierania wstepnie wypelnionego wydarzenia kalendarza.',
   'demo.recron.showcase.questionAnswerPanel.subtitle':
     'Blok odpowiedzi markdown z loadingiem, bledem i fallbackiem ask-AI.',
-  'demo.recron.showcase.indexedContentCard.subtitle':
-    'Wielokrotnie uzywalna numerowana karta tresci dla FAQ, rankingow i elementow wiedzy.',
   'demo.recron.showcase.featureCard.subtitle':
     'Samodzielny kafel feature do sekcji landingowych i prezentacji mozliwosci produktu.',
   'demo.recron.featureCard.organizer.title': 'Organizer ofert',
@@ -1703,8 +1719,6 @@ const plMessages: Record<DemoMessageKey, string> = {
   'demo.recron.showcase.flashcardQuizCard.subtitle': 'Pojedyncza karta flip używana wewnatrz przeplywow quizowych.',
   'demo.recron.showcase.flashcardQuizSession.subtitle': 'Pelna sesja nauki ze sledzeniem znane / nieznane.',
   'demo.recron.showcase.flashcardQuizSummary.subtitle': 'Stan podsumowania dla zakonczonych sesji flashcard.',
-  'demo.page.compositesRecronExtracts.description':
-    'Najnowsze komponenty organizera wyciągnięte z Recron, każdy pokazany w osobnej sekcji demo.',
   'demo.page.compositesScheduler.description':
     'Scheduler do planowania miesięcznego z wydarzeniami wielodniowymi i drag-and-drop.',
   'demo.showcase.composites.aiResultPanel.subtitle':
@@ -1804,16 +1818,51 @@ const plMessages: Record<DemoMessageKey, string> = {
   'demo.showcase.feedback.errorMessage.title': 'ErrorMessage',
   'demo.showcase.feedback.kbd.subtitle': 'Stylizowane klawisze skrótów klawiaturowych',
   'demo.showcase.feedback.kbd.title': 'Kbd',
-  'demo.showcase.feedback.loadingContainer.subtitle': 'Wycentrowane stany ładowania dla powierzchni kontenerów',
-  'demo.showcase.feedback.loadingContainer.title': 'LoadingContainer',
+  'demo.showcase.feedback.honeycombLoader.subtitle':
+    'Animowany wskaźnik plastra miodu wyciągnięty ze środkowej części PageLoadera',
+  'demo.showcase.feedback.honeycombLoader.title': 'HoneycombLoader',
+  'demo.showcase.feedback.dualPlaneSpinner.subtitle': 'Trójwymiarowy spinner z dwiema przeciwbieżnymi obręczami',
+  'demo.showcase.feedback.dualPlaneSpinner.title': 'DualPlaneSpinner',
+  'demo.showcase.feedback.pulseRingLoader.subtitle':
+    'Ośmiokropkowy radialny puls do kompaktowych stanów ładowania inline',
+  'demo.showcase.feedback.pulseRingLoader.title': 'PulseRingLoader',
+  'demo.showcase.feedback.cornerPulseLoader.subtitle': 'Czteropunktowy orbitujący puls z rytmiczną zmianą skali',
+  'demo.showcase.feedback.cornerPulseLoader.title': 'CornerPulseLoader',
+  'demo.showcase.feedback.bikeLoader.subtitle':
+    'Animowany rower liniowy z obracającymi się kołami, szprychami i pedałami',
+  'demo.showcase.feedback.bikeLoader.title': 'BikeLoader',
+  'demo.showcase.feedback.bouncingDotsLoader.subtitle': 'Trzy odbijające się kropki brandowe z miękkimi cieniami',
+  'demo.showcase.feedback.bouncingDotsLoader.title': 'BouncingDotsLoader',
+  'demo.showcase.feedback.concentricPulseLoader.subtitle':
+    'Trzy koncentryczne okręgi pojawiające się warstwowo z miękkimi cieniami',
+  'demo.showcase.feedback.concentricPulseLoader.title': 'ConcentricPulseLoader',
+  'demo.showcase.feedback.jellyTriangleLoader.subtitle': 'Organiczny puls trójkąta z żelowym blendowaniem',
+  'demo.showcase.feedback.jellyTriangleLoader.title': 'JellyTriangleLoader',
   'demo.showcase.feedback.notificationCenter.subtitle': 'Trwała historia oparta o zdarzenia toast',
   'demo.showcase.feedback.notificationCenter.title': 'NotificationCenter',
+  'demo.showcase.feedback.orbitSquaresLoader.subtitle': 'Rotujący konwój kwadratów poruszający się po siatce',
+  'demo.showcase.feedback.orbitSquaresLoader.title': 'OrbitSquaresLoader',
+  'demo.showcase.feedback.pageLoader.subtitle':
+    'Pełnoekranowa nakładka ładowania dla przejść routingu i odświeżeń dokumentu',
+  'demo.showcase.feedback.pageLoader.title': 'PageLoader',
   'demo.showcase.feedback.progress.subtitle': 'Paski postępu deterministyczne i niedeterministyczne',
   'demo.showcase.feedback.progress.title': 'Progress',
   'demo.showcase.feedback.skeleton.subtitle': 'Placeholdery ładowania z wieloma wariantami',
   'demo.showcase.feedback.skeleton.title': 'Skeleton',
   'demo.showcase.feedback.spinner.subtitle': 'Wskaźniki postępu w wielu rozmiarach',
   'demo.showcase.feedback.spinner.title': 'Spinner',
+  'demo.showcase.feedback.shapeTrailLoader.subtitle': 'Animowana kropka śledząca obrys koła, trójkąta i kwadratu',
+  'demo.showcase.feedback.shapeTrailLoader.title': 'ShapeTrailLoader',
+  'demo.showcase.feedback.rippleDotsLoader.subtitle':
+    'Pięć pulsujących kropek z rozchodzącą się poświatą i kaskadowym timingiem',
+  'demo.showcase.feedback.rippleDotsLoader.title': 'RippleDotsLoader',
+  'demo.showcase.feedback.shuffleGridLoader.subtitle': 'Dziewięciopolowa siatka z przesuwającą się choreografią kafli',
+  'demo.showcase.feedback.shuffleGridLoader.title': 'ShuffleGridLoader',
+  'demo.showcase.feedback.ellipsisLoader.subtitle': 'Sekwencyjna animacja kropek do kompaktowych stanów ładowania',
+  'demo.showcase.feedback.ellipsisLoader.title': 'EllipsisLoader',
+  'demo.showcase.feedback.equalizerLoader.subtitle':
+    'Trójsłupkowy equalizer do kompaktowych stanów odtwarzania i aktywności',
+  'demo.showcase.feedback.equalizerLoader.title': 'EqualizerLoader',
   'demo.showcase.feedback.statCard.subtitle': 'Kompaktowe karty KPI',
   'demo.showcase.feedback.statCard.title': 'StatCard',
   'demo.showcase.feedback.toast.subtitle': 'Globalne powiadomienia z dowolnej akcji',
@@ -2097,7 +2146,7 @@ const plMessages: Record<DemoMessageKey, string> = {
     'data-display/ (6) - Table, Accordion, MarkdownRenderer, ScoreRing, RadarChart, SectionCard',
   'demo.text.developer.categories.navigation': 'navigation/ (4) - Tabs, Stepper, Pagination, Timeline',
   'demo.text.developer.categories.feedback':
-    'feedback/ (10) - Toast, Spinner, Skeleton, LoadingContainer, ErrorMessage, EmptyState, ErrorFallback, AccessDenied, Chip',
+    'feedback/ (14) - Toast, Spinner, HoneycombLoader, BouncingDotsLoader, JellyTriangleLoader, OrbitSquaresLoader, EllipsisLoader, Skeleton, PageLoader, ErrorMessage, EmptyState, ErrorFallback, AccessDenied, Chip',
   'demo.text.developer.categories.overlays':
     'overlays/ (7) - Dialog, Tooltip, ConfirmDialog, ConfirmAction, ContextMenu, Lightbox, Tour',
   'demo.text.developer.categories.layout': 'layout/ (3) - MainLayout, Navbar, Footer',
@@ -2427,8 +2476,25 @@ const plMessages: Record<DemoMessageKey, string> = {
   'demo.text.feedback.closableChip.typescript': 'TypeScript',
   'demo.text.feedback.errorMessage.loadFailed': 'Nie udało się załadować',
   'demo.text.feedback.errorMessage.networkTimeout': 'Przekroczono limit czasu sieci',
+  'demo.text.feedback.ellipsisLoader.loading': 'Ładowanie rekordów',
+  'demo.text.feedback.bikeLoader.loading': 'Jazda przez zadania',
+  'demo.text.feedback.bouncingDotsLoader.loading': 'Synchronizacja modułów',
+  'demo.text.feedback.concentricPulseLoader.loading': 'Nakładanie warstw',
+  'demo.text.feedback.equalizerLoader.loading': 'Aktywność strumienia',
+  'demo.text.feedback.honeycombLoader.loading': 'Ładowanie workspace',
+  'demo.text.feedback.dualPlaneSpinner.loading': 'Renderowanie sceny',
+  'demo.text.feedback.pulseRingLoader.loading': 'Rozwiązywanie kolejki',
+  'demo.text.feedback.cornerPulseLoader.loading': 'Przygotowanie obszaru',
+  'demo.text.feedback.jellyTriangleLoader.loading': 'Analiza danych',
   'demo.text.feedback.notificationCenter.meta': 'Meta centrum powiadomień',
+  'demo.text.feedback.orbitSquaresLoader.loading': 'Przygotowanie layoutu',
+  'demo.text.feedback.pageLoader.reloading': 'Odświeżanie workspace...',
   'demo.text.feedback.progress.loading': 'Ładowanie',
+  'demo.text.feedback.rippleDotsLoader.loading': 'Pingowanie usług',
+  'demo.text.feedback.shuffleGridLoader.loading': 'Tasowanie kolejki',
+  'demo.text.feedback.shapeTrailLoader.circle': 'Śledzenie ścieżki koła',
+  'demo.text.feedback.shapeTrailLoader.square': 'Śledzenie ścieżki kwadratu',
+  'demo.text.feedback.shapeTrailLoader.triangle': 'Śledzenie ścieżki trójkąta',
   'demo.text.feedback.progress.uploading': 'Przesyłanie',
   'demo.text.feedback.spinner.large': 'Duży',
   'demo.text.feedback.spinner.medium': 'Średni',

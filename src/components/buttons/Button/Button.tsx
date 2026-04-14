@@ -1,14 +1,13 @@
 import { createMemo, type JSX, Show, splitProps } from 'solid-js';
 
-import Spinner from '~/components/feedback/Spinner/Spinner';
+import Spinner from '~/components/loaders/Spinner/Spinner';
 import Text from '~/components/typography/Text/Text';
 import type Props from '~/models/Props';
 import type { ButtonCoreNativeProps, ComponentSize, LabelOnlyProps } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
+import { type ButtonVariant, DEFAULT_BUTTON_VARIANT } from '../shared/buttonVariants';
 import styles from './Button.module.css';
-
-export type ButtonVariant = 'primary' | 'danger' | 'ghost' | 'dashed' | 'outline' | 'subtle' | 'navbar';
 
 interface ButtonBaseProps extends Omit<ButtonCoreNativeProps, 'children'> {
   variant?: ButtonVariant;
@@ -65,7 +64,7 @@ const Button = (props: Props<ButtonOwnProps>) => {
 
   const sizeClass = createMemo(() => sizeToClass[local.size ?? 'md']);
   const iconSizeClass = createMemo(() => iconSizeToClass[local.size ?? 'md']);
-  const variantClass = createMemo(() => variantToClass[local.variant ?? 'primary']);
+  const variantClass = createMemo(() => variantToClass[local.variant ?? DEFAULT_BUTTON_VARIANT]);
   const isDisabled = createMemo(() => Boolean(local.disabled ?? local.loading));
   const hasLabel = createMemo(() => typeof local.label === 'string');
   const content = createMemo(() =>
@@ -106,4 +105,5 @@ const Button = (props: Props<ButtonOwnProps>) => {
 };
 
 export type { ButtonOwnProps };
+export type { ButtonVariant };
 export default Button;

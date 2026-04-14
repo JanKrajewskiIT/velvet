@@ -4,7 +4,7 @@ import { Show } from 'solid-js';
 import AffixButton from '~/components/buttons/AffixButton/AffixButton';
 import MarkdownRenderer from '~/components/composites/MarkdownRenderer/MarkdownRenderer';
 import ErrorMessage from '~/components/feedback/ErrorMessage/ErrorMessage';
-import Spinner from '~/components/feedback/Spinner/Spinner';
+import Spinner from '~/components/loaders/Spinner/Spinner';
 import Icon from '~/components/media/Icon/Icon';
 import Text from '~/components/typography/Text/Text';
 import { useI18n } from '~/i18n/I18nProvider';
