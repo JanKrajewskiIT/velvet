@@ -1,3 +1,4 @@
+import { getAuthAccessToken } from '~/auth/oidc';
 import { ApiError } from '~/http/errors';
 import type { HttpClient, HttpClientConfig, HttpRequestOptions } from '~/http/types';
 import { buildUrl, parseResponseBody, resolveRequestBody } from '~/http/utils';
@@ -7,7 +8,7 @@ export const createHttpClient = (config: HttpClientConfig = {}): HttpClient => {
   const baseUrl = config.baseUrl ?? '';
 
   const request = async <T>(method: string, path: string, options: HttpRequestOptions = {}): Promise<T> => {
-    const token = await config.getAccessToken?.();
+    const token = config.authConfig ? await getAuthAccessToken(config.authConfig) : undefined;
     const resolvedBody = resolveRequestBody(options.body);
 
     const headers: Record<string, string> = {

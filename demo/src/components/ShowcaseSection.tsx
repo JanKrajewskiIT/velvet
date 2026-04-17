@@ -2,6 +2,7 @@ import { Card, Heading, Text } from '@jankrajewskiit/ui';
 import type { JSX } from 'solid-js';
 
 interface ShowcaseSectionProps {
+  id?: string;
   title: string;
   subtitle?: string;
   children: JSX.Element;
@@ -24,7 +25,7 @@ interface PreviewGroupProps {
 
 export const ShowcaseSection = (props: ShowcaseSectionProps) => {
   return (
-    <section class="showcaseSection">
+    <section id={props.id} class="showcaseSection">
       <div class="showcaseHeading">
         <Heading level={2} variant="h3" class="showcaseTitle">
           {props.title}

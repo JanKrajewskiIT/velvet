@@ -3,22 +3,12 @@
 export type { AuthActionButtonProps } from './auth/AuthActionButton';
 export { default as AuthActionButton } from './auth/AuthActionButton';
 export type { AuthGuardProps } from './auth/AuthGuard';
+export type { Role, UnauthorizedBehavior } from './auth/AuthGuard';
 export { default as AuthGuard } from './auth/AuthGuard';
-export type { AuthContextValue, OidcAuthConfig, OidcAuthUserManagerFactoryConfig } from './auth/AuthProvider';
-export {
-  AuthProvider,
-  getAuthAccessToken,
-  handleAuthRedirectCallback,
-  setAuthUserManagerFactory,
-  useAuth,
-} from './auth/AuthProvider';
-export type { AuthRedirectProps } from './auth/AuthRedirect';
-export { default as AuthRedirect } from './auth/AuthRedirect';
-export { createAuthContextWithSessionFallback } from './auth/createAuthContextWithSessionFallback';
-export type { CreateCachedOidcUserManagerFactoryOptions } from './auth/createCachedOidcUserManagerFactory';
-export { createCachedOidcUserManagerFactory } from './auth/createCachedOidcUserManagerFactory';
-export type { RequireAuthProps } from './auth/RequireAuth';
-export { default as RequireAuth } from './auth/RequireAuth';
+export type { AuthContextValue } from './auth/AuthProvider';
+export { AuthProvider, useAuth } from './auth/AuthProvider';
+export type { OidcAuthConfig, OidcAuthUserManagerFactoryConfig } from './auth/oidc';
+export { getAuthAccessToken, handleAuthRedirectCallback, setAuthUserManagerFactory } from './auth/oidc';
 export { getStoredUser } from './auth/utils';
 export type { CreateVelvetBootstrapOptions } from './bootstrap/createVelvetBootstrap';
 export { bootstrapVelvetApp, sanitizeAuthQueryParams } from './bootstrap/createVelvetBootstrap';
@@ -174,7 +164,10 @@ export { default as EmptyState } from './components/feedback/EmptyState/EmptySta
 export { default as ErrorFallback } from './components/feedback/ErrorFallback/ErrorFallback';
 export { default as ErrorMessage } from './components/feedback/ErrorMessage/ErrorMessage';
 export { default as Kbd } from './components/feedback/Kbd/Kbd';
+export type { NotFoundProps } from './components/feedback/NotFound/NotFound';
+export { default as NotFound } from './components/feedback/NotFound/NotFound';
 export { default as NotificationCenter } from './components/feedback/NotificationCenter/NotificationCenter';
+export { default as Page } from './components/feedback/Page/Page';
 export { default as Progress } from './components/feedback/Progress/Progress';
 export type {
   SelectableChipItem,
@@ -348,8 +341,11 @@ export type { CardOwnProps } from './components/surfaces/Card/Card';
 export { default as Card } from './components/surfaces/Card/Card';
 export { default as DataCard } from './components/surfaces/DataCard/DataCard';
 export { default as Divider } from './components/surfaces/Divider/Divider';
-export type { FeatureCardProps } from './components/surfaces/FeatureCard/FeatureCard';
-export { default as FeatureCard } from './components/surfaces/FeatureCard/FeatureCard';
+export {
+  default as FeatureCard,
+  type FeatureCardProps,
+  type FeatureCardTone,
+} from './components/surfaces/FeatureCard/FeatureCard';
 export type { FlashcardPracticeCardProps } from './components/surfaces/FlashcardPracticeCard/FlashcardPracticeCard';
 export { default as FlashcardPracticeCard } from './components/surfaces/FlashcardPracticeCard/FlashcardPracticeCard';
 export type {
@@ -455,8 +451,6 @@ export type { CreateApiClientsOptions, DefaultApiClientMap, HttpClientMap } from
 export { createApiClients } from './http/createApiClients';
 export { createHttpClient } from './http/createHttpClient';
 export { ApiError, normalizeHttpError } from './http/errors';
-export type { ResolveApiBaseUrlOptions } from './http/resolveApiBaseUrl';
-export { resolveApiBaseUrl } from './http/resolveApiBaseUrl';
 export type {
   HttpClient,
   HttpClientConfig,

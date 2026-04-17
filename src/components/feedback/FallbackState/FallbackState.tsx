@@ -1,5 +1,7 @@
-import { createMemo, type JSX, Show, splitProps } from 'solid-js';
+import type { IconTypes } from 'solid-icons';
+import { type JSX, Show, splitProps } from 'solid-js';
 
+import Icon from '~/components/media/Icon/Icon';
 import Heading from '~/components/typography/Heading/Heading';
 import Text from '~/components/typography/Text/Text';
 import type Props from '~/models/Props';
@@ -10,19 +12,17 @@ import styles from './FallbackState.module.css';
 interface FallbackStateOwnProps {
   label: string;
   description: string;
-  icon?: JSX.Element;
+  icon?: IconTypes;
   action?: JSX.Element;
-  iconClass?: string;
 }
 
 const FallbackState = (props: Props<FallbackStateOwnProps>) => {
-  const [local, rest] = splitProps(props, ['class', 'label', 'description', 'icon', 'action', 'iconClass']);
-  const containerClass = createMemo(() => classNames(styles.container, local.class));
+  const [local, rest] = splitProps(props, ['class', 'label', 'description', 'icon', 'action']);
 
   return (
-    <div {...rest} class={containerClass()}>
-      <Show when={local.icon}>
-        <div class={classNames(styles.icon, local.iconClass)}>{local.icon}</div>
+    <div {...rest} class={classNames(styles.container, local.class)}>
+      <Show when={local.icon} keyed>
+        {(icon) => <Icon class={styles.icon} icon={icon} size="lg" variant="muted" />}
       </Show>
       <Heading as="div" level={2} variant="titleLg">
         {local.label}

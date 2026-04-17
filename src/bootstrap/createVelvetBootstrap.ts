@@ -7,7 +7,7 @@ import {
   type OidcAuthConfig,
   type OidcAuthUserManagerFactoryConfig,
   setAuthUserManagerFactory,
-} from '~/auth/AuthProvider';
+} from '~/auth/oidc';
 import { isBrowserRuntime, normalizePathname } from '~/auth/utils';
 import type { I18nDictionary, Locale } from '~/i18n/messages';
 import { configureVelvet } from '~/providers/velvet-config';

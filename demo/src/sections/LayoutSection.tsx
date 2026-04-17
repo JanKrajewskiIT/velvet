@@ -1,4 +1,3 @@
-import type { FlashcardPracticeResult } from '@jankrajewskiit/ui';
 import {
   Accordion,
   AccordionIcon,
@@ -11,7 +10,9 @@ import {
   DataCard,
   Divider,
   FeatureCard,
+  type FeatureCardTone,
   FlashcardPracticeCard,
+  type FlashcardPracticeResult,
   FlashcardPracticeSession,
   FlashcardPracticeSummary,
   FlipCard,
@@ -82,28 +83,34 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
   const { locale } = useI18n();
   const dictionary = createMemo(() => getDemoMessages(locale()));
   const t = (key: DemoI18nMessageKey): string => dictionary()[key];
-  const featureCards = createMemo<{ icon: IconTypes; title: string; description: string }[]>(() => [
-    {
-      icon: FaSolidBriefcase,
-      title: t('demo.recron.featureCard.organizer.title'),
-      description: t('demo.recron.featureCard.organizer.description'),
-    },
-    {
-      icon: FiBookOpen,
-      title: t('demo.recron.featureCard.questions.title'),
-      description: t('demo.recron.featureCard.questions.description'),
-    },
-    {
-      icon: FiFileText,
-      title: t('demo.recron.featureCard.portfolio.title'),
-      description: t('demo.recron.featureCard.portfolio.description'),
-    },
-    {
-      icon: FaSolidWandMagicSparkles,
-      title: t('demo.recron.featureCard.ai.title'),
-      description: t('demo.recron.featureCard.ai.description'),
-    },
-  ]);
+  const featureCards = createMemo<{ icon: IconTypes; title: string; description: string; tone: FeatureCardTone }[]>(
+    () => [
+      {
+        icon: FaSolidBriefcase,
+        title: t('demo.recron.featureCard.organizer.title'),
+        description: t('demo.recron.featureCard.organizer.description'),
+        tone: 'primary',
+      },
+      {
+        icon: FiBookOpen,
+        title: t('demo.recron.featureCard.questions.title'),
+        description: t('demo.recron.featureCard.questions.description'),
+        tone: 'success',
+      },
+      {
+        icon: FiFileText,
+        title: t('demo.recron.featureCard.portfolio.title'),
+        description: t('demo.recron.featureCard.portfolio.description'),
+        tone: 'warning',
+      },
+      {
+        icon: FaSolidWandMagicSparkles,
+        title: t('demo.recron.featureCard.ai.title'),
+        description: t('demo.recron.featureCard.ai.description'),
+        tone: 'info',
+      },
+    ],
+  );
   const [quizFlipped, setQuizFlipped] = createSignal(false);
   const [quizSessionItems, setQuizSessionItems] = createSignal([...flashcardItems]);
   const [quizResults, setQuizResults] = createSignal<FlashcardPracticeResult<(typeof flashcardItems)[number]>[]>([]);
@@ -486,7 +493,7 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
                       icon={feature.icon}
                       label={feature.title}
                       description={feature.description}
-                      iconSize="lg"
+                      tone={feature.tone}
                       animationOrder={index()}
                     />
                   )}

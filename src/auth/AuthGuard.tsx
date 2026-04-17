@@ -1,15 +1,19 @@
-import type { JSX } from 'solid-js';
+import { createEffect, createMemo, type JSX, Show } from 'solid-js';
 
+import AccessDenied from '~/components/feedback/AccessDenied/AccessDenied';
+import PageLoader from '~/components/loaders/PageLoader/PageLoader';
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 
 import { useAuth } from './AuthProvider';
-import RequireAuth from './RequireAuth';
 import { getCurrentReturnUrl } from './utils';
 
+export type Role = 'admin' | 'user' | 'moderator';
+export type UnauthorizedBehavior = 'access-denied' | 'redirect';
+
 interface AuthGuardProps {
-  roles?: string | string[];
-  fallback?: JSX.Element;
+  roles?: Role | Role[];
+  unauthorizedBehavior?: UnauthorizedBehavior;
   children: JSX.Element;
 }
 
@@ -17,26 +21,56 @@ const AuthGuard = (props: Props<AuthGuardProps>) => {
   const auth = useAuth();
   const { ts } = useI18n();
 
-  const handleUnauthenticated = () => {
-    const returnUrl = getCurrentReturnUrl();
-    return auth.signIn(returnUrl);
-  };
+  const requiredRoles = createMemo(() => {
+    if (!props.roles) return [] as string[];
+    return Array.isArray(props.roles) ? props.roles : [props.roles];
+  });
+
+  const hasAccess = createMemo(() => {
+    const roles = requiredRoles();
+    if (roles.length === 0) return true;
+    return auth.hasAnyRole(...roles);
+  });
+
+  const shouldRedirect = createMemo(() => (props.unauthorizedBehavior ?? 'access-denied') === 'redirect');
+
+  createEffect(() => {
+    if (!auth.isLoading() && !auth.isAuthenticated() && shouldRedirect()) {
+      window.location.href = '/';
+    }
+  });
 
   return (
-    <RequireAuth
-      class={props.class}
-      isLoading={auth.isLoading()}
-      isAuthenticated={auth.isAuthenticated()}
-      roles={props.roles}
-      hasAnyRole={auth.hasAnyRole}
-      onUnauthenticated={handleUnauthenticated}
-      accessDeniedFallback={props.fallback}
-      accessDeniedTitle={ts('accessDenied.forbidden.title')}
-      accessDeniedDescription={ts('accessDenied.forbidden.description')}
-      accessDeniedGoHomeLabel={ts('accessDenied.goHome')}
-    >
-      {props.children}
-    </RequireAuth>
+    <Show when={!auth.isLoading()} fallback={<PageLoader />}>
+      <Show
+        when={auth.isAuthenticated()}
+        fallback={
+          <Show when={!shouldRedirect()}>
+            <AccessDenied
+              label={ts('accessDenied.unauthorized.title')}
+              description={ts('accessDenied.unauthorized.description')}
+              goHomeLabel={ts('common.logIn')}
+              onGoHome={() => {
+                void auth.signIn(getCurrentReturnUrl());
+              }}
+            />
+          </Show>
+        }
+      >
+        <Show
+          when={hasAccess()}
+          fallback={
+            <AccessDenied
+              label={ts('accessDenied.forbidden.title')}
+              description={ts('accessDenied.forbidden.description')}
+              goHomeLabel={ts('accessDenied.goHome')}
+            />
+          }
+        >
+          {props.children}
+        </Show>
+      </Show>
+    </Show>
   );
 };
 

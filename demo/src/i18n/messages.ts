@@ -1,4 +1,4 @@
-export type DemoLocale = 'en' | 'pl';
+﻿export type DemoLocale = 'en' | 'pl';
 
 export const DEMO_SUPPORTED_LOCALES: DemoLocale[] = ['en', 'pl'];
 
@@ -160,7 +160,7 @@ const enMessages = {
     'Alert, Banner, ErrorMessage and NotificationCenter for inline and full-width status messaging.',
   'demo.page.feedbackStates.title': 'Feedback & Empty States',
   'demo.page.feedbackStates.description':
-    'ErrorFallback, EmptyState and AccessDenied for error, zero-data and permission-denied screens.',
+    'ErrorFallback, EmptyState, AccessDenied and NotFound for error, zero-data, permission-denied and missing-page screens.',
   'demo.page.overlaysTooltips.title': 'Overlays & Tooltip & Popover',
   'demo.page.overlaysTooltips.description':
     'Tooltip and Popover for contextual hints and click-triggered floating content around controls.',
@@ -380,6 +380,8 @@ const enMessages = {
   'demo.showcase.feedback.emptyStateNoResults.title': 'EmptyState - No results found',
   'demo.showcase.feedback.errorFallback.subtitle': 'Page-level failure handling',
   'demo.showcase.feedback.errorFallback.title': 'ErrorFallback',
+  'demo.showcase.feedback.notFound.subtitle': 'Full-page 404 screen with quick navigation links',
+  'demo.showcase.feedback.notFound.title': 'NotFound',
   'demo.showcase.feedback.errorMessage.subtitle': 'Inline error alerts',
   'demo.showcase.feedback.errorMessage.title': 'ErrorMessage',
   'demo.showcase.feedback.kbd.subtitle': 'Styled keyboard shortcut keys',
@@ -667,7 +669,7 @@ const enMessages = {
   'demo.text.developer.categories.composites':
     'composites/ (6) - DataTable, EditableCollection, FileDropZone, FlipCard, Wizard, AiResultPanel',
   'demo.text.developer.categories.app':
-    'app/ (4) - LocaleSwitcher, ThemeToggle, AuthRedirect, RequireAuth (shown under Inputs Buttons and Developer snippets)',
+    'app/ (3) - LocaleSwitcher, ThemeToggle, AuthGuard (shown under Inputs Buttons and Developer snippets)',
   'demo.text.developer.principles.appAgnostic': 'Components are app-agnostic and avoid business logic coupling.',
   'demo.text.developer.principles.userFacingText': 'User-facing text is passed via props by the consuming app.',
   'demo.text.developer.principles.layoutSlots': 'Layout components expose slots for flexible composition.',
@@ -1079,6 +1081,9 @@ const enMessages = {
   'demo.text.feedback.states.adjustSearch': 'Adjust Search',
   'demo.text.feedback.states.folderEmpty': 'Folder Empty',
   'demo.text.feedback.states.goHome': 'Go Home',
+  'demo.text.feedback.states.notFoundAccessDenied': 'Access denied',
+  'demo.text.feedback.states.notFoundEmptyState': 'Empty state',
+  'demo.text.feedback.states.notFoundErrorFallback': 'Error fallback',
   'demo.text.feedback.states.noResults': 'No Results',
   'demo.text.feedback.states.somethingWrong': 'Something Wrong',
   'demo.text.feedback.states.stillFailing': 'Still Failing',
@@ -1334,7 +1339,6 @@ const enMessages = {
   'demo.text.overlays.dialog.confirm': 'Confirm',
   'demo.text.overlays.dialog.exampleTitle': 'Example dialog',
   'demo.text.overlays.dialog.openDialog': 'Open Dialog',
-  'demo.text.developer.snippets.redirecting': 'Redirecting...',
   'demo.text.overlays.popover.bottomContent': 'Popover on the bottom',
   'demo.text.overlays.popover.leftContent': 'Popover on the left',
   'demo.text.overlays.popover.rightContent': 'Popover on the right',
@@ -1588,7 +1592,7 @@ const plMessages: Record<DemoMessageKey, string> = {
     'Alert, Banner, ErrorMessage i NotificationCenter dla komunikatów inline i full-width.',
   'demo.page.feedbackStates.title': 'Informacja zwrotna i stany puste',
   'demo.page.feedbackStates.description':
-    'ErrorFallback, EmptyState i AccessDenied dla błędów, braku danych i braku uprawnień.',
+    'ErrorFallback, EmptyState, AccessDenied i NotFound dla błędów, braku danych, braku uprawnień i brakującej strony.',
   'demo.page.overlaysTooltips.title': 'Nakładki i podpowiedzi/popover',
   'demo.page.overlaysTooltips.description':
     'Tooltip i Popover dla kontekstowych podpowiedzi i paneli otwieranych kliknięciem.',
@@ -1814,6 +1818,8 @@ const plMessages: Record<DemoMessageKey, string> = {
   'demo.showcase.feedback.emptyStateNoResults.title': 'EmptyState - Nie znaleziono wyników',
   'demo.showcase.feedback.errorFallback.subtitle': 'Obsługa błędów na poziomie strony',
   'demo.showcase.feedback.errorFallback.title': 'ErrorFallback',
+  'demo.showcase.feedback.notFound.subtitle': 'Pełnoekranowy ekran 404 z szybkimi linkami nawigacyjnymi',
+  'demo.showcase.feedback.notFound.title': 'NotFound',
   'demo.showcase.feedback.errorMessage.subtitle': 'Wbudowane alerty błędów',
   'demo.showcase.feedback.errorMessage.title': 'ErrorMessage',
   'demo.showcase.feedback.kbd.subtitle': 'Stylizowane klawisze skrótów klawiaturowych',
@@ -2153,7 +2159,7 @@ const plMessages: Record<DemoMessageKey, string> = {
   'demo.text.developer.categories.composites':
     'composites/ (6) - DataTable, EditableCollection, FileDropZone, FlipCard, Wizard, AiResultPanel',
   'demo.text.developer.categories.app':
-    'app/ (4) - LocaleSwitcher, ThemeToggle, AuthRedirect, RequireAuth (pokazane w Inputs Buttons i snippetach Developer)',
+    'app/ (3) - LocaleSwitcher, ThemeToggle, AuthGuard (pokazane w Inputs Buttons i snippetach Developer)',
   'demo.text.developer.principles.appAgnostic': 'Komponenty są app-agnostic i unikają powiązania z logika biznesowa.',
   'demo.text.developer.principles.userFacingText': 'Teksty dla użytkownika są przekazywane przez propsy aplikacji.',
   'demo.text.developer.principles.layoutSlots': 'Komponenty layoutu udostępniają sloty dla elastycznej kompozycji.',
@@ -2510,6 +2516,9 @@ const plMessages: Record<DemoMessageKey, string> = {
   'demo.text.feedback.states.adjustSearch': 'Dopasuj wyszukiwanie',
   'demo.text.feedback.states.folderEmpty': 'Pusty folder',
   'demo.text.feedback.states.goHome': 'Przejdź do strony głównej',
+  'demo.text.feedback.states.notFoundAccessDenied': 'Brak dostępu',
+  'demo.text.feedback.states.notFoundEmptyState': 'Pusty stan',
+  'demo.text.feedback.states.notFoundErrorFallback': 'Fallback błędu',
   'demo.text.feedback.states.noResults': 'Brak wyników',
   'demo.text.feedback.states.somethingWrong': 'Coś poszło nie tak',
   'demo.text.feedback.states.stillFailing': 'Nadal nie działa',
@@ -2825,7 +2834,6 @@ const plMessages: Record<DemoMessageKey, string> = {
   'demo.text.overlays.dialog.confirm': 'Potwierdź',
   'demo.text.overlays.dialog.exampleTitle': 'Przykładowy tytuł',
   'demo.text.overlays.dialog.openDialog': 'Otwórz dialog',
-  'demo.text.developer.snippets.redirecting': 'Przekierowywanie...',
   'demo.text.overlays.popover.bottomContent': 'Treść dolna',
   'demo.text.overlays.popover.leftContent': 'Treść lewa',
   'demo.text.overlays.popover.rightContent': 'Treść prawa',

@@ -13,7 +13,15 @@ export interface CreateApiClientsOptions<TClients extends Record<string, string>
 > {
   baseUrl: string;
   clients?: TClients;
+  isDev?: boolean;
+  devProxyPath?: string;
 }
+
+const resolveBaseUrl = (baseUrl: string, isDev?: boolean, devProxyPath?: string): string => {
+  const normalized = baseUrl.trim();
+  if (!isDev || normalized.length > 0) return normalized;
+  return devProxyPath ?? '/api';
+};
 
 const resolveApiBase = (baseUrl: string, path: string): string => {
   const normalizedBase = baseUrl.replace(/\/+$/u, '');
@@ -24,10 +32,12 @@ const resolveApiBase = (baseUrl: string, path: string): string => {
 export const createApiClients = <TClients extends Record<string, string> = DefaultApiClientMap>(
   options: CreateApiClientsOptions<TClients>,
 ): HttpClientMap<TClients> => {
+  const effectiveBaseUrl = resolveBaseUrl(options.baseUrl, options.isDev, options.devProxyPath);
+
   const sharedConfig: Omit<HttpClientConfig, 'baseUrl'> = {
+    authConfig: options.authConfig,
     headers: options.headers,
     fetch: options.fetch,
-    getAccessToken: options.getAccessToken,
     onUnauthorized: options.onUnauthorized,
     requestInterceptors: options.requestInterceptors,
     responseInterceptors: options.responseInterceptors,
@@ -40,7 +50,7 @@ export const createApiClients = <TClients extends Record<string, string> = Defau
   Object.entries(clientsConfig).forEach(([key, path]) => {
     clients[key as keyof TClients] = createHttpClient({
       ...sharedConfig,
-      baseUrl: resolveApiBase(options.baseUrl, path),
+      baseUrl: resolveApiBase(effectiveBaseUrl, path),
     });
   });
 

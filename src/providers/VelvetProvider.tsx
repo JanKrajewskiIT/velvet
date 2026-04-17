@@ -1,7 +1,7 @@
 ﻿import { createMemo, ErrorBoundary, type JSX, type ParentProps } from 'solid-js';
 
-import type { OidcAuthConfig } from '~/auth/AuthProvider';
 import { AuthProvider } from '~/auth/AuthProvider';
+import type { OidcAuthConfig } from '~/auth/oidc';
 import ErrorFallback from '~/components/feedback/ErrorFallback/ErrorFallback';
 import ToastProvider from '~/components/feedback/Toast/ToastProvider/ToastProvider';
 import { I18nProvider, useI18n } from '~/i18n/I18nProvider';

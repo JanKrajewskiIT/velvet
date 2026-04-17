@@ -162,31 +162,13 @@ useFocusTrap(container, { enabled: () => dialogOpen() });`,
 />;`,
   },
   {
-    title: 'RequireAuth',
+    title: 'AuthGuard',
     file: 'routing/ProtectedRoute.tsx',
-    code: `import { RequireAuth } from '@jankrajewskiit/ui';
+    code: `import { AuthGuard } from '@jankrajewskiit/ui';
 
-<RequireAuth
-  isLoading={auth.isLoading()}
-  isAuthenticated={auth.isAuthenticated()}
-  roles={['admin', 'editor']}
-  hasAnyRole={auth.hasAnyRole}
-  onUnauthenticated={() => auth.signIn(window.location.pathname)}
->
+<AuthGuard roles={['admin', 'editor']}>
   <AdminPage />
-</RequireAuth>;`,
-  },
-  {
-    title: 'AuthRedirect',
-    file: 'routing/RedirectAfterAuth.tsx',
-    code: `import { AuthRedirect } from '@jankrajewskiit/ui';
-
-<AuthRedirect
-  onRedirect={() => {
-    navigate('/dashboard', { replace: true });
-  }}
-  fallback={<Spinner label="${t('demo.text.developer.snippets.redirecting')}" />}
-/>`,
+</AuthGuard>;`,
   },
 ];
 

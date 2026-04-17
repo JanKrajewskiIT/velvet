@@ -1,3 +1,5 @@
+import type { OidcAuthConfig } from '~/auth/oidc';
+
 export type HttpQueryPrimitive = string | number | boolean | null | undefined;
 export type HttpQueryValue = HttpQueryPrimitive | HttpQueryPrimitive[];
 
@@ -13,10 +15,10 @@ export type HttpRequestInterceptor = (url: string, init: RequestInit) => Request
 export type HttpResponseInterceptor = (response: Response, url: string) => Response | Promise<Response>;
 
 export interface HttpClientConfig {
+  authConfig?: OidcAuthConfig;
   baseUrl?: string;
   headers?: Record<string, string>;
   fetch?: typeof fetch;
-  getAccessToken?: () => string | undefined | Promise<string | undefined>;
   onUnauthorized?: () => void | Promise<void>;
   requestInterceptors?: HttpRequestInterceptor[];
   responseInterceptors?: HttpResponseInterceptor[];

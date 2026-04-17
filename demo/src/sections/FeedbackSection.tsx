@@ -28,6 +28,7 @@ import {
   IconButton,
   JellyTriangleLoader,
   Kbd,
+  NotFound,
   NotificationCenter,
   OrbitSquaresLoader,
   PageLoader,
@@ -777,6 +778,19 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
 
       <Show when={sectionId() === 'feedback-states'}>
         <ShowcaseSection
+          id="feedback-not-found"
+          title={t('demo.showcase.feedback.notFound.title')}
+          subtitle={t('demo.showcase.feedback.notFound.subtitle')}
+        >
+          <PreviewPanel>
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <NotFound />
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          id="feedback-access-denied"
           title={t('demo.showcase.feedback.accessDenied.title')}
           subtitle={t('demo.showcase.feedback.accessDenied.subtitle')}
         >
@@ -792,6 +806,7 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
         </ShowcaseSection>
 
         <ShowcaseSection
+          id="feedback-error-fallback"
           title={t('demo.showcase.feedback.errorFallback.title')}
           subtitle={t('demo.showcase.feedback.errorFallback.subtitle')}
         >
@@ -811,6 +826,7 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
         </ShowcaseSection>
 
         <ShowcaseSection
+          id="feedback-empty-state-search"
           title={t('demo.showcase.feedback.emptyStateNoResults.title')}
           subtitle={t('demo.showcase.feedback.emptyStateNoResults.subtitle')}
         >
@@ -826,6 +842,7 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
         </ShowcaseSection>
 
         <ShowcaseSection
+          id="feedback-empty-state-folder"
           title={t('demo.showcase.feedback.emptyStateFolderEmpty.title')}
           subtitle={t('demo.showcase.feedback.emptyStateFolderEmpty.subtitle')}
         >
