@@ -65,7 +65,9 @@ export interface CreateQueryClientOptions {
   };
 }
 
-export interface MutationOptions<TData, TVariables> {
-  onSuccess?: (result: TData, variables: TVariables) => void;
-  onError?: (error: Error, variables: TVariables) => void;
+export interface MutationOptions<TData, TVariables, TContext = unknown> {
+  onMutate?: (variables: TVariables) => TContext | Promise<TContext>;
+  onSuccess?: (result: TData, variables: TVariables, context?: TContext) => void;
+  onError?: (error: Error, variables: TVariables, context?: TContext) => void;
+  onSettled?: (data: TData | undefined, error: Error | undefined, variables: TVariables, context?: TContext) => void;
 }

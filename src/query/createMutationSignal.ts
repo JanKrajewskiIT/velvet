@@ -2,9 +2,9 @@ import { createMemo, createSignal } from 'solid-js';
 
 import type { MutationOptions, MutationSignal, MutationState } from '~/query/types';
 
-export const createMutationSignal = <TData, TVariables>(
+export const createMutationSignal = <TData, TVariables, TContext = unknown>(
   mutate: (variables: TVariables) => Promise<TData>,
-  options: MutationOptions<TData, TVariables> = {},
+  options: MutationOptions<TData, TVariables, TContext> = {},
 ): MutationSignal<TData, TVariables> => {
   const [state, setState] = createSignal<MutationState<TData>>({
     status: 'idle',
@@ -13,6 +13,22 @@ export const createMutationSignal = <TData, TVariables>(
   });
 
   const run = async (variables: TVariables): Promise<TData> => {
+    let context: TContext | undefined;
+
+    try {
+      if (options.onMutate) {
+        context = await options.onMutate(variables);
+      }
+    } catch (mutateError: unknown) {
+      const normalized = mutateError instanceof Error ? mutateError : new Error('onMutate failed');
+      setState((previous) => ({
+        ...previous,
+        status: 'error',
+        error: normalized,
+      }));
+      throw normalized;
+    }
+
     setState((previous) => ({
       ...previous,
       status: 'pending',
@@ -26,7 +42,8 @@ export const createMutationSignal = <TData, TVariables>(
         data: result,
         error: undefined,
       });
-      options.onSuccess?.(result, variables);
+      options.onSuccess?.(result, variables, context);
+      options.onSettled?.(result, undefined, variables, context);
       return result;
     } catch (error: unknown) {
       const normalized = error instanceof Error ? error : new Error('Mutation failed');
@@ -35,7 +52,8 @@ export const createMutationSignal = <TData, TVariables>(
         status: 'error',
         error: normalized,
       }));
-      options.onError?.(normalized, variables);
+      options.onError?.(normalized, variables, context);
+      options.onSettled?.(undefined, normalized, variables, context);
       throw normalized;
     }
   };

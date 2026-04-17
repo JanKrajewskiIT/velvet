@@ -6,3 +6,7 @@ export type { CreatePersistedSignalOptions, PersistStorage } from '~/store/creat
 export { createPersistedSignal } from '~/store/createPersistedSignal';
 export type { CreateSelectionStoreOptions, SelectionStore } from '~/store/createSelectionStore';
 export { createSelectionStore } from '~/store/createSelectionStore';
+export type { StoreCollectionActions } from '~/store/createStoreCollectionActions';
+export { createStoreCollectionActions } from '~/store/createStoreCollectionActions';
+export type { CreateSyncedStoreOptions, SyncedStore } from '~/store/createSyncedStore';
+export { createSyncedStore } from '~/store/createSyncedStore';

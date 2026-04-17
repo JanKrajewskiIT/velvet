@@ -473,13 +473,20 @@ export type {
   AppQueryResult,
   CreateAppQueryOptions,
   CreateCrudSignalsOptions,
+  CreateInfiniteQueryOptions,
+  CreatePaginatedQueryOptions,
   CreateQueryClientOptions,
   CreateQuerySignalOptions,
   CrudSignals,
+  InfinitePageResult,
+  InfiniteQueryResult,
   MutationCallbacks,
   MutationOptions,
   MutationSignal,
   MutationStatus,
+  PagedData,
+  PaginatedQueryResult,
+  QueryBoundaryProps,
   QueryClient,
   QueryClientProviderProps,
   QueryKey,
@@ -495,7 +502,9 @@ export {
   createAppMutation,
   createAppQuery,
   createCrudSignals,
+  createInfiniteQuery,
   createMutationSignal,
+  createPaginatedQuery,
   createQueryClient,
   createQuerySignal,
   getDefaultQueryClient,
@@ -503,6 +512,7 @@ export {
   invalidateQuery,
   matchesPartialKey,
   normalizeQueryKey,
+  QueryBoundary,
   QueryClientProvider,
   useQueryClient,
 } from './query';
@@ -513,11 +523,21 @@ export type {
   CreateEntityStoreOptions,
   CreatePersistedSignalOptions,
   CreateSelectionStoreOptions,
+  CreateSyncedStoreOptions,
   EntityStore,
   PersistStorage,
   SelectionStore,
+  StoreCollectionActions,
+  SyncedStore,
 } from './store';
-export { createAutosaveSignal, createEntityStore, createPersistedSignal, createSelectionStore } from './store';
+export {
+  createAutosaveSignal,
+  createEntityStore,
+  createPersistedSignal,
+  createSelectionStore,
+  createStoreCollectionActions,
+  createSyncedStore,
+} from './store';
 export type { ThemeChoice } from './theme/ThemeProvider';
 export { ThemeProvider, useTheme } from './theme/ThemeProvider';
 export { default as classNames } from './utils/classNames';

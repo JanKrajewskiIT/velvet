@@ -1,4 +1,4 @@
-import { type Accessor, createEffect, on } from 'solid-js';
+import { type Accessor, createEffect, createMemo, on } from 'solid-js';
 
 import type { AuthContextValue } from '~/auth/AuthProvider';
 import { createMutationSignal } from '~/query/createMutationSignal';
@@ -7,18 +7,20 @@ import { createQuerySignal, type CreateQuerySignalOptions } from '~/query/create
 import { getDefaultQueryClient } from '~/query/queryClientContext';
 import type { QueryKey } from '~/query/types';
 
-interface MutationCallbacks<TData, TVariables> {
-  onError?: (error: Error, variables: TVariables) => void;
-  onSuccess?: (data: TData, variables: TVariables) => void;
+interface MutationCallbacks<TData, TVariables, TContext = unknown> {
+  onMutate?: (variables: TVariables) => TContext | Promise<TContext>;
+  onError?: (error: Error, variables: TVariables, context?: TContext) => void;
+  onSuccess?: (data: TData, variables: TVariables, context?: TContext) => void;
+  onSettled?: (data: TData | undefined, error: Error | undefined, variables: TVariables, context?: TContext) => void;
 }
 
-interface AppMutationResult<TData, TVariables> {
+interface AppMutationResult<TData, TVariables, TContext = unknown> {
   readonly data: TData | undefined;
   readonly error: Error | undefined;
   readonly isError: boolean;
   readonly isPending: boolean;
   readonly isSuccess: boolean;
-  mutate: (variables: TVariables, callbacks?: MutationCallbacks<TData, TVariables>) => void;
+  mutate: (variables: TVariables, callbacks?: MutationCallbacks<TData, TVariables, TContext>) => void;
   mutateAsync: (variables: TVariables) => Promise<TData>;
   reset: () => void;
 }
@@ -40,9 +42,14 @@ interface CreateAppQueryOptions<TData> extends Omit<CreateQuerySignalOptions<TDa
   client?: QueryClient;
   auth?: AuthStateAdapter;
   watch?: Accessor<unknown>;
+  select?: (data: TData) => unknown;
 }
 
-const createAppQuery = <TData>(options: CreateAppQueryOptions<TData>): AppQueryResult<TData> => {
+function createAppQuery<TData>(options: CreateAppQueryOptions<TData>): AppQueryResult<TData>;
+function createAppQuery<TData, TSelected>(
+  options: CreateAppQueryOptions<TData> & { select: (data: TData) => TSelected },
+): AppQueryResult<TSelected>;
+function createAppQuery<TData>(options: CreateAppQueryOptions<TData>): AppQueryResult<unknown> {
   const auth = options.auth;
   const client = options.client ?? getDefaultQueryClient();
 
@@ -85,9 +92,16 @@ const createAppQuery = <TData>(options: CreateAppQueryOptions<TData>): AppQueryR
     );
   }
 
+  const selectFn = options.select;
+  const selectedData = createMemo(() => {
+    const raw = signal.data();
+    if (selectFn && raw !== undefined) return selectFn(raw);
+    return raw;
+  });
+
   return {
     get data() {
-      return signal.data();
+      return selectedData();
     },
     get error() {
       return signal.error();
@@ -105,15 +119,15 @@ const createAppQuery = <TData>(options: CreateAppQueryOptions<TData>): AppQueryR
       return signal.status() === 'success';
     },
     invalidate: signal.invalidate,
-    refetch: signal.refetch,
+    refetch: signal.refetch as () => Promise<unknown>,
   };
-};
+}
 
-const createAppMutation = <TData, TVariables>(
+const createAppMutation = <TData, TVariables, TContext = unknown>(
   mutate: (variables: TVariables) => Promise<TData>,
-  callbacks?: MutationCallbacks<TData, TVariables>,
-): AppMutationResult<TData, TVariables> => {
-  const signal = createMutationSignal(mutate, callbacks);
+  callbacks?: MutationCallbacks<TData, TVariables, TContext>,
+): AppMutationResult<TData, TVariables, TContext> => {
+  const signal = createMutationSignal<TData, TVariables, TContext>(mutate, callbacks);
 
   return {
     get data() {
