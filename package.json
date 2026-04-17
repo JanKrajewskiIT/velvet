@@ -28,7 +28,8 @@
       "import": "./config/lint-staged.mjs"
     },
     "./husky/pre-commit": "./config/husky-pre-commit.sh",
-    "./stylelint-config": "./config/stylelint.json"
+    "./stylelint-config": "./config/stylelint.json",
+    "./nginx/spa": "./config/nginx-spa.conf"
   },
   "types": "./dist/index.d.ts",
   "sideEffects": [
