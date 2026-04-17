@@ -9,20 +9,12 @@ import {
   setAuthUserManagerFactory,
 } from '~/auth/oidc';
 import { isBrowserRuntime, normalizePathname } from '~/auth/utils';
-import type { I18nDictionary, Locale } from '~/i18n/messages';
 import { configureVelvet } from '~/providers/velvet-config';
-
-interface ConfigureVelvetRuntime {
-  themeStorageKey: string;
-  localeStorageKey: string;
-  localeDictionaries: Partial<Record<Locale, I18nDictionary>>;
-}
 
 interface CreateVelvetBootstrapOptions {
   authConfig: OidcAuthConfig;
   root: string | HTMLElement;
   app: () => JSX.Element;
-  velvet: ConfigureVelvetRuntime;
   authUserManagerFactory?: (config: OidcAuthUserManagerFactoryConfig) => UserManager;
   onBeforeSanitizeAuthParams?: (url: URL) => void;
 }
@@ -83,7 +75,7 @@ async function bootstrapVelvetApp(options: CreateVelvetBootstrapOptions): Promis
     throw new Error('Root element not found');
   }
 
-  configureVelvet(options.velvet);
+  configureVelvet({ authConfig: options.authConfig });
   render(options.app, root);
 }
 

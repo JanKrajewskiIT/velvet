@@ -12,7 +12,10 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
-    "./styles": "./dist/velvet-ui.css",
+    "./styles": {
+      "types": "./config/styles.d.ts",
+      "default": "./dist/velvet-ui.css"
+    },
     "./eslint-config": "./config/eslint.mjs",
     "./prettier-config": "./config/prettier.json",
     "./tsconfig/app": "./config/tsconfig.app.json",

@@ -2,13 +2,15 @@ import { getAuthAccessToken } from '~/auth/oidc';
 import { ApiError } from '~/http/errors';
 import type { HttpClient, HttpClientConfig, HttpRequestOptions } from '~/http/types';
 import { buildUrl, parseResponseBody, resolveRequestBody } from '~/http/utils';
+import { getVelvetRuntimeConfig } from '~/providers/velvet-config';
 
 export const createHttpClient = (config: HttpClientConfig = {}): HttpClient => {
   const fetchImpl = config.fetch ?? globalThis.fetch;
   const baseUrl = config.baseUrl ?? '';
 
   const request = async <T>(method: string, path: string, options: HttpRequestOptions = {}): Promise<T> => {
-    const token = config.authConfig ? await getAuthAccessToken(config.authConfig) : undefined;
+    const authConfig = getVelvetRuntimeConfig().authConfig;
+    const token = authConfig ? await getAuthAccessToken(authConfig) : undefined;
     const resolvedBody = resolveRequestBody(options.body);
 
     const headers: Record<string, string> = {

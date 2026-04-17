@@ -1,12 +1,13 @@
-﻿import { createMemo, ErrorBoundary, type JSX, type ParentProps } from 'solid-js';
+import { createMemo, ErrorBoundary, type JSX, type ParentProps, Show, untrack } from 'solid-js';
 
 import { AuthProvider } from '~/auth/AuthProvider';
-import type { OidcAuthConfig } from '~/auth/oidc';
 import ErrorFallback from '~/components/feedback/ErrorFallback/ErrorFallback';
 import ToastProvider from '~/components/feedback/Toast/ToastProvider/ToastProvider';
 import { I18nProvider, useI18n } from '~/i18n/I18nProvider';
 import type { I18nDictionary, Locale } from '~/i18n/messages';
-import { QueryClientProvider, type QueryClientProviderProps } from '~/query/QueryClientProvider';
+import { configureVelvet, getVelvetRuntimeConfig } from '~/providers/velvet-config';
+import { getDefaultQueryClient, QueryClientContext } from '~/query/queryClientContext';
+import type { CreateQueryClientOptions } from '~/query/types';
 import { ThemeProvider } from '~/theme/ThemeProvider';
 
 interface VelvetProviderProps extends ParentProps {
@@ -14,8 +15,7 @@ interface VelvetProviderProps extends ParentProps {
   localeStorageKey?: string;
   initialLocale?: Locale;
   localeDictionaries?: Partial<Record<Locale, I18nDictionary>>;
-  authConfig: OidcAuthConfig;
-  query?: Omit<QueryClientProviderProps, 'children'>;
+  queryDefaults?: CreateQueryClientOptions;
   errorFallback?: JSX.Element;
 }
 
@@ -30,6 +30,17 @@ const DefaultErrorFallback = (props: { error: unknown; reset: () => void }) => {
 };
 
 const VelvetProvider = (props: VelvetProviderProps) => {
+  untrack(() =>
+    configureVelvet({
+      themeStorageKey: props.themeStorageKey,
+      localeStorageKey: props.localeStorageKey,
+      localeDictionaries: props.localeDictionaries,
+      queryClientOptions: props.queryDefaults,
+    }),
+  );
+
+  const config = getVelvetRuntimeConfig();
+
   const renderErrorFallback = (error: unknown, reset: () => void) => {
     if (props.errorFallback) {
       return props.errorFallback;
@@ -39,19 +50,26 @@ const VelvetProvider = (props: VelvetProviderProps) => {
   };
 
   return (
-    <ThemeProvider storageKey={props.themeStorageKey}>
-      <I18nProvider
-        storageKey={props.localeStorageKey}
-        initialLocale={props.initialLocale}
-        dictionaries={props.localeDictionaries}
-      >
-        <QueryClientProvider client={props.query?.client} options={props.query?.options}>
-          <AuthProvider config={props.authConfig}>
-            <ToastProvider>
-              <ErrorBoundary fallback={renderErrorFallback}>{props.children}</ErrorBoundary>
-            </ToastProvider>
-          </AuthProvider>
-        </QueryClientProvider>
+    <ThemeProvider>
+      <I18nProvider initialLocale={props.initialLocale}>
+        <QueryClientContext.Provider value={getDefaultQueryClient()}>
+          <Show
+            when={config.authConfig}
+            fallback={
+              <ToastProvider>
+                <ErrorBoundary fallback={renderErrorFallback}>{props.children}</ErrorBoundary>
+              </ToastProvider>
+            }
+          >
+            {(authConfig) => (
+              <AuthProvider config={authConfig()}>
+                <ToastProvider>
+                  <ErrorBoundary fallback={renderErrorFallback}>{props.children}</ErrorBoundary>
+                </ToastProvider>
+              </AuthProvider>
+            )}
+          </Show>
+        </QueryClientContext.Provider>
       </I18nProvider>
     </ThemeProvider>
   );

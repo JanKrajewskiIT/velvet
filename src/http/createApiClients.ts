@@ -35,7 +35,6 @@ export const createApiClients = <TClients extends Record<string, string> = Defau
   const effectiveBaseUrl = resolveBaseUrl(options.baseUrl, options.isDev, options.devProxyPath);
 
   const sharedConfig: Omit<HttpClientConfig, 'baseUrl'> = {
-    authConfig: options.authConfig,
     headers: options.headers,
     fetch: options.fetch,
     onUnauthorized: options.onUnauthorized,
