@@ -14,10 +14,12 @@ interface TradingViewWsFeedOptions {
   protocols?: string | string[] | ((context: TradingViewFeedContext) => string | string[] | undefined);
   webSocketFactory?: (url: string, protocols?: string | string[]) => WebSocket;
   parseMessage?: (event: MessageEvent, context: TradingViewFeedContext) => unknown;
-  buildSubscribeMessage?: (context: TradingViewFeedContext) => string | ArrayBufferLike | Blob | ArrayBufferView | null;
+  buildSubscribeMessage?: (
+    context: TradingViewFeedContext,
+  ) => string | ArrayBuffer | Blob | ArrayBufferView<ArrayBuffer> | null;
   buildUnsubscribeMessage?: (
     context: TradingViewFeedContext,
-  ) => string | ArrayBufferLike | Blob | ArrayBufferView | null;
+  ) => string | ArrayBuffer | Blob | ArrayBufferView<ArrayBuffer> | null;
   onOpen?: (event: Event, context: TradingViewFeedContext) => void;
   onError?: (event: Event, context: TradingViewFeedContext) => void;
   onClose?: (event: CloseEvent, context: TradingViewFeedContext) => void;

@@ -2,8 +2,8 @@ import { createMemo, splitProps } from 'solid-js';
 
 import type { LoaderBaseProps, LoaderMessages } from '~/hooks/useLoaderA11y';
 import useLoaderA11y from '~/hooks/useLoaderA11y';
-import type { ComponentSize } from '~/models/Props';
 import type Props from '~/models/Props';
+import type { ComponentSize } from '~/models/Props';
 import classNames from '~/utils/classNames';
 
 import styles from './Spinner.module.css';
