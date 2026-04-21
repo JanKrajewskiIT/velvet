@@ -1,0 +1,12 @@
+.root {
+  display: grid;
+  gap: var(--spacing-md);
+}
+
+.gapSm {
+  gap: var(--spacing-sm);
+}
+
+.gapLg {
+  gap: var(--spacing-lg);
+}

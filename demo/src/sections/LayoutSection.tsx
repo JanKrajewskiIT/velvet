@@ -5,7 +5,6 @@ import {
   addToast,
   Button,
   Card,
-  Chip,
   CodeText,
   DataCard,
   Divider,
@@ -23,7 +22,6 @@ import {
   Navbar,
   PracticeSetupPanel,
   ResizablePanel,
-  SectionCard,
   Stack,
   StatCard,
   Surface,
@@ -703,32 +701,6 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
               </div>
             </PreviewGroup>
           </PreviewPanel>
-        </ShowcaseSection>
-
-        <ShowcaseSection
-          title={t('demo.showcase.layout.sectionCard.title')}
-          subtitle={t('demo.showcase.layout.sectionCard.subtitle')}
-        >
-          <PreviewPanel>
-            <PreviewGroup title={t('demo.text.common.examples')}>
-              <SectionCard label={t('demo.text.layout.sectionCard.details')} defaultOpen>
-                <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                  {t('demo.text.layout.sectionCard.detailsBody')}
-                </Text>
-              </SectionCard>
-              <SectionCard label={t('demo.text.layout.sectionCard.advancedOptions')}>
-                <Text as="p" variant="bodySm" tone="muted" class="mutedText">
-                  {t('demo.text.layout.sectionCard.collapsedByDefault')}
-                </Text>
-              </SectionCard>
-            </PreviewGroup>
-          </PreviewPanel>
-          <ShowcaseMeta>
-            <CodeText as="span" class="codeInline">
-              SectionCard
-            </CodeText>{' '}
-            {t('demo.text.layout.sectionCard.meta')}
-          </ShowcaseMeta>
         </ShowcaseSection>
       </Show>
     </div>

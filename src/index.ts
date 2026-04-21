@@ -338,6 +338,7 @@ export { default as Rating, type RatingProps } from './components/pickers/Rating
 export { default as Slider, type SliderMark, type SliderProps } from './components/pickers/Slider/Slider';
 export { default as Accordion, type AccordionOwnProps } from './components/surfaces/Accordion/Accordion';
 export { default as AccordionIcon } from './components/surfaces/Accordion/AccordionIcon/AccordionIcon';
+export type { AccordionItemOwnProps, AccordionTone } from './components/surfaces/Accordion/AccordionItem/AccordionItem';
 export { default as AccordionItem } from './components/surfaces/Accordion/AccordionItem/AccordionItem';
 export type { CardOwnProps } from './components/surfaces/Card/Card';
 export { default as Card } from './components/surfaces/Card/Card';
@@ -369,7 +370,6 @@ export type {
 } from './components/surfaces/PracticeSetupPanel/PracticeSetupPanel';
 export { default as PracticeSetupPanel } from './components/surfaces/PracticeSetupPanel/PracticeSetupPanel';
 export { default as ResizablePanel } from './components/surfaces/ResizablePanel/ResizablePanel';
-export { default as SectionCard } from './components/surfaces/SectionCard/SectionCard';
 export { default as Stack } from './components/surfaces/Stack/Stack';
 export { default as StatCard } from './components/surfaces/StatCard/StatCard';
 export type {

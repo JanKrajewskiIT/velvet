@@ -2,8 +2,9 @@ import { createEffect, createMemo, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
 import type { DivCoreNativeProps } from '~/models/Props';
+import classNames from '~/utils/classNames';
 
-import Card from '../Card/Card';
+import styles from './Accordion.module.css';
 import {
   AccordionContext,
   type AccordionContextValue,
@@ -13,12 +14,19 @@ import {
 
 export interface AccordionOwnProps extends DivCoreNativeProps {
   multiple?: boolean;
+  gap?: 'sm' | 'md' | 'lg';
 }
 
+const gapClassByValue: Record<NonNullable<AccordionOwnProps['gap']>, string | undefined> = {
+  sm: styles.gapSm,
+  md: undefined,
+  lg: styles.gapLg,
+};
+
 const Accordion = (props: Props<AccordionOwnProps>) => {
-  const [local, rest] = splitProps(props, ['class', 'children', 'multiple']);
+  const [local, rest] = splitProps(props, ['class', 'children', 'multiple', 'gap']);
   const items = new Map<string, AccordionItemRegistration>();
-  const multiple = createMemo(() => local.multiple ?? true);
+  const multiple = createMemo(() => local.multiple ?? false);
 
   const closeOtherItems = (activeId: string, options?: AccordionItemSetOpenOptions) => {
     items.forEach((item, id) => {
@@ -36,7 +44,8 @@ const Accordion = (props: Props<AccordionOwnProps>) => {
         openItemId = id;
         return;
       }
-      item.setOpen(false);
+
+      item.setOpen(false, { notify: true });
     });
   };
 
@@ -58,9 +67,9 @@ const Accordion = (props: Props<AccordionOwnProps>) => {
 
   return (
     <AccordionContext.Provider value={contextValue}>
-      <Card padding="none" radius="md" clip class={local.class} {...rest}>
+      <div class={classNames(styles.root, gapClassByValue[local.gap ?? 'md'], local.class)} {...rest}>
         {local.children}
-      </Card>
+      </div>
     </AccordionContext.Provider>
   );
 };

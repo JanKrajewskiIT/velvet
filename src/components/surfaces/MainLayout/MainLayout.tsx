@@ -18,15 +18,13 @@ const MainLayout = (props: ParentProps<Props<MainLayoutProps>>) => {
 
   return (
     <div {...rest} class={classNames(styles.layout, local.class)}>
-      <Show when={isAuthenticated() || isLoading()}>
-        {local.navbar}
-        <main class={styles.main}>
-          <div class={styles.container}>
-            <Suspense fallback={<PageLoader />}>{local.children}</Suspense>
-          </div>
-        </main>
-        {local.footer}
-      </Show>
+      <Show when={isAuthenticated() || isLoading()}>{local.navbar}</Show>
+      <main class={styles.main}>
+        <div class={styles.container}>
+          <Suspense fallback={<PageLoader />}>{local.children}</Suspense>
+        </div>
+      </main>
+      <Show when={isAuthenticated() || isLoading()}>{local.footer}</Show>
     </div>
   );
 };
