@@ -114,7 +114,7 @@ export const createPaginatedQuery = <TItem>(
         setPage((current) => current - 1);
       }
     },
-    refetch: inner.refetch as () => Promise<PagedData<TItem>>,
+    refetch: inner.refetch,
     invalidate: inner.invalidate,
   };
 };

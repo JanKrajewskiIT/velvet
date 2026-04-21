@@ -1,4 +1,4 @@
-import { For, type JSX, splitProps } from 'solid-js';
+import { For, splitProps } from 'solid-js';
 
 import type { LoaderBaseProps, LoaderMessages } from '~/hooks/useLoaderA11y';
 import useLoaderA11y from '~/hooks/useLoaderA11y';
@@ -35,11 +35,9 @@ const OrbitSquaresLoader = (props: Props<OrbitSquaresLoaderProps>) => {
         {(delay) => (
           <div
             class={styles.square}
-            style={
-              {
-                '--square-delay': `${delay}s`,
-              } as JSX.CSSProperties
-            }
+            style={{
+              '--square-delay': `${delay}s`,
+            }}
           />
         )}
       </For>

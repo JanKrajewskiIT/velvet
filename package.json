@@ -101,7 +101,7 @@
     "globals": "^17.5.0",
     "remark-gfm": "^4.0.1",
     "stylelint-config-standard": "^40.0.0",
-    "typescript-eslint": "^8.58.2",
+    "typescript-eslint": "^8.59.0",
     "vite-plugin-solid": "^2.11.12"
   },
   "devDependencies": {
@@ -124,10 +124,6 @@
     "typescript": "~6.0.3",
     "vite": "^8.0.9",
     "vite-plugin-dts": "^4.5.4"
-  },
-  "overrides": {
-    "@eslint/js": "$@eslint/js",
-    "eslint": "$eslint"
   },
   "size-limit": [
     {

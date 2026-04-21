@@ -54,7 +54,7 @@ const Chip = (props: Props<ChipProps>) => {
       '--chip-border-color': props.color,
       '--chip-text-color': isColorFilled() ? getContrastTextColor(props.color) : props.color,
       '--chip-background-color': isColorFilled() ? props.color : 'transparent',
-    } as JSX.CSSProperties;
+    };
   });
 
   const content = createMemo(() => (

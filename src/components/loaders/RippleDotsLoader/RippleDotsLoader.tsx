@@ -1,4 +1,4 @@
-import { For, type JSX, splitProps } from 'solid-js';
+import { For, splitProps } from 'solid-js';
 
 import type { LoaderBaseProps, LoaderMessages } from '~/hooks/useLoaderA11y';
 import useLoaderA11y from '~/hooks/useLoaderA11y';
@@ -35,11 +35,9 @@ const RippleDotsLoader = (props: Props<RippleDotsLoaderProps>) => {
         {(delay) => (
           <span
             class={styles.dot}
-            style={
-              {
-                '--ripple-delay': delay,
-              } as JSX.CSSProperties
-            }
+            style={{
+              '--ripple-delay': delay,
+            }}
           />
         )}
       </For>

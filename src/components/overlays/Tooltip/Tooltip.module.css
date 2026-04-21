@@ -1,9 +1,13 @@
 .tooltipContainer {
+  --tooltip-offset: var(--spacing-sm);
+
   position: relative;
   display: inline-block;
 }
 
 .tooltipContent {
+  --tooltip-arrow-size: 0.5rem;
+
   position: absolute;
   z-index: var(--z-modal);
   padding: var(--spacing-xs) var(--spacing-sm);
@@ -12,26 +16,59 @@
   animation: scaleIn var(--duration-fast) var(--ease-out-back);
 }
 
+.tooltipContent::after {
+  content: '';
+  position: absolute;
+  width: var(--tooltip-arrow-size);
+  height: var(--tooltip-arrow-size);
+  background: var(--color-tooltip);
+  transform: rotate(45deg);
+}
+
 .top {
   bottom: 100%;
   left: 50%;
-  transform: translateX(-50%) translateY(calc(-1 * var(--spacing-sm)));
+  transform: translateX(-50%) translateY(calc(-1 * var(--tooltip-offset)));
+}
+
+.top::after {
+  left: 50%;
+  top: 100%;
+  transform: translateX(-50%) translateY(calc(-0.5 * var(--tooltip-arrow-size))) rotate(45deg);
 }
 
 .bottom {
   top: 100%;
   left: 50%;
-  transform: translateX(-50%) translateY(var(--spacing-sm));
+  transform: translateX(-50%) translateY(var(--tooltip-offset));
+}
+
+.bottom::after {
+  left: 50%;
+  bottom: 100%;
+  transform: translateX(-50%) translateY(calc(0.5 * var(--tooltip-arrow-size))) rotate(45deg);
 }
 
 .left {
   right: 100%;
   top: 50%;
-  transform: translateY(-50%) translateX(calc(-1 * var(--spacing-sm)));
+  transform: translateY(-50%) translateX(calc(-1 * var(--tooltip-offset)));
+}
+
+.left::after {
+  left: 100%;
+  top: 50%;
+  transform: translateX(calc(-0.5 * var(--tooltip-arrow-size))) translateY(-50%) rotate(45deg);
 }
 
 .right {
   left: 100%;
   top: 50%;
-  transform: translateY(-50%) translateX(var(--spacing-sm));
+  transform: translateY(-50%) translateX(var(--tooltip-offset));
+}
+
+.right::after {
+  right: 100%;
+  top: 50%;
+  transform: translateX(calc(0.5 * var(--tooltip-arrow-size))) translateY(-50%) rotate(45deg);
 }

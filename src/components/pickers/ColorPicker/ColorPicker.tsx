@@ -1,4 +1,4 @@
-import { createMemo, For, type JSX, splitProps } from 'solid-js';
+import { createMemo, For, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
 import type { AriaFieldProps } from '~/models/Props';
@@ -96,7 +96,7 @@ const ColorPicker = (props: Props<ColorPickerProps>) => {
             disabled={local.disabled}
             tabIndex={tabStopIndex() === index() || (!hasSelectedColor() && index() === 0) ? 0 : -1}
             class={classNames(styles.colorOption, local.value === c && styles.colorOptionSelected)}
-            style={{ '--swatch-color': c } as JSX.CSSProperties}
+            style={{ '--swatch-color': c }}
             ref={(element) => {
               optionRefs[index()] = element;
             }}

@@ -18,13 +18,14 @@ interface NavbarProps {
   navItems: NavItem[];
   logo?: JSX.Element;
   actions?: JSX.Element;
+  showActiveLabel?: boolean;
 }
 
 const hasExactMatch = (path: string, href: string) => path === href;
 
 const Navbar = (props: Props<NavbarProps>) => {
   const { ts } = useI18n();
-  const [local, rest] = splitProps(props, ['navItems', 'logo', 'actions', 'class']);
+  const [local, rest] = splitProps(props, ['navItems', 'logo', 'actions', 'showActiveLabel', 'class']);
   const [menuOpen, setMenuOpen] = createSignal(false);
   const location = useLocation();
 
@@ -57,11 +58,15 @@ const Navbar = (props: Props<NavbarProps>) => {
 
   return (
     <header {...rest} class={classNames(styles.header, local.class)}>
-      {local.logo ?? <div class={styles.logo} />}
-      <Text variant="labelLg" tone="inverse" class={styles.activeLabel}>
-        {activeLabel()}
-      </Text>
-      <MenuBar items={local.navItems} activeIndex={activeIndex()} />
+      <div class={styles.brand}>
+        {local.logo ?? <div class={styles.logo} />}
+        {local.showActiveLabel !== false && (
+          <Text variant="labelLg" tone="inverse" class={styles.activeLabel}>
+            {activeLabel()}
+          </Text>
+        )}
+      </div>
+      <MenuBar class={styles.menuBarSlot} items={local.navItems} activeIndex={activeIndex()} />
       <div class={styles.actions}>
         {local.actions}
         <IconButton

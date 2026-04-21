@@ -5,9 +5,9 @@
   top: 0;
   z-index: var(--z-header);
   display: grid;
-  grid-template-columns: 50px 50px 1fr auto;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 50%) minmax(0, 1fr);
   column-gap: var(--spacing-sm);
-  place-items: center center;
+  align-items: center;
   height: var(--header-height);
   padding: 0 var(--spacing-md);
   background-color: var(--header-bg);
@@ -17,7 +17,18 @@
     box-shadow var(--duration-fast) var(--ease-out-expo);
 }
 
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  min-width: 0;
+  justify-self: start;
+}
+
 .logo {
+  flex: none;
+  inline-size: 50px;
+  block-size: 50px;
   font-size: var(--typography-scale-5xl);
   color: var(--header-text);
 }
@@ -25,14 +36,22 @@
 .activeLabel {
   margin: 0;
   white-space: nowrap;
-  justify-self: start;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
   pointer-events: none;
+}
+
+.menuBarSlot {
+  min-width: 0;
+  justify-self: center;
 }
 
 .actions {
   display: flex;
   align-items: center;
   gap: var(--spacing-md);
+  justify-self: end;
 }
 
 .hamburger {
@@ -45,11 +64,11 @@
 
 @media (width < 768px) {
   .header {
-    grid-template-columns: 50px 1fr auto;
+    grid-template-columns: minmax(0, 1fr) auto;
   }
 
-  .activeLabel {
-    justify-self: start;
+  .brand {
+    max-width: 100%;
   }
 
   .hamburger {

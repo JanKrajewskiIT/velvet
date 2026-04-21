@@ -1,4 +1,4 @@
-import { For, type JSX, splitProps } from 'solid-js';
+import { For, splitProps } from 'solid-js';
 
 import type { LoaderBaseProps, LoaderMessages } from '~/hooks/useLoaderA11y';
 import useLoaderA11y from '~/hooks/useLoaderA11y';
@@ -40,12 +40,10 @@ const PulseRingLoader = (props: Props<PulseRingLoaderProps>) => {
         {(dot) => (
           <span
             class={styles.dot}
-            style={
-              {
-                '--dot-angle': dot.angle,
-                '--dot-delay-factor': dot.delayFactor,
-              } as JSX.CSSProperties
-            }
+            style={{
+              '--dot-angle': dot.angle,
+              '--dot-delay-factor': dot.delayFactor,
+            }}
           />
         )}
       </For>

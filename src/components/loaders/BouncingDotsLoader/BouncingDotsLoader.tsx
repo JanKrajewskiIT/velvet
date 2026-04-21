@@ -1,4 +1,4 @@
-import { For, type JSX, splitProps } from 'solid-js';
+import { For, splitProps } from 'solid-js';
 
 import type { LoaderBaseProps, LoaderMessages } from '~/hooks/useLoaderA11y';
 import useLoaderA11y from '~/hooks/useLoaderA11y';
@@ -45,21 +45,17 @@ const BouncingDotsLoader = (props: Props<BouncingDotsLoaderProps>) => {
           <>
             <div
               class={styles.dot}
-              style={
-                {
-                  '--dot-left': dot.left,
-                  '--dot-delay': `${dot.delay}s`,
-                } as JSX.CSSProperties
-              }
+              style={{
+                '--dot-left': dot.left,
+                '--dot-delay': `${dot.delay}s`,
+              }}
             />
             <div
               class={styles.shadow}
-              style={
-                {
-                  '--dot-left': dot.left,
-                  '--dot-delay': `${dot.delay}s`,
-                } as JSX.CSSProperties
-              }
+              style={{
+                '--dot-left': dot.left,
+                '--dot-delay': `${dot.delay}s`,
+              }}
             />
           </>
         )}

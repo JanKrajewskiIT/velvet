@@ -171,18 +171,16 @@ const RangeSlider = (props: Props<RangeSliderProps>) => {
         <div class={styles.rail} />
         <div
           class={styles.range}
-          style={{ '--range-left': `${leftPercent()}%`, '--range-width': `${rangeWidth()}%` } as JSX.CSSProperties}
+          style={{ '--range-left': `${leftPercent()}%`, '--range-width': `${rangeWidth()}%` }}
         />
         <Text
           as="span"
           variant="labelMd"
           tone="inverse"
           class={styles.valueLabel}
-          style={
-            {
-              '--range-label-left': `calc((100% - var(--range-thumb-size)) * ${leftRatio()} + (var(--range-thumb-size) / 2))`,
-            } as JSX.CSSProperties
-          }
+          style={{
+            '--range-label-left': `calc((100% - var(--range-thumb-size)) * ${leftRatio()} + (var(--range-thumb-size) / 2))`,
+          }}
         >
           {normalized().min}
         </Text>
@@ -191,11 +189,9 @@ const RangeSlider = (props: Props<RangeSliderProps>) => {
           variant="labelMd"
           tone="inverse"
           class={styles.valueLabel}
-          style={
-            {
-              '--range-label-left': `calc((100% - var(--range-thumb-size)) * ${rightRatio()} + (var(--range-thumb-size) / 2))`,
-            } as JSX.CSSProperties
-          }
+          style={{
+            '--range-label-left': `calc((100% - var(--range-thumb-size)) * ${rightRatio()} + (var(--range-thumb-size) / 2))`,
+          }}
         >
           {normalized().max}
         </Text>
@@ -239,7 +235,7 @@ const RangeSlider = (props: Props<RangeSliderProps>) => {
                   styles.mark,
                   mark.value >= normalized().min && mark.value <= normalized().max && styles.markActive,
                 )}
-                style={{ '--range-mark-left': `${mark.percent}%` } as JSX.CSSProperties}
+                style={{ '--range-mark-left': `${mark.percent}%` }}
               >
                 <span class={styles.markTick} />
                 <Show when={mark.label}>

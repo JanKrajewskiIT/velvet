@@ -75,6 +75,10 @@
   box-shadow: var(--shadow-glow-sm);
 }
 
+.active .menuItemTooltip {
+  --tooltip-offset: calc(var(--spacing-lg));
+}
+
 .active .menuIcon {
   position: absolute;
   margin-top: 24px;

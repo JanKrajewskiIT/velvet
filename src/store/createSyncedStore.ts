@@ -86,7 +86,7 @@ export const createSyncedStore = <TData extends object>(
   };
 
   const collectionActions = <TItem extends { id: string }>(key: keyof TData & string): StoreCollectionActions<TItem> =>
-    createStoreCollectionActions<TItem>(setStore as SetStoreFunction<Record<string, TItem[]>>, key);
+    createStoreCollectionActions<TItem>(setStore, key);
 
   return {
     store,

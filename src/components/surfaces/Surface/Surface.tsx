@@ -63,7 +63,7 @@ const Surface = (props: Props<SurfaceOwnProps>) => {
   return (
     <Dynamic
       component={local.as ?? 'div'}
-      ref={local.ref as never}
+      ref={local.ref}
       class={classNames(
         styles.surface,
         toneClass(),

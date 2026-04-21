@@ -37,7 +37,7 @@ const TabButton = (props: Props<TabButtonOwnProps>) => {
           variant="labelLg"
           tone={visualVariant() === 'pill' ? 'inherit' : local.selected ? 'primary' : 'muted'}
         >
-          {local.label as string}
+          {local.label}
         </Text>
       </Show>
     </Button>

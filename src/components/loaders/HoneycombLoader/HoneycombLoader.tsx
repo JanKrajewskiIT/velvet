@@ -1,4 +1,4 @@
-import { For, type JSX, splitProps } from 'solid-js';
+import { For, splitProps } from 'solid-js';
 
 import type { LoaderBaseProps, LoaderMessages } from '~/hooks/useLoaderA11y';
 import useLoaderA11y from '~/hooks/useLoaderA11y';
@@ -80,13 +80,11 @@ const HoneycombLoader = (props: Props<HoneycombLoaderProps>) => {
           {(point) => (
             <div
               class={styles.gel}
-              style={
-                {
-                  '--gel-x': `${point.x}px`,
-                  '--gel-y': `${point.y}px`,
-                  '--gel-delay': `${point.delay}s`,
-                } as JSX.CSSProperties
-              }
+              style={{
+                '--gel-x': `${point.x}px`,
+                '--gel-y': `${point.y}px`,
+                '--gel-delay': `${point.delay}s`,
+              }}
             >
               <div class={classNames(styles.hexBrick, styles.h1)} />
               <div class={classNames(styles.hexBrick, styles.h2)} />

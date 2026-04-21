@@ -61,6 +61,8 @@ export { default as AtsAnalysisPanel } from './components/composites/AtsAnalysis
 export { default as CodeBlock } from './components/composites/CodeBlock/CodeBlock';
 export type { CommandItem } from './components/composites/CommandPalette/CommandPalette';
 export { default as CommandPalette } from './components/composites/CommandPalette/CommandPalette';
+export type { CommandPaletteTriggerProps } from './components/composites/CommandPaletteTrigger/CommandPaletteTrigger';
+export { default as CommandPaletteTrigger } from './components/composites/CommandPaletteTrigger/CommandPaletteTrigger';
 export type {
   EditableCollectionProps,
   EditableCollectionRenderContext,

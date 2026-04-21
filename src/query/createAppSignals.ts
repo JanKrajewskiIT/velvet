@@ -119,7 +119,7 @@ function createAppQuery<TData>(options: CreateAppQueryOptions<TData>): AppQueryR
       return signal.status() === 'success';
     },
     invalidate: signal.invalidate,
-    refetch: signal.refetch as () => Promise<unknown>,
+    refetch: signal.refetch,
   };
 }
 

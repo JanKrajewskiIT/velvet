@@ -20,7 +20,7 @@ const getDefaultStorage = (): PersistStorage | undefined => {
     return undefined;
   }
 
-  return globalThis.localStorage as PersistStorage;
+  return globalThis.localStorage;
 };
 
 export const createPersistedSignal = <T>(

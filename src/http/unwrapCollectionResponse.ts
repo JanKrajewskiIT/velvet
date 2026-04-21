@@ -15,7 +15,7 @@ const findCollection = <TItem>(value: Record<string, unknown>, seen: WeakSet<obj
     const entry = value[key];
 
     if (Array.isArray(entry)) {
-      return entry as unknown as TItem[];
+      return entry as TItem[];
     }
 
     if (entry && typeof entry === 'object') {
@@ -29,7 +29,7 @@ const findCollection = <TItem>(value: Record<string, unknown>, seen: WeakSet<obj
 
   for (const entry of Object.values(value)) {
     if (Array.isArray(entry)) {
-      return entry as unknown as TItem[];
+      return entry as TItem[];
     }
   }
 

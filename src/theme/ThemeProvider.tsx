@@ -29,7 +29,7 @@ function getStoredTheme(key: string): ThemeChoice {
 }
 
 function resolveTheme(choice: ThemeChoice, system: ResolvedTheme): ResolvedTheme {
-  return choice === 'system' ? system : (choice as ResolvedTheme);
+  return choice === 'system' ? system : choice;
 }
 
 function applyTheme(resolved: ResolvedTheme) {

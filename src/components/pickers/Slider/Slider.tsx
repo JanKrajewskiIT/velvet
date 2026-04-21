@@ -89,17 +89,15 @@ const Slider = (props: Props<SliderProps>) => {
     <div class={classNames(styles.root, local.class, local.disabled && styles.disabled)}>
       <div class={styles.railWrap}>
         <div class={styles.rail} />
-        <div class={styles.track} style={{ '--slider-fill': `${percentage()}%` } as JSX.CSSProperties} />
+        <div class={styles.track} style={{ '--slider-fill': `${percentage()}%` }} />
         <Text
           as="span"
           variant="labelMd"
           tone="inverse"
           class={styles.valueLabel}
-          style={
-            {
-              '--slider-value-left': `calc((100% - var(--slider-thumb-size)) * ${thumbRatio()} + (var(--slider-thumb-size) / 2))`,
-            } as JSX.CSSProperties
-          }
+          style={{
+            '--slider-value-left': `calc((100% - var(--slider-thumb-size)) * ${thumbRatio()} + (var(--slider-thumb-size) / 2))`,
+          }}
         >
           {normalizedValue()}
         </Text>
@@ -127,7 +125,7 @@ const Slider = (props: Props<SliderProps>) => {
             {(mark) => (
               <div
                 class={classNames(styles.mark, mark.value <= normalizedValue() && styles.markActive)}
-                style={{ '--slider-mark-left': `${mark.percent}%` } as JSX.CSSProperties}
+                style={{ '--slider-mark-left': `${mark.percent}%` }}
               >
                 <span class={styles.markTick} />
                 <Show when={mark.label}>
