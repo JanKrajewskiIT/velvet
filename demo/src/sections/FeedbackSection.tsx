@@ -26,6 +26,7 @@ import {
   ErrorMessage,
   HoneycombLoader,
   IconButton,
+  InlineEmptyState,
   JellyTriangleLoader,
   Kbd,
   NotFound,
@@ -849,6 +850,20 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
           <PreviewPanel>
             <PreviewGroup title={t('demo.text.common.examples')}>
               <EmptyState icon={<IoFolder size={40} />} message={t('demo.text.feedback.states.folderEmpty')} />
+            </PreviewGroup>
+          </PreviewPanel>
+        </ShowcaseSection>
+
+        <ShowcaseSection
+          id="feedback-inline-empty-state"
+          title={t('demo.showcase.feedback.inlineEmptyState.title')}
+          subtitle={t('demo.showcase.feedback.inlineEmptyState.subtitle')}
+        >
+          <PreviewPanel>
+            <PreviewGroup title={t('demo.text.common.examples')}>
+              <div class="recronDemoWide">
+                <InlineEmptyState message={t('demo.text.feedback.states.inlineEmpty')} />
+              </div>
             </PreviewGroup>
           </PreviewPanel>
         </ShowcaseSection>

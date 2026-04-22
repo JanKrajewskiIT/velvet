@@ -72,8 +72,6 @@ export type { KanbanColumn, KanbanItemBase } from './components/composites/Kanba
 export { default as KanbanBoard } from './components/composites/KanbanBoard/KanbanBoard';
 export { default as MarkdownEditDialog } from './components/composites/MarkdownEditDialog/MarkdownEditDialog';
 export { default as MarkdownRenderer } from './components/composites/MarkdownRenderer/MarkdownRenderer';
-export type { QuestionAnswerPanelProps } from './components/composites/QuestionAnswerPanel/QuestionAnswerPanel';
-export { default as QuestionAnswerPanel } from './components/composites/QuestionAnswerPanel/QuestionAnswerPanel';
 export type { TransferItem, TransferListProps } from './components/composites/TransferList/TransferList';
 export { default as TransferList } from './components/composites/TransferList/TransferList';
 export type { FilterBarFilter, FilterBarOption, FilterBarValue } from './components/data/FilterBar/FilterBar';
@@ -165,6 +163,7 @@ export { default as DualFilterBar } from './components/feedback/DualFilterBar/Du
 export { default as EmptyState } from './components/feedback/EmptyState/EmptyState';
 export { default as ErrorFallback } from './components/feedback/ErrorFallback/ErrorFallback';
 export { default as ErrorMessage } from './components/feedback/ErrorMessage/ErrorMessage';
+export { default as InlineEmptyState } from './components/feedback/InlineEmptyState/InlineEmptyState';
 export { default as Kbd } from './components/feedback/Kbd/Kbd';
 export type { NotFoundProps } from './components/feedback/NotFound/NotFound';
 export { default as NotFound } from './components/feedback/NotFound/NotFound';

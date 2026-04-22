@@ -1,0 +1,20 @@
+.root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-lg);
+  border: 1px dashed color-mix(in srgb, var(--color-border) 86%, transparent);
+  border-radius: var(--radius-md);
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 8px,
+    color-mix(in srgb, var(--color-border) 30%, transparent) 8px,
+    color-mix(in srgb, var(--color-border) 30%, transparent) 9px
+  );
+  text-align: center;
+}
+
+.message {
+  font-style: italic;
+}

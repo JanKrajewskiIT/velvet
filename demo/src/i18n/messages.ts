@@ -273,7 +273,6 @@ const enMessages = {
   'demo.recron.showcase.atsAnalysisPanel.subtitle': 'ATS analysis flow with input, score result and retry.',
   'demo.recron.showcase.importSourcesDialog.subtitle': 'Import dialog with URL and file flows.',
   'demo.recron.showcase.calendarEventButton.subtitle': 'Compact action for opening a prefilled calendar event.',
-  'demo.recron.showcase.questionAnswerPanel.subtitle': 'Markdown answer block with loading, error and ask-AI fallback.',
   'demo.recron.showcase.featureCard.subtitle':
     'Standalone feature tile for landing sections and product capability highlights.',
   'demo.recron.featureCard.organizer.title': 'Offer organizer',
@@ -376,6 +375,8 @@ const enMessages = {
   'demo.showcase.feedback.countdown.title': 'Countdown',
   'demo.showcase.feedback.emptyStateFolderEmpty.subtitle': 'Friendly zero-state for empty collections',
   'demo.showcase.feedback.emptyStateFolderEmpty.title': 'EmptyState - This folder is empty',
+  'demo.showcase.feedback.inlineEmptyState.subtitle': 'Compact patterned placeholder for inline empty content',
+  'demo.showcase.feedback.inlineEmptyState.title': 'InlineEmptyState',
   'demo.showcase.feedback.emptyStateNoResults.subtitle': 'Friendly zero-state for empty search',
   'demo.showcase.feedback.emptyStateNoResults.title': 'EmptyState - No results found',
   'demo.showcase.feedback.errorFallback.subtitle': 'Page-level failure handling',
@@ -1080,6 +1081,7 @@ const enMessages = {
   'demo.text.feedback.states.adjustSearch': 'Adjust Search',
   'demo.text.feedback.states.folderEmpty': 'Folder Empty',
   'demo.text.feedback.states.goHome': 'Go Home',
+  'demo.text.feedback.states.inlineEmpty': 'Add an answer or ask AI to generate a first draft for this section.',
   'demo.text.feedback.states.notFoundAccessDenied': 'Access denied',
   'demo.text.feedback.states.notFoundEmptyState': 'Empty state',
   'demo.text.feedback.states.notFoundErrorFallback': 'Error fallback',
@@ -1702,8 +1704,6 @@ const plMessages: Record<DemoMessageKey, string> = {
   'demo.recron.showcase.importSourcesDialog.subtitle': 'Dialog importu z przeplywem URL i pliku.',
   'demo.recron.showcase.calendarEventButton.subtitle':
     'Kompaktowa akcja do otwierania wstepnie wypelnionego wydarzenia kalendarza.',
-  'demo.recron.showcase.questionAnswerPanel.subtitle':
-    'Blok odpowiedzi markdown z loadingiem, bledem i fallbackiem ask-AI.',
   'demo.recron.showcase.featureCard.subtitle':
     'Samodzielny kafel feature do sekcji landingowych i prezentacji mozliwosci produktu.',
   'demo.recron.featureCard.organizer.title': 'Organizer ofert',
@@ -1813,6 +1813,8 @@ const plMessages: Record<DemoMessageKey, string> = {
   'demo.showcase.feedback.countdown.title': 'Countdown',
   'demo.showcase.feedback.emptyStateFolderEmpty.subtitle': 'Przyjazny stan zerowy dla pustych kolekcji',
   'demo.showcase.feedback.emptyStateFolderEmpty.title': 'EmptyState - Ten folder jest pusty',
+  'demo.showcase.feedback.inlineEmptyState.subtitle': 'Kompaktowy zakreskowany placeholder dla pustej treści inline',
+  'demo.showcase.feedback.inlineEmptyState.title': 'InlineEmptyState',
   'demo.showcase.feedback.emptyStateNoResults.subtitle': 'Przyjazny stan zerowy dla pustego wyszukiwania',
   'demo.showcase.feedback.emptyStateNoResults.title': 'EmptyState - Nie znaleziono wyników',
   'demo.showcase.feedback.errorFallback.subtitle': 'Obsługa błędów na poziomie strony',
@@ -2514,6 +2516,8 @@ const plMessages: Record<DemoMessageKey, string> = {
   'demo.text.feedback.states.adjustSearch': 'Dopasuj wyszukiwanie',
   'demo.text.feedback.states.folderEmpty': 'Pusty folder',
   'demo.text.feedback.states.goHome': 'Przejdź do strony głównej',
+  'demo.text.feedback.states.inlineEmpty':
+    'Dodaj odpowiedź albo poproś AI o wygenerowanie pierwszego szkicu dla tej sekcji.',
   'demo.text.feedback.states.notFoundAccessDenied': 'Brak dostępu',
   'demo.text.feedback.states.notFoundEmptyState': 'Pusty stan',
   'demo.text.feedback.states.notFoundErrorFallback': 'Fallback błędu',

@@ -277,7 +277,6 @@ const enMessages = {
   'colorLabel.empty': 'No labels yet',
   'colorLabel.deleteConfirm': 'Delete label',
   'colorLabel.deleteConfirmMessage': 'Are you sure you want to delete this label?',
-  'questionAnswer.ask': 'Generate answer',
 } as const;
 
 type MessageKey = keyof typeof enMessages;
@@ -549,7 +548,6 @@ const plMessages: Record<MessageKey, string> = {
   'colorLabel.deleteConfirm': 'Usuń etykietę',
   'colorLabel.deleteConfirmMessage': 'Czy na pewno chcesz usunąć tę etykietę?',
   'editableCollection.deleteConfirmMessage': 'Czy na pewno chcesz usunąć ten element?',
-  'questionAnswer.ask': 'Generuj odpowiedź',
 };
 
 const dictionaries: Record<Locale, FlatI18nDictionary> = {

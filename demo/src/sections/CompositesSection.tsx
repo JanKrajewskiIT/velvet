@@ -13,7 +13,6 @@ import {
   KanbanBoard,
   type KanbanColumn,
   type KanbanItemBase,
-  QuestionAnswerPanel,
   Scheduler,
   type SchedulerEvent,
   Select,
@@ -360,9 +359,6 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
     categories: { label: string; score: number }[];
     recommendations: { label: string; message: string; severity: 'critical' | 'warning' | 'suggestion' }[];
   } | null>(null);
-  const [questionAnswerContent, setQuestionAnswerContent] = createSignal<string | null>(null);
-  const [questionAnswerLoading, setQuestionAnswerLoading] = createSignal(false);
-  const [questionAnswerError, setQuestionAnswerError] = createSignal<string | undefined>();
   const [tasks, setTasks] = createSignal<TaskItem[]>([]);
   const [kanbanItems, setKanbanItems] = createSignal<KanbanDemoItem[]>([]);
   const [schedulerEvents, setSchedulerEvents] = createSignal<SchedulerEvent[]>([]);
@@ -427,16 +423,6 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
   const resetAtsAnalysis = () => {
     setAtsResult(null);
     setAtsError(undefined);
-  };
-
-  const handleQuestionAnswerAsk = async () => {
-    setQuestionAnswerLoading(true);
-    setQuestionAnswerError(undefined);
-    await new Promise((resolve) => setTimeout(resolve, 600));
-    setQuestionAnswerContent(
-      'Use `createMemo` for derived state that depends on reactive inputs.\n\n- It caches the computed result\n- It reruns only when tracked dependencies change\n- It keeps expensive derivations out of plain render code',
-    );
-    setQuestionAnswerLoading(false);
   };
 
   const selectedScenario = createMemo(
@@ -661,21 +647,6 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
                   errorMessage={atsError()}
                   inputLabel={t('demo.recron.ai.ats.inputLabel')}
                   inputHint={t('demo.recron.ai.ats.inputHint')}
-                />
-              </div>
-            </PreviewGroup>
-          </PreviewPanel>
-        </ShowcaseSection>
-
-        <ShowcaseSection title="QuestionAnswerPanel" subtitle={t('demo.recron.showcase.questionAnswerPanel.subtitle')}>
-          <PreviewPanel>
-            <PreviewGroup title="Example">
-              <div class="recronDemoWide">
-                <QuestionAnswerPanel
-                  content={questionAnswerContent()}
-                  loading={questionAnswerLoading()}
-                  errorMessage={questionAnswerError()}
-                  onAsk={() => void handleQuestionAnswerAsk()}
                 />
               </div>
             </PreviewGroup>
