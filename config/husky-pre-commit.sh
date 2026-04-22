@@ -10,12 +10,12 @@ if ! command -v node >/dev/null 2>&1; then
 fi
 
 if command -v lint-staged >/dev/null 2>&1; then
-  lint-staged --no-stash --concurrent false
+  lint-staged --no-stash --concurrent false --cwd "$hook_dir/.."
   exit $?
 fi
 
 if command -v npx >/dev/null 2>&1; then
-  npx --no-install lint-staged --no-stash --concurrent false
+  npx --no-install lint-staged --no-stash --concurrent false --cwd "$hook_dir/.."
   exit $?
 fi
 
