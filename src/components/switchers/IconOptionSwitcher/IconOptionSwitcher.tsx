@@ -28,7 +28,7 @@ const IconOptionSwitcher = (props: Props<IconOptionSwitcherProps>) => {
             class={classNames(styles.button, props.selectedId === item.id && styles.buttonSelected)}
             icon={item.icon}
             label={item.label}
-            variant={props.selectedId === item.id ? 'primary' : 'subtle'}
+            variant={props.selectedId === item.id ? 'primary' : 'ghost'}
             onClick={() => props.onSelect(item.id)}
             aria-pressed={props.selectedId === item.id}
           />

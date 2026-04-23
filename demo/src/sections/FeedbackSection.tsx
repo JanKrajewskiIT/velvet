@@ -862,7 +862,15 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
           <PreviewPanel>
             <PreviewGroup title={t('demo.text.common.examples')}>
               <div class="recronDemoWide">
-                <InlineEmptyState message={t('demo.text.feedback.states.inlineEmpty')} />
+                <InlineEmptyState
+                  message={t('demo.text.feedback.states.inlineEmpty')}
+                  action={
+                    <>
+                      <Button size="sm" variant="primary" label={t('demo.text.inputs.actions.submit')} />
+                      <Button size="sm" variant="ghost" label={t('demo.text.inputs.actions.saveDraft')} />
+                    </>
+                  }
+                />
               </div>
             </PreviewGroup>
           </PreviewPanel>

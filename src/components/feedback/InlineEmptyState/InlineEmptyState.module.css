@@ -1,7 +1,4 @@
 .root {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   padding: var(--spacing-lg);
   border: 1px dashed color-mix(in srgb, var(--color-border) 86%, transparent);
   border-radius: var(--radius-md);
@@ -17,4 +14,13 @@
 
 .message {
   font-style: italic;
+  max-width: 32rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
 }
