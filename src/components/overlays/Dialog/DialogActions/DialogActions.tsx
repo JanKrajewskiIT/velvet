@@ -1,4 +1,5 @@
 import type { JSX } from 'solid-js';
+import { splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
@@ -10,9 +11,10 @@ interface DialogActionsProps {
 }
 
 const DialogActions = (props: Props<DialogActionsProps>) => {
+  const [local, rest] = splitProps(props, ['children', 'class']);
   return (
-    <div class={classNames(styles.root, props.class)}>
-      <div class={styles.actions}>{props.children}</div>
+    <div {...rest} class={classNames(styles.root, local.class)}>
+      {local.children}
     </div>
   );
 };

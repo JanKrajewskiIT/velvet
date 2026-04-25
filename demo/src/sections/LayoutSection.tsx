@@ -5,6 +5,7 @@ import {
   addToast,
   Button,
   Card,
+  Chip,
   CodeText,
   DataCard,
   Divider,
@@ -26,7 +27,6 @@ import {
   StatCard,
   Surface,
   Text,
-  useI18n,
 } from '@jankrajewskiit/ui';
 import type { IconTypes } from 'solid-icons';
 import { FaSolidBriefcase, FaSolidWandMagicSparkles } from 'solid-icons/fa';
@@ -34,40 +34,13 @@ import { FiBookOpen, FiFileText } from 'solid-icons/fi';
 import { IoAlertCircle, IoCheckmarkCircle, IoPeople, IoStatsChart } from 'solid-icons/io';
 import { createMemo, createSignal, For, Show } from 'solid-js';
 
-import type { SectionId } from '../App';
 import { PreviewGroup, PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
-import { type DemoI18nMessageKey, getDemoMessages } from '../i18n/messages';
+import { DEMO_FLASHCARD_ITEMS, DEMO_PRACTICE_SETUP_CATEGORIES } from '../fixtures/layoutFixtures';
+import { useDemoDictionary } from '../hooks/useDemoDictionary';
 import { renderRichText } from '../i18n/renderRichText';
+import type { SectionId } from '../nav/demoNavConfig';
 
-const flashcardItems = [
-  {
-    id: 'fc-1',
-    category: 'SolidJS',
-    question: 'What problem does `createMemo` solve?',
-    answer: 'It caches derived values and only recomputes when tracked dependencies change.',
-  },
-  {
-    id: 'fc-2',
-    category: 'TypeScript',
-    question: 'When would you prefer a discriminated union?',
-    answer: 'When state variants need precise narrowing and exhaustiveness checks.',
-  },
-  {
-    id: 'fc-3',
-    category: 'CSS',
-    question: 'What is the benefit of CSS custom properties?',
-    answer: 'They allow dynamic theming and composition directly in the cascade.',
-  },
-];
-
-const practiceSetupCategories = [
-  { value: 'solid-basics', label: 'SolidJS / Basics' },
-  { value: 'solid-performance', label: 'SolidJS / Performance' },
-  { value: 'ts-advanced', label: 'TypeScript / Advanced' },
-  { value: 'css-architecture', label: 'CSS / Architecture' },
-];
-
-const fallbackQuizResults: FlashcardPracticeResult<(typeof flashcardItems)[number]>[] = flashcardItems.map(
+const fallbackQuizResults: FlashcardPracticeResult<(typeof DEMO_FLASHCARD_ITEMS)[number]>[] = DEMO_FLASHCARD_ITEMS.map(
   (item, index) => ({
     id: item.id,
     item,
@@ -78,9 +51,7 @@ const fallbackQuizResults: FlashcardPracticeResult<(typeof flashcardItems)[numbe
 const LayoutSection = (props: { sectionId: SectionId }) => {
   const sectionId = () => props.sectionId;
   const year = new Date().getFullYear();
-  const { locale } = useI18n();
-  const dictionary = createMemo(() => getDemoMessages(locale()));
-  const t = (key: DemoI18nMessageKey): string => dictionary()[key];
+  const { t } = useDemoDictionary();
   const featureCards = createMemo<{ icon: IconTypes; title: string; description: string; tone: FeatureCardTone }[]>(
     () => [
       {
@@ -110,27 +81,30 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
     ],
   );
   const [quizFlipped, setQuizFlipped] = createSignal(false);
-  const [quizSessionItems, setQuizSessionItems] = createSignal([...flashcardItems]);
-  const [quizResults, setQuizResults] = createSignal<FlashcardPracticeResult<(typeof flashcardItems)[number]>[]>([]);
+  const [quizSessionItems, setQuizSessionItems] = createSignal([...DEMO_FLASHCARD_ITEMS]);
+  const [quizResults, setQuizResults] = createSignal<FlashcardPracticeResult<(typeof DEMO_FLASHCARD_ITEMS)[number]>[]>(
+    [],
+  );
 
-  const handleQuizFinish = (results: FlashcardPracticeResult<(typeof flashcardItems)[number]>[]) => {
+  const handleQuizFinish = (results: FlashcardPracticeResult<(typeof DEMO_FLASHCARD_ITEMS)[number]>[]) => {
     setQuizResults(results);
-    addToast({ type: 'success', message: 'Quiz session finished.' });
+    addToast({ type: 'success', message: t('demo.toast.layout.quizFinished') });
   };
 
   const handleQuizSummaryBack = () => {
-    addToast({ type: 'info', message: 'Back action triggered.' });
+    addToast({ type: 'info', message: t('demo.toast.layout.quizBack') });
   };
 
   const handleQuizRestart = () => {
     setQuizResults([]);
-    setQuizSessionItems([...flashcardItems]);
+    setQuizSessionItems([...DEMO_FLASHCARD_ITEMS]);
   };
 
   const handlePracticeSetupStart = (value: { categoryId: string | null; count: number }) => {
+    const category = value.categoryId ?? t('demo.toast.layout.practiceAllCategories');
     addToast({
       type: 'success',
-      message: `Practice configured for ${value.categoryId ?? 'all categories'} with ${String(value.count)} cards.`,
+      message: t('demo.toast.layout.practiceConfigured', { category, count: value.count }),
     });
   };
 
@@ -658,7 +632,7 @@ const LayoutSection = (props: { sectionId: SectionId }) => {
                 <PracticeSetupPanel
                   title={t('demo.recron.knowledge.quizSetup.title')}
                   description={t('demo.recron.knowledge.quizSetup.description')}
-                  categories={practiceSetupCategories}
+                  categories={DEMO_PRACTICE_SETUP_CATEGORIES}
                   countOptions={[10, 20, 30, 50]}
                   initialCount={20}
                   onStart={handlePracticeSetupStart}

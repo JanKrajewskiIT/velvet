@@ -1,4 +1,5 @@
 import { FiChevronDown } from 'solid-icons/fi';
+import { createMemo, splitProps } from 'solid-js';
 
 import { type ButtonVariant, resolveDropdownTriggerTone } from '~/components/buttons/shared/buttonVariants';
 import type { TypographyTone } from '~/components/typography/Typography/Typography';
@@ -22,15 +23,16 @@ interface DropdownChevronFieldTriggerOwnProps extends Omit<ButtonCoreNativeProps
 }
 
 const DropdownChevronFieldTrigger = (props: Props<DropdownChevronFieldTriggerOwnProps>) => {
-  const resolvedTone = () => props.tone ?? resolveDropdownTriggerTone(props.variant);
+  const [local, passToTrigger] = splitProps(props, ['open']);
+  const resolvedTone = createMemo(() => passToTrigger.tone ?? resolveDropdownTriggerTone(passToTrigger.variant));
 
   return (
-    <DropdownFieldTrigger {...props}>
+    <DropdownFieldTrigger {...passToTrigger}>
       <span
         class={classNames(
           styles.chevron,
           resolvedTone() === 'inverse' && styles.chevronInverse,
-          props.open && styles.chevronOpen,
+          local.open && styles.chevronOpen,
         )}
       >
         <FiChevronDown />

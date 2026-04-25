@@ -49,83 +49,77 @@ const QueryBuilderRuleRow = (props: QueryBuilderRuleRowProps) => {
 
   return (
     <div class={styles.rule}>
-      <div class={styles.ruleField}>
-        <FormField>
-          {(fieldProps) => (
-            <Select
-              {...fieldProps}
-              size="sm"
-              aria-label={ts('common.field')}
-              value={props.rule.fieldKey}
-              onChange={props.onFieldChange}
-              disabled={props.disabled}
-              options={fieldSelectOptions()}
-            />
-          )}
-        </FormField>
-      </div>
+      <FormField>
+        {(fieldProps) => (
+          <Select
+            {...fieldProps}
+            size="sm"
+            aria-label={ts('common.field')}
+            value={props.rule.fieldKey}
+            onChange={props.onFieldChange}
+            disabled={props.disabled}
+            options={fieldSelectOptions()}
+          />
+        )}
+      </FormField>
 
-      <div class={styles.ruleOperator}>
-        <FormField>
-          {(fieldProps) => (
-            <Select
-              {...fieldProps}
-              size="sm"
-              aria-label={ts('common.operator')}
-              value={props.rule.operator}
-              onChange={props.onOperatorChange}
-              disabled={props.disabled}
-              options={operatorSelectOptions()}
-            />
-          )}
-        </FormField>
-      </div>
+      <FormField>
+        {(fieldProps) => (
+          <Select
+            {...fieldProps}
+            size="sm"
+            aria-label={ts('common.operator')}
+            value={props.rule.operator}
+            onChange={props.onOperatorChange}
+            disabled={props.disabled}
+            options={operatorSelectOptions()}
+          />
+        )}
+      </FormField>
 
-      <div class={styles.ruleValue}>
-        <FormField>
-          {(fieldProps) => (
+      <FormField>
+        {(fieldProps) => (
+          <Show
+            when={valueRequired()}
+            fallback={
+              <Input
+                {...fieldProps}
+                value=""
+                size="sm"
+                readOnly
+                disabled
+                aria-label={ts('common.value')}
+                class={styles.inputDisabled}
+              />
+            }
+          >
             <Show
-              when={valueRequired()}
+              when={hasSelectableOptions()}
               fallback={
                 <Input
                   {...fieldProps}
-                  value=""
+                  type={inputType()}
+                  value={props.rule.value}
                   size="sm"
-                  readOnly
-                  disabled
                   aria-label={ts('common.value')}
-                  class={styles.inputDisabled}
+                  onInput={props.onValueInput}
+                  disabled={props.disabled}
                 />
               }
             >
-              <Show
-                when={hasSelectableOptions()}
-                fallback={
-                  <Input
-                    {...fieldProps}
-                    type={inputType()}
-                    value={props.rule.value}
-                    size="sm"
-                    aria-label={ts('common.value')}
-                    onInput={props.onValueInput}
-                    disabled={props.disabled}
-                  />
-                }
-              >
-                <Select
-                  {...fieldProps}
-                  size="sm"
-                  aria-label={ts('common.value')}
-                  value={props.rule.value}
-                  onChange={props.onValueSelectChange}
-                  disabled={props.disabled}
-                  options={valueSelectOptions()}
-                />
-              </Show>
+              <Select
+                {...fieldProps}
+                size="sm"
+                aria-label={ts('common.value')}
+                value={props.rule.value}
+                onChange={props.onValueSelectChange}
+                disabled={props.disabled}
+                options={valueSelectOptions()}
+              />
             </Show>
-          )}
-        </FormField>
-      </div>
+          </Show>
+        )}
+      </FormField>
 
       <div class={styles.ruleActions}>
         <IconButton

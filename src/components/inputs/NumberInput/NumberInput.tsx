@@ -104,6 +104,14 @@ const NumberInput = (props: Props<NumberInputOwnProps>) => {
     }
   };
 
+  const handleDecrementMouseDown = () => {
+    startRepeat(decrement);
+  };
+
+  const handleIncrementMouseDown = () => {
+    startRepeat(increment);
+  };
+
   return (
     <AffixInput
       {...rest}
@@ -126,7 +134,7 @@ const NumberInput = (props: Props<NumberInputOwnProps>) => {
           label={ts('number.decrease')}
           disabled={local.disabled || local.readOnly}
           onClick={decrement}
-          onMouseDown={() => startRepeat(decrement)}
+          onMouseDown={handleDecrementMouseDown}
           onMouseUp={stopRepeat}
           onMouseLeave={stopRepeat}
           size={controlSize()}
@@ -139,7 +147,7 @@ const NumberInput = (props: Props<NumberInputOwnProps>) => {
           label={ts('number.increase')}
           disabled={local.disabled || local.readOnly}
           onClick={increment}
-          onMouseDown={() => startRepeat(increment)}
+          onMouseDown={handleIncrementMouseDown}
           onMouseUp={stopRepeat}
           onMouseLeave={stopRepeat}
           size={controlSize()}

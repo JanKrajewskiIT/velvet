@@ -30,9 +30,7 @@ const FallbackState = (props: Props<FallbackStateOwnProps>) => {
       <Text as="p" variant="bodySm" tone="muted">
         {local.description}
       </Text>
-      <Show when={local.action}>
-        <div class={styles.action}>{local.action}</div>
-      </Show>
+      <Show when={local.action}>{local.action}</Show>
     </div>
   );
 };

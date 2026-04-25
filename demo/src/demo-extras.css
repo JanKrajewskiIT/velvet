@@ -1,0 +1,241 @@
+.aiRunButton {
+  min-width: max-content;
+}
+
+.recronDemoMedium {
+  width: min(100%, 42rem);
+}
+
+.recronDemoWide {
+  width: min(100%, 70rem);
+}
+
+.timelineCompositeDemo {
+  width: min(100%, 42rem);
+  display: grid;
+  gap: var(--spacing-md);
+}
+
+.chipsCasesGrid {
+  width: min(100%, 70rem);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-md);
+}
+
+.chipsCaseCard {
+  display: grid;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-bg-elevated);
+}
+
+@media (width < 768px) {
+  .chipsCasesGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.recronDemoSurface {
+  padding: var(--spacing-lg);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.pageHeaderIntro {
+  display: grid;
+  gap: var(--spacing-xs);
+}
+
+.pageHeaderActions {
+  display: grid;
+  gap: var(--spacing-md);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid color-mix(in srgb, var(--color-border) 78%, transparent);
+}
+
+.pageHeaderActionsCopy {
+  display: grid;
+  gap: var(--spacing-2xs);
+}
+
+.pageHeaderActionGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.pageHeaderRemember {
+  display: flex;
+  padding-top: var(--spacing-2xs);
+  justify-content: flex-start;
+}
+
+.overviewHeroPanel {
+  gap: var(--spacing-xl);
+}
+
+.overviewLead {
+  display: grid;
+  gap: var(--spacing-md);
+}
+
+.overviewTrackGrid,
+.overviewFeatureGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.overviewTrackCard,
+.overviewFeatureCard {
+  display: grid;
+  align-content: start;
+  gap: var(--spacing-sm);
+  min-height: 100%;
+}
+
+.overviewCardEyebrow {
+  margin: 0;
+}
+
+.overviewCardTitle,
+.overviewCardBody {
+  margin: 0;
+}
+
+.overviewCardActions {
+  margin-top: auto;
+  padding-top: var(--spacing-xs);
+}
+
+.scenarioShell {
+  display: grid;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-elevated);
+  box-shadow: var(--shadow-sm);
+}
+
+.scenarioShellCompact {
+  min-height: 100%;
+}
+
+.scenarioHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.scenarioHeaderCopy {
+  display: grid;
+  gap: var(--spacing-2xs);
+}
+
+.scenarioHeaderCopy > * {
+  margin: 0;
+}
+
+.scenarioMetricRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.scenarioMetric {
+  display: grid;
+  gap: var(--spacing-2xs);
+  min-width: 7rem;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid color-mix(in srgb, var(--color-border) 78%, transparent);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--color-bg-elevated) 92%, transparent);
+}
+
+.scenarioBody {
+  display: grid;
+  gap: var(--spacing-sm);
+}
+
+.scenarioGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--spacing-sm);
+}
+
+.scenarioCard {
+  display: grid;
+  gap: var(--spacing-2xs);
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.scenarioCard > * {
+  margin: 0;
+}
+
+.tabShowcasePanel {
+  display: grid;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-elevated);
+  box-shadow: var(--shadow-sm);
+}
+
+.shortcutRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.actionCluster {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.recronOverviewGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--spacing-sm);
+}
+
+.demoSubsectionIntro {
+  display: grid;
+  gap: var(--spacing-2xs);
+  margin: 0 0 var(--spacing-md);
+}
+
+.demoSubsectionIntro > * {
+  margin: 0;
+}
+
+.recronTableWrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+@media (width < 640px) {
+  .layoutPreviewShell {
+    height: min(56dvh, 380px);
+    min-height: 320px;
+  }
+
+  .layoutPreviewShellCompact {
+    height: min(22dvh, 150px);
+    min-height: 125px;
+  }
+}

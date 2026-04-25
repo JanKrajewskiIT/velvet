@@ -1,4 +1,15 @@
-import { createEffect, createMemo, createSignal, For, type JSX, on, Show, splitProps } from 'solid-js';
+import {
+  createEffect,
+  createMemo,
+  createSignal,
+  For,
+  type JSX,
+  on,
+  onCleanup,
+  onMount,
+  Show,
+  splitProps,
+} from 'solid-js';
 
 import type Props from '~/models/Props';
 import type { DivCoreNativeProps } from '~/models/Props';
@@ -45,7 +56,7 @@ const SegmentedControl = (props: Props<SegmentedControlOwnProps>) => {
   const optionRefs: (HTMLButtonElement | undefined)[] = [];
   let containerRef: HTMLDivElement | undefined;
 
-  const size = () => local.size ?? 'md';
+  const size = createMemo(() => local.size ?? 'md');
 
   const selectedIndex = createMemo(() => {
     return local.options.findIndex((option) => option.value === local.value);
@@ -115,29 +126,46 @@ const SegmentedControl = (props: Props<SegmentedControlOwnProps>) => {
     }
   };
 
-  const activeIndex = createMemo(() => local.options.findIndex((option) => option.value === local.value));
-
   const [indicatorStyle, setIndicatorStyle] = createSignal<JSX.CSSProperties>({});
 
+  const computeIndicatorStyle = () => {
+    const index = selectedIndex();
+    if (index < 0 || !containerRef) {
+      setIndicatorStyle({});
+      return;
+    }
+    const button = optionRefs[index];
+    if (!button) {
+      setIndicatorStyle({});
+      return;
+    }
+    const containerRect = containerRef.getBoundingClientRect();
+    const buttonRect = button.getBoundingClientRect();
+    setIndicatorStyle({
+      '--indicator-offset': `${String(buttonRect.left - containerRect.left)}px`,
+      '--indicator-width': `${String(buttonRect.width)}px`,
+    });
+  };
+
   createEffect(
-    on(activeIndex, (index) => {
-      if (index < 0 || !containerRef) {
-        setIndicatorStyle({});
-        return;
-      }
-      const button = optionRefs[index];
-      if (!button) {
-        setIndicatorStyle({});
-        return;
-      }
-      const containerRect = containerRef.getBoundingClientRect();
-      const buttonRect = button.getBoundingClientRect();
-      setIndicatorStyle({
-        '--indicator-offset': `${String(buttonRect.left - containerRect.left)}px`,
-        '--indicator-width': `${String(buttonRect.width)}px`,
-      });
-    }),
+    on(
+      selectedIndex,
+      () => {
+        computeIndicatorStyle();
+      },
+      { defer: true },
+    ),
   );
+
+  onMount(() => {
+    computeIndicatorStyle();
+    if (typeof ResizeObserver === 'undefined' || !containerRef) return;
+    const observer = new ResizeObserver(() => {
+      computeIndicatorStyle();
+    });
+    observer.observe(containerRef);
+    onCleanup(() => observer.disconnect());
+  });
 
   return (
     <div
@@ -147,7 +175,7 @@ const SegmentedControl = (props: Props<SegmentedControlOwnProps>) => {
       ref={containerRef}
       style={indicatorStyle()}
     >
-      <Show when={(local.indicator ?? true) && activeIndex() >= 0}>
+      <Show when={(local.indicator ?? true) && selectedIndex() >= 0}>
         <span class={styles.indicator} />
       </Show>
       <For each={local.options}>

@@ -40,10 +40,6 @@
   padding: var(--spacing-sm) 0;
 }
 
-.tableWrapper {
-  overflow-x: auto;
-}
-
 .table {
   width: 100%;
   border-collapse: collapse;

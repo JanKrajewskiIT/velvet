@@ -29,7 +29,3 @@
 .hint {
   max-width: 30rem;
 }
-
-.actions {
-  margin-top: var(--spacing-xs);
-}

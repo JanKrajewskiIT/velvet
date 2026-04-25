@@ -42,19 +42,21 @@ const SchedulerEventForm = (props: Props<SchedulerEventFormProps>) => {
     props.onDescriptionChange(event.currentTarget.value);
   };
 
+  const handleTitleRef = (element: HTMLInputElement) => {
+    props.titleRef?.(element);
+  };
+
   return (
     <form class={styles.createForm} onSubmit={(event) => props.onSubmit(event)}>
       <Input
-        ref={(element: HTMLInputElement) => props.titleRef?.(element)}
+        ref={handleTitleRef}
         type="text"
         placeholder={ts('scheduler.eventTitle')}
         value={props.title}
         onInput={handleTitleInput}
         required
       />
-      <div class={styles.createRowSingle}>
-        <DateTimePicker value={dateTimeValue()} onChange={handleDateTimeChange} />
-      </div>
+      <DateTimePicker value={dateTimeValue()} onChange={handleDateTimeChange} />
       <TextArea
         placeholder={ts('scheduler.descriptionOptional')}
         value={props.description}

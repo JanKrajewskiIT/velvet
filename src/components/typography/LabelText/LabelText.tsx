@@ -14,21 +14,31 @@ interface LabelTextOwnProps extends OptionalLabelOnlyProps {
 const LabelText = (props: Props<LabelTextOwnProps>) => {
   const [local, rest] = splitProps(props, ['class', 'label', 'description']);
   const hasContent = createMemo(() => Boolean(local.label || local.description));
+  const labelOnly = createMemo(() => Boolean(local.label) && !local.description);
 
   return (
     <Show when={hasContent()}>
-      <span {...rest} class={classNames(styles.text, local.class)}>
-        <Show when={local.label}>
-          <Text as="span" variant="labelLg">
+      <Show
+        when={!labelOnly()}
+        fallback={
+          <Text {...rest} as="span" variant="labelLg" class={local.class}>
             {local.label}
           </Text>
-        </Show>
-        <Show when={local.description}>
-          <Text as="span" variant="caption" tone="muted">
-            {local.description}
-          </Text>
-        </Show>
-      </span>
+        }
+      >
+        <span {...rest} class={classNames(styles.text, local.class)}>
+          <Show when={local.label}>
+            <Text as="span" variant="labelLg">
+              {local.label}
+            </Text>
+          </Show>
+          <Show when={local.description}>
+            <Text as="span" variant="caption" tone="muted">
+              {local.description}
+            </Text>
+          </Show>
+        </span>
+      </Show>
     </Show>
   );
 };

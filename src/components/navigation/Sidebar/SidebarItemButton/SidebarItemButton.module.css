@@ -2,6 +2,7 @@
   width: 100%;
   align-items: center;
   justify-content: flex-start;
+  padding-left: calc(var(--spacing-sm) + (var(--sidebar-item-depth, 0) * var(--spacing-sm)));
 }
 
 .itemIconButton:hover {

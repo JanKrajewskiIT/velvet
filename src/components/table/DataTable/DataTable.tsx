@@ -111,6 +111,11 @@ const DataTable = <T extends Record<string, unknown>>(props: Props<DataTableProp
     props.onFilterQueryChange?.(next);
   };
 
+  const handleHeaderClick = (column: DataTableColumn<T>) => {
+    if (!isColumnSortable(column)) return;
+    handleSort(column);
+  };
+
   createEffect(on(filterQuery, () => setCurrentPage(1), { defer: true }));
 
   return (
@@ -124,11 +129,9 @@ const DataTable = <T extends Record<string, unknown>>(props: Props<DataTableProp
             placeholder={ts('table.filterRows')}
             class={styles.filterInput}
           />
-          <Show when={props.filterable}>
-            <Text as="span" variant="caption" tone="muted">
-              {sortedData().length} {resultsCountLabel()}
-            </Text>
-          </Show>
+          <Text as="span" variant="caption" tone="muted">
+            {sortedData().length} {resultsCountLabel()}
+          </Text>
         </div>
       </Show>
       <Table containerClass={classNames(totalPages() > 1 && styles.tableContainerWithPagination)}>
@@ -141,9 +144,9 @@ const DataTable = <T extends Record<string, unknown>>(props: Props<DataTableProp
 
                 return (
                   <TableHeader
-                    class={classNames(sortable() && styles.sortable)}
-                    style={column.width ? { width: column.width } : undefined}
-                    onClick={() => sortable() && handleSort(column)}
+                    class={classNames(sortable() && styles.sortable, column.width && styles.headerWithWidth)}
+                    style={column.width ? { '--column-width': column.width } : undefined}
+                    onClick={() => handleHeaderClick(column)}
                   >
                     {column.header}
                     <Show when={sortable()}>

@@ -42,36 +42,19 @@ import {
   Skeleton,
   Spinner,
   Text,
-  useI18n,
 } from '@jankrajewskiit/ui';
 import { IoFolder, IoMail, IoNotifications, IoSearch } from 'solid-icons/io';
 import { createMemo, createSignal, Show } from 'solid-js';
 
-import type { SectionId } from '../App';
 import { PreviewGroup, PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
-import { type DemoI18nMessageKey, getDemoMessages } from '../i18n/messages';
+import { DEMO_COLOR_LABEL_CHIPS, DEMO_SELECTABLE_FILTER_ITEMS } from '../fixtures/feedbackFixtures';
+import { useDemoDictionary } from '../hooks/useDemoDictionary';
 import { renderRichText } from '../i18n/renderRichText';
-
-const colorLabelItems = [
-  { value: 'tag-1', label: 'Remote', color: '#1d4ed8' },
-  { value: 'tag-2', label: 'Senior', color: '#7c3aed' },
-  { value: 'tag-3', label: 'Fintech', color: '#0f766e' },
-  { value: 'tag-4', label: 'Urgent', color: '#dc2626' },
-];
-
-const selectableFilterItems = [
-  { value: 'new', label: 'New', count: 12, variant: 'primary' as const },
-  { value: 'screening', label: 'Screening', count: 5, variant: 'info' as const },
-  { value: 'interview', label: 'Interview', count: 3, variant: 'warning' as const },
-  { value: 'offer', label: 'Offer', count: 2, variant: 'success' as const },
-  { value: 'rejected', label: 'Rejected', count: 7, variant: 'error' as const },
-];
+import type { SectionId } from '../nav/demoNavConfig';
 
 const FeedbackSection = (props: { sectionId: SectionId }) => {
   const sectionId = () => props.sectionId;
-  const { locale } = useI18n();
-  const dictionary = createMemo(() => getDemoMessages(locale()));
-  const t = (key: DemoI18nMessageKey): string => dictionary()[key];
+  const { t } = useDemoDictionary();
   const [retried, setRetried] = createSignal(false);
   const [bannerVisible, setBannerVisible] = createSignal(true);
   const [selectedLabelIds, setSelectedLabelIds] = createSignal<string[]>(['tag-1', 'tag-2']);
@@ -101,7 +84,7 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
 
   const handleLabelSelectionSubmit = (value: string[]) => {
     setSelectedLabelIds(value);
-    addToast({ type: 'success', message: 'Label selection updated.' });
+    addToast({ type: 'success', message: t('demo.toast.feedback.labelSelectionUpdated') });
   };
 
   const handleLabelCreate = (item: ColorLabel) => {
@@ -178,7 +161,7 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
                   <SelectableChips
                     label={t('demo.recron.status.tagCloud.label')}
                     description={t('demo.recron.status.tagCloud.description')}
-                    items={colorLabelItems}
+                    items={DEMO_COLOR_LABEL_CHIPS}
                     value={selectedLabelIds()}
                     onChange={setSelectedLabelIds}
                   />
@@ -192,7 +175,7 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
                   </Text>
                   <SelectableChips
                     label={t('demo.recron.status.filters.label')}
-                    items={selectableFilterItems}
+                    items={DEMO_SELECTABLE_FILTER_ITEMS}
                     value={multiFilterValue()}
                     onChange={setMultiFilterValue}
                   />
@@ -216,7 +199,7 @@ const FeedbackSection = (props: { sectionId: SectionId }) => {
                 open={labelSelectionOpen()}
                 label={t('demo.recron.status.tagSelection.title')}
                 description={t('demo.recron.status.tagSelection.description')}
-                items={colorLabelItems}
+                items={DEMO_COLOR_LABEL_CHIPS}
                 value={selectedLabelIds()}
                 chipsLabel={t('demo.recron.status.tagSelection.label')}
                 cancelLabel={t('demo.recron.status.tagSelection.cancel')}

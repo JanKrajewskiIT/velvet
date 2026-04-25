@@ -1,4 +1,4 @@
-import { createSignal, For, Show } from 'solid-js';
+import { createSignal, For, type JSX, Show } from 'solid-js';
 
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
@@ -21,9 +21,7 @@ const SidebarItemRow = (props: Props<SidebarItemRowProps>) => {
   const hasChildren = () => props.item.children && props.item.children.length > 0;
   const isActive = () => props.activeId === props.item.id;
   const isExpanded = () => props.forceExpanded || expanded();
-  const nestedPadding = () => ({
-    'padding-left': `calc(var(--spacing-sm) + (${String(props.depth)} * var(--spacing-sm)))`,
-  });
+  const depthStyle = () => ({ '--sidebar-item-depth': String(props.depth) }) as JSX.CSSProperties;
 
   const handleClick = () => {
     if (hasChildren()) {
@@ -43,7 +41,7 @@ const SidebarItemRow = (props: Props<SidebarItemRowProps>) => {
         active={isActive()}
         collapsed={props.collapsed}
         onClick={hasChildren() || props.onSelect ? handleClick : undefined}
-        style={props.collapsed ? undefined : nestedPadding()}
+        style={props.collapsed ? undefined : depthStyle()}
       />
       <Show when={hasChildren() && isExpanded() && !props.collapsed}>
         <ul class={styles.children}>

@@ -3,6 +3,7 @@
   width: 100%;
   min-width: 0;
   gap: var(--grid-gap, var(--spacing-md));
+  grid-template-columns: var(--grid-template-columns, repeat(12, minmax(0, 1fr)));
 }
 
 .alignStart {

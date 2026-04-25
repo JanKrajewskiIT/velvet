@@ -2,6 +2,8 @@
   display: block;
   background-color: var(--color-skeleton);
   border-radius: var(--radius-sm);
+  width: var(--skeleton-width, auto);
+  height: var(--skeleton-height, auto);
 }
 
 .text {

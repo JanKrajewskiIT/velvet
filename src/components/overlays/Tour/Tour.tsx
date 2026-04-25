@@ -1,4 +1,4 @@
-import { createEffect, createMemo, createSignal, onCleanup, Show, splitProps } from 'solid-js';
+import { batch, createEffect, createMemo, createSignal, type JSX, on, onCleanup, Show, splitProps } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
 import Button from '~/components/buttons/Button/Button';
@@ -51,8 +51,8 @@ const Tour = (props: Props<TourProps>) => {
   const { ts } = useI18n();
   const [local, rest] = splitProps(props, ['steps', 'open', 'onClose', 'onComplete', 'class']);
   const [currentStep, setCurrentStep] = createSignal(0);
-  const [spotlightStyle, setSpotlightStyle] = createSignal<Record<string, string>>({});
-  const [cardStyle, setCardStyle] = createSignal<Record<string, string>>({});
+  const [spotlightStyle, setSpotlightStyle] = createSignal<JSX.CSSProperties>({});
+  const [cardStyle, setCardStyle] = createSignal<JSX.CSSProperties>({});
   let cardRef: HTMLDivElement | undefined;
   const currentStepData = createMemo(() => local.steps[currentStep()]);
   const isLastStep = createMemo(() => currentStep() === local.steps.length - 1);
@@ -69,14 +69,13 @@ const Tour = (props: Props<TourProps>) => {
     () => local.onClose(),
   );
 
-  const updatePosition = () => {
-    const step = currentStepData();
-    if (!step) return;
-
+  const updatePosition = (step: TourStep) => {
     const el = document.querySelector(step.target);
     if (!el) {
-      setSpotlightStyle({});
-      setCardStyle({ top: '50%', left: '50%', transform: 'translate(-50%, -50%)' });
+      batch(() => {
+        setSpotlightStyle({});
+        setCardStyle({});
+      });
       return;
     }
 
@@ -84,44 +83,60 @@ const Tour = (props: Props<TourProps>) => {
     const padding = 4;
     const cardWidth = cardRef?.offsetWidth ?? 320;
     const cardHeight = cardRef?.offsetHeight ?? 220;
-
-    setSpotlightStyle({
-      top: `${rect.top - padding}px`,
-      left: `${rect.left - padding}px`,
-      width: `${rect.width + padding * 2}px`,
-      height: `${rect.height + padding * 2}px`,
-    });
-
     const placement = step.placement ?? 'bottom';
     const position = computeCardPosition(rect, placement, cardWidth, cardHeight);
     const maxLeft = Math.max(VIEWPORT_PADDING, window.innerWidth - cardWidth - VIEWPORT_PADDING);
     const maxTop = Math.max(VIEWPORT_PADDING, window.innerHeight - cardHeight - VIEWPORT_PADDING);
 
-    setCardStyle({
-      top: `${Math.round(clamp(position.top, VIEWPORT_PADDING, maxTop))}px`,
-      left: `${Math.round(clamp(position.left, VIEWPORT_PADDING, maxLeft))}px`,
-      transform: 'none',
+    batch(() => {
+      setSpotlightStyle({
+        '--tour-spotlight-top': `${rect.top - padding}px`,
+        '--tour-spotlight-left': `${rect.left - padding}px`,
+        '--tour-spotlight-width': `${rect.width + padding * 2}px`,
+        '--tour-spotlight-height': `${rect.height + padding * 2}px`,
+      });
+
+      setCardStyle({
+        '--tour-card-top': `${Math.round(clamp(position.top, VIEWPORT_PADDING, maxTop))}px`,
+        '--tour-card-left': `${Math.round(clamp(position.left, VIEWPORT_PADDING, maxLeft))}px`,
+        '--tour-card-transform': 'none',
+      });
     });
   };
 
+  createEffect(
+    on(
+      () => local.open,
+      (open) => {
+        if (!open) setCurrentStep(0);
+      },
+      { defer: true },
+    ),
+  );
+
   createEffect(() => {
-    if (!local.open) {
-      setCurrentStep(0);
-      return;
-    }
+    if (!local.open) return;
+    const step = currentStepData();
+    if (!step) return;
 
-    currentStep();
-    updatePosition();
+    updatePosition(step);
 
-    const handleResize = () => updatePosition();
-    const handleScroll = () => updatePosition();
+    let rafId: number | undefined;
+    const scheduleUpdate = () => {
+      if (rafId !== undefined) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = undefined;
+        updatePosition(step);
+      });
+    };
 
-    window.addEventListener('resize', handleResize);
-    window.addEventListener('scroll', handleScroll, true);
+    window.addEventListener('resize', scheduleUpdate);
+    window.addEventListener('scroll', scheduleUpdate, true);
 
     onCleanup(() => {
-      window.removeEventListener('resize', handleResize);
-      window.removeEventListener('scroll', handleScroll, true);
+      if (rafId !== undefined) cancelAnimationFrame(rafId);
+      window.removeEventListener('resize', scheduleUpdate);
+      window.removeEventListener('scroll', scheduleUpdate, true);
     });
   });
 
@@ -142,15 +157,17 @@ const Tour = (props: Props<TourProps>) => {
     local.onClose();
   };
 
+  const handleCardRef = (element: HTMLDivElement) => {
+    cardRef = element;
+  };
+
   return (
     <Show when={local.open}>
       <Portal>
         <div {...rest} class={classNames(styles.overlay, local.class)}>
           <div class={styles.spotlight} style={spotlightStyle()} />
           <Surface
-            ref={(element) => {
-              cardRef = element;
-            }}
+            ref={handleCardRef}
             class={classNames(styles.card, cardPlacementClass())}
             style={cardStyle()}
             elevation="popover"

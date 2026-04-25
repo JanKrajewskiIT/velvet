@@ -1,4 +1,4 @@
-import { createEffect, createMemo, createSignal, on, Show } from 'solid-js';
+import { batch, createEffect, createMemo, createSignal, on, Show } from 'solid-js';
 
 import Button from '~/components/buttons/Button/Button';
 import MarkdownEditDialog from '~/components/composites/MarkdownEditDialog/MarkdownEditDialog';
@@ -51,12 +51,14 @@ const TimelineCardEditDialog = (props: Props<TimelineCardEditDialogProps>) => {
       () => [props.open, props.value] as const,
       ([open]) => {
         if (!open) return;
-        setEditCategory(props.value.category);
-        setEditStatus(props.value.status);
-        setEditDateTime(toLocalDatetime(props.value.dateTime));
-        setEditDuration(props.value.duration);
-        setEditLocation(props.value.location);
-        setEditNotes(props.value.notes);
+        batch(() => {
+          setEditCategory(props.value.category);
+          setEditStatus(props.value.status);
+          setEditDateTime(toLocalDatetime(props.value.dateTime));
+          setEditDuration(props.value.duration);
+          setEditLocation(props.value.location);
+          setEditNotes(props.value.notes);
+        });
       },
       { defer: true },
     ),
@@ -81,6 +83,38 @@ const TimelineCardEditDialog = (props: Props<TimelineCardEditDialogProps>) => {
     });
   };
 
+  const handleCategoryChange = (event: Event & { currentTarget: HTMLSelectElement }) => {
+    setEditCategory(event.currentTarget.value);
+  };
+
+  const handleStatusChange = (event: Event & { currentTarget: HTMLSelectElement }) => {
+    setEditStatus(event.currentTarget.value);
+  };
+
+  const handleDateTimeInput = (event: InputEvent & { currentTarget: HTMLInputElement }) => {
+    setEditDateTime(event.currentTarget.value);
+  };
+
+  const handleDurationInput = (event: InputEvent & { currentTarget: HTMLInputElement }) => {
+    setEditDuration(event.currentTarget.value);
+  };
+
+  const handleLocationInput = (event: InputEvent & { currentTarget: HTMLInputElement }) => {
+    setEditLocation(event.currentTarget.value);
+  };
+
+  const handleOpenNotesDialog = () => {
+    setNotesDialogOpen(true);
+  };
+
+  const handleSaveClick = () => {
+    void handleSave();
+  };
+
+  const handleNotesDialogClose = () => {
+    setNotesDialogOpen(false);
+  };
+
   return (
     <>
       <Dialog open={props.open} onClose={props.onClose}>
@@ -92,7 +126,7 @@ const TimelineCardEditDialog = (props: Props<TimelineCardEditDialogProps>) => {
                 <Select
                   {...controlProps}
                   value={editCategory()}
-                  onChange={(event) => setEditCategory(event.currentTarget.value)}
+                  onChange={handleCategoryChange}
                   options={categorySelectOptions()}
                 />
               )}
@@ -102,19 +136,14 @@ const TimelineCardEditDialog = (props: Props<TimelineCardEditDialogProps>) => {
                 <Select
                   {...controlProps}
                   value={editStatus()}
-                  onChange={(event) => setEditStatus(event.currentTarget.value)}
+                  onChange={handleStatusChange}
                   options={statusSelectOptions()}
                 />
               )}
             </FormField>
             <FormField label={props.labels.dateTime}>
               {(controlProps) => (
-                <Input
-                  {...controlProps}
-                  type="datetime-local"
-                  value={editDateTime()}
-                  onInput={(event) => setEditDateTime(event.currentTarget.value)}
-                />
+                <Input {...controlProps} type="datetime-local" value={editDateTime()} onInput={handleDateTimeInput} />
               )}
             </FormField>
             <FormField label={props.labels.duration}>
@@ -125,22 +154,17 @@ const TimelineCardEditDialog = (props: Props<TimelineCardEditDialogProps>) => {
                   min={0}
                   step={15}
                   value={editDuration()}
-                  onInput={(event) => setEditDuration(event.currentTarget.value)}
+                  onInput={handleDurationInput}
                 />
               )}
             </FormField>
             <FormField label={props.labels.location}>
               {(controlProps) => (
-                <Input
-                  {...controlProps}
-                  type="text"
-                  value={editLocation()}
-                  onInput={(event) => setEditLocation(event.currentTarget.value)}
-                />
+                <Input {...controlProps} type="text" value={editLocation()} onInput={handleLocationInput} />
               )}
             </FormField>
             <FormField label={props.labels.notes}>
-              <Button variant="ghost" onClick={() => setNotesDialogOpen(true)} label={ts('common.edit')} />
+              <Button variant="ghost" onClick={handleOpenNotesDialog} label={ts('common.edit')} />
               <Show when={editNotes().trim()}>
                 <div class={styles.notesPreview}>
                   <MarkdownRenderer content={editNotes()} />
@@ -151,7 +175,7 @@ const TimelineCardEditDialog = (props: Props<TimelineCardEditDialogProps>) => {
         </DialogBody>
         <DialogActions>
           <Button variant="ghost" onClick={props.onClose} disabled={props.loading} label={ts('common.cancel')} />
-          <Button onClick={() => void handleSave()} loading={props.loading} label={ts('common.save')} />
+          <Button onClick={handleSaveClick} loading={props.loading} label={ts('common.save')} />
         </DialogActions>
       </Dialog>
       <MarkdownEditDialog
@@ -159,7 +183,7 @@ const TimelineCardEditDialog = (props: Props<TimelineCardEditDialogProps>) => {
         label={props.labels.editDialogLabel}
         initialValue={editNotes()}
         onSave={setEditNotes}
-        onClose={() => setNotesDialogOpen(false)}
+        onClose={handleNotesDialogClose}
       />
     </>
   );

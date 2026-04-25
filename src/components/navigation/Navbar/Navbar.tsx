@@ -49,6 +49,7 @@ const Navbar = (props: Props<NavbarProps>) => {
       () => {
         setMenuOpen(false);
       },
+      { defer: true },
     ),
   );
 

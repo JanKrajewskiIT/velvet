@@ -9,6 +9,16 @@
 .eventsPanel {
   width: 100%;
   padding: var(--spacing-md);
+  overflow: visible;
+  position: relative;
+}
+
+.calendarPanel {
+  z-index: 1;
+}
+
+.eventsPanel {
+  z-index: 2;
 }
 
 .eventsHeader {

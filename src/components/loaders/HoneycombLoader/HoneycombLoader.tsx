@@ -75,24 +75,22 @@ const HoneycombLoader = (props: Props<HoneycombLoaderProps>) => {
       aria-label={loaderA11y.ariaLabel()}
       class={classNames(styles.loader, local.class)}
     >
-      <div class={styles.socket}>
-        <For each={gelPoints}>
-          {(point) => (
-            <div
-              class={styles.gel}
-              style={{
-                '--gel-x': `${point.x}px`,
-                '--gel-y': `${point.y}px`,
-                '--gel-delay': `${point.delay}s`,
-              }}
-            >
-              <div class={classNames(styles.hexBrick, styles.h1)} />
-              <div class={classNames(styles.hexBrick, styles.h2)} />
-              <div class={classNames(styles.hexBrick, styles.h3)} />
-            </div>
-          )}
-        </For>
-      </div>
+      <For each={gelPoints}>
+        {(point) => (
+          <div
+            class={styles.gel}
+            style={{
+              '--gel-x': `${point.x}px`,
+              '--gel-y': `${point.y}px`,
+              '--gel-delay': `${point.delay}s`,
+            }}
+          >
+            <div class={classNames(styles.hexBrick, styles.h1)} />
+            <div class={classNames(styles.hexBrick, styles.h2)} />
+            <div class={classNames(styles.hexBrick, styles.h3)} />
+          </div>
+        )}
+      </For>
     </div>
   );
 };

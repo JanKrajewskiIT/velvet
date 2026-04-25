@@ -1,3 +1,5 @@
+import { splitProps } from 'solid-js';
+
 import { useI18n } from '~/i18n/I18nProvider';
 import type { Locale } from '~/i18n/messages';
 import { SUPPORTED_LOCALES } from '~/i18n/messages';
@@ -15,7 +17,8 @@ interface LocaleSwitcherProps {
 
 const LocaleSwitcher = (props: Props<LocaleSwitcherProps>) => {
   const { ts, locale, setLocale } = useI18n();
-  const availableLocales = () => props.locales ?? SUPPORTED_LOCALES;
+  const [local, rest] = splitProps(props, ['class', 'variant', 'locales']);
+  const availableLocales = () => local.locales ?? SUPPORTED_LOCALES;
   const nextLocale = (): Locale => {
     const locales = availableLocales();
     if (locales.length === 0) return locale();
@@ -24,12 +27,15 @@ const LocaleSwitcher = (props: Props<LocaleSwitcherProps>) => {
     return locales[nextIndex] ?? locales[0] ?? locale();
   };
 
+  const handleClick = () => setLocale(nextLocale());
+
   return (
     <Button
-      class={classNames(styles.root, props.class)}
+      {...rest}
+      class={classNames(styles.root, local.class)}
       size="sm"
-      variant={props.variant}
-      onClick={() => setLocale(nextLocale())}
+      variant={local.variant}
+      onClick={handleClick}
       aria-label={ts('locale.switchLanguage')}
       data-locale={locale()}
       label={locale().toUpperCase()}

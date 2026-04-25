@@ -34,16 +34,14 @@ const EditableCollection = <T,>(props: Props<EditableCollectionProps<T>>) => {
     setDeleteId(null);
   };
 
+  const handleDialogClose = () => setDeleteId(null);
+
   return (
     <div class={classNames(styles.list, props.class)}>
       <For each={props.items}>
         {(item) => (
           <div class={styles.item}>
-            {props.renderItem(item, {
-              requestRemove: () => {
-                setDeleteId(props.getId(item));
-              },
-            })}
+            {props.renderItem(item, { requestRemove: () => setDeleteId(props.getId(item)) })}
           </div>
         )}
       </For>
@@ -57,7 +55,7 @@ const EditableCollection = <T,>(props: Props<EditableCollectionProps<T>>) => {
         confirmLabel={ts('common.delete')}
         variant={props.confirmVariant ?? 'danger'}
         onConfirm={handleConfirmDelete}
-        onClose={() => setDeleteId(null)}
+        onClose={handleDialogClose}
       />
     </div>
   );

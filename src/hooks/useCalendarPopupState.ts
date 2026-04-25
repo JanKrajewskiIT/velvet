@@ -1,5 +1,5 @@
 import type { Accessor } from 'solid-js';
-import { createSignal } from 'solid-js';
+import { batch, createEffect, createSignal, on } from 'solid-js';
 
 import { parseDate } from '~/utils/datetime';
 
@@ -38,9 +38,24 @@ const useCalendarPopupState = (options: UseCalendarPopupStateOptions) => {
 
   const setViewFromIso = (iso?: string) => {
     const next = parseMonthView(iso);
-    setViewYear(next.year);
-    setViewMonth(next.month);
+    batch(() => {
+      setViewYear(next.year);
+      setViewMonth(next.month);
+    });
   };
+
+  if (options.selectedIso) {
+    const selectedIsoAccessor = options.selectedIso;
+    createEffect(
+      on(
+        () => selectedIsoAccessor(),
+        (iso) => {
+          setViewFromIso(iso);
+        },
+        { defer: true },
+      ),
+    );
+  }
 
   const close = () => {
     setIsOpen(false);
@@ -49,8 +64,10 @@ const useCalendarPopupState = (options: UseCalendarPopupStateOptions) => {
 
   const open = (iso?: string) => {
     if (isDisabled()) return;
-    setViewFromIso(iso);
-    setIsOpen(true);
+    batch(() => {
+      setViewFromIso(iso);
+      setIsOpen(true);
+    });
   };
 
   const toggle = (iso?: string) => {
@@ -63,23 +80,27 @@ const useCalendarPopupState = (options: UseCalendarPopupStateOptions) => {
   };
 
   const prevMonth = () => {
-    if (viewMonth() === 0) {
-      setViewMonth(11);
-      setViewYear(viewYear() - 1);
-      return;
-    }
+    batch(() => {
+      if (viewMonth() === 0) {
+        setViewMonth(11);
+        setViewYear(viewYear() - 1);
+        return;
+      }
 
-    setViewMonth(viewMonth() - 1);
+      setViewMonth(viewMonth() - 1);
+    });
   };
 
   const nextMonth = () => {
-    if (viewMonth() === 11) {
-      setViewMonth(0);
-      setViewYear(viewYear() + 1);
-      return;
-    }
+    batch(() => {
+      if (viewMonth() === 11) {
+        setViewMonth(0);
+        setViewYear(viewYear() + 1);
+        return;
+      }
 
-    setViewMonth(viewMonth() + 1);
+      setViewMonth(viewMonth() + 1);
+    });
   };
 
   useClickOutside(

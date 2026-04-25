@@ -1,34 +1,19 @@
-import { Button, Card, CodeText, Heading, Text, useI18n } from '@jankrajewskiit/ui';
+import { Button, Card, CodeText, Heading, Text } from '@jankrajewskiit/ui';
 import { createMemo, For } from 'solid-js';
 
 import { PreviewGroup, PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
-import { type DemoI18nMessageKey, getDemoMessages } from '../i18n/messages';
+import type { DemoOverviewFeaturedSection, DemoOverviewTrack } from '../demoTypes';
+import { useDemoDictionary } from '../hooks/useDemoDictionary';
 import { renderRichText } from '../i18n/renderRichText';
 
-interface OverviewTrack {
-  id: string;
-  label: string;
-  description: string;
-  count: number;
-}
-
-interface OverviewFeaturedSection {
-  id: string;
-  label: string;
-  description: string;
-  eyebrow: string;
-}
-
 interface OverviewSectionProps {
-  tracks: OverviewTrack[];
-  featuredSections: OverviewFeaturedSection[];
+  tracks: DemoOverviewTrack[];
+  featuredSections: DemoOverviewFeaturedSection[];
   onNavigate: (id: string) => void;
 }
 
 const OverviewSection = (props: OverviewSectionProps) => {
-  const { locale } = useI18n();
-  const dictionary = createMemo(() => getDemoMessages(locale()));
-  const t = (key: DemoI18nMessageKey): string => dictionary()[key];
+  const { t } = useDemoDictionary();
   const stats = createMemo(() => [
     { label: t('demo.text.overview.stats.components'), value: '58+' },
     { label: t('demo.text.overview.stats.categories'), value: '9' },

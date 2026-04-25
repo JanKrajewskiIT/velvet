@@ -83,6 +83,9 @@ const DatePicker = (props: Props<DatePickerProps>) => {
 
   const isDayDisabled = (cell: DayCell): boolean => isDateDisabled(toIso(cell.year, cell.month, cell.day));
 
+  const handleToggle = () => popup.toggle(props.value);
+  const getDayAriaLabel = (cell: DayCell) => toIso(cell.year, cell.month, cell.day);
+
   return (
     <DateTimeFieldTrigger
       ref={wrapperRef}
@@ -97,7 +100,7 @@ const DatePicker = (props: Props<DatePickerProps>) => {
           labelTone={props.value ? 'default' : 'muted'}
           class={triggerClass}
           disabled={props.disabled}
-          onClick={() => popup.toggle(props.value)}
+          onClick={handleToggle}
           title={openPickerLabel()}
           aria-haspopup="dialog"
           aria-expanded={popup.isOpen()}
@@ -115,7 +118,6 @@ const DatePicker = (props: Props<DatePickerProps>) => {
         <DropdownSurface
           id={dropdownId}
           class={styles.dropdown}
-          style={{ top: 'calc(100% + var(--spacing-xs))' }}
           align="left"
           origin="topLeft"
           role="dialog"
@@ -130,7 +132,7 @@ const DatePicker = (props: Props<DatePickerProps>) => {
             days={daysGrid()}
             getDayClass={dayClass}
             isDayDisabled={isDayDisabled}
-            getDayAriaLabel={(cell) => toIso(cell.year, cell.month, cell.day)}
+            getDayAriaLabel={getDayAriaLabel}
             onSelectDay={selectDay}
             dayLabels={dayLabels()}
           />

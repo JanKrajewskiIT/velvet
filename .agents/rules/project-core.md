@@ -8,48 +8,12 @@ paths:
 
 # VelvetUi - Core Principles
 
-## Overview
-
-- SolidJS UI component library: `@jankrajewskiit/ui`
-- Stack: SolidJS, TypeScript, CSS Modules, Vite
-- Peers: `solid-js >=1.9`, `@solidjs/router >=0.15`
-
 ## Scope and Responsibilities
 
-- Generic, app-agnostic core components:
-  - No auth, app, data-fetching, or business workflow logic in primitives and generic components
-  - Built-in generic copy belongs in VelvetUi i18n, not in ad hoc string literals
-  - Do not force every reusable label into props when the library should own the default copy
-- Text resolution order:
-  - Semantic prop override when it is genuinely part of the public API
-  - `messages` override when consumer-level customization is needed
-  - Built-in `useI18n()` default for generic reusable copy
-- When a reusable component needs a new built-in label, add it to `src/i18n/messages.ts`
+- Generic, app-agnostic core components: no auth, data-fetching, or business workflow logic in primitives
 - When extracting code from an app into VelvetUi, prefer reusable patterns and renamed generic contracts over copying business flows 1:1
 - If an extracted component still reads as domain-specific, generalize it before export or treat it as a template/business-layer component
 
 ## Code Style and Cleanliness
 
-- Self-documenting code:
-  - No comments explaining obvious behavior
-  - No commented-out code left in files
-  - No `eslint-disable` unless explicitly requested
-- Consistent TypeScript + SolidJS patterns (see `solidjs-tsx` rule)
-
-## Visual Direction
-
-- Base primitives and shared surfaces stay visually neutral by default
-- Do not add gradients, glow, hover lift, scale, or translate motion to default primitive variants
-- `Card` is a basic primitive: background, border, radius, subtle shadow
-- Hoverable, elevated, spotlighted, or promotional surfaces must be explicit separate components or opt-in variants
-
-## Project Structure
-
-- `src/components/{category}/` - components grouped by category
-- `src/hooks/` - reusable hooks
-- `src/models/Props.ts` - shared props contracts
-- `src/theme/` - design tokens and theming
-- `src/utils/` - shared utilities
-- `src/index.ts` - library entry/exports
-- `config/` - shared config packages and tooling
-- `demo/` - demo application using the library
+- Self-documenting code: no comments explaining obvious behavior, no commented-out code, no `eslint-disable`

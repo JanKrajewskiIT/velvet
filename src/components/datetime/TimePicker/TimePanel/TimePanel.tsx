@@ -20,7 +20,6 @@ const TimePanel = (props: Props<TimePanelProps>) => {
       ref={props.surfaceRef}
       id={props.id}
       class={props.panelClass}
-      style={{ top: 'calc(100% + var(--spacing-xs))' }}
       align="right"
       origin="top"
       role="listbox"

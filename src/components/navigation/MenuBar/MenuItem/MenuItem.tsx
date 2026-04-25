@@ -1,4 +1,5 @@
 import { A } from '@solidjs/router';
+import { splitProps } from 'solid-js';
 
 import Icon from '~/components/media/Icon/Icon';
 import Tooltip from '~/components/overlays/Tooltip/Tooltip';
@@ -14,16 +15,17 @@ interface MenuItemProps {
 }
 
 const MenuItem = (props: Props<MenuItemProps>) => {
+  const [local, rest] = splitProps(props, ['item', 'isActive', 'class']);
   return (
-    <li class={classNames(styles.menuItem, props.isActive && styles.active, props.class)}>
-      <Tooltip position="bottom" content={props.item.label} class={styles.menuItemTooltip}>
+    <li {...rest} class={classNames(styles.menuItem, local.isActive && styles.active, local.class)}>
+      <Tooltip position="bottom" content={local.item.label} class={styles.menuItemTooltip}>
         <A
-          href={props.item.href}
-          aria-label={props.item.label}
-          aria-current={props.isActive ? 'page' : undefined}
+          href={local.item.href}
+          aria-label={local.item.label}
+          aria-current={local.isActive ? 'page' : undefined}
           class={styles.menuItemLink}
         >
-          <Icon icon={props.item.icon} class={styles.menuIcon} />
+          <Icon icon={local.item.icon} class={styles.menuIcon} />
         </A>
       </Tooltip>
     </li>

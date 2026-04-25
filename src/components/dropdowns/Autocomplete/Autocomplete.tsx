@@ -1,4 +1,14 @@
-import { createMemo, createSignal, createUniqueId, For, Show, splitProps } from 'solid-js';
+import {
+  batch,
+  createDeferred,
+  createMemo,
+  createSignal,
+  createUniqueId,
+  For,
+  onCleanup,
+  Show,
+  splitProps,
+} from 'solid-js';
 
 import ClosableChip from '~/components/feedback/ClosableChip/ClosableChip';
 import useDropdownState from '~/hooks/useDropdownState';
@@ -46,8 +56,9 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
 
   const dropdown = useDropdownState(() => rootRef, { isInteractive: () => !local.disabled });
 
+  const deferredQuery = createDeferred(() => inputValue().toLowerCase(), { timeoutMs: 120 });
   const filteredOptions = createMemo(() => {
-    const query = inputValue().toLowerCase();
+    const query = deferredQuery();
     const available = local.options.filter((r) => !local.values.includes(r));
     if (!query) return available;
     return available.filter((r) => r.toLowerCase().includes(query));
@@ -55,13 +66,15 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
   const emptyLabel = createMemo(() => ts('common.noOptions'));
 
   const addValue = (value: string) => {
-    if (!local.values.includes(value)) {
-      local.onChange([...local.values, value]);
-    }
+    batch(() => {
+      if (!local.values.includes(value)) {
+        local.onChange([...local.values, value]);
+      }
 
-    setInputValue('');
-    setActiveIndex(-1);
-    dropdown.setOpen(document.activeElement === inputRef);
+      setInputValue('');
+      setActiveIndex(-1);
+      dropdown.setOpen(document.activeElement === inputRef);
+    });
   };
 
   const removeValue = (value: string) => {
@@ -71,19 +84,30 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
 
   const handleInput = (e: InputEvent & { currentTarget: HTMLInputElement }) => {
     if (local.disabled) return;
-    setInputValue(e.currentTarget.value);
-    dropdown.openDropdown();
-    setActiveIndex(0);
-  };
-
-  const handleBlur = () => {
-    requestAnimationFrame(() => {
-      const active = document.activeElement;
-      if (active && rootRef?.contains(active)) return;
-      dropdown.close();
-      setActiveIndex(-1);
+    batch(() => {
+      setInputValue(e.currentTarget.value);
+      dropdown.openDropdown();
+      setActiveIndex(0);
     });
   };
+
+  let blurRafId: number | undefined;
+  const handleBlur = () => {
+    if (blurRafId !== undefined) cancelAnimationFrame(blurRafId);
+    blurRafId = requestAnimationFrame(() => {
+      blurRafId = undefined;
+      const active = document.activeElement;
+      if (active && rootRef?.contains(active)) return;
+      batch(() => {
+        dropdown.close();
+        setActiveIndex(-1);
+      });
+    });
+  };
+
+  onCleanup(() => {
+    if (blurRafId !== undefined) cancelAnimationFrame(blurRafId);
+  });
 
   const activeOptionId = createMemo(() => {
     if (!dropdown.open()) return undefined;
@@ -103,6 +127,23 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
     const start = current >= 0 ? current : direction === 1 ? -1 : 0;
     const next = (start + direction + count) % count;
     setActiveIndex(next);
+  };
+
+  const handleFocus = () => {
+    batch(() => {
+      dropdown.openDropdown();
+      if (filteredOptions().length > 0) setActiveIndex(0);
+    });
+  };
+
+  const handleOptionMouseDown = (index: number, event: MouseEvent) => {
+    setActiveIndex(index);
+    event.preventDefault();
+  };
+
+  const selectOption = (option: string) => {
+    addValue(option);
+    inputRef?.focus();
   };
 
   const handleKeyDown = (e: KeyboardEvent) => {
@@ -164,8 +205,10 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
     }
 
     if (e.key === 'Escape') {
-      dropdown.close();
-      setActiveIndex(-1);
+      batch(() => {
+        dropdown.close();
+        setActiveIndex(-1);
+      });
     }
   };
 
@@ -185,10 +228,7 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
           size={local.size}
           value={inputValue()}
           onInput={handleInput}
-          onFocus={() => {
-            dropdown.openDropdown();
-            if (filteredOptions().length > 0) setActiveIndex(0);
-          }}
+          onFocus={handleFocus}
           onBlur={handleBlur}
           onKeyDown={handleKeyDown}
           placeholder={ts('common.searchEllipsis')}
@@ -217,15 +257,9 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
                     role="option"
                     aria-selected={activeIndex() === index()}
                     selected={activeIndex() === index()}
-                    onMouseDown={(e) => {
-                      setActiveIndex(index());
-                      e.preventDefault();
-                    }}
+                    onMouseDown={(event) => handleOptionMouseDown(index(), event)}
                     onMouseEnter={() => setActiveIndex(index())}
-                    onClick={() => {
-                      addValue(option);
-                      inputRef?.focus();
-                    }}
+                    onClick={() => selectOption(option)}
                   />
                 )}
               </For>

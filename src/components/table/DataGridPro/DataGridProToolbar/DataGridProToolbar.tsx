@@ -50,15 +50,13 @@ const DataGridProToolbar = (props: Props<DataGridProToolbarProps>) => {
       <div class={classNames(styles.toolbar, props.class)}>
         <div class={styles.toolbarLeft}>
           <Show when={props.filterable}>
-            <div class={styles.filterWrap}>
-              <Input
-                type="search"
-                value={props.filterQuery()}
-                onInput={props.onFilterInput}
-                placeholder={ts('table.filterRows')}
-                class={styles.filterInput}
-              />
-            </div>
+            <Input
+              type="search"
+              value={props.filterQuery()}
+              onInput={props.onFilterInput}
+              placeholder={ts('table.filterRows')}
+              class={classNames(styles.filterWrap, styles.filterInput)}
+            />
           </Show>
           <div class={styles.summary}>
             <Text as="span" variant="labelMd" tone="secondary" class={styles.resultsCount}>

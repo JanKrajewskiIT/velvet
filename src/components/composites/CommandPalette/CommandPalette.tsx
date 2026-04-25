@@ -1,5 +1,5 @@
 import type { IconTypes } from 'solid-icons';
-import { createEffect, createMemo, createSignal, For, Show, splitProps } from 'solid-js';
+import { batch, createEffect, createMemo, createSignal, For, on, onCleanup, Show, splitProps } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
 import useEscapeKey from '~/hooks/useEscapeKey';
@@ -34,9 +34,31 @@ const CommandPalette = (props: Props<CommandPaletteProps>) => {
   const { ts } = useI18n();
   const [local, rest] = splitProps(props, ['open', 'onClose', 'items', 'class']);
   const [query, setQuery] = createSignal('');
+  const [queryInput, setQueryInput] = createSignal('');
   const [activeIndex, setActiveIndex] = createSignal(-1);
   const [panelRef, setPanelRef] = createSignal<HTMLElement | undefined>();
   let resultsRef: HTMLDivElement | undefined;
+
+  let queryDebounceTimer: number | undefined;
+  const handleQueryInput = (next: string) => {
+    setQueryInput(next);
+    if (queryDebounceTimer !== undefined) clearTimeout(queryDebounceTimer);
+    queryDebounceTimer = window.setTimeout(() => {
+      setQuery(next);
+    }, 80);
+  };
+
+  const clearQuery = () => {
+    if (queryDebounceTimer !== undefined) clearTimeout(queryDebounceTimer);
+    batch(() => {
+      setQueryInput('');
+      setQuery('');
+    });
+  };
+
+  onCleanup(() => {
+    if (queryDebounceTimer !== undefined) clearTimeout(queryDebounceTimer);
+  });
 
   useEscapeKey(
     () => local.open,
@@ -71,36 +93,52 @@ const CommandPalette = (props: Props<CommandPaletteProps>) => {
     return groups;
   });
 
-  createEffect(() => {
-    if (!local.open) return;
-    setQuery('');
-    setActiveIndex(local.items.length > 0 ? 0 : -1);
-  });
+  const isOpen = () => local.open;
 
-  createEffect(() => {
-    const items = filtered();
-    if (items.length === 0) {
-      if (activeIndex() !== -1) {
-        setActiveIndex(-1);
-      }
-      return;
-    }
+  createEffect(
+    on(
+      isOpen,
+      (open) => {
+        if (!open) return;
+        batch(() => {
+          if (queryDebounceTimer !== undefined) clearTimeout(queryDebounceTimer);
+          setQueryInput('');
+          setQuery('');
+          setActiveIndex(local.items.length > 0 ? 0 : -1);
+        });
+      },
+      { defer: true },
+    ),
+  );
 
-    const current = activeIndex();
-    if (current < 0 || current >= items.length) {
-      setActiveIndex(0);
-    }
-  });
+  createEffect(
+    on(
+      () => filtered().length,
+      (length) => {
+        const current = activeIndex();
+        if (length === 0) {
+          if (current !== -1) setActiveIndex(-1);
+          return;
+        }
+        if (current < 0 || current >= length) {
+          setActiveIndex(0);
+        }
+      },
+      { defer: true },
+    ),
+  );
 
-  createEffect(() => {
-    if (!local.open) return;
-
-    const index = activeIndex();
-    if (index < 0) return;
-
-    const activeItem = resultsRef?.querySelector<HTMLElement>(`[data-command-index="${String(index)}"]`);
-    activeItem?.scrollIntoView({ block: 'nearest' });
-  });
+  createEffect(
+    on(
+      [isOpen, activeIndex] as const,
+      ([open, index]) => {
+        if (!open || index < 0) return;
+        const activeItem = resultsRef?.querySelector<HTMLElement>(`[data-command-index="${String(index)}"]`);
+        activeItem?.scrollIntoView({ block: 'nearest' });
+      },
+      { defer: true },
+    ),
+  );
 
   const handleOverlayClick = (e: MouseEvent) => {
     if (e.target === e.currentTarget) local.onClose();
@@ -172,9 +210,9 @@ const CommandPalette = (props: Props<CommandPaletteProps>) => {
                 class={styles.searchInput}
                 size="lg"
                 placeholder={ts('commandPalette.searchCommands')}
-                value={query()}
-                onInput={setQuery}
-                onClear={() => setQuery('')}
+                value={queryInput()}
+                onInput={handleQueryInput}
+                onClear={clearQuery}
                 onKeyDown={handleSearchKeyDown}
                 autofocus
               />

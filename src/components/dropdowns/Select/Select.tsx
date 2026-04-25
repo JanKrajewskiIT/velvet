@@ -1,4 +1,15 @@
-import { createEffect, createMemo, createSignal, createUniqueId, For, on, splitProps } from 'solid-js';
+import {
+  batch,
+  createEffect,
+  createMemo,
+  createSignal,
+  createUniqueId,
+  For,
+  on,
+  onCleanup,
+  splitProps,
+  untrack,
+} from 'solid-js';
 
 import useDropdownPanel from '~/hooks/useDropdownPanel';
 import type Props from '~/models/Props';
@@ -58,19 +69,20 @@ const Select = (props: Props<SelectOwnProps>) => {
 
   createEffect(
     on(
-      () => [local.value, local.options],
-      () => {
-        if (local.value !== undefined) {
-          setInternalValue(String(local.value));
+      () => [local.value, local.options] as const,
+      ([value, options]) => {
+        if (value !== undefined) {
+          setInternalValue(String(value));
           return;
         }
 
-        const current = internalValue();
-        const hasCurrent = local.options.some((option) => option.value === current);
+        const current = untrack(internalValue);
+        const hasCurrent = options.some((option) => option.value === current);
         if (!hasCurrent) {
-          setInternalValue(local.options[0]?.value ?? '');
+          setInternalValue(options[0]?.value ?? '');
         }
       },
+      { defer: true },
     ),
   );
 
@@ -89,8 +101,12 @@ const Select = (props: Props<SelectOwnProps>) => {
     if (selected) return selected.label;
     return local.options[0]?.label ?? '';
   });
+
+  let focusRafId: number | undefined;
   const focusSelectedOption = () => {
-    requestAnimationFrame(() => {
+    if (focusRafId !== undefined) cancelAnimationFrame(focusRafId);
+    focusRafId = requestAnimationFrame(() => {
+      focusRafId = undefined;
       const panel = panelRef;
       if (!panel) return;
       const selected = panel.querySelector<HTMLButtonElement>('[aria-selected="true"]:not(:disabled)');
@@ -102,6 +118,10 @@ const Select = (props: Props<SelectOwnProps>) => {
       first?.focus();
     });
   };
+
+  onCleanup(() => {
+    if (focusRafId !== undefined) cancelAnimationFrame(focusRafId);
+  });
 
   const selectValue = (value: string) => {
     if (local.readOnly || local.disabled) return;
@@ -154,8 +174,10 @@ const Select = (props: Props<SelectOwnProps>) => {
       return;
     }
 
-    dropdown.openDropdown();
-    focusSelectedOption();
+    batch(() => {
+      dropdown.openDropdown();
+      focusSelectedOption();
+    });
   };
 
   return (
@@ -194,16 +216,19 @@ const Select = (props: Props<SelectOwnProps>) => {
           onKeyDown={dropdown.handlePanelKeyDown}
         >
           <For each={local.options}>
-            {(option) => (
-              <DropdownOption
-                selected={option.value === selectedOption()?.value}
-                label={option.label}
-                role="option"
-                aria-selected={option.value === selectedOption()?.value}
-                disabled={option.disabled || !!local.readOnly}
-                onClick={() => selectValue(option.value)}
-              />
-            )}
+            {(option) => {
+              const isSelected = createMemo(() => option.value === selectedOption()?.value);
+              return (
+                <DropdownOption
+                  selected={isSelected()}
+                  label={option.label}
+                  role="option"
+                  aria-selected={isSelected()}
+                  disabled={option.disabled || !!local.readOnly}
+                  onClick={() => selectValue(option.value)}
+                />
+              );
+            }}
           </For>
         </DropdownSurface>
       )}

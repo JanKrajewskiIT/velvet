@@ -1,0 +1,281 @@
+﻿*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(
+      circle at top left,
+      color-mix(in srgb, var(--color-primary-light) 42%, transparent),
+      transparent 34%
+    ),
+    linear-gradient(180deg, color-mix(in srgb, var(--color-surface) 86%, transparent), var(--color-bg));
+}
+
+#root {
+  min-height: 100dvh;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: var(--layout-sidebar-width) 1fr;
+  min-height: 100dvh;
+  height: 100dvh;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at top right,
+      color-mix(in srgb, var(--color-primary-light) 32%, transparent),
+      transparent 28%
+    ),
+    linear-gradient(180deg, color-mix(in srgb, var(--color-surface) 60%, transparent), transparent 20%);
+}
+
+.main {
+  overflow-y: auto;
+  padding: var(--spacing-2xl);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--color-bg-elevated) 70%, transparent), transparent 28%), transparent;
+}
+
+.pageHeader {
+  margin-bottom: var(--spacing-2xl);
+  display: grid;
+  gap: var(--spacing-xl);
+}
+
+.pageEyebrow {
+  margin: 0;
+}
+
+.pageTitle {
+  margin: var(--spacing-xs) 0 var(--spacing-xs);
+}
+
+.pageDescription {
+  margin: 0;
+  max-width: 52rem;
+}
+
+.pageStats {
+  margin-top: var(--spacing-lg);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--spacing-sm);
+}
+
+.statPill {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  padding: var(--spacing-sm) var(--spacing-md);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  box-shadow: 0 1px 0 rgb(255 255 255 / 55%) inset;
+}
+
+.showcaseSection {
+  display: grid;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-3xl);
+}
+
+.showcaseHeading {
+  display: grid;
+  gap: var(--spacing-2xs);
+}
+
+.showcaseContent {
+  display: grid;
+  gap: var(--spacing-sm);
+}
+
+.showcaseContent :is([role='dialog'], [role='listbox']) {
+  z-index: var(--z-overlay);
+}
+
+.previewPanel {
+  display: grid;
+  gap: var(--spacing-md);
+  position: relative;
+  overflow: visible;
+}
+
+.previewPanel.previewPanel {
+  overflow: visible;
+}
+
+.previewGroup {
+  display: grid;
+  gap: var(--spacing-sm);
+  min-width: 0;
+  overflow: visible;
+}
+
+.previewGroup + .previewGroup {
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--color-border);
+}
+
+.backToTopScrollFiller {
+  margin-top: var(--spacing-xl);
+  min-height: min(200vh, 2800px);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.backToTopScrollFillerCard {
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+  padding: var(--spacing-lg);
+  display: grid;
+  gap: var(--spacing-sm);
+}
+
+.backToTopScrollFillerBar {
+  height: 10px;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-hover);
+  max-width: 100%;
+}
+
+.backToTopScrollFillerBarNarrow {
+  width: 38%;
+}
+
+.backToTopScrollFillerBarWide {
+  width: 92%;
+}
+
+.backToTopScrollFillerBarMid {
+  width: 72%;
+}
+
+.previewGroupHeader {
+  display: grid;
+  gap: var(--spacing-2xs);
+}
+
+.previewGroupTitle {
+  margin: 0;
+}
+
+.previewGroupSubtitle {
+  margin: 0;
+}
+
+.affixButtonBadgeSpacer {
+  display: inline-block;
+  width: 10px;
+}
+
+.previewGroupContent {
+  display: grid;
+  gap: var(--spacing-sm);
+  min-width: 0;
+  overflow: visible;
+}
+
+.previewPanel .previewGroupContent > button {
+  width: fit-content;
+  max-width: 100%;
+  justify-self: start;
+}
+
+.previewUploadFull {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.previewUploadFull button {
+  width: 100%;
+}
+
+.showcaseMeta {
+  margin: 0;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  align-items: center;
+}
+
+.loaderPreviewRow {
+  min-height: 7rem;
+  padding: var(--spacing-xl);
+  border: 1px solid color-mix(in srgb, var(--color-border) 76%, transparent);
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--color-bg-elevated) 94%, transparent);
+  box-shadow: var(--shadow-sm);
+}
+
+.inputFieldStack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.inputSizesStack > * {
+  display: block;
+  width: 100%;
+  margin-bottom: var(--spacing-md);
+}
+
+.inputSizesStack > *:last-child {
+  margin-bottom: 0;
+}
+
+.gridCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.codeInline {
+  margin-inline: var(--spacing-2xs);
+}
+
+.overviewList {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: grid;
+  gap: var(--spacing-xs);
+  color: var(--color-text-secondary);
+}
+
+.installBlock {
+  margin: 0;
+}
+
+.mutedText {
+  margin: 0;
+}
+
+.stepButtons {
+  margin-top: var(--spacing-md);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+}
+
+.speedDialGrid {
+  display: grid;
+  gap: var(--spacing-md);
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}

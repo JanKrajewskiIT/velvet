@@ -1,4 +1,5 @@
 import type { IconTypes } from 'solid-icons';
+import { splitProps } from 'solid-js';
 
 import Icon from '~/components/media/Icon/Icon';
 import Heading from '~/components/typography/Heading/Heading';
@@ -20,21 +21,23 @@ interface FeatureCardProps {
 }
 
 const FeatureCard = (props: Props<FeatureCardProps>) => {
+  const [local, rest] = splitProps(props, ['icon', 'label', 'description', 'tone', 'animationOrder', 'class', 'style']);
   return (
     <article
-      class={classNames(styles.card, props.class)}
-      data-tone={props.tone ?? 'primary'}
-      style={{ '--feature-card-order': String(props.animationOrder ?? 0), ...props.style }}
+      {...rest}
+      class={classNames(styles.card, local.class)}
+      data-tone={local.tone ?? 'primary'}
+      style={{ '--feature-card-order': String(local.animationOrder ?? 0), ...local.style }}
     >
       <div class={styles.icon} aria-hidden="true">
-        <Icon icon={props.icon} size="md" aria-hidden={true} />
+        <Icon icon={local.icon} size="md" aria-hidden={true} />
       </div>
       <div class={styles.body}>
         <Heading variant="titleMd" tone="default">
-          {props.label}
+          {local.label}
         </Heading>
         <Text as="p" variant="caption" tone="muted">
-          {props.description}
+          {local.description}
         </Text>
       </div>
     </article>

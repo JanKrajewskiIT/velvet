@@ -1,5 +1,6 @@
 .dropdown {
   display: block;
+  top: calc(100% + var(--spacing-xs));
   width: 100%;
   z-index: var(--z-overlay);
 }

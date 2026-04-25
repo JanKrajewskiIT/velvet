@@ -57,7 +57,7 @@ const Grid = (props: Props<GridOwnProps>) => {
     return {
       ...base,
       '--grid-gap': resolveSpacingToken(local.gap),
-      'grid-template-columns': templateColumns(),
+      '--grid-template-columns': templateColumns(),
     };
   };
 

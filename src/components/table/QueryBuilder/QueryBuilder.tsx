@@ -165,21 +165,19 @@ const QueryBuilder = (props: Props<QueryBuilderProps>) => {
         </div>
       </div>
 
-      <div class={styles.combinatorRow}>
-        <FormField class={styles.combinatorField}>
-          {(fieldProps) => (
-            <Select
-              {...fieldProps}
-              size="sm"
-              aria-label={ts('common.match')}
-              value={local.value.combinator}
-              onChange={handleCombinatorChange}
-              disabled={local.disabled}
-              options={combinatorOptions()}
-            />
-          )}
-        </FormField>
-      </div>
+      <FormField class={styles.combinatorField}>
+        {(fieldProps) => (
+          <Select
+            {...fieldProps}
+            size="sm"
+            aria-label={ts('common.match')}
+            value={local.value.combinator}
+            onChange={handleCombinatorChange}
+            disabled={local.disabled}
+            options={combinatorOptions()}
+          />
+        )}
+      </FormField>
 
       <Show
         when={hasRules()}

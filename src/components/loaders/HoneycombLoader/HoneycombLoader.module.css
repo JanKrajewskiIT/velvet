@@ -8,11 +8,6 @@
   height: 200px;
 }
 
-.socket {
-  position: absolute;
-  inset: 0;
-}
-
 .gel {
   --gel-x: 0px;
   --gel-y: 0px;

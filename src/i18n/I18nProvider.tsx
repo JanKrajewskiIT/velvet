@@ -1,4 +1,4 @@
-import { createContext, createEffect, createMemo, createSignal, type ParentProps, useContext } from 'solid-js';
+import { createContext, createEffect, createMemo, createSignal, on, type ParentProps, useContext } from 'solid-js';
 
 import { getVelvetRuntimeConfig } from '~/providers/velvet-config';
 
@@ -70,23 +70,34 @@ const I18nProvider = (props: I18nProviderProps) => {
     ...flattenI18nDictionary(props.dictionaries?.[locale()]),
   }));
 
-  createEffect(() => {
-    const nextLocale = props.initialLocale;
-    if (!nextLocale) return;
-    if (!SUPPORTED_LOCALES.includes(nextLocale)) return;
-    if (locale() !== nextLocale) {
-      setLocale(nextLocale);
-    }
-  });
+  createEffect(
+    on(
+      () => props.initialLocale,
+      (nextLocale) => {
+        if (!nextLocale) return;
+        if (!SUPPORTED_LOCALES.includes(nextLocale)) return;
+        if (locale() !== nextLocale) {
+          setLocale(nextLocale);
+        }
+      },
+      { defer: true },
+    ),
+  );
 
-  createEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(storageKey(), locale());
-    }
-    if (typeof document !== 'undefined') {
-      document.documentElement.setAttribute('lang', locale());
-    }
-  });
+  createEffect(
+    on(
+      locale,
+      (currentLocale) => {
+        if (typeof window !== 'undefined') {
+          localStorage.setItem(storageKey(), currentLocale);
+        }
+        if (typeof document !== 'undefined') {
+          document.documentElement.setAttribute('lang', currentLocale);
+        }
+      },
+      { defer: true },
+    ),
+  );
 
   const t = (key: string, params?: Record<string, string | number>): string => {
     const template = dictionary()[key] || fallbackDictionary()[key] || key;

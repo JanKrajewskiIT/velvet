@@ -1,5 +1,5 @@
 import { FiClock } from 'solid-icons/fi';
-import { createMemo, createSignal, createUniqueId, Show } from 'solid-js';
+import { batch, createMemo, createSignal, createUniqueId, onCleanup, Show } from 'solid-js';
 
 import DropdownFieldTrigger from '~/components/dropdowns/Dropdown/DropdownFieldTrigger/DropdownFieldTrigger';
 import Icon from '~/components/media/Icon/Icon';
@@ -55,12 +55,25 @@ const TimePicker = (props: Props<TimePickerProps>) => {
     if (child) child.scrollIntoView({ block: 'center' });
   };
 
+  let scrollRafId: number | undefined;
   const toggle = () => {
     if (props.disabled) return;
     const opening = !isOpen();
-    setIsOpen(opening);
-    if (opening) requestAnimationFrame(scrollToSelected);
+    batch(() => {
+      setIsOpen(opening);
+      if (opening) {
+        if (scrollRafId !== undefined) cancelAnimationFrame(scrollRafId);
+        scrollRafId = requestAnimationFrame(() => {
+          scrollRafId = undefined;
+          scrollToSelected();
+        });
+      }
+    });
   };
+
+  onCleanup(() => {
+    if (scrollRafId !== undefined) cancelAnimationFrame(scrollRafId);
+  });
 
   const select = (time: string) => {
     props.onChange(time);

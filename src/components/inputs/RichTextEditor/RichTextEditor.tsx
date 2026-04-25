@@ -1,4 +1,15 @@
-import { createEffect, createSignal, type JSX, Show, splitProps } from 'solid-js';
+import {
+  batch,
+  createEffect,
+  createMemo,
+  createSignal,
+  type JSX,
+  on,
+  onCleanup,
+  Show,
+  splitProps,
+  untrack,
+} from 'solid-js';
 
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
@@ -64,17 +75,31 @@ const RichTextEditor = (props: Props<RichTextEditorOwnProps>) => {
     return `https://${trimmed}`;
   };
 
+  let linkFocusCancelled = false;
   const openLinkEditor = () => {
     if (local.disabled) return;
-    setLinkEditorOpen(true);
-    setLinkDraft('');
-    queueMicrotask(() => linkInputRef?.focus());
+    batch(() => {
+      setLinkEditorOpen(true);
+      setLinkDraft('');
+    });
+    linkFocusCancelled = false;
+    queueMicrotask(() => {
+      if (linkFocusCancelled) return;
+      linkInputRef?.focus();
+    });
   };
 
   const closeLinkEditor = () => {
-    setLinkEditorOpen(false);
-    setLinkDraft('');
+    linkFocusCancelled = true;
+    batch(() => {
+      setLinkEditorOpen(false);
+      setLinkDraft('');
+    });
   };
+
+  onCleanup(() => {
+    linkFocusCancelled = true;
+  });
 
   const applyLink = () => {
     const normalized = normalizeLink(linkDraft());
@@ -109,37 +134,43 @@ const RichTextEditor = (props: Props<RichTextEditorOwnProps>) => {
     setLinkDraft(event.currentTarget.value);
   };
 
-  createEffect(() => {
-    syncEditorValue();
-  });
+  const applyBold = () => applyCommand('bold');
+  const applyItalic = () => applyCommand('italic');
+  const applyUnderline = () => applyCommand('underline');
+  const applyUnorderedList = () => applyCommand('insertUnorderedList');
+  const applyOrderedList = () => applyCommand('insertOrderedList');
+  const clearFormatting = () => applyCommand('removeFormat');
+
+  const linkButtonVariant = createMemo(() => (linkEditorOpen() ? 'outline' : 'subtle'));
+  const editorStyle = createMemo<JSX.CSSProperties | undefined>(() =>
+    local.minHeight ? { '--editor-min-height': local.minHeight } : undefined,
+  );
+
+  createEffect(
+    on(
+      () => local.value,
+      () => {
+        untrack(() => syncEditorValue());
+      },
+      { defer: true },
+    ),
+  );
 
   return (
     <div {...rest} class={classNames(styles.wrapper, local.class)}>
       <FieldBase as="div" size={null} focusStyle="within" disabled={local.disabled} class={styles.editorShell}>
         <div class={styles.toolbar}>
-          <Button
-            class={styles.toolButton}
-            variant="subtle"
-            size="sm"
-            onClick={() => applyCommand('bold')}
-            disabled={local.disabled}
-          >
+          <Button class={styles.toolButton} variant="subtle" size="sm" onClick={applyBold} disabled={local.disabled}>
             B
           </Button>
-          <Button
-            class={styles.toolButton}
-            variant="subtle"
-            size="sm"
-            onClick={() => applyCommand('italic')}
-            disabled={local.disabled}
-          >
+          <Button class={styles.toolButton} variant="subtle" size="sm" onClick={applyItalic} disabled={local.disabled}>
             I
           </Button>
           <Button
             class={styles.toolButton}
             variant="subtle"
             size="sm"
-            onClick={() => applyCommand('underline')}
+            onClick={applyUnderline}
             disabled={local.disabled}
           >
             U
@@ -148,7 +179,7 @@ const RichTextEditor = (props: Props<RichTextEditorOwnProps>) => {
             class={styles.toolButton}
             variant="subtle"
             size="sm"
-            onClick={() => applyCommand('insertUnorderedList')}
+            onClick={applyUnorderedList}
             disabled={local.disabled}
           >
             {ts('richText.list')}
@@ -157,14 +188,14 @@ const RichTextEditor = (props: Props<RichTextEditorOwnProps>) => {
             class={styles.toolButton}
             variant="subtle"
             size="sm"
-            onClick={() => applyCommand('insertOrderedList')}
+            onClick={applyOrderedList}
             disabled={local.disabled}
           >
             1.
           </Button>
           <Button
             class={styles.toolButton}
-            variant={linkEditorOpen() ? 'outline' : 'subtle'}
+            variant={linkButtonVariant()}
             size="sm"
             onClick={openLinkEditor}
             disabled={local.disabled}
@@ -178,7 +209,7 @@ const RichTextEditor = (props: Props<RichTextEditorOwnProps>) => {
             class={styles.toolButton}
             variant="subtle"
             size="sm"
-            onClick={() => applyCommand('removeFormat')}
+            onClick={clearFormatting}
             disabled={local.disabled}
           >
             {ts('richText.clear')}
@@ -216,7 +247,7 @@ const RichTextEditor = (props: Props<RichTextEditorOwnProps>) => {
           class={styles.editor}
           contentEditable={!local.disabled}
           data-placeholder={ts('richText.placeholder')}
-          style={local.minHeight ? { '--editor-min-height': local.minHeight } : undefined}
+          style={editorStyle()}
           onInput={handleInput}
           role="textbox"
           aria-multiline="true"

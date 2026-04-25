@@ -1,4 +1,4 @@
-import { createEffect, createSignal, For, type JSX, Show } from 'solid-js';
+import { batch, createEffect, createSignal, For, type JSX, on, onCleanup, Show } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
 import useClickOutside from '~/hooks/useClickOutside';
@@ -37,8 +37,10 @@ const ContextMenu = (props: Props<ContextMenuProps>) => {
 
   const handleContextMenu = (e: MouseEvent) => {
     e.preventDefault();
-    setPosition({ x: e.clientX, y: e.clientY });
-    setVisible(true);
+    batch(() => {
+      setPosition({ x: e.clientX, y: e.clientY });
+      setVisible(true);
+    });
   };
 
   const handleItemClick = (item: ContextMenuOption) => {
@@ -92,12 +94,19 @@ const ContextMenu = (props: Props<ContextMenuProps>) => {
     }
   };
 
-  createEffect(() => {
-    if (!visible()) return;
-    requestAnimationFrame(() => {
-      focusItemAt(0);
-    });
-  });
+  createEffect(
+    on(
+      visible,
+      (isVisible) => {
+        if (!isVisible) return;
+        const rafId = requestAnimationFrame(() => {
+          focusItemAt(0);
+        });
+        onCleanup(() => cancelAnimationFrame(rafId));
+      },
+      { defer: true },
+    ),
+  );
 
   return (
     <div class={classNames(styles.wrapper, props.class)} onContextMenu={handleContextMenu}>

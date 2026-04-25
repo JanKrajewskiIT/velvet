@@ -33,10 +33,6 @@ const ImageGrid = (props: Props<ImageGridProps>) => {
 
   const imageClass = () => classNames(styles.image, hoverable() && styles.hoverable);
 
-  const handleImageClick = (index: number) => {
-    props.onImageClick?.(index);
-  };
-
   const renderCellContent = (item: ImageGridItem) => (
     <>
       <img class={imageClass()} src={item.src} alt={item.alt ?? ''} loading="lazy" />
@@ -56,7 +52,7 @@ const ImageGrid = (props: Props<ImageGridProps>) => {
             <button
               type="button"
               class={cellClass(true)}
-              onClick={() => handleImageClick(index())}
+              onClick={() => props.onImageClick?.(index())}
               aria-label={item.caption ?? item.alt ?? `Open image ${index() + 1}`}
             >
               {renderCellContent(item)}

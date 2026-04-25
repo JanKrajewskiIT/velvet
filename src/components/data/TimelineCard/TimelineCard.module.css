@@ -68,17 +68,13 @@
   display: flex;
   align-items: flex-start;
   flex-shrink: 0;
-}
-
-.actionButtons {
-  display: flex;
   gap: var(--spacing-xs);
   opacity: 0;
   transition: opacity var(--duration-fast) var(--ease-out-expo);
 }
 
-.card:hover .actionButtons,
-.card:focus-within .actionButtons {
+.card:hover .actions,
+.card:focus-within .actions {
   opacity: 1;
 }
 
@@ -89,9 +85,6 @@
 
   .actions {
     align-self: flex-end;
-  }
-
-  .actionButtons {
     opacity: 1;
   }
 }

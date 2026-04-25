@@ -29,11 +29,11 @@ const Breadcrumbs = (props: Props<BreadcrumbsProps>) => {
   const maxItems = createMemo(() => local.maxItems ?? Infinity);
 
   const shouldCollapse = createMemo(() => local.items.length > maxItems() && !expanded());
-  const renderSeparator = () => {
+  const separatorElement = createMemo(() => {
     const separator = local.separator;
     if (typeof separator === 'function') return separator();
     return separator ?? <FiChevronRight size={14} />;
-  };
+  });
 
   const visibleItems = createMemo<BreadcrumbItem[]>(() => {
     if (!shouldCollapse()) return local.items;
@@ -44,6 +44,8 @@ const Breadcrumbs = (props: Props<BreadcrumbsProps>) => {
   });
 
   const showEllipsis = createMemo(() => shouldCollapse());
+
+  const handleShowAllClick = () => setExpanded(true);
 
   const renderItem = (item: BreadcrumbItem, isCurrentPage: boolean) => {
     if (isCurrentPage) {
@@ -86,15 +88,15 @@ const Breadcrumbs = (props: Props<BreadcrumbsProps>) => {
             {(item) => <li class={styles.item}>{renderItem(item, false)}</li>}
           </For>
           <li class={styles.separator} aria-hidden="true">
-            {renderSeparator()}
+            {separatorElement()}
           </li>
           <li class={styles.item}>
-            <Button variant="subtle" size="sm" onClick={() => setExpanded(true)} aria-label={ts('breadcrumbs.showAll')}>
+            <Button variant="subtle" size="sm" onClick={handleShowAllClick} aria-label={ts('breadcrumbs.showAll')}>
               &hellip;
             </Button>
           </li>
           <li class={styles.separator} aria-hidden="true">
-            {renderSeparator()}
+            {separatorElement()}
           </li>
           <For each={visibleItems().slice(1)}>
             {(item, index) => (
@@ -102,7 +104,7 @@ const Breadcrumbs = (props: Props<BreadcrumbsProps>) => {
                 <li class={styles.item}>{renderItem(item, index() === visibleItems().length - 2)}</li>
                 <Show when={index() < visibleItems().length - 2}>
                   <li class={styles.separator} aria-hidden="true">
-                    {renderSeparator()}
+                    {separatorElement()}
                   </li>
                 </Show>
               </>
@@ -116,7 +118,7 @@ const Breadcrumbs = (props: Props<BreadcrumbsProps>) => {
                 <li class={styles.item}>{renderItem(item, index() === visibleItems().length - 1)}</li>
                 <Show when={index() < visibleItems().length - 1}>
                   <li class={styles.separator} aria-hidden="true">
-                    {renderSeparator()}
+                    {separatorElement()}
                   </li>
                 </Show>
               </>

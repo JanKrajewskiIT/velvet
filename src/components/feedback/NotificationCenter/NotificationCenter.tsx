@@ -51,8 +51,6 @@ const NotificationCenter = (props: Props<NotificationCenterOwnProps>) => {
   const markReadLabel = createMemo(() => ts('notification.markRead'));
   const emptyMessage = createMemo(() => ts('notification.empty'));
   const hasNotifications = createMemo(() => notifications().length > 0);
-  const handleItemRead = (id: string) => markNotificationRead(id);
-  const handleItemRemove = (id: string) => removeNotification(id);
 
   return (
     <Stack
@@ -105,7 +103,7 @@ const NotificationCenter = (props: Props<NotificationCenterOwnProps>) => {
           <For each={items()}>
             {(item) => (
               <li class={classNames(styles.item, !item.read && styles.itemUnread)}>
-                <button type="button" class={styles.itemMain} onClick={() => handleItemRead(item.id)}>
+                <button type="button" class={styles.itemMain} onClick={() => markNotificationRead(item.id)}>
                   <Show when={!item.read} fallback={<span class={styles.dotPlaceholder} />}>
                     <Badge dot class={styles.dotBadge}>
                       <span class={styles.dotAnchor} />
@@ -130,7 +128,7 @@ const NotificationCenter = (props: Props<NotificationCenterOwnProps>) => {
                       <IconButton
                         icon={IoCheckmarkDone}
                         label={markReadLabel()}
-                        onClick={() => handleItemRead(item.id)}
+                        onClick={() => markNotificationRead(item.id)}
                         size="sm"
                         variant="subtle"
                       />
@@ -140,7 +138,7 @@ const NotificationCenter = (props: Props<NotificationCenterOwnProps>) => {
                     <IconButton
                       icon={IoTrash}
                       label={dismissLabel()}
-                      onClick={() => handleItemRemove(item.id)}
+                      onClick={() => removeNotification(item.id)}
                       size="sm"
                       variant="subtle"
                     />

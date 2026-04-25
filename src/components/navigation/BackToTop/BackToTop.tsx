@@ -24,6 +24,8 @@ const BackToTop = (props: Props<BackToTopProps>) => {
 
   createEffect(() => {
     const root = local.scrollRoot?.() ?? null;
+    let rafId: number | undefined;
+
     const update = () => {
       if (root) {
         setVisible(root.scrollTop >= threshold());
@@ -32,13 +34,27 @@ const BackToTop = (props: Props<BackToTopProps>) => {
       }
     };
 
+    const scheduleUpdate = () => {
+      if (rafId !== undefined) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = undefined;
+        update();
+      });
+    };
+
     update();
     if (root) {
-      root.addEventListener('scroll', update, { passive: true });
-      onCleanup(() => root.removeEventListener('scroll', update));
+      root.addEventListener('scroll', scheduleUpdate, { passive: true });
+      onCleanup(() => {
+        if (rafId !== undefined) cancelAnimationFrame(rafId);
+        root.removeEventListener('scroll', scheduleUpdate);
+      });
     } else {
-      window.addEventListener('scroll', update, { passive: true });
-      onCleanup(() => window.removeEventListener('scroll', update));
+      window.addEventListener('scroll', scheduleUpdate, { passive: true });
+      onCleanup(() => {
+        if (rafId !== undefined) cancelAnimationFrame(rafId);
+        window.removeEventListener('scroll', scheduleUpdate);
+      });
     }
   });
 

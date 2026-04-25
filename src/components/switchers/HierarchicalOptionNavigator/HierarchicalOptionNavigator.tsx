@@ -65,14 +65,13 @@ const HierarchicalOptionNavigator = (props: Props<HierarchicalOptionNavigatorPro
       />
 
       <Show when={childItems().length > 0 && props.onChildSelect}>
-        <div class={styles.children}>
-          <ChipOptionSwitcher
-            aria-label={ts('sidebar.componentCategories')}
-            items={childItems()}
-            selectedId={props.selectedChildId}
-            onSelect={(id) => props.onChildSelect?.(id)}
-          />
-        </div>
+        <ChipOptionSwitcher
+          class={styles.children}
+          aria-label={ts('sidebar.componentCategories')}
+          items={childItems()}
+          selectedId={props.selectedChildId}
+          onSelect={(id) => props.onChildSelect?.(id)}
+        />
       </Show>
     </div>
   );

@@ -55,6 +55,10 @@ const Avatar = (props: Props<AvatarOwnProps>) => {
   const showInitials = createMemo(() => !showImage() && Boolean(local.name));
   const fallbackLabel = createMemo(() => local.alt ?? local.name ?? ts('avatar.label'));
 
+  const handleImageError = () => {
+    setImgError(true);
+  };
+
   return (
     <div
       {...rest}
@@ -64,12 +68,7 @@ const Avatar = (props: Props<AvatarOwnProps>) => {
     >
       <span class={styles.imageWrapper}>
         <Show when={showImage()}>
-          <img
-            class={styles.image}
-            src={local.src}
-            alt={local.alt ?? local.name ?? ''}
-            onError={() => setImgError(true)}
-          />
+          <img class={styles.image} src={local.src} alt={local.alt ?? local.name ?? ''} onError={handleImageError} />
         </Show>
         <Show when={!showImage() && showInitials()}>
           <span class={styles.initials}>{getInitials(local.name ?? '')}</span>

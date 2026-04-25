@@ -1,4 +1,4 @@
-import { createSignal, type JSX, Show } from 'solid-js';
+import { createMemo, createSignal, type JSX, Show, splitProps } from 'solid-js';
 
 import useClickOutside from '~/hooks/useClickOutside';
 import useEscapeKey from '~/hooks/useEscapeKey';
@@ -26,28 +26,29 @@ const positionClassByValue: Record<NonNullable<PopoverProps['position']>, string
 };
 
 const Popover = (props: Props<PopoverProps>) => {
+  const [local, rest] = splitProps(props, ['trigger', 'content', 'position', 'open', 'onOpenChange', 'class']);
   const [internalOpen, setInternalOpen] = createSignal(false);
   let rootRef: HTMLDivElement | undefined;
 
-  const isOpen = () => props.open ?? internalOpen();
+  const isOpen = () => local.open ?? internalOpen();
 
   const setOpen = (value: boolean) => {
     setInternalOpen(value);
-    props.onOpenChange?.(value);
+    local.onOpenChange?.(value);
   };
 
   const toggle = () => setOpen(!isOpen());
   const close = () => setOpen(false);
 
-  const position = () => props.position ?? 'bottom';
+  const position = createMemo(() => local.position ?? 'bottom');
 
   useClickOutside(() => rootRef, isOpen, close);
 
   useEscapeKey(isOpen, close);
 
   return (
-    <div ref={rootRef} class={classNames(styles.wrapper, props.class)}>
-      {props.trigger({
+    <div {...rest} ref={rootRef} class={classNames(styles.wrapper, local.class)}>
+      {local.trigger({
         onClick: toggle,
       })}
       <Show when={isOpen()}>
@@ -60,7 +61,7 @@ const Popover = (props: Props<PopoverProps>) => {
           blur
         >
           <Text as="p" variant="bodySm" tone="muted">
-            {props.content}
+            {local.content}
           </Text>
         </Surface>
       </Show>

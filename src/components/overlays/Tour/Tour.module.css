@@ -7,6 +7,10 @@
 
 .spotlight {
   position: absolute;
+  top: var(--tour-spotlight-top, 0);
+  left: var(--tour-spotlight-left, 0);
+  width: var(--tour-spotlight-width, 0);
+  height: var(--tour-spotlight-height, 0);
   z-index: var(--z-overlay);
   box-shadow: 0 0 0 9999px var(--color-overlay);
   border-radius: var(--radius-sm);
@@ -31,6 +35,9 @@
 
 .card {
   position: absolute;
+  top: var(--tour-card-top, 50%);
+  left: var(--tour-card-left, 50%);
+  transform: var(--tour-card-transform, translate(-50%, -50%));
   z-index: var(--z-modal);
   padding: var(--spacing-md);
   max-width: 320px;

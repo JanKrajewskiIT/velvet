@@ -10,9 +10,11 @@ interface MarkdownRendererProps {
   content: string;
 }
 
+const REMARK_PLUGINS = [remarkGfm];
+
 const MarkdownRenderer = (props: Props<MarkdownRendererProps>) => (
   <div class={classNames(styles.markdown, props.class)}>
-    <SolidMarkdown remarkPlugins={[remarkGfm]}>{props.content}</SolidMarkdown>
+    <SolidMarkdown remarkPlugins={REMARK_PLUGINS}>{props.content}</SolidMarkdown>
   </div>
 );
 

@@ -1,14 +1,11 @@
-import { CodeText, Heading, LabelText, Text, useI18n } from '@jankrajewskiit/ui';
-import { createMemo } from 'solid-js';
+import { CodeText, Heading, LabelText, Text } from '@jankrajewskiit/ui';
 
 import { PreviewGroup, PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
-import { type DemoI18nMessageKey, getDemoMessages } from '../i18n/messages';
+import { useDemoDictionary } from '../hooks/useDemoDictionary';
 import { renderRichText } from '../i18n/renderRichText';
 
 const TypographySection = () => {
-  const { locale } = useI18n();
-  const dictionary = createMemo(() => getDemoMessages(locale()));
-  const t = (key: DemoI18nMessageKey): string => dictionary()[key];
+  const { t } = useDemoDictionary();
   const blockCodeTitle = () => t('demo.text.typography.blockCode.sectionTitle');
   const blockCodeHelperText = () => t('demo.text.typography.blockCode.helperText');
 

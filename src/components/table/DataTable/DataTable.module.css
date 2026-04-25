@@ -25,6 +25,10 @@
   user-select: none;
 }
 
+.headerWithWidth {
+  width: var(--column-width);
+}
+
 .sortable:hover {
   color: var(--color-text);
 }

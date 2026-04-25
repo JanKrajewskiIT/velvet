@@ -1,4 +1,4 @@
-import { createMemo, createSignal, For, type JSX, Show, splitProps } from 'solid-js';
+import { batch, createMemo, createSignal, For, type JSX, Show, splitProps } from 'solid-js';
 
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
@@ -30,11 +30,12 @@ const Wizard = (props: Props<WizardOwnProps>) => {
 
   const isLastStep = createMemo(() => currentStep() === local.steps.length - 1);
 
-  const stepperSteps = () =>
+  const stepperSteps = createMemo(() =>
     local.steps.map((s, i) => ({
       value: String(i),
       label: s.label,
-    }));
+    })),
+  );
 
   const handleNext = async () => {
     setIsLoading(true);
@@ -49,8 +50,10 @@ const Wizard = (props: Props<WizardOwnProps>) => {
         await local.onFinish();
       } else {
         const next = currentStep() + 1;
-        setCurrentStep(next);
-        local.onStepChange?.(next);
+        batch(() => {
+          setCurrentStep(next);
+          local.onStepChange?.(next);
+        });
       }
     } finally {
       setIsLoading(false);
@@ -60,8 +63,10 @@ const Wizard = (props: Props<WizardOwnProps>) => {
   const handleBack = () => {
     if (currentStep() > 0) {
       const prev = currentStep() - 1;
-      setCurrentStep(prev);
-      local.onStepChange?.(prev);
+      batch(() => {
+        setCurrentStep(prev);
+        local.onStepChange?.(prev);
+      });
     }
   };
 
@@ -71,9 +76,7 @@ const Wizard = (props: Props<WizardOwnProps>) => {
 
   return (
     <div class={classNames(styles.wizard, local.class)} {...rest}>
-      <div class={styles.stepperContainer}>
-        <Stepper steps={stepperSteps()} activeStep={String(currentStep())} />
-      </div>
+      <Stepper class={styles.stepperContainer} steps={stepperSteps()} activeStep={String(currentStep())} />
       <div class={styles.content}>
         <For each={local.steps}>
           {(step, index) => (

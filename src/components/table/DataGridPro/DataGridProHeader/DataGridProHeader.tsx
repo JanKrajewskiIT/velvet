@@ -36,8 +36,12 @@ interface DataGridProHeaderProps<T extends Record<string, unknown>> {
 const DataGridProHeader = <T extends Record<string, unknown>>(props: DataGridProHeaderProps<T>) => {
   const { ts } = useI18n();
 
+  const headerStyle = () => ({ '--header-height': `${String(props.headerHeight())}px` });
+
+  const handleResizeClick = (event: MouseEvent) => event.stopPropagation();
+
   return (
-    <div class={styles.header} role="row" style={{ height: `${props.headerHeight()}px` }}>
+    <div class={styles.header} role="row" style={headerStyle()}>
       <Show when={props.selectable()}>
         <div role="columnheader" class={classNames(styles.headerCell, styles.pinnedLeft, styles.selectionHeaderCell)}>
           <Checkbox
@@ -71,9 +75,9 @@ const DataGridProHeader = <T extends Record<string, unknown>>(props: DataGridPro
               )}
               style={props.getColumnStyle(column)}
               draggable={props.reorderable()}
-              onDragStart={(e) => props.onHeaderDragStart(key(), e)}
-              onDragOver={(e) => props.onHeaderDragOver(key(), e)}
-              onDrop={(e) => props.onHeaderDrop(key(), e)}
+              onDragStart={(event) => props.onHeaderDragStart(key(), event)}
+              onDragOver={(event) => props.onHeaderDragOver(key(), event)}
+              onDrop={(event) => props.onHeaderDrop(key(), event)}
               onDragEnd={props.onHeaderDragEnd}
             >
               <Button
@@ -100,8 +104,8 @@ const DataGridProHeader = <T extends Record<string, unknown>>(props: DataGridPro
                 iconOnly
                 class={styles.resizeHandle}
                 aria-label={ts('table.resizeColumn', { label: column.header })}
-                onMouseDown={(e) => props.onResizeStart(key(), e)}
-                onClick={(e) => e.stopPropagation()}
+                onMouseDown={(event) => props.onResizeStart(key(), event)}
+                onClick={handleResizeClick}
               >
                 <span class={styles.resizeHandleVisual} aria-hidden="true" />
               </Button>

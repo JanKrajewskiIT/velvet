@@ -1,4 +1,15 @@
-import { createEffect, createMemo, createSignal, For, type JSX, splitProps, untrack } from 'solid-js';
+import {
+  batch,
+  createEffect,
+  createMemo,
+  createSignal,
+  For,
+  type JSX,
+  on,
+  onCleanup,
+  splitProps,
+  untrack,
+} from 'solid-js';
 
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
@@ -60,26 +71,55 @@ const TreeView = (props: Props<TreeViewProps>) => {
   const [loadingIds, setLoadingIds] = createSignal(new Set<string>());
   const [draggingId, setDraggingId] = createSignal<string | null>(null);
   const [dragOverId, setDragOverId] = createSignal<string | null>(null);
-  const [internalCheckedIds, setInternalCheckedIds] = createSignal<string[]>([...(local.defaultChecked ?? [])]);
+  const [internalCheckedIds, setInternalCheckedIds] = createSignal<string[]>(
+    untrack(() => [...(local.checkedIds ?? local.defaultChecked ?? [])]),
+  );
   const [focusedId, setFocusedId] = createSignal('');
   let treeRef: HTMLUListElement | undefined;
 
   const checkedSet = createMemo(() => new Set(local.checkedIds ?? internalCheckedIds()));
   const visibleNodes = createMemo(() => buildVisibleTreeItems(treeData(), expanded()));
 
-  createEffect(() => {
-    setTreeData(cloneTreeNodes(local.nodes));
-  });
+  createEffect(
+    on(
+      () => local.nodes,
+      (nodes) => {
+        setTreeData(cloneTreeNodes(nodes));
+      },
+      { defer: true },
+    ),
+  );
 
-  createEffect(() => {
-    const nodeIds = collectTreeNodeIds(treeData());
-    setExpanded((current) => new Set(Array.from(current).filter((id) => nodeIds.has(id))));
-    setInternalCheckedIds((current) => current.filter((id) => nodeIds.has(id)));
-  });
+  createEffect(
+    on(
+      () => local.checkedIds,
+      (checkedIds) => {
+        if (!checkedIds) return;
+        setInternalCheckedIds([...checkedIds]);
+      },
+      { defer: true },
+    ),
+  );
+
+  createEffect(
+    on(
+      treeData,
+      (data) => {
+        const nodeIds = collectTreeNodeIds(data);
+        batch(() => {
+          setExpanded((current) => new Set(Array.from(current).filter((id) => nodeIds.has(id))));
+          setInternalCheckedIds((current) => current.filter((id) => nodeIds.has(id)));
+        });
+      },
+      { defer: true },
+    ),
+  );
 
   const updateCheckedIds = (nextIds: string[]) => {
-    setInternalCheckedIds(nextIds);
-    local.onCheckedIdsChange?.(nextIds);
+    batch(() => {
+      setInternalCheckedIds(nextIds);
+      local.onCheckedIdsChange?.(nextIds);
+    });
   };
 
   const toggleCheck = (id: string) => {
@@ -112,13 +152,29 @@ const TreeView = (props: Props<TreeViewProps>) => {
     setLoadingIds((prev) => new Set(prev).add(id));
     try {
       const children = await local.loadChildren(node);
-      setTreeData((prev) => updateTreeNodeChildren(prev, id, children));
-    } finally {
+      const shouldCheckLoadedChildren = internalCheckedIds().includes(id);
+      batch(() => {
+        setTreeData((prev) => updateTreeNodeChildren(prev, id, children));
+        if (shouldCheckLoadedChildren && children.length > 0) {
+          const nextCheckedIds = new Set(internalCheckedIds());
+          for (const childId of collectTreeNodeIds(children)) {
+            nextCheckedIds.add(childId);
+          }
+          updateCheckedIds(Array.from(nextCheckedIds));
+        }
+        setLoadingIds((prev) => {
+          const next = new Set(prev);
+          next.delete(id);
+          return next;
+        });
+      });
+    } catch (error) {
       setLoadingIds((prev) => {
         const next = new Set(prev);
         next.delete(id);
         return next;
       });
+      throw error;
     }
   };
 
@@ -156,7 +212,8 @@ const TreeView = (props: Props<TreeViewProps>) => {
       if (!nextId) return;
       event.preventDefault();
       setFocusedId(nextId);
-      requestAnimationFrame(() => focusNode(nextId));
+      const rafId = requestAnimationFrame(() => focusNode(nextId));
+      onCleanup(() => cancelAnimationFrame(rafId));
     };
 
     if (event.key === 'ArrowDown') {
@@ -215,32 +272,49 @@ const TreeView = (props: Props<TreeViewProps>) => {
     if (!local.draggable) return;
     event.preventDefault();
     const sourceId = draggingId();
-    setDragOverId(null);
-    setDraggingId(null);
-    if (!sourceId || sourceId === targetId) return;
+    batch(() => {
+      setDragOverId(null);
+      setDraggingId(null);
+      if (!sourceId || sourceId === targetId) return;
 
-    const draggedNode = findTreeNodeById(treeData(), sourceId);
-    if (!draggedNode) return;
-    if (collectTreeDescendantIds(draggedNode).includes(targetId)) return;
+      const draggedNode = findTreeNodeById(treeData(), sourceId);
+      if (!draggedNode) return;
+      if (collectTreeDescendantIds(draggedNode).includes(targetId)) return;
 
-    setTreeData((prev) => {
-      const removed = removeTreeNodeById(prev, sourceId);
-      if (!removed.removed) return prev;
-      return insertTreeNodeAsChild(removed.nodes, targetId, removed.removed);
+      setTreeData((prev) => {
+        const removed = removeTreeNodeById(prev, sourceId);
+        if (!removed.removed) return prev;
+        return insertTreeNodeAsChild(removed.nodes, targetId, removed.removed);
+      });
+      local.onMove?.(sourceId, targetId);
+      setExpanded((prev) => new Set(prev).add(targetId));
     });
-    local.onMove?.(sourceId, targetId);
-    setExpanded((prev) => new Set(prev).add(targetId));
   };
 
-  createEffect(() => {
-    const visible = visibleNodes();
-    if (visible.length === 0) return;
-    if (!visible.some((item) => item.id === focusedId())) {
-      const firstVisibleId = visible[0]?.id ?? '';
-      const selectedInVisible = local.selectedId != null && visible.some((item) => item.id === local.selectedId);
-      setFocusedId(selectedInVisible && local.selectedId != null ? local.selectedId : firstVisibleId);
-    }
-  });
+  createEffect(
+    on(
+      visibleNodes,
+      (visible) => {
+        if (visible.length === 0) return;
+        const currentFocus = untrack(focusedId);
+        if (!visible.some((item) => item.id === currentFocus)) {
+          const firstVisibleId = visible[0]?.id ?? '';
+          const selectedId = local.selectedId;
+          const selectedInVisible = selectedId != null && visible.some((item) => item.id === selectedId);
+          setFocusedId(selectedInVisible ? selectedId : firstVisibleId);
+        }
+      },
+      { defer: true },
+    ),
+  );
+
+  const handleFocusNode = (id: string) => {
+    setFocusedId(id);
+  };
+
+  const handleDragLeave = () => {
+    setDragOverId(null);
+  };
 
   return (
     <ul {...listProps} ref={treeRef} class={classNames(styles.tree, local.class)} role="tree">
@@ -259,13 +333,13 @@ const TreeView = (props: Props<TreeViewProps>) => {
             depth={0}
             parentId={null}
             onToggleCheck={toggleCheck}
-            onFocusNode={(id) => setFocusedId(id)}
+            onFocusNode={handleFocusNode}
             onNavigate={handleNavigate}
             onToggle={handleToggle}
             onDragStart={handleDragStart}
             onDragOver={handleDragOver}
             onDrop={handleDrop}
-            onDragLeave={() => setDragOverId(null)}
+            onDragLeave={handleDragLeave}
             onSelect={local.onSelect}
             toggleNodeLabel={local.toggleNodeLabel}
           />

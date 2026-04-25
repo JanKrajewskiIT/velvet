@@ -1,5 +1,6 @@
 .body {
   position: relative;
+  height: var(--total-rows-height);
 }
 
 .rows {
@@ -7,10 +8,12 @@
   top: 0;
   left: 0;
   right: 0;
+  transform: translateY(var(--offset-y));
 }
 
 .row {
   display: flex;
+  height: var(--row-height);
 
   --data-grid-row-bg: var(--color-bg);
 
@@ -58,6 +61,9 @@
   font-size: var(--font-size-sm);
   color: var(--color-text);
   background: var(--data-grid-row-bg);
+  width: var(--col-width);
+  min-width: var(--col-width);
+  max-width: var(--col-width);
 }
 
 .selectionCell {
@@ -77,11 +83,17 @@
 }
 
 .pinnedLeft {
+  position: sticky;
+  left: var(--col-pin-offset);
+  z-index: 4;
   background: var(--data-grid-row-bg);
   box-shadow: 2px 0 0 var(--color-border);
 }
 
 .pinnedRight {
+  position: sticky;
+  right: var(--col-pin-offset);
+  z-index: 4;
   background: var(--data-grid-row-bg);
   box-shadow: -2px 0 0 var(--color-border);
 }
@@ -99,4 +111,5 @@
     color-mix(in srgb, var(--color-bg-elevated) 94%, transparent),
     color-mix(in srgb, var(--color-surface) 72%, transparent)
   );
+  height: var(--body-height);
 }

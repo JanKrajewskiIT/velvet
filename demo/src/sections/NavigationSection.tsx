@@ -27,25 +27,22 @@ import {
   Tabs,
   Text,
   ThemeToggle,
-  useI18n,
   Wizard,
 } from '@jankrajewskiit/ui';
 import { BiLogosReact } from 'solid-icons/bi';
 import { IoAdd, IoCalendar, IoHome, IoPencil, IoPerson, IoSearch, IoSettings, IoShareSocial } from 'solid-icons/io';
 import { createMemo, createSignal, For, Show } from 'solid-js';
 
-import type { SectionId } from '../App';
 import { PreviewGroup, PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
-import { type DemoI18nMessageKey, getDemoMessages } from '../i18n/messages';
+import { useDemoDictionary } from '../hooks/useDemoDictionary';
 import { renderRichText } from '../i18n/renderRichText';
+import type { SectionId } from '../nav/demoNavConfig';
 
 type TabValue = 'preview' | 'code' | 'props';
 
 const NavigationSection = (props: { sectionId: SectionId }) => {
   const sectionId = () => props.sectionId;
-  const { locale } = useI18n();
-  const dictionary = createMemo(() => getDemoMessages(locale()));
-  const t = (key: DemoI18nMessageKey): string => dictionary()[key];
+  const { t } = useDemoDictionary();
   const [tab, setTab] = createSignal<TabValue>('preview');
   const [activeStep, setActiveStep] = createSignal('details');
   const [page, setPage] = createSignal(3);

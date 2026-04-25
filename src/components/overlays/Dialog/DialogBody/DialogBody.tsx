@@ -1,4 +1,5 @@
 import type { JSX } from 'solid-js';
+import { splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
@@ -10,7 +11,12 @@ interface DialogBodyProps {
 }
 
 const DialogBody = (props: Props<DialogBodyProps>) => {
-  return <div class={classNames(styles.root, props.class)}>{props.children}</div>;
+  const [local, rest] = splitProps(props, ['children', 'class']);
+  return (
+    <div {...rest} class={classNames(styles.root, local.class)}>
+      {local.children}
+    </div>
+  );
 };
 
 export default DialogBody;

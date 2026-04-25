@@ -1,4 +1,4 @@
-import { createMemo, createSignal, For, type JSX, Show, splitProps } from 'solid-js';
+import { createMemo, createSignal, For, type JSX, onCleanup, Show, splitProps } from 'solid-js';
 
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
@@ -43,13 +43,25 @@ const VirtualizedList = <T,>(props: Props<VirtualizedListOwnProps<T>>) => {
 
   const totalHeight = createMemo(() => local.items.length * local.itemHeight);
   const offsetY = createMemo(() => startIndex() * local.itemHeight);
-  const viewportStyle = createMemo(() => ({ height: `${local.height}px` }));
-  const spacerStyle = createMemo(() => ({ height: `${totalHeight()}px` }));
-  const innerStyle = createMemo(() => ({ transform: `translateY(${offsetY()}px)` }));
+  const viewportStyle = createMemo(() => ({ '--viewport-height': `${String(local.height)}px` }));
+  const spacerStyle = createMemo(() => ({ '--total-height': `${String(totalHeight())}px` }));
+  const innerStyle = createMemo(() => ({ '--offset-y': `${String(offsetY())}px` }));
+  const itemStyle = createMemo(() => ({ '--item-height': `${String(local.itemHeight)}px` }));
 
+  let scrollRafId: number | undefined;
+  let pendingScrollTop = 0;
   const handleScroll: JSX.EventHandler<HTMLDivElement, Event> = (e) => {
-    setScrollTop(e.currentTarget.scrollTop);
+    pendingScrollTop = e.currentTarget.scrollTop;
+    if (scrollRafId !== undefined) return;
+    scrollRafId = requestAnimationFrame(() => {
+      scrollRafId = undefined;
+      setScrollTop(pendingScrollTop);
+    });
   };
+
+  onCleanup(() => {
+    if (scrollRafId !== undefined) cancelAnimationFrame(scrollRafId);
+  });
 
   return (
     <div
@@ -67,7 +79,7 @@ const VirtualizedList = <T,>(props: Props<VirtualizedListOwnProps<T>>) => {
           <div class={styles.inner} style={innerStyle()}>
             <For each={visibleItems()}>
               {(entry) => (
-                <div class={styles.item} style={{ height: `${local.itemHeight}px` }} role="listitem">
+                <div class={styles.item} style={itemStyle()} role="listitem">
                   {local.renderItem(entry.item, entry.index)}
                 </div>
               )}

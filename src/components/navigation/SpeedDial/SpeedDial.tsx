@@ -91,21 +91,24 @@ const SpeedDial = (props: Props<SpeedDialProps>) => {
         >
           <For each={local.actions}>
             {(action, index) => (
-              <div class={styles.actionWrapper} style={{ '--action-delay': `${index() * 30}ms` }}>
-                <Tooltip content={action.label} position={tooltipPosition()}>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    iconOnly
-                    class={styles.actionButton}
-                    onClick={() => handleAction(action)}
-                    aria-label={action.label}
-                    role="menuitem"
-                  >
-                    {action.icon}
-                  </Button>
-                </Tooltip>
-              </div>
+              <Tooltip
+                class={styles.actionWrapper}
+                style={{ '--action-delay': `${index() * 30}ms` }}
+                content={action.label}
+                position={tooltipPosition()}
+              >
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  iconOnly
+                  class={styles.actionButton}
+                  onClick={() => handleAction(action)}
+                  aria-label={action.label}
+                  role="menuitem"
+                >
+                  {action.icon}
+                </Button>
+              </Tooltip>
             )}
           </For>
         </div>

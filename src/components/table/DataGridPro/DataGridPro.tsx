@@ -52,10 +52,10 @@ const DataGridPro = <T extends Record<string, unknown>>(props: Props<DataGridPro
         aria-rowcount={state.rowCount()}
         aria-colcount={state.visibleColumns().length + (state.selectable() ? 1 : 0)}
         aria-multiselectable={state.selectable() ? 'true' : undefined}
-        style={{ height: `${state.viewportHeight()}px` }}
+        style={{ '--viewport-height': `${String(state.viewportHeight())}px` }}
         onScroll={state.handleScroll}
       >
-        <div class={styles.grid} style={{ width: `${state.gridWidth()}px` }}>
+        <div class={styles.grid} style={{ '--grid-width': `${String(state.gridWidth())}px` }}>
           <DataGridProHeader
             headerHeight={state.headerHeight}
             selectable={state.selectable}

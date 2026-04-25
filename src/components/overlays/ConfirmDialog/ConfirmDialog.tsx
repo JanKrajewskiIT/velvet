@@ -1,4 +1,5 @@
 import { FiAlertTriangle, FiHelpCircle } from 'solid-icons/fi';
+import { createMemo, splitProps } from 'solid-js';
 
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
@@ -24,22 +25,32 @@ interface ConfirmDialogProps {
 
 const ConfirmDialog = (props: Props<ConfirmDialogProps>) => {
   const { ts } = useI18n();
-  const isDanger = () => (props.variant ?? 'primary') === 'danger';
+  const [local, rest] = splitProps(props, [
+    'open',
+    'label',
+    'message',
+    'confirmLabel',
+    'variant',
+    'onConfirm',
+    'onClose',
+    'class',
+  ]);
+  const isDanger = createMemo(() => (local.variant ?? 'primary') === 'danger');
 
   return (
-    <Dialog open={props.open} onClose={props.onClose} class={props.class}>
-      <DialogTitle label={props.label} />
+    <Dialog {...rest} open={local.open} onClose={local.onClose} class={local.class}>
+      <DialogTitle label={local.label} />
       <DialogBody class={styles.body}>
         <div class={classNames(styles.iconWrapper, isDanger() ? styles.iconDanger : styles.iconPrimary)}>
           {isDanger() ? <FiAlertTriangle /> : <FiHelpCircle />}
         </div>
         <Text as="p" variant="bodyMd" tone="muted" class={styles.message}>
-          {props.message}
+          {local.message}
         </Text>
       </DialogBody>
       <DialogActions>
-        <Button variant="ghost" onClick={() => props.onClose()} label={ts('common.cancel')} />
-        <Button variant={props.variant ?? 'primary'} onClick={() => props.onConfirm()} label={props.confirmLabel} />
+        <Button variant="ghost" onClick={local.onClose} label={ts('common.cancel')} />
+        <Button variant={local.variant ?? 'primary'} onClick={local.onConfirm} label={local.confirmLabel} />
       </DialogActions>
     </Dialog>
   );

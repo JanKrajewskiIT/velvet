@@ -1,5 +1,5 @@
 import type { JSX } from 'solid-js';
-import { For } from 'solid-js';
+import { createMemo, For, splitProps } from 'solid-js';
 
 import Badge from '~/components/feedback/Badge/Badge';
 import Text from '~/components/typography/Text/Text';
@@ -24,24 +24,23 @@ interface BottomNavProps {
 }
 
 const BottomNav = (props: Props<BottomNavProps>) => {
-  const placement = () => props.placement ?? 'viewport';
-  const barClass = () => (placement() === 'container' ? styles.barContainer : styles.barViewport);
+  const [local, rest] = splitProps(props, ['items', 'activeId', 'onChange', 'placement', 'class']);
+  const placement = createMemo(() => local.placement ?? 'viewport');
+  const barClass = createMemo(() => (placement() === 'container' ? styles.barContainer : styles.barViewport));
 
   return (
-    <nav class={classNames(styles.bar, barClass(), props.class)}>
-      <For each={props.items}>
+    <nav {...rest} class={classNames(styles.bar, barClass(), local.class)}>
+      <For each={local.items}>
         {(item) => (
           <Button
-            class={classNames(styles.item, props.activeId === item.id && styles.active)}
+            class={classNames(styles.item, local.activeId === item.id && styles.active)}
             variant="subtle"
             size="md"
-            onClick={() => props.onChange(item.id)}
+            onClick={() => local.onChange(item.id)}
           >
-            <span class={styles.iconWrap}>
-              <Badge content={item.badge} variant="error">
-                <span class={styles.icon}>{item.icon}</span>
-              </Badge>
-            </span>
+            <Badge class={styles.iconWrap} content={item.badge} variant="error">
+              <span class={styles.icon}>{item.icon}</span>
+            </Badge>
             <Text as="span" variant="caption" tone="inherit" class={styles.label}>
               {item.label}
             </Text>

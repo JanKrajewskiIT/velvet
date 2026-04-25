@@ -1,4 +1,4 @@
-import { createSignal, For, type JSX, splitProps } from 'solid-js';
+import { batch, createEffect, createSignal, For, type JSX, on, splitProps } from 'solid-js';
 
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
@@ -22,6 +22,18 @@ const TagInput = (props: Props<TagInputOwnProps>) => {
   const [local, rest] = splitProps(props, ['value', 'onChange', 'size', 'class', 'disabled', 'readOnly', 'onKeyDown']);
   const [inputValue, setInputValue] = createSignal('');
 
+  createEffect(
+    on(
+      () => local.value,
+      (next) => {
+        if (next.length === 0 && inputValue() !== '') {
+          setInputValue('');
+        }
+      },
+      { defer: true },
+    ),
+  );
+
   const handleKeyDown: JSX.EventHandler<HTMLInputElement, KeyboardEvent> = (e) => {
     if (typeof local.onKeyDown === 'function') {
       local.onKeyDown(e);
@@ -33,10 +45,12 @@ const TagInput = (props: Props<TagInputOwnProps>) => {
     if (e.key === 'Enter' || e.key === ',') {
       e.preventDefault();
       const newTag = inputValue().trim();
-      if (newTag && !local.value.includes(newTag)) {
-        local.onChange([...local.value, newTag]);
-      }
-      setInputValue('');
+      batch(() => {
+        if (newTag && !local.value.includes(newTag)) {
+          local.onChange([...local.value, newTag]);
+        }
+        setInputValue('');
+      });
     } else if (e.key === 'Backspace' && inputValue() === '') {
       local.onChange(local.value.slice(0, -1));
     }

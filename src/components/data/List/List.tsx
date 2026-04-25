@@ -1,4 +1,5 @@
 import type { JSX } from 'solid-js';
+import { createMemo, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
@@ -11,9 +12,14 @@ interface ListProps {
 }
 
 const List = (props: Props<ListProps>) => {
-  const variantClass = () => (props.variant === 'bordered' ? styles.bordered : '');
+  const [local, rest] = splitProps(props, ['children', 'variant', 'class']);
+  const variantClass = createMemo(() => (local.variant === 'bordered' ? styles.bordered : ''));
 
-  return <ul class={classNames(styles.list, variantClass(), props.class)}>{props.children}</ul>;
+  return (
+    <ul {...rest} class={classNames(styles.list, variantClass(), local.class)}>
+      {local.children}
+    </ul>
+  );
 };
 
 export default List;

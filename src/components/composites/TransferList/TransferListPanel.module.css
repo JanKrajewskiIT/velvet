@@ -59,6 +59,4 @@
 
 .itemChecked {
   background: var(--color-primary-light);
-  border-left: 3px solid var(--color-primary);
-  padding-left: calc(var(--spacing-sm) - 3px);
 }

@@ -6,10 +6,6 @@
   margin-bottom: var(--spacing-sm);
 }
 
-.grid {
-  width: 100%;
-}
-
 .weekdayLabel {
   text-align: center;
   color: var(--color-text-tertiary);

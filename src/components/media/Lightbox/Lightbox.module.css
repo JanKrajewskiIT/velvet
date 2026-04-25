@@ -24,6 +24,7 @@
   left: 50%;
   transform: translateX(-50%);
   margin: 0;
+  opacity: 0.7;
 }
 
 .imageContainer {
@@ -84,4 +85,5 @@
 .caption {
   margin-top: var(--spacing-md);
   max-width: 600px;
+  opacity: 0.8;
 }

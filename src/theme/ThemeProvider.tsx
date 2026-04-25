@@ -14,29 +14,28 @@ interface ThemeContextValue {
 
 const ThemeContext = createContext<ThemeContextValue>();
 
-function getSystemTheme(): ResolvedTheme {
+const getSystemTheme = (): ResolvedTheme => {
   if (typeof window === 'undefined') return 'light';
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-}
+};
 
-function getStoredTheme(key: string): ThemeChoice {
+const getStoredTheme = (key: string): ThemeChoice => {
   if (typeof window === 'undefined') return 'system';
   const stored = localStorage.getItem(key);
   if (stored === 'light' || stored === 'dark' || stored === 'system') {
     return stored;
   }
   return 'system';
-}
+};
 
-function resolveTheme(choice: ThemeChoice, system: ResolvedTheme): ResolvedTheme {
-  return choice === 'system' ? system : choice;
-}
+const resolveTheme = (choice: ThemeChoice, system: ResolvedTheme): ResolvedTheme =>
+  choice === 'system' ? system : choice;
 
-function applyTheme(resolved: ResolvedTheme) {
+const applyTheme = (resolved: ResolvedTheme): void => {
   if (typeof document !== 'undefined') {
     document.documentElement.setAttribute('data-theme', resolved);
   }
-}
+};
 
 interface ThemeProviderProps extends ParentProps {
   storageKey?: string;
@@ -95,12 +94,12 @@ const ThemeProvider = (props: ThemeProviderProps) => {
   );
 };
 
-export { ThemeProvider };
-
-export function useTheme(): ThemeContextValue {
+const useTheme = (): ThemeContextValue => {
   const context = useContext(ThemeContext);
   if (!context) {
     throw new Error('useTheme must be used within ThemeProvider');
   }
   return context;
-}
+};
+
+export { ThemeProvider, useTheme };

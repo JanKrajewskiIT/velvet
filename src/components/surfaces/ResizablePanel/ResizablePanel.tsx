@@ -1,4 +1,14 @@
-import { children, createEffect, createMemo, createSignal, onCleanup, type ParentProps } from 'solid-js';
+import {
+  batch,
+  children,
+  createEffect,
+  createMemo,
+  createSignal,
+  type JSX,
+  onCleanup,
+  type ParentProps,
+  splitProps,
+} from 'solid-js';
 
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
@@ -15,16 +25,17 @@ interface ResizablePanelProps {
 
 const ResizablePanel = (props: ParentProps<Props<ResizablePanelProps>>) => {
   const { ts } = useI18n();
-  const direction = createMemo(() => props.direction ?? 'horizontal');
-  const minSize = createMemo(() => props.minSize ?? 10);
+  const [local, rest] = splitProps(props, ['direction', 'initialSplit', 'minSize', 'onResize', 'class', 'children']);
+  const direction = createMemo(() => local.direction ?? 'horizontal');
+  const minSize = createMemo(() => local.minSize ?? 10);
   const resizeLabel = createMemo(() => ts('resizablePanel.resizePanels'));
 
-  const [split, setSplit] = createSignal(props.initialSplit ?? 50);
+  const [split, setSplit] = createSignal(local.initialSplit ?? 50);
   const [dragging, setDragging] = createSignal(false);
 
   let wrapperRef: HTMLDivElement | undefined;
 
-  const resolved = children(() => props.children);
+  const resolved = children(() => local.children);
   const childArray = () => {
     const c = resolved();
     return Array.isArray(c) ? c : [c];
@@ -35,6 +46,20 @@ const ResizablePanel = (props: ParentProps<Props<ResizablePanelProps>>) => {
     setDragging(true);
   };
 
+  let moveRafId: number | undefined;
+  let pendingClamped: number | null = null;
+
+  const flushMove = () => {
+    moveRafId = undefined;
+    if (pendingClamped === null) return;
+    const next = pendingClamped;
+    pendingClamped = null;
+    batch(() => {
+      setSplit(next);
+      local.onResize?.(next);
+    });
+  };
+
   const handleMouseMove = (e: MouseEvent) => {
     if (!dragging() || !wrapperRef) return;
 
@@ -43,10 +68,10 @@ const ResizablePanel = (props: ParentProps<Props<ResizablePanelProps>>) => {
     const position = isHorizontal ? e.clientX - rect.left : e.clientY - rect.top;
     const total = isHorizontal ? rect.width : rect.height;
     const percentage = (position / total) * 100;
-    const clamped = Math.min(Math.max(percentage, minSize()), 100 - minSize());
+    pendingClamped = Math.min(Math.max(percentage, minSize()), 100 - minSize());
 
-    setSplit(clamped);
-    props.onResize?.(clamped);
+    if (moveRafId !== undefined) return;
+    moveRafId = requestAnimationFrame(flushMove);
   };
 
   const handleMouseUp = () => {
@@ -62,35 +87,44 @@ const ResizablePanel = (props: ParentProps<Props<ResizablePanelProps>>) => {
     } else {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
+      if (moveRafId !== undefined) {
+        cancelAnimationFrame(moveRafId);
+        moveRafId = undefined;
+      }
+      pendingClamped = null;
     }
 
     onCleanup(() => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
+      if (moveRafId !== undefined) {
+        cancelAnimationFrame(moveRafId);
+        moveRafId = undefined;
+      }
+      pendingClamped = null;
     });
   });
 
   const isHorizontal = () => direction() === 'horizontal';
 
-  const firstStyle = () =>
-    isHorizontal() ? { width: `${split()}%`, height: '100%' } : { height: `${split()}%`, width: '100%' };
-
-  const secondStyle = () =>
-    isHorizontal() ? { width: `${100 - split()}%`, height: '100%' } : { height: `${100 - split()}%`, width: '100%' };
+  const wrapperStyle = (): JSX.CSSProperties => ({
+    '--resizable-split': `${split()}%`,
+    '--resizable-split-remainder': `${100 - split()}%`,
+  });
 
   return (
     <div
+      {...rest}
       ref={wrapperRef}
+      style={wrapperStyle()}
       class={classNames(
         styles.wrapper,
         isHorizontal() ? styles.horizontal : styles.vertical,
         dragging() && styles.dragging,
-        props.class,
+        local.class,
       )}
     >
-      <div class={styles.panelFirst} style={firstStyle()}>
-        {childArray()[0]}
-      </div>
+      <div class={styles.panelFirst}>{childArray()[0]}</div>
       <button
         type="button"
         aria-label={resizeLabel()}
@@ -103,9 +137,7 @@ const ResizablePanel = (props: ParentProps<Props<ResizablePanelProps>>) => {
           <span class={styles.gripDot} />
         </span>
       </button>
-      <div class={styles.panelSecond} style={secondStyle()}>
-        {childArray()[1]}
-      </div>
+      <div class={styles.panelSecond}>{childArray()[1]}</div>
     </div>
   );
 };

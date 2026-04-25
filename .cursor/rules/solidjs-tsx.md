@@ -43,17 +43,6 @@ paths:
 - Prefer `label` over `title` for component-level labels; reserve `title` for real domain data
 - Use `LabelText` for label/description rendering instead of duplicating inline text stacks
 
-## Built-in Copy and i18n
-
-- Generic reusable copy belongs in VelvetUi i18n
-- Do not leave hardcoded user-facing fallback strings in component logic when the library should own that copy
-- Resolution order for reusable text:
-  - semantic prop override when justified
-  - `messages` override
-  - built-in `useI18n()` default
-- When adding new built-in copy, add the key to `src/i18n/messages.ts`
-- Only expose text props when customization is part of the real component contract, not as a reflex
-
 ## Style Prop and Dynamic Styling
 
 - Always use object syntax: `style={{ key: value }}`
@@ -68,22 +57,3 @@ paths:
 - Field-like components must wire `aria-invalid`, `aria-errormessage`, and `aria-describedby` via shared aria helpers
 - Component semantics must expose correct role and accessible name by default
 - If label text is visually hidden or composed, keep semantic labeling intact
-
-## Component Test Baseline
-
-- New reusable components should include tests for render and core interaction behavior
-- Cover at least key states that change behavior: disabled, loading, error, selected, expanded, or equivalent
-- Validate keyboard interactions for actionable controls
-- Add an accessibility smoke assertion for semantic rendering where practical
-
-## Performance and SSR Safety
-
-- Keep derived state in `createMemo` and avoid effect chains for pure computation
-- Avoid expensive calculations inside JSX render paths
-- Guard browser-only APIs (`window`, `document`, `ResizeObserver`) with `onMount` or environment checks
-- Keep list identity stable with deterministic keys to avoid unnecessary remounts
-
-## Extraction Guidance
-
-- When extracting app code into VelvetUi, generalize patterns before export
-- Prefer reusable shells, cards, selectors, panels, and workflows over business-specific flows copied verbatim

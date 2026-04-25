@@ -42,14 +42,6 @@ interface SchedulerEventItemProps {
 }
 
 const SchedulerEventItem = (props: Props<SchedulerEventItemProps>) => {
-  const handleMoveDragStart = (event: DragEvent) => {
-    props.onMoveDragStart(event);
-  };
-
-  const handleResizeDragStart = (event: DragEvent) => {
-    props.onResizeDragStart(event);
-  };
-
   return (
     <article class={classNames(styles.eventItem, props.isDragging && styles.eventDragging)}>
       <Show
@@ -108,7 +100,7 @@ const SchedulerEventItem = (props: Props<SchedulerEventItemProps>) => {
                   variant="ghost"
                   class={styles.dragAction}
                   draggable
-                  onDragStart={handleMoveDragStart}
+                  onDragStart={props.onMoveDragStart}
                   onDragEnd={props.onDragEnd}
                   aria-label={props.moveAriaLabel}
                 >
@@ -119,7 +111,7 @@ const SchedulerEventItem = (props: Props<SchedulerEventItemProps>) => {
                   variant="ghost"
                   class={styles.dragAction}
                   draggable
-                  onDragStart={handleResizeDragStart}
+                  onDragStart={props.onResizeDragStart}
                   onDragEnd={props.onDragEnd}
                   aria-label={props.resizeEndAriaLabel}
                 >

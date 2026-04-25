@@ -64,7 +64,7 @@ interface SchedulerEventsPanelProps {
 
 const SchedulerEventsPanel = (props: Props<SchedulerEventsPanelProps>) => {
   return (
-    <Card class={styles.eventsPanel} style={{ overflow: 'visible', position: 'relative', 'z-index': 2 }}>
+    <Card class={styles.eventsPanel}>
       <div class={styles.eventsHeader}>
         <Heading as="h4" level={4} variant="titleMd">
           {props.agendaTitle}

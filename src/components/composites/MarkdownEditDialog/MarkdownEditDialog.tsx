@@ -1,4 +1,4 @@
-import { createEffect, createSignal, on, Show } from 'solid-js';
+import { createDeferred, createEffect, createSignal, on } from 'solid-js';
 
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
@@ -24,6 +24,7 @@ interface MarkdownEditDialogProps {
 const MarkdownEditDialog = (props: Props<MarkdownEditDialogProps>) => {
   const { ts } = useI18n();
   const [value, setValue] = createSignal(props.initialValue);
+  const deferredValue = createDeferred(value, { timeoutMs: 150 });
 
   createEffect(
     on(
@@ -33,6 +34,7 @@ const MarkdownEditDialog = (props: Props<MarkdownEditDialogProps>) => {
           setValue(props.initialValue);
         }
       },
+      { defer: true },
     ),
   );
 
@@ -51,23 +53,21 @@ const MarkdownEditDialog = (props: Props<MarkdownEditDialogProps>) => {
   };
 
   return (
-    <Show when={props.open}>
-      <Dialog open={props.open} onClose={handleCancel} class={props.class}>
-        <DialogTitle label={props.label} />
-        <DialogBody>
-          <div class={styles.body}>
-            <TextArea rows={8} value={value()} onInput={handleInput} />
-            <Card class={styles.preview}>
-              <MarkdownRenderer content={value()} />
-            </Card>
-          </div>
-        </DialogBody>
-        <DialogActions>
-          <Button variant="ghost" onClick={handleCancel} label={ts('common.cancel')} />
-          <Button onClick={handleSave} label={ts('common.save')} />
-        </DialogActions>
-      </Dialog>
-    </Show>
+    <Dialog open={props.open} onClose={handleCancel} class={props.class}>
+      <DialogTitle label={props.label} />
+      <DialogBody>
+        <div class={styles.body}>
+          <TextArea rows={8} value={value()} onInput={handleInput} />
+          <Card class={styles.preview}>
+            <MarkdownRenderer content={deferredValue()} />
+          </Card>
+        </div>
+      </DialogBody>
+      <DialogActions>
+        <Button variant="ghost" onClick={handleCancel} label={ts('common.cancel')} />
+        <Button onClick={handleSave} label={ts('common.save')} />
+      </DialogActions>
+    </Dialog>
   );
 };
 

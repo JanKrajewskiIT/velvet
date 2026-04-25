@@ -8,6 +8,7 @@ import classNames from '~/utils/classNames';
 import Button from '../../buttons/Button/Button';
 import ScoreRing from '../../charts/ScoreRing/ScoreRing';
 import Spinner from '../../loaders/Spinner/Spinner';
+import Card from '../../surfaces/Card/Card';
 import Stack from '../../surfaces/Stack/Stack';
 import CodeText from '../../typography/CodeText/CodeText';
 import Heading from '../../typography/Heading/Heading';
@@ -87,11 +88,11 @@ const AiResultPanel = (props: Props<AiResultPanelProps>) => {
           </Show>
 
           <Show when={props.summary}>
-            <div class={styles.summarySection}>
+            <Card padding="none" class={styles.summarySection}>
               <Text as="p" variant="bodySm">
                 {props.summary}
               </Text>
-            </div>
+            </Card>
           </Show>
 
           <For each={props.sections ?? []}>

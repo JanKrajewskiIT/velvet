@@ -30,8 +30,10 @@ const FlashcardPracticeCard = (props: Props<FlashcardPracticeCardProps>) => {
       onFlip={props.onFlip}
       width="100%"
       height={props.height ?? '18.75rem'}
+      frontClass={classNames(styles.face, styles.front)}
+      backClass={classNames(styles.face, styles.back)}
       front={
-        <div class={classNames(styles.face, styles.front)}>
+        <>
           <Show when={props.badgeLabel}>
             {(label) => (
               <Chip class={styles.badge} label={label()} size="sm" variant={props.badgeVariant ?? 'subtle'} />
@@ -41,17 +43,15 @@ const FlashcardPracticeCard = (props: Props<FlashcardPracticeCardProps>) => {
           <Text as="span" variant="caption" tone="muted" class={styles.hint}>
             {ts('flashcard.revealHint')}
           </Text>
-        </div>
+        </>
       }
       back={
-        <div class={classNames(styles.face, styles.back)}>
-          <div class={styles.backHeader}>
-            <Text as="span" variant="overline" tone="secondary">
-              {ts('flashcard.answer')}
-            </Text>
-          </div>
+        <>
+          <Text as="span" variant="overline" tone="secondary">
+            {ts('flashcard.answer')}
+          </Text>
           <div class={styles.backContent}>{props.back}</div>
-        </div>
+        </>
       }
     />
   );

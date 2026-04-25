@@ -1,4 +1,4 @@
-import { createSignal, type JSX } from 'solid-js';
+import { createSignal, type JSX, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
 
@@ -21,11 +21,21 @@ export interface ConfirmActionProps {
 }
 
 const ConfirmAction = (props: Props<ConfirmActionProps>) => {
+  const [local, rest] = splitProps(props, [
+    'class',
+    'label',
+    'message',
+    'confirmLabel',
+    'variant',
+    'onConfirm',
+    'onClose',
+    'children',
+  ]);
   const [open, setOpen] = createSignal(false);
 
   const closeConfirm = () => {
     setOpen(false);
-    props.onClose?.();
+    local.onClose?.();
   };
 
   const openConfirm = () => {
@@ -33,23 +43,24 @@ const ConfirmAction = (props: Props<ConfirmActionProps>) => {
   };
 
   const handleConfirm = () => {
-    void Promise.resolve(props.onConfirm()).finally(closeConfirm);
+    void Promise.resolve(local.onConfirm()).finally(closeConfirm);
   };
 
   return (
     <>
-      {props.children({
+      {local.children({
         openConfirm,
         closeConfirm,
         isConfirmOpen: open,
       })}
       <ConfirmDialog
-        class={props.class}
+        {...rest}
+        class={local.class}
         open={open()}
-        label={props.label}
-        message={props.message}
-        confirmLabel={props.confirmLabel}
-        variant={props.variant}
+        label={local.label}
+        message={local.message}
+        confirmLabel={local.confirmLabel}
+        variant={local.variant}
         onConfirm={handleConfirm}
         onClose={closeConfirm}
       />

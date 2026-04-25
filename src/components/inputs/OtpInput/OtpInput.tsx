@@ -1,4 +1,4 @@
-import { createMemo, For, type JSX, splitProps } from 'solid-js';
+import { createEffect, createMemo, For, type JSX, on, splitProps } from 'solid-js';
 
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
@@ -29,6 +29,21 @@ const OtpInput = (props: Props<OtpInputOwnProps>) => {
 
   const length = createMemo(() => local.length ?? 6);
   const digits = createMemo(() => Array.from({ length: length() }, (_, i) => i));
+
+  createEffect(
+    on(
+      length,
+      (len) => {
+        if (local.value.length !== len) {
+          const normalized = local.value.slice(0, len);
+          if (normalized !== local.value) {
+            local.onChange(normalized);
+          }
+        }
+      },
+      { defer: true },
+    ),
+  );
 
   const focusAt = (index: number) => {
     const target = refs[index];

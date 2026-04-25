@@ -59,6 +59,14 @@ const PracticeSetupPanel = (props: Props<PracticeSetupPanelProps>) => {
     });
   };
 
+  const handleCategoryChange = (event: Event & { currentTarget: HTMLSelectElement }) => {
+    setSelectedCategory(event.currentTarget.value);
+  };
+
+  const handleCountChange = (event: Event & { currentTarget: HTMLSelectElement }) => {
+    setCount(Number(event.currentTarget.value));
+  };
+
   return (
     <section class={classNames(styles.panel, props.class)}>
       <div class={styles.header}>
@@ -72,19 +80,11 @@ const PracticeSetupPanel = (props: Props<PracticeSetupPanelProps>) => {
 
       <FormGrid class={styles.fields}>
         <FormField label={ts('practiceSetup.category')}>
-          <Select
-            value={selectedCategory()}
-            onChange={(event) => setSelectedCategory(event.currentTarget.value)}
-            options={categoryOptions()}
-          />
+          <Select value={selectedCategory()} onChange={handleCategoryChange} options={categoryOptions()} />
         </FormField>
 
         <FormField label={ts('practiceSetup.count')}>
-          <Select
-            value={String(count())}
-            onChange={(event) => setCount(Number(event.currentTarget.value))}
-            options={countSelectOptions()}
-          />
+          <Select value={String(count())} onChange={handleCountChange} options={countSelectOptions()} />
         </FormField>
       </FormGrid>
 

@@ -1,5 +1,5 @@
 import type { JSX } from 'solid-js';
-import { createMemo, Show } from 'solid-js';
+import { createMemo, Show, splitProps } from 'solid-js';
 
 import Text from '~/components/typography/Text/Text';
 import type Props from '~/models/Props';
@@ -31,51 +31,68 @@ const variantClassByValue: Record<NonNullable<ChipProps['variant']>, string | un
 };
 
 const Chip = (props: Props<ChipProps>) => {
-  const usesCustomColor = createMemo(() => Boolean(props.color));
-  const isColorFilled = createMemo(() => Boolean(props.color && (props.selected || props.filled)));
+  const [local, rest] = splitProps(props, [
+    'variant',
+    'size',
+    'selected',
+    'filled',
+    'color',
+    'onClick',
+    'label',
+    'endAdornment',
+    'class',
+  ]);
+  const usesCustomColor = createMemo(() => Boolean(local.color));
+  const isColorFilled = createMemo(() => Boolean(local.color && (local.selected || local.filled)));
 
   const chipClass = createMemo(() =>
     classNames(
       styles.chip,
       usesCustomColor() && styles.customColor,
-      !usesCustomColor() && variantClassByValue[props.variant ?? 'primary'],
-      props.size === 'sm' && styles.sm,
-      props.selected && styles.selected,
-      props.filled && styles.filled,
-      props.onClick && styles.interactive,
-      props.class,
+      !usesCustomColor() && variantClassByValue[local.variant ?? 'primary'],
+      local.size === 'sm' && styles.sm,
+      local.selected && styles.selected,
+      local.filled && styles.filled,
+      local.onClick && styles.interactive,
+      local.class,
     ),
   );
 
   const inlineStyles = createMemo(() => {
-    if (!props.color) return undefined;
+    if (!local.color) return undefined;
 
     return {
-      '--chip-border-color': props.color,
-      '--chip-text-color': isColorFilled() ? getContrastTextColor(props.color) : props.color,
-      '--chip-background-color': isColorFilled() ? props.color : 'transparent',
+      '--chip-border-color': local.color,
+      '--chip-text-color': isColorFilled() ? getContrastTextColor(local.color) : local.color,
+      '--chip-background-color': isColorFilled() ? local.color : 'transparent',
     };
   });
 
   const content = createMemo(() => (
     <>
       <Text as="span" variant="labelMd" tone="inherit">
-        {props.label}
+        {local.label}
       </Text>
-      <Show when={props.endAdornment}>{props.endAdornment}</Show>
+      <Show when={local.endAdornment}>{local.endAdornment}</Show>
     </>
   ));
 
   return (
     <Show
-      when={props.onClick}
+      when={local.onClick}
       fallback={
-        <span class={chipClass()} style={inlineStyles()}>
+        <span {...rest} class={chipClass()} style={inlineStyles()}>
           {content()}
         </span>
       }
     >
-      <button type="button" class={chipClass()} style={inlineStyles()} onClick={(event) => props.onClick?.(event)}>
+      <button
+        type="button"
+        {...rest}
+        class={chipClass()}
+        style={inlineStyles()}
+        onClick={(event) => local.onClick?.(event)}
+      >
         {content()}
       </button>
     </Show>

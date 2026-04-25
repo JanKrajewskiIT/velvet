@@ -1,4 +1,4 @@
-import { createSignal } from 'solid-js';
+import { batch, createSignal } from 'solid-js';
 
 export interface ToastMessage {
   id: string;
@@ -37,8 +37,10 @@ const clearToastTimer = (id: string): void => {
 export const addToast = (toast: Omit<ToastMessage, 'id'>): string => {
   const id = createToastId();
   const toastMessage = { ...toast, id };
-  setToasts((prev) => [...prev, toastMessage]);
-  setNotifications((prev) => [{ ...toastMessage, createdAt: Date.now(), read: false }, ...prev]);
+  batch(() => {
+    setToasts((prev) => [...prev, toastMessage]);
+    setNotifications((prev) => [{ ...toastMessage, createdAt: Date.now(), read: false }, ...prev]);
+  });
 
   const duration = toast.duration !== undefined ? toast.duration : 3000;
   if (duration > 0) {
@@ -89,6 +91,8 @@ export const cleanupToasts = (): void => {
     clearTimeout(timer);
   }
   toastTimers.clear();
-  setToasts([]);
-  setNotifications([]);
+  batch(() => {
+    setToasts([]);
+    setNotifications([]);
+  });
 };

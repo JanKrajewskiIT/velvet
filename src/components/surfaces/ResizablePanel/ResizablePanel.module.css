@@ -20,6 +20,26 @@
   min-height: 0;
 }
 
+.horizontal > .panelFirst {
+  width: var(--resizable-split);
+  height: 100%;
+}
+
+.horizontal > .panelSecond {
+  width: var(--resizable-split-remainder);
+  height: 100%;
+}
+
+.vertical > .panelFirst {
+  height: var(--resizable-split);
+  width: 100%;
+}
+
+.vertical > .panelSecond {
+  height: var(--resizable-split-remainder);
+  width: 100%;
+}
+
 .handle {
   flex-shrink: 0;
   display: flex;

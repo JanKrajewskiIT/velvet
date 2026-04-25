@@ -19,7 +19,6 @@ import {
   Text,
   type TransferItem,
   TransferList,
-  useI18n,
 } from '@jankrajewskiit/ui';
 import {
   IoAdd,
@@ -37,10 +36,12 @@ import {
 } from 'solid-icons/io';
 import { createEffect, createMemo, createSignal, For, Show } from 'solid-js';
 
-import type { SectionId } from '../App';
 import { PreviewGroup, PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
-import { type DemoI18nMessageKey, getDemoMessages } from '../i18n/messages';
+import { DEMO_TRANSFER_INITIAL_SOURCE, DEMO_TRANSFER_INITIAL_TARGET } from '../fixtures/compositesFixtures';
+import { useDemoDictionary } from '../hooks/useDemoDictionary';
+import { type DemoI18nMessageKey } from '../i18n/messages';
 import { renderRichText } from '../i18n/renderRichText';
+import type { SectionId } from '../nav/demoNavConfig';
 
 type AnalysisState = 'idle' | 'loading' | 'result' | 'error';
 
@@ -68,16 +69,6 @@ interface KanbanDemoItem extends KanbanItemBase {
   owner: string;
   priority: 'low' | 'medium' | 'high';
 }
-
-const INITIAL_SOURCE: TransferItem[] = [
-  { id: '1', label: 'TypeScript' },
-  { id: '2', label: 'CSS Modules' },
-  { id: '3', label: 'Vite' },
-  { id: '4', label: 'ESLint' },
-  { id: '5', label: 'Prettier' },
-];
-
-const INITIAL_TARGET: TransferItem[] = [{ id: '6', label: 'SolidJS' }];
 
 const createTask = (index: number, t: (key: DemoI18nMessageKey) => string): TaskItem => ({
   id: crypto.randomUUID(),
@@ -341,14 +332,12 @@ const createAiRunScenarios = (t: (key: DemoI18nMessageKey) => string): readonly 
 
 const CompositesSection = (props: { sectionId: SectionId }) => {
   const sectionId = () => props.sectionId;
-  const { locale } = useI18n();
-  const dictionary = createMemo(() => getDemoMessages(locale()));
-  const t = (key: DemoI18nMessageKey): string => dictionary()[key];
+  const { t } = useDemoDictionary();
   const aiRunScenarios = createMemo(() => createAiRunScenarios(t));
   const commandItems = createMemo(() => createCommandItems(t));
   const kanbanColumns = createMemo(() => createKanbanColumns(t));
-  const [sourceItems, setSourceItems] = createSignal(INITIAL_SOURCE);
-  const [targetItems, setTargetItems] = createSignal(INITIAL_TARGET);
+  const [sourceItems, setSourceItems] = createSignal(DEMO_TRANSFER_INITIAL_SOURCE);
+  const [targetItems, setTargetItems] = createSignal(DEMO_TRANSFER_INITIAL_TARGET);
   const [analysisState, setAnalysisState] = createSignal<AnalysisState>('idle');
   const [selectedScenarioId, setSelectedScenarioId] = createSignal('a11y-audit');
   const [atsInput, setAtsInput] = createSignal('SolidJS, TypeScript, Design systems, accessibility');
@@ -393,26 +382,26 @@ const CompositesSection = (props: { sectionId: SectionId }) => {
 
     if (!atsInput().trim()) {
       setAtsLoading(false);
-      setAtsError('Paste a resume excerpt before running the ATS analysis.');
+      setAtsError(t('demo.text.composites.ats.errorEmptyInput'));
       return;
     }
 
     setAtsResult({
       overallScore: 86,
       categories: [
-        { label: 'Keyword match', score: 91 },
-        { label: 'Structure', score: 83 },
-        { label: 'Readability', score: 78 },
+        { label: t('demo.text.composites.ats.category.keywordMatch'), score: 91 },
+        { label: t('demo.text.composites.ats.category.structure'), score: 83 },
+        { label: t('demo.text.composites.ats.category.readability'), score: 78 },
       ],
       recommendations: [
         {
-          label: 'Add measurable outcomes',
-          message: 'Highlight impact with numbers in two recent experience bullets.',
+          label: t('demo.text.composites.ats.reco.measurableOutcomes.label'),
+          message: t('demo.text.composites.ats.reco.measurableOutcomes.message'),
           severity: 'warning',
         },
         {
-          label: 'Mirror required stack',
-          message: 'Mention testing and accessibility closer to the top of the profile.',
+          label: t('demo.text.composites.ats.reco.mirrorStack.label'),
+          message: t('demo.text.composites.ats.reco.mirrorStack.message'),
           severity: 'suggestion',
         },
       ],

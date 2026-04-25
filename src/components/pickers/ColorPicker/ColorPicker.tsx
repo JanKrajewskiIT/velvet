@@ -30,8 +30,8 @@ const ColorPicker = (props: Props<ColorPickerProps>) => {
 
   const optionRefs: (HTMLButtonElement | undefined)[] = [];
 
-  const hasSelectedColor = () => local.colors.includes(local.value);
   const selectedIndex = createMemo(() => local.colors.findIndex((color) => color === local.value));
+  const hasSelectedColor = createMemo(() => selectedIndex() >= 0);
   const tabStopIndex = createMemo(() => {
     const selected = selectedIndex();
     return selected >= 0 ? selected : 0;

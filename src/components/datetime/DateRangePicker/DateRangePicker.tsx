@@ -1,4 +1,4 @@
-import { createMemo, createSignal, createUniqueId, Show } from 'solid-js';
+import { batch, createMemo, createSignal, createUniqueId, Show } from 'solid-js';
 
 import DropdownFieldTrigger from '~/components/dropdowns/Dropdown/DropdownFieldTrigger/DropdownFieldTrigger';
 import DropdownSurface from '~/components/dropdowns/Dropdown/DropdownSurface/DropdownSurface';
@@ -80,41 +80,45 @@ const DateRangePicker = (props: Props<DateRangePickerProps>) => {
 
   const openCalendar = (field: 'start' | 'end') => {
     if (props.disabled) return;
-    setActiveField(field);
-    setPendingStart(null);
     const dateStr = field === 'start' ? props.value.start : props.value.end;
-    popup.open(dateStr);
+    batch(() => {
+      setActiveField(field);
+      setPendingStart(null);
+      popup.open(dateStr);
+    });
   };
 
   const selectDay = (cell: DayCell) => {
     const iso = toIso(cell.year, cell.month, cell.day);
     if (isDateDisabled(iso)) return;
 
-    if (activeField() === 'start') {
-      const currentEnd = props.value.end;
-      if (currentEnd && currentEnd >= iso) {
-        props.onChange({ start: iso, end: currentEnd });
-        popup.close();
+    batch(() => {
+      if (activeField() === 'start') {
+        const currentEnd = props.value.end;
+        if (currentEnd && currentEnd >= iso) {
+          props.onChange({ start: iso, end: currentEnd });
+          popup.close();
+          return;
+        }
+
+        props.onChange({ start: iso, end: '' });
+        setPendingStart(iso);
+        setActiveField('end');
         return;
       }
 
-      props.onChange({ start: iso, end: '' });
-      setPendingStart(iso);
-      setActiveField('end');
-      return;
-    }
+      const start = props.value.start || pendingStart();
+      if (!start) {
+        props.onChange({ start: iso, end: '' });
+        setPendingStart(iso);
+        setActiveField('end');
+        return;
+      }
 
-    const start = props.value.start || pendingStart();
-    if (!start) {
-      props.onChange({ start: iso, end: '' });
-      setPendingStart(iso);
-      setActiveField('end');
-      return;
-    }
-
-    const [a, b] = start <= iso ? [start, iso] : [iso, start];
-    props.onChange({ start: a, end: b });
-    popup.close();
+      const [a, b] = start <= iso ? [start, iso] : [iso, start];
+      props.onChange({ start: a, end: b });
+      popup.close();
+    });
   };
 
   const effectiveStart = createMemo(() => pendingStart() ?? props.value.start);
@@ -153,6 +157,10 @@ const DateRangePicker = (props: Props<DateRangePickerProps>) => {
     ),
   );
 
+  const handleOpenStart = () => openCalendar('start');
+  const handleOpenEnd = () => openCalendar('end');
+  const getDayAriaLabel = (cell: DayCell) => toIso(cell.year, cell.month, cell.day);
+
   return (
     <div
       ref={wrapperRef}
@@ -169,7 +177,7 @@ const DateRangePicker = (props: Props<DateRangePickerProps>) => {
         labelId={startTriggerLabelId}
         labelTone={props.value.start ? 'default' : 'muted'}
         disabled={props.disabled}
-        onClick={() => openCalendar('start')}
+        onClick={handleOpenStart}
         title={startAriaLabel()}
         aria-haspopup="dialog"
         aria-expanded={popup.isOpen() && activeField() === 'start'}
@@ -189,7 +197,7 @@ const DateRangePicker = (props: Props<DateRangePickerProps>) => {
         labelId={endTriggerLabelId}
         labelTone={props.value.end ? 'default' : 'muted'}
         disabled={props.disabled}
-        onClick={() => openCalendar('end')}
+        onClick={handleOpenEnd}
         title={endAriaLabel()}
         aria-haspopup="dialog"
         aria-expanded={popup.isOpen() && activeField() === 'end'}
@@ -203,7 +211,6 @@ const DateRangePicker = (props: Props<DateRangePickerProps>) => {
         <DropdownSurface
           id={dropdownId}
           class={styles.dropdown}
-          style={{ top: 'calc(100% + var(--spacing-xs))' }}
           align="left"
           origin="topLeft"
           role="dialog"
@@ -218,7 +225,7 @@ const DateRangePicker = (props: Props<DateRangePickerProps>) => {
             days={daysGrid()}
             getDayClass={dayClass}
             isDayDisabled={isDayDisabled}
-            getDayAriaLabel={(cell) => toIso(cell.year, cell.month, cell.day)}
+            getDayAriaLabel={getDayAriaLabel}
             onSelectDay={selectDay}
             dayLabels={dayLabels()}
           />

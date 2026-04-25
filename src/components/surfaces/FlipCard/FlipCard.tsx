@@ -16,10 +16,23 @@ interface FlipCardOwnProps extends DivCoreNativeProps {
   width?: string;
   height?: string;
   axis?: FlipAxis;
+  frontClass?: string;
+  backClass?: string;
 }
 
 const FlipCard = (props: Props<FlipCardOwnProps>) => {
-  const [local, rest] = splitProps(props, ['front', 'back', 'isFlipped', 'onFlip', 'width', 'height', 'axis', 'class']);
+  const [local, rest] = splitProps(props, [
+    'front',
+    'back',
+    'isFlipped',
+    'onFlip',
+    'width',
+    'height',
+    'axis',
+    'class',
+    'frontClass',
+    'backClass',
+  ]);
   const [internalFlipped, setInternalFlipped] = createSignal(false);
 
   const isFlipped = createMemo(() => (local.isFlipped !== undefined ? local.isFlipped : internalFlipped()));
@@ -41,10 +54,17 @@ const FlipCard = (props: Props<FlipCardOwnProps>) => {
     }
   };
 
+  const cardStyle = createMemo<JSX.CSSProperties>(() => {
+    const style: JSX.CSSProperties = {};
+    if (local.width) style['--flip-card-width'] = local.width;
+    if (local.height) style['--flip-card-height'] = local.height;
+    return style;
+  });
+
   return (
     <div
       class={classNames(styles.flipCard, local.axis === 'horizontal' && styles.horizontal, local.class)}
-      style={{ width: local.width || '100%', height: local.height || '200px' }}
+      style={cardStyle()}
       onClick={handleFlip}
       onKeyDown={handleKeyDown}
       role="button"
@@ -52,8 +72,12 @@ const FlipCard = (props: Props<FlipCardOwnProps>) => {
       {...rest}
     >
       <div class={classNames(styles.flipCardInner, isFlipped() && styles.flipped)}>
-        <div class={styles.flipCardFront}>{local.front}</div>
-        <div class={styles.flipCardBack}>{local.back}</div>
+        <div class={classNames(styles.flipCardFront, local.frontClass ? local.frontClass : styles.defaultFace)}>
+          {local.front}
+        </div>
+        <div class={classNames(styles.flipCardBack, local.backClass ? local.backClass : styles.defaultFace)}>
+          {local.back}
+        </div>
       </div>
     </div>
   );

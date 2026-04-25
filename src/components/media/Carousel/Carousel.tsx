@@ -73,20 +73,36 @@ const Carousel = (props: Props<CarouselOwnProps>) => {
     const el = trackRef();
     if (!el) return;
 
+    let rafId: number | undefined;
     const syncFromScroll = () => {
-      const count = el.children.length;
-      if (count === 0) return;
-      const slideWidth = el.clientWidth;
-      const index = Math.round(el.scrollLeft / slideWidth);
-      const clamped = Math.max(0, Math.min(index, count - 1));
-      setActiveIndex(clamped);
+      if (rafId !== undefined) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = undefined;
+        const count = el.children.length;
+        if (count === 0) return;
+        const slideWidth = el.clientWidth;
+        const index = Math.round(el.scrollLeft / slideWidth);
+        const clamped = Math.max(0, Math.min(index, count - 1));
+        setActiveIndex(clamped);
+      });
     };
 
-    el.addEventListener('scroll', syncFromScroll);
-    onCleanup(() => el.removeEventListener('scroll', syncFromScroll));
+    el.addEventListener('scroll', syncFromScroll, { passive: true });
+    onCleanup(() => {
+      if (rafId !== undefined) cancelAnimationFrame(rafId);
+      el.removeEventListener('scroll', syncFromScroll);
+    });
   });
 
   const resolveSlideButtonLabel = (index: number) => ts('carousel.goToSlide', { index: index + 1 });
+
+  const handleMouseEnter = () => {
+    setHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setHovered(false);
+  };
 
   return (
     <div
@@ -94,8 +110,8 @@ const Carousel = (props: Props<CarouselOwnProps>) => {
       class={classNames(styles.carousel, local.class)}
       role="region"
       aria-roledescription="carousel"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <div class={styles.track} ref={setTrackRef}>
         <For each={slides()}>{(slide) => <div class={styles.slide}>{slide}</div>}</For>

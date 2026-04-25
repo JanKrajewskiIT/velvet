@@ -39,6 +39,7 @@
 
 .progressFill {
   height: 100%;
+  width: var(--flashcard-progress, 0%);
   border-radius: var(--radius-pill);
   background: var(--color-primary);
   transition: width var(--duration-normal) var(--ease-out-expo);

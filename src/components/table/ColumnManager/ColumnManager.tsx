@@ -1,5 +1,5 @@
 import { IoArrowDown, IoArrowUp } from 'solid-icons/io';
-import { createMemo, For, Show, splitProps } from 'solid-js';
+import { batch, createMemo, For, Show, splitProps } from 'solid-js';
 
 import Card from '~/components/surfaces/Card/Card';
 import Heading from '~/components/typography/Heading/Heading';
@@ -127,9 +127,11 @@ const ColumnManager = (props: Props<ColumnManagerOwnProps>) => {
       resetPinning[column.key] = local.defaultPinning?.[column.key] ?? null;
     }
 
-    local.onOrderChange(resetOrder);
-    local.onVisibilityChange(resetVisibility);
-    local.onPinningChange?.(resetPinning);
+    batch(() => {
+      local.onOrderChange(resetOrder);
+      local.onVisibilityChange(resetVisibility);
+      local.onPinningChange?.(resetPinning);
+    });
   };
 
   return (
@@ -175,9 +177,7 @@ const ColumnManager = (props: Props<ColumnManagerOwnProps>) => {
                     value={pinValue() ?? ''}
                     disabled={local.disabled || !isVisible(column.key)}
                     options={pinOptions()}
-                    onChange={(event: Event & { currentTarget: HTMLSelectElement; target: HTMLSelectElement }) =>
-                      setPinning(column.key, toPinValue(event.currentTarget.value))
-                    }
+                    onChange={(event) => setPinning(column.key, toPinValue(event.currentTarget.value))}
                   />
                 </Show>
 

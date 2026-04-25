@@ -66,6 +66,14 @@ const AtsAnalysisPanel = (props: Props<AtsAnalysisPanelProps>) => {
   const categories = createMemo(() => props.result?.categories ?? []);
   const recommendations = createMemo(() => props.result?.recommendations ?? []);
 
+  const handleValueInput = (event: InputEvent & { currentTarget: HTMLTextAreaElement }) => {
+    props.onValueChange(event.currentTarget.value);
+  };
+
+  const handleSubmitClick = () => {
+    void props.onSubmit();
+  };
+
   return (
     <div class={classNames(styles.panel, props.class)}>
       <Show when={props.loading}>
@@ -145,17 +153,13 @@ const AtsAnalysisPanel = (props: Props<AtsAnalysisPanelProps>) => {
                 <TextArea
                   value={props.value}
                   placeholder={ts('analysis.inputPlaceholder')}
-                  onInput={(event) => props.onValueChange(event.currentTarget.value)}
+                  onInput={handleValueInput}
                 />
               </FormField>
             )}
           </Show>
           <Show when={!props.inputLabel}>
-            <TextArea
-              value={props.value}
-              placeholder={ts('analysis.inputPlaceholder')}
-              onInput={(event) => props.onValueChange(event.currentTarget.value)}
-            />
+            <TextArea value={props.value} placeholder={ts('analysis.inputPlaceholder')} onInput={handleValueInput} />
           </Show>
           <Show when={props.inputHint}>
             {(hint) => (
@@ -164,7 +168,7 @@ const AtsAnalysisPanel = (props: Props<AtsAnalysisPanelProps>) => {
               </Text>
             )}
           </Show>
-          <Button label={ts('analysis.analyze')} onClick={() => void props.onSubmit()} />
+          <Button label={ts('analysis.analyze')} onClick={handleSubmitClick} />
         </div>
       </Show>
     </div>

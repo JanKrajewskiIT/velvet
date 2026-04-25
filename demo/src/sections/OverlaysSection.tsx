@@ -16,21 +16,18 @@ import {
   Tooltip,
   Tour,
   type TourStep,
-  useI18n,
 } from '@jankrajewskiit/ui';
 import { IoCopy, IoPencil, IoTrash } from 'solid-icons/io';
 import { createMemo, createSignal, Show } from 'solid-js';
 
-import type { SectionId } from '../App';
 import { PreviewGroup, PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
-import { type DemoI18nMessageKey, getDemoMessages } from '../i18n/messages';
+import { useDemoDictionary } from '../hooks/useDemoDictionary';
 import { renderRichText } from '../i18n/renderRichText';
+import type { SectionId } from '../nav/demoNavConfig';
 
 const OverlaysSection = (props: { sectionId: SectionId }) => {
   const sectionId = () => props.sectionId;
-  const { locale } = useI18n();
-  const dictionary = createMemo(() => getDemoMessages(locale()));
-  const t = (key: DemoI18nMessageKey): string => dictionary()[key];
+  const { t } = useDemoDictionary();
   const [tourOpen, setTourOpen] = createSignal(false);
   const [dialogOpen, setDialogOpen] = createSignal(false);
   const [confirmOpen, setConfirmOpen] = createSignal(false);

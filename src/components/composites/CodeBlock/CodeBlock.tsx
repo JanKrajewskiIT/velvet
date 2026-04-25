@@ -32,7 +32,7 @@ const CodeBlock = (props: Props<CodeBlockProps>) => {
         </Show>
         <CopyButton text={props.code} size="sm" />
       </div>
-      <div class={styles.body} style={props.maxHeight ? { 'max-height': props.maxHeight } : undefined}>
+      <div class={styles.body} style={props.maxHeight ? { '--code-block-max-height': props.maxHeight } : undefined}>
         <CodeText as="pre" variant="block" size="md" class={styles.lineNumbers}>
           {lineNumberText()}
         </CodeText>

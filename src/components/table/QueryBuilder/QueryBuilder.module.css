@@ -30,10 +30,6 @@
   gap: var(--spacing-2xs);
 }
 
-.combinatorRow {
-  display: flex;
-}
-
 .combinatorField {
   width: min(100%, 320px);
 }
@@ -52,13 +48,6 @@
   border-radius: var(--radius-sm);
   background: var(--color-bg);
   padding: var(--spacing-xs);
-}
-
-.ruleField,
-.ruleOperator,
-.ruleValue {
-  display: grid;
-  gap: var(--spacing-2xs);
 }
 
 .ruleActions {

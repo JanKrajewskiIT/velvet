@@ -82,9 +82,13 @@ const CalendarEventButton = (props: Props<CalendarEventButtonProps>) => {
         />
       }
     >
-      <span class={classNames(styles.status, sizeClassBySize[size()], props.class)}>
-        <Icon icon={FiCheck} size={size()} variant="success" label={props.syncedLabel} />
-      </span>
+      <Icon
+        class={classNames(styles.status, sizeClassBySize[size()], props.class)}
+        icon={FiCheck}
+        size={size()}
+        variant="success"
+        label={props.syncedLabel}
+      />
     </Show>
   );
 };

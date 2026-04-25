@@ -15,6 +15,7 @@ interface ButtonBaseProps extends Omit<ButtonCoreNativeProps, 'children'> {
   loading?: boolean;
   iconOnly?: boolean;
   round?: boolean;
+  contentClass?: string;
 }
 
 type ButtonLabelProps = ButtonBaseProps & LabelOnlyProps;
@@ -56,6 +57,7 @@ const Button = (props: Props<ButtonOwnProps>) => {
     'iconOnly',
     'round',
     'class',
+    'contentClass',
     'children',
     'label',
     'disabled',
@@ -99,7 +101,9 @@ const Button = (props: Props<ButtonOwnProps>) => {
           <Spinner size="sm" />
         </span>
       </Show>
-      <span class={classNames(styles.content, local.loading && styles.contentHidden)}>{content()}</span>
+      <span class={classNames(styles.content, local.loading && styles.contentHidden, local.contentClass)}>
+        {content()}
+      </span>
     </button>
   );
 };

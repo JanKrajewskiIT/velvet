@@ -1,5 +1,5 @@
 import { FiCheck } from 'solid-icons/fi';
-import { For, Show } from 'solid-js';
+import { createMemo, For, Show, splitProps } from 'solid-js';
 
 import Text from '~/components/typography/Text/Text';
 import type Props from '~/models/Props';
@@ -26,7 +26,8 @@ const stepStateClassByValue: Record<StepState, string | undefined> = {
 };
 
 const Stepper = (props: Props<StepperProps>) => {
-  const activeIndex = () => props.steps.findIndex((s) => s.value === props.activeStep);
+  const [local, rest] = splitProps(props, ['steps', 'activeStep', 'class']);
+  const activeIndex = createMemo(() => local.steps.findIndex((s) => s.value === local.activeStep));
 
   const getStepState = (index: number): StepState => {
     const current = activeIndex();
@@ -47,8 +48,8 @@ const Stepper = (props: Props<StepperProps>) => {
   };
 
   return (
-    <div class={classNames(styles.stepIndicator, props.class)} role="list">
-      <For each={props.steps}>
+    <div {...rest} class={classNames(styles.stepIndicator, local.class)} role="list">
+      <For each={local.steps}>
         {(step, index) => (
           <>
             <Show when={index() > 0}>

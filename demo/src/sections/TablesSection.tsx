@@ -22,13 +22,12 @@ import {
   TableHeader,
   TableRow,
   Text,
-  useI18n,
 } from '@jankrajewskiit/ui';
 import { createMemo, createSignal } from 'solid-js';
 
 import { PreviewGroup, PreviewPanel, ShowcaseMeta, ShowcaseSection } from '../components/ShowcaseSection';
-import { type DemoI18nMessageKey, getDemoMessages } from '../i18n/messages';
-import { interpolateText, renderRichText } from '../i18n/renderRichText';
+import { useDemoDictionary } from '../hooks/useDemoDictionary';
+import { renderRichText } from '../i18n/renderRichText';
 
 interface PackageRow extends Record<string, unknown> {
   id: string;
@@ -181,10 +180,7 @@ const createDefaultAdvancedQuery = (): QueryBuilderValue => ({
 });
 
 const TablesSection = () => {
-  const { locale } = useI18n();
-  const dictionary = createMemo(() => getDemoMessages(locale()));
-  const t = (key: DemoI18nMessageKey, params?: Record<string, string | number>): string =>
-    interpolateText(dictionary()[key], params);
+  const { t } = useDemoDictionary();
   const [query, setQuery] = createSignal('');
   const [gridFilterQuery, setGridFilterQuery] = createSignal('');
   const [gridSort, setGridSort] = createSignal<DataGridProSortState>({ key: 'downloads', direction: 'desc' });

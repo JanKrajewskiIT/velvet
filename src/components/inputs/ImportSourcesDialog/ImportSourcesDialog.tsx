@@ -1,5 +1,5 @@
 import { IoClose, IoCloudUpload, IoDocument } from 'solid-icons/io';
-import { createEffect, createMemo, createSignal, Match, Show, Switch } from 'solid-js';
+import { batch, createEffect, createMemo, createSignal, type JSX, Match, on, Show, Switch } from 'solid-js';
 
 import Button from '~/components/buttons/Button/Button';
 import IconButton from '~/components/buttons/IconButton/IconButton';
@@ -65,25 +65,42 @@ const ImportSourcesDialog = (props: Props<ImportSourcesDialogProps>) => {
   const [urlValues, setUrlValues] = createSignal<Record<string, string>>({});
   const [fileValues, setFileValues] = createSignal<Record<string, File | null>>({});
 
-  createEffect(() => {
-    if (!props.open) {
-      setActiveSource(firstSourceValue());
-      setUrlValues({});
-      setFileValues({});
-      return;
-    }
+  createEffect(
+    on(
+      () => props.open,
+      (open) => {
+        if (!open) {
+          batch(() => {
+            setActiveSource(firstSourceValue());
+            setUrlValues({});
+            setFileValues({});
+          });
+          return;
+        }
 
-    const selected = activeSource();
-    const exists = props.sources.some((source) => source.value === selected);
-    if (!exists) {
-      setActiveSource(firstSourceValue());
-    }
-  });
+        const selected = activeSource();
+        const exists = props.sources.some((source) => source.value === selected);
+        if (!exists) {
+          setActiveSource(firstSourceValue());
+        }
+      },
+      { defer: true },
+    ),
+  );
 
   const currentSource = createMemo(() => props.sources.find((source) => source.value === activeSource()));
+  const currentUrlSource = createMemo<UrlImportSource | undefined>(() => {
+    const source = currentSource();
+    return source?.kind === 'url' ? source : undefined;
+  });
+  const currentFileSource = createMemo<FileImportSource | undefined>(() => {
+    const source = currentSource();
+    return source?.kind === 'file' ? source : undefined;
+  });
   const currentUrl = createMemo(() => urlValues()[activeSource()] ?? '');
   const currentFile = createMemo(() => fileValues()[activeSource()] ?? null);
   const showTabs = createMemo(() => props.sources.length > 1);
+  const tabs = createMemo(() => props.sources.map((source) => ({ value: source.value, label: source.label })));
 
   const isSubmitDisabled = createMemo(() => {
     const source = currentSource();
@@ -101,6 +118,13 @@ const ImportSourcesDialog = (props: Props<ImportSourcesDialogProps>) => {
   const handleFileChange = (file: File | null) => {
     setFileValues((current) => ({ ...current, [activeSource()]: file }));
   };
+
+  const handleUrlInput: JSX.EventHandler<HTMLInputElement, InputEvent> = (event) => {
+    handleUrlChange(event.currentTarget.value);
+  };
+
+  const clearSelectedFile = () => handleFileChange(null);
+  const submitForm = () => void handleSubmit();
 
   const handleSubmit = async () => {
     const source = currentSource();
@@ -126,7 +150,7 @@ const ImportSourcesDialog = (props: Props<ImportSourcesDialogProps>) => {
           <Show when={showTabs()}>
             <Tabs
               variant="pill"
-              tabs={props.sources.map((source) => ({ value: source.value, label: source.label }))}
+              tabs={tabs()}
               value={activeSource()}
               onChange={setActiveSource}
               disabled={props.busy}
@@ -134,56 +158,60 @@ const ImportSourcesDialog = (props: Props<ImportSourcesDialogProps>) => {
           </Show>
 
           <Switch>
-            <Match when={currentSource()?.kind === 'url'}>
-              <FormLayout>
-                <FormField label={(currentSource() as UrlImportSource | undefined)?.inputLabel ?? ''}>
-                  <Input
-                    type="url"
-                    value={currentUrl()}
-                    placeholder={(currentSource() as UrlImportSource | undefined)?.inputPlaceholder}
-                    disabled={props.busy}
-                    onInput={(event) => handleUrlChange(event.currentTarget.value)}
-                  />
-                </FormField>
-                <Show when={(currentSource() as UrlImportSource | undefined)?.helperText}>
-                  {(helperText) => (
-                    <Text as="p" variant="caption" tone="muted" class={styles.helperText}>
-                      {helperText()}
-                    </Text>
-                  )}
-                </Show>
-              </FormLayout>
-            </Match>
-            <Match when={currentSource()?.kind === 'file'}>
-              <FormLayout>
-                <Show
-                  when={currentFile() === null}
-                  fallback={
-                    <div class={styles.selectedFile}>
-                      <IoDocument />
-                      <Text as="span" class={styles.selectedFileName}>
-                        {currentFile()?.name ?? ''}
+            <Match when={currentUrlSource()}>
+              {(urlSource) => (
+                <FormLayout>
+                  <FormField label={urlSource().inputLabel}>
+                    <Input
+                      type="url"
+                      value={currentUrl()}
+                      placeholder={urlSource().inputPlaceholder}
+                      disabled={props.busy}
+                      onInput={handleUrlInput}
+                    />
+                  </FormField>
+                  <Show when={urlSource().helperText}>
+                    {(helperText) => (
+                      <Text as="p" variant="caption" tone="muted" class={styles.helperText}>
+                        {helperText()}
                       </Text>
-                      <IconButton
-                        icon={IoClose}
-                        label={(currentSource() as FileImportSource | undefined)?.clearLabel ?? ts('common.cancel')}
-                        size="sm"
-                        disabled={props.busy}
-                        onClick={() => handleFileChange(null)}
-                      />
-                    </div>
-                  }
-                >
-                  <FileDropZone
-                    accept={(currentSource() as FileImportSource | undefined)?.accept}
-                    icon={<IoCloudUpload />}
-                    label={(currentSource() as FileImportSource | undefined)?.dropLabel ?? ''}
-                    hint={(currentSource() as FileImportSource | undefined)?.dropHint}
-                    disabled={props.busy}
-                    onFile={(file) => handleFileChange(file)}
-                  />
-                </Show>
-              </FormLayout>
+                    )}
+                  </Show>
+                </FormLayout>
+              )}
+            </Match>
+            <Match when={currentFileSource()}>
+              {(fileSource) => (
+                <FormLayout>
+                  <Show
+                    when={currentFile() === null}
+                    fallback={
+                      <div class={styles.selectedFile}>
+                        <IoDocument />
+                        <Text as="span" class={styles.selectedFileName}>
+                          {currentFile()?.name ?? ''}
+                        </Text>
+                        <IconButton
+                          icon={IoClose}
+                          label={fileSource().clearLabel}
+                          size="sm"
+                          disabled={props.busy}
+                          onClick={clearSelectedFile}
+                        />
+                      </div>
+                    }
+                  >
+                    <FileDropZone
+                      accept={fileSource().accept}
+                      icon={<IoCloudUpload />}
+                      label={fileSource().dropLabel}
+                      hint={fileSource().dropHint}
+                      disabled={props.busy}
+                      onFile={handleFileChange}
+                    />
+                  </Show>
+                </FormLayout>
+              )}
             </Match>
           </Switch>
 
@@ -192,7 +220,7 @@ const ImportSourcesDialog = (props: Props<ImportSourcesDialogProps>) => {
       </DialogBody>
       <DialogActions>
         <Button variant="ghost" label={ts('common.cancel')} disabled={props.busy} onClick={props.onClose} />
-        <Button disabled={isSubmitDisabled()} onClick={() => void handleSubmit()}>
+        <Button disabled={isSubmitDisabled()} onClick={submitForm}>
           <Show when={props.busy} fallback={props.submitLabel}>
             <>
               <Spinner size="sm" />

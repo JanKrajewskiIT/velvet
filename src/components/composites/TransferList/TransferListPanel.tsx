@@ -31,9 +31,12 @@ const TransferListPanel = (props: TransferListPanelProps) => {
         <Chip size="sm" variant="subtle" label={props.items.length.toString()} />
       </div>
       <Show when={props.searchable}>
-        <div class={styles.search}>
-          <SearchInput class={styles.searchInput} size="sm" value={props.filterValue} onInput={props.onFilterChange} />
-        </div>
+        <SearchInput
+          class={classNames(styles.search, styles.searchInput)}
+          size="sm"
+          value={props.filterValue}
+          onInput={props.onFilterChange}
+        />
       </Show>
       <div class={styles.list}>
         <For each={props.items}>

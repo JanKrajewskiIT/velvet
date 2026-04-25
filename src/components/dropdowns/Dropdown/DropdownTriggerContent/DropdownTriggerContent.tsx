@@ -1,4 +1,5 @@
 import type { JSX } from 'solid-js';
+import { createMemo, splitProps } from 'solid-js';
 
 import Text from '~/components/typography/Text/Text';
 import type { TypographyTone } from '~/components/typography/Typography/Typography';
@@ -19,24 +20,25 @@ export interface DropdownTriggerContentProps {
 }
 
 const DropdownTriggerContent = (props: Props<DropdownTriggerContentProps>) => {
-  const labelVariant = () => {
-    if (props.size === 'lg') return 'bodyMd';
-    return 'bodySm';
-  };
+  const [local, rest] = splitProps(props, ['label', 'labelId', 'class', 'tone', 'labelTone', 'size', 'children']);
+  const labelVariant = createMemo(() => {
+    if (local.size === 'lg') return 'bodyMd' as const;
+    return 'bodySm' as const;
+  });
 
-  const labelTone = () => {
-    if (props.tone === 'inverse') return 'inverse';
-    return props.labelTone ?? 'inherit';
-  };
+  const labelToneResolved = createMemo(() => {
+    if (local.tone === 'inverse') return 'inverse' as const;
+    return local.labelTone ?? ('inherit' as const);
+  });
 
   return (
-    <span class={classNames(styles.root, props.class)}>
-      <Text as="span" id={props.labelId} variant={labelVariant()} tone={labelTone()} class={styles.label}>
-        {props.label}
+    <span {...rest} class={classNames(styles.root, local.class)}>
+      <Text as="span" id={local.labelId} variant={labelVariant()} tone={labelToneResolved()} class={styles.label}>
+        {local.label}
       </Text>
-      {props.children && (
-        <span class={classNames(styles.suffix, props.tone === 'inverse' && styles.suffixInverse)}>
-          {props.children}
+      {local.children && (
+        <span class={classNames(styles.suffix, local.tone === 'inverse' && styles.suffixInverse)}>
+          {local.children}
         </span>
       )}
     </span>

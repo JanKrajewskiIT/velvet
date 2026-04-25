@@ -1,4 +1,4 @@
-import { createEffect, createSignal, on, Show } from 'solid-js';
+import { batch, createEffect, createSignal, on, Show } from 'solid-js';
 
 import Button from '~/components/buttons/Button/Button';
 import SelectableChips, { type SelectableChipItem } from '~/components/feedback/SelectableChips/SelectableChips';
@@ -33,11 +33,13 @@ const ColorLabelSelectionDialog = (props: Props<ColorLabelSelectionDialogProps>)
     on(
       () => props.open,
       (open) => {
-        if (open) {
+        if (!open) return;
+        batch(() => {
           setSelectedIds([...props.value]);
           setIsSubmitting(false);
-        }
+        });
       },
+      { defer: true },
     ),
   );
 
@@ -57,30 +59,32 @@ const ColorLabelSelectionDialog = (props: Props<ColorLabelSelectionDialogProps>)
     }
   };
 
+  const handleSubmitClick = () => {
+    void handleSubmit();
+  };
+
   return (
-    <Show when={props.open}>
-      <Dialog open={props.open} onClose={handleClose} class={props.class}>
-        <DialogTitle label={props.label} />
-        <DialogBody>
-          <Show when={props.description}>
-            <Text as="p" variant="bodySm" tone="muted" class={styles.description}>
-              {props.description}
-            </Text>
-          </Show>
-          <SelectableChips
-            items={props.items}
-            value={selectedIds()}
-            label={props.chipsLabel}
-            onChange={setSelectedIds}
-            disabled={isSubmitting()}
-          />
-        </DialogBody>
-        <DialogActions>
-          <Button variant="ghost" onClick={handleClose} disabled={isSubmitting()} label={props.cancelLabel} />
-          <Button onClick={() => void handleSubmit()} loading={isSubmitting()} label={ts('common.confirm')} />
-        </DialogActions>
-      </Dialog>
-    </Show>
+    <Dialog open={props.open} onClose={handleClose} class={props.class}>
+      <DialogTitle label={props.label} />
+      <DialogBody>
+        <Show when={props.description}>
+          <Text as="p" variant="bodySm" tone="muted" class={styles.description}>
+            {props.description}
+          </Text>
+        </Show>
+        <SelectableChips
+          items={props.items}
+          value={selectedIds()}
+          label={props.chipsLabel}
+          onChange={setSelectedIds}
+          disabled={isSubmitting()}
+        />
+      </DialogBody>
+      <DialogActions>
+        <Button variant="ghost" onClick={handleClose} disabled={isSubmitting()} label={props.cancelLabel} />
+        <Button onClick={handleSubmitClick} loading={isSubmitting()} label={ts('common.confirm')} />
+      </DialogActions>
+    </Dialog>
   );
 };
 

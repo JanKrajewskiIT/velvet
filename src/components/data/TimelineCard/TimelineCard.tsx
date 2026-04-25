@@ -119,6 +119,10 @@ const TimelineCard = (props: Props<TimelineCardProps>) => {
     return typeof icon === 'function' ? icon({}) : icon;
   };
 
+  const handleEditOpen = () => {
+    setEditOpen(true);
+  };
+
   return (
     <ConfirmAction
       label={props.labels.deleteDialogLabel}
@@ -176,11 +180,9 @@ const TimelineCard = (props: Props<TimelineCardProps>) => {
             </Show>
           </div>
           <div class={styles.actions}>
-            <div class={styles.actionButtons}>
-              <Show when={props.calendarAction}>{props.calendarAction}</Show>
-              <IconButton icon={FiEdit2} label={ts('common.edit')} onClick={() => setEditOpen(true)} size="sm" />
-              <IconButton icon={FiTrash2} label={ts('common.delete')} onClick={openConfirm} size="sm" />
-            </div>
+            <Show when={props.calendarAction}>{props.calendarAction}</Show>
+            <IconButton icon={FiEdit2} label={ts('common.edit')} onClick={handleEditOpen} size="sm" />
+            <IconButton icon={FiTrash2} label={ts('common.delete')} onClick={openConfirm} size="sm" />
           </div>
           <TimelineCardEditDialog
             open={editOpen()}

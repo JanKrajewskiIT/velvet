@@ -29,6 +29,7 @@
 
 .dropdown {
   display: block;
+  top: calc(100% + var(--spacing-xs));
   padding: var(--spacing-md);
   z-index: var(--z-overlay);
 }

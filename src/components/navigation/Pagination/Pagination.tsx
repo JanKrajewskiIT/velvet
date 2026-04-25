@@ -51,6 +51,9 @@ const Pagination = (props: Props<PaginationOwnProps>) => {
   const current = createMemo(() => Math.min(Math.max(local.page, 1), local.totalPages));
   const pages = createMemo(() => buildPageItems(current(), local.totalPages, 7));
 
+  const handlePreviousClick = () => local.onChange(current() - 1);
+  const handleNextClick = () => local.onChange(current() + 1);
+
   return (
     <nav {...rest} class={classNames(styles.nav, local.class)} aria-label={ts('common.pagination')}>
       <Button
@@ -58,7 +61,7 @@ const Pagination = (props: Props<PaginationOwnProps>) => {
         size="sm"
         class={styles.navButton}
         disabled={current() <= 1}
-        onClick={() => local.onChange(current() - 1)}
+        onClick={handlePreviousClick}
       >
         {ts('common.previous')}
       </Button>
@@ -96,7 +99,7 @@ const Pagination = (props: Props<PaginationOwnProps>) => {
         size="sm"
         class={styles.navButton}
         disabled={current() >= local.totalPages}
-        onClick={() => local.onChange(current() + 1)}
+        onClick={handleNextClick}
       >
         {ts('common.next')}
       </Button>

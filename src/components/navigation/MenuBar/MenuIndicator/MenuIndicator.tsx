@@ -1,3 +1,5 @@
+import { splitProps } from 'solid-js';
+
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -8,10 +10,12 @@ interface MenuIndicatorProps {
 }
 
 const MenuIndicator = (props: Props<MenuIndicatorProps>) => {
+  const [local, rest] = splitProps(props, ['offset', 'class', 'style']);
   return (
     <div
-      class={classNames(styles.indicator, props.class)}
-      style={{ '--indicator-offset': String(props.offset) }}
+      {...rest}
+      class={classNames(styles.indicator, local.class)}
+      style={{ '--indicator-offset': String(local.offset), ...local.style }}
       aria-hidden="true"
     >
       <span class={styles.indicatorRing} />

@@ -1,5 +1,5 @@
 import { IoCheckmark, IoCloseOutline, IoPencil } from 'solid-icons/io';
-import { createEffect, createSignal, type JSX, onMount, Show, splitProps } from 'solid-js';
+import { batch, createEffect, createSignal, type JSX, on, onMount, Show, splitProps } from 'solid-js';
 
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
@@ -35,31 +35,45 @@ const InlineEditableText = (props: Props<InlineEditableTextProps>) => {
   const [draft, setDraft] = createSignal('');
 
   onMount(() => {
-    setIsEditing(Boolean(local.startInEditMode));
-    setDraft(local.value);
+    batch(() => {
+      setIsEditing(Boolean(local.startInEditMode));
+      setDraft(local.value);
+    });
   });
 
-  createEffect(() => {
-    if (!isEditing()) {
-      setDraft(local.value);
-    }
-  });
+  createEffect(
+    on(
+      () => local.value,
+      (next) => {
+        if (!isEditing()) {
+          setDraft(next);
+        }
+      },
+      { defer: true },
+    ),
+  );
 
   const beginEdit = () => {
     if (local.disabled) return;
-    setDraft(local.value);
-    setIsEditing(true);
+    batch(() => {
+      setDraft(local.value);
+      setIsEditing(true);
+    });
   };
 
   const cancelEdit = () => {
-    setDraft(local.value);
-    setIsEditing(false);
+    batch(() => {
+      setDraft(local.value);
+      setIsEditing(false);
+    });
   };
 
   const saveEdit = () => {
     const next = draft().trim();
-    local.onChange(next);
-    setIsEditing(false);
+    batch(() => {
+      local.onChange(next);
+      setIsEditing(false);
+    });
   };
 
   const handleKeyDown: JSX.EventHandler<HTMLInputElement, KeyboardEvent> = (e) => {

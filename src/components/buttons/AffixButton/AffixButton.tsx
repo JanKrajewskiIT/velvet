@@ -32,18 +32,16 @@ const AffixButton = (props: Props<AffixButtonOwnProps>) => {
   ]);
 
   return (
-    <Button {...rest} variant={local.variant} size={local.size} class={local.class}>
-      <span class={styles.content}>
-        <Show when={local.prefix}>
-          <span class={classNames(styles.prefix, local.prefixClass)}>{local.prefix}</span>
-        </Show>
-        <Text as="span" variant="labelMd" tone="inherit" class={classNames(styles.body, local.bodyClass)}>
-          {local.text}
-        </Text>
-        <Show when={local.suffix}>
-          <span class={styles.suffix}>{local.suffix}</span>
-        </Show>
-      </span>
+    <Button {...rest} variant={local.variant} size={local.size} class={local.class} contentClass={styles.content}>
+      <Show when={local.prefix}>
+        <span class={classNames(styles.prefix, local.prefixClass)}>{local.prefix}</span>
+      </Show>
+      <Text as="span" variant="labelMd" tone="inherit" class={classNames(styles.body, local.bodyClass)}>
+        {local.text}
+      </Text>
+      <Show when={local.suffix}>
+        <span class={styles.suffix}>{local.suffix}</span>
+      </Show>
     </Button>
   );
 };

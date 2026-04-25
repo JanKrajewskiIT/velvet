@@ -1,5 +1,5 @@
 import { IoClose } from 'solid-icons/io';
-import { createEffect, createMemo, createSignal, type JSX, onCleanup, Show, splitProps } from 'solid-js';
+import { createEffect, createMemo, createSignal, type JSX, on, onCleanup, Show, splitProps, untrack } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
 import IconButton from '~/components/buttons/IconButton/IconButton';
@@ -13,6 +13,28 @@ import classNames from '~/utils/classNames';
 
 import MediaNavButton from '../MediaNavButton/MediaNavButton';
 import styles from './Lightbox.module.css';
+
+let lightboxOpenCount = 0;
+let previousBodyOverflow: string | null = null;
+
+const lockBodyScroll = () => {
+  if (typeof document === 'undefined') return;
+  if (lightboxOpenCount === 0) {
+    previousBodyOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+  }
+  lightboxOpenCount += 1;
+};
+
+const unlockBodyScroll = () => {
+  if (typeof document === 'undefined') return;
+  if (lightboxOpenCount === 0) return;
+  lightboxOpenCount -= 1;
+  if (lightboxOpenCount === 0) {
+    document.body.style.overflow = previousBodyOverflow ?? '';
+    previousBodyOverflow = null;
+  }
+};
 
 export interface LightboxImage {
   src: string;
@@ -74,28 +96,41 @@ const Lightbox = (props: Props<LightboxOwnProps>) => {
     () => isVisible(),
   );
 
-  createEffect(() => {
-    const maxIndex = Math.max(total() - 1, 0);
-    const startIndex = local.startIndex ?? 0;
-    setCurrentIndex(Math.min(Math.max(startIndex, 0), maxIndex));
-  });
+  createEffect(
+    on(
+      () => local.startIndex ?? 0,
+      (startIndex) => {
+        const maxIndex = Math.max(untrack(total) - 1, 0);
+        setCurrentIndex(Math.min(Math.max(startIndex, 0), maxIndex));
+      },
+    ),
+  );
 
-  createEffect(() => {
-    if (typeof document === 'undefined') return;
+  createEffect(
+    on(
+      total,
+      (nextTotal) => {
+        const maxIndex = Math.max(nextTotal - 1, 0);
+        setCurrentIndex((current) => Math.min(current, maxIndex));
+      },
+      { defer: true },
+    ),
+  );
 
-    if (isVisible()) {
-      document.body.style.overflow = 'hidden';
+  createEffect(
+    on(isVisible, (visible) => {
+      if (typeof document === 'undefined') return;
+      if (!visible) return;
+
+      lockBodyScroll();
       document.addEventListener('keydown', handleKeyDown);
-    } else {
-      document.body.style.overflow = '';
-      document.removeEventListener('keydown', handleKeyDown);
-    }
 
-    onCleanup(() => {
-      document.body.style.overflow = '';
-      document.removeEventListener('keydown', handleKeyDown);
-    });
-  });
+      onCleanup(() => {
+        document.removeEventListener('keydown', handleKeyDown);
+        unlockBodyScroll();
+      });
+    }),
+  );
 
   return (
     <Show when={isVisible()}>
@@ -119,7 +154,7 @@ const Lightbox = (props: Props<LightboxOwnProps>) => {
           />
 
           <Show when={hasManyImages()}>
-            <Text as="span" variant="bodySm" tone="inverse" class={styles.counter} style={{ opacity: '0.7' }}>
+            <Text as="span" variant="bodySm" tone="inverse" class={styles.counter}>
               {currentIndex() + 1} / {total()}
             </Text>
           </Show>
@@ -147,7 +182,7 @@ const Lightbox = (props: Props<LightboxOwnProps>) => {
           </div>
 
           <Show when={currentImage()?.caption}>
-            <Text as="p" variant="bodySm" tone="inverse" class={styles.caption} style={{ opacity: '0.8' }}>
+            <Text as="p" variant="bodySm" tone="inverse" class={styles.caption}>
               {currentImage()?.caption}
             </Text>
           </Show>

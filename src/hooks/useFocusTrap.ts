@@ -1,5 +1,5 @@
 import type { Accessor } from 'solid-js';
-import { createEffect, onCleanup } from 'solid-js';
+import { batch, createEffect, onCleanup } from 'solid-js';
 
 const FOCUSABLE =
   'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -29,11 +29,15 @@ const useFocusTrap = (
     const active = isActive();
 
     if (!active) {
-      if (previousActive && options?.restoreFocusRef?.()) {
-        const el = options.restoreFocusRef();
-        el?.focus();
-      } else if (previousActive && previouslyFocused && document.contains(previouslyFocused)) {
-        previouslyFocused.focus();
+      if (previousActive) {
+        batch(() => {
+          const restored = options?.restoreFocusRef?.();
+          if (restored) {
+            restored.focus();
+          } else if (previouslyFocused && document.contains(previouslyFocused)) {
+            previouslyFocused.focus();
+          }
+        });
       }
       previousActive = false;
       return;
@@ -45,7 +49,11 @@ const useFocusTrap = (
     if (!container) return;
 
     const el = container;
-    requestAnimationFrame(() => focusFirst(el));
+    let disposed = false;
+    const rafId = requestAnimationFrame(() => {
+      if (disposed) return;
+      focusFirst(el);
+    });
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key !== 'Tab') return;
@@ -69,6 +77,8 @@ const useFocusTrap = (
 
     document.addEventListener('keydown', handleKeyDown);
     onCleanup(() => {
+      disposed = true;
+      cancelAnimationFrame(rafId);
       document.removeEventListener('keydown', handleKeyDown);
     });
   });

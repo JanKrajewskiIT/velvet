@@ -1,5 +1,5 @@
 import { FiEdit2, FiPlus, FiTrash2 } from 'solid-icons/fi';
-import { createMemo, createSignal, For, Show } from 'solid-js';
+import { batch, createMemo, createSignal, For, Show } from 'solid-js';
 
 import Button from '~/components/buttons/Button/Button';
 import IconButton from '~/components/buttons/IconButton/IconButton';
@@ -48,10 +48,12 @@ const ColorLabelManagerDialog = (props: Props<ColorLabelManagerDialogProps>) => 
   const defaultColor = createMemo(() => props.colors[0] ?? '#3b82f6');
 
   const resetForm = () => {
-    setShowForm(false);
-    setEditingTagId(null);
-    setName('');
-    setColor(defaultColor());
+    batch(() => {
+      setShowForm(false);
+      setEditingTagId(null);
+      setName('');
+      setColor(defaultColor());
+    });
   };
 
   const handleClose = () => {
@@ -61,17 +63,21 @@ const ColorLabelManagerDialog = (props: Props<ColorLabelManagerDialogProps>) => 
   };
 
   const handleAdd = () => {
-    setShowForm(true);
-    setEditingTagId(null);
-    setName('');
-    setColor(defaultColor());
+    batch(() => {
+      setShowForm(true);
+      setEditingTagId(null);
+      setName('');
+      setColor(defaultColor());
+    });
   };
 
   const handleEdit = (item: ColorLabel) => {
-    setShowForm(true);
-    setEditingTagId(item.id);
-    setName(item.name);
-    setColor(item.color);
+    batch(() => {
+      setShowForm(true);
+      setEditingTagId(item.id);
+      setName(item.name);
+      setColor(item.color);
+    });
   };
 
   const handleCancelForm = () => {
@@ -111,6 +117,13 @@ const ColorLabelManagerDialog = (props: Props<ColorLabelManagerDialogProps>) => 
     } finally {
       setPending(false);
     }
+  };
+
+  const handleNameInput = (event: InputEvent & { currentTarget: HTMLInputElement }) => {
+    setName(event.currentTarget.value);
+  };
+  const handleSaveClick = () => {
+    void handleSave();
   };
 
   return (
@@ -164,7 +177,7 @@ const ColorLabelManagerDialog = (props: Props<ColorLabelManagerDialogProps>) => 
             <Divider />
             <div class={styles.form}>
               <FormField label={ts('colorLabel.name')}>
-                <Input value={name()} onInput={(event) => setName(event.currentTarget.value)} disabled={pending()} />
+                <Input value={name()} onInput={handleNameInput} disabled={pending()} />
               </FormField>
               <FormField label={ts('colorLabel.color')}>
                 <ColorPicker
@@ -195,7 +208,7 @@ const ColorLabelManagerDialog = (props: Props<ColorLabelManagerDialogProps>) => 
           }
         >
           <Button variant="ghost" label={ts('common.cancel')} disabled={pending()} onClick={handleCancelForm} />
-          <Button label={ts('common.save')} disabled={pending() || !name().trim()} onClick={() => void handleSave()} />
+          <Button label={ts('common.save')} disabled={pending() || !name().trim()} onClick={handleSaveClick} />
         </Show>
       </DialogActions>
     </Dialog>

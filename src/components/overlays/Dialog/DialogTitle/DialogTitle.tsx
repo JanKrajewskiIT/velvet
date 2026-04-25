@@ -1,3 +1,5 @@
+import { splitProps } from 'solid-js';
+
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 
@@ -12,11 +14,12 @@ interface DialogTitleProps {
 
 const DialogTitle = (props: Props<DialogTitleProps>) => {
   const dialog = useDialogContext();
+  const [local, rest] = splitProps(props, ['label', 'class']);
 
   return (
-    <div class={classNames(styles.root, props.class)}>
+    <div {...rest} class={classNames(styles.root, local.class)}>
       <Heading id={dialog?.titleId} variant="titleLg" as="h3">
-        {props.label}
+        {local.label}
       </Heading>
     </div>
   );

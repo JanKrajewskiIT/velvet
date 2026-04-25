@@ -3,6 +3,8 @@
   perspective: 1000px;
   cursor: pointer;
   border-radius: var(--radius-md);
+  width: var(--flip-card-width, 100%);
+  height: var(--flip-card-height, 200px);
 }
 
 .flipCardInner {
@@ -32,6 +34,9 @@
   height: 100%;
   backface-visibility: hidden;
   border-radius: var(--radius-md);
+}
+
+.defaultFace {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -42,6 +47,9 @@
 
 .flipCardBack {
   transform: rotateY(180deg);
+}
+
+.flipCardBack.defaultFace {
   background: var(--color-primary-light);
   border-color: var(--color-primary);
 }

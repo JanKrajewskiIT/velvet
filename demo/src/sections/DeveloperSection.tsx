@@ -1,8 +1,9 @@
-import { Card, CodeText, Heading, useI18n } from '@jankrajewskiit/ui';
+import { Card, CodeText, Heading } from '@jankrajewskiit/ui';
 import { createMemo, For } from 'solid-js';
 
 import { PreviewGroup, PreviewPanel, ShowcaseSection } from '../components/ShowcaseSection';
-import { type DemoI18nMessageKey, getDemoMessages } from '../i18n/messages';
+import { useDemoDictionary } from '../hooks/useDemoDictionary';
+import type { DemoI18nMessageKey } from '../i18n/messages';
 
 interface DocSnippet {
   title: string;
@@ -173,9 +174,7 @@ useFocusTrap(container, { enabled: () => dialogOpen() });`,
 ];
 
 const DeveloperSection = () => {
-  const { locale } = useI18n();
-  const dictionary = createMemo(() => getDemoMessages(locale()));
-  const t = (key: DemoI18nMessageKey): string => dictionary()[key];
+  const { t } = useDemoDictionary();
   const usageSnippets = createMemo(() => createUsageSnippets(t));
 
   return (

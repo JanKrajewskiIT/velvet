@@ -45,6 +45,9 @@ const CommandPaletteTrigger = (props: Props<CommandPaletteTriggerProps>) => {
   const resolvedVariant = createMemo<ButtonVariant>(() => local.variant ?? 'outline');
   const resolvedSize = createMemo<ComponentSize>(() => local.size ?? 'sm');
 
+  const handleTriggerClick = () => setOpen(true);
+  const handlePaletteClose = () => setOpen(false);
+
   onMount(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (!(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== normalizedShortcutKey()) {
@@ -66,7 +69,7 @@ const CommandPaletteTrigger = (props: Props<CommandPaletteTriggerProps>) => {
         aria-label={rest['aria-label'] ?? ts('commandPalette.open')}
         class={classNames(styles.root, local.class)}
         data-command-palette-variant={resolvedVariant()}
-        onClick={() => setOpen(true)}
+        onClick={handleTriggerClick}
         size={resolvedSize()}
         variant={resolvedVariant()}
       >
@@ -76,7 +79,7 @@ const CommandPaletteTrigger = (props: Props<CommandPaletteTriggerProps>) => {
         </Text>
         <Kbd class={styles.kbd}>{resolvedShortcutLabel()}</Kbd>
       </Button>
-      <CommandPalette open={open()} onClose={() => setOpen(false)} items={local.items} />
+      <CommandPalette open={open()} onClose={handlePaletteClose} items={local.items} />
     </>
   );
 };

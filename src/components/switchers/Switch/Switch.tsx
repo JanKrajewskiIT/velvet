@@ -29,26 +29,31 @@ const Switch = (props: Props<SwitchOwnProps>) => {
   const hasText = createMemo(() => Boolean(local.label || local.description));
   const textId = createMemo(() => `${generatedId}-text`);
   const labelledBy = createMemo(() => joinAriaIds(local['aria-labelledby'], hasText() ? textId() : undefined));
-  const wrapperClass = createMemo(() => classNames(styles.wrapper, local.class));
+
+  const handleClick = () => local.onChange(!local.checked);
+
+  const switchButton = (
+    <button
+      {...rest}
+      class={classNames(styles.switch, local.checked && styles.checked, !hasText() && local.class)}
+      type="button"
+      role="switch"
+      aria-checked={local.checked}
+      aria-labelledby={labelledBy()}
+      disabled={local.disabled}
+      onClick={handleClick}
+    >
+      <span class={styles.thumb} />
+    </button>
+  );
 
   return (
-    <div class={wrapperClass()}>
-      <button
-        {...rest}
-        class={classNames(styles.switch, local.checked && styles.checked)}
-        type="button"
-        role="switch"
-        aria-checked={local.checked}
-        aria-labelledby={labelledBy()}
-        disabled={local.disabled}
-        onClick={() => local.onChange(!local.checked)}
-      >
-        <span class={styles.thumb} />
-      </button>
-      <Show when={hasText()}>
+    <Show when={hasText()} fallback={switchButton}>
+      <div class={classNames(styles.wrapper, local.class)}>
+        {switchButton}
         <LabelText id={textId()} label={local.label} description={local.description} />
-      </Show>
-    </div>
+      </div>
+    </Show>
   );
 };
 

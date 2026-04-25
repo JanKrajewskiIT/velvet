@@ -25,6 +25,7 @@ interface SidebarItemButtonOwnProps {
 
 const SidebarItemButton = (props: Props<SidebarItemButtonOwnProps>) => {
   const iconTitle = () => props.label;
+  const handleClick = () => props.onClick?.();
   const resolvedSuffix = () => (
     <>
       <Show when={props.badge !== undefined}>
@@ -49,7 +50,7 @@ const SidebarItemButton = (props: Props<SidebarItemButtonOwnProps>) => {
           class={classNames(styles.itemButton, props.class)}
           bodyClass={styles.label}
           style={props.style}
-          onClick={() => props.onClick?.()}
+          onClick={handleClick}
         />
       }
     >
@@ -58,7 +59,7 @@ const SidebarItemButton = (props: Props<SidebarItemButtonOwnProps>) => {
         icon={props.prefix}
         variant={props.active ? 'primary' : 'ghost'}
         label={iconTitle()}
-        onClick={() => props.onClick?.()}
+        onClick={handleClick}
         style={props.style}
       />
     </Show>

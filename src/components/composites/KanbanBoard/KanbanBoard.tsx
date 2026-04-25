@@ -1,5 +1,5 @@
 import type { JSX } from 'solid-js';
-import { createMemo, createSignal, For, Show, splitProps } from 'solid-js';
+import { batch, createMemo, createSignal, For, Show, splitProps } from 'solid-js';
 
 import Chip from '~/components/feedback/Chip/Chip';
 import { useI18n } from '~/i18n/I18nProvider';
@@ -58,8 +58,10 @@ const KanbanBoard = <T extends KanbanItemBase>(props: Props<KanbanBoardProps<T>>
   };
 
   const handleDragEnd = () => {
-    setDraggingId(null);
-    setDragOverColumnId(null);
+    batch(() => {
+      setDraggingId(null);
+      setDragOverColumnId(null);
+    });
   };
 
   const handleDragOverColumn = (columnId: string, e: DragEvent) => {
@@ -70,15 +72,17 @@ const KanbanBoard = <T extends KanbanItemBase>(props: Props<KanbanBoardProps<T>>
   const handleDropColumn = (columnId: string, e: DragEvent) => {
     e.preventDefault();
     const itemId = draggingId();
-    setDragOverColumnId(null);
-    setDraggingId(null);
-    if (!itemId) return;
+    batch(() => {
+      setDragOverColumnId(null);
+      setDraggingId(null);
+      if (!itemId) return;
 
-    const moved = local.items.find((item) => item.id === itemId);
-    if (!moved || moved.columnId === columnId) return;
+      const moved = local.items.find((item) => item.id === itemId);
+      if (!moved || moved.columnId === columnId) return;
 
-    const next = local.items.map((item) => (item.id === itemId ? { ...item, columnId } : item));
-    local.onChange(next);
+      const next = local.items.map((item) => (item.id === itemId ? { ...item, columnId } : item));
+      local.onChange(next);
+    });
   };
 
   const defaultCard = (item: T) => (
@@ -103,8 +107,8 @@ const KanbanBoard = <T extends KanbanItemBase>(props: Props<KanbanBoardProps<T>>
           return (
             <section
               class={styles.columnSection}
-              onDragOver={(e) => handleDragOverColumn(column.id, e)}
-              onDrop={(e) => handleDropColumn(column.id, e)}
+              onDragOver={(event) => handleDragOverColumn(column.id, event)}
+              onDrop={(event) => handleDropColumn(column.id, event)}
             >
               <Card
                 padding="none"
@@ -127,16 +131,19 @@ const KanbanBoard = <T extends KanbanItemBase>(props: Props<KanbanBoardProps<T>>
                   >
                     <For each={items()}>
                       {(item) => (
-                        <article
-                          class={classNames(styles.card, draggingId() === item.id && styles.cardDragging)}
+                        <Card
+                          as="article"
+                          class={classNames(
+                            styles.card,
+                            styles.cardSurface,
+                            draggingId() === item.id && styles.cardDragging,
+                          )}
                           draggable
-                          onDragStart={(e) => handleDragStart(item.id, e)}
+                          onDragStart={(event) => handleDragStart(item.id, event)}
                           onDragEnd={handleDragEnd}
                         >
-                          <Card class={styles.cardSurface}>
-                            {local.renderCard ? local.renderCard(item) : defaultCard(item)}
-                          </Card>
-                        </article>
+                          {local.renderCard ? local.renderCard(item) : defaultCard(item)}
+                        </Card>
                       )}
                     </For>
                   </Show>

@@ -1,4 +1,5 @@
 import type { Accessor } from 'solid-js';
+import { onCleanup } from 'solid-js';
 
 import { createDropdownSurfaceKeyDownHandler, focusDropdownItem, getDropdownOpenTarget } from '~/utils/dropdown';
 
@@ -19,14 +20,22 @@ interface OpenFromKeyboardOptions {
 const useDropdownPanel = (options: UseDropdownPanelOptions) => {
   const dropdown = useDropdownState(options.rootRef, { isInteractive: options.isInteractive });
 
+  let focusRafId: number | undefined;
+
   const openAndFocus = (target: 'first' | 'last') => {
     dropdown.openDropdown();
-    requestAnimationFrame(() => {
+    if (focusRafId !== undefined) cancelAnimationFrame(focusRafId);
+    focusRafId = requestAnimationFrame(() => {
+      focusRafId = undefined;
       const panel = options.panelRef();
       if (!panel) return;
       focusDropdownItem(panel, target);
     });
   };
+
+  onCleanup(() => {
+    if (focusRafId !== undefined) cancelAnimationFrame(focusRafId);
+  });
 
   const openFromKeyboard = (event: KeyboardEvent, keyboardOptions?: OpenFromKeyboardOptions): boolean => {
     if (keyboardOptions?.ignoreWhenOpen && dropdown.open()) return false;

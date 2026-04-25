@@ -38,7 +38,7 @@
   "sideEffects": [
     "**/*.css"
   ],
-  "packageManager": "npm@11.12.1",
+  "packageManager": "npm@11.13.0",
   "files": [
     "dist/**/*",
     "config/**/*"
@@ -111,7 +111,7 @@
     "@types/node": "^25.6.0",
     "eslint": "^9.39.4",
     "husky": "^9.1.7",
-    "lightweight-charts": "^5.1.0",
+    "lightweight-charts": "^5.2.0",
     "lint-staged": "^16.4.0",
     "oidc-client-ts": "^3.5.0",
     "prettier": "^3.8.3",
@@ -120,9 +120,9 @@
     "solid-icons": "^1.2.0",
     "solid-js": "^1.9.12",
     "solid-markdown": "^2.1.1",
-    "stylelint": "^17.8.0",
+    "stylelint": "^17.9.0",
     "typescript": "~6.0.3",
-    "vite": "^8.0.9",
+    "vite": "^8.0.10",
     "vite-plugin-dts": "^4.5.4"
   },
   "size-limit": [

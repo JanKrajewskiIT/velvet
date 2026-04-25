@@ -33,6 +33,11 @@ interface DataGridProBodyProps<T extends Record<string, unknown>> {
 const DataGridProBody = <T extends Record<string, unknown>>(props: DataGridProBodyProps<T>) => {
   const { ts } = useI18n();
 
+  const emptyStyle = () => ({ '--body-height': `${String(props.bodyHeight())}px` });
+  const bodyStyle = () => ({ '--total-rows-height': `${String(props.totalRowsHeight())}px` });
+  const rowsStyle = () => ({ '--offset-y': `${String(props.offsetY())}px` });
+  const rowStyle = () => ({ '--row-height': `${String(props.rowHeight())}px` });
+
   const handleCheckboxClick = (event: MouseEvent & { currentTarget: HTMLInputElement }) => {
     event.stopPropagation();
   };
@@ -41,13 +46,13 @@ const DataGridProBody = <T extends Record<string, unknown>>(props: DataGridProBo
     <Show
       when={props.hasRows()}
       fallback={
-        <div class={styles.empty} role="status" style={{ height: `${props.bodyHeight()}px` }}>
+        <div class={styles.empty} role="status" style={emptyStyle()}>
           {ts('table.noRows')}
         </div>
       }
     >
-      <div class={styles.body} role="rowgroup" style={{ height: `${props.totalRowsHeight()}px` }}>
-        <div class={styles.rows} style={{ transform: `translateY(${props.offsetY()}px)` }}>
+      <div class={styles.body} role="rowgroup" style={bodyStyle()}>
+        <div class={styles.rows} style={rowsStyle()}>
           <For each={props.visibleRows()}>
             {(entry) => (
               <div
@@ -58,7 +63,7 @@ const DataGridProBody = <T extends Record<string, unknown>>(props: DataGridProBo
                   props.striped() && entry.index % 2 === 1 && styles.striped,
                   props.selectedSet().has(entry.id) && styles.rowSelected,
                 )}
-                style={{ height: `${props.rowHeight()}px` }}
+                style={rowStyle()}
               >
                 <Show when={props.selectable()}>
                   <div role="gridcell" class={classNames(styles.cell, styles.pinnedLeft, styles.selectionCell)}>

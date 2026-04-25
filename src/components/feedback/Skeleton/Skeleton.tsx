@@ -1,4 +1,4 @@
-import { type JSX, mergeProps, splitProps } from 'solid-js';
+import { createMemo, type JSX, mergeProps, splitProps } from 'solid-js';
 
 import type Props from '~/models/Props';
 import type { DivCoreNativeProps } from '~/models/Props';
@@ -13,41 +13,46 @@ interface SkeletonOwnProps extends DivCoreNativeProps {
   animation?: 'pulse' | 'wave' | 'none';
 }
 
+const variantClassByValue: Record<NonNullable<SkeletonOwnProps['variant']>, string | undefined> = {
+  text: styles.text,
+  circular: styles.circular,
+  rectangular: styles.rectangular,
+};
+
+const animationClassByValue: Record<NonNullable<SkeletonOwnProps['animation']>, string | undefined> = {
+  pulse: styles.pulse,
+  wave: styles.wave,
+  none: undefined,
+};
+
+const toCssLength = (value: string | number | undefined): string | undefined => {
+  if (value === undefined) return undefined;
+  return typeof value === 'number' ? `${value}px` : value;
+};
+
 const Skeleton = (props: Props<SkeletonOwnProps>) => {
-  const merged = mergeProps({ variant: 'text', animation: 'wave' }, props);
-  const [local, rest] = splitProps(merged, ['variant', 'width', 'height', 'animation', 'class', 'style']);
+  const merged = mergeProps({ variant: 'text' as const, animation: 'wave' as const }, props);
+  const [local, rest] = splitProps(merged, ['variant', 'width', 'height', 'animation', 'class']);
 
-  const baseStyle = () => {
-    const s: Record<string, string | number> = {};
-    if (typeof local.style === 'object') {
-      for (const [key, val] of Object.entries(local.style as Record<string, string | number | undefined>)) {
-        if (val !== undefined) {
-          s[key] = val;
-        }
-      }
-    }
-    if (local.width) s.width = typeof local.width === 'number' ? `${local.width}px` : local.width;
-    if (local.height) s.height = typeof local.height === 'number' ? `${local.height}px` : local.height;
-    return s as JSX.CSSProperties;
-  };
-
-  const variantClass = () => {
-    if (local.variant === 'circular') return styles.circular;
-    if (local.variant === 'rectangular') return styles.rectangular;
-    return styles.text;
-  };
-
-  const animationClass = () => {
-    if (local.animation === 'pulse') return styles.pulse;
-    if (local.animation === 'wave') return styles.wave;
-    return undefined;
-  };
+  const sizeStyle = createMemo<JSX.CSSProperties>(() => {
+    const width = toCssLength(local.width);
+    const height = toCssLength(local.height);
+    return {
+      ...(width !== undefined && { '--skeleton-width': width }),
+      ...(height !== undefined && { '--skeleton-height': height }),
+    };
+  });
 
   return (
     <div
-      class={classNames(styles.skeleton, variantClass(), animationClass(), local.class)}
-      style={baseStyle()}
       {...rest}
+      class={classNames(
+        styles.skeleton,
+        variantClassByValue[local.variant],
+        animationClassByValue[local.animation],
+        local.class,
+      )}
+      style={sizeStyle()}
     />
   );
 };

@@ -110,9 +110,7 @@ const FilterBar = (props: Props<FilterBarOwnProps>) => {
                 class={styles.field}
                 aria-label={filter.label}
                 value={selectedByKey().get(filter.key) ?? ''}
-                onChange={(event: Event & { currentTarget: HTMLSelectElement; target: HTMLSelectElement }) =>
-                  setFilterValue(filter.key, event.currentTarget.value)
-                }
+                onChange={(event) => setFilterValue(filter.key, event.currentTarget.value)}
                 disabled={local.disabled}
                 options={getSelectOptions(filter)}
               />

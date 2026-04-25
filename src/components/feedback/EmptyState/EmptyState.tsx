@@ -40,9 +40,7 @@ const EmptyState = (props: Props<EmptyStateProps>) => {
           )}
         </Show>
       </Stack>
-      <Show when={local.action}>
-        <div class={styles.actions}>{local.action}</div>
-      </Show>
+      <Show when={local.action}>{local.action}</Show>
     </Stack>
   );
 };

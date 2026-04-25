@@ -32,13 +32,11 @@ const TableAddRowAction = (props: Props<TableAddRowActionProps>) => {
       role="button"
       aria-label={props.label}
     >
-      <TableCell colSpan={props.colSpan} class={styles.cell}>
-        <div class={styles.content}>
-          {props.icon && <span class={styles.icon}>{props.icon}</span>}
-          <Text as="span" variant="labelMd" tone="primary">
-            {props.label}
-          </Text>
-        </div>
+      <TableCell colSpan={props.colSpan} class={classNames(styles.cell, styles.content)}>
+        {props.icon && <span class={styles.icon}>{props.icon}</span>}
+        <Text as="span" variant="labelMd" tone="primary">
+          {props.label}
+        </Text>
       </TableCell>
     </TableRow>
   );

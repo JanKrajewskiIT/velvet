@@ -1,4 +1,4 @@
-import { Card, Heading, Text } from '@jankrajewskiit/ui';
+import { Card, classNames, Heading, Text } from '@jankrajewskiit/ui';
 import type { JSX } from 'solid-js';
 
 interface ShowcaseSectionProps {
@@ -42,7 +42,7 @@ export const ShowcaseSection = (props: ShowcaseSectionProps) => {
 };
 
 export const PreviewPanel = (props: PreviewPanelProps) => {
-  return <Card class={`previewPanel ${props.class ?? ''}`}>{props.children}</Card>;
+  return <Card class={classNames('previewPanel', props.class)}>{props.children}</Card>;
 };
 
 export const ShowcaseMeta = (props: ShowcaseMetaProps) => {

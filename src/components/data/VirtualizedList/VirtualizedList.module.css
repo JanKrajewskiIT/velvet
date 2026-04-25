@@ -4,11 +4,13 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   background: var(--color-bg-elevated);
+  height: var(--viewport-height);
 }
 
 .spacer {
   position: relative;
   width: 100%;
+  height: var(--total-height);
 }
 
 .inner {
@@ -16,6 +18,7 @@
   top: 0;
   left: 0;
   right: 0;
+  transform: translateY(var(--offset-y));
 }
 
 .item {
@@ -23,6 +26,7 @@
   align-items: center;
   border-bottom: 1px solid var(--color-border);
   padding: 0 var(--spacing-sm);
+  height: var(--item-height);
 }
 
 .item:last-child {

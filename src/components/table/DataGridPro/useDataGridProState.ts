@@ -1,5 +1,5 @@
 import type { JSX } from 'solid-js';
-import { createEffect, createMemo, createSignal, onCleanup } from 'solid-js';
+import { batch, createEffect, createMemo, createSignal, on, onCleanup } from 'solid-js';
 
 import useClickOutside from '~/hooks/useClickOutside';
 import useEscapeKey from '~/hooks/useEscapeKey';
@@ -84,48 +84,49 @@ const useDataGridProState = <T extends Record<string, unknown>>(props: Props<Dat
   const showToolbar = () => props.showToolbar ?? true;
   const persistenceStorageKey = () => (props.persistenceKey ? `velvetui.datagridpro.${props.persistenceKey}` : '');
 
-  createEffect(() => {
-    setColumnWidths((prev) => {
-      const next: Record<string, number> = {};
-      for (const column of props.columns) {
-        next[column.key] = prev[column.key] ?? parseWidth(column.width);
-      }
-      return next;
-    });
-  });
+  createEffect(
+    on(
+      () => props.columns,
+      (columns) => {
+        const keys = columns.map((column) => column.key);
+        const keysSet = new Set(keys);
+        const byKey = new Map(columns.map((column) => [column.key, column]));
+        const defaultOrder = props.defaultColumnOrder ?? keys;
 
-  createEffect(() => {
-    const keys = props.columns.map((column) => column.key);
-    const defaultOrder = props.defaultColumnOrder ?? keys;
-    setInternalColumnOrder((prev) => {
-      const fromPrev = prev.filter((key) => keys.includes(key));
-      const missing = keys.filter((key) => !fromPrev.includes(key));
-      return prev.length === 0 ? defaultOrder : [...fromPrev, ...missing];
-    });
-  });
+        batch(() => {
+          setColumnWidths((prev) => {
+            const next: Record<string, number> = {};
+            for (const column of columns) {
+              next[column.key] = prev[column.key] ?? parseWidth(column.width);
+            }
+            return next;
+          });
 
-  createEffect(() => {
-    const keys = props.columns.map((column) => column.key);
-    setInternalColumnVisibility((prev) => {
-      const next: Record<string, boolean> = {};
-      for (const key of keys) {
-        next[key] = prev[key] ?? props.defaultColumnVisibility?.[key] ?? true;
-      }
-      return next;
-    });
-  });
+          setInternalColumnOrder((prev) => {
+            const fromPrev = prev.filter((key) => keysSet.has(key));
+            const missing = keys.filter((key) => !fromPrev.includes(key));
+            return prev.length === 0 ? defaultOrder : [...fromPrev, ...missing];
+          });
 
-  createEffect(() => {
-    const keys = props.columns.map((column) => column.key);
-    const byKey = new Map(props.columns.map((column) => [column.key, column]));
-    setInternalColumnPinning((prev) => {
-      const next: DataGridProColumnPinning = {};
-      for (const key of keys) {
-        next[key] = prev[key] ?? props.defaultColumnPinning?.[key] ?? byKey.get(key)?.pinned ?? null;
-      }
-      return next;
-    });
-  });
+          setInternalColumnVisibility((prev) => {
+            const next: Record<string, boolean> = {};
+            for (const key of keys) {
+              next[key] = prev[key] ?? props.defaultColumnVisibility?.[key] ?? true;
+            }
+            return next;
+          });
+
+          setInternalColumnPinning((prev) => {
+            const next: DataGridProColumnPinning = {};
+            for (const key of keys) {
+              next[key] = prev[key] ?? props.defaultColumnPinning?.[key] ?? byKey.get(key)?.pinned ?? null;
+            }
+            return next;
+          });
+        });
+      },
+    ),
+  );
 
   const getRowId = (row: T, index: number): string => {
     if (props.getRowId) return props.getRowId(row, index);
@@ -157,67 +158,77 @@ const useDataGridProState = <T extends Record<string, unknown>>(props: Props<Dat
   };
 
   const setSortState = (state: DataGridProSortState) => {
-    setInternalSortKey(state.key);
-    setInternalSortDirection(state.direction);
-    props.onSortChange?.(state);
+    batch(() => {
+      setInternalSortKey(state.key);
+      setInternalSortDirection(state.direction);
+      props.onSortChange?.(state);
+    });
   };
 
   const setColumnOrder = (nextOrder: string[]) => {
-    setInternalColumnOrder(nextOrder);
-    props.onColumnOrderChange?.(nextOrder);
+    batch(() => {
+      setInternalColumnOrder(nextOrder);
+      props.onColumnOrderChange?.(nextOrder);
+    });
   };
 
   const setColumnVisibility = (nextVisibility: Record<string, boolean>) => {
-    setInternalColumnVisibility(nextVisibility);
-    props.onColumnVisibilityChange?.(nextVisibility);
+    batch(() => {
+      setInternalColumnVisibility(nextVisibility);
+      props.onColumnVisibilityChange?.(nextVisibility);
+    });
   };
 
   const setColumnPinning = (nextPinning: DataGridProColumnPinning) => {
-    setInternalColumnPinning(nextPinning);
-    props.onColumnPinningChange?.(nextPinning);
+    batch(() => {
+      setInternalColumnPinning(nextPinning);
+      props.onColumnPinningChange?.(nextPinning);
+    });
   };
 
   const applyGridState = (state: PersistedGridState): boolean => {
     if (state.v !== DATA_GRID_PERSISTENCE_VERSION) return false;
 
-    if (props.filterQuery == null && typeof state.filterQuery === 'string') {
-      setInternalFilterQuery(state.filterQuery);
-      props.onFilterQueryChange?.(state.filterQuery);
-    }
+    batch(() => {
+      if (props.filterQuery == null && typeof state.filterQuery === 'string') {
+        setInternalFilterQuery(state.filterQuery);
+        props.onFilterQueryChange?.(state.filterQuery);
+      }
 
-    if (!props.sortKey) {
-      setInternalSortKey(state.sortKey ?? null);
-    }
+      if (!props.sortKey) {
+        setInternalSortKey(state.sortKey ?? null);
+      }
 
-    if (!props.sortDirection && state.sortDirection) {
-      setInternalSortDirection(state.sortDirection);
-    }
+      if (!props.sortDirection && state.sortDirection) {
+        setInternalSortDirection(state.sortDirection);
+      }
 
-    if (!props.sortKey || !props.sortDirection) {
-      props.onSortChange?.({
-        key: props.sortKey ?? state.sortKey ?? null,
-        direction: props.sortDirection ?? state.sortDirection ?? 'asc',
-      });
-    }
+      if (!props.sortKey || !props.sortDirection) {
+        props.onSortChange?.({
+          key: props.sortKey ?? state.sortKey ?? null,
+          direction: props.sortDirection ?? state.sortDirection ?? 'asc',
+        });
+      }
 
-    if (!props.columnOrder && Array.isArray(state.columnOrder)) {
-      setInternalColumnOrder(state.columnOrder);
-      props.onColumnOrderChange?.(state.columnOrder);
-    }
+      if (!props.columnOrder && Array.isArray(state.columnOrder)) {
+        setInternalColumnOrder(state.columnOrder);
+        props.onColumnOrderChange?.(state.columnOrder);
+      }
 
-    if (!props.columnVisibility && state.columnVisibility && typeof state.columnVisibility === 'object') {
-      setInternalColumnVisibility(state.columnVisibility);
-      props.onColumnVisibilityChange?.(state.columnVisibility);
-    }
+      if (!props.columnVisibility && state.columnVisibility && typeof state.columnVisibility === 'object') {
+        setInternalColumnVisibility(state.columnVisibility);
+        props.onColumnVisibilityChange?.(state.columnVisibility);
+      }
 
-    if (!props.columnPinning && state.columnPinning && typeof state.columnPinning === 'object') {
-      setInternalColumnPinning(state.columnPinning);
-      props.onColumnPinningChange?.(state.columnPinning);
-    }
+      if (!props.columnPinning && state.columnPinning && typeof state.columnPinning === 'object') {
+        setInternalColumnPinning(state.columnPinning);
+        props.onColumnPinningChange?.(state.columnPinning);
+      }
 
-    if (state.columnWidths && typeof state.columnWidths === 'object') {
-      setColumnWidths((prev) => ({ ...prev, ...state.columnWidths }));
-    }
+      if (state.columnWidths && typeof state.columnWidths === 'object') {
+        setColumnWidths((prev) => ({ ...prev, ...state.columnWidths }));
+      }
+    });
 
     return true;
   };
@@ -256,18 +267,14 @@ const useDataGridProState = <T extends Record<string, unknown>>(props: Props<Dat
     columnWidths: columnWidths(),
   });
 
-  const savePersistedState = () => {
+  const writePersistedState = (storageKey: string, payload: PersistedGridState) => {
     if (typeof window === 'undefined' || typeof window.localStorage === 'undefined') return;
-    const storageKey = persistenceStorageKey();
-    if (!storageKey) return;
-
-    const payload = getGridStatePayload();
 
     try {
       window.localStorage.setItem(storageKey, JSON.stringify(payload));
       setHasPersistedLayout(true);
     } catch {
-      // Ignore storage errors.
+      void 0;
     }
   };
 
@@ -363,25 +370,38 @@ const useDataGridProState = <T extends Record<string, unknown>>(props: Props<Dat
   });
 
   const getColumnStyle = (column: DataGridProColumn<T>): JSX.CSSProperties => {
-    const width = `${columnWidths()[column.key] ?? DEFAULT_COLUMN_WIDTH}px`;
+    const width = `${String(columnWidths()[column.key] ?? DEFAULT_COLUMN_WIDTH)}px`;
     const pin = getColumnPin(column);
-    const base: JSX.CSSProperties = { width, 'min-width': width, 'max-width': width };
+    const base: JSX.CSSProperties = { '--col-width': width };
     if (pin === 'left') {
-      return { ...base, position: 'sticky', left: `${pinnedLeftOffsets()[column.key]}px`, 'z-index': 4 };
+      return { ...base, '--col-pin-offset': `${String(pinnedLeftOffsets()[column.key] ?? 0)}px` };
     }
     if (pin === 'right') {
-      return { ...base, position: 'sticky', right: `${pinnedRightOffsets()[column.key]}px`, 'z-index': 4 };
+      return { ...base, '--col-pin-offset': `${String(pinnedRightOffsets()[column.key] ?? 0)}px` };
     }
     return base;
   };
 
+  let scrollRafId: number | undefined;
+  let pendingScrollTop = 0;
   const handleScroll: JSX.EventHandler<HTMLDivElement, Event> = (event) => {
-    setScrollTop(event.currentTarget.scrollTop);
+    pendingScrollTop = event.currentTarget.scrollTop;
+    if (scrollRafId !== undefined) return;
+    scrollRafId = requestAnimationFrame(() => {
+      scrollRafId = undefined;
+      setScrollTop(pendingScrollTop);
+    });
   };
 
+  onCleanup(() => {
+    if (scrollRafId !== undefined) cancelAnimationFrame(scrollRafId);
+  });
+
   const setFilterValue = (next: string) => {
-    setInternalFilterQuery(next);
-    props.onFilterQueryChange?.(next);
+    batch(() => {
+      setInternalFilterQuery(next);
+      props.onFilterQueryChange?.(next);
+    });
   };
 
   const handleFilterInput: JSX.EventHandler<HTMLInputElement, InputEvent> = (event) => {
@@ -391,8 +411,10 @@ const useDataGridProState = <T extends Record<string, unknown>>(props: Props<Dat
   const selectedSet = createMemo(() => new Set(selectedRowIds()));
 
   const updateSelection = (next: string[]) => {
-    setInternalSelectedRowIds(next);
-    props.onSelectedRowIdsChange?.(next);
+    batch(() => {
+      setInternalSelectedRowIds(next);
+      props.onSelectedRowIdsChange?.(next);
+    });
   };
 
   const toggleRow = (id: string) => {
@@ -447,10 +469,12 @@ const useDataGridProState = <T extends Record<string, unknown>>(props: Props<Dat
   };
 
   const resetView = () => {
-    setFilterValue('');
-    setSortState({ key: null, direction: 'asc' });
-    updateSelection([]);
-    resetColumns();
+    batch(() => {
+      setFilterValue('');
+      setSortState({ key: null, direction: 'asc' });
+      updateSelection([]);
+      resetColumns();
+    });
   };
 
   const resetPersistedLayout = () => {
@@ -460,10 +484,12 @@ const useDataGridProState = <T extends Record<string, unknown>>(props: Props<Dat
         window.localStorage.removeItem(storageKey);
       }
     }
-    setHasPersistedLayout(false);
-    setPersistenceSaveReady(false);
-    resetView();
-    props.onPersistenceReset?.();
+    batch(() => {
+      setHasPersistedLayout(false);
+      setPersistenceSaveReady(false);
+      resetView();
+      props.onPersistenceReset?.();
+    });
   };
 
   const clearSelection = () => {
@@ -499,14 +525,13 @@ const useDataGridProState = <T extends Record<string, unknown>>(props: Props<Dat
 
         if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined' && storageKey) {
           try {
-            window.localStorage.setItem(storageKey, JSON.stringify(parsed));
-            setHasPersistedLayout(true);
+            writePersistedState(storageKey, parsed);
           } catch {
-            // Ignore storage errors.
+            void 0;
           }
         }
       } catch {
-        // Ignore malformed imports.
+        void 0;
       }
     })();
   };
@@ -530,22 +555,26 @@ const useDataGridProState = <T extends Record<string, unknown>>(props: Props<Dat
     if (!reorderable()) return;
     event.preventDefault();
     const sourceKey = draggingColumnKey();
-    setDraggingColumnKey(null);
-    setDragOverColumnKey(null);
-    if (!sourceKey || sourceKey === targetKey) return;
+    batch(() => {
+      setDraggingColumnKey(null);
+      setDragOverColumnKey(null);
+      if (!sourceKey || sourceKey === targetKey) return;
 
-    const order = [...currentColumnOrder()];
-    const sourceIndex = order.indexOf(sourceKey);
-    const targetIndex = order.indexOf(targetKey);
-    if (sourceIndex < 0 || targetIndex < 0) return;
-    order.splice(sourceIndex, 1);
-    order.splice(targetIndex, 0, sourceKey);
-    setColumnOrder(order);
+      const order = [...currentColumnOrder()];
+      const sourceIndex = order.indexOf(sourceKey);
+      const targetIndex = order.indexOf(targetKey);
+      if (sourceIndex < 0 || targetIndex < 0) return;
+      order.splice(sourceIndex, 1);
+      order.splice(targetIndex, 0, sourceKey);
+      setColumnOrder(order);
+    });
   };
 
   const handleHeaderDragEnd = () => {
-    setDraggingColumnKey(null);
-    setDragOverColumnKey(null);
+    batch(() => {
+      setDraggingColumnKey(null);
+      setDragOverColumnKey(null);
+    });
   };
 
   useClickOutside(
@@ -562,11 +591,15 @@ const useDataGridProState = <T extends Record<string, unknown>>(props: Props<Dat
     const active = resizeState();
     if (!active) return;
 
-    const onMouseMove = (event: MouseEvent) => {
+    let rafId: number | undefined;
+    let pendingClientX = active.startX;
+
+    const flush = () => {
+      rafId = undefined;
       const column = getColumnByKey(active.key);
       if (!column) return;
 
-      const delta = event.clientX - active.startX;
+      const delta = pendingClientX - active.startX;
       const baseWidth = active.startWidth + delta;
       const min = column.minWidth ?? 80;
       const max = column.maxWidth ?? 720;
@@ -578,7 +611,18 @@ const useDataGridProState = <T extends Record<string, unknown>>(props: Props<Dat
       }));
     };
 
+    const onMouseMove = (event: MouseEvent) => {
+      pendingClientX = event.clientX;
+      if (rafId !== undefined) return;
+      rafId = requestAnimationFrame(flush);
+    };
+
     const onMouseUp = () => {
+      if (rafId !== undefined) {
+        cancelAnimationFrame(rafId);
+        rafId = undefined;
+        flush();
+      }
       setResizeState(null);
     };
 
@@ -586,6 +630,7 @@ const useDataGridProState = <T extends Record<string, unknown>>(props: Props<Dat
     window.addEventListener('mouseup', onMouseUp);
 
     onCleanup(() => {
+      if (rafId !== undefined) cancelAnimationFrame(rafId);
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('mouseup', onMouseUp);
     });
@@ -601,28 +646,51 @@ const useDataGridProState = <T extends Record<string, unknown>>(props: Props<Dat
 
   createEffect(() => {
     if (hydratedPersistence()) return;
-    loadPersistedState();
-    setHydratedPersistence(true);
+    batch(() => {
+      loadPersistedState();
+      setHydratedPersistence(true);
+    });
   });
 
-  createEffect(() => {
-    if (!hydratedPersistence()) return;
-    if (!persistenceStorageKey()) return;
+  let persistenceSaveTimer: number | undefined;
 
-    filterQuery();
-    sortKey();
-    sortDirection();
-    currentColumnOrder();
-    currentColumnVisibility();
-    currentColumnPinning();
-    columnWidths();
+  createEffect(
+    on(
+      () =>
+        [
+          filterQuery(),
+          sortKey(),
+          sortDirection(),
+          currentColumnOrder(),
+          currentColumnVisibility(),
+          currentColumnPinning(),
+          columnWidths(),
+        ] as const,
+      () => {
+        if (!hydratedPersistence()) return;
+        const storageKey = persistenceStorageKey();
+        if (!storageKey) return;
 
-    const saveReady = persistenceSaveReady();
-    if (!saveReady) {
-      setPersistenceSaveReady(true);
-      return;
-    }
-    savePersistedState();
+        const saveReady = persistenceSaveReady();
+        if (!saveReady) {
+          setPersistenceSaveReady(true);
+          return;
+        }
+
+        const payload = getGridStatePayload();
+
+        if (persistenceSaveTimer !== undefined) clearTimeout(persistenceSaveTimer);
+        persistenceSaveTimer = window.setTimeout(() => {
+          persistenceSaveTimer = undefined;
+          writePersistedState(storageKey, payload);
+        }, 150);
+      },
+      { defer: true },
+    ),
+  );
+
+  onCleanup(() => {
+    if (persistenceSaveTimer !== undefined) clearTimeout(persistenceSaveTimer);
   });
 
   const getAriaSort = (column: DataGridProColumn<T>): 'none' | 'ascending' | 'descending' => {

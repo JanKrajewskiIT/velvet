@@ -1,5 +1,5 @@
 import { IoCheckmark, IoCopy } from 'solid-icons/io';
-import { createMemo, createSignal, onCleanup, Show, splitProps } from 'solid-js';
+import { batch, createMemo, createSignal, onCleanup, Show, splitProps } from 'solid-js';
 
 import Icon from '~/components/media/Icon/Icon';
 import { useI18n } from '~/i18n/I18nProvider';
@@ -35,14 +35,18 @@ const CopyButton = (props: Props<CopyButtonProps>) => {
     void navigator.clipboard
       .writeText(text)
       .then(() => {
-        setFailed(false);
-        setCopied(true);
+        batch(() => {
+          setFailed(false);
+          setCopied(true);
+        });
         clearTimeout(timeoutId);
         timeoutId = setTimeout(() => setCopied(false), timeout);
       })
       .catch(() => {
-        setCopied(false);
-        setFailed(true);
+        batch(() => {
+          setCopied(false);
+          setFailed(true);
+        });
         clearTimeout(timeoutId);
         timeoutId = setTimeout(() => setFailed(false), timeout);
       });

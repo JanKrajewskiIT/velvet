@@ -45,6 +45,29 @@ const SchedulerCalendar = (props: Props<SchedulerCalendarProps>) => {
     );
   };
 
+  const getDayAriaPressed = (cell: DayCell) => cellIso(cell) === props.selectedDate;
+  const handleSelectDay = (cell: DayCell) => props.onSelectDate(cellIso(cell));
+  const handleDayDoubleClick = (cell: DayCell) => props.onOpenCreateForDate(cellIso(cell));
+  const shouldRenderDay = (cell: DayCell) => props.showAdjacentDays || !cell.outside;
+
+  const renderDayContent = (cell: DayCell) => {
+    const iso = cellIso(cell);
+    const eventsCount = getEventsCount(iso);
+
+    return (
+      <>
+        <Text as="span" variant="caption" tone={cell.outside ? 'tertiary' : 'default'}>
+          {cell.day}
+        </Text>
+        <Show when={eventsCount > 0}>
+          <Text as="span" variant="caption" tone="primary" class={styles.dayBadge}>
+            {eventsCount}
+          </Text>
+        </Show>
+      </>
+    );
+  };
+
   return (
     <>
       <CalendarHeader
@@ -59,39 +82,21 @@ const SchedulerCalendar = (props: Props<SchedulerCalendarProps>) => {
         }
       />
 
-      <div class={styles.grid}>
-        <CalendarGrid
-          dayLabels={props.dayNames}
-          days={props.gridDays}
-          weekdayLabelClass={styles.weekdayLabel}
-          dayClass={dayButtonClass}
-          getDayAriaLabel={cellIso}
-          getDayAriaPressed={(cell) => cellIso(cell) === props.selectedDate}
-          onSelectDay={(cell) => props.onSelectDate(cellIso(cell))}
-          onDayDoubleClick={(cell) => props.onOpenCreateForDate(cellIso(cell))}
-          onDayDragOver={props.onDayDragOver}
-          onDayDrop={props.onDayDrop}
-          onDayDragLeave={props.onDayDragLeave}
-          filterDay={(cell) => props.showAdjacentDays || !cell.outside}
-          getDayContent={(cell) => {
-            const iso = cellIso(cell);
-            const eventsCount = getEventsCount(iso);
-
-            return (
-              <>
-                <Text as="span" variant="caption" tone={cell.outside ? 'tertiary' : 'default'}>
-                  {cell.day}
-                </Text>
-                <Show when={eventsCount > 0}>
-                  <Text as="span" variant="caption" tone="primary" class={styles.dayBadge}>
-                    {eventsCount}
-                  </Text>
-                </Show>
-              </>
-            );
-          }}
-        />
-      </div>
+      <CalendarGrid
+        dayLabels={props.dayNames}
+        days={props.gridDays}
+        weekdayLabelClass={styles.weekdayLabel}
+        dayClass={dayButtonClass}
+        getDayAriaLabel={cellIso}
+        getDayAriaPressed={getDayAriaPressed}
+        onSelectDay={handleSelectDay}
+        onDayDoubleClick={handleDayDoubleClick}
+        onDayDragOver={props.onDayDragOver}
+        onDayDrop={props.onDayDrop}
+        onDayDragLeave={props.onDayDragLeave}
+        filterDay={shouldRenderDay}
+        getDayContent={renderDayContent}
+      />
     </>
   );
 };

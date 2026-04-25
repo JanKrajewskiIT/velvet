@@ -1,4 +1,4 @@
-import { createEffect, createMemo, createSignal, splitProps } from 'solid-js';
+import { batch, createEffect, createMemo, createSignal, on, onCleanup, splitProps } from 'solid-js';
 
 import ConfirmDialog from '~/components/overlays/ConfirmDialog/ConfirmDialog';
 import Card from '~/components/surfaces/Card/Card';
@@ -69,11 +69,20 @@ const Scheduler = (props: Props<SchedulerProps>) => {
   );
   const [viewYear, setViewYear] = createSignal(now.getFullYear());
   const [viewMonth, setViewMonth] = createSignal(now.getMonth());
-  createEffect(() => {
-    const parts = parseDateParts(local.selectedDate ?? internalSelectedDate());
-    setViewYear(parts.year);
-    setViewMonth(parts.month);
-  });
+
+  createEffect(
+    on(
+      () => local.selectedDate ?? internalSelectedDate(),
+      (iso) => {
+        const parts = parseDateParts(iso);
+        batch(() => {
+          setViewYear(parts.year);
+          setViewMonth(parts.month);
+        });
+      },
+      { defer: true },
+    ),
+  );
 
   const selectedDate = () => local.selectedDate ?? internalSelectedDate();
   const dayNames = () => local.dayNames ?? DEFAULT_DAY_NAMES;
@@ -129,56 +138,70 @@ const Scheduler = (props: Props<SchedulerProps>) => {
   };
 
   const goToPreviousMonth = () => {
-    if (viewMonth() === 0) {
-      setViewMonth(11);
-      setViewYear((year) => year - 1);
-      return;
-    }
-    setViewMonth((month) => month - 1);
+    batch(() => {
+      if (viewMonth() === 0) {
+        setViewMonth(11);
+        setViewYear((year) => year - 1);
+        return;
+      }
+      setViewMonth((month) => month - 1);
+    });
   };
 
   const goToNextMonth = () => {
-    if (viewMonth() === 11) {
-      setViewMonth(0);
-      setViewYear((year) => year + 1);
-      return;
-    }
-    setViewMonth((month) => month + 1);
+    batch(() => {
+      if (viewMonth() === 11) {
+        setViewMonth(0);
+        setViewYear((year) => year + 1);
+        return;
+      }
+      setViewMonth((month) => month + 1);
+    });
   };
 
   const goToToday = () => {
     const today = new Date();
     const iso = toIso(today.getFullYear(), today.getMonth(), today.getDate());
-    setViewYear(today.getFullYear());
-    setViewMonth(today.getMonth());
-    setSelectedDate(iso);
+    batch(() => {
+      setViewYear(today.getFullYear());
+      setViewMonth(today.getMonth());
+      setSelectedDate(iso);
+    });
   };
 
   const resetDraft = () => {
-    setDraftTitle('');
-    setDraftTime('');
-    setDraftDescription('');
+    batch(() => {
+      setDraftTitle('');
+      setDraftTime('');
+      setDraftDescription('');
+    });
   };
 
   const openCreateForDate = (date: string) => {
     if (!canEditEvents()) return;
-    resetEdit();
-    setSelectedDate(date);
-    setCreateOpen(true);
-    resetDraft();
+    batch(() => {
+      resetEdit();
+      setSelectedDate(date);
+      setCreateOpen(true);
+      resetDraft();
+    });
   };
 
   const closeCreate = () => {
-    setCreateOpen(false);
-    resetDraft();
+    batch(() => {
+      setCreateOpen(false);
+      resetDraft();
+    });
   };
 
   const resetEdit = () => {
-    setEditingEventId(null);
-    setEditDate('');
-    setEditTitle('');
-    setEditTime('');
-    setEditDescription('');
+    batch(() => {
+      setEditingEventId(null);
+      setEditDate('');
+      setEditTitle('');
+      setEditTime('');
+      setEditDescription('');
+    });
   };
 
   const createEvent = (e: SubmitEvent) => {
@@ -201,12 +224,14 @@ const Scheduler = (props: Props<SchedulerProps>) => {
 
   const openEdit = (event: SchedulerEvent) => {
     if (!canEditEvents()) return;
-    closeCreate();
-    setEditingEventId(event.id);
-    setEditDate(event.date);
-    setEditTitle(event.title);
-    setEditTime(event.time ?? '');
-    setEditDescription(event.description ?? '');
+    batch(() => {
+      closeCreate();
+      setEditingEventId(event.id);
+      setEditDate(event.date);
+      setEditTitle(event.title);
+      setEditTime(event.time ?? '');
+      setEditDescription(event.description ?? '');
+    });
   };
 
   const saveEdit = (eventId: string, e: SubmitEvent) => {
@@ -230,11 +255,13 @@ const Scheduler = (props: Props<SchedulerProps>) => {
 
   const deleteEvent = (eventId: string) => {
     if (!local.onEventsChange) return;
-    local.onEventsChange(deleteSchedulerEvent(local.events, eventId));
-    if (editingEventId() === eventId) {
-      resetEdit();
-    }
-    setDeleteConfirmEventId(null);
+    batch(() => {
+      local.onEventsChange?.(deleteSchedulerEvent(local.events, eventId));
+      if (editingEventId() === eventId) {
+        resetEdit();
+      }
+      setDeleteConfirmEventId(null);
+    });
   };
 
   const requestDeleteEvent = (eventId: string) => {
@@ -262,16 +289,18 @@ const Scheduler = (props: Props<SchedulerProps>) => {
     e.preventDefault();
     const activeDrag = dragState();
     const targetIso = toIso(cell.year, cell.month, cell.day);
-    if (activeDrag?.eventId) {
-      if (activeDrag.type === 'move') {
-        moveEventToDate(activeDrag.eventId, targetIso);
-      } else {
-        resizeEventEndDate(activeDrag.eventId, targetIso);
+    batch(() => {
+      if (activeDrag?.eventId) {
+        if (activeDrag.type === 'move') {
+          moveEventToDate(activeDrag.eventId, targetIso);
+        } else {
+          resizeEventEndDate(activeDrag.eventId, targetIso);
+        }
+        setSelectedDate(targetIso);
       }
-      setSelectedDate(targetIso);
-    }
-    setDragState(null);
-    setDragOverDate(null);
+      setDragState(null);
+      setDragOverDate(null);
+    });
   };
 
   const handleDayDragLeave = (cell: DayCell) => {
@@ -287,8 +316,43 @@ const Scheduler = (props: Props<SchedulerProps>) => {
   };
 
   const handleEventDragEnd = () => {
-    setDragState(null);
-    setDragOverDate(null);
+    batch(() => {
+      setDragState(null);
+      setDragOverDate(null);
+    });
+  };
+
+  const handleOpenCreateForSelected = () => openCreateForDate(selectedDate());
+
+  const handleDraftDateTimeChange = (date: string, time: string) => {
+    if (date) setSelectedDate(date);
+    setDraftTime(time);
+  };
+
+  const handleEditDateTimeChange = (date: string, time: string) => {
+    if (date) setEditDate(date);
+    setEditTime(time);
+  };
+
+  const handleMoveDragStart = (eventId: string, event: DragEvent) => handleEventDragStart(eventId, 'move', event);
+
+  const handleResizeDragStart = (eventId: string, event: DragEvent) =>
+    handleEventDragStart(eventId, 'resize-end', event);
+
+  const handleCreateTitleRef = (element: HTMLInputElement) => {
+    createTitleInputRef = element;
+  };
+
+  const handleEditTitleRef = (element: HTMLInputElement) => {
+    editTitleInputRef = element;
+  };
+
+  const closeDeleteConfirm = () => setDeleteConfirmEventId(null);
+
+  const handleConfirmDelete = () => {
+    const eventId = deleteConfirmEventId();
+    if (!eventId) return;
+    deleteEvent(eventId);
   };
 
   useEscapeKey(
@@ -304,29 +368,55 @@ const Scheduler = (props: Props<SchedulerProps>) => {
     },
   );
 
-  createEffect(() => {
-    local.onMonthChange?.(toIso(viewYear(), viewMonth(), 1).slice(0, 7));
-  });
+  createEffect(
+    on(
+      () => [viewYear(), viewMonth()] as const,
+      ([year, month]) => {
+        local.onMonthChange?.(toIso(year, month, 1).slice(0, 7));
+      },
+      { defer: true },
+    ),
+  );
 
-  createEffect(() => {
-    if (createOpen()) {
-      queueMicrotask(() => {
-        createTitleInputRef?.focus();
-      });
-    }
-  });
+  createEffect(
+    on(
+      createOpen,
+      (open) => {
+        if (!open) return;
+        let cancelled = false;
+        queueMicrotask(() => {
+          if (cancelled) return;
+          createTitleInputRef?.focus();
+        });
+        onCleanup(() => {
+          cancelled = true;
+        });
+      },
+      { defer: true },
+    ),
+  );
 
-  createEffect(() => {
-    if (editingEventId()) {
-      queueMicrotask(() => {
-        editTitleInputRef?.focus();
-      });
-    }
-  });
+  createEffect(
+    on(
+      editingEventId,
+      (id) => {
+        if (!id) return;
+        let cancelled = false;
+        queueMicrotask(() => {
+          if (cancelled) return;
+          editTitleInputRef?.focus();
+        });
+        onCleanup(() => {
+          cancelled = true;
+        });
+      },
+      { defer: true },
+    ),
+  );
 
   return (
     <div {...rest} class={classNames(styles.scheduler, local.class)}>
-      <Card class={styles.calendarPanel} style={{ overflow: 'visible', position: 'relative', 'z-index': 1 }}>
+      <Card class={styles.calendarPanel}>
         <SchedulerCalendar
           monthLabel={monthLabel()}
           dayNames={dayNames()}
@@ -352,26 +442,21 @@ const Scheduler = (props: Props<SchedulerProps>) => {
         addEventLabel={addEventLabel()}
         todayLabel={todayLabel()}
         selectedDate={selectedDate()}
-        onOpenCreate={() => openCreateForDate(selectedDate())}
+        onOpenCreate={handleOpenCreateForSelected}
         onGoToToday={goToToday}
         createOpen={createOpen()}
         draftTitle={draftTitle()}
         onDraftTitleChange={setDraftTitle}
         draftDate={selectedDate()}
         draftTime={draftTime()}
-        onDraftDateTimeChange={(date, time) => {
-          if (date) setSelectedDate(date);
-          setDraftTime(time);
-        }}
+        onDraftDateTimeChange={handleDraftDateTimeChange}
         draftDescription={draftDescription()}
         onDraftDescriptionChange={setDraftDescription}
         cancelLabel={cancelLabel()}
         saveLabel={saveLabel()}
         onCancelCreate={closeCreate}
         onCreateSubmit={createEvent}
-        titleRef={(element) => {
-          createTitleInputRef = element;
-        }}
+        titleRef={handleCreateTitleRef}
         events={selectedDayEvents()}
         emptyDayLabel={noEventsLabel()}
         isDraggingEventId={dragState()?.eventId ?? null}
@@ -390,20 +475,15 @@ const Scheduler = (props: Props<SchedulerProps>) => {
         editDescription={editDescription()}
         onOpenEdit={openEdit}
         onRequestDelete={requestDeleteEvent}
-        onMoveDragStart={(eventId, event) => handleEventDragStart(eventId, 'move', event)}
-        onResizeDragStart={(eventId, event) => handleEventDragStart(eventId, 'resize-end', event)}
+        onMoveDragStart={handleMoveDragStart}
+        onResizeDragStart={handleResizeDragStart}
         onDragEnd={handleEventDragEnd}
         onEditTitleChange={setEditTitle}
-        onEditDateTimeChange={(date, time) => {
-          if (date) setEditDate(date);
-          setEditTime(time);
-        }}
+        onEditDateTimeChange={handleEditDateTimeChange}
         onEditDescriptionChange={setEditDescription}
         onCancelEdit={resetEdit}
         onSaveEdit={saveEdit}
-        editTitleRef={(element) => {
-          editTitleInputRef = element;
-        }}
+        editTitleRef={handleEditTitleRef}
         getEventLabel={getSchedulerEventLabel}
       />
       <ConfirmDialog
@@ -412,12 +492,8 @@ const Scheduler = (props: Props<SchedulerProps>) => {
         message={deleteDialogMessage()}
         confirmLabel={deleteDialogConfirmLabel()}
         variant="danger"
-        onClose={() => setDeleteConfirmEventId(null)}
-        onConfirm={() => {
-          const eventId = deleteConfirmEventId();
-          if (!eventId) return;
-          deleteEvent(eventId);
-        }}
+        onClose={closeDeleteConfirm}
+        onConfirm={handleConfirmDelete}
       />
     </div>
   );

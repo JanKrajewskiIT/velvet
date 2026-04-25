@@ -1,5 +1,5 @@
 import type { JSX } from 'solid-js';
-import { createEffect, createMemo, createSignal, on, Show } from 'solid-js';
+import { batch, createEffect, createMemo, createSignal, on, Show } from 'solid-js';
 
 import Button from '~/components/buttons/Button/Button';
 import EmptyState from '~/components/feedback/EmptyState/EmptyState';
@@ -39,10 +39,13 @@ const FlashcardPracticeSession = <T,>(props: Props<FlashcardPracticeSessionProps
     on(
       () => props.items,
       () => {
-        setCurrentIndex(0);
-        setFlipped(false);
-        setResults([]);
+        batch(() => {
+          setCurrentIndex(0);
+          setFlipped(false);
+          setResults([]);
+        });
       },
+      { defer: true },
     ),
   );
 
@@ -64,16 +67,24 @@ const FlashcardPracticeSession = <T,>(props: Props<FlashcardPracticeSessionProps
     };
     const nextResults = [...results(), nextResult];
 
-    setResults(nextResults);
-    setFlipped(false);
+    batch(() => {
+      setResults(nextResults);
+      setFlipped(false);
 
-    if (isLast()) {
-      props.onFinish(nextResults);
-      return;
-    }
+      if (isLast()) {
+        props.onFinish(nextResults);
+        return;
+      }
 
-    setCurrentIndex((value) => value + 1);
+      setCurrentIndex((value) => value + 1);
+    });
   };
+
+  const markUnknown = () => handleRate(false);
+  const markKnown = () => handleRate(true);
+  const progressFillStyle = createMemo<JSX.CSSProperties>(() => ({
+    '--flashcard-progress': `${progressPercent()}%`,
+  }));
 
   return (
     <Show when={total() > 0} fallback={<EmptyState class={props.class} message={props.emptyMessage} />}>
@@ -102,7 +113,7 @@ const FlashcardPracticeSession = <T,>(props: Props<FlashcardPracticeSessionProps
           aria-valuemin={1}
           aria-valuemax={total()}
         >
-          <div class={styles.progressFill} style={{ width: `${progressPercent()}%` }} />
+          <div class={styles.progressFill} style={progressFillStyle()} />
         </div>
 
         <Show when={currentItem()}>
@@ -120,8 +131,8 @@ const FlashcardPracticeSession = <T,>(props: Props<FlashcardPracticeSessionProps
 
         <Show when={flipped()}>
           <div class={styles.actions}>
-            <Button variant="danger" label={ts('flashcard.iDontKnow')} onClick={() => handleRate(false)} />
-            <Button label={ts('flashcard.iKnow')} onClick={() => handleRate(true)} />
+            <Button variant="danger" label={ts('flashcard.iDontKnow')} onClick={markUnknown} />
+            <Button label={ts('flashcard.iKnow')} onClick={markKnown} />
           </div>
         </Show>
       </div>

@@ -1,5 +1,5 @@
 import { IoChevronBack, IoChevronForward, IoPlayBack, IoPlayForward } from 'solid-icons/io';
-import { createEffect, createMemo, createSignal, splitProps } from 'solid-js';
+import { batch, createMemo, createSignal, splitProps } from 'solid-js';
 
 import IconButton from '~/components/buttons/IconButton/IconButton';
 import { useI18n } from '~/i18n/I18nProvider';
@@ -42,39 +42,44 @@ const TransferList = (props: Props<TransferListProps>) => {
   const targetTitle = createMemo(() => ts('transfer.selected'));
   const selectItemLabel = (label: string) => ts('transfer.selectItem', { label });
 
-  const toggleSourceChecked = (id: string) => setSourceChecked((current) => toggleTransferSelection(current, id));
-  const toggleTargetChecked = (id: string) => setTargetChecked((current) => toggleTransferSelection(current, id));
+  const prunedSourceChecked = createMemo(() => pruneTransferSelection(sourceChecked(), local.sourceItems));
+  const prunedTargetChecked = createMemo(() => pruneTransferSelection(targetChecked(), local.targetItems));
 
-  createEffect(() => {
-    setSourceChecked((current) => pruneTransferSelection(current, local.sourceItems));
-  });
-
-  createEffect(() => {
-    setTargetChecked((current) => pruneTransferSelection(current, local.targetItems));
-  });
+  const toggleSourceChecked = (id: string) =>
+    setSourceChecked((current) => toggleTransferSelection(pruneTransferSelection(current, local.sourceItems), id));
+  const toggleTargetChecked = (id: string) =>
+    setTargetChecked((current) => toggleTransferSelection(pruneTransferSelection(current, local.targetItems), id));
 
   const moveSelectedRight = () => {
-    const next = moveSelectedTransferItems(local.sourceItems, local.targetItems, sourceChecked());
-    setSourceChecked(new Set<string>());
-    local.onChange(next.source, next.target);
+    const next = moveSelectedTransferItems(local.sourceItems, local.targetItems, prunedSourceChecked());
+    batch(() => {
+      setSourceChecked(new Set<string>());
+      local.onChange(next.source, next.target);
+    });
   };
 
   const moveAllRight = () => {
     const next = moveAllTransferItems(local.sourceItems, local.targetItems);
-    setSourceChecked(new Set<string>());
-    local.onChange(next.source, next.target);
+    batch(() => {
+      setSourceChecked(new Set<string>());
+      local.onChange(next.source, next.target);
+    });
   };
 
   const moveSelectedLeft = () => {
-    const next = moveSelectedTransferItems(local.targetItems, local.sourceItems, targetChecked());
-    setTargetChecked(new Set<string>());
-    local.onChange(next.target, next.source);
+    const next = moveSelectedTransferItems(local.targetItems, local.sourceItems, prunedTargetChecked());
+    batch(() => {
+      setTargetChecked(new Set<string>());
+      local.onChange(next.target, next.source);
+    });
   };
 
   const moveAllLeft = () => {
     const next = moveAllTransferItems(local.targetItems, local.sourceItems);
-    setTargetChecked(new Set<string>());
-    local.onChange(next.target, next.source);
+    batch(() => {
+      setTargetChecked(new Set<string>());
+      local.onChange(next.target, next.source);
+    });
   };
 
   return (
@@ -85,14 +90,14 @@ const TransferList = (props: Props<TransferListProps>) => {
         filterValue={sourceFilter()}
         searchable={local.searchable}
         selectItemLabel={selectItemLabel}
-        checkedIds={sourceChecked()}
+        checkedIds={prunedSourceChecked()}
         onFilterChange={setSourceFilter}
         onToggleItem={toggleSourceChecked}
       />
 
       <div class={styles.controls}>
         <IconButton
-          disabled={sourceChecked().size === 0}
+          disabled={prunedSourceChecked().size === 0}
           onClick={moveSelectedRight}
           label={ts('transfer.moveSelectedRight')}
           icon={IoChevronForward}
@@ -108,7 +113,7 @@ const TransferList = (props: Props<TransferListProps>) => {
           variant="ghost"
         />
         <IconButton
-          disabled={targetChecked().size === 0}
+          disabled={prunedTargetChecked().size === 0}
           onClick={moveSelectedLeft}
           label={ts('transfer.moveSelectedLeft')}
           icon={IoChevronBack}
@@ -131,7 +136,7 @@ const TransferList = (props: Props<TransferListProps>) => {
         filterValue={targetFilter()}
         searchable={local.searchable}
         selectItemLabel={selectItemLabel}
-        checkedIds={targetChecked()}
+        checkedIds={prunedTargetChecked()}
         onFilterChange={setTargetFilter}
         onToggleItem={toggleTargetChecked}
       />

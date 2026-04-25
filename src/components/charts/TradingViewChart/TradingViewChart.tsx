@@ -15,7 +15,7 @@ import {
   type UTCTimestamp,
 } from 'lightweight-charts';
 import type { JSX } from 'solid-js';
-import { createEffect, createMemo, createSignal, onCleanup, onMount, splitProps } from 'solid-js';
+import { batch, createEffect, createMemo, createSignal, on, onCleanup, onMount, splitProps, untrack } from 'solid-js';
 
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
@@ -146,23 +146,36 @@ const TradingViewChart = (props: Props<TradingViewChartProps>) => {
   const rsiData = createMemo(() => createRsi(chartData(), 14));
   const macdData = createMemo(() => createMacd(chartData()));
   const bollingerData = createMemo(() => createBollingerBands(chartData(), 20, 2));
-  const rsiDataByTime = createMemo(() => new Map(rsiData().map((item) => [String(item.time), item.value])));
-  const macdDataByTime = createMemo(() => new Map(macdData().macdLine.map((item) => [String(item.time), item.value])));
-  const macdSignalByTime = createMemo(
-    () => new Map(macdData().signalLine.map((item) => [String(item.time), item.value])),
-  );
-  const bbUpperByTime = createMemo(() => new Map(bollingerData().upper.map((item) => [String(item.time), item.value])));
-  const bbLowerByTime = createMemo(() => new Map(bollingerData().lower.map((item) => [String(item.time), item.value])));
+  interface IndicatorsAtTime {
+    rsi?: number;
+    macd?: number;
+    signal?: number;
+    bbUpper?: number;
+    bbLower?: number;
+  }
+  const indicatorsByTime = createMemo(() => {
+    const map = new Map<string, IndicatorsAtTime>();
+    const ensure = (key: string): IndicatorsAtTime => {
+      let entry = map.get(key);
+      if (!entry) {
+        entry = {};
+        map.set(key, entry);
+      }
+      return entry;
+    };
+    for (const item of rsiData()) ensure(String(item.time)).rsi = item.value;
+    const macd = macdData();
+    for (const item of macd.macdLine) ensure(String(item.time)).macd = item.value;
+    for (const item of macd.signalLine) ensure(String(item.time)).signal = item.value;
+    const bb = bollingerData();
+    for (const item of bb.upper) ensure(String(item.time)).bbUpper = item.value;
+    for (const item of bb.lower) ensure(String(item.time)).bbLower = item.value;
+    return map;
+  });
   const indicatorSnapshot = createMemo(() => {
     const time = currentBar()?.time;
     if (!time) return undefined;
-    const key = String(time);
-    const rsi = rsiDataByTime().get(key);
-    const macd = macdDataByTime().get(key);
-    const signal = macdSignalByTime().get(key);
-    const bbUpper = bbUpperByTime().get(key);
-    const bbLower = bbLowerByTime().get(key);
-    return { rsi, macd, signal, bbUpper, bbLower };
+    return indicatorsByTime().get(String(time)) ?? {};
   });
   const chartSymbol = createMemo(() => local.symbol ?? 'XAUUSD');
   const draftPoints = createMemo(() => {
@@ -770,10 +783,18 @@ const TradingViewChart = (props: Props<TradingViewChartProps>) => {
     });
   });
 
-  createEffect(() => {
-    setRuntimeData(baseData());
-    setHoveredBar(undefined);
-  });
+  createEffect(
+    on(
+      baseData,
+      (next) => {
+        batch(() => {
+          setRuntimeData(next);
+          setHoveredBar(undefined);
+        });
+      },
+      { defer: true },
+    ),
+  );
 
   createEffect(() => {
     latestBar = runtimeData().at(-1);
@@ -783,18 +804,31 @@ const TradingViewChart = (props: Props<TradingViewChartProps>) => {
     latestDataByTime = chartDataByTime();
   });
 
-  createEffect(() => {
-    if (!local.drawings) return;
-    setTrendLines(local.drawings.trendLines ?? []);
-    setLevels(local.drawings.levels ?? []);
-    setZones(local.drawings.zones ?? []);
-    setOverlayRevision((value) => value + 1);
-  });
+  createEffect(
+    on(
+      () => local.drawings,
+      (drawings) => {
+        if (!drawings) return;
+        batch(() => {
+          setTrendLines(drawings.trendLines ?? []);
+          setLevels(drawings.levels ?? []);
+          setZones(drawings.zones ?? []);
+          setOverlayRevision((value) => value + 1);
+        });
+      },
+      { defer: true },
+    ),
+  );
 
-  createEffect(() => {
-    activeTool();
-    setDraftPoint(undefined);
-  });
+  createEffect(
+    on(
+      activeTool,
+      () => {
+        setDraftPoint(undefined);
+      },
+      { defer: true },
+    ),
+  );
 
   createEffect(() => {
     if (feedTimer) clearInterval(feedTimer);
@@ -813,29 +847,27 @@ const TradingViewChart = (props: Props<TradingViewChartProps>) => {
     const append = (payload: TradingViewChartPoint | TradingViewChartPoint[]) => {
       const incoming = Array.isArray(payload) ? payload : [payload];
       let latestIncoming: TradingViewChartPoint | undefined;
-      setRuntimeData((current) => {
-        const merged = mergeBars(current, incoming, maxPoints);
-        latestIncoming = incoming.reduce<TradingViewChartPoint | undefined>((latest, bar) => {
-          if (!latest) return bar;
-          return bar.time >= latest.time ? bar : latest;
-        }, undefined);
-        const mergedTail = merged.at(-1);
-        const incomingTail = latestIncoming;
-        const canIncremental =
-          incoming.length === 1 &&
-          Boolean(mergedTail) &&
-          Boolean(incomingTail) &&
-          mergedTail?.time === incomingTail?.time &&
-          (incomingTail ? updateSeriesIncrementally(incomingTail) : false);
-        if (canIncremental && incomingTail) {
-          skipFullRenderAtTime = incomingTail.time;
-          setOverlayRevision((value) => value + 1);
-        }
-        return merged;
-      });
-      if (!latestIncoming || skipFullRenderAtTime !== latestIncoming.time) {
-        setOverlayRevision((value) => value + 1);
+      for (const bar of incoming) {
+        if (!latestIncoming || bar.time >= latestIncoming.time) latestIncoming = bar;
       }
+
+      const current = untrack(runtimeData);
+      const merged = mergeBars(current, incoming, maxPoints);
+      const mergedTail = merged.at(-1);
+      const canIncremental =
+        incoming.length === 1 &&
+        Boolean(mergedTail) &&
+        Boolean(latestIncoming) &&
+        mergedTail?.time === latestIncoming?.time &&
+        (latestIncoming ? updateSeriesIncrementally(latestIncoming) : false);
+      if (canIncremental && latestIncoming) {
+        skipFullRenderAtTime = latestIncoming.time;
+      }
+
+      batch(() => {
+        setRuntimeData(merged);
+        setOverlayRevision((value) => value + 1);
+      });
     };
 
     if (local.liveFeed.mode === 'polling' && local.liveFeed.poll) {
@@ -868,23 +900,19 @@ const TradingViewChart = (props: Props<TradingViewChartProps>) => {
     }
   });
 
-  createEffect(() => {
-    showVolume();
-    showSma();
-    showEma();
-    showRsi();
-    showMacd();
-    showBb();
-    const latestTime = chartData().at(-1)?.time;
-    if (latestTime && skipFullRenderAtTime === latestTime) {
+  createEffect(
+    on([showVolume, showSma, showEma, showRsi, showMacd, showBb, chartData] as const, ([, , , , , , data]) => {
+      const latestTime = data.at(-1)?.time;
+      if (latestTime && skipFullRenderAtTime === latestTime) {
+        skipFullRenderAtTime = undefined;
+        fitChart(false);
+        return;
+      }
       skipFullRenderAtTime = undefined;
+      renderSeriesData();
       fitChart(false);
-      return;
-    }
-    skipFullRenderAtTime = undefined;
-    renderSeriesData();
-    fitChart(false);
-  });
+    }),
+  );
 
   return (
     <div {...rest} ref={wrapperRef} class={classNames(styles.root, local.class)}>

@@ -87,6 +87,8 @@ const FileDropZone = (props: Props<FileDropZoneProps>) => {
     target.value = '';
   };
 
+  const openFilePicker = () => fileInputRef?.click();
+
   return (
     <>
       <button
@@ -97,7 +99,7 @@ const FileDropZone = (props: Props<FileDropZoneProps>) => {
           props.disabled && styles.dropZoneDisabled,
           props.class,
         )}
-        onClick={() => fileInputRef?.click()}
+        onClick={openFilePicker}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -119,7 +121,7 @@ const FileDropZone = (props: Props<FileDropZoneProps>) => {
         accept={props.accept}
         multiple={props.multiple}
         disabled={props.disabled}
-        style={{ display: 'none' }}
+        class={styles.hiddenInput}
         onInput={handleFileInput}
       />
     </>

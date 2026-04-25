@@ -1,4 +1,4 @@
-import { createMemo, createUniqueId, For, Show, splitProps } from 'solid-js';
+import { batch, createMemo, createUniqueId, For, onCleanup, Show, splitProps } from 'solid-js';
 
 import ClosableChip from '~/components/feedback/ClosableChip/ClosableChip';
 import CheckboxIndicator from '~/components/switchers/Checkbox/CheckboxIndicator/CheckboxIndicator';
@@ -94,8 +94,11 @@ const MultiSelect = (props: Props<MultiSelectOwnProps>) => {
     local.onChange(local.value.filter((entry) => entry !== value));
   };
 
+  let focusRafId: number | undefined;
   const focusSelectedOption = () => {
-    requestAnimationFrame(() => {
+    if (focusRafId !== undefined) cancelAnimationFrame(focusRafId);
+    focusRafId = requestAnimationFrame(() => {
+      focusRafId = undefined;
       const panel = panelRef;
       if (!panel) return;
       const selected = panel.querySelector<HTMLButtonElement>('[aria-selected="true"]:not(:disabled)');
@@ -107,14 +110,21 @@ const MultiSelect = (props: Props<MultiSelectOwnProps>) => {
       first?.focus();
     });
   };
+
+  onCleanup(() => {
+    if (focusRafId !== undefined) cancelAnimationFrame(focusRafId);
+  });
+
   const toggleOpen = () => {
     if (dropdown.open()) {
       dropdown.close();
       return;
     }
 
-    dropdown.openDropdown();
-    focusSelectedOption();
+    batch(() => {
+      dropdown.openDropdown();
+      focusSelectedOption();
+    });
   };
 
   const handleTriggerKeyDown = (e: KeyboardEvent) => {

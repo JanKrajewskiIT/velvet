@@ -8,12 +8,6 @@
   gap: var(--spacing-xs);
 }
 
-.createRowSingle {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--spacing-xs);
-}
-
 .createActions {
   display: flex;
   justify-content: flex-end;

@@ -1,5 +1,5 @@
 import { FiX } from 'solid-icons/fi';
-import { createSignal, createUniqueId, type JSX, Show } from 'solid-js';
+import { createMemo, createSignal, createUniqueId, type JSX, Show, splitProps } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
 import useEscapeKey from '~/hooks/useEscapeKey';
@@ -44,68 +44,87 @@ const panelSizeClassByValue: Record<SheetSize, string | undefined> = {
 
 const Sheet = (props: Props<SheetProps>) => {
   const { ts } = useI18n();
+  const [local, rest] = splitProps(props, [
+    'open',
+    'onClose',
+    'label',
+    'subtitle',
+    'children',
+    'actions',
+    'side',
+    'size',
+    'class',
+    'aria-labelledby',
+    'aria-describedby',
+  ]);
   const [panelRef, setPanelRef] = createSignal<HTMLElement | undefined>();
   const titleId = createUniqueId();
   const subtitleId = createUniqueId();
-  const entered = useOverlayAnimation(() => props.open);
+  const entered = useOverlayAnimation(() => local.open);
 
-  const side = () => props.side ?? 'bottom';
-  const size = () => props.size ?? 'md';
+  const side = createMemo(() => local.side ?? 'bottom');
+  const size = createMemo(() => local.size ?? 'md');
 
   useEscapeKey(
-    () => props.open,
-    () => props.onClose(),
+    () => local.open,
+    () => {
+      local.onClose();
+    },
   );
 
-  useFocusTrap(panelRef, () => props.open);
+  useFocusTrap(panelRef, () => local.open);
 
-  const panelClass = () =>
+  const panelClass = createMemo(() =>
     classNames(
       styles.panel,
       panelSideClassByValue[side()],
       panelSizeClassByValue[size()],
       entered() && styles.panelVisible,
-      props.class,
-    );
+      local.class,
+    ),
+  );
 
   return (
-    <Show when={props.open}>
+    <Show when={local.open}>
       <Portal>
         <div
           class={classNames(styles.overlay, entered() && styles.overlayVisible)}
           aria-hidden="true"
-          onClick={() => props.onClose()}
+          onClick={() => {
+            local.onClose();
+          }}
         />
         <Surface
+          {...rest}
           ref={setPanelRef}
           class={panelClass()}
           elevation="drawer"
           role="dialog"
           tabIndex={-1}
           aria-modal="true"
-          aria-labelledby={joinAriaIds(props['aria-labelledby'], props.label && titleId)}
-          aria-describedby={joinAriaIds(props['aria-describedby'], props.subtitle && subtitleId)}
+          aria-labelledby={joinAriaIds(local['aria-labelledby'], local.label && titleId)}
+          aria-describedby={joinAriaIds(local['aria-describedby'], local.subtitle && subtitleId)}
         >
           <div class={styles.header}>
             <div class={styles.titleBlock}>
-              <Show when={props.label}>
+              <Show when={local.label}>
                 <Heading as="h2" level={2} variant="titleLg" id={titleId}>
-                  {props.label}
+                  {local.label}
                 </Heading>
               </Show>
-              <Show when={props.subtitle}>
+              <Show when={local.subtitle}>
                 <Text as="p" variant="bodySm" tone="muted" id={subtitleId}>
-                  {props.subtitle}
+                  {local.subtitle}
                 </Text>
               </Show>
             </div>
-            <IconButton icon={FiX} label={ts('common.close')} onClick={() => props.onClose()} />
+            <IconButton icon={FiX} label={ts('common.close')} onClick={local.onClose} />
           </div>
-          <Show when={props.children}>
-            <div class={styles.body}>{props.children}</div>
+          <Show when={local.children}>
+            <div class={styles.body}>{local.children}</div>
           </Show>
-          <Show when={props.actions}>
-            <div class={styles.footer}>{props.actions}</div>
+          <Show when={local.actions}>
+            <div class={styles.footer}>{local.actions}</div>
           </Show>
         </Surface>
       </Portal>
