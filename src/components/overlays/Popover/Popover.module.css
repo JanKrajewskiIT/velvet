@@ -1,82 +1,51 @@
 .wrapper {
-  position: relative;
   display: inline-block;
 }
 
 .content {
-  position: absolute;
-  z-index: var(--z-dropdown);
+  position: relative;
   padding: var(--spacing-md);
   overflow: visible;
+  animation: scaleIn var(--duration-fast) var(--ease-out-expo);
 }
 
-.content::after {
-  content: '';
+.arrow {
   position: absolute;
   width: 10px;
   height: 10px;
   background: var(--color-bg-elevated);
   border: 1px solid var(--color-border);
+  pointer-events: none;
+}
+
+[data-placement^='top'] .arrow {
+  left: var(--arrow-x, 50%);
+  bottom: -6px;
+  transform: rotate(225deg);
   border-right: none;
   border-bottom: none;
-  transform: rotate(45deg);
 }
 
-.bottom {
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-top: var(--spacing-sm);
-  animation: slideDown var(--duration-fast) var(--ease-out-expo) both;
-}
-
-.bottom::after {
+[data-placement^='bottom'] .arrow {
+  left: var(--arrow-x, 50%);
   top: -6px;
-  left: 50%;
-  margin-left: -5px;
+  transform: rotate(45deg);
+  border-right: none;
+  border-bottom: none;
 }
 
-.top {
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-bottom: var(--spacing-sm);
-  animation: slideUp var(--duration-fast) var(--ease-out-expo) both;
-}
-
-.top::after {
-  bottom: -6px;
-  left: 50%;
-  margin-left: -5px;
-  transform: rotate(225deg);
-}
-
-.left {
-  right: 100%;
-  top: 50%;
-  transform: translateY(-50%);
-  margin-right: var(--spacing-sm);
-  animation: scaleIn var(--duration-fast) var(--ease-out-expo) both;
-}
-
-.left::after {
+[data-placement^='left'] .arrow {
+  top: var(--arrow-y, 50%);
   right: -6px;
-  top: 50%;
-  margin-top: -5px;
   transform: rotate(135deg);
+  border-right: none;
+  border-bottom: none;
 }
 
-.right {
-  left: 100%;
-  top: 50%;
-  transform: translateY(-50%);
-  margin-left: var(--spacing-sm);
-  animation: scaleIn var(--duration-fast) var(--ease-out-expo) both;
-}
-
-.right::after {
+[data-placement^='right'] .arrow {
+  top: var(--arrow-y, 50%);
   left: -6px;
-  top: 50%;
-  margin-top: -5px;
   transform: rotate(315deg);
+  border-right: none;
+  border-bottom: none;
 }

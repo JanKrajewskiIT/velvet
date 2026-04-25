@@ -52,9 +52,14 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
   const [activeIndex, setActiveIndex] = createSignal(-1);
   const dropdownId = createUniqueId();
   let rootRef: HTMLDivElement | undefined;
+  let inputWrapperRef: HTMLDivElement | undefined;
   let inputRef: HTMLInputElement | undefined;
+  let panelRef: HTMLDivElement | undefined;
 
-  const dropdown = useDropdownState(() => rootRef, { isInteractive: () => !local.disabled });
+  const dropdown = useDropdownState(() => rootRef, {
+    isInteractive: () => !local.disabled,
+    floatingRef: () => panelRef,
+  });
 
   const deferredQuery = createDeferred(() => inputValue().toLowerCase(), { timeoutMs: 120 });
   const filteredOptions = createMemo(() => {
@@ -220,7 +225,7 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
         </For>
       </div>
 
-      <div class={styles.inputWrapper}>
+      <div ref={inputWrapperRef} class={styles.inputWrapper}>
         <DropdownInputTrigger
           id={local.id}
           ref={inputRef}
@@ -247,7 +252,17 @@ const Autocomplete = (props: Props<AutocompleteProps>) => {
         />
 
         <Show when={dropdown.open()}>
-          <DropdownSurface id={dropdownId} class={styles.dropdown} align="fullWidth" origin="top" role="listbox">
+          <DropdownSurface
+            ref={(el) => {
+              panelRef = el;
+            }}
+            id={dropdownId}
+            class={styles.dropdown}
+            align="fullWidth"
+            origin="top"
+            anchor={() => inputWrapperRef}
+            role="listbox"
+          >
             <Show when={filteredOptions().length > 0} fallback={<div class={styles.empty}>{emptyLabel()}</div>}>
               <For each={filteredOptions()}>
                 {(option, index) => (

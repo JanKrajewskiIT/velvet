@@ -1,3 +1,4 @@
+import type { Accessor } from 'solid-js';
 import { For } from 'solid-js';
 
 import DropdownOption from '~/components/dropdowns/Dropdown/DropdownOption/DropdownOption';
@@ -12,6 +13,7 @@ interface TimePanelProps {
   onSelect: (time: string) => void;
   panelClass?: string;
   surfaceRef?: (element: HTMLDivElement) => void;
+  anchor?: Accessor<HTMLElement | undefined>;
 }
 
 const TimePanel = (props: Props<TimePanelProps>) => {
@@ -22,6 +24,7 @@ const TimePanel = (props: Props<TimePanelProps>) => {
       class={props.panelClass}
       align="right"
       origin="top"
+      anchor={props.anchor}
       role="listbox"
       aria-label={props.ariaLabel}
     >

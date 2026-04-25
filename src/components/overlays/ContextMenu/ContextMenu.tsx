@@ -1,10 +1,11 @@
 import { batch, createEffect, createSignal, For, type JSX, on, onCleanup, Show } from 'solid-js';
-import { Portal } from 'solid-js/web';
 
+import Floating from '~/components/overlays/Floating/Floating';
 import useClickOutside from '~/hooks/useClickOutside';
 import useEscapeKey from '~/hooks/useEscapeKey';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
+import type { Rect, VirtualElement } from '~/utils/floating/types';
 
 import DropdownDivider from '../../dropdowns/Dropdown/DropdownDivider/DropdownDivider';
 import DropdownOption from '../../dropdowns/Dropdown/DropdownOption/DropdownOption';
@@ -24,35 +25,43 @@ interface ContextMenuProps {
   items: Array<ContextMenuOption | 'separator'>;
 }
 
+const createPointVirtualElement = (x: number, y: number): VirtualElement => ({
+  getBoundingClientRect: (): Rect => ({ x, y, width: 0, height: 0 }),
+});
+
 const ContextMenu = (props: Props<ContextMenuProps>) => {
   const [visible, setVisible] = createSignal(false);
-  const [position, setPosition] = createSignal({ x: 0, y: 0 });
-  let menuRef: HTMLDivElement | undefined;
+  const [virtualEl, setVirtualEl] = createSignal<VirtualElement | undefined>(undefined);
+  const [menuRef, setMenuRef] = createSignal<HTMLDivElement | undefined>(undefined);
+  const [floatingEl, setFloatingEl] = createSignal<HTMLDivElement | undefined>(undefined);
 
-  const close = () => setVisible(false);
+  const close = (): void => {
+    setVisible(false);
+  };
 
-  useClickOutside(() => menuRef, visible, close);
-
+  useClickOutside(menuRef, visible, close, floatingEl);
   useEscapeKey(visible, close);
 
-  const handleContextMenu = (e: MouseEvent) => {
+  const handleContextMenu = (e: MouseEvent): void => {
     e.preventDefault();
     batch(() => {
-      setPosition({ x: e.clientX, y: e.clientY });
+      setVirtualEl(createPointVirtualElement(e.clientX, e.clientY));
       setVisible(true);
     });
   };
 
-  const handleItemClick = (item: ContextMenuOption) => {
+  const handleItemClick = (item: ContextMenuOption): void => {
     if (item.disabled) return;
     close();
     item.onClick();
   };
 
-  const getMenuItems = (): HTMLButtonElement[] =>
-    menuRef ? Array.from(menuRef.querySelectorAll<HTMLButtonElement>('button[role="menuitem"]:not(:disabled)')) : [];
+  const getMenuItems = (): HTMLButtonElement[] => {
+    const root = menuRef();
+    return root ? Array.from(root.querySelectorAll<HTMLButtonElement>('button[role="menuitem"]:not(:disabled)')) : [];
+  };
 
-  const focusItemAt = (index: number) => {
+  const focusItemAt = (index: number): void => {
     const items = getMenuItems();
     if (items.length === 0) return;
     const clampedIndex = (index + items.length) % items.length;
@@ -112,19 +121,15 @@ const ContextMenu = (props: Props<ContextMenuProps>) => {
     <div class={classNames(styles.wrapper, props.class)} onContextMenu={handleContextMenu}>
       {props.children}
       <Show when={visible()}>
-        <Portal>
+        <Floating anchor={virtualEl} open={visible()} placement="bottom-start" padding={8} ref={setFloatingEl}>
           <DropdownSurface
-            ref={menuRef}
+            ref={setMenuRef}
             class={styles.menu}
             panel={false}
             scrollable={false}
             role="menu"
             tabIndex={-1}
             aria-orientation="vertical"
-            style={{
-              '--context-menu-top': `${position().y}px`,
-              '--context-menu-left': `${position().x}px`,
-            }}
             onKeyDown={handleMenuKeyDown}
           >
             <For each={props.items}>
@@ -145,7 +150,7 @@ const ContextMenu = (props: Props<ContextMenuProps>) => {
               }
             </For>
           </DropdownSurface>
-        </Portal>
+        </Floating>
       </Show>
     </div>
   );

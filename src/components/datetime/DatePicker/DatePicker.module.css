@@ -1,9 +1,8 @@
 .dropdown {
   display: block;
-  top: calc(100% + var(--spacing-xs));
+  margin-top: var(--spacing-xs);
   padding: var(--spacing-md);
   width: min(296px, calc(100vw - (var(--spacing-lg) * 2)));
-  z-index: var(--z-overlay);
 }
 
 .day {

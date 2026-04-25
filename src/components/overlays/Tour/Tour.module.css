@@ -11,7 +11,6 @@
   left: var(--tour-spotlight-left, 0);
   width: var(--tour-spotlight-width, 0);
   height: var(--tour-spotlight-height, 0);
-  z-index: var(--z-overlay);
   box-shadow: 0 0 0 9999px var(--color-overlay);
   border-radius: var(--radius-sm);
   transition: all var(--duration-normal) var(--ease-out-expo);
@@ -33,22 +32,20 @@
   }
 }
 
+.floatingHost {
+  pointer-events: auto;
+}
+
 .card {
-  position: absolute;
-  top: var(--tour-card-top, 50%);
-  left: var(--tour-card-left, 50%);
-  transform: var(--tour-card-transform, translate(-50%, -50%));
-  z-index: var(--z-modal);
+  position: relative;
   padding: var(--spacing-md);
   max-width: 320px;
   min-width: 240px;
-  pointer-events: auto;
   overflow: visible;
   animation: morphIn 0.3s var(--ease-out-expo);
 }
 
-.card::after {
-  content: '';
+.arrow {
   position: absolute;
   width: 10px;
   height: 10px;
@@ -57,28 +54,24 @@
   pointer-events: none;
 }
 
-.cardTop::after {
+[data-placement^='top'] .arrow {
+  left: var(--arrow-x, 50%);
   bottom: -5px;
-  left: 50%;
-  margin-left: -5px;
 }
 
-.cardBottom::after {
+[data-placement^='bottom'] .arrow {
+  left: var(--arrow-x, 50%);
   top: -5px;
-  left: 50%;
-  margin-left: -5px;
 }
 
-.cardLeft::after {
+[data-placement^='left'] .arrow {
+  top: var(--arrow-y, 50%);
   right: -5px;
-  top: 50%;
-  margin-top: -5px;
 }
 
-.cardRight::after {
+[data-placement^='right'] .arrow {
+  top: var(--arrow-y, 50%);
   left: -5px;
-  top: 50%;
-  margin-top: -5px;
 }
 
 .title {

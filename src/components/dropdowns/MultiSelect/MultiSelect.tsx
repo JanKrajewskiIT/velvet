@@ -45,6 +45,7 @@ const MultiSelect = (props: Props<MultiSelectOwnProps>) => {
     'class',
   ]);
   let rootRef: HTMLDivElement | undefined;
+  let triggerAreaRef: HTMLDivElement | undefined;
   let triggerRef: HTMLButtonElement | undefined;
   let panelRef: HTMLDivElement | undefined;
   const dropdownId = createUniqueId();
@@ -134,7 +135,7 @@ const MultiSelect = (props: Props<MultiSelectOwnProps>) => {
 
   return (
     <div {...rest} ref={rootRef} class={classNames(styles.wrapper, local.class)}>
-      <div class={styles.triggerArea}>
+      <div ref={triggerAreaRef} class={styles.triggerArea}>
         <DropdownChevronFieldTrigger
           id={local.id}
           ref={triggerRef}
@@ -162,6 +163,7 @@ const MultiSelect = (props: Props<MultiSelectOwnProps>) => {
             class={styles.dropdown}
             align="fullWidth"
             origin="top"
+            anchor={() => triggerAreaRef}
             role="listbox"
             aria-multiselectable="true"
             onKeyDown={dropdown.handlePanelKeyDown}

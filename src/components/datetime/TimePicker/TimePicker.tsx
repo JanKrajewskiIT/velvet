@@ -39,6 +39,7 @@ const TimePicker = (props: Props<TimePickerProps>) => {
     () => wrapperRef,
     () => isOpen(),
     close,
+    () => dropdownRef,
   );
   useEscapeKey(() => isOpen(), close);
 
@@ -119,6 +120,7 @@ const TimePicker = (props: Props<TimePickerProps>) => {
           value={props.value}
           onSelect={select}
           panelClass={styles.dropdown}
+          anchor={() => wrapperRef}
         />
       </Show>
     </DateTimeFieldTrigger>

@@ -70,6 +70,7 @@ const DropdownButton = (props: Props<DropdownButtonProps>) => {
           class={styles.menu}
           align="left"
           origin="topLeft"
+          anchor={() => wrapperRef}
           role="menu"
           tabIndex={-1}
           onKeyDown={dropdown.handlePanelKeyDown}

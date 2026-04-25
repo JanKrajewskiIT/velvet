@@ -1,74 +1,47 @@
 .tooltipContainer {
-  --tooltip-offset: var(--spacing-sm);
-
-  position: relative;
   display: inline-block;
+}
+
+.floatingHost {
+  z-index: var(--z-tooltip);
+  pointer-events: none;
 }
 
 .tooltipContent {
   --tooltip-arrow-size: 0.5rem;
 
-  position: absolute;
-  z-index: var(--z-modal);
+  position: relative;
   padding: var(--spacing-xs) var(--spacing-sm);
   white-space: nowrap;
   pointer-events: none;
   animation: scaleIn var(--duration-fast) var(--ease-out-back);
 }
 
-.tooltipContent::after {
-  content: '';
+.arrow {
   position: absolute;
   width: var(--tooltip-arrow-size);
   height: var(--tooltip-arrow-size);
   background: var(--color-tooltip);
   transform: rotate(45deg);
+  pointer-events: none;
 }
 
-.top {
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%) translateY(calc(-1 * var(--tooltip-offset)));
+[data-placement^='top'] .arrow {
+  left: var(--arrow-x, 50%);
+  bottom: calc(-0.5 * var(--tooltip-arrow-size));
 }
 
-.top::after {
-  left: 50%;
-  top: 100%;
-  transform: translateX(-50%) translateY(calc(-0.5 * var(--tooltip-arrow-size))) rotate(45deg);
+[data-placement^='bottom'] .arrow {
+  left: var(--arrow-x, 50%);
+  top: calc(-0.5 * var(--tooltip-arrow-size));
 }
 
-.bottom {
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%) translateY(var(--tooltip-offset));
+[data-placement^='left'] .arrow {
+  top: var(--arrow-y, 50%);
+  right: calc(-0.5 * var(--tooltip-arrow-size));
 }
 
-.bottom::after {
-  left: 50%;
-  bottom: 100%;
-  transform: translateX(-50%) translateY(calc(0.5 * var(--tooltip-arrow-size))) rotate(45deg);
-}
-
-.left {
-  right: 100%;
-  top: 50%;
-  transform: translateY(-50%) translateX(calc(-1 * var(--tooltip-offset)));
-}
-
-.left::after {
-  left: 100%;
-  top: 50%;
-  transform: translateX(calc(-0.5 * var(--tooltip-arrow-size))) translateY(-50%) rotate(45deg);
-}
-
-.right {
-  left: 100%;
-  top: 50%;
-  transform: translateY(-50%) translateX(var(--tooltip-offset));
-}
-
-.right::after {
-  right: 100%;
-  top: 50%;
-  transform: translateX(calc(0.5 * var(--tooltip-arrow-size))) translateY(-50%) rotate(45deg);
+[data-placement^='right'] .arrow {
+  top: var(--arrow-y, 50%);
+  left: calc(-0.5 * var(--tooltip-arrow-size));
 }

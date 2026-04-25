@@ -3,9 +3,6 @@
 }
 
 .menu {
-  position: fixed;
-  top: var(--context-menu-top);
-  left: var(--context-menu-left);
   min-width: 160px;
   padding: var(--spacing-xs) 0;
   transform-origin: 0 0;

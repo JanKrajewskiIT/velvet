@@ -1,25 +1,5 @@
 .surface {
-  z-index: var(--z-dropdown);
   animation: scaleIn var(--duration-fast) var(--ease-out-back);
-}
-
-.panel {
-  position: absolute;
-  top: 100%;
-}
-
-.panelLeft {
-  left: 0;
-}
-
-.panelRight {
-  right: 0;
-}
-
-.panelFullWidth {
-  left: 0;
-  right: 0;
-  width: 100%;
 }
 
 .originTop {
@@ -31,7 +11,8 @@
 }
 
 .scrollable {
-  max-height: 240px;
+  /* Use the available viewport height computed by the floating engine, capped by a sane default. */
+  max-height: min(var(--available-height, 240px), 240px);
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--color-border) transparent;

@@ -32,9 +32,11 @@ const DatePicker = (props: Props<DatePickerProps>) => {
   const triggerLabelId = createUniqueId();
 
   let wrapperRef: HTMLDivElement | undefined;
+  let panelRef: HTMLDivElement | undefined;
 
   const popup = useCalendarPopupState({
     rootRef: () => wrapperRef,
+    floatingRef: () => panelRef,
     selectedIso: () => props.value,
     isDisabled: () => Boolean(props.disabled),
   });
@@ -116,10 +118,14 @@ const DatePicker = (props: Props<DatePickerProps>) => {
     >
       <Show when={popup.isOpen()}>
         <DropdownSurface
+          ref={(el) => {
+            panelRef = el;
+          }}
           id={dropdownId}
           class={styles.dropdown}
           align="left"
           origin="topLeft"
+          anchor={() => wrapperRef}
           role="dialog"
           aria-modal="false"
           aria-label={calendarLabel()}

@@ -325,6 +325,7 @@ export { default as Dialog } from './components/overlays/Dialog/Dialog';
 export { default as DialogActions } from './components/overlays/Dialog/DialogActions/DialogActions';
 export { default as DialogBody } from './components/overlays/Dialog/DialogBody/DialogBody';
 export { default as DialogTitle } from './components/overlays/Dialog/DialogTitle/DialogTitle';
+export { default as Floating, type FloatingProps } from './components/overlays/Floating/Floating';
 export { default as Popover } from './components/overlays/Popover/Popover';
 export { default as Sheet } from './components/overlays/Sheet/Sheet';
 export { default as Tooltip } from './components/overlays/Tooltip/Tooltip';
@@ -443,6 +444,8 @@ export { default as LabelText } from './components/typography/LabelText/LabelTex
 export { default as Text } from './components/typography/Text/Text';
 export { default as useClickOutside } from './hooks/useClickOutside';
 export { default as useEscapeKey } from './hooks/useEscapeKey';
+export type { UseFloatingOptions, UseFloatingReturn } from './hooks/useFloating';
+export { default as useFloating } from './hooks/useFloating';
 export { default as useFocusTrap } from './hooks/useFocusTrap';
 export type { TradingViewPollingFeedOptions } from './hooks/useTradingViewPollingFeed';
 export { default as useTradingViewPollingFeed } from './hooks/useTradingViewPollingFeed';

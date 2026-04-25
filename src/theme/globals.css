@@ -190,9 +190,11 @@
   --shadow-focus: 0 0 0 3px var(--color-focus-ring);
   --shadow-focus-primary: 0 0 0 3px var(--color-focus-ring), 0 0 12px rgb(139 0 54 / 12%);
   --z-header: 100;
-  --z-overlay: 999;
+  --z-overlay: 900;
   --z-modal: 1000;
   --z-dropdown: 200;
+  --z-floating: 1100;
+  --z-tooltip: 1200;
   --z-toast: 9999;
   --transition-fast: 0.2s ease;
   --transition-normal: 0.5s ease;

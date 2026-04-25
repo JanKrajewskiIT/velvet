@@ -18,7 +18,10 @@ interface OpenFromKeyboardOptions {
 }
 
 const useDropdownPanel = (options: UseDropdownPanelOptions) => {
-  const dropdown = useDropdownState(options.rootRef, { isInteractive: options.isInteractive });
+  const dropdown = useDropdownState(options.rootRef, {
+    isInteractive: options.isInteractive,
+    floatingRef: options.panelRef,
+  });
 
   let focusRafId: number | undefined;
 

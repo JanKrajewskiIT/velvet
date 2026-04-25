@@ -6,6 +6,7 @@ import useEscapeKey from './useEscapeKey';
 
 interface UseDropdownStateOptions {
   isInteractive?: Accessor<boolean>;
+  floatingRef?: Accessor<HTMLElement | undefined>;
 }
 
 const useDropdownState = (rootRef: Accessor<HTMLElement | undefined>, options?: UseDropdownStateOptions) => {
@@ -32,6 +33,7 @@ const useDropdownState = (rootRef: Accessor<HTMLElement | undefined>, options?: 
     () => rootRef(),
     () => open(),
     close,
+    options?.floatingRef,
   );
 
   return {

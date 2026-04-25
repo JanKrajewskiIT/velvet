@@ -1,0 +1,6 @@
+[submodule ".ai-tools"]
+	path = .ai-tools
+	url = https://github.com/JanKrajewskiIT/shared-ai-tools.git
+[submodule "shared-ai-tools"]
+	path = shared-ai-tools
+	url = https://github.com/JanKrajewskiIT/shared-ai-tools.git

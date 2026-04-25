@@ -13,6 +13,7 @@ interface MonthView {
 
 interface UseCalendarPopupStateOptions {
   rootRef: Accessor<HTMLElement | undefined>;
+  floatingRef?: Accessor<HTMLElement | undefined>;
   selectedIso?: Accessor<string | undefined>;
   isDisabled?: Accessor<boolean>;
   onClose?: () => void;
@@ -107,6 +108,7 @@ const useCalendarPopupState = (options: UseCalendarPopupStateOptions) => {
     () => options.rootRef(),
     () => isOpen(),
     close,
+    options.floatingRef,
   );
   useEscapeKey(() => isOpen(), close);
 

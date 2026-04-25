@@ -211,6 +211,7 @@ const Select = (props: Props<SelectOwnProps>) => {
           id={dropdownId}
           class={styles.selectDropdown}
           align="fullWidth"
+          anchor={() => wrapperRef}
           origin="top"
           role="listbox"
           onKeyDown={dropdown.handlePanelKeyDown}

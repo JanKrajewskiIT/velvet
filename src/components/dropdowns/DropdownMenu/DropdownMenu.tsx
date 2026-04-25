@@ -64,6 +64,7 @@ const DropdownMenu = (props: Props<DropdownMenuProps>) => {
           class={styles.menu}
           align="left"
           origin="topLeft"
+          anchor={() => menuRef}
           role="menu"
           aria-label={menuAriaLabel()}
           tabIndex={-1}

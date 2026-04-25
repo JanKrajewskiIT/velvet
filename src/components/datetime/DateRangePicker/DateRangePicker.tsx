@@ -39,9 +39,11 @@ const DateRangePicker = (props: Props<DateRangePickerProps>) => {
   const endTriggerLabelId = createUniqueId();
 
   let wrapperRef: HTMLDivElement | undefined;
+  let panelRef: HTMLDivElement | undefined;
 
   const popup = useCalendarPopupState({
     rootRef: () => wrapperRef,
+    floatingRef: () => panelRef,
     selectedIso: () => props.value.start,
     isDisabled: () => Boolean(props.disabled),
     onClose: () => setPendingStart(null),
@@ -209,10 +211,14 @@ const DateRangePicker = (props: Props<DateRangePickerProps>) => {
       />
       <Show when={popup.isOpen()}>
         <DropdownSurface
+          ref={(el) => {
+            panelRef = el;
+          }}
           id={dropdownId}
           class={styles.dropdown}
           align="left"
           origin="topLeft"
+          anchor={() => wrapperRef}
           role="dialog"
           aria-modal="false"
           aria-label={calendarLabel()}

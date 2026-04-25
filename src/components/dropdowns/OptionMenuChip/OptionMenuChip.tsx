@@ -161,6 +161,7 @@ const OptionMenuChip = (props: Props<OptionMenuChipProps>) => {
           class={styles.menu}
           align={local.align ?? 'left'}
           origin="topLeft"
+          anchor={() => wrapperRef}
           role="menu"
           aria-label={local.menuLabel}
           tabIndex={-1}

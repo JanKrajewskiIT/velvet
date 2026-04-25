@@ -2,6 +2,7 @@ import { batch, createEffect, createMemo, createSignal, type JSX, on, onCleanup,
 import { Portal } from 'solid-js/web';
 
 import Button from '~/components/buttons/Button/Button';
+import Floating from '~/components/overlays/Floating/Floating';
 import Surface from '~/components/surfaces/Surface/Surface';
 import Heading from '~/components/typography/Heading/Heading';
 import Text from '~/components/typography/Text/Text';
@@ -9,6 +10,8 @@ import useEscapeKey from '~/hooks/useEscapeKey';
 import { useI18n } from '~/i18n/I18nProvider';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
+import arrow from '~/utils/floating/middleware/arrow';
+import type { Placement, ReferenceElement } from '~/utils/floating/types';
 
 import styles from './Tour.module.css';
 
@@ -26,84 +29,87 @@ interface TourProps {
   onComplete?: () => void;
 }
 
-const VIEWPORT_PADDING = 16;
-const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
+const SPOTLIGHT_PADDING = 4;
+const TOUR_OFFSET = 16;
 
-const computeCardPosition = (
-  rect: DOMRect,
-  placement: 'top' | 'bottom' | 'left' | 'right',
-  cardWidth: number,
-  cardHeight: number,
-) => {
-  switch (placement) {
-    case 'top':
-      return { top: rect.top - VIEWPORT_PADDING - cardHeight, left: rect.left };
-    case 'bottom':
-      return { top: rect.bottom + VIEWPORT_PADDING, left: rect.left };
-    case 'left':
-      return { top: rect.top, left: rect.left - VIEWPORT_PADDING - cardWidth };
-    case 'right':
-      return { top: rect.top, left: rect.right + VIEWPORT_PADDING };
-  }
+const placementByValue: Record<NonNullable<TourStep['placement']>, Placement> = {
+  top: 'top-start',
+  bottom: 'bottom-start',
+  left: 'left-start',
+  right: 'right-start',
 };
 
 const Tour = (props: Props<TourProps>) => {
   const { ts } = useI18n();
   const [local, rest] = splitProps(props, ['steps', 'open', 'onClose', 'onComplete', 'class']);
   const [currentStep, setCurrentStep] = createSignal(0);
+  const [targetEl, setTargetEl] = createSignal<HTMLElement | undefined>(undefined);
   const [spotlightStyle, setSpotlightStyle] = createSignal<JSX.CSSProperties>({});
-  const [cardStyle, setCardStyle] = createSignal<JSX.CSSProperties>({});
-  let cardRef: HTMLDivElement | undefined;
+  const [arrowRef, setArrowRef] = createSignal<HTMLSpanElement | undefined>(undefined);
+
   const currentStepData = createMemo(() => local.steps[currentStep()]);
   const isLastStep = createMemo(() => currentStep() === local.steps.length - 1);
-  const cardPlacementClass = createMemo(() => {
-    const placement = currentStepData()?.placement ?? 'bottom';
-    if (placement === 'top') return styles.cardTop;
-    if (placement === 'left') return styles.cardLeft;
-    if (placement === 'right') return styles.cardRight;
-    return styles.cardBottom;
-  });
 
   useEscapeKey(
     () => local.open,
     () => local.onClose(),
   );
 
-  const updatePosition = (step: TourStep) => {
-    const el = document.querySelector(step.target);
+  const updateSpotlight = (el: HTMLElement | undefined): void => {
     if (!el) {
-      batch(() => {
-        setSpotlightStyle({});
-        setCardStyle({});
-      });
+      setSpotlightStyle({});
       return;
     }
-
     const rect = el.getBoundingClientRect();
-    const padding = 4;
-    const cardWidth = cardRef?.offsetWidth ?? 320;
-    const cardHeight = cardRef?.offsetHeight ?? 220;
-    const placement = step.placement ?? 'bottom';
-    const position = computeCardPosition(rect, placement, cardWidth, cardHeight);
-    const maxLeft = Math.max(VIEWPORT_PADDING, window.innerWidth - cardWidth - VIEWPORT_PADDING);
-    const maxTop = Math.max(VIEWPORT_PADDING, window.innerHeight - cardHeight - VIEWPORT_PADDING);
-
-    batch(() => {
-      setSpotlightStyle({
-        '--tour-spotlight-top': `${rect.top - padding}px`,
-        '--tour-spotlight-left': `${rect.left - padding}px`,
-        '--tour-spotlight-width': `${rect.width + padding * 2}px`,
-        '--tour-spotlight-height': `${rect.height + padding * 2}px`,
-      });
-
-      setCardStyle({
-        '--tour-card-top': `${Math.round(clamp(position.top, VIEWPORT_PADDING, maxTop))}px`,
-        '--tour-card-left': `${Math.round(clamp(position.left, VIEWPORT_PADDING, maxLeft))}px`,
-        '--tour-card-transform': 'none',
-      });
+    setSpotlightStyle({
+      '--tour-spotlight-top': `${rect.top - SPOTLIGHT_PADDING}px`,
+      '--tour-spotlight-left': `${rect.left - SPOTLIGHT_PADDING}px`,
+      '--tour-spotlight-width': `${rect.width + SPOTLIGHT_PADDING * 2}px`,
+      '--tour-spotlight-height': `${rect.height + SPOTLIGHT_PADDING * 2}px`,
     });
   };
 
+  // Resolve target element + spotlight position whenever the step changes or layout updates.
+  createEffect(
+    on(
+      () => [local.open, currentStepData()?.target],
+      () => {
+        if (!local.open) return;
+        const step = currentStepData();
+        if (!step) return;
+        const el = document.querySelector(step.target);
+        const target = el instanceof HTMLElement ? el : undefined;
+        batch(() => {
+          setTargetEl(target);
+          updateSpotlight(target);
+        });
+      },
+    ),
+  );
+
+  // Keep spotlight + floating card in sync with viewport changes.
+  createEffect(() => {
+    if (!local.open) return;
+    const target = targetEl();
+    if (!target) return;
+    let rafId: number | undefined;
+    const scheduleUpdate = (): void => {
+      if (rafId !== undefined) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = undefined;
+        updateSpotlight(target);
+      });
+    };
+    window.addEventListener('resize', scheduleUpdate);
+    window.addEventListener('scroll', scheduleUpdate, true);
+    onCleanup(() => {
+      if (rafId !== undefined) cancelAnimationFrame(rafId);
+      window.removeEventListener('resize', scheduleUpdate);
+      window.removeEventListener('scroll', scheduleUpdate, true);
+    });
+  });
+
+  // Reset to first step when re-opened.
   createEffect(
     on(
       () => local.open,
@@ -114,33 +120,13 @@ const Tour = (props: Props<TourProps>) => {
     ),
   );
 
-  createEffect(() => {
-    if (!local.open) return;
-    const step = currentStepData();
-    if (!step) return;
+  const placement = createMemo<Placement>(() => placementByValue[currentStepData()?.placement ?? 'bottom']);
+  const middleware = () => [arrow({ element: () => arrowRef() })];
 
-    updatePosition(step);
+  // Floating expects a ReferenceElement accessor; targetEl satisfies HTMLElement which is a ReferenceElement.
+  const referenceAccessor = (): ReferenceElement | undefined => targetEl();
 
-    let rafId: number | undefined;
-    const scheduleUpdate = () => {
-      if (rafId !== undefined) return;
-      rafId = requestAnimationFrame(() => {
-        rafId = undefined;
-        updatePosition(step);
-      });
-    };
-
-    window.addEventListener('resize', scheduleUpdate);
-    window.addEventListener('scroll', scheduleUpdate, true);
-
-    onCleanup(() => {
-      if (rafId !== undefined) cancelAnimationFrame(rafId);
-      window.removeEventListener('resize', scheduleUpdate);
-      window.removeEventListener('scroll', scheduleUpdate, true);
-    });
-  });
-
-  const handleNext = () => {
+  const handleNext = (): void => {
     if (isLastStep()) {
       local.onComplete?.();
       local.onClose();
@@ -149,16 +135,12 @@ const Tour = (props: Props<TourProps>) => {
     }
   };
 
-  const handlePrev = () => {
+  const handlePrev = (): void => {
     setCurrentStep((prev) => Math.max(0, prev - 1));
   };
 
-  const handleSkip = () => {
+  const handleSkip = (): void => {
     local.onClose();
-  };
-
-  const handleCardRef = (element: HTMLDivElement) => {
-    cardRef = element;
   };
 
   return (
@@ -166,39 +148,46 @@ const Tour = (props: Props<TourProps>) => {
       <Portal>
         <div {...rest} class={classNames(styles.overlay, local.class)}>
           <div class={styles.spotlight} style={spotlightStyle()} />
-          <Surface
-            ref={handleCardRef}
-            class={classNames(styles.card, cardPlacementClass())}
-            style={cardStyle()}
-            elevation="popover"
-          >
-            <Button variant="ghost" size="sm" class={styles.skip} onClick={handleSkip}>
-              {ts('common.skip')}
-            </Button>
-            <Heading as="h3" variant="titleMd" class={styles.title}>
-              {currentStepData()?.title}
-            </Heading>
-            <Text as="p" variant="bodySm" tone="muted" class={styles.content}>
-              {currentStepData()?.content}
-            </Text>
-            <div class={styles.footer}>
-              <Text as="span" variant="caption" tone="muted" class={styles.steps}>
-                {currentStep() + 1} / {local.steps.length}
-              </Text>
-              <div class={styles.actions}>
-                <Show when={currentStep() > 0}>
-                  <Button variant="ghost" size="sm" onClick={handlePrev}>
-                    {ts('common.back')}
-                  </Button>
-                </Show>
-                <Button variant="primary" size="sm" onClick={handleNext}>
-                  {isLastStep() ? ts('common.finish') : ts('common.next')}
-                </Button>
-              </div>
-            </div>
-          </Surface>
         </div>
       </Portal>
+      <Floating
+        anchor={referenceAccessor}
+        open={local.open && Boolean(targetEl())}
+        placement={placement()}
+        offset={TOUR_OFFSET}
+        padding={16}
+        animationFrame
+        extraMiddleware={middleware()}
+        class={styles.floatingHost}
+      >
+        <Surface class={styles.card} elevation="popover">
+          <Button variant="ghost" size="sm" class={styles.skip} onClick={handleSkip}>
+            {ts('common.skip')}
+          </Button>
+          <Heading as="h3" variant="titleMd" class={styles.title}>
+            {currentStepData()?.title}
+          </Heading>
+          <Text as="p" variant="bodySm" tone="muted" class={styles.content}>
+            {currentStepData()?.content}
+          </Text>
+          <div class={styles.footer}>
+            <Text as="span" variant="caption" tone="muted" class={styles.steps}>
+              {currentStep() + 1} / {local.steps.length}
+            </Text>
+            <div class={styles.actions}>
+              <Show when={currentStep() > 0}>
+                <Button variant="ghost" size="sm" onClick={handlePrev}>
+                  {ts('common.back')}
+                </Button>
+              </Show>
+              <Button variant="primary" size="sm" onClick={handleNext}>
+                {isLastStep() ? ts('common.finish') : ts('common.next')}
+              </Button>
+            </div>
+          </div>
+          <span ref={setArrowRef} class={styles.arrow} aria-hidden="true" />
+        </Surface>
+      </Floating>
     </Show>
   );
 };
