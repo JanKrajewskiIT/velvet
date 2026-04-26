@@ -423,6 +423,7 @@ export { unwrapCollectionResponse } from './http/unwrapCollectionResponse';
 export { I18nProvider, useI18n } from './i18n/I18nProvider';
 export type { FlatI18nDictionary, I18nMessageKey, I18nMessageRegistry, Locale } from './i18n/registry';
 export { getRegisteredMessages, hasRegisteredMessage, registerI18nMessages, SUPPORTED_LOCALES } from './i18n/registry';
+import './i18n';
 export type { ComponentSize, DivCoreNativeProps, default as Props } from './models/Props';
 export { configureVelvet } from './providers/velvet-config';
 export type { VelvetProviderProps } from './providers/VelvetProvider';
