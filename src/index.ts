@@ -1,4 +1,5 @@
 ﻿import './theme/globals.css';
+import './i18n';
 
 export type { AuthActionButtonProps } from './auth/AuthActionButton';
 export { default as AuthActionButton } from './auth/AuthActionButton';
