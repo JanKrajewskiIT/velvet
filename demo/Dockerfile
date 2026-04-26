@@ -12,9 +12,9 @@ RUN --mount=type=secret,id=github_token \
 # Remove .npmrc so token does not leak into subsequent layers
 RUN rm -f .npmrc
 
-# Copy library source and config (needed by demo aliases and tsc)
+# Copy library source (needed by demo aliases and tsc)
 COPY src/ src/
-COPY config/ config/
+COPY styles.d.ts ./
 COPY tsconfig.json tsconfig.app.json tsconfig.node.json ./
 COPY vite.config.ts ./
 

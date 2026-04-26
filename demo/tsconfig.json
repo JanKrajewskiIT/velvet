@@ -1,5 +1,5 @@
 {
-  "extends": "../config/tsconfig.app-vite.json",
+  "extends": "@jankrajewskiit/configs/tsconfig/app-vite",
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "paths": {

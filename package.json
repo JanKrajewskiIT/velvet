@@ -13,26 +13,9 @@
       "import": "./dist/index.js"
     },
     "./styles": {
-      "types": "./config/styles.d.ts",
+      "types": "./styles.d.ts",
       "default": "./dist/velvet-ui.css"
-    },
-    "./eslint-config": "./config/eslint.mjs",
-    "./prettier-config": "./config/prettier.json",
-    "./tsconfig/app": "./config/tsconfig.app.json",
-    "./tsconfig/node": "./config/tsconfig.node.json",
-    "./tsconfig/app-vite": "./config/tsconfig.app-vite.json",
-    "./tsconfig/node-vite": "./config/tsconfig.node-vite.json",
-    "./vite-config": {
-      "types": "./config/vite.d.mts",
-      "import": "./config/vite.mjs"
-    },
-    "./lint-staged-config": {
-      "types": "./config/lint-staged.d.mts",
-      "import": "./config/lint-staged.mjs"
-    },
-    "./husky/pre-commit": "./config/husky-pre-commit.sh",
-    "./stylelint-config": "./config/stylelint.json",
-    "./nginx/spa": "./config/nginx-spa.conf"
+    }
   },
   "types": "./dist/index.d.ts",
   "sideEffects": [
@@ -41,7 +24,7 @@
   "packageManager": "npm@11.13.0",
   "files": [
     "dist/**/*",
-    "config/**/*"
+    "styles.d.ts"
   ],
   "engines": {
     "node": ">=20"
@@ -57,7 +40,7 @@
     "lint:css": "stylelint \"src/**/*.css\"",
     "lint:css:fix": "stylelint \"src/**/*.css\" --fix",
     "verify": "npm run typecheck && npm run lint && npm run lint:css && npm run build && npm run verify:pkg",
-    "verify:pkg": "npm run build && publint && attw --pack . --entrypoints . --profile esm-only --ignore-rules internal-resolution-error",
+    "verify:pkg": "publint && attw --pack . --entrypoints . --profile esm-only --ignore-rules internal-resolution-error",
     "size": "size-limit",
     "prepare": "husky"
   },
@@ -91,21 +74,11 @@
     }
   },
   "dependencies": {
-    "@eslint/js": "^9.39.4",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-css-modules": "^2.12.0",
-    "eslint-plugin-jsx-a11y": "^6.10.2",
-    "eslint-plugin-simple-import-sort": "^13.0.0",
-    "eslint-plugin-solid": "^0.14.5",
-    "eslint-plugin-unused-imports": "^4.4.1",
-    "globals": "^17.5.0",
-    "remark-gfm": "^4.0.1",
-    "stylelint-config-standard": "^40.0.0",
-    "typescript-eslint": "^8.59.0",
-    "vite-plugin-solid": "^2.11.12"
+    "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.2",
+    "@jankrajewskiit/configs": "^1.1.1",
     "@size-limit/file": "^12.1.0",
     "@solidjs/router": "^0.16.1",
     "@types/node": "^25.6.0",

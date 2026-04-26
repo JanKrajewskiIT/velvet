@@ -1,5 +1,5 @@
 {
-  "extends": "./config/tsconfig.node-vite.json",
+  "extends": "@jankrajewskiit/configs/tsconfig/node-vite",
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo"
   },

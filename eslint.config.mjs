@@ -1,4 +1,4 @@
-import { createEslintConfig } from './config/eslint.mjs';
+import { createEslintConfig } from '@jankrajewskiit/configs/eslint';
 
 export default createEslintConfig({
   tsconfigRootDir: import.meta.dirname,

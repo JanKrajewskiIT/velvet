@@ -1,3 +1,3 @@
-import { createLintStagedConfig } from './config/lint-staged.mjs';
+import { createLintStagedConfig } from '@jankrajewskiit/configs/lint-staged';
 
 export default createLintStagedConfig();

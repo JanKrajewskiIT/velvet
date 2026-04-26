@@ -15,7 +15,7 @@ const TOOLING_SNIPPETS: DocSnippet[] = [
   {
     title: 'ESLint preset',
     file: 'eslint.config.mjs',
-    code: `import { createEslintConfig } from '@jankrajewskiit/ui/eslint-config';
+    code: `import { createEslintConfig } from '@jankrajewskiit/configs/eslint';
 
 export default createEslintConfig({
   tsconfigRootDir: import.meta.dirname,
@@ -24,27 +24,27 @@ export default createEslintConfig({
   {
     title: 'Prettier preset',
     file: '.prettierrc',
-    code: `"@jankrajewskiit/ui/prettier-config"`,
+    code: `"@jankrajewskiit/configs/prettier"`,
   },
   {
     title: 'Prettier (JSON)',
     file: '.prettierrc.json',
     code: `{
-  "extends": "@jankrajewskiit/ui/prettier-config"
+  "extends": "@jankrajewskiit/configs/prettier"
 }`,
   },
   {
     title: 'Stylelint preset',
     file: '.stylelintrc.json',
     code: `{
-  "extends": "@jankrajewskiit/ui/stylelint-config"
+  "extends": "@jankrajewskiit/configs/stylelint"
 }`,
   },
   {
     title: 'TypeScript app config',
     file: 'tsconfig.app.json',
     code: `{
-  "extends": "@jankrajewskiit/ui/tsconfig/app-vite",
+  "extends": "@jankrajewskiit/configs/tsconfig/app-vite",
   "compilerOptions": {
     "baseUrl": ".",
     "paths": { "~/*": ["src/*"] }
@@ -56,7 +56,7 @@ export default createEslintConfig({
     title: 'TypeScript node config',
     file: 'tsconfig.node.json',
     code: `{
-  "extends": "@jankrajewskiit/ui/tsconfig/node-vite",
+  "extends": "@jankrajewskiit/configs/tsconfig/node-vite",
   "include": ["vite.config.ts"]
 }`,
   },
@@ -64,7 +64,7 @@ export default createEslintConfig({
     title: 'Vite config preset',
     file: 'vite.config.ts',
     code: `import { defineConfig } from 'vite';
-import { createSolidAppViteConfig } from '@jankrajewskiit/ui/vite-config';
+import { createSolidAppViteConfig } from '@jankrajewskiit/configs/vite';
 
 export default defineConfig(
   createSolidAppViteConfig({
@@ -76,14 +76,14 @@ export default defineConfig(
   {
     title: 'lint-staged preset',
     file: '.lintstagedrc.mjs',
-    code: `import { createLintStagedConfig } from '@jankrajewskiit/ui/lint-staged-config';
+    code: `import { createLintStagedConfig } from '@jankrajewskiit/configs/lint-staged';
 
 export default createLintStagedConfig();`,
   },
   {
     title: 'Husky pre-commit',
     file: '.husky/pre-commit',
-    code: `. "$(dirname -- "$0")/../node_modules/@jankrajewskiit/ui/config/husky-pre-commit.sh"`,
+    code: `. "$(dirname -- "$0")/../node_modules/@jankrajewskiit/configs/husky/pre-commit.sh"`,
   },
   {
     title: 'package.json scripts',
