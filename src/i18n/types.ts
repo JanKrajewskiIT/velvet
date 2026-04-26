@@ -11,7 +11,7 @@
  * Apps extend the global key space by augmenting `VelvetI18nDictionary`:
  *
  * ```ts
- * declare module '@jankrajewskiit/ui/i18n' {
+ * declare module '@jankrajewskiit/ui' {
  *   interface VelvetI18nDictionary extends AppDictionary {}
  * }
  * ```
@@ -64,7 +64,7 @@ export type DotPath<T> = T extends string
  * Apps and libraries extend the key set via module augmentation:
  *
  * ```ts
- * declare module '@jankrajewskiit/ui/i18n' {
+ * declare module '@jankrajewskiit/ui' {
  *   interface VelvetI18nDictionary extends MyAppDictionary {}
  * }
  * ```

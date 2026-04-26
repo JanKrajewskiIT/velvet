@@ -6,7 +6,7 @@
  * once and merges left-to-right; later layers override earlier ones.
  *
  * @example
- *   import { en as uiEn, pl as uiPl } from '@jankrajewskiit/ui/i18n';
+ *   import { en as uiEn, pl as uiPl } from '@jankrajewskiit/ui';
  *   import { en as dataEn, pl as dataPl } from '@jankrajewskiit/data/i18n';
  *   import { en as appEn, pl as appPl } from '~/i18n';
  *

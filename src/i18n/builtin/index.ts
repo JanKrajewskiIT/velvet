@@ -1,7 +1,7 @@
 /**
  * Foundation dictionaries owned by VelvetUi.
  *
- * Re-exported from `@jankrajewskiit/ui/i18n` so apps and libraries can
+ * Re-exported from `@jankrajewskiit/ui` so apps and libraries can
  * compose them with their own layers via `defineDictionaries`.
  */
 
