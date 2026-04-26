@@ -3,8 +3,9 @@ import { createMemo, ErrorBoundary, type JSX, type ParentProps, Show, untrack } 
 import { AuthProvider } from '~/auth/AuthProvider';
 import ErrorFallback from '~/components/feedback/ErrorFallback/ErrorFallback';
 import ToastProvider from '~/components/feedback/Toast/ToastProvider/ToastProvider';
+import type { ComposedDictionaries } from '~/i18n/defineDictionary';
 import { I18nProvider, useI18n } from '~/i18n/I18nProvider';
-import type { Locale } from '~/i18n/registry';
+import type { Locale } from '~/i18n/types';
 import { configureVelvet, getVelvetRuntimeConfig } from '~/providers/velvet-config';
 import { getDefaultQueryClient, QueryClientContext } from '~/query/queryClientContext';
 import type { CreateQueryClientOptions } from '~/query/types';
@@ -14,6 +15,14 @@ interface VelvetProviderProps extends ParentProps {
   themeStorageKey?: string;
   localeStorageKey?: string;
   initialLocale?: Locale;
+  /**
+   * Composed locale dictionaries produced by `defineDictionaries`.
+   *
+   * When omitted, the provider uses VelvetUi's foundation dictionary only,
+   * which is sufficient for primitive components but will not contain
+   * data-domain or app-specific keys.
+   */
+  dictionaries?: ComposedDictionaries;
   queryDefaults?: CreateQueryClientOptions;
   errorFallback?: JSX.Element;
 }
@@ -49,7 +58,7 @@ const VelvetProvider = (props: VelvetProviderProps) => {
 
   return (
     <ThemeProvider>
-      <I18nProvider initialLocale={props.initialLocale}>
+      <I18nProvider initialLocale={props.initialLocale} dictionaries={props.dictionaries}>
         <QueryClientContext.Provider value={getDefaultQueryClient()}>
           <Show
             when={config.authConfig}

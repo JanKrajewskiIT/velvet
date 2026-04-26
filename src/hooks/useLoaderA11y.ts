@@ -1,7 +1,7 @@
-import { type Accessor, createMemo } from 'solid-js';
+﻿import { type Accessor, createMemo } from 'solid-js';
 
 import { useI18n } from '~/i18n/I18nProvider';
-import type { I18nMessageKey } from '~/i18n/registry';
+import type { VelvetI18nKey } from '~/i18n/types';
 import type { DivCoreNativeProps } from '~/models/Props';
 
 interface LoaderMessages {
@@ -20,14 +20,14 @@ interface UseLoaderA11yOptions {
   label?: Accessor<string | undefined>;
   messages?: Accessor<LoaderMessages | undefined>;
   role?: Accessor<DivCoreNativeProps['role'] | undefined>;
-  translationKey: I18nMessageKey;
+  translationKey: VelvetI18nKey;
 }
 
 const useLoaderA11y = (options: UseLoaderA11yOptions) => {
-  const { ts } = useI18n();
+  const { t } = useI18n();
 
   const resolvedLabel = createMemo(
-    () => options.label?.() ?? options.messages?.()?.loading ?? ts(options.translationKey),
+    () => options.label?.() ?? options.messages?.()?.loading ?? t(options.translationKey),
   );
   const isAriaHidden = createMemo(() => options.ariaHidden?.() === 'true');
   const role = createMemo(() => (isAriaHidden() ? options.role?.() : (options.role?.() ?? 'status')));

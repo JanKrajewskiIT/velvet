@@ -1,36 +1,36 @@
-import './builtin';
+/**
+ * VelvetUi i18n provider.
+ *
+ * Reactive Solid context exposing:
+ *   - `locale()` / `setLocale(...)` signals
+ *   - `t(key, params?)` – type-safe message translation
+ *   - `formatNumber(value, options?)` – locale-aware number
+ *   - `formatDate(value, options?)` – locale-aware date/time
+ *   - `formatRelativeTime(value, unit, options?)` – locale-aware relative time
+ *
+ * Dictionaries are passed in declaratively (via `<VelvetProvider dictionaries={...}>`
+ * or directly as a prop on `<I18nProvider>`); there is no global registry
+ * and no side-effectful registration.
+ */
 
-import { createContext, createEffect, createMemo, createSignal, on, type ParentProps, useContext } from 'solid-js';
+import {
+  type Accessor,
+  createContext,
+  createEffect,
+  createMemo,
+  createSignal,
+  on,
+  type ParentProps,
+  useContext,
+} from 'solid-js';
 
 import { getVelvetRuntimeConfig } from '~/providers/velvet-config';
 
-import {
-  type FlatI18nDictionary,
-  getRegisteredMessages,
-  hasRegisteredMessage,
-  type I18nMessageKey,
-  type Locale,
-  SUPPORTED_LOCALES,
-} from './registry';
-
-interface I18nContextValue {
-  locale: () => Locale;
-  setLocale: (locale: Locale) => void;
-  t: (key: string, params?: Record<string, string | number>) => string;
-  ts: (key: I18nMessageKey, params?: Record<string, string | number>) => string;
-}
-
-const I18nContext = createContext<I18nContextValue>();
-
-const interpolate = (template: string, params?: Record<string, string | number>): string => {
-  if (!params) return template;
-
-  return template.replace(/\{\{\s*([^}]+?)\s*\}\}|\{\s*([^}]+?)\s*\}/gu, (_match, mustacheToken, braceToken) => {
-    const token = (mustacheToken ?? braceToken) as string;
-    const value = params[token];
-    return value === undefined ? _match : String(value);
-  });
-};
+import { en as builtinEn, pl as builtinPl } from './builtin';
+import { type ComposedDictionaries, defineDictionaries } from './defineDictionary';
+import { compileMessage } from './format/compiler';
+import { getDateTimeFormat, getNumberFormat, getRelativeTimeFormat } from './format/intl';
+import { type FlatDictionary, type Locale, type MessageParams, SUPPORTED_LOCALES, type VelvetI18nKey } from './types';
 
 interface ImportMetaEnvLike {
   DEV?: boolean;
@@ -46,108 +46,191 @@ const isDev = (): boolean => {
 };
 
 const warnedKeys = new Set<string>();
-const warnFallback = (locale: Locale, key: string): void => {
+const warnMissing = (locale: Locale, key: string, fallbackUsed: boolean): void => {
   if (!isDev()) return;
-  const sigil = `${locale}:${key}`;
+  const sigil = `${locale}:${key}:${fallbackUsed ? 'fb' : 'miss'}`;
   if (warnedKeys.has(sigil)) return;
   warnedKeys.add(sigil);
   // eslint-disable-next-line no-console
-  console.warn(`[velvet-ui i18n] Missing "${key}" for locale "${locale}". Falling back to "en".`);
+  console.warn(
+    fallbackUsed
+      ? `[velvet-ui i18n] Missing key "${key}" for locale "${locale}". Falling back to "en".`
+      : `[velvet-ui i18n] Missing key "${key}" in every locale. Returning the key verbatim.`,
+  );
 };
 
-const getStoredLocale = (storageKey: string): Locale => {
+const detectInitialLocale = (storageKey: string): Locale => {
   if (typeof window === 'undefined') return 'en';
-  const stored = localStorage.getItem(storageKey);
-  if (stored && SUPPORTED_LOCALES.includes(stored as Locale)) {
+  const stored = window.localStorage.getItem(storageKey);
+  if (stored && (SUPPORTED_LOCALES as ReadonlyArray<string>).includes(stored)) {
     return stored as Locale;
   }
-
-  const [browserLang] = navigator.language.split('-');
-  if (browserLang && SUPPORTED_LOCALES.includes(browserLang as Locale)) {
-    return browserLang as Locale;
+  const browser = window.navigator.language.split('-')[0];
+  if (browser && (SUPPORTED_LOCALES as ReadonlyArray<string>).includes(browser)) {
+    return browser as Locale;
   }
-
   return 'en';
 };
 
-interface I18nProviderProps extends ParentProps {
+/**
+ * Type-safe translation function.
+ *
+ * The key parameter accepts:
+ *   - any path proven to exist in the augmented `VelvetI18nDictionary`
+ *     (autocomplete, rename and find-references all work), and
+ *   - any string literal (with `(string & {})`), so dynamic keys still type-check
+ *     and the developer is responsible for runtime correctness.
+ */
+export type TranslateFn = (key: VelvetI18nKey | (string & {}), params?: MessageParams) => string;
+
+/**
+ * Strict translation function for **literal** i18n keys.
+ *
+ * Identical runtime behavior to {@link TranslateFn}, but the key parameter
+ * is narrowed to the augmented `VelvetI18nDictionary` only — no
+ * `(string & {})` widening — so passing an unknown literal is a type error.
+ *
+ * Convention (enforced by ESLint `no-restricted-syntax`):
+ *   - `ts('common.save')` for compile-time keys.
+ *   - `t(dynamicKey)` only when the key is computed at runtime.
+ */
+export type TranslateStaticFn = (key: VelvetI18nKey, params?: MessageParams) => string;
+
+export interface I18nContextValue {
+  locale: Accessor<Locale>;
+  setLocale: (locale: Locale) => void;
+  t: TranslateFn;
+  ts: TranslateStaticFn;
+  formatNumber: (value: number | bigint, options?: Intl.NumberFormatOptions) => string;
+  formatDate: (value: Date | number | string, options?: Intl.DateTimeFormatOptions) => string;
+  formatRelativeTime: (
+    value: number,
+    unit: Intl.RelativeTimeFormatUnit,
+    options?: Intl.RelativeTimeFormatOptions,
+  ) => string;
+}
+
+const I18nContext = createContext<I18nContextValue>();
+
+const FALLBACK_DICTIONARIES: ComposedDictionaries = defineDictionaries({
+  en: [builtinEn],
+  pl: [builtinPl],
+});
+
+export interface I18nProviderProps extends ParentProps {
+  /** Composed dictionaries (output of `defineDictionaries`). Falls back to VelvetUi foundation only. */
+  dictionaries?: ComposedDictionaries;
+  /** localStorage key used to persist user preference. */
   storageKey?: string;
+  /** Initial locale, overrides stored/browser detection. */
   initialLocale?: Locale;
 }
 
-const I18nProvider = (props: I18nProviderProps) => {
-  const storageKey = () => props.storageKey ?? getVelvetRuntimeConfig().localeStorageKey;
-  const [locale, setLocale] = createSignal<Locale>(props.initialLocale ?? getStoredLocale(storageKey()));
+const resolveTemplate = (active: FlatDictionary, fallback: FlatDictionary, locale: Locale, key: string): string => {
+  const direct = active[key];
+  if (direct !== undefined) return direct;
+  const fallbackTpl = fallback[key];
+  if (fallbackTpl !== undefined) {
+    if (active !== fallback) warnMissing(locale, key, true);
+    return fallbackTpl;
+  }
+  warnMissing(locale, key, false);
+  return key;
+};
 
-  const fallbackDictionary = createMemo<FlatI18nDictionary>(() => getRegisteredMessages('en'));
+export const I18nProvider = (props: I18nProviderProps) => {
+  const storageKey = (): string => props.storageKey ?? getVelvetRuntimeConfig().localeStorageKey;
 
-  const dictionary = createMemo<FlatI18nDictionary>(() => {
-    if (locale() === 'en') return fallbackDictionary();
-    return { ...fallbackDictionary(), ...getRegisteredMessages(locale()) };
+  const [locale, setLocaleSignal] = createSignal<Locale>(props.initialLocale ?? detectInitialLocale(storageKey()));
+
+  const dictionaries = createMemo<ComposedDictionaries>(() => props.dictionaries ?? FALLBACK_DICTIONARIES);
+
+  const fallback = createMemo<FlatDictionary>(() => dictionaries().en);
+  const active = createMemo<FlatDictionary>(() => {
+    const dict = dictionaries()[locale()] as FlatDictionary | undefined;
+    return dict ?? fallback();
   });
 
   createEffect(
     on(
       () => props.initialLocale,
-      (nextLocale) => {
-        if (!nextLocale) return;
-        if (!SUPPORTED_LOCALES.includes(nextLocale)) return;
-        if (locale() !== nextLocale) {
-          setLocale(nextLocale);
-        }
+      (next) => {
+        if (!next) return;
+        if (!(SUPPORTED_LOCALES as ReadonlyArray<string>).includes(next)) return;
+        if (locale() !== next) setLocaleSignal(next);
       },
       { defer: true },
     ),
   );
 
   createEffect(
-    on(
-      locale,
-      (currentLocale) => {
-        if (typeof window !== 'undefined') {
-          localStorage.setItem(storageKey(), currentLocale);
-        }
-        if (typeof document !== 'undefined') {
-          document.documentElement.setAttribute('lang', currentLocale);
-        }
-      },
-      { defer: true },
-    ),
+    on(locale, (current) => {
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem(storageKey(), current);
+      }
+      if (typeof document !== 'undefined') {
+        document.documentElement.setAttribute('lang', current);
+      }
+    }),
   );
 
-  const resolveTemplate = (key: string): string => {
-    const current = dictionary()[key];
-    if (current !== undefined) return current;
-    const fallback = fallbackDictionary()[key];
-    if (fallback !== undefined) {
-      if (locale() !== 'en' && !hasRegisteredMessage(locale(), key)) {
-        warnFallback(locale(), key);
-      }
-      return fallback;
-    }
-    return key;
+  const t: TranslateFn = (key, params) => {
+    const template = resolveTemplate(active(), fallback(), locale(), key);
+    return compileMessage(template)(params, locale());
   };
 
-  const t = (key: string, params?: Record<string, string | number>): string =>
-    interpolate(resolveTemplate(key), params);
+  const ts: TranslateStaticFn = (key, params) => t(key, params);
 
-  const ts = (key: I18nMessageKey, params?: Record<string, string | number>): string => t(key, params);
+  const formatNumber: I18nContextValue['formatNumber'] = (value, options) =>
+    getNumberFormat(locale(), options).format(value);
 
-  return <I18nContext.Provider value={{ locale, setLocale, t, ts }}>{props.children}</I18nContext.Provider>;
+  const formatDate: I18nContextValue['formatDate'] = (value, options) =>
+    getDateTimeFormat(locale(), options ?? { dateStyle: 'medium' }).format(
+      value instanceof Date ? value : new Date(value),
+    );
+
+  const formatRelativeTime: I18nContextValue['formatRelativeTime'] = (value, unit, options) =>
+    getRelativeTimeFormat(locale(), options).format(value, unit);
+
+  const value: I18nContextValue = {
+    locale,
+    setLocale: setLocaleSignal,
+    t,
+    ts,
+    formatNumber,
+    formatDate,
+    formatRelativeTime,
+  };
+
+  return <I18nContext.Provider value={value}>{props.children}</I18nContext.Provider>;
 };
 
-export { I18nProvider };
-
+/**
+ * Access the active i18n context.
+ *
+ * Outside of an `<I18nProvider>` returns a degraded implementation that
+ * reads VelvetUi's built-in foundation dictionary so primitive components
+ * remain usable in tests and Storybook-style isolation.
+ */
 export const useI18n = (): I18nContextValue => {
   const context = useContext(I18nContext);
   if (context) return context;
 
-  const fallbackLocale = (): Locale => 'en';
+  const fallbackLocale: Accessor<Locale> = () => 'en';
+  const fb = FALLBACK_DICTIONARIES.en;
+
+  const fallbackT: TranslateFn = (key, params) => compileMessage(fb[key] ?? key)(params, 'en');
 
   return {
     locale: fallbackLocale,
     setLocale: () => undefined,
-    t: (key, params) => interpolate(getRegisteredMessages('en')[key] ?? key, params),
-    ts: (key, params) => interpolate(getRegisteredMessages('en')[key] ?? key, params),
+    t: fallbackT,
+    ts: (key, params) => fallbackT(key, params),
+    formatNumber: (value, options) => getNumberFormat('en', options).format(value),
+    formatDate: (value, options) =>
+      getDateTimeFormat('en', options ?? { dateStyle: 'medium' }).format(
+        value instanceof Date ? value : new Date(value),
+      ),
+    formatRelativeTime: (value, unit, options) => getRelativeTimeFormat('en', options).format(value, unit),
   };
 };

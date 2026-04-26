@@ -23,9 +23,7 @@
   },
   "types": "./dist/index.d.ts",
   "sideEffects": [
-    "**/*.css",
-    "./dist/i18n/builtin.js",
-    "./dist/i18n/index.js"
+    "**/*.css"
   ],
   "packageManager": "npm@11.13.0",
   "files": [

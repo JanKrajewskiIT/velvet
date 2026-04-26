@@ -1,5 +1,4 @@
 ﻿import './theme/globals.css';
-import './i18n';
 
 export type { AuthActionButtonProps } from './auth/AuthActionButton';
 export { default as AuthActionButton } from './auth/AuthActionButton';
@@ -421,10 +420,22 @@ export type {
   HttpRequestOptions,
 } from './http/types';
 export { unwrapCollectionResponse } from './http/unwrapCollectionResponse';
+export type { ComposedDictionaries, DictionaryInput, LocaleDictionariesInput } from './i18n/defineDictionary';
+export { defineDictionaries, defineDictionary } from './i18n/defineDictionary';
+export type { CompiledMessage } from './i18n/format/compiler';
+export { compileMessage } from './i18n/format/compiler';
+export type { I18nContextValue, I18nProviderProps, TranslateFn } from './i18n/I18nProvider';
 export { I18nProvider, useI18n } from './i18n/I18nProvider';
-export type { FlatI18nDictionary, I18nMessageKey, I18nMessageRegistry, Locale } from './i18n/registry';
-export { getRegisteredMessages, hasRegisteredMessage, registerI18nMessages, SUPPORTED_LOCALES } from './i18n/registry';
-import './i18n';
+export type {
+  DictionaryNode,
+  DotPath,
+  FlatDictionary,
+  Locale,
+  MessageParams,
+  VelvetI18nDictionary,
+  VelvetI18nKey,
+} from './i18n/types';
+export { SUPPORTED_LOCALES } from './i18n/types';
 export type { ComponentSize, DivCoreNativeProps, default as Props } from './models/Props';
 export { configureVelvet } from './providers/velvet-config';
 export type { VelvetProviderProps } from './providers/VelvetProvider';
