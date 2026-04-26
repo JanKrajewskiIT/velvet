@@ -129,6 +129,7 @@ export type { MultiSelectOption } from './components/dropdowns/MultiSelect/Multi
 export { default as MultiSelect } from './components/dropdowns/MultiSelect/MultiSelect';
 export type { OptionMenuChipOption, OptionMenuChipProps } from './components/dropdowns/OptionMenuChip/OptionMenuChip';
 export { default as OptionMenuChip } from './components/dropdowns/OptionMenuChip/OptionMenuChip';
+export type { SelectOption } from './components/dropdowns/Select/Select';
 export { default as Select } from './components/dropdowns/Select/Select';
 export { default as AccessDenied } from './components/feedback/AccessDenied/AccessDenied';
 export { default as Alert } from './components/feedback/Alert/Alert';
