@@ -1,7 +1,8 @@
 /**
  * MessageFormat AST.
  *
- * Supported placeholder forms (a strict subset of ICU MessageFormat):
+ * Supported placeholder forms (a strict subset of ICU MessageFormat,
+ * extended with XML-style tag pairs for rich-text translation):
  *
  *   {name}                                          – simple interpolation
  *   {value, number}                                 – locale-default number
@@ -10,9 +11,14 @@
  *   {n, plural, one {# row} other {# rows}}         – cardinal plural
  *   {n, plural, =0 {none} other {#}}                – exact-match branches
  *   {g, select, male {he} female {she} other {they}}
+ *   <tag>...</tag>                                  – rich-text tag pair
  *
  * `#` inside a plural body resolves to the formatted plural number.
- * Branch bodies are themselves messages, so all forms nest arbitrarily.
+ * Branch and tag bodies are themselves messages, so all forms nest arbitrarily.
+ *
+ * To emit a literal `<` or `{`, escape with single-quotes (ICU convention):
+ *   "It''s here", "'<not a tag>'", "5 '{' 6 '}'"
+ * `''` is always a literal apostrophe.
  */
 
 export interface LiteralNode {
@@ -53,6 +59,12 @@ export interface SelectNode {
   readonly branches: ReadonlyArray<{ readonly key: string; readonly nodes: ReadonlyArray<MessageNode> }>;
 }
 
+export interface TagNode {
+  readonly type: 'tag';
+  readonly name: string;
+  readonly children: ReadonlyArray<MessageNode>;
+}
+
 export type MessageNode =
   | LiteralNode
   | ArgumentNode
@@ -60,7 +72,8 @@ export type MessageNode =
   | NumberFormatNode
   | DateFormatNode
   | PluralNode
-  | SelectNode;
+  | SelectNode
+  | TagNode;
 
 class Parser {
   private cursor = 0;
@@ -71,10 +84,19 @@ class Parser {
   }
 
   parse(): ReadonlyArray<MessageNode> {
-    return this.parseMessage(false);
+    return this.parseMessage(undefined);
   }
 
-  private parseMessage(insideBranch: boolean): ReadonlyArray<MessageNode> {
+  /**
+   * Parse a sequence of message nodes.
+   *
+   * `endTag`: when set, parsing stops at the matching `</endTag>`. When
+   * undefined and `insideBranch` is false, parsing runs to end of source
+   * and a stray `}` is treated as literal. When `insideBranch` is true
+   * (i.e. inside a plural/select body delimited by `{...}`) parsing
+   * stops at the next `}`.
+   */
+  private parseMessage(endTag: string | undefined, insideBranch = false): ReadonlyArray<MessageNode> {
     const nodes: MessageNode[] = [];
     let buffer = '';
 
@@ -88,9 +110,37 @@ class Parser {
     while (this.cursor < this.source.length) {
       const char = this.source[this.cursor] ?? '';
 
-      if (char === "'" && this.source[this.cursor + 1] === "'") {
+      // ICU single-quote escape: `''` -> literal `'`; `'X'` -> literal X
+      // where X is any run of chars until the next `'` (used to escape `{`, `}`, `<`).
+      if (char === "'") {
+        if (this.source[this.cursor + 1] === "'") {
+          buffer += "'";
+          this.cursor += 2;
+          continue;
+        }
+        // Only quote when next char is a syntax char; otherwise treat as literal apostrophe.
+        const next = this.source[this.cursor + 1];
+        if (next === '{' || next === '}' || next === '<' || next === '#') {
+          this.cursor += 1; // skip opening '
+          while (this.cursor < this.source.length) {
+            const c = this.source[this.cursor] ?? '';
+            if (c === "'") {
+              if (this.source[this.cursor + 1] === "'") {
+                buffer += "'";
+                this.cursor += 2;
+                continue;
+              }
+              this.cursor += 1; // skip closing '
+              break;
+            }
+            buffer += c;
+            this.cursor += 1;
+          }
+          continue;
+        }
+        // Lone apostrophe.
         buffer += "'";
-        this.cursor += 2;
+        this.cursor += 1;
         continue;
       }
 
@@ -111,12 +161,51 @@ class Parser {
         continue;
       }
 
+      if (char === '<') {
+        // Closing tag for the currently open tag context?
+        if (endTag !== undefined && this.source.startsWith(`</${endTag}>`, this.cursor)) {
+          break;
+        }
+        // Opening or other closing tag?
+        const opened = this.tryParseOpenTag();
+        if (opened) {
+          flushLiteral();
+          nodes.push(opened);
+          continue;
+        }
+        // Treat as literal.
+        buffer += char;
+        this.cursor += 1;
+        continue;
+      }
+
       buffer += char;
       this.cursor += 1;
     }
 
     flushLiteral();
     return nodes;
+  }
+
+  /**
+   * Try to parse `<tag>children</tag>` starting at the current cursor.
+   * Returns null if it doesn't look like a tag (cursor unchanged).
+   */
+  private tryParseOpenTag(): TagNode | null {
+    const rest = this.source.slice(this.cursor);
+    const match = /^<([A-Za-z_][\w-]*)>/u.exec(rest);
+    if (!match) return null;
+    const name = match[1] ?? '';
+    const startCursor = this.cursor;
+    this.cursor += match[0].length;
+    const children = this.parseMessage(name, false);
+    if (!this.source.startsWith(`</${name}>`, this.cursor)) {
+      // Unbalanced: rewind and treat opening `<tag>` as literal.
+      this.cursor = startCursor;
+      return null;
+    }
+    this.cursor += `</${name}>`.length;
+    return { type: 'tag', name, children };
   }
 
   private parsePlaceholder(): MessageNode {
@@ -181,7 +270,7 @@ class Parser {
       const key = this.readBranchKey();
       this.skipWhitespace();
       this.expect('{');
-      const nodes = this.parseMessage(true);
+      const nodes = this.parseMessage(undefined, true);
       this.expect('}');
       branches.push({ key, nodes });
       this.skipWhitespace();

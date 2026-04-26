@@ -423,9 +423,17 @@ export { unwrapCollectionResponse } from './http/unwrapCollectionResponse';
 export { en, pl, type VelvetUiFoundationDictionary } from './i18n/builtin';
 export type { ComposedDictionaries, DictionaryInput, LocaleDictionariesInput } from './i18n/defineDictionary';
 export { defineDictionaries, defineDictionary } from './i18n/defineDictionary';
-export type { CompiledMessage } from './i18n/format/compiler';
-export { compileMessage } from './i18n/format/compiler';
-export type { I18nContextValue, I18nProviderProps, TranslateFn, TranslateStaticFn } from './i18n/I18nProvider';
+export type { CompiledMessage, CompiledRichMessage, RichNode } from './i18n/format/compiler';
+export { compileMessage, compileRichMessage } from './i18n/format/compiler';
+export type {
+  I18nContextValue,
+  I18nProviderProps,
+  RichMessageParams,
+  TagHandler,
+  TranslateFn,
+  TranslateRichFn,
+  TranslateStaticFn,
+} from './i18n/I18nProvider';
 export { I18nProvider, useI18n } from './i18n/I18nProvider';
 export type {
   DictionaryNode,

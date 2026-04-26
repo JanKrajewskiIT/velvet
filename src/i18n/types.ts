@@ -68,6 +68,25 @@ export type DotPath<T> = T extends string
  *   interface VelvetI18nDictionary extends MyAppDictionary {}
  * }
  * ```
+ *
+ * ## Namespace ownership rule (IMPORTANT)
+ *
+ * Each augmenting layer **must own a disjoint top-level namespace**.
+ * TypeScript interface augmentation does NOT deep-merge nested object
+ * types — when two layers both declare e.g. `table: { ... }`, only one
+ * wins (the property collapses to a single layer's shape) and `DotPath`
+ * silently loses keys from the other layer. This produces type errors
+ * that look like missing-key errors but are actually namespace collisions.
+ *
+ * Foundation owns: `common`, `dir`, `table` (utility keys for `DataTable`),
+ *   `time`, `number`, `search`, `multiselect`, `alert`, `editableText`,
+ *   `inlineEditable`, `locale`, `optionsTable`, `colorPicker`, `colorLabel`,
+ *   `editableCollection`, `confirmDialog`.
+ *
+ * Library/app authors: pick a top-level key not used by any layer you depend
+ * on. Examples in this monorepo:
+ *   - `@jankrajewskiit/data` owns: `dataGrid`, `columnManager`, `query`, `trading`
+ *   - apps own: their domain namespaces (e.g. `recron`, `dashboard`)
  */
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface VelvetI18nDictionary {}

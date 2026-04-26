@@ -19,6 +19,7 @@ import {
   createEffect,
   createMemo,
   createSignal,
+  type JSX,
   on,
   type ParentProps,
   useContext,
@@ -28,7 +29,7 @@ import { getVelvetRuntimeConfig } from '~/providers/velvet-config';
 
 import { en as builtinEn, pl as builtinPl } from './builtin';
 import { type ComposedDictionaries, defineDictionaries } from './defineDictionary';
-import { compileMessage } from './format/compiler';
+import { compileMessage, compileRichMessage, type RichNode } from './format/compiler';
 import { getDateTimeFormat, getNumberFormat, getRelativeTimeFormat } from './format/intl';
 import { type FlatDictionary, type Locale, type MessageParams, SUPPORTED_LOCALES, type VelvetI18nKey } from './types';
 
@@ -73,6 +74,47 @@ const detectInitialLocale = (storageKey: string): Locale => {
 };
 
 /**
+ * Strip {@link TagHandler} entries from a {@link RichMessageParams} map so the
+ * remaining shape is compatible with the string-only {@link MessageParams}
+ * the parser/compiler accepts. Tag handlers operate at JSX-render time, not
+ * inside the AST, so they must not leak into placeholder substitution.
+ */
+const stringParams = (params: RichMessageParams | undefined): MessageParams | undefined => {
+  if (!params) return undefined;
+  const out: Record<string, string | number | boolean | Date | null | undefined> = {};
+  for (const key in params) {
+    const v = params[key];
+    if (typeof v === 'function') continue;
+    out[key] = v;
+  }
+  return out;
+};
+
+/**
+ * Walk a compiled {@link RichNode} tree and produce JSX. Tag children are
+ * rendered first (recursively) and then handed to the caller-supplied
+ * {@link TagHandler}. Tags without a matching handler render their children
+ * unwrapped so the message remains visible (degraded gracefully).
+ */
+const renderRichToJsx = (nodes: ReadonlyArray<RichNode>, params: RichMessageParams | undefined): JSX.Element => {
+  const out: JSX.Element[] = [];
+  for (const node of nodes) {
+    if (typeof node === 'string') {
+      out.push(node);
+      continue;
+    }
+    const children = renderRichToJsx(node.children, params);
+    const handler = params?.[node.tag];
+    if (typeof handler === 'function') {
+      out.push(handler(children));
+    } else {
+      out.push(children);
+    }
+  }
+  return out;
+};
+
+/**
  * Type-safe translation function.
  *
  * The key parameter accepts:
@@ -96,11 +138,60 @@ export type TranslateFn = (key: VelvetI18nKey | (string & {}), params?: MessageP
  */
 export type TranslateStaticFn = (key: VelvetI18nKey, params?: MessageParams) => string;
 
+/**
+ * A handler that wraps the children of a `<tag>...</tag>` pair into JSX.
+ * Receives the resolved children (already translated, with nested tags applied)
+ * and returns a JSX element that becomes that tag's rendering.
+ *
+ * @example
+ *   tx('demo.intro', { pkg: (chunks) => <CodeText>{chunks}</CodeText> })
+ *   // for message: "Built on top of <pkg>{name}</pkg> primitives."
+ */
+export type TagHandler = (children: JSX.Element) => JSX.Element;
+
+/**
+ * Parameters accepted by {@link TranslateRichFn}.
+ *
+ * Values are either:
+ *   - `string | number | boolean | Date | null | undefined` — substituted into
+ *     `{token}` placeholders just like {@link TranslateFn};
+ *   - {@link TagHandler} — invoked for each `<token>...</token>` pair to wrap
+ *     its rendered children in JSX.
+ *
+ * A handler key may also appear as a plain `{token}`; in that case the handler
+ * is called with no children (an empty fragment) — useful for self-closing
+ * style insertion (rare; prefer `<tag></tag>`).
+ */
+export type RichMessageParams = Readonly<
+  Record<string, string | number | boolean | Date | null | undefined | TagHandler>
+>;
+
+/**
+ * Rich-text translation function.
+ *
+ * Resolves a key whose template may contain XML-style tag pairs
+ * (`<x>...</x>`) and returns a JSX element with the tags realised via the
+ * caller-supplied {@link TagHandler}s. Plain `{token}` placeholders are
+ * still supported and substituted as strings.
+ *
+ * Like {@link TranslateStaticFn}, the key parameter is narrowed to the
+ * augmented `VelvetI18nDictionary` for compile-time safety.
+ *
+ * @example
+ *   // dictionary: 'demo.intro': 'Try <link>this</link> for a {count, number} % boost.'
+ *   tx('demo.intro', {
+ *     count: 12,
+ *     link: (chunks) => <a href="/x">{chunks}</a>,
+ *   });
+ */
+export type TranslateRichFn = (key: VelvetI18nKey, params?: RichMessageParams) => JSX.Element;
+
 export interface I18nContextValue {
   locale: Accessor<Locale>;
   setLocale: (locale: Locale) => void;
   t: TranslateFn;
   ts: TranslateStaticFn;
+  tx: TranslateRichFn;
   formatNumber: (value: number | bigint, options?: Intl.NumberFormatOptions) => string;
   formatDate: (value: Date | number | string, options?: Intl.DateTimeFormatOptions) => string;
   formatRelativeTime: (
@@ -181,6 +272,12 @@ export const I18nProvider = (props: I18nProviderProps) => {
 
   const ts: TranslateStaticFn = (key, params) => t(key, params);
 
+  const tx: TranslateRichFn = (key, params) => {
+    const template = resolveTemplate(active(), fallback(), locale(), key);
+    const nodes = compileRichMessage(template)(stringParams(params), locale());
+    return renderRichToJsx(nodes, params);
+  };
+
   const formatNumber: I18nContextValue['formatNumber'] = (value, options) =>
     getNumberFormat(locale(), options).format(value);
 
@@ -197,6 +294,7 @@ export const I18nProvider = (props: I18nProviderProps) => {
     setLocale: setLocaleSignal,
     t,
     ts,
+    tx,
     formatNumber,
     formatDate,
     formatRelativeTime,
@@ -226,6 +324,11 @@ export const useI18n = (): I18nContextValue => {
     setLocale: () => undefined,
     t: fallbackT,
     ts: (key, params) => fallbackT(key, params),
+    tx: (key, params) => {
+      const template = fb[key] ?? key;
+      const nodes = compileRichMessage(template)(stringParams(params), 'en');
+      return renderRichToJsx(nodes, params);
+    },
     formatNumber: (value, options) => getNumberFormat('en', options).format(value),
     formatDate: (value, options) =>
       getDateTimeFormat('en', options ?? { dateStyle: 'medium' }).format(
