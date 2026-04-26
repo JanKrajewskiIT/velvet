@@ -1,6 +1,6 @@
 {
   "name": "@jankrajewskiit/ui",
-  "version": "2.0.9",
+  "version": "3.0.0",
   "type": "module",
   "license": "MIT",
   "repository": {
@@ -12,6 +12,10 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
+    "./i18n": {
+      "types": "./dist/i18n/index.d.ts",
+      "import": "./dist/i18n/index.js"
+    },
     "./styles": {
       "types": "./styles.d.ts",
       "default": "./dist/velvet-ui.css"
@@ -19,7 +23,9 @@
   },
   "types": "./dist/index.d.ts",
   "sideEffects": [
-    "**/*.css"
+    "**/*.css",
+    "./dist/i18n/builtin.js",
+    "./dist/i18n/index.js"
   ],
   "packageManager": "npm@11.13.0",
   "files": [

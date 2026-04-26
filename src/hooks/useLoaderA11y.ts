@@ -1,7 +1,7 @@
 import { type Accessor, createMemo } from 'solid-js';
 
 import { useI18n } from '~/i18n/I18nProvider';
-import type { I18nMessageKey } from '~/i18n/messages';
+import type { I18nMessageKey } from '~/i18n/registry';
 import type { DivCoreNativeProps } from '~/models/Props';
 
 interface LoaderMessages {

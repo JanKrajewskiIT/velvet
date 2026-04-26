@@ -420,11 +420,9 @@ export type {
   HttpRequestOptions,
 } from './http/types';
 export { unwrapCollectionResponse } from './http/unwrapCollectionResponse';
-export type { DictionaryKeyOf, TypedI18nContextValue } from './i18n/createTypedI18n';
-export { createTypedI18n } from './i18n/createTypedI18n';
 export { I18nProvider, useI18n } from './i18n/I18nProvider';
-export type { Locale } from './i18n/messages';
-export { SUPPORTED_LOCALES } from './i18n/messages';
+export type { FlatI18nDictionary, I18nMessageKey, I18nMessageRegistry, Locale } from './i18n/registry';
+export { getRegisteredMessages, hasRegisteredMessage, registerI18nMessages, SUPPORTED_LOCALES } from './i18n/registry';
 export type { ComponentSize, DivCoreNativeProps, default as Props } from './models/Props';
 export { configureVelvet } from './providers/velvet-config';
 export type { VelvetProviderProps } from './providers/VelvetProvider';

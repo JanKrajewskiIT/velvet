@@ -4,7 +4,7 @@ import { AuthProvider } from '~/auth/AuthProvider';
 import ErrorFallback from '~/components/feedback/ErrorFallback/ErrorFallback';
 import ToastProvider from '~/components/feedback/Toast/ToastProvider/ToastProvider';
 import { I18nProvider, useI18n } from '~/i18n/I18nProvider';
-import type { I18nDictionary, Locale } from '~/i18n/messages';
+import type { Locale } from '~/i18n/registry';
 import { configureVelvet, getVelvetRuntimeConfig } from '~/providers/velvet-config';
 import { getDefaultQueryClient, QueryClientContext } from '~/query/queryClientContext';
 import type { CreateQueryClientOptions } from '~/query/types';
@@ -14,7 +14,6 @@ interface VelvetProviderProps extends ParentProps {
   themeStorageKey?: string;
   localeStorageKey?: string;
   initialLocale?: Locale;
-  localeDictionaries?: Partial<Record<Locale, I18nDictionary>>;
   queryDefaults?: CreateQueryClientOptions;
   errorFallback?: JSX.Element;
 }
@@ -34,7 +33,6 @@ const VelvetProvider = (props: VelvetProviderProps) => {
     configureVelvet({
       themeStorageKey: props.themeStorageKey,
       localeStorageKey: props.localeStorageKey,
-      localeDictionaries: props.localeDictionaries,
       queryClientOptions: props.queryDefaults,
     }),
   );

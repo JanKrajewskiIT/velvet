@@ -1,11 +1,9 @@
 import type { OidcAuthConfig } from '~/auth/oidc';
-import type { I18nDictionary, Locale } from '~/i18n/messages';
 import type { CreateQueryClientOptions } from '~/query/types';
 
 interface VelvetRuntimeConfig {
   themeStorageKey: string;
   localeStorageKey: string;
-  localeDictionaries: Partial<Record<Locale, I18nDictionary>>;
   authConfig?: OidcAuthConfig;
   queryClientOptions?: CreateQueryClientOptions;
 }
@@ -13,7 +11,6 @@ interface VelvetRuntimeConfig {
 interface ConfigureVelvetOptions {
   themeStorageKey?: string;
   localeStorageKey?: string;
-  localeDictionaries?: Partial<Record<Locale, I18nDictionary>>;
   authConfig?: OidcAuthConfig;
   queryClientOptions?: CreateQueryClientOptions;
 }
@@ -21,7 +18,6 @@ interface ConfigureVelvetOptions {
 const runtimeConfig: VelvetRuntimeConfig = {
   themeStorageKey: 'velvet-theme',
   localeStorageKey: 'velvet-locale',
-  localeDictionaries: {},
 };
 
 const configureVelvet = (options: ConfigureVelvetOptions): void => {
@@ -31,10 +27,6 @@ const configureVelvet = (options: ConfigureVelvetOptions): void => {
 
   if (options.localeStorageKey !== undefined) {
     runtimeConfig.localeStorageKey = options.localeStorageKey;
-  }
-
-  if (options.localeDictionaries !== undefined) {
-    runtimeConfig.localeDictionaries = options.localeDictionaries;
   }
 
   if (options.authConfig !== undefined) {

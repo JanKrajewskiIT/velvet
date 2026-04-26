@@ -1,17 +1,17 @@
+import './builtin';
+
 import { createContext, createEffect, createMemo, createSignal, on, type ParentProps, useContext } from 'solid-js';
 
 import { getVelvetRuntimeConfig } from '~/providers/velvet-config';
 
 import {
-  flattenI18nDictionary,
-  getMessages,
-  type I18nDictionary,
+  type FlatI18nDictionary,
+  getRegisteredMessages,
+  hasRegisteredMessage,
   type I18nMessageKey,
   type Locale,
   SUPPORTED_LOCALES,
-} from './messages';
-
-type FlatDictionary = Record<string, string>;
+} from './registry';
 
 interface I18nContextValue {
   locale: () => Locale;
@@ -32,6 +32,29 @@ const interpolate = (template: string, params?: Record<string, string | number>)
   });
 };
 
+interface ImportMetaEnvLike {
+  DEV?: boolean;
+  MODE?: string;
+}
+
+const isDev = (): boolean => {
+  const env = (import.meta as { env?: ImportMetaEnvLike }).env;
+  if (!env) return false;
+  if (env.DEV !== undefined) return env.DEV;
+  if (env.MODE !== undefined) return env.MODE !== 'production';
+  return false;
+};
+
+const warnedKeys = new Set<string>();
+const warnFallback = (locale: Locale, key: string): void => {
+  if (!isDev()) return;
+  const sigil = `${locale}:${key}`;
+  if (warnedKeys.has(sigil)) return;
+  warnedKeys.add(sigil);
+  // eslint-disable-next-line no-console
+  console.warn(`[velvet-ui i18n] Missing "${key}" for locale "${locale}". Falling back to "en".`);
+};
+
 const getStoredLocale = (storageKey: string): Locale => {
   if (typeof window === 'undefined') return 'en';
   const stored = localStorage.getItem(storageKey);
@@ -50,25 +73,18 @@ const getStoredLocale = (storageKey: string): Locale => {
 interface I18nProviderProps extends ParentProps {
   storageKey?: string;
   initialLocale?: Locale;
-  dictionaries?: Partial<Record<Locale, I18nDictionary>>;
 }
 
 const I18nProvider = (props: I18nProviderProps) => {
   const storageKey = () => props.storageKey ?? getVelvetRuntimeConfig().localeStorageKey;
   const [locale, setLocale] = createSignal<Locale>(props.initialLocale ?? getStoredLocale(storageKey()));
 
-  const fallbackDictionary = createMemo<FlatDictionary>(() => ({
-    ...getMessages('en'),
-    ...flattenI18nDictionary(getVelvetRuntimeConfig().localeDictionaries.en),
-    ...flattenI18nDictionary(props.dictionaries?.en),
-  }));
+  const fallbackDictionary = createMemo<FlatI18nDictionary>(() => getRegisteredMessages('en'));
 
-  const dictionary = createMemo<FlatDictionary>(() => ({
-    ...fallbackDictionary(),
-    ...(locale() === 'en' ? {} : getMessages(locale())),
-    ...flattenI18nDictionary(getVelvetRuntimeConfig().localeDictionaries[locale()]),
-    ...flattenI18nDictionary(props.dictionaries?.[locale()]),
-  }));
+  const dictionary = createMemo<FlatI18nDictionary>(() => {
+    if (locale() === 'en') return fallbackDictionary();
+    return { ...fallbackDictionary(), ...getRegisteredMessages(locale()) };
+  });
 
   createEffect(
     on(
@@ -99,10 +115,21 @@ const I18nProvider = (props: I18nProviderProps) => {
     ),
   );
 
-  const t = (key: string, params?: Record<string, string | number>): string => {
-    const template = dictionary()[key] || fallbackDictionary()[key] || key;
-    return interpolate(template, params);
+  const resolveTemplate = (key: string): string => {
+    const current = dictionary()[key];
+    if (current !== undefined) return current;
+    const fallback = fallbackDictionary()[key];
+    if (fallback !== undefined) {
+      if (locale() !== 'en' && !hasRegisteredMessage(locale(), key)) {
+        warnFallback(locale(), key);
+      }
+      return fallback;
+    }
+    return key;
   };
+
+  const t = (key: string, params?: Record<string, string | number>): string =>
+    interpolate(resolveTemplate(key), params);
 
   const ts = (key: I18nMessageKey, params?: Record<string, string | number>): string => t(key, params);
 
@@ -116,12 +143,11 @@ export const useI18n = (): I18nContextValue => {
   if (context) return context;
 
   const fallbackLocale = (): Locale => 'en';
-  const fallbackDictionary = getMessages('en');
 
   return {
     locale: fallbackLocale,
     setLocale: () => undefined,
-    t: (key, params) => interpolate(fallbackDictionary[key] || key, params),
-    ts: (key, params) => interpolate(fallbackDictionary[key] || key, params),
+    t: (key, params) => interpolate(getRegisteredMessages('en')[key] ?? key, params),
+    ts: (key, params) => interpolate(getRegisteredMessages('en')[key] ?? key, params),
   };
 };

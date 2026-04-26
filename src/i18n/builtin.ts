@@ -1,16 +1,16 @@
-export type Locale = 'en' | 'pl';
+/**
+ * Foundation messages owned by VelvetUi.
+ *
+ * Auto-registers on first import of the package main entry (re-exported from
+ * `~/i18n` index, which is in turn imported by `~/index.ts`).
+ *
+ * Data-domain keys (trading, query, columnManager, DataGridPro tables) live in
+ * `@jankrajewskiit/data/i18n`.
+ */
 
-export type I18nDictionary = {
-  [key: string]: string | I18nDictionary;
-};
+import { registerI18nMessages } from './registry';
 
-export type FlatI18nDictionary = Record<string, string>;
-
-const flattenedDictionaryCache = new WeakMap<I18nDictionary, FlatI18nDictionary>();
-
-export const SUPPORTED_LOCALES: Locale[] = ['en', 'pl'];
-
-const enMessages = {
+const en = {
   'common.add': 'Add',
   'common.all': 'All',
   'common.apply': 'Apply',
@@ -104,38 +104,7 @@ const enMessages = {
   'notification.markRead': 'Mark as read',
   'notification.clearAll': 'Clear all',
   'notification.empty': 'No notifications yet.',
-  'query.clearRules': 'Clear rules',
-  'query.addRule': 'Add rule',
-  'query.empty': 'No rules defined',
-  'query.combinator.and': 'All rules (AND)',
-  'query.combinator.or': 'Any rule (OR)',
-  'query.operator.equals': 'Equals',
-  'query.operator.notEquals': 'Does not equal',
-  'query.operator.contains': 'Contains',
-  'query.operator.startsWith': 'Starts with',
-  'query.operator.endsWith': 'Ends with',
-  'query.operator.gt': 'Greater than',
-  'query.operator.gte': 'Greater than or equal to',
-  'query.operator.lt': 'Less than',
-  'query.operator.lte': 'Less than or equal to',
-  'query.operator.isEmpty': 'Is empty',
-  'query.operator.isNotEmpty': 'Is not empty',
-  'query.moveRuleUp': 'Move rule up',
-  'query.moveRuleDown': 'Move rule down',
-  'query.removeRule': 'Remove rule',
-  'columnManager.resetColumns': 'Reset columns',
-  'columnManager.columnVisibility': 'Column visibility',
   'table.filterRows': 'Filter rows...',
-  'table.rowsCount': '{count} rows',
-  'table.selectedCount': '{count} selected',
-  'table.selectRow': 'Select row {id}',
-  'table.noRows': 'No rows to display',
-  'table.selectAllVisibleRows': 'Select all visible rows',
-  'table.resizeColumn': 'Resize {label}',
-  'table.clearSelection': 'Clear selection',
-  'table.resetView': 'Reset view',
-  'table.resetSavedLayout': 'Reset saved layout',
-  'table.columns': 'Columns',
   'table.result': 'result',
   'table.results': 'results',
   'table.pageOf': 'Page {current} of {total}',
@@ -227,24 +196,6 @@ const enMessages = {
   'tree.loading': 'Loading...',
   'tree.toggleNode': 'Toggle {label}',
   'rating.valueOf': '{index} of {max}',
-  'trading.bbUpper': 'BB Upper',
-  'trading.bbBasis': 'BB Basis',
-  'trading.bbLower': 'BB Lower',
-  'trading.sma20': 'SMA 20',
-  'trading.ema50': 'EMA 50',
-  'trading.rsi14': 'RSI 14',
-  'trading.macd': 'MACD',
-  'trading.macdSignal': 'MACD Signal',
-  'trading.macdHist': 'MACD Hist',
-  'trading.volumeShort': 'Vol',
-  'trading.smaShort': 'SMA',
-  'trading.emaShort': 'EMA',
-  'trading.bbShort': 'BB',
-  'trading.rsiShort': 'RSI',
-  'trading.macdShort': 'MACD',
-  'trading.trendTool': 'Trend',
-  'trading.levelTool': 'Level',
-  'trading.zoneTool': 'Zone',
   'resizablePanel.resizePanels': 'Resize panels',
   'theme.light': 'Light',
   'theme.dark': 'Dark',
@@ -279,9 +230,9 @@ const enMessages = {
   'colorLabel.deleteConfirmMessage': 'Are you sure you want to delete this label?',
 } as const;
 
-type MessageKey = keyof typeof enMessages;
+type FoundationKey = keyof typeof en;
 
-const plMessages: Record<MessageKey, string> = {
+const pl: Record<FoundationKey, string> = {
   'common.add': 'Dodaj',
   'common.all': 'Wszystkie',
   'common.apply': 'Zastosuj',
@@ -375,38 +326,7 @@ const plMessages: Record<MessageKey, string> = {
   'notification.markRead': 'Oznacz jako przeczytane',
   'notification.clearAll': 'Wyczyść wszystkie',
   'notification.empty': 'Brak powiadomień.',
-  'query.clearRules': 'Wyczyść reguły',
-  'query.addRule': 'Dodaj regułę',
-  'query.empty': 'Brak zdefiniowanych reguł',
-  'query.combinator.and': 'Wszystkie reguły (AND)',
-  'query.combinator.or': 'Dowolna reguła (OR)',
-  'query.operator.equals': 'Równa się',
-  'query.operator.notEquals': 'Nie równa się',
-  'query.operator.contains': 'Zawiera',
-  'query.operator.startsWith': 'Zaczyna się od',
-  'query.operator.endsWith': 'Kończy się na',
-  'query.operator.gt': 'Większe niż',
-  'query.operator.gte': 'Większe lub równe',
-  'query.operator.lt': 'Mniejsze niż',
-  'query.operator.lte': 'Mniejsze lub równe',
-  'query.operator.isEmpty': 'Jest puste',
-  'query.operator.isNotEmpty': 'Nie jest puste',
-  'query.moveRuleUp': 'Przesuń regułę w górę',
-  'query.moveRuleDown': 'Przesuń regułę w dół',
-  'query.removeRule': 'Usuń regułę',
-  'columnManager.resetColumns': 'Resetuj kolumny',
-  'columnManager.columnVisibility': 'Widoczność kolumn',
   'table.filterRows': 'Filtruj wiersze...',
-  'table.rowsCount': '{count} wierszy',
-  'table.selectedCount': '{count} zazn.',
-  'table.selectRow': 'Wybierz wiersz {id}',
-  'table.noRows': 'Brak wierszy do wyświetlenia',
-  'table.selectAllVisibleRows': 'Wybierz wszystkie widoczne wiersze',
-  'table.resizeColumn': 'Zmień szerokość: {label}',
-  'table.clearSelection': 'Wyczyść zaznaczenie',
-  'table.resetView': 'Resetuj widok',
-  'table.resetSavedLayout': 'Resetuj zapisany układ',
-  'table.columns': 'Kolumny',
   'table.result': 'wynik',
   'table.results': 'wyników',
   'table.pageOf': 'Strona {current} z {total}',
@@ -498,24 +418,6 @@ const plMessages: Record<MessageKey, string> = {
   'tree.loading': 'Ładowanie...',
   'tree.toggleNode': 'Przełącz {label}',
   'rating.valueOf': '{index} z {max}',
-  'trading.bbUpper': 'BB Góra',
-  'trading.bbBasis': 'BB Baza',
-  'trading.bbLower': 'BB Dół',
-  'trading.sma20': 'SMA 20',
-  'trading.ema50': 'EMA 50',
-  'trading.rsi14': 'RSI 14',
-  'trading.macd': 'MACD',
-  'trading.macdSignal': 'MACD Sygnał',
-  'trading.macdHist': 'MACD Hist',
-  'trading.volumeShort': 'Wol.',
-  'trading.smaShort': 'SMA',
-  'trading.emaShort': 'EMA',
-  'trading.bbShort': 'BB',
-  'trading.rsiShort': 'RSI',
-  'trading.macdShort': 'MACD',
-  'trading.trendTool': 'Trend',
-  'trading.levelTool': 'Poziom',
-  'trading.zoneTool': 'Strefa',
   'resizablePanel.resizePanels': 'Zmień rozmiar paneli',
   'theme.light': 'Jasny',
   'theme.dark': 'Ciemny',
@@ -550,40 +452,10 @@ const plMessages: Record<MessageKey, string> = {
   'editableCollection.deleteConfirmMessage': 'Czy na pewno chcesz usunąć ten element?',
 };
 
-const dictionaries: Record<Locale, FlatI18nDictionary> = {
-  en: enMessages,
-  pl: plMessages,
-};
-
-export type I18nMessageKey = MessageKey;
-
-export function flattenI18nDictionary(dictionary?: I18nDictionary): FlatI18nDictionary {
-  if (!dictionary) return {};
-
-  const cached = flattenedDictionaryCache.get(dictionary);
-  if (cached) return cached;
-
-  const flattened: FlatI18nDictionary = {};
-
-  const visit = (value: I18nDictionary, prefix = ''): void => {
-    for (const [key, entry] of Object.entries(value)) {
-      const nextKey = prefix ? `${prefix}.${key}` : key;
-
-      if (typeof entry === 'string') {
-        flattened[nextKey] = entry;
-        continue;
-      }
-
-      visit(entry, nextKey);
-    }
-  };
-
-  visit(dictionary);
-  flattenedDictionaryCache.set(dictionary, flattened);
-
-  return flattened;
+declare module './registry' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  interface I18nMessageRegistry extends Record<FoundationKey, string> {}
 }
 
-export function getMessages(locale: Locale): FlatI18nDictionary {
-  return dictionaries[locale];
-}
+registerI18nMessages('en', en, { source: '@jankrajewskiit/ui' });
+registerI18nMessages('pl', pl, { source: '@jankrajewskiit/ui' });
