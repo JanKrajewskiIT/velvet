@@ -6,15 +6,7 @@ export default defineConfig(async () =>
     {},
     {
       fileName: 'velvet-ui',
-      externalPackages: [
-        'solid-js',
-        '@solidjs/router',
-        'solid-icons',
-        'solid-markdown',
-        'dompurify',
-        'remark-gfm',
-        'lightweight-charts',
-      ],
+      externalPackages: ['solid-js', '@solidjs/router', 'solid-icons', 'solid-markdown', 'dompurify', 'remark-gfm'],
       dts: { tsconfigPath: './tsconfig.app.json' },
     },
   ),

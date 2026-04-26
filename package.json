@@ -46,7 +46,6 @@
   },
   "peerDependencies": {
     "@solidjs/router": ">=0.15",
-    "lightweight-charts": ">=5.1.0",
     "oidc-client-ts": ">=3.1.0",
     "solid-icons": ">=1.2.0",
     "solid-js": ">=1.9",
@@ -55,9 +54,6 @@
   },
   "peerDependenciesMeta": {
     "@solidjs/router": {
-      "optional": true
-    },
-    "lightweight-charts": {
       "optional": true
     },
     "oidc-client-ts": {
@@ -84,7 +80,6 @@
     "@types/node": "^25.6.0",
     "eslint": "^9.39.4",
     "husky": "^9.1.7",
-    "lightweight-charts": "^5.2.0",
     "lint-staged": "^16.4.0",
     "oidc-client-ts": "^3.5.0",
     "prettier": "^3.8.3",

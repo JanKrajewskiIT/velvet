@@ -36,19 +36,6 @@ export type { ComparisonSelectionBarProps } from './components/charts/Comparison
 export { default as ComparisonSelectionBar } from './components/charts/ComparisonSelectionBar/ComparisonSelectionBar';
 export { default as RadarChart } from './components/charts/RadarChart/RadarChart';
 export { default as ScoreRing } from './components/charts/ScoreRing/ScoreRing';
-export type {
-  TradingViewChartPoint,
-  TradingViewChartProps,
-  TradingViewDrawings,
-  TradingViewDrawingTool,
-  TradingViewFeedContext,
-  TradingViewLevelLine,
-  TradingViewLiveFeedConfig,
-  TradingViewLiveFeedMode,
-  TradingViewTrendLine,
-  TradingViewZone,
-} from './components/charts/TradingViewChart/TradingViewChart';
-export { default as TradingViewChart } from './components/charts/TradingViewChart/TradingViewChart';
 export { default as AiResultPanel } from './components/composites/AiResultPanel/AiResultPanel';
 export type {
   AtsAnalysisCategory,
@@ -403,41 +390,14 @@ export {
   type SegmentedControlOption,
 } from './components/switchers/SegmentedControl/SegmentedControl';
 export { default as Switch } from './components/switchers/Switch/Switch';
-export type {
-  ColumnManagerColumn,
-  ColumnManagerPin,
-  ColumnManagerPinning,
-  ColumnManagerVisibility,
-} from './components/table/ColumnManager/ColumnManager';
-export { default as ColumnManager } from './components/table/ColumnManager/ColumnManager';
-export type {
-  DataGridProColumn,
-  DataGridProColumnPin,
-  DataGridProColumnPinning,
-  DataGridProProps,
-  DataGridProSortState,
-} from './components/table/DataGridPro/DataGridPro';
-export { DataGridPro } from './components/table/DataGridPro/DataGridPro';
 export type { DataTableColumn, DataTableProps } from './components/table/DataTable/DataTable';
 export { DataTable } from './components/table/DataTable/DataTable';
-export type {
-  QueryBuilderCombinator,
-  QueryBuilderField,
-  QueryBuilderFieldOption,
-  QueryBuilderOperator,
-  QueryBuilderProps,
-  QueryBuilderRule,
-  QueryBuilderValue,
-} from './components/table/QueryBuilder/QueryBuilder';
-export { default as QueryBuilder } from './components/table/QueryBuilder/QueryBuilder';
 export { default as Table } from './components/table/Table/Table';
 export { default as TableBody } from './components/table/Table/TableBody/TableBody';
 export { default as TableCell } from './components/table/Table/TableCell/TableCell';
 export { default as TableHead } from './components/table/Table/TableHead/TableHead';
 export { default as TableHeader } from './components/table/Table/TableHeader/TableHeader';
 export { default as TableRow } from './components/table/Table/TableRow/TableRow';
-export type { TableAddRowActionProps } from './components/table/TableAddRowAction/TableAddRowAction';
-export { default as TableAddRowAction } from './components/table/TableAddRowAction/TableAddRowAction';
 export { default as CodeText } from './components/typography/CodeText/CodeText';
 export { default as Heading } from './components/typography/Heading/Heading';
 export { default as LabelText } from './components/typography/LabelText/LabelText';
@@ -447,10 +407,6 @@ export { default as useEscapeKey } from './hooks/useEscapeKey';
 export type { UseFloatingOptions, UseFloatingReturn } from './hooks/useFloating';
 export { default as useFloating } from './hooks/useFloating';
 export { default as useFocusTrap } from './hooks/useFocusTrap';
-export type { TradingViewPollingFeedOptions } from './hooks/useTradingViewPollingFeed';
-export { default as useTradingViewPollingFeed } from './hooks/useTradingViewPollingFeed';
-export type { TradingViewWsFeedOptions } from './hooks/useTradingViewWsFeed';
-export { default as useTradingViewWsFeed } from './hooks/useTradingViewWsFeed';
 export type { CreateApiClientsOptions, DefaultApiClientMap, HttpClientMap } from './http/createApiClients';
 export { createApiClients } from './http/createApiClients';
 export { createHttpClient } from './http/createHttpClient';
@@ -468,7 +424,7 @@ export { createTypedI18n } from './i18n/createTypedI18n';
 export { I18nProvider, useI18n } from './i18n/I18nProvider';
 export type { Locale } from './i18n/messages';
 export { SUPPORTED_LOCALES } from './i18n/messages';
-export type { ComponentSize, default as Props } from './models/Props';
+export type { ComponentSize, DivCoreNativeProps, default as Props } from './models/Props';
 export { configureVelvet } from './providers/velvet-config';
 export type { VelvetProviderProps } from './providers/VelvetProvider';
 export { default as VelvetProvider } from './providers/VelvetProvider';
@@ -548,3 +504,5 @@ export { default as classNames } from './utils/classNames';
 export { getContrastTextColor } from './utils/color';
 export { emptyToNull, numberToString, orEmpty, parseFloatOrNull } from './utils/form';
 export { default as getInputSizeClass } from './utils/getInputSizeClass';
+export type { TabularFilterColumn, TabularSortColumn, TabularSortDirection } from './utils/tabularData';
+export { filterRows, sortRows } from './utils/tabularData';
