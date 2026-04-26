@@ -2,8 +2,8 @@
 	path = .claude
 	url = https://github.com/JanKrajewskiIT/claude.git
 [submodule ".agents"]
-	path = .claude
+	path = .agents
 	url = https://github.com/JanKrajewskiIT/claude.git
 [submodule ".cursor"]
-	path = .claude
+	path = .cursor
 	url = https://github.com/JanKrajewskiIT/claude.git
