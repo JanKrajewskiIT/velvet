@@ -12,6 +12,7 @@
  *   {n, plural, =0 {none} other {#}}                – exact-match branches
  *   {g, select, male {he} female {she} other {they}}
  *   <tag>...</tag>                                  – rich-text tag pair
+ *   <tag/>                                          – rich-text empty tag (placeholder)
  *
  * `#` inside a plural body resolves to the formatted plural number.
  * Branch and tag bodies are themselves messages, so all forms nest arbitrarily.
@@ -188,11 +189,19 @@ class Parser {
   }
 
   /**
-   * Try to parse `<tag>children</tag>` starting at the current cursor.
-   * Returns null if it doesn't look like a tag (cursor unchanged).
+   * Try to parse `<tag>children</tag>` or self-closing `<tag/>` starting at
+   * the current cursor. Returns null if it doesn't look like a tag (cursor
+   * unchanged) — the caller falls back to literal `<`.
    */
   private tryParseOpenTag(): TagNode | null {
     const rest = this.source.slice(this.cursor);
+    // Self-closing form first (greedier, so try it before the open form).
+    const selfClose = /^<([A-Za-z_][\w-]*)\s*\/>/u.exec(rest);
+    if (selfClose) {
+      const name = selfClose[1] ?? '';
+      this.cursor += selfClose[0].length;
+      return { type: 'tag', name, children: [] };
+    }
     const match = /^<([A-Za-z_][\w-]*)>/u.exec(rest);
     if (!match) return null;
     const name = match[1] ?? '';
