@@ -419,6 +419,7 @@ export type {
   TranslateFn,
   TranslateRichFn,
   TranslateStaticFn,
+  TranslationOf,
   VelvetI18nDictionary,
   VelvetI18nKey,
 } from './i18n';
