@@ -1,4 +1,4 @@
-import type { VelvetUiFoundationDictionary } from './en';
+import type { VelvetUiFoundationDictionary } from './index';
 
 export const pl: VelvetUiFoundationDictionary = {
   common: {

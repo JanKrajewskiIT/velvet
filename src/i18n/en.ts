@@ -1,4 +1,3 @@
-import type { TranslationOf } from '@jankrajewskiit/i18n';
 import { defineDictionary } from '@jankrajewskiit/i18n';
 
 export const en = defineDictionary({
@@ -324,10 +323,3 @@ export const en = defineDictionary({
     deleteConfirmMessage: 'Are you sure you want to delete this label?',
   },
 });
-
-export type VelvetUiFoundationDictionary = TranslationOf<typeof en>;
-
-declare module '@jankrajewskiit/i18n' {
-  // eslint-disable-next-line @typescript-eslint/no-empty-object-type -- module augmentation seeds the UI key space.
-  interface VelvetI18nDictionary extends VelvetUiFoundationDictionary {}
-}
