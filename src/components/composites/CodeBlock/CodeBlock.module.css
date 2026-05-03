@@ -27,7 +27,7 @@
 .body {
   display: flex;
   overflow: auto;
-  box-shadow: inset 0 2px 4px rgb(0 0 0 / 4%);
+  box-shadow: inset 0 2px 4px var(--color-scrim-faint);
   max-height: var(--code-block-max-height, none);
 }
 

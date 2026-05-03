@@ -3,7 +3,7 @@
   border-radius: var(--radius-md);
   border: 1px solid transparent;
   border-left-width: 3px;
-  box-shadow: 0 1px 0 rgb(255 255 255 / 35%) inset;
+  box-shadow: 0 1px 0 var(--color-highlight-inset) inset;
   animation: fadeInUp var(--duration-normal) var(--ease-out-expo);
 }
 
@@ -16,7 +16,7 @@
   height: 2rem;
   margin-top: 1px;
   border-radius: var(--radius-full);
-  background: rgb(255 255 255 / 55%);
+  background: var(--color-highlight-surface);
   animation: scaleIn 0.3s var(--ease-out-back) 0.1s both;
 }
 

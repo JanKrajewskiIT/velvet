@@ -59,7 +59,7 @@
 
 .filled {
   color: var(--color-warning);
-  filter: drop-shadow(0 0 4px rgb(255 193 7 / 40%));
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--color-warning) 40%, transparent));
   transition-delay: calc(var(--star-index, 0) * 30ms);
 }
 
@@ -74,7 +74,7 @@
 
 .interactive:hover {
   transform: scale(1.15);
-  filter: drop-shadow(0 0 4px rgb(255 193 7 / 40%));
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--color-warning) 40%, transparent));
 }
 
 .interactive:active {

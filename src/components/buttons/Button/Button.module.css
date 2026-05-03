@@ -123,7 +123,11 @@
 
 .variantDanger {
   border-color: var(--color-error);
-  background: linear-gradient(135deg, var(--color-error) 0%, color-mix(in srgb, var(--color-error) 85%, #ff6b6b) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-error) 0%,
+    color-mix(in srgb, var(--color-error) 85%, var(--color-error-accent)) 100%
+  );
   color: var(--color-on-accent);
 }
 
@@ -132,9 +136,9 @@
   background: linear-gradient(
     135deg,
     var(--color-error-hover) 0%,
-    color-mix(in srgb, var(--color-error) 80%, #ff6b6b) 100%
+    color-mix(in srgb, var(--color-error) 80%, var(--color-error-accent)) 100%
   );
-  box-shadow: 0 0 12px rgb(211 47 47 / 20%);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--color-error) 20%, transparent);
   filter: brightness(1.06);
 }
 
@@ -196,7 +200,7 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(90deg, transparent 0%, rgb(255 255 255 / 12%) 50%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, var(--color-highlight-subtle) 50%, transparent 100%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
 }

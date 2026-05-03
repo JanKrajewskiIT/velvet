@@ -8,7 +8,7 @@
   --concentric-size: 30px;
   --concentric-index: 1;
   --concentric-surface: color-mix(in srgb, var(--color-bg-elevated) 92%, var(--color-primary-light));
-  --concentric-shadow-dark: color-mix(in srgb, var(--color-primary) 16%, rgb(0 0 0 / 18%));
+  --concentric-shadow-dark: color-mix(in srgb, var(--color-primary) 16%, var(--color-scrim-light));
   --concentric-shadow-light: color-mix(in srgb, white 72%, var(--color-bg-elevated));
 
   position: absolute;
