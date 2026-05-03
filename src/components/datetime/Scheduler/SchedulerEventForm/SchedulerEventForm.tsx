@@ -3,7 +3,7 @@ import { createMemo } from 'solid-js';
 import Button from '~/components/buttons/Button/Button';
 import Input from '~/components/inputs/Input/Input';
 import TextArea from '~/components/inputs/TextArea/TextArea';
-import { useI18n } from '~/i18n/I18nProvider';
+import { useI18n } from '~/i18n';
 import type Props from '~/models/Props';
 import { splitDateTimeValue } from '~/utils/datetime';
 

@@ -4,7 +4,7 @@ import { batch, createEffect, createMemo, createSignal, on, Show } from 'solid-j
 import Button from '~/components/buttons/Button/Button';
 import EmptyState from '~/components/feedback/EmptyState/EmptyState';
 import Text from '~/components/typography/Text/Text';
-import { useI18n } from '~/i18n/I18nProvider';
+import { useI18n } from '~/i18n';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 

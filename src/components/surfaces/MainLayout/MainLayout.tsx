@@ -1,6 +1,6 @@
 import { type JSX, type ParentProps, Show, splitProps, Suspense } from 'solid-js';
 
-import { useAuth } from '~/auth/AuthProvider';
+import { useAuth } from '~/auth';
 import PageLoader from '~/components/loaders/PageLoader/PageLoader';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';

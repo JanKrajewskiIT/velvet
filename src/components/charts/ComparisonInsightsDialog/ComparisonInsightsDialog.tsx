@@ -14,7 +14,7 @@ import TableHead from '~/components/table/Table/TableHead/TableHead';
 import TableHeader from '~/components/table/Table/TableHeader/TableHeader';
 import TableRow from '~/components/table/Table/TableRow/TableRow';
 import Text from '~/components/typography/Text/Text';
-import { useI18n } from '~/i18n/I18nProvider';
+import { useI18n } from '~/i18n';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 

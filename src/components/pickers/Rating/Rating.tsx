@@ -2,7 +2,7 @@ import { FiStar } from 'solid-icons/fi';
 import { createMemo, createSignal, For, type JSX, splitProps } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
 
-import { useI18n } from '~/i18n/I18nProvider';
+import { useI18n } from '~/i18n';
 import type Props from '~/models/Props';
 import type { DivCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';

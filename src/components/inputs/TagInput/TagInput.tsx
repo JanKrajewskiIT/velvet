@@ -1,6 +1,6 @@
 import { batch, createEffect, createSignal, For, type JSX, on, splitProps } from 'solid-js';
 
-import { useI18n } from '~/i18n/I18nProvider';
+import { useI18n } from '~/i18n';
 import type Props from '~/models/Props';
 import type { ComponentSize, InputCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';

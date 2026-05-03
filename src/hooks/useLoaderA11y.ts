@@ -1,7 +1,7 @@
-﻿import { type Accessor, createMemo } from 'solid-js';
+import { type Accessor, createMemo } from 'solid-js';
 
-import { useI18n } from '~/i18n/I18nProvider';
-import type { VelvetI18nKey } from '~/i18n/types';
+import type { VelvetI18nKey } from '~/i18n';
+import { useI18n } from '~/i18n';
 import type { DivCoreNativeProps } from '~/models/Props';
 
 interface LoaderMessages {

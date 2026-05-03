@@ -11,7 +11,7 @@ import TextArea from '~/components/inputs/TextArea/TextArea';
 import Spinner from '~/components/loaders/Spinner/Spinner';
 import Heading from '~/components/typography/Heading/Heading';
 import Text from '~/components/typography/Text/Text';
-import { useI18n } from '~/i18n/I18nProvider';
+import { useI18n } from '~/i18n';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 

@@ -2,7 +2,7 @@ import { IoCheckmark, IoCopy } from 'solid-icons/io';
 import { batch, createMemo, createSignal, onCleanup, Show, splitProps } from 'solid-js';
 
 import Icon from '~/components/media/Icon/Icon';
-import { useI18n } from '~/i18n/I18nProvider';
+import { useI18n } from '~/i18n';
 import type Props from '~/models/Props';
 import type { ComponentSize } from '~/models/Props';
 import classNames from '~/utils/classNames';

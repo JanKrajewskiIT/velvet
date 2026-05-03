@@ -1,11 +1,5 @@
 import type { VelvetUiFoundationDictionary } from './en';
 
-/**
- * VelvetUi foundation dictionary (Polish).
- *
- * Strict mirror of `en` shape — TypeScript fails compilation if any key
- * goes missing or extra keys creep in.
- */
 export const pl: VelvetUiFoundationDictionary = {
   common: {
     add: 'Dodaj',
@@ -237,7 +231,7 @@ export const pl: VelvetUiFoundationDictionary = {
     label: 'Paleta poleceń',
     results: 'Wyniki poleceń',
     noResults: 'Brak wyników',
-    navigate: 'Użyj \u2191 \u2193 aby nawigować',
+    navigate: 'Użyj ↑ ↓ aby nawigować',
     select: 'Enter aby wybrać',
     escToClose: 'Esc aby zamknąć',
   },

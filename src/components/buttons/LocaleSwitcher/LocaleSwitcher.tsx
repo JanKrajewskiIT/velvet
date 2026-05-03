@@ -1,8 +1,8 @@
 import { splitProps } from 'solid-js';
 
-import { useI18n } from '~/i18n/I18nProvider';
-import type { Locale } from '~/i18n/types';
-import { SUPPORTED_LOCALES } from '~/i18n/types';
+import type { Locale } from '~/i18n';
+import { useI18n } from '~/i18n';
+import { SUPPORTED_LOCALES } from '~/i18n';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 

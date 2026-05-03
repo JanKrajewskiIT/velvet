@@ -4,7 +4,7 @@ import { createMemo, splitProps } from 'solid-js';
 import Icon from '~/components/media/Icon/Icon';
 import type { SegmentedControlOption } from '~/components/switchers/SegmentedControl/SegmentedControl';
 import SegmentedControl from '~/components/switchers/SegmentedControl/SegmentedControl';
-import { useI18n } from '~/i18n/I18nProvider';
+import { useI18n } from '~/i18n';
 import type Props from '~/models/Props';
 import { useTheme } from '~/theme/ThemeProvider';
 import classNames from '~/utils/classNames';

@@ -14,7 +14,7 @@ import DialogTitle from '~/components/overlays/Dialog/DialogTitle/DialogTitle';
 import ColorPicker from '~/components/pickers/ColorPicker/ColorPicker';
 import Divider from '~/components/surfaces/Divider/Divider';
 import Text from '~/components/typography/Text/Text';
-import { useI18n } from '~/i18n/I18nProvider';
+import { useI18n } from '~/i18n';
 import type Props from '~/models/Props';
 
 import styles from './ColorLabelManagerDialog.module.css';

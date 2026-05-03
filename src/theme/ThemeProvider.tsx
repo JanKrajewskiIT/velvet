@@ -1,6 +1,6 @@
 ﻿import { createContext, createEffect, createSignal, onCleanup, type ParentProps, untrack, useContext } from 'solid-js';
 
-import { getVelvetRuntimeConfig } from '~/providers/velvet-config';
+import { VELVET_THEME_STORAGE_KEY } from '~/providers/velvet-config';
 
 export type ThemeChoice = 'light' | 'dark' | 'system';
 type ResolvedTheme = 'light' | 'dark';
@@ -42,7 +42,7 @@ interface ThemeProviderProps extends ParentProps {
 }
 
 const ThemeProvider = (props: ThemeProviderProps) => {
-  const storageKey = () => props.storageKey ?? getVelvetRuntimeConfig().themeStorageKey;
+  const storageKey = () => props.storageKey ?? VELVET_THEME_STORAGE_KEY;
   const initialTheme = getStoredTheme(untrack(storageKey));
   const initialSystem = getSystemTheme();
 

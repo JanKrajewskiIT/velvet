@@ -4,7 +4,7 @@ import Chip from '~/components/feedback/Chip/Chip';
 import EmptyState from '~/components/feedback/EmptyState/EmptyState';
 import Stack from '~/components/surfaces/Stack/Stack';
 import LabelText from '~/components/typography/LabelText/LabelText';
-import { useI18n } from '~/i18n/I18nProvider';
+import { useI18n } from '~/i18n';
 import type Props from '~/models/Props';
 import type { DivCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';

@@ -15,7 +15,7 @@ import DialogActions from '~/components/overlays/Dialog/DialogActions/DialogActi
 import DialogBody from '~/components/overlays/Dialog/DialogBody/DialogBody';
 import DialogTitle from '~/components/overlays/Dialog/DialogTitle/DialogTitle';
 import Text from '~/components/typography/Text/Text';
-import { useI18n } from '~/i18n/I18nProvider';
+import { useI18n } from '~/i18n';
 import type Props from '~/models/Props';
 
 import styles from './ImportSourcesDialog.module.css';

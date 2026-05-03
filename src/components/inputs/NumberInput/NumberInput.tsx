@@ -1,7 +1,7 @@
 import { IoAdd, IoRemove } from 'solid-icons/io';
 import { createMemo, type JSX, onCleanup, splitProps } from 'solid-js';
 
-import { useI18n } from '~/i18n/I18nProvider';
+import { useI18n } from '~/i18n';
 import type Props from '~/models/Props';
 import type { AriaFieldProps, ComponentSize } from '~/models/Props';
 import classNames from '~/utils/classNames';

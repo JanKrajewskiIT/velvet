@@ -4,7 +4,7 @@ import { createEffect, createMemo, createSignal, For, type JSX, on, splitProps }
 
 import Icon from '~/components/media/Icon/Icon';
 import useEscapeKey from '~/hooks/useEscapeKey';
-import { useI18n } from '~/i18n/I18nProvider';
+import { useI18n } from '~/i18n';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 

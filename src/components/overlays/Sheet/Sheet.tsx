@@ -5,7 +5,7 @@ import { Portal } from 'solid-js/web';
 import useEscapeKey from '~/hooks/useEscapeKey';
 import useFocusTrap from '~/hooks/useFocusTrap';
 import useOverlayAnimation from '~/hooks/useOverlayAnimation';
-import { useI18n } from '~/i18n/I18nProvider';
+import { useI18n } from '~/i18n';
 import type Props from '~/models/Props';
 import { joinAriaIds } from '~/utils/aria';
 import classNames from '~/utils/classNames';

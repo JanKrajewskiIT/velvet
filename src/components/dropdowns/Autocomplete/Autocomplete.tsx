@@ -12,7 +12,7 @@ import {
 
 import ClosableChip from '~/components/feedback/ClosableChip/ClosableChip';
 import useDropdownState from '~/hooks/useDropdownState';
-import { useI18n } from '~/i18n/I18nProvider';
+import { useI18n } from '~/i18n';
 import type Props from '~/models/Props';
 import type { AriaFieldProps, ComponentSize } from '~/models/Props';
 import { resolveAriaInvalid } from '~/utils/aria';

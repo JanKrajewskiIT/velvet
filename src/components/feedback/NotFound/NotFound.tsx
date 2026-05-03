@@ -2,7 +2,7 @@ import { FiAlertCircle } from 'solid-icons/fi';
 import { splitProps } from 'solid-js';
 
 import Button from '~/components/buttons/Button/Button';
-import { useI18n } from '~/i18n/I18nProvider';
+import { useI18n } from '~/i18n';
 import type Props from '~/models/Props';
 
 import FallbackState from '../FallbackState/FallbackState';

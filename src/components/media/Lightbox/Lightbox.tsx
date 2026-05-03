@@ -6,7 +6,7 @@ import IconButton from '~/components/buttons/IconButton/IconButton';
 import Text from '~/components/typography/Text/Text';
 import useEscapeKey from '~/hooks/useEscapeKey';
 import useFocusTrap from '~/hooks/useFocusTrap';
-import { useI18n } from '~/i18n/I18nProvider';
+import { useI18n } from '~/i18n';
 import type Props from '~/models/Props';
 import type { DivCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';

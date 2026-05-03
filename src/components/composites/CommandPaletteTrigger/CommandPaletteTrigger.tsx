@@ -7,7 +7,7 @@ import type { CommandItem } from '~/components/composites/CommandPalette/Command
 import CommandPalette from '~/components/composites/CommandPalette/CommandPalette';
 import Kbd from '~/components/feedback/Kbd/Kbd';
 import Text from '~/components/typography/Text/Text';
-import { useI18n } from '~/i18n/I18nProvider';
+import { useI18n } from '~/i18n';
 import type Props from '~/models/Props';
 import type { ComponentSize } from '~/models/Props';
 import classNames from '~/utils/classNames';

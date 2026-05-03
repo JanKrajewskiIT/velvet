@@ -12,7 +12,7 @@ import Dialog from '~/components/overlays/Dialog/Dialog';
 import DialogActions from '~/components/overlays/Dialog/DialogActions/DialogActions';
 import DialogBody from '~/components/overlays/Dialog/DialogBody/DialogBody';
 import DialogTitle from '~/components/overlays/Dialog/DialogTitle/DialogTitle';
-import { useI18n } from '~/i18n/I18nProvider';
+import { useI18n } from '~/i18n';
 import type Props from '~/models/Props';
 
 import type { TimelineCardData, TimelineCardLabels, TimelineCardOption } from './TimelineCard';

@@ -1,13 +1,6 @@
-import { defineDictionary } from '../defineDictionary';
-import type { TranslationOf } from '../types';
+import type { TranslationOf } from '@jankrajewskiit/i18n';
+import { defineDictionary } from '@jankrajewskiit/i18n';
 
-/**
- * VelvetUi foundation dictionary (English).
- *
- * This is the source of truth for the foundation key set; the Polish
- * dictionary mirrors its shape exactly. Apps and library packages add
- * their own dictionaries on top via `defineDictionaries`.
- */
 export const en = defineDictionary({
   common: {
     add: 'Add',
@@ -332,12 +325,9 @@ export const en = defineDictionary({
   },
 });
 
-/** Foundation dictionary shape — used to seed `VelvetI18nDictionary` and
- *  to constrain other locales (e.g. `pl`) to the same key set without
- *  pinning them to English string literals. */
 export type VelvetUiFoundationDictionary = TranslationOf<typeof en>;
 
-declare module '../types' {
-  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+declare module '@jankrajewskiit/i18n' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type -- module augmentation seeds the UI key space.
   interface VelvetI18nDictionary extends VelvetUiFoundationDictionary {}
 }

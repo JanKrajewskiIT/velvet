@@ -3,7 +3,7 @@ import { batch, createMemo, createUniqueId, For, onCleanup, Show, splitProps } f
 import ClosableChip from '~/components/feedback/ClosableChip/ClosableChip';
 import CheckboxIndicator from '~/components/switchers/Checkbox/CheckboxIndicator/CheckboxIndicator';
 import useDropdownPanel from '~/hooks/useDropdownPanel';
-import { useI18n } from '~/i18n/I18nProvider';
+import { useI18n } from '~/i18n';
 import type Props from '~/models/Props';
 import type { AriaFieldProps, ComponentSize } from '~/models/Props';
 import { joinAriaIds, resolveAriaInvalid } from '~/utils/aria';

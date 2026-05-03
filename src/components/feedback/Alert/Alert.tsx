@@ -8,7 +8,7 @@ import Icon from '~/components/media/Icon/Icon';
 import Stack from '~/components/surfaces/Stack/Stack';
 import Heading from '~/components/typography/Heading/Heading';
 import Text from '~/components/typography/Text/Text';
-import { useI18n } from '~/i18n/I18nProvider';
+import { useI18n } from '~/i18n';
 import type Props from '~/models/Props';
 import type { DivCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';

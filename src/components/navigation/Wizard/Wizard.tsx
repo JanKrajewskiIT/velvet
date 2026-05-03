@@ -1,6 +1,6 @@
 import { batch, createMemo, createSignal, For, type JSX, Show, splitProps } from 'solid-js';
 
-import { useI18n } from '~/i18n/I18nProvider';
+import { useI18n } from '~/i18n';
 import type Props from '~/models/Props';
 import type { DivCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';

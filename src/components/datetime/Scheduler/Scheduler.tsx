@@ -3,7 +3,7 @@ import { batch, createEffect, createMemo, createSignal, on, onCleanup, splitProp
 import ConfirmDialog from '~/components/overlays/ConfirmDialog/ConfirmDialog';
 import Card from '~/components/surfaces/Card/Card';
 import useEscapeKey from '~/hooks/useEscapeKey';
-import { useI18n } from '~/i18n/I18nProvider';
+import { useI18n } from '~/i18n';
 import type Props from '~/models/Props';
 import type { DivCoreNativeProps } from '~/models/Props';
 import classNames from '~/utils/classNames';

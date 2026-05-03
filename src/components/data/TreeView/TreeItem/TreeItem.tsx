@@ -3,7 +3,7 @@ import { For, type JSX, Show } from 'solid-js';
 
 import Checkbox from '~/components/switchers/Checkbox/Checkbox';
 import Text from '~/components/typography/Text/Text';
-import { useI18n } from '~/i18n/I18nProvider';
+import { useI18n } from '~/i18n';
 import type Props from '~/models/Props';
 import classNames from '~/utils/classNames';
 

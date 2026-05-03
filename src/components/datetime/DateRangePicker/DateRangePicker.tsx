@@ -4,7 +4,7 @@ import DropdownFieldTrigger from '~/components/dropdowns/Dropdown/DropdownFieldT
 import DropdownSurface from '~/components/dropdowns/Dropdown/DropdownSurface/DropdownSurface';
 import Text from '~/components/typography/Text/Text';
 import useCalendarPopupState from '~/hooks/useCalendarPopupState';
-import { useI18n } from '~/i18n/I18nProvider';
+import { useI18n } from '~/i18n';
 import type Props from '~/models/Props';
 import type { AriaFieldProps, ComponentSize } from '~/models/Props';
 import { joinAriaIds, resolveAriaInvalid } from '~/utils/aria';

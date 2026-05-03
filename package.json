@@ -27,7 +27,7 @@
     "styles.d.ts"
   ],
   "engines": {
-    "node": ">=20"
+    "node": ">=25"
   },
   "scripts": {
     "prepublishOnly": "npm run verify",
@@ -49,8 +49,7 @@
     "oidc-client-ts": ">=3.1.0",
     "solid-icons": ">=1.2.0",
     "solid-js": ">=1.9",
-    "solid-markdown": ">=2.1.0",
-    "stylelint": ">=17"
+    "solid-markdown": ">=2.1.0"
   },
   "peerDependenciesMeta": {
     "@solidjs/router": {
@@ -64,17 +63,16 @@
     },
     "solid-markdown": {
       "optional": true
-    },
-    "stylelint": {
-      "optional": true
     }
   },
   "dependencies": {
+    "@jankrajewskiit/auth": "^0.2.2",
+    "@jankrajewskiit/i18n": "^0.1.5",
     "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.2",
-    "@jankrajewskiit/configs": "^1.1.4",
+    "@jankrajewskiit/configs": "^1.1.8",
     "@size-limit/file": "^12.1.0",
     "@solidjs/router": "^0.16.1",
     "@types/node": "^25.6.0",
@@ -88,10 +86,10 @@
     "solid-icons": "^1.2.0",
     "solid-js": "^1.9.12",
     "solid-markdown": "^2.1.1",
-    "stylelint": "^17.9.0",
+    "stylelint": "^17.10.0",
     "typescript": "~6.0.3",
     "vite": "^8.0.10",
-    "vite-plugin-dts": "^4.5.4"
+    "vite-plugin-dts": "^5.0.0"
   },
   "size-limit": [
     {

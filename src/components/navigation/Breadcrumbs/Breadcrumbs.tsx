@@ -3,7 +3,7 @@ import { createMemo, createSignal, For, type JSX, Show, splitProps } from 'solid
 
 import Heading from '~/components/typography/Heading/Heading';
 import Text from '~/components/typography/Text/Text';
-import { useI18n } from '~/i18n/I18nProvider';
+import { useI18n } from '~/i18n';
 import type Props from '~/models/Props';
 
 import Button from '../../buttons/Button/Button';

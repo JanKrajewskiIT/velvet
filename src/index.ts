@@ -1,17 +1,14 @@
 ﻿import './theme/globals.css';
 
-export type { AuthActionButtonProps } from './auth/AuthActionButton';
-export { default as AuthActionButton } from './auth/AuthActionButton';
-export type { AuthGuardProps } from './auth/AuthGuard';
-export type { Role, UnauthorizedBehavior } from './auth/AuthGuard';
-export { default as AuthGuard } from './auth/AuthGuard';
-export type { AuthContextValue } from './auth/AuthProvider';
-export { AuthProvider, useAuth } from './auth/AuthProvider';
-export type { OidcAuthConfig, OidcAuthUserManagerFactoryConfig } from './auth/oidc';
-export { getAuthAccessToken, handleAuthRedirectCallback, setAuthUserManagerFactory } from './auth/oidc';
-export { getStoredUser } from './auth/utils';
-export type { CreateVelvetBootstrapOptions } from './bootstrap/createVelvetBootstrap';
-export { bootstrapVelvetApp, sanitizeAuthQueryParams } from './bootstrap/createVelvetBootstrap';
+export type {
+  AuthActionButtonProps,
+  AuthContextValue,
+  AuthGuardProps,
+  OidcAuthConfig,
+  Role,
+  UnauthorizedBehavior,
+} from './auth';
+export { AuthActionButton, AuthGuard, useAuth } from './auth';
 export { default as AffixButton } from './components/buttons/AffixButton/AffixButton';
 export type { ButtonVariant } from './components/buttons/Button/Button';
 export { default as Button } from './components/buttons/Button/Button';
@@ -290,6 +287,7 @@ export type { BottomNavItem } from './components/navigation/BottomNav/BottomNav'
 export { default as BottomNav } from './components/navigation/BottomNav/BottomNav';
 export type { BreadcrumbItem } from './components/navigation/Breadcrumbs/Breadcrumbs';
 export { default as Breadcrumbs } from './components/navigation/Breadcrumbs/Breadcrumbs';
+export { default as MenuBar } from './components/navigation/MenuBar/MenuBar';
 export { default as Navbar } from './components/navigation/Navbar/Navbar';
 export type { NavItem } from './components/navigation/Navbar/NavItem';
 export { default as Pagination } from './components/navigation/Pagination/Pagination';
@@ -408,118 +406,31 @@ export { default as useEscapeKey } from './hooks/useEscapeKey';
 export type { UseFloatingOptions, UseFloatingReturn } from './hooks/useFloating';
 export { default as useFloating } from './hooks/useFloating';
 export { default as useFocusTrap } from './hooks/useFocusTrap';
-export type { CreateApiClientsOptions, DefaultApiClientMap, HttpClientMap } from './http/createApiClients';
-export { createApiClients } from './http/createApiClients';
-export { createHttpClient } from './http/createHttpClient';
-export { ApiError, normalizeHttpError } from './http/errors';
 export type {
-  HttpClient,
-  HttpClientConfig,
-  HttpQueryPrimitive,
-  HttpQueryValue,
-  HttpRequestOptions,
-} from './http/types';
-export { unwrapCollectionResponse } from './http/unwrapCollectionResponse';
-export { en, pl, type VelvetUiFoundationDictionary } from './i18n/builtin';
-export type { ComposedDictionaries, DictionaryInput, LocaleDictionariesInput } from './i18n/defineDictionary';
-export { defineDictionaries, defineDictionary } from './i18n/defineDictionary';
-export type { CompiledMessage, CompiledRichMessage, RichNode } from './i18n/format/compiler';
-export { compileMessage, compileRichMessage } from './i18n/format/compiler';
-export type {
+  ComposedDictionaries,
+  DictionaryInput,
   I18nContextValue,
   I18nProviderProps,
+  Locale,
+  LocaleDictionariesInput,
+  MessageParams,
   RichMessageParams,
   TagHandler,
   TranslateFn,
   TranslateRichFn,
   TranslateStaticFn,
-} from './i18n/I18nProvider';
-export { I18nProvider, useI18n } from './i18n/I18nProvider';
-export type {
-  DictionaryNode,
-  DotPath,
-  FlatDictionary,
-  Locale,
-  MessageParams,
-  TranslationOf,
   VelvetI18nDictionary,
   VelvetI18nKey,
-} from './i18n/types';
-export { SUPPORTED_LOCALES } from './i18n/types';
+} from './i18n';
+export { en, pl, type VelvetUiFoundationDictionary } from './i18n';
+export { defineDictionaries, defineDictionary, I18nProvider, SUPPORTED_LOCALES, useI18n } from './i18n';
 export type { ComponentSize, DivCoreNativeProps, default as Props } from './models/Props';
-export { configureVelvet } from './providers/velvet-config';
+export type { MountVelvetAppOptions } from './providers/mountVelvetApp';
+export { mountVelvetApp } from './providers/mountVelvetApp';
+export type { VelvetConfigInput } from './providers/velvet-config';
+export { VELVET_LOCALE_STORAGE_KEY, VELVET_THEME_STORAGE_KEY } from './providers/velvet-config';
 export type { VelvetProviderProps } from './providers/VelvetProvider';
 export { default as VelvetProvider } from './providers/VelvetProvider';
-export type {
-  AppMutationResult,
-  AppQueryResult,
-  CreateAppQueryOptions,
-  CreateCrudSignalsOptions,
-  CreateInfiniteQueryOptions,
-  CreatePaginatedQueryOptions,
-  CreateQueryClientOptions,
-  CreateQuerySignalOptions,
-  CrudSignals,
-  InfinitePageResult,
-  InfiniteQueryResult,
-  MutationCallbacks,
-  MutationOptions,
-  MutationSignal,
-  MutationStatus,
-  PagedData,
-  PaginatedQueryResult,
-  QueryBoundaryProps,
-  QueryClient,
-  QueryClientProviderProps,
-  QueryKey,
-  QueryKeyPart,
-  MutationState as QueryMutationState,
-  QueryOptions,
-  QueryRetry,
-  QuerySignal,
-  QueryState,
-  QueryStatus,
-} from './query';
-export {
-  createAppMutation,
-  createAppQuery,
-  createCrudSignals,
-  createInfiniteQuery,
-  createMutationSignal,
-  createPaginatedQuery,
-  createQueryClient,
-  createQuerySignal,
-  getDefaultQueryClient,
-  hashQueryKey,
-  invalidateQuery,
-  matchesPartialKey,
-  normalizeQueryKey,
-  QueryBoundary,
-  QueryClientProvider,
-  useQueryClient,
-} from './query';
-export type {
-  AutosaveSignal,
-  AutosaveStatus,
-  CreateAutosaveSignalOptions,
-  CreateEntityStoreOptions,
-  CreatePersistedSignalOptions,
-  CreateSelectionStoreOptions,
-  CreateSyncedStoreOptions,
-  EntityStore,
-  PersistStorage,
-  SelectionStore,
-  StoreCollectionActions,
-  SyncedStore,
-} from './store';
-export {
-  createAutosaveSignal,
-  createEntityStore,
-  createPersistedSignal,
-  createSelectionStore,
-  createStoreCollectionActions,
-  createSyncedStore,
-} from './store';
 export type { ThemeChoice } from './theme/ThemeProvider';
 export { ThemeProvider, useTheme } from './theme/ThemeProvider';
 export { default as classNames } from './utils/classNames';

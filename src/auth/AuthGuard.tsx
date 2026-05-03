@@ -1,14 +1,13 @@
+import { getCurrentReturnUrl } from '@jankrajewskiit/auth';
 import { createEffect, createMemo, type JSX, Show } from 'solid-js';
 
+import { useAuth } from '~/auth';
 import AccessDenied from '~/components/feedback/AccessDenied/AccessDenied';
 import PageLoader from '~/components/loaders/PageLoader/PageLoader';
-import { useI18n } from '~/i18n/I18nProvider';
+import { useI18n } from '~/i18n';
 import type Props from '~/models/Props';
 
-import { useAuth } from './AuthProvider';
-import { getCurrentReturnUrl } from './utils';
-
-export type Role = 'admin' | 'user' | 'moderator';
+export type Role = string;
 export type UnauthorizedBehavior = 'access-denied' | 'redirect';
 
 interface AuthGuardProps {
@@ -36,7 +35,7 @@ const AuthGuard = (props: Props<AuthGuardProps>) => {
 
   createEffect(() => {
     if (!auth.isLoading() && !auth.isAuthenticated() && shouldRedirect()) {
-      window.location.href = '/';
+      void auth.signIn(getCurrentReturnUrl());
     }
   });
 
