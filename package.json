@@ -66,8 +66,8 @@
     }
   },
   "dependencies": {
-    "@jankrajewskiit/auth": "^2.0.6",
-    "@jankrajewskiit/i18n": "2.0.6",
+    "@jankrajewskiit/auth": "^2.0.7",
+    "@jankrajewskiit/i18n": "2.0.9",
     "remark-gfm": "^4.0.1"
   },
   "devDependencies": {

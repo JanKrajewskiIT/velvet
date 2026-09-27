@@ -13,8 +13,8 @@ npm install @jankrajewskiit/ui solid-js @solidjs/router
 `.npmrc` for GitHub Packages authentication:
 
 ```ini
-//npm.pkg.github.com/:_authToken=${GHCR_TOKEN}
-@jankrajewskiit:registry=https://npm.pkg.github.com/
+@jankrajewskiit:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
 ```
 
 ## Quick Start
