@@ -21,7 +21,7 @@
   "sideEffects": [
     "**/*.css"
   ],
-  "packageManager": "npm@11.13.0",
+  "packageManager": "npm@12.1.0",
   "files": [
     "dist/**/*",
     "styles.d.ts"
@@ -66,30 +66,30 @@
     }
   },
   "dependencies": {
-    "@jankrajewskiit/auth": "^0.2.2",
-    "@jankrajewskiit/i18n": "^0.1.5",
+    "@jankrajewskiit/auth": "^2.0.6",
+    "@jankrajewskiit/i18n": "2.0.6",
     "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "^0.18.2",
-    "@jankrajewskiit/configs": "^1.1.8",
-    "@size-limit/file": "^12.1.0",
-    "@solidjs/router": "^0.16.1",
-    "@types/node": "^25.6.0",
-    "eslint": "^9.39.4",
+    "@arethetypeswrong/cli": "^0.18.5",
+    "@jankrajewskiit/configs": "^2.0.6",
+    "@size-limit/file": "^14.1.0",
+    "@solidjs/router": "^1.0.0",
+    "@types/node": "^26.6.3",
+    "eslint": "^10.11.0",
     "husky": "^9.1.7",
-    "lint-staged": "^16.4.0",
+    "lint-staged": "^17.6.0",
     "oidc-client-ts": "^3.5.0",
-    "prettier": "^3.8.3",
-    "publint": "^0.3.18",
-    "size-limit": "^12.1.0",
+    "prettier": "^3.9.9",
+    "publint": "^0.3.24",
+    "size-limit": "^14.1.0",
     "solid-icons": "^1.2.0",
-    "solid-js": "^1.9.12",
+    "solid-js": "^1.9.15",
     "solid-markdown": "^2.1.1",
-    "stylelint": "^17.10.0",
-    "typescript": "~6.0.3",
-    "vite": "^8.0.10",
-    "vite-plugin-dts": "^5.0.0"
+    "stylelint": "^17.15.0",
+    "typescript": "~7.0.2",
+    "vite": "^8.3.1",
+    "vite-plugin-dts": "^5.1.1"
   },
   "size-limit": [
     {
