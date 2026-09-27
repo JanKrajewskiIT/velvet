@@ -27,7 +27,7 @@
     "styles.d.ts"
   ],
   "engines": {
-    "node": ">=25"
+    "node": ">=26"
   },
   "scripts": {
     "prepublishOnly": "npm run verify",

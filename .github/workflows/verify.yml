@@ -17,7 +17,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [25]
+        node-version: [26]
 
     steps:
       - uses: actions/checkout@v6
@@ -27,6 +27,9 @@ jobs:
           node-version: ${{ matrix.node-version }}
           scope: '@jankrajewskiit'
           cache: 'npm'
+
+      - name: Use repository npm version
+        run: npm install --global npm@12.1.0
 
       - name: Install dependencies
         run: npm ci
