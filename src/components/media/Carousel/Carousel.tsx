@@ -70,27 +70,27 @@ const Carousel = (props: Props<CarouselOwnProps>) => {
   });
 
   createEffect(() => {
-    const el = trackRef();
-    if (!el) return;
+    const initialTrack = trackRef();
+    if (!initialTrack) return;
 
     let rafId: number | undefined;
     const syncFromScroll = () => {
       if (rafId !== undefined) return;
       rafId = requestAnimationFrame(() => {
         rafId = undefined;
-        const count = el.children.length;
+        const count = initialTrack.children.length;
         if (count === 0) return;
-        const slideWidth = el.clientWidth;
-        const index = Math.round(el.scrollLeft / slideWidth);
+        const slideWidth = initialTrack.clientWidth;
+        const index = Math.round(initialTrack.scrollLeft / slideWidth);
         const clamped = Math.max(0, Math.min(index, count - 1));
         setActiveIndex(clamped);
       });
     };
 
-    el.addEventListener('scroll', syncFromScroll, { passive: true });
+    initialTrack.addEventListener('scroll', syncFromScroll, { passive: true });
     onCleanup(() => {
       if (rafId !== undefined) cancelAnimationFrame(rafId);
-      el.removeEventListener('scroll', syncFromScroll);
+      initialTrack.removeEventListener('scroll', syncFromScroll);
     });
   });
 

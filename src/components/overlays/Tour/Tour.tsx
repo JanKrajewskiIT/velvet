@@ -90,14 +90,14 @@ const Tour = (props: Props<TourProps>) => {
   // Keep spotlight + floating card in sync with viewport changes.
   createEffect(() => {
     if (!local.open) return;
-    const target = targetEl();
-    if (!target) return;
+    const initialTarget = targetEl();
+    if (!initialTarget) return;
     let rafId: number | undefined;
     const scheduleUpdate = (): void => {
       if (rafId !== undefined) return;
       rafId = requestAnimationFrame(() => {
         rafId = undefined;
-        updateSpotlight(target);
+        updateSpotlight(initialTarget);
       });
     };
     window.addEventListener('resize', scheduleUpdate);

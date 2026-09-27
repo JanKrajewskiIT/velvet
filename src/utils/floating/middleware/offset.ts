@@ -13,21 +13,15 @@ const offset = (value: number | OffsetOptions = 0): Middleware => ({
     const mainAxis = opts.mainAxis ?? 0;
     const crossAxis = opts.crossAxis ?? 0;
     const side = getSide(state.placement);
-    let dx = 0;
-    let dy = 0;
-    if (side === 'top') {
-      dy = -mainAxis;
-      dx = crossAxis;
-    } else if (side === 'bottom') {
-      dy = mainAxis;
-      dx = crossAxis;
-    } else if (side === 'left') {
-      dx = -mainAxis;
-      dy = crossAxis;
-    } else {
-      dx = mainAxis;
-      dy = crossAxis;
-    }
+    const [dx, dy] =
+      side === 'top'
+        ? [crossAxis, -mainAxis]
+        : side === 'bottom'
+          ? [crossAxis, mainAxis]
+          : side === 'left'
+            ? [-mainAxis, crossAxis]
+            : [mainAxis, crossAxis];
+
     return {
       x: state.x + dx,
       y: state.y + dy,

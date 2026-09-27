@@ -409,7 +409,11 @@ export { default as useFocusTrap } from './hooks/useFocusTrap';
 export type {
   ComposedDictionaries,
   DictionaryInput,
+  DictionaryNode,
+  FlatDictionary,
   I18nContextValue,
+  I18nDictionary,
+  I18nKey,
   I18nProviderProps,
   Locale,
   LocaleDictionariesInput,
