@@ -1,6 +1,6 @@
 # Primitives And Forms
 
-Status: Draft. Source component and prop names are evidence labels only. Under `USER-DEC-009`, the replacement API may be redesigned; preserve semantic input/output, validation, focus, form submission and user-visible state transitions.
+Status: Approved/Frozen. Source component and prop names are evidence labels only. Under `USER-DEC-009`, the replacement API may be redesigned; preserve semantic input/output, validation, focus, form submission and user-visible state transitions.
 
 ## Common Component Contract
 

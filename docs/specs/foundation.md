@@ -1,6 +1,6 @@
 # Foundation And Package
 
-Status: Draft. Requirement provenance is stated per section. Public implementation technology is constrained by the user's decision; internal architecture is not.
+Status: Approved/Frozen. Requirement provenance is stated per section. Public implementation technology is constrained by the user's decision; internal architecture is not.
 
 Names and structures shown in source requirements are traceability evidence, not replacement API requirements. Preserve explicitly fixed persistence keys, locale/date representations, CSS token names, dependency baseline and brand colors; redesign other public shapes as needed to provide the specified behavior.
 
@@ -15,6 +15,7 @@ Names and structures shown in source requirements are traceability evidence, not
 - `SOURCE-CI-002`: `.github/workflows/publish.yml` runs on `v*` tags; publish depends on the reusable verify workflow passing, uses Node 26/npm 12.1.0, installs locked dependencies with package token, then runs `npm publish` using GitHub token/package-write permission.
 - `SOURCE-CI-003`: Repository has no test/spec source files and no test script in package.json. Current CI gates typecheck, lint, CSS lint, package build/validation and moderate dependency audit; behavioral tests are not in the pipeline. This records the source baseline and does not require adding tests to the replacement.
 - `USER-PKG-003`: Preserve the dependency and peer ranges from package version 3.1.3. Any dependency addition/update, including the HTML sanitizer, requires separate approval.
+- `USER-PKG-004`: The user-approved sanitizer exception is `isomorphic-dompurify`; the replacement manifest must pin a concrete version and include its SSR-compatible runtime requirements. No other dependency additions are implied by this decision.
 - `SOURCE-PKG-004`: `src/index.ts` at baseline 3.1.3 is the source inventory for functionality; [export-catalog.md](export-catalog.md) maps every legacy export to a capability. Under `USER-DEC-009`, replacement export names and API signatures may differ.
 - `SOURCE-PKG-005`: Source consumers import global library CSS separately from JS through `./styles`. Preserve a separately consumable stylesheet at that subpath. The old `styles.d.ts` is empty and declares no token types. Private module selectors are not contracts.
 - `USER-APP-008`: Preserve the exact light/dark primary brand colors and related primary hover/subtle/focus/brand-gradient colors in [theme-tokens.md](theme-tokens.md). Other theme token values may improve.

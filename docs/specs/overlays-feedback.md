@@ -1,6 +1,6 @@
 # Overlays And Feedback
 
-Status: Draft. Preserve externally visible lifecycle, action ordering and outcomes while replacing fragile focus/portal mechanics where necessary. Source prop/object shapes and callback names are descriptive evidence; the replacement API may differ.
+Status: Approved/Frozen. Preserve externally visible lifecycle, action ordering and outcomes while replacing fragile focus/portal mechanics where necessary. Source prop/object shapes and callback names are descriptive evidence; the replacement API may differ.
 
 ## Overlay Contracts
 

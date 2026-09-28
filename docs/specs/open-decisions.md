@@ -45,8 +45,8 @@ These concrete refinements implement the user-approved behavior and quality dire
 - `AGENT-DEC-031`: Contrast-color input accepts optional `#` plus exactly six hexadecimal digits. Invalid input returns deterministic fallback `#1a1a1a` rather than calculating contrast from NaN channels.
 - `AGENT-DEC-032`: Editable scheduler events expose keyboard-operable actions to move one day earlier/later and extend/shorten the end by one day. Move shifts start/end dates together; resize keeps start fixed and cannot end before it. Each activation commits one change through the same semantic outcome as pointer interaction.
 
-## Unresolved
+## Resolved Decisions
 
-- `ASSUMPTION-001` (HTML sanitizer dependency): An HTML sanitizer is required for the accepted rich-text safety contract. The source package has no sanitizer dependency. Select and separately approve a maintained library for browser and SSR use; do not implement an ad hoc sanitizer.
+- `USER-DEC-012` (HTML sanitizer): Use the maintained `isomorphic-dompurify` package for browser and SSR sanitization. Pin a concrete approved version in the replacement manifest, keep sanitization at the rich-text boundary, and do not implement an ad hoc sanitizer. The allowlist and URL protocol rules remain those in `AGENT-DEC-021`.
 
-The rebuild cannot be frozen until the sanitizer dependency is approved and the source-capability, behavior, localization-message and styling-token evidence gates in `coverage.md` pass. Legacy declaration parity is not required.
+The specification is frozen for implementation. Legacy declaration parity is not required. Adding the approved sanitizer to the replacement manifest and running release validation are implementation tasks, not reasons to reopen this behavior brief.

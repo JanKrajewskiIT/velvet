@@ -1,6 +1,6 @@
 # Composite Widgets
 
-Status: Draft. The accessibility patterns below are behavior requirements, not a prescription to reuse the current helper implementation.
+Status: Approved/Frozen. The accessibility patterns below are behavior requirements, not a prescription to reuse the current helper implementation.
 
 Requirement entries describe source inputs and output semantics. Object field names, prop shapes and callback APIs may be redesigned; preserve the represented user data, ordering, selection and interaction outcomes rather than mechanically cloning these signatures.
 

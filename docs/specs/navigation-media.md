@@ -1,6 +1,6 @@
 # Navigation And Media
 
-Status: Draft. Routing integration requires `@solidjs/router` where the current router-backed behavior is needed. Source item/type shapes are evidence only; the replacement API may differ while preserving route matching, navigation outcomes and accessible state.
+Status: Approved/Frozen. Routing integration requires `@solidjs/router` where the current router-backed behavior is needed. Source item/type shapes are evidence only; the replacement API may differ while preserving route matching, navigation outcomes and accessible state.
 
 ## Navigation
 

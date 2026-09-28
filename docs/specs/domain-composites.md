@@ -1,6 +1,6 @@
 # Domain Composites
 
-Status: Draft. Components are reusable UI workflows; business data remains consumer-owned unless state is explicitly local. Source prop and data-object shapes are evidence only; replacement APIs may differ while preserving data meaning and workflow outcomes.
+Status: Approved/Frozen. Components are reusable UI workflows; business data remains consumer-owned unless state is explicitly local. Source prop and data-object shapes are evidence only; replacement APIs may differ while preserving data meaning and workflow outcomes.
 
 ## AI, Analysis And Comparison
 
@@ -12,7 +12,7 @@ Status: Draft. Components are reusable UI workflows; business data remains consu
 
 - `SOURCE-COMP-010`: `MarkdownRenderer` requires content string; renders Markdown with `remark-gfm` plugin through `solid-markdown`. `MarkdownEditDialog` requires open/label/initialValue/onSave/onClose. Draft resets to initialValue when opened. Preview is deferred by 150ms; save emits current draft then closes; cancel resets draft and closes. Its close/Escape path is cancel.
 - `SOURCE-COMP-011`: `CodeBlock` requires code string; optional language/maxHeight. Splits on newline, renders one-based line numbers, language placeholder when omitted, and copy action; maxHeight becomes CSS custom property. Copying uses clipboard feedback contract.
-- `USER-COMP-012`: `USER-DEC-002` is authoritative: Markdown with GFM does not render raw HTML; rich-text output is constrained and sanitized. Source uses an HTML string, but target value/callback names and representation may differ if formatting capability and safe rendered result remain equivalent. `AGENT-DEC-021` defines the tag/URI allowlist. Sanitizer dependency is unresolved in `ASSUMPTION-001`.
+- `USER-COMP-012`: `USER-DEC-002` is authoritative: Markdown with GFM does not render raw HTML; rich-text output is constrained and sanitized with `isomorphic-dompurify`. Source uses an HTML string, but target value/callback names and representation may differ if formatting capability and safe rendered result remain equivalent. `AGENT-DEC-021` defines the tag/URI allowlist.
 
 ## Collection And Workflow Components
 

@@ -1,6 +1,6 @@
 # Export Coverage And Evidence Gaps
 
-Status: **Not complete.** This is the required audit ledger before the specification can be approved. `src/index.ts` is the controlling source capability inventory; entries must be checked against the barrel, owning modules, styles, and available behavior evidence. Do not treat a family-level mention as complete behavioral coverage.
+Status: **Complete for the frozen behavior brief.** This audit ledger records the source capability inventory, owning specifications, acceptance scenarios and residual implementation gates. `src/index.ts` was the controlling source capability inventory for the baseline; do not treat a family-level mention as complete behavioral coverage during implementation.
 
 ## Coverage Rule
 
@@ -19,9 +19,9 @@ The source-to-capability audit should be tracked against [acceptance-matrix.md](
 - `GAP-004`: Dictionary leaf keys and placeholders are catalogued in `i18n-keys.md`. Locale detection, fallback and dictionary merge precedence are delegated to pinned `@jankrajewskiit/i18n` 2.0.9; `ACC-I18N-001` verifies the consumer-visible behavior without requiring a second implementation of that dependency.
 - `GAP-005`: Shared auth context/config implementation is external. Keep the dependency baseline `@jankrajewskiit/auth ^2.0.7`; match user-facing authentication state and OIDC redirect outcomes, without requiring the replacement to expose the dependency's public API. OIDC edge behavior remains dependency-owned and is not independently verified.
 - `GAP-007`: Reduced-motion rules are source-confirmed in 20 component stylesheets, but the full CSS-module audit is incomplete. This is a provenance limit rather than a target behavior gap: `AGENT-DEC-022` applies to the full replacement, with browser scenarios in `ACC-THEME-001` and `ACC-MEDIA-001`.
-- `GAP-009`: Content policy is defined in `USER-DEC-002`/`AGENT-DEC-021`; sanitizer dependency remains unresolved in `ASSUMPTION-001`. Imported URLs/files remain untrusted; client accept filters are not security validation and consumers must validate uploads/destinations at trusted server boundaries.
+- `GAP-009`: Content policy is defined in `USER-DEC-002`/`AGENT-DEC-021`; `USER-DEC-012` selects `isomorphic-dompurify` for the implementation. Imported URLs/files remain untrusted; client accept filters are not security validation and consumers must validate uploads/destinations at trusted server boundaries.
 - `GAP-012`: Source package identity, root/style entrypoints and build/CI/release workflow are described in `foundation.md`. The replacement must retain those distribution contracts; target release validation has not been run.
-- `GAP-013`: The sanitizer dependency required by the accepted content-safety contract is not yet selected/authorized (`ASSUMPTION-001`). Package build/release validation is a separate deployment gate; generated source API declarations are not a compatibility requirement under `USER-DEC-009`.
+- `GAP-013`: The sanitizer package is selected by `USER-DEC-012`; pin its concrete version in the replacement manifest. Package build/release validation is a separate implementation gate; generated source API declarations are not a compatibility requirement under `USER-DEC-009`.
 
 ## Confirmed Mappings
 
@@ -33,4 +33,4 @@ The source-to-capability audit should be tracked against [acceptance-matrix.md](
 
 ## Freeze Gate
 
-The handoff can be marked **Approved** only when `ASSUMPTION-001` is resolved, all localization/token/security contracts have acceptance evidence, specs pass `.agents/skills/implementation-spec-authoring/references/review-checklist.md`, and the user approves the frozen spec version. Matching legacy export names or TypeScript signatures is not a gate under `USER-DEC-009`.
+The handoff is **Approved/Frozen** because the source capability map, behavioral specs, acceptance matrix, security policy and dependency decision are recorded. Matching legacy export names or TypeScript signatures is not a gate under `USER-DEC-009`. Implementation must still pin the sanitizer version and perform its own release validation.

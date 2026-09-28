@@ -1,6 +1,6 @@
 # Date, Time And Scheduling
 
-Status: Draft. Source input/object shapes are evidence and may be redesigned. Current values are local date/time strings, not timestamps, except where explicitly stated; the approved local serialization format and calendar outcomes remain fixed.
+Status: Approved/Frozen. Source input/object shapes are evidence and may be redesigned. Current values are local date/time strings, not timestamps, except where explicitly stated; the approved local serialization format and calendar outcomes remain fixed.
 
 ## Date And Time Values
 

@@ -1,6 +1,6 @@
 # VelvetUi Clean-Room Specification
 
-Status: **Draft; not yet an implementation-authorizing handoff.** This specification describes the approved rebuild boundary and source-backed behavior gathered so far. It is not complete enough to replace source inspection yet: unresolved items in `open-decisions.md` and `coverage.md` must be closed and this index marked Approved before a rebuilding agent starts.
+Status: **Approved/Frozen; implementation-authorizing handoff.** This specification describes the approved rebuild boundary and source-backed behavior. The rebuilding agent may implement from these documents without reopening the old source. Release validation remains an implementation task.
 
 ## Outcome
 
@@ -46,8 +46,8 @@ The complete source dictionary messages/placeholders are in [i18n-keys.md](i18n-
 - `AGENT-ACC-002`: Every capability specifies meaningful inputs/outputs, state transitions, validation/errors, accessibility and edge cases. Source object/property names are evidence, not target contracts.
 - `AGENT-ACC-003`: Acceptance scenarios verify user-visible behavior against the replacement's own documented API; they do not assert old symbol names, DOM depth, or private selectors.
 - `SOURCE-ACC-004`: Preserve evidenced persistence semantics, local date model, primary brand palette, locale/theme behavior, auth redirect outcomes, toast effects and integration results.
-- `AGENT-ACC-005`: Correct security/accessibility defects only as documented in accepted refinements; use an approved safe HTML sanitizer before rendering/emitting rich text.
-- `AGENT-ACC-006`: When frozen, the specs plus approved implementation dependencies are sufficient without the old source. Until then, the source may be consulted to close listed gaps.
+- `AGENT-ACC-005`: Correct security/accessibility defects only as documented in accepted refinements; use `isomorphic-dompurify` with the approved allowlist and URL protocol policy before rendering/emitting rich text.
+- `AGENT-ACC-006`: The specs plus approved implementation dependencies are sufficient without the old source. Do not use the archived/source implementation as an additional design contract.
 - `AGENT-ACC-007`: Legacy object/property names in code font are source evidence unless a line is explicitly marked as a fixed format, persistence key, CSS token, or data protocol.
 
 ## Handoff Rule

@@ -1,6 +1,6 @@
 # Data Display
 
-Status: Draft. Source data shapes are evidence and may be redesigned. Preserve semantic data, callback/action timing, ordering and empty/loading/error outcomes.
+Status: Approved/Frozen. Source data shapes are evidence and may be redesigned. Preserve semantic data, callback/action timing, ordering and empty/loading/error outcomes.
 
 ## Lists, Trees And Timelines
 
