@@ -1,0 +1,25 @@
+<!-- @dsCard group="27 Planning" viewport="960x555" name="Timeline — pipeline" subtitle="Hiring stages: done · current · upcoming" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.pane{display:flex;flex-direction:column;gap:14px}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { Timeline, Card, Avatar, Badge } = NS;
+const App=()=>(<div className="pane"><div className="g2"><Card title="Anna Kowalska" description="Senior Frontend Engineer" actions={<Badge tone="info" size="sm" dot>Technical interview</Badge>}><Timeline items={[
+{id:1,status:'done',title:'Applied',time:'12 Sep',description:'Via careers page'},
+{id:2,status:'done',title:'CV screening',time:'14 Sep',description:'ATS match 82% · approved by Olga B.'},
+{id:3,status:'done',title:'Intro call',time:'19 Sep',description:'30 min · Olga Brzeska'},
+{id:4,status:'current',title:'Technical interview',time:'Today, 14:30',content:<div style={{display:'flex',alignItems:'center',gap:8}}><Avatar name="Jan Nowak" size="xs" /><span>Jan Nowak · Room 3</span></div>},
+{id:5,status:'upcoming',title:'Team fit',description:'Not scheduled'},
+{id:6,status:'upcoming',title:'Offer'}]} /></Card>
+<Card title="Krzysztof Lis" description="DevOps Engineer" actions={<Badge tone="danger" size="sm" dot>Rejected</Badge>}><Timeline items={[
+{id:1,status:'done',title:'Applied',time:'2 Sep'},
+{id:2,status:'done',title:'CV screening',time:'4 Sep',description:'ATS match 71%'},
+{id:3,status:'done',title:'Technical interview',time:'11 Sep'},
+{id:4,tone:'danger',icon:'x',title:'Rejected',time:'13 Sep',description:'Missing Kubernetes production experience'}]} /></Card></div></div>);
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

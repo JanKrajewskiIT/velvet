@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script><script src="./recron-data.js"></script><style>:root:root{overflow:auto!important;height:auto!important;background:var(--bg-page)!important}html body{margin:0!important;padding:0!important;background:var(--bg-page)!important}</style></helmet>
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.PageHeader" on-back="{{ back }}" back-label="Pipeline" eyebrow="{{ eyebrow }}" title="{{ title }}" status="{{ status }}" meta="{{ meta }}" actions="{{ headerActions }}" tabs="{{ tabs }}" active-tab="{{ tab }}" on-tab-change="{{ setTab }}" hint-size="100%,190px"></x-import>
+<sc-if value="{{ t.overview }}" hint-placeholder-val="{{ true }}">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:var(--space-4);align-items:start">
+<div style="grid-column:span 2;min-width:0;display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Job description" actions="{{ postingLink }}" hint-size="100%,520px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Markdown" source="{{ offer.description }}" size="sm" hint-size="100%,460px"></x-import>
+</x-import>
+</div>
+<div style="display:flex;flex-direction:column;gap:var(--space-4);min-width:0">
+<sc-if value="{{ hasMatch }}" hint-placeholder-val="{{ true }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.ScoreCard" label="CV match" score="{{ offer.match }}" verdict="{{ verdict }}" hint="Based on your current CV" criteria="{{ criteria }}" hint-size="100%,260px"></x-import>
+</sc-if>
+<sc-if value="{{ noMatch }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" hint-size="100%,220px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.EmptyState" size="sm" icon="sparkles" title="How well do you fit?" description="Compare your CV with this posting — strengths, gaps and what to change." actions="{{ runMatchBtn }}" hint-size="100%,200px"></x-import>
+</x-import>
+</sc-if>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Details" hint-size="100%,300px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.DescriptionList" items="{{ details }}" hint-size="100%,260px"></x-import>
+</x-import>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ t.match }}" hint-placeholder-val="{{ false }}">
+<sc-if value="{{ matchIdle }}" hint-placeholder-val="{{ true }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.AnalysisRequest" title="CV match" description="Recron reads your CV next to this posting and tells you where you stand." sources="{{ sources }}" analyses="{{ analyses }}" status="{{ matchRun }}" steps="{{ matchSteps }}" step="{{ matchStep }}" on-run="{{ runMatch }}" model="Claude · EU" estimate="≈ 3k tokens · 1 credit" run-label="Run match" hint-size="100%,520px"></x-import>
+</sc-if>
+<sc-if value="{{ matchDone }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.AiResultPanel" title="CV match" model="Claude · EU" elapsed="4.2 s" score="{{ mr.score }}" headline="{{ mr.headline }}" summary="{{ mr.summary }}" sections="{{ mr.sections }}" tokens="{{ 2840 }}" cost="1 credit" on-regenerate="{{ rerunMatch }}" hint-size="100%,560px"></x-import>
+</sc-if>
+</sc-if>
+<sc-if value="{{ t.letter }}" hint-placeholder-val="{{ false }}">
+<div style="display:grid;grid-template-columns:minmax(260px,1fr) minmax(0,2fr);gap:var(--space-4);align-items:start">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Cover letter" description="Written from your CV and this posting. Edit freely — it’s yours." hint-size="100%,360px">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.OptionSwitcher" label="Tone" variant="chips" options="{{ tones }}" value="{{ tone }}" on-value-change="{{ setTone }}" hint-size="100%,36px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Textarea" label="Anything to emphasise?" optional="{{ true }}" rows="{{ 3 }}" placeholder="e.g. my design-system work, relocation to Gdańsk" hint-size="100%,96px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Button" icon-left="sparkles" block="{{ true }}" loading="{{ letterLoading }}" on-click="{{ genLetter }}" hint-size="100%,40px">{{ genLabel }}</x-import>
+</div>
+</x-import>
+<sc-if value="{{ hasLetter }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Draft" description="{{ letterMeta }}" footer="{{ letterFooter }}" hint-size="100%,520px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Textarea" aria-label="Cover letter" value="{{ letter }}" on-change="{{ editLetter }}" rows="{{ 16 }}" max-rows="{{ 24 }}" hint-size="100%,420px"></x-import>
+</x-import>
+</sc-if>
+<sc-if value="{{ noLetter }}" hint-placeholder-val="{{ true }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" hint-size="100%,360px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.EmptyState" icon="file-text" title="No draft yet" description="Pick a tone and generate. You can regenerate or edit as much as you like." hint-size="100%,300px"></x-import>
+</x-import>
+</sc-if>
+</div>
+</sc-if>
+<sc-if value="{{ t.ats }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.AtsAnalysisPanel" status="{{ atsStatus }}" result="{{ ats }}" subject="Your CV" target="{{ offer.name }}" title="ATS check" model="Claude · EU" generated-at="just now" steps="{{ atsSteps }}" step="{{ atsStep }}" on-rerun="{{ runAts }}" on-retry="{{ runAts }}" hint-size="100%,640px"></x-import>
+<sc-if value="{{ atsEmpty }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;justify-content:center">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Button" icon-left="shield-check" on-click="{{ runAts }}" hint-size="200px,40px">Check my CV for this posting</x-import>
+</div>
+</sc-if>
+</sc-if>
+<sc-if value="{{ t.interviews }}" hint-placeholder-val="{{ false }}">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:var(--space-4);align-items:start">
+<div style="grid-column:span 2;min-width:0">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Interview loop" description="{{ loopDesc }}" hint-size="100%,420px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Timeline" items="{{ loop }}" on-add="{{ openSchedule }}" add-label="Schedule interview" hint-size="100%,360px"></x-import>
+</x-import>
+</div>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Prepare" description="Questions people get for roles like this" footer="{{ prepFooter }}" hint-size="100%,320px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.List" items="{{ prepList }}" size="sm" hint-size="100%,200px"></x-import>
+</x-import>
+</div>
+</sc-if>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Dialog" open="{{ scheduleOpen }}" on-close="{{ closeSchedule }}" title="Schedule interview" description="{{ scheduleDesc }}" footer="{{ scheduleFooter }}" size="md" hint-size="0,0">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FormGrid" columns="{{ 2 }}" hint-size="100%,220px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Select" label="Stage" options="{{ stages }}" value="{{ draft.stage }}" on-value-change="{{ setStage }}" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Select" label="Duration" options="{{ durations }}" value="{{ draft.duration }}" on-value-change="{{ setDuration }}" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.DateTimePicker" label="When" value="{{ draft.at }}" on-value-change="{{ setAt }}" min="{{ today }}" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Where" placeholder="Google Meet, office, phone…" value="{{ draft.location }}" on-change="{{ setLocation }}" hint-size="100%,64px"></x-import>
+</x-import>
+</x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { matchRun: 'idle', matchStep: 0, matchDone: {}, tone: 'Formal', letters: {}, letterLoading: false, atsStatus: {}, atsStep: 0, scheduleOpen: false, draft: { stage: 'Technical', duration: '60', at: null, location: '' } };
+  componentWillUnmount() { (this._tm || []).forEach(clearTimeout); }
+  later(fn, ms) { (this._tm = this._tm || []).push(setTimeout(fn, ms)); }
+  renderVals() {
+    const app = this.props.app || (window.RecronStandalone && window.VelvetUIDesignSystem_ee2bd8 && window.RecronStandalone(this));
+    if (!app) { clearTimeout(this._wt); this._wt = setTimeout(() => this.forceUpdate(), 80); return {}; }
+    const { D, U, NS, offers, interviews } = app;
+    const h = React.createElement;
+    const s = this.state;
+    const offer = offers.find((o) => o.id === app.offerId) || offers[0];
+    if (!offer) return { title: 'Offer not found', t: {}, back: () => app.go('pipeline') };
+    const st = D.STATUS[offer.status];
+    const tab = app.offerTab || 'overview';
+    const t = {}; t[tab] = true;
+    const loopItems = interviews.filter((i) => i.offerId === offer.id).sort((a, b) => new Date(a.at) - new Date(b.at));
+    const firstUpcoming = loopItems.find((i) => i.status === 'scheduled');
+    const mr = U.matchFor(offer);
+    const matchDone = !!s.matchDone[offer.id] || offer.match != null && s.matchRun === 'idle' && s.matchDone[offer.id] !== false;
+    const runMatch = () => {
+      this.setState({ matchRun: 'running', matchStep: 0 });
+      [1, 2, 3].forEach((k) => this.later(() => this.setState({ matchStep: k }), k * 700));
+      this.later(() => { this.setState({ matchRun: 'idle', matchDone: { ...s.matchDone, [offer.id]: true } }); if (offer.match == null) app.updateOffer(offer.id, { match: mr.score }); app.toast('CV match ready', 'success', mr.score + '% · ' + offer.company); }, 2900);
+    };
+    const atsStatus = s.atsStatus[offer.id] || 'empty';
+    const runAts = () => {
+      this.setState({ atsStatus: { ...s.atsStatus, [offer.id]: 'loading' }, atsStep: 0 });
+      [1, 2, 3].forEach((k) => this.later(() => this.setState({ atsStep: k }), k * 650));
+      this.later(() => this.setState({ atsStatus: { ...this.state.atsStatus, [offer.id]: 'done' } }), 2700);
+    };
+    const letter = s.letters[offer.id];
+    const genLetter = () => { this.setState({ letterLoading: true }); this.later(() => this.setState({ letterLoading: false, letters: { ...this.state.letters, [offer.id]: { text: U.letter(offer, this.state.tone), tone: this.state.tone } } }), 1300); };
+    const setDraft = (k) => (v) => this.setState({ draft: { ...this.state.draft, [k]: v && v.target ? v.target.value : v } });
+    const pad = (n) => String(n).padStart(2, '0');
+    const saveInterview = () => {
+      const d = s.draft; if (!d.at) return;
+      const at = d.at.getFullYear() + '-' + pad(d.at.getMonth() + 1) + '-' + pad(d.at.getDate()) + 'T' + pad(d.at.getHours()) + ':' + pad(d.at.getMinutes());
+      app.addInterview({ offerId: offer.id, stage: d.stage, status: 'scheduled', at, duration: +d.duration, location: d.location || 'TBC', notes: '' });
+      this.setState({ scheduleOpen: false, draft: { stage: 'HR', duration: '60', at: null, location: '' } });
+      app.toast('Interview scheduled', 'success', d.stage + ' · ' + U.relDay(at) + ', ' + U.fmtTime(at));
+    };
+    const related = D.questions.filter((q) => offer.tags.includes(q.category) || q.category === 'Behavioral' || q.category === 'JavaScript').slice(0, 4);
+    return {
+      offer, t, tab,
+      back: () => app.go('pipeline'),
+      eyebrow: offer.company,
+      title: offer.name,
+      status: { label: st.label, tone: st.tone },
+      meta: [{ icon: 'map-pin', label: offer.city + ' · ' + offer.workMode }, { icon: 'dollar-sign', label: U.salary(offer) }, { icon: 'link', label: offer.source + ' · added ' + U.relDay(offer.added).toLowerCase() }],
+      headerActions: h(React.Fragment, null,
+        h(NS.DropdownButton, { variant: 'secondary', items: D.STATUS_ORDER.map((k) => ({ label: D.STATUS[k].label, checked: offer.status === k, onSelect: () => { app.updateOffer(offer.id, { status: k }); app.toast('Moved to ' + D.STATUS[k].label, 'neutral', offer.name); } })) }, 'Move to'),
+        offer.status === 'applied' ? h(NS.Button, { iconLeft: 'calendar-plus', onClick: () => { app.setOfferTab('interviews'); this.setState({ scheduleOpen: true }); } }, 'Schedule interview') : h(NS.Button, { iconLeft: 'send', onClick: () => { app.updateOffer(offer.id, { status: 'applied' }); app.toast('Marked as applied', 'success', offer.company); } }, 'Mark as applied')),
+      tabs: [{ value: 'overview', label: 'Overview' }, { value: 'match', label: 'CV match', icon: 'sparkles' }, { value: 'letter', label: 'Cover letter' }, { value: 'ats', label: 'ATS check' }, { value: 'interviews', label: 'Interviews', count: loopItems.length || undefined }],
+      setTab: app.setOfferTab,
+      postingLink: h(NS.Button, { variant: 'ghost', size: 'sm', iconRight: 'external-link', onClick: () => window.open(offer.link, '_blank') }, 'Original posting'),
+      hasMatch: offer.match != null, noMatch: offer.match == null,
+      verdict: offer.match >= 80 ? 'Strong match' : offer.match >= 60 ? 'Good match' : 'Partial match',
+      criteria: [{ label: 'Skills', value: Math.min(100, (offer.match || 0) + 8) }, { label: 'Experience', value: Math.max(0, (offer.match || 0) - 4) }, { label: 'Keywords', value: Math.max(0, (offer.match || 0) - 15) }],
+      runMatchBtn: h(NS.Button, { size: 'sm', iconLeft: 'sparkles', onClick: () => app.setOfferTab('match') }, 'Run CV match'),
+      details: [
+        { term: 'Company', description: offer.company }, { term: 'Location', description: offer.city }, { term: 'Work mode', description: offer.workMode },
+        { term: 'Salary', description: U.salary(offer) }, { term: 'Source', description: offer.source },
+        { term: 'Tags', description: offer.tags.length ? h('span', { style: { display: 'flex', flexWrap: 'wrap', gap: 'var(--space-1)' } }, offer.tags.map((x) => h(NS.Tag, { key: x, size: 'sm', variant: 'soft', tone: 'brand' }, x))) : null }
+      ],
+      matchIdle: !matchDone, matchDone, mr,
+      matchRun: s.matchRun, matchStep: s.matchStep, matchSteps: ['Reading your CV', 'Reading the posting', 'Matching requirements', 'Writing the summary'],
+      sources: [{ id: 'cv', label: 'Your CV', kind: 'cv', detail: 'Updated 3 days ago · 2 pages' }, { id: 'job', label: offer.name, kind: 'job', detail: offer.company }, { id: 'profile', label: 'Profile', kind: 'profile', detail: D.profile.role + ' · ' + D.profile.years + ' yrs' }],
+      analyses: [{ id: 'match', label: 'Fit check', description: 'Score, strengths, gaps, next steps', icon: 'target', requires: ['cv', 'job'] }, { id: 'gaps', label: 'Gap analysis', description: 'Only what’s missing', icon: 'search', requires: ['cv', 'job'] }],
+      runMatch, rerunMatch: () => { this.setState({ matchDone: { ...s.matchDone, [offer.id]: false } }); },
+      tones: ['Formal', 'Friendly', 'Concise'], tone: s.tone, setTone: (v) => this.setState({ tone: v }),
+      letterLoading: s.letterLoading, genLetter, genLabel: letter ? 'Regenerate' : 'Generate draft',
+      hasLetter: !!letter, noLetter: !letter, letter: letter ? letter.text : '',
+      letterMeta: letter ? letter.tone + ' · ' + letter.text.split(/\s+/).length + ' words' : '',
+      editLetter: (e) => this.setState({ letters: { ...s.letters, [offer.id]: { ...letter, text: e.target.value } } }),
+      letterFooter: letter ? h(React.Fragment, null, h(NS.CopyButton, { value: letter.text, variant: 'secondary', size: 'sm' }), h(NS.Button, { size: 'sm', iconLeft: 'download', onClick: () => app.toast('Downloaded', 'success', 'cover-letter-' + offer.company.toLowerCase().replace(/\s+/g, '-') + '.pdf') }, 'Download PDF')) : null,
+      atsStatus, ats: atsStatus === 'done' ? U.atsFor(offer) : null, atsEmpty: atsStatus === 'empty', runAts, atsStep: s.atsStep, atsSteps: ['Parsing CV layout', 'Extracting keywords', 'Scoring sections', 'Writing recommendations'],
+      loopDesc: loopItems.length ? loopItems.filter((i) => i.status === 'done').length + ' of ' + loopItems.length + ' done' + (firstUpcoming ? ' · next ' + U.relDay(firstUpcoming.at).toLowerCase() : '') : 'Nothing scheduled yet',
+      loop: loopItems.map((i) => ({
+        id: i.id, title: i.stage, description: i.notes || undefined,
+        time: U.fmtDate(i.at, { weekday: 'short', day: 'numeric', month: 'short' }) + ', ' + U.fmtTime(i.at),
+        status: i.status === 'done' ? 'done' : i === firstUpcoming ? 'current' : 'upcoming',
+        badge: i.status === 'done' ? { label: 'Done', icon: 'check', tone: 'success' } : i === firstUpcoming ? { label: U.relDay(i.at), tone: 'brand' } : undefined,
+        meta: [{ icon: 'clock', label: i.duration + ' min' }, { icon: 'map-pin', label: i.location }],
+        actions: i.status === 'done' ? [] : [{ id: 'cal', label: 'Add to calendar', icon: 'calendar-plus', onClick: () => app.toast('Added to Google Calendar', 'success', i.stage + ' · ' + offer.company) }, { id: 'del', label: 'Cancel interview', icon: 'trash-2', tone: 'danger', confirm: 'Cancel this interview?', onClick: () => app.removeInterview(i.id) }]
+      })),
+      openSchedule: () => this.setState({ scheduleOpen: true }),
+      prepList: related.map((q) => ({ id: q.id, title: q.question, leading: h(NS.Badge, { size: 'sm', tone: 'brand' }, q.category) })),
+      prepFooter: h(NS.Button, { size: 'sm', variant: 'soft', iconLeft: 'book-open', onClick: () => { app.setPrepTab('practice'); app.go('prep'); } }, 'Practise these'),
+      scheduleOpen: s.scheduleOpen, closeSchedule: () => this.setState({ scheduleOpen: false }),
+      scheduleDesc: offer.name + ' · ' + offer.company,
+      scheduleFooter: h(React.Fragment, null, h(NS.Button, { variant: 'secondary', onClick: () => this.setState({ scheduleOpen: false }) }, 'Cancel'), h(NS.Button, { disabled: !s.draft.at, onClick: saveInterview }, 'Schedule')),
+      stages: D.STAGES, durations: [{ value: '30', label: '30 min' }, { value: '45', label: '45 min' }, { value: '60', label: '1 hour' }, { value: '90', label: '1.5 hours' }],
+      draft: s.draft, setStage: setDraft('stage'), setDuration: setDraft('duration'), setAt: setDraft('at'), setLocation: setDraft('location'),
+      today: D.TODAY
+    };
+  }
+}
+</script>
+</body>
+</html>

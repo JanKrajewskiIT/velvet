@@ -1,0 +1,21 @@
+/* EventCalendar */
+.vui-evcal{display:inline-flex;flex-direction:column;gap:var(--space-4);width:min-content;max-width:100%;min-width:0}
+.vui-evcal--split{display:grid;grid-template-columns:auto minmax(220px,300px);gap:var(--space-6);width:max-content;align-items:start}
+.vui-evcal--split .vui-evcal__agenda{padding:0 0 0 var(--space-6);border-top:0;border-left:var(--border-width) solid var(--border-subtle);align-self:stretch}
+@media (max-width:620px){.vui-evcal--split{display:inline-flex;flex-direction:column;width:min-content}
+.vui-evcal--split .vui-evcal__agenda{padding:var(--space-4) 0 0;border-left:0;border-top:var(--border-width) solid var(--border-subtle)}}
+.vui-evcal__agenda{align-self:stretch;padding-top:var(--space-4);border-top:var(--border-width) solid var(--border-subtle)}
+.vui-evcal__agenda{display:flex;flex-direction:column;gap:var(--space-3);min-width:0}
+.vui-evcal__date{font-family:var(--font-display);font-weight:var(--type-title-weight);font-size:var(--type-body-size);letter-spacing:var(--type-title-tracking)}
+.vui-evcal__list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:var(--space-3)}
+.vui-evcal__ev{display:grid;grid-template-columns:52px 8px minmax(0,1fr);gap:var(--space-2-5);align-items:start}
+.vui-evcal__ev--success .vui-evcal__dot{background:var(--status-success-solid)}
+.vui-evcal__ev--warning .vui-evcal__dot{background:var(--status-warning-solid)}
+.vui-evcal__ev--danger .vui-evcal__dot{background:var(--status-danger-solid)}
+.vui-evcal__ev--info .vui-evcal__dot{background:var(--status-info-solid)}
+.vui-evcal__time{font:var(--type-label-weight) var(--type-caption-size)/20px var(--font-mono);color:var(--fg-tertiary);font-variant-numeric:tabular-nums}
+.vui-evcal__dot{margin-top:var(--space-1-5);background:var(--action-primary)}
+.vui-evcal__body{display:flex;flex-direction:column;gap:var(--space-0-5);min-width:0}
+.vui-evcal__title{font-size:var(--type-body-sm-size);color:var(--fg-primary);line-height:20px}
+.vui-evcal__desc{font-size:var(--type-caption-size);color:var(--fg-secondary)}
+.vui-evcal__empty{padding:0}

@@ -1,0 +1,45 @@
+/* Comparison — series avatars are the Avatar component with color="var(--c)". */
+.vui-cmpbar{display:flex;align-items:center;gap:var(--space-3-5);padding:var(--space-2) var(--space-2) var(--space-2) var(--space-2-5);border:var(--border-width) solid var(--border-default);border-radius:var(--radius-xl);background:var(--bg-overlay);box-shadow:var(--elevation-raised);font-family:var(--font-sans);color:var(--fg-primary);max-width:100%;box-sizing:border-box}
+.vui-cmpbar--floating{position:fixed;left:50%;bottom:var(--space-5);z-index:var(--z-sticky);width:max-content;max-width:calc(100vw - 2 * var(--viewport-margin));transform:translate(-50%,calc(100% + 40px));opacity:0;pointer-events:none;transition:transform var(--motion-enter),opacity var(--motion-base)}
+.vui-cmpbar--floating.vui-cmpbar--shown{transform:translate(-50%,0);opacity:1;pointer-events:auto}
+.vui-cmpbar:not(.vui-cmpbar--floating):not(.vui-cmpbar--shown){opacity:.6}
+.vui-cmpbar__items{display:flex;align-items:center;gap:var(--space-1-5);min-width:0;overflow-x:auto}
+.vui-cmpbar__chip{display:inline-flex;align-items:center;gap:var(--space-1-5);flex:none;height:var(--control-height-sm);padding:0 var(--space-1) 0 var(--space-1);border-radius:var(--radius-full);background:color-mix(in oklab,var(--c) 12%,var(--bg-raised));box-shadow:inset 0 0 0 var(--border-width) color-mix(in oklab,var(--c) 35%,transparent);animation:vui-cmp-pop var(--motion-spring)}
+.vui-cmpbar__lbl{max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:var(--type-body-sm-size);font-weight:var(--type-label-weight)}
+.vui-cmpbar__x{display:grid;place-items:center;width:22px;height:22px;border:0;border-radius:50%;background:none;color:var(--fg-tertiary);cursor:pointer;font-size:var(--type-caption-size)}
+.vui-cmpbar__x:hover{background:var(--bg-hover);color:var(--fg-primary)}
+.vui-cmpbar__x:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.vui-cmpbar__slot{display:grid;place-items:center;flex:none;width:var(--control-height-sm);height:var(--control-height-sm);border-radius:50%;border:var(--border-width-medium) dashed var(--border-default);color:var(--fg-disabled);font-size:var(--type-body-sm-size)}
+.vui-cmpbar__hint{flex:none;font-size:var(--type-caption-size);color:var(--fg-tertiary);white-space:nowrap}
+.vui-cmpbar__hint--over{color:var(--status-warning-fg)}
+.vui-cmpbar__acts{display:flex;gap:var(--space-1);margin-left:auto;flex:none}
+@keyframes vui-cmp-pop{from{transform:scale(.7);opacity:0}to{transform:none;opacity:1}}
+@media (max-width:640px){.vui-cmpbar{flex-wrap:wrap}.vui-cmpbar__hint{order:3;flex-basis:100%}}
+@media (prefers-reduced-motion:reduce){.vui-cmpbar--floating,.vui-cmpbar__chip{transition:opacity var(--motion-base);animation:none}}
+.vui-cmpdlg .vui-dialog__body{min-width:0}
+.vui-cmpdlg__body{display:flex;flex-direction:column;gap:var(--space-5);min-width:0}
+.vui-cmpdlg__cols{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:var(--space-2)}
+.vui-cmpdlg__col{display:flex;align-items:center;gap:var(--space-2-5);min-width:0;padding:var(--space-2-5) var(--space-3);border-radius:var(--radius-lg);background:color-mix(in oklab,var(--c) 8%,var(--bg-raised));box-shadow:inset 0 var(--border-width-accent) 0 var(--c),inset 0 0 0 var(--border-width) var(--border-subtle)}
+.vui-cmpdlg__ct{flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--space-0-5)}
+.vui-cmpdlg__ct b{font-size:var(--type-body-sm-size);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vui-cmpdlg__ct small{font-size:var(--type-caption-size);color:var(--fg-tertiary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vui-cmpdlg__score{flex:none;font:var(--type-heavy-weight) var(--type-title-lg-size)/1 var(--font-display);font-variant-numeric:tabular-nums}
+.vui-cmpdlg__radar{display:flex;justify-content:center;padding:var(--space-1) 0}
+.vui-cmpdlg__tablewrap{overflow-x:auto;border:var(--border-width) solid var(--border-subtle);border-radius:var(--radius-lg)}
+.vui-cmpdlg__table{width:100%;border-collapse:collapse;font-size:var(--type-body-sm-size)}
+.vui-cmpdlg__table th,.vui-cmpdlg__table td{padding:var(--space-2-5) var(--space-3-5);border-bottom:var(--border-width) solid var(--border-subtle);text-align:left;vertical-align:top}
+.vui-cmpdlg__table tr:last-child>*{border-bottom:0}
+.vui-cmpdlg__table thead th{background:var(--bg-subtle);font-weight:var(--type-title-weight);font-size:var(--type-caption-size);color:var(--fg-secondary);box-shadow:inset 0 calc(-1 * var(--border-width-thick)) 0 var(--c,transparent)}
+.vui-cmpdlg__table tbody th{position:sticky;left:0;background:var(--bg-raised);font-weight:var(--type-label-weight);color:var(--fg-primary);min-width:140px}
+.vui-cmpdlg__table tbody th small{display:block;margin-top:var(--space-0-5);font-weight:var(--type-body-weight);font-size:var(--type-caption-size);color:var(--fg-tertiary)}
+.vui-cmpdlg__table td{color:var(--fg-secondary);font-variant-numeric:tabular-nums}
+.vui-cmpdlg__best{color:var(--fg-primary)!important;font-weight:var(--type-title-weight);background:var(--status-success-bg)}
+.vui-cmpdlg__best .vui-icon{margin-left:var(--space-1-5);font-size:var(--type-caption-size);color:var(--status-success-fg);vertical-align:-1px}
+.vui-cmpdlg__ins{display:flex;flex-direction:column;gap:var(--space-2-5);padding:var(--space-3-5) var(--space-4);border-radius:var(--radius-lg);background:linear-gradient(135deg,var(--bg-brand-subtle),var(--bg-subtle))}
+.vui-cmpdlg__ins h4{display:flex;align-items:center;gap:var(--space-1-5);margin:0;color:var(--fg-brand);font:var(--type-section);letter-spacing:var(--type-section-tracking);text-transform:uppercase}
+.vui-cmpdlg__instext{font-size:var(--type-body-sm-size);color:var(--fg-primary);line-height:1.55}
+.vui-cmpdlg__insload{display:flex;align-items:center;gap:var(--space-2);font-size:var(--type-body-sm-size);color:var(--fg-brand)}
+.vui-cmpdlg__insempty{display:flex;align-items:center;justify-content:space-between;gap:var(--space-3);flex-wrap:wrap;font-size:var(--type-body-sm-size);color:var(--fg-secondary)}
+.vui-cmpdlg__state{display:flex;flex-direction:column;align-items:center;gap:var(--space-3);padding:var(--space-12) var(--space-4);text-align:center;font-size:var(--type-body-sm-size);color:var(--fg-secondary)}
+.vui-cmpdlg__state--err>.vui-icon{font-size:28px;color:var(--status-danger-fg)}
+@media (max-width:640px){.vui-cmpdlg__cols{grid-template-columns:minmax(0,1fr)}}

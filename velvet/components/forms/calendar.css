@@ -1,0 +1,29 @@
+/* Calendar */
+.vui-cal{display:flex;gap:var(--space-6);user-select:none}
+.vui-cal__month{display:flex;flex-direction:column;gap:var(--space-1-5);width:calc(7 * var(--cal-cell))}
+.vui-cal__head{display:flex;align-items:center;justify-content:space-between;height:var(--control-height-sm)}
+.vui-cal__title{font:var(--type-title-weight) var(--type-body-size)/1 var(--font-display);letter-spacing:var(--type-title-tracking)}
+.vui-cal__nav-sp{width:var(--control-height-sm)}
+.vui-cal__grid{display:grid;grid-template-columns:repeat(7,var(--cal-cell));row-gap:var(--space-0-5)}
+.vui-cal__wd{display:grid;place-items:center;height:var(--control-height-inner)}
+.vui-cal__day{position:relative;display:grid;place-items:center;width:var(--cal-cell);height:var(--cal-cell);padding:0;border:0;border-radius:var(--radius-md);background:none;color:var(--fg-primary);font:var(--type-body-weight) var(--type-body-sm-size)/1 var(--font-sans);font-variant-numeric:tabular-nums;cursor:pointer;transition:background-color var(--motion-fast)}
+.vui-cal__day:hover:not(:disabled){background:var(--bg-hover)}
+.vui-cal__day:focus-visible{outline:none;box-shadow:var(--focus-ring);z-index:1}
+.vui-cal__day--out{color:var(--fg-disabled)}
+.vui-cal__day--today{font-weight:var(--type-title-weight);color:var(--fg-brand)}
+.vui-cal__day--today::after{content:"";position:absolute;bottom:5px;width:14px;height:var(--border-width-thick);border-radius:var(--radius-2xs);background:currentColor}
+.vui-cal__day--in{border-radius:0;background:var(--bg-selected)}
+.vui-cal__day--in:hover:not(:disabled){background:var(--action-soft-hover)}
+.vui-cal__day--sel,.vui-cal__day--sel:hover:not(:disabled){background:var(--action-primary);color:var(--action-primary-fg);font-weight:var(--type-title-weight)}
+.vui-cal__day--sel.vui-cal__day--today::after{background:var(--action-primary-fg)}
+.vui-cal__day--start{border-radius:var(--radius-md) 0 0 var(--radius-md);box-shadow:8px 0 0 -0px var(--bg-selected)}
+.vui-cal__day--end{border-radius:0 var(--radius-md) var(--radius-md) 0}
+.vui-cal__day--start.vui-cal__day--end{border-radius:var(--radius-md);box-shadow:none}
+.vui-cal__day--sel:disabled{text-decoration:none}
+.vui-cal__day:disabled{color:var(--fg-disabled);cursor:not-allowed;text-decoration:line-through;text-decoration-color:var(--border-default)}
+.vui-cal__mark{position:absolute;bottom:var(--space-1);width:4px;height:4px;border-radius:50%;background:var(--action-primary)}
+.vui-cal__day--sel .vui-cal__mark{background:var(--action-primary-fg)}
+.vui-cal__day--today .vui-cal__mark{bottom:var(--space-2)}
+@media (max-width:599px){.vui-cal__month{width:100%}
+.vui-cal__grid{grid-template-columns:repeat(7,1fr)}
+.vui-cal__day{width:100%}}

@@ -1,0 +1,6 @@
+/* Divider */
+.vui-divider{display:flex;align-items:center;gap:var(--space-3);color:var(--fg-tertiary);font-size:var(--type-caption-size);width:100%}
+.vui-divider::before,.vui-divider::after{content:"";flex:1;height:var(--border-width);background:var(--border-default)}
+.vui-divider--plain::after{display:none}
+.vui-divider--vertical{flex-direction:column;width:auto;align-self:stretch}
+.vui-divider--vertical::before{width:var(--border-width);height:auto}

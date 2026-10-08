@@ -1,0 +1,19 @@
+<!-- @dsCard group="26 Data" viewport="960x414" name="Table — sort, bulk, keyboard, loading" subtitle="Click headers · ↑↓ · Space · ⌘A · Esc" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.pane{display:flex;flex-direction:column;gap:12px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.lbl{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);width:72px;flex:none}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { Table, Card, Badge, Avatar, Button, Tabs } = NS;
+const ROWS=[{id:1,name:'Marek Nowak',role:'Admin',status:'Active',tone:'success',mrr:1240},{id:2,name:'Julia Wiśniewska',role:'Editor',status:'Invited',tone:'warning',mrr:0},{id:3,name:'Anna Kowalska',role:'Owner',status:'Active',tone:'success',mrr:3890},{id:4,name:'Piotr Zieliński',role:'Viewer',status:'Suspended',tone:'danger',mrr:420}];
+const App=()=>{const[sel,setSel]=React.useState([3]);const[mode,setMode]=React.useState('data');const[den,setDen]=React.useState('comfortable');
+return(<div className="pane"><div className="r" style={{justifyContent:'space-between'}}><Tabs variant="segmented" value={mode} onChange={setMode} items={[{value:'data',label:'Data'},{value:'loading',label:'Loading'},{value:'empty',label:'Empty'}]} /><Tabs variant="segmented" value={den} onChange={setDen} items={[{value:'comfortable',label:'Comfortable'},{value:'compact',label:'Compact'}]} /></div>
+<div data-density={den}><Card padding="none"><Table selectable selected={sel} onSelectedChange={setSel} loading={mode==='loading'} loadingRows={3} rows={mode==='empty'?[]:ROWS} defaultSort={{key:'mrr',dir:'desc'}} empty="No members match this filter."
+bulkActions={<><Button size="sm" variant="secondary" iconLeft="download">Export</Button><Button size="sm" variant="danger" iconLeft="trash-2">Remove</Button></>}
+columns={[{key:'name',label:'Member',sortable:true,render:r=><span className="r" style={{gap:8}}><Avatar name={r.name} size="sm" />{r.name}</span>},{key:'role',label:'Role',sortable:true,hideOnMobile:true},{key:'status',label:'Status',render:r=><Badge tone={r.tone} dot>{r.status}</Badge>},{key:'mrr',label:'MRR',align:'right',sortable:true,render:r=>'€'+r.mrr.toLocaleString('en')}]} /></Card></div></div>);};
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

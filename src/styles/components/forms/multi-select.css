@@ -1,0 +1,6 @@
+/* MultiSelect */
+.vui-multi__caret{display:grid;place-items:center;align-self:center;margin-left:auto;padding:0 var(--space-1);color:var(--fg-tertiary);cursor:pointer}
+.vui-multi__menu{padding:0;display:flex;flex-direction:column;overflow:hidden;max-height:var(--overlay-max-h-sm)}
+.vui-multi__list{flex:1;overflow-y:auto;margin:0;padding:var(--space-1);list-style:none}
+.vui-multi__option[aria-selected="true"]{color:var(--fg-primary);font-weight:var(--type-body-weight)}
+.vui-multi__foot{display:flex;align-items:center;justify-content:space-between;gap:var(--space-2);min-height:var(--control-height-md);padding:var(--space-1) var(--space-3);border-top:var(--border-width) solid var(--border-subtle);background:var(--bg-subtle);font-size:var(--type-caption-size);color:var(--fg-tertiary)}

@@ -1,0 +1,27 @@
+<!-- @dsCard group="01 Overview" viewport="960x380" name="Token lint" subtitle="Live scan of component CSS — ref reads, colour & px literals" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../styles.bundle.css"><link rel="stylesheet" href="card.css"><script src="../assets/theme-toggle.js"></script><script src="card.js"></script></head><body><div class="col" style="gap:16px">
+<div class="grid" id="sum" style="grid-template-columns:repeat(4,minmax(0,1fr));gap:12px"></div>
+<div class="grid" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start">
+<div class="stack" style="gap:6px"><span class="hd">px literals · top files</span><div id="px" class="stack" style="gap:4px"></div></div>
+<div class="stack" style="gap:6px"><span class="hd">ref-token reads in components</span><div id="ref" class="stack" style="gap:4px"></div><span class="hd" style="margin-top:10px">colour literals</span><div id="col" class="stack" style="gap:4px"></div></div>
+</div></div>
+<script>
+const REF=/var\(--(velvet|neutral|success|warning|danger|info|hue|syntax|font-size|font-weight|dur|shadow)-[a-z0-9-]+/g;
+const ALLOW=['var(--shadow-media'];
+const tile=(k,v,ok)=>'<div style="padding:12px 14px;border-radius:var(--radius-md);background:var(--bg-subtle)"><div class="k">'+k+'</div><div style="font:var(--type-kpi);letter-spacing:var(--type-kpi-tracking);margin-top:6px;color:'+(ok?'var(--status-success-fg)':'var(--fg-primary)')+'">'+v+'</div></div>';
+const line=(a,b,warn)=>'<div class="grid" style="grid-template-columns:minmax(0,1fr) auto;gap:12px"><span class="k" style="color:var(--fg-secondary)">'+a+'</span><span class="v" style="color:'+(warn?'var(--status-warning-fg)':'var(--fg-tertiary)')+'">'+b+'</span></div>';
+(async()=>{
+ const src=await (await fetch('../styles.css')).text();
+ const files=[...src.matchAll(/@import url\("(components\/[^"]+)"\)/g)].map(m=>m[1]);
+ const texts=await Promise.all(files.map(f=>fetch('../'+f).then(r=>r.text()).catch(()=>'')));
+ let px=0,refs=[],cols=[];const per=[];
+ files.forEach((f,i)=>{const t=texts[i].replace(/\/\*[\s\S]*?\*\//g,'').replace(/@media[^{]+\{/g,'{');const name=f.split('/').pop();
+  const n=(t.match(/[\s:(,]-?\d+(\.\d+)?px/g)||[]).length;if(name!=='loaders.css')px+=n;per.push([name,n]);
+  const r=(t.match(REF)||[]).filter(x=>!ALLOW.some(a=>x.startsWith(a)));if(r.length)refs.push([name,[...new Set(r.map(x=>x.slice(4)))].join(' ')]);
+  const c=(t.match(/#[0-9a-f]{3,8}\b|\b(rgba?|hsla?|oklch)\(/gi)||[]).length;if(c)cols.push([name,c]);});
+ document.getElementById('sum').innerHTML=tile('files scanned',files.length)+tile('ref-token reads',refs.reduce((a,r)=>a+r[1].split(' ').length,0),!refs.length)+tile('colour literals',cols.reduce((a,c)=>a+c[1],0),!cols.length)+tile('px literals · excl. loaders',px);
+ per.sort((a,b)=>b[1]-a[1]);document.getElementById('px').innerHTML=per.slice(0,12).map(([n,v])=>line(n,v,v>15)).join('');
+ document.getElementById('ref').innerHTML=refs.length?refs.slice(0,6).map(([n,v])=>line(n,v,true)).join(''):line('none','✓');
+ document.getElementById('col').innerHTML=cols.length?cols.slice(0,4).map(([n,v])=>line(n,v,true)).join(''):line('none','✓');
+})();
+</script></body></html>

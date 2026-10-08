@@ -1,0 +1,14 @@
+/* Option — also styles the legacy row classes so every listbox shares one row */
+.vui-option,.vui-menu__item,.vui-select__option{display:flex;align-items:center;gap:var(--option-gap);min-height:var(--option-height);padding:var(--space-1-5) var(--option-px);border-radius:var(--option-radius);font:var(--type-body);color:var(--option-fg);cursor:pointer;user-select:none;scroll-margin:var(--panel-pad);outline:0}
+.vui-menu__item{min-height:var(--control-height-inner-lg)}
+.vui-option>.vui-icon,.vui-menu__item>.vui-icon{flex:none;font-size:var(--size-icon-md);color:var(--option-icon)}
+.vui-option--active,.vui-option:hover:not([aria-disabled]),.vui-menu__item--active,.vui-select__option--active{background:var(--option-bg-active)}
+.vui-option--active>.vui-icon,.vui-menu__item--active>.vui-icon{color:var(--fg-primary)}
+.vui-option--danger,.vui-option--danger>.vui-icon,.vui-menu__item--danger,.vui-menu__item--danger>.vui-icon{color:var(--option-danger-fg)}
+.vui-option--danger.vui-option--active,.vui-menu__item--danger.vui-menu__item--active{background:var(--option-danger-bg-active)}
+.vui-option[aria-disabled],.vui-menu__item[aria-disabled]{opacity:var(--opacity-disabled);cursor:not-allowed}
+.vui-option__label{flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--space-0-5)}
+.vui-option__desc{font:var(--type-caption);color:var(--fg-tertiary)}
+.vui-option__kbd{flex:none;font:var(--type-kbd);letter-spacing:var(--type-section-tracking);color:var(--fg-tertiary)}
+.vui-option__check{display:grid;place-items:center;flex:none;width:var(--size-icon-md);color:var(--option-check);font-size:var(--size-icon-md)}
+@media (pointer:coarse){.vui-option,.vui-menu__item,.vui-select__option{min-height:var(--hit-target-min)}}

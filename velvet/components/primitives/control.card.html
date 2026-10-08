@@ -1,0 +1,15 @@
+<!-- @dsCard group="11 Atoms" viewport="960x250" name="Control" subtitle="Bordered field shell · sizes · adornments · states" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.pane{display:flex;flex-direction:column;gap:12px}.lbl{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary)}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.g{display:grid;gap:8px}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { Control } = NS;
+const I=(p)=><input className="vui-control__input" aria-label={p.l} defaultValue={p.v} placeholder={p.ph} />;
+const App=()=>(<div className="pane"><div className="lbl">sizes</div><div className="g" style={{gridTemplateColumns:'repeat(3,1fr)'}}><Control size="sm"><I l="sm" ph="sm · 32" /></Control><Control><I l="md" ph="md · 40" /></Control><Control size="lg"><I l="lg" ph="lg · 48" /></Control></div><div className="lbl">adornments · states</div><div className="g" style={{gridTemplateColumns:'repeat(3,1fr)'}}><Control iconLeft="search"><I l="Search" ph="Search…" /></Control><Control prefix="velvet.app/"><I l="URL" v="atlas" /></Control><Control suffix="PLN"><I l="Amount" v="1 200" /></Control><Control invalid><I l="Invalid" v="anna@" /></Control><Control readOnly><I l="Read-only" v="INV-2041" /></Control><Control disabled><I l="Disabled" v="Disabled" /></Control></div></div>);
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

@@ -1,0 +1,11 @@
+/* DatePicker */
+.vui-datepicker{display:flex;width:100%}
+.vui-datefield{display:flex;align-items:center;gap:var(--space-2);flex:1;min-width:0;height:100%;padding:0 var(--control-pad-x);border:0;background:none;color:var(--fg-primary);font:inherit;font-size:var(--type-body-size);text-align:left;cursor:pointer;outline:0;border-radius:inherit}
+.vui-datefield .vui-icon{color:var(--fg-tertiary);font-size:var(--type-body-lg-size)}
+.vui-datefield__text{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vui-datefield__text--empty{color:var(--fg-tertiary)}
+.vui-control:has(.vui-datefield:focus-visible){border-color:var(--border-focus);box-shadow:var(--focus-ring)}
+.vui-control:has(.vui-datefield){padding:0}
+.vui-popover.vui-datepop{top:calc(100% + var(--overlay-offset));padding:var(--space-3);min-width:0;max-width:none;width:max-content}
+@media (max-width:599px){.vui-popover.vui-rangepop{width:auto;position:fixed;left:var(--space-2)!important;right:var(--space-2)!important;top:auto;bottom:var(--space-2);max-width:none}}
+.vui-datepop__foot{display:flex;justify-content:flex-end;gap:var(--space-1-5);margin-top:var(--space-2);padding-top:var(--space-2);border-top:var(--border-width) solid var(--border-subtle)}

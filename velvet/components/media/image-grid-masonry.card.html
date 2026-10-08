@@ -1,0 +1,20 @@
+<!-- @dsCard group="24 Media" viewport="960x298" name="ImageGrid · masonry" subtitle="Mixed ratios · columns=6" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}.lbl{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin-bottom:-6px}.ph{display:grid;place-items:center;height:100%;min-height:140px;border-radius:12px;font:600 18px/1.2 var(--font-display);color:#fff}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const ph=(a,b,t)=>'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+a+'"/><stop offset="1" stop-color="'+b+'"/></linearGradient></defs><rect width="800" height="600" fill="url(#g)"/><text x="400" y="310" font-family="sans-serif" font-size="30" fill="var(--on-color-muted)" text-anchor="middle">'+t+'</text></svg>');
+const IMGS=[['#8b0036','#e05f88','Image 1'],['#1b8a9c','#5b93f0','Image 2'],['#d98200','#f08a66','Image 3'],['#1f9254','#4fb8c9','Image 4'],['#7a52cc','#e05f88','Image 5'],['#3a3437','#7d7679','Image 6']].map(([a,b,t],i)=>({src:ph(a,b,t),alt:t+' placeholder',caption:'Placeholder '+(i+1)+' — replace with real photography'}));
+const { ImageGrid } = NS;
+const MORE=[...IMGS,...IMGS.slice(0,4)];
+const RAT=['3 / 2','16 / 9','3 / 4','4 / 3','5 / 4','2 / 3','16 / 10','1 / 1'];
+const App=()=>(<div className="pane">
+<div className="lbl">masonry · columns=6</div><ImageGrid layout="masonry" columns={6} images={[...IMGS,...IMGS.slice(0,2)].map((m,i)=>({...m,ratio:RAT[i]}))} />
+</div>);
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

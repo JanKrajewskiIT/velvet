@@ -1,0 +1,14 @@
+<!-- @dsCard group="15 Actions" viewport="960x136" name="ButtonGroup" subtitle="Attached · split button · toggle state · spaced" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { ButtonGroup, Button, IconButton } = NS;
+const App=()=>{const[v,setV]=React.useState('list');return(<div className="pane"><div className="r" style={{gap:20}}><ButtonGroup label="Text style"><IconButton icon="bold" label="Bold" variant="secondary" /><IconButton icon="italic" label="Italic" variant="secondary" /><IconButton icon="underline" label="Underline" variant="secondary" /></ButtonGroup><ButtonGroup label="View">{[['list','list','List'],['layout-grid','grid','Grid'],['kanban','board','Board']].map(([i,k,l])=><Button key={k} variant="secondary" iconLeft={i} aria-pressed={v===k} onClick={()=>setV(k)}>{l}</Button>)}</ButtonGroup></div><div className="r" style={{gap:20}}><ButtonGroup label="Publish"><Button variant="primary" iconLeft="send">Publish</Button><IconButton icon="chevron-down" label="More publish options" variant="primary" /></ButtonGroup><ButtonGroup size="sm" label="Page"><Button variant="secondary" iconLeft="chevron-left">Prev</Button><Button variant="secondary">Next</Button></ButtonGroup><ButtonGroup attached={false}><Button variant="ghost">Cancel</Button><Button variant="primary">Save changes</Button></ButtonGroup></div></div>);};
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

@@ -1,0 +1,13 @@
+<!-- @dsCard group="11 Atoms" viewport="960x194" name="Glyph" subtitle="CSS-mask icon · name × size · decorative vs labelled" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><link rel="stylesheet" href="../../guidelines/card.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const { Glyph } = window.VelvetUIDesignSystem_ee2bd8;
+const SZ=['xs','sm','md','lg','xl'];const N=['search','bell','calendar','settings','user'];
+const App=()=>(<div className="mx" style={{gridTemplateColumns:'80px repeat(5,minmax(0,1fr))',rowGap:16,justifyItems:'center',alignItems:'center'}}><span></span>{SZ.map(s=><span key={s} className="hd">{s}</span>)}{N.slice(0,3).map(n=><React.Fragment key={n}><span className="rh" style={{justifySelf:'start'}}>{n}</span>{SZ.map(s=><Glyph key={s} name={n} size={s} />)}</React.Fragment>)}<span className="rh" style={{justifySelf:'start'}}>tone</span><Glyph name="circle-check" size="lg" style={{color:'var(--status-success-fg)'}} label="Done" /><Glyph name="triangle-alert" size="lg" style={{color:'var(--status-warning-fg)'}} label="Warning" /><Glyph name="circle-x" size="lg" style={{color:'var(--status-danger-fg)'}} label="Error" /><Glyph name="sparkles" size="lg" style={{color:'var(--fg-brand)'}} /><Glyph name="info" size="lg" style={{color:'var(--fg-tertiary)'}} /></div>);
+ReactDOM.createRoot(document.getElementById('root')).render(<div className="pane"><App /></div>);
+</script></body></html>

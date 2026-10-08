@@ -1,0 +1,25 @@
+/* Toast */
+.vui-toast-region{position:fixed;right:var(--space-6);bottom:var(--space-6);z-index:var(--z-toast);display:flex;flex-direction:column;gap:var(--space-2);width:min(var(--overlay-w-md),calc(100vw - 2 * var(--viewport-margin)))}
+@media (max-width:639px){.vui-toast-region{left:var(--space-4);right:var(--space-4);bottom:var(--space-4);width:auto}}
+.vui-toast{display:flex;align-items:flex-start;gap:var(--space-3);padding:var(--space-3) var(--space-3) var(--space-3) var(--space-4);background:var(--bg-overlay);border:var(--border-width) solid var(--border-default);animation:vui-pop var(--motion-enter)}
+.vui-toast__icon{margin-top:var(--space-0-5);font-size:var(--type-body-lg-size)}
+.vui-toast--success .vui-toast__icon{color:var(--status-success-fg)}
+.vui-toast--warning .vui-toast__icon{color:var(--status-warning-fg)}
+.vui-toast--danger .vui-toast__icon{color:var(--status-danger-fg)}
+.vui-toast--info .vui-toast__icon{color:var(--status-info-fg)}
+.vui-toast--brand .vui-toast__icon{color:var(--fg-brand)}
+.vui-toast__content{flex:1;min-width:0;padding-top:1px}
+.vui-toast__title{font-size:var(--type-body-size);font-weight:var(--type-title-weight);line-height:var(--type-label-leading)}
+.vui-toast__desc{font-size:var(--type-body-sm-size);color:var(--fg-secondary);margin-top:var(--space-0-5)}
+.vui-toast__action{margin-top:var(--space-2);display:flex;gap:var(--space-2)}
+.vui-toast{position:relative;overflow:hidden}
+.vui-toast__progress{position:absolute;left:0;right:0;bottom:0;height:var(--border-width-thick);background:currentColor;opacity:.35;transform-origin:left;animation:vui-countdown linear forwards}
+.vui-toast--brand .vui-toast__progress,.vui-toast--neutral .vui-toast__progress{color:var(--fg-brand)}
+.vui-toast--success .vui-toast__progress{color:var(--status-success-fg)}
+.vui-toast--warning .vui-toast__progress{color:var(--status-warning-fg)}
+.vui-toast--danger .vui-toast__progress{color:var(--status-danger-fg)}
+.vui-toast--info .vui-toast__progress{color:var(--status-info-fg)}
+.vui-toast:hover .vui-toast__progress,.vui-toast:focus-within .vui-toast__progress{animation-play-state:paused}
+.vui-toast-region>.vui-toast{animation:vui-toast-in var(--motion-pop)}
+@keyframes vui-countdown{to{transform:scaleX(0)}}
+@keyframes vui-toast-in{from{opacity:0;transform:translateY(12px) scale(.96)}}

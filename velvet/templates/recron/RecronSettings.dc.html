@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script><script src="./recron-data.js"></script><style>:root:root{overflow:auto!important;height:auto!important;background:var(--bg-page)!important}html body{margin:0!important;padding:0!important;background:var(--bg-page)!important}</style></helmet>
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.PageHeader" title="Settings" description="Your profile powers CV matching, cover letters and question suggestions." tabs="{{ sections }}" active-tab="{{ section }}" on-tab-change="{{ setSection }}" hint-size="100%,160px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" padding="lg" hint-size="100%,640px">
+<sc-if value="{{ sec.profile }}" hint-placeholder-val="{{ true }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FormLayout" gap="lg" on-submit="{{ save }}" hint-size="100%,900px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FormSection" layout="aside" title="Personal" description="Shown on your CV header." hint-size="100%,200px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FormGrid" min-column-width="{{ 220 }}" hint-size="100%,160px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Display name" default-value="{{ p.name }}" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Email" value="{{ p.email }}" read-only="{{ true }}" hint="From your sign-in account" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Phone" optional="{{ true }}" default-value="{{ p.phone }}" icon-left="phone" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Location" default-value="{{ p.location }}" icon-left="map-pin" hint-size="100%,64px"></x-import>
+</x-import>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FormSection" layout="aside" divider="{{ true }}" title="Career" description="Used to match offers and suggest questions." hint-size="100%,320px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FormLayout" as="div" hint-size="100%,300px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Select" label="Preferred role" options="{{ roles }}" default-value="{{ p.role }}" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Slider" label="Experience" min="{{ 0 }}" max="{{ 15 }}" default-value="{{ p.years }}" format="{{ fmtYears }}" marks="{{ yearMarks }}" hint-size="100%,72px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.TagInput" label="Skills" default-value="{{ p.skills }}" max="{{ 20 }}" hint-size="100%,72px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Textarea" label="Short bio" optional="{{ true }}" default-value="{{ p.bio }}" rows="{{ 2 }}" max-length="{{ 280 }}" show-count="{{ true }}" hint-size="100%,96px"></x-import>
+</x-import>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FormSection" layout="aside" divider="{{ true }}" title="Links" description="Added to your CV and cover letters." hint-size="100%,220px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FormLayout" as="div" gap="sm" hint-size="100%,200px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="LinkedIn" optional="{{ true }}" prefix="https://" default-value="{{ p.linkedin }}" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="GitHub" optional="{{ true }}" prefix="https://" default-value="{{ p.github }}" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Website" optional="{{ true }}" prefix="https://" default-value="{{ p.website }}" hint-size="100%,64px"></x-import>
+</x-import>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.ActionRow" divider="{{ true }}" start="{{ savedNote }}" hint-size="100%,56px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Button" type="submit" hint-size="120px,40px">Save changes</x-import>
+</x-import>
+</x-import>
+</sc-if>
+<sc-if value="{{ sec.calendar }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FormLayout" as="div" gap="lg" hint-size="100%,400px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FormSection" layout="aside" title="Google Calendar" description="Interviews you schedule in Recron appear in your calendar, with the offer linked." hint-size="100%,140px">
+<div style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-4);border:var(--border-width) solid var(--border-subtle);border-radius:var(--radius-md)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.IconTile" icon="calendar" tone="{{ calTone }}" hint-size="36px,36px"></x-import>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column"><span style="font-weight:var(--type-title-weight)">{{ calTitle }}</span><span style="font-size:var(--type-caption-size);color:var(--fg-secondary)">{{ calSub }}</span></div>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Button" variant="{{ calBtnVariant }}" size="sm" on-click="{{ toggleCal }}" hint-size="110px,32px">{{ calBtn }}</x-import>
+</div>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FormSection" layout="aside" divider="{{ true }}" title="Behaviour" hint-size="100%,160px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FormLayout" as="div" gap="sm" hint-size="100%,140px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Switch" label="Add interviews automatically" description="No need to press “Add to calendar”" default-checked="{{ true }}" disabled="{{ calOff }}" hint-size="100%,44px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Select" label="Default reminder" options="{{ reminders }}" default-value="1 hour before" disabled="{{ calOff }}" hint-size="100%,64px"></x-import>
+</x-import>
+</x-import>
+</x-import>
+</sc-if>
+<sc-if value="{{ sec.prefs }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FormLayout" as="div" gap="lg" hint-size="100%,400px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FormSection" layout="aside" title="Appearance" hint-size="100%,120px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FormLayout" as="div" gap="sm" hint-size="100%,140px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.ThemeToggle" appearance="segmented" hint-size="200px,36px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Select" label="Language" options="{{ languages }}" default-value="English" icon-left="languages" hint-size="100%,64px"></x-import>
+</x-import>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FormSection" layout="aside" divider="{{ true }}" title="Notifications" description="Email only. We never message employers for you." hint-size="100%,160px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FormLayout" as="div" gap="sm" hint-size="100%,140px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Switch" label="Interview reminders" description="The evening before and 1 hour before" default-checked="{{ true }}" hint-size="100%,44px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Switch" label="Follow-up nudges" description="When an application has had no reply for 10 days" default-checked="{{ true }}" hint-size="100%,44px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Switch" label="Weekly summary" description="Mondays, 8:00" hint-size="100%,44px"></x-import>
+</x-import>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FormSection" layout="aside" divider="{{ true }}" title="Guided tour" description="Walk through the app again." hint-size="100%,80px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Button" variant="secondary" icon-left="compass" on-click="{{ restartOnboarding }}" hint-size="180px,40px">Restart onboarding</x-import>
+</x-import>
+</x-import>
+</sc-if>
+<sc-if value="{{ sec.account }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FormLayout" as="div" gap="lg" hint-size="100%,300px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FormSection" layout="aside" title="Your data" description="Offers, interviews, CV and saved questions." hint-size="100%,80px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Button" variant="secondary" icon-left="download" on-click="{{ exportData }}" hint-size="160px,40px">Export all data</x-import>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FormSection" layout="aside" divider="{{ true }}" title="Delete account" description="Removes everything permanently. This can’t be undone." hint-size="100%,140px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Alert" tone="danger" variant="outline" title="Delete your Recron account" action="{{ deleteBtn }}" hint-size="100%,120px">All offers, interviews and your CV will be deleted within 24 hours.</x-import>
+</x-import>
+</x-import>
+</sc-if>
+</x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { section: 'profile', cal: true, saved: false };
+  renderVals() {
+    const app = this.props.app || (window.RecronStandalone && window.VelvetUIDesignSystem_ee2bd8 && window.RecronStandalone(this));
+    if (!app) { clearTimeout(this._wt); this._wt = setTimeout(() => this.forceUpdate(), 80); return {}; }
+    const { D, NS } = app;
+    const h = React.createElement;
+    const s = this.state;
+    return {
+      sections: [{ value: 'profile', label: 'Profile', icon: 'user' }, { value: 'calendar', label: 'Calendar', icon: 'calendar' }, { value: 'prefs', label: 'Preferences', icon: 'sliders' }, { value: 'account', label: 'Account', icon: 'shield' }],
+      section: s.section, setSection: (v) => this.setState({ section: v }),
+      sec: { [s.section]: true },
+      p: D.profile,
+      roles: ['Frontend Developer', 'Backend Developer', 'Fullstack Developer', 'Mobile Developer', 'QA Engineer', 'DevOps Engineer', 'Product Designer'],
+      fmtYears: (v) => (v === 15 ? '15+ years' : v + (v === 1 ? ' year' : ' years')),
+      yearMarks: [{ value: 0, label: 'Junior' }, { value: 3, label: 'Mid' }, { value: 6, label: 'Senior' }, { value: 10, label: 'Lead' }],
+      save: () => { this.setState({ saved: true }); app.markDone('profile'); app.toast('Profile saved', 'success'); },
+      savedNote: s.saved ? h('span', { style: { fontSize: 'var(--type-caption-size)', color: 'var(--fg-tertiary)' } }, 'Saved just now') : null,
+      calTone: s.cal ? 'success' : undefined,
+      calTitle: s.cal ? 'Connected' : 'Not connected',
+      calSub: s.cal ? D.profile.email + ' · last sync 5 min ago' : 'Connect to sync interviews both ways',
+      calBtn: s.cal ? 'Disconnect' : 'Connect', calBtnVariant: s.cal ? 'secondary' : 'primary',
+      toggleCal: () => { this.setState({ cal: !s.cal }); app.toast(s.cal ? 'Calendar disconnected' : 'Google Calendar connected', s.cal ? 'neutral' : 'success'); },
+      calOff: !s.cal,
+      reminders: ['None', '15 minutes before', '1 hour before', '1 day before'],
+      languages: ['English', 'Polski'],
+      restartOnboarding: () => app.go('onboarding'),
+      exportData: () => app.toast('Export started', 'info', 'We’ll email you a ZIP within a few minutes'),
+      deleteBtn: h(NS.Button, { variant: 'danger', size: 'sm', iconLeft: 'trash-2', onClick: () => app.toast('Confirmation sent', 'warning', 'Check your inbox to confirm deletion') }, 'Delete account')
+    };
+  }
+}
+</script>
+</body>
+</html>

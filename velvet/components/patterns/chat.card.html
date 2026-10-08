@@ -1,0 +1,27 @@
+<!-- @dsCard group="28 Patterns" viewport="960x640" name="ChatMessage · ChatThread" subtitle="user bubble · assistant tools · sources · streaming caret · typing — send a prompt to stream a reply" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}.col{display:flex;flex-direction:column;gap:6px;min-width:0}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const L=({children})=><span className="lbl">{children}</span>;
+const { ChatThread, ChatMessage, PromptInput } = NS;
+const R1='Shortlisted 3 of 12 candidates for Senior Designer. Anna Kowal leads on portfolio depth and design-systems work; Marek Nowak is strongest on research. Want me to draft interview invites?';
+const R2='Here is a draft:\n\n“Hi Anna — thanks for applying to Velvet. We’d love to invite you to a 45-minute interview with the design team next week. Which of these slots works best?”';
+const App=()=>{
+  const [msgs,setMsgs]=React.useState([{id:1,role:'system',content:'Today · 09:41'},{id:2,role:'user',content:'Summarise the strongest candidates for the Senior Designer role.'},{id:3,role:'assistant',content:R1,sources:[{title:'Anna Kowal — CV.pdf'},{title:'Portfolio review notes'},{title:'Marek Nowak — CV.pdf'}]}]);
+  const [fb,setFb]=React.useState({3:'up'}); const [busy,setBusy]=React.useState(false); const tm=React.useRef();
+  const send=(t)=>{const id=Date.now();setMsgs(m=>[...m,{id,role:'user',content:t},{id:id+1,role:'assistant',content:'',streaming:true}]);setBusy(true);let k=0;clearInterval(tm.current);
+    tm.current=setTimeout(()=>{tm.current=setInterval(()=>{k+=3;setMsgs(m=>m.map(x=>x.id===id+1?{...x,content:R2.slice(0,k),streaming:k<R2.length}:x));if(k>=R2.length){clearInterval(tm.current);setBusy(false);}},28);},800);};
+  const stop=()=>{clearInterval(tm.current);clearTimeout(tm.current);setBusy(false);setMsgs(m=>m.map(x=>x.streaming?{...x,streaming:false,error:x.content?undefined:'Generation stopped.'}:x));};
+  return <div className="pane" style={{gap:12}}>
+    <ChatThread height={448}>{msgs.map(m=><ChatMessage key={m.id} role={m.role} content={m.content} streaming={m.streaming} sources={m.sources} error={m.error} feedback={fb[m.id]} onFeedback={(v)=>setFb({...fb,[m.id]:v})} onRetry={m.role==='assistant'?()=>{}:undefined} />)}</ChatThread>
+    <PromptInput loading={busy} onStop={stop} onSubmit={send} onAttach={()=>{}} suggestions={['Draft interview invites','Compare the top 3','What’s missing from Marek’s CV?']} />
+  </div>;
+};
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

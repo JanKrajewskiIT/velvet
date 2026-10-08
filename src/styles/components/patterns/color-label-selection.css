@@ -1,0 +1,7 @@
+/* ColorLabelSelection */
+.vui-cls .vui-dialog__footer{align-items:center}
+.vui-cls__manage{margin-right:auto}
+.vui-cls__search{margin-bottom:var(--space-3)}
+.vui-cls__meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-2);font-size:var(--type-caption-size);color:var(--fg-tertiary)}
+.vui-cls__chips{display:flex;flex-wrap:wrap;gap:var(--space-2);max-height:var(--overlay-max-h-sm);overflow-y:auto;padding:var(--space-0-5)}
+.vui-cls__empty{margin:var(--space-2) 0}

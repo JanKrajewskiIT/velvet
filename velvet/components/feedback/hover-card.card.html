@@ -1,0 +1,14 @@
+<!-- @dsCard group="20 Overlays" viewport="960x318" name="Popover — hover card" subtitle="openOn=&quot;hover&quot; · delay · stays open over the panel · opens on focus" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { Popover, Avatar, Button, Badge } = NS;
+const App=()=>(<div className="pane"><div style={{margin:0,fontSize:14,color:'var(--fg-secondary)'}}>Reviewed by <Popover openOn="hover" defaultOpen trigger={<a href="#" style={{fontWeight:600}}>Anna Kowalska</a>}><div style={{display:'flex',flexDirection:'column',gap:10,width:260}}><div className="r" style={{gap:10}}><Avatar name="Anna Kowalska" /><div><div style={{fontWeight:600,color:'var(--fg-primary)'}}>Anna Kowalska</div><div className="lbl">Lead designer · Kraków</div></div></div><div style={{fontSize:13}}>Owns the Velvet design system and the checkout redesign.</div><div className="r" style={{gap:6}}><Badge tone="success" dot>Available</Badge><Badge>Design</Badge></div><Button size="sm" variant="secondary" iconLeft="message-square">Message</Button></div></Popover> on Oct 2.</div></div>);
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

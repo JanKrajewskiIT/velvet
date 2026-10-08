@@ -1,0 +1,10 @@
+/* LocaleSwitcher — a pill Segmented track (reads --segment-*) with a sliding thumb; columns from --locale-*. */
+.vui-locale{position:relative;display:inline-grid;grid-template-columns:var(--locale-ic-w) repeat(var(--n),var(--locale-opt-w));align-items:center;height:var(--control-height-sm);padding:var(--space-0-5);border:var(--border-width) solid var(--border-default);border-radius:var(--radius-full);background:var(--segment-bg)}
+.vui-locale--md{height:var(--control-height-md);grid-template-columns:var(--locale-ic-w-md) repeat(var(--n),var(--locale-opt-w-md))}
+.vui-locale__ic{justify-self:center;font-size:var(--size-icon-md);color:var(--fg-tertiary)}
+.vui-locale__thumb{position:absolute;top:var(--space-0-5);bottom:var(--space-0-5);left:calc(var(--space-0-5) + var(--locale-ic-w) + var(--i) * var(--locale-opt-w));width:var(--locale-opt-w);border-radius:var(--radius-full);background:var(--segment-on-bg);box-shadow:var(--segment-on-shadow);transition:left var(--motion-pop)}
+.vui-locale--md .vui-locale__thumb{left:calc(var(--space-0-5) + var(--locale-ic-w-md) + var(--i) * var(--locale-opt-w-md));width:var(--locale-opt-w-md)}
+.vui-locale__opt{position:relative;z-index:1;height:100%;padding:0;border:0;border-radius:var(--radius-full);background:none;color:var(--fg-tertiary);font:var(--type-title-weight) var(--type-caption-size)/var(--leading-none) var(--font-sans);letter-spacing:var(--tracking-wide);cursor:pointer;transition:color var(--motion-fast)}
+.vui-locale__opt:hover{color:var(--segment-fg-hover)}
+.vui-locale__opt--on{color:var(--segment-on-fg)}
+.vui-locale__opt:focus-visible{outline:none;box-shadow:var(--focus-ring)}

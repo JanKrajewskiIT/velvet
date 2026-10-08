@@ -1,0 +1,17 @@
+/* BottomNav */
+.vui-bottomnav{display:flex;align-items:flex-end;padding:0 var(--space-1-5) env(safe-area-inset-bottom,0px);border-top:var(--border-width) solid var(--border-subtle);background:var(--bg-raised)}
+.vui-bottomnav--fixed{position:fixed;left:0;right:0;bottom:0;z-index:var(--z-sticky)}
+.vui-bottomnav__item{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--space-1);padding:var(--space-2-5) 0 var(--space-2);border:0;background:none;color:var(--fg-tertiary);font-family:var(--font-sans);text-decoration:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:color var(--motion-fast)}
+.vui-bottomnav__item:hover{color:var(--fg-secondary)}
+.vui-bottomnav__item:focus-visible{outline:none;box-shadow:inset var(--focus-ring);border-radius:var(--radius-md)}
+.vui-bottomnav__item--on,.vui-bottomnav__item--on:hover{color:var(--fg-brand)}
+.vui-bottomnav__icon{position:relative;display:grid;place-items:center;transition:transform var(--motion-reveal)}
+.vui-bottomnav__icon .vui-icon{font-size:var(--size-icon-2xl)}
+.vui-bottomnav__item:active .vui-bottomnav__icon{transform:scale(.92)}
+.vui-bottomnav__label{font-size:var(--type-overline-size);font-weight:var(--type-title-weight);line-height:1.2;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vui-bottomnav__icon>.vui-indicator__item{top:1px;right:1px}
+.vui-bottomnav__action{position:relative;top:-14px;flex:0 0 52px;width:52px;height:52px;margin:0 var(--space-1);display:grid;place-items:center;padding:0;border:4px solid var(--bg-raised);border-radius:50%;background:var(--action-primary);color:var(--action-primary-fg);box-shadow:0 0 0 var(--border-width) color-mix(in oklch,var(--action-primary) 15%,transparent),0 10px 34px -10px color-mix(in oklch,var(--action-primary) 55%,transparent);cursor:pointer;box-sizing:border-box;transition:transform var(--motion-reveal),background-color var(--motion-fast)}
+.vui-bottomnav__action:hover{background:var(--action-primary-hover);transform:scale(1.06)}
+.vui-bottomnav__action:active{transform:scale(.96)}
+.vui-bottomnav__action:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.vui-bottomnav__action .vui-icon{font-size:var(--type-h4-size)}

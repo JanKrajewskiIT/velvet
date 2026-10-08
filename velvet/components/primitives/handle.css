@@ -1,0 +1,7 @@
+/* Atom · Handle — drag grip. Hosts may hide it until row hover (TransferList). */
+.vui-handle{flex:none;width:20px;height:var(--control-height-inner);display:grid;place-items:center;padding:0;border:0;border-radius:var(--radius-sm);background:none;color:var(--fg-tertiary);cursor:grab;touch-action:none}
+.vui-handle:hover{color:var(--fg-primary);background:var(--bg-hover)}
+.vui-handle:active{cursor:grabbing}
+.vui-handle:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.vui-handle .vui-icon{font-size:var(--type-body-lg-size)}
+.vui-handle--decorative{width:auto;height:auto}.vui-handle--decorative:hover{background:none;color:inherit}

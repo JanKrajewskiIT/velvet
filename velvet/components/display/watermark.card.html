@@ -1,0 +1,19 @@
+<!-- @dsCard group="13 Display" viewport="960x272" name="Watermark" subtitle="repeating diagonal stamp · theme-aware mask · multi-line viewer stamp · never blocks clicks" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}.col{display:flex;flex-direction:column;gap:6px;min-width:0}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const L=({children})=><span className="lbl">{children}</span>;
+const { Watermark, Surface, Button } = NS;
+const Doc=({t})=>(<Surface padding="md"><div style={{display:'flex',flexDirection:'column',gap:8}}><span style={{font:'var(--type-title)'}}>{t}</span><span style={{font:'var(--type-body-sm)',color:'var(--fg-secondary)',textWrap:'pretty'}}>Base salary €92,000 · equity 0.08% · start 1 December. Relocation support and a 6-month review are included. This offer expires on 20 October.</span><div className="r"><Button size="sm">Accept</Button><Button size="sm" variant="ghost">Download</Button></div></div></Surface>);
+const App=()=>(<div className="pane"><div className="g2">
+  <div className="col"><L>text="Confidential"</L><Watermark><Doc t="Offer — Senior Designer" /></Watermark></div>
+  <div className="col"><L>lines = viewer + date</L><Watermark lines={['anna@velvet.io','6 Oct 2026 · 09:41']} fontSize={12} opacity={0.1} gap={[72,56]}><Doc t="Offer — Product Designer" /></Watermark></div>
+</div></div>);
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

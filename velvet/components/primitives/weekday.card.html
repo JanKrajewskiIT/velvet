@@ -1,0 +1,18 @@
+<!-- @dsCard group="11 Atoms" viewport="960x112" name="Weekday" subtitle="date-grid header · weekdayNames(locale, start, len)" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><link rel="stylesheet" href="../../guidelines/card.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { Weekday } = NS;
+const names=(loc,start,len)=>Array.from({length:7},(_,i)=>{const s=new Intl.DateTimeFormat(loc,{weekday:'short'}).format(new Date(2024,0,7+((i+start)%7)));return len?s.slice(0,len):s;});
+const Row=({k,children})=>(<div className="grid" style={{gridTemplateColumns:'150px repeat(7,minmax(0,1fr))',gap:8}}><span className="k">{k}</span>{children}</div>);
+const App=()=>(<div className="col" style={{gap:14}}>
+<Row k="en · Mon · len 2">{names('en-US',1,2).map((w,i)=><Weekday key={i} today={i===1}>{w}</Weekday>)}</Row>
+<Row k="pl · Mon">{names('pl-PL',1).map((w,i)=><Weekday key={i}>{w}</Weekday>)}</Row>
+</div>);
+ReactDOM.createRoot(document.getElementById('root')).render(<div className="pane"><App /></div>);
+</script></body></html>

@@ -1,0 +1,11 @@
+/* CalendarEventButton */
+.vui-calbtn{position:relative;display:inline-flex}
+.vui-calbtn__chev{font-size:.85em;margin-left:calc(-1 * var(--space-0-5));opacity:.7}
+.vui-calbtn--done .vui-icon:first-child{color:var(--status-success-fg)}
+.vui-calbtn__menu{position:absolute;top:calc(100% + var(--overlay-offset));left:0;z-index:var(--z-dropdown);display:flex;flex-direction:column;min-width:var(--overlay-min-w);padding:var(--space-1);border:var(--border-width) solid var(--border-default);border-radius:var(--radius-lg);background:var(--bg-overlay);box-shadow:var(--elevation-raised);animation:vui-calbtn-in var(--motion-reveal)}
+.vui-calbtn__item{display:flex;align-items:center;gap:var(--space-2-5);height:var(--control-height-inner-lg);padding:0 var(--space-2-5);border:0;border-radius:var(--radius-md);background:none;color:var(--fg-primary);font:var(--type-body-sm-size)/1 var(--font-sans);text-align:left;cursor:pointer}
+.vui-calbtn__item:hover,.vui-calbtn__item:focus-visible{outline:none;background:var(--bg-hover)}
+.vui-calbtn__item>.vui-icon:first-child{color:var(--fg-tertiary);font-size:var(--size-icon-md)}
+.vui-calbtn__ext{margin-left:auto;font-size:var(--type-caption-size);color:var(--fg-disabled)}
+@media (prefers-reduced-motion:reduce){.vui-calbtn__menu{animation:none}}
+@keyframes vui-calbtn-in{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}

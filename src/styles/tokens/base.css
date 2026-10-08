@@ -1,0 +1,38 @@
+/* Element defaults + framework-agnostic text styles and layout helpers. Text styles read the role tokens (roles.css). */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;font:var(--type-body);color:var(--fg-primary);background:var(--bg-page);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+::selection{background:var(--selection-bg);color:var(--selection-fg)}
+a{color:var(--fg-link);text-decoration:underline;text-decoration-color:color-mix(in oklab,currentColor 35%,transparent);text-underline-offset:3px;transition:color var(--motion-fast)}
+a:hover{color:var(--fg-link-hover);text-decoration-color:currentColor}
+:focus-visible{outline:var(--border-width-thick) solid var(--border-focus);outline-offset:var(--focus-ring-offset)}
+h1,h2,h3,h4,h5,h6,p{margin:0;text-wrap:pretty}
+.vui-display-lg{font:var(--type-display-lg);letter-spacing:var(--type-display-lg-tracking)}
+.vui-display-md{font:var(--type-display-md);letter-spacing:var(--type-display-md-tracking)}
+.vui-display-sm{font:var(--type-display-sm);letter-spacing:var(--type-display-sm-tracking)}
+.vui-h1{font:var(--type-h1);letter-spacing:var(--type-h1-tracking)}
+.vui-h2{font:var(--type-h2);letter-spacing:var(--type-h2-tracking)}
+.vui-h3{font:var(--type-h3);letter-spacing:var(--type-h3-tracking)}
+.vui-h4{font:var(--type-h4);letter-spacing:var(--type-h4-tracking)}
+.vui-h5{font:var(--type-h5)}
+.vui-title{font:var(--type-title);letter-spacing:var(--type-title-tracking)}
+.vui-kpi{font:var(--type-kpi);letter-spacing:var(--type-kpi-tracking);font-variant-numeric:tabular-nums}
+.vui-body-lg{font:var(--type-body-lg)}
+.vui-body{font:var(--type-body)}
+.vui-body-sm{font:var(--type-body-sm)}
+.vui-label-text{font:var(--type-label)}
+.vui-caption{font:var(--type-caption);color:var(--fg-tertiary)}
+.vui-overline{font:var(--type-overline);letter-spacing:var(--type-overline-tracking);text-transform:uppercase;color:var(--fg-tertiary)}
+.vui-mono{font-family:var(--font-mono);font-size:.92em}
+.vui-container{width:100%;max-width:var(--container-xl);margin-inline:auto;padding-inline:var(--gutter)}
+.vui-container--prose{max-width:var(--container-prose)}.vui-container--wide{max-width:var(--container-2xl)}
+.vui-sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+/* Shared keyframes — components reference these by name with a --motion-* intent; never redeclare locally. */
+@keyframes vui-fade-in{from{opacity:0}}
+@keyframes vui-rise-in{from{opacity:0;transform:translateY(-4px)}}
+@keyframes vui-sheet-in{from{transform:translateY(100%)}}
+@keyframes vui-spin{to{transform:rotate(360deg)}}
+@keyframes vui-pulse{50%{opacity:.25;transform:scale(.7)}}
+@keyframes vui-pop-in{from{opacity:0;transform:scale(.6)}}
+.vui-pop-in{animation:vui-pop-in var(--motion-pop) both}
+@media (prefers-reduced-motion:reduce){.vui-pop-in{animation:none}}

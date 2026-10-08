@@ -1,0 +1,17 @@
+.vui-btngroup{display:inline-flex;align-items:center;gap:var(--space-2);flex-wrap:wrap}
+.vui-btngroup--vertical{flex-direction:column;align-items:stretch}
+.vui-btngroup--attached{gap:0;flex-wrap:nowrap;isolation:isolate}
+.vui-btngroup--attached>*{position:relative;border-radius:0}
+.vui-btngroup--attached>*:hover,.vui-btngroup--attached>*:focus-visible{z-index:1}
+.vui-btngroup--attached:not(.vui-btngroup--vertical)>*+*{margin-left:calc(var(--border-width) * -1)}
+.vui-btngroup--attached:not(.vui-btngroup--vertical)>:first-child{border-start-start-radius:var(--button-radius);border-end-start-radius:var(--button-radius)}
+.vui-btngroup--attached:not(.vui-btngroup--vertical)>:last-child{border-start-end-radius:var(--button-radius);border-end-end-radius:var(--button-radius)}
+.vui-btngroup--vertical.vui-btngroup--attached>*+*{margin-top:calc(var(--border-width) * -1)}
+.vui-btngroup--vertical.vui-btngroup--attached>:first-child{border-start-start-radius:var(--button-radius);border-start-end-radius:var(--button-radius)}
+.vui-btngroup--vertical.vui-btngroup--attached>:last-child{border-end-start-radius:var(--button-radius);border-end-end-radius:var(--button-radius)}
+.vui-btngroup--attached>.vui-btn--sm:first-child{border-start-start-radius:var(--button-radius-sm);border-end-start-radius:var(--button-radius-sm)}
+.vui-btngroup--attached>.vui-btn--sm:last-child{border-start-end-radius:var(--button-radius-sm);border-end-end-radius:var(--button-radius-sm)}
+/* Solid fills: a hairline divider instead of overlapping borders */
+.vui-btngroup--attached>.vui-btn--primary+.vui-btn--primary,.vui-btngroup--attached>.vui-btn--danger+.vui-btn--danger{margin-left:0;box-shadow:inset var(--border-width) 0 0 var(--on-color-border)}
+.vui-btngroup--attached>.vui-btn--ghost+.vui-btn--ghost,.vui-btngroup--attached>.vui-btn--soft+.vui-btn--soft{margin-left:var(--space-px)}
+.vui-btngroup--attached>[aria-pressed="true"]{background:var(--bg-selected);color:var(--fg-brand);border-color:var(--border-brand);z-index:2}

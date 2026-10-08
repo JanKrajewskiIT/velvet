@@ -1,0 +1,18 @@
+<!-- @dsCard group="02 Brand" viewport="960x262" name="BrandLogo" subtitle="Velvet logotype & signet · on surface · inverse on brand · sizes" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.pane{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:20px;align-items:center}.clear{--x:24px;display:inline-block;padding:var(--x);border:1px solid var(--border-default);border-radius:var(--radius-md);background:linear-gradient(to right,var(--border-subtle) 1px,transparent 1px) 0 0/var(--x) var(--x),linear-gradient(to bottom,var(--border-subtle) 1px,transparent 1px) 0 0/var(--x) var(--x)}.sw{display:flex;gap:12px;margin-top:14px}.sw>div{flex:1;display:grid;place-items:center;min-height:68px;border:1px solid var(--border-subtle);border-radius:var(--radius-md)}.brand{background:var(--action-primary);border-color:transparent!important}.meta{display:flex;flex-direction:column;gap:8px}.lbl{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary)}.meta h3{margin:0;font:600 18px/1.3 var(--font-display);letter-spacing:-.005em}.meta p{margin:0;font-size:13px;line-height:1.55;color:var(--fg-secondary)}.r{display:flex;align-items:flex-end;gap:16px;margin-top:6px}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const { BrandLogo } = window.VelvetUIDesignSystem_ee2bd8;
+const App=()=>(<div className="pane">
+<div><div className="clear"><BrandLogo brand="recron" size={48} /></div>
+<div className="sw"><div><BrandLogo brand="recron" size={28} /></div><div className="brand"><BrandLogo brand="recron" tone="inverse" size={28} /></div></div></div>
+<div className="meta"><span className="lbl">brand="recron"</span><h3>Recron logotype &amp; signet</h3><p>"R" signet with the circuit-node stem in the brand colour, next to the wordmark. Clear space is 0.5× the logo height on every side. Min 32px tall on screen. On brand fills use <code>tone="inverse"</code>.</p>
+<div className="r"><BrandLogo brand="recron" variant="mark" size="sm" /><BrandLogo brand="recron" variant="mark" size="md" /><BrandLogo brand="recron" variant="mark" size="lg" /><BrandLogo brand="recron" variant="mark" size="xl" /></div></div>
+</div>);
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

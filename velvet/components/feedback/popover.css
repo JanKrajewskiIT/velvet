@@ -1,0 +1,10 @@
+/* Popover — paint (panel bg / border / radius / shadow) comes from the Surface overlay registry; this file is position + layout only. */
+.vui-popover-wrap{position:relative;display:inline-flex}
+.vui-popover{position:absolute;z-index:var(--z-dropdown);top:calc(100% + var(--overlay-offset));left:0;min-width:var(--overlay-min-w);max-width:min(var(--overlay-w),calc(100vw - 2 * var(--viewport-margin)));padding:var(--space-4);font-size:var(--type-body-size);transform-origin:top left;animation:vui-select-in var(--motion-reveal)}
+.vui-popover-wrap--hover>.vui-popover::before{content:"";position:absolute;left:0;right:0;top:-10px;height:10px}
+.vui-popover-wrap--hover>.vui-popover--top::before{top:auto;bottom:-10px}
+.vui-popover--end{left:auto;right:0;transform-origin:top right}
+.vui-popover--top{top:auto;bottom:calc(100% + var(--overlay-offset));transform-origin:bottom left}
+.vui-popover--top.vui-popover--end{transform-origin:bottom right}
+.vui-popover__title{font-weight:var(--type-title-weight);margin-bottom:var(--space-1)}
+.vui-popover__body{color:var(--fg-secondary);font-size:var(--type-body-sm-size)}

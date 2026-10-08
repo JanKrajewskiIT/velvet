@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script><script src="./recron-data.js"></script><style>:root:root{overflow:auto!important;height:auto!important;background:var(--bg-page)!important}html body{margin:0!important;padding:0!important;background:var(--bg-page)!important}</style></helmet>
+<div style="min-height:100vh;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;gap:var(--space-6);padding:var(--space-8) var(--space-4);background:var(--bg-page);color:var(--fg-primary);font:var(--type-body)">
+<div style="width:100%;max-width:680px;display:flex;justify-content:space-between;align-items:center">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.BrandLogo" brand="recron" size="sm" hint-size="110px,24px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Button" variant="ghost" size="sm" on-click="{{ skip }}" hint-size="100px,32px">Skip for now</x-import>
+</div>
+<div style="width:100%;max-width:680px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Stepper" steps="{{ steps }}" current="{{ step }}" on-step-click="{{ goStep }}" hint-size="100%,56px"></x-import>
+</div>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" padding="lg" footer="{{ footer }}" footer-align="between" style="width:100%;max-width:680px" hint-size="680px,460px">
+<sc-if value="{{ s.s0 }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-5)">
+<div style="display:flex;flex-direction:column;gap:var(--space-1)"><h2 style="margin:0;font:var(--type-title-weight) var(--type-h3-size)/1.2 var(--font-display)">Hi {{ first }} — let’s set up your search</h2><p style="margin:0;color:var(--fg-secondary)">Two minutes now saves you hours later. Everything can be changed in Settings.</p></div>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Select" label="What role are you looking for?" options="{{ roles }}" value="{{ v.role }}" on-value-change="{{ setRole }}" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Slider" label="Years of experience" min="{{ 0 }}" max="{{ 15 }}" value="{{ v.years }}" on-value-change="{{ setYears }}" format="{{ fmtYears }}" marks="{{ yearMarks }}" hint-size="100%,80px"></x-import>
+</div>
+</sc-if>
+<sc-if value="{{ s.s1 }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-5)">
+<div style="display:flex;flex-direction:column;gap:var(--space-1)"><h2 style="margin:0;font:var(--type-title-weight) var(--type-h3-size)/1.2 var(--font-display)">What are you good at?</h2><p style="margin:0;color:var(--fg-secondary)">We use these to score offers and pick practice questions.</p></div>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.TagInput" label="Your skills" value="{{ v.skills }}" on-value-change="{{ setSkills }}" placeholder="Type and press Enter…" max="{{ 20 }}" hint-size="100%,80px"></x-import>
+<div style="display:flex;flex-direction:column;gap:var(--space-2)"><span style="font-size:var(--type-caption-size);color:var(--fg-secondary)">Popular for {{ v.role }}</span>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.ChipGroup" size="sm" label="Suggested skills" options="{{ suggestions }}" value="{{ v.skills }}" on-value-change="{{ setSkills }}" hint-size="100%,72px"></x-import>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ s.s2 }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-5)">
+<div style="display:flex;flex-direction:column;gap:var(--space-1)"><h2 style="margin:0;font:var(--type-title-weight) var(--type-h3-size)/1.2 var(--font-display)">What would a great offer look like?</h2><p style="margin:0;color:var(--fg-secondary)">Offers outside these get flagged — not hidden.</p></div>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.OptionSwitcher" label="Work mode" variant="tiles" options="{{ modes }}" value="{{ v.mode }}" on-value-change="{{ setMode }}" hint-size="100%,96px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.RangeInput" label="Salary expectations" locale="pl" value="{{ v.salary }}" on-value-change="{{ setSalary }}" unit-options="{{ currencies }}" default-unit="PLN" period-options="{{ periods }}" default-period="Monthly" hint="Gross. Leave the upper bound empty if there isn’t one." hint-size="100%,96px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Where?" optional="{{ true }}" icon-left="map-pin" value="{{ v.city }}" on-change="{{ setCity }}" placeholder="City, or leave empty for anywhere" hint-size="100%,64px"></x-import>
+</div>
+</sc-if>
+<sc-if value="{{ s.s3 }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-5)">
+<div style="display:flex;flex-direction:column;gap:var(--space-1)"><h2 style="margin:0;font:var(--type-title-weight) var(--type-h3-size)/1.2 var(--font-display)">Start your CV</h2><p style="margin:0;color:var(--fg-secondary)">Your CV is what Recron matches against every offer.</p></div>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.OptionSwitcher" label="How do you want to start?" variant="tiles" options="{{ cvOptions }}" value="{{ v.cv }}" on-value-change="{{ setCv }}" hint-size="100%,96px"></x-import>
+<sc-if value="{{ cvUpload }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FileUpload" accept=".pdf,.docx" multiple="{{ false }}" title="Drop your CV here or browse" hint="PDF or DOCX — we’ll read it and fill in your CV" files="{{ files }}" on-files="{{ onFiles }}" on-remove="{{ clearFiles }}" hint-size="100%,140px"></x-import>
+</sc-if>
+</div>
+</sc-if>
+</x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { step: 0, v: { role: 'Frontend Developer', years: 5, skills: ['React', 'TypeScript'], mode: 'Remote', salary: { min: 16000, max: null }, city: '', cv: 'upload' }, files: [] };
+  renderVals() {
+    const app = this.props.app || (window.RecronStandalone && window.VelvetUIDesignSystem_ee2bd8 && window.RecronStandalone(this));
+    if (!app) { clearTimeout(this._wt); this._wt = setTimeout(() => this.forceUpdate(), 80); return {}; }
+    const { D, NS } = app;
+    const h = React.createElement;
+    const st = this.state;
+    const set = (k) => (x) => this.setState({ v: { ...st.v, [k]: x && x.target ? x.target.value : x } });
+    const last = st.step === 3;
+    const sugg = { 'Frontend Developer': ['React', 'TypeScript', 'Next.js', 'CSS', 'Vue', 'Testing Library', 'Accessibility', 'GraphQL'], 'Backend Developer': ['Node.js', 'Java', 'Go', 'PostgreSQL', 'Docker', 'Kafka'], 'Fullstack Developer': ['React', 'Node.js', 'TypeScript', 'PostgreSQL', 'Docker', 'AWS'] };
+    return {
+      first: D.profile.first,
+      steps: [{ label: 'You' }, { label: 'Skills' }, { label: 'Preferences' }, { label: 'CV' }],
+      step: st.step, goStep: (i) => this.setState({ step: i }),
+      s: { ['s' + st.step]: true },
+      v: st.v,
+      skip: app.finishOnboarding,
+      roles: ['Frontend Developer', 'Backend Developer', 'Fullstack Developer', 'Mobile Developer', 'QA Engineer', 'DevOps Engineer', 'Product Designer'],
+      setRole: set('role'), setYears: set('years'), setSkills: set('skills'), setMode: set('mode'), setSalary: set('salary'), setCity: set('city'), setCv: set('cv'),
+      fmtYears: (v) => (v === 15 ? '15+ years' : v + (v === 1 ? ' year' : ' years')),
+      yearMarks: [{ value: 0, label: 'Junior' }, { value: 3, label: 'Mid' }, { value: 6, label: 'Senior' }, { value: 10, label: 'Lead' }],
+      suggestions: sugg[st.v.role] || sugg['Frontend Developer'],
+      modes: [{ value: 'Remote', label: 'Remote', icon: 'globe' }, { value: 'Hybrid', label: 'Hybrid', icon: 'layers' }, { value: 'On-site', label: 'On-site', icon: 'building' }, { value: 'Any', label: 'Any', icon: 'check-double' }],
+      currencies: ['PLN', 'EUR', 'USD', 'GBP'], periods: ['Hourly', 'Monthly', 'Yearly'],
+      cvOptions: [{ value: 'upload', label: 'Upload a CV', icon: 'upload' }, { value: 'linkedin', label: 'From LinkedIn', icon: 'link' }, { value: 'blank', label: 'Start blank', icon: 'file' }],
+      cvUpload: st.v.cv === 'upload',
+      files: st.files,
+      onFiles: (fs) => { const f = fs[0]; if (!f) return; const id = Date.now(); this.setState({ files: [{ id, name: f.name, size: f.size, status: 'uploading', progress: 30 }] }); setTimeout(() => this.setState({ files: [{ id, name: f.name, size: f.size, status: 'done' }] }), 900); },
+      clearFiles: () => this.setState({ files: [] }),
+      footer: h(React.Fragment, null,
+        st.step > 0 ? h(NS.Button, { variant: 'ghost', iconLeft: 'arrow-left', onClick: () => this.setState({ step: st.step - 1 }) }, 'Back') : h('span', { style: { fontSize: 'var(--type-caption-size)', color: 'var(--fg-tertiary)' } }, 'Step 1 of 4'),
+        h(NS.Button, { iconRight: last ? 'check' : 'arrow-right', onClick: last ? app.finishOnboarding : () => this.setState({ step: st.step + 1 }) }, last ? 'Finish setup' : 'Continue'))
+    };
+  }
+}
+</script>
+</body>
+</html>

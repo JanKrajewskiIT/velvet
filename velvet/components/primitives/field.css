@@ -1,0 +1,12 @@
+/* Field */
+.vui-field{display:flex;flex-direction:column;gap:var(--field-gap);min-width:0}
+.vui-label{font:var(--type-label);color:var(--field-label-fg)}
+.vui-label__opt{color:var(--field-hint-fg);font-weight:var(--type-body-weight);margin-left:var(--space-1)}
+.vui-label__req{color:var(--field-error-fg);margin-left:var(--space-0-5)}
+.vui-hint{font:var(--type-caption);color:var(--field-hint-fg)}
+.vui-hint--error{color:var(--field-error-fg)}
+.vui-hint--lane{min-height:var(--field-hint-lane)}
+.vui-hint--error::before{content:"";display:inline-block;width:var(--size-dot);height:var(--size-dot);margin:0 var(--space-1-5) 1px 0;border-radius:50%;background:currentColor}
+.vui-field__foot{display:flex;justify-content:space-between;align-items:flex-start;gap:var(--space-3)}
+.vui-field__count{margin-left:auto;flex:none;font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+.vui-field__count--max{color:var(--status-warning-fg)}

@@ -1,0 +1,15 @@
+<!-- @dsCard group="23 Cards" viewport="960x404" name="QuestionCard" subtitle="Card + category · difficulty · tags · expandable answer" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.pane{display:flex;flex-direction:column;gap:14px}.g2{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:start}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { QuestionCard } = NS;
+const Q=[{category:'React',level:'Senior',difficulty:4,time:'18 min',tags:['Hooks','Rendering'],question:'Explain the difference between useEffect and useLayoutEffect.',answer:'useLayoutEffect fires synchronously after DOM mutations and before the browser paints, so use it for measurements. useEffect runs after paint and is the default.',votes:24},{category:'System design',categoryTone:'info',level:'Mid',difficulty:3,time:'25 min',tags:['Caching'],question:'How would you design a rate limiter for a public API?',votes:9},{category:'Soft skills',categoryTone:'success',level:'Any',difficulty:2,time:'5 min',tags:['Behavioural'],question:'Tell me about a time you disagreed with your manager.',votes:41}];
+const App=()=>{const[st,setSt]=React.useState({0:{v:true},2:{s:true}});const t=(i,k)=>setSt(s=>({...s,[i]:{...s[i],[k]:!(s[i]||{})[k]}}));return(<div className="pane"><div className="g2">{Q.map((q,i)=><QuestionCard key={i} {...q} defaultExpanded={i===0} votes={q.votes+((st[i]||{}).v?1:0)} voted={!!(st[i]||{}).v} onVote={()=>t(i,'v')} starred={!!(st[i]||{}).s} onStar={()=>t(i,'s')} />)}</div></div>);};
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

@@ -1,0 +1,22 @@
+.vui-toggle{display:inline-flex;align-items:center;justify-content:center;gap:var(--button-gap);height:var(--control-height-md);padding:0 var(--button-px);border:var(--border-width) solid var(--button-secondary-border);border-radius:var(--button-radius);background:var(--button-secondary-bg);color:var(--fg-secondary);font:var(--type-button, var(--type-label-weight) var(--type-body-sm-size)/1 var(--font-sans));white-space:nowrap;cursor:pointer;user-select:none;transition:var(--transition-colors),transform var(--motion-spring)}
+.vui-toggle .vui-icon{font-size:var(--size-icon-md);transition:transform var(--motion-spring)}
+.vui-toggle:hover:not(:disabled){border-color:var(--button-secondary-border-hover);color:var(--fg-primary)}
+.vui-toggle:focus-visible{outline:none;box-shadow:var(--focus-ring);z-index:3}
+.vui-toggle:active:not(:disabled){transform:translateY(var(--motion-nudge))}
+.vui-toggle[aria-pressed="true"]{background:var(--bg-selected);border-color:var(--border-brand);color:var(--fg-brand)}
+.vui-toggle[aria-pressed="true"] .vui-icon{transform:scale(1.08)}
+.vui-toggle--neutral[aria-pressed="true"]{background:var(--bg-pressed);border-color:var(--border-strong);color:var(--fg-primary)}
+.vui-toggle:disabled{opacity:var(--opacity-disabled);cursor:not-allowed}
+.vui-toggle--sm{height:var(--control-height-sm);padding:0 var(--button-px-sm);border-radius:var(--button-radius-sm);gap:var(--space-1-5);font:var(--type-button-sm)}
+.vui-toggle--lg{height:var(--control-height-lg);padding:0 var(--button-px-lg)}
+.vui-toggle--icon{padding:0;width:var(--control-height-md)}.vui-toggle--icon.vui-toggle--sm{width:var(--control-height-sm)}.vui-toggle--icon.vui-toggle--lg{width:var(--control-height-lg)}
+.vui-togglegroup{display:inline-flex;align-items:center;gap:var(--space-1)}
+.vui-togglegroup--attached{gap:0;isolation:isolate}
+.vui-togglegroup--attached>.vui-toggle{position:relative;border-radius:0}
+.vui-togglegroup--attached>.vui-toggle+.vui-toggle{margin-left:calc(var(--border-width) * -1)}
+.vui-togglegroup--attached>.vui-toggle:first-child{border-start-start-radius:var(--button-radius);border-end-start-radius:var(--button-radius)}
+.vui-togglegroup--attached>.vui-toggle:last-child{border-start-end-radius:var(--button-radius);border-end-end-radius:var(--button-radius)}
+.vui-togglegroup--attached>.vui-toggle--sm:first-child{border-start-start-radius:var(--button-radius-sm);border-end-start-radius:var(--button-radius-sm)}
+.vui-togglegroup--attached>.vui-toggle--sm:last-child{border-start-end-radius:var(--button-radius-sm);border-end-end-radius:var(--button-radius-sm)}
+.vui-togglegroup--attached>.vui-toggle:hover{z-index:1}
+.vui-togglegroup--attached>.vui-toggle[aria-pressed="true"]{z-index:2}

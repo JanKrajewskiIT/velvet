@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script><style>:root:root{overflow:auto!important;height:auto!important;background:var(--bg-page)!important}html body{margin:0!important;padding:0!important;background:var(--bg-page)!important}</style></helmet>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Dialog" open="{{ open }}" on-close="{{ close }}" title="Add offer" description="Paste a link and let AI read it, or fill it in yourself." footer="{{ footer }}" size="md" hint-size="0,0">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Tabs" variant="segmented" block="{{ true }}" items="{{ modes }}" value="{{ mode }}" on-value-change="{{ setMode }}" hint-size="100%,36px"></x-import>
+<sc-if value="{{ isLink }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-3)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Job posting URL" icon-left="link" placeholder="https://www.linkedin.com/jobs/view/…" value="{{ url }}" on-change="{{ setUrl }}" hint="Works with LinkedIn, JustJoin.it, NoFluffJobs, Pracuj.pl and most career pages" hint-size="100%,84px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Textarea" label="…or paste the posting text" optional="{{ true }}" rows="{{ 4 }}" hint-size="100%,120px"></x-import>
+</div>
+</sc-if>
+<sc-if value="{{ isManual }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<sc-if value="{{ parsed }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Alert" tone="brand" icon="sparkles" title="Filled in from the posting" hint-size="100%,64px">Check the details — AI can misread salary ranges.</x-import>
+</sc-if>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FormGrid" columns="{{ 2 }}" gap="sm" hint-size="100%,220px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Role" value="{{ f.name }}" on-change="{{ setName }}" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Company" value="{{ f.company }}" on-change="{{ setCompany }}" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="City" value="{{ f.city }}" on-change="{{ setCity }}" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Select" label="Work mode" options="{{ workModes }}" value="{{ f.workMode }}" on-value-change="{{ setWorkMode }}" hint-size="100%,64px"></x-import>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.RangeInput" label="Salary" optional="{{ true }}" locale="pl" value="{{ salary }}" on-value-change="{{ setSalary }}" unit-options="{{ currencies }}" default-unit="PLN" period-options="{{ periods }}" default-period="Monthly" hint-size="100%,84px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FormGrid" columns="{{ 2 }}" gap="sm" hint-size="100%,72px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Select" label="Source" options="{{ sources }}" value="{{ f.source }}" on-value-change="{{ setSource }}" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Select" label="Status" options="{{ statuses }}" value="{{ f.status }}" on-value-change="{{ setStatus }}" hint-size="100%,64px"></x-import>
+</x-import>
+</div>
+</sc-if>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { mode: 'link', url: '', parsing: false, parsed: false, f: { name: '', company: '', city: '', workMode: 'Remote', source: 'LinkedIn', status: 'new' }, salary: { min: null, max: null } };
+  reset() { this.setState({ mode: 'link', url: '', parsing: false, parsed: false, f: { name: '', company: '', city: '', workMode: 'Remote', source: 'LinkedIn', status: 'new' }, salary: { min: null, max: null } }); }
+  renderVals() {
+    const app = this.props.app;
+    if (!app) return { open: false };
+    const { D, NS } = app;
+    const h = React.createElement;
+    const s = this.state;
+    const setF = (k) => (x) => this.setState({ f: { ...this.state.f, [k]: x && x.target ? x.target.value : x } });
+    const close = () => { app.closeAdd(); this.reset(); };
+    const parse = () => {
+      this.setState({ parsing: true });
+      setTimeout(() => this.setState({ parsing: false, parsed: true, mode: 'manual', f: { name: 'Senior Frontend Engineer', company: 'Northwind Labs', city: 'Warsaw', workMode: 'Hybrid', source: /linkedin/i.test(s.url) ? 'LinkedIn' : 'Company site', status: 'new' }, salary: { min: 19000, max: 25000 } }), 1500);
+    };
+    const canAdd = s.f.name.trim() && s.f.company.trim();
+    const add = () => { app.addOffer({ ...s.f, salaryMin: s.salary.min, salaryMax: s.salary.max, currency: 'PLN', period: 'month', match: null, tags: [], added: '2026-10-06', link: s.url || '#', description: '_No description yet — paste the posting text to enable CV match._' }); this.reset(); };
+    return {
+      open: !!app.addOpen, close,
+      modes: [{ value: 'link', label: 'From a link', icon: 'sparkles' }, { value: 'manual', label: 'Fill in manually', icon: 'pencil' }],
+      mode: s.mode, setMode: (v) => this.setState({ mode: v }),
+      isLink: s.mode === 'link', isManual: s.mode === 'manual', parsed: s.parsed,
+      url: s.url, setUrl: (e) => this.setState({ url: e.target.value }),
+      f: s.f, setName: setF('name'), setCompany: setF('company'), setCity: setF('city'), setWorkMode: setF('workMode'), setSource: setF('source'), setStatus: setF('status'),
+      salary: s.salary, setSalary: (v) => this.setState({ salary: v }),
+      workModes: D.workModes, sources: D.sources, currencies: ['PLN', 'EUR', 'USD', 'GBP'], periods: ['Hourly', 'Monthly', 'Yearly'],
+      statuses: D.STATUS_ORDER.map((k) => ({ value: k, label: D.STATUS[k].label })),
+      footer: h(React.Fragment, null,
+        h(NS.Button, { variant: 'secondary', onClick: close }, 'Cancel'),
+        s.mode === 'link' ? h(NS.Button, { iconLeft: 'sparkles', loading: s.parsing, disabled: !s.url.trim(), onClick: parse }, s.parsing ? 'Reading posting…' : 'Read with AI') : h(NS.Button, { iconLeft: 'plus', disabled: !canAdd, onClick: add }, 'Add offer'))
+    };
+  }
+}
+</script>
+</body>
+</html>

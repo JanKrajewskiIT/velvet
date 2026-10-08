@@ -1,0 +1,23 @@
+<!-- @dsCard group="11 Atoms" viewport="960x236" name="Rail" subtitle="connector between markers · size · done / active / dashed" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><link rel="stylesheet" href="../../guidelines/card.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { Rail, RailItem, Marker, Glyph } = NS;
+const Row=({m,t,s})=>(<div style={{display:'flex',gap:12,paddingBottom:16}}>{m}<div style={{paddingTop:4}}><div style={{font:'var(--type-label)'}}>{t}</div><div style={{font:'var(--type-caption)',color:'var(--fg-tertiary)'}}>{s}</div></div></div>);
+const App=()=>(<div className="grid" style={{gridTemplateColumns:'repeat(3,minmax(0,1fr))',gap:24,alignItems:'start'}}>
+<div className="stack"><span className="k">size="lg" · done → active → dashed</span><Rail size="lg">
+<RailItem state="done"><Row m={<Marker size="lg" tone="success"><Glyph name="check" /></Marker>} t="Applied" s="Mon 09:12" /></RailItem>
+<RailItem state="dashed"><Row m={<Marker size="lg" appearance="solid" ring gap><Glyph name="calendar" /></Marker>} t="Interview" s="Today" /></RailItem>
+<RailItem><Row m={<Marker size="lg" appearance="outline" dot />} t="Offer" s="Upcoming" /></RailItem></Rail></div>
+<div className="stack"><span className="k">size="md" · numbered</span><Rail>
+{['Account','Workspace','Invite team'].map((t,i)=><RailItem key={t} state={i<1?'active':undefined}><Row m={<Marker appearance={i<1?'solid':'outline'} tone={i<2?'brand':undefined} ring={i===1}>{i+1}</Marker>} t={t} s={i<1?'Done':i===1?'Current':'Next'} /></RailItem>)}</Rail></div>
+<div className="stack"><span className="k">size="sm" · activity feed</span><Rail size="sm">
+{[['git-merge','brand','Merged #482'],['mail','info','Invite sent'],['triangle-alert','warning','Build flaky']].map(([ic,t,l])=><RailItem key={l}><Row m={<Marker size="sm" tone={t}><Glyph name={ic} /></Marker>} t={l} s="2h ago" /></RailItem>)}</Rail></div>
+</div>);
+ReactDOM.createRoot(document.getElementById('root')).render(<div className="pane"><App /></div>);
+</script></body></html>

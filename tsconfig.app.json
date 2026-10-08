@@ -1,12 +1,9 @@
 {
-  "extends": "@jankrajewskiit/configs/tsconfig/app",
+  "extends": "@jankrajewskiit/configs/tsconfig/app-vite",
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "rootDir": "src",
-    "declaration": false,
-    "paths": {
-      "~/*": ["./src/*"]
-    }
+    "declaration": false
   },
   "include": ["src"]
 }

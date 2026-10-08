@@ -1,0 +1,12 @@
+/* BottomSheet — paint from the Surface dialog registry (--dialog-*); only the bottom edge is squared off here. */
+.vui-sheet-backdrop{position:fixed;inset:0;z-index:var(--z-modal);display:flex;align-items:flex-end;justify-content:center;background:var(--scrim-backdrop);animation:vui-fade-in var(--motion-base)}
+.vui-sheet{display:flex;flex-direction:column;width:100%;max-width:var(--sheet-max-w);max-height:88vh;padding-bottom:env(safe-area-inset-bottom,0px);border-bottom:0;border-bottom-left-radius:0;border-bottom-right-radius:0;outline:0;animation:vui-sheet-in var(--motion-enter);transition:transform var(--motion-move)}
+.vui-sheet--dragging{transition:none}
+.vui-sheet__grab{display:grid;place-items:center;height:var(--hit-target-sm);cursor:grab;touch-action:none;flex:none}
+.vui-sheet__grab span{width:var(--sheet-grab-w);height:var(--size-track-sm);border-radius:var(--radius-2xs);background:var(--border-strong)}
+.vui-sheet__head{padding:var(--space-1) var(--space-5) var(--space-3)}
+.vui-sheet__title{margin:0;font:var(--type-title-lg);letter-spacing:var(--type-title-tracking)}
+.vui-sheet__desc{margin:var(--space-1) 0 0;font-size:var(--type-body-sm-size);color:var(--fg-secondary)}
+.vui-sheet__body{flex:1;overflow-y:auto;padding:0 var(--space-5) var(--space-4)}
+.vui-sheet__foot{display:flex;gap:var(--space-2);padding:var(--space-3) var(--space-5) var(--space-4);border-top:var(--border-width) solid var(--border-subtle)}
+.vui-sheet__foot>.vui-btn{flex:1}

@@ -1,0 +1,5 @@
+/* Atom · ColumnResize — drag / arrow-key handle on a header cell's right edge (Table, DataGrid). Host cell must be position:relative. */
+.vui-col-resize{position:absolute;top:0;right:calc(var(--col-resize-w) / -2);bottom:0;z-index:3;width:var(--col-resize-w);cursor:col-resize;touch-action:none;outline:0}
+.vui-col-resize::after{content:"";position:absolute;top:25%;bottom:25%;left:calc(50% - var(--border-width-thick) / 2);width:var(--border-width-thick);border-radius:var(--radius-2xs);background:transparent;transition:background-color var(--motion-fast)}
+:hover>.vui-col-resize::after{background:var(--border-default)}
+.vui-col-resize:hover::after,.vui-col-resize:focus-visible::after,.vui-col-resize--active::after{top:0;bottom:0;background:var(--border-focus)}

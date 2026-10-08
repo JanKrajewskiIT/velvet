@@ -1,0 +1,7 @@
+/* SearchTrigger */
+.vui-search-trigger{display:flex;align-items:center;gap:var(--space-2);width:min(320px,100%);height:var(--control-height-md);padding:0 var(--space-2) 0 var(--control-pad-x);border:var(--border-width) solid var(--border-default);border-radius:var(--radius-md);background:var(--bg-field);color:var(--fg-tertiary);font:var(--type-body-weight) var(--type-body-size)/1 var(--font-sans);text-align:left;cursor:pointer;transition:border-color var(--motion-fast),box-shadow var(--motion-fast)}
+.vui-search-trigger:hover{border-color:var(--border-strong);color:var(--fg-secondary)}
+.vui-search-trigger:focus-visible{outline:none;border-color:var(--border-focus);box-shadow:var(--focus-ring)}
+.vui-search-trigger__text{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media (max-width:639px){.vui-search-trigger{width:var(--control-height-md);padding:0;justify-content:center}
+.vui-search-trigger__text,.vui-search-trigger .vui-kbd{display:none}}

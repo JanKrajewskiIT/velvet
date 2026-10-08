@@ -1,0 +1,53 @@
+/* SYS · COLOUR (light) — intent tokens. Dark overrides live in sys-color-dark.css.
+   Families: bg · fg · border · action · on-color · status · focus · scrim · label · dv · code.
+   Every value aliases a ref token or is color-mix()ed from one — no literals. */
+:root{
+color-scheme:light;
+--tint:var(--velvet-950);/* shadow + hairline tint */
+--wash:var(--neutral-900);/* state-layer base */
+/* Background */
+--bg-page:var(--neutral-25);--bg-subtle:var(--neutral-50);--bg-raised:var(--neutral-0);--bg-sunken:var(--neutral-100);--bg-overlay:var(--neutral-0);--bg-field:var(--neutral-0);--bg-inverse:var(--neutral-900);
+--bg-brand:var(--velvet-700);--bg-brand-subtle:var(--velvet-50);--bg-glass:color-mix(in oklab,var(--neutral-25) 82%,transparent);--bg-media:var(--neutral-1000);
+/* State layers — washes that sit on any bg */
+--bg-hover:color-mix(in oklab,var(--wash) 5%,transparent);--bg-pressed:color-mix(in oklab,var(--wash) 9%,transparent);--bg-selected:var(--velvet-50);--bg-selected-hover:var(--velvet-100);
+/* Foreground */
+--fg-primary:var(--neutral-900);--fg-secondary:var(--neutral-600);--fg-tertiary:var(--neutral-500);--fg-disabled:var(--neutral-400);--fg-inverse:var(--neutral-0);
+--fg-brand:var(--velvet-700);--fg-link:var(--velvet-700);--fg-link-hover:var(--velvet-900);
+--selection-bg:var(--velvet-200);--selection-fg:var(--velvet-950);
+/* Border */
+--border-subtle:color-mix(in oklab,var(--tint) 7%,transparent);--border-default:color-mix(in oklab,var(--tint) 12%,transparent);--border-strong:color-mix(in oklab,var(--tint) 22%,transparent);
+--border-focus:var(--velvet-600);--border-brand:var(--velvet-700);
+/* Action fills + paired fg */
+--action-primary:var(--velvet-700);--action-primary-hover:var(--velvet-800);--action-primary-active:var(--velvet-900);--action-primary-fg:var(--white);
+--action-soft:var(--velvet-50);--action-soft-hover:var(--velvet-100);--action-soft-fg:var(--velvet-700);
+--action-danger:var(--danger-600);--action-danger-hover:var(--danger-700);--action-danger-fg:var(--white);
+/* On colour — content on brand fills, solids, media. Same in both themes. */
+--on-color-fg:var(--white);--on-color-muted:color-mix(in oklab,var(--white) 82%,transparent);
+--on-color-subtle:color-mix(in oklab,var(--white) 8%,transparent);--on-color-hover:color-mix(in oklab,var(--white) 14%,transparent);--on-color-pressed:color-mix(in oklab,var(--white) 20%,transparent);
+--on-color-border:color-mix(in oklab,var(--white) 28%,transparent);--on-color-border-strong:color-mix(in oklab,var(--white) 48%,transparent);
+/* Status — fg (text/icon) · bg (tint) · border · solid (fill under --on-color-fg) */
+--status-success-fg:var(--success-700);--status-success-bg:var(--success-50);--status-success-border:var(--success-200);--status-success-solid:var(--success-600);
+--status-warning-fg:var(--warning-700);--status-warning-bg:var(--warning-50);--status-warning-border:var(--warning-200);--status-warning-solid:var(--warning-500);
+--status-danger-fg:var(--danger-700);--status-danger-bg:var(--danger-50);--status-danger-border:var(--danger-200);--status-danger-solid:var(--danger-600);
+--status-info-fg:var(--info-700);--status-info-bg:var(--info-50);--status-info-border:var(--info-200);--status-info-solid:var(--info-600);
+--status-neutral-solid:var(--neutral-800);--rating-fill:var(--warning-400);
+/* Focus colour — shape lives in sys-state.css */
+--focus-ring-color:color-mix(in oklab,var(--velvet-500) 32%,transparent);--focus-ring-danger-color:color-mix(in oklab,var(--danger-500) 22%,transparent);
+/* Scrims */
+--scrim-backdrop:color-mix(in oklab,var(--neutral-950) 44%,transparent);--scrim-media:color-mix(in oklab,var(--neutral-1000) 94%,transparent);--scrim-image:color-mix(in oklab,var(--black) 45%,transparent);
+/* Fixtures */
+--skeleton-base:var(--bg-sunken);--skeleton-shine:color-mix(in oklab,var(--white) 38%,transparent);
+--thumb-bg:var(--white);--thumb-shadow:0 1px 2px color-mix(in oklab,var(--black) 25%,transparent);
+--swatch-ring:inset 0 0 0 1px color-mix(in oklab,var(--black) 10%,transparent);
+/* Labels — 8 decorative hues */
+--label-blue:var(--hue-blue);--label-indigo:var(--hue-indigo);--label-violet:var(--hue-violet);--label-magenta:var(--hue-magenta);--label-teal:var(--hue-teal);--label-cyan:var(--hue-cyan);--label-olive:var(--hue-olive);--label-slate:var(--hue-slate);
+--label-subtle-mix:12%;--label-fg-mix:var(--black) 22%;
+/* Data-viz — same 8 hues as labels, ordered for max adjacent contrast; never status colours */
+--dv-1:var(--hue-blue);--dv-2:var(--hue-magenta);--dv-3:var(--hue-teal);--dv-4:var(--hue-violet);--dv-5:var(--hue-olive);--dv-6:var(--hue-cyan);--dv-7:var(--hue-indigo);--dv-8:var(--hue-slate);
+--dv-seq-1:var(--velvet-100);--dv-seq-2:var(--velvet-300);--dv-seq-3:var(--velvet-500);--dv-seq-4:var(--velvet-700);--dv-seq-5:var(--velvet-900);
+--dv-grid:var(--border-subtle);--dv-axis:var(--fg-tertiary);
+/* Code — dark ground in both themes */
+--code-bg:var(--syntax-bg);--code-fg:var(--syntax-fg);--code-border:var(--neutral-800);--code-line:color-mix(in oklab,var(--white) 7%,transparent);--code-hover:color-mix(in oklab,var(--white) 3%,transparent);--code-active:color-mix(in oklab,var(--white) 8%,transparent);
+--code-muted:var(--syntax-muted);--code-gutter:var(--syntax-gutter);--code-comment:var(--syntax-comment);--code-accent:var(--velvet-400);
+--code-keyword:var(--syntax-keyword);--code-string:var(--syntax-string);--code-number:var(--syntax-number);--code-function:var(--syntax-function);--code-added:var(--syntax-added);
+}

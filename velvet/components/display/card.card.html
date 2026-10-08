@@ -1,0 +1,21 @@
+<!-- @dsCard group="23 Cards" viewport="960x502" name="Card" subtitle="Surface + regions: header · actions · body · footer · padding" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>a{color:var(--fg-link)}a:hover{color:var(--fg-link-hover)}.pane{display:flex;flex-direction:column;gap:18px}.hd{display:flex;justify-content:space-between;align-items:baseline;gap:16px}.hd b{font:var(--type-title);letter-spacing:var(--type-title-tracking)}.cap b{color:var(--fg-secondary);font-weight:600}.slot{display:flex;flex-direction:column;gap:8px;min-width:0}.nm{font-weight:600;font-size:15px}.tile{min-height:112px;justify-content:center;gap:4px}.g{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:start}.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;align-items:start}.ph{height:44px;border-radius:var(--radius-sm);background:var(--bg-sunken)}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { Card, Badge, Button, IconButton } = NS;
+const App=()=>(<div className="pane"><div className="lbl">paint · tone · behaviour → Surface</div>
+<div className="g">
+<div className="slot"><span className="cap"><b>title · description · actions · body · footer</b></span><Card title="Monthly revenue" description="Last 30 days" actions={<IconButton icon="more-horizontal" label="More" size="sm" />} footer={<><Button size="sm" variant="ghost">Export</Button><Button size="sm" variant="secondary">View report</Button></>}><div style={{display:'flex',alignItems:'baseline',gap:10}}><span style={{fontFamily:'var(--font-display)',fontWeight:600,fontSize:30,lineHeight:1,letterSpacing:'-0.03em'}}>€48,290</span><Badge tone="success" dot>+12.4%</Badge></div></Card></div>
+<div className="slot"><span className="cap"><b>title · body</b></span><Card title="Notifications" description="Choose what we email you"><div className="sb">Weekly digest, mentions and review requests.</div></Card></div>
+<div className="slot"><span className="cap"><b>body · footerAlign="between"</b></span><Card footerAlign="between" footer={<><span className="cap">Draft · 2 min ago</span><Button size="sm">Publish</Button></>}><div className="sb">Body-only card with a footer bar. Use when the content carries its own heading.</div></Card></div>
+</div>
+<div className="slot"><span className="cap"><b>padding</b> · --card-pad-*</span><div className="g4">{['none','sm','md','lg'].map(p=><Card key={p} padding={p} title={'padding="'+p+'"'}><div className="ph"></div></Card>)}</div></div>
+</div>);
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

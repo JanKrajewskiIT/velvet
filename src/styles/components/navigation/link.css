@@ -1,0 +1,11 @@
+.vui-link{color:var(--fg-link);font-weight:var(--type-label-weight);text-decoration:underline;text-decoration-thickness:1px;text-decoration-color:color-mix(in oklab,currentColor 35%,transparent);text-underline-offset:var(--underline-offset);border-radius:var(--radius-xs);transition:color var(--motion-fast),text-decoration-color var(--motion-fast)}
+.vui-link:hover{color:var(--fg-link-hover);text-decoration-color:currentColor}
+.vui-link:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.vui-link--plain{text-decoration-color:transparent}.vui-link--plain:hover{text-decoration-color:currentColor}
+.vui-link--quiet{color:var(--fg-secondary);text-decoration-color:transparent}.vui-link--quiet:hover{color:var(--fg-primary);text-decoration-color:currentColor}
+.vui-link--standalone{display:inline-flex;align-items:center;gap:var(--space-1-5);font-weight:var(--type-title-weight);text-decoration:none}
+.vui-link__icon{font-size:.95em;margin-left:.2em;vertical-align:-.12em}.vui-link--standalone .vui-link__icon{margin-left:0}
+.vui-link__arrow{transition:transform var(--motion-fast)}.vui-link:hover .vui-link__arrow{transform:translateX(3px)}
+.vui-link--disabled{color:var(--fg-disabled);text-decoration:none;cursor:not-allowed;pointer-events:none}
+.vui-sr-only{position:absolute;width:var(--border-width);height:var(--border-width);padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media (prefers-reduced-motion:reduce){.vui-link:hover .vui-link__arrow{transform:none}}

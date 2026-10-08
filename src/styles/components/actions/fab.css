@@ -1,0 +1,17 @@
+/* Fab */
+.vui-fab-wrap{position:relative;display:inline-flex;flex-direction:column;align-items:flex-end;gap:var(--space-3)}
+.vui-fab-wrap--fixed{position:fixed;right:var(--space-6);bottom:calc(var(--space-6) + env(safe-area-inset-bottom,0px));z-index:var(--z-sticky)}
+.vui-fab{display:inline-flex;align-items:center;justify-content:center;gap:var(--space-2-5);width:var(--fab-size);height:var(--fab-size);padding:0;border:0;border-radius:var(--fab-radius);background:var(--action-primary);color:var(--action-primary-fg);font:var(--type-title-weight) var(--type-body-size)/1 var(--font-sans);box-shadow:var(--glow-brand),var(--elevation-raised);cursor:pointer;transition:transform var(--motion-spring),box-shadow var(--motion-base),background-color var(--motion-fast)}
+.vui-fab:hover{background:var(--action-primary-hover);transform:translateY(-2px)}
+.vui-fab:active{transform:scale(.95)}
+.vui-fab:focus-visible{outline:none;box-shadow:var(--elevation-raised),var(--focus-ring)}
+.vui-fab--extended{width:auto;padding:0 var(--space-6) 0 var(--space-5)}
+.vui-fab__icon{font-size:var(--size-icon-2xl);transition:transform var(--motion-pop)}
+.vui-fab-wrap--open .vui-fab__icon{transform:rotate(135deg)}
+.vui-fab__dial{display:flex;flex-direction:column;align-items:flex-end;gap:var(--space-2-5);margin:0;padding:0 var(--space-1) 0 0;list-style:none}
+.vui-fab__dial li{display:flex;align-items:center;gap:var(--space-2-5);opacity:0;transform:translateY(12px) scale(.8);pointer-events:none;transition:opacity var(--motion-base),transform var(--motion-spring)}
+.vui-fab-wrap--open .vui-fab__dial li{opacity:1;transform:none;pointer-events:auto}
+.vui-fab__tag{padding:var(--space-1-5) var(--space-2-5);border-radius:var(--radius-md);background:var(--bg-overlay);box-shadow:var(--elevation-popover);font-size:var(--type-body-sm-size);font-weight:var(--type-label-weight);white-space:nowrap}
+.vui-fab__mini{display:grid;place-items:center;width:var(--hit-target-min);height:var(--hit-target-min);border:var(--border-width) solid var(--border-subtle);border-radius:var(--radius-xl);background:var(--bg-overlay);color:var(--fg-brand);box-shadow:var(--elevation-popover);cursor:pointer;font-size:var(--type-title-lg-size)}
+.vui-fab__mini:hover{background:var(--bg-selected)}
+.vui-fab__mini:focus-visible{outline:none;box-shadow:var(--focus-ring)}

@@ -1,0 +1,15 @@
+<!-- @dsCard group="01 Overview" viewport="960x108" name="Theme switch" subtitle="Global — re-themes every card in this tab" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../styles.bundle.css"><script src="../assets/theme-toggle.js"></script><style>body{margin:0;height:100vh;display:flex;flex-direction:column;justify-content:center;gap:18px;padding:0 24px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}.t{font:600 18px/1.2 var(--font-display);letter-spacing:-0.02em}.s{font-size:13px;color:var(--fg-secondary);margin-top:4px}.row{display:flex;align-items:center;justify-content:space-between;gap:16px}</style></head><body>
+<div class="row"><div><div class="t">Theme</div><div class="s">Applies to all foundation and component cards.</div></div>
+<div class="vui-tabs vui-tabs--segmented" role="tablist" id="seg">
+<button class="vui-tab" role="tab" data-v="light"><i class="vui-icon icon-sun"></i>Light</button>
+<button class="vui-tab" role="tab" data-v="dark"><i class="vui-icon icon-moon"></i>Dark</button>
+<button class="vui-tab" role="tab" data-v="system"><i class="vui-icon icon-monitor"></i>System</button>
+</div></div>
+<script>
+const seg=document.getElementById('seg');
+const sync=()=>seg.querySelectorAll('.vui-tab').forEach(b=>b.setAttribute('aria-selected',b.dataset.v===vuiGetTheme()));
+seg.addEventListener('click',e=>{const b=e.target.closest('.vui-tab');if(b){vuiSetTheme(b.dataset.v);sync();}});
+addEventListener('storage',sync);sync();
+</script>
+</body></html>

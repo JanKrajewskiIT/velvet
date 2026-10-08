@@ -1,0 +1,8 @@
+/* SYS · STATE — focus shapes. Colours come from sys-color; state washes are --bg-hover / --bg-pressed / --bg-selected; disabled is --opacity-disabled.
+   ring: halo around fields, buttons, cards · ring-inset: inside clipped containers · outline: swatches, media, free-form targets. */
+:root,[data-theme]{
+--focus-ring:0 0 0 var(--focus-ring-width) var(--focus-ring-color);/* @kind shadow */
+--focus-ring-danger:0 0 0 var(--focus-ring-width) var(--focus-ring-danger-color);/* @kind shadow */
+--focus-ring-inset:inset 0 0 0 var(--border-width-thick) var(--border-focus);/* @kind shadow */
+--focus-outline:var(--border-width-thick) solid var(--border-focus);/* @kind other */
+}

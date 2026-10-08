@@ -1,0 +1,12 @@
+/* ImageCropper */
+.vui-crop{display:flex;flex-direction:column;gap:var(--space-3);min-width:0}
+.vui-crop__stage{position:relative;overflow:hidden;border-radius:var(--media-radius);background:var(--neutral-950,var(--black));cursor:grab;touch-action:none;user-select:none}
+.vui-crop__stage--drag{cursor:grabbing}
+.vui-crop__img{position:absolute;left:50%;top:50%;max-width:none;pointer-events:none;user-select:none}
+.vui-crop__frame{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);box-shadow:0 0 0 9999px color-mix(in oklab,var(--black) 58%,transparent);outline:var(--border-width) solid color-mix(in oklab,var(--white) 85%,transparent);outline-offset:-1px;transition:outline-color var(--motion-fast)}
+.vui-crop__frame:focus-visible{outline:var(--border-width-thick) solid var(--white);outline-offset:-2px}
+.vui-crop__frame--circle{border-radius:50%}
+.vui-crop__grid{position:absolute;inset:0;border-radius:inherit;opacity:0;transition:opacity var(--motion-base);background:linear-gradient(90deg,transparent calc(33.33% - .5px),color-mix(in oklab,var(--white) 45%,transparent) calc(33.33% - .5px) calc(33.33% + .5px),transparent calc(33.33% + .5px) calc(66.66% - .5px),color-mix(in oklab,var(--white) 45%,transparent) calc(66.66% - .5px) calc(66.66% + .5px),transparent calc(66.66% + .5px)),linear-gradient(180deg,transparent calc(33.33% - .5px),color-mix(in oklab,var(--white) 45%,transparent) calc(33.33% - .5px) calc(33.33% + .5px),transparent calc(33.33% + .5px) calc(66.66% - .5px),color-mix(in oklab,var(--white) 45%,transparent) calc(66.66% - .5px) calc(66.66% + .5px),transparent calc(66.66% + .5px))}
+.vui-crop__stage--drag .vui-crop__grid,.vui-crop__frame:focus-visible .vui-crop__grid{opacity:1}
+.vui-crop__bar{display:flex;align-items:flex-end;gap:var(--space-3)}
+.vui-crop__zoom{flex:1;min-width:0}

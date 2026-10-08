@@ -1,0 +1,195 @@
+import { createMemo, createSignal, For, mergeProps, Show } from 'solid-js';
+
+import { useTranslate } from '../../i18n/useTranslate';
+import { cx } from '../../utils/cx';
+import { VisuallyHidden } from '../primitives/VisuallyHidden';
+import { niceTicks } from './chartScale';
+import { type ChartDatum, type ChartSeries, colorOf, defaultSeries, valueOf } from './chartSeries';
+import { createChartFormat } from './createChartFormat';
+import { createWidth } from './createWidth';
+
+const PAD = { l: 40, r: 8, t: 12, b: 28 } as const;
+const MAX_GROUP_WIDTH = 56;
+const TIP_MARGIN = 70;
+
+export interface BarChartProps {
+  /** `[{ label: 'Mon', value: 12 }]` or one key per series. */
+  data: ChartDatum[];
+  /** @default [{ key: 'value', label: localized "Value" }] */
+  series?: ChartSeries[];
+  /** px. @default 240 */
+  height?: number;
+  stacked?: boolean;
+  /** Axis + tooltip formatter. @default compact numbers in the active locale (1.2K) */
+  format?: (v: number) => string;
+  /** Accessible name. @default localized "Bar chart" */
+  label?: string;
+  /** Default: shown for 2+ series. */
+  showLegend?: boolean;
+  class?: string;
+}
+
+/** Vertical bar chart (grouped or stacked). Hover or focus + ←→ to read each group; the tooltip lists every series and is announced. */
+export const BarChart = (props: BarChartProps) => {
+  const merged = mergeProps({ height: 240, stacked: false } satisfies Partial<BarChartProps>, props);
+  const translate = useTranslate();
+  const format = createChartFormat(() => merged.format);
+  const { ref, width } = createWidth();
+  const [hover, setHover] = createSignal(-1);
+
+  const label = () => merged.label ?? translate('velvet.charts.barChart.label');
+  const series = createMemo(() => merged.series ?? defaultSeries(translate));
+  const innerWidth = () => width() - PAD.l - PAD.r;
+  const innerHeight = () => merged.height - PAD.t - PAD.b;
+  const lastIndex = () => merged.data.length - 1;
+
+  const ticks = createMemo(() => {
+    const totals = merged.data.map((d) =>
+      merged.stacked
+        ? series().reduce((sum, s) => sum + valueOf(d, s.key), 0)
+        : Math.max(...series().map((s) => valueOf(d, s.key))),
+    );
+    return niceTicks(Math.max(1, ...totals));
+  });
+  const top = () => ticks().at(-1) ?? 1;
+  const y = (v: number) => PAD.t + innerHeight() - (v / top()) * innerHeight();
+  const band = () => innerWidth() / Math.max(1, merged.data.length);
+  const groupWidth = () => Math.min(MAX_GROUP_WIDTH, band() * 0.64);
+  const barWidth = () => (merged.stacked ? groupWidth() : groupWidth() / series().length);
+  const bandCentre = (i: number) => PAD.l + band() * i + band() / 2;
+
+  const bars = (d: ChartDatum, i: number) => {
+    const x0 = PAD.l + band() * i + (band() - groupWidth()) / 2;
+    let acc = 0;
+    return series().map((s, k) => {
+      const v = valueOf(d, s.key);
+      const h = (v / top()) * innerHeight();
+      const stackedBar = merged.stacked;
+      const bar = {
+        key: s.key,
+        color: colorOf(s, k),
+        x: (stackedBar ? x0 : x0 + k * barWidth()) + (stackedBar ? 0 : 1),
+        y: stackedBar ? y(acc + v) : y(v),
+        width: Math.max(1, barWidth() - (stackedBar ? 0 : 2)),
+        height: Math.max(0, h - (stackedBar && k ? 1 : 0)),
+        radius: stackedBar && k !== series().length - 1 ? 0 : 4,
+      };
+      acc += v;
+      return bar;
+    });
+  };
+
+  const onKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      setHover((h) => Math.min(lastIndex(), h + 1));
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      setHover((h) => Math.max(0, h < 0 ? 0 : h - 1));
+    } else if (e.key === 'Escape') setHover(-1);
+  };
+
+  const hovered = () => (hover() >= 0 ? merged.data[hover()] : undefined);
+  const announcement = (d: ChartDatum) =>
+    `${d.label}: ${series()
+      .map((s) => `${s.label} ${format(valueOf(d, s.key))}`)
+      .join(', ')}`;
+
+  return (
+    <div ref={ref} class={cx('vui-chart', merged.class)}>
+      <Show when={merged.showLegend ?? series().length > 1}>
+        <div class="vui-chart__legend">
+          <For each={series()}>
+            {(s, k) => (
+              <span class="vui-chart__lg">
+                <i style={{ background: colorOf(s, k()) }} />
+                {s.label}
+              </span>
+            )}
+          </For>
+        </div>
+      </Show>
+      <div class="vui-chart__plot" style={{ height: `${merged.height}px` }}>
+        <svg
+          width={width()}
+          height={merged.height}
+          role="img"
+          aria-label={translate('velvet.charts.barChart.instructions', { label: label() })}
+          tabindex={0}
+          onKeyDown={onKeyDown}
+          onFocus={() => hover() < 0 && setHover(0)}
+          onBlur={() => setHover(-1)}
+          onMouseLeave={() => setHover(-1)}
+        >
+          <For each={ticks()}>
+            {(t) => (
+              <g>
+                <line x1={PAD.l} x2={width() - PAD.r} y1={y(t)} y2={y(t)} class="vui-chart__grid" />
+                <text x={PAD.l - 8} y={y(t)} dy="0.32em" text-anchor="end" class="vui-chart__tick">
+                  {format(t)}
+                </text>
+              </g>
+            )}
+          </For>
+          <For each={merged.data}>
+            {(d, i) => (
+              <g
+                onMouseEnter={() => setHover(i())}
+                class={cx('vui-chart__group', hover() >= 0 && hover() !== i() && 'vui-chart__group--dim')}
+              >
+                <rect x={PAD.l + band() * i()} y={PAD.t} width={band()} height={innerHeight()} fill="transparent" />
+                <For each={bars(d, i())}>
+                  {(bar) => (
+                    <rect
+                      x={bar.x}
+                      y={bar.y}
+                      width={bar.width}
+                      height={bar.height}
+                      rx={bar.radius}
+                      class="vui-chart__bar"
+                      style={{ fill: bar.color, 'animation-delay': `${i() * 30}ms` }}
+                    />
+                  )}
+                </For>
+                <text
+                  x={bandCentre(i())}
+                  y={merged.height - 8}
+                  text-anchor="middle"
+                  class={cx('vui-chart__tick', hover() === i() && 'vui-chart__tick--on')}
+                >
+                  {d.label}
+                </text>
+              </g>
+            )}
+          </For>
+        </svg>
+        <Show when={hovered()}>
+          {(d) => (
+            <div
+              class="vui-chart__tip"
+              style={{
+                left: `${Math.max(TIP_MARGIN, Math.min(width() - TIP_MARGIN, bandCentre(hover())))}px`,
+                top: `${PAD.t}px`,
+              }}
+              aria-hidden="true"
+            >
+              <div class="vui-chart__tip-t">{d().label}</div>
+              <For each={series()}>
+                {(s, k) => (
+                  <div class="vui-chart__tip-r">
+                    <i style={{ background: colorOf(s, k()) }} />
+                    {s.label}
+                    <b>{format(valueOf(d(), s.key))}</b>
+                  </div>
+                )}
+              </For>
+            </div>
+          )}
+        </Show>
+        <VisuallyHidden role="status">
+          <Show when={hovered()}>{(d) => announcement(d())}</Show>
+        </VisuallyHidden>
+      </div>
+    </div>
+  );
+};

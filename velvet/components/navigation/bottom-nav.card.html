@@ -1,0 +1,15 @@
+<!-- @dsCard group="22 Navigation" viewport="960x322" name="BottomNav" subtitle="Mobile tab bar · elevated centre action · badge" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { BottomNav } = window.VelvetUIDesignSystem_ee2bd8;
+const L={home:'Home',search:'Search',activity:'Activity',profile:'Profile'};
+const App=()=>{const[v,setV]=React.useState('home');const[s,setS]=React.useState('Home screen');return(<div className="pane" style={{alignItems:'center'}}><div style={{width:380,borderRadius:28,overflow:'hidden',border:'1px solid var(--border-subtle)',boxShadow:'var(--shadow-md)',background:'var(--bg-raised)'}}><div style={{height:220,background:'var(--bg-subtle)',display:'grid',placeItems:'center',color:'var(--fg-tertiary)',fontSize:13,fontWeight:500}}><span>{s}</span></div><BottomNav fixed={false} value={v} onChange={(x)=>{setV(x);setS(L[x]+' screen');}} action={{label:'Create',icon:'plus',onClick:()=>setS('New post')}} items={[{value:'home',label:'Home',icon:'home'},{value:'search',label:'Search',icon:'search'},{value:'activity',label:'Activity',icon:'bell',badge:3},{value:'profile',label:'Profile',icon:'user'}]} /></div></div>);};
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

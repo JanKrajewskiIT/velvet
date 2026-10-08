@@ -1,0 +1,42 @@
+/* REF · COLOUR — raw ramps in OKLCH. L steps evenly, C peaks mid-ramp, H fixed per family.
+   Never read by component CSS — only by sys-* tokens. Hex comments = sRGB hand-off values. */
+:root{
+--velvet-50:oklch(97.1% 0.012 359);/* #fdf2f5 */
+--velvet-100:oklch(94.2% 0.026 356);/* #fbe5ec */
+--velvet-200:oklch(87.3% 0.058 358);/* #f6c6d5 */
+--velvet-300:oklch(77.4% 0.108 360);/* #ee98b3 */
+--velvet-400:oklch(65.8% 0.165 3);/* #e05f88 */
+--velvet-500:oklch(55.8% 0.193 6);/* #c92d62 */
+--velvet-600:oklch(48.3% 0.184 9);/* #ac1249 */
+--velvet-700:oklch(40.7% 0.163 9);/* #8b0036 — brand */
+--velvet-800:oklch(35.4% 0.142 8);/* #72002d */
+--velvet-900:oklch(30.9% 0.118 7);/* #5c0526 */
+--velvet-950:oklch(21.9% 0.088 6);/* #380014 */
+--neutral-0:oklch(100% 0 0);/* #ffffff */
+--neutral-25:oklch(98.9% 0.001 355);/* #fcfbfb */
+--neutral-50:oklch(97.2% 0.002 355);/* #f7f5f6 */
+--neutral-100:oklch(94.6% 0.003 355);/* #efeced */
+--neutral-200:oklch(90.4% 0.005 355);/* #e2dedf */
+--neutral-300:oklch(82.9% 0.007 355);/* #cbc5c7 */
+--neutral-400:oklch(70.0% 0.009 352);/* #a39c9f */
+--neutral-500:oklch(57.3% 0.010 352);/* #7d7679 */
+--neutral-600:oklch(46.7% 0.009 355);/* #5e585a */
+--neutral-700:oklch(37.6% 0.010 352);/* #463f42 */
+--neutral-800:oklch(29.0% 0.007 352);/* #2e2a2c */
+--neutral-850:oklch(25.7% 0.006 355);/* #262223 */
+--neutral-900:oklch(22.2% 0.005 355);/* #1d1a1b */
+--neutral-925:oklch(19.5% 0.005 355);/* #171415 */
+--neutral-950:oklch(17.6% 0.004 355);/* #121011 */
+--neutral-1000:oklch(14.6% 0.002 355);/* #0b0a0a */
+--white:oklch(100% 0 0);/* @kind color */
+--black:oklch(0% 0 0);/* @kind color */
+--success-50:oklch(97.5% 0.015 158);--success-100:oklch(93.6% 0.038 157);--success-200:oklch(86.4% 0.076 157);--success-300:oklch(78.5% 0.115 155);--success-400:oklch(69.8% 0.149 154);--success-500:oklch(58.3% 0.137 154);--success-600:oklch(51.2% 0.121 154);--success-700:oklch(44.0% 0.099 156);--success-800:oklch(37.5% 0.082 156);--success-900:oklch(31.0% 0.065 157);--success-950:oklch(23.0% 0.045 158);
+--warning-50:oklch(98.1% 0.019 83);--warning-100:oklch(95.0% 0.053 87);--warning-200:oklch(89.8% 0.105 86);--warning-300:oklch(84.5% 0.135 79);--warning-400:oklch(78.2% 0.158 72);--warning-500:oklch(68.4% 0.154 65);--warning-600:oklch(59.5% 0.135 64);--warning-700:oklch(49.9% 0.114 63);--warning-800:oklch(41.5% 0.094 64);--warning-900:oklch(33.3% 0.074 66);--warning-950:oklch(24.0% 0.052 66);
+/* Danger is orange-red (hue 30) so errors never read as brand velvet (hue 9). */
+--danger-50:oklch(97.2% 0.012 24);--danger-100:oklch(93.5% 0.031 25);--danger-200:oklch(86.6% 0.066 27);--danger-300:oklch(78.0% 0.120 27);--danger-400:oklch(68.6% 0.173 28);--danger-500:oklch(60.1% 0.203 30);--danger-600:oklch(53.3% 0.189 30);--danger-700:oklch(45.6% 0.159 30);--danger-800:oklch(37.8% 0.130 30);--danger-900:oklch(30.0% 0.102 30);--danger-950:oklch(22.0% 0.070 30);
+--info-50:oklch(96.9% 0.015 261);--info-100:oklch(92.8% 0.033 261);--info-200:oklch(85.3% 0.068 261);--info-300:oklch(76.0% 0.110 260);--info-400:oklch(66.8% 0.151 260);--info-500:oklch(56.2% 0.179 260);--info-600:oklch(48.4% 0.167 261);--info-700:oklch(41.6% 0.137 261);--info-800:oklch(35.5% 0.114 261);--info-900:oklch(29.5% 0.091 261);--info-950:oklch(21.5% 0.062 261);
+/* Categorical hues — decorative only. Uniform L 57%, clear of velvet / red / green / orange. */
+--hue-blue:oklch(57% 0.15 258);--hue-indigo:oklch(57% 0.15 280);--hue-violet:oklch(57% 0.16 300);--hue-magenta:oklch(57% 0.17 330);--hue-teal:oklch(57% 0.10 190);--hue-cyan:oklch(57% 0.11 225);--hue-olive:oklch(57% 0.10 115);--hue-slate:oklch(57% 0.03 265);
+/* Syntax — code-block palette on a fixed dark ground (same in both themes). Read only by sys --code-*. */
+--syntax-bg:oklch(17.5% 0.010 25);--syntax-fg:oklch(92.5% 0.008 355);--syntax-muted:oklch(70.5% 0.014 355);--syntax-gutter:oklch(46.0% 0.014 355);--syntax-comment:oklch(57.5% 0.012 355);--syntax-keyword:oklch(75.0% 0.120 360);--syntax-string:oklch(83.0% 0.080 150);--syntax-number:oklch(81.5% 0.110 70);--syntax-function:oklch(77.0% 0.110 260);--syntax-added:oklch(79.5% 0.120 155);
+}

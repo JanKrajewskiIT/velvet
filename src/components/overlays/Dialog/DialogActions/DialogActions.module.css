@@ -1,7 +1,0 @@
-.root {
-  flex-shrink: 0;
-  padding: 0 var(--spacing-lg) var(--spacing-lg);
-  display: flex;
-  justify-content: flex-end;
-  gap: var(--spacing-sm);
-}

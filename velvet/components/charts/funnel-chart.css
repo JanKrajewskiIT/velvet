@@ -1,0 +1,19 @@
+/* FunnelChart */
+.vui-funnel{display:flex;flex-direction:column;width:100%;min-width:0;font-family:var(--font-sans);color:var(--fg-primary)}
+.vui-funnel__row,.vui-funnel__conv{display:grid;grid-template-columns:minmax(72px,150px) minmax(0,1fr) 84px;align-items:center;gap:var(--space-4)}
+.vui-funnel__row{min-height:44px;padding:0 var(--space-1);border-radius:var(--radius-md);outline:0;transition:opacity var(--motion-fast)}
+.vui-funnel__row:focus-visible{box-shadow:var(--focus-ring)}
+.vui-funnel__row--dim{opacity:.4}
+.vui-funnel__label{font:var(--type-label);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vui-funnel__track{position:relative;display:flex;justify-content:center;height:36px}
+.vui-funnel__ghost{position:absolute;top:0;bottom:0;left:50%;transform:translateX(-50%);box-sizing:border-box;border:var(--border-width) dashed var(--border-default);border-radius:var(--radius-sm);background:repeating-linear-gradient(135deg,var(--bg-subtle) 0 5px,transparent 5px 10px)}
+.vui-funnel__bar{position:relative;height:100%;border-radius:var(--radius-sm);animation:vui-funnel-in var(--motion-slide) backwards}
+.vui-funnel__val{display:flex;flex-direction:column;align-items:flex-end;line-height:1.25}
+.vui-funnel__val b{font:var(--type-title);font-variant-numeric:tabular-nums}
+.vui-funnel__val small{font-size:var(--type-caption-size);color:var(--fg-tertiary);font-variant-numeric:tabular-nums}
+.vui-funnel__conv{min-height:26px;padding:0 var(--space-1)}
+.vui-funnel__conv>span{grid-column:2;justify-self:center;display:inline-flex;align-items:center;gap:var(--space-2);font-size:var(--type-caption-size);color:var(--fg-tertiary)}
+.vui-funnel__conv b{display:inline-flex;align-items:center;gap:var(--space-1);height:20px;padding:0 var(--space-2);border-radius:var(--radius-full);background:var(--bg-subtle);color:var(--fg-primary);font-weight:var(--font-weight-semibold);font-variant-numeric:tabular-nums}
+@media (max-width:479px){.vui-funnel__row,.vui-funnel__conv{grid-template-columns:minmax(0,1fr) 64px;gap:var(--space-1) var(--space-3)}.vui-funnel__label{grid-column:1/-1}.vui-funnel__conv>span{grid-column:1}}
+@media (prefers-reduced-motion:reduce){.vui-funnel__bar{animation:none}}
+@keyframes vui-funnel-in{from{transform:scaleX(0)}}

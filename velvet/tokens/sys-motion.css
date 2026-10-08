@@ -1,0 +1,18 @@
+/* SYS · MOTION — duration + curve composed per intent so they never drift. Use as `transition:opacity var(--motion-fast)`.
+   instant: press feedback · fast: hover/colour · base: state change · move: position/size change · reveal: small popups, chevrons · enter/exit: overlays · spring: thumbs, checks · bounce: quick pops · pop: things appearing · lift: card hover (= move) · slide: carousels, drawers · progress: bars, meters · track: values following input (scroll progress, drag).
+   Components read --motion-*, never --dur-* or --ease-* (exception: infinite keyframe loops may pair a literal duration with --ease-*). */
+:root{
+--motion-instant:var(--dur-instant) var(--ease-standard);/* @kind other */
+--motion-fast:var(--dur-fast) var(--ease-standard);/* @kind other */
+--motion-base:var(--dur-base) var(--ease-standard);/* @kind other */
+--motion-enter:var(--dur-slow) var(--ease-emphasized);/* @kind other */
+--motion-exit:var(--dur-base) var(--ease-exit);/* @kind other */
+--motion-spring:var(--dur-base) var(--ease-spring);/* @kind other */
+--motion-move:var(--dur-base) var(--ease-emphasized);/* @kind other */--motion-lift:var(--motion-move);/* @kind other */--motion-reveal:var(--dur-fast) var(--ease-emphasized);/* @kind other */--motion-bounce:var(--dur-fast) var(--ease-spring);/* @kind other */--motion-progress:var(--dur-slower) var(--ease-standard);/* @kind other */
+--motion-pop:var(--dur-slow) var(--ease-spring);/* @kind other */
+--motion-slide:var(--dur-slower) var(--ease-emphasized);/* @kind other */
+--motion-track:var(--dur-instant) var(--ease-linear);/* @kind other */
+--transition-colors:color var(--motion-fast),background-color var(--motion-fast),border-color var(--motion-fast),box-shadow var(--motion-fast);/* @kind other */
+/* Distances */
+--motion-rise:8px;/* @kind spacing */--motion-nudge:1px;/* @kind spacing */--motion-stagger:50ms;/* @kind other */
+}

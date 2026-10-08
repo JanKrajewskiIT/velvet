@@ -1,0 +1,3 @@
+/* Atom · Weekday — short weekday label above a date grid (Calendar, Scheduler, CalendarOrganizer). Names come from weekdayNames() in date.js. */
+.vui-weekday{color:var(--fg-tertiary);font:var(--type-overline);letter-spacing:var(--type-overline-tracking);text-transform:uppercase}
+.vui-weekday--today{color:var(--fg-brand)}

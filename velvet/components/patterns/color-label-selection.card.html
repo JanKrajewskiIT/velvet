@@ -1,0 +1,21 @@
+<!-- @dsCard group="28 Patterns" viewport="960x336" name="ColorLabelSelectionDialog" subtitle="Assign labels to an item · search + create inline · max · async apply · links to ColorLabelManager" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.pane{display:flex;flex-direction:column;gap:12px}.row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 14px;border:1px solid var(--border-subtle);border-radius:12px;background:var(--bg-raised)}.row b{font-size:14px;font-weight:600;margin-right:auto}.tag{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 9px 0 7px;border-radius:999px;font-size:12px;font-weight:500;background:color-mix(in oklab,var(--c) 14%,transparent)}.tag i{width:8px;height:8px;border-radius:50%;background:var(--c)}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const { ColorLabelSelectionDialog, ColorLabelManager, Button } = window.VelvetUIDesignSystem_ee2bd8;
+const INIT=[{id:'a',name:'Top talent',color:'var(--dv-1)',count:12},{id:'b',name:'Relocation',color:'var(--dv-2)',count:4},{id:'c',name:'Referral',color:'var(--dv-3)',count:9},{id:'d',name:'Needs visa',color:'var(--dv-4)',count:2},{id:'e',name:'Re-engage Q1',color:'var(--dv-5)',count:6},{id:'f',name:'Hold',color:'var(--dv-6)',count:3},{id:'g',name:'Senior',color:'var(--dv-7)',count:15},{id:'h',name:'Contractor',color:'var(--dv-8)',count:1}];
+const App=()=>{const[labels,setLabels]=React.useState(INIT);const[val,setVal]=React.useState(['a','c']);const[open,setOpen]=React.useState(true);const[mng,setMng]=React.useState(false);
+return(<div className="pane"><div className="row"><b>Anna Kowalska</b>{labels.filter(l=>val.includes(l.id)).map(l=><span key={l.id} className="tag" style={{'--c':l.color}}><i />{l.name}</span>)}<Button size="sm" variant="secondary" iconLeft="tag" onClick={()=>setOpen(true)}>Labels</Button></div>
+<ColorLabelSelectionDialog open={open} onClose={()=>setOpen(false)} title="Labels for Anna Kowalska" labels={labels} value={val} max={4}
+onSubmit={(ids)=>new Promise(r=>setTimeout(()=>{setVal(ids);r();},500))}
+onCreate={({name,color})=>{const l={id:'n'+Date.now(),name,color,count:0};setLabels(x=>[...x,l]);return l;}}
+onManage={()=>{setOpen(false);setMng(true);}} />
+<ColorLabelManager open={mng} onClose={()=>{setMng(false);setOpen(true);}} labels={labels} onChange={setLabels} />
+</div>);};
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

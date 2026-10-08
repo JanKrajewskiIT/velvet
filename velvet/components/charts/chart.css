@@ -1,0 +1,27 @@
+/* Chart */
+.vui-chart{position:relative;display:flex;flex-direction:column;gap:var(--space-2-5);width:100%;min-width:0;font-family:var(--font-sans)}
+.vui-chart__bar-top{display:flex;align-items:center;justify-content:space-between;gap:var(--space-3);min-height:28px}
+.vui-chart__legend{display:flex;flex-wrap:wrap;gap:var(--space-1) var(--space-3-5)}
+.vui-chart__lg{display:inline-flex;align-items:center;gap:var(--space-1-5);font-size:var(--type-caption-size);color:var(--fg-secondary)}
+.vui-chart__lg i{width:10px;height:10px;border-radius:var(--radius-2xs)}
+.vui-chart__plot{position:relative}
+.vui-chart__plot svg{display:block;overflow:visible;outline:0;border-radius:var(--radius-sm)}
+.vui-chart__plot svg:focus-visible{box-shadow:var(--focus-ring)}
+.vui-chart__grid{stroke:var(--dv-grid);stroke-width:1;shape-rendering:crispEdges}
+.vui-chart__tick{fill:var(--dv-axis);font:var(--type-body-weight) var(--type-overline-size)/1 var(--font-sans);font-variant-numeric:tabular-nums}
+.vui-chart__tick--on{fill:var(--fg-primary);font-weight:var(--type-title-weight)}
+.vui-chart__bar{transform-origin:bottom;transform-box:fill-box;animation:vui-bar-in var(--motion-slide) backwards;transition:opacity var(--motion-fast)}
+.vui-chart__group--dim .vui-chart__bar{opacity:.35}
+.vui-chart__line{fill:none;stroke-width:2.25;stroke-linejoin:round;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:0;animation:vui-draw 900ms var(--ease-emphasized) backwards}
+.vui-chart__area{animation:vui-fade-in 900ms var(--ease-standard) backwards}
+.vui-chart__cross{stroke:var(--border-strong);stroke-width:1;stroke-dasharray:3 3;pointer-events:none}
+.vui-chart__pt{fill:var(--bg-raised);stroke-width:2.5;pointer-events:none}
+.vui-chart__tip{position:absolute;z-index:2;transform:translate(-50%,calc(-100% - 8px));min-width:120px;padding:var(--space-2) var(--space-2-5);border-radius:var(--radius-md);pointer-events:none;font-size:var(--type-caption-size);white-space:nowrap;transition:left var(--motion-fast)}
+.vui-chart__tip-t{margin-bottom:var(--space-1);font-weight:var(--type-title-weight);color:var(--fg-primary)}
+.vui-chart__tip-r{display:flex;align-items:center;gap:var(--space-1-5);color:var(--fg-secondary)}
+.vui-chart__tip-r i{width:var(--size-dot-lg);height:var(--size-dot-lg);border-radius:var(--radius-2xs)}
+.vui-chart__tip-r b{margin-left:auto;padding-left:var(--space-3);color:var(--fg-primary);font-variant-numeric:tabular-nums}
+.vui-chart__table{max-height:280px;overflow:auto;border:var(--border-width) solid var(--border-subtle);border-radius:var(--radius-md)}
+@media (prefers-reduced-motion:reduce){.vui-chart__bar,.vui-chart__line,.vui-chart__area{animation:none}}
+@keyframes vui-bar-in{from{transform:scaleY(0)}}
+@keyframes vui-draw{from{stroke-dashoffset:1}}

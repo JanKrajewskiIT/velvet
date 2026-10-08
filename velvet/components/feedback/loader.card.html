@@ -1,0 +1,14 @@
+<!-- @dsCard group="14 Feedback" viewport="960x488" name="Loader" subtitle="14 decorative loaders · 1:1 port from VelvetUi · PageLoader" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.pane{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.cell{display:grid;grid-template-rows:96px auto;place-items:center;gap:6px;padding:10px 4px;border-radius:12px;background:var(--bg-subtle);overflow:hidden}.cell>div:first-child{display:grid;place-items:center;width:100%;height:96px;overflow:hidden}.n{font:500 11px/1.2 var(--font-mono);color:var(--fg-tertiary)}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const { Loader, PageLoader } = window.VelvetUIDesignSystem_ee2bd8;
+const L=[['bike',.6],['bouncing-dots',.6],['concentric-pulse',.9],['corner-pulse',1],['dual-plane',.8],['ellipsis',1],['equalizer',1],['honeycomb',.42],['jelly-triangle',1],['orbit-squares',.8],['pulse-ring',1],['ripple-dots',.8],['shape-trail',1],['shape-trail',1,'triangle'],['shuffle-grid',1]];
+const App=()=>(<div className="pane">{L.map(([v,s,sh],i)=><div className="cell" key={i}><div><Loader variant={v} scale={s} shape={sh} /></div><span className="n">{v}{sh?' · '+sh:''}</span></div>)}</div>);
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

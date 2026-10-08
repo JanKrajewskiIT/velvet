@@ -1,0 +1,15 @@
+<!-- @dsCard group="14 Feedback" viewport="960x510" name="NotificationCenter" subtitle="Bell + unread count → list · mark all read" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { NotificationCenter, Avatar } = NS;
+const INIT=[{id:1,title:'Anna mentioned you in Atlas redesign',body:'“@you can you review the nav spacing before Friday?”',time:'2m ago',unread:true,avatar:<Avatar name="Anna Kowalska" size="sm" />},{id:2,title:'Export finished',body:'members-2026-09.csv is ready to download.',time:'1h ago',unread:true,tone:'success'},{id:3,title:'Storage almost full',body:'You’ve used 92% of 20 GB.',time:'Yesterday',unread:true,tone:'warning'},{id:4,title:'Marek joined the workspace',time:'Mon',tone:'brand',icon:'users'}];
+const App=()=>{const[items,setItems]=React.useState(INIT);return(<div className="pane"><div style={{display:'flex',justifyContent:'flex-end'}}><NotificationCenter defaultOpen items={items} onMarkAllRead={()=>setItems(i=>i.map(x=>({...x,unread:false})))} onItemClick={(n)=>setItems(i=>i.map(x=>x.id===n.id?{...x,unread:false}:x))} onViewAll={()=>{}} /></div></div>);};
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

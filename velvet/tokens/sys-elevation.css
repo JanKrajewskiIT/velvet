@@ -1,0 +1,35 @@
+/* SYS · ELEVATION — five-step shadow ladder (wine-tinted light, black + inset highlight dark) and the intents components read.
+   Components read --elevation-*, never --shadow-* directly. Scoped to [data-theme] too so subtrees recompute. */
+:root,[data-theme]{
+--shadow-xs:0 1px 2px color-mix(in oklab,var(--tint) 6%,transparent);
+--shadow-sm:0 1px 3px color-mix(in oklab,var(--tint) 8%,transparent),0 1px 2px color-mix(in oklab,var(--tint) 4%,transparent);
+--shadow-md:0 4px 12px -2px color-mix(in oklab,var(--tint) 9%,transparent),0 2px 4px -2px color-mix(in oklab,var(--tint) 5%,transparent);
+--shadow-lg:0 12px 32px -8px color-mix(in oklab,var(--tint) 14%,transparent),0 4px 8px -4px color-mix(in oklab,var(--tint) 6%,transparent);
+--shadow-xl:0 24px 64px -12px color-mix(in oklab,var(--tint) 22%,transparent),0 8px 16px -8px color-mix(in oklab,var(--tint) 8%,transparent);
+--shadow-drawer-right:-12px 0 40px -8px color-mix(in oklab,var(--tint) 16%,transparent);--shadow-drawer-left:12px 0 40px -8px color-mix(in oklab,var(--tint) 16%,transparent);
+--shadow-media:0 20px 60px color-mix(in oklab,var(--black) 50%,transparent);
+--highlight-inset:inset 0 1px 0 color-mix(in oklab,var(--white) 80%,transparent);
+--highlight-on-color:inset 0 1px 0 color-mix(in oklab,var(--white) 12%,transparent);
+--glow-brand:0 0 0 1px color-mix(in oklab,var(--velvet-500) 14%,transparent),0 10px 32px -8px color-mix(in oklab,var(--velvet-700) 35%,transparent);
+/* Intents — flat · control · card · card-hover · raised · popover · dialog · drawer · brand · media */
+--elevation-flat:none;/* @kind shadow */
+--elevation-control:var(--shadow-xs);/* @kind shadow */
+--elevation-card:var(--shadow-sm);/* @kind shadow */
+--elevation-card-hover:var(--shadow-md);/* @kind shadow */
+--elevation-raised:var(--shadow-lg);/* @kind shadow */
+--elevation-popover:var(--shadow-lg),var(--highlight-inset);/* @kind shadow */
+--elevation-dialog:var(--shadow-xl),var(--highlight-inset);/* @kind shadow */
+--elevation-brand:var(--glow-brand),var(--shadow-lg);/* @kind shadow */
+--elevation-media:var(--shadow-media);/* @kind shadow */
+--elevation-drawer-right:var(--shadow-drawer-right);/* @kind shadow */--elevation-drawer-left:var(--shadow-drawer-left);/* @kind shadow */
+}
+[data-theme="dark"]{
+--shadow-xs:0 1px 2px color-mix(in oklab,var(--black) 40%,transparent);
+--shadow-sm:0 1px 3px color-mix(in oklab,var(--black) 45%,transparent),inset 0 1px 0 color-mix(in oklab,var(--white) 3%,transparent);
+--shadow-md:0 4px 12px -2px color-mix(in oklab,var(--black) 50%,transparent),inset 0 1px 0 color-mix(in oklab,var(--white) 4%,transparent);
+--shadow-lg:0 12px 32px -8px color-mix(in oklab,var(--black) 60%,transparent),inset 0 1px 0 color-mix(in oklab,var(--white) 5%,transparent);
+--shadow-xl:0 24px 64px -12px color-mix(in oklab,var(--black) 70%,transparent),inset 0 1px 0 color-mix(in oklab,var(--white) 6%,transparent);
+--shadow-drawer-right:-12px 0 40px -8px color-mix(in oklab,var(--black) 55%,transparent);--shadow-drawer-left:12px 0 40px -8px color-mix(in oklab,var(--black) 55%,transparent);
+--highlight-inset:inset 0 1px 0 color-mix(in oklab,var(--white) 6%,transparent);
+--glow-brand:0 0 0 1px color-mix(in oklab,var(--velvet-400) 18%,transparent),0 10px 40px -8px color-mix(in oklab,var(--velvet-500) 45%,transparent);
+}

@@ -1,0 +1,17 @@
+<!-- @dsCard group="25 Data viz" viewport="960x437" name="Heatmap" subtitle="Calendar density · hover or arrow keys · sequential palette" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.pane{display:flex;flex-direction:column;gap:18px}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { Heatmap } = NS;
+let s=7;const rnd=()=>(s=(s*16807)%2147483647)/2147483647;
+const mk=(days,end,f)=>{const out=[];const e=new Date(end);for(let i=0;i<days;i++){const d=new Date(e.getFullYear(),e.getMonth(),e.getDate()-i);const wd=d.getDay();const base=(wd===0||wd===6)?.25:1;const v=rnd()<.18?0:Math.round(rnd()*f*base*(1-i/days*.5));out.push({date:d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'),value:v});}return out;};
+const A=mk(140,'2026-10-02',12);const B=mk(364,'2026-10-02',6);
+const App=()=>{const[p,setP]=React.useState(null);return(<div className="pane"><Heatmap data={A} weeks={20} unit="sessions" label="Last 20 weeks" onCellClick={setP} /><div className="lbl">{p?'Selected '+p.date+' — '+p.value+' sessions':'Click a day to select it'}</div><Heatmap data={B} weeks={52} cellMax={11} unit="commits" label="Last year" thresholds={[2,4,6]} /></div>);};
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

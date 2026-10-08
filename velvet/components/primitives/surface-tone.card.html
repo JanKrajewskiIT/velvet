@@ -1,0 +1,18 @@
+<!-- @dsCard group="11 Atoms" viewport="960x296" name="Surface · Tone" subtitle="tone sets --tone / --tone-fg / --tone-bg · accent draws the strip" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>a{color:var(--fg-link)}a:hover{color:var(--fg-link-hover)}.pane{display:flex;flex-direction:column;gap:18px}.hd{display:flex;justify-content:space-between;align-items:baseline;gap:16px}.hd b{font:var(--type-title);letter-spacing:var(--type-title-tracking)}.cap b{color:var(--fg-secondary);font-weight:600}.slot{display:flex;flex-direction:column;gap:8px;min-width:0}.nm{font-weight:600;font-size:15px}.tile{min-height:112px;justify-content:center;gap:4px}.g{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.bd{padding:14px;border-radius:var(--radius-xl);background:repeating-linear-gradient(135deg,var(--bg-sunken) 0 8px,var(--bg-page) 8px 16px)}.g6{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px}.g8{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:14px}.chip{display:inline-flex;align-self:flex-start;padding:2px 8px;border-radius:var(--radius-sm);background:var(--tone-bg);color:var(--tone-fg);font:var(--type-label-sm)}.k{font:var(--type-overline);letter-spacing:.08em;text-transform:uppercase;color:var(--fg-tertiary)}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { Surface } = NS;
+const V=[['default','Resting card · bg + hairline + shadow'],['flat','Border only, no shadow'],['raised','Shadow only, no border'],['subtle','Recedes into the page'],['sunken','Wells, insets, media beds'],['brand','Tinted brand wash'],['brand-solid','Filled brand, on-colour text'],['inverse','Dark on light (and back)'],['glass','Frosted — over imagery only']];
+const T=({v,s})=>(<Surface variant={v} padding="md" className="tile"><span className="nm">{v}</span><span className="sb" style={/solid|inverse/.test(v)?{color:'inherit',opacity:.8}:null}>{s}</span></Surface>);
+const S=['brand','neutral','success','warning','danger','info'],L=['blue','indigo','violet','magenta','teal','cyan','olive','slate'];
+const TT=({t})=>(<Surface tone={t} accent padding="sm" style={{minHeight:84,gap:8,justifyContent:'flex-end'}}><span className="chip">{t}</span><span className="cap">--tone-bg</span></Surface>);
+const App=()=>(<div className="pane"><div className="hd"><span className="k">Tone · status — carries meaning</span><span className="mono">tone="…" accent</span></div><div className="g6">{S.map(t=><TT key={t} t={t} />)}</div><span className="k">Tone · label — decorative, never status</span><div className="g8">{L.map(t=><TT key={t} t={t} />)}</div></div>);
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

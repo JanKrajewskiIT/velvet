@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script><script src="./recron-data.js"></script><style>:root:root{overflow:auto!important;height:auto!important;background:var(--bg-page)!important}html body{margin:0!important;padding:0!important;background:var(--bg-page)!important}</style></helmet>
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.PageHeader" title="Interview prep" description="Real questions from the community, matched to your role. Save the ones you want to learn, then practise them." actions="{{ headerActions }}" hint-size="100%,112px"></x-import>
+<sc-if value="{{ isBank }}" hint-placeholder-val="{{ true }}">
+<div style="display:grid;grid-template-columns:200px minmax(0,1fr);gap:var(--space-5);align-items:start">
+<div style="position:sticky;top:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Tabs" orientation="vertical" items="{{ categoryTabs }}" value="{{ category }}" on-value-change="{{ setCategory }}" aria-label="Categories" hint-size="200px,320px"></x-import>
+</div>
+<div style="display:flex;flex-direction:column;gap:var(--space-4);min-width:0">
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-3)">
+<div style="flex:1 1 220px;max-width:320px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.SearchInput" size="sm" placeholder="Search questions…" value="{{ query }}" on-value-change="{{ setQuery }}" aria-label="Search questions" hint-size="100%,36px"></x-import>
+</div>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.ChipGroup" size="sm" multiple="{{ false }}" label="Show" options="{{ filterOptions }}" value="{{ filter }}" on-value-change="{{ setFilter }}" hint-size="260px,32px"></x-import>
+<div style="flex:1"></div>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Select" size="sm" aria-label="Sort" options="{{ sortOptions }}" value="{{ sort }}" on-value-change="{{ setSort }}" icon-left="swap-vertical" style="width:180px" hint-size="180px,32px"></x-import>
+</div>
+<sc-if value="{{ hasQuestions }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-3)">
+<sc-for list="{{ visible }}" as="q" hint-placeholder-count="4">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.QuestionCard" question="{{ q.question }}" category="{{ q.category }}" level="{{ q.level }}" difficulty="{{ q.difficulty }}" answer="{{ q.answer }}" votes="{{ q.votes }}" voted="{{ q.voted }}" on-vote="{{ q.vote }}" starred="{{ q.learning }}" on-star="{{ q.star }}" hint-size="100%,150px"></x-import>
+</sc-for>
+</div>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.LoadMore" shown="{{ shown }}" total="{{ total }}" step="{{ 6 }}" on-load-more="{{ more }}" format="{{ fmtMore }}" hint-size="100%,96px"></x-import>
+</sc-if>
+<sc-if value="{{ noQuestions }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.EmptyState" icon="search" title="No questions here yet" description="Try another category — or propose the question you were asked." actions="{{ proposeBtn }}" hint-size="100%,260px"></x-import>
+</sc-if>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ isPractice }}" hint-placeholder-val="{{ false }}">
+<div style="max-width:720px;width:100%;margin:0 auto">
+<sc-if value="{{ phase.setup }}" hint-placeholder-val="{{ true }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Practice session" description="Flip each card, answer out loud, then mark how it went. Missed cards come back first next time." hint-size="100%,420px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FlashcardSetup" decks="{{ decks }}" max-cards="{{ 20 }}" on-start="{{ start }}" hint-size="100%,340px"></x-import>
+</x-import>
+</sc-if>
+<sc-if value="{{ phase.session }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FlashcardSession" cards="{{ cards }}" on-finish="{{ finish }}" on-exit="{{ exit }}" hint-size="100%,460px"></x-import>
+</sc-if>
+<sc-if value="{{ phase.summary }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FlashcardSummary" results="{{ results }}" on-restart="{{ restart }}" on-review-missed="{{ reviewMissed }}" on-done="{{ exit }}" hint-size="100%,360px"></x-import>
+</sc-if>
+</div>
+</sc-if>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Dialog" open="{{ proposeOpen }}" on-close="{{ closePropose }}" title="Propose a question" description="Got asked something good? Share it — a moderator reviews it before it goes public." footer="{{ proposeFooter }}" hint-size="0,0">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FormLayout" as="div" gap="sm" hint-size="100%,300px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Select" label="Category" options="{{ categories }}" value="{{ draftCat }}" on-value-change="{{ setDraftCat }}" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Textarea" label="Question" rows="{{ 2 }}" value="{{ draftQ }}" on-change="{{ setDraftQ }}" placeholder="What were you asked?" hint-size="100%,80px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Textarea" label="A good answer" optional="{{ true }}" rows="{{ 3 }}" placeholder="How would you answer it?" hint-size="100%,100px"></x-import>
+</x-import>
+</x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { category: 'all', query: '', filter: 'all', sort: 'top', shown: 6, qs: null, phase: 'setup', cards: [], results: [], proposeOpen: false, draftCat: 'React', draftQ: '' };
+  renderVals() {
+    const app = this.props.app || (window.RecronStandalone && window.VelvetUIDesignSystem_ee2bd8 && window.RecronStandalone(this));
+    if (!app) { clearTimeout(this._wt); this._wt = setTimeout(() => this.forceUpdate(), 80); return {}; }
+    const { D, NS } = app;
+    const h = React.createElement;
+    const s = this.state;
+    const qs = s.qs || D.questions;
+    const upd = (id, patch) => this.setState({ qs: qs.map((q) => (q.id === id ? { ...q, ...patch(q) } : q)) });
+    const tab = app.prepTab || 'bank';
+    const counts = {}; qs.forEach((q) => { counts[q.category] = (counts[q.category] || 0) + 1; });
+    const ql = s.query.trim().toLowerCase();
+    let list = qs.filter((q) => (s.category === 'all' || q.category === s.category) && (s.filter === 'all' || !s.filter || (s.filter === 'learning' ? q.learning : q.mine)) && (!ql || q.question.toLowerCase().includes(ql)));
+    list = [...list].sort(s.sort === 'top' ? (a, b) => b.votes - a.votes : s.sort === 'hard' ? (a, b) => b.difficulty - a.difficulty : (a, b) => (b.id > a.id ? 1 : -1));
+    const learning = qs.filter((q) => q.learning);
+    const toCard = (q) => ({ id: q.id, front: q.question, back: q.answer, hint: q.category + ' · ' + q.level });
+    const start = (cfg) => {
+      let pool = cfg.deck === 'learning' ? learning : cfg.deck === 'all' ? qs : qs.filter((q) => q.category === cfg.deck);
+      if (cfg.order === 'random') pool = [...pool].sort(() => Math.random() - 0.5);
+      this.setState({ phase: 'session', cards: pool.slice(0, cfg.count).map(toCard) });
+    };
+    const proposeBtn = h(NS.Button, { size: 'sm', variant: 'secondary', iconLeft: 'plus', onClick: () => this.setState({ proposeOpen: true }) }, 'Propose a question');
+    return {
+      headerActions: tab === 'bank'
+        ? h(React.Fragment, null, h(NS.Button, { variant: 'secondary', iconLeft: 'plus', onClick: () => this.setState({ proposeOpen: true }) }, 'Propose'), h(NS.Button, { iconLeft: 'play', onClick: () => app.setPrepTab('practice') }, learning.length ? 'Practise ' + learning.length : 'Practise'))
+        : h(NS.Button, { variant: 'secondary', iconLeft: 'arrow-left', onClick: () => { this.setState({ phase: 'setup' }); app.setPrepTab('bank'); } }, 'Back to questions'),
+      tab, setTab: app.setPrepTab, isBank: tab === 'bank', isPractice: tab === 'practice',
+      categoryTabs: [{ value: 'all', label: 'All', count: qs.length }, ...D.categories.map((c) => ({ value: c, label: c, count: counts[c] || 0 }))],
+      category: s.category, setCategory: (v) => this.setState({ category: v, shown: 6 }),
+      query: s.query, setQuery: (v) => this.setState({ query: v, shown: 6 }),
+      filterOptions: [{ value: 'all', label: 'All' }, { value: 'learning', label: 'Learning', icon: 'star', count: learning.length }, { value: 'mine', label: 'Mine' }],
+      filter: s.filter, setFilter: (v) => this.setState({ filter: v || 'all', shown: 6 }),
+      sortOptions: [{ value: 'top', label: 'Most upvoted' }, { value: 'new', label: 'Newest' }, { value: 'hard', label: 'Hardest' }],
+      sort: s.sort, setSort: (v) => this.setState({ sort: v }),
+      hasQuestions: list.length > 0, noQuestions: list.length === 0,
+      visible: list.slice(0, s.shown).map((q) => ({ ...q, vote: () => upd(q.id, (x) => ({ voted: !x.voted, votes: x.votes + (x.voted ? -1 : 1) })), star: () => { upd(q.id, (x) => ({ learning: !x.learning })); if (!q.learning) app.toast('Added to Learning', 'success', 'It’ll show up in your next practice session'); } })),
+      shown: Math.min(s.shown, list.length), total: list.length, more: () => this.setState({ shown: s.shown + 6 }),
+      fmtMore: (a, b) => a + ' of ' + b + ' questions',
+      proposeBtn,
+      phase: { [s.phase]: true },
+      decks: [{ id: 'learning', name: 'My learning list', total: learning.length, due: learning.length }, { id: 'all', name: 'All questions', total: qs.length }, ...D.categories.map((c) => ({ id: c, name: c, total: counts[c] || 0 }))],
+      start, cards: s.cards,
+      finish: (r) => { this.setState({ phase: 'summary', results: r }); app.markDone('prep'); },
+      exit: () => this.setState({ phase: 'setup' }),
+      results: s.results,
+      restart: () => this.setState({ phase: 'session', cards: [...s.cards] }),
+      reviewMissed: () => { const missed = new Set(s.results.filter((r) => !r.known).map((r) => r.id)); this.setState({ phase: 'session', cards: s.cards.filter((c) => missed.has(c.id)) }); },
+      proposeOpen: s.proposeOpen, closePropose: () => this.setState({ proposeOpen: false }),
+      categories: D.categories, draftCat: s.draftCat, setDraftCat: (v) => this.setState({ draftCat: v }),
+      draftQ: s.draftQ, setDraftQ: (e) => this.setState({ draftQ: e.target.value }),
+      proposeFooter: h(React.Fragment, null, h(NS.Button, { variant: 'secondary', onClick: () => this.setState({ proposeOpen: false }) }, 'Cancel'), h(NS.Button, { disabled: !s.draftQ.trim(), onClick: () => { this.setState({ proposeOpen: false, draftQ: '', qs: [{ id: 'p' + Date.now(), category: s.draftCat, question: s.draftQ, answer: 'Pending review.', level: 'Mid', difficulty: 2, votes: 0, voted: false, learning: false, mine: true }, ...qs] }); app.toast('Question sent for review', 'success', 'You’ll see it under “Mine”'); } }, 'Submit'))
+    };
+  }
+}
+</script>
+</body>
+</html>

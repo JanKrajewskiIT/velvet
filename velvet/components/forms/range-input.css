@@ -1,0 +1,9 @@
+/* RangeInput */
+.vui-range__row{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-2)}
+.vui-range__bounds{flex:1 1 240px;min-width:0;display:flex;align-items:center;gap:var(--space-2)}
+.vui-range__bound{flex:1;min-width:0}
+.vui-range__bound .vui-control__input{font-variant-numeric:tabular-nums}
+.vui-range__sep{flex:none;color:var(--fg-tertiary)}
+.vui-range__select{flex:0 0 96px;min-width:0}
+.vui-range__select--wide{flex-basis:128px}
+.vui-range__select>.vui-field,.vui-range__select.vui-field{gap:0}

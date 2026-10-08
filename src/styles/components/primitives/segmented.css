@@ -1,0 +1,13 @@
+/* Atom · Segmented — sunken track with a raised selected item. OptionSwitcher (track) renders it; Tabs (segmented) and ThemeToggle (segmented) read the same --segment-* tokens. */
+.vui-segmented{display:inline-flex;align-items:center;gap:var(--segment-gap);padding:var(--segment-pad);border-radius:var(--segment-radius);background:var(--segment-bg)}
+.vui-segmented--block{display:flex}.vui-segmented--block>.vui-segmented__item{flex:1}
+.vui-segmented--round,.vui-segmented--round>.vui-segmented__item{border-radius:var(--radius-full)}
+.vui-segmented__item{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:var(--space-1-5);height:var(--segment-h);padding:0 var(--segment-px);border:0;border-radius:var(--radius-nested);background:none;color:var(--segment-fg);font:var(--type-label-weight) var(--type-body-sm-size)/var(--leading-none) var(--font-sans);white-space:nowrap;cursor:pointer;transition:var(--transition-colors)}
+.vui-segmented__item .vui-icon{font-size:var(--size-icon-md)}
+.vui-segmented__item:hover:not(:disabled){color:var(--segment-fg-hover)}
+.vui-segmented__item:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.vui-segmented__item:disabled{opacity:var(--opacity-disabled);cursor:not-allowed}
+.vui-segmented__item[aria-selected="true"],.vui-segmented__item[aria-checked="true"],.vui-segmented__item[aria-pressed="true"]{background:var(--segment-on-bg);color:var(--segment-on-fg);box-shadow:var(--segment-on-shadow)}
+.vui-segmented__item[aria-selected="true"] .vui-icon,.vui-segmented__item[aria-checked="true"] .vui-icon,.vui-segmented__item[aria-pressed="true"] .vui-icon{color:var(--fg-brand)}
+.vui-segmented--sm .vui-segmented__item{height:var(--segment-h-sm);padding:0 var(--segment-px-sm);font-size:var(--type-caption-size)}
+.vui-segmented--icon .vui-segmented__item{width:var(--segment-h);padding:0}.vui-segmented--icon.vui-segmented--sm .vui-segmented__item{width:var(--segment-h-sm)}

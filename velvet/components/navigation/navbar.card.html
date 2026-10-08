@@ -1,0 +1,22 @@
+<!-- @dsCard group="22 Navigation" viewport="960x560" name="Navbar" subtitle="links (default · brand) · menubar: full logo, dark active disc, notifications / ⌘K / account menu · condensed" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.pane{display:flex;flex-direction:column;gap:14px}.lbl{margin-bottom:8px}.band{padding-bottom:12px}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { Navbar, NavbarLocale, NavbarUser, NotificationCenter, SearchTrigger, BrandLogo, IconButton, Avatar } = NS;
+const MB=[{id:'home',label:'Dashboard',icon:'home'},{id:'search',label:'Search',icon:'search'},{id:'settings',label:'Settings',icon:'settings'}];
+const MB5=[{id:'home',label:'Dashboard',icon:'home'},{id:'grid',label:'Projects',icon:'layout-grid'},{id:'reports',label:'Reports',icon:'bar-chart'},{id:'globe',label:'Language',icon:'globe'},{id:'settings',label:'Settings',icon:'settings'}];
+const App=()=>{const[a,setA]=React.useState('offers');const[m1,setM1]=React.useState('home');const[m2,setM2]=React.useState('reports');const[m3,setM3]=React.useState('home');const items=[{id:'home',label:'Home'},{id:'offers',label:'Offers'},{id:'questions',label:'Questions'},{id:'quiz',label:'Quiz'}];const acts=<><IconButton icon="search" label="Search" variant="ghost" /><IconButton icon="bell" label="Notifications" variant="ghost" /><Avatar name="Anna Kowalska" size="sm" /></>;const br=<strong style={{fontFamily:'var(--font-display)',fontSize:18}}>Recron</strong>;return(<div className="pane">
+<div><div className="lbl">links · default</div><div style={{border:'1px solid var(--border-subtle)',borderRadius:12,overflow:'hidden'}}><Navbar brand={br} items={items} active={a} onNavigate={setA} actions={acts} /></div></div>
+<div><div className="lbl">links · tone brand</div><div style={{borderRadius:12,overflow:'hidden'}}><Navbar tone="brand" brand={br} items={items} active={a} onNavigate={setA} actions={acts} /></div></div>
+<div className="band"><div className="lbl">menubar · full logo · notifications · ⌘K · account menu</div><Navbar variant="menubar" logo={<BrandLogo brand="recron" tone="inverse" size={28} />} showActiveLabel={false} items={MB} active={m1} onNavigate={setM1} actions={<><SearchTrigger placeholder="Search" hotkey={false} /><NotificationCenter items={[{id:1,title:'Interview tomorrow',body:'Acme · 10:00',time:'1h',unread:true,tone:'brand',icon:'calendar'},{id:2,title:'CV match ready',time:'3h',unread:true,tone:'success'}]} /><NavbarUser name="Anna Kowalska" items={[{label:'Profile',icon:'user'},{label:'Settings',icon:'settings'},{divider:true},{label:'Sign out',icon:'log-out',danger:true}]} /></>} /></div>
+<div className="band"><div className="lbl">menubar · no active label · 5 items</div><Navbar variant="menubar" logo="R" showActiveLabel={false} items={MB5} active={m2} onNavigate={setM2} actions={<NavbarLocale />} /></div>
+<div><div className="lbl">menubar · condensed (burger)</div><Navbar variant="menubar" condensed logo="R" items={MB} active={m3} onNavigate={setM3} /></div>
+</div>);};
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

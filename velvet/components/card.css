@@ -1,0 +1,2 @@
+/* Shared label style for component @dsCards. The frame (surface, 18/20 gutter, document-level scroll) is owned by assets/theme-toggle.js. */
+.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}

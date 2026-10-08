@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script><script src="./recron-data.js"></script><style>:root:root{overflow:auto!important;height:auto!important;background:var(--bg-page)!important}html body{margin:0!important;padding:0!important;background:var(--bg-page)!important}</style></helmet>
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.PageHeader" eyebrow="{{ dateLabel }}" title="{{ greeting }}" description="{{ insight }}" actions="{{ headerActions }}" hint-size="100%,128px"></x-import>
+<sc-if value="{{ showChecklist }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.SetupChecklist" layout="grid" title="Get set up" description="Four steps and Recron starts working for you — matching your CV, reminding you about interviews." steps="{{ checklist }}" on-dismiss="{{ dismiss }}" hint-size="100%,200px"></x-import>
+</sc-if>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:var(--space-4)">
+<sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Stat" label="{{ s.label }}" value="{{ s.value }}" hint="{{ s.hint }}" spark="{{ s.spark }}" accent="{{ s.accent }}" hint-size="100%,120px"></x-import>
+</sc-for>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:var(--space-4);align-items:start">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Up next" description="Scheduled interviews" actions="{{ upNextAction }}" hint-size="100%,320px">
+<sc-if value="{{ hasUpcoming }}" hint-placeholder-val="{{ true }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Timeline" items="{{ upcoming }}" hint-size="100%,260px"></x-import>
+</sc-if>
+<sc-if value="{{ noUpcoming }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.EmptyState" size="sm" icon="calendar" title="No interviews yet" description="When you schedule one on an offer, it shows up here with a reminder." hint-size="100%,200px"></x-import>
+</sc-if>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Needs your attention" description="Small moves that keep the pipeline going" padding="md" hint-size="100%,320px">
+<sc-if value="{{ hasAttention }}" hint-placeholder-val="{{ true }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.List" items="{{ attention }}" hint-size="100%,260px"></x-import>
+</sc-if>
+<sc-if value="{{ noAttention }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.EmptyState" size="sm" icon="circle-check" tone="success" title="Nothing waiting on you" description="Add an offer and Recron will suggest the next step." hint-size="100%,200px"></x-import>
+</sc-if>
+</x-import>
+</div>
+<sc-if value="{{ hasOffers }}" hint-placeholder-val="{{ true }}">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:var(--space-4);align-items:start">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Pipeline" description="How far your offers get" hint-size="100%,320px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FunnelChart" data="{{ funnel }}" label="Offer pipeline" hint-size="100%,240px"></x-import>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Your rhythm" description="Offers added or moved, per day" hint-size="100%,320px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Heatmap" data="{{ activity }}" weeks="{{ 20 }}" end="{{ today }}" label="this period" unit="actions" hint-size="100%,200px"></x-import>
+</x-import>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const app = this.props.app || (window.RecronStandalone && window.VelvetUIDesignSystem_ee2bd8 && window.RecronStandalone(this));
+    if (!app) { clearTimeout(this._wt); this._wt = setTimeout(() => this.forceUpdate(), 80); return {}; }
+    const { D, U, NS, offers, interviews } = app;
+    const h = React.createElement;
+    const hr = D.TODAY.getHours();
+    const greeting = (hr < 12 ? 'Good morning, ' : hr < 18 ? 'Good afternoon, ' : 'Good evening, ') + D.profile.first;
+    const active = offers.filter((o) => o.status === 'applied' || o.status === 'considering');
+    const applied = offers.filter((o) => o.status === 'applied');
+    const byId = Object.fromEntries(offers.map((o) => [o.id, o]));
+    const up = interviews.filter((i) => i.status === 'scheduled' && new Date(i.at) >= D.TODAY && byId[i.offerId]).sort((a, b) => new Date(a.at) - new Date(b.at));
+    const withInterview = new Set(interviews.map((i) => i.offerId));
+    const next = up[0];
+    const insight = !offers.length ? 'Your search starts here — add the first offer you’re interested in.'
+      : (active.length + ' active applications') + (next ? ' · next interview ' + U.relDay(next.at).toLowerCase() + ' at ' + U.fmtTime(next.at) : '');
+    const attention = [];
+    offers.filter((o) => o.status === 'considering' && o.match == null).forEach((o) => attention.push({ o, icon: 'sparkles', title: 'Check your fit for ' + o.name, desc: o.company + ' · no CV match yet', label: 'Run match', tab: 'match' }));
+    offers.filter((o) => o.status === 'applied' && !withInterview.has(o.id) && U.daysAgo(o.added) > 10).forEach((o) => attention.push({ o, icon: 'mail', title: 'Follow up with ' + o.company, desc: 'Applied ' + U.daysAgo(o.added) + ' days ago, no reply', label: 'Open', tab: 'overview' }));
+    up.filter((i) => !i.notes).slice(0, 2).forEach((i) => attention.push({ o: byId[i.offerId], icon: 'book-open', title: 'Prepare for ' + i.stage + ' at ' + byId[i.offerId].company, desc: U.relDay(i.at) + ' · no notes yet', label: 'Prepare', tab: 'interviews' }));
+    offers.filter((o) => o.status === 'new').slice(0, 2).forEach((o) => attention.push({ o, icon: 'inbox', title: 'Review ' + o.name, desc: o.company + ' · added ' + U.relDay(o.added).toLowerCase(), label: 'Review', tab: 'overview' }));
+    const done = app.checklistDone;
+    const checklist = [
+      { id: 'profile', label: 'Complete your profile', description: 'Role, experience and skills', icon: 'user', done: !app.newUser || !!done.profile, onClick: () => app.go('settings') },
+      { id: 'cv', label: 'Build your CV', description: 'Used for matching and letters', icon: 'file-text', done: !app.newUser || !!done.cv, onClick: () => app.go('cv') },
+      { id: 'offer', label: 'Add your first offer', description: 'Paste a link — AI fills the rest', icon: 'briefcase', done: offers.length > 0, onClick: app.openAdd },
+      { id: 'prep', label: 'Practise 10 questions', description: 'Matched to your role', icon: 'book-open', done: !!done.prep, onClick: () => app.go('prep') }
+    ];
+    const ints = interviews.length;
+    return {
+      dateLabel: D.TODAY.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' }),
+      greeting, insight,
+      headerActions: h(React.Fragment, null, h(NS.Button, { variant: 'secondary', iconLeft: 'book-open', onClick: () => app.go('prep') }, 'Practise'), h(NS.Button, { iconLeft: 'plus', onClick: app.openAdd }, 'Add offer')),
+      showChecklist: !app.checklistDismissed && checklist.some((s) => !s.done),
+      checklist, dismiss: app.dismissChecklist,
+      stats: [
+        { label: 'Tracked offers', value: String(offers.length), hint: offers.filter((o) => U.daysAgo(o.added) <= 7).length + ' added this week', spark: offers.length ? [2, 3, 3, 5, 6, 8, offers.length] : undefined },
+        { label: 'Applied', value: String(applied.length), hint: active.length - applied.length + ' still considering' },
+        { label: 'Interviews', value: String(ints), hint: up.length + ' upcoming', accent: up.length ? 'brand' : undefined },
+        { label: 'Response rate', value: applied.length ? Math.round((new Set(interviews.map((i) => i.offerId)).size / Math.max(1, applied.length + offers.filter((o) => o.status === 'rejected').length)) * 100) + '%' : '—', hint: 'replies ÷ applications' }
+      ],
+      hasUpcoming: up.length > 0, noUpcoming: up.length === 0,
+      upNextAction: up.length ? h(NS.Button, { variant: 'ghost', size: 'sm', iconRight: 'arrow-right', onClick: () => app.go('interviews') }, 'Calendar') : null,
+      upcoming: up.slice(0, 3).map((i, k) => ({
+        id: i.id, title: i.stage + ' · ' + byId[i.offerId].company, description: byId[i.offerId].name,
+        time: U.relDay(i.at) + ', ' + U.fmtTime(i.at), status: k === 0 ? 'current' : 'upcoming', icon: 'calendar',
+        meta: [{ icon: 'clock', label: i.duration + ' min' }, { icon: 'map-pin', label: i.location }],
+        actions: [{ id: 'open', label: 'Open offer', icon: 'arrow-up-right', onClick: () => app.openOffer(i.offerId, 'interviews') }]
+      })),
+      hasAttention: attention.length > 0, noAttention: attention.length === 0,
+      attention: attention.slice(0, 5).map((a, k) => ({
+        id: k, title: a.title, description: a.desc,
+        leading: h(NS.IconTile, { icon: a.icon, size: 'sm', tone: a.icon === 'sparkles' ? 'brand' : undefined }),
+        trailing: h(NS.Button, { variant: 'soft', size: 'sm', onClick: () => app.openOffer(a.o.id, a.tab) }, a.label)
+      })),
+      hasOffers: offers.length > 0,
+      funnel: [
+        { label: 'Tracked', value: offers.length },
+        { label: 'Applied', value: offers.filter((o) => o.status === 'applied' || o.status === 'rejected').length },
+        { label: 'Interviewing', value: withInterview.size },
+        { label: 'Final round', value: interviews.filter((i) => i.stage === 'HR' || i.stage === 'Offer').length }
+      ],
+      activity: D.activity, today: D.TODAY
+    };
+  }
+}
+</script>
+</body>
+</html>

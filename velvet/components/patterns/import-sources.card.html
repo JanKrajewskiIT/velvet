@@ -1,0 +1,15 @@
+<!-- @dsCard group="28 Patterns" viewport="960x642" name="ImportSourcesDialog" subtitle="Connected checklist · connect / reconnect" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { ImportSourcesDialog, Button } = NS;
+const INIT=[{id:'csv',name:'CSV upload',description:'Spreadsheet export from any tool',icon:'file',status:'connected',count:1240,defaultSelected:true},{id:'gd',name:'Google Drive',description:'anna@velvet.design',icon:'folder',status:'connected',count:318,color:'var(--dv-4)'},{id:'nt',name:'Notion',icon:'file',status:'error',error:'Access expired — reconnect to continue'},{id:'db',name:'Postgres',description:'Read-only connection string',icon:'database',status:'available',color:'var(--dv-7)'},{id:'mail',name:'Mailbox',description:'Import threads as tasks',icon:'mail',status:'available',color:'var(--dv-2)'}];
+const App=()=>{const[o,setO]=React.useState(true);const[s,setS]=React.useState(INIT);return(<div className="pane" style={{height:'100vh',overflow:'hidden',transform:'translateZ(0)'}}><Button variant="secondary" iconLeft="download" onClick={()=>setO(true)} style={{alignSelf:'flex-start'}}>Import from…</Button><ImportSourcesDialog open={o} onClose={()=>setO(false)} sources={s} onConnect={(id)=>new Promise(r=>setTimeout(()=>{setS(x=>x.map(y=>y.id===id?{...y,status:'connected',count:Math.round(80+Math.random()*400),error:undefined}:y));r();},700))} onImport={()=>new Promise(r=>setTimeout(()=>{setO(false);r();},800))} /></div>);};
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

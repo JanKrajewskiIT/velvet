@@ -1,0 +1,28 @@
+<!-- @dsCard group="24 Media" viewport="960x618" name="MediaFrame" subtitle="--aspect-* ratio scale · shimmer · striped placeholder · glass play · badge · overlay · caption" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { MediaFrame } = NS;
+const L=({children})=><div className="lbl">{children}</div>;
+const App=()=>(<div className="pane" style={{display:'flex',flexDirection:'column',gap:14}}>
+<L>ratio scale · --aspect-*</L>
+<div style={{display:'grid',gridTemplateColumns:'repeat(4,minmax(0,1fr))',gap:12,alignItems:'start'}}>
+<MediaFrame ratio="square" showRatio placeholder="square · avatar" bordered credit="--aspect-square" />
+<MediaFrame ratio="video" kind="video" size="sm" bordered credit="--aspect-video" title="Intro" />
+<MediaFrame ratio="photo" showRatio placeholder="photo" bordered credit="--aspect-photo" />
+<MediaFrame ratio="portrait" showRatio placeholder="portrait · story" bordered credit="--aspect-portrait" />
+</div>
+<div style={{display:'grid',gridTemplateColumns:'repeat(3,minmax(0,1fr))',gap:12,alignItems:'start'}}>
+<div style={{display:'flex',flexDirection:'column',gap:6}}><L>video 21:9 · badge · overlay</L><MediaFrame ratio="wide" kind="video" bordered badge="2:14" overlay={<span>Studio tour</span>} title="Studio tour" /></div>
+<div style={{display:'flex',flexDirection:'column',gap:6}}><L>loading · forced shimmer</L><MediaFrame ratio="video" loading caption="Placeholder keeps the ratio" /></div>
+<div style={{display:'flex',flexDirection:'column',gap:6}}><L>error fallback</L><MediaFrame ratio="video" src="https://example.invalid/missing.jpg" alt="Office" bordered caption="Retry from the source" credit="404" /></div>
+</div>
+</div>);
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

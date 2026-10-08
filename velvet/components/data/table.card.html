@@ -1,0 +1,30 @@
+<!-- @dsCard group="26 Data" viewport="960x592" name="Table" subtitle="Toolbar · sort · Shift-range select · resize · expandable rows · sticky header · empty" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.pane{display:flex;flex-direction:column;gap:12px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.lbl{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);width:72px;flex:none}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const { Table, Badge, Avatar, Button, EmptyState } = window.VelvetUIDesignSystem_ee2bd8;
+const ROWS=[
+{id:1,name:'Northwind',plan:'Enterprise',tone:'brand',mrr:4800,seats:120,renews:'Mar 12, 2027',owner:'Marek Nowak',region:'EU-West',health:'Healthy'},
+{id:2,name:'Lumen Labs',plan:'Team',tone:'info',mrr:1290,seats:34,renews:'Nov 2, 2026',owner:'Julia Wiśniewska',region:'US-East',health:'At risk'},
+{id:3,name:'Atlas & Co',plan:'Business',tone:'success',mrr:2650,seats:61,renews:'Jan 20, 2027',owner:'Anna Kowalska',region:'EU-Central',health:'Healthy'},
+{id:4,name:'Brightside',plan:'Starter',tone:'neutral',mrr:290,seats:8,renews:'Oct 30, 2026',owner:'Piotr Zieliński',region:'APAC',health:'Churning'},
+{id:5,name:'Quarry Studio',plan:'Team',tone:'info',mrr:980,seats:22,renews:'Dec 14, 2026',owner:'Ola Lewandowska',region:'EU-West',health:'Healthy'},
+{id:6,name:'Helix Health',plan:'Enterprise',tone:'brand',mrr:6100,seats:180,renews:'Jun 1, 2027',owner:'Marek Nowak',region:'US-West',health:'Healthy'},
+{id:7,name:'Pinecone Ltd',plan:'Business',tone:'success',mrr:2100,seats:47,renews:'Feb 8, 2027',owner:'Anna Kowalska',region:'UK',health:'At risk'}];
+const fmt=(n)=>'€'+n.toLocaleString('en');
+const hc={Healthy:'var(--status-success-fg)','At risk':'var(--status-warning-fg)',Churning:'var(--status-danger-fg)'};
+const App=()=>{const[sel,setSel]=React.useState([2,3]);const[emptyV,setEmptyV]=React.useState(false);const rows=emptyV?[]:ROWS;
+return(<div className="pane"><Table title="Subscriptions" rows={rows} selectable selected={sel} onSelectedChange={setSel} resizable maxHeight={392} defaultSort={{key:'mrr',dir:'desc'}}
+toolbar={<Button size="sm" variant="secondary" onClick={()=>setEmptyV(!emptyV)}>{emptyV?'Show data':'Show empty'}</Button>}
+bulkActions={<><Button size="sm" variant="secondary" iconLeft="download">Export</Button><Button size="sm" variant="danger">Cancel plans</Button></>}
+renderExpanded={(r)=>(<div style={{display:'grid',gridTemplateColumns:'repeat(4,minmax(0,1fr))',gap:16}}>{[['Renews',r.renews],['Owner',r.owner],['Region',r.region],['Health',<span style={{fontWeight:600,color:hc[r.health]}}>{r.health}</span>]].map(([k,v])=><div key={k}><div style={{fontSize:11,fontWeight:700,letterSpacing:'.06em',textTransform:'uppercase',color:'var(--fg-tertiary)',marginBottom:5}}>{k}</div><div style={{fontSize:13.5,fontWeight:500}}>{v}</div></div>)}</div>)}
+empty={<EmptyState icon="search" title="No subscriptions match" description="Loosen the filters or clear the search to see the full account list again." actions={<Button size="sm" onClick={()=>setEmptyV(false)}>Clear filters</Button>} />}
+columns={[{key:'name',label:'Account',sortable:true,render:r=><span className="r" style={{gap:10,flexWrap:'nowrap'}}><Avatar name={r.name} size="sm" /><span style={{fontWeight:500}}>{r.name}</span></span>},{key:'plan',label:'Plan',sortable:true,render:r=><Badge tone={r.tone}>{r.plan}</Badge>},{key:'mrr',label:'MRR',align:'right',sortable:true,render:r=>fmt(r.mrr)},{key:'seats',label:'Seats',align:'right',sortable:true,render:r=><span style={{color:'var(--fg-secondary)'}}>{r.seats}</span>}]} />
+<span className="lbl">Shift-click a checkbox to select a range · drag a header edge to resize · chevron or →/← expands</span></div>);};
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

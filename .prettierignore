@@ -1,2 +1,6 @@
-dist
 node_modules
+dist
+dist-showcase
+velvet
+package-lock.json
+src/styles

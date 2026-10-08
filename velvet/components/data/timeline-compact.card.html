@@ -1,0 +1,16 @@
+<!-- @dsCard group="26 Data" viewport="960x253" name="Timeline · compact" subtitle="Activity feed for dashboard cards · no rail · one line per event" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.pane{display:flex;flex-direction:column;gap:18px}.box{border:1px solid var(--border-subtle);border-radius:14px;padding:16px 18px}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { Timeline, Avatar } = NS;
+const I=[{icon:'check',tone:'success',title:<span><b>Ada Kowalska</b> approved <b>Nocturne release</b></span>,time:'2m'},{icon:'upload',title:<span><b>Jan Dąbrowski</b> uploaded 4 files to <b>Atlas</b></span>,time:'1h'},{icon:'triangle-alert',tone:'warning',title:<span>Build <b>#482</b> failed on staging</span>,time:'3h'},{icon:'tag',tone:'brand',title:<span><b>Ola Nowak</b> added label <b>Design</b></span>,time:'Yesterday'}];
+const P=[{avatar:<Avatar name="Ada Kowalska" size="xs" />,title:<span><b>Ada</b> commented on <b>Q4 plan</b></span>,description:'“Moved the review to Thursday.”',time:'5m'},{avatar:<Avatar name="Jan Dąbrowski" size="xs" />,title:<span><b>Jan</b> joined <b>Atlas</b></span>,time:'2h'},{avatar:<Avatar name="Ola Nowak" size="xs" />,title:<span><b>Ola</b> closed 3 tasks</span>,time:'4h'}];
+const App=()=>(<div className="pane"><div className="g2"><div className="box"><div className="lbl" style={{marginBottom:10}}>Icons · divided</div><Timeline variant="compact" divided items={I} /></div><div className="box"><div className="lbl" style={{marginBottom:10}}>Avatars · description</div><Timeline variant="compact" items={P} /></div></div></div>);
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

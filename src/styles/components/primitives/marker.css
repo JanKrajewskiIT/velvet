@@ -1,0 +1,17 @@
+/* Atom · Marker — round step / event badge holding a number, icon, avatar or dot. Stepper + Timeline render it.
+   appearance: soft (tinted, default) · outline (todo / upcoming) · solid (done / current / error). Colour from data-tone; ring = current halo; gap = surface-coloured separation ring over a rail. */
+.vui-marker{position:relative;z-index:1;display:grid;place-items:center;flex:none;box-sizing:border-box;width:var(--marker-size);height:var(--marker-size);border-radius:50%;border:var(--marker-border) solid transparent;overflow:hidden;font:var(--type-title-weight) var(--type-caption-size)/var(--leading-none) var(--font-sans);font-variant-numeric:tabular-nums;transition:background-color var(--motion-base),border-color var(--motion-base),color var(--motion-base),box-shadow var(--motion-base),transform var(--motion-spring)}
+.vui-marker .vui-icon{font-size:var(--size-icon-md)}
+.vui-marker>.vui-avatar,.vui-marker>img{width:100%;height:100%;object-fit:cover}
+.vui-marker--sm{width:var(--marker-size-sm);height:var(--marker-size-sm)}.vui-marker--sm .vui-icon{font-size:var(--size-icon-sm)}
+.vui-marker--lg{width:var(--marker-size-lg);height:var(--marker-size-lg)}
+.vui-marker--soft{background:var(--marker-soft-bg);color:var(--fg-tertiary)}
+.vui-marker--soft[data-tone]{background:var(--tone-bg);color:var(--tone-fg,var(--tone))}
+.vui-marker--outline{background:var(--bg-raised);border-color:var(--border-strong);color:var(--fg-tertiary)}
+.vui-marker--outline[data-tone]{border-color:var(--tone);color:var(--tone-fg,var(--tone))}
+.vui-marker--solid{background:var(--tone,var(--action-primary));border-color:var(--tone,var(--action-primary));color:var(--on-color-fg)}
+.vui-marker--ring{box-shadow:0 0 0 var(--marker-halo) var(--marker-halo-color)}
+.vui-marker--gap{box-shadow:0 0 0 var(--marker-halo) var(--bg-raised)}
+.vui-marker--gap.vui-marker--ring{box-shadow:0 0 0 var(--marker-halo) var(--bg-raised),0 0 0 calc(var(--marker-halo) + var(--border-width-thick)) var(--focus-ring-color)}
+.vui-marker__dot{width:var(--marker-dot);height:var(--marker-dot);border-radius:50%;background:currentColor}
+.vui-marker--sm .vui-marker__dot{width:var(--marker-dot-sm);height:var(--marker-dot-sm)}

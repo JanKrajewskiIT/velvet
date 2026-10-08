@@ -1,0 +1,14 @@
+<!-- @dsCard group="11 Atoms" viewport="960x188" name="Handle" subtitle="grip · focusable vs decorative · ↑↓ to reorder" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><link rel="stylesheet" href="../../guidelines/card.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const { Handle } = window.VelvetUIDesignSystem_ee2bd8;
+const App=()=>{const[it,setIt]=React.useState(['Discovery call','Portfolio review','Offer']);const mv=(i,d)=>{const j=i+d;if(j<0||j>=it.length)return;const n=[...it];[n[i],n[j]]=[n[j],n[i]];setIt(n);requestAnimationFrame(()=>document.querySelectorAll('.vui-handle:not(.vui-handle--decorative)')[j].focus());};
+return(<div className="pane" style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:24}}><div style={{display:'flex',flexDirection:'column',gap:6}}><span className="hd">focusable · try ↑ ↓</span>{it.map((t,i)=><div key={t} style={{display:'flex',alignItems:'center',gap:8,padding:'4px 8px',border:'1px solid var(--border-default)',borderRadius:'var(--radius-md)',background:'var(--bg-raised)',fontSize:'var(--font-size-sm)'}}><Handle label={'Reorder '+t+' (↑↓)'} onKeyDown={(e)=>{if(e.key==='ArrowUp'){e.preventDefault();mv(i,-1)}if(e.key==='ArrowDown'){e.preventDefault();mv(i,1)}}} />{t}</div>)}</div>
+<div style={{display:'flex',flexDirection:'column',gap:6}}><span className="hd">decorative · whole row drags</span>{['Anna Kowalska','Jan Nowak','Olga Brzeska'].map(t=><div key={t} draggable style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:8,padding:'8px 10px',border:'1px solid var(--border-default)',borderRadius:'var(--radius-md)',background:'var(--bg-raised)',fontSize:'var(--font-size-sm)',cursor:'grab'}}>{t}<Handle decorative /></div>)}</div></div>);};
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

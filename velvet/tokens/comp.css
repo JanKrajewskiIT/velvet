@@ -1,0 +1,73 @@
+/* COMP · per-family knobs aliased to sys tokens. Retheme a family here or on any subtree without touching component CSS.
+   Rule: component CSS reads its family tokens first, sys second, ref never. */
+:root,[data-theme],[data-density]{
+/* Surface — the container primitive: paint · elevation · padding · behaviour. Every container reads these; Card and its derivatives never re-declare them. */
+--surface-bg:var(--bg-raised);/* @kind color */--surface-border:var(--border-subtle);/* @kind color */--surface-radius:var(--radius-lg);/* @kind other */--surface-shadow:var(--elevation-card);/* @kind shadow */--surface-shadow-hover:var(--elevation-card-hover);/* @kind shadow */--surface-pad-sm:var(--space-4);/* @kind spacing */--surface-pad-md:var(--space-5);/* @kind spacing */--surface-pad-lg:var(--space-8);/* @kind spacing */--surface-lift:-2px;/* @kind spacing */--surface-lift-tonal:-4px;/* @kind spacing */--surface-tonal-border-mix:38%;/* @kind other */--surface-tonal-glow-mix:14%;/* @kind other */
+/* Card — content regions on top of Surface (header · body · footer). Paint comes from --surface-*. */
+--card-pad:var(--surface-pad-md);/* @kind spacing */--card-pad-sm:var(--surface-pad-sm);/* @kind spacing */--card-pad-lg:var(--surface-pad-lg);/* @kind spacing */--card-header-gap:var(--space-4);/* @kind spacing */--card-footer-bg:var(--bg-subtle);/* @kind color */--card-divider:var(--surface-border);/* @kind color */
+/* Button */
+--button-radius:var(--radius-md);/* @kind other */--button-radius-sm:var(--radius-sm);/* @kind other */
+--button-px-sm:var(--space-3);/* @kind spacing */--button-px:var(--space-4);/* @kind spacing */--button-px-lg:var(--space-6);/* @kind spacing */--button-gap:var(--space-2);/* @kind spacing */
+--button-primary-bg:var(--action-primary);/* @kind color */--button-primary-bg-hover:var(--action-primary-hover);/* @kind color */--button-primary-bg-active:var(--action-primary-active);/* @kind color */--button-primary-fg:var(--action-primary-fg);/* @kind color */--button-primary-shadow:var(--elevation-control),var(--highlight-on-color);/* @kind shadow */
+--button-secondary-bg:var(--bg-raised);/* @kind color */--button-secondary-bg-hover:var(--bg-subtle);/* @kind color */--button-secondary-fg:var(--fg-primary);/* @kind color */--button-secondary-border:var(--border-default);/* @kind color */--button-secondary-border-hover:var(--border-strong);/* @kind color */
+--button-soft-bg:var(--action-soft);/* @kind color */--button-soft-bg-hover:var(--action-soft-hover);/* @kind color */--button-soft-fg:var(--action-soft-fg);/* @kind color */
+--button-ghost-fg:var(--fg-primary);/* @kind color */--button-ghost-bg-hover:var(--bg-hover);/* @kind color */--button-ghost-bg-active:var(--bg-pressed);/* @kind color */
+--button-danger-bg:var(--action-danger);/* @kind color */--button-danger-bg-hover:var(--action-danger-hover);/* @kind color */--button-danger-fg:var(--action-danger-fg);/* @kind color */
+/* Control — the bordered field shell (Input, Select, DatePicker, NumberInput, Search…) */
+--control-bg:var(--bg-field);/* @kind color */--control-fg:var(--fg-primary);/* @kind color */--control-placeholder:var(--fg-tertiary);/* @kind color */--control-adorn:var(--fg-tertiary);/* @kind color */
+--control-border:var(--border-default);/* @kind color */--control-border-hover:var(--border-strong);/* @kind color */--control-border-focus:var(--border-focus);/* @kind color */--control-border-invalid:var(--status-danger-solid);/* @kind color */
+--control-radius:var(--radius-md);/* @kind other */--control-radius-sm:var(--radius-sm);/* @kind other */--control-shadow:var(--elevation-control);/* @kind shadow */--control-readonly-bg:var(--bg-subtle);/* @kind color */
+/* Field — label + control + hint stack */
+--field-gap:var(--space-1-5);/* @kind spacing */--field-label-fg:var(--fg-primary);/* @kind color */--field-hint-fg:var(--fg-tertiary);/* @kind color */--field-error-fg:var(--status-danger-fg);/* @kind color */--field-hint-lane:18px;/* @kind spacing */
+/* Check / radio / switch */
+--check-size:var(--size-check);/* @kind spacing */--check-radius:var(--radius-xs);/* @kind other */--check-border:var(--border-strong);/* @kind color */--check-border-focus:var(--border-focus);/* @kind color */--check-on-hover:var(--action-primary-hover);/* @kind color */--check-on-active:var(--action-primary-active);/* @kind color */--check-press-bg:var(--bg-brand-subtle);/* @kind color */--check-press-halo:var(--focus-ring-color);/* @kind color */--check-on:var(--action-primary);/* @kind color */--check-mark:var(--action-primary-fg);/* @kind color */--check-tick-w:5px;/* @kind spacing */--check-tick-h:9px;/* @kind spacing */--check-tick-w-sm:4px;/* @kind spacing */--check-tick-h-sm:8px;/* @kind spacing */--check-dash-w:8px;/* @kind spacing */--check-dot:8px;/* @kind spacing */
+--switch-w:36px;/* @kind spacing */--switch-h:20px;/* @kind spacing */--switch-w-sm:28px;/* @kind spacing */--switch-h-sm:16px;/* @kind spacing */--slider-thumb:18px;/* @kind spacing */--slider-track-h:var(--size-track-sm);/* @kind spacing */--switch-track:var(--border-strong);/* @kind color */--switch-track-on:var(--action-primary);/* @kind color */--switch-track-hover:var(--fg-tertiary);/* @kind color */--switch-thumb:var(--thumb-bg);/* @kind color */
+/* Overlay — floating panels (Menu, Select list, Popover, Autocomplete) */
+--panel-bg:var(--bg-overlay);/* @kind color */--panel-border:var(--border-subtle);/* @kind color */--panel-radius:var(--radius-lg);/* @kind other */--panel-shadow:var(--elevation-popover);/* @kind shadow */--panel-pad:var(--space-1);/* @kind spacing */--panel-offset:var(--overlay-offset);/* @kind spacing */
+/* Option — one row inside an overlay/listbox (menu item, select option, command item) */
+--option-height:36px;/* @kind spacing */--option-px:var(--space-2-5);/* @kind spacing */--option-gap:var(--space-2-5);/* @kind spacing */--option-radius:var(--radius-md);/* @kind other */
+--option-fg:var(--fg-primary);/* @kind color */--option-icon:var(--fg-tertiary);/* @kind color */--option-bg-active:var(--bg-hover);/* @kind color */--option-check:var(--fg-brand);/* @kind color */
+--option-danger-fg:var(--status-danger-fg);/* @kind color */--option-danger-bg-active:var(--status-danger-bg);/* @kind color */
+/* Dialog / sheet */
+--dialog-bg:var(--bg-overlay);/* @kind color */--dialog-radius:var(--radius-xl);/* @kind other */--dialog-pad:var(--space-6);/* @kind spacing */--dialog-w-sm:400px;/* @kind spacing */--dialog-w:480px;/* @kind spacing */--dialog-w-lg:640px;/* @kind spacing */--drawer-w:420px;/* @kind spacing */--dialog-shadow:var(--elevation-dialog);/* @kind shadow */--dialog-backdrop:var(--scrim-backdrop);/* @kind color */--dialog-backdrop-blur:var(--blur-sm);/* @kind other */
+/* Tooltip */
+--tooltip-bg:var(--bg-inverse);/* @kind color */--tooltip-fg:var(--fg-inverse);/* @kind color */--tooltip-radius:var(--radius-sm);/* @kind other */--tooltip-offset:var(--space-2);/* @kind spacing */--tooltip-max-w:260px;/* @kind spacing */
+/* Count — numeric pill (notifications, tab/chip counts). Ring separates it from what it overlaps. */
+--count-size-sm:16px;/* @kind spacing */--count-size:20px;/* @kind spacing */--count-size-lg:24px;/* @kind spacing */--count-px:5px;/* @kind spacing */
+--count-bg:var(--action-primary);/* @kind color */--count-fg:var(--action-primary-fg);/* @kind color */--count-ring:var(--bg-raised);/* @kind color */
+--count-shadow:0 1px 2px color-mix(in oklab,var(--tint) 22%,transparent),var(--highlight-on-color);/* @kind shadow */
+/* Badge / tag */
+--badge-height:20px;/* @kind spacing */--badge-height-sm:18px;/* @kind spacing */--badge-radius:var(--radius-full);/* @kind other */--badge-px:var(--space-2);/* @kind spacing */
+--tag-height:28px;/* @kind spacing */--tag-height-sm:24px;/* @kind spacing */--tag-radius:var(--radius-sm);/* @kind other */--tag-px:var(--space-2-5);/* @kind spacing */
+/* Navigation */
+--tab-indicator:var(--border-width-thick);/* @kind spacing */--tab-indicator-color:var(--action-primary);/* @kind color */
+--nav-item-height:40px;/* @kind spacing */--nav-item-fg:var(--fg-secondary);/* @kind color */--nav-item-bg-hover:var(--bg-hover);/* @kind color */--nav-item-bg-active:var(--bg-selected);/* @kind color */--nav-item-fg-active:var(--fg-brand);/* @kind color */--nav-item-bg-active-hover:var(--bg-selected-hover);/* @kind color */
+/* Segmented — sunken track + raised selected item (Segmented atom, Tabs segmented, OptionSwitcher track, ThemeToggle segmented). Item = parent height − 2×track pad. */
+--segment-bg:var(--bg-sunken);/* @kind color */--segment-radius:var(--radius-md);/* @kind other */--segment-gap:var(--space-0-5);/* @kind spacing */--segment-pad:var(--track-pad);/* @kind spacing */--segment-h:calc(var(--control-height-inner-lg) - 2 * var(--track-pad));/* @kind spacing */--segment-h-sm:var(--control-height-inner-sm);/* @kind spacing */--segment-px:var(--space-3);/* @kind spacing */--segment-px-sm:var(--space-2-5);/* @kind spacing */
+--segment-fg:var(--fg-secondary);/* @kind color */--segment-fg-hover:var(--fg-primary);/* @kind color */--segment-on-bg:var(--bg-raised);/* @kind color */--segment-on-fg:var(--fg-primary);/* @kind color */--segment-on-shadow:var(--elevation-card);/* @kind shadow */
+/* Table */
+--table-row-height:var(--row-height);/* @kind spacing */--table-header-bg:var(--bg-subtle);/* @kind color */--table-border:var(--border-subtle);/* @kind color */--table-row-hover:var(--bg-hover);/* @kind color */--table-row-selected:var(--bg-selected);/* @kind color */--table-header-fg:var(--fg-tertiary);/* @kind color */--grid-row-height:var(--control-height-inner-lg);/* @kind spacing */--col-resize-w:8px;/* @kind spacing */--table-pin-shadow:8px 0 10px -6px color-mix(in oklab,var(--tint) 18%,transparent);/* @kind shadow */--table-pin-shadow-end:-8px 0 10px -6px color-mix(in oklab,var(--tint) 18%,transparent);/* @kind shadow */
+/* Media frame */
+--media-radius:var(--radius-lg);/* @kind other */--media-bg:var(--bg-sunken);/* @kind color */--media-stripe:var(--bg-subtle);/* @kind color */--media-border:var(--border-subtle);/* @kind color */
+--media-play-size:52px;/* @kind spacing */--media-play-bg:var(--bg-glass);/* @kind color */--media-play-fg:var(--fg-primary);/* @kind color */--media-play-blur:var(--blur-md);/* @kind other */
+--media-scrim:var(--scrim-image);/* @kind color */--media-caption-gap:var(--space-2);/* @kind spacing */
+/* Footer */
+--footer-bg:var(--bg-raised);/* @kind color */--footer-bar-bg:var(--bg-subtle);/* @kind color */--footer-border:var(--border-subtle);/* @kind color */--footer-radius:var(--radius-lg);/* @kind other */
+--footer-pad:var(--space-8);/* @kind spacing */--footer-col-gap:var(--space-8);/* @kind spacing */--footer-link:var(--fg-secondary);/* @kind color */--footer-link-hover:var(--fg-primary);/* @kind color */
+--footer-mark-size:32px;/* @kind spacing */--footer-mark-bg:var(--bg-brand);/* @kind color */--footer-mark-fg:var(--on-color-fg);/* @kind color */
+/* FAB · Calendar · Sheet */
+--fab-size:56px;/* @kind spacing */--fab-radius:var(--radius-xl);/* @kind other */--cal-cell:var(--control-height-inner-lg);/* @kind spacing */--sheet-max-w:560px;/* @kind spacing */--sheet-grab-w:40px;/* @kind spacing */
+/* Topbar */
+--topbar-bg:var(--bg-glass);/* @kind color */--topbar-h:var(--topbar-height);/* @kind spacing */--topbar-mark:38px;/* @kind spacing */--topbar-blur:var(--blur-md);/* @kind other */
+/* Marker — round step / event badge (Stepper, Timeline). Halo = current-step ring. */
+--marker-size-sm:24px;/* @kind spacing */--marker-size:28px;/* @kind spacing */--marker-size-lg:32px;/* @kind spacing */--marker-border:var(--border-width-medium);/* @kind spacing */--marker-halo:var(--halo-sm);/* @kind spacing */--marker-halo-color:var(--bg-selected);/* @kind color */--marker-soft-bg:var(--bg-subtle);/* @kind color */--marker-dot:10px;/* @kind spacing */--marker-dot-sm:var(--size-dot-lg);/* @kind spacing */
+/* Rail — connector between stacked markers (Timeline, vertical Stepper). Hosts set --rail-marker on the list (inline or via their own token). */
+--rail-w:var(--border-width-thick);/* @kind spacing */--rail-gap:var(--space-1);/* @kind spacing */--rail-color:var(--border-subtle);/* @kind color */--rail-done:var(--status-success-solid);/* @kind color */--rail-active:var(--action-primary);/* @kind color */
+/* Locale switcher — icon column + equal option columns; thumb slides by option width */
+--locale-ic-w:24px;/* @kind spacing */--locale-ic-w-md:28px;/* @kind spacing */--locale-opt-w:36px;/* @kind spacing */--locale-opt-w-md:44px;/* @kind spacing */
+/* Atoms — Meter · Swatch · Mark · Kbd (Checkmark reads --check-*) */
+--meter-track:var(--bg-sunken);/* @kind color */--meter-fill:var(--action-primary);/* @kind color */--meter-radius:var(--radius-full);/* @kind other */
+--swatch-radius:var(--radius-sm);/* @kind other */--swatch-selected-ring:0 0 0 2px var(--bg-raised),0 0 0 4px var(--border-focus);/* @kind shadow */
+--mark-bg:color-mix(in oklab,var(--action-primary) 18%,transparent);/* @kind color */--mark-mention-bg:var(--bg-brand-subtle);/* @kind color */--mark-mention-fg:var(--fg-brand);/* @kind color */
+--kbd-height:20px;/* @kind spacing */--kbd-height-sm:18px;/* @kind spacing */--kbd-bg:var(--bg-subtle);/* @kind color */--kbd-fg:var(--fg-secondary);/* @kind color */--kbd-border:var(--border-default);/* @kind color */
+}

@@ -1,0 +1,22 @@
+<!-- @dsCard group="23 Cards" viewport="960x356" name="StructuredCard" subtitle="Regions · media + scrim + floating tag · header / body / footer hairlines" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>a{color:var(--fg-link)}a:hover{color:var(--fg-link-hover)}.pane{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:start}.ph{width:100%;height:100%;display:grid;place-items:center;font:500 10px/1 var(--font-mono);color:var(--fg-tertiary);background:repeating-linear-gradient(135deg,transparent 0 9px,color-mix(in oklab,var(--border-default) 60%,transparent) 9px 10px)}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const { StructuredCard, Badge, Button, Icon, Avatar, AvatarGroup, Link } = window.VelvetUIDesignSystem_ee2bd8;
+const App=()=>(<div className="pane">
+<StructuredCard hoverable tonal tone="teal" accent reveal={0} title="Project Atlas" meta={<><Icon name="clock" />Updated 2h ago</>} badge={<Badge tone="success" dot>Active</Badge>}
+ footer={<><AvatarGroup><Avatar name="Jan Kowal" size="sm" /><Avatar name="Maria Nowak" size="sm" tone="info" /><Avatar initials="+3" size="sm" tone="neutral" /></AvatarGroup><Button size="sm">Open</Button></>}>
+ Header and footer carry hairlines from the same --card-border the card uses.</StructuredCard>
+<StructuredCard hoverable tonal tone="violet" reveal={1} media={<div className="ph">media · 16:9</div>} mediaTag={<Badge variant="solid" tone="neutral">Guide</Badge>} mediaMeta={<><Icon name="clock" />6 min read</>}
+ footer={<><span style={{display:'flex',alignItems:'center',gap:6,font:'var(--type-caption)',color:'var(--fg-tertiary)'}}><Icon name="user" />Maria Nowak</span><Link href="#" standalone onClick={e=>e.preventDefault()}>Read</Link></>}>
+ <div className="vui-scard__title">Designing with surfaces</div>The scrim keeps overlaid tags legible on any image.</StructuredCard>
+<StructuredCard hoverable tonal tone="blue" accent reveal={2} media={<div className="ph">cover · 16:9</div>} title="Media + header" meta="3 hairline-divided regions" badge={<Badge tone="info">New</Badge>}>
+ Stack any regions — media, header, body and footer compose freely.</StructuredCard>
+</div>);
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

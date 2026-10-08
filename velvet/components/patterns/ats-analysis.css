@@ -1,0 +1,52 @@
+/* AtsAnalysisPanel — band = Badge, category bars = Meter, rec / state icons = IconTile. */
+.vui-ats__bar{flex:none}
+.vui-ats{display:flex;flex-direction:column;border:var(--border-width) solid var(--border-default);border-radius:var(--radius-xl);background:var(--bg-raised);box-shadow:var(--elevation-control);overflow:hidden;font-family:var(--font-sans);color:var(--fg-primary)}
+.vui-ats__head{display:flex;align-items:center;gap:var(--space-2-5);min-height:var(--hit-target-min);padding:0 var(--space-4);border-bottom:var(--border-width) solid var(--border-subtle);background:var(--bg-subtle)}
+.vui-ats__pair{display:inline-flex;align-items:center;gap:var(--space-1-5);min-width:0;font-size:var(--type-body-sm-size);color:var(--fg-secondary);overflow:hidden;white-space:nowrap}
+.vui-ats__pair b{color:var(--fg-primary);font-weight:var(--type-title-weight)}
+.vui-ats__pair .vui-icon{font-size:var(--type-body-sm-size);color:var(--fg-tertiary)}
+.vui-ats__body{display:flex;flex-direction:column;gap:var(--space-6);padding:var(--space-5)}
+.vui-ats__hero{display:flex;align-items:center;gap:var(--space-6)}
+.vui-ats__ring .vui-ring__track{stroke:var(--bg-sunken)}
+.vui-ats__score{position:relative;font:var(--type-heavy-weight) var(--type-h2-size)/1 var(--font-display);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.vui-ats__score small{font-size:var(--type-caption-size);font-weight:var(--type-label-weight);color:var(--fg-tertiary);margin-left:var(--space-px)}
+.vui-ats__verdict{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:var(--space-1-5)}
+.vui-ats__vh{margin:0;font:var(--type-title-weight) var(--type-title-lg-size)/1.3 var(--font-display);letter-spacing:var(--type-title-tracking);text-wrap:balance}
+.vui-ats__sum{margin:0;font-size:var(--type-body-sm-size);color:var(--fg-secondary);line-height:var(--type-body-leading);text-wrap:pretty}
+.vui-ats__tally{display:flex;flex-wrap:wrap;gap:var(--space-1-5);margin-top:var(--space-1)}
+.vui-ats__tchip{display:inline-flex;align-items:center;gap:var(--space-1-5);font-size:var(--type-caption-size);color:var(--fg-secondary)}
+.vui-ats__tchip .vui-icon{font-size:var(--type-body-sm-size)}
+.vui-ats__tchip--danger .vui-icon{color:var(--status-danger-fg)}.vui-ats__tchip--warning .vui-icon{color:var(--status-warning-fg)}.vui-ats__tchip--info .vui-icon{color:var(--fg-brand)}
+.vui-ats__tchip+.vui-ats__tchip::before{content:"·";margin-right:var(--space-1-5);color:var(--fg-disabled)}
+.vui-ats__sec{display:flex;flex-direction:column;gap:var(--space-3)}
+.vui-ats__h{margin:0}
+.vui-ats__h .vui-icon{font-size:var(--type-body-size)}
+.vui-ats__hc{font-weight:var(--type-body-weight)}
+.vui-ats__cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:var(--space-3-5) var(--space-6);margin:0;padding:0;list-style:none}
+.vui-ats__cat{display:flex;flex-direction:column;gap:var(--space-1-5);min-width:0}
+.vui-ats__cath{display:flex;align-items:baseline;justify-content:space-between;gap:var(--space-2)}
+.vui-ats__catl{font-size:var(--type-body-sm-size);font-weight:var(--type-label-weight)}
+.vui-ats__catl small{margin-left:var(--space-1-5);font:var(--type-micro);color:var(--fg-tertiary)}
+.vui-ats__catv{font:var(--type-title-weight) var(--type-body-sm-size)/1 var(--font-mono);font-variant-numeric:tabular-nums}
+.vui-ats__catv--success{color:var(--status-success-fg)}.vui-ats__catv--brand{color:var(--fg-brand)}.vui-ats__catv--warning{color:var(--status-warning-fg)}.vui-ats__catv--danger{color:var(--status-danger-fg)}
+.vui-ats__catn{font-size:var(--type-caption-size);color:var(--fg-tertiary);line-height:var(--leading-snug)}
+.vui-ats__sg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-3)}
+.vui-ats__sgcol{display:flex;flex-direction:column;gap:var(--space-2-5);padding:var(--space-3-5) var(--space-4);border-radius:var(--radius-lg);background:var(--bg-subtle)}
+.vui-ats__sgcol--pos .vui-ats__h{color:var(--status-success-fg)}.vui-ats__sgcol--neg .vui-ats__h{color:var(--status-warning-fg)}
+.vui-ats__sgcol ul{display:flex;flex-direction:column;gap:var(--space-1-5);margin:0;padding-left:var(--space-5);font-size:var(--type-body-sm-size);color:var(--fg-secondary);line-height:var(--leading-normal)}
+.vui-ats__recs{display:flex;flex-direction:column;gap:var(--space-2);margin:0;padding:0;list-style:none}
+.vui-ats__rec{display:flex;gap:var(--space-3);padding:var(--space-3) var(--space-3-5);border:var(--border-width) solid var(--border-subtle);border-radius:var(--radius-lg);background:var(--bg-raised)}
+.vui-ats__rec--danger{border-color:var(--status-danger-border)}
+.vui-ats__rbody{flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--space-1)}
+.vui-ats__rh{display:flex;align-items:baseline;justify-content:space-between;gap:var(--space-2);font-size:var(--type-body-sm-size)}
+.vui-ats__rsev{flex:none;font:var(--type-micro);text-transform:uppercase;letter-spacing:var(--tracking-label);color:var(--fg-tertiary)}
+.vui-ats__rbody p{margin:0;font-size:var(--type-body-sm-size);color:var(--fg-secondary);line-height:var(--leading-normal);text-wrap:pretty}
+.vui-ats__ev{display:flex;flex-direction:column;gap:var(--space-0-5);margin:var(--space-1) 0 0;padding:var(--space-1-5) var(--space-2-5);border-radius:var(--radius-sm);background:var(--bg-subtle);font-size:var(--type-caption-size);color:var(--fg-secondary);font-style:italic}
+.vui-ats__ev cite{font-style:normal;color:var(--fg-tertiary)}
+.vui-ats__more{align-self:flex-start;display:inline-flex;align-items:center;gap:var(--space-1);padding:var(--space-1) var(--space-1-5);border:0;border-radius:var(--radius-sm);background:none;color:var(--fg-link);font:var(--type-label-weight) var(--type-body-sm-size)/1 var(--font-sans);cursor:pointer}
+.vui-ats__more:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.vui-ats__state{display:flex;align-items:center;gap:var(--space-3-5);padding:var(--space-7) var(--space-5)}
+.vui-ats__state>div{flex:1;min-width:0}
+.vui-ats__state b{font-size:var(--type-body-size)}
+.vui-ats__state p{margin:var(--space-1) 0 0;font-size:var(--type-body-sm-size);color:var(--fg-secondary)}
+@media (max-width:600px){.vui-ats__hero{flex-direction:column;align-items:flex-start}.vui-ats__sg{grid-template-columns:minmax(0,1fr)}}

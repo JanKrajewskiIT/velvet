@@ -1,0 +1,24 @@
+<!-- @dsCard group="25 Data viz" viewport="960x243" name="Comparison" subtitle="ComparisonBar (pick 2–4) → ComparisonDialog: radar · table with best-value stars · AI insights" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.pane{display:flex;flex-direction:column;gap:10px}.row{display:flex;align-items:center;gap:12px;padding:10px 14px;border:1px solid var(--border-subtle);border-radius:12px;background:var(--bg-raised);cursor:pointer;font-size:14px}.row[aria-pressed="true"]{border-color:var(--action-primary);background:var(--bg-selected)}.row small{margin-left:auto;color:var(--fg-tertiary);font-family:var(--font-mono)}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const { ComparisonBar, ComparisonDialog, Checkbox, Markdown } = window.VelvetUIDesignSystem_ee2bd8;
+const C=[{id:'a',label:'Anna Kowalska',description:'Senior PD · 6 y',score:78,scores:{craft:92,systems:95,lead:48,research:70,comm:82}},{id:'b',label:'Marek Nowak',description:'Lead Designer · 9 y',score:74,scores:{craft:80,systems:62,lead:88,research:66,comm:75}},{id:'c',label:'Julia Wiśniewska',description:'Product Designer · 4 y',score:69,scores:{craft:85,systems:58,lead:40,research:90,comm:72}},{id:'d',label:'Tomasz Zieliński',description:'UX Engineer · 5 y',score:66,scores:{craft:70,systems:88,lead:35,research:45,comm:68}}];
+const AX=[{key:'craft',label:'Visual craft'},{key:'systems',label:'Systems'},{key:'lead',label:'Leadership'},{key:'research',label:'Research'},{key:'comm',label:'Communication'}];
+const META={a:['6',18500,'2 weeks','Warsaw'],b:['9',22000,'3 months','Kraków'],c:['4',15000,'Immediately','Remote'],d:['5',17000,'1 month','Gdańsk']};
+const App=()=>{const[sel,setSel]=React.useState(['a','b']);const[open,setOpen]=React.useState(false);const[ins,setIns]=React.useState('idle');
+const items=C.filter(c=>sel.includes(c.id));const t=id=>setSel(s=>s.includes(id)?s.filter(x=>x!==id):[...s,id]);
+return(<div className="pane">{C.map(c=><div key={c.id} className="row" role="button" aria-pressed={sel.includes(c.id)} onClick={()=>t(c.id)}><Checkbox checked={sel.includes(c.id)} readOnly tabIndex={-1} aria-label={c.label} /><span style={{flex:1,minWidth:0}}>{c.label}</span><small>{c.score}</small></div>)}
+<ComparisonBar items={items} noun={['candidate','candidates']} onRemove={t} onClear={()=>setSel([])} onCompare={()=>{setOpen(true);setIns('idle');}} />
+<ComparisonDialog open={open} onClose={()=>setOpen(false)} title="Compare candidates" description="Senior Product Designer" items={items} axes={AX}
+rows={[{label:'Experience',hint:'years',values:items.map(i=>+META[i.id][0]),best:'max'},{label:'Expected salary',hint:'PLN / month',values:items.map(i=>META[i.id][1]),best:'min',format:v=>v.toLocaleString('pl-PL')},{label:'Notice period',values:items.map(i=>META[i.id][2])},{label:'Location',values:items.map(i=>META[i.id][3])},{label:'Match score',values:items.map(i=>i.score),best:'max'}]}
+insightsStatus={ins==='loading'?'loading':'idle'} onGenerateInsights={()=>{setIns('loading');setTimeout(()=>setIns('done'),900);}}
+insights={ins==='done'?<Markdown size="sm" source={'**Anna** is the stronger systems hire; **Marek** brings the leadership the role lists as a must. If the team needs a manager in 6 months, prefer Marek; otherwise Anna.'} />:null} />
+</div>);};
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

@@ -1,0 +1,9 @@
+/* Tooltip */
+.vui-tooltip-wrap{position:relative;display:inline-flex}
+.vui-tooltip{position:absolute;z-index:var(--z-tooltip);left:50%;bottom:calc(100% + var(--tooltip-offset));transform:translate(-50%,4px);padding:var(--space-1-5) var(--space-2-5);border-radius:var(--tooltip-radius);background:var(--tooltip-bg);color:var(--tooltip-fg);font-size:var(--type-caption-size);font-weight:var(--type-label-weight);line-height:var(--type-label-leading);white-space:nowrap;max-width:var(--tooltip-max-w);pointer-events:none;opacity:0;box-shadow:var(--elevation-card-hover);transition:opacity var(--motion-fast),transform var(--motion-fast)}
+.vui-tooltip--bottom{bottom:auto;top:calc(100% + var(--tooltip-offset));transform:translate(-50%,-4px)}
+.vui-tooltip--right{left:calc(100% + var(--tooltip-offset));bottom:auto;top:50%;transform:translate(-4px,-50%)}
+.vui-tooltip--left{left:auto;right:calc(100% + var(--tooltip-offset));bottom:auto;top:50%;transform:translate(4px,-50%)}
+.vui-tooltip-wrap:hover .vui-tooltip,.vui-tooltip-wrap:focus-within .vui-tooltip,.vui-tooltip--open{opacity:1;transform:translate(-50%,0)}
+.vui-tooltip-wrap:hover .vui-tooltip--right,.vui-tooltip-wrap:hover .vui-tooltip--left,.vui-tooltip-wrap:focus-within .vui-tooltip--right,.vui-tooltip-wrap:focus-within .vui-tooltip--left,.vui-tooltip--right.vui-tooltip--open,.vui-tooltip--left.vui-tooltip--open{transform:translate(0,-50%)}
+.vui-tooltip__kbd{margin-left:var(--space-2);font-family:var(--font-mono);font-size:var(--type-overline-size);opacity:var(--opacity-muted)}

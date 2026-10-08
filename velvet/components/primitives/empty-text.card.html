@@ -1,0 +1,14 @@
+<!-- @dsCard group="11 Atoms" viewport="960x188" name="EmptyText" subtitle="inline empty message · center · start · dashed · icon" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><link rel="stylesheet" href="../../guidelines/card.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const { EmptyText } = window.VelvetUIDesignSystem_ee2bd8;
+const fr={border:'1px solid var(--border-subtle)',borderRadius:'var(--radius-md)',background:'var(--bg-raised)',minHeight:120,display:'flex',flexDirection:'column'};
+const App=()=>(<div className="mx" style={{gridTemplateColumns:'repeat(4,minmax(0,1fr))',rowGap:10}}><span className="hd">center</span><span className="hd">icon</span><span className="hd">dashed · drop zone</span><span className="hd">start</span>
+<div style={fr}><EmptyText style={{flex:1}}>No matches for “velv”</EmptyText></div><div style={fr}><EmptyText icon="circle-check" style={{flex:1}}>You’re all caught up.</EmptyText></div><div style={{...fr,padding:10,border:0,background:'var(--bg-subtle)'}}><EmptyText dashed style={{flex:1,padding:0}}>Drop cards here</EmptyText></div><div style={{...fr,padding:14}}><EmptyText align="start" style={{padding:0}}>No events this day.</EmptyText></div></div>);
+ReactDOM.createRoot(document.getElementById('root')).render(<div className="pane"><App /></div>);
+</script></body></html>

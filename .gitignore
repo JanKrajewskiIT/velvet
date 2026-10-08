@@ -1,9 +1,9 @@
 node_modules/
 dist/
+dist-showcase/
 dist-ssr/
 *.local
 .env*
-AGENTS.md
 
 # Generated agent customizations
 /AGENTS.md

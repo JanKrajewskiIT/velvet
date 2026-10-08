@@ -1,0 +1,13 @@
+/* Toolbar */
+.vui-toolbar{position:relative;display:flex;align-items:center;gap:var(--space-0-5);min-width:0;padding:var(--track-pad);border-radius:calc(var(--radius-md) + var(--radius-2xs));overflow:hidden}
+.vui-toolbar__measure{position:absolute;left:0;top:0;display:flex;gap:var(--space-0-5);visibility:hidden;pointer-events:none;white-space:nowrap}
+.vui-toolbar__btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--space-1-5);flex:none;width:var(--control-height-sm);height:var(--control-height-sm);padding:0;border:0;border-radius:var(--radius-sm);background:none;color:var(--fg-secondary);font:var(--type-label-weight) var(--type-body-sm-size)/1 var(--font-sans);white-space:nowrap;cursor:pointer;transition:background-color var(--motion-fast),color var(--motion-fast)}
+.vui-toolbar__btn .vui-icon{font-size:var(--size-icon-lg)}
+.vui-toolbar__btn--label{width:auto;padding:0 var(--space-2-5)}
+.vui-toolbar__btn:hover:not(:disabled){background:var(--bg-hover);color:var(--fg-primary)}
+.vui-toolbar__btn[aria-pressed="true"]{background:var(--bg-selected);color:var(--fg-brand)}
+.vui-toolbar__btn:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.vui-toolbar__btn:disabled{opacity:var(--opacity-disabled);cursor:not-allowed}
+.vui-toolbar__sep{height:20px;margin:0 var(--space-1)}
+.vui-toolbar__spacer{flex:1}
+.vui-toolbar>.vui-menu-wrap{margin-left:auto}

@@ -1,0 +1,6 @@
+/* LoadMore */
+.vui-loadmore{display:flex;flex-direction:column;align-items:center;gap:var(--space-3);padding:var(--space-4) 0;font-family:var(--font-sans)}
+.vui-loadmore__bar{width:min(100%,280px)}
+.vui-loadmore__bar .vui-progress__head{justify-content:center}
+.vui-loadmore__count{font-weight:400;font-size:var(--type-caption-size);color:var(--fg-secondary);font-variant-numeric:tabular-nums}
+.vui-loadmore__done{font-size:var(--type-caption-size);color:var(--fg-tertiary)}

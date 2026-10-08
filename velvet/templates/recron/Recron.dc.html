@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Recron" description="Job-search workspace — Today, Pipeline (table / board / compare), offer page with AI match · cover letter · ATS, Interviews, Prep (questions + practice), CV builder, Settings, Onboarding" -->
+<helmet><script src="./ds-base.js"></script><script src="./recron-data.js"></script><style>:root:root{overflow:auto!important;height:auto!important;background:var(--bg-page)!important}html body{margin:0!important;padding:0!important;background:var(--bg-page)!important}</style></helmet>
+<div style="min-height:100vh;background:var(--bg-page)">
+<sc-if value="{{ isOnboarding }}" hint-placeholder-val="{{ false }}">
+<dc-import name="RecronOnboarding" app="{{ app }}" hint-size="100%,100vh"></dc-import>
+</sc-if>
+<sc-if value="{{ isPublic }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;min-height:100vh;background:var(--bg-page);color:var(--fg-primary);font-family:var(--font-sans)">
+<header style="position:sticky;top:0;z-index:var(--z-sticky);display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);height:64px;padding:0 var(--space-6);box-sizing:border-box;background:var(--topbar-bg);backdrop-filter:blur(var(--topbar-blur));-webkit-backdrop-filter:blur(var(--topbar-blur));border-bottom:var(--border-width) solid var(--border-subtle)">
+<a href="#landing" onClick="{{ goLanding }}" aria-label="Recron home" style="display:flex;align-items:center;text-decoration:none"><x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.BrandLogo" brand="recron" size="{{ 28 }}" hint-size="125px,28px"></x-import></a>
+<div style="display:flex;align-items:center;gap:var(--space-2)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Button" variant="ghost" size="sm" on-click="{{ goPrivacy }}" hint-size="80px,32px">Privacy</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Button" size="sm" icon-left="log-in" on-click="{{ signIn }}" hint-size="90px,32px">Sign in</x-import>
+</div>
+</header>
+<sc-if value="{{ r.landing }}" hint-placeholder-val="{{ true }}"><dc-import name="RecronLanding" app="{{ app }}" hint-size="100%,calc(100vh - 64px)"></dc-import></sc-if>
+<sc-if value="{{ r.privacy }}" hint-placeholder-val="{{ false }}"><main style="width:100%;max-width:1120px;margin:0 auto;box-sizing:border-box;padding:var(--space-12) var(--space-6) var(--space-16)"><dc-import name="RecronPrivacy" hint-size="100%,1400px"></dc-import></main></sc-if>
+<footer style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--space-3);padding:var(--space-5) var(--space-6);border-top:var(--border-width) solid var(--border-subtle);font-size:var(--type-caption-size);color:var(--fg-tertiary)">
+<span>© 2026 Recron</span>
+<a href="#privacy" onClick="{{ goPrivacy }}" style="color:var(--fg-secondary);text-decoration:none" style-hover="color:var(--fg-brand);text-decoration:underline">Privacy Policy</a>
+</footer>
+</div>
+</sc-if>
+<sc-if value="{{ isApp }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;min-height:100vh;box-sizing:border-box;background:var(--bg-page);color:var(--fg-primary);font:var(--type-body)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Navbar" variant="menubar" sticky="{{ true }}" logo="{{ logo }}" show-active-label="{{ false }}" on-logo-click="{{ goHome }}" logo-href="#today" items="{{ navItems }}" active="{{ navActive }}" on-navigate="{{ navigate }}" actions="{{ navActions }}" label="Recron" hint-size="100%,64px"></x-import>
+{{ cmd }}
+<main style="display:flex;flex-direction:column;gap:var(--space-4);width:100%;max-width:1360px;margin:0 auto;box-sizing:border-box;min-width:0;padding:var(--space-8) var(--space-6) var(--space-16)">
+<sc-if value="{{ r.today }}" hint-placeholder-val="{{ true }}"><dc-import name="RecronToday" app="{{ app }}" hint-size="100%,900px"></dc-import></sc-if>
+<sc-if value="{{ r.pipeline }}" hint-placeholder-val="{{ false }}"><dc-import name="RecronPipeline" app="{{ app }}" hint-size="100%,800px"></dc-import></sc-if>
+<sc-if value="{{ r.offer }}" hint-placeholder-val="{{ false }}"><dc-import name="RecronOffer" app="{{ app }}" hint-size="100%,900px"></dc-import></sc-if>
+<sc-if value="{{ r.interviews }}" hint-placeholder-val="{{ false }}"><dc-import name="RecronInterviews" app="{{ app }}" hint-size="100%,800px"></dc-import></sc-if>
+<sc-if value="{{ r.prep }}" hint-placeholder-val="{{ false }}"><dc-import name="RecronPrep" app="{{ app }}" hint-size="100%,900px"></dc-import></sc-if>
+<sc-if value="{{ r.cv }}" hint-placeholder-val="{{ false }}"><dc-import name="RecronCv" app="{{ app }}" hint-size="100%,900px"></dc-import></sc-if>
+<sc-if value="{{ r.settings }}" hint-placeholder-val="{{ false }}"><dc-import name="RecronSettings" app="{{ app }}" hint-size="100%,800px"></dc-import></sc-if>
+<sc-if value="{{ r.privacy }}" hint-placeholder-val="{{ false }}"><div style="padding-top:var(--space-4)"><dc-import name="RecronPrivacy" hint-size="100%,1400px"></dc-import></div></sc-if>
+</main>
+</div>
+<dc-import name="RecronAddOffer" app="{{ app }}" hint-size="0,0"></dc-import>
+</sc-if>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.ToastRegion" hint-size="0,0">
+<sc-for list="{{ toasts }}" as="t" hint-placeholder-count="0">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Toast" tone="{{ t.tone }}" title="{{ t.title }}" description="{{ t.description }}" duration="{{ 4000 }}" on-close="{{ t.close }}" hint-size="320px,64px"></x-import>
+</sc-for>
+</x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;startRoute&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;today&quot;,&quot;pipeline&quot;,&quot;offer&quot;,&quot;interviews&quot;,&quot;prep&quot;,&quot;cv&quot;,&quot;settings&quot;,&quot;onboarding&quot;,&quot;landing&quot;,&quot;privacy&quot;],&quot;default&quot;:&quot;today&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype&quot;},&quot;newUser&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Prototype&quot;}}">
+class Component extends DCLogic {
+  state = (() => {
+    let saved = {};
+    try { saved = JSON.parse(localStorage.getItem('recron-proto') || '{}'); } catch (e) {}
+    return { ready: false, route: saved.route || null, offerId: saved.offerId || 'o1', offerTab: saved.offerTab || 'overview', prepTab: 'bank', offers: null, interviews: null, toasts: [], addOpen: false, checklistDone: {}, checklistDismissed: false, collapsed: false, onboarded: false, signedOut: !!saved.signedOut };
+  })();
+  componentDidMount() {
+    this._t = setInterval(() => {
+      if (window.RecronData && window.VelvetUIDesignSystem_ee2bd8 && window.VelvetUIDesignSystem_ee2bd8.Sidebar) { clearInterval(this._t); this.setState({ ready: true }); }
+    }, 40);
+  }
+  componentWillUnmount() { clearInterval(this._t); }
+  componentDidUpdate() {
+    const nu = !!this.props.newUser, sr = this.props.startRoute || 'today';
+    if (this._nu !== undefined && this._nu !== nu) this.setState({ offers: null, interviews: null, checklistDone: {}, checklistDismissed: false });
+    if (this._sr !== undefined && this._sr !== sr) this.setState({ route: null });
+    this._nu = nu; this._sr = sr;
+  }
+  persist(patch) {
+    this.setState(patch, () => {
+      const { route, offerId, offerTab, signedOut } = this.state;
+      try { localStorage.setItem('recron-proto', JSON.stringify({ route, offerId, offerTab, signedOut })); } catch (e) {}
+      window.scrollTo(0, 0);
+    });
+  }
+  toast(title, tone, description) {
+    const id = Date.now() + Math.random();
+    this.setState((s) => ({ toasts: [...s.toasts, { id, title, tone: tone || 'success', description }] }));
+  }
+  renderVals() {
+    try { const v = this._rv(); window.__rv = (window.__rv || 0) + 1; return v; } catch (e) { console.error('Recron renderVals', e); return { r: {}, toasts: [] }; }
+  }
+  _rv() {
+    const D = window.RecronData;
+    const NS = window.VelvetUIDesignSystem_ee2bd8 || {};
+    if (!D || !NS.Sidebar) { clearTimeout(this._rt); this._rt = setTimeout(() => this.forceUpdate(), 60); return { isApp: false, isOnboarding: false, r: {}, toasts: [] }; }
+    const h = React.createElement;
+    const newUser = !!this.props.newUser;
+    const offers = this.state.offers ?? (newUser ? [] : D.offers);
+    const interviews = this.state.interviews ?? (newUser ? [] : D.interviews);
+    const route = this.state.route || this.props.startRoute || 'today';
+    const go = (r, extra) => this.persist({ route: r, ...(extra || {}) });
+    const upcoming = interviews.filter((i) => i.status === 'scheduled' && new Date(i.at) >= D.TODAY);
+    const app = {
+      D, U: window.RecronUtil, NS, newUser, route, offers, interviews,
+      offerId: this.state.offerId, offerTab: this.state.offerTab, prepTab: this.state.prepTab,
+      addOpen: this.state.addOpen, checklistDone: this.state.checklistDone, checklistDismissed: this.state.checklistDismissed,
+      go,
+      openOffer: (id, tab) => go('offer', { offerId: id, offerTab: tab || 'overview' }),
+      setOfferTab: (t) => this.persist({ offerTab: t }),
+      setPrepTab: (t) => this.setState({ prepTab: t }),
+      updateOffer: (id, patch) => this.setState({ offers: offers.map((o) => (o.id === id ? { ...o, ...patch } : o)) }),
+      setOffers: (next) => this.setState({ offers: next }),
+      addOffer: (o) => { this.setState({ offers: [{ ...o, id: 'n' + Date.now() }, ...offers], addOpen: false, checklistDone: { ...this.state.checklistDone, offer: true } }); this.toast('Offer added', 'success', o.name + ' · ' + o.company); },
+      removeOffer: (id) => { const o = offers.find((x) => x.id === id); this.setState({ offers: offers.filter((x) => x.id !== id) }); this.toast('Offer deleted', 'neutral', o && o.name); },
+      addInterview: (i) => this.setState({ interviews: [...interviews, { ...i, id: 'i' + Date.now() }] }),
+      removeInterview: (id) => this.setState({ interviews: interviews.filter((x) => x.id !== id) }),
+      openAdd: () => this.setState({ addOpen: true }),
+      closeAdd: () => this.setState({ addOpen: false }),
+      markDone: (k) => this.setState({ checklistDone: { ...this.state.checklistDone, [k]: true } }),
+      dismissChecklist: () => this.setState({ checklistDismissed: true }),
+      finishOnboarding: () => { this.persist({ route: 'today' }); this.setState({ onboarded: true, checklistDone: { ...this.state.checklistDone, profile: true } }); this.toast('You’re all set', 'success', 'Your profile is ready. Add your first offer next.'); },
+      toast: (t, tone, d) => this.toast(t, tone, d),
+      signIn: () => { window.scrollTo(0, 0); this.persist({ route: newUser ? 'onboarding' : 'today', signedOut: false }); this.setState({ signedOut: false }); },
+      signOut: () => { window.scrollTo(0, 0); this.persist({ route: 'landing', signedOut: true }); this.setState({ signedOut: true }); }
+    };
+    window.__recron = app;
+    const signedOut = this.state.signedOut || route === 'landing';
+    const isPublic = route === 'landing' || (route === 'privacy' && signedOut);
+    const r = {}; r[route] = true;
+    const navTo = { today: 'today', pipeline: 'pipeline', interviews: 'interviews', prep: 'prep', cv: 'cv' };
+    return {
+      isPublic: isPublic, isApp: !isPublic && route !== 'onboarding', isOnboarding: route === 'onboarding', r, app,
+      goLanding: (e) => { e && e.preventDefault && e.preventDefault(); window.scrollTo(0, 0); go('landing'); }, goPrivacy: (e) => { e && e.preventDefault && e.preventDefault(); window.scrollTo(0, 0); go('privacy'); }, signIn: app.signIn,
+      logo: NS.BrandLogo ? h(NS.BrandLogo, { brand: 'recron', tone: 'inverse', size: 28 }) : 'Recron',
+      navItems: [{ id: 'today', label: 'Today', icon: 'home' }, { id: 'pipeline', label: 'Pipeline', icon: 'briefcase' }, { id: 'interviews', label: 'Interviews', icon: 'calendar' }, { id: 'prep', label: 'Prep', icon: 'book-open' }, { id: 'cv', label: 'CV', icon: 'file-text' }],
+      navActive: route === 'offer' ? 'pipeline' : navTo[route] || '',
+      navigate: (id) => go(id),
+      goHome: () => go('today'),
+      navActions: h(React.Fragment, null,
+        h(NS.SearchTrigger, { placeholder: 'Search', onOpen: () => this.setState({ cmdOpen: true }) }),
+        h(NS.NotificationCenter, { items: this.state.notifs || D.notifications || [{ id: 'n1', title: 'Interview tomorrow', body: 'Acme · Technical · 10:00', time: '1h', unread: true, tone: 'brand', icon: 'calendar' }, { id: 'n2', title: 'CV match ready', body: 'React Engineer · Globex — 72%', time: '3h', unread: true, tone: 'success', icon: 'sparkles' }, { id: 'n3', title: 'No reply for 14 days', body: 'UI Engineer · Initech — follow up?', time: '1d', tone: 'warning', icon: 'clock' }],
+          onItemClick: () => go('interviews'), onMarkAllRead: () => this.setState((s) => ({ notifs: (s.notifs || []).length ? s.notifs.map((n) => ({ ...n, unread: false })) : [{ id: 'n1', title: 'Interview tomorrow', body: 'Acme · Technical · 10:00', time: '1h', tone: 'brand', icon: 'calendar' }, { id: 'n2', title: 'CV match ready', body: 'React Engineer · Globex — 72%', time: '3h', tone: 'success', icon: 'sparkles' }, { id: 'n3', title: 'No reply for 14 days', body: 'UI Engineer · Initech — follow up?', time: '1d', tone: 'warning', icon: 'clock' }] })) }),
+        h(NS.NavbarUser || ((p) => h(NS.Menu, { align: 'end', width: 220, items: p.items, trigger: h('button', { type: 'button', className: 'vui-navbar-mb__user', 'aria-label': 'Account menu — ' + p.name }, h(NS.Avatar, { name: p.name, size: 'sm', tone: 'neutral' }), h('span', { className: 'vui-navbar-mb__user-name' }, p.name.split(' ')[0]), h(NS.Glyph || 'span', { name: 'chevron-down' })) })), { name: D.profile.name, items: [{ section: D.profile.name }, { label: 'Profile & CV', icon: 'user', onSelect: () => go('cv') }, { label: 'Settings', icon: 'settings', onSelect: () => go('settings') }, { divider: true }, { label: 'Privacy policy', icon: 'shield', onSelect: () => go('privacy') }, { divider: true }, { label: 'Sign out', icon: 'log-out', danger: true, onSelect: () => app.signOut() }] })
+      ),
+      cmd: h(NS.CommandPalette, { open: !!this.state.cmdOpen, onClose: () => this.setState({ cmdOpen: false }), placeholder: 'Search offers, go to…', groups: [
+        { label: 'Go to', items: [['today', 'Today', 'home'], ['pipeline', 'Pipeline', 'briefcase'], ['interviews', 'Interviews', 'calendar'], ['prep', 'Prep', 'book-open'], ['cv', 'CV', 'file-text'], ['settings', 'Settings', 'settings']].map(([id, l, ic]) => ({ id: 'go-' + id, label: l, icon: ic, onSelect: () => { this.setState({ cmdOpen: false }); go(id); } })) },
+        { label: 'Offers', items: offers.slice(0, 8).map((o) => ({ id: o.id, label: o.name, description: o.company, icon: 'briefcase', keywords: [o.company], onSelect: () => { this.setState({ cmdOpen: false }); go('offer', { offerId: o.id, offerTab: 'overview' }); } })) },
+        { label: 'Actions', items: [{ id: 'add', label: 'Add offer', icon: 'plus', onSelect: () => this.setState({ cmdOpen: false, addOpen: true }) }] }
+      ] }),
+      toasts: this.state.toasts.map((t) => ({ ...t, close: () => this.setState((s) => ({ toasts: s.toasts.filter((x) => x.id !== t.id) })) }))
+    };
+  }
+}
+</script>
+</body>
+</html>

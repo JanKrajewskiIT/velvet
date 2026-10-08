@@ -1,0 +1,23 @@
+/* QuestionCard */
+/* QuestionCard — interior only; paint from Card → Surface */
+.vui-qcard>.vui-card__body{display:flex;flex-direction:column;gap:var(--space-3)}
+.vui-qcard--open{border-color:var(--border-default)}
+.vui-qcard__top{display:flex;align-items:center;justify-content:space-between;gap:var(--space-2);min-height:32px}
+.vui-qcard__badges{display:flex;flex-wrap:wrap;gap:var(--space-1-5)}
+.vui-qcard__q{margin:0;font:var(--type-label-weight) var(--type-body-size)/1.4 var(--font-sans);color:var(--fg-primary);text-wrap:pretty}
+.vui-qcard__q--btn{padding:0;border:0;background:none;text-align:left;cursor:pointer;border-radius:var(--radius-xs)}
+.vui-qcard__q--btn:hover{color:var(--fg-brand)}
+.vui-qcard__q--btn:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.vui-qcard__meta{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-2) var(--space-3)}
+.vui-qcard__time{display:inline-flex;align-items:center;gap:var(--space-1);font-size:var(--type-caption-size);color:var(--fg-tertiary)}
+.vui-qcard__time .vui-icon{font-size:var(--type-body-size)}
+.vui-qcard__answer{padding:var(--space-3) var(--space-4);border-radius:var(--radius-md);background:var(--bg-sunken);font-size:var(--type-body-sm-size);line-height:1.55;color:var(--fg-secondary)}
+.vui-qcard__answer[hidden]{display:none}
+.vui-qcard__foot{display:flex;align-items:center;justify-content:space-between;gap:var(--space-2);margin-top:auto;padding-top:var(--space-3);border-top:var(--border-width) solid var(--border-subtle)}
+.vui-qcard__vote{display:inline-flex;align-items:center;gap:var(--space-1-5);height:var(--control-height-sm);padding:0 var(--space-3);border:0;border-radius:var(--radius-md);background:none;color:var(--fg-secondary);font:var(--type-title-weight) var(--type-body-sm-size)/1 var(--font-sans);cursor:pointer;transition:background-color var(--motion-fast),color var(--motion-fast)}
+.vui-qcard__vote:hover{background:var(--bg-hover);color:var(--fg-primary)}
+.vui-qcard__vote:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.vui-qcard__vote--on{background:var(--action-soft);color:var(--action-soft-fg)}
+.vui-qcard__vote--on:hover{background:var(--action-soft-hover);color:var(--action-soft-fg)}
+.vui-qcard__vote .vui-icon{font-size:var(--type-body-lg-size)}
+.vui-qcard__sr{position:absolute;width:var(--border-width);height:var(--border-width);overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}

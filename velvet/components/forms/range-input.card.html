@@ -1,0 +1,14 @@
+<!-- @dsCard group="16 Inputs" viewport="960x400" name="RangeInput" subtitle="Money range (currency + period) · fixed suffix · inverted-range error · disabled" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.pane{display:flex;flex-direction:column;gap:18px}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { RangeInput } = NS;
+const App=()=>{const[v,setV]=React.useState({min:12000,max:18000});return(<div className="pane"><div style={{display:'grid',gridTemplateColumns:'minmax(0,1.4fr) minmax(0,1fr)',gap:24}}><RangeInput label="Salary" locale="pl" value={v} onValueChange={setV} unitOptions={['PLN','EUR','USD','GBP']} defaultUnit="PLN" periodOptions={['Hourly','Monthly','Yearly']} defaultPeriod="Monthly" hint={'Gross · '+(v.min??'…')+' – '+(v.max??'…')} /><RangeInput label="Area" suffix="m²" fromLabel="Min" toLabel="Max" defaultValue={{min:40}} optional /></div><div style={{display:'grid',gridTemplateColumns:'minmax(0,1.4fr) minmax(0,1fr)',gap:24}}><RangeInput label="Budget" locale="pl" prefix="€" defaultValue={{min:9000,max:5000}} /><RangeInput label="Team size" defaultValue={{min:3,max:8}} disabled /></div></div>);};
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

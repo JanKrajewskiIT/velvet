@@ -1,0 +1,26 @@
+<!-- @dsCard group="28 Patterns" viewport="960x564" name="AI analysis · request" subtitle="Pick sources + analysis → run" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.pane{display:flex;flex-direction:column;gap:16px}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const { AnalysisRequest, AtsAnalysisPanel } = window.VelvetUIDesignSystem_ee2bd8;
+const STEPS=['Reading CV','Parsing job offer','Matching requirements','Scoring & writing recommendations'];
+const RESULT={score:78,verdict:'Strong on design systems, light on people leadership',summary:'Anna’s 6 years building component libraries map directly to the role’s core. The offer asks for managing 3–5 designers; her CV shows mentoring but no direct reports.',
+categories:[{label:'Hard skills',score:91,weight:3},{label:'Experience level',score:82,weight:2,note:'6 y vs 5+ required'},{label:'Leadership',score:48,weight:2,note:'Mentoring only, no direct reports'},{label:'Domain (B2B SaaS)',score:74,weight:1},{label:'Location & availability',score:100,weight:1}],
+keywords:{matched:['Design systems','Figma','Accessibility','React','Design tokens','User research'],partial:['Team leadership'],missing:['OKRs','Hiring']},
+strengths:['Built and scaled a token-based design system used by 40+ engineers','WCAG 2.2 AA audits across 3 products','Comfortable in code (React, CSS architecture)'],
+gaps:['No evidence of managing designers directly','No hiring or performance-review experience mentioned'],
+recommendations:[{severity:'critical',title:'Probe leadership in the interview',message:'Ask for a concrete example of leading a project with other designers end-to-end.',evidence:{quote:'Mentored two junior designers through onboarding',source:'CV · Velvet Labs, 2021–24'}},{severity:'warning',title:'Clarify notice period',message:'Recruiter notes say “available soon” — confirm the exact date before the final round.'},{severity:'suggestion',title:'Share the design-system roadmap',message:'Her strongest motivation signal; use it in the pitch.'}]};
+const App=()=>{const[st,setSt]=React.useState('done');const[step,setStep]=React.useState(0);const[cv,setCv]=React.useState('ready');
+const run=()=>new Promise(res=>{setSt('loading');setStep(0);let i=0;const t=setInterval(()=>{i++;setStep(i);if(i>=STEPS.length){clearInterval(t);setSt('done');res();}},700);});
+const sources=[{id:'cv',kind:'cv',label:'CV',detail:'Anna_Kowalska_CV.pdf · 2 pages',status:cv,onAttach:()=>setCv('ready')},{id:'job',kind:'job',label:'Job offer',detail:'Senior Product Designer · Warsaw / remote'},{id:'notes',kind:'notes',label:'Recruiter notes',detail:'3 notes · last 2 days ago'},{id:'interview',kind:'transcript',label:'Interview transcript',status:'missing',onAttach:()=>{}}];
+const analyses=[{id:'fit',label:'Role fit',description:'Score the candidate against the offer',icon:'target',requires:['cv','job']},{id:'ats',label:'ATS keywords',description:'Keyword coverage of the CV',icon:'search',requires:['cv']},{id:'questions',label:'Interview questions',description:'Probe gaps and risks',icon:'message-square',requires:['cv','job']}];
+return(<div className="pane">
+<AnalysisRequest description="Anna Kowalska · Senior Product Designer" model="Claude · EU" estimate="≈ 6k tokens · 1 credit" sources={sources} analyses={analyses} status={st==='loading'?'running':'idle'} steps={STEPS} step={step} onRun={run} />
+</div>);};
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

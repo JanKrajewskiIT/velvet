@@ -1,0 +1,14 @@
+<!-- @dsCard group="20 Overlays" viewport="960x318" name="ConfirmAction" subtitle="Inline popover confirm for row-level destructive actions" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { ConfirmAction, IconButton } = NS;
+const App=()=>{const[files,setFiles]=React.useState(['brand.pdf','hero.png','notes.md']);return(<div className="pane"><div style={{display:'flex',flexDirection:'column',gap:4,maxWidth:320}}>{files.map(f=><div key={f} className="r" style={{justifyContent:'space-between',padding:'4px 4px 4px 12px',border:'1px solid var(--border-subtle)',borderRadius:10,fontSize:14}}>{f}<ConfirmAction tone="danger" title={'Delete '+f+'?'} description="It will be removed for everyone." confirmLabel="Delete" onConfirm={()=>new Promise(r=>setTimeout(()=>{setFiles(x=>x.filter(y=>y!==f));r();},500))} trigger={<IconButton icon="trash-2" label={'Delete '+f} variant="ghost" size="sm" />} /></div>)}</div></div>);};
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

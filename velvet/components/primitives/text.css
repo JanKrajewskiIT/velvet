@@ -1,0 +1,6 @@
+/* Text */
+.vui-text{margin:0}
+.vui-text--primary{color:var(--fg-primary)}.vui-text--secondary{color:var(--fg-secondary)}.vui-text--tertiary{color:var(--fg-tertiary)}.vui-text--brand{color:var(--fg-brand)}.vui-text--danger{color:var(--status-danger-fg)}.vui-text--success{color:var(--status-success-fg)}.vui-text--warning{color:var(--status-warning-fg)}.vui-text--inherit{color:inherit}
+.vui-text--truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.vui-text--tabular{font-variant-numeric:tabular-nums}
+.vui-text--mono{font-family:var(--font-mono)}

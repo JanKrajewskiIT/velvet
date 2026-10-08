@@ -1,0 +1,8 @@
+.vui-anchor{display:flex;flex-direction:column;gap:var(--space-2);min-width:0;font-family:var(--font-sans)}
+.vui-anchor__title{font:var(--type-overline);letter-spacing:var(--type-overline-tracking);text-transform:uppercase;color:var(--fg-tertiary)}
+.vui-anchor__list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;box-shadow:inset var(--border-width-thick) 0 0 var(--border-subtle)}
+.vui-anchor__link{display:block;padding:var(--space-1-5) var(--space-3);border-left:var(--border-width-thick) solid transparent;font:var(--type-body-sm);color:var(--fg-secondary);text-decoration:none;transition:color var(--motion-fast),border-color var(--motion-fast)}
+.vui-anchor__link:hover{color:var(--fg-primary)}
+.vui-anchor__link--sub{padding-left:calc(var(--space-3) + var(--space-3));font-size:var(--type-caption-size)}
+.vui-anchor__link--on{color:var(--fg-brand);border-left-color:var(--tab-indicator-color);font-weight:var(--type-label-weight)}
+.vui-anchor__link:focus-visible{outline:none;box-shadow:var(--focus-ring);border-radius:var(--radius-xs)}

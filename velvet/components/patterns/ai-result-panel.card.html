@@ -1,0 +1,15 @@
+<!-- @dsCard group="28 Patterns" viewport="960x503" name="AiResultPanel" subtitle="Provenance · score ring · findings · sources · streaming / error states" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.pane{display:flex;flex-direction:column;gap:18px}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { AiResultPanel, OptionSwitcher } = NS;
+const SEC=[{title:'Strengths',icon:'check',tone:'success',items:['4 years of React and TypeScript in production','Led a design-system migration across 3 products','Clear written communication in the take-home']},{title:'Gaps',icon:'triangle-alert',tone:'warning',items:['No documented GraphQL experience','Limited mobile (React Native) work']}];
+const App=()=>{const[st,setSt]=React.useState('done');return(<div className="pane"><OptionSwitcher options={[{value:'done',label:'Done'},{value:'streaming',label:'Streaming'},{value:'error',label:'Error'}]} value={st} onValueChange={setSt} size="sm" label="State" /><AiResultPanel status={st} model="claude-haiku-4.5" elapsed="1.2s" score={92} headline="Match: very high" subline="Ada Kowalska × Senior Frontend Engineer" sections={SEC} sources={[{label:'CV — Ada_Kowalska.pdf'},{label:'Take-home review',href:'#'},{label:'Job description'}]} tokens={1284} cost="$0.0021" onRegenerate={()=>{setSt('streaming');setTimeout(()=>setSt('done'),1400);}} onFeedback={()=>{}} /></div>);};
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

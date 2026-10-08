@@ -1,0 +1,37 @@
+/* Stepper — step circles are the Marker atom (primitives/marker.css); rails are positioned from --marker-size. */
+.vui-stepper{display:flex;margin:0;padding:0;list-style:none}
+.vui-stepper--horizontal .vui-step{flex-direction:column}
+.vui-stepper--vertical .vui-step__line::after{transform:scaleY(0);transform-origin:top}
+.vui-stepper--horizontal .vui-step__inner{flex-direction:column;gap:var(--space-2)}
+.vui-stepper--horizontal .vui-step__text{padding:0 var(--space-3) 0 0}
+.vui-stepper--horizontal .vui-step__line{top:calc(var(--marker-size) / 2);left:calc(var(--marker-size) + var(--space-2));right:var(--space-2);height:var(--rail-w);border-radius:var(--radius-2xs)}
+.vui-stepper--vertical{flex-direction:column}
+.vui-stepper--vertical .vui-step{padding-bottom:var(--space-5)}
+.vui-stepper--vertical .vui-step:last-child{padding-bottom:0}
+.vui-stepper--vertical .vui-step__line{left:calc(var(--marker-size) / 2 - var(--border-width));top:calc(var(--marker-size) + var(--space-1-5));bottom:var(--space-1);width:var(--rail-w);border-radius:var(--radius-2xs)}
+@media (max-width:639px){.vui-stepper--horizontal .vui-step__desc{display:none}
+.vui-stepper--horizontal .vui-step:not(.vui-step--current) .vui-step__label{position:absolute!important;width:var(--border-width);height:var(--border-width);overflow:hidden;clip:rect(0,0,0,0)}
+.vui-stepper--horizontal .vui-step:not(.vui-step--current){flex:0 0 calc(2 * var(--marker-size))}}
+.vui-step{position:relative;display:flex;flex:1;min-width:0}
+.vui-step__inner{display:flex;align-items:flex-start;gap:var(--space-2-5);padding:0;border:0;background:none;text-align:left;font:inherit;color:inherit;border-radius:var(--radius-md)}
+button.vui-step__inner{cursor:pointer}
+button.vui-step__inner:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+button.vui-step__inner:not(:disabled):hover .vui-step__label{color:var(--fg-brand)}
+button.vui-step__inner:disabled{cursor:default}
+.vui-step__dot .vui-icon{font-size:var(--size-icon-sm)}
+.vui-step__text{display:flex;flex-direction:column;gap:var(--space-0-5);padding-top:var(--space-1-5);min-width:0}
+.vui-step__label{font-size:var(--type-body-sm-size);font-weight:var(--type-label-weight);color:var(--fg-secondary)}
+.vui-step__desc{font-size:var(--type-caption-size);color:var(--fg-tertiary)}
+.vui-step--current .vui-step__label{color:var(--fg-primary);font-weight:var(--type-title-weight)}
+.vui-step--done .vui-step__label{color:var(--fg-primary)}
+.vui-step--error .vui-step__label{color:var(--status-danger-fg)}
+.vui-step__line{position:absolute;background:var(--border-default);overflow:hidden}
+.vui-step__line::after{content:"";position:absolute;inset:0;background:var(--rail-active);transform:scaleX(0);transform-origin:left;transition:transform var(--motion-slide)}
+.vui-step--done .vui-step__line::after{transform:none}
+.vui-step--current .vui-step__dot{transform:scale(1.1)}
+.vui-step--pop .vui-step__dot{animation:vui-step-pop var(--motion-pop)}
+.vui-step--pop .vui-step__dot .vui-icon{animation:vui-step-check var(--motion-pop)}
+.vui-step__label{transition:color var(--motion-fast)}
+button.vui-step__inner:not(:disabled):hover .vui-step__dot{border-color:var(--action-primary)}
+@keyframes vui-step-pop{0%{transform:scale(.6)}100%{transform:scale(1)}}
+@keyframes vui-step-check{0%{transform:scale(0) rotate(-30deg);opacity:0}100%{transform:none;opacity:1}}

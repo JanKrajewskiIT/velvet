@@ -1,0 +1,11 @@
+.vui-dtpop__body{display:flex;gap:var(--space-3);align-items:stretch}
+.vui-dtpop__times{display:flex;flex-direction:column;width:104px;padding-left:var(--space-3);border-left:var(--border-width) solid var(--border-subtle)}
+.vui-dtpop__head{display:flex;align-items:center;gap:var(--space-1-5);height:var(--control-height-sm);font:var(--type-label);color:var(--fg-primary)}
+.vui-dtpop__head .vui-icon{color:var(--fg-tertiary);font-size:var(--size-icon-sm)}
+.vui-dtpop__list{flex:1;min-height:0;max-height:var(--overlay-max-h-sm);overflow-y:auto;display:flex;flex-direction:column;gap:var(--space-0-5);padding-right:var(--space-0-5);scrollbar-width:thin}
+.vui-dtpop__slot{flex:none;height:var(--control-height-sm);border:0;border-radius:var(--radius-sm);background:none;color:var(--fg-primary);font:var(--type-body-sm);font-variant-numeric:tabular-nums;cursor:pointer;transition:var(--transition-colors)}
+.vui-dtpop__slot:hover:not(:disabled){background:var(--bg-hover)}
+.vui-dtpop__slot:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.vui-dtpop__slot--on,.vui-dtpop__slot--on:hover{background:var(--action-primary)!important;color:var(--action-primary-fg);font-weight:var(--type-title-weight)}
+.vui-dtpop__slot:disabled{color:var(--fg-disabled);cursor:not-allowed}
+@media (max-width:519px){.vui-dtpop__body{flex-direction:column}.vui-dtpop__times{width:auto;padding:var(--space-3) 0 0;border-left:0;border-top:var(--border-width) solid var(--border-subtle)}.vui-dtpop__list{flex-direction:row;overflow-x:auto;max-height:none}.vui-dtpop__slot{padding:0 var(--space-3)}}

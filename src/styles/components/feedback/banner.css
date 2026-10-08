@@ -1,0 +1,20 @@
+/* Banner */
+.vui-banner{position:relative;display:flex;align-items:center;min-height:var(--hit-target-min);padding:var(--space-2) var(--space-12);font-size:var(--type-body-sm-size);color:var(--on-color-fg)}
+.vui-banner--sticky{position:sticky;top:0;z-index:var(--z-sticky)}
+.vui-banner__inner{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:var(--space-2) var(--space-3);flex:1;text-align:center}
+.vui-banner__inner>.vui-icon{font-size:var(--type-body-lg-size)}
+.vui-banner__text{font-weight:var(--type-label-weight)}
+.vui-banner__action .vui-btn{height:var(--control-height-inner);padding:0 var(--space-3);background:var(--on-color-subtle);border-color:var(--on-color-border);color:var(--on-color-fg)}
+.vui-banner__action .vui-btn:hover{background:var(--on-color-pressed)}
+.vui-banner__close{position:absolute;right:var(--space-2-5);top:50%;display:grid;place-items:center;width:var(--control-height-inner);height:var(--control-height-inner);border:0;border-radius:var(--radius-sm);background:none;color:inherit;opacity:.8;cursor:pointer;transform:translateY(-50%)}
+.vui-banner__close:hover{opacity:1;background:var(--on-color-hover)}
+.vui-banner__close:focus-visible{outline:var(--border-width-thick) solid var(--on-color-fg);outline-offset:1px}
+.vui-banner--brand{background:var(--action-primary)}
+.vui-banner--info{background:var(--status-info-solid)}
+.vui-banner--success{background:var(--status-success-solid)}
+.vui-banner--danger{background:var(--status-danger-solid)}
+.vui-banner--neutral{background:var(--status-neutral-solid)}
+.vui-banner--warning{background:var(--status-warning-bg);color:var(--status-warning-fg);border-bottom:var(--border-width) solid var(--status-warning-border)}
+.vui-banner--warning .vui-banner__action .vui-btn{background:var(--bg-raised);border-color:var(--status-warning-border);color:var(--status-warning-fg)}
+@media (max-width:639px){.vui-banner{padding:var(--space-2-5) var(--space-12) var(--space-2-5) var(--space-4)}
+.vui-banner__inner{justify-content:flex-start;text-align:left}}

@@ -1,0 +1,15 @@
+/* InlineEdit */
+.vui-inline-edit{display:inline-flex;align-items:center;gap:var(--space-2);max-width:100%;margin:0 calc(-1 * var(--space-2));padding:var(--space-1) var(--space-2);border:var(--border-width) solid transparent;border-radius:var(--radius-md);background:none;color:var(--fg-primary);font:inherit;font-size:var(--type-body-size);line-height:var(--type-label-leading);text-align:left;cursor:text;transition:background-color var(--motion-fast),border-color var(--motion-fast)}
+.vui-inline-edit:hover{background:var(--bg-hover)}
+.vui-inline-edit:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.vui-inline-edit__text{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vui-inline-edit__icon{flex:none;font-size:var(--type-body-size);color:var(--fg-tertiary);opacity:0;transition:opacity var(--motion-fast)}
+.vui-inline-edit:hover .vui-inline-edit__icon,.vui-inline-edit:focus-visible .vui-inline-edit__icon{opacity:1}
+.vui-inline-edit--empty .vui-inline-edit__text{color:var(--fg-tertiary)}
+.vui-inline-edit--saved .vui-inline-edit__icon{opacity:1;color:var(--status-success-fg)}
+.vui-inline-edit--sm{font-size:var(--type-body-sm-size);padding:var(--space-0-5) var(--space-1-5);margin:0 calc(-1 * var(--space-1-5))}
+.vui-inline-edit--lg{font:var(--type-title-weight) var(--type-h3-size)/var(--type-label-leading) var(--font-display);letter-spacing:var(--type-title-tracking)}
+.vui-inline-edit__form{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-1-5);max-width:100%;margin:0;padding:0}
+.vui-inline-edit__form.vui-inline-edit--lg .vui-control{height:var(--control-height-lg)}
+.vui-inline-edit__form.vui-inline-edit--lg .vui-control__input{font:var(--type-title-weight) var(--type-h4-size)/1 var(--font-display);letter-spacing:var(--type-title-tracking)}
+.vui-inline-edit__err{flex-basis:100%}

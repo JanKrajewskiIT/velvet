@@ -1,0 +1,4 @@
+# Project notes
+- Cards (`@dsCard` html, thumbnail) link `styles.bundle.css` — a flattened copy of `styles.css` + all its @imports (one request instead of ~165). After editing ANY file in `tokens/` or a component `.css`, regenerate `styles.bundle.css` from `styles.css` (inline imports in order, rewrite relative `url()` to root-relative). `styles.css` stays the source of truth for the compiler and consumers.
+- Card frame (bg, 18/20 gutter, no inner scroll) lives in `assets/theme-toggle.js`; label style in `components/card.css`. Viewport height must fit content — cards never scroll.
+- `docs/` = handoff docs for porting to SolidJS (`docs/README.md`). After adding, removing or renaming a component, changing its props/deps/cards, or changing a rule: update `docs/components.md` (regenerate from `.d.ts`/`.jsx` imports/`*.card.html` groups) and any affected `docs/*.md`, so the docs never drift from the source.

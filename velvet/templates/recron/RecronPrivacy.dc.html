@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script><script src="./recron-data.js"></script><style>:root:root{overflow:auto!important;height:auto!important;background:var(--bg-page)!important}html body{margin:0!important;padding:0!important;background:var(--bg-page)!important}</style></helmet>
+<div data-screen-label="Privacy" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),max-content));justify-content:center;gap:var(--space-12);width:100%;box-sizing:border-box;color:var(--fg-primary);font-family:var(--font-sans)">
+<aside style="position:sticky;top:96px;align-self:start;display:flex;flex-direction:column;gap:var(--space-3);width:240px;max-width:100%">
+<div style="font:var(--type-label-weight) var(--type-caption-size)/1 var(--font-sans);letter-spacing:.08em;text-transform:uppercase;color:var(--fg-tertiary)">On this page</div>
+<nav aria-label="Table of contents" style="display:flex;flex-direction:column;border-left:var(--border-width) solid var(--border-subtle)">
+<a href="#introduction" onClick="{{ jump.introduction }}" style="padding:var(--space-1-5) var(--space-3);margin-left:-1px;border-left:2px solid transparent;color:var(--fg-secondary);font-size:var(--type-body-sm-size);text-decoration:none" style-hover="color:var(--fg-brand);border-left-color:var(--border-brand)">Introduction</a>
+<a href="#data-collected" onClick="{{ jump.dataCollected }}" style="padding:var(--space-1-5) var(--space-3);margin-left:-1px;border-left:2px solid transparent;color:var(--fg-secondary);font-size:var(--type-body-sm-size);text-decoration:none" style-hover="color:var(--fg-brand);border-left-color:var(--border-brand)">Data we collect</a>
+<a href="#purpose" onClick="{{ jump.purpose }}" style="padding:var(--space-1-5) var(--space-3);margin-left:-1px;border-left:2px solid transparent;color:var(--fg-secondary);font-size:var(--type-body-sm-size);text-decoration:none" style-hover="color:var(--fg-brand);border-left-color:var(--border-brand)">How we use your data</a>
+<a href="#third-party" onClick="{{ jump.thirdParty }}" style="padding:var(--space-1-5) var(--space-3);margin-left:-1px;border-left:2px solid transparent;color:var(--fg-secondary);font-size:var(--type-body-sm-size);text-decoration:none" style-hover="color:var(--fg-brand);border-left-color:var(--border-brand)">Third-party services</a>
+<a href="#data-storage" onClick="{{ jump.dataStorage }}" style="padding:var(--space-1-5) var(--space-3);margin-left:-1px;border-left:2px solid transparent;color:var(--fg-secondary);font-size:var(--type-body-sm-size);text-decoration:none" style-hover="color:var(--fg-brand);border-left-color:var(--border-brand)">Data storage and security</a>
+<a href="#user-rights" onClick="{{ jump.userRights }}" style="padding:var(--space-1-5) var(--space-3);margin-left:-1px;border-left:2px solid transparent;color:var(--fg-secondary);font-size:var(--type-body-sm-size);text-decoration:none" style-hover="color:var(--fg-brand);border-left-color:var(--border-brand)">Your rights</a>
+<a href="#cookies" onClick="{{ jump.cookies }}" style="padding:var(--space-1-5) var(--space-3);margin-left:-1px;border-left:2px solid transparent;color:var(--fg-secondary);font-size:var(--type-body-sm-size);text-decoration:none" style-hover="color:var(--fg-brand);border-left-color:var(--border-brand)">Cookies</a>
+<a href="#contact" onClick="{{ jump.contact }}" style="padding:var(--space-1-5) var(--space-3);margin-left:-1px;border-left:2px solid transparent;color:var(--fg-secondary);font-size:var(--type-body-sm-size);text-decoration:none" style-hover="color:var(--fg-brand);border-left-color:var(--border-brand)">Contact</a>
+</nav>
+</aside>
+<article style="display:flex;flex-direction:column;gap:var(--space-10);width:680px;max-width:100%;min-width:0;font-size:var(--type-body-size);line-height:1.7;color:var(--fg-secondary)">
+<header style="display:flex;flex-direction:column;gap:var(--space-2);padding-bottom:var(--space-6);border-bottom:var(--border-width) solid var(--border-subtle)">
+<h1 style="margin:0;font:var(--type-heavy-weight) clamp(28px,4vw,40px)/1.1 var(--font-display);letter-spacing:-.02em;color:var(--fg-primary)">Privacy Policy</h1>
+<p style="margin:0;font-size:var(--type-body-sm-size);color:var(--fg-tertiary)">Last updated: February 2026</p>
+</header>
+<section id="introduction" style="display:flex;flex-direction:column;gap:var(--space-3);scroll-margin-top:96px"><h2 style="margin:0;font:var(--type-title-weight) var(--type-h3-size)/1.25 var(--font-display);color:var(--fg-primary)">Introduction</h2><p style="margin:0;text-wrap:pretty">This Privacy Policy describes how Recron ("we", "our", "us") collects, uses, and protects your personal data when you use our application. We are committed to ensuring that your privacy is protected in accordance with the General Data Protection Regulation (GDPR).</p></section>
+<section id="data-collected" style="display:flex;flex-direction:column;gap:var(--space-3);scroll-margin-top:96px"><h2 style="margin:0;font:var(--type-title-weight) var(--type-h3-size)/1.25 var(--font-display);color:var(--fg-primary)">Data we collect</h2><p style="margin:0;text-wrap:pretty">When you sign in to Recron, we collect the following personal data from your account or identity provider:</p><ul style="margin:0;padding-left:var(--space-5);display:flex;flex-direction:column;gap:var(--space-1-5)"><li>First and last name</li><li>Email address</li><li>Profile picture (URL)</li><li>Authentication provider identifier (e.g. LinkedIn, Keycloak)</li></ul></section>
+<section id="purpose" style="display:flex;flex-direction:column;gap:var(--space-3);scroll-margin-top:96px"><h2 style="margin:0;font:var(--type-title-weight) var(--type-h3-size)/1.25 var(--font-display);color:var(--fg-primary)">How we use your data</h2><p style="margin:0;text-wrap:pretty">We use your personal data for the following purposes:</p><ul style="margin:0;padding-left:var(--space-5);display:flex;flex-direction:column;gap:var(--space-1-5)"><li><strong style="color:var(--fg-primary);font-weight:var(--type-label-weight)">Authentication and account management</strong> — to verify your identity and manage your access to the application</li><li><strong style="color:var(--fg-primary);font-weight:var(--type-label-weight)">Personalization</strong> — to display your name and profile picture within the application</li><li><strong style="color:var(--fg-primary);font-weight:var(--type-label-weight)">Communication</strong> — to contact you regarding your account if necessary</li></ul></section>
+<section id="third-party" style="display:flex;flex-direction:column;gap:var(--space-3);scroll-margin-top:96px"><h2 style="margin:0;font:var(--type-title-weight) var(--type-h3-size)/1.25 var(--font-display);color:var(--fg-primary)">Third-party services</h2><p style="margin:0;text-wrap:pretty">We use Keycloak as our identity and access management solution. When you sign in via a third-party provider (such as LinkedIn), your authentication data is processed by that provider according to their own privacy policy. We only receive the data listed above and do not share your personal data with any other third parties.</p></section>
+<section id="data-storage" style="display:flex;flex-direction:column;gap:var(--space-3);scroll-margin-top:96px"><h2 style="margin:0;font:var(--type-title-weight) var(--type-h3-size)/1.25 var(--font-display);color:var(--fg-primary)">Data storage and security</h2><p style="margin:0;text-wrap:pretty">Your data is stored securely in our database and is protected using industry-standard encryption and security practices. We retain your data for as long as your account is active. You may request deletion of your account and associated data at any time.</p></section>
+<section id="user-rights" style="display:flex;flex-direction:column;gap:var(--space-3);scroll-margin-top:96px"><h2 style="margin:0;font:var(--type-title-weight) var(--type-h3-size)/1.25 var(--font-display);color:var(--fg-primary)">Your rights</h2><p style="margin:0;text-wrap:pretty">Under the GDPR, you have the following rights regarding your personal data:</p><ul style="margin:0;padding-left:var(--space-5);display:flex;flex-direction:column;gap:var(--space-1-5)"><li><strong style="color:var(--fg-primary);font-weight:var(--type-label-weight)">Right of access</strong> — request a copy of your personal data</li><li><strong style="color:var(--fg-primary);font-weight:var(--type-label-weight)">Right to rectification</strong> — request correction of inaccurate data</li><li><strong style="color:var(--fg-primary);font-weight:var(--type-label-weight)">Right to erasure</strong> — request deletion of your personal data</li><li><strong style="color:var(--fg-primary);font-weight:var(--type-label-weight)">Right to data portability</strong> — request your data in a portable format</li></ul></section>
+<section id="cookies" style="display:flex;flex-direction:column;gap:var(--space-3);scroll-margin-top:96px"><h2 style="margin:0;font:var(--type-title-weight) var(--type-h3-size)/1.25 var(--font-display);color:var(--fg-primary)">Cookies</h2><p style="margin:0;text-wrap:pretty">Recron uses session storage to maintain your authentication state. We do not use tracking cookies or third-party analytics cookies.</p></section>
+<section id="contact" style="display:flex;flex-direction:column;gap:var(--space-3);scroll-margin-top:96px"><h2 style="margin:0;font:var(--type-title-weight) var(--type-h3-size)/1.25 var(--font-display);color:var(--fg-primary)">Contact</h2><p style="margin:0;text-wrap:pretty">If you have any questions about this Privacy Policy or wish to exercise your rights, please contact us through the application.</p></section>
+</article>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const ids = { introduction: 'introduction', dataCollected: 'data-collected', purpose: 'purpose', thirdParty: 'third-party', dataStorage: 'data-storage', userRights: 'user-rights', cookies: 'cookies', contact: 'contact' };
+    const jump = {};
+    Object.keys(ids).forEach((k) => {
+      jump[k] = (e) => {
+        e.preventDefault();
+        const el = document.getElementById(ids[k]);
+        if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 88, behavior: 'smooth' });
+      };
+    });
+    return { jump };
+  }
+}
+</script>
+</body>
+</html>

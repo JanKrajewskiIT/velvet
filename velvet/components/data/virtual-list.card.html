@@ -1,0 +1,20 @@
+<!-- @dsCard group="26 Data" viewport="960x480" name="VirtualList" subtitle="10 000 rows · selectable · infinite load · keyboard" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.pane{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.lbl{font-size:12px;color:var(--fg-tertiary);margin-bottom:6px}.r{display:flex;align-items:center;gap:10px;min-width:0;width:100%}.r b{font-weight:500;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.r small{margin-left:auto;font:12px var(--font-mono);color:var(--fg-tertiary)}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const { VirtualList, Avatar } = window.VelvetUIDesignSystem_ee2bd8;
+const F=['Anna','Marek','Julia','Tomasz','Ola','Piotr','Kasia','Bartek'],L=['Kowalska','Nowak','Wiśniewska','Zieliński','Lewandowska','Wójcik'];
+const mk=(from,n)=>Array.from({length:n},(_,i)=>{const k=from+i;return{id:'c'+k,name:F[k%8]+' '+L[k%6],score:40+((k*37)%60)};});
+const App=()=>{const big=React.useMemo(()=>mk(0,10000),[]);const[sel,setSel]=React.useState(['c3']);const[feed,setFeed]=React.useState(()=>mk(0,30));const[ld,setLd]=React.useState(false);
+const row=(c,i,s)=><div className="r"><Avatar name={c.name} size="sm" /><b>{c.name}</b><small>#{i+1} · {c.score}</small></div>;
+return(<div className="pane">
+<div><div className="lbl">10 000 candidates · multi-select</div><VirtualList items={big} height={380} itemHeight={52} divided selectable selected={sel} onSelect={(k)=>setSel(s=>s.includes(k)?s.filter(x=>x!==k):[...s,k])} renderItem={row} label="Candidates" /></div>
+<div><div className="lbl">infinite load · {feed.length} loaded</div><VirtualList items={feed} height={380} itemHeight={52} divided loading={ld} onEndReached={()=>{setLd(true);setTimeout(()=>{setFeed(f=>[...f,...mk(f.length,30)]);setLd(false);},700);}} renderItem={row} label="Feed" /></div>
+</div>);};
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

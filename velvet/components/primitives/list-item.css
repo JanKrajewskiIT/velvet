@@ -1,0 +1,17 @@
+/* Atom · ListItem — leading · title/description/meta · trailing. Hosts restyle via their own class (loaded later). */
+.vui-list-item{display:flex;align-items:center;gap:var(--space-3);width:100%;min-height:var(--row-height-lg);padding:var(--space-2-5) var(--space-3);border:0;border-radius:var(--radius-md);background:none;font:inherit;color:inherit;text-align:left;text-decoration:none;box-sizing:border-box}
+.vui-list-item--sm{min-height:var(--row-height-sm);padding:var(--space-1-5) var(--space-3)}
+.vui-list-item--top{align-items:flex-start}
+.vui-list-item--action{cursor:pointer;transition:background-color var(--motion-fast),border-color var(--motion-fast)}
+.vui-list-item--action:hover{background:var(--bg-hover)}
+.vui-list-item--action:active{background:var(--bg-pressed)}
+.vui-list-item--action:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.vui-list-item--disabled,.vui-list-item:disabled{opacity:var(--opacity-disabled);pointer-events:none}
+.vui-list-item--selected,.vui-list-item--selected:hover{background:var(--bg-selected)}
+.vui-list-item__leading{display:flex;align-items:center;gap:var(--space-2-5);flex:none;color:var(--fg-secondary)}
+.vui-list-item__main{flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--space-0-5)}
+.vui-list-item__title{font-size:var(--type-body-sm-size);color:var(--fg-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vui-list-item__desc{font-size:var(--type-caption-size);color:var(--fg-secondary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vui-list-item__desc--clamp{display:-webkit-box;-webkit-box-orient:vertical;white-space:normal}
+.vui-list-item__meta{font-size:var(--type-overline-size);color:var(--fg-tertiary)}
+.vui-list-item__trailing{display:flex;align-items:center;gap:var(--space-2);flex:none;font-size:var(--type-caption-size);color:var(--fg-tertiary)}

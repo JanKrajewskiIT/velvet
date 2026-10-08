@@ -1,0 +1,22 @@
+/* FileUpload */
+.vui-upload{display:flex;flex-direction:column;gap:var(--space-3)}
+.vui-upload__zone{display:flex;flex-direction:column;align-items:center;gap:var(--space-1-5);padding:var(--space-7) var(--space-5);border:var(--border-width-medium) dashed var(--border-strong);border-radius:var(--radius-lg);background:var(--bg-subtle);text-align:center;cursor:pointer;transition:border-color var(--motion-fast),background-color var(--motion-fast),transform var(--motion-spring)}
+.vui-upload__zone:hover{border-color:var(--border-brand)}
+.vui-upload__zone:focus-visible{outline:none;border-color:var(--border-focus);box-shadow:var(--focus-ring)}
+.vui-upload__zone--over{border-style:solid;border-color:var(--border-focus);background:var(--bg-selected);transform:scale(1.01)}
+.vui-upload__zone--disabled{opacity:var(--opacity-disabled);cursor:not-allowed}
+.vui-upload__icon{display:grid;place-items:center;width:40px;height:40px;margin-bottom:var(--space-1);border-radius:50%;background:var(--bg-raised);box-shadow:var(--elevation-card);color:var(--fg-brand);font-size:var(--type-title-lg-size);transition:transform var(--motion-spring)}
+.vui-upload__zone--over .vui-upload__icon{transform:translateY(-3px)}
+.vui-upload__title{font-size:var(--type-body-size);font-weight:var(--type-label-weight);color:var(--fg-primary)}
+.vui-upload__hint{font-size:var(--type-caption-size);color:var(--fg-tertiary)}
+.vui-upload__list{display:flex;flex-direction:column;gap:var(--space-2);margin:0;padding:0;list-style:none}
+.vui-upload__file{display:flex;align-items:center;gap:var(--space-3);padding:var(--space-2-5) var(--space-2-5) var(--space-2-5) var(--space-3);border:var(--border-width) solid var(--border-subtle);border-radius:var(--radius-md);background:var(--bg-raised);animation:vui-select-in var(--motion-move)}
+.vui-upload__file--error{border-color:var(--status-danger-border)}
+.vui-upload__thumb{border-radius:var(--radius-sm);background:var(--bg-sunken)}
+.vui-upload__meta{flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--space-1-5)}
+.vui-upload__row{display:flex;align-items:baseline;justify-content:space-between;gap:var(--space-3)}
+.vui-upload__name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:var(--type-body-sm-size);font-weight:var(--type-label-weight)}
+.vui-upload__status{display:inline-flex;align-items:center;gap:var(--space-1);flex:none;font-size:var(--type-caption-size);color:var(--fg-tertiary);font-variant-numeric:tabular-nums}
+.vui-upload__file--done .vui-upload__status .vui-icon{color:var(--status-success-fg)}
+.vui-upload__file--error .vui-upload__status{color:var(--status-danger-fg)}
+.vui-upload__empty{padding:var(--space-1-5)}

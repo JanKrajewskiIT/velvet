@@ -1,0 +1,65 @@
+import { defineDictionary } from '@jankrajewskiit/i18n';
+
+export const mediaEn = defineDictionary({
+  audioPlayer: {
+    seekTitled: 'Seek — {title}',
+  },
+  carousel: {
+    label: 'Carousel',
+    roleDescription: 'carousel',
+    slideRoleDescription: 'slide',
+    slide: '{index} of {count}',
+    previous: 'Previous slide',
+    next: 'Next slide',
+    goTo: 'Go to slide {index}',
+    pauseAutoplay: 'Pause autoplay',
+    resumeAutoplay: 'Resume autoplay',
+  },
+  imageCropper: {
+    area: 'Crop area. Drag or use arrow keys to move the image, plus and minus to zoom.',
+    rotateLeft: 'Rotate 90° left',
+    zoom: 'Zoom',
+    reset: 'Reset',
+  },
+  imageGrid: {
+    openGallery: 'Open gallery, {count} more',
+    openImage: 'Open {alt}',
+    openUntitled: 'Open image {index}',
+  },
+  lightbox: {
+    label: 'Image {index} of {count}',
+    zoomIn: 'Zoom in',
+    zoomOut: 'Zoom out',
+    previous: 'Previous image',
+    next: 'Next image',
+    thumb: 'Image {index}',
+  },
+  mediaFrame: {
+    error: 'Couldn’t load media',
+    empty: 'No media',
+    embed: 'Embedded media',
+    play: 'Play video',
+    playTitled: 'Play {title}',
+  },
+  player: {
+    play: 'Play',
+    pause: 'Pause',
+    mute: 'Mute',
+    unmute: 'Unmute',
+    seek: 'Seek',
+    volume: 'Volume',
+    position: '{time} of {duration}',
+    speed: 'Playback speed {rate}',
+  },
+  videoPlayer: {
+    label: 'Video player',
+    labelTitled: '{title} — video player',
+    playKey: 'Play ({key})',
+    pauseKey: 'Pause ({key})',
+    muteKey: 'Mute ({key})',
+    unmuteKey: 'Unmute ({key})',
+    captionsKey: 'Captions ({key})',
+    fullscreenKey: 'Full screen ({key})',
+    exitFullscreenKey: 'Exit full screen ({key})',
+  },
+});

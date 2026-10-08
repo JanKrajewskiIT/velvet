@@ -1,0 +1,11 @@
+/* Countdown */
+.vui-countdown{display:inline-flex;align-items:flex-start;gap:var(--space-2)}
+.vui-countdown__unit{display:flex;flex-direction:column;align-items:center;gap:var(--space-1-5)}
+.vui-countdown--boxes .vui-countdown__num{display:grid;place-items:center;min-width:64px;height:64px;padding:0 var(--space-2);border-radius:var(--radius-lg);box-shadow:var(--elevation-card),var(--highlight-inset);font:var(--type-title-weight) var(--type-h2-size)/1 var(--font-display);letter-spacing:-.02em;font-variant-numeric:tabular-nums;animation:vui-tick var(--motion-move)}
+.vui-countdown__label{color:var(--fg-tertiary);font:var(--type-overline);letter-spacing:var(--type-overline-tracking);text-transform:uppercase}
+.vui-countdown--sm.vui-countdown--boxes .vui-countdown__num{min-width:44px;height:44px;font-size:var(--type-h4-size);border-radius:var(--radius-md)}
+.vui-countdown--lg.vui-countdown--boxes .vui-countdown__num{min-width:88px;height:88px;font-size:44px;border-radius:var(--radius-xl)}
+.vui-countdown--inline{align-items:baseline;gap:var(--space-0-5);font:var(--type-title-weight) var(--type-title-lg-size)/1 var(--font-mono);font-variant-numeric:tabular-nums}
+.vui-countdown--inline .vui-countdown__num{display:inline-block;animation:vui-tick var(--motion-move)}
+@media (prefers-reduced-motion:reduce){.vui-countdown__num{animation:none!important}}
+@keyframes vui-tick{from{opacity:.3;transform:translateY(-4px)}}

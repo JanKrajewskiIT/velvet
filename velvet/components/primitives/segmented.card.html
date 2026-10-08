@@ -1,0 +1,22 @@
+<!-- @dsCard group="11 Atoms" viewport="960x218" name="Segmented" subtitle="track + raised item · size · icon · round · block" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><link rel="stylesheet" href="../../guidelines/card.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { Segmented, SegmentedItem } = NS;
+const Row=({k,children})=>(<div className="grid" style={{gridTemplateColumns:'110px minmax(0,1fr)',gap:16}}><span className="k">{k}</span><div className="row" style={{gap:16}}>{children}</div></div>);
+function Demo(props){const opts=props.opts,init=props.init,p={size:props.size,iconOnly:props.iconOnly,round:props.round,block:props.block};const s=React.useState(init!==undefined?init:opts[0][0]);const v=s[0],setV=s[1];return (<Segmented role="radiogroup" size={p.size} iconOnly={p.iconOnly} round={p.round} block={p.block}>{opts.map(o=>(<SegmentedItem key={o[0]} role="radio" selected={v===o[0]} icon={o[2]} aria-label={p.iconOnly?o[1]:undefined} onClick={()=>setV(o[0])}>{p.iconOnly?null:o[1]}</SegmentedItem>))}</Segmented>);}
+const V=[['day','Day'],['week','Week'],['month','Month']];
+const I=[['list','List','list'],['grid','Grid','layout-grid'],['board','Board','kanban']];
+const App=()=>(<div className="col" style={{gap:16}}>
+<Row k="size"><Demo opts={V} init="week" /><Demo opts={V} size="sm" init="week" /></Row>
+<Row k="icon"><Demo opts={I} /><Demo opts={I} iconOnly /><Demo opts={I} iconOnly size="sm" /></Row>
+<Row k="round"><Demo opts={V} round init="month" /></Row>
+<Row k="block"><div style={{width:360}}><Demo opts={V} block init="day" /></div></Row>
+</div>);
+ReactDOM.createRoot(document.getElementById('root')).render(<div className="pane"><App /></div>);
+</script></body></html>

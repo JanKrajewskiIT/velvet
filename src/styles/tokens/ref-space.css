@@ -1,0 +1,39 @@
+/* REF · SPACE & SHAPE — 4px grid, radii, border widths, fixed sizes, layout scales.
+   Breakpoints are documented here but must be written as literals in @media queries. */
+:root{
+--space-0:0;--space-px:1px;--space-0-5:2px;--space-1:4px;--space-1-5:6px;--space-2:8px;--space-2-5:10px;--space-3:12px;--space-3-5:14px;--space-4:16px;--space-5:20px;--space-6:24px;--space-7:28px;--space-8:32px;--space-10:40px;--space-12:48px;--space-16:64px;--space-20:80px;--space-24:96px;
+/* Radius — 2xs: bars, marks, tracks · xs: chips, code · sm: small controls · md: buttons, fields · lg: cards, panels · xl: dialogs, FAB · 2xl: hero tiles */
+--radius-none:0;--radius-2xs:2px;--radius-xs:4px;--radius-sm:6px;--radius-md:8px;--radius-lg:12px;--radius-xl:16px;--radius-2xl:24px;--radius-full:999px;
+/* Border width — hairline everywhere · thick: focus, active tab · accent: strips, quotes */
+--border-width:1px;/* @kind spacing */--border-width-medium:1.5px;/* @kind spacing */--border-width-thick:2px;/* @kind spacing */--border-width-accent:3px;/* @kind spacing */
+/* Fixed boxes */
+--size-dot-sm:4px;/* @kind spacing */--size-dot:6px;/* @kind spacing */--size-dot-lg:8px;/* @kind spacing */--size-icon-xs:12px;/* @kind spacing */--size-icon-sm:14px;/* @kind spacing */--size-icon-md:16px;/* @kind spacing */--size-icon-lg:18px;/* @kind spacing */--size-icon-xl:20px;/* @kind spacing */--size-icon-2xl:24px;/* @kind spacing */
+--size-check:18px;/* @kind spacing */--size-check-sm:16px;/* @kind spacing */--size-swatch:28px;/* @kind spacing */--size-track-sm:4px;/* @kind spacing */--size-track:6px;/* @kind spacing */--size-track-lg:8px;/* @kind spacing */
+--size-avatar-xs:24px;/* @kind spacing */--size-avatar-sm:28px;/* @kind spacing */--size-avatar-md:32px;/* @kind spacing */--size-avatar-lg:40px;/* @kind spacing */--size-avatar-xl:56px;/* @kind spacing */
+--size-icon-tile-xs:28px;/* @kind spacing */--size-icon-tile-sm:32px;/* @kind spacing */--size-icon-tile-md:36px;/* @kind spacing */--size-icon-tile-lg:40px;/* @kind spacing */--size-icon-tile-xl:48px;/* @kind spacing */--size-icon-tile-2xl:56px;/* @kind spacing */--size-icon-tile-3xl:72px;/* @kind spacing */
+/* Control heights — the single source for buttons, fields, selects, segmented, toolbars */
+--control-height-xs:24px;/* @kind spacing */--control-height-sm:32px;/* @kind spacing */--control-height-md:40px;/* @kind spacing */--control-height-lg:48px;/* @kind spacing */
+/* Nested controls — a button inside a field, toolbar, segmented track or calendar grid: inner-sm = sm parent (32) − 2×3 · inner = md parent (40) − 2×6 · inner-lg = lg parent (48) − 2×6 */
+--control-height-inner-sm:26px;/* @kind spacing */--control-height-inner:28px;/* @kind spacing */--control-height-inner-lg:36px;/* @kind spacing */
+--control-pad-x:12px;/* @kind spacing */--row-height-sm:40px;/* @kind spacing */--row-height:48px;/* @kind spacing */--row-height-lg:56px;/* @kind spacing */--cell-py:12px;/* @kind spacing */--cell-px:16px;/* @kind spacing */
+/* Accessibility — hit-target-sm = WCAG 2.2 AA minimum, hit-target-min = touch */
+--hit-target-sm:24px;/* @kind spacing */--hit-target-min:44px;/* @kind spacing */
+--focus-ring-width:3px;/* @kind spacing */--focus-ring-offset:2px;/* @kind spacing */
+/* Halo — soft ring around a mark (press feedback, current step, empty-state icon). Ring gap = --border-width-thick in the surface colour. */
+--halo-sm:4px;/* @kind spacing */--halo-md:8px;/* @kind spacing */--halo-lg:10px;/* @kind spacing */
+/* Track — inset of a segmented track / toolbar / stepper; nested radius = parent radius − track inset */
+--track-pad:3px;/* @kind spacing */--radius-nested:calc(var(--radius-md) - var(--track-pad));/* @kind spacing */
+--underline-offset:3px;/* @kind spacing */
+/* Layout */
+--container-prose:68ch;/* @kind spacing */--container-sm:640px;/* @kind spacing */--container-md:768px;/* @kind spacing */--container-lg:1024px;/* @kind spacing */--container-xl:1280px;/* @kind spacing */--container-2xl:1440px;/* @kind spacing */
+--gutter:clamp(16px,4vw,32px);/* @kind spacing */
+--grid-columns:12;/* @kind other */--grid-gap:var(--space-6);/* @kind spacing */--grid-gap-sm:var(--space-4);/* @kind spacing */
+--section-gap:clamp(48px,8vw,96px);/* @kind spacing */--content-gap:var(--space-6);/* @kind spacing */--stack-gap:var(--space-4);/* @kind spacing */
+--aspect-square:1/1;/* @kind other */--aspect-video:16/9;/* @kind other */--aspect-photo:4/3;/* @kind other */--aspect-portrait:3/4;/* @kind other */--aspect-wide:21/9;/* @kind other */
+--bp-sm:640px;/* @kind spacing */--bp-md:768px;/* @kind spacing */--bp-lg:1024px;/* @kind spacing */--bp-xl:1280px;/* @kind spacing */--bp-2xl:1536px;/* @kind spacing */
+/* Overlays — popover / menu / select / palette sizing */
+--overlay-offset:6px;/* @kind spacing */--overlay-min-w:220px;/* @kind spacing */--overlay-w-sm:300px;/* @kind spacing */--overlay-w:340px;/* @kind spacing */--overlay-w-md:380px;/* @kind spacing */--overlay-w-lg:620px;/* @kind spacing */
+--overlay-max-h-sm:280px;/* @kind spacing */--overlay-max-h:360px;/* @kind spacing */--overlay-max-h-lg:520px;/* @kind spacing */
+--viewport-margin:var(--space-4);/* @kind spacing */
+--sidebar-width:248px;/* @kind spacing */--sidebar-width-collapsed:64px;/* @kind spacing */--topbar-height:60px;/* @kind spacing */
+}

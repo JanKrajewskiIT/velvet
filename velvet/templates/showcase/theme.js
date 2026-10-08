@@ -1,0 +1,1 @@
+(()=>{const set=v=>document.documentElement.dataset.theme=v==='dark'||v==='light'?v:(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');set(localStorage.getItem('vui-theme'));addEventListener('storage',e=>{if(e.key==='vui-theme')set(e.newValue)})})();

@@ -1,0 +1,23 @@
+<!-- @dsCard group="16 Inputs" viewport="960x360" name="MentionInput" subtitle="@people · #projects · listbox at the caret · ↑↓ ↵ Tab Esc · highlighted tokens · plain-text value" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}.col{display:flex;flex-direction:column;gap:6px;min-width:0}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const L=({children})=><span className="lbl">{children}</span>;
+const { MentionInput } = NS;
+const USERS=[{id:1,label:'Anna Kowal',description:'Design lead'},{id:2,label:'Marek Nowak',description:'Researcher'},{id:3,label:'Julia Wiśniewska',description:'Recruiter'},{id:4,label:'Tomasz Zieliński',description:'Engineering manager'},{id:5,label:'Ola Mazur',description:'Product designer'}];
+const TAGS=[{label:'hiring-q4'},{label:'design-system'},{label:'onboarding'}];
+const App=()=>{
+  const [v,setV]=React.useState('Great portfolio — @Anna Kowal can you review with @Marek Nowak? Filed under #hiring-q4. ');
+  return <div className="pane"><div className="g2" style={{gridTemplateColumns:'minmax(0,3fr) minmax(0,2fr)'}}>
+    <MentionInput label="Comment" hint="Type @ for people, # for projects" users={USERS} tags={TAGS} value={v} onValueChange={setV} rows={3} />
+    <div className="col"><L>value (plain text)</L><div style={{font:'400 12px/1.6 var(--font-mono)',color:'var(--fg-secondary)',whiteSpace:'pre-wrap',overflowWrap:'anywhere'}}>{JSON.stringify(v)}</div></div>
+  </div></div>;
+};
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

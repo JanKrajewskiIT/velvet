@@ -1,0 +1,58 @@
+/* SYS · TYPE ROLES — each role split into -family/-size/-leading/-weight/-tracking (portable to Figma / native); --type-<role> is the `font` shorthand.
+   Components read roles only (never --font-size-* or --font-weight-*): pick the role whose size/weight matches, e.g. font-size:var(--type-caption-size);font-weight:var(--type-label-weight).
+   Use: font:var(--type-title);letter-spacing:var(--type-title-tracking)  ·  font-size:var(--type-title-size) */
+:root{
+--type-display-lg-family:var(--font-display);/* @kind other */--type-display-lg-size:var(--font-size-display-lg);/* @kind other */--type-display-lg-leading:var(--leading-display);/* @kind other */--type-display-lg-weight:var(--font-weight-semibold);/* @kind other */--type-display-lg-tracking:var(--tracking-tighter);/* @kind other */
+--type-display-lg:var(--type-display-lg-weight) var(--type-display-lg-size)/var(--type-display-lg-leading) var(--type-display-lg-family);/* @kind font */
+--type-display-md-family:var(--font-display);/* @kind other */--type-display-md-size:var(--font-size-display-md);/* @kind other */--type-display-md-leading:var(--leading-display);/* @kind other */--type-display-md-weight:var(--font-weight-semibold);/* @kind other */--type-display-md-tracking:var(--tracking-tighter);/* @kind other */
+--type-display-md:var(--type-display-md-weight) var(--type-display-md-size)/var(--type-display-md-leading) var(--type-display-md-family);/* @kind font */
+--type-display-sm-family:var(--font-display);/* @kind other */--type-display-sm-size:var(--font-size-display-sm);/* @kind other */--type-display-sm-leading:var(--leading-display);/* @kind other */--type-display-sm-weight:var(--font-weight-semibold);/* @kind other */--type-display-sm-tracking:var(--tracking-tighter);/* @kind other */
+--type-display-sm:var(--type-display-sm-weight) var(--type-display-sm-size)/var(--type-display-sm-leading) var(--type-display-sm-family);/* @kind font */
+--type-h1-family:var(--font-display);/* @kind other */--type-h1-size:var(--font-size-4xl);/* @kind other */--type-h1-leading:var(--leading-tight);/* @kind other */--type-h1-weight:var(--font-weight-semibold);/* @kind other */--type-h1-tracking:var(--tracking-tighter);/* @kind other */
+--type-h1:var(--type-h1-weight) var(--type-h1-size)/var(--type-h1-leading) var(--type-h1-family);/* @kind font */
+--type-h2-family:var(--font-display);/* @kind other */--type-h2-size:var(--font-size-3xl);/* @kind other */--type-h2-leading:var(--leading-tight);/* @kind other */--type-h2-weight:var(--font-weight-semibold);/* @kind other */--type-h2-tracking:var(--tracking-tighter);/* @kind other */
+--type-h2:var(--type-h2-weight) var(--type-h2-size)/var(--type-h2-leading) var(--type-h2-family);/* @kind font */
+--type-h3-family:var(--font-display);/* @kind other */--type-h3-size:var(--font-size-2xl);/* @kind other */--type-h3-leading:var(--leading-snug);/* @kind other */--type-h3-weight:var(--font-weight-semibold);/* @kind other */--type-h3-tracking:var(--tracking-tight);/* @kind other */
+--type-h3:var(--type-h3-weight) var(--type-h3-size)/var(--type-h3-leading) var(--type-h3-family);/* @kind font */
+--type-h4-family:var(--font-display);/* @kind other */--type-h4-size:var(--font-size-xl);/* @kind other */--type-h4-leading:var(--leading-snug);/* @kind other */--type-h4-weight:var(--font-weight-semibold);/* @kind other */--type-h4-tracking:var(--tracking-tight);/* @kind other */
+--type-h4:var(--type-h4-weight) var(--type-h4-size)/var(--type-h4-leading) var(--type-h4-family);/* @kind font */
+--type-h5-family:var(--font-sans);/* @kind other */--type-h5-size:var(--font-size-base);/* @kind other */--type-h5-leading:var(--leading-snug);/* @kind other */--type-h5-weight:var(--font-weight-semibold);/* @kind other */--type-h5-tracking:var(--tracking-normal);/* @kind other */
+--type-h5:var(--type-h5-weight) var(--type-h5-size)/var(--type-h5-leading) var(--type-h5-family);/* @kind font */
+--type-title-family:var(--font-display);/* @kind other */--type-title-size:var(--font-size-base);/* @kind other */--type-title-leading:var(--leading-snug);/* @kind other */--type-title-weight:var(--font-weight-semibold);/* @kind other */--type-title-tracking:var(--tracking-tight);/* @kind other */
+--type-title:var(--type-title-weight) var(--type-title-size)/var(--type-title-leading) var(--type-title-family);/* @kind font */
+--type-title-lg-family:var(--font-display);/* @kind other */--type-title-lg-size:var(--font-size-lg);/* @kind other */--type-title-lg-leading:var(--leading-snug);/* @kind other */--type-title-lg-weight:var(--font-weight-semibold);/* @kind other */--type-title-lg-tracking:var(--tracking-tight);/* @kind other */
+--type-title-lg:var(--type-title-lg-weight) var(--type-title-lg-size)/var(--type-title-lg-leading) var(--type-title-lg-family);/* @kind font */
+--type-kpi-family:var(--font-display);/* @kind other */--type-kpi-size:var(--font-size-3xl);/* @kind other */--type-kpi-leading:var(--leading-none);/* @kind other */--type-kpi-weight:var(--font-weight-semibold);/* @kind other */--type-kpi-tracking:var(--tracking-tighter);/* @kind other */
+--type-kpi:var(--type-kpi-weight) var(--type-kpi-size)/var(--type-kpi-leading) var(--type-kpi-family);/* @kind font */
+--type-body-lg-family:var(--font-sans);/* @kind other */--type-body-lg-size:var(--font-size-base);/* @kind other */--type-body-lg-leading:var(--leading-relaxed);/* @kind other */--type-body-lg-weight:var(--font-weight-regular);/* @kind other */--type-body-lg-tracking:var(--tracking-normal);/* @kind other */
+--type-body-lg:var(--type-body-lg-weight) var(--type-body-lg-size)/var(--type-body-lg-leading) var(--type-body-lg-family);/* @kind font */
+--type-body-family:var(--font-sans);/* @kind other */--type-body-size:var(--font-size-md);/* @kind other */--type-body-leading:var(--leading-normal);/* @kind other */--type-body-weight:var(--font-weight-regular);/* @kind other */--type-body-tracking:var(--tracking-normal);/* @kind other */
+--type-body:var(--type-body-weight) var(--type-body-size)/var(--type-body-leading) var(--type-body-family);/* @kind font */
+--type-body-sm-family:var(--font-sans);/* @kind other */--type-body-sm-size:var(--font-size-sm);/* @kind other */--type-body-sm-leading:var(--leading-normal);/* @kind other */--type-body-sm-weight:var(--font-weight-regular);/* @kind other */--type-body-sm-tracking:var(--tracking-normal);/* @kind other */
+--type-body-sm:var(--type-body-sm-weight) var(--type-body-sm-size)/var(--type-body-sm-leading) var(--type-body-sm-family);/* @kind font */
+--type-label-family:var(--font-sans);/* @kind other */--type-label-size:var(--font-size-sm);/* @kind other */--type-label-leading:var(--leading-snug);/* @kind other */--type-label-weight:var(--font-weight-medium);/* @kind other */--type-label-tracking:var(--tracking-normal);/* @kind other */
+--type-label:var(--type-label-weight) var(--type-label-size)/var(--type-label-leading) var(--type-label-family);/* @kind font */
+--type-label-sm-family:var(--font-sans);/* @kind other */--type-label-sm-size:var(--font-size-xs);/* @kind other */--type-label-sm-leading:var(--leading-snug);/* @kind other */--type-label-sm-weight:var(--font-weight-medium);/* @kind other */--type-label-sm-tracking:var(--tracking-normal);/* @kind other */
+--type-label-sm:var(--type-label-sm-weight) var(--type-label-sm-size)/var(--type-label-sm-leading) var(--type-label-sm-family);/* @kind font */
+--type-caption-family:var(--font-sans);/* @kind other */--type-caption-size:var(--font-size-xs);/* @kind other */--type-caption-leading:var(--leading-normal);/* @kind other */--type-caption-weight:var(--font-weight-regular);/* @kind other */--type-caption-tracking:var(--tracking-normal);/* @kind other */
+--type-caption:var(--type-caption-weight) var(--type-caption-size)/var(--type-caption-leading) var(--type-caption-family);/* @kind font */
+--type-overline-family:var(--font-sans);/* @kind other */--type-overline-size:var(--font-size-2xs);/* @kind other */--type-overline-leading:var(--leading-compact);/* @kind other */--type-overline-weight:var(--font-weight-semibold);/* @kind other */--type-overline-tracking:var(--tracking-caps);/* @kind other */
+--type-overline:var(--type-overline-weight) var(--type-overline-size)/var(--type-overline-leading) var(--type-overline-family);/* @kind font */
+--type-button-sm-family:var(--font-sans);/* @kind other */--type-button-sm-size:var(--font-size-sm);/* @kind other */--type-button-sm-leading:var(--leading-none);/* @kind other */--type-button-sm-weight:var(--font-weight-medium);/* @kind other */--type-button-sm-tracking:var(--tracking-snug);/* @kind other */
+--type-button-sm:var(--type-button-sm-weight) var(--type-button-sm-size)/var(--type-button-sm-leading) var(--type-button-sm-family);/* @kind font */
+--type-button-family:var(--font-sans);/* @kind other */--type-button-size:var(--font-size-md);/* @kind other */--type-button-leading:var(--leading-none);/* @kind other */--type-button-weight:var(--font-weight-medium);/* @kind other */--type-button-tracking:var(--tracking-snug);/* @kind other */
+--type-button:var(--type-button-weight) var(--type-button-size)/var(--type-button-leading) var(--type-button-family);/* @kind font */
+--type-button-lg-family:var(--font-sans);/* @kind other */--type-button-lg-size:var(--font-size-base);/* @kind other */--type-button-lg-leading:var(--leading-none);/* @kind other */--type-button-lg-weight:var(--font-weight-medium);/* @kind other */--type-button-lg-tracking:var(--tracking-snug);/* @kind other */
+--type-button-lg:var(--type-button-lg-weight) var(--type-button-lg-size)/var(--type-button-lg-leading) var(--type-button-lg-family);/* @kind font */
+--type-code-family:var(--font-mono);/* @kind other */--type-code-size:var(--font-size-sm);/* @kind other */--type-code-leading:var(--leading-code);/* @kind other */--type-code-weight:var(--font-weight-regular);/* @kind other */--type-code-tracking:var(--tracking-normal);/* @kind other */
+--type-code:var(--type-code-weight) var(--type-code-size)/var(--type-code-leading) var(--type-code-family);/* @kind font */
+--type-kbd-family:var(--font-mono);/* @kind other */--type-kbd-size:var(--font-size-2xs);/* @kind other */--type-kbd-leading:var(--leading-none);/* @kind other */--type-kbd-weight:var(--font-weight-medium);/* @kind other */--type-kbd-tracking:var(--tracking-normal);/* @kind other */
+--type-kbd:var(--type-kbd-weight) var(--type-kbd-size)/var(--type-kbd-leading) var(--type-kbd-family);/* @kind font */
+--type-section-family:var(--font-sans);/* @kind other */--type-section-size:var(--font-size-2xs);/* @kind other */--type-section-leading:var(--leading-compact);/* @kind other */--type-section-weight:var(--font-weight-semibold);/* @kind other */--type-section-tracking:var(--tracking-label);/* @kind other */
+--type-section:var(--type-section-weight) var(--type-section-size)/var(--type-section-leading) var(--type-section-family);/* @kind font */
+/* Weight intent beyond the role set — wordmarks, big numerals */
+--type-heavy-weight:var(--font-weight-bold);/* @kind other */
+/* Micro — counters inside pills, source indices, inline mono tags. Below this, nothing. */
+--type-micro-family:var(--font-mono);/* @kind other */--type-micro-size:var(--font-size-3xs);/* @kind other */--type-micro-leading:var(--leading-none);/* @kind other */--type-micro-weight:var(--font-weight-medium);/* @kind other */--type-micro-tracking:var(--tracking-normal);/* @kind other */
+--type-micro:var(--type-micro-weight) var(--type-micro-size)/var(--type-micro-leading) var(--type-micro-family);/* @kind font */
+}

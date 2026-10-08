@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script><script src="./recron-data.js"></script><style>:root:root{overflow:auto!important;height:auto!important;background:var(--bg-page)!important}html body{margin:0!important;padding:0!important;background:var(--bg-page)!important}</style></helmet>
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.PageHeader" title="Interviews" description="{{ summary }}" actions="{{ headerActions }}" hint-size="100%,112px"></x-import>
+<div style="display:grid;grid-template-columns:minmax(0,2.2fr) minmax(280px,1fr);gap:var(--space-4);align-items:start">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" padding="sm" hint-size="100%,640px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Scheduler" events="{{ events }}" default-date="{{ today }}" default-view="week" start-hour="{{ 0 }}" end-hour="{{ 24 }}" scroll-to-hour="{{ 8 }}" max-height="{{ 560 }}" locale="en-GB" on-event-click="{{ onEvent }}" hint-size="100%,600px"></x-import>
+</x-import>
+<div style="display:flex;flex-direction:column;gap:var(--space-4);min-width:0">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Upcoming" hint-size="100%,320px">
+<sc-if value="{{ hasUpcoming }}" hint-placeholder-val="{{ true }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.List" items="{{ upcoming }}" on-item-click="{{ onItem }}" hint-size="100%,260px"></x-import>
+</sc-if>
+<sc-if value="{{ noUpcoming }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.EmptyState" size="sm" icon="calendar" title="Nothing scheduled" description="Schedule interviews from an offer’s Interviews tab." hint-size="100%,200px"></x-import>
+</sc-if>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Done" description="{{ pastDesc }}" hint-size="100%,240px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Timeline" variant="compact" items="{{ past }}" hint-size="100%,180px"></x-import>
+</x-import>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const app = this.props.app || (window.RecronStandalone && window.VelvetUIDesignSystem_ee2bd8 && window.RecronStandalone(this));
+    if (!app) { clearTimeout(this._wt); this._wt = setTimeout(() => this.forceUpdate(), 80); return {}; }
+    const { D, U, NS, offers, interviews } = app;
+    const h = React.createElement;
+    const byId = Object.fromEntries(offers.map((o) => [o.id, o]));
+    const list = interviews.filter((i) => byId[i.offerId]);
+    const up = list.filter((i) => i.status === 'scheduled' && new Date(i.at) >= D.TODAY).sort((a, b) => new Date(a.at) - new Date(b.at));
+    const past = list.filter((i) => i.status === 'done').sort((a, b) => new Date(b.at) - new Date(a.at));
+    const tone = { Screening: 'info', Technical: 'brand', HR: 'success', Offer: 'warning', Onboarding: 'neutral' };
+    const thisWeek = up.filter((i) => (new Date(i.at) - D.TODAY) / 864e5 < 7).length;
+    return {
+      summary: up.length ? up.length + ' upcoming · ' + thisWeek + ' this week' : 'Your interview calendar across every offer.',
+      headerActions: h(NS.Button, { variant: 'secondary', iconLeft: 'refresh', onClick: () => app.toast('Calendar synced', 'success', 'Google Calendar · just now') }, 'Sync calendar'),
+      today: D.TODAY,
+      events: list.map((i) => { const s = new Date(i.at); return { id: i.id, title: i.stage + ' · ' + byId[i.offerId].company, start: s, end: new Date(+s + i.duration * 6e4), tone: i.status === 'done' ? 'neutral' : tone[i.stage], meta: i.location }; }),
+      onEvent: (e) => { const i = list.find((x) => x.id === e.id); if (i) app.openOffer(i.offerId, 'interviews'); },
+      hasUpcoming: up.length > 0, noUpcoming: up.length === 0,
+      upcoming: up.map((i) => ({ id: i.id, title: i.stage + ' · ' + byId[i.offerId].company, description: U.relDay(i.at) + ', ' + U.fmtTime(i.at) + ' · ' + i.location, leading: h(NS.Avatar, { name: byId[i.offerId].company, color: 'auto', size: 'sm' }), trailing: h(NS.CalendarEventButton, { iconOnly: true, size: 'sm', variant: 'ghost', event: { title: i.stage + ' interview — ' + byId[i.offerId].company, start: i.at, durationMinutes: i.duration, location: i.location } }) })),
+      onItem: (it) => { const i = list.find((x) => x.id === it.id); if (i) app.openOffer(i.offerId, 'interviews'); },
+      pastDesc: past.length + ' completed',
+      past: past.map((i) => ({ id: i.id, title: i.stage + ' · ' + byId[i.offerId].company, time: U.fmtDate(i.at), icon: 'check', tone: 'success' }))
+    };
+  }
+}
+</script>
+</body>
+</html>

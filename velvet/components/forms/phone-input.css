@@ -1,0 +1,8 @@
+/* PhoneInput */
+.vui-phone__country{display:flex;align-items:center;gap:var(--space-1-5);height:100%;flex:none;margin:0;padding:0 var(--space-2-5) 0 var(--control-pad-x);border:0;border-right:var(--border-width) solid var(--border-subtle);border-radius:var(--radius-md) 0 0 var(--radius-md);background:none;color:var(--fg-primary);font:inherit;font-size:var(--type-body-size);cursor:pointer}
+.vui-phone__country:hover{background:var(--bg-hover)}
+.vui-phone__country:focus-visible{outline:none;box-shadow:var(--focus-ring-inset)}
+.vui-phone__country .vui-icon{font-size:var(--type-body-size);color:var(--fg-tertiary)}
+.vui-phone__code{display:inline-grid;place-items:center;min-width:26px;height:var(--badge-height-sm);padding:0 var(--space-1);border-radius:var(--radius-xs);background:var(--bg-sunken);font:var(--type-title-weight) var(--type-overline-size)/1 var(--font-mono);color:var(--fg-secondary);letter-spacing:.02em}
+.vui-phone__dial{font-variant-numeric:tabular-nums;color:var(--fg-secondary)}
+.vui-phone .vui-control__input{font-variant-numeric:tabular-nums}

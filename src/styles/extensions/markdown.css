@@ -1,0 +1,13 @@
+.vui-prose li > ul,
+.vui-prose li > ol {
+  margin-top: var(--space-1);
+}
+
+.vui-prose .vui-prose__task {
+  display: block;
+}
+
+.vui-prose__row {
+  display: flex;
+  gap: var(--space-2);
+}

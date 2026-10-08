@@ -1,0 +1,23 @@
+<!-- @dsCard group="26 Data" viewport="960x432" name="LogViewer" subtitle="live tail · level toggles + counts · filter highlight · wrap · scroll up to pause, “N new” to resume" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}.col{display:flex;flex-direction:column;gap:6px;min-width:0}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const L=({children})=><span className="lbl">{children}</span>;
+const { LogViewer } = NS;
+const SRC=['api','worker','auth','billing'];
+const MSG=[['info','GET /v1/candidates 200 in 42ms'],['debug','cache hit key=cand:list:p1'],['info','POST /v1/interviews 201 in 118ms'],['warn','Slow query on applications (812ms) — missing index on stage_id'],['info','Job email.digest completed (14 sent)'],['error','Stripe webhook signature mismatch — event evt_3Q… rejected'],['debug','token refreshed for user 4821'],['info','GET /v1/roles 200 in 31ms'],['warn','Rate limit 80% for org velvet']];
+let n=0; const mk=()=>{const m=MSG[(n*7+3)%MSG.length];n++;return {ts:Date.now()-((60-n)*1500),level:m[0],source:SRC[n%SRC.length],message:m[1]};};
+const INIT=Array.from({length:40},mk);
+const App=()=>{
+  const [lines,setLines]=React.useState(INIT);
+  React.useEffect(()=>{const t=setInterval(()=>setLines(l=>[...l,{...mk(),ts:Date.now()}].slice(-500)),1200);return()=>clearInterval(t);},[]);
+  return <div className="pane"><LogViewer title="api-prod · eu-central" lines={lines} height={340} /></div>;
+};
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

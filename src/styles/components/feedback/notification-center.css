@@ -1,0 +1,22 @@
+/* NotificationCenter */
+.vui-notif__bell{position:relative}
+.vui-notif__bell>.vui-indicator__item{top:9px;right:9px}
+.vui-notif{width:min(var(--overlay-w-md),calc(100vw - var(--viewport-margin)));padding:0;max-width:none;overflow:hidden;display:flex;flex-direction:column}
+.vui-notif__head{display:flex;align-items:center;justify-content:space-between;gap:var(--space-2-5);min-height:var(--row-height-lg);box-sizing:border-box;padding:var(--space-3-5) var(--space-4);border-bottom:var(--border-width) solid var(--border-default);background:var(--bg-raised)}
+.vui-notif__heading{display:flex;align-items:center;gap:var(--space-2);font:var(--type-title-weight) var(--type-body-size)/1 var(--font-display)}
+.vui-notif__list{margin:0;padding:0;list-style:none;max-height:var(--overlay-max-h);overflow-y:auto;background:var(--bg-raised)}
+.vui-notif__item{min-height:0;padding:var(--space-3) var(--space-4);border-radius:0}
+.vui-notif__item:focus-visible{box-shadow:inset var(--focus-ring)}
+.vui-notif__item--unread{background:color-mix(in oklch,var(--action-primary) 6%,var(--bg-raised))}
+.vui-notif__item--unread:hover{background:color-mix(in oklch,var(--action-primary) 10%,var(--bg-raised))}
+.vui-notif__item--unread .vui-list-item__title{color:var(--fg-primary);font-weight:var(--type-label-weight)}
+.vui-notif__dot{align-self:center;background:var(--action-primary)}
+.vui-notif__empty{gap:var(--space-2);padding:var(--space-8) var(--space-4)}
+.vui-notif__empty .vui-icon{color:var(--status-success-fg)}
+.vui-notif__foot{display:flex;align-items:center;justify-content:center;gap:var(--space-1-5);height:48px;flex:none;border:0;border-top:var(--border-width) solid var(--border-default);background:var(--bg-raised);color:var(--fg-brand);font:var(--type-label-weight) var(--type-body-sm-size)/1 var(--font-sans);cursor:pointer}
+.vui-notif__foot:hover{background:var(--bg-hover)}
+.vui-notif__foot:focus-visible{outline:none;box-shadow:inset var(--focus-ring)}
+.vui-notif__item+.vui-notif__item,.vui-notif__list>li+li{border-top:var(--border-width) solid var(--border-subtle)}
+.vui-notif__item .vui-list-item__title{white-space:normal;color:var(--fg-secondary)}
+.vui-notif__item--unread .vui-list-item__title{color:var(--fg-primary)}
+.vui-notif__item .vui-list-item__desc{color:var(--fg-tertiary)}

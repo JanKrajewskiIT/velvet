@@ -1,0 +1,17 @@
+<!-- @dsCard group="13 Display" viewport="960x120" name="IconTile" subtitle="Glyph in a tinted box · tone · sm–xl · circle" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.g{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}.col{display:flex;flex-direction:column;gap:8px}.row{display:flex;gap:10px;align-items:center}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const { IconTile } = window.VelvetUIDesignSystem_ee2bd8;
+const App=()=>(<div className="g">
+<div className="col"><span className="lbl">sizes</span><div className="row"><IconTile icon="file" size="sm" /><IconTile icon="file" /><IconTile icon="file" size="lg" /><IconTile icon="file" size="xl" /></div></div>
+<div className="col"><span className="lbl">tones · circle</span><div className="row"><IconTile icon="sparkles" tone="brand" shape="circle" size="sm" /><IconTile icon="circle-check" tone="success" shape="circle" size="sm" /><IconTile icon="triangle-alert" tone="warning" shape="circle" size="sm" /><IconTile icon="circle-x" tone="danger" shape="circle" size="sm" /></div></div>
+<div className="col"><span className="lbl">outline · custom colour</span><div className="row"><IconTile icon="database" outline /><IconTile icon="globe" outline color="var(--fg-primary)" /><IconTile icon="layers" outline color="var(--dv-3)" /></div></div>
+</div>);
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>
