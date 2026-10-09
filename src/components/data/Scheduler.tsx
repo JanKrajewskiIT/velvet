@@ -230,11 +230,11 @@ export const Scheduler = (props: SchedulerProps): JSX.Element => {
           </For>
         </ButtonGroup>
       </div>
-      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- scrollable schedule region must be focusable so keyboard users can scroll it */}
       <div
         ref={frame}
         class="vui-sched__frame"
         style={{ 'max-height': cssLength(p.maxHeight) }}
+        // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- scrollable schedule region must be focusable so keyboard users can scroll it
         tabIndex={0}
         aria-label={translate('velvet.data.scheduler.scheduleLabel')}
       >

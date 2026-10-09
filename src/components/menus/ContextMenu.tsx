@@ -77,11 +77,12 @@ export const ContextMenu = (props: ContextMenuProps) => {
   };
 
   return (
-    // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/no-noninteractive-tabindex -- the zone must be focusable so Shift+F10 / ContextMenu open the menu from the keyboard
+    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <div
       ref={zone}
       class={props.class}
       style={props.style}
+      // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- the zone must be focusable so Shift+F10 / ContextMenu open the menu from the keyboard
       tabIndex={0}
       aria-haspopup="menu"
       onContextMenu={onContextMenu}
