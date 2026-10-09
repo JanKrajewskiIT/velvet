@@ -12,7 +12,7 @@ npm install @jankrajewskiit/ui @jankrajewskiit/i18n solid-js
 
 ```ini
 @jankrajewskiit:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
+//npm.pkg.github.com/:_authToken=${GHCR_TOKEN}
 ```
 
 `solid-js` and `@jankrajewskiit/i18n` are peer dependencies: the library and the application must share one instance of each.
@@ -70,3 +70,36 @@ Without a provider, components fall back to the bundled English text. Words shar
 | `npm run build`                     | Library build to `dist/`                  |
 | `npm run showcase`                  | Component showcase dev server             |
 | `npm run verify`                    | Everything required before publishing     |
+
+## Upgrading
+
+Changes for every published version are recorded in [CHANGELOG.md](CHANGELOG.md).
+
+## Provenance verification
+
+Releases are published with npm provenance. Verify an installed version with:
+
+```sh
+npm audit signatures @jankrajewskiit/ui
+```
+
+A passing audit attests that the registry signature and the sigstore provenance attestation match the tarball, which ties it to the source commit and the publish workflow run.
+
+## Release workflow
+
+1. Confirm the default branch is green and `CHANGELOG.md` has a section for the new version.
+2. `npm version patch|minor|major` and commit the changelog edit with the bump.
+3. `git push --follow-tags`.
+
+The `v<semver>` tag starts `publish.yml`: verify, version check, then `npm publish --provenance --access public`. A failed provenance step fails the run; re-run it against the same tag once sigstore is reachable.
+
+Recover from a broken release by publishing a superseding patch and running `npm deprecate @jankrajewskiit/ui@<broken-version> "<reason>"`. Never unpublish a version consumers may have installed.
+
+## Branch protection
+
+Protect the default branch with:
+
+- a required, passing `verify` status check that includes the `npm audit` step;
+- at least one approving CODEOWNERS review;
+- a branch that is up to date before merging;
+- force pushes and non-administrative direct pushes disabled.

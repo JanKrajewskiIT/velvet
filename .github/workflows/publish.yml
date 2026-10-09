@@ -5,38 +5,25 @@ on:
     tags:
       - 'v*'
 
+concurrency:
+  group: publish-${{ github.ref_name }}
+  cancel-in-progress: false
+
 jobs:
   verify:
     uses: ./.github/workflows/verify.yml
+    permissions:
+      contents: read
+      packages: read
     secrets:
       GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
 
   publish:
     needs: verify
-    runs-on: ubuntu-latest
+    uses: jankrajewskiit/velvetconfigs/.github/workflows/publish-package.yml@main
     permissions:
       contents: read
       packages: write
-
-    steps:
-      - uses: actions/checkout@v6
-
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 26
-          registry-url: 'https://npm.pkg.github.com'
-          scope: '@jankrajewskiit'
-          cache: 'npm'
-
-      - name: Use repository npm version
-        run: npm install --global npm@12.1.0
-
-      - name: Install dependencies
-        run: npm ci
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GHCR_TOKEN }}
-
-      - name: Publish
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ github.token }}
+      id-token: write
+    secrets:
+      GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
