@@ -216,7 +216,7 @@ const VirtualListDemo = () => {
 export const dataBDemos: DemoEntry[] = [
   {
     id: 'table',
-    group: 'Data',
+    group: '26 Data',
     title: 'Table',
     description:
       'Sortable, selectable, resizable table with bulk actions, expandable rows, pinned columns and loading / empty states.',
@@ -247,7 +247,7 @@ export const dataBDemos: DemoEntry[] = [
   },
   {
     id: 'data-grid',
-    group: 'Data',
+    group: '26 Data',
     title: 'DataGrid',
     description:
       'Editing grid: single active cell, keyboard editing, search, query filters, column manager, export and bulk selection.',
@@ -263,7 +263,7 @@ export const dataBDemos: DemoEntry[] = [
   },
   {
     id: 'column-manager',
-    group: 'Data',
+    group: '26 Data',
     title: 'ColumnManager',
     description: 'Show, hide, reorder and freeze table columns; feed Table with ApplyColumns.',
     render: () => (
@@ -277,7 +277,7 @@ export const dataBDemos: DemoEntry[] = [
   },
   {
     id: 'kanban',
-    group: 'Data',
+    group: '27 Planning',
     title: 'Kanban',
     description: 'Column task board with drag and drop and a keyboard move model (Ctrl/⌘/Alt + arrows).',
     render: () => (
@@ -292,7 +292,7 @@ export const dataBDemos: DemoEntry[] = [
   },
   {
     id: 'scheduler',
-    group: 'Data',
+    group: '27 Planning',
     title: 'Scheduler',
     description: 'Day and week time grid with overlap lanes, a now-line and slot clicks.',
     render: () => (
@@ -307,7 +307,7 @@ export const dataBDemos: DemoEntry[] = [
   },
   {
     id: 'virtual-list',
-    group: 'Data',
+    group: '26 Data',
     title: 'VirtualList',
     description: 'Windowed list for thousands of rows with listbox selection and keyboard navigation.',
     render: () => (
@@ -322,7 +322,7 @@ export const dataBDemos: DemoEntry[] = [
   },
   {
     id: 'virtual-table',
-    group: 'Data',
+    group: '26 Data',
     title: 'VirtualTable',
     description: 'Windowed table for tens of thousands of rows.',
     render: () => (

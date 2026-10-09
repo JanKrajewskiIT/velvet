@@ -1,5 +1,7 @@
 import type { JSX } from 'solid-js';
 
+import { clamp } from '../../utils/math';
+
 export interface SliderMark {
   value: number;
   label?: JSX.Element;
@@ -26,7 +28,7 @@ export interface SnapRange {
 /** The step-aligned value nearest to `value`, clamped to the range. */
 export const snapToStep = (value: number, { min, max, step }: SnapRange): number => {
   const snapped = Math.round((value - min) / step) * step + min;
-  return Math.min(max, Math.max(min, Number(snapped.toFixed(FLOAT_PRECISION))));
+  return clamp(Number(snapped.toFixed(FLOAT_PRECISION)), min, max);
 };
 
 /** The mark value nearest to `value`; `undefined` without marks. */

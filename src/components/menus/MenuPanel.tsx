@@ -14,9 +14,9 @@ import {
 
 import { cx } from '../../utils/cx';
 import { Glyph, renderIcon } from '../primitives/Glyph';
-import { Kbd } from '../primitives/Kbd';
 import { SectionLabel } from '../primitives/SectionLabel';
 import { isActionable, type MenuItem, menuItemKind } from './menuItem';
+import { MenuItemContent } from './MenuItemContent';
 
 const TYPEAHEAD_RESET_MS = 600;
 const SCROLL_PADDING_PX = 8;
@@ -163,24 +163,20 @@ export const MenuPanel = (props: MenuPanelProps) => {
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => choose(item())}
               >
-                <Show when={item().checked !== undefined} fallback={renderIcon(item().icon)}>
-                  <span class="vui-menu__check">
-                    <Show when={item().checked}>
-                      <Glyph name="check" />
+                <MenuItemContent
+                  leading={
+                    <Show when={item().checked !== undefined} fallback={renderIcon(item().icon)}>
+                      <span class="vui-menu__check">
+                        <Show when={item().checked}>
+                          <Glyph name="check" />
+                        </Show>
+                      </span>
                     </Show>
-                  </span>
-                </Show>
-                <span class="vui-menu__label">
-                  {item().label}
-                  <Show when={item().description}>
-                    <span class="vui-menu__desc">{item().description}</span>
-                  </Show>
-                </span>
-                <Show when={item().shortcut}>
-                  <Kbd plain class="vui-menu__kbd">
-                    {item().shortcut}
-                  </Kbd>
-                </Show>
+                  }
+                  label={item().label}
+                  description={item().description}
+                  shortcut={item().shortcut}
+                />
               </div>
             </Match>
           </Switch>

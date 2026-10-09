@@ -4,7 +4,6 @@ import {
   createMemo,
   createSignal,
   createUniqueId,
-  For,
   type JSX,
   mergeProps,
   on,
@@ -17,11 +16,13 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { Chevron } from '../primitives/Chevron';
 import { Control, type ControlProps } from '../primitives/Control';
-import { EmptyText } from '../primitives/EmptyText';
 import { Field } from '../primitives/Field';
 import { type CascaderActivation, CascaderColumns } from './CascaderColumns';
 import { CascaderPath } from './CascaderPath';
-import { type CascaderNode, hasChildren, lastOf, leafPaths, pathTo } from './cascaderPaths';
+import { type CascaderNode, lastOf, pathTo } from './cascaderPaths';
+import { CascaderSearchResults } from './CascaderSearchResults';
+import { createCascaderNavigation } from './createCascaderNavigation';
+import { createCascaderSearch } from './createCascaderSearch';
 
 export interface CascaderProps {
   label?: JSX.Element;
@@ -53,8 +54,6 @@ export interface CascaderProps {
   id?: string;
 }
 
-const MAX_HITS = 50;
-
 /** Single-path hierarchical pick shown as side-by-side columns (region → country → city). Keys: ↑↓ in a column · → into child column · ← back · Enter pick · Esc close. */
 export const Cascader = (props: CascaderProps) => {
   const p = mergeProps(
@@ -76,10 +75,6 @@ export const Cascader = (props: CascaderProps) => {
   const emit = (id: string, path: CascaderNode[]) => (p.onValueChange ?? p.onChange)?.(id, path);
   const listId = createUniqueId();
   const [open, setOpen] = createSignal(false);
-  const [trail, setTrail] = createSignal<string[]>([]);
-  const [column, setColumn] = createSignal(0);
-  const [query, setQuery] = createSignal('');
-  const [hitIndex, setHitIndex] = createSignal(0);
   const [root, setRoot] = createSignal<HTMLElement>();
   let menu: HTMLDivElement | undefined;
   let search: HTMLInputElement | undefined;
@@ -88,46 +83,11 @@ export const Cascader = (props: CascaderProps) => {
     const id = value();
     return id == null ? [] : (pathTo(p.data, id) ?? []);
   });
-  const columns = createMemo(() => {
-    const result: CascaderNode[][] = [p.data];
-    trail().forEach((id, level) => {
-      const children = result[level]?.find((node) => node.id === id)?.children;
-      if (children?.length) result.push(children);
-    });
-    return result;
-  });
-  const needle = () => query().trim().toLowerCase();
-  const hits = createMemo(() => {
-    const text = needle();
-    if (!text) return [];
-    return leafPaths(p.data)
-      .filter((path) =>
-        path.some((node) => (typeof node.label === 'string' ? node.label : '').toLowerCase().includes(text)),
-      )
-      .slice(0, MAX_HITS);
-  });
 
   const closeToTrigger = () => {
     setOpen(false);
     root()?.querySelector<HTMLElement>('.vui-casc__trigger')?.focus();
   };
-  createDismiss(open, () => setOpen(false), root, { escape: false });
-
-  createEffect(
-    on(open, (isOpen) => {
-      if (!isOpen) return;
-      const ids = pickedPath().map((node) => node.id);
-      const first = p.data[0]?.id;
-      batch(() => {
-        setTrail(ids.length ? ids : first ? [first] : []);
-        setColumn(Math.max(0, ids.length - 1));
-        setQuery('');
-        setHitIndex(0);
-      });
-      (search ?? menu)?.focus();
-    }),
-  );
-
   const commit = (path: CascaderNode[]) => {
     const leaf = lastOf(path);
     if (!leaf) return;
@@ -138,91 +98,32 @@ export const Cascader = (props: CascaderProps) => {
     commit(path);
     closeToTrigger();
   };
-  const activate = (level: number, node: CascaderNode, via: CascaderActivation) => {
-    batch(() => {
-      setTrail([...trail().slice(0, level), node.id]);
-      setColumn(level);
-    });
-    const path = pathTo(p.data, node.id);
-    if (!path || via !== 'click') return;
-    if (!hasChildren(node)) commitAndClose(path);
-    else if (p.changeOnSelect) commit(path);
-  };
+  const nav = createCascaderNavigation({
+    data: () => p.data,
+    changeOnSelect: () => p.changeOnSelect,
+    commit,
+    commitAndClose,
+  });
+  const finder = createCascaderSearch(() => p.data, commitAndClose);
 
-  const onSearchKey = (e: KeyboardEvent) => {
-    const count = hits().length;
-    if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      setHitIndex(Math.min(count - 1, hitIndex() + 1));
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      setHitIndex(Math.max(0, hitIndex() - 1));
-    } else if (e.key === 'Enter') {
-      const hit = hits()[hitIndex()];
-      if (!hit) return;
-      e.preventDefault();
-      commitAndClose(hit);
-    }
-  };
-  const onColumnKey = (e: KeyboardEvent) => {
-    const list = () => columns()[column()] ?? [];
-    const index = Math.max(
-      0,
-      list().findIndex((node) => node.id === trail()[column()]),
-    );
-    const node = list()[index];
-    const moveTo = (to: number) => {
-      const target = list()[to];
-      if (!target) return;
-      e.preventDefault();
-      setTrail([...trail().slice(0, column()), target.id]);
-    };
-    const enterChildren = (parent: CascaderNode) => {
-      const child = parent.children?.[0];
-      if (!child) return;
-      e.preventDefault();
+  createDismiss(open, () => setOpen(false), root, { escape: false });
+  createEffect(
+    on(open, (isOpen) => {
+      if (!isOpen) return;
       batch(() => {
-        setTrail([...trail().slice(0, column() + 1), child.id]);
-        setColumn(column() + 1);
+        nav.reset(pickedPath().map((node) => node.id));
+        finder.reset();
       });
-    };
-    switch (e.key) {
-      case 'ArrowDown':
-        moveTo(Math.min(list().length - 1, index + 1));
-        break;
-      case 'ArrowUp':
-        moveTo(Math.max(0, index - 1));
-        break;
-      case 'ArrowRight':
-        if (node && hasChildren(node)) enterChildren(node);
-        break;
-      case 'ArrowLeft':
-        if (column() > 0) {
-          e.preventDefault();
-          batch(() => {
-            setTrail(trail().slice(0, column()));
-            setColumn(column() - 1);
-          });
-        }
-        break;
-      case 'Enter': {
-        if (!node || node.disabled) break;
-        e.preventDefault();
-        const path = pathTo(p.data, node.id);
-        if (!path) break;
-        if (!hasChildren(node)) commitAndClose(path);
-        else if (p.changeOnSelect) commitAndClose(path);
-        else enterChildren(node);
-        break;
-      }
-    }
-  };
+      (search ?? menu)?.focus();
+    }),
+  );
+
   const onMenuKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'Escape') {
       e.preventDefault();
       closeToTrigger();
-    } else if (needle()) onSearchKey(e);
-    else onColumnKey(e);
+    } else if (finder.needle()) finder.onKeyDown(e);
+    else nav.onKeyDown(e);
   };
 
   return (
@@ -284,49 +185,33 @@ export const Cascader = (props: CascaderProps) => {
                     class="vui-control__input"
                     placeholder={translate('velvet.common.search')}
                     aria-label={translate('velvet.forms.cascader.searchLabel')}
-                    value={query()}
-                    onInput={(e) => {
-                      setQuery(e.currentTarget.value);
-                      setHitIndex(0);
-                    }}
+                    value={finder.query()}
+                    onInput={(e) => finder.input(e.currentTarget.value)}
                   />
                 </Control>
               </Show>
               <Show
-                when={needle()}
+                when={finder.needle()}
                 fallback={
                   <CascaderColumns
-                    columns={columns()}
-                    trail={trail()}
-                    activeColumn={column()}
+                    columns={nav.columns()}
+                    trail={nav.trail()}
+                    activeColumn={nav.column()}
                     picked={pickedPath()}
                     expandTrigger={p.expandTrigger}
-                    onActivate={activate}
+                    onActivate={nav.activate}
                   />
                 }
               >
-                <div class="vui-casc__results" role="listbox">
-                  <Show when={hits().length === 0}>
-                    <EmptyText class="vui-tselect__empty">{translate('velvet.forms.cascader.noMatches')}</EmptyText>
-                  </Show>
-                  <For each={hits()}>
-                    {(path, index) => (
-                      // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/interactive-supports-focus -- keyboard handled by the dialog's onKeyDown with a virtual active option
-                      <div
-                        role="option"
-                        aria-selected={lastOf(path)?.id === value()}
-                        class={cx('vui-option', index() === hitIndex() && 'vui-option--active')}
-                        onMouseEnter={() => setHitIndex(index())}
-                        onMouseDown={(e) => e.preventDefault()}
-                        onClick={() => commitAndClose(path)}
-                      >
-                        <span class="vui-option__label vui-casc__hit">
-                          <CascaderPath path={path} separator={p.separator} query={needle()} />
-                        </span>
-                      </div>
-                    )}
-                  </For>
-                </div>
+                <CascaderSearchResults
+                  hits={finder.hits()}
+                  activeIndex={finder.hitIndex()}
+                  selectedId={value()}
+                  separator={p.separator}
+                  query={finder.needle()}
+                  onHover={finder.selectHit}
+                  onPick={commitAndClose}
+                />
               </Show>
             </div>
           </Show>

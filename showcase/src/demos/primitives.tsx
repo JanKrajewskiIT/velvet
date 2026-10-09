@@ -10,6 +10,8 @@ import {
   Dot,
   EmptyText,
   Field,
+  FieldHint,
+  FieldLabel,
   Glyph,
   Handle,
   highlightMatch,
@@ -110,7 +112,7 @@ const LiveRegionDemo = () => {
 export const primitiveDemos: DemoEntry[] = [
   {
     id: 'surface',
-    group: 'Primitives',
+    group: '11 Atoms',
     title: 'Surface',
     description:
       'The one primitive that paints a container: background, border, radius, elevation, padding, tone and behaviour.',
@@ -144,7 +146,7 @@ export const primitiveDemos: DemoEntry[] = [
   },
   {
     id: 'text',
-    group: 'Primitives',
+    group: '11 Atoms',
     title: 'Text',
     description: 'Applies one type role and an optional text colour. Use it instead of hand-combining font tokens.',
     render: () => (
@@ -165,7 +167,7 @@ export const primitiveDemos: DemoEntry[] = [
   },
   {
     id: 'glyph',
-    group: 'Primitives',
+    group: '11 Atoms',
     title: 'Glyph',
     description: 'One Velvet icon rendered as a CSS mask. Decorative unless it has a label.',
     render: () => (
@@ -177,7 +179,7 @@ export const primitiveDemos: DemoEntry[] = [
   },
   {
     id: 'control',
-    group: 'Primitives',
+    group: '11 Atoms',
     title: 'Control & Field',
     description: 'The bordered field shell and the label / hint / error stack that every form component composes.',
     render: () => (
@@ -225,6 +227,27 @@ export const primitiveDemos: DemoEntry[] = [
             )}
           </Field>
         </Example>
+        <Example
+          title="FieldLabel and FieldHint"
+          stack
+          code={
+            '<FieldLabel as="span" id="city-label" required>City</FieldLabel> <FieldHint error>Required</FieldHint>'
+          }
+        >
+          <FieldLabel as="span" id="sc-city-label" required>
+            City
+          </FieldLabel>
+          <Control>
+            <input class="vui-control__input" aria-labelledby="sc-city-label" aria-describedby="sc-city-hint" />
+          </Control>
+          <FieldHint id="sc-city-hint" error>
+            Enter the city you live in.
+          </FieldHint>
+          <FieldLabel as="span" optional>
+            Nickname
+          </FieldLabel>
+          <FieldHint>Shown on your public profile.</FieldHint>
+        </Example>
         <Example title="Sizes and states" code={'<Control size="sm" disabled>…</Control>'}>
           <Control size="sm">
             <input class="vui-control__input" placeholder="Small" />
@@ -244,7 +267,7 @@ export const primitiveDemos: DemoEntry[] = [
   },
   {
     id: 'badges',
-    group: 'Primitives',
+    group: '11 Atoms',
     title: 'Dot, Count & Indicator',
     description: 'Status points, numeric pills and the indicator that anchors either to a host element.',
     render: () => (
@@ -278,7 +301,7 @@ export const primitiveDemos: DemoEntry[] = [
   },
   {
     id: 'icon-tile',
-    group: 'Primitives',
+    group: '13 Display',
     title: 'IconTile',
     description: 'A glyph in a tinted box — the leading visual of notification rows, sources and feature cards.',
     render: () => (
@@ -297,7 +320,7 @@ export const primitiveDemos: DemoEntry[] = [
   },
   {
     id: 'list-item',
-    group: 'Primitives',
+    group: '13 Display',
     title: 'ListItem & Option',
     description: 'One list row and one listbox/menu row. List, Menu, Select and pattern rows compose them.',
     render: () => (
@@ -331,7 +354,7 @@ export const primitiveDemos: DemoEntry[] = [
   },
   {
     id: 'section-label',
-    group: 'Primitives',
+    group: '13 Display',
     title: 'SectionLabel, Separator & EmptyText',
     description: 'Group headings, inline separators and the one-line "nothing here" message.',
     render: () => (
@@ -363,7 +386,7 @@ export const primitiveDemos: DemoEntry[] = [
   },
   {
     id: 'segmented',
-    group: 'Primitives',
+    group: '11 Atoms',
     title: 'Segmented',
     description:
       'A sunken track of raised, mutually-exclusive items. It owns no state — you set the role and selection.',
@@ -389,7 +412,7 @@ export const primitiveDemos: DemoEntry[] = [
   },
   {
     id: 'meter',
-    group: 'Primitives',
+    group: '11 Atoms',
     title: 'Meter',
     description: 'Track and fill for a known quantity. Progress is the task-progress component; Meter is the bare bar.',
     render: () => (
@@ -405,7 +428,7 @@ export const primitiveDemos: DemoEntry[] = [
   },
   {
     id: 'marker-rail',
-    group: 'Primitives',
+    group: '11 Atoms',
     title: 'Marker & Rail',
     description: 'Round step or event badge, and the vertical list that joins markers with a connector line.',
     render: () => (
@@ -448,7 +471,7 @@ export const primitiveDemos: DemoEntry[] = [
   },
   {
     id: 'checkmark',
-    group: 'Primitives',
+    group: '11 Atoms',
     title: 'Checkmark & Chevron',
     description: 'Glyph box for rows that are not native inputs, and the disclosure arrow for anything that opens.',
     render: () => (
@@ -473,7 +496,7 @@ export const primitiveDemos: DemoEntry[] = [
   },
   {
     id: 'close-button',
-    group: 'Primitives',
+    group: '11 Atoms',
     title: 'CloseButton & Handle',
     description: 'The one × control, and the drag grip for reorderable rows.',
     render: () => (
@@ -496,7 +519,7 @@ export const primitiveDemos: DemoEntry[] = [
   },
   {
     id: 'kbd',
-    group: 'Primitives',
+    group: '13 Display',
     title: 'Kbd & Mark',
     description: 'Keyboard keys that adapt to the platform, and highlighted runs inside text.',
     render: () => (
@@ -519,7 +542,7 @@ export const primitiveDemos: DemoEntry[] = [
   },
   {
     id: 'swatch',
-    group: 'Primitives',
+    group: '11 Atoms',
     title: 'Swatch',
     description: 'A colour chip for presets, label colours and picker triggers.',
     render: () => (
@@ -537,7 +560,7 @@ export const primitiveDemos: DemoEntry[] = [
   },
   {
     id: 'weekday',
-    group: 'Primitives',
+    group: '11 Atoms',
     title: 'Weekday',
     description: 'Short weekday label for date grids. Pair with weekdayNames().',
     render: () => (
@@ -548,7 +571,7 @@ export const primitiveDemos: DemoEntry[] = [
   },
   {
     id: 'column-resize',
-    group: 'Primitives',
+    group: '11 Atoms',
     title: 'ColumnResize',
     description: 'Column-width handle: drag, ←/→ for keyboard, double-click to reset.',
     render: () => (
@@ -559,7 +582,7 @@ export const primitiveDemos: DemoEntry[] = [
   },
   {
     id: 'visually-hidden',
-    group: 'Primitives',
+    group: '11 Atoms',
     title: 'VisuallyHidden & LiveRegion',
     description: 'Screen-reader-only content, and a region that announces dynamic changes.',
     render: () => (

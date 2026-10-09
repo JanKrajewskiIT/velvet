@@ -115,7 +115,7 @@ const RichTextDemo = () => {
 export const formsTextDemos: DemoEntry[] = [
   {
     id: 'input',
-    group: 'Forms',
+    group: '16 Inputs',
     title: 'Input',
     description:
       'Text field with label, hint, icons, prefix or suffix and validation. The message lane is fixed-height when validation is on.',
@@ -177,7 +177,7 @@ export const formsTextDemos: DemoEntry[] = [
   },
   {
     id: 'textarea',
-    group: 'Forms',
+    group: '16 Inputs',
     title: 'Textarea',
     description: 'Multi-line field that grows with its content between `rows` and `maxRows`.',
     render: () => (
@@ -207,7 +207,7 @@ export const formsTextDemos: DemoEntry[] = [
   },
   {
     id: 'password-input',
-    group: 'Forms',
+    group: '16 Inputs',
     title: 'PasswordInput',
     description: 'Password field with a show / hide toggle and an optional live strength meter.',
     render: () => (
@@ -223,7 +223,7 @@ export const formsTextDemos: DemoEntry[] = [
   },
   {
     id: 'number-input',
-    group: 'Forms',
+    group: '16 Inputs',
     title: 'NumberInput',
     description: 'Stepper field: −/+ buttons, clamped bounds, ↑↓ to step (Shift ×10), Home and End jump to the bounds.',
     render: () => (
@@ -236,7 +236,7 @@ export const formsTextDemos: DemoEntry[] = [
   },
   {
     id: 'search-input',
-    group: 'Forms',
+    group: '16 Inputs',
     title: 'SearchInput',
     description: 'Search field with a clear button and an optional suggestions dropdown.',
     render: () => (
@@ -250,7 +250,7 @@ export const formsTextDemos: DemoEntry[] = [
   },
   {
     id: 'phone-input',
-    group: 'Forms',
+    group: '16 Inputs',
     title: 'PhoneInput',
     description: 'Phone field with a country picker and as-you-type formatting. Emits E.164.',
     render: () => (
@@ -263,7 +263,7 @@ export const formsTextDemos: DemoEntry[] = [
   },
   {
     id: 'otp-input',
-    group: 'Forms',
+    group: '16 Inputs',
     title: 'OtpInput',
     description: 'One-time-code boxes: auto-advance, Backspace steps back, paste fills from the focused box.',
     render: () => (
@@ -274,7 +274,7 @@ export const formsTextDemos: DemoEntry[] = [
   },
   {
     id: 'tag-input',
-    group: 'Forms',
+    group: '16 Inputs',
     title: 'TagInput',
     description: 'Free-text tags inside a field. Enter or comma adds, Backspace on empty removes the last.',
     render: () => (
@@ -287,7 +287,7 @@ export const formsTextDemos: DemoEntry[] = [
   },
   {
     id: 'mention-input',
-    group: 'Forms',
+    group: '16 Inputs',
     title: 'MentionInput',
     description: 'Multi-line field with @mention and #tag suggestions at the caret. The value stays plain text.',
     render: () => (
@@ -306,7 +306,7 @@ export const formsTextDemos: DemoEntry[] = [
   },
   {
     id: 'range-input',
-    group: 'Forms',
+    group: '16 Inputs',
     title: 'RangeInput',
     description: 'From–to numeric field for budgets, salaries and filters. An inverted range flags itself.',
     render: () => (
@@ -317,7 +317,7 @@ export const formsTextDemos: DemoEntry[] = [
   },
   {
     id: 'rich-text-editor',
-    group: 'Forms',
+    group: '16 Inputs',
     title: 'RichTextEditor',
     description: 'Dependency-free WYSIWYG with markdown shortcuts, links, undo and sanitized paste.',
     render: () => (

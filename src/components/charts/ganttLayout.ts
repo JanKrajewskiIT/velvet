@@ -50,6 +50,23 @@ export const toDay = (value: GanttDate): Date => startOfDay(toDate(value));
 
 export const daysBetween = (from: Date, to: Date): number => Math.round((to.getTime() - from.getTime()) / DAY_MS);
 
+export const isWeekend = (d: Date): boolean => d.getDay() === 0 || d.getDay() === 6;
+
+export interface GanttMonth {
+  id: number;
+  index: number;
+  date: Date;
+}
+
+export const buildMonths = (days: Date[]): GanttMonth[] => {
+  const list: GanttMonth[] = [];
+  days.forEach((date, index) => {
+    const id = date.getFullYear() * 12 + date.getMonth();
+    if (list.at(-1)?.id !== id) list.push({ id, index, date });
+  });
+  return list;
+};
+
 export const placeTasks = (tasks: GanttTask[]): PlacedTask[] => {
   const groups = [...new Set(tasks.map((t) => t.group).filter((g): g is string => !!g))];
   return tasks.map((task, i) => ({

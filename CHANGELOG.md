@@ -1,5 +1,25 @@
 # Changelog
 
+## Unreleased
+
+### Breaking
+
+- None.
+
+### Added
+
+- `VirtualTable` accepts `rowKey` and exposes the record key as `data-row-key` on each row.
+
+### Changed
+
+- Large components are split into smaller internal modules; public exports, props, DOM and behavior are unchanged.
+- Generated ids of new comments, labels, calendar events and query nodes use one shared format.
+- `package.json` no longer lists the `css-modules` keyword, and `verify` runs `format:check` first.
+
+### Fixed
+
+- None.
+
 ## 3.3.0
 
 ### Breaking

@@ -3,6 +3,7 @@ import { createUniqueId, Index, type JSX, mergeProps, Show } from 'solid-js';
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { clamp } from '../../utils/math';
 import { FieldHint, FieldLabel } from '../primitives/Field';
 import { Separator } from '../primitives/Separator';
 
@@ -73,7 +74,7 @@ export const OtpInput = (props: OtpInputProps) => {
   };
   const commit = (next: string[]) => setStored(next.join('').replace(/\s+$/u, ''));
   const focusCell = (index: number) => {
-    const cell = cells[Math.max(0, Math.min(p.length - 1, index))];
+    const cell = cells[clamp(index, 0, p.length - 1)];
     cell?.focus();
     cell?.select();
   };

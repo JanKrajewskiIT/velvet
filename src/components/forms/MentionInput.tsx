@@ -1,50 +1,14 @@
-import {
-  createEffect,
-  createMemo,
-  createSignal,
-  createUniqueId,
-  For,
-  Index,
-  type JSX,
-  mergeProps,
-  on,
-  Show,
-} from 'solid-js';
+import { createUniqueId, Index, type JSX, mergeProps, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
-import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
-import { Avatar } from '../data/Avatar';
 import { Control } from '../primitives/Control';
 import { Field } from '../primitives/Field';
-import { Option } from '../primitives/Option';
-import { Surface } from '../primitives/Surface';
-import {
-  createMentionPattern,
-  createQueryDetector,
-  filterMentions,
-  type MentionOption,
-  type MentionQuery,
-  type MentionSources,
-} from './mentionModel';
+import { createMentionLayout } from './createMentionLayout';
+import { createMentionSearch } from './createMentionSearch';
+import type { MentionOption, MentionSources } from './mentionModel';
+import { MentionSuggestions } from './MentionSuggestions';
 
-const POPOVER_WIDTH_PX = 248;
-const POPOVER_GAP_PX = 6;
-const CARET_LEFT_OFFSET_PX = 8;
-const DEFAULT_LINE_HEIGHT_PX = 20;
-const MIRRORED_STYLES = [
-  'padding-top',
-  'padding-right',
-  'padding-bottom',
-  'padding-left',
-  'font-family',
-  'font-size',
-  'font-weight',
-  'line-height',
-  'letter-spacing',
-  'word-spacing',
-  'tab-size',
-] as const;
 const NAVIGATION_KEYS = ['ArrowLeft', 'ArrowRight', 'Home', 'End'];
 
 export interface MentionInputProps {
@@ -85,100 +49,34 @@ export const MentionInput = (props: MentionInputProps) => {
     { defaultValue: '', users: [], tags: [], rows: 3, maxRows: 8, maxResults: 6 } satisfies Partial<MentionInputProps>,
     props,
   );
-  const translate = useTranslate();
-  const sources = createMemo<MentionSources>(
-    () => p.sources ?? (p.tags.length ? { '@': p.users, '#': p.tags } : { '@': p.users }),
-  );
-  const detectQuery = createMemo(() => createQueryDetector(Object.keys(sources())));
-  const mentionPattern = createMemo(() => createMentionPattern(sources()));
   const [value, setValue] = createControllable({
     value: () => p.value,
     defaultValue: p.defaultValue,
     onChange: (next) => p.onValueChange?.(next),
   });
-  const [query, setQuery] = createSignal<MentionQuery>();
-  const [activeIndex, setActiveIndex] = createSignal(0);
-  const [popoverPosition, setPopoverPosition] = createSignal({ left: 0, top: 0 });
+  const search = createMentionSearch(p, value);
   let textarea: HTMLTextAreaElement | undefined;
   let highlight: HTMLDivElement | undefined;
   let measure: HTMLDivElement | undefined;
   let caret: HTMLSpanElement | undefined;
-
-  const suggestions = createMemo(() => {
-    const current = query();
-    return current ? filterMentions(sources()[current.trigger] ?? [], current.text, p.maxResults) : [];
-  });
-  const open = () => !!query() && suggestions().length > 0 && !p.disabled;
-  const textBeforeTrigger = () => {
-    const current = query();
-    return current ? value().slice(0, current.start) : '';
-  };
-  const parts = () => {
-    const pattern = mentionPattern();
-    return pattern ? value().split(pattern) : [value()];
-  };
-
-  createEffect(
-    on([value, () => p.rows, () => p.maxRows], () => {
-      if (!textarea) return;
-      const computed = getComputedStyle(textarea);
-      for (const layer of [highlight, measure]) {
-        for (const name of MIRRORED_STYLES) layer?.style.setProperty(name, computed.getPropertyValue(name));
-      }
-      const lineHeight = Number.parseFloat(computed.lineHeight) || DEFAULT_LINE_HEIGHT_PX;
-      const padding = Number.parseFloat(computed.paddingTop) + Number.parseFloat(computed.paddingBottom);
-      const maxHeight = p.maxRows * lineHeight + padding;
-      textarea.style.height = 'auto';
-      textarea.style.height = `${Math.min(Math.max(textarea.scrollHeight, p.rows * lineHeight + padding), maxHeight)}px`;
-      textarea.style.overflowY = textarea.scrollHeight > maxHeight ? 'auto' : 'hidden';
-      if (highlight) highlight.scrollTop = textarea.scrollTop;
-    }),
+  const layout = createMentionLayout(
+    { textarea: () => textarea, highlight: () => highlight, measure: () => measure, caret: () => caret },
+    { value, rows: () => p.rows, maxRows: () => p.maxRows, queryStart: () => search.query()?.start },
   );
-
-  createEffect(
-    on([() => query()?.start, value], ([start]) => {
-      if (start === undefined || !caret || !textarea) return;
-      setPopoverPosition({
-        left: Math.max(0, Math.min(caret.offsetLeft - CARET_LEFT_OFFSET_PX, textarea.clientWidth - POPOVER_WIDTH_PX)),
-        top: caret.offsetTop + caret.offsetHeight - textarea.scrollTop + POPOVER_GAP_PX,
-      });
-    }),
-  );
-
-  const refreshQuery = (field: HTMLTextAreaElement) => {
-    setQuery(detectQuery()(field.value, field.selectionStart));
-    setActiveIndex(0);
-  };
 
   const pick = (option: MentionOption) => {
-    const current = query();
+    const current = search.query();
     const field = textarea;
     if (!current || !field) return;
     const inserted = `${current.trigger}${option.label} `;
     const position = current.start + inserted.length;
     setValue(value().slice(0, current.start) + inserted + value().slice(field.selectionStart));
-    setQuery(undefined);
+    search.close();
     p.onMention?.(option, current.trigger);
     requestAnimationFrame(() => {
       field.focus();
       field.setSelectionRange(position, position);
     });
-  };
-
-  const onKeyDown: JSX.EventHandler<HTMLTextAreaElement, KeyboardEvent> = (event) => {
-    if (!open() || event.isComposing) return;
-    const count = suggestions().length;
-    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
-      event.preventDefault();
-      setActiveIndex((activeIndex() + (event.key === 'ArrowDown' ? 1 : -1) + count) % count);
-    } else if (event.key === 'Enter' || event.key === 'Tab') {
-      event.preventDefault();
-      const option = suggestions()[activeIndex()];
-      if (option) pick(option);
-    } else if (event.key === 'Escape') {
-      event.preventDefault();
-      setQuery(undefined);
-    }
   };
 
   const autoId = createUniqueId();
@@ -197,7 +95,7 @@ export const MentionInput = (props: MentionInputProps) => {
           <Control multiline invalid={control.invalid} disabled={p.disabled}>
             <div class="vui-mention__wrap">
               <div ref={highlight} class="vui-mention__hl" aria-hidden="true">
-                <Index each={parts()}>
+                <Index each={search.parts()}>
                   {(part, index) => (
                     <Show when={index % 2 === 1} fallback={part()}>
                       <mark class="vui-mention__tok">{part()}</mark>
@@ -207,8 +105,8 @@ export const MentionInput = (props: MentionInputProps) => {
                 {'\u200b'}
               </div>
               <div ref={measure} class="vui-mention__hl vui-mention__meas" aria-hidden="true">
-                {textBeforeTrigger()}
-                <span ref={caret}>{query()?.trigger}</span>
+                {search.textBeforeTrigger()}
+                <span ref={caret}>{search.query()?.trigger}</span>
               </div>
               <textarea
                 ref={textarea}
@@ -221,60 +119,39 @@ export const MentionInput = (props: MentionInputProps) => {
                 required={p.required}
                 role="combobox"
                 aria-autocomplete="list"
-                aria-expanded={open()}
-                aria-controls={open() ? `${control.id}-list` : undefined}
-                aria-activedescendant={open() ? `${control.id}-list-${activeIndex()}` : undefined}
+                aria-expanded={search.open()}
+                aria-controls={search.open() ? `${control.id}-list` : undefined}
+                aria-activedescendant={search.open() ? `${control.id}-list-${search.activeIndex()}` : undefined}
                 aria-invalid={control.invalid || undefined}
                 aria-describedby={control.describedBy}
                 onInput={(event) => {
                   setValue(event.currentTarget.value);
-                  refreshQuery(event.currentTarget);
+                  search.refresh(event.currentTarget);
                 }}
-                onKeyDown={onKeyDown}
+                onKeyDown={(event) => search.onKeyDown(event, pick)}
                 onKeyUp={(event) => {
-                  if (NAVIGATION_KEYS.includes(event.key)) refreshQuery(event.currentTarget);
+                  if (NAVIGATION_KEYS.includes(event.key)) search.refresh(event.currentTarget);
                 }}
-                onClick={(event) => refreshQuery(event.currentTarget)}
-                onBlur={() => setQuery(undefined)}
+                onClick={(event) => search.refresh(event.currentTarget)}
+                onBlur={search.close}
                 onScroll={(event) => {
                   if (highlight) highlight.scrollTop = event.currentTarget.scrollTop;
                 }}
               />
             </div>
           </Control>
-          <Show when={open() ? query() : undefined}>
+          <Show when={search.open() ? search.query() : undefined}>
             {(current) => (
-              <Surface
-                variant="overlay"
-                class="vui-mention__pop"
-                role="listbox"
+              <MentionSuggestions
                 id={`${control.id}-list`}
-                aria-label={p.listLabel ?? translate('velvet.forms.mentionInput.listLabel')}
-                style={{ left: `${popoverPosition().left}px`, top: `${popoverPosition().top}px` }}
-              >
-                <For each={suggestions()}>
-                  {(option, index) => (
-                    <Option
-                      id={`${control.id}-list-${index()}`}
-                      active={index() === activeIndex()}
-                      label={option.label}
-                      description={option.description}
-                      icon={
-                        current().trigger === '@' ? (
-                          <Avatar size="xs" name={option.label} src={option.src} />
-                        ) : (
-                          (option.icon ?? 'tag')
-                        )
-                      }
-                      onMouseDown={(event) => {
-                        event.preventDefault();
-                        pick(option);
-                      }}
-                      onMouseEnter={() => setActiveIndex(index())}
-                    />
-                  )}
-                </For>
-              </Surface>
+                label={p.listLabel}
+                trigger={current().trigger}
+                position={layout.popoverPosition()}
+                suggestions={search.suggestions()}
+                activeIndex={search.activeIndex()}
+                onPick={pick}
+                onActivate={search.setActiveIndex}
+              />
             )}
           </Show>
         </div>

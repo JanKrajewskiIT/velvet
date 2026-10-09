@@ -1,3 +1,5 @@
+import { clamp } from './math';
+
 export type FloatingSide = 'top' | 'bottom' | 'left' | 'right';
 export type FloatingAlign = 'start' | 'center' | 'end';
 
@@ -32,8 +34,6 @@ export interface Placement {
 const OPPOSITE: Record<FloatingSide, FloatingSide> = { top: 'bottom', bottom: 'top', left: 'right', right: 'left' };
 
 const isVertical = (side: FloatingSide) => side === 'top' || side === 'bottom';
-
-const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(value, Math.max(min, max)));
 
 const crossStart = (anchorStart: number, anchorSize: number, size: number, align: FloatingAlign): number => {
   if (align === 'start') return anchorStart;

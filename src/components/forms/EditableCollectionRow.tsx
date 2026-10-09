@@ -1,0 +1,130 @@
+import { type JSX, Show } from 'solid-js';
+
+import { useTranslate } from '../../i18n/useTranslate';
+import { cx } from '../../utils/cx';
+import { IconButton } from '../actions/IconButton';
+import { Handle } from '../primitives/Handle';
+import type { CollectionDrag } from './createCollectionDrag';
+import type { CollectionRows } from './createCollectionRows';
+import type { EditableItem, EditableReorder } from './editableItem';
+import { Rating } from './Rating';
+import { Select } from './Select';
+
+export interface EditableCollectionRowProps {
+  item: EditableItem;
+  index: number;
+  rows: CollectionRows;
+  drag: CollectionDrag;
+  reorder: EditableReorder;
+  required: boolean;
+  requiredText?: string;
+  placeholder?: string;
+  levels?: ReadonlyArray<string>;
+  levelLabel?: string;
+  weighted: boolean;
+  maxWeight: number;
+}
+
+export const EditableCollectionRow = (props: EditableCollectionRowProps): JSX.Element => {
+  const translate = useTranslate();
+  const invalid = () => props.required && props.rows.touched().has(props.item.id) && !props.item.text.trim();
+
+  return (
+    <li
+      class={cx(
+        'vui-editcol__row',
+        props.drag.dragIndex() === props.index && 'vui-editcol__row--drag',
+        props.drag.overIndex() === props.index &&
+          props.drag.dragIndex() !== undefined &&
+          props.drag.dragIndex() !== props.index &&
+          'vui-editcol__row--over',
+        invalid() && 'vui-editcol__row--invalid',
+      )}
+      onDragOver={(event) => props.drag.onRowDragOver(event, props.index)}
+      onDrop={(event) => props.drag.onRowDrop(event, props.index)}
+    >
+      <Show
+        when={props.reorder === 'drag'}
+        fallback={
+          <span class="vui-editcol__idx" aria-hidden="true">
+            {props.index + 1}
+          </span>
+        }
+      >
+        <Handle
+          class="vui-editcol__grip"
+          draggable
+          label={translate('velvet.forms.editableCollection.reorderItem', { index: props.index + 1 })}
+          title={translate('velvet.forms.editableCollection.reorderHint')}
+          onDragStart={(event) => props.drag.onDragStart(event, props.index)}
+          onDragEnd={props.drag.endDrag}
+          onKeyDown={(event) => props.rows.onGripKeyDown(event, props.index)}
+        />
+      </Show>
+      <input
+        class="vui-editcol__input"
+        value={props.item.text}
+        placeholder={props.placeholder ?? translate('velvet.forms.editableCollection.placeholder')}
+        aria-label={translate('velvet.forms.editableCollection.itemLabel', { index: props.index + 1 })}
+        aria-invalid={invalid() || undefined}
+        onInput={(event) => props.rows.patch(props.item.id, { text: event.currentTarget.value })}
+        onBlur={() => props.rows.markTouched(props.item.id)}
+      />
+      <Show when={props.levels}>
+        {(levels) => (
+          <div class="vui-editcol__level">
+            <Select
+              size="sm"
+              aria-label={translate('velvet.forms.editableCollection.levelForItem', {
+                level: props.levelLabel ?? translate('velvet.forms.editableCollection.levelLabel'),
+                index: props.index + 1,
+              })}
+              options={levels()}
+              value={props.item.level ?? ''}
+              onValueChange={(level) => props.rows.patch(props.item.id, { level })}
+            />
+          </div>
+        )}
+      </Show>
+      <Show when={props.weighted}>
+        <Rating
+          size="sm"
+          max={props.maxWeight}
+          value={props.item.weight ?? 0}
+          label={translate('velvet.forms.editableCollection.importanceLabel', { index: props.index + 1 })}
+          onValueChange={(weight) => props.rows.patch(props.item.id, { weight })}
+        />
+      </Show>
+      <span class="vui-editcol__tools">
+        <Show when={props.reorder === 'buttons'}>
+          <IconButton
+            icon="arrow-up"
+            label={translate('velvet.forms.editableCollection.moveUp')}
+            size="sm"
+            disabled={props.index === 0}
+            onClick={() => props.rows.moveItem(props.index, props.index - 1)}
+          />
+          <IconButton
+            icon="arrow-down"
+            label={translate('velvet.forms.editableCollection.moveDown')}
+            size="sm"
+            disabled={props.index === props.rows.items().length - 1}
+            onClick={() => props.rows.moveItem(props.index, props.index + 1)}
+          />
+        </Show>
+        <IconButton
+          class="vui-editcol__del"
+          icon="trash-2"
+          label={translate('velvet.forms.editableCollection.removeItem', { index: props.index + 1 })}
+          size="sm"
+          onClick={() => props.rows.removeItem(props.item.id)}
+        />
+      </span>
+      <Show when={invalid()}>
+        <div class="vui-editcol__err" role="alert">
+          {props.requiredText ?? translate('velvet.forms.editableCollection.requiredText')}
+        </div>
+      </Show>
+    </li>
+  );
+};

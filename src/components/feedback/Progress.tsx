@@ -2,6 +2,7 @@ import { children, createMemo, type JSX, mergeProps, Show, splitProps } from 'so
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { percentOf } from '../../utils/math';
 import type { HtmlProps } from '../../utils/polymorphic';
 import { Meter } from '../primitives/Meter';
 
@@ -21,8 +22,6 @@ export interface ProgressProps extends HtmlProps<HTMLDivElement> {
   /** Custom value text — `(v, max) => v + ' of ' + max + ' GB'`. Defaults to a rounded percentage. */
   format?: (value: number, max: number) => string;
 }
-
-const percentOf = (value: number, max: number): number => Math.max(0, Math.min(100, (value / max) * 100));
 
 /** Linear progress for determinate tasks (upload, onboarding, quota) or indeterminate loading. */
 export const Progress = (props: ProgressProps) => {

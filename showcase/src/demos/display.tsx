@@ -131,7 +131,7 @@ const RemovableTags = () => {
 export const displayDemos: DemoEntry[] = [
   {
     id: 'badge',
-    group: 'Display',
+    group: '13 Display',
     title: 'Badge',
     description: 'Small non-interactive status or count label.',
     render: () => (
@@ -168,7 +168,7 @@ export const displayDemos: DemoEntry[] = [
   },
   {
     id: 'brand-logo',
-    group: 'Display',
+    group: '02 Brand',
     title: 'BrandLogo',
     description: 'Brand mark: the Recron signet and wordmark, or the type-only velvet/ui placeholder.',
     render: () => (
@@ -194,7 +194,7 @@ export const displayDemos: DemoEntry[] = [
   },
   {
     id: 'card',
-    group: 'Display',
+    group: '23 Cards',
     title: 'Card',
     description: 'Content container: Surface plus header, body and footer regions.',
     render: () => (
@@ -255,7 +255,7 @@ export const displayDemos: DemoEntry[] = [
   },
   {
     id: 'icon',
-    group: 'Display',
+    group: '05 Icons',
     title: 'Icon',
     description: 'Velvet icons as inline SVG: inherits currentColor, 24px grid, 1.75 stroke.',
     render: () => (
@@ -298,7 +298,7 @@ export const displayDemos: DemoEntry[] = [
   },
   {
     id: 'markdown',
-    group: 'Display',
+    group: '13 Display',
     title: 'Markdown',
     description: 'Markdown as Velvet prose. HTML in the source is escaped and only safe URLs are kept.',
     render: () => (
@@ -316,7 +316,7 @@ export const displayDemos: DemoEntry[] = [
   },
   {
     id: 'markdown-editor',
-    group: 'Display',
+    group: '16 Inputs',
     title: 'MarkdownEditor & MarkdownEditDialog',
     description: 'Write, split and preview a Markdown field with a toolbar, shortcuts and list continuation.',
     render: () => (
@@ -341,7 +341,7 @@ export const displayDemos: DemoEntry[] = [
   },
   {
     id: 'qr-code',
-    group: 'Display',
+    group: '13 Display',
     title: 'QRCode',
     description: 'Scannable QR code generated in the browser. Pair it with a visible link.',
     render: () => (
@@ -364,7 +364,7 @@ export const displayDemos: DemoEntry[] = [
   },
   {
     id: 'structured-card',
-    group: 'Display',
+    group: '23 Cards',
     title: 'StructuredCard',
     description: 'Card laid out in hairline-divided regions: media, header, body, footer.',
     render: () => (
@@ -432,7 +432,7 @@ export const displayDemos: DemoEntry[] = [
   },
   {
     id: 'tag',
-    group: 'Display',
+    group: '13 Display',
     title: 'Tag',
     description: 'Chip for filters, categories and removable selections.',
     render: () => (
@@ -476,7 +476,7 @@ export const displayDemos: DemoEntry[] = [
   },
   {
     id: 'watermark',
-    group: 'Display',
+    group: '13 Display',
     title: 'Watermark',
     description: 'Repeating diagonal text over its children. A deterrent, not access control.',
     render: () => (

@@ -143,7 +143,7 @@ const SearchTriggerDemo = () => {
 export const layoutDemos: DemoEntry[] = [
   {
     id: 'stack-grid',
-    group: 'Layout',
+    group: '12 Layout',
     title: 'Stack and Grid',
     description: 'Flex stack and CSS grid with space-scale gaps. Grid is fixed columns or auto-fill by minimum width.',
     render: () => (
@@ -185,7 +185,7 @@ export const layoutDemos: DemoEntry[] = [
   },
   {
     id: 'scroll-area',
-    group: 'Layout',
+    group: '12 Layout',
     title: 'ScrollArea',
     description:
       'Thin themed scrollbar with edge fades only where content continues; focusable for keyboard scrolling.',
@@ -221,7 +221,7 @@ export const layoutDemos: DemoEntry[] = [
   },
   {
     id: 'search-trigger',
-    group: 'Layout',
+    group: '22 Navigation',
     title: 'SearchTrigger',
     description: 'Search field look-alike that opens a command palette. Press ⌘K or Ctrl+K anywhere on the page.',
     render: () => (
@@ -232,7 +232,7 @@ export const layoutDemos: DemoEntry[] = [
   },
   {
     id: 'sidebar',
-    group: 'Layout',
+    group: '22 Navigation',
     title: 'Sidebar',
     description:
       'App navigation spine: floating card or docked panel, section labels, counts, accordion children, 64px icon rail.',
@@ -247,7 +247,7 @@ export const layoutDemos: DemoEntry[] = [
   },
   {
     id: 'split-pane',
-    group: 'Layout',
+    group: '12 Layout',
     title: 'SplitPane',
     description: 'Two resizable panes. Drag the handle or use arrows (Shift ×5), Home/End, Enter and double-click.',
     render: () => (
@@ -261,7 +261,7 @@ export const layoutDemos: DemoEntry[] = [
   },
   {
     id: 'page-header',
-    group: 'Layout',
+    group: '22 Navigation',
     title: 'PageHeader',
     description:
       'View masthead: breadcrumb, back, title and status, meta facts, actions and section tabs. Every region is optional.',
@@ -308,7 +308,7 @@ export const layoutDemos: DemoEntry[] = [
   },
   {
     id: 'footer',
-    group: 'Layout',
+    group: '22 Navigation',
     title: 'Footer',
     description: 'Product footer: full marketing layout with columns and legal bar, or a compact in-app row.',
     render: () => (

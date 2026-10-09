@@ -4,11 +4,11 @@ import { createMemo, createSignal, createUniqueId, For, type JSX, mergeProps, Sh
 import { createControllable } from '../../hooks/createControllable';
 import { createDismiss } from '../../hooks/createDismiss';
 import { useTranslate } from '../../i18n/useTranslate';
-import { cx } from '../../utils/cx';
 import { Control } from '../primitives/Control';
 import { Field } from '../primitives/Field';
 import { Glyph } from '../primitives/Glyph';
 import { callHandler } from './callHandler';
+import { ComboboxOption } from './ComboboxOption';
 import { formatNational, nationalLength, onlyDigits, PHONE_COUNTRIES, type PhoneCountry } from './phoneCountries';
 
 /** Digits tolerated beyond the national length, so a pasted prefix stays visible instead of being cut off silently. */
@@ -237,15 +237,12 @@ export const PhoneInput = (props: PhoneInputProps) => {
             <ul id={listId()} role="listbox" aria-label={countryLabel()} class="vui-select__menu">
               <For each={local.countries}>
                 {(item, index) => (
-                  // eslint-disable-next-line jsx-a11y/click-events-have-key-events -- keyboard handled by the country button via aria-activedescendant
-                  <li
+                  <ComboboxOption
                     id={optionId(index())}
-                    role="option"
-                    aria-selected={item.code === country().code}
-                    class={cx('vui-select__option', index() === active() && 'vui-select__option--active')}
-                    onMouseEnter={() => setActive(index())}
-                    onMouseDown={(e) => e.preventDefault()}
-                    onClick={() => pickCountry(item)}
+                    selected={item.code === country().code}
+                    active={index() === active()}
+                    onHover={() => setActive(index())}
+                    onPick={() => pickCountry(item)}
                   >
                     <span class="vui-phone__code">{item.code}</span>
                     <span class="vui-select__label">{countryName(item)}</span>
@@ -253,7 +250,7 @@ export const PhoneInput = (props: PhoneInputProps) => {
                     <Show when={item.code === country().code}>
                       <Glyph name="check" />
                     </Show>
-                  </li>
+                  </ComboboxOption>
                 )}
               </For>
             </ul>

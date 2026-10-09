@@ -2,6 +2,7 @@ import { createEffect, createMemo, createUniqueId, For, type JSX, mergeProps, on
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { scrollBehavior } from '../../utils/motion';
 import { Glyph } from '../primitives/Glyph';
 
 /** Keeps the target field clear of sticky headers after the jump. */
@@ -27,10 +28,9 @@ const jumpToField = (event: MouseEvent, id: string) => {
   const field = document.getElementById(id);
   if (!field) return;
   field.focus({ preventScroll: true });
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   window.scrollTo({
     top: field.getBoundingClientRect().top + window.scrollY - SCROLL_OFFSET_PX,
-    behavior: reduceMotion ? 'auto' : 'smooth',
+    behavior: scrollBehavior(),
   });
 };
 

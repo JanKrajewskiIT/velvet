@@ -3,12 +3,13 @@ import { createEffect, createMemo, createSignal, createUniqueId, For, type JSX, 
 import { createModal } from '../../hooks/createModal';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { ModalBackdrop } from '../feedback/ModalBackdrop';
 import { EmptyText } from '../primitives/EmptyText';
 import { Glyph, renderIcon } from '../primitives/Glyph';
-import { Kbd } from '../primitives/Kbd';
 import { highlightMatch } from '../primitives/Mark';
 import { SectionLabel } from '../primitives/SectionLabel';
 import { type CommandGroup, type CommandItem, type CommandPaletteLabels, filterCommandGroups } from './commandSearch';
+import { MenuItemContent } from './MenuItemContent';
 
 export interface CommandPaletteDialogProps {
   groups: CommandGroup[];
@@ -82,13 +83,7 @@ export const CommandPaletteDialog = (props: CommandPaletteDialogProps) => {
   };
 
   return (
-    // eslint-disable-next-line jsx-a11y/no-static-element-interactions -- backdrop click is a pointer shortcut; keyboard dismissal is handled by createModal (Escape)
-    <div
-      class="vui-dialog-backdrop vui-dialog-backdrop--top"
-      onMouseDown={(e) => {
-        if (e.target === e.currentTarget) props.onClose();
-      }}
-    >
+    <ModalBackdrop class="vui-dialog-backdrop vui-dialog-backdrop--top" onDismiss={props.onClose}>
       <div
         ref={setRoot}
         role="dialog"
@@ -136,21 +131,17 @@ export const CommandPaletteDialog = (props: CommandPaletteDialogProps) => {
                       onMouseMove={() => active() !== result.index && setActive(result.index)}
                       onClick={() => run(result.item)}
                     >
-                      {renderIcon(result.item.icon)}
-                      <span class="vui-menu__label">
-                        {highlightMatch(result.item.label, query())}
-                        <Show when={result.item.description}>
-                          <span class="vui-menu__desc">{result.item.description}</span>
-                        </Show>
-                      </span>
-                      <Show when={result.item.shortcut}>
-                        <Kbd plain class="vui-menu__kbd">
-                          {result.item.shortcut}
-                        </Kbd>
-                      </Show>
-                      <Show when={result.index === active()}>
-                        <Glyph name="arrow-right" class="vui-cmdk__go" />
-                      </Show>
+                      <MenuItemContent
+                        leading={renderIcon(result.item.icon)}
+                        label={highlightMatch(result.item.label, query())}
+                        description={result.item.description}
+                        shortcut={result.item.shortcut}
+                        trailing={
+                          <Show when={result.index === active()}>
+                            <Glyph name="arrow-right" class="vui-cmdk__go" />
+                          </Show>
+                        }
+                      />
                     </div>
                   )}
                 </For>
@@ -177,6 +168,6 @@ export const CommandPaletteDialog = (props: CommandPaletteDialogProps) => {
           <span class="vui-cmdk__count">{resultCount()}</span>
         </div>
       </div>
-    </div>
+    </ModalBackdrop>
   );
 };

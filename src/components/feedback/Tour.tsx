@@ -14,6 +14,7 @@ import { Portal } from 'solid-js/web';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { clamp } from '../../utils/math';
 import { Button } from '../actions/Button';
 import { Glyph } from '../primitives/Glyph';
 import { createModalRoot } from './createModalRoot';
@@ -68,8 +69,6 @@ const resolveTarget = (target: TourStep['target']): HTMLElement | undefined => {
   if (typeof target === 'string') return document.querySelector<HTMLElement>(target) ?? undefined;
   return typeof target === 'function' ? target() : target;
 };
-
-const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
 
 const placeCard = (
   rect: DOMRect | undefined,

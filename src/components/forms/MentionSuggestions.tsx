@@ -1,0 +1,52 @@
+import { For } from 'solid-js';
+
+import { useTranslate } from '../../i18n/useTranslate';
+import { Avatar } from '../data/Avatar';
+import { Option } from '../primitives/Option';
+import { Surface } from '../primitives/Surface';
+import type { MentionOption } from './mentionModel';
+
+export interface MentionSuggestionsProps {
+  id: string;
+  label?: string;
+  trigger: string;
+  position: { left: number; top: number };
+  suggestions: ReadonlyArray<MentionOption>;
+  activeIndex: number;
+  onPick: (option: MentionOption) => void;
+  onActivate: (index: number) => void;
+}
+
+/** Listbox of mention options anchored under the caret. */
+export const MentionSuggestions = (props: MentionSuggestionsProps) => {
+  const translate = useTranslate();
+  return (
+    <Surface
+      variant="overlay"
+      class="vui-mention__pop"
+      role="listbox"
+      id={props.id}
+      aria-label={props.label ?? translate('velvet.forms.mentionInput.listLabel')}
+      style={{ left: `${props.position.left}px`, top: `${props.position.top}px` }}
+    >
+      <For each={props.suggestions}>
+        {(option, index) => (
+          <Option
+            id={`${props.id}-${index()}`}
+            active={index() === props.activeIndex}
+            label={option.label}
+            description={option.description}
+            icon={
+              props.trigger === '@' ? <Avatar size="xs" name={option.label} src={option.src} /> : (option.icon ?? 'tag')
+            }
+            onMouseDown={(event) => {
+              event.preventDefault();
+              props.onPick(option);
+            }}
+            onMouseEnter={() => props.onActivate(index())}
+          />
+        )}
+      </For>
+    </Surface>
+  );
+};

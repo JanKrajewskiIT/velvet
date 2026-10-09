@@ -5,31 +5,18 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { Polymorphic } from '../../utils/polymorphic';
 import { Button } from '../actions/Button';
-import { CopyButton } from '../actions/CopyButton';
 import { Badge } from '../display/Badge';
-import { ProgressRing } from '../feedback/ProgressRing';
 import { Skeleton } from '../feedback/Skeleton';
 import { SkeletonText } from '../feedback/SkeletonText';
 import { Glyph } from '../primitives/Glyph';
 import { SectionLabel } from '../primitives/SectionLabel';
-import { plainText } from './plainText';
+import { AiResultFooter } from './AiResultFooter';
+import { aiResultPlainText, RING_SIZE } from './aiResultFormat';
+import { AiResultScoreRow } from './AiResultScoreRow';
+import { AiResultSections } from './AiResultSections';
+import type { AiFeedback, AiScoreTone, AiSection, AiSource } from './aiResultTypes';
 
-export interface AiSection {
-  title: string;
-  icon?: string;
-  tone?: 'neutral' | 'brand' | 'success' | 'warning' | 'danger' | 'info';
-  items: JSX.Element[];
-}
-
-export interface AiSource {
-  label: string;
-  href?: string;
-  detail?: string;
-}
-
-export type AiFeedback = 'up' | 'down' | null;
-
-export type AiScoreTone = 'brand' | 'success' | 'warning' | 'danger' | 'neutral';
+export type { AiFeedback, AiScoreTone, AiSection, AiSource } from './aiResultTypes';
 
 export interface AiResultPanelProps {
   /** @default localized "AI analysis" */
@@ -64,14 +51,6 @@ export interface AiResultPanelProps {
   class?: string;
 }
 
-const RING_SIZE = 64;
-const RING_STROKE = 6;
-const SUCCESS_FRACTION = 0.75;
-const WARNING_FRACTION = 0.5;
-
-const defaultTone = (fraction: number): AiScoreTone =>
-  fraction >= SUCCESS_FRACTION ? 'success' : fraction >= WARNING_FRACTION ? 'warning' : 'danger';
-
 /** Surface for a structured (non-chat) model answer: provenance, score ring, findings, sources, copy / regenerate / feedback and cost meta. */
 export const AiResultPanel = (props: AiResultPanelProps) => {
   const p = mergeProps({ status: 'done', scoreMax: 100 } satisfies AiResultPanelProps, props);
@@ -87,29 +66,12 @@ export const AiResultPanel = (props: AiResultPanelProps) => {
 
   const streaming = () => p.status === 'streaming';
   const hasScore = () => p.score != null;
-  const score = () => p.score ?? 0;
-  const fraction = () => Math.max(0, Math.min(1, score() / p.scoreMax));
-  const tone = () => p.scoreTone ?? defaultTone(fraction());
   const sections = () => p.sections ?? [];
   const sources = () => p.sources ?? [];
   const empty = () => !hasScore() && !p.headline && !p.summary && sections().length === 0;
   const provenance = () => [p.model, !streaming() && p.elapsed].filter(Boolean).join(' · ');
-  const meta = () =>
-    [p.tokens != null ? translate('velvet.patterns.aiResultPanel.tokens', { count: p.tokens }) : null, p.cost]
-      .filter(Boolean)
-      .join(' · ');
   const plain = () =>
-    [
-      p.headline,
-      p.subline,
-      p.summary,
-      ...sections().map(
-        (section) => `${section.title}\n${section.items.map((item) => `• ${plainText(item)}`).join('\n')}`,
-      ),
-    ]
-      .map(plainText)
-      .filter(Boolean)
-      .join('\n\n');
+    aiResultPlainText({ headline: p.headline, subline: p.subline, summary: p.summary, sections: sections() });
   const toggleVote = (value: 'up' | 'down') => setVote(vote() === value ? null : value);
 
   return (
@@ -128,58 +90,17 @@ export const AiResultPanel = (props: AiResultPanelProps) => {
         <Switch
           fallback={
             <>
-              <Show when={hasScore() || p.headline}>
-                <div class="vui-ai__score-row">
-                  <Show when={hasScore()}>
-                    <ProgressRing
-                      value={score()}
-                      max={p.scoreMax}
-                      size={RING_SIZE}
-                      stroke={RING_STROKE}
-                      tone={tone()}
-                      role="img"
-                      label={translate('velvet.patterns.aiResultPanel.scoreLabel', { score: score(), max: p.scoreMax })}
-                    >
-                      <span class="vui-ring__value vui-ai__score" aria-hidden="true">
-                        {score()}
-                      </span>
-                    </ProgressRing>
-                  </Show>
-                  <div style={{ 'min-width': 0 }}>
-                    <Show when={p.headline}>
-                      <h3 class="vui-ai__headline">{p.headline}</h3>
-                    </Show>
-                    <Show when={p.subline}>
-                      <div class="vui-ai__subline">{p.subline}</div>
-                    </Show>
-                  </div>
-                </div>
-              </Show>
+              <AiResultScoreRow
+                score={p.score}
+                max={p.scoreMax}
+                tone={p.scoreTone}
+                headline={p.headline}
+                subline={p.subline}
+              />
               <Show when={p.summary}>
                 <p class="vui-ai__summary">{p.summary}</p>
               </Show>
-              <Show when={sections().length > 0}>
-                <div class="vui-ai__secs">
-                  <For each={sections()}>
-                    {(section) => (
-                      <section class={cx('vui-ai__sec', section.tone && `vui-ai__sec--${section.tone}`)}>
-                        <SectionLabel
-                          as="h4"
-                          class="vui-ai__sec-h"
-                          tone="secondary"
-                          icon={section.icon}
-                          end={<span>{section.items.length}</span>}
-                        >
-                          {section.title}
-                        </SectionLabel>
-                        <ul class="vui-ai__items">
-                          <For each={section.items}>{(item) => <li>{item}</li>}</For>
-                        </ul>
-                      </section>
-                    )}
-                  </For>
-                </div>
-              </Show>
+              <AiResultSections sections={sections()} />
               <Show when={streaming()}>
                 <SkeletonText lines={2} lastWidth="40%" />
               </Show>
@@ -242,41 +163,17 @@ export const AiResultPanel = (props: AiResultPanelProps) => {
         </Switch>
       </div>
       <Show when={p.status !== 'error'}>
-        <footer class="vui-ai__foot">
-          <Show
-            when={!streaming()}
-            fallback={
-              <span class="vui-ai__meta" style={{ 'margin-left': 0 }}>
-                {translate('velvet.patterns.aiResultPanel.writing')}
-              </span>
-            }
-          >
-            <CopyButton value={plain} variant="ghost" size="sm" onCopy={p.onCopy} />
-            <Show when={p.onRegenerate}>
-              <Button variant="ghost" size="sm" iconLeft="refresh" onClick={() => p.onRegenerate?.()}>
-                {translate('velvet.patterns.aiResultPanel.regenerate')}
-              </Button>
-            </Show>
-            <Show when={p.onFeedback}>
-              <span
-                class="vui-ai__fb"
-                role="group"
-                aria-label={translate('velvet.patterns.aiResultPanel.feedbackLabel')}
-              >
-                <span>{translate('velvet.patterns.aiResultPanel.helpful')}</span>
-                <Button variant="ghost" size="sm" aria-pressed={vote() === 'up'} onClick={() => toggleVote('up')}>
-                  {translate('velvet.common.yes')}
-                </Button>
-                <Button variant="ghost" size="sm" aria-pressed={vote() === 'down'} onClick={() => toggleVote('down')}>
-                  {translate('velvet.common.no')}
-                </Button>
-              </span>
-            </Show>
-            <Show when={meta()}>
-              <span class="vui-ai__meta">{meta()}</span>
-            </Show>
-          </Show>
-        </footer>
+        <AiResultFooter
+          streaming={streaming()}
+          plain={plain}
+          tokens={p.tokens}
+          cost={p.cost}
+          feedback={vote()}
+          feedbackEnabled={!!p.onFeedback}
+          onToggleFeedback={toggleVote}
+          onCopy={p.onCopy}
+          onRegenerate={p.onRegenerate}
+        />
       </Show>
     </article>
   );

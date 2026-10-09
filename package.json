@@ -7,8 +7,7 @@
     "solid",
     "ui",
     "components",
-    "component-library",
-    "css-modules"
+    "component-library"
   ],
   "type": "module",
   "license": "MIT",
@@ -54,7 +53,7 @@
     "format:check": "prettier --check .",
     "lint:css": "stylelint \"src/**/*.css\"",
     "lint:css:fix": "stylelint \"src/**/*.css\" --fix",
-    "verify": "npm run lint && npm run lint:css && npm run build && npm run verify:pkg",
+    "verify": "npm run format:check && npm run lint && npm run lint:css && npm run build && npm run verify:pkg",
     "verify:pkg": "publint --strict && attw --pack . --entrypoints . --profile esm-only --ignore-rules internal-resolution-error",
     "size": "size-limit",
     "prepare": "husky"

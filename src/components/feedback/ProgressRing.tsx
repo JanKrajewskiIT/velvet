@@ -1,6 +1,7 @@
 import { children, createMemo, type JSX, mergeProps, Show, splitProps } from 'solid-js';
 
 import { cx } from '../../utils/cx';
+import { clamp } from '../../utils/math';
 import type { HtmlProps } from '../../utils/polymorphic';
 import type { ProgressTone } from './Progress';
 
@@ -57,7 +58,7 @@ export const ProgressRing = (props: ProgressRingProps) => {
   const centre = children(() => local.children);
   const radius = () => (local.size - local.stroke) / 2;
   const circumference = createMemo(() => 2 * Math.PI * radius());
-  const fraction = () => Math.max(0, Math.min(1, local.value / local.max));
+  const fraction = () => clamp(local.value / local.max, 0, 1);
   const hasRange = () => local.role !== 'img';
 
   return (

@@ -19,6 +19,10 @@ export type TreeRow =
   | { kind: 'node'; id: string; node: TreeNode; level: number; parent: string | null; pos: number; size: number }
   | { kind: 'status'; id: string; owner: TreeNode; status: LoadStatus; level: number; parent: string };
 
+export type NodeRow = Extract<TreeRow, { kind: 'node' }>;
+
+export type StatusRow = Extract<TreeRow, { kind: 'status' }>;
+
 export type CheckState = 'off' | 'on' | 'mixed';
 
 export const hasChildren = (node: TreeNode): boolean => (node.children?.length ?? 0) > 0;

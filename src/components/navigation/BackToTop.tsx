@@ -2,8 +2,9 @@ import { createEffect, createSignal, mergeProps, on, onCleanup } from 'solid-js'
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { scrollBehavior } from '../../utils/motion';
 import { Glyph } from '../primitives/Glyph';
-import { resolveScrollContainer, scrollBehavior, type ScrollContainer } from './scrollContainer';
+import { resolveScrollContainer, type ScrollContainer } from './scrollContainer';
 
 export interface BackToTopProps {
   /** Scroll container: element, selector or accessor. Defaults to the window. */

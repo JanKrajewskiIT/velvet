@@ -10,6 +10,7 @@ import { Control } from '../primitives/Control';
 import { FieldLabel } from '../primitives/Field';
 import { Glyph } from '../primitives/Glyph';
 import { callbackAlias } from './callbackAlias';
+import { ComboboxOption } from './ComboboxOption';
 import { exampleTime, formatMinutes, formatTime, minutesOfTime, parseTime } from './time';
 
 export interface TimePickerProps {
@@ -186,15 +187,12 @@ export const TimePicker = (props: TimePickerProps) => {
           <ul ref={list} id={listId()} role="listbox" class="vui-select__menu vui-time__menu">
             <For each={options()}>
               {(option, index) => (
-                // eslint-disable-next-line jsx-a11y/click-events-have-key-events -- keyboard handled by the input via aria-activedescendant
-                <li
+                <ComboboxOption
                   id={`${listId()}-${index()}`}
-                  role="option"
-                  aria-selected={option === current()}
-                  class={cx('vui-select__option', index() === active() && 'vui-select__option--active')}
-                  onMouseEnter={() => setActive(index())}
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() => {
+                  selected={option === current()}
+                  active={index() === active()}
+                  onHover={() => setActive(index())}
+                  onPick={() => {
                     set(option);
                     setOpen(false);
                   }}
@@ -205,7 +203,7 @@ export const TimePicker = (props: TimePickerProps) => {
                   <Show when={option === current()}>
                     <Glyph name="check" class="vui-select__check" />
                   </Show>
-                </li>
+                </ComboboxOption>
               )}
             </For>
           </ul>

@@ -7,7 +7,3 @@ export const resolveScrollContainer = (container: ScrollContainer | undefined): 
   if (typeof container === 'function') return container() ?? null;
   return container ?? null;
 };
-
-/** Browser-only: instant under `prefers-reduced-motion`. */
-export const scrollBehavior = (): ScrollBehavior =>
-  window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';

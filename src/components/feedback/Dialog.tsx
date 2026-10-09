@@ -4,6 +4,7 @@ import { Portal } from 'solid-js/web';
 import { cx, modifier } from '../../utils/cx';
 import { CloseButton } from '../primitives/CloseButton';
 import { createModalRoot } from './createModalRoot';
+import { ModalBackdrop } from './ModalBackdrop';
 
 export interface DialogProps {
   open: boolean;
@@ -41,12 +42,9 @@ const DialogPanel = (props: DialogPanelProps) => {
   const close = () => props.dialog.onClose?.();
 
   return (
-    // eslint-disable-next-line jsx-a11y/no-static-element-interactions -- backdrop click is a pointer shortcut; keyboard dismissal is handled by createModal (Escape) and the close button
-    <div
+    <ModalBackdrop
       class={cx('vui-dialog-backdrop', drawer() && `vui-dialog-backdrop--${props.dialog.placement}`)}
-      onMouseDown={(e) => {
-        if (props.dialog.dismissible && e.target === e.currentTarget) close();
-      }}
+      onDismiss={props.dialog.dismissible ? close : undefined}
     >
       <div
         ref={props.ref}
@@ -84,7 +82,7 @@ const DialogPanel = (props: DialogPanelProps) => {
           <div class="vui-dialog__footer">{footer()}</div>
         </Show>
       </div>
-    </div>
+    </ModalBackdrop>
   );
 };
 

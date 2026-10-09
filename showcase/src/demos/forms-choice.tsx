@@ -149,7 +149,7 @@ const RatingSummaryDemo = () => {
 export const formsChoiceDemos: DemoEntry[] = [
   {
     id: 'select',
-    group: 'Forms',
+    group: '17 Selection',
     title: 'Select',
     description: 'Custom listbox select. ↑ ↓ Home End Enter Esc and type-ahead; opens upward near the viewport bottom.',
     render: () => (
@@ -181,7 +181,7 @@ export const formsChoiceDemos: DemoEntry[] = [
   },
   {
     id: 'autocomplete',
-    group: 'Forms',
+    group: '17 Selection',
     title: 'Autocomplete',
     description: 'Type-to-filter single select. Local options or async `loadOptions` with skeleton and retry.',
     render: () => (
@@ -200,7 +200,7 @@ export const formsChoiceDemos: DemoEntry[] = [
   },
   {
     id: 'multi-select',
-    group: 'Forms',
+    group: '17 Selection',
     title: 'MultiSelect',
     description:
       'Pick many from a searchable list. Selected values are removable tags; the footer shows count and Clear.',
@@ -217,7 +217,7 @@ export const formsChoiceDemos: DemoEntry[] = [
   },
   {
     id: 'cascader',
-    group: 'Forms',
+    group: '17 Selection',
     title: 'Cascader',
     description: 'Single-path hierarchical pick shown as side-by-side columns.',
     render: () => (
@@ -233,7 +233,7 @@ export const formsChoiceDemos: DemoEntry[] = [
   },
   {
     id: 'tree-select',
-    group: 'Forms',
+    group: '17 Selection',
     title: 'TreeSelect',
     description: 'Hierarchical select with search; single or multiple with tri-state parents.',
     render: () => (
@@ -249,7 +249,7 @@ export const formsChoiceDemos: DemoEntry[] = [
   },
   {
     id: 'transfer-list',
-    group: 'Forms',
+    group: '17 Selection',
     title: 'TransferList',
     description: 'Two lists with search, grouping and reordering for assigning members or permissions.',
     render: () => (
@@ -271,7 +271,7 @@ export const formsChoiceDemos: DemoEntry[] = [
   },
   {
     id: 'checkbox',
-    group: 'Forms',
+    group: '17 Selection',
     title: 'Checkbox',
     description: 'Multi-select and consent. Supports an indeterminate state.',
     render: () => (
@@ -287,7 +287,7 @@ export const formsChoiceDemos: DemoEntry[] = [
   },
   {
     id: 'radio',
-    group: 'Forms',
+    group: '17 Selection',
     title: 'Radio',
     description: 'One of 2–5 visible options. Group with a shared `name`.',
     render: () => (
@@ -301,7 +301,7 @@ export const formsChoiceDemos: DemoEntry[] = [
   },
   {
     id: 'switch',
-    group: 'Forms',
+    group: '17 Selection',
     title: 'Switch',
     description: 'Instant on/off setting that needs no Save.',
     render: () => (
@@ -315,7 +315,7 @@ export const formsChoiceDemos: DemoEntry[] = [
   },
   {
     id: 'option-switcher',
-    group: 'Forms',
+    group: '17 Selection',
     title: 'OptionSwitcher',
     description: 'Required single choice among 2–5 options. ←→ move and select.',
     render: () => (
@@ -326,7 +326,7 @@ export const formsChoiceDemos: DemoEntry[] = [
   },
   {
     id: 'chip-group',
-    group: 'Forms',
+    group: '17 Selection',
     title: 'Chip & ChipGroup',
     description:
       'Toggle chips for tagging and filtering. Multi-select by default; `multiple={false}` is a deselectable single choice.',
@@ -356,7 +356,7 @@ export const formsChoiceDemos: DemoEntry[] = [
   },
   {
     id: 'slider',
-    group: 'Forms',
+    group: '17 Selection',
     title: 'Slider',
     description: 'Range control with a filled track. One value or [lo, hi]; thumbs never cross.',
     render: () => (
@@ -367,7 +367,7 @@ export const formsChoiceDemos: DemoEntry[] = [
   },
   {
     id: 'rating',
-    group: 'Forms',
+    group: '17 Selection',
     title: 'Rating & RatingSummary',
     description:
       'Star rating (click the current star to clear) and a review summary with a distribution that can filter.',

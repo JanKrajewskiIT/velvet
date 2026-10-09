@@ -3,6 +3,7 @@ import { children, createMemo, createSignal, type JSX, mergeProps } from 'solid-
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { clamp } from '../../utils/math';
 
 const KEY_STEP = 2;
 const KEY_STEP_SHIFT = 10;
@@ -73,17 +74,17 @@ export const SplitPane = (props: SplitPaneProps) => {
     return horizontal() ? rect.width : rect.height;
   };
 
-  const clamp = (value: number): number => {
+  const constrain = (value: number): number => {
     const total = boxLength();
     const floorPercent = total ? (p.minPx / total) * FULL : 0;
     const lower = Math.max(p.min, floorPercent);
     const upper = Math.min(p.max, FULL - floorPercent);
     if (p.collapsible && value < lower / 2) return 0;
-    return Math.max(lower, Math.min(upper, value));
+    return clamp(value, lower, upper);
   };
 
   const resize = (value: number) => {
-    const next = clamp(value);
+    const next = constrain(value);
     if (next > 0) lastOpenSize = next;
     setCurrent(next);
   };

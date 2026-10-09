@@ -1,11 +1,9 @@
-import { createMemo, createSignal, createUniqueId, For, type JSX, mergeProps, Show } from 'solid-js';
+import { createSignal, For, type JSX, mergeProps, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { createDismiss } from '../../hooks/createDismiss';
-import { createFloating } from '../../hooks/createFloating';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
-import { Button } from '../actions/Button';
 import { Tag } from '../display/Tag';
 import { Spinner } from '../feedback/Spinner';
 import { Checkmark } from '../primitives/Checkmark';
@@ -14,49 +12,16 @@ import { Control } from '../primitives/Control';
 import { Field } from '../primitives/Field';
 import { Glyph } from '../primitives/Glyph';
 import { callbackAlias } from './callbackAlias';
-import { createAsyncOptions, type LoadOptions } from './createAsyncOptions';
+import { ComboboxOption } from './ComboboxOption';
+import { ComboboxOptionText } from './ComboboxOptionText';
+import { createComboboxOptions } from './createComboboxOptions';
+import { createComboboxPopup } from './createComboboxPopup';
+import { MultiSelectFooter } from './MultiSelectFooter';
+import type { MultiSelectProps } from './multiSelectTypes';
 import { OptionListStatus } from './OptionListStatus';
-import { type AutocompleteOption, filterOptions, normalizeOption } from './selectOption';
+import type { AutocompleteOption } from './selectOption';
 
-export interface MultiSelectProps {
-  label?: JSX.Element;
-  hint?: JSX.Element;
-  error?: JSX.Element;
-  optional?: boolean;
-  options?: ReadonlyArray<string | AutocompleteOption>;
-  /** Controlled selection. */
-  value?: string[];
-  defaultValue?: string[];
-  /** Same callback as `onValueChange`, kept as an alias. */
-  onChange?: (value: string[]) => void;
-  onValueChange?: (value: string[]) => void;
-  /** Server search — return options for the query. Labels of picked items are kept across searches. */
-  loadOptions?: LoadOptions;
-  /** @default localized "Select…" */
-  placeholder?: string;
-  /** @default localized "No matches." */
-  emptyText?: string;
-  /** Shown in the empty list before the user types. @default localized "Type to search." */
-  searchPrompt?: string;
-  /** Shown when `loadOptions` rejects. @default localized "Couldn’t load options" */
-  errorText?: string;
-  /** @default localized "Retry" */
-  retryLabel?: string;
-  /** @default localized "Clear" */
-  clearLabel?: string;
-  /** Footer summary. @default localized "N selected" or "N selected of MAX" */
-  selectedLabel?: (count: number, max: number | undefined) => string;
-  /** Accessible name of each tag's remove button. @default localized "Remove LABEL" */
-  removeLabel?: (label: string) => string;
-  /** Cap on selections; unpicked rows disable at the cap. */
-  max?: number;
-  /** @default 'md' */
-  size?: 'sm' | 'md';
-  disabled?: boolean;
-  id?: string;
-  /** Styles the field shell. */
-  class?: string;
-}
+export type { MultiSelectProps };
 
 const NO_OPTIONS: ReadonlyArray<string | AutocompleteOption> = [];
 
@@ -79,10 +44,8 @@ export const MultiSelect = (props: MultiSelectProps) => {
   };
   const removeLabel = (label: string) =>
     p.removeLabel?.(label) ?? translate('velvet.forms.multiSelect.removeItem', { label });
-  const autoId = createUniqueId();
-  const id = () => p.id ?? autoId;
-  const listId = () => `${id()}-list`;
-  const optionId = (index: number) => `${listId()}-${index}`;
+  const popup = createComboboxPopup(() => p.id);
+  const { id, listId, optionId, open, setOpen, active, setActive, floating } = popup;
 
   const [selected, setSelected] = createControllable<string[]>({
     value: () => p.value,
@@ -93,19 +56,18 @@ export const MultiSelect = (props: MultiSelectProps) => {
     ),
   });
   const [query, setQuery] = createSignal('');
-  const [open, setOpen] = createSignal(false);
-  const [active, setActive] = createSignal(0);
   const [pickedLabels, setPickedLabels] = createSignal<Record<string, string>>({});
-  const [root, setRoot] = createSignal<HTMLElement>();
   let input!: HTMLInputElement;
 
-  const localOptions = createMemo(() => p.options.map(normalizeOption));
-  const remote = createAsyncOptions(() => p.loadOptions, query, open);
-  const list = createMemo(() => (p.loadOptions ? remote.items() : filterOptions(localOptions(), query())));
+  const { local, remote, list } = createComboboxOptions(
+    { options: () => p.options, loadOptions: () => p.loadOptions },
+    query,
+    open,
+  );
   const isFull = () => p.max != null && selected().length >= p.max;
   const labelOf = (value: string) =>
     pickedLabels()[value] ??
-    localOptions().find((o) => o.value === value)?.label ??
+    local().find((o) => o.value === value)?.label ??
     remote.items().find((o) => o.value === value)?.label ??
     value;
 
@@ -128,20 +90,11 @@ export const MultiSelect = (props: MultiSelectProps) => {
     setActive(0);
   };
 
-  createDismiss(open, close, root);
-  const floating = createFloating(open, root, { matchWidth: true });
+  createDismiss(open, close, popup.root);
 
   const onKeyDown: JSX.EventHandler<HTMLInputElement, KeyboardEvent> = (e) => {
+    if (popup.handleArrowKey(e, list().length)) return;
     switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault();
-        if (open()) setActive((index) => Math.min(list().length - 1, index + 1));
-        else setOpen(true);
-        break;
-      case 'ArrowUp':
-        e.preventDefault();
-        setActive((index) => Math.max(0, index - 1));
-        break;
       case 'Enter':
         e.preventDefault();
         if (open()) toggle(list()[active()]);
@@ -159,7 +112,7 @@ export const MultiSelect = (props: MultiSelectProps) => {
   return (
     <Field label={p.label} hint={p.hint} error={p.error} optional={p.optional} id={id()}>
       {(control) => (
-        <div ref={setRoot} class="vui-select">
+        <div ref={popup.setRoot} class="vui-select">
           <Control
             invalid={control.invalid}
             disabled={p.disabled}
@@ -195,7 +148,7 @@ export const MultiSelect = (props: MultiSelectProps) => {
               aria-expanded={open()}
               aria-controls={listId()}
               aria-autocomplete="list"
-              aria-activedescendant={open() && list()[active()] ? optionId(active()) : undefined}
+              aria-activedescendant={popup.activeDescendant(list())}
               aria-invalid={control.invalid || undefined}
               aria-describedby={control.describedBy}
               class="vui-taginput__input"
@@ -227,30 +180,19 @@ export const MultiSelect = (props: MultiSelectProps) => {
                     const on = () => selected().includes(option.value);
                     const blocked = () => !on() && isFull();
                     return (
-                      // eslint-disable-next-line jsx-a11y/click-events-have-key-events -- keyboard handled by the combobox input via aria-activedescendant
-                      <li
+                      <ComboboxOption
                         id={optionId(index())}
-                        role="option"
-                        aria-selected={on()}
-                        aria-disabled={blocked() || undefined}
-                        class={cx(
-                          'vui-select__option',
-                          'vui-multi__option',
-                          index() === active() && 'vui-select__option--active',
-                        )}
-                        onMouseEnter={() => setActive(index())}
-                        onMouseDown={(e) => e.preventDefault()}
-                        onClick={() => !blocked() && toggle(option)}
+                        selected={on()}
+                        active={index() === active()}
+                        disabled={blocked()}
+                        class="vui-multi__option"
+                        onHover={() => setActive(index())}
+                        onPick={() => !blocked() && toggle(option)}
                       >
                         <Checkmark size="sm" checked={on()} />
                         <Show when={option.icon}>{(icon) => <Glyph name={icon()} />}</Show>
-                        <span class="vui-select__label">
-                          {option.label}
-                          <Show when={option.description}>
-                            <span class="vui-select__desc">{option.description}</span>
-                          </Show>
-                        </span>
-                      </li>
+                        <ComboboxOptionText label={option.label} description={option.description} />
+                      </ComboboxOption>
                     );
                   }}
                 </For>
@@ -268,19 +210,12 @@ export const MultiSelect = (props: MultiSelectProps) => {
                   onRetry={remote.retry}
                 />
               </ul>
-              <div class="vui-multi__foot">
-                <span>{selectedLabel(selected().length, p.max)}</span>
-                <Show when={selected().length > 0}>
-                  <Button
-                    variant="link"
-                    size="sm"
-                    onMouseDown={(e) => e.preventDefault()}
-                    onClick={() => setSelected([])}
-                  >
-                    {p.clearLabel ?? translate('velvet.common.clear')}
-                  </Button>
-                </Show>
-              </div>
+              <MultiSelectFooter
+                summary={selectedLabel(selected().length, p.max)}
+                canClear={selected().length > 0}
+                clearLabel={p.clearLabel}
+                onClear={() => setSelected([])}
+              />
             </div>
           </Show>
         </div>

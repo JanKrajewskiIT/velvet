@@ -2,6 +2,7 @@ import { createEffect, createMemo, createSignal, type JSX, onCleanup, Show, untr
 import { Portal } from 'solid-js/web';
 
 import { createDismiss } from '../../hooks/createDismiss';
+import { clamp } from '../../utils/math';
 import type { MenuItem } from './menuItem';
 import { MenuPanel } from './MenuPanel';
 
@@ -9,7 +10,7 @@ const VIEWPORT_MARGIN_PX = 8;
 const KEYBOARD_OFFSET_PX = 16;
 
 const fitInViewport = (value: number, size: number, viewport: number): number =>
-  Math.max(VIEWPORT_MARGIN_PX, Math.min(value, viewport - size - VIEWPORT_MARGIN_PX));
+  clamp(value, VIEWPORT_MARGIN_PX, viewport - size - VIEWPORT_MARGIN_PX);
 
 interface Point {
   x: number;

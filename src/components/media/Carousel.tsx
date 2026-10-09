@@ -2,9 +2,10 @@ import { createEffect, createMemo, createSignal, For, type JSX, mergeProps, onCl
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { clamp } from '../../utils/math';
+import { REDUCED_MOTION_QUERY } from '../../utils/motion';
 import { IconButton } from '../actions/IconButton';
 
-const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
 const DRAG_THRESHOLD_PX = 4;
 const SWIPE_DISTANCE_PX = 50;
 
@@ -60,7 +61,7 @@ export const Carousel = (props: CarouselProps) => {
   const visible = (k: number) => k >= index() && k < index() + p.perView;
   const go = (target: number) => {
     if (p.loop) setPosition(target < 0 ? max() : target > max() ? 0 : target);
-    else setPosition(Math.max(0, Math.min(max(), target)));
+    else setPosition(clamp(target, 0, max()));
   };
 
   onMount(() => {

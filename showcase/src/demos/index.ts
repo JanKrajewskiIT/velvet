@@ -7,6 +7,9 @@ import { displayDemos } from './display';
 import { feedbackOverlayDemos } from './feedback-overlays';
 import { feedbackStatusDemos } from './feedback-status';
 import { feedbackDemos } from './feedback';
+import { foundationADemos } from './foundations-a';
+import { foundationBDemos } from './foundations-b';
+import { foundationCDemos } from './foundations-c';
 import { formsChoiceDemos } from './forms-choice';
 import { formsPickerDemos } from './forms-pickers';
 import { formsStructureDemos } from './forms-structure';
@@ -17,9 +20,13 @@ import { menusDemos } from './menus';
 import { navigationDemos } from './navigation';
 import { patternsADemos } from './patterns-a';
 import { patternsBDemos } from './patterns-b';
+import { patternsAuthDemos } from './patterns-auth';
 import { primitiveDemos } from './primitives';
 
 export const DEMOS: readonly DemoEntry[] = [
+  ...foundationADemos,
+  ...foundationBDemos,
+  ...foundationCDemos,
   ...primitiveDemos,
   ...actionDemos,
   ...formsTextDemos,
@@ -39,4 +46,5 @@ export const DEMOS: readonly DemoEntry[] = [
   ...layoutDemos,
   ...patternsADemos,
   ...patternsBDemos,
+  ...patternsAuthDemos,
 ];

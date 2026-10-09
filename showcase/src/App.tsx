@@ -4,6 +4,7 @@ import { DEMOS } from './demos';
 import { GROUPS } from './registry';
 
 const idFromHash = () => decodeURIComponent(location.hash.replace(/^#\/?/, ''));
+const POPULATED_GROUPS = GROUPS.filter((group) => DEMOS.some((demo) => demo.group === group));
 
 export const App = () => {
   const [hash, setHash] = createSignal(idFromHash());
@@ -31,7 +32,7 @@ export const App = () => {
         <Text variant="title" as="p">
           Velvet UI
         </Text>
-        <For each={GROUPS}>
+        <For each={POPULATED_GROUPS}>
           {(group) => (
             <div class="sc-nav__group">
               <Text variant="overline">{group}</Text>

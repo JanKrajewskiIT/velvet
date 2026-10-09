@@ -220,7 +220,7 @@ const StepperDemo = () => {
 export const navigationDemos: DemoEntry[] = [
   {
     id: 'link',
-    group: 'Navigation',
+    group: '22 Navigation',
     title: 'Link',
     description: 'Text link inline in prose or standalone as a call to action.',
     render: () => (
@@ -250,7 +250,7 @@ export const navigationDemos: DemoEntry[] = [
   },
   {
     id: 'breadcrumb',
-    group: 'Navigation',
+    group: '22 Navigation',
     title: 'Breadcrumb',
     description: 'Location trail; beyond maxItems the middle collapses into a menu.',
     render: () => (
@@ -280,7 +280,7 @@ export const navigationDemos: DemoEntry[] = [
   },
   {
     id: 'tabs',
-    group: 'Navigation',
+    group: '22 Navigation',
     title: 'Tabs',
     description: 'Peer views with a sliding indicator; arrows, Home and End move and select.',
     render: () => (
@@ -328,7 +328,7 @@ export const navigationDemos: DemoEntry[] = [
   },
   {
     id: 'pagination',
-    group: 'Navigation',
+    group: '22 Navigation',
     title: 'Pagination',
     description: 'Page navigation with truncation, a range label and rows per page.',
     render: () => (
@@ -345,7 +345,7 @@ export const navigationDemos: DemoEntry[] = [
   },
   {
     id: 'stepper',
-    group: 'Navigation',
+    group: '22 Navigation',
     title: 'Stepper',
     description: 'Progress through ordered steps: done, current, upcoming, error.',
     render: () => (
@@ -360,7 +360,7 @@ export const navigationDemos: DemoEntry[] = [
   },
   {
     id: 'wizard',
-    group: 'Navigation',
+    group: '19 Forms',
     title: 'Wizard',
     description: 'Multi-step flow with validation, Back / Next and an awaited Finish.',
     render: () => (
@@ -371,7 +371,7 @@ export const navigationDemos: DemoEntry[] = [
   },
   {
     id: 'tree-view',
-    group: 'Navigation',
+    group: '22 Navigation',
     title: 'TreeView',
     description: 'WAI-ARIA tree with tri-state checkboxes and lazy children.',
     render: () => (
@@ -391,7 +391,7 @@ export const navigationDemos: DemoEntry[] = [
   },
   {
     id: 'hierarchy-navigator',
-    group: 'Navigation',
+    group: '22 Navigation',
     title: 'HierarchyNavigator',
     description: 'Drill-down picker for deep taxonomies, one level at a time.',
     render: () => (
@@ -402,7 +402,7 @@ export const navigationDemos: DemoEntry[] = [
   },
   {
     id: 'navbar',
-    group: 'Navigation',
+    group: '22 Navigation',
     title: 'Navbar',
     description: 'Top app bar: text links, or the brand-filled icon menubar.',
     render: () => (
@@ -413,7 +413,7 @@ export const navigationDemos: DemoEntry[] = [
   },
   {
     id: 'bottom-nav',
-    group: 'Navigation',
+    group: '22 Navigation',
     title: 'BottomNav',
     description: 'Mobile tab bar with badges and an optional centre action.',
     render: () => (
@@ -433,7 +433,7 @@ export const navigationDemos: DemoEntry[] = [
   },
   {
     id: 'load-more',
-    group: 'Navigation',
+    group: '22 Navigation',
     title: 'LoadMore',
     description: 'Incremental "Show more" footer with a quiet progress bar.',
     render: () => (
@@ -449,7 +449,7 @@ export const navigationDemos: DemoEntry[] = [
   },
   {
     id: 'anchor',
-    group: 'Navigation',
+    group: '22 Navigation',
     title: 'Anchor',
     description: 'On-this-page table of contents that follows the section in view.',
     render: () => (
@@ -475,7 +475,7 @@ export const navigationDemos: DemoEntry[] = [
   },
   {
     id: 'back-to-top',
-    group: 'Navigation',
+    group: '22 Navigation',
     title: 'BackToTop',
     description: 'Scroll-to-top button with a progress ring; appears after a threshold.',
     render: () => (

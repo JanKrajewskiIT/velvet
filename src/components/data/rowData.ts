@@ -42,5 +42,3 @@ export const sortRows = <T extends object>(rows: T[], get: (row: T) => unknown, 
 /** Numbers become px lengths (Solid does not append units); strings pass through. */
 export const cssLength = (value: number | string | undefined): string | undefined =>
   typeof value === 'number' ? `${value}px` : value;
-
-export const clamp = (value: number, min: number, max: number): number => Math.max(min, Math.min(max, value));

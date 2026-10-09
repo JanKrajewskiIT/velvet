@@ -1,4 +1,5 @@
 import { addDays, DAY_MS, startOfDay, toDate, ymd } from '../../utils/date';
+import { createId } from '../../utils/id';
 
 export interface OrganizerEvent {
   id: string | number;
@@ -23,12 +24,15 @@ export interface EventDraft {
   description: string;
 }
 
+export interface OrganizerEventsSource {
+  events: OrganizerEvent[];
+  onEventsChange?: (events: OrganizerEvent[]) => void;
+}
+
 const MAX_SPAN_DAYS = 366;
 const UNTIMED_SORT_KEY = '99';
 
-let nextEventSeq = 0;
-
-export const createEventId = (): string => `e${Date.now()}-${nextEventSeq++}`;
+export const createEventId = (): string => createId('e');
 
 export const dayDistance = (from: Date, to: Date): number =>
   Math.round((startOfDay(to).getTime() - startOfDay(from).getTime()) / DAY_MS);

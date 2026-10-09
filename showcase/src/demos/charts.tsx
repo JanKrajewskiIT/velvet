@@ -264,7 +264,7 @@ const ComparisonDemo = () => {
 export const chartsDemos: DemoEntry[] = [
   {
     id: 'bar-chart',
-    group: 'Charts',
+    group: '25 Data viz',
     title: 'BarChart',
     description:
       'Grouped or stacked bars. Hover, or focus and use the arrow keys to read each group; the values are announced.',
@@ -300,7 +300,7 @@ export const chartsDemos: DemoEntry[] = [
   },
   {
     id: 'line-chart',
-    group: 'Charts',
+    group: '25 Data viz',
     title: 'LineChart',
     description:
       'Line and area chart with a crosshair. The Table toggle shows the same data as an accessible table with period-over-period change.',
@@ -338,7 +338,7 @@ export const chartsDemos: DemoEntry[] = [
   },
   {
     id: 'donut-chart',
-    group: 'Charts',
+    group: '25 Data viz',
     title: 'DonutChart',
     description: 'Part-to-whole with an interactive legend. Click an entry to exclude it and recut the rest.',
     render: () => (
@@ -367,7 +367,7 @@ export const chartsDemos: DemoEntry[] = [
   },
   {
     id: 'funnel-chart',
-    group: 'Charts',
+    group: '25 Data viz',
     title: 'FunnelChart',
     description: 'Conversion funnel with drop-off between steps. Each step is focusable and reads its numbers aloud.',
     render: () => (
@@ -387,7 +387,7 @@ export const chartsDemos: DemoEntry[] = [
   },
   {
     id: 'gauge',
-    group: 'Charts',
+    group: '25 Data viz',
     title: 'Gauge',
     description:
       'Half-circle meter for one value against a range. Thresholds recolour the arc and add a notch; the number is always printed.',
@@ -417,7 +417,7 @@ export const chartsDemos: DemoEntry[] = [
   },
   {
     id: 'heatmap',
-    group: 'Charts',
+    group: '25 Data viz',
     title: 'Heatmap',
     description:
       'Calendar density grid. Arrow through days (left/right = week, up/down = day, Home/End); every cell has a spoken label.',
@@ -450,7 +450,7 @@ export const chartsDemos: DemoEntry[] = [
   },
   {
     id: 'radar-chart',
-    group: 'Charts',
+    group: '25 Data viz',
     title: 'RadarChart',
     description:
       'Compare 1–3 profiles across 5–8 dimensions. The legend toggles series; every value is in the accessible name.',
@@ -492,7 +492,7 @@ export const chartsDemos: DemoEntry[] = [
   },
   {
     id: 'sparkline',
-    group: 'Charts',
+    group: '25 Data viz',
     title: 'Sparkline',
     description: 'Tiny inline trend. Scrub with the mouse or focus and use the arrow keys; the readout is announced.',
     render: () => (
@@ -520,7 +520,7 @@ export const chartsDemos: DemoEntry[] = [
   },
   {
     id: 'gantt',
-    group: 'Charts',
+    group: '25 Data viz',
     title: 'Gantt',
     description:
       'Timeline with groups, milestones, progress and finish-to-start dependencies. Bars are buttons that read name, dates and progress.',
@@ -532,7 +532,7 @@ export const chartsDemos: DemoEntry[] = [
   },
   {
     id: 'comparison',
-    group: 'Charts',
+    group: '25 Data viz',
     title: 'ComparisonBar and ComparisonDialog',
     description:
       'Pick 2–4 things, then compare them side by side in a dialog with radar, criteria table (best values starred) and on-demand insights.',

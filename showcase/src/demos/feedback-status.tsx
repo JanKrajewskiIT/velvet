@@ -102,7 +102,7 @@ const ProgressDemo = () => {
 export const feedbackStatusDemos: DemoEntry[] = [
   {
     id: 'alert',
-    group: 'Feedback',
+    group: '14 Feedback',
     title: 'Alert & Banner',
     description: 'Inline Alert for contextual messages; Banner for one full-width system notice at the top of the app.',
     render: () => (
@@ -155,7 +155,7 @@ export const feedbackStatusDemos: DemoEntry[] = [
   },
   {
     id: 'progress',
-    group: 'Feedback',
+    group: '14 Feedback',
     title: 'Progress',
     description: 'Linear and circular progress for determinate tasks; indeterminate when the amount is unknown.',
     render: () => (
@@ -186,7 +186,7 @@ export const feedbackStatusDemos: DemoEntry[] = [
   },
   {
     id: 'skeleton',
-    group: 'Feedback',
+    group: '14 Feedback',
     title: 'Skeleton',
     description: 'Shimmering placeholder in the shape of content that is loading. Wrap the region in aria-busy.',
     render: () => (
@@ -206,7 +206,7 @@ export const feedbackStatusDemos: DemoEntry[] = [
   },
   {
     id: 'loader',
-    group: 'Feedback',
+    group: '14 Feedback',
     title: 'Loader',
     description: 'Decorative brand loaders for page and hero waits. Use Spinner for inline and button waits.',
     render: () => (
@@ -237,7 +237,7 @@ export const feedbackStatusDemos: DemoEntry[] = [
   },
   {
     id: 'countdown',
-    group: 'Feedback',
+    group: '13 Display',
     title: 'Countdown',
     description: 'Live countdown to a date. Screen readers get one summary label, not per-second updates.',
     render: () => (
@@ -254,7 +254,7 @@ export const feedbackStatusDemos: DemoEntry[] = [
   },
   {
     id: 'empty-state',
-    group: 'Feedback',
+    group: '14 Feedback',
     title: 'EmptyState & ErrorState',
     description: 'EmptyState for "nothing here yet"; ErrorState for a section that failed to load.',
     render: () => (
@@ -281,7 +281,7 @@ export const feedbackStatusDemos: DemoEntry[] = [
   },
   {
     id: 'status-page',
-    group: 'Feedback',
+    group: '28 Patterns',
     title: 'StatusPage',
     description:
       'End of a page or flow — error codes and outcomes. lg shows a code watermark; md and sm sit inside sections.',
@@ -307,7 +307,7 @@ export const feedbackStatusDemos: DemoEntry[] = [
   },
   {
     id: 'notification-center',
-    group: 'Feedback',
+    group: '14 Feedback',
     title: 'NotificationCenter',
     description: 'Bell with unread count and a popover list. NotificationList is the bare list for activity pages.',
     render: () => (
@@ -326,7 +326,7 @@ export const feedbackStatusDemos: DemoEntry[] = [
   },
   {
     id: 'setup-checklist',
-    group: 'Feedback',
+    group: '14 Feedback',
     title: 'SetupChecklist',
     description: 'First-run setup card. Steps are independent; the first open one is highlighted.',
     render: () => (

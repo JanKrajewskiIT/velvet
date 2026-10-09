@@ -1,3 +1,4 @@
+import { clamp } from '../../utils/math';
 import { LEAF_SELECTOR, LIST_TAG, tidy } from './richTextModel';
 
 export type SavedPoint = readonly [blockIndex: number, offset: number];
@@ -99,7 +100,7 @@ export const restoreSel = (root: Element, saved: SavedSelection | null): void =>
   if (!saved) return;
   const all = leaves(root);
   const at = ([index, offset]: SavedPoint): DomPoint | undefined => {
-    const block = all[Math.max(0, Math.min(index, all.length - 1))];
+    const block = all[clamp(index, 0, all.length - 1)];
     return block ? pointIn(block, offset) : undefined;
   };
   const start = at(saved[0]);

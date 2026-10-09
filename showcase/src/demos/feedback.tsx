@@ -8,7 +8,7 @@ const VARIANTS: SpinnerVariant[] = ['ring', 'dots', 'bars', 'pulse'];
 export const feedbackDemos: DemoEntry[] = [
   {
     id: 'spinner',
-    group: 'Feedback',
+    group: '14 Feedback',
     title: 'Spinner',
     description:
       'Loader for unknown-duration work. Use Skeleton when the content shape is known and Progress when the percentage is known.',

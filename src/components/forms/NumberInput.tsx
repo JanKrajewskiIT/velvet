@@ -12,6 +12,7 @@ import {
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { clamp } from '../../utils/math';
 import { Control } from '../primitives/Control';
 import { Field } from '../primitives/Field';
 import { Glyph } from '../primitives/Glyph';
@@ -96,9 +97,8 @@ export const NumberInput = (props: NumberInputProps) => {
   const atMin = () => current() <= local.min;
   const atMax = () => current() >= local.max;
 
-  const clamp = (n: number) => Math.min(local.max, Math.max(local.min, Number(n.toFixed(places()))));
   const commit = (n: number) => {
-    setCurrent(clamp(n));
+    setCurrent(clamp(Number(n.toFixed(places())), local.min, local.max));
     setDraft(undefined);
   };
   const commitDraft = () => {

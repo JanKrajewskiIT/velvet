@@ -1,6 +1,7 @@
 import { createMemo, For, mergeProps, Show, splitProps } from 'solid-js';
 
 import { cx, modifier } from '../../utils/cx';
+import { percentOf } from '../../utils/math';
 import type { HtmlProps } from '../../utils/polymorphic';
 import type { Tone } from '../../utils/tone';
 
@@ -39,7 +40,7 @@ export const Meter = (props: MeterProps) => {
     'label',
     'class',
   ]);
-  const percent = createMemo(() => Math.max(0, Math.min(100, (local.value / local.max) * 100)));
+  const percent = createMemo(() => percentOf(local.value, local.max));
   const litSegments = () => Math.round((percent() / 100) * (local.steps ?? 0));
   const segments = () => Array.from({ length: local.steps ?? 0 }, (_, i) => i);
   const a11y = () =>

@@ -3,7 +3,8 @@ import { createEffect, For, type JSX, mergeProps, on, onCleanup, Show, untrack }
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
-import { resolveScrollContainer, scrollBehavior, type ScrollContainer } from './scrollContainer';
+import { scrollBehavior } from '../../utils/motion';
+import { resolveScrollContainer, type ScrollContainer } from './scrollContainer';
 
 export interface AnchorItem {
   /** Must match a heading/section id in the document. */

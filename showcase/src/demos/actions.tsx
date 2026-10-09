@@ -37,7 +37,7 @@ const AuthDemo = () => {
 export const actionDemos: DemoEntry[] = [
   {
     id: 'button',
-    group: 'Actions',
+    group: '15 Actions',
     title: 'Button',
     description: 'Primary action trigger. One primary per view; secondary or ghost for the rest.',
     render: () => (
@@ -69,7 +69,7 @@ export const actionDemos: DemoEntry[] = [
   },
   {
     id: 'icon-button',
-    group: 'Actions',
+    group: '15 Actions',
     title: 'IconButton',
     description: 'Square icon-only button. Always carries an accessible label.',
     render: () => (
@@ -93,7 +93,7 @@ export const actionDemos: DemoEntry[] = [
   },
   {
     id: 'button-group',
-    group: 'Actions',
+    group: '15 Actions',
     title: 'ButtonGroup',
     description: 'Groups related buttons into a segmented control, or spaces them as an action row.',
     render: () => (
@@ -116,7 +116,7 @@ export const actionDemos: DemoEntry[] = [
   },
   {
     id: 'toggle',
-    group: 'Actions',
+    group: '15 Actions',
     title: 'ToggleButton & ToggleGroup',
     description: 'An action that stays pressed (favourite, bold, mute). Not a setting — use Switch for those.',
     render: () => (
@@ -145,7 +145,7 @@ export const actionDemos: DemoEntry[] = [
   },
   {
     id: 'copy',
-    group: 'Actions',
+    group: '15 Actions',
     title: 'CopyButton & CopyField',
     description: 'Copies text to the clipboard; the icon morphs and the result is announced.',
     render: () => (
@@ -162,7 +162,7 @@ export const actionDemos: DemoEntry[] = [
   },
   {
     id: 'auth-button',
-    group: 'Actions',
+    group: '15 Actions',
     title: 'AuthButton',
     description: 'Session toggle: sign in when signed out, sign out when signed in. Handlers may be async.',
     render: () => (
@@ -176,7 +176,7 @@ export const actionDemos: DemoEntry[] = [
   },
   {
     id: 'fab',
-    group: 'Actions',
+    group: '15 Actions',
     title: 'Fab',
     description: 'Floating action button for the single most important creation action on mobile.',
     render: () => (
@@ -196,7 +196,7 @@ export const actionDemos: DemoEntry[] = [
   },
   {
     id: 'locale-switcher',
-    group: 'Actions',
+    group: '21 Menus',
     title: 'LocaleSwitcher',
     description: 'Compact language toggle with a sliding thumb. For four or more languages use Select.',
     render: () => (
@@ -208,7 +208,7 @@ export const actionDemos: DemoEntry[] = [
   },
   {
     id: 'theme-toggle',
-    group: 'Actions',
+    group: '15 Actions',
     title: 'ThemeToggle',
     description: 'Light/dark switch. Uncontrolled it drives html[data-theme] and persists the choice.',
     render: () => (
@@ -221,7 +221,7 @@ export const actionDemos: DemoEntry[] = [
   },
   {
     id: 'calendar-event-button',
-    group: 'Actions',
+    group: '15 Actions',
     title: 'CalendarEventButton',
     description: 'Add an interview, deadline or meeting to Google, Outlook or an .ics file.',
     render: () => (

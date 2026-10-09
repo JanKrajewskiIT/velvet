@@ -119,7 +119,7 @@ const TOAST_TONE_COPY: Record<StatusTone, string> = {
 export const feedbackOverlayDemos: DemoEntry[] = [
   {
     id: 'dialog',
-    group: 'Feedback',
+    group: '20 Overlays',
     title: 'Dialog',
     description:
       'Modal dialog or side drawer. The page behind is inert, focus returns to the trigger on close, Esc and backdrop click dismiss.',
@@ -184,7 +184,7 @@ export const feedbackOverlayDemos: DemoEntry[] = [
   },
   {
     id: 'confirm-dialog',
-    group: 'Feedback',
+    group: '20 Overlays',
     title: 'ConfirmDialog',
     description:
       'Second-thought dialog. Danger tone starts focus on Cancel; requireText gates irreversible actions; async onConfirm locks the dialog and shows failures inline.',
@@ -258,7 +258,7 @@ export const feedbackOverlayDemos: DemoEntry[] = [
   },
   {
     id: 'bottom-sheet',
-    group: 'Feedback',
+    group: '20 Overlays',
     title: 'BottomSheet',
     description:
       'Mobile-first panel sliding up from the bottom. Drag the grabber down or flick to dismiss; Esc and backdrop tap also close.',
@@ -286,7 +286,7 @@ export const feedbackOverlayDemos: DemoEntry[] = [
   },
   {
     id: 'popover',
-    group: 'Feedback',
+    group: '20 Overlays',
     title: 'Popover',
     description:
       'Floating panel for rich content. openOn="hover" makes it a hover card. Closes on outside click and Esc. Use Tooltip for plain-text hints.',
@@ -339,7 +339,7 @@ export const feedbackOverlayDemos: DemoEntry[] = [
   },
   {
     id: 'tooltip',
-    group: 'Feedback',
+    group: '20 Overlays',
     title: 'Tooltip',
     description:
       'Short hint on hover and focus, linked to its trigger with aria-describedby. Stays visible while hovered and dismisses with Esc.',
@@ -374,7 +374,7 @@ export const feedbackOverlayDemos: DemoEntry[] = [
   },
   {
     id: 'tour',
-    group: 'Feedback',
+    group: '20 Overlays',
     title: 'Tour',
     description:
       'Guided walkthrough that spotlights one element per step. Arrow keys navigate, Esc skips; the page behind is inert.',
@@ -389,7 +389,7 @@ export const feedbackOverlayDemos: DemoEntry[] = [
   },
   {
     id: 'toast',
-    group: 'Feedback',
+    group: '14 Feedback',
     title: 'Toast',
     description:
       'Transient status message. ToastProvider owns the queue and the live region; useToast().show() queues a toast. Toast and ToastRegion remain available for custom stacks.',

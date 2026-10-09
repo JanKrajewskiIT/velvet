@@ -2,6 +2,7 @@ import { createEffect, createMemo, createSignal, For, mergeProps, on, Show, untr
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { createId } from '../../utils/id';
 import { Count } from '../primitives/Count';
 import { EmptyText } from '../primitives/EmptyText';
 import { CommentComposer } from './CommentComposer';
@@ -60,7 +61,6 @@ export const CommentThread = (props: CommentThreadProps) => {
   const [editing, setEditing] = createSignal<CommentId | null>(null);
   const [confirming, setConfirming] = createSignal<CommentId | null>(null);
   const [expanded, setExpandedMap] = createSignal<Record<string, boolean>>({});
-  let idSequence = 0;
 
   createEffect(
     on(
@@ -80,7 +80,7 @@ export const CommentThread = (props: CommentThreadProps) => {
     (p.onChange ?? p.onValueChange)?.(tidy);
   };
   const newComment = (body: string): Comment => ({
-    id: `c${Date.now()}-${idSequence++}`,
+    id: createId('c'),
     author: currentUser(),
     time: nowLabel(),
     body,

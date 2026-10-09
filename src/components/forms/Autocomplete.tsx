@@ -1,8 +1,7 @@
-import { createMemo, createSignal, createUniqueId, For, type JSX, mergeProps, Show } from 'solid-js';
+import { createSignal, For, type JSX, mergeProps, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { createDismiss } from '../../hooks/createDismiss';
-import { createFloating } from '../../hooks/createFloating';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { Spinner } from '../feedback/Spinner';
@@ -11,48 +10,17 @@ import { Control } from '../primitives/Control';
 import { Field } from '../primitives/Field';
 import { Glyph, renderIcon } from '../primitives/Glyph';
 import { highlightMatch } from '../primitives/Mark';
+import { AutocompleteCustomOption } from './AutocompleteCustomOption';
+import type { AutocompleteProps } from './autocompleteTypes';
 import { callbackAlias } from './callbackAlias';
-import { createAsyncOptions, type LoadOptions } from './createAsyncOptions';
+import { ComboboxOption } from './ComboboxOption';
+import { ComboboxOptionText } from './ComboboxOptionText';
+import { createComboboxOptions } from './createComboboxOptions';
+import { createComboboxPopup } from './createComboboxPopup';
 import { OptionListStatus } from './OptionListStatus';
-import { type AutocompleteOption, filterOptions, normalizeOption, type SelectOption } from './selectOption';
+import type { AutocompleteOption, SelectOption } from './selectOption';
 
-export interface AutocompleteProps {
-  label?: JSX.Element;
-  hint?: JSX.Element;
-  error?: JSX.Element;
-  optional?: boolean;
-  options?: ReadonlyArray<string | AutocompleteOption>;
-  /** Controlled value; `null` is a controlled empty selection. */
-  value?: string | null;
-  defaultValue?: string | null;
-  /** Same callback as `onValueChange`, kept as an alias. */
-  onChange?: (value: string | null) => void;
-  onValueChange?: (value: string | null) => void;
-  /** Server search — return options for the query. Debounced, and only the latest query's result is applied. */
-  loadOptions?: LoadOptions;
-  /** @default localized "Search…" */
-  placeholder?: string;
-  /** @default localized "No matches." */
-  emptyText?: string;
-  /** Shown when `loadOptions` rejects. @default localized "Couldn’t load options" */
-  errorText?: string;
-  /** @default localized "Retry" */
-  retryLabel?: string;
-  /** @default localized "Clear" */
-  clearLabel?: string;
-  /** Builds the label of the free-text row; used with `allowCustom`. @default localized `Use “text”` */
-  customLabel?: (text: string) => string;
-  /** Accept free text as the value. */
-  allowCustom?: boolean;
-  /** Glyph name or node; `null` hides it. @default 'search' */
-  iconLeft?: JSX.Element | null;
-  /** @default 'md' */
-  size?: 'sm' | 'md' | 'lg';
-  disabled?: boolean;
-  id?: string;
-  /** Styles the field shell. */
-  class?: string;
-}
+export type { AutocompleteProps };
 
 const NO_OPTIONS: ReadonlyArray<string | AutocompleteOption> = [];
 
@@ -71,10 +39,8 @@ export const Autocomplete = (props: AutocompleteProps) => {
   const translate = useTranslate();
   const customLabel = (text: string) =>
     p.customLabel?.(text) ?? translate('velvet.forms.autocomplete.customLabel', { text });
-  const autoId = createUniqueId();
-  const id = () => p.id ?? autoId;
-  const listId = () => `${id()}-list`;
-  const optionId = (index: number) => `${listId()}-${index}`;
+  const popup = createComboboxPopup(() => p.id);
+  const { id, listId, optionId, open, setOpen, active, setActive, floating } = popup;
 
   const [value, setValue] = createControllable<string | null>({
     value: () => p.value,
@@ -87,22 +53,19 @@ export const Autocomplete = (props: AutocompleteProps) => {
   const [picked, setPicked] = createSignal<Record<string, SelectOption>>({});
   const [text, setText] = createSignal('');
   const [typing, setTyping] = createSignal(false);
-  const [open, setOpen] = createSignal(false);
-  const [active, setActive] = createSignal(0);
-  const [root, setRoot] = createSignal<HTMLElement>();
 
-  const localOptions = createMemo(() => p.options.map(normalizeOption));
   const query = () => (typing() ? text() : '');
-  const remote = createAsyncOptions(() => p.loadOptions, query, open);
-  const list = createMemo(() => (p.loadOptions ? remote.items() : filterOptions(localOptions(), query())));
+  const { local, remote, list } = createComboboxOptions(
+    { options: () => p.options, loadOptions: () => p.loadOptions },
+    query,
+    open,
+  );
 
   const selectedLabel = () => {
     const current = value();
     if (current === null) return '';
     const known =
-      picked()[current] ??
-      localOptions().find((o) => o.value === current) ??
-      remote.items().find((o) => o.value === current);
+      picked()[current] ?? local().find((o) => o.value === current) ?? remote.items().find((o) => o.value === current);
     return known?.label ?? current;
   };
   const shownText = () => (typing() ? text() : selectedLabel());
@@ -140,22 +103,12 @@ export const Autocomplete = (props: AutocompleteProps) => {
       if (reason === 'outside') commitText();
       else setTyping(false);
     },
-    root,
+    popup.root,
   );
-  const floating = createFloating(open, root, { matchWidth: true });
 
   const onKeyDown: JSX.EventHandler<HTMLInputElement, KeyboardEvent> = (e) => {
-    const lastIndex = list().length - 1;
+    if (popup.handleArrowKey(e, list().length)) return;
     switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault();
-        if (open()) setActive((index) => Math.min(lastIndex, index + 1));
-        else setOpen(true);
-        break;
-      case 'ArrowUp':
-        e.preventDefault();
-        setActive((index) => Math.max(0, index - 1));
-        break;
       case 'Enter': {
         const option = list()[active()];
         if (open() && option) {
@@ -181,7 +134,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
   return (
     <Field label={p.label} hint={p.hint} error={p.error} optional={p.optional} id={id()}>
       {(control) => (
-        <div ref={setRoot} class="vui-select">
+        <div ref={popup.setRoot} class="vui-select">
           <Control size={p.size} invalid={control.invalid} disabled={p.disabled} class={p.class}>
             <Show when={p.iconLeft}>
               <span class="vui-control__adorn">
@@ -196,7 +149,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
               aria-expanded={open()}
               aria-controls={listId()}
               aria-autocomplete="list"
-              aria-activedescendant={open() && list()[active()] ? optionId(active()) : undefined}
+              aria-activedescendant={popup.activeDescendant(list())}
               aria-invalid={control.invalid || undefined}
               aria-describedby={control.describedBy}
               class="vui-control__input"
@@ -232,42 +185,32 @@ export const Autocomplete = (props: AutocompleteProps) => {
             >
               <For each={list()}>
                 {(option, index) => (
-                  // eslint-disable-next-line jsx-a11y/click-events-have-key-events -- keyboard handled by the combobox input via aria-activedescendant
-                  <li
+                  <ComboboxOption
                     id={optionId(index())}
-                    role="option"
-                    aria-selected={value() === option.value}
-                    class={cx('vui-select__option', index() === active() && 'vui-select__option--active')}
-                    onMouseEnter={() => setActive(index())}
-                    onMouseDown={(e) => e.preventDefault()}
-                    onClick={() => pick(option)}
+                    selected={value() === option.value}
+                    active={index() === active()}
+                    onHover={() => setActive(index())}
+                    onPick={() => pick(option)}
                   >
                     <Show when={option.icon}>{(icon) => <Glyph name={icon()} />}</Show>
-                    <span class="vui-select__label">
-                      {highlightMatch(option.label, query())}
-                      <Show when={option.description}>
-                        <span class="vui-select__desc">{option.description}</span>
-                      </Show>
-                    </span>
+                    <ComboboxOptionText
+                      label={highlightMatch(option.label, query())}
+                      description={option.description}
+                    />
                     <Show when={value() === option.value}>
                       <Glyph name="check" class="vui-select__check" />
                     </Show>
-                  </li>
+                  </ComboboxOption>
                 )}
               </For>
               <Show when={showCustom()}>
-                {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions -- keyboard handled by the combobox input; pointer-only shortcut for the custom entry */}
-                <li
-                  class="vui-select__option"
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() => {
+                <AutocompleteCustomOption
+                  label={customLabel(customText())}
+                  onPick={() => {
                     commitText();
                     setOpen(false);
                   }}
-                >
-                  <Glyph name="plus" />
-                  {customLabel(customText())}
-                </li>
+                />
               </Show>
               <OptionListStatus
                 loading={remote.loading()}

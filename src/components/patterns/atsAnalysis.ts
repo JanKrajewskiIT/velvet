@@ -1,6 +1,7 @@
 import type { I18nKey } from '@jankrajewskiit/i18n';
 import type { JSX } from 'solid-js';
 
+import { clamp } from '../../utils/math';
 import { englishText, type StaticTranslate } from './englishText';
 
 export const SEVERITY_ORDER = ['critical', 'warning', 'suggestion'] as const;
@@ -97,8 +98,7 @@ export const SCORE_BANDS: ScoreBand[] = localizeScoreBands(englishText);
 
 export const MAX_SCORE = 100;
 
-export const clampScore = (score: number): number =>
-  Number.isFinite(score) ? Math.max(0, Math.min(MAX_SCORE, score)) : 0;
+export const clampScore = (score: number): number => (Number.isFinite(score) ? clamp(score, 0, MAX_SCORE) : 0);
 
 export const scoreBand = (score: number, bands: readonly ScoreBand[] = SCORE_BANDS): ScoreBand =>
   bands.find((band) => clampScore(score) >= band.min) ?? bands[bands.length - 1] ?? LOWEST_BAND;

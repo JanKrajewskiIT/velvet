@@ -1,86 +1,28 @@
-import {
-  batch,
-  createEffect,
-  createMemo,
-  createSignal,
-  createUniqueId,
-  For,
-  type JSX,
-  mergeProps,
-  on,
-  Show,
-  untrack,
-} from 'solid-js';
+import { createSignal, createUniqueId, For, mergeProps, Show } from 'solid-js';
 
-import { createControllable } from '../../hooks/createControllable';
 import { createDismiss } from '../../hooks/createDismiss';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { Button } from '../actions/Button';
-import { Tag } from '../display/Tag';
-import { Control, type ControlProps } from '../primitives/Control';
+import { Control } from '../primitives/Control';
 import { EmptyText } from '../primitives/EmptyText';
 import { Field } from '../primitives/Field';
 import { Glyph } from '../primitives/Glyph';
-import { callbackAlias } from './callbackAlias';
+import { createTreeSelectKeyboard } from './createTreeSelectKeyboard';
+import { createTreeSelectPopup } from './createTreeSelectPopup';
+import { createTreeSelectSelection } from './createTreeSelectSelection';
+import { createTreeSelectView } from './createTreeSelectView';
 import { TreeSelectRow } from './TreeSelectRow';
-import { findNode, leafIds, selectionState, type TreeSelectNode, visibleRows } from './treeSelectRows';
+import { selectionState, type TreeSelectNode } from './treeSelectRows';
+import type {
+  TreeSelectModelProps,
+  TreeSelectMultipleProps,
+  TreeSelectProps,
+  TreeSelectSingleProps,
+} from './treeSelectTypes';
+import { TreeSelectValue } from './TreeSelectValue';
 
-export type { TreeSelectNode };
-
-interface TreeSelectBaseProps {
-  label?: JSX.Element;
-  hint?: JSX.Element;
-  error?: JSX.Element;
-  optional?: boolean;
-  required?: boolean;
-  data: TreeSelectNode[];
-  /** @default localized "Select…" */
-  placeholder?: string;
-  /** @default true */
-  searchable?: boolean;
-  defaultExpanded?: string[];
-  /** Tags shown before "+N" (multiple). @default 2 */
-  maxTags?: number;
-  size?: ControlProps['size'];
-  disabled?: boolean;
-  id?: string;
-}
-
-export interface TreeSelectSingleProps extends TreeSelectBaseProps {
-  multiple?: false;
-  value?: string | null;
-  defaultValue?: string | null;
-  onValueChange?: (value: string | null) => void;
-  /** Alias of `onValueChange`. */
-  onChange?: (value: string | null) => void;
-  /** Parents only expand, they cannot be picked. @default false */
-  leavesOnly?: boolean;
-}
-
-export interface TreeSelectMultipleProps extends TreeSelectBaseProps {
-  /** Tri-state checkboxes: a parent selects all its leaves; the value holds leaf ids. */
-  multiple: true;
-  value?: string[];
-  defaultValue?: string[];
-  onValueChange?: (value: string[]) => void;
-  /** Alias of `onValueChange`. */
-  onChange?: (value: string[]) => void;
-}
-
-export type TreeSelectProps = TreeSelectSingleProps | TreeSelectMultipleProps;
-
-type SelectionValue = string | string[] | null;
-
-/** Both modes seen through one value type; the public union keeps each mode's callback precisely typed. */
-interface TreeSelectModelProps extends TreeSelectBaseProps {
-  multiple?: boolean;
-  leavesOnly?: boolean;
-  value?: SelectionValue;
-  defaultValue?: SelectionValue;
-  onValueChange?: (value: SelectionValue) => void;
-  onChange?: (value: SelectionValue) => void;
-}
+export type { TreeSelectMultipleProps, TreeSelectNode, TreeSelectProps, TreeSelectSingleProps };
 
 /**
  * Select over hierarchical options — departments, categories, locations. Expand with the chevron or →/←, search filters and
@@ -98,96 +40,26 @@ export const TreeSelect = (props: TreeSelectProps) => {
     props as TreeSelectModelProps,
   );
   const translate = useTranslate();
-  const [value, setValue] = createControllable<SelectionValue>({
-    value: () => p.value,
-    defaultValue: untrack(() => p.defaultValue ?? (p.multiple ? [] : null)),
-    onChange: callbackAlias(
-      () => p.onValueChange,
-      () => p.onChange,
-    ),
-  });
+  const selection = createTreeSelectSelection(p);
   const listId = createUniqueId();
   const [open, setOpen] = createSignal(false);
-  const [expanded, setExpanded] = createSignal<ReadonlySet<string>>(new Set(p.defaultExpanded));
-  const [query, setQuery] = createSignal('');
-  const [active, setActive] = createSignal(0);
   const [root, setRoot] = createSignal<HTMLElement>();
-  let search: HTMLInputElement | undefined;
-  let tree: HTMLDivElement | undefined;
-
-  const selected = createMemo((): ReadonlySet<string> => {
-    const v = value();
-    if (Array.isArray(v)) return new Set(v);
-    return new Set(v == null ? [] : [v]);
-  });
-  const selectedIds = () => [...selected()];
-  const picked = createMemo(() => selectedIds().flatMap((id) => findNode(p.data, id) ?? []));
-  const needle = () => query().trim().toLowerCase();
-  const rows = createMemo(() => visibleRows(p.data, expanded(), needle()));
-  const isExpanded = (id: string) => !!needle() || expanded().has(id);
+  const view = createTreeSelectView(() => p.data, p.defaultExpanded);
   const rowId = (id: string) => `${listId}-${id}`;
-  const activeRow = () => rows()[active()];
 
   createDismiss(open, () => setOpen(false), root);
-  createEffect(
-    on(open, (isOpen) => {
-      if (!isOpen) return;
-      batch(() => {
-        setQuery('');
-        setActive(0);
-      });
-      (search ?? tree)?.focus();
-    }),
-  );
-  createEffect(() => {
-    const row = tree?.children[active()];
-    if (!open() || !tree || !(row instanceof HTMLElement)) return;
-    if (row.offsetTop < tree.scrollTop) tree.scrollTop = row.offsetTop;
-    else if (row.offsetTop + row.offsetHeight > tree.scrollTop + tree.clientHeight)
-      tree.scrollTop = row.offsetTop + row.offsetHeight - tree.clientHeight;
-  });
+  const popup = createTreeSelectPopup(open, view);
 
-  const toggleExpanded = (id: string, force?: boolean) => {
-    const next = new Set(expanded());
-    if (force ?? !next.has(id)) next.add(id);
-    else next.delete(id);
-    setExpanded(next);
-  };
-  const removePicked = (id: string) => setValue(selectedIds().filter((x) => x !== id));
   const pick = (node: TreeSelectNode, hasChildren: boolean) => {
-    if (p.multiple) {
-      const leaves = leafIds(node);
-      const all = leaves.every((id) => selected().has(id));
-      const next = new Set(selected());
-      leaves.forEach((id) => (all ? next.delete(id) : next.add(id)));
-      setValue([...next]);
-    } else if (hasChildren && p.leavesOnly) toggleExpanded(node.id);
+    if (p.multiple) selection.toggleLeaves(node);
+    else if (hasChildren && p.leavesOnly) view.toggleExpanded(node.id);
     else {
-      setValue(node.id);
+      selection.setValue(node.id);
       setOpen(false);
       root()?.querySelector<HTMLElement>('.vui-tselect__trigger')?.focus();
     }
   };
-  const onKeyDown = (e: KeyboardEvent) => {
-    const row = activeRow();
-    const canExpand = !!row?.hasChildren && !needle();
-    if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      setActive(Math.min(rows().length - 1, active() + 1));
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      setActive(Math.max(0, active() - 1));
-    } else if (e.key === 'ArrowRight' && row && canExpand) {
-      e.preventDefault();
-      toggleExpanded(row.node.id, true);
-    } else if (e.key === 'ArrowLeft' && row && canExpand) {
-      e.preventDefault();
-      toggleExpanded(row.node.id, false);
-    } else if (e.key === 'Enter' && row) {
-      e.preventDefault();
-      pick(row.node, row.hasChildren);
-    }
-  };
+  const onKeyDown = createTreeSelectKeyboard(view, pick);
 
   return (
     <Field label={p.label} hint={p.hint} error={p.error} optional={p.optional} required={p.required} id={p.id}>
@@ -197,7 +69,7 @@ export const TreeSelect = (props: TreeSelectProps) => {
             size={p.size}
             invalid={control.invalid}
             disabled={p.disabled}
-            class={cx(p.multiple && picked().length > 0 && 'vui-tselect__control--tags')}
+            class={cx(p.multiple && selection.picked().length > 0 && 'vui-tselect__control--tags')}
           >
             <button
               id={control.id}
@@ -210,24 +82,13 @@ export const TreeSelect = (props: TreeSelectProps) => {
               aria-describedby={control.describedBy}
               onClick={() => setOpen(!open())}
             >
-              <Show when={picked().length === 0}>
-                <span class="vui-tselect__ph">{p.placeholder ?? translate('velvet.forms.treeSelect.placeholder')}</span>
-              </Show>
-              <Show when={!p.multiple && picked()[0]}>
-                {(node) => <span class="vui-tselect__val">{node().label}</span>}
-              </Show>
-              <Show when={p.multiple}>
-                <For each={picked().slice(0, p.maxTags)}>
-                  {(node) => (
-                    <Tag size="sm" onRemove={() => removePicked(node.id)}>
-                      {node.label}
-                    </Tag>
-                  )}
-                </For>
-                <Show when={picked().length > p.maxTags}>
-                  <Tag size="sm">{`+${picked().length - p.maxTags}`}</Tag>
-                </Show>
-              </Show>
+              <TreeSelectValue
+                picked={selection.picked()}
+                multiple={p.multiple}
+                maxTags={p.maxTags}
+                placeholder={p.placeholder}
+                onRemove={selection.removePicked}
+              />
             </button>
             <Glyph name="chevron-down" class="vui-control__chevron" />
           </Control>
@@ -237,55 +98,54 @@ export const TreeSelect = (props: TreeSelectProps) => {
               <Show when={p.searchable}>
                 <Control size="sm" class="vui-tselect__search" iconLeft="search">
                   <input
-                    ref={search}
+                    ref={popup.setSearch}
                     class="vui-control__input"
                     placeholder={translate('velvet.common.search')}
                     aria-label={translate('velvet.forms.treeSelect.searchLabel')}
                     aria-controls={listId}
-                    aria-activedescendant={activeRow() ? rowId(activeRow()?.node.id ?? '') : undefined}
-                    value={query()}
-                    onInput={(e) => {
-                      setQuery(e.currentTarget.value);
-                      setActive(0);
-                    }}
+                    aria-activedescendant={view.activeRow() ? rowId(view.activeRow()?.node.id ?? '') : undefined}
+                    value={view.query()}
+                    onInput={(e) => view.search(e.currentTarget.value)}
                   />
                 </Control>
               </Show>
               <div
-                ref={tree}
+                ref={popup.setTree}
                 id={listId}
                 role="tree"
                 aria-multiselectable={p.multiple || undefined}
                 aria-label={typeof p.label === 'string' ? p.label : translate('velvet.forms.treeSelect.treeLabel')}
                 tabIndex={p.searchable ? -1 : 0}
                 class="vui-tselect__tree"
-                aria-activedescendant={!p.searchable && activeRow() ? rowId(activeRow()?.node.id ?? '') : undefined}
+                aria-activedescendant={
+                  !p.searchable && view.activeRow() ? rowId(view.activeRow()?.node.id ?? '') : undefined
+                }
               >
-                <Show when={rows().length === 0}>
+                <Show when={view.rows().length === 0}>
                   <EmptyText class="vui-tselect__empty">{translate('velvet.forms.treeSelect.noMatches')}</EmptyText>
                 </Show>
-                <For each={rows()}>
+                <For each={view.rows()}>
                   {(row, index) => (
                     <TreeSelectRow
                       id={rowId(row.node.id)}
                       row={row}
-                      active={index() === active()}
+                      active={index() === view.active()}
                       multiple={p.multiple}
-                      expanded={isExpanded(row.node.id)}
-                      state={selectionState(row.node, selected(), p.multiple)}
-                      onHover={() => setActive(index())}
+                      expanded={view.isExpanded(row.node.id)}
+                      state={selectionState(row.node, selection.selected(), p.multiple)}
+                      onHover={() => view.setActive(index())}
                       onPick={() => pick(row.node, row.hasChildren)}
-                      onToggle={() => toggleExpanded(row.node.id)}
+                      onToggle={() => view.toggleExpanded(row.node.id)}
                     />
                   )}
                 </For>
               </div>
-              <Show when={p.multiple && picked().length > 0}>
+              <Show when={p.multiple && selection.picked().length > 0}>
                 <div class="vui-fchip__foot">
                   <span class="vui-tselect__sum">
-                    {translate('velvet.forms.treeSelect.selectedCount', { count: picked().length })}
+                    {translate('velvet.forms.treeSelect.selectedCount', { count: selection.picked().length })}
                   </span>
-                  <Button variant="ghost" size="sm" onClick={() => setValue([])}>
+                  <Button variant="ghost" size="sm" onClick={selection.clear}>
                     {translate('velvet.common.clear')}
                   </Button>
                 </div>

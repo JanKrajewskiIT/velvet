@@ -109,7 +109,7 @@ const SignatureDemo = () => {
 export const formsStructureDemos: DemoEntry[] = [
   {
     id: 'form-layout',
-    group: 'Forms',
+    group: '19 Forms',
     title: 'FormLayout',
     description:
       'Form shell with FormSection, FormGrid, FormSpan and ActionRow — consistent rhythm between sections, grids and fields.',
@@ -158,7 +158,7 @@ export const formsStructureDemos: DemoEntry[] = [
   },
   {
     id: 'error-summary',
-    group: 'Forms',
+    group: '19 Forms',
     title: 'ErrorSummary',
     description: 'Submit-time summary that takes focus and links to each failing field.',
     render: () => (
@@ -169,7 +169,7 @@ export const formsStructureDemos: DemoEntry[] = [
   },
   {
     id: 'inline-edit',
-    group: 'Forms',
+    group: '16 Inputs',
     title: 'InlineEdit',
     description: 'Click-to-edit value. Enter or blur saves, Esc cancels; async saves lock the field while pending.',
     render: () => (
@@ -180,7 +180,7 @@ export const formsStructureDemos: DemoEntry[] = [
   },
   {
     id: 'editable-collection',
-    group: 'Forms',
+    group: '19 Forms',
     title: 'EditableCollection',
     description:
       'Repeatable editable rows — skills with a level, requirements with importance. Drag, or use ↑↓ on the grip.',
@@ -214,7 +214,7 @@ export const formsStructureDemos: DemoEntry[] = [
   },
   {
     id: 'signature-pad',
-    group: 'Forms',
+    group: '16 Inputs',
     title: 'SignaturePad',
     description: 'Draw-to-sign field with smoothed strokes, pressure-aware width and undo.',
     render: () => (

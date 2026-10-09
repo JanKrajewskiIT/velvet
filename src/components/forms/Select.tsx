@@ -8,6 +8,8 @@ import { cx, modifier } from '../../utils/cx';
 import { Chevron } from '../primitives/Chevron';
 import { Field } from '../primitives/Field';
 import { Glyph, renderIcon } from '../primitives/Glyph';
+import { ComboboxOption } from './ComboboxOption';
+import { ComboboxOptionText } from './ComboboxOptionText';
 import { normalizeOption, type SelectOption } from './selectOption';
 
 const TYPEAHEAD_RESET_MS = 600;
@@ -211,28 +213,20 @@ export const Select = (props: SelectProps) => {
             >
               <For each={options()}>
                 {(option, index) => (
-                  // eslint-disable-next-line jsx-a11y/click-events-have-key-events -- keyboard handled by the trigger via aria-activedescendant
-                  <li
+                  <ComboboxOption
                     id={optionId(index())}
-                    role="option"
-                    aria-selected={option.value === current()}
-                    aria-disabled={option.disabled || undefined}
-                    class={cx('vui-select__option', index() === active() && 'vui-select__option--active')}
-                    onMouseEnter={() => !option.disabled && setActive(index())}
-                    onMouseDown={(e) => e.preventDefault()}
-                    onClick={() => pick(option)}
+                    selected={option.value === current()}
+                    active={index() === active()}
+                    disabled={option.disabled}
+                    onHover={() => !option.disabled && setActive(index())}
+                    onPick={() => pick(option)}
                   >
                     {renderIcon(option.icon)}
-                    <span class="vui-select__label">
-                      {option.label}
-                      <Show when={option.description}>
-                        <span class="vui-select__desc">{option.description}</span>
-                      </Show>
-                    </span>
+                    <ComboboxOptionText label={option.label} description={option.description} />
                     <Show when={option.value === current()}>
                       <Glyph name="check" class="vui-select__check" />
                     </Show>
-                  </li>
+                  </ComboboxOption>
                 )}
               </For>
             </ul>

@@ -50,5 +50,3 @@ export const hsvToHex = ({ h, s, v }: Hsv): string => {
     )
     .join('')}`;
 };
-
-export const clamp01 = (n: number): number => Math.min(1, Math.max(0, n));

@@ -4,6 +4,7 @@ import { Portal } from 'solid-js/web';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { createModalRoot } from './createModalRoot';
+import { ModalBackdrop } from './ModalBackdrop';
 
 /** Drag distance (px) past which releasing the grabber dismisses the sheet. */
 const DISMISS_DISTANCE = 120;
@@ -60,13 +61,7 @@ const BottomSheetPanel = (props: BottomSheetPanelProps) => {
   };
 
   return (
-    // eslint-disable-next-line jsx-a11y/no-static-element-interactions -- backdrop click is a pointer shortcut; keyboard dismissal is handled by createModal (Escape)
-    <div
-      class="vui-sheet-backdrop"
-      onMouseDown={(e) => {
-        if (e.target === e.currentTarget) props.sheet.onClose?.();
-      }}
-    >
+    <ModalBackdrop class="vui-sheet-backdrop" onDismiss={() => props.sheet.onClose?.()}>
       <div
         ref={props.ref}
         tabIndex={-1}
@@ -104,7 +99,7 @@ const BottomSheetPanel = (props: BottomSheetPanelProps) => {
           <div class="vui-sheet__foot">{footer()}</div>
         </Show>
       </div>
-    </div>
+    </ModalBackdrop>
   );
 };
 

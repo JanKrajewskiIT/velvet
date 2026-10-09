@@ -2,6 +2,7 @@ import { useI18n } from '@jankrajewskiit/i18n';
 import { children, createUniqueId, For, type JSX, mergeProps, Show } from 'solid-js';
 
 import { cx } from '../../utils/cx';
+import { clamp } from '../../utils/math';
 
 const GAUGE_TONE = {
   brand: 'var(--action-primary)',
@@ -66,7 +67,7 @@ export const Gauge = (props: GaugeProps) => {
   const centreY = () => radius() + stroke() / 2;
   const height = () => centreY() + stroke() / 2;
   const span = () => merged.max - merged.min || 1;
-  const value = () => Math.max(merged.min, Math.min(merged.max, merged.value || 0));
+  const value = () => clamp(merged.value || 0, merged.min, merged.max);
   const progress = () => (value() - merged.min) / span();
   const thresholds = () => (merged.thresholds ?? []).slice().sort((a, b) => a.value - b.value);
   const arcColor = () => {

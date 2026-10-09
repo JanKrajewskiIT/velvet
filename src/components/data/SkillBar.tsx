@@ -2,6 +2,7 @@ import { createSignal, type JSX, mergeProps, onCleanup, onMount, Show, untrack }
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { clamp } from '../../utils/math';
 import { Meter } from '../primitives/Meter';
 
 export interface SkillBarProps {
@@ -27,7 +28,7 @@ export const SkillBar = (props: SkillBarProps) => {
     const frame = requestAnimationFrame(() => setGrown(true));
     onCleanup(() => cancelAnimationFrame(frame));
   });
-  const percent = () => Math.max(0, Math.min(100, merged.value));
+  const percent = () => clamp(merged.value, 0, 100);
   const valueText = () =>
     merged.level
       ? translate('velvet.data.skillBar.valueTextWithLevel', { level: merged.level, percent: percent() })

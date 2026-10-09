@@ -8,7 +8,7 @@ How the library was built from the Velvet design-system reference (`velvet/`), w
 | -------------------------------------------------------- | ------------------------------------------------------------------------------------ |
 | Reference components                                     | 183 (`.jsx` and `.d.ts`), 212 specimens, 12 component folders                        |
 | Reference entry stylesheet                               | `velvet/styles.css`, 188 imports                                                     |
-| Port components                                          | 256 `.tsx` files in `src/components` (granular: sub-components have their own files) |
+| Port components                                          | 309 `.tsx` files in `src/components` (granular: sub-components have their own files) |
 | Reference exported names found in `src`                  | 572 of 572 (checked, by name only)                                                   |
 | Component CSS identical to the reference                 | 174 of 174 (checked)                                                                 |
 | Tokens and fonts identical                               | 15 of 15 and 8 of 8 (checked)                                                        |
@@ -47,7 +47,7 @@ How the library was built from the Velvet design-system reference (`velvet/`), w
 | 1. Assess reference and port | `design-system-solid-port`         | The first reference drop was partial: component folders for primitives, navigation and patterns were missing, five menu CSS files were missing, the entry stylesheet imported 58 files that did not exist, and sources existed for 126 of the 183 documented components. The user supplied a complete drop. CSS was identical to `src/styles`. The port was mostly faithful.                                                |
 | 2. Settle constraints        | `design-system-solid-port`         | Tables above.                                                                                                                                                                                                                                                                                                                                                                                                               |
 | 3. Localize defaults         | `component-library-i18n-migration` | Foundation (`src/i18n`), pilot components, then twelve groups in parallel batches: actions, primitives, display, feedback, forms (A to M, N to Z), navigation and menus, data and charts, media and layout, patterns (A to F, G to Z). Empty agent results were detected by checking key usage; charts, patterns, TransferList, TransferPanel and TreeSelect were completed again or by hand. ConfirmDialog uses rich text. |
-| 4. Parity audit              | `design-system-parity-audit`       | First audit: exports mapped, 164 Props interfaces compared, `aria`, roles, data attributes, keys, listeners, timers and classes checked. Fixed: `Input` multiline and rows, `onChange` aliases on BottomNav, Anchor, Tabs and ThemeToggle, VirtualList loading markup, LoadMore optional counts. Left: `VirtualTable.rowKey`. Name-level recheck on 2026-10-08: 572 of 572.                                                 |
+| 4. Parity audit              | `design-system-parity-audit`       | First audit: exports mapped, 164 Props interfaces compared, `aria`, roles, data attributes, keys, listeners, timers and classes checked. Fixed: `Input` multiline and rows, `onChange` aliases on BottomNav, Anchor, Tabs and ThemeToggle, VirtualList loading markup, LoadMore optional counts. `VirtualTable.rowKey` was added later (exposed as `data-row-key`). Name-level recheck on 2026-10-08: 572 of 572.           |
 | 5. Typecheck                 | none                               | `npm run typecheck` passed. Lint and stylelint were blocked until their configs were restored.                                                                                                                                                                                                                                                                                                                              |
 | 6. Regression review         | `implementation-regression-review` | Previous implementation compared with the staged replacement; verdicts below.                                                                                                                                                                                                                                                                                                                                               |
 | 7. Restorations              | skills named below                 | See the extensions list.                                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -71,12 +71,14 @@ How the library was built from the Velvet design-system reference (`velvet/`), w
 
 - `src/components/<group>`: actions, charts, data, display, feedback, forms, layout, media, menus, navigation, patterns, primitives. Each group has an `index.ts`.
 - `src/hooks`: `createControllable`, `createLayer`, `createDismiss`, `createModal`, `createFloating`.
-- `src/utils`: `cx`, `date`, `polymorphic`, `tone`, `floating`.
+- `src/utils`: `cx`, `date`, `polymorphic`, `tone`, `floating`, `math` (`clamp`, `percentOf`), `motion` (reduced-motion query, `scrollBehavior`), `id` (`createId`).
 - `src/i18n`: `en` and `pl` dictionaries per group plus `common`, `augment.ts`, `useTranslate.ts`.
 - `src/provider`: `VelvetProvider`, `mountVelvetApp`.
 - `src/theme`: theme preference, persistence and OS sync.
 - `src/styles`: verbatim reference CSS and tokens, plus `extensions`.
-- `showcase`: demo app for manual checks.
+- `showcase`: demo app for manual checks. Groups carry the reference numbering and names from `velvet/templates/showcase/cards.json` (`01 Overview` to `28 Patterns`). Foundation pages (`foundations-a|b|c-*.tsx`) cover the reference cards for overview, brand, colour, type, shape, space and layout, depth, motion, state and accessibility. Not reproduced: the theme-switch card (the toolbar has the switch) and the token-lint card (tooling).
+- Large components are split into a controller object plus `create*` hooks and sub-components (for example `DataGrid`, `Table`, `ColumnManager`, `Scheduler`, `Gantt`, `TreeView`, `RichTextEditor`); the original file keeps the public types and exports.
+- Shared internals: `ModalBackdrop` (Dialog, BottomSheet, CommandPaletteDialog), `ComboboxOption` / `ComboboxOptionText` (Select, MultiSelect, Autocomplete, SearchInput, TimePicker, PhoneInput), `MenuItemContent` (MenuPanel, CommandPaletteDialog) and `createComboboxPopup` / `createComboboxOptions` (Autocomplete, MultiSelect).
 
 ## Extensions beyond the reference
 
@@ -88,11 +90,11 @@ How the library was built from the Velvet design-system reference (`velvet/`), w
 ## Known gaps and unverified areas
 
 - Not yet using `createFloating`: TreeSelect, Cascader, SearchInput, PhoneInput, TimePicker, ColorPicker, FilterChip, NotificationCenter, CalendarEventButton, Fab.
-- `VirtualTable.rowKey` is not implemented.
-- Files above the 250-line guideline (checked, excluding i18n and styles): DataGrid 543, Table 409, ColumnManager 320, RichTextEditor 320, TreeView 317, TransferPanel 304, Cascader 299, MarkdownEditor 271, VideoPlayer 266, Autocomplete 264, TreeSelect 264, Scheduler 261, ImageCropper 256, VirtualList 255, MultiSelect 253, ColorLabelSelectionDialog 252, Calendar 252, EditableCollection 251. `renderMarkdown.ts` (323) and `encodeQR.ts` (327) are single-purpose modules. Review with `solidjs-library-audit`.
-- Not verified at runtime: pixel parity with the reference specimens, behavior of the restored features, showcase in `en` and `pl`.
+- `VirtualTable.rowKey` only exposes the record key as `data-row-key`; Solid has no keyed reconciliation equivalent, rows are reused by position.
+- Files above the 250-line guideline (checked 2026-10-09, excluding i18n and styles): PhoneInput 262, Kanban 259, Tour 258, MediaFrame 253. `renderMarkdown.ts` (341), `encodeQR.ts` (356) and `richTextBlocks.ts` (275) are single-purpose modules. Review with `solidjs-library-audit`.
+- Not verified at runtime: pixel parity with the reference specimens, behavior of the restored features and of the split components (DataGrid, Table, ColumnManager, Scheduler, Gantt, LineChart, TreeView, Cascader, TreeSelect, RichTextEditor, TransferPanel, CalendarOrganizer, AnalysisRequest, ColorLabelSelectionDialog, VideoPlayer, MarkdownEditor, EditableCollection, ImageCropper, MentionInput, AiResultPanel, Autocomplete, MultiSelect, Calendar, ColorLabelManager, Heatmap, VirtualList), showcase in `en` and `pl`.
 - Polish translations need a native review.
-- Verified on 2026-10-08: `npm run typecheck`, `npm run lint` and `npm run lint:css` pass with no findings. Unrun: `npm run build`, `npm run verify:pkg`.
+- Verified on 2026-10-09 after the first refactoring round: `npm run typecheck`, `npm run lint`, `npm run lint:css`, `npm run build`, `npm run verify:pkg` and `prettier --check src showcase docs` passed. The second round (nine more splits, `MenuItemContent`, shared `clamp`) is checked only by editor diagnostics; run `npm run verify` before release.
 - Lint exceptions are targeted `eslint-disable-next-line` directives with a reason. They cover WAI-ARIA composite patterns whose keyboard handling lives on the owning element (listbox options, menu items, tree rows, radiogroups with roving focus, modal backdrops closed by Escape) and media elements with user-supplied sources. `solid/no-react-specific-props` is off because `FieldLabel` keeps the reference prop `htmlFor`.
 - Stylelint skips the verbatim reference CSS (`src/styles/components`, `tokens`, `fonts`, `styles.css`) and checks only `src/styles/extensions*`.
 - `package-lock.json` must be regenerated after the manifest changes.
@@ -107,6 +109,7 @@ How the library was built from the Velvet design-system reference (`velvet/`), w
 5. For new components: port in dependency order (`design-system-solid-port`), then localize (`component-library-i18n-migration`).
 6. For removed components: remove files, exports, demo entries and dictionary keys.
 7. Rerun the audit for touched groups and record the date and affected components here.
+8. Compare the showcase groups and foundation pages with `velvet/templates/showcase/cards.json` and update demos for added or removed specimens.
 
 ## Breaking changes versus 3.x
 

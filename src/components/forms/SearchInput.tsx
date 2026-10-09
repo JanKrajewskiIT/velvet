@@ -12,6 +12,8 @@ import { FieldLabel } from '../primitives/Field';
 import { Glyph } from '../primitives/Glyph';
 import { highlightMatch } from '../primitives/Mark';
 import { callHandler } from './callHandler';
+import { ComboboxOption } from './ComboboxOption';
+import { ComboboxOptionText } from './ComboboxOptionText';
 import { type AutocompleteOption, filterOptions, normalizeOption } from './selectOption';
 
 export type SearchSuggestion = AutocompleteOption;
@@ -187,24 +189,16 @@ export const SearchInput = (props: SearchInputProps) => {
           <ul id={listId()} role="listbox" class="vui-select__menu">
             <For each={options()}>
               {(option, index) => (
-                // eslint-disable-next-line jsx-a11y/click-events-have-key-events -- keyboard handled by the input via aria-activedescendant
-                <li
+                <ComboboxOption
                   id={optionId(index())}
-                  role="option"
-                  aria-selected={index() === active()}
-                  class={cx('vui-select__option', index() === active() && 'vui-select__option--active')}
-                  onMouseEnter={() => setActive(index())}
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() => pick(option)}
+                  selected={index() === active()}
+                  active={index() === active()}
+                  onHover={() => setActive(index())}
+                  onPick={() => pick(option)}
                 >
                   <Show when={option.icon}>{(icon) => <Glyph name={icon()} />}</Show>
-                  <span class="vui-select__label">
-                    {highlightMatch(option.label, query())}
-                    <Show when={option.description}>
-                      <span class="vui-select__desc">{option.description}</span>
-                    </Show>
-                  </span>
-                </li>
+                  <ComboboxOptionText label={highlightMatch(option.label, query())} description={option.description} />
+                </ComboboxOption>
               )}
             </For>
             <Show when={options().length === 0}>

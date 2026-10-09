@@ -2,13 +2,13 @@ import { createSignal, createUniqueId, For, type JSX, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { clamp } from '../../utils/math';
 import type { StatusTone } from '../../utils/tone';
 import { IconButton } from '../actions/IconButton';
 import { Badge } from '../display/Badge';
 import { Count } from '../primitives/Count';
 import { Dot } from '../primitives/Dot';
 import { EmptyText } from '../primitives/EmptyText';
-import { clamp } from './rowData';
 
 export interface KanbanColumn {
   id: string;

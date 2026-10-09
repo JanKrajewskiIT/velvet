@@ -3,6 +3,7 @@ import { createSignal, createUniqueId, mergeProps, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { clamp } from '../../utils/math';
 import { VisuallyHidden } from '../primitives/VisuallyHidden';
 import { seriesColor } from './chartScale';
 import { createWidth } from './createWidth';
@@ -62,7 +63,7 @@ export const Sparkline = (props: SparklineProps) => {
 
   const onMouseMove = (e: MouseEvent & { currentTarget: SVGSVGElement }) => {
     const rect = e.currentTarget.getBoundingClientRect();
-    setIndex(Math.max(0, Math.min(lastIndex(), Math.round(((e.clientX - rect.left) / rect.width) * lastIndex()))));
+    setIndex(clamp(Math.round(((e.clientX - rect.left) / rect.width) * lastIndex()), 0, lastIndex()));
   };
   const onKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'ArrowRight') {

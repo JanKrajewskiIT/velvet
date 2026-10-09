@@ -253,7 +253,7 @@ const CommandPaletteDemo = () => {
 export const menusDemos: DemoEntry[] = [
   {
     id: 'menu',
-    group: 'Menus',
+    group: '21 Menus',
     title: 'Menu',
     description:
       'Dropdown of actions attached to a trigger. Arrow keys, Home/End and typeahead move; Enter selects; Escape closes and refocuses the trigger.',
@@ -266,28 +266,28 @@ export const menusDemos: DemoEntry[] = [
   },
   {
     id: 'context-menu',
-    group: 'Menus',
+    group: '21 Menus',
     title: 'ContextMenu',
     description: 'Right-click, Shift+F10 or the Menu key opens a menu at the pointer, clamped to the viewport.',
     render: () => <ContextMenuDemo />,
   },
   {
     id: 'dropdown-button',
-    group: 'Menus',
+    group: '21 Menus',
     title: 'DropdownButton',
     description: 'Split button (main action plus alternatives) or a single button that opens a menu.',
     render: () => <DropdownButtonDemo />,
   },
   {
     id: 'menu-chip',
-    group: 'Menus',
+    group: '21 Menus',
     title: 'MenuChip',
     description: 'Filter chip that opens a single-choice menu. Tinted when a value is set.',
     render: () => <MenuChipDemo />,
   },
   {
     id: 'toolbar',
-    group: 'Menus',
+    group: '15 Actions',
     title: 'Toolbar',
     description:
       'Tool row that never wraps: what does not fit collapses into an overflow menu. One tab stop, arrow keys move focus.',
@@ -295,7 +295,7 @@ export const menusDemos: DemoEntry[] = [
   },
   {
     id: 'command-palette',
-    group: 'Menus',
+    group: '21 Menus',
     title: 'CommandPalette',
     description: 'Modal palette with fuzzy-filtered, grouped results, match highlight and combobox keyboard handling.',
     render: () => <CommandPaletteDemo />,

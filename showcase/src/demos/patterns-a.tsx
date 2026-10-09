@@ -329,14 +329,14 @@ const LabelsDemo = () => {
 export const patternsADemos: DemoEntry[] = [
   {
     id: 'ai-result-panel',
-    group: 'Patterns',
+    group: '28 Patterns',
     title: 'AiResultPanel',
     description: 'Structured (non-chat) model answer with provenance, score, findings, sources and cost.',
     render: () => <AiDemo />,
   },
   {
     id: 'analysis-request',
-    group: 'Patterns',
+    group: '28 Patterns',
     title: 'AnalysisRequest',
     description:
       'Compose an AI analysis from several sources; Run is blocked with a reason until requirements are met.',
@@ -344,14 +344,14 @@ export const patternsADemos: DemoEntry[] = [
   },
   {
     id: 'ats-analysis-panel',
-    group: 'Patterns',
+    group: '28 Patterns',
     title: 'AtsAnalysisPanel',
     description: 'Candidate ↔ role result: score band, breakdown, keywords, strengths, gaps and recommendations.',
     render: () => <AtsDemo />,
   },
   {
     id: 'calendar-organizer',
-    group: 'Patterns',
+    group: '28 Patterns',
     title: 'CalendarOrganizer',
     description:
       'Month planner with arrow-key day navigation, multi-day events, a day detail panel, quick add, edit, delete with confirmation and drag-to-move.',
@@ -359,14 +359,14 @@ export const patternsADemos: DemoEntry[] = [
   },
   {
     id: 'chat',
-    group: 'Patterns',
+    group: '28 Patterns',
     title: 'ChatMessage',
     description: 'Chat turns, scrolling log that follows new messages, and the typing indicator.',
     render: () => <ChatDemo />,
   },
   {
     id: 'color-labels',
-    group: 'Patterns',
+    group: '28 Patterns',
     title: 'Colour labels',
     description: 'ColorLabelManager and ColorLabelSelectionDialog.',
     render: () => <LabelsDemo />,

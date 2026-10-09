@@ -1,3 +1,5 @@
+import { clamp } from '../../utils/math';
+
 export interface PlaybackState {
   playing: boolean;
   time: number;
@@ -24,7 +26,7 @@ export const togglePlayback = (media: HTMLMediaElement, onError?: (error: unknow
 
 export const seekMedia = (media: HTMLMediaElement, seconds: number): void => {
   if (!media.duration) return;
-  media.currentTime = Math.max(0, Math.min(media.duration, seconds));
+  media.currentTime = clamp(seconds, 0, media.duration);
 };
 
 /** The rate after `current` in `rates`, wrapping; the first rate when `current` is not listed. */

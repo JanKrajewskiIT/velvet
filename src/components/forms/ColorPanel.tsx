@@ -1,8 +1,9 @@
 import { createEffect, createSignal, For, on, Show, untrack } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { clamp } from '../../utils/math';
 import { Control } from '../primitives/Control';
-import { clamp01, hexToHsv, type Hsv, hsvToHex } from './colorMath';
+import { hexToHsv, type Hsv, hsvToHex } from './colorMath';
 
 export interface ColorPanelProps {
   hex: string;
@@ -53,14 +54,14 @@ export const ColorPanel = (props: ColorPanelProps) => {
     const rect = area.getBoundingClientRect();
     push({
       ...hsv(),
-      s: clamp01((e.clientX - rect.left) / rect.width),
-      v: clamp01(1 - (e.clientY - rect.top) / rect.height),
+      s: clamp((e.clientX - rect.left) / rect.width, 0, 1),
+      v: clamp(1 - (e.clientY - rect.top) / rect.height, 0, 1),
     });
   };
   const dragHue = (e: PointerEvent) => {
     if (!hue) return;
     const rect = hue.getBoundingClientRect();
-    push({ ...hsv(), h: clamp01((e.clientX - rect.left) / rect.width) * MAX_HUE });
+    push({ ...hsv(), h: clamp((e.clientX - rect.left) / rect.width, 0, 1) * MAX_HUE });
   };
   const startDrag = (e: PointerEvent & { currentTarget: HTMLElement }, drag: (e: PointerEvent) => void) => {
     e.currentTarget.setPointerCapture(e.pointerId);
@@ -73,7 +74,7 @@ export const ColorPanel = (props: ColorPanelProps) => {
     if (!key) return;
     e.preventDefault();
     const [axis, sign] = key;
-    push({ ...hsv(), [axis]: clamp01(hsv()[axis] + sign * keyStep(e)) });
+    push({ ...hsv(), [axis]: clamp(hsv()[axis] + sign * keyStep(e), 0, 1) });
   };
   const onHueKey = (e: KeyboardEvent) => {
     const direction = HUE_KEYS[e.key];

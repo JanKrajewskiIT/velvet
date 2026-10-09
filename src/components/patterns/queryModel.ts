@@ -1,5 +1,6 @@
 import type { I18nKey } from '@jankrajewskiit/i18n';
 
+import { createId } from '../../utils/id';
 import { englishText, type StaticTranslate } from './englishText';
 
 export interface QueryOperator {
@@ -93,8 +94,7 @@ const firstOperator = (field: QueryField | undefined): string => operatorDefinit
 export const combinatorLabel = (combinator: QueryGroup['combinator'], translate: StaticTranslate): string =>
   translate(COMBINATOR_LABEL_KEYS[combinator]);
 
-let idSequence = 0;
-export const createQueryId = (): string => `q${Date.now().toString(36)}${idSequence++}`;
+export const createQueryId = (): string => createId('q');
 
 export const newQueryRule = (fields: QueryField[]): QueryRule => ({
   id: createQueryId(),

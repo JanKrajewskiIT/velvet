@@ -2,6 +2,7 @@ import { createMemo, createSignal, For, mergeProps, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { clamp } from '../../utils/math';
 import { VisuallyHidden } from '../primitives/VisuallyHidden';
 import { niceTicks } from './chartScale';
 import { type ChartDatum, type ChartSeries, colorOf, defaultSeries, valueOf } from './chartSeries';
@@ -168,7 +169,7 @@ export const BarChart = (props: BarChartProps) => {
             <div
               class="vui-chart__tip"
               style={{
-                left: `${Math.max(TIP_MARGIN, Math.min(width() - TIP_MARGIN, bandCentre(hover())))}px`,
+                left: `${clamp(bandCentre(hover()), TIP_MARGIN, width() - TIP_MARGIN)}px`,
                 top: `${PAD.t}px`,
               }}
               aria-hidden="true"

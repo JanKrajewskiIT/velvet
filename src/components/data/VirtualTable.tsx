@@ -3,7 +3,8 @@ import { createSignal, For, type JSX, mergeProps } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
-import { cellText, clamp, rowValue } from './rowData';
+import { clamp } from '../../utils/math';
+import { cellText, rowId, rowValue } from './rowData';
 
 export interface VirtualColumn<T extends object = object> {
   key: string;
@@ -25,13 +26,18 @@ export interface VirtualTableProps<T extends object = object> {
   height?: number;
   /** @default 8 */
   overscan?: number;
+  /** Row field that identifies a record; exposed as `data-row-key`, falls back to the row index. @default 'id' */
+  rowKey?: string;
   onRowClick?: (row: T) => void;
   class?: string;
 }
 
 /** Windowed table for 10k–1M rows: only visible rows (+ overscan) are in the DOM. Fixed row height. ↑↓ PageUp/Down Home End keep the focused row in view. Footer reports the visible range. */
 export const VirtualTable = <T extends object>(props: VirtualTableProps<T>): JSX.Element => {
-  const p = mergeProps({ rowHeight: 40, height: 400, overscan: 8 } satisfies Partial<VirtualTableProps<T>>, props);
+  const p = mergeProps(
+    { rowHeight: 40, height: 400, overscan: 8, rowKey: 'id' } satisfies Partial<VirtualTableProps<T>>,
+    props,
+  );
   const translate = useTranslate();
   const i18n = useI18n();
   const [scrollTop, setScrollTop] = createSignal(0);
@@ -111,6 +117,7 @@ export const VirtualTable = <T extends object>(props: VirtualTableProps<T>): JSX
               // eslint-disable-next-line jsx-a11y/click-events-have-key-events -- row keyboard handling (Enter) lives on the scroll body's onKeyDown
               <div
                 data-vi={i}
+                data-row-key={rowId(p.rows[i] as T, p.rowKey, i)}
                 role="row"
                 aria-rowindex={i + 2}
                 tabIndex={i === focus() ? 0 : -1}

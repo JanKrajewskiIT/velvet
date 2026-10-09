@@ -131,3 +131,49 @@
 .sc-field--wide {
   width: min(100%, 520px);
 }
+
+.sc-wash {
+  --sc-hover: var(--bg-hover);
+  --sc-pressed: var(--bg-pressed);
+  --sc-selected: var(--bg-selected);
+  --sc-selected-hover: var(--bg-selected-hover);
+  --sc-wash: transparent;
+
+  height: var(--space-10);
+  color: var(--fg-primary);
+  font: var(--type-label-sm);
+  cursor: pointer;
+  background: linear-gradient(var(--sc-wash), var(--sc-wash)), var(--sc-base);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+}
+
+.sc-wash:hover {
+  --sc-wash: var(--sc-hover);
+}
+
+.sc-wash:active {
+  --sc-wash: var(--sc-pressed);
+}
+
+.sc-wash[aria-pressed='true'] {
+  --sc-wash: var(--sc-selected);
+}
+
+.sc-wash[aria-pressed='true']:hover {
+  --sc-wash: var(--sc-selected-hover);
+}
+
+.sc-wash:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.sc-wash--on-color {
+  --sc-hover: var(--on-color-hover);
+  --sc-pressed: var(--on-color-pressed);
+  --sc-selected: var(--on-color-subtle);
+  --sc-selected-hover: var(--on-color-hover);
+
+  color: var(--on-color-fg);
+}

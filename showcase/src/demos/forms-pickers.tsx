@@ -86,7 +86,7 @@ const UploadDemo = () => {
 export const formsPickerDemos: DemoEntry[] = [
   {
     id: 'calendar',
-    group: 'Forms',
+    group: '18 Pickers',
     title: 'Calendar',
     description:
       'Month grid, single or range with a hover preview. Arrows move by day or week, PageUp/Down by month (Shift = year).',
@@ -98,7 +98,7 @@ export const formsPickerDemos: DemoEntry[] = [
   },
   {
     id: 'date-picker',
-    group: 'Forms',
+    group: '18 Pickers',
     title: 'DatePicker',
     description: 'Date field that opens a calendar popover with Today and Clear. Esc closes and refocuses.',
     render: () => (
@@ -125,7 +125,7 @@ export const formsPickerDemos: DemoEntry[] = [
   },
   {
     id: 'date-time-picker',
-    group: 'Forms',
+    group: '18 Pickers',
     title: 'DateTimePicker',
     description: 'Calendar and time slots in one popover.',
     render: () => (
@@ -141,7 +141,7 @@ export const formsPickerDemos: DemoEntry[] = [
   },
   {
     id: 'time-picker',
-    group: 'Forms',
+    group: '18 Pickers',
     title: 'TimePicker & TimeStepper',
     description: 'Typed time field with a slot list, and an inline hour / minute stepper for popovers and touch.',
     render: () => (
@@ -158,7 +158,7 @@ export const formsPickerDemos: DemoEntry[] = [
   },
   {
     id: 'color-picker',
-    group: 'Forms',
+    group: '18 Pickers',
     title: 'ColorPicker',
     description: 'Colour field with a saturation / hue popover, hex input and presets; or a curated swatch grid.',
     render: () => (
@@ -171,7 +171,7 @@ export const formsPickerDemos: DemoEntry[] = [
   },
   {
     id: 'file-upload',
-    group: 'Forms',
+    group: '16 Inputs',
     title: 'FileUpload',
     description: 'Dropzone and file list with progress, retry and remove. The upload itself is yours.',
     render: () => (

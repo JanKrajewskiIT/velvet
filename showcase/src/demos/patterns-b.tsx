@@ -408,7 +408,7 @@ const QUERY: QueryGroup = {
 export const patternsBDemos: DemoEntry[] = [
   {
     id: 'comment-thread',
-    group: 'Patterns',
+    group: '28 Patterns',
     title: 'CommentThread',
     description:
       'Discussion on one object: like, reply, edit and delete own comments with inline confirmation. One nesting level, long threads collapse.',
@@ -424,28 +424,28 @@ export const patternsBDemos: DemoEntry[] = [
   },
   {
     id: 'dual-filter-bar',
-    group: 'Patterns',
+    group: '28 Patterns',
     title: 'DualFilterBar',
     description: 'One toolbar, two independent chip groups: multi-select filters with Clear and single-choice sort.',
     render: () => <DualFilterBarDemo />,
   },
   {
     id: 'filter-bar',
-    group: 'Patterns',
+    group: '28 Patterns',
     title: 'FilterBar',
     description: 'Search plus faceted filter chips. A chip with one pick reads "Status: Active", several show a count.',
     render: () => <FilterBarDemo />,
   },
   {
     id: 'flashcards',
-    group: 'Patterns',
+    group: '28 Patterns',
     title: 'FlashcardSession',
     description: 'Study flow: FlashcardSetup, one-card-at-a-time FlashcardSession and the FlashcardSummary result.',
     render: () => <FlashcardsDemo />,
   },
   {
     id: 'import-sources-dialog',
-    group: 'Patterns',
+    group: '28 Patterns',
     title: 'ImportSourcesDialog',
     description:
       'Dialog checklist of import sources. Connected rows are selectable; available or errored rows connect asynchronously.',
@@ -453,14 +453,14 @@ export const patternsBDemos: DemoEntry[] = [
   },
   {
     id: 'pricing-table',
-    group: 'Patterns',
+    group: '28 Patterns',
     title: 'PricingTable',
     description: 'Plan comparison with one featured tier, per-period prices and a Monthly / Yearly switch.',
     render: () => <PricingDemo />,
   },
   {
     id: 'prompt-input',
-    group: 'Patterns',
+    group: '28 Patterns',
     title: 'PromptInput',
     description:
       'AI chat composer: auto-grow, attachments, suggestions, toolbar slot, Send turns into Stop while loading.',
@@ -468,7 +468,7 @@ export const patternsBDemos: DemoEntry[] = [
   },
   {
     id: 'query-builder',
-    group: 'Patterns',
+    group: '28 Patterns',
     title: 'QueryBuilder',
     description: 'Visual condition builder with typed operators, nested groups and a readable summary.',
     render: () => (

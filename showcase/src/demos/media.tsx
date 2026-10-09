@@ -212,7 +212,7 @@ const CropperDemo = () => {
 export const mediaDemos: DemoEntry[] = [
   {
     id: 'media-frame',
-    group: 'Media',
+    group: '24 Media',
     title: 'MediaFrame',
     description:
       'Fixed-ratio frame for an image, video or embed with loading, empty and failed states. Unsafe URL schemes are treated as a failed load.',
@@ -220,7 +220,7 @@ export const mediaDemos: DemoEntry[] = [
   },
   {
     id: 'video-player',
-    group: 'Media',
+    group: '24 Media',
     title: 'VideoPlayer',
     description:
       'Velvet controls over a video. Keyboard on the focused player: Space / K, ← →, J / L, M, F, C. No video is bundled; pass your own src.',
@@ -244,7 +244,7 @@ export const mediaDemos: DemoEntry[] = [
   },
   {
     id: 'audio-player',
-    group: 'Media',
+    group: '24 Media',
     title: 'AudioPlayer',
     description:
       'Waveform scrubber row: click or drag, ← → 5 s, PgUp / PgDn 15 s, Space plays. The tone is generated in code.',
@@ -275,7 +275,7 @@ export const mediaDemos: DemoEntry[] = [
   },
   {
     id: 'carousel',
-    group: 'Media',
+    group: '24 Media',
     title: 'Carousel',
     description:
       'Arrows, dots, swipe and ←→ keys. Off-screen slides are inert; autoplay pauses on hover and focus and is off under reduced motion.',
@@ -301,7 +301,7 @@ export const mediaDemos: DemoEntry[] = [
   },
   {
     id: 'marquee',
-    group: 'Media',
+    group: '24 Media',
     title: 'Marquee',
     description:
       'Infinite scroller for logo walls. The duplicate copy is aria-hidden; pauses on hover and is static under reduced motion.',
@@ -322,14 +322,14 @@ export const mediaDemos: DemoEntry[] = [
   },
   {
     id: 'lightbox',
-    group: 'Media',
+    group: '24 Media',
     title: 'Lightbox & ImageGrid',
     description: 'Full-screen image viewer (focus trapped and restored, ←→ / Esc) and the grids that open it.',
     render: () => <LightboxDemo />,
   },
   {
     id: 'image-cropper',
-    group: 'Media',
+    group: '24 Media',
     title: 'ImageCropper',
     description:
       'Fixed-aspect crop: drag or arrows to pan, Slider / wheel / + − to zoom, rotate in 90° steps. Reports the crop in source pixels.',

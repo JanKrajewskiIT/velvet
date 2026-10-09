@@ -240,7 +240,7 @@ const EVENTS = [
 export const dataADemos: DemoEntry[] = [
   {
     id: 'accordion',
-    group: 'Data',
+    group: '13 Display',
     title: 'Accordion',
     description: 'Collapsible sections with animated height. Arrow keys, Home and End move between headers.',
     render: () => (
@@ -263,7 +263,7 @@ export const dataADemos: DemoEntry[] = [
   },
   {
     id: 'avatar',
-    group: 'Data',
+    group: '13 Display',
     title: 'Avatar',
     description: 'Initials or image avatar with presence dot, auto colour and grouping.',
     render: () => (
@@ -301,7 +301,7 @@ export const dataADemos: DemoEntry[] = [
   },
   {
     id: 'code-snippet',
-    group: 'Data',
+    group: '13 Display',
     title: 'CodeSnippet',
     description: 'Code block with lightweight highlighting, line numbers, copy and language tabs.',
     render: () => (
@@ -341,7 +341,7 @@ export const dataADemos: DemoEntry[] = [
   },
   {
     id: 'description-list',
-    group: 'Data',
+    group: '26 Data',
     title: 'DescriptionList',
     description: 'Key–value details. Missing values show an em dash.',
     render: () => (
@@ -376,7 +376,7 @@ export const dataADemos: DemoEntry[] = [
   },
   {
     id: 'diff-viewer',
-    group: 'Data',
+    group: '26 Data',
     title: 'DiffViewer',
     description: 'Line and word diff with unified or split view and folded unchanged runs.',
     render: () => (
@@ -402,7 +402,7 @@ export const dataADemos: DemoEntry[] = [
   },
   {
     id: 'divider',
-    group: 'Data',
+    group: '12 Layout',
     title: 'Divider',
     description: 'Hairline separator, optionally with a label.',
     render: () => (
@@ -423,7 +423,7 @@ export const dataADemos: DemoEntry[] = [
   },
   {
     id: 'event-calendar',
-    group: 'Data',
+    group: '27 Planning',
     title: 'EventCalendar',
     description: 'Month grid with dots on days that have events, plus the agenda of the selected day.',
     render: () => (
@@ -439,7 +439,7 @@ export const dataADemos: DemoEntry[] = [
   },
   {
     id: 'feature-card',
-    group: 'Data',
+    group: '23 Cards',
     title: 'FeatureCard',
     description: 'Feature tile built on Card: tone icon tile, title, copy and an optional action.',
     render: () => (
@@ -484,7 +484,7 @@ export const dataADemos: DemoEntry[] = [
   },
   {
     id: 'flip-card',
-    group: 'Data',
+    group: '23 Cards',
     title: 'FlipCard',
     description: 'Two-sided card that flips on click, Enter or Space.',
     render: () => (
@@ -514,7 +514,7 @@ export const dataADemos: DemoEntry[] = [
   },
   {
     id: 'list',
-    group: 'Data',
+    group: '26 Data',
     title: 'List',
     description: 'Lightweight rows for people, files and settings.',
     render: () => (
@@ -533,7 +533,7 @@ export const dataADemos: DemoEntry[] = [
   },
   {
     id: 'log-viewer',
-    group: 'Data',
+    group: '26 Data',
     title: 'LogViewer',
     description: 'Log tail with level toggles, filter and follow mode.',
     render: () => (
@@ -544,7 +544,7 @@ export const dataADemos: DemoEntry[] = [
   },
   {
     id: 'question-card',
-    group: 'Data',
+    group: '23 Cards',
     title: 'QuestionCard',
     description: 'Interview or quiz question with metadata, upvote, save and an expandable answer.',
     render: () => (
@@ -566,7 +566,7 @@ export const dataADemos: DemoEntry[] = [
   },
   {
     id: 'score-card',
-    group: 'Data',
+    group: '23 Cards',
     title: 'ScoreCard',
     description: 'Computed score with verdict and per-criterion bars. Tone follows the score.',
     render: () => (
@@ -602,7 +602,7 @@ export const dataADemos: DemoEntry[] = [
   },
   {
     id: 'skill-bar',
-    group: 'Data',
+    group: '25 Data viz',
     title: 'SkillBar',
     description: 'Competency meter that grows in once on mount.',
     render: () => (
@@ -620,7 +620,7 @@ export const dataADemos: DemoEntry[] = [
   },
   {
     id: 'stat',
-    group: 'Data',
+    group: '25 Data viz',
     title: 'Stat',
     description: 'KPI card with delta badge, hint, accent strip and trend line.',
     render: () => (
@@ -639,7 +639,7 @@ export const dataADemos: DemoEntry[] = [
   },
   {
     id: 'timeline',
-    group: 'Data',
+    group: '26 Data',
     title: 'Timeline',
     description: 'Vertical activity feed. Pipeline statuses, badges, facts and inline-confirmed actions.',
     render: () => (

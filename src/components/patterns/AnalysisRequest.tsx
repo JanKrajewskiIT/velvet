@@ -1,22 +1,24 @@
-import { createMemo, createSignal, createUniqueId, For, type JSX, mergeProps, Show, untrack } from 'solid-js';
+import { createMemo, type JSX, mergeProps, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { Button } from '../actions/Button';
-import { Checkmark } from '../primitives/Checkmark';
 import { Glyph } from '../primitives/Glyph';
 import { IconTile } from '../primitives/IconTile';
-import { AnalysisSourceRow } from './AnalysisSourceRow';
+import { AnalysisContext } from './AnalysisContext';
+import { AnalysisDepthPicker } from './AnalysisDepthPicker';
 import {
   type AnalysisDepth,
   type AnalysisRunPayload,
   type AnalysisSource,
   type AnalysisType,
   localizeAnalysisDepths,
-  sourceStatus,
 } from './analysisSources';
 import { AnalysisSteps } from './AnalysisSteps';
+import { AnalysisTypePicker } from './AnalysisTypePicker';
+import { createAnalysisRun } from './createAnalysisRun';
+import { createAnalysisSelection } from './createAnalysisSelection';
 
 export interface AnalysisRequestProps {
   /** @default localized "Request AI analysis" */
@@ -84,21 +86,7 @@ export const AnalysisRequest = (props: AnalysisRequestProps) => {
   const depths = createMemo(() => p.depths ?? localizeAnalysisDepths(translate));
   const runLabel = () => p.runLabel ?? translate('velvet.patterns.analysisRequest.runLabel');
   const runErrorText = () => p.runErrorText ?? translate('velvet.patterns.analysisRequest.runErrorText');
-  const analyses = () => p.analyses ?? [];
-  const [selected, setSelected] = createControllable<string[]>({
-    value: () => p.selected,
-    defaultValue: untrack(
-      () =>
-        p.defaultSelected ??
-        p.sources.filter((source) => sourceStatus(source) !== 'missing').map((source) => source.id),
-    ),
-    onChange: (ids) => p.onSelectedChange?.(ids),
-  });
-  const [analysis, setAnalysis] = createControllable<string | undefined>({
-    value: () => p.analysis,
-    defaultValue: p.defaultAnalysis ?? analyses()[0]?.id,
-    onChange: (id) => id !== undefined && p.onAnalysisChange?.(id),
-  });
+  const selection = createAnalysisSelection(p);
   const [instructions, setInstructions] = createControllable<string>({
     value: () => p.instructions,
     defaultValue: p.defaultInstructions,
@@ -109,55 +97,24 @@ export const AnalysisRequest = (props: AnalysisRequestProps) => {
     defaultValue: p.defaultDepth,
     onChange: (value) => p.onDepthChange?.(value),
   });
-  const depthLabelId = createUniqueId();
-  const [busy, setBusy] = createSignal(false);
-  const [failed, setFailed] = createSignal(false);
-
-  const running = () => p.status === 'running' || busy();
-  const required = () => analyses().find((a) => a.id === analysis())?.requires ?? [];
-  const isIncluded = (id: string) => {
-    const source = p.sources.find((s) => s.id === id);
-    return !!source && sourceStatus(source) === 'ready' && selected().includes(id);
-  };
-  const included = createMemo(() => p.sources.filter((source) => isIncluded(source.id)));
-  const missing = createMemo(() =>
-    required()
-      .filter((id) => !isIncluded(id))
-      .map((id) => p.sources.find((s) => s.id === id)?.label ?? id),
-  );
-  const blocked = () => missing().length > 0 || included().length === 0;
+  const { running, shownError, run } = createAnalysisRun(p, {
+    blocked: selection.blocked,
+    payload: () => ({
+      analysis: selection.analysis() ?? '',
+      sources: selection.included().map((source) => source.id),
+      instructions: instructions().trim(),
+      depth: depth(),
+    }),
+    runErrorText,
+  });
   const note = () =>
-    included().length === 0
+    selection.included().length === 0
       ? translate('velvet.patterns.analysisRequest.includeOne')
-      : missing().length > 0
-        ? translate('velvet.patterns.analysisRequest.needs', { sources: missing().join(', ') })
+      : selection.missing().length > 0
+        ? translate('velvet.patterns.analysisRequest.needs', { sources: selection.missing().join(', ') })
         : undefined;
-  const shownError = () => p.error || (failed() ? runErrorText() : undefined);
-
-  const toggle = (source: AnalysisSource) => {
-    if (sourceStatus(source) !== 'ready' || running()) return;
-    setSelected(
-      selected().includes(source.id) ? selected().filter((id) => id !== source.id) : [...selected(), source.id],
-    );
-  };
-
-  const run = async () => {
-    if (blocked() || running() || !p.onRun) return;
-    setFailed(false);
-    setBusy(true);
-    try {
-      await p.onRun({
-        analysis: analysis() ?? '',
-        sources: included().map((source) => source.id),
-        instructions: instructions().trim(),
-        depth: depth(),
-      });
-    } catch (error) {
-      setFailed(true);
-      p.onError?.(error);
-    } finally {
-      setBusy(false);
-    }
+  const toggleSource = (source: AnalysisSource) => {
+    if (!running()) selection.toggle(source);
   };
 
   return (
@@ -175,60 +132,15 @@ export const AnalysisRequest = (props: AnalysisRequestProps) => {
         </Show>
       </header>
       <div class="vui-areq__body">
-        <Show when={analyses().length > 0}>
-          <fieldset class="vui-areq__set" disabled={running()}>
-            <legend class="vui-areq__lbl">{translate('velvet.patterns.analysisRequest.analysis')}</legend>
-            <div
-              class="vui-areq__types"
-              role="radiogroup"
-              aria-label={translate('velvet.patterns.analysisRequest.analysisType')}
-            >
-              <For each={analyses()}>
-                {(type) => (
-                  <button
-                    type="button"
-                    role="radio"
-                    aria-checked={type.id === analysis()}
-                    class="vui-areq__type"
-                    onClick={() => setAnalysis(type.id)}
-                  >
-                    <IconTile size="xs" class="vui-areq__ticon" icon={type.icon ?? 'sparkles'} />
-                    <span class="vui-areq__tt">
-                      <span class="vui-areq__tname">{type.label}</span>
-                      <Show when={type.description}>
-                        <span class="vui-areq__tdesc">{type.description}</span>
-                      </Show>
-                    </span>
-                    <Checkmark radio size="sm" checked={type.id === analysis()} class="vui-areq__radio" />
-                  </button>
-                )}
-              </For>
-            </div>
-          </fieldset>
+        <Show when={selection.analyses().length > 0}>
+          <AnalysisTypePicker
+            analyses={selection.analyses()}
+            analysis={selection.analysis()}
+            disabled={running()}
+            onSelect={selection.setAnalysis}
+          />
         </Show>
-        <fieldset class="vui-areq__set" disabled={running()}>
-          <legend class="vui-areq__lbl">
-            {translate('velvet.patterns.analysisRequest.context')}{' '}
-            <span class="vui-areq__lblc">
-              {translate('velvet.patterns.analysisRequest.contextCount', {
-                included: included().length,
-                total: p.sources.length,
-              })}
-            </span>
-          </legend>
-          <ul class="vui-areq__sources">
-            <For each={p.sources}>
-              {(source) => (
-                <AnalysisSourceRow
-                  source={source}
-                  included={isIncluded(source.id)}
-                  required={required().includes(source.id)}
-                  onToggle={toggle}
-                />
-              )}
-            </For>
-          </ul>
-        </fieldset>
+        <AnalysisContext sources={p.sources} selection={selection} disabled={running()} onToggle={toggleSource} />
         <div class="vui-areq__row">
           <label class="vui-areq__set vui-areq__ins">
             <span class="vui-areq__lbl">{translate('velvet.patterns.analysisRequest.instructions')}</span>
@@ -248,30 +160,7 @@ export const AnalysisRequest = (props: AnalysisRequestProps) => {
             />
           </label>
           <Show when={depths().length > 0}>
-            <div class="vui-areq__set">
-              <span class="vui-areq__lbl" id={depthLabelId}>
-                {translate('velvet.patterns.analysisRequest.depth')}
-              </span>
-              <div class="vui-areq__depth" role="radiogroup" aria-labelledby={depthLabelId}>
-                <For each={depths()}>
-                  {(option) => (
-                    <button
-                      type="button"
-                      role="radio"
-                      aria-checked={option.id === depth()}
-                      disabled={running()}
-                      class="vui-areq__dbtn"
-                      onClick={() => setDepth(option.id)}
-                    >
-                      <span>{option.label}</span>
-                      <Show when={option.hint}>
-                        <small>{option.hint}</small>
-                      </Show>
-                    </button>
-                  )}
-                </For>
-              </div>
-            </div>
+            <AnalysisDepthPicker depths={depths()} depth={depth()} disabled={running()} onSelect={setDepth} />
           </Show>
         </div>
         <Show when={running() && p.steps.length > 0}>
@@ -297,7 +186,7 @@ export const AnalysisRequest = (props: AnalysisRequestProps) => {
           class="vui-areq__run"
           iconLeft="sparkles"
           loading={running()}
-          disabled={blocked()}
+          disabled={selection.blocked()}
           onClick={() => void run()}
         >
           {running() ? translate('velvet.patterns.analysisRequest.analysing') : runLabel()}

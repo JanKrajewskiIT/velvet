@@ -1,38 +1,16 @@
-import { createMemo, createSignal, createUniqueId, type JSX, mergeProps, onCleanup, onMount, Show } from 'solid-js';
+import { createMemo, createUniqueId, type JSX, mergeProps, onMount, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { FieldLabel } from '../primitives/Field';
+import { createRichTextCommands } from './createRichTextCommands';
 import { createRichTextHistory } from './createRichTextHistory';
-import { createRichTextLink } from './createRichTextLink';
-import {
-  insertContent,
-  insertLineBreak,
-  insertParagraph,
-  readHtml,
-  repairLive,
-  setBlock,
-  setList,
-} from './richTextBlocks';
+import { createRichTextInput } from './createRichTextInput';
+import { createRichTextState } from './createRichTextState';
 import { resolveLinkLabels, type RichTextLinkLabels, RichTextLinkPopover } from './RichTextLinkPopover';
-import { applyMarkdownShortcut } from './richTextMarkdown';
-import { applyMark, insertPending } from './richTextMarks';
-import { escapeHtml, MARK_NAMES, MARK_TAGS, type MarkName, sanitizeRichText } from './richTextModel';
-import { blockOf, caretTo, closestTag, endOf, rangeIn, restoreSel, saveSel, textNodesIn } from './richTextSelection';
-import { EMPTY_FORMAT, type RichTextFormat, RichTextToolbar } from './RichTextToolbar';
-import { matchesShortcut, TOOL_LABEL_KEYS, TOOLBAR_ENTRIES, toolbarEntries, type ToolId } from './richTextTools';
-
-const NAVIGATION_KEYS = new Set([
-  'ArrowLeft',
-  'ArrowRight',
-  'ArrowUp',
-  'ArrowDown',
-  'Home',
-  'End',
-  'PageUp',
-  'PageDown',
-]);
-const MARKDOWN_TRIGGER = /[ *_`~]$/u;
+import { sanitizeRichText } from './richTextModel';
+import { RichTextToolbar } from './RichTextToolbar';
+import { TOOL_LABEL_KEYS, toolbarEntries, type ToolId } from './richTextTools';
 
 export interface RichTextLabels extends RichTextLinkLabels {
   /** Accessible name of the formatting toolbar. */
@@ -85,198 +63,32 @@ export const RichTextEditor = (props: RichTextEditorProps) => {
   }));
   const editable = () => !p.disabled && !p.readOnly;
   const emitChange = (html: string, text: string) => (p.onValueChange ?? p.onChange)?.(html, text);
-  const pending = new Map<string, boolean>();
-  const [format, setFormat] = createSignal<RichTextFormat>(EMPTY_FORMAT);
-  const [textLength, setTextLength] = createSignal(0);
-  const [empty, setEmpty] = createSignal(true);
   let editor!: HTMLDivElement;
-  let lastOutput: string | undefined;
 
-  const refreshFormat = () => {
-    const range = rangeIn(editor);
-    if (!range) return;
-    const texts = range.collapsed ? [] : textNodesIn(range, editor);
-    const inside = (tag: string) =>
-      range.collapsed
-        ? !!closestTag(range.startContainer, tag, editor)
-        : texts.length > 0 && texts.every((text) => closestTag(text, tag, editor));
-    const block = blockOf(range.startContainer, editor);
-    setFormat({
-      marks: new Set(MARK_NAMES.filter((name) => pending.get(MARK_TAGS[name]) ?? inside(MARK_TAGS[name]))),
-      block: block?.tagName ?? 'P',
-      list: block?.tagName === 'LI' ? (block.parentElement?.tagName ?? null) : null,
-      link: !!closestTag(range.startContainer, 'A', editor) || texts.some((text) => closestTag(text, 'A', editor)),
-    });
-  };
-
-  const afterChange = () => {
-    const text = editor.innerText.replace(/\n+$/u, '');
-    const isEmpty =
-      !editor.textContent && editor.children.length <= 1 && !editor.querySelector('li,h2,h3,blockquote,pre');
-    setEmpty(isEmpty);
-    setTextLength(text.trim() ? Array.from(text).length : 0);
-    refreshFormat();
-    const output = isEmpty ? '' : readHtml(editor);
-    if (lastOutput !== undefined && output !== lastOutput) emitChange(output, text);
-    lastOutput = output;
-  };
-
+  const state = createRichTextState({ editor: () => editor, emitChange });
   const history = createRichTextHistory({
     root: () => editor,
     onRestore: () => {
-      pending.clear();
-      afterChange();
+      state.pending.clear();
+      state.afterChange();
     },
   });
-
-  const run = (command: (root: HTMLElement) => void) => {
-    if (!editable()) return;
-    const saved = saveSel(editor);
-    if (document.activeElement !== editor) editor.focus();
-    if (saved) restoreSel(editor, saved);
-    else if (!rangeIn(editor)) caretTo(...endOf(editor.lastElementChild ?? editor));
-    history.flush();
-    command(editor);
-    history.record();
-    afterChange();
-  };
-
-  const toggleMark = (name: MarkName) =>
-    run((root) => {
-      const tag = MARK_TAGS[name];
-      const range = rangeIn(root);
-      if (!range) return;
-      if (!range.collapsed) {
-        applyMark(root, tag);
-        return;
-      }
-      const base = !!closestTag(range.startContainer, tag, root);
-      const active = pending.get(tag) ?? base;
-      if (!active === base) pending.delete(tag);
-      else pending.set(tag, !active);
-    });
-
-  const link = createRichTextLink({
+  const commands = createRichTextCommands({
     editor: () => editor,
-    run,
-    pending,
     editable,
     invalidText: () => labels().invalid,
+    state,
+    history,
   });
-
-  const exec = (tool: ToolId) => {
-    switch (tool) {
-      case 'bold':
-      case 'italic':
-      case 'underline':
-      case 'strike':
-      case 'code':
-        return toggleMark(tool);
-      case 'link':
-        return link.open();
-      case 'undo':
-        return history.travel(-1);
-      case 'redo':
-        return history.travel(1);
-      case 'UL':
-      case 'OL':
-        return run((root) => setList(root, tool));
-      case 'H2':
-      case 'H3':
-      case 'BLOCKQUOTE':
-      case 'PRE':
-        return run((root) => setBlock(root, tool));
-    }
-  };
+  const { link, exec } = commands;
 
   onMount(() => {
     editor.innerHTML = sanitizeRichText(p.defaultValue);
     history.record();
-    afterChange();
-    const onBeforeInput = (event: InputEvent) => {
-      if (event.inputType === 'historyUndo' || event.inputType === 'historyRedo') {
-        event.preventDefault();
-        history.travel(event.inputType === 'historyUndo' ? -1 : 1);
-      } else if (event.inputType.startsWith('format')) {
-        event.preventDefault();
-      } else if (event.inputType === 'insertParagraph') {
-        event.preventDefault();
-        run(insertParagraph);
-      } else if (event.inputType === 'insertLineBreak') {
-        event.preventDefault();
-        run(insertLineBreak);
-      } else if (event.inputType === 'insertText' && event.data && !event.isComposing && pending.size > 0) {
-        event.preventDefault();
-        insertPending(editor, event.data, pending);
-        pending.clear();
-        afterChange();
-        history.recordSoon();
-      }
-    };
-    let frame = 0;
-    const onSelectionChange = () => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => {
-        if (rangeIn(editor)) refreshFormat();
-      });
-    };
-    editor.addEventListener('beforeinput', onBeforeInput);
-    document.addEventListener('selectionchange', onSelectionChange);
-    onCleanup(() => {
-      editor.removeEventListener('beforeinput', onBeforeInput);
-      document.removeEventListener('selectionchange', onSelectionChange);
-      cancelAnimationFrame(frame);
-    });
+    state.afterChange();
   });
 
-  const onInput: JSX.EventHandler<HTMLDivElement, InputEvent> = (event) => {
-    repairLive(editor);
-    const typed = event.data ?? '';
-    const shortcut =
-      event.inputType === 'insertText' && !event.isComposing && MARKDOWN_TRIGGER.test(typed)
-        ? applyMarkdownShortcut(editor, typed.slice(-1), history.record)
-        : undefined;
-    if (shortcut) {
-      if (shortcut.kind === 'mark') {
-        pending.clear();
-        pending.set(shortcut.tag, false);
-      }
-      history.record();
-    } else history.recordSoon();
-    afterChange();
-  };
-
-  const onKeyDown: JSX.EventHandler<HTMLDivElement, KeyboardEvent> = (event) => {
-    if (NAVIGATION_KEYS.has(event.key)) pending.clear();
-    if (!(event.metaKey || event.ctrlKey)) return;
-    const tool = TOOLBAR_ENTRIES.find((entry) => entry.kind === 'button' && matchesShortcut(event, entry.keys));
-    const toolId = tool?.kind === 'button' ? tool.id : matchesShortcut(event, 'mod+y') ? 'redo' : undefined;
-    if (!toolId) return;
-    event.preventDefault();
-    exec(toolId);
-  };
-
-  const onPaste: JSX.EventHandler<HTMLDivElement, ClipboardEvent> = (event) => {
-    event.preventDefault();
-    const clipboard = event.clipboardData;
-    if (!clipboard) return;
-    const html = clipboard.getData('text/html');
-    const lines = clipboard.getData('text/plain').split(/\r?\n/u);
-    const fromText = () =>
-      lines
-        .filter((line, index) => line.trim() || (index > 0 && index < lines.length - 1))
-        .map((line) => `<p>${escapeHtml(line) || '<br>'}</p>`)
-        .join('');
-    run((root) => insertContent(root, sanitizeRichText(html || fromText())));
-  };
-
-  const onClick: JSX.EventHandler<HTMLDivElement, MouseEvent> = (event) => {
-    if (!(event.metaKey || event.ctrlKey) || !(event.target instanceof Element)) return;
-    const anchor = event.target.closest('a[href]');
-    if (!(anchor instanceof HTMLAnchorElement)) return;
-    event.preventDefault();
-    window.open(anchor.href, '_blank', 'noopener');
-  };
+  const input = createRichTextInput({ editor: () => editor, state, history, commands });
 
   return (
     <div class={cx('vui-field', p.class)}>
@@ -288,7 +100,7 @@ export const RichTextEditor = (props: RichTextEditorProps) => {
           {(toolbar) => (
             <RichTextToolbar
               entries={toolbarEntries(toolbar())}
-              format={format()}
+              format={state.format()}
               canUndo={history.canUndo()}
               canRedo={history.canRedo()}
               disabled={p.disabled}
@@ -330,16 +142,16 @@ export const RichTextEditor = (props: RichTextEditorProps) => {
           aria-disabled={p.disabled || undefined}
           aria-readonly={p.readOnly || undefined}
           data-placeholder={placeholder()}
-          data-empty={empty() || undefined}
+          data-empty={state.empty() || undefined}
           style={{
             'min-height': `${p.minHeight}px`,
             'max-height': p.maxHeight === undefined ? undefined : `${p.maxHeight}px`,
           }}
-          onInput={onInput}
-          onKeyDown={onKeyDown}
-          onPaste={onPaste}
-          onMouseDown={() => pending.clear()}
-          onClick={onClick}
+          onInput={input.onInput}
+          onKeyDown={input.onKeyDown}
+          onPaste={input.onPaste}
+          onMouseDown={input.onMouseDown}
+          onClick={input.onClick}
         />
       </div>
       <Show when={p.hint || p.error || p.maxLength}>
@@ -350,10 +162,10 @@ export const RichTextEditor = (props: RichTextEditorProps) => {
           <Show when={p.maxLength}>
             {(max) => (
               <span
-                class={cx('vui-hint', 'vui-field__count', textLength() > max() && 'vui-field__count--max')}
+                class={cx('vui-hint', 'vui-field__count', state.textLength() > max() && 'vui-field__count--max')}
                 aria-live="polite"
               >
-                {textLength()}/{max()}
+                {state.textLength()}/{max()}
               </span>
             )}
           </Show>
