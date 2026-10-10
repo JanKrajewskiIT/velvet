@@ -4,7 +4,8 @@ import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { clamp } from '../../utils/math';
-import { FieldHint, FieldLabel } from '../primitives/Field';
+import { FieldHint } from '../primitives/FieldHint';
+import { FieldLabel } from '../primitives/FieldLabel';
 import { Separator } from '../primitives/Separator';
 
 const BLANK = ' ';

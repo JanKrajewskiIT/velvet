@@ -11,7 +11,7 @@ export {
   type ColumnState,
   type ManagedColumn,
 } from './ColumnManager';
-export { DataGrid, type DataGridProps, type GridColumn, type GridRowChange } from './DataGrid';
+export { DataGrid, type DataGridProps, type GridColumn, type GridRowChange, type GridViewState } from './DataGrid';
 export { type DescriptionItem, DescriptionList, type DescriptionListProps } from './DescriptionList';
 export { diffLines, type DiffRow } from './diffLines';
 export { type DiffMode, DiffViewer, type DiffViewerProps } from './DiffViewer';
@@ -19,6 +19,7 @@ export { Divider, type DividerProps } from './Divider';
 export { type CalendarEvent, EventCalendar, type EventCalendarProps } from './EventCalendar';
 export { FeatureCard, type FeatureCardProps } from './FeatureCard';
 export { FlipCard, type FlipCardProps } from './FlipCard';
+export { parseGridView, serializeGridView } from './gridViewCodec';
 export { Kanban, type KanbanCard, type KanbanColumn, type KanbanProps } from './Kanban';
 export { List, type ListItemData, type ListProps } from './List';
 export { type LogLevel, type LogLine } from './logLines';
@@ -30,6 +31,7 @@ export { ScoreCard, type ScoreCardProps, type ScoreCriterion, type ScoreTone } f
 export { SkillBar, type SkillBarProps } from './SkillBar';
 export { Stat, type StatProps } from './Stat';
 export { Table, type TableColumn, type TableProps, type TableSort } from './Table';
+export { TableAddRowAction, type TableAddRowActionProps } from './TableAddRowAction';
 export { Timeline, type TimelineProps } from './Timeline';
 export {
   type TimelineAction,

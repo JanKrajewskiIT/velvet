@@ -73,7 +73,9 @@ export const ScrollArea = (props: ScrollAreaProps) => {
   return (
     <div
       {...rest}
-      ref={area}
+      ref={(element) => {
+        area = element;
+      }}
       onScroll={measure}
       tabIndex={0}
       role={local.label ? 'region' : undefined}

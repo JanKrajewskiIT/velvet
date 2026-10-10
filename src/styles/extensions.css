@@ -1,4 +1,7 @@
 /* Library additions to the reference stylesheet. Reference files stay verbatim; everything here layers on top. */
 
-@import url("extensions/markdown.css");
-@import url("extensions/calendar-organizer.css");
+@import url('extensions/markdown.css');
+@import url('extensions/calendar-organizer.css');
+@import url('extensions/modal.css');
+@import url('extensions/floating.css');
+@import url('extensions/data-grid.css');

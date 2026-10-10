@@ -8,7 +8,7 @@ export interface ColorLabelSelectionInput {
   value?: string[];
   max?: number;
   searchable?: boolean;
-  colors: string[];
+  colors: readonly string[];
   onClose?: () => void;
   onSubmit?: (ids: string[]) => void | Promise<void>;
   onCreate?: (draft: { name: string; color: string }) => ColorLabel | undefined | Promise<ColorLabel | undefined>;

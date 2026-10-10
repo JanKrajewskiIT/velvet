@@ -94,7 +94,9 @@ export const Wizard = (props: WizardProps) => {
       <Show when={step()} keyed>
         {(current) => (
           <div
-            ref={panel}
+            ref={(element) => {
+              panel = element;
+            }}
             tabIndex={-1}
             class="vui-wizard__panel"
             role="group"

@@ -289,6 +289,9 @@ export const patternsPl: TranslationOf<typeof patternsEn> = {
     hintSend: '↵ — wyślij · ⇧↵ — nowy wiersz',
   },
   queryBuilder: {
+    clearRules: 'Wyczyść warunki',
+    moveUp: 'Przesuń warunek lub grupę w górę',
+    moveDown: 'Przesuń warunek lub grupę w dół',
     query: 'Zapytanie',
     conditions: 'Warunki',
     conditionGroup: 'Grupa warunków',
@@ -310,6 +313,7 @@ export const patternsPl: TranslationOf<typeof patternsEn> = {
       is: 'jest',
       isNot: 'nie jest',
       startsWith: 'zaczyna się od',
+      endsWith: 'kończy się na',
       isEmpty: 'jest puste',
       isNotEmpty: 'nie jest puste',
       isOn: 'jest w dniu',

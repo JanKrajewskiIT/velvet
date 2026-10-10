@@ -43,6 +43,13 @@ export const dataEn = defineDictionary({
     nothingPinned: 'Nothing pinned',
   },
   dataGrid: {
+    label: 'Data grid',
+    viewSettings: 'View settings',
+    resetView: 'Reset view',
+    exportView: 'Export view settings',
+    importView: 'Import view settings',
+    importingView: 'Importing view settings…',
+    viewError: 'View settings could not be loaded or saved. Check the file and browser storage permissions.',
     searchLabel: 'Filter rows',
     searchPlaceholder: 'Filter {count, plural, one {# record} other {# records}}…',
     selected: '<b>{count}</b> selected',
@@ -140,6 +147,7 @@ export const dataEn = defineDictionary({
     trendLabel: 'Trend',
   },
   table: {
+    addRow: 'Add row',
     empty: 'Nothing here yet.',
     resetWidths: 'Reset widths',
     bulkActionsLabel: 'Bulk actions',

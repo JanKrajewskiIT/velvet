@@ -119,7 +119,9 @@ export const LogViewer = (props: LogViewerProps) => {
         </button>
       </div>
       <div
-        ref={body}
+        ref={(element) => {
+          body = element;
+        }}
         class={cx('vui-log__body', wrap() && 'vui-log__body--wrap')}
         style={{ height: cssLength(merged.height) }}
         // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- scrollable log region must be focusable so keyboard users can scroll it

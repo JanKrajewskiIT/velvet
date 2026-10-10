@@ -1,6 +1,7 @@
 import { createSignal, createUniqueId, For, mergeProps, Show } from 'solid-js';
 
 import { createDismiss } from '../../hooks/createDismiss';
+import { createFloating } from '../../hooks/createFloating';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { Button } from '../actions/Button';
@@ -44,6 +45,7 @@ export const TreeSelect = (props: TreeSelectProps) => {
   const listId = createUniqueId();
   const [open, setOpen] = createSignal(false);
   const [root, setRoot] = createSignal<HTMLElement>();
+  const floating = createFloating(open, root, { matchWidth: true });
   const view = createTreeSelectView(() => p.data, p.defaultExpanded);
   const rowId = (id: string) => `${listId}-${id}`;
 
@@ -94,7 +96,12 @@ export const TreeSelect = (props: TreeSelectProps) => {
           </Control>
           <Show when={open()}>
             {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions -- relays key events bubbling from the search input and the tree */}
-            <div class="vui-select__menu vui-tselect__menu" onKeyDown={onKeyDown}>
+            <div
+              ref={floating.ref}
+              style={floating.style()}
+              class="vui-select__menu vui-tselect__menu"
+              onKeyDown={onKeyDown}
+            >
               <Show when={p.searchable}>
                 <Control size="sm" class="vui-tselect__search" iconLeft="search">
                   <input

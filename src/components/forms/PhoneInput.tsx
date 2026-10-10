@@ -1,15 +1,15 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { createMemo, createSignal, createUniqueId, For, type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import { createMemo, createSignal, createUniqueId, type JSX, mergeProps, Show, splitProps } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
-import { createDismiss } from '../../hooks/createDismiss';
 import { useTranslate } from '../../i18n/useTranslate';
 import { Control } from '../primitives/Control';
 import { Field } from '../primitives/Field';
 import { Glyph } from '../primitives/Glyph';
 import { callHandler } from './callHandler';
-import { ComboboxOption } from './ComboboxOption';
+import { createPhoneCountryPopup } from './createPhoneCountryPopup';
 import { formatNational, nationalLength, onlyDigits, PHONE_COUNTRIES, type PhoneCountry } from './phoneCountries';
+import { PhoneCountryList } from './PhoneCountryList';
 
 /** Digits tolerated beyond the national length, so a pasted prefix stays visible instead of being cut off silently. */
 const EXTRA_DIGITS = 2;
@@ -89,6 +89,7 @@ export const PhoneInput = (props: PhoneInputProps) => {
     'name',
     'class',
     'onBlur',
+    'onInput',
   ]);
   const autoId = createUniqueId();
   const i18n = useI18n();
@@ -119,8 +120,6 @@ export const PhoneInput = (props: PhoneInputProps) => {
     value: () => (local.value === undefined ? undefined : onlyDigits(local.value)),
     defaultValue: onlyDigits(local.defaultValue),
   });
-  const [open, setOpen] = createSignal(false);
-  const [active, setActive] = createSignal(0);
   const [touched, setTouched] = createSignal(false);
   const [root, setRoot] = createSignal<HTMLElement>();
   let input!: HTMLInputElement;
@@ -143,42 +142,19 @@ export const PhoneInput = (props: PhoneInputProps) => {
     setOpen(false);
     input.focus({ preventScroll: true });
   };
-  const openList = () => {
-    setActive(Math.max(0, local.countries.indexOf(country())));
-    setOpen(true);
-  };
   const lengthError = () => {
     const digits = digitState();
     const wrongLength = digits.length > 0 && digits.length !== nationalLength(country());
     return local.validateOnBlur && touched() && wrongLength ? invalidMessage(country()) : undefined;
   };
 
-  createDismiss(open, () => setOpen(false), root);
-
-  const onCountryKeyDown: JSX.EventHandler<HTMLButtonElement, KeyboardEvent> = (e) => {
-    const count = local.countries.length;
-    if (!open()) {
-      if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        openList();
-      }
-      return;
-    }
-    if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      setActive((index) => (index + 1) % count);
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      setActive((index) => (index - 1 + count) % count);
-    } else if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      const chosen = local.countries[active()];
-      if (chosen) pickCountry(chosen);
-    } else if (e.key === 'Tab') {
-      setOpen(false);
-    }
-  };
-
+  const { open, setOpen, active, setActive, openList, onKeyDown, floating } = createPhoneCountryPopup({
+    countries: () => local.countries,
+    selected: () => country().code,
+    countryName,
+    root,
+    onPick: pickCountry,
+  });
   return (
     <Field
       label={local.label ?? translate('velvet.forms.phoneInput.label')}
@@ -190,18 +166,18 @@ export const PhoneInput = (props: PhoneInputProps) => {
       {(control) => (
         <div ref={setRoot} class="vui-select vui-phone">
           <Control size={local.size} invalid={control.invalid} disabled={local.disabled} class={local.class}>
-            {/* eslint-disable-next-line jsx-a11y/role-supports-aria-props -- the button drives the popup listbox through aria-activedescendant */}
             <button
               type="button"
               class="vui-phone__country"
+              role="combobox"
               disabled={local.disabled}
               aria-label={`${countryLabel()}: ${countryName(country())} +${country().dial}`}
               aria-haspopup="listbox"
               aria-expanded={open()}
               aria-controls={listId()}
-              aria-activedescendant={open() ? optionId(active()) : undefined}
+              aria-activedescendant={open() && active() >= 0 ? optionId(active()) : undefined}
               onClick={() => (open() ? setOpen(false) : openList())}
-              onKeyDown={onCountryKeyDown}
+              onKeyDown={onKeyDown}
             >
               <span class="vui-phone__code">{country().code}</span>
               <span class="vui-phone__dial">+{country().dial}</span>
@@ -209,7 +185,9 @@ export const PhoneInput = (props: PhoneInputProps) => {
             </button>
             <input
               {...rest}
-              ref={input}
+              ref={(element) => {
+                input = element;
+              }}
               id={control.id}
               type="tel"
               inputMode="tel"
@@ -223,6 +201,7 @@ export const PhoneInput = (props: PhoneInputProps) => {
               onInput={(e) => {
                 setDigits(onlyDigits(e.currentTarget.value));
                 e.currentTarget.value = formatNational(digitState(), country().mask);
+                callHandler(local.onInput, e);
               }}
               onBlur={(e) => {
                 setTouched(true);
@@ -234,26 +213,18 @@ export const PhoneInput = (props: PhoneInputProps) => {
             <input type="hidden" name={local.name} value={e164(digitState(), country())} />
           </Show>
           <Show when={open()}>
-            <ul id={listId()} role="listbox" aria-label={countryLabel()} class="vui-select__menu">
-              <For each={local.countries}>
-                {(item, index) => (
-                  <ComboboxOption
-                    id={optionId(index())}
-                    selected={item.code === country().code}
-                    active={index() === active()}
-                    onHover={() => setActive(index())}
-                    onPick={() => pickCountry(item)}
-                  >
-                    <span class="vui-phone__code">{item.code}</span>
-                    <span class="vui-select__label">{countryName(item)}</span>
-                    <span class="vui-phone__dial">+{item.dial}</span>
-                    <Show when={item.code === country().code}>
-                      <Glyph name="check" />
-                    </Show>
-                  </ComboboxOption>
-                )}
-              </For>
-            </ul>
+            <PhoneCountryList
+              ref={floating.ref}
+              style={floating.style()}
+              id={listId()}
+              label={countryLabel()}
+              countries={local.countries}
+              selected={country().code}
+              active={active()}
+              countryName={countryName}
+              onHover={setActive}
+              onPick={pickCountry}
+            />
           </Show>
         </div>
       )}

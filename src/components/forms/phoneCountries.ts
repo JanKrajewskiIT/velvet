@@ -1,3 +1,5 @@
+import { freezeRecords } from '../../utils/freezeRecords';
+
 export interface PhoneCountry {
   /** ISO 3166-1 alpha-2 code. */
   code: string;
@@ -9,9 +11,9 @@ export interface PhoneCountry {
 }
 
 /** A country list always has a fallback entry. */
-export type PhoneCountryList = readonly [PhoneCountry, ...PhoneCountry[]];
+export type PhoneCountryList = readonly [Readonly<PhoneCountry>, ...Readonly<PhoneCountry>[]];
 
-export const PHONE_COUNTRIES: PhoneCountryList = [
+export const PHONE_COUNTRIES: PhoneCountryList = freezeRecords([
   { code: 'PL', name: 'Poland', dial: '48', mask: '### ### ###' },
   { code: 'DE', name: 'Germany', dial: '49', mask: '#### #######' },
   { code: 'GB', name: 'United Kingdom', dial: '44', mask: '#### ######' },
@@ -23,7 +25,7 @@ export const PHONE_COUNTRIES: PhoneCountryList = [
   { code: 'CZ', name: 'Czechia', dial: '420', mask: '### ### ###' },
   { code: 'UA', name: 'Ukraine', dial: '380', mask: '## ### ## ##' },
   { code: 'SE', name: 'Sweden', dial: '46', mask: '## ### ## ##' },
-];
+]);
 
 const DIGIT_SLOT = '#';
 

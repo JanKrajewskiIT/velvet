@@ -29,17 +29,25 @@ export interface ContextMenuProps {
 /** Right-click (or Shift+F10 / Menu key) menu for a region. Opens at the pointer, clamps to the viewport, closes on scroll and outside click. Always duplicate critical actions somewhere visible: context menus are undiscoverable. */
 export const ContextMenu = (props: ContextMenuProps) => {
   let zone!: HTMLDivElement;
-  let host: HTMLElement | undefined;
+  const [host, setHost] = createSignal<HTMLElement>();
   const [pos, setPos] = createSignal<Point | null>(null);
   const isOpen = createMemo(() => pos() !== null);
 
   const close = () => setPos(null);
-  createDismiss(isOpen, close, () => host, { escape: false });
+  createDismiss(
+    isOpen,
+    (reason) => {
+      close();
+      if (reason === 'escape') zone.focus({ preventScroll: true });
+    },
+    host,
+    { refocus: false },
+  );
 
   createEffect(() => {
     if (!isOpen()) return;
     const onScroll = (e: Event) => {
-      if (!(e.target instanceof Node && host?.contains(e.target))) close();
+      if (!(e.target instanceof Node && host()?.contains(e.target))) close();
     };
     window.addEventListener('scroll', onScroll, true);
     window.addEventListener('resize', close);
@@ -52,7 +60,7 @@ export const ContextMenu = (props: ContextMenuProps) => {
   /** Called once the portal host is attached, so the panel can be measured and kept inside the viewport. */
   const placePanel = (el: Element) => {
     if (!(el instanceof HTMLElement)) return;
-    host = el;
+    setHost(el);
     const at = untrack(pos);
     const rect = el.firstElementChild?.getBoundingClientRect();
     if (!at || !rect) return;
@@ -80,7 +88,9 @@ export const ContextMenu = (props: ContextMenuProps) => {
   return (
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <div
-      ref={zone}
+      ref={(element) => {
+        zone = element;
+      }}
       class={props.class}
       style={props.style}
       // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- the zone must be focusable so Shift+F10 / ContextMenu open the menu from the keyboard
@@ -92,7 +102,7 @@ export const ContextMenu = (props: ContextMenuProps) => {
       {props.children}
       <Show when={pos()}>
         {(at) => (
-          <Portal ref={placePanel}>
+          <Portal ref={placePanel} mount={zone.closest('dialog[open]') ?? undefined}>
             <MenuPanel
               items={props.items}
               style={{ position: 'fixed', left: `${at().x}px`, top: `${at().y}px`, 'z-index': 'var(--z-dropdown)' }}

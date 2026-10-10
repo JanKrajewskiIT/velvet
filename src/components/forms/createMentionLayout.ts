@@ -4,7 +4,7 @@ import { clamp } from '../../utils/math';
 
 const POPOVER_WIDTH_PX = 248;
 const POPOVER_GAP_PX = 6;
-const CARET_LEFT_OFFSET_PX = 8;
+export const CARET_LEFT_OFFSET_PX = 8;
 const DEFAULT_LINE_HEIGHT_PX = 20;
 const MIRRORED_STYLES = [
   'padding-top',

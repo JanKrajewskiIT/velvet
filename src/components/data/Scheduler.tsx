@@ -64,7 +64,9 @@ export const Scheduler = (props: SchedulerProps): JSX.Element => {
     <div class={cx('vui-sched', p.class)}>
       <SchedulerToolbar scheduler={scheduler} />
       <div
-        ref={frame}
+        ref={(element) => {
+          frame = element;
+        }}
         class="vui-sched__frame"
         style={{ 'max-height': cssLength(p.maxHeight) }}
         // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- scrollable schedule region must be focusable so keyboard users can scroll it

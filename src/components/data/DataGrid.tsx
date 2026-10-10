@@ -1,22 +1,28 @@
-import { createSignal, For, type JSX, mergeProps, Show } from 'solid-js';
+import { createEffect, createMemo, createSignal, type JSX, mergeProps, onCleanup, Show } from 'solid-js';
 
+import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { Button } from '../actions/Button';
 import { createGridActiveCell } from './createGridActiveCell';
 import { createGridExpansion } from './createGridExpansion';
 import { createGridKeyboard } from './createGridKeyboard';
 import { createGridLayout } from './createGridLayout';
 import { createGridSelection } from './createGridSelection';
 import { createGridView } from './createGridView';
+import { createGridWindow, type GridWindow } from './createGridWindow';
+import { createVirtualKeys } from './createVirtualKeys';
 import type { DataGridController } from './dataGridController';
 import type { DataGridProps } from './dataGridTypes';
+import { GridBody } from './GridBody';
+import { DEFAULT_GRID_HEIGHT } from './gridColumns';
 import { GridEmpty } from './GridEmpty';
 import { GridFooter } from './GridFooter';
 import { GridHeader } from './GridHeader';
-import { GridRow } from './GridRow';
 import { GridToolbar } from './GridToolbar';
-import { rowId } from './rowData';
+import { rowId, type RowKey } from './rowData';
 
 export type { DataGridProps, GridColumn, GridRowChange } from './dataGridTypes';
+export type { GridViewState } from './gridViewTypes';
 
 /**
  * Advanced data grid. Spreadsheet core: single active cell, arrows / Home / End / PageUp/Down, Enter / F2 / typing edits,
@@ -31,7 +37,7 @@ export const DataGrid = <T extends object>(props: DataGridProps<T>): JSX.Element
   const p = mergeProps(
     {
       rowKey: 'id',
-      height: 360,
+      height: DEFAULT_GRID_HEIGHT,
       stickyFirst: true,
       rowNumbers: true,
       selectable: false,
@@ -42,20 +48,33 @@ export const DataGrid = <T extends object>(props: DataGridProps<T>): JSX.Element
     props,
   );
   const [scrolled, setScrolled] = createSignal(false);
-  let gridElement!: HTMLDivElement;
+  const [scrolledRight, setScrolledRight] = createSignal(false);
+  const [gridElement, setGridElement] = createSignal<HTMLDivElement>();
+  const translate = useTranslate();
 
-  const keyOf = (row: T, index: number) => rowId(row, p.rowKey, index);
-  const view = createGridView<T>({
-    columns: () => p.columns,
-    rows: () => p.rows,
-    stickyFirst: () => p.stickyFirst,
-    filterFields: () => p.filterFields,
+  const sourceKeys = createVirtualKeys(
+    () => p.rows,
+    (row, index) => p.getRowId?.(row) ?? rowId(row, p.rowKey, index),
+    'DataGrid',
+  );
+  const identities = createMemo(() => {
+    const keys = sourceKeys.keys();
+    const result = new Map<T, RowKey>();
+    p.rows.forEach((row, index) => {
+      const key = keys[index];
+      if (key !== undefined) result.set(row, key);
+    });
+    return result;
   });
+  const keyOf = (row: T, index: number) => identities().get(row) ?? p.getRowId?.(row) ?? rowId(row, p.rowKey, index);
+  const view = createGridView<T>(() => p);
+  const rowKeys = createVirtualKeys(view.rows, keyOf, 'DataGrid');
   const layout = createGridLayout<T>({
-    columns: () => p.columns,
     cols: view.cols,
     rowNumbers: () => p.rowNumbers,
     selectable: () => p.selectable,
+    widths: view.widths,
+    setWidth: view.setWidth,
   });
   const selection = createGridSelection<T>({
     selected: () => p.selected,
@@ -65,14 +84,25 @@ export const DataGrid = <T extends object>(props: DataGridProps<T>): JSX.Element
     keyOf,
   });
   const expansion = createGridExpansion();
+  const [getWindow, setWindow] = createSignal<GridWindow>();
   const active = createGridActiveCell<T>({
-    getGrid: () => gridElement,
+    getGrid: gridElement,
     cols: view.cols,
     view: view.rows,
     rows: () => p.rows,
-    rowKey: () => p.rowKey,
+    keyOf,
+    ensureVisible: (index) => getWindow()?.ensureVisible(index),
     onRowsChange: (rows, change) => p.onRowsChange?.(rows, change),
   });
+  const window = createGridWindow({
+    config: () => p,
+    keys: rowKeys,
+    expansion,
+    viewport: gridElement,
+    active: active.cell,
+    edit: active.edit,
+  });
+  setWindow(window);
   const onKey = createGridKeyboard<T>({
     active,
     selection,
@@ -83,28 +113,65 @@ export const DataGrid = <T extends object>(props: DataGridProps<T>): JSX.Element
     selectable: () => p.selectable,
     hasDetail: () => !!p.renderDetail,
   });
-  const grid: DataGridController<T> = { config: p, view, selection, layout, active, expansion, keyOf };
+  const grid: DataGridController<T> = { config: p, view, selection, layout, active, expansion, keyOf, window, rowKeys };
+  createEffect(() => {
+    layout.template();
+    const element = gridElement();
+    if (!element) return;
+    const update = () => {
+      const currentElement = gridElement();
+      if (!currentElement) return;
+      setScrolled(currentElement.scrollLeft > 2);
+      setScrolledRight(currentElement.scrollWidth - currentElement.clientWidth - currentElement.scrollLeft > 2);
+    };
+    const frame = requestAnimationFrame(update);
+    const observer = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(update);
+    observer?.observe(element);
+    onCleanup(() => {
+      cancelAnimationFrame(frame);
+      observer?.disconnect();
+    });
+  });
 
   return (
     <div class={cx('vui-dgrid', p.class)}>
       <GridToolbar grid={grid} />
+      <Show when={view.error()}>
+        <div role="status" class="vui-dgrid__view-error">
+          {translate('velvet.data.dataGrid.viewError')}
+          <Button size="xs" variant="ghost" onClick={view.reset}>
+            {translate('velvet.data.dataGrid.resetView')}
+          </Button>
+        </div>
+      </Show>
       {/* eslint-disable-next-line jsx-a11y/interactive-supports-focus -- grid uses roving tabindex: the active gridcell holds the tab stop */}
       <div
-        ref={gridElement}
+        ref={setGridElement}
         role="grid"
-        aria-rowcount={view.rows().length + 1}
-        aria-colcount={view.cols().length}
+        aria-label={p.label ?? translate('velvet.data.dataGrid.label')}
+        aria-rowcount={window.rowCount()}
+        aria-colcount={view.cols().length + (p.selectable ? 1 : 0)}
         aria-multiselectable={p.selectable || undefined}
-        class={cx('vui-grid', scrolled() && 'vui-grid--scrolled')}
-        style={{ height: `${p.height}px`, '--grid-tpl': layout.template() }}
+        class={cx('vui-grid', scrolled() && 'vui-grid--scrolled', scrolledRight() && 'vui-grid--scrolled-right')}
+        style={{
+          height: `${p.height}px`,
+          '--grid-tpl': layout.template(),
+          '--grid-row-height': p.rowHeight === undefined ? undefined : `${window.rowHeight()}px`,
+        }}
         onKeyDown={onKey}
-        onScroll={(e) => setScrolled(e.currentTarget.scrollLeft > 2)}
+        onScroll={(event) => {
+          setScrolled(event.currentTarget.scrollLeft > 2);
+          setScrolledRight(
+            event.currentTarget.scrollWidth - event.currentTarget.clientWidth - event.currentTarget.scrollLeft > 2,
+          );
+          window.update();
+        }}
       >
         <GridHeader grid={grid} />
         <Show when={view.rows().length === 0}>
           <GridEmpty grid={grid} />
         </Show>
-        <For each={view.rows()}>{(row, r) => <GridRow grid={grid} row={row} index={r()} />}</For>
+        <GridBody grid={grid} />
       </div>
       <GridFooter grid={grid} />
     </div>

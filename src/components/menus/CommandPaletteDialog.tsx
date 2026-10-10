@@ -34,14 +34,15 @@ export const CommandPaletteDialog = (props: CommandPaletteDialogProps) => {
   const id = createUniqueId();
   const optionId = (index: number) => `${id}-${index}`;
   let list!: HTMLDivElement;
-  const [root, setRoot] = createSignal<HTMLDivElement>();
+  const [root, setRoot] = createSignal<HTMLDialogElement>();
   const [query, setQuery] = createSignal('');
-  const [active, setActive] = createSignal(0);
+  const [highlighted, setActive] = createSignal(0);
 
   createModal(() => true, root, { onEscape: () => props.onClose() });
 
   const groups = createMemo(() => filterCommandGroups(props.groups, query()));
   const flat = createMemo(() => groups().flatMap((group) => group.results.map((result) => result.item)));
+  const active = () => (flat().length ? Math.min(Math.max(0, highlighted()), flat().length - 1) : -1);
 
   createEffect(() => {
     const el = document.getElementById(optionId(active()));
@@ -58,7 +59,7 @@ export const CommandPaletteDialog = (props: CommandPaletteDialogProps) => {
 
   const step = (direction: 1 | -1) => {
     const count = Math.max(1, flat().length);
-    setActive((at) => (at + direction + count) % count);
+    setActive((active() + direction + count) % count);
   };
 
   const onKeyDown: JSX.EventHandler<HTMLInputElement, KeyboardEvent> = (e) => {
@@ -83,18 +84,18 @@ export const CommandPaletteDialog = (props: CommandPaletteDialogProps) => {
   };
 
   return (
-    <ModalBackdrop class="vui-dialog-backdrop vui-dialog-backdrop--top" onDismiss={props.onClose}>
-      <div
-        ref={setRoot}
-        role="dialog"
-        aria-modal="true"
-        aria-label={labels().dialog}
-        class={cx('vui-cmdk', props.class)}
-      >
+    <ModalBackdrop
+      ref={setRoot}
+      class="vui-dialog-backdrop vui-dialog-backdrop--top"
+      onDismiss={props.onClose}
+      aria-label={labels().dialog}
+    >
+      <div class={cx('vui-cmdk', props.class)}>
         <div class="vui-cmdk__search">
           <Glyph name="search" />
           <input
             role="combobox"
+            aria-label={translate('velvet.common.search')}
             aria-expanded="true"
             aria-controls={id}
             aria-activedescendant={flat().length ? optionId(active()) : undefined}
@@ -111,7 +112,14 @@ export const CommandPaletteDialog = (props: CommandPaletteDialogProps) => {
             Esc
           </kbd>
         </div>
-        <div ref={list} id={id} role="listbox" class="vui-cmdk__list">
+        <div
+          ref={(element) => {
+            list = element;
+          }}
+          id={id}
+          role="listbox"
+          class="vui-cmdk__list"
+        >
           <For each={groups()}>
             {(group) => (
               <div role="group" aria-label={group.label}>

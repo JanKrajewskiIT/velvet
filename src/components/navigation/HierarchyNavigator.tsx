@@ -105,7 +105,12 @@ export const HierarchyNavigator = (props: HierarchyNavigatorProps) => {
       </div>
       <Show when={[path().length]} keyed>
         {(_depth) => (
-          <ul ref={list} class={cx('vui-hnav__list', direction() > 0 ? 'vui-hnav__list--in' : 'vui-hnav__list--out')}>
+          <ul
+            ref={(element) => {
+              list = element;
+            }}
+            class={cx('vui-hnav__list', direction() > 0 ? 'vui-hnav__list--in' : 'vui-hnav__list--out')}
+          >
             <Index each={level()}>
               {(node) => (
                 <li>

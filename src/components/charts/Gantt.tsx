@@ -69,7 +69,9 @@ export const Gantt = (props: GanttProps) => {
       aria-label={label()}
     >
       <div
-        ref={scroller}
+        ref={(element) => {
+          scroller = element;
+        }}
         class="vui-gantt__scroll"
         style={{ 'max-height': typeof merged.height === 'number' ? `${merged.height}px` : merged.height }}
       >

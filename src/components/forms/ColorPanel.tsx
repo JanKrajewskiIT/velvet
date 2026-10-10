@@ -100,7 +100,9 @@ export const ColorPanel = (props: ColorPanelProps) => {
   return (
     <div class="vui-color">
       <div
-        ref={area}
+        ref={(element) => {
+          area = element;
+        }}
         class="vui-color__area"
         style={{ background: `hsl(${hsv().h} 100% 50%)` }}
         onPointerDown={(e) => startDrag(e, dragArea)}
@@ -123,7 +125,9 @@ export const ColorPanel = (props: ColorPanelProps) => {
         />
       </div>
       <div
-        ref={hue}
+        ref={(element) => {
+          hue = element;
+        }}
         class="vui-color__hue"
         onPointerDown={(e) => startDrag(e, dragHue)}
         onPointerMove={(e) => e.buttons && dragHue(e)}

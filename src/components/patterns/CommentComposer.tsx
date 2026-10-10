@@ -60,7 +60,9 @@ export const CommentComposer = (props: CommentComposerProps) => {
       </Show>
       <div class="vui-cmt-compose__box">
         <textarea
-          ref={input}
+          ref={(element) => {
+            input = element;
+          }}
           rows={1}
           class="vui-cmt-compose__input"
           placeholder={p.placeholder}

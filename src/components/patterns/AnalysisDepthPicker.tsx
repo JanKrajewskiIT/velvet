@@ -4,7 +4,7 @@ import { useTranslate } from '../../i18n/useTranslate';
 import type { AnalysisDepth } from './analysisSources';
 
 export interface AnalysisDepthPickerProps {
-  depths: AnalysisDepth[];
+  depths: readonly AnalysisDepth[];
   depth: string;
   disabled: boolean;
   onSelect: (id: string) => void;

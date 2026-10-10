@@ -3,7 +3,8 @@ import { createMemo, For, type JSX, mergeProps, Show } from 'solid-js';
 import { createControllable } from '../../hooks/createControllable';
 import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
-import { Segmented, SegmentedItem } from '../primitives/Segmented';
+import { Segmented } from '../primitives/Segmented';
+import { SegmentedItem } from '../primitives/SegmentedItem';
 
 export interface SwitcherOption {
   value: string;

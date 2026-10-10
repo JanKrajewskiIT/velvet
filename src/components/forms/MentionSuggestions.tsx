@@ -1,4 +1,4 @@
-import { For } from 'solid-js';
+import { For, type JSX } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { Avatar } from '../data/Avatar';
@@ -7,6 +7,8 @@ import { Surface } from '../primitives/Surface';
 import type { MentionOption } from './mentionModel';
 
 export interface MentionSuggestionsProps {
+  ref?: (element: HTMLElement) => void;
+  style?: JSX.CSSProperties;
   id: string;
   label?: string;
   trigger: string;
@@ -22,12 +24,13 @@ export const MentionSuggestions = (props: MentionSuggestionsProps) => {
   const translate = useTranslate();
   return (
     <Surface
+      ref={props.ref}
       variant="overlay"
       class="vui-mention__pop"
       role="listbox"
       id={props.id}
       aria-label={props.label ?? translate('velvet.forms.mentionInput.listLabel')}
-      style={{ left: `${props.position.left}px`, top: `${props.position.top}px` }}
+      style={{ left: `${props.position.left}px`, top: `${props.position.top}px`, ...props.style }}
     >
       <For each={props.suggestions}>
         {(option, index) => (

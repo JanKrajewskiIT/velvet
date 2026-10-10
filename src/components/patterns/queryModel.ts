@@ -10,8 +10,11 @@ export interface QueryOperator {
 
 type OperatorDefinition = { value: string } & ({ labelKey: I18nKey } | { symbol: string });
 
-const IS_EMPTY: OperatorDefinition = { value: 'empty', labelKey: 'velvet.patterns.queryBuilder.operators.isEmpty' };
-const IS: OperatorDefinition = { value: 'eq', labelKey: 'velvet.patterns.queryBuilder.operators.is' };
+const IS_EMPTY = {
+  value: 'empty',
+  labelKey: 'velvet.patterns.queryBuilder.operators.isEmpty',
+} as const satisfies OperatorDefinition;
+const IS = { value: 'eq', labelKey: 'velvet.patterns.queryBuilder.operators.is' } as const satisfies OperatorDefinition;
 
 const OPERATORS = {
   text: [
@@ -19,6 +22,7 @@ const OPERATORS = {
     { value: 'not_contains', labelKey: 'velvet.patterns.queryBuilder.operators.notContains' },
     IS,
     { value: 'starts', labelKey: 'velvet.patterns.queryBuilder.operators.startsWith' },
+    { value: 'ends', labelKey: 'velvet.patterns.queryBuilder.operators.endsWith' },
     IS_EMPTY,
     { value: 'not_empty', labelKey: 'velvet.patterns.queryBuilder.operators.isNotEmpty' },
   ],
@@ -42,7 +46,12 @@ const OPERATORS = {
     { value: 'true', labelKey: 'velvet.patterns.queryBuilder.operators.isTrue' },
     { value: 'false', labelKey: 'velvet.patterns.queryBuilder.operators.isFalse' },
   ],
-} satisfies Record<string, OperatorDefinition[]>;
+} as const satisfies Record<string, readonly OperatorDefinition[]>;
+
+export type QueryOperatorValue = (typeof OPERATORS)[keyof typeof OPERATORS][number]['value'];
+export const QUERY_OPERATOR_VALUES: readonly string[] = Object.values(OPERATORS).flatMap((operators) =>
+  operators.map((operator) => operator.value),
+);
 
 const COMBINATOR_LABEL_KEYS: Record<'and' | 'or', I18nKey> = {
   and: 'velvet.patterns.queryBuilder.combinators.and',
@@ -58,6 +67,8 @@ export interface QueryField {
   type?: QueryFieldType;
   options?: { value: string; label: string }[];
   placeholder?: string;
+  /** Limit the available operators to a subset supported by this field's type. */
+  operators?: readonly QueryOperatorValue[];
 }
 
 export interface QueryRule {
@@ -80,8 +91,13 @@ export const VALUELESS_OPS: readonly string[] = ['empty', 'not_empty', 'true', '
 
 export const isQueryGroup = (node: QueryNode): node is QueryGroup => 'rules' in node;
 
-const operatorDefinitions = (field: QueryField | undefined): readonly OperatorDefinition[] =>
-  OPERATORS[field?.type ?? 'text'];
+const operatorDefinitions = (field: QueryField | undefined): readonly OperatorDefinition[] => {
+  const defaults = OPERATORS[field?.type ?? 'text'];
+  return field?.operators ? defaults.filter((operator) => field.operators?.includes(operator.value)) : defaults;
+};
+
+export const queryOperatorValues = (field: QueryField | undefined): string[] =>
+  operatorDefinitions(field).map((operator) => operator.value);
 
 export const operatorsFor = (field: QueryField | undefined, translate: StaticTranslate): QueryOperator[] =>
   operatorDefinitions(field).map((definition) => ({

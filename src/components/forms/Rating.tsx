@@ -95,7 +95,9 @@ export const Rating = (props: RatingProps) => {
     >
       {/* eslint-disable-next-line jsx-a11y/interactive-supports-focus -- focus roves on the radio stars, not on the group */}
       <span
-        ref={root}
+        ref={(element) => {
+          root = element;
+        }}
         class={cx('vui-rating', sizeClass(), p.class)}
         role="radiogroup"
         aria-label={label()}

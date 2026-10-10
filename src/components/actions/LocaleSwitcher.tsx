@@ -3,6 +3,7 @@ import { For, type JSX, mergeProps, untrack } from 'solid-js';
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { freezeRecords } from '../../utils/freezeRecords';
 import { Glyph } from '../primitives/Glyph';
 
 export interface LocaleOption {
@@ -13,10 +14,10 @@ export interface LocaleOption {
   name: string;
 }
 
-export const DEFAULT_LOCALE_OPTIONS: readonly LocaleOption[] = [
+export const DEFAULT_LOCALE_OPTIONS: readonly Readonly<LocaleOption>[] = freezeRecords([
   { value: 'pl', label: 'PL', name: 'Polski' },
   { value: 'en', label: 'EN', name: 'English' },
-];
+]);
 
 export interface LocaleSwitcherProps {
   locales?: readonly LocaleOption[];

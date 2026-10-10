@@ -54,7 +54,7 @@ export const Tooltip = (props: TooltipProps) => {
     }, HIDE_DELAY);
   };
   onCleanup(() => clearTimeout(hideTimer));
-  createLayer(visible, () => setDismissed(true));
+  createLayer(visible, () => setDismissed(true), { root: wrap, onOutside: () => setDismissed(true) });
   const floating = createFloating(visible, () => wrap()?.firstElementChild ?? wrap(), {
     side: () => p.side,
     align: () => 'center',

@@ -1,4 +1,4 @@
-import type { ColumnState } from './ColumnManager';
+import type { ColumnState } from './columnManagerTypes';
 
 /** Visible columns in display order (left pins → middle → right pins), each with `pin` set. */
 export const applyColumns = <T extends { key: string }>(

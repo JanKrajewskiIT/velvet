@@ -1,7 +1,7 @@
 import { relative } from 'node:path';
 
 const CHUNK_SIZE = 25;
-const IGNORED_PATH = /^(?:velvet|dist-showcase|src\/styles)\//u;
+const IGNORED_PATH = /^(?:velvet\/|src\/styles\/(?:styles\.css$|components\/|tokens\/|fonts\/))/u;
 
 const toRelative = (file) => relative(process.cwd(), file).replaceAll('\\', '/');
 

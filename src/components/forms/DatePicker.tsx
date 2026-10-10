@@ -6,7 +6,7 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { fmtDate, startOfDay } from '../../utils/date';
 import { Button } from '../actions/Button';
-import { FieldLabel } from '../primitives/Field';
+import { FieldLabel } from '../primitives/FieldLabel';
 import { Calendar } from './Calendar';
 import { callbackAlias } from './callbackAlias';
 import { createPickerPopover } from './createPickerPopover';
@@ -71,7 +71,7 @@ export const DatePicker = (props: DatePickerProps) => {
       () => p.onChange,
     ),
   });
-  const popover = createPickerPopover(p.defaultOpen);
+  const popover = createPickerPopover(p.defaultOpen, () => p.align);
   const text = () => {
     const date = current();
     if (!date) return '';
@@ -106,6 +106,8 @@ export const DatePicker = (props: DatePickerProps) => {
         </div>
         <Show when={popover.open()}>
           <div
+            ref={popover.floating.ref}
+            style={popover.floating.style()}
             class={cx('vui-popover', 'vui-datepop', p.align === 'end' && 'vui-popover--end')}
             role="dialog"
             aria-label={translate('velvet.forms.datePicker.dialogLabel')}

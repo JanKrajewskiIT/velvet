@@ -1,59 +1,71 @@
 import { type Accessor, createEffect, onCleanup } from 'solid-js';
 
-import { createLayer } from './createLayer';
+import { createLayer, isTopLayer } from './createLayer';
 
 const FOCUSABLE =
   'button:not([disabled]),[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
 
 export interface ModalOptions {
-  /** Called when Escape reaches this layer. Omit for a non-dismissible modal. */
   onEscape?: () => void;
-  /** Selector for the element that receives focus on open. Defaults to `[autofocus]`, then the first focusable element, then the root. */
   initialFocus?: string;
 }
 
-/** Makes every body-level sibling branch of `root` inert and returns the function that restores them. */
-const inertBackground = (root: HTMLElement): (() => void) => {
-  const changed: HTMLElement[] = [];
-  for (let node: HTMLElement | null = root; node && node !== document.body; node = node.parentElement) {
-    for (const sibling of node.parentElement?.children ?? []) {
-      if (sibling === node || !(sibling instanceof HTMLElement) || sibling.inert) continue;
-      sibling.inert = true;
-      changed.push(sibling);
-    }
-  }
-  return () => changed.forEach((el) => (el.inert = false));
+interface ScrollLock {
+  count: number;
+  overflow: string;
+}
+
+const scrollLocks = new WeakMap<Document, ScrollLock>();
+
+const lockScroll = (document: Document): (() => void) => {
+  const root = document.documentElement;
+  const lock = scrollLocks.get(document) ?? { count: 0, overflow: root.style.overflow };
+  lock.count += 1;
+  scrollLocks.set(document, lock);
+  root.style.overflow = 'hidden';
+  return () => {
+    lock.count -= 1;
+    if (lock.count) return;
+    root.style.overflow = lock.overflow;
+    scrollLocks.delete(document);
+  };
 };
 
-const focusInitial = (root: HTMLElement, selector?: string) => {
+const focusInitial = (root: HTMLDialogElement, selector?: string) => {
   const target =
     (selector && root.querySelector<HTMLElement>(selector)) ||
     root.querySelector<HTMLElement>('[autofocus]') ||
-    root.querySelector<HTMLElement>(FOCUSABLE) ||
-    root;
-  target.focus({ preventScroll: true });
+    root.querySelector<HTMLElement>(FOCUSABLE);
+  target?.focus({ preventScroll: true });
 };
 
-/**
- * Modal layer lifecycle while `open()` is true: focus moves into `root`, the rest of the page is inert (focus cannot leave,
- * no Tab handler needed), Escape goes through the shared layer stack, and focus returns to the previously focused element on close.
- * `root` must be rendered outside the elements it makes inert, e.g. through a `Portal`.
- */
+/** Native modality owns focus containment and background inertness; the shared layer stack owns dismissal. */
 export const createModal = (
   open: Accessor<boolean>,
-  root: Accessor<HTMLElement | undefined>,
+  root: Accessor<HTMLDialogElement | undefined>,
   options: ModalOptions = {},
 ): void => {
-  createLayer(open, () => options.onEscape?.());
+  createLayer(open, () => options.onEscape?.(), { root });
   createEffect(() => {
-    const el = root();
-    if (!open() || !el) return;
+    const dialog = root();
+    if (!open() || !dialog) return;
+    const document = dialog.ownerDocument;
     const previouslyFocused = document.activeElement instanceof HTMLElement ? document.activeElement : undefined;
-    const restoreBackground = inertBackground(el);
-    focusInitial(el, options.initialFocus);
+    const onCancel = (event: Event) => {
+      event.preventDefault();
+      if (isTopLayer(dialog)) options.onEscape?.();
+    };
+    dialog.addEventListener('cancel', onCancel);
+    dialog.showModal();
+    const unlock = lockScroll(document);
+    focusInitial(dialog, options.initialFocus);
     onCleanup(() => {
-      restoreBackground();
-      if (previouslyFocused?.isConnected) previouslyFocused.focus({ preventScroll: true });
+      dialog.removeEventListener('cancel', onCancel);
+      dialog.close();
+      unlock();
+      if (previouslyFocused?.isConnected && !previouslyFocused.closest('[inert]')) {
+        previouslyFocused.focus({ preventScroll: true });
+      }
     });
   });
 };

@@ -114,6 +114,7 @@ const createsFixedContainingBlock = (style: CSSStyleDeclaration): boolean =>
  * unless an ancestor (transformed dialog, filtered or contained panel) establishes its own containing block.
  */
 export const fixedOrigin = (element: HTMLElement): { x: number; y: number } => {
+  if (element.popover === 'manual' && element.matches(':popover-open')) return { x: 0, y: 0 };
   for (let node = element.parentElement; node; node = node.parentElement) {
     if (!createsFixedContainingBlock(getComputedStyle(node))) continue;
     const rect = node.getBoundingClientRect();

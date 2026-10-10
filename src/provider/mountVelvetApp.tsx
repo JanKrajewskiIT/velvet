@@ -1,3 +1,4 @@
+import { handleAuthRedirectCallback } from '@jankrajewskiit/auth';
 import type { JSX } from 'solid-js';
 import { render } from 'solid-js/web';
 
@@ -16,6 +17,12 @@ const resolveContainer = (root: string | HTMLElement): HTMLElement => {
   return container;
 };
 
-/** Renders `app` inside `VelvetProvider`. Returns the function that unmounts it. */
-export const mountVelvetApp = ({ root, app, ...providerProps }: MountVelvetAppOptions): (() => void) =>
-  render(() => <VelvetProvider {...providerProps}>{app()}</VelvetProvider>, resolveContainer(root));
+/** Handles OIDC before mounting. Returns a disposer, or undefined when the callback starts navigation. Rejects on bootstrap failure. */
+export const mountVelvetApp = async ({
+  root,
+  app,
+  ...providerProps
+}: MountVelvetAppOptions): Promise<(() => void) | undefined> => {
+  if (providerProps.authConfig && (await handleAuthRedirectCallback(providerProps.authConfig))) return undefined;
+  return render(() => <VelvetProvider {...providerProps}>{app()}</VelvetProvider>, resolveContainer(root));
+};

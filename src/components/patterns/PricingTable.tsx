@@ -11,7 +11,7 @@ import { Glyph } from '../primitives/Glyph';
 import { VisuallyHidden } from '../primitives/VisuallyHidden';
 import { isOneOf } from './oneOf';
 
-export const BILLINGS = ['monthly', 'yearly'] as const;
+export const BILLINGS = Object.freeze(['monthly', 'yearly'] as const);
 export type Billing = (typeof BILLINGS)[number];
 
 export type PerBilling<T> = T | Record<Billing, T>;

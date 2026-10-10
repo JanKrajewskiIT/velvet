@@ -9,7 +9,9 @@ export interface ColorLabel {
 const SERIES_COUNT = 8;
 
 /** The data-viz series palette, in order. */
-export const LABEL_COLORS: string[] = Array.from({ length: SERIES_COUNT }, (_, i) => `var(--dv-${i + 1})`);
+export const LABEL_COLORS: readonly string[] = Object.freeze(
+  Array.from({ length: SERIES_COUNT }, (_, i) => `var(--dv-${i + 1})`),
+);
 
 /** Case- and diacritic-insensitive form used to match label names. */
 export const normalizeLabelText = (text: string): string =>

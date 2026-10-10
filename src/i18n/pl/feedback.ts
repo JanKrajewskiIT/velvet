@@ -9,6 +9,9 @@ export const feedbackPl: TranslationOf<typeof feedbackEn> = {
   bottomSheet: {
     label: 'Panel',
   },
+  dialog: {
+    label: 'Okno dialogowe',
+  },
   confirmDialog: {
     title: 'Czy na pewno?',
     errorMessage: 'Coś poszło nie tak — spróbuj ponownie.',

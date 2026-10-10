@@ -3,6 +3,7 @@ import { createMemo, For, Match, Show, Switch } from 'solid-js';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { Button } from '../actions/Button';
+import { IconButton } from '../actions/IconButton';
 import {
   combinatorLabel,
   isQueryGroup,
@@ -24,6 +25,8 @@ export interface QueryGroupEditorProps {
   /** 0 for the root group. */
   depth: number;
   maxDepth: number;
+  disabled?: boolean;
+  reorderable?: boolean;
 }
 
 const asGroup = (node: QueryNode): QueryGroup | undefined => (isQueryGroup(node) ? node : undefined);
@@ -43,6 +46,14 @@ export const QueryGroupEditor = (props: QueryGroupEditorProps) => {
   const remove = (id: string) =>
     props.onChange({ ...props.group, rules: props.group.rules.filter((node) => node.id !== id) });
   const append = (node: QueryNode) => props.onChange({ ...props.group, rules: [...props.group.rules, node] });
+  const move = (from: number, to: number) => {
+    if (props.disabled || to < 0 || to >= props.group.rules.length) return;
+    const rules = [...props.group.rules];
+    const node = rules.splice(from, 1)[0];
+    if (!node) return;
+    rules.splice(to, 0, node);
+    props.onChange({ ...props.group, rules });
+  };
 
   return (
     <div
@@ -68,6 +79,7 @@ export const QueryGroupEditor = (props: QueryGroupEditorProps) => {
                         size="xs"
                         iconRight="chevrons-up-down"
                         class="vui-qb__comb"
+                        disabled={props.disabled}
                         aria-label={translate(
                           combinator() === 'and'
                             ? 'velvet.patterns.queryBuilder.matchAll'
@@ -88,6 +100,8 @@ export const QueryGroupEditor = (props: QueryGroupEditorProps) => {
                         fields={props.fields}
                         depth={props.depth + 1}
                         maxDepth={props.maxDepth}
+                        disabled={props.disabled}
+                        reorderable={props.reorderable}
                         onChange={(next) => replace(id, next)}
                         onRemove={() => remove(id)}
                       />
@@ -99,19 +113,44 @@ export const QueryGroupEditor = (props: QueryGroupEditorProps) => {
                         rule={rule()}
                         fields={props.fields}
                         canRemove={canRemoveRule()}
+                        disabled={props.disabled}
                         onChange={(next) => replace(id, next)}
                         onRemove={() => remove(id)}
                       />
                     )}
                   </Match>
                 </Switch>
+                <Show when={props.reorderable && props.group.rules.length > 1}>
+                  <div class="vui-qb__order">
+                    <IconButton
+                      size="xs"
+                      icon="arrow-up"
+                      label={translate('velvet.patterns.queryBuilder.moveUp')}
+                      disabled={props.disabled || position() === 0}
+                      onClick={() => move(position(), position() - 1)}
+                    />
+                    <IconButton
+                      size="xs"
+                      icon="arrow-down"
+                      label={translate('velvet.patterns.queryBuilder.moveDown')}
+                      disabled={props.disabled || position() === props.group.rules.length - 1}
+                      onClick={() => move(position(), position() + 1)}
+                    />
+                  </div>
+                </Show>
               </div>
             )}
           </Show>
         )}
       </For>
       <div class="vui-qb__add">
-        <Button variant="ghost" size="sm" iconLeft="plus" onClick={() => append(newQueryRule(props.fields))}>
+        <Button
+          variant="ghost"
+          size="sm"
+          iconLeft="plus"
+          disabled={props.disabled || !props.fields.length}
+          onClick={() => append(newQueryRule(props.fields))}
+        >
           {translate('velvet.patterns.queryBuilder.addCondition')}
         </Button>
         <Show when={canAddGroup()}>
@@ -119,13 +158,20 @@ export const QueryGroupEditor = (props: QueryGroupEditorProps) => {
             variant="ghost"
             size="sm"
             iconLeft="plus"
+            disabled={props.disabled || !props.fields.length}
             onClick={() => append(newQueryGroup(oppositeCombinator(combinator()), props.fields))}
           >
             {translate('velvet.patterns.queryBuilder.addGroup')}
           </Button>
         </Show>
         <Show when={props.depth > 0}>
-          <Button variant="ghost" size="sm" class="vui-qb__drop" onClick={() => props.onRemove()}>
+          <Button
+            variant="ghost"
+            size="sm"
+            class="vui-qb__drop"
+            disabled={props.disabled}
+            onClick={() => props.onRemove()}
+          >
             {translate('velvet.patterns.queryBuilder.removeGroup')}
           </Button>
         </Show>

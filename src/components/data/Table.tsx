@@ -85,7 +85,9 @@ export const Table = <T extends object>(props: TableProps<T>): JSX.Element => {
       <TableToolbar table={table} />
       <TableBulkBar table={table} />
       <div
-        ref={scroller}
+        ref={(element) => {
+          scroller = element;
+        }}
         onScroll={pins.updateScrolled}
         class={cx(
           'vui-table__scroll',
@@ -103,10 +105,18 @@ export const Table = <T extends object>(props: TableProps<T>): JSX.Element => {
           )}
           aria-busy={p.loading || undefined}
         >
-          <thead ref={head}>
+          <thead
+            ref={(element) => {
+              head = element;
+            }}
+          >
             <TableHeaderRow table={table} />
           </thead>
-          <tbody ref={body}>
+          <tbody
+            ref={(element) => {
+              body = element;
+            }}
+          >
             <Show when={p.loading}>
               <TableSkeletonRows table={table} />
             </Show>
@@ -119,6 +129,7 @@ export const Table = <T extends object>(props: TableProps<T>): JSX.Element => {
                   </td>
                 </tr>
               </Show>
+              {p.addRow}
             </Show>
           </tbody>
         </table>

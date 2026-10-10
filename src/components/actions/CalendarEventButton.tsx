@@ -1,7 +1,10 @@
 import type { I18nKey } from '@jankrajewskiit/i18n';
-import { createEffect, createSignal, createUniqueId, For, type JSX, mergeProps, on, Show, untrack } from 'solid-js';
+import { createSignal, createUniqueId, For, mergeProps, Show } from 'solid-js';
 
+import { createControllable } from '../../hooks/createControllable';
 import { createDismiss } from '../../hooks/createDismiss';
+import { createFloating } from '../../hooks/createFloating';
+import { createMenuNavigation } from '../../hooks/createMenuNavigation';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { Chevron } from '../primitives/Chevron';
@@ -16,7 +19,6 @@ import {
 } from './calendarEvent';
 
 const OBJECT_URL_REVOKE_DELAY_MS = 1000;
-const MENU_ITEM = '[role=menuitem]';
 
 export type CalendarProvider = 'google' | 'outlook' | 'ics';
 
@@ -55,12 +57,14 @@ const PROVIDERS: Record<
   },
 };
 
-export const CALENDAR_PROVIDERS = Object.keys(PROVIDERS) as CalendarProvider[];
+export const CALENDAR_PROVIDERS: readonly CalendarProvider[] = Object.freeze(
+  Object.keys(PROVIDERS) as CalendarProvider[],
+);
 
 export interface CalendarEventButtonProps {
   event: CalendarEventDetails;
   /** One provider renders a plain button; several render a menu. @default all providers */
-  providers?: CalendarProvider[];
+  providers?: readonly CalendarProvider[];
   /** @default localized "Add to calendar" */
   label?: string;
   /** @default 'secondary' */
@@ -86,40 +90,29 @@ export const CalendarEventButton = (props: CalendarEventButtonProps) => {
   const translate = useTranslate();
   const label = () => p.label ?? translate('velvet.actions.calendarEventButton.label');
   const [open, setOpen] = createSignal(false);
-  const [done, setDone] = createSignal(untrack(() => !!p.added));
+  const [done, setDone] = createControllable({ value: () => p.added, defaultValue: false });
   const [root, setRoot] = createSignal<HTMLSpanElement>();
   const menuId = createUniqueId();
 
-  createEffect(
-    on(
-      () => p.added,
-      (added) => setDone(!!added),
-      { defer: true },
-    ),
-  );
-  createDismiss(open, () => setOpen(false), root, { refocus: 'button' });
-  createEffect(() => {
-    if (!open()) return;
-    requestAnimationFrame(() => root()?.querySelector<HTMLElement>(MENU_ITEM)?.focus());
-  });
-
+  const close = (refocus: boolean) => {
+    setOpen(false);
+    if (refocus) root()?.querySelector<HTMLElement>('button')?.focus({ preventScroll: true });
+  };
+  const menu = createMenuNavigation(root, () => p.providers.length, close);
+  const openMenu = (last = false) => {
+    setOpen(true);
+    menu.focus(last ? p.providers.length - 1 : 0);
+  };
+  createDismiss(open, () => close(false), root, { refocus: 'button' });
+  const floating = createFloating(open, root);
   const single = () => p.providers.length === 1;
   const text = () => (done() ? (p.addedLabel ?? translate('velvet.actions.calendarEventButton.added')) : label());
 
   const pick = (provider: CalendarProvider) => {
     PROVIDERS[provider].go(p.event);
-    setOpen(false);
+    close(true);
     setDone(true);
     p.onAdd?.(provider);
-  };
-
-  const onMenuKeyDown: JSX.EventHandler<HTMLDivElement, KeyboardEvent> = (e) => {
-    if (e.key === 'Tab') setOpen(false);
-    if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
-    e.preventDefault();
-    const items = [...e.currentTarget.querySelectorAll<HTMLElement>(MENU_ITEM)];
-    const at = items.indexOf(document.activeElement as HTMLElement);
-    items[(at + (e.key === 'ArrowDown' ? 1 : -1) + items.length) % items.length]?.focus();
   };
 
   return (
@@ -136,7 +129,13 @@ export const CalendarEventButton = (props: CalendarEventButtonProps) => {
         onClick={() => {
           const [only] = p.providers;
           if (single() && only) pick(only);
-          else setOpen(!open());
+          else if (open()) close(false);
+          else openMenu();
+        }}
+        onKeyDown={(event) => {
+          if (single() || (event.key !== 'ArrowDown' && event.key !== 'ArrowUp')) return;
+          event.preventDefault();
+          openMenu(event.key === 'ArrowUp');
         }}
       >
         <Glyph name={done() ? 'check' : 'calendar-plus'} />
@@ -149,10 +148,25 @@ export const CalendarEventButton = (props: CalendarEventButtonProps) => {
       </button>
       <Show when={open()}>
         {/* eslint-disable-next-line jsx-a11y/interactive-supports-focus -- focus is roving on the menuitems, the menu container is not a tab stop */}
-        <div id={menuId} role="menu" class="vui-calbtn__menu" aria-label={label()} onKeyDown={onMenuKeyDown}>
+        <div
+          ref={floating.ref}
+          style={floating.style()}
+          id={menuId}
+          role="menu"
+          class="vui-calbtn__menu"
+          aria-label={label()}
+          onKeyDown={menu.onKeyDown}
+        >
           <For each={p.providers}>
-            {(provider) => (
-              <button type="button" role="menuitem" class="vui-calbtn__item" onClick={() => pick(provider)}>
+            {(provider, index) => (
+              <button
+                type="button"
+                role="menuitem"
+                tabIndex={index() === menu.active() ? 0 : -1}
+                onFocus={() => menu.onFocus(index())}
+                class="vui-calbtn__item"
+                onClick={() => pick(provider)}
+              >
                 <Glyph name={PROVIDERS[provider].icon} />
                 {translate(PROVIDERS[provider].labelKey)}
                 <Show when={PROVIDERS[provider].external}>

@@ -1,4 +1,4 @@
-import { createEffect, createSignal, type JSX, mergeProps, on, Show } from 'solid-js';
+import { createEffect, createSignal, type JSX, mergeProps, on, onCleanup, Show } from 'solid-js';
 
 import { useTranslate, useTranslateRich } from '../../i18n/useTranslate';
 import { Button } from '../actions/Button';
@@ -13,7 +13,7 @@ export interface ConfirmDialogProps {
   /** May be async: the dialog is locked and shows a spinner until it settles; a rejection keeps it open with `errorMessage`. */
   onConfirm?: () => void | Promise<void>;
   onCancel?: () => void;
-  /** Receives the value `onConfirm` rejected with — the dialog itself shows only `errorMessage`. */
+  /** Receives a rejection from the current open dialog; results after close or disposal are ignored. */
   onError?: (error: unknown) => void;
   /** @default localized "Are you sure?" */
   title?: JSX.Element;
@@ -46,13 +46,20 @@ export const ConfirmDialog = (props: ConfirmDialogProps) => {
   const danger = () => p.tone === 'danger';
   const confirmed = () => !p.requireText || typed().trim() === p.requireText;
   let run = 0;
+  let disposed = false;
+  const isCurrent = (current: number) => !disposed && p.open && current === run;
+
+  onCleanup(() => {
+    disposed = true;
+    run += 1;
+  });
 
   createEffect(
     on(
       () => p.open,
       (open) => {
-        if (!open) return;
         run += 1;
+        if (!open) return;
         setTyped('');
         setBusy(false);
         setFailed(false);
@@ -61,17 +68,18 @@ export const ConfirmDialog = (props: ConfirmDialogProps) => {
   );
 
   const confirm = async () => {
-    if (!confirmed() || busy()) return;
+    if (disposed || !p.open || !confirmed() || busy()) return;
     const current = ++run;
     setBusy(true);
     setFailed(false);
     try {
       await p.onConfirm?.();
     } catch (error) {
-      if (current === run) setFailed(true);
+      if (!isCurrent(current)) return;
+      setFailed(true);
       p.onError?.(error);
     } finally {
-      if (current === run) setBusy(false);
+      if (isCurrent(current)) setBusy(false);
     }
   };
 
@@ -142,42 +150,5 @@ export const ConfirmDialog = (props: ConfirmDialogProps) => {
         )}
       </Show>
     </Dialog>
-  );
-};
-
-export interface ConfirmActionProps extends Omit<ConfirmDialogProps, 'open' | 'onCancel'> {
-  /** Label of the default secondary button, or a render function that receives `open` for a custom trigger. */
-  trigger: JSX.Element | ((open: () => void) => JSX.Element);
-}
-
-/** Trigger + ConfirmDialog in one — owns the open state and closes once `onConfirm` resolves. For lists of repeated destructive actions. */
-export const ConfirmAction = (props: ConfirmActionProps) => {
-  const [open, setOpen] = createSignal(false);
-  const show = () => setOpen(true);
-  const rest = mergeProps(props, {
-    get open() {
-      return open();
-    },
-    onCancel: () => setOpen(false),
-    onConfirm: async () => {
-      await props.onConfirm?.();
-      setOpen(false);
-    },
-  });
-  const trigger = () => {
-    const t = props.trigger;
-    return typeof t === 'function' ? (
-      t(show)
-    ) : (
-      <Button variant="secondary" onClick={show}>
-        {t}
-      </Button>
-    );
-  };
-  return (
-    <>
-      {trigger()}
-      <ConfirmDialog {...rest} />
-    </>
   );
 };

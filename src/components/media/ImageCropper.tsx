@@ -60,7 +60,9 @@ export const ImageCropper = (props: ImageCropperProps) => {
   return (
     <div class={cx('vui-crop', p.class)}>
       <div
-        ref={stage}
+        ref={(element) => {
+          stage = element;
+        }}
         class={cx('vui-crop__stage', gestures.dragging() && 'vui-crop__stage--drag')}
         style={{ height: `${p.height}px` }}
         onPointerDown={gestures.onPointerDown}
@@ -89,7 +91,9 @@ export const ImageCropper = (props: ImageCropperProps) => {
         </Show>
         {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- crop frame is a focusable group that moves and zooms the image with arrow keys */}
         <div
-          ref={frame}
+          ref={(element) => {
+            frame = element;
+          }}
           class={cx('vui-crop__frame', p.shape === 'circle' && 'vui-crop__frame--circle')}
           style={{ width: `${view.frameSize().width}px`, height: `${view.frameSize().height}px` }}
           // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- the crop frame must take focus so arrow keys can adjust the crop

@@ -117,7 +117,9 @@ export const SignaturePad = (props: SignaturePadProps) => {
         style={{ height: `${p.height}px` }}
       >
         <canvas
-          ref={canvas}
+          ref={(element) => {
+            canvas = element;
+          }}
           class="vui-sig__canvas"
           role="img"
           aria-label={`${canvasLabel()} — ${signatureState()}`}

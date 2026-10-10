@@ -36,7 +36,7 @@ export interface ColorLabelSelectionDialogProps {
   /** @default auto — more than 7 labels or onCreate set */
   searchable?: boolean;
   /** Colours cycled for new labels. @default LABEL_COLORS */
-  colors?: string[];
+  colors?: readonly string[];
   /** @default localized "No labels yet." */
   emptyText?: JSX.Element;
   /** Shown when `onSubmit` rejects. @default localized "Couldn’t apply labels — your selection is kept." */

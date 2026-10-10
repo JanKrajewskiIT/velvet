@@ -3,11 +3,12 @@ import { createEffect, createMemo, createSignal, createUniqueId, For, type JSX, 
 
 import { createControllable } from '../../hooks/createControllable';
 import { createDismiss } from '../../hooks/createDismiss';
+import { createFloating } from '../../hooks/createFloating';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { pad } from '../../utils/date';
 import { Control } from '../primitives/Control';
-import { FieldLabel } from '../primitives/Field';
+import { FieldLabel } from '../primitives/FieldLabel';
 import { Glyph } from '../primitives/Glyph';
 import { callbackAlias } from './callbackAlias';
 import { ComboboxOption } from './ComboboxOption';
@@ -62,10 +63,11 @@ export const TimePicker = (props: TimePickerProps) => {
     ),
   });
   const [open, setOpen] = createSignal(false);
-  const [active, setActive] = createSignal(-1);
+  const [highlighted, setActive] = createSignal(-1);
   const [typed, setTyped] = createSignal<string | null>(null);
   const [invalidText, setInvalidText] = createSignal(false);
   const [wrap, setWrap] = createSignal<HTMLElement>();
+  const floating = createFloating(open, wrap, { matchWidth: true });
   let list: HTMLUListElement | undefined;
 
   const text = () => typed() ?? formatTime(current(), p.hour12, i18n.locale());
@@ -79,6 +81,7 @@ export const TimePicker = (props: TimePickerProps) => {
     return result;
   });
   const indexAtOrAfter = (time: string) => options().findIndex((option) => option >= time);
+  const active = () => (options().length ? Math.min(Math.max(0, highlighted()), options().length - 1) : -1);
 
   const set = (time: string | null) => {
     setInvalidText(false);
@@ -184,7 +187,16 @@ export const TimePicker = (props: TimePickerProps) => {
           />
         </Control>
         <Show when={open()}>
-          <ul ref={list} id={listId()} role="listbox" class="vui-select__menu vui-time__menu">
+          <ul
+            ref={(element) => {
+              list = element;
+              floating.ref(element);
+            }}
+            style={floating.style()}
+            id={listId()}
+            role="listbox"
+            class="vui-select__menu vui-time__menu"
+          >
             <For each={options()}>
               {(option, index) => (
                 <ComboboxOption

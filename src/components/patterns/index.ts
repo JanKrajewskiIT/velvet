@@ -26,7 +26,6 @@ export {
   scoreBand,
 } from './atsAnalysis';
 export { AtsAnalysisPanel, type AtsAnalysisPanelProps } from './AtsAnalysisPanel';
-export { AuthGuard, type AuthGuardProps } from './AuthGuard';
 export { CalendarOrganizer, type CalendarOrganizerProps } from './CalendarOrganizer';
 export { type ChatFeedback, ChatMessage, type ChatMessageProps, type ChatRole, type ChatSource } from './ChatMessage';
 export { ChatThread, type ChatThreadProps } from './ChatThread';
@@ -74,7 +73,10 @@ export {
   QueryBuilder,
   type QueryBuilderProps,
   type QueryField,
+  type QueryFieldType,
   type QueryGroup,
+  type QueryNode,
+  type QueryOperatorValue,
   type QueryRule,
 } from './QueryBuilder';
 export { TypingIndicator, type TypingIndicatorProps } from './TypingIndicator';

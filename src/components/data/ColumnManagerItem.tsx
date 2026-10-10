@@ -32,7 +32,7 @@ export const ColumnManagerItem = (props: ColumnManagerItemProps) => {
         props.manager.drag.dragKey() === column().key && 'vui-colman__item--drag',
         dropClass(),
       )}
-      draggable={!locked()}
+      draggable={props.manager.model.canMove(column().key)}
       onDragStart={(e) => props.manager.drag.startDrag(e, column().key)}
       onDragOver={(e) => props.manager.drag.dragOverItem(e, column().key, props.pin)}
       onDragEnd={() => props.manager.drag.endDrag()}
@@ -42,7 +42,7 @@ export const ColumnManagerItem = (props: ColumnManagerItemProps) => {
         data-grip={column().key}
         class="vui-colman__grip"
         icon={locked() ? 'lock' : 'grip-vertical'}
-        disabled={locked()}
+        disabled={!props.manager.model.canMove(column().key)}
         label={translate('velvet.data.columnManager.reorder', { name: props.manager.model.nameOf(column().key) })}
         onKeyDown={(e) => props.manager.keyMove(e, column())}
       />
@@ -61,7 +61,7 @@ export const ColumnManagerItem = (props: ColumnManagerItemProps) => {
               : 'velvet.data.columnManager.pinLeft',
         )}
         class={cx('vui-colman__pin', column().pin && 'vui-colman__pin--on')}
-        disabled={locked() || atMax()}
+        disabled={!props.manager.model.canPin(column().key) || atMax()}
         aria-pressed={!!column().pin}
         onClick={() => props.manager.model.togglePin(column())}
       />
@@ -71,7 +71,7 @@ export const ColumnManagerItem = (props: ColumnManagerItemProps) => {
           name: props.manager.model.nameOf(column().key),
         })}
         checked={column().visible}
-        disabled={locked()}
+        disabled={!props.manager.model.canHide(column().key)}
         onChange={() => props.manager.model.toggleVisible(column())}
       />
     </li>

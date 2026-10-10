@@ -112,7 +112,9 @@ export const Textarea = (props: TextareaProps) => {
         >
           <textarea
             {...rest}
-            ref={area}
+            ref={(element) => {
+              area = element;
+            }}
             id={control.id}
             rows={local.rows}
             class="vui-control__input vui-textarea"

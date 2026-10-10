@@ -25,13 +25,15 @@ export const createMentionSearch = (options: MentionSearchOptions, value: Access
   const detectQuery = createMemo(() => createQueryDetector(Object.keys(sources())));
   const mentionPattern = createMemo(() => createMentionPattern(sources()));
   const [query, setQuery] = createSignal<MentionQuery>();
-  const [activeIndex, setActiveIndex] = createSignal(0);
+  const [highlighted, setActiveIndex] = createSignal(0);
 
   const suggestions = createMemo(() => {
     const current = query();
     return current ? filterMentions(sources()[current.trigger] ?? [], current.text, options.maxResults) : [];
   });
   const open = () => !!query() && suggestions().length > 0 && !options.disabled;
+  const activeIndex = () =>
+    suggestions().length ? Math.min(Math.max(0, highlighted()), suggestions().length - 1) : -1;
   const textBeforeTrigger = () => {
     const current = query();
     return current ? value().slice(0, current.start) : '';

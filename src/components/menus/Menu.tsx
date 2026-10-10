@@ -1,8 +1,9 @@
-import { type JSX, mergeProps, Show } from 'solid-js';
+import { createSignal, type JSX, mergeProps, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { createDismiss } from '../../hooks/createDismiss';
 import { createFloating } from '../../hooks/createFloating';
+import { createTrigger } from '../../hooks/createTrigger';
 import { cx } from '../../utils/cx';
 import { Button } from '../actions/Button';
 import type { MenuItem } from './menuItem';
@@ -20,11 +21,8 @@ export interface MenuTriggerProps {
 
 export type MenuTriggerRenderer = (trigger: MenuTriggerProps) => JSX.Element;
 
-const isRenderer = (trigger: JSX.Element | MenuTriggerRenderer): trigger is MenuTriggerRenderer =>
-  typeof trigger === 'function';
-
 export interface MenuProps {
-  /** A render function receiving the trigger attributes (usually spread onto a Button or IconButton; ↓ on it opens), or content for a default secondary Button. */
+  /** Label, a native interactive element, or a render function receiving attributes and keyboard handlers. */
   trigger: JSX.Element | MenuTriggerRenderer;
   items: MenuItem[];
   /** @default 'start' */
@@ -43,7 +41,7 @@ export interface MenuProps {
 /** Dropdown menu of actions attached to a trigger. ↑↓ / Home / End move, type to jump, Enter selects, Esc closes and refocuses the trigger. */
 export const Menu = (props: MenuProps) => {
   const p = mergeProps({ align: 'start', side: 'bottom', defaultOpen: false } satisfies Partial<MenuProps>, props);
-  let wrap!: HTMLSpanElement;
+  const [wrap, setWrap] = createSignal<HTMLSpanElement>();
   const [isOpen, setOpen] = createControllable({
     value: () => p.open,
     defaultValue: p.defaultOpen,
@@ -52,15 +50,10 @@ export const Menu = (props: MenuProps) => {
 
   const close = (refocus: boolean) => {
     setOpen(false);
-    if (refocus) wrap.querySelector<HTMLElement>(TRIGGER_SELECTOR)?.focus({ preventScroll: true });
+    if (refocus) wrap()?.querySelector<HTMLElement>(TRIGGER_SELECTOR)?.focus({ preventScroll: true });
   };
-  createDismiss(
-    isOpen,
-    () => setOpen(false),
-    () => wrap,
-    { escape: false },
-  );
-  const floating = createFloating(isOpen, () => wrap, { side: () => p.side, align: () => p.align });
+  createDismiss(isOpen, (reason) => close(reason === 'escape'), wrap, { refocus: false });
+  const floating = createFloating(isOpen, wrap, { side: () => p.side, align: () => p.align });
 
   const triggerProps: MenuTriggerProps = {
     'aria-haspopup': 'menu',
@@ -76,20 +69,20 @@ export const Menu = (props: MenuProps) => {
     },
   };
 
-  const renderTrigger = () => {
-    const trigger = p.trigger;
-    return isRenderer(trigger) ? (
-      trigger(triggerProps)
-    ) : (
-      <Button variant="secondary" {...triggerProps}>
-        {trigger}
+  const trigger = createTrigger(
+    () => p.trigger,
+    triggerProps,
+    (content, attributes) => (
+      <Button variant="secondary" {...attributes}>
+        {content}
       </Button>
-    );
-  };
+    ),
+  );
 
   return (
-    <span ref={wrap} class={cx('vui-menu-wrap', p.class)}>
-      {renderTrigger()}
+    // eslint-disable-next-line jsx-a11y/no-static-element-interactions -- delegates events from the supplied native trigger, which owns keyboard semantics
+    <span ref={setWrap} class={cx('vui-menu-wrap', p.class)} onClick={trigger.onClick} onKeyDown={trigger.onKeyDown}>
+      {trigger.content}
       <Show when={isOpen()}>
         <MenuPanel
           ref={floating.ref}

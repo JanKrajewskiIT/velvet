@@ -1,6 +1,7 @@
 import type { I18nKey } from '@jankrajewskiit/i18n';
 import type { JSX } from 'solid-js';
 
+import { freezeRecords } from '../../utils/freezeRecords';
 import { clamp } from '../../utils/math';
 import { englishText, type StaticTranslate } from './englishText';
 
@@ -88,19 +89,19 @@ const bandFrom = (translate: StaticTranslate, preset: ScoreBandPreset): ScoreBan
   tone: preset.tone,
 });
 
-const LOWEST_BAND: ScoreBand = bandFrom(englishText, WEAK_PRESET);
+const LOWEST_BAND: Readonly<ScoreBand> = Object.freeze(bandFrom(englishText, WEAK_PRESET));
 
 export const localizeScoreBands = (translate: StaticTranslate): ScoreBand[] =>
   BAND_PRESETS.map((preset) => bandFrom(translate, preset));
 
 /** English snapshot; `AtsAnalysisPanel` localizes its own default. */
-export const SCORE_BANDS: ScoreBand[] = localizeScoreBands(englishText);
+export const SCORE_BANDS: readonly Readonly<ScoreBand>[] = freezeRecords(localizeScoreBands(englishText));
 
 export const MAX_SCORE = 100;
 
 export const clampScore = (score: number): number => (Number.isFinite(score) ? clamp(score, 0, MAX_SCORE) : 0);
 
-export const scoreBand = (score: number, bands: readonly ScoreBand[] = SCORE_BANDS): ScoreBand =>
+export const scoreBand = (score: number, bands: readonly ScoreBand[] = SCORE_BANDS): Readonly<ScoreBand> =>
   bands.find((band) => clampScore(score) >= band.min) ?? bands[bands.length - 1] ?? LOWEST_BAND;
 
 export const SEVERITY: Record<

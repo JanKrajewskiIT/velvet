@@ -49,6 +49,7 @@ export const GridCell = <T extends object>(props: GridCellProps<T>) => {
       )}
       style={props.grid.layout.pinStyle(props.column)}
       onClick={() => props.grid.active.setCell({ row: props.rowIndex, col: props.colIndex })}
+      onFocus={() => props.grid.active.setCell({ row: props.rowIndex, col: props.colIndex })}
       onDblClick={() => props.grid.active.startEdit(props.rowIndex, props.colIndex)}
     >
       <Show when={props.colIndex === 0 && props.grid.config.renderDetail && !editing()}>

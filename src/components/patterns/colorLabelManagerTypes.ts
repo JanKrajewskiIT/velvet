@@ -9,7 +9,7 @@ export interface ColorLabelManagerProps {
   /** Receives the error `onChange` rejected with. */
   onError?: (error: unknown) => void;
   /** Colours offered for a label. @default LABEL_COLORS */
-  colors?: string[];
+  colors?: readonly string[];
   /** @default localized "Manage labels" */
   title?: string;
   /** Shown when `onChange` rejects. @default localized "Couldn’t save labels — try again." */

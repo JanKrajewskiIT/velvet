@@ -12,6 +12,7 @@ import {
 
 import { createControllable } from '../../hooks/createControllable';
 import { createDismiss } from '../../hooks/createDismiss';
+import { createFloating } from '../../hooks/createFloating';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { Chevron } from '../primitives/Chevron';
@@ -76,6 +77,7 @@ export const Cascader = (props: CascaderProps) => {
   const listId = createUniqueId();
   const [open, setOpen] = createSignal(false);
   const [root, setRoot] = createSignal<HTMLElement>();
+  const floating = createFloating(open, root, { minWidth: true });
   let menu: HTMLDivElement | undefined;
   let search: HTMLInputElement | undefined;
 
@@ -106,7 +108,15 @@ export const Cascader = (props: CascaderProps) => {
   });
   const finder = createCascaderSearch(() => p.data, commitAndClose);
 
-  createDismiss(open, () => setOpen(false), root, { escape: false });
+  createDismiss(
+    open,
+    (reason) => {
+      if (reason === 'escape') closeToTrigger();
+      else setOpen(false);
+    },
+    root,
+    { refocus: false },
+  );
   createEffect(
     on(open, (isOpen) => {
       if (!isOpen) return;
@@ -119,10 +129,8 @@ export const Cascader = (props: CascaderProps) => {
   );
 
   const onMenuKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      e.preventDefault();
-      closeToTrigger();
-    } else if (finder.needle()) finder.onKeyDown(e);
+    if (e.defaultPrevented || e.key === 'Escape') return;
+    if (finder.needle()) finder.onKeyDown(e);
     else nav.onKeyDown(e);
   };
 
@@ -170,7 +178,11 @@ export const Cascader = (props: CascaderProps) => {
           <Show when={open()}>
             {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- dialog owns arrow/Enter/Escape navigation of its columns; tabIndex -1 is for programmatic focus */}
             <div
-              ref={menu}
+              ref={(element) => {
+                menu = element;
+                floating.ref(element);
+              }}
+              style={floating.style()}
               id={listId}
               tabIndex={-1}
               class="vui-select__menu vui-casc__menu"
@@ -181,7 +193,9 @@ export const Cascader = (props: CascaderProps) => {
               <Show when={p.searchable}>
                 <Control size="sm" class="vui-casc__search" iconLeft="search">
                   <input
-                    ref={search}
+                    ref={(element) => {
+                      search = element;
+                    }}
                     class="vui-control__input"
                     placeholder={translate('velvet.common.search')}
                     aria-label={translate('velvet.forms.cascader.searchLabel')}

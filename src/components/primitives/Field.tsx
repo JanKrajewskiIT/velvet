@@ -1,8 +1,8 @@
-import { createUniqueId, type JSX, Show, splitProps } from 'solid-js';
+import { createUniqueId, type JSX, Show } from 'solid-js';
 
-import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
-import { type ElementTag, type HtmlProps, Polymorphic } from '../../utils/polymorphic';
+import { FieldHint } from './FieldHint';
+import { FieldLabel } from './FieldLabel';
 
 /** Ids and state a Field hands to its control — spread onto the input. */
 export interface FieldControlProps {
@@ -11,67 +11,6 @@ export interface FieldControlProps {
   describedBy?: string;
   required?: boolean;
 }
-
-export interface FieldLabelProps extends HtmlProps<HTMLElement> {
-  /** Renders `label` when `htmlFor` is set, otherwise `span` (pair a span with `aria-labelledby`). */
-  as?: Extract<ElementTag, 'label' | 'span' | 'div'>;
-  htmlFor?: string;
-  optional?: boolean;
-  required?: boolean;
-  /** Text of the optional marker. @default localized "Optional" */
-  optionalLabel?: string;
-}
-
-export const FieldLabel = (props: FieldLabelProps) => {
-  const [local, rest] = splitProps(props, [
-    'as',
-    'htmlFor',
-    'optional',
-    'required',
-    'optionalLabel',
-    'class',
-    'children',
-  ]);
-  const translate = useTranslate();
-  const tag = () => local.as ?? (local.htmlFor ? 'label' : 'span');
-  return (
-    <Polymorphic
-      tag={tag()}
-      class={cx('vui-label', local.class)}
-      for={tag() === 'label' ? local.htmlFor : undefined}
-      {...rest}
-    >
-      {local.children}
-      <Show when={local.required}>
-        <span class="vui-label__req" aria-hidden="true">
-          *
-        </span>
-      </Show>
-      <Show when={local.optional}>
-        <span class="vui-label__opt">{local.optionalLabel ?? translate('velvet.primitives.field.optional')}</span>
-      </Show>
-    </Polymorphic>
-  );
-};
-
-export interface FieldHintProps extends HtmlProps<HTMLSpanElement> {
-  error?: boolean;
-  /** Fixed-height lane that announces changes politely. */
-  lane?: boolean;
-}
-
-export const FieldHint = (props: FieldHintProps) => {
-  const [local, rest] = splitProps(props, ['error', 'lane', 'class', 'children']);
-  return (
-    <span
-      class={cx('vui-hint', local.error && 'vui-hint--error', local.lane && 'vui-hint--lane', local.class)}
-      aria-live={local.lane ? 'polite' : undefined}
-      {...rest}
-    >
-      {local.children}
-    </span>
-  );
-};
 
 export interface FieldProps {
   label?: JSX.Element;
@@ -100,13 +39,22 @@ export const Field = (props: FieldProps) => {
   const lane = () => props.reserveHint === true || hasCounter();
   const hasMessage = () => !!(props.error || props.hint);
 
-  const control = (): FieldControlProps => ({
-    id: id(),
-    invalid: !!props.error,
-    describedBy: hasMessage() || hasCounter() ? hintId() : undefined,
-    required: props.required,
-  });
-  const body = () => (typeof props.children === 'function' ? props.children(control()) : props.children);
+  const control: FieldControlProps = {
+    get id() {
+      return id();
+    },
+    get invalid() {
+      return !!props.error;
+    },
+    get describedBy() {
+      return hasMessage() || hasCounter() ? hintId() : undefined;
+    },
+    get required() {
+      return props.required;
+    },
+  };
+  const renderer = () => (typeof props.children === 'function' ? props.children : undefined);
+  const content = () => (typeof props.children === 'function' ? undefined : props.children);
 
   return (
     <div class={cx('vui-field', props.class)}>
@@ -120,7 +68,9 @@ export const Field = (props: FieldProps) => {
           {props.label}
         </FieldLabel>
       </Show>
-      {body()}
+      <Show when={renderer()} keyed fallback={content()}>
+        {(render) => render(control)}
+      </Show>
       <Show when={hasMessage() || lane()}>
         <div class={cx('vui-field__foot', lane() && 'vui-hint--lane')}>
           <FieldHint id={hintId()} error={!!props.error} lane={lane()}>

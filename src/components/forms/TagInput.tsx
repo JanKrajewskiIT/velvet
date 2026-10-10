@@ -132,7 +132,9 @@ export const TagInput = (props: TagInputProps) => {
             )}
           </For>
           <input
-            ref={input}
+            ref={(element) => {
+              input = element;
+            }}
             id={control.id}
             class="vui-taginput__input"
             value={text()}

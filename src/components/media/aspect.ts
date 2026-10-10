@@ -1,4 +1,4 @@
-export const ASPECTS = ['square', 'video', 'photo', 'portrait', 'wide'] as const;
+export const ASPECTS = Object.freeze(['square', 'video', 'photo', 'portrait', 'wide'] as const);
 
 export type Aspect = (typeof ASPECTS)[number];
 

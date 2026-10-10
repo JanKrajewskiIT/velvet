@@ -88,7 +88,9 @@ export const ToggleGroup = (props: ToggleGroupProps) => {
     <ToggleGroupContext.Provider value={{ isOn, toggle, size: () => p.size, disabled: () => p.disabled }}>
       {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- arrow-key focus movement between the group's buttons is handled on the group container */}
       <div
-        ref={root}
+        ref={(element) => {
+          root = element;
+        }}
         role="group"
         aria-label={p.label}
         onKeyDown={onKeyDown}

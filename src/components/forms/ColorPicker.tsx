@@ -2,9 +2,10 @@ import { createSignal, For, type JSX, Match, mergeProps, Show, Switch } from 'so
 
 import { createControllable } from '../../hooks/createControllable';
 import { createDismiss } from '../../hooks/createDismiss';
+import { createFloating } from '../../hooks/createFloating';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
-import { FieldLabel } from '../primitives/Field';
+import { FieldLabel } from '../primitives/FieldLabel';
 import { Glyph } from '../primitives/Glyph';
 import { callbackAlias } from './callbackAlias';
 import { ColorPanel } from './ColorPanel';
@@ -56,6 +57,7 @@ export const ColorPicker = (props: ColorPickerProps) => {
   const [open, setOpen] = createSignal(false);
   const [wrap, setWrap] = createSignal<HTMLElement>();
   createDismiss(open, () => setOpen(false), wrap, { refocus: 'button' });
+  const floating = createFloating(open, wrap);
   const isSelected = (swatch: string) => swatch.toLowerCase() === current().toLowerCase();
 
   return (
@@ -129,6 +131,8 @@ export const ColorPicker = (props: ColorPickerProps) => {
             </button>
             <Show when={open()}>
               <div
+                ref={floating.ref}
+                style={floating.style()}
                 class="vui-popover vui-color__pop"
                 role="dialog"
                 aria-label={translate('velvet.forms.colorPicker.dialogLabel')}

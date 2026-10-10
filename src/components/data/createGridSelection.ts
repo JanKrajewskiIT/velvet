@@ -35,7 +35,8 @@ export const createGridSelection = <T extends object>(options: GridSelectionOpti
   const selectedRows = () => options.rows().filter((r, i) => selectedSet().has(options.keyOf(r, i)));
   const toggleAll = () => {
     const next = new Set(selectedSet());
-    viewKeys().forEach((k) => (allOn() ? next.delete(k) : next.add(k)));
+    const remove = allOn();
+    viewKeys().forEach((key) => (remove ? next.delete(key) : next.add(key)));
     setSelection([...next]);
   };
   const toggleRow = (key: RowKey) => {

@@ -1,8 +1,17 @@
-export const TONES = ['neutral', 'brand', 'info', 'success', 'warning', 'danger'] as const;
+export const TONES = Object.freeze(['neutral', 'brand', 'info', 'success', 'warning', 'danger'] as const);
 
 export type StatusTone = (typeof TONES)[number];
 
-export const CATEGORY_TONES = ['blue', 'indigo', 'violet', 'magenta', 'teal', 'cyan', 'olive', 'slate'] as const;
+export const CATEGORY_TONES = Object.freeze([
+  'blue',
+  'indigo',
+  'violet',
+  'magenta',
+  'teal',
+  'cyan',
+  'olive',
+  'slate',
+] as const);
 
 export type Tone = StatusTone | (typeof CATEGORY_TONES)[number];
 

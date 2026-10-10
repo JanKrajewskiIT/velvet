@@ -2,7 +2,7 @@ import { createMemo, createUniqueId, type JSX, mergeProps, onMount, Show } from 
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
-import { FieldLabel } from '../primitives/Field';
+import { FieldLabel } from '../primitives/FieldLabel';
 import { createRichTextCommands } from './createRichTextCommands';
 import { createRichTextHistory } from './createRichTextHistory';
 import { createRichTextInput } from './createRichTextInput';
@@ -127,7 +127,9 @@ export const RichTextEditor = (props: RichTextEditorProps) => {
         </Show>
         {/* eslint-disable-next-line jsx-a11y/interactive-supports-focus -- contenteditable receives focus natively; tabIndex would make the disabled and read-only states tabbable */}
         <div
-          ref={editor}
+          ref={(element) => {
+            editor = element;
+          }}
           id={`${id}-editor`}
           class="vui-rte__area"
           contentEditable={editable()}

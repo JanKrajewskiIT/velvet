@@ -3,7 +3,7 @@ import { createUniqueId, For, Index, type JSX, mergeProps, onCleanup, Show, untr
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
-import { FieldLabel } from '../primitives/Field';
+import { FieldLabel } from '../primitives/FieldLabel';
 import { adjacentMark, nearestMark, resolveMarks, type SliderMarks, snapToStep } from './sliderMarks';
 
 const PERCENT = 100;
@@ -173,7 +173,9 @@ export const Slider = (props: SliderProps) => {
         </div>
       </Show>
       <div
-        ref={track}
+        ref={(element) => {
+          track = element;
+        }}
         class="vui-slider__track"
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}

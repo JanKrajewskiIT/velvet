@@ -37,6 +37,7 @@ export const ColumnManager = (props: ColumnManagerProps): JSX.Element => {
     onChange: (next) => (p.onChange ?? p.onValueChange)?.(next),
     pinRight: () => p.pinRight,
     maxPinned: () => p.maxPinned,
+    minVisible: () => p.minVisible,
     announce: setMessage,
   });
   const drag = createColumnDrag(model);
@@ -53,7 +54,12 @@ export const ColumnManager = (props: ColumnManagerProps): JSX.Element => {
   };
 
   return (
-    <div ref={root} class={cx('vui-colman', p.class)}>
+    <div
+      ref={(element) => {
+        root = element;
+      }}
+      class={cx('vui-colman', p.class)}
+    >
       <div class="vui-colman__head">
         <span class="vui-colman__title">{title()}</span>
         <Button variant="link" size="xs" onClick={reset}>

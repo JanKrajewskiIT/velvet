@@ -46,6 +46,13 @@ export const dataPl: TranslationOf<typeof dataEn> = {
     nothingPinned: 'Nic nie przypięto',
   },
   dataGrid: {
+    label: 'Siatka danych',
+    viewSettings: 'Ustawienia widoku',
+    resetView: 'Przywróć widok',
+    exportView: 'Eksportuj ustawienia widoku',
+    importView: 'Importuj ustawienia widoku',
+    importingView: 'Importowanie ustawień widoku…',
+    viewError: 'Nie udało się wczytać lub zapisać ustawień widoku. Sprawdź plik i uprawnienia pamięci przeglądarki.',
     searchLabel: 'Filtruj wiersze',
     searchPlaceholder: 'Filtruj {count, plural, one {# rekord} few {# rekordy} many {# rekordów} other {# rekordu}}…',
     selected: 'Zaznaczono: <b>{count}</b>',
@@ -144,6 +151,7 @@ export const dataPl: TranslationOf<typeof dataEn> = {
     trendLabel: 'Trend',
   },
   table: {
+    addRow: 'Dodaj wiersz',
     empty: 'Nic tu jeszcze nie ma.',
     resetWidths: 'Resetuj szerokości',
     bulkActionsLabel: 'Akcje zbiorcze',

@@ -35,7 +35,7 @@ export interface AtsAnalysisPanelProps {
   onExport?: () => void;
   onFeedback?: (value: AiFeedback) => void;
   /** Override thresholds / labels. @default localized SCORE_BANDS */
-  bands?: ScoreBand[];
+  bands?: readonly ScoreBand[];
   /** @default localized "AI-generated assessment — use it to support, not replace, your judgement." */
   disclaimer?: JSX.Element;
   class?: string;

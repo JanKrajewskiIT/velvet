@@ -21,10 +21,10 @@ export interface FlashResult {
   known: boolean;
 }
 
-export const FLASH_ORDERS = ['due', 'random', 'new'] as const;
+export const FLASH_ORDERS = Object.freeze(['due', 'random', 'new'] as const);
 export type FlashOrder = (typeof FLASH_ORDERS)[number];
 
-export const FLASH_DIRECTIONS = ['front', 'back'] as const;
+export const FLASH_DIRECTIONS = Object.freeze(['front', 'back'] as const);
 export type FlashDirection = (typeof FLASH_DIRECTIONS)[number];
 
 export interface FlashcardConfig {

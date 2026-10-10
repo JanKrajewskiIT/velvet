@@ -1,5 +1,6 @@
 import { createSignal, type JSX, mergeProps, onCleanup, splitProps, untrack } from 'solid-js';
 
+import { columnWidthBounds, constrainColumnWidth } from '../../utils/columnWidth';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
 
@@ -10,6 +11,7 @@ export interface ColumnResizeProps extends HtmlProps<HTMLSpanElement, 'onResize'
   width?: number;
   /** @default 64 */
   min?: number;
+  max?: number;
   /** Keyboard step in px. @default 16 */
   step?: number;
   onResize?: (width: number) => void;
@@ -19,30 +21,41 @@ export interface ColumnResizeProps extends HtmlProps<HTMLSpanElement, 'onResize'
 
 /** Column-width handle for a header cell's right edge: drag, ←/→, double-click to reset. Place inside a `position: relative` header cell. */
 export const ColumnResize = (props: ColumnResizeProps) => {
-  const merged = mergeProps({ min: 64, step: 16 } satisfies Partial<ColumnResizeProps>, props);
-  const [local, rest] = splitProps(merged, ['label', 'width', 'min', 'step', 'onResize', 'onReset', 'class']);
+  const merged = mergeProps({ step: 16 } satisfies Partial<ColumnResizeProps>, props);
+  const [local, rest] = splitProps(merged, ['label', 'width', 'min', 'max', 'step', 'onResize', 'onReset', 'class']);
   const [active, setActive] = createSignal(false);
   let stopDrag: (() => void) | undefined;
   onCleanup(() => stopDrag?.());
 
   const cellWidth = (handle: HTMLElement) => local.width || handle.parentElement?.getBoundingClientRect().width || 0;
-  const resize = (width: number) => local.onResize?.(Math.max(local.min, Math.round(width)));
+  const bounds = () => columnWidthBounds(local.min, local.max);
+  const resize = (width: number) => {
+    if (Number.isFinite(width)) local.onResize?.(constrainColumnWidth(width, bounds()));
+  };
 
   const onPointerDown: JSX.EventHandler<HTMLSpanElement, PointerEvent> = (e) => {
+    if (e.button !== 0 || !e.isPrimary) return;
+    stopDrag?.();
     e.preventDefault();
     e.stopPropagation();
     const startX = e.clientX;
+    const pointerId = e.pointerId;
     const startWidth = untrack(() => cellWidth(e.currentTarget));
-    const move = (ev: PointerEvent) => resize(startWidth + ev.clientX - startX);
-    const stop = () => {
+    const move = (ev: PointerEvent) => {
+      if (ev.pointerId === pointerId) resize(startWidth + ev.clientX - startX);
+    };
+    const stop = (event?: PointerEvent) => {
+      if (event && event.pointerId !== pointerId) return;
       setActive(false);
       window.removeEventListener('pointermove', move);
       window.removeEventListener('pointerup', stop);
+      window.removeEventListener('pointercancel', stop);
       stopDrag = undefined;
     };
     setActive(true);
     window.addEventListener('pointermove', move);
     window.addEventListener('pointerup', stop);
+    window.addEventListener('pointercancel', stop);
     stopDrag = stop;
   };
 
@@ -62,6 +75,8 @@ export const ColumnResize = (props: ColumnResizeProps) => {
       aria-orientation="vertical"
       aria-label={local.label}
       aria-valuenow={local.width ? Math.round(local.width) : undefined}
+      aria-valuemin={bounds().min}
+      aria-valuemax={Number.isFinite(bounds().max) ? bounds().max : undefined}
       class={cx('vui-col-resize', active() && 'vui-col-resize--active', local.class)}
       onPointerDown={onPointerDown}
       onKeyDown={onKeyDown}

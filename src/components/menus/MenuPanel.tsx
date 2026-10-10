@@ -12,13 +12,15 @@ import {
   Switch,
 } from 'solid-js';
 
+import { createFrameFocus } from '../../hooks/createFrameFocus';
+import { ownsLayerEvent } from '../../hooks/createLayer';
+import { createTypeahead } from '../../utils/createTypeahead';
 import { cx } from '../../utils/cx';
 import { Glyph, renderIcon } from '../primitives/Glyph';
 import { SectionLabel } from '../primitives/SectionLabel';
 import { isActionable, type MenuItem, menuItemKind } from './menuItem';
 import { MenuItemContent } from './MenuItemContent';
 
-const TYPEAHEAD_RESET_MS = 600;
 const SCROLL_PADDING_PX = 8;
 
 export interface MenuPanelProps {
@@ -39,14 +41,20 @@ export const MenuPanel = (props: MenuPanelProps) => {
   let panel!: HTMLDivElement;
   const id = createUniqueId();
   const itemId = (index: number) => `${id}-${index}`;
-  const [active, setActive] = createSignal(-1);
-  const typed = { text: '', at: 0 };
+  const [highlighted, setActive] = createSignal(-1);
+  const search = createTypeahead();
+  const focusFrame = createFrameFocus(() => panel);
 
   const actionable = createMemo(() => p.items.flatMap((item, index) => (isActionable(item) ? [index] : [])));
+  const active = () => {
+    const index = highlighted();
+    if (index < 0) return -1;
+    return actionable().includes(index) ? index : (actionable()[0] ?? -1);
+  };
 
   onMount(() => {
     if (!p.autoFocus) return;
-    panel.focus({ preventScroll: true });
+    focusFrame();
     setActive(actionable()[0] ?? -1);
   });
 
@@ -79,14 +87,13 @@ export const MenuPanel = (props: MenuPanelProps) => {
     document.getElementById(itemId(index))?.querySelector('.vui-menu__label')?.textContent.toLowerCase() ?? '';
 
   const typeahead = (key: string) => {
-    const now = Date.now();
-    typed.text = (now - typed.at > TYPEAHEAD_RESET_MS ? '' : typed.text) + key.toLowerCase();
-    typed.at = now;
-    const hit = actionable().find((index) => labelOf(index).startsWith(typed.text));
-    if (hit !== undefined) setActive(hit);
+    const list = actionable();
+    const hit = search(key, list.map(labelOf), list.indexOf(active()));
+    if (hit >= 0) setActive(list[hit] ?? -1);
   };
 
   const onKeyDown: JSX.EventHandler<HTMLDivElement, KeyboardEvent> = (e) => {
+    if (e.defaultPrevented) return;
     const list = actionable();
     switch (e.key) {
       case 'ArrowDown':
@@ -111,15 +118,16 @@ export const MenuPanel = (props: MenuPanelProps) => {
         choose(p.items[active()]);
         break;
       case 'Escape':
+        if (!ownsLayerEvent(panel)) return;
         e.preventDefault();
         e.stopPropagation();
         p.onClose?.(true);
         break;
       case 'Tab':
-        p.onClose?.(false);
+        p.onClose?.(true);
         break;
       default:
-        if (e.key.length === 1 && !e.metaKey && !e.ctrlKey) typeahead(e.key);
+        if (e.key.length === 1 && !e.metaKey && !e.ctrlKey && !e.altKey) typeahead(e.key);
     }
   };
 

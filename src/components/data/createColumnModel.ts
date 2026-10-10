@@ -4,6 +4,7 @@ import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
 import { clamp } from '../../utils/math';
 import type { ColumnPin, ColumnState, ManagedColumn } from './columnManagerTypes';
+import { initialManagedColumns, reconcileColumnState } from './columnState';
 import { type Zone, type ZoneKey, zoneOf, ZONES } from './columnZones';
 
 export interface ColumnModelOptions {
@@ -13,6 +14,7 @@ export interface ColumnModelOptions {
   onChange: (state: ColumnState[]) => void;
   pinRight: Accessor<boolean>;
   maxPinned: Accessor<number | undefined>;
+  minVisible: Accessor<number | undefined>;
   announce: (message: string) => void;
 }
 
@@ -24,6 +26,9 @@ export interface ColumnModel {
   limitReached: () => boolean;
   labelOf: (key: string) => JSX.Element;
   isLocked: (key: string) => boolean;
+  canHide: (key: string) => boolean;
+  canPin: (key: string) => boolean;
+  canMove: (key: string) => boolean;
   nameOf: (key: string) => string;
   moveTo: (key: string, pin: ColumnPin | null, index?: number) => void;
   togglePin: (c: ColumnState) => void;
@@ -31,17 +36,15 @@ export interface ColumnModel {
   reset: () => void;
 }
 
-const initialState = (columns: ManagedColumn[]): ColumnState[] =>
-  columns.map((c) => ({ key: c.key, visible: c.visible !== false, pin: c.pin ?? null }));
-
 export const createColumnModel = (options: ColumnModelOptions): ColumnModel => {
   const translate = useTranslate();
-  const initial = untrack(() => initialState(options.columns()));
-  const [state, setState] = createControllable<ColumnState[]>({
+  const initial = untrack(() => initialManagedColumns(options.columns()));
+  const [rawState, setState] = createControllable<ColumnState[]>({
     value: options.value,
     defaultValue: options.defaultValue() ?? initial,
     onChange: options.onChange,
   });
+  const state = createMemo(() => reconcileColumnState(rawState(), options.columns(), options.minVisible()));
 
   const zones = createMemo(() =>
     ZONES.filter((z) => z.pin !== 'right' || options.pinRight() || state().some((c) => c.pin === 'right')),
@@ -54,6 +57,16 @@ export const createColumnModel = (options: ColumnModelOptions): ColumnModel => {
   };
   const labelOf = (key: string) => options.columns().find((c) => c.key === key)?.label ?? key;
   const isLocked = (key: string) => !!options.columns().find((c) => c.key === key)?.locked;
+  const capability = (key: string, name: 'canHide' | 'canPin' | 'canMove') => {
+    const column = options.columns().find((candidate) => candidate.key === key);
+    return !!column && !column.locked && column[name] !== false;
+  };
+  const canHide = (key: string) =>
+    capability(key, 'canHide') &&
+    (!state().find((column) => column.key === key)?.visible ||
+      state().filter((column) => column.visible).length > (options.minVisible() ?? 0));
+  const canPin = (key: string) => capability(key, 'canPin');
+  const canMove = (key: string) => capability(key, 'canMove');
   const nameOf = (key: string) => {
     const label = labelOf(key);
     return typeof label === 'string' ? label : key;
@@ -62,6 +75,12 @@ export const createColumnModel = (options: ColumnModelOptions): ColumnModel => {
   const moveTo = (key: string, pin: ColumnPin | null, index?: number) => {
     const from = state().find((c) => c.key === key);
     if (!from) return;
+    if (from.pin === pin ? !canMove(key) : !canPin(key)) return;
+    if (pin === 'right' && !zones().some((zone) => zone.pin === 'right')) return;
+    if (pin && !from.pin && limitReached()) {
+      options.announce(translate('velvet.data.columnManager.pinLimit', { count: options.maxPinned() }));
+      return;
+    }
     const without = (pinZone: ColumnPin | null) => inZone(pinZone).filter((c) => c.key !== key);
     const lists: Record<ZoneKey, ColumnState[]> = {
       left: without('left'),
@@ -74,6 +93,7 @@ export const createColumnModel = (options: ColumnModelOptions): ColumnModel => {
   };
 
   const togglePin = (c: ColumnState) => {
+    if (!canPin(c.key)) return;
     if (c.pin) {
       moveTo(c.key, null, 0);
       options.announce(translate('velvet.data.columnManager.unpinned', { name: nameOf(c.key) }));
@@ -85,8 +105,8 @@ export const createColumnModel = (options: ColumnModelOptions): ColumnModel => {
     }
   };
   const toggleVisible = (c: ColumnState) =>
-    setState(state().map((x) => (x.key === c.key ? { ...x, visible: !x.visible } : x)));
-  const reset = () => setState(initial);
+    canHide(c.key) && setState(state().map((x) => (x.key === c.key ? { ...x, visible: !x.visible } : x)));
+  const reset = () => setState(initialManagedColumns(options.columns()));
 
   return {
     state,
@@ -96,6 +116,9 @@ export const createColumnModel = (options: ColumnModelOptions): ColumnModel => {
     limitReached,
     labelOf,
     isLocked,
+    canHide,
+    canPin,
+    canMove,
     nameOf,
     moveTo,
     togglePin,

@@ -1,0 +1,36 @@
+dialog[data-vui-modal] {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  border: 0;
+  color: inherit;
+  overflow: visible;
+
+  &:not([open]) {
+    display: none;
+  }
+
+  &::backdrop {
+    background: transparent;
+  }
+}
+
+.vui-confirm-action {
+  display: contents;
+}
+
+.vui-sheet-backdrop[data-vui-modal],
+.vui-lightbox[data-vui-modal],
+.vui-tour[data-vui-modal] {
+  padding: 0;
+}
+
+.vui-tour[data-vui-modal] {
+  background: transparent;
+}
+
+.vui-lightbox[data-vui-modal] {
+  color: var(--on-color-fg);
+}

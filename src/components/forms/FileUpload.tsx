@@ -102,7 +102,9 @@ export const FileUpload = (props: FileUploadProps) => {
           <span class="vui-upload__hint">{p.hint}</span>
         </Show>
         <input
-          ref={input}
+          ref={(element) => {
+            input = element;
+          }}
           type="file"
           hidden
           accept={p.accept}

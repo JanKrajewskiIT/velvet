@@ -4,7 +4,7 @@ import { cx } from '../../utils/cx';
 import { Badge } from '../display/Badge';
 import { Glyph } from '../primitives/Glyph';
 import { Marker, type MarkerProps } from '../primitives/Marker';
-import { RailItem } from '../primitives/Rail';
+import { RailItem } from '../primitives/RailItem';
 import { TimelineActions } from './TimelineActions';
 import { TimelineConfirm } from './TimelineConfirm';
 import type { TimelineAction, TimelineItem } from './timelineTypes';

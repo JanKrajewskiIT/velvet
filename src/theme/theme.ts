@@ -1,6 +1,6 @@
 export const THEME_STORAGE_KEY = 'vui-theme';
 
-export const THEME_PREFERENCES = ['light', 'system', 'dark'] as const;
+export const THEME_PREFERENCES = Object.freeze(['light', 'system', 'dark'] as const);
 
 export type ThemePreference = (typeof THEME_PREFERENCES)[number];
 export type ResolvedTheme = Exclude<ThemePreference, 'system'>;

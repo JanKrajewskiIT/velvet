@@ -134,7 +134,12 @@ export const ChatMessage = (props: ChatMessageProps) => {
               </Show>
             }
           >
-            <div ref={body} class="vui-chatmsg__body">
+            <div
+              ref={(element) => {
+                body = element;
+              }}
+              class="vui-chatmsg__body"
+            >
               {content()}
               <Show when={p.streaming}>
                 <span class="vui-chatmsg__caret" aria-hidden="true" />

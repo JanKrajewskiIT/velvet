@@ -11,6 +11,9 @@ export interface ManagedColumn {
   pin?: ColumnPin;
   /** Can't be hidden, moved or unpinned (e.g. Name). */
   locked?: boolean;
+  canHide?: boolean;
+  canPin?: boolean;
+  canMove?: boolean;
 }
 
 export interface ColumnState {
@@ -33,6 +36,8 @@ export interface ColumnManagerProps {
   pinRight?: boolean;
   /** Cap on pinned columns — pins beyond it are disabled with a hint. */
   maxPinned?: number;
+  /** Minimum number of visible columns. @default 0 */
+  minVisible?: number;
   /** Defaults to on when there are more than 8 columns. */
   searchable?: boolean;
   class?: string;

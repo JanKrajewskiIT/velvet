@@ -122,7 +122,10 @@ export const Autocomplete = (props: AutocompleteProps) => {
         break;
       }
       case 'Escape':
-        if (!open()) setTyping(false);
+        if (!open() && typing()) {
+          e.preventDefault();
+          setTyping(false);
+        }
         break;
       case 'Tab':
         setOpen(false);

@@ -25,6 +25,10 @@ export const createColumnDrag = (model: ColumnModel): ColumnDrag => {
   const [over, setOver] = createSignal<DropTarget | null>(null);
 
   const startDrag = (e: DragEvent, key: string) => {
+    if (!model.canMove(key)) {
+      e.preventDefault();
+      return;
+    }
     setDragKey(key);
     if (!e.dataTransfer) return;
     e.dataTransfer.effectAllowed = 'move';

@@ -5,7 +5,7 @@ import { cx } from '../../utils/cx';
 import { Button } from '../actions/Button';
 import { OptionSwitcher } from '../forms/OptionSwitcher';
 import { Slider } from '../forms/Slider';
-import { FieldLabel } from '../primitives/Field';
+import { FieldLabel } from '../primitives/FieldLabel';
 import {
   FLASH_DIRECTION_LABEL_KEYS,
   FLASH_DIRECTIONS,

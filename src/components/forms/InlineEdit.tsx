@@ -124,7 +124,9 @@ export const InlineEdit = (props: InlineEditProps) => {
       when={editing()}
       fallback={
         <button
-          ref={trigger}
+          ref={(element) => {
+            trigger = element;
+          }}
           type="button"
           class={cx(
             'vui-inline-edit',

@@ -3,6 +3,8 @@ import type { GridExpansion } from './createGridExpansion';
 import type { GridLayout } from './createGridLayout';
 import type { GridSelection } from './createGridSelection';
 import type { GridView } from './createGridView';
+import type { GridWindow } from './createGridWindow';
+import type { VirtualKeys } from './createVirtualKeys';
 import type { DataGridProps } from './dataGridTypes';
 import type { RowKey } from './rowData';
 
@@ -14,5 +16,7 @@ export interface DataGridController<T extends object> {
   layout: GridLayout<T>;
   active: GridActiveCell;
   expansion: GridExpansion;
+  window: GridWindow;
+  rowKeys: VirtualKeys;
   keyOf: (row: T, index: number) => RowKey;
 }

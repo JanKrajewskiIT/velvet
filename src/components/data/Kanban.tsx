@@ -1,46 +1,17 @@
 import { createSignal, createUniqueId, For, type JSX, Show } from 'solid-js';
 
+import { createFrameFocus } from '../../hooks/createFrameFocus';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { clamp } from '../../utils/math';
-import type { StatusTone } from '../../utils/tone';
 import { IconButton } from '../actions/IconButton';
-import { Badge } from '../display/Badge';
 import { Count } from '../primitives/Count';
 import { Dot } from '../primitives/Dot';
 import { EmptyText } from '../primitives/EmptyText';
+import { KanbanCardBody } from './KanbanCardBody';
+import type { KanbanCard, KanbanProps } from './kanbanTypes';
 
-export interface KanbanColumn {
-  id: string;
-  title: string;
-  /** Status dot colour — e.g. `'var(--dv-2)'`. */
-  color?: string;
-  /** WIP limit — count turns warning when exceeded. */
-  limit?: number;
-}
-
-export interface KanbanCard {
-  id: string | number;
-  column: string;
-  title?: JSX.Element;
-  tag?: string;
-  tagTone?: StatusTone;
-  meta?: JSX.Element;
-  assignee?: JSX.Element;
-  [key: string]: unknown;
-}
-
-export interface KanbanProps {
-  columns: KanbanColumn[];
-  cards: KanbanCard[];
-  onCardsChange?: (cards: KanbanCard[]) => void;
-  onCardClick?: (card: KanbanCard) => void;
-  /** Replace the default card body. */
-  renderCard?: (card: KanbanCard) => JSX.Element;
-  /** Shows + in each column header. */
-  onAddCard?: (columnId: string) => void;
-  class?: string;
-}
+export type { KanbanCard, KanbanColumn, KanbanProps } from './kanbanTypes';
 
 interface DropTarget {
   column: string;
@@ -58,6 +29,7 @@ export const Kanban = (props: KanbanProps): JSX.Element => {
   const helpId = `vui-kanban-help-${createUniqueId()}`;
   let board!: HTMLDivElement;
 
+  const focusFrame = createFrameFocus(() => board);
   const cardsIn = (columnId: string) => props.cards.filter((c) => c.column === columnId);
 
   const move = (id: KanbanCard['id'], columnId: string, index?: number) => {
@@ -78,7 +50,7 @@ export const Kanban = (props: KanbanProps): JSX.Element => {
         position: at + 1,
       }),
     );
-    requestAnimationFrame(() => board.querySelector<HTMLElement>(`[data-card="${CSS.escape(String(id))}"]`)?.focus());
+    focusFrame(`[data-card="${CSS.escape(String(id))}"]`);
   };
 
   const onCardKey = (e: KeyboardEvent & { currentTarget: HTMLElement }, card: KanbanCard) => {
@@ -129,7 +101,12 @@ export const Kanban = (props: KanbanProps): JSX.Element => {
   };
 
   return (
-    <div ref={board} class={cx('vui-kanban', props.class)}>
+    <div
+      ref={(element) => {
+        board = element;
+      }}
+      class={cx('vui-kanban', props.class)}
+    >
       <span class="vui-sr-only" aria-live="assertive">
         {announcement()}
       </span>
@@ -213,27 +190,7 @@ export const Kanban = (props: KanbanProps): JSX.Element => {
                         onKeyDown={(e) => onCardKey(e, card)}
                         onClick={() => props.onCardClick?.(card)}
                       >
-                        <Show
-                          when={props.renderCard}
-                          fallback={
-                            <>
-                              <Show when={card.tag}>
-                                <Badge size="sm" tone={card.tagTone ?? 'neutral'}>
-                                  {card.tag}
-                                </Badge>
-                              </Show>
-                              <div class="vui-kanban__ctitle">{card.title}</div>
-                              <Show when={card.meta || card.assignee}>
-                                <div class="vui-kanban__cfoot">
-                                  <span class="vui-kanban__meta">{card.meta}</span>
-                                  {card.assignee}
-                                </div>
-                              </Show>
-                            </>
-                          }
-                        >
-                          {(render) => render()(card)}
-                        </Show>
+                        <KanbanCardBody card={card} render={props.renderCard} />
                       </article>
                     </>
                   )}

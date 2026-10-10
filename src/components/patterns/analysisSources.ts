@@ -1,6 +1,7 @@
 import type { I18nKey } from '@jankrajewskiit/i18n';
 import type { JSX } from 'solid-js';
 
+import { freezeRecords } from '../../utils/freezeRecords';
 import { englishText, type StaticTranslate } from './englishText';
 
 export const KIND_ICON = {
@@ -81,6 +82,8 @@ export const localizeAnalysisDepths = (translate: StaticTranslate): AnalysisDept
   }));
 
 /** English snapshot; `AnalysisRequest` localizes its own default. */
-export const DEFAULT_ANALYSIS_DEPTHS: AnalysisDepth[] = localizeAnalysisDepths(englishText);
+export const DEFAULT_ANALYSIS_DEPTHS: readonly Readonly<AnalysisDepth>[] = freezeRecords(
+  localizeAnalysisDepths(englishText),
+);
 
 export const sourceStatus = (source: AnalysisSource): AnalysisSourceStatus => source.status ?? 'ready';

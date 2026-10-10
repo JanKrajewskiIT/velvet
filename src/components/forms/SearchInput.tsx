@@ -2,13 +2,14 @@ import { createMemo, createSignal, createUniqueId, For, type JSX, mergeProps, Sh
 
 import { createControllable } from '../../hooks/createControllable';
 import { createDismiss } from '../../hooks/createDismiss';
+import { createFloating } from '../../hooks/createFloating';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { Spinner } from '../feedback/Spinner';
 import { CloseButton } from '../primitives/CloseButton';
 import { Control } from '../primitives/Control';
 import { EmptyText } from '../primitives/EmptyText';
-import { FieldLabel } from '../primitives/Field';
+import { FieldLabel } from '../primitives/FieldLabel';
 import { Glyph } from '../primitives/Glyph';
 import { highlightMatch } from '../primitives/Mark';
 import { callHandler } from './callHandler';
@@ -87,7 +88,7 @@ export const SearchInput = (props: SearchInputProps) => {
     onChange: (next) => local.onValueChange?.(next),
   });
   const [open, setOpen] = createSignal(false);
-  const [active, setActive] = createSignal(0);
+  const [highlighted, setActive] = createSignal(0);
   const [root, setRoot] = createSignal<HTMLElement>();
   let input!: HTMLInputElement;
 
@@ -96,6 +97,8 @@ export const SearchInput = (props: SearchInputProps) => {
     return local.filter ? filterOptions(all, query()) : all;
   });
   const showList = () => open() && !!local.suggestions && query().length > 0;
+  const active = () => (options().length ? Math.min(Math.max(0, highlighted()), options().length - 1) : -1);
+  const floating = createFloating(showList, root, { matchWidth: true });
   const activeOption = () => options()[active()];
 
   const change = (next: string) => {
@@ -113,13 +116,15 @@ export const SearchInput = (props: SearchInputProps) => {
 
   const onKeyDown: JSX.EventHandler<HTMLInputElement, KeyboardEvent> = (e) => {
     callHandler(local.onKeyDown, e);
+    if (e.defaultPrevented) return;
     if (e.key === 'ArrowDown') {
       e.preventDefault();
+      const wasOpen = showList();
       setOpen(true);
-      setActive((index) => Math.min(options().length - 1, index + 1));
+      setActive(wasOpen ? Math.min(options().length - 1, active() + 1) : 0);
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
-      setActive((index) => Math.max(0, index - 1));
+      setActive(Math.max(0, active() - 1));
     } else if (e.key === 'Enter') {
       const option = activeOption();
       if (showList() && option) {
@@ -129,6 +134,7 @@ export const SearchInput = (props: SearchInputProps) => {
         local.onSelect?.({ value: query(), label: query() });
       }
     } else if (e.key === 'Escape' && !showList() && query()) {
+      e.preventDefault();
       change('');
     }
   };
@@ -186,7 +192,7 @@ export const SearchInput = (props: SearchInputProps) => {
           </Show>
         </Control>
         <Show when={showList()}>
-          <ul id={listId()} role="listbox" class="vui-select__menu">
+          <ul ref={floating.ref} style={floating.style()} id={listId()} role="listbox" class="vui-select__menu">
             <For each={options()}>
               {(option, index) => (
                 <ComboboxOption

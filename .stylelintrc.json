@@ -2,7 +2,6 @@
   "extends": "@jankrajewskiit/configs/stylelint",
   "ignoreFiles": [
     "velvet/**",
-    "dist-showcase/**",
     "src/styles/styles.css",
     "src/styles/tokens/**",
     "src/styles/fonts/**",
@@ -17,16 +16,5 @@
       "^vui-[a-z0-9]+(-[a-z0-9]+)*$",
       { "message": "Expected keyframe name to follow the vui-kebab-case convention" }
     ]
-  },
-  "overrides": [
-    {
-      "files": ["showcase/**/*.css"],
-      "rules": {
-        "selector-class-pattern": [
-          "^(vui|sc)-[a-z0-9]+(-[a-z0-9]+)*(__[a-z0-9]+(-[a-z0-9]+)*)?(--[a-z0-9]+(-[a-z0-9]+)*)?$",
-          { "message": "Expected class selector to follow the vui-/sc-block__element--modifier convention" }
-        ]
-      }
-    }
-  ]
+  }
 }

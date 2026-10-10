@@ -27,7 +27,13 @@ export const TimelineConfirm = (props: TimelineConfirmProps) => {
     });
   });
   return (
-    <div ref={root} class="vui-timeline__confirm" role="alert">
+    <div
+      ref={(element) => {
+        root = element;
+      }}
+      class="vui-timeline__confirm"
+      role="alert"
+    >
       <span>
         {typeof props.action.confirm === 'string'
           ? props.action.confirm

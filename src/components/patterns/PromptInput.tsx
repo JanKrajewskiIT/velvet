@@ -154,7 +154,9 @@ export const PromptInput = (props: PromptInputProps) => {
           </div>
         </Show>
         <textarea
-          ref={input}
+          ref={(element) => {
+            input = element;
+          }}
           rows={1}
           class="vui-prompt__input"
           value={text()}

@@ -1,6 +1,8 @@
 import type { JSX } from 'solid-js';
 
-import type { QueryField } from '../patterns/QueryBuilder';
+import type { QueryField } from '../patterns/queryModel';
+import type { ColumnPin } from './columnManagerTypes';
+import type { GridViewState } from './gridViewTypes';
 import type { RowKey } from './rowData';
 
 export interface GridColumn<T extends object = object> {
@@ -8,6 +10,17 @@ export interface GridColumn<T extends object = object> {
   label: JSX.Element;
   /** px, resizable by dragging the header edge. @default 160 */
   width?: number;
+  minWidth?: number;
+  maxWidth?: number;
+  /** @default true */
+  sortable?: boolean;
+  sortAccessor?: (row: T) => unknown;
+  /** Ascending comparison; descending order reverses its result. */
+  sortFn?: (a: T, b: T) => number;
+  /** Value used by text search and query rules for this column. */
+  filterAccessor?: (row: T) => unknown;
+  /** Custom free-text search predicate. */
+  filterFn?: (row: T, search: string) => boolean;
   /** number = right-aligned, tabular, parsed on edit. */
   type?: 'text' | 'number';
   editable?: boolean;
@@ -15,12 +28,15 @@ export interface GridColumn<T extends object = object> {
   options?: string[];
   format?: (value: unknown) => JSX.Element;
   render?: (row: T) => JSX.Element;
-  /** Start pinned (frozen) to the left. */
-  pin?: 'left';
+  /** Start pinned (frozen). */
+  pin?: ColumnPin;
   /** Start hidden (re-enable in Columns). */
   hidden?: boolean;
   /** Can't be hidden / moved / unpinned in Columns. */
   locked?: boolean;
+  canHide?: boolean;
+  canPin?: boolean;
+  canMove?: boolean;
 }
 
 export interface GridRowChange {
@@ -34,6 +50,28 @@ export interface DataGridProps<T extends object = object> {
   rows: T[];
   /** @default 'id' */
   rowKey?: string;
+  /** Stable unique identity, required when records have no key field and are replaced or reordered. */
+  getRowId?: (row: T) => RowKey;
+  /** Controlled search, query, sorting, column order, pins, visibility and widths. */
+  view?: GridViewState;
+  defaultView?: Partial<GridViewState>;
+  onViewChange?: (view: GridViewState) => void;
+  /** Keep filtering and sorting in the consumer's server query. */
+  manualFiltering?: boolean;
+  manualSorting?: boolean;
+  /** Optional localStorage key. Only view settings are stored, never records. */
+  persistenceKey?: string;
+  onViewError?: (error: Error) => void;
+  /** Reset and validated JSON import/export controls. */
+  viewSettings?: boolean;
+  /** Render only the visible row window; expanded details are measured. */
+  virtual?: boolean;
+  /** Override the design-system row height in px; otherwise measure it (initial estimate: 36). */
+  rowHeight?: number;
+  /** Additional rows above and below the viewport. @default 6 */
+  overscan?: number;
+  /** Accessible grid name. */
+  label?: string;
   onRowsChange?: (rows: T[], change: GridRowChange) => void;
   /** Scroll area height in px. @default 360 */
   height?: number;
@@ -67,4 +105,4 @@ export interface DataGridProps<T extends object = object> {
 }
 
 export type CellPosition = { row: number; col: number };
-export type EditMove = 'down' | 'right' | 'stay';
+export type EditMove = 'down' | 'right' | 'left' | 'stay';

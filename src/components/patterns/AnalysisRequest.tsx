@@ -43,7 +43,7 @@ export interface AnalysisRequestProps {
   defaultDepth?: string;
   onDepthChange?: (id: string) => void;
   /** @default localized quick · standard · deep */
-  depths?: AnalysisDepth[];
+  depths?: readonly AnalysisDepth[];
   /** @default 'idle' */
   status?: 'idle' | 'running';
   /** Progress labels while running, e.g. ['Reading CV', 'Matching requirements', 'Scoring'] */

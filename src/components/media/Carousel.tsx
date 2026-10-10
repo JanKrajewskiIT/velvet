@@ -107,7 +107,9 @@ export const Carousel = (props: CarouselProps) => {
       }}
     >
       <div
-        ref={viewport}
+        ref={(element) => {
+          viewport = element;
+        }}
         class="vui-carousel__viewport"
         onPointerDown={(e) => {
           if (e.pointerType === 'mouse' && e.button !== 0) return;

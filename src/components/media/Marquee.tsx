@@ -57,7 +57,13 @@ export const Marquee = (props: MarqueeProps) => {
           gap: `${p.gap}px`,
         }}
       >
-        <div ref={group} class="vui-marquee__group" style={{ gap: `${p.gap}px` }}>
+        <div
+          ref={(element) => {
+            group = element;
+          }}
+          class="vui-marquee__group"
+          style={{ gap: `${p.gap}px` }}
+        >
           {p.children}
         </div>
         <div class="vui-marquee__group" style={{ gap: `${p.gap}px` }} aria-hidden="true">

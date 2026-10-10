@@ -1,3 +1,5 @@
+import { createSignal } from 'solid-js';
+
 import { createLayer } from '../../hooks/createLayer';
 import { useTranslate } from '../../i18n/useTranslate';
 import { Button } from '../actions/Button';
@@ -17,13 +19,15 @@ export interface OrganizerEventFormProps {
 /** Inline editor for one event in the day panel: title, start and end date, time, description. Enter saves, Esc cancels. */
 export const OrganizerEventForm = (props: OrganizerEventFormProps) => {
   const translate = useTranslate();
+  const [root, setRoot] = createSignal<HTMLLIElement>();
   createLayer(
     () => true,
     () => props.onCancel(),
+    { root },
   );
 
   return (
-    <li class="vui-organizer__form" style={{ '--ec': props.color ?? 'var(--dv-1)' }}>
+    <li ref={setRoot} class="vui-organizer__form" style={{ '--ec': props.color ?? 'var(--dv-1)' }}>
       <Control size="sm">
         <input
           class="vui-control__input"

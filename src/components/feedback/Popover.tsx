@@ -1,18 +1,18 @@
 import {
   children as resolveChildren,
-  createMemo,
   createSignal,
   createUniqueId,
   type JSX,
   mergeProps,
   onCleanup,
   Show,
-  untrack,
 } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { createDismiss } from '../../hooks/createDismiss';
 import { createFloating } from '../../hooks/createFloating';
+import { createTrigger } from '../../hooks/createTrigger';
+import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 
 /** Attributes and handler a custom trigger must spread onto its element. */
@@ -24,9 +24,11 @@ export interface PopoverTriggerProps {
 }
 
 export interface PopoverProps {
-  /** Label of the default trigger button, or a render function that spreads the received props onto a Button or IconButton. */
+  /** Label, a native interactive element, or a render function spreading the received attributes onto its trigger. */
   trigger: JSX.Element | ((trigger: PopoverTriggerProps) => JSX.Element);
   title?: JSX.Element;
+  /** Accessible name when the panel has no visible title. */
+  label?: string;
   /** Preferred side; flips when there is no room. @default 'bottom' */
   side?: 'bottom' | 'top';
   /** @default 'start' */
@@ -65,12 +67,10 @@ export const Popover = (props: PopoverProps) => {
   });
   const [wrap, setWrap] = createSignal<HTMLElement>();
   const id = createUniqueId();
+  const titleId = `${id}-title`;
+  const translate = useTranslate();
   const hover = () => p.openOn === 'hover';
   const title = resolveChildren(() => p.title);
-  const titleText = () => {
-    const resolved = title();
-    return typeof resolved === 'string' ? resolved : undefined;
-  };
   let timer: ReturnType<typeof setTimeout> | undefined;
 
   const cancelPending = () => clearTimeout(timer);
@@ -99,23 +99,23 @@ export const Popover = (props: PopoverProps) => {
       if (!hover()) setOpen(!isOpen());
     },
   };
-  const trigger = createMemo(() => {
-    const t = p.trigger;
-    return untrack(() =>
-      typeof t === 'function' ? (
-        t(triggerProps)
-      ) : (
-        <button type="button" {...triggerProps}>
-          {t}
-        </button>
-      ),
-    );
-  });
+  const trigger = createTrigger(
+    () => p.trigger,
+    triggerProps,
+    (content, attributes) => (
+      <button type="button" {...attributes}>
+        {content}
+      </button>
+    ),
+  );
 
   return (
+    // eslint-disable-next-line jsx-a11y/no-static-element-interactions -- delegates events from the supplied native trigger, which owns keyboard semantics
     <span
       ref={setWrap}
       class={cx('vui-popover-wrap', hover() && 'vui-popover-wrap--hover', p.class)}
+      onClick={trigger.onClick}
+      onKeyDown={trigger.onKeyDown}
       onMouseEnter={() => hover() && later(true, p.openDelay)}
       onMouseLeave={() => hover() && later(false, p.closeDelay)}
       onFocusIn={() => hover() && later(true, 0)}
@@ -123,13 +123,14 @@ export const Popover = (props: PopoverProps) => {
         if (hover() && !e.currentTarget.contains(e.relatedTarget as Node | null)) later(false, p.closeDelay);
       }}
     >
-      {trigger()}
+      {trigger.content}
       <Show when={isOpen()}>
         <div
           ref={floating.ref}
           id={id}
           role="dialog"
-          aria-label={titleText()}
+          aria-labelledby={title() ? titleId : undefined}
+          aria-label={title() ? undefined : (p.label ?? translate('velvet.feedback.dialog.label'))}
           class={cx(
             'vui-popover',
             floating.side() === 'top' && 'vui-popover--top',
@@ -138,7 +139,9 @@ export const Popover = (props: PopoverProps) => {
           style={floating.style()}
         >
           <Show when={title()}>
-            <div class="vui-popover__title">{title()}</div>
+            <div id={titleId} class="vui-popover__title">
+              {title()}
+            </div>
           </Show>
           <div class="vui-popover__body">{p.children}</div>
         </div>

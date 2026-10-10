@@ -1,7 +1,7 @@
 {
   "name": "@jankrajewskiit/ui",
   "version": "3.3.6",
-  "description": "SolidJS component library with theming, translations, and a showcase.",
+  "description": "SolidJS component library with theming and translations.",
   "keywords": [
     "solidjs",
     "solid",
@@ -44,8 +44,6 @@
   "scripts": {
     "prepublishOnly": "npm run verify",
     "build": "tsc -b && vite build",
-    "showcase": "vite --config showcase/vite.config.ts",
-    "showcase:build": "vite build --config showcase/vite.config.ts",
     "typecheck": "tsc -b",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -59,12 +57,14 @@
     "prepare": "husky"
   },
   "peerDependencies": {
+    "@jankrajewskiit/auth": "^3.3.4",
     "@jankrajewskiit/i18n": "^3.3.0",
     "solid-js": ">=1.9.0 <2"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
     "@eslint/compat": "^2.1.1",
+    "@jankrajewskiit/auth": "^3.3.4",
     "@jankrajewskiit/configs": "^3.3.4",
     "@jankrajewskiit/i18n": "^3.3.4",
     "@size-limit/file": "^14.2.0",

@@ -1,6 +1,9 @@
 import type { I18nKey } from '@jankrajewskiit/i18n';
-import { type JSX, Show } from 'solid-js';
+import { createSignal, onMount, Show } from 'solid-js';
 
+import { createDismiss } from '../../hooks/createDismiss';
+import { createFloating } from '../../hooks/createFloating';
+import { createFrameFocus } from '../../hooks/createFrameFocus';
 import { Button } from '../actions/Button';
 import { Control } from '../primitives/Control';
 
@@ -39,24 +42,38 @@ export interface RichTextLinkPopoverProps {
   onClose: () => void;
 }
 
-const focusInput = (input: HTMLInputElement) => queueMicrotask(() => input.focus());
-
 /** Inline link editor anchored under the toolbar. Esc closes it without leaving the editor. */
 export const RichTextLinkPopover = (props: RichTextLinkPopoverProps) => {
-  const onKeyDown: JSX.EventHandler<HTMLDivElement, KeyboardEvent> = (event) => {
-    if (event.key !== 'Escape') return;
-    event.preventDefault();
-    event.stopPropagation();
-    props.onClose();
-  };
+  const [root, setRoot] = createSignal<HTMLDivElement>();
+  const wrap = () => root()?.closest<HTMLElement>('.vui-rte') ?? root();
+  const floating = createFloating(
+    () => true,
+    () => wrap()?.querySelector('.vui-rte__bar') ?? wrap(),
+    { matchWidth: true, offset: 0 },
+  );
+  createDismiss(
+    () => true,
+    () => props.onClose(),
+    wrap,
+    { refocus: false },
+  );
+  const focusInput = createFrameFocus(root);
+  onMount(() => focusInput('input'));
 
   return (
-    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- only intercepts Escape bubbling from the dialog's own inputs
-    <div class="vui-rte__link" role="dialog" aria-label={props.labels.dialog} onKeyDown={onKeyDown}>
+    <div
+      ref={(element) => {
+        setRoot(element);
+        floating.ref(element);
+      }}
+      style={floating.style()}
+      class="vui-rte__link"
+      role="dialog"
+      aria-label={props.labels.dialog}
+    >
       <div class="vui-rte__link-row">
         <Control size="sm" invalid={!!props.error} style={{ flex: 1 }} iconLeft="link">
           <input
-            ref={focusInput}
             class="vui-control__input"
             value={props.href}
             placeholder={props.labels.placeholder}

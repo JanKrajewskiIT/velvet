@@ -36,7 +36,9 @@ export const ChatThread = (props: ChatThreadProps) => {
 
   return (
     <div
-      ref={thread}
+      ref={(element) => {
+        thread = element;
+      }}
       role="log"
       aria-label={props.label ?? translate('velvet.patterns.chatThread.label')}
       // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a scrollable log region must be focusable so keyboard users can scroll it

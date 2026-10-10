@@ -1,8 +1,0 @@
-{
-  "extends": "@jankrajewskiit/configs/tsconfig/app-vite",
-  "compilerOptions": {
-    "tsBuildInfoFile": "../node_modules/.tmp/tsconfig.showcase.tsbuildinfo",
-    "rootDir": ".."
-  },
-  "include": ["src", "../src"]
-}

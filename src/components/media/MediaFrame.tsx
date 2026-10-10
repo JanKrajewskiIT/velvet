@@ -4,63 +4,21 @@ import {
   createMemo,
   createSignal,
   type JSX,
-  Match,
   mergeProps,
   on,
   Show,
-  Switch,
   untrack,
 } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx, modifier } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
-import { aspectLabel, type AspectRatio, aspectRatioValue } from './aspect';
+import { aspectLabel, aspectRatioValue } from './aspect';
+import { MediaFrameContent } from './MediaFrameContent';
+import type { FrameState, MediaFrameProps } from './mediaFrameTypes';
 import { safeEmbedUrl, safeMediaUrl } from './safeUrl';
 
-type FrameState = 'empty' | 'loading' | 'ready' | 'error';
-
-const EMBED_PERMISSIONS = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
-
-export interface MediaFrameProps {
-  src?: string;
-  /** Required for meaningful images; `''` marks decorative. @default '' */
-  alt?: string;
-  /** @default 'image' */
-  kind?: 'image' | 'video' | 'embed';
-  /** Video only — still frame shown until play. */
-  poster?: string;
-  /** Token name or any CSS ratio ("4/5"). @default 'video' */
-  ratio?: AspectRatio;
-  /** @default 'cover' */
-  fit?: 'cover' | 'contain';
-  /** object-position, e.g. "top" or "30% 50%" for focal point. */
-  position?: string;
-  caption?: JSX.Element;
-  credit?: JSX.Element;
-  /** Bottom content on a scrim — title, author. */
-  overlay?: JSX.Element;
-  /** Small pill top-right — duration, "Live", count. */
-  badge?: JSX.Element;
-  /** Force the shimmer (data still fetching). @default false */
-  loading?: boolean;
-  /** Text in the empty placeholder. */
-  placeholder?: JSX.Element;
-  /** Print the ratio ("16 : 9") in the empty placeholder — for layout specs. @default false */
-  showRatio?: boolean;
-  /** Play button size. @default 'md' */
-  size?: 'sm' | 'md' | 'lg';
-  /** @default true */
-  rounded?: boolean;
-  /** @default false */
-  bordered?: boolean;
-  /** Accessible name for video/embed. */
-  title?: string;
-  onPlay?: () => void;
-  /** Custom fallback shown when empty or on error. */
-  children?: JSX.Element;
-  class?: string;
-}
+export type { MediaFrameProps } from './mediaFrameTypes';
 
 /**
  * Fixed-ratio frame for an image, video or embed. Reserves space before load (no layout shift), shimmer while loading,
@@ -148,57 +106,17 @@ export const MediaFrame = (props: MediaFrameProps) => {
       >
         <Show when={state() !== 'error' && url()}>
           {(src) => (
-            <Switch>
-              <Match when={p.kind === 'video' && !playing()}>
-                <Show when={posterUrl()}>
-                  {(poster) => (
-                    <img
-                      class="vui-media__el"
-                      src={poster()}
-                      alt=""
-                      onLoad={ready}
-                      onError={failed}
-                      style={objectStyle()}
-                    />
-                  )}
-                </Show>
-              </Match>
-              <Match when={p.kind === 'video'}>
-                {/* eslint-disable-next-line jsx-a11y/media-has-caption -- captions are provided by the media source; the player cannot know them */}
-                <video
-                  class="vui-media__el"
-                  src={src()}
-                  controls
-                  autoplay
-                  playsinline
-                  onLoadedData={ready}
-                  onError={failed}
-                  style={objectStyle()}
-                />
-              </Match>
-              <Match when={p.kind === 'embed'}>
-                <iframe
-                  class="vui-media__el"
-                  src={src()}
-                  title={p.title || p.alt || translate('velvet.media.mediaFrame.embed')}
-                  loading="lazy"
-                  allow={EMBED_PERMISSIONS}
-                  onLoad={ready}
-                />
-              </Match>
-              <Match when={true}>
-                <img
-                  class="vui-media__el"
-                  src={src()}
-                  alt={p.alt}
-                  loading="lazy"
-                  decoding="async"
-                  onLoad={ready}
-                  onError={failed}
-                  style={objectStyle()}
-                />
-              </Match>
-            </Switch>
+            <MediaFrameContent
+              src={src()}
+              kind={p.kind}
+              poster={posterUrl()}
+              playing={playing()}
+              title={p.title}
+              alt={p.alt}
+              style={objectStyle()}
+              onReady={ready}
+              onError={failed}
+            />
           )}
         </Show>
         <Show when={isEmpty()}>

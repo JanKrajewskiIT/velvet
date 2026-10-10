@@ -7,6 +7,9 @@ export const feedbackEn = defineDictionary({
   bottomSheet: {
     label: 'Sheet',
   },
+  dialog: {
+    label: 'Dialog',
+  },
   confirmDialog: {
     title: 'Are you sure?',
     errorMessage: 'Something went wrong — try again.',

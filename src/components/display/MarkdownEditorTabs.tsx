@@ -1,7 +1,8 @@
 import { For } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
-import { Segmented, SegmentedItem } from '../primitives/Segmented';
+import { Segmented } from '../primitives/Segmented';
+import { SegmentedItem } from '../primitives/SegmentedItem';
 import { MARKDOWN_EDITOR_MODES, type MarkdownEditorMode } from './markdownEditorModes';
 
 export interface MarkdownEditorTabsProps {

@@ -5,7 +5,8 @@ import { cx } from '../../utils/cx';
 import { Button } from '../actions/Button';
 import { Glyph } from '../primitives/Glyph';
 import { Marker } from '../primitives/Marker';
-import { Rail, RailItem } from '../primitives/Rail';
+import { Rail } from '../primitives/Rail';
+import { RailItem } from '../primitives/RailItem';
 import { TimelineEntry } from './TimelineEntry';
 import type { TimelineAction, TimelineItem } from './timelineTypes';
 

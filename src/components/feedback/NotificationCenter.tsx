@@ -1,7 +1,8 @@
-import { createMemo, mergeProps, Show, splitProps } from 'solid-js';
+import { createMemo, createSignal, mergeProps, Show, splitProps } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { createDismiss } from '../../hooks/createDismiss';
+import { createFloating } from '../../hooks/createFloating';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
@@ -54,16 +55,14 @@ export const NotificationCenter = (props: NotificationCenterProps) => {
   const unread = createMemo(() => local.items.filter((item) => item.unread).length);
   const translate = useTranslate();
   const title = () => local.title ?? translate('velvet.feedback.notificationCenter.title');
-  let wrap: HTMLSpanElement | undefined;
+  const [wrap, setWrap] = createSignal<HTMLSpanElement>();
 
-  createDismiss(
-    isOpen,
-    () => setOpen(false),
-    () => wrap,
-  );
+  createDismiss(isOpen, () => setOpen(false), wrap);
+
+  const floating = createFloating(isOpen, wrap, { align: () => local.align });
 
   return (
-    <span {...rest} ref={wrap} class={cx('vui-popover-wrap', local.class)}>
+    <span {...rest} ref={setWrap} class={cx('vui-popover-wrap', local.class)}>
       <button
         type="button"
         class={cx(buttonClass({ variant: 'ghost', icon: true }), 'vui-notif__bell')}
@@ -81,6 +80,8 @@ export const NotificationCenter = (props: NotificationCenterProps) => {
       </button>
       <Show when={isOpen()}>
         <div
+          ref={floating.ref}
+          style={floating.style()}
           role="dialog"
           aria-label={title()}
           class={cx('vui-popover', 'vui-notif', local.align === 'end' && 'vui-popover--end')}

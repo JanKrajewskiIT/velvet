@@ -49,6 +49,8 @@ export interface TableProps<T extends object = object> {
   count?: JSX.Element;
   /** Toolbar actions, right-aligned. */
   toolbar?: JSX.Element;
+  /** A native table row, usually TableAddRowAction; shown after records when not loading. */
+  addRow?: JSX.Element;
   /** Drag column edges to resize (double-click resets a column; ←/→ on the handle). Adds “Reset widths” to the toolbar once changed. */
   resizable?: boolean;
   /** Adds a chevron column; renders this below the row when expanded. */

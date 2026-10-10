@@ -3,11 +3,12 @@ import { mergeProps, Show, untrack } from 'solid-js';
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { Button } from '../actions/Button';
 import { SectionLabel } from '../primitives/SectionLabel';
 import { QueryGroupEditor } from './QueryGroupEditor';
 import { describeQuery, emptyQuery, type QueryField, type QueryGroup } from './queryModel';
 
-export type { QueryField, QueryGroup, QueryRule } from './queryModel';
+export type { QueryField, QueryFieldType, QueryGroup, QueryNode, QueryOperatorValue, QueryRule } from './queryModel';
 export { describeQuery, emptyQuery } from './queryModel';
 
 export interface QueryBuilderProps {
@@ -21,6 +22,9 @@ export interface QueryBuilderProps {
   maxDepth?: number;
   /** Readable one-line version under the builder */
   showSummary?: boolean;
+  disabled?: boolean;
+  /** Offer accessible move-up/down controls for rules and groups. @default true */
+  reorderable?: boolean;
   class?: string;
 }
 
@@ -30,7 +34,10 @@ export interface QueryBuilderProps {
  * For quick faceted filtering use FilterBar; QueryBuilder is for saved, precise rules.
  */
 export const QueryBuilder = (props: QueryBuilderProps) => {
-  const p = mergeProps({ maxDepth: 2, showSummary: false } satisfies Partial<QueryBuilderProps>, props);
+  const p = mergeProps(
+    { maxDepth: 2, showSummary: false, reorderable: true } satisfies Partial<QueryBuilderProps>,
+    props,
+  );
   const translate = useTranslate();
   const [query, setQuery] = createControllable<QueryGroup>({
     value: () => p.value,
@@ -45,9 +52,25 @@ export const QueryBuilder = (props: QueryBuilderProps) => {
         fields={p.fields}
         depth={0}
         maxDepth={p.maxDepth}
-        onChange={setQuery}
+        disabled={p.disabled}
+        reorderable={p.reorderable}
+        onChange={(next) => {
+          if (!p.disabled) setQuery(next);
+        }}
         onRemove={() => undefined}
       />
+      <Show when={query().rules.length > 0}>
+        <Button
+          variant="ghost"
+          size="sm"
+          disabled={p.disabled}
+          onClick={() => {
+            if (!p.disabled) setQuery({ ...query(), rules: [] });
+          }}
+        >
+          {translate('velvet.patterns.queryBuilder.clearRules')}
+        </Button>
+      </Show>
       <Show when={p.showSummary}>
         <div class="vui-qb__summary">
           <SectionLabel as="span">{translate('velvet.patterns.queryBuilder.query')}</SectionLabel>

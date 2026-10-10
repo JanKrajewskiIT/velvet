@@ -2,10 +2,12 @@
 
 SolidJS component library published as `@jankrajewskiit/ui`.
 
+The live showcase is maintained separately in the sibling `VelvetDemo` project. This repository contains the library and its read-only Velvet reference. The [porting record](docs/design-system-port.md) describes parity, implementation decisions and remaining verification.
+
 ## Install
 
 ```bash
-npm install @jankrajewskiit/ui @jankrajewskiit/i18n solid-js
+npm install @jankrajewskiit/ui @jankrajewskiit/auth @jankrajewskiit/i18n oidc-client-ts solid-js
 ```
 
 `.npmrc` for GitHub Packages authentication:
@@ -15,7 +17,7 @@ npm install @jankrajewskiit/ui @jankrajewskiit/i18n solid-js
 //npm.pkg.github.com/:_authToken=${GHCR_TOKEN}
 ```
 
-`solid-js` and `@jankrajewskiit/i18n` are peer dependencies: the library and the application must share one instance of each.
+VelvetUi targets applications sharing the Velvet infrastructure, including `@jankrajewskiit/auth` for OIDC. The library and application must share one instance of `solid-js`, `@jankrajewskiit/i18n` and `@jankrajewskiit/auth`; separate auth instances would create separate session contexts. `oidc-client-ts` is the authentication package's peer dependency.
 
 ## Quick start
 
@@ -23,13 +25,13 @@ npm install @jankrajewskiit/ui @jankrajewskiit/i18n solid-js
 import '@jankrajewskiit/ui/styles';
 import { Button, mountVelvetApp } from '@jankrajewskiit/ui';
 
-mountVelvetApp({
+await mountVelvetApp({
   root: 'root',
   app: () => <Button variant="primary">Save</Button>,
 });
 ```
 
-`mountVelvetApp` renders the app inside `VelvetProvider`, which syncs the theme with the OS and storage, provides the locale and translations, a toast queue and an error boundary with a retry screen.
+`mountVelvetApp` renders the app inside `VelvetProvider`, which syncs the theme with the OS and storage, provides the locale and translations, a toast queue and an error boundary with a retry screen. With `authConfig`, it processes the OIDC callback before rendering and enables the shared auth session. The asynchronous bootstrap returns a disposer, or `undefined` when a callback starts navigation; bootstrap failures reject its Promise and must be handled by the application entry point.
 
 ## Translations
 
@@ -41,35 +43,46 @@ import { defineDictionary } from '@jankrajewskiit/i18n';
 const appEn = defineDictionary({ app: { title: 'Dashboard' } });
 const appPl = defineDictionary({ app: { title: 'Pulpit' } });
 
-mountVelvetApp({ root: 'root', app: App, messages: { en: [appEn], pl: [appPl] } });
+await mountVelvetApp({ root: 'root', app: App, messages: { en: [appEn], pl: [appPl] } });
 ```
 
 Without a provider, components fall back to the bundled English text. Words shared by many components (Cancel, Save, Close, …) live under `velvet.common`. Components also accept explicit label props that override the dictionary.
 
 ## Authorization
 
-`AuthGuard` renders its children only for signed-in, authorized users. It takes the session state as props, so any auth library fits:
+The authentication module lives in `src/auth`: `AuthButton`, `AuthActionButton`, `AuthGuard` and their shared operation lifecycle. `src/auth/index.ts` owns their exports, which remain available from `@jankrajewskiit/ui`. Authentication is a separate infrastructure boundary even though its button appears in the showcase's actions section. Reference styles and existing translation keys retain their original groups. `VelvetProvider` and `mountVelvetApp` stay in `src/provider` as application bootstrap owners.
+
+Pass the application's OIDC configuration to the bootstrap:
 
 ```tsx
-<AuthGuard
-  loading={auth.loading()}
-  authenticated={auth.signedIn()}
-  authorized={auth.hasRole('admin')}
-  onSignIn={auth.signIn}
->
+await mountVelvetApp({ root: 'root', app: App, authConfig });
+```
+
+For an existing application root, `<VelvetProvider authConfig={authConfig}>` also owns the session; Velvet Auth handles callbacks on mount in that composition. Treat `authConfig` as stable configuration: replacing its object remounts the session and application subtree.
+
+`AuthButton` reads the session and signs in or out automatically. `AuthActionButton` provides the same behavior with compact icon-only, ghost defaults. Both accept `returnUrl`; otherwise sign-in preserves the current path, query and hash. Their native click handler runs first and can cancel the action with `preventDefault()`. Initial session loading and pending operations disable the button. Failures are announced with localized text and reflected in the title; `onError` can integrate additional application feedback without exposing raw dependency errors in the UI.
+
+`AuthGuard` reads the same session and requires any one of the supplied roles. No roles means any signed-in user. Its default behavior shows a sign-in prompt; `unauthorizedBehavior="redirect"` starts sign-in automatically. A failed session initialization or sign-in shows a retry screen instead of repeatedly redirecting. An authenticated user without the required role sees the forbidden screen.
+
+```tsx
+<AuthButton />
+<AuthGuard roles="admin" unauthorizedBehavior="redirect">
   <AdminPanel />
 </AuthGuard>
 ```
 
+`useAuth`, `AuthProvider`, `AuthContextValue` and `OidcAuthConfig` are re-exported for application composition. Auth components require an auth provider. Server APIs must still enforce permissions and resource ownership.
+
+Migration from the temporary prop-driven API: remove `signedIn`, `onSignIn` and `onSignOut` from `AuthButton`; remove `loading`, `authenticated`, `authorized` and `onSignIn` from `AuthGuard`, replacing authorization predicates with `roles` and `unauthenticated` with `unauthorizedBehavior`. Provide `authConfig` and await `mountVelvetApp` when consuming its result. Other components can still run without an auth configuration.
+
 ## Scripts
 
-| Script                              | Purpose                                   |
-| ----------------------------------- | ----------------------------------------- |
-| `npm run typecheck`                 | `tsc -b` for the library and the showcase |
-| `npm run lint` / `npm run lint:css` | ESLint and Stylelint                      |
-| `npm run build`                     | Library build to `dist/`                  |
-| `npm run showcase`                  | Component showcase dev server             |
-| `npm run verify`                    | Everything required before publishing     |
+| Script                              | Purpose                               |
+| ----------------------------------- | ------------------------------------- |
+| `npm run typecheck`                 | `tsc -b` for the library              |
+| `npm run lint` / `npm run lint:css` | ESLint and Stylelint                  |
+| `npm run build`                     | Library build to `dist/`              |
+| `npm run verify`                    | Everything required before publishing |
 
 ## Upgrading
 

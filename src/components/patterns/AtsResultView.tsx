@@ -26,7 +26,7 @@ import { plainText } from './plainText';
 export interface AtsResultViewProps {
   result: AtsResult;
   title: string;
-  bands: ScoreBand[];
+  bands: readonly ScoreBand[];
   disclaimer?: JSX.Element;
   /** Panel header (badge, subject → target, provenance). */
   header: JSX.Element;

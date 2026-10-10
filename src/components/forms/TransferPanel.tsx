@@ -99,7 +99,9 @@ export const TransferPanel = (props: TransferPanelProps) => {
         </div>
       </Show>
       <ul
-        ref={list}
+        ref={(element) => {
+          list = element;
+        }}
         class="vui-xfer__list"
         role="listbox"
         aria-multiselectable="true"

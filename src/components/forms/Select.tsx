@@ -4,6 +4,7 @@ import { createControllable } from '../../hooks/createControllable';
 import { createDismiss } from '../../hooks/createDismiss';
 import { createFloating } from '../../hooks/createFloating';
 import { useTranslate } from '../../i18n/useTranslate';
+import { createTypeahead } from '../../utils/createTypeahead';
 import { cx, modifier } from '../../utils/cx';
 import { Chevron } from '../primitives/Chevron';
 import { Field } from '../primitives/Field';
@@ -12,7 +13,6 @@ import { ComboboxOption } from './ComboboxOption';
 import { ComboboxOptionText } from './ComboboxOptionText';
 import { normalizeOption, type SelectOption } from './selectOption';
 
-const TYPEAHEAD_RESET_MS = 600;
 const OPENING_KEYS = ['ArrowDown', 'ArrowUp', 'Enter', ' '];
 const NO_OPTIONS: ReadonlyArray<string | SelectOption> = [];
 
@@ -74,8 +74,7 @@ export const Select = (props: SelectProps) => {
   const [active, setActive] = createSignal(-1);
   const [root, setRoot] = createSignal<HTMLElement>();
   let trigger!: HTMLButtonElement;
-  let typed = '';
-  let typedAt = 0;
+  const search = createTypeahead();
 
   createDismiss(open, () => setOpen(false), root);
   const floating = createFloating(open, root, { matchWidth: true });
@@ -110,11 +109,13 @@ export const Select = (props: SelectProps) => {
     setActive((edge === 'first' ? enabled[0] : enabled.at(-1)) ?? active());
   };
   const typeahead = (key: string) => {
-    const now = Date.now();
-    typed = (now - typedAt > TYPEAHEAD_RESET_MS ? '' : typed) + key.toLowerCase();
-    typedAt = now;
-    const match = options().findIndex((option) => !option.disabled && option.label.toLowerCase().startsWith(typed));
-    if (match >= 0) setActive(match);
+    const enabled = options().flatMap((option, index) => (option.disabled ? [] : [{ option, index }]));
+    const match = search(
+      key,
+      enabled.map((entry) => entry.option.label),
+      enabled.findIndex((entry) => entry.index === active()),
+    );
+    if (match >= 0) setActive(enabled[match]?.index ?? active());
   };
 
   const onKeyDown: JSX.EventHandler<HTMLButtonElement, KeyboardEvent> = (e) => {
@@ -167,7 +168,9 @@ export const Select = (props: SelectProps) => {
       {(control) => (
         <div ref={setRoot} class="vui-select">
           <button
-            ref={trigger}
+            ref={(element) => {
+              trigger = element;
+            }}
             type="button"
             id={control.id}
             disabled={p.disabled}

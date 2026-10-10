@@ -1,10 +1,12 @@
-import { createUniqueId, Index, type JSX, mergeProps, Show } from 'solid-js';
+import { createMemo, createSignal, createUniqueId, Index, type JSX, mergeProps, onCleanup, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
+import { createDismiss } from '../../hooks/createDismiss';
+import { createFloating } from '../../hooks/createFloating';
 import { cx } from '../../utils/cx';
 import { Control } from '../primitives/Control';
 import { Field } from '../primitives/Field';
-import { createMentionLayout } from './createMentionLayout';
+import { CARET_LEFT_OFFSET_PX, createMentionLayout } from './createMentionLayout';
 import { createMentionSearch } from './createMentionSearch';
 import type { MentionOption, MentionSources } from './mentionModel';
 import { MentionSuggestions } from './MentionSuggestions';
@@ -55,25 +57,45 @@ export const MentionInput = (props: MentionInputProps) => {
     onChange: (next) => p.onValueChange?.(next),
   });
   const search = createMentionSearch(p, value);
-  let textarea: HTMLTextAreaElement | undefined;
+  const [root, setRoot] = createSignal<HTMLDivElement>();
+  const [textarea, setTextarea] = createSignal<HTMLTextAreaElement>();
   let highlight: HTMLDivElement | undefined;
   let measure: HTMLDivElement | undefined;
-  let caret: HTMLSpanElement | undefined;
+  const [caret, setCaret] = createSignal<HTMLSpanElement>();
   const layout = createMentionLayout(
-    { textarea: () => textarea, highlight: () => highlight, measure: () => measure, caret: () => caret },
+    { textarea, highlight: () => highlight, measure: () => measure, caret },
     { value, rows: () => p.rows, maxRows: () => p.maxRows, queryStart: () => search.query()?.start },
   );
+  const anchor = createMemo(() => {
+    layout.popoverPosition();
+    const marker = caret();
+    const field = textarea();
+    if (!marker || !field) return undefined;
+    return {
+      contextElement: field,
+      getBoundingClientRect: () => {
+        const rect = marker.getBoundingClientRect();
+        return new DOMRect(rect.left - CARET_LEFT_OFFSET_PX, rect.top - field.scrollTop, rect.width, rect.height);
+      },
+    };
+  });
+  const floating = createFloating(search.open, anchor);
+  createDismiss(search.open, search.close, root, { refocus: false });
+  let pickFrame = 0;
+  onCleanup(() => cancelAnimationFrame(pickFrame));
 
   const pick = (option: MentionOption) => {
     const current = search.query();
-    const field = textarea;
+    const field = textarea();
     if (!current || !field) return;
     const inserted = `${current.trigger}${option.label} `;
     const position = current.start + inserted.length;
     setValue(value().slice(0, current.start) + inserted + value().slice(field.selectionStart));
     search.close();
     p.onMention?.(option, current.trigger);
-    requestAnimationFrame(() => {
+    cancelAnimationFrame(pickFrame);
+    pickFrame = requestAnimationFrame(() => {
+      if (!field.isConnected) return;
       field.focus();
       field.setSelectionRange(position, position);
     });
@@ -91,10 +113,16 @@ export const MentionInput = (props: MentionInputProps) => {
       id={p.id ?? autoId}
     >
       {(control) => (
-        <div class={cx('vui-mention', p.class)}>
+        <div ref={setRoot} class={cx('vui-mention', p.class)}>
           <Control multiline invalid={control.invalid} disabled={p.disabled}>
             <div class="vui-mention__wrap">
-              <div ref={highlight} class="vui-mention__hl" aria-hidden="true">
+              <div
+                ref={(element) => {
+                  highlight = element;
+                }}
+                class="vui-mention__hl"
+                aria-hidden="true"
+              >
                 <Index each={search.parts()}>
                   {(part, index) => (
                     <Show when={index % 2 === 1} fallback={part()}>
@@ -104,12 +132,18 @@ export const MentionInput = (props: MentionInputProps) => {
                 </Index>
                 {'\u200b'}
               </div>
-              <div ref={measure} class="vui-mention__hl vui-mention__meas" aria-hidden="true">
+              <div
+                ref={(element) => {
+                  measure = element;
+                }}
+                class="vui-mention__hl vui-mention__meas"
+                aria-hidden="true"
+              >
                 {search.textBeforeTrigger()}
-                <span ref={caret}>{search.query()?.trigger}</span>
+                <span ref={setCaret}>{search.query()?.trigger}</span>
               </div>
               <textarea
-                ref={textarea}
+                ref={setTextarea}
                 id={control.id}
                 rows={p.rows}
                 class="vui-control__input vui-mention__input"
@@ -143,6 +177,8 @@ export const MentionInput = (props: MentionInputProps) => {
           <Show when={search.open() ? search.query() : undefined}>
             {(current) => (
               <MentionSuggestions
+                ref={floating.ref}
+                style={floating.style()}
                 id={`${control.id}-list`}
                 label={p.listLabel}
                 trigger={current().trigger}

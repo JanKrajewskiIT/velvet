@@ -143,7 +143,9 @@ export const SplitPane = (props: SplitPaneProps) => {
 
   return (
     <div
-      ref={box}
+      ref={(element) => {
+        box = element;
+      }}
       class={cx(
         'vui-split',
         `vui-split--${p.direction}`,

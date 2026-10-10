@@ -110,7 +110,9 @@ export const Tabs = (props: TabsProps) => {
     // eslint-disable-next-line jsx-a11y/interactive-supports-focus -- tablist focus roves on the tab children (roving tabindex), the container itself is not a tab stop
     <div
       {...rest}
-      ref={list}
+      ref={(element) => {
+        list = element;
+      }}
       role="tablist"
       aria-orientation={vertical() ? 'vertical' : 'horizontal'}
       onKeyDown={onKeyDown}

@@ -96,7 +96,9 @@ export const Stepper = (props: StepperProps) => {
   return (
     // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- keydown only bubbles up from the step buttons to move focus between them
     <ol
-      ref={root}
+      ref={(element) => {
+        root = element;
+      }}
       class={cx('vui-stepper', `vui-stepper--${p.orientation}`, p.class)}
       aria-label={labels().navigation}
       onKeyDown={onKeyDown}

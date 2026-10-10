@@ -89,7 +89,9 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
     <div class={cx('vui-audio', `vui-audio--${p.size}`, state().playing && 'vui-audio--playing', p.class)}>
       {/* eslint-disable-next-line jsx-a11y/media-has-caption -- captions are provided by the media source; the player cannot know them */}
       <audio
-        ref={audio}
+        ref={(element) => {
+          audio = element;
+        }}
         src={safeMediaUrl(p.src)}
         preload="metadata"
         onPlay={sync}
@@ -116,7 +118,9 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
         </Show>
         <div class="vui-audio__track">
           <div
-            ref={waveform}
+            ref={(element) => {
+              waveform = element;
+            }}
             class="vui-audio__wave"
             role="slider"
             tabIndex={0}

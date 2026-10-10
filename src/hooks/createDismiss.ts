@@ -1,4 +1,4 @@
-import { type Accessor, createEffect, onCleanup } from 'solid-js';
+import type { Accessor } from 'solid-js';
 
 import { createLayer } from './createLayer';
 
@@ -21,19 +21,11 @@ export const createDismiss = (
   { outside = true, escape = true, refocus = '[aria-expanded]' }: DismissOptions = {},
 ): void => {
   createLayer(
-    () => open() && escape,
+    open,
     () => {
       onDismiss('escape');
       if (refocus) root()?.querySelector<HTMLElement>(refocus)?.focus();
     },
+    { root, escape, onOutside: () => outside && onDismiss('outside') },
   );
-  createEffect(() => {
-    if (!open() || !outside) return;
-    const onPointerDown = (e: MouseEvent) => {
-      const el = root();
-      if (el && e.target instanceof Node && !el.contains(e.target)) onDismiss('outside');
-    };
-    document.addEventListener('mousedown', onPointerDown);
-    onCleanup(() => document.removeEventListener('mousedown', onPointerDown));
-  });
 };

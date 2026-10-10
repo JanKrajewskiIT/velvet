@@ -97,7 +97,7 @@ export const DateTimePicker = (props: DateTimePickerProps) => {
       () => p.onChange,
     ),
   });
-  const popover = createPickerPopover(p.defaultOpen);
+  const popover = createPickerPopover(p.defaultOpen, () => p.align);
   const [draft, setDraft] = createSignal<Date | null>(current());
   let list: HTMLDivElement | undefined;
 
@@ -176,6 +176,8 @@ export const DateTimePicker = (props: DateTimePickerProps) => {
           />
           <Show when={popover.open()}>
             <div
+              ref={popover.floating.ref}
+              style={popover.floating.style()}
               class={cx('vui-popover', 'vui-datepop', 'vui-dtpop', p.align === 'end' && 'vui-popover--end')}
               role="dialog"
               aria-label={translate('velvet.forms.dateTimePicker.dialogLabel')}
@@ -195,7 +197,9 @@ export const DateTimePicker = (props: DateTimePickerProps) => {
                     {translate('velvet.forms.dateTimePicker.timeLabel')}
                   </div>
                   <div
-                    ref={list}
+                    ref={(element) => {
+                      list = element;
+                    }}
                     class="vui-dtpop__list"
                     role="listbox"
                     aria-label={translate('velvet.forms.dateTimePicker.timeLabel')}

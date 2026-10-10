@@ -6,8 +6,11 @@ import { createModal, type ModalOptions } from '../../hooks/createModal';
  * `createModal` for a layer that is mounted only while open. Returns the `ref` callback for the modal root;
  * the root is forgotten when the layer unmounts so a reopened layer never binds to a detached element.
  */
-export const createModalRoot = (open: Accessor<boolean>, options: ModalOptions): ((element: HTMLElement) => void) => {
-  const [root, setRoot] = createSignal<HTMLElement>();
+export const createModalRoot = (
+  open: Accessor<boolean>,
+  options: ModalOptions,
+): ((element: HTMLDialogElement) => void) => {
+  const [root, setRoot] = createSignal<HTMLDialogElement>();
   createModal(open, root, options);
   return (element) => {
     setRoot(element);

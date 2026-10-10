@@ -7,7 +7,9 @@ import { LOADER_BODIES, LOADER_CLASS_SUFFIX, type LoaderShape } from './loaderBo
 
 export type LoaderVariant = keyof typeof LOADER_CLASS_SUFFIX;
 
-export const LOADER_VARIANTS = Object.keys(LOADER_CLASS_SUFFIX) as LoaderVariant[];
+export const LOADER_VARIANTS: readonly LoaderVariant[] = Object.freeze(
+  Object.keys(LOADER_CLASS_SUFFIX) as LoaderVariant[],
+);
 
 export interface LoaderProps extends HtmlProps<HTMLDivElement> {
   /** @default 'ripple-dots' */

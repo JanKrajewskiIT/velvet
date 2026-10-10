@@ -1,6 +1,7 @@
 import './styles/styles.css';
 import './styles/extensions.css';
 
+export * from './auth';
 export * from './components/actions';
 export * from './components/charts';
 export * from './components/data';
@@ -13,7 +14,7 @@ export * from './components/menus';
 export * from './components/navigation';
 export * from './components/patterns';
 export * from './components/primitives';
-export { createFloating, type Floating, type FloatingOptions } from './hooks/createFloating';
+export { createFloating, type Floating, type FloatingAnchor, type FloatingOptions } from './hooks/createFloating';
 export { velvetMessages } from './i18n';
 export { mountVelvetApp, type MountVelvetAppOptions } from './provider/mountVelvetApp';
 export { LOCALE_STORAGE_KEY, VelvetProvider, type VelvetProviderProps } from './provider/VelvetProvider';

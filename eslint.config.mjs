@@ -4,7 +4,7 @@ import { buildLiteralI18nKeySelectors, createEslintConfig } from '@jankrajewskii
 export default fixupConfigRules(
   createEslintConfig({
     tsconfigRootDir: import.meta.dirname,
-    ignorePaths: ['velvet/**', 'dist-showcase/**'],
+    ignorePaths: ['velvet/**'],
     extraConfigs: [
       {
         files: ['src/**/*.{ts,tsx,js,jsx}'],
@@ -15,7 +15,6 @@ export default fixupConfigRules(
       {
         files: ['src/**/*.tsx'],
         rules: {
-          'no-unassigned-vars': 'off',
           // FieldLabel keeps the reference prop name `htmlFor`; className and key are already rejected by the JSX types.
           'solid/no-react-specific-props': 'off',
         },

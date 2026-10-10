@@ -2,13 +2,13 @@ import { For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { Control } from '../primitives/Control';
-import { FieldLabel } from '../primitives/Field';
+import { FieldLabel } from '../primitives/FieldLabel';
 import type { LabelDraft } from './colorLabelManagerTypes';
 import type { ColorLabelManagerController } from './createColorLabelManager';
 
 export interface ColorLabelFormProps {
   draft: LabelDraft;
-  colors: string[];
+  colors: readonly string[];
   manager: ColorLabelManagerController;
 }
 

@@ -1,6 +1,7 @@
 import type { I18nKey } from '@jankrajewskiit/i18n';
 
 import { addDays, startOfDay } from '../../utils/date';
+import { freezeRecords } from '../../utils/freezeRecords';
 import type { DateRange } from './Calendar';
 import { startOfMonth } from './calendarGrid';
 
@@ -22,7 +23,7 @@ const upToToday = (daysBack: number): DateRange => {
 };
 
 /** Today, Last 7 / 30 days, This / Last month, This year. */
-export const DEFAULT_RANGE_PRESETS: RangePreset[] = [
+export const DEFAULT_RANGE_PRESETS: readonly Readonly<RangePreset>[] = freezeRecords([
   { labelKey: 'velvet.common.today', range: () => upToToday(0) },
   { labelKey: 'velvet.forms.rangePresets.last7Days', range: () => upToToday(6) },
   { labelKey: 'velvet.forms.rangePresets.last30Days', range: () => upToToday(29) },
@@ -41,4 +42,4 @@ export const DEFAULT_RANGE_PRESETS: RangePreset[] = [
     labelKey: 'velvet.forms.rangePresets.thisYear',
     range: () => ({ start: new Date(today().getFullYear(), 0, 1), end: today() }),
   },
-];
+]);

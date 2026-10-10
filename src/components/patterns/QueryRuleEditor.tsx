@@ -12,6 +12,7 @@ export interface QueryRuleEditorProps {
   onChange: (rule: QueryRule) => void;
   onRemove: () => void;
   canRemove: boolean;
+  disabled?: boolean;
 }
 
 /** One `field operator value` condition row. */
@@ -29,6 +30,7 @@ export const QueryRuleEditor = (props: QueryRuleEditorProps) => {
       <div class="vui-qb__field">
         <Select
           size="sm"
+          disabled={props.disabled}
           aria-label={translate('velvet.patterns.queryBuilder.field')}
           value={props.rule.field}
           options={props.fields.map((candidate) => ({ value: candidate.key, label: candidate.label }))}
@@ -38,6 +40,7 @@ export const QueryRuleEditor = (props: QueryRuleEditorProps) => {
       <div class="vui-qb__op">
         <Select
           size="sm"
+          disabled={props.disabled || !operatorsFor(field(), translate).length}
           aria-label={translate('velvet.patterns.queryBuilder.operator')}
           value={props.rule.op}
           options={operatorsFor(field(), translate)}
@@ -52,6 +55,7 @@ export const QueryRuleEditor = (props: QueryRuleEditorProps) => {
           <div class="vui-qb__value">
             <Select
               size="sm"
+              disabled={props.disabled}
               aria-label={translate('velvet.patterns.queryBuilder.value')}
               placeholder={translate('velvet.patterns.queryBuilder.choose')}
               value={props.rule.value}
@@ -64,6 +68,7 @@ export const QueryRuleEditor = (props: QueryRuleEditorProps) => {
           <div class="vui-qb__value">
             <Input
               size="sm"
+              disabled={props.disabled}
               aria-label={translate('velvet.patterns.queryBuilder.value')}
               type={inputType()}
               placeholder={field()?.placeholder ?? translate('velvet.patterns.queryBuilder.value')}
@@ -75,7 +80,7 @@ export const QueryRuleEditor = (props: QueryRuleEditorProps) => {
       </Switch>
       <CloseButton
         label={translate('velvet.patterns.queryBuilder.removeCondition')}
-        disabled={!props.canRemove}
+        disabled={props.disabled || !props.canRemove}
         onClick={() => props.onRemove()}
       />
     </div>

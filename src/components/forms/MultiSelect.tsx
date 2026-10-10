@@ -142,7 +142,9 @@ export const MultiSelect = (props: MultiSelectProps) => {
               )}
             </For>
             <input
-              ref={input}
+              ref={(element) => {
+                input = element;
+              }}
               id={control.id}
               role="combobox"
               aria-expanded={open()}

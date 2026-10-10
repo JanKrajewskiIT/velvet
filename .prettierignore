@@ -1,6 +1,8 @@
 .agents/
 dist/
-dist-showcase/
 velvet/
 package-lock.json
-src/styles
+src/styles/styles.css
+src/styles/components/
+src/styles/tokens/
+src/styles/fonts/

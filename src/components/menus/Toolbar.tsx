@@ -102,7 +102,9 @@ export const Toolbar = (props: ToolbarProps) => {
 
   return (
     <div
-      ref={bar}
+      ref={(element) => {
+        bar = element;
+      }}
       role="toolbar"
       aria-label={props.label}
       class={cx('vui-toolbar', props.class)}
@@ -112,7 +114,14 @@ export const Toolbar = (props: ToolbarProps) => {
         if (stop !== undefined) setStopIndex(stop);
       }}
     >
-      <div ref={measure} class="vui-toolbar__measure" aria-hidden="true" inert>
+      <div
+        ref={(element) => {
+          measure = element;
+        }}
+        class="vui-toolbar__measure"
+        aria-hidden="true"
+        inert
+      >
         <For each={props.items}>{(item) => <ToolbarEntry item={item} tabIndex={-1} />}</For>
       </div>
       <Index each={shown()}>

@@ -1,66 +1,142 @@
-import { type Accessor, createMemo, createSignal, type Setter, untrack } from 'solid-js';
+import { type Accessor, createMemo, createSignal, untrack } from 'solid-js';
 
-import { emptyQuery, type QueryField, type QueryGroup } from '../patterns/QueryBuilder';
+import { createControllable } from '../../hooks/createControllable';
+import type { QueryGroup } from '../patterns/queryModel';
 import { applyColumns } from './applyColumns';
-import type { ColumnState } from './ColumnManager';
-import type { GridColumn } from './dataGridTypes';
-import { initialColumnState } from './gridColumns';
+import type { ColumnState } from './columnManagerTypes';
+import { sameColumnState } from './columnState';
+import { createGridPersistence } from './createGridPersistence';
+import type { DataGridProps, GridColumn } from './dataGridTypes';
 import { countActiveRules, matchesQuery } from './gridFilter';
-import { cellText, type RowSort, rowValue, sortRows } from './rowData';
-
-export interface GridViewOptions<T extends object> {
-  columns: Accessor<GridColumn<T>[]>;
-  rows: Accessor<T[]>;
-  stickyFirst: Accessor<boolean>;
-  filterFields: Accessor<QueryField[] | undefined>;
-}
+import { parseGridView, serializeGridView } from './gridViewCodec';
+import { normalizeGridView } from './gridViewState';
+import type { GridViewState } from './gridViewTypes';
+import { cellText, compareValues, type RowSort, rowValue } from './rowData';
 
 export interface GridView<T extends object> {
-  /** Visible columns in display order. */
   cols: Accessor<GridColumn<T>[]>;
-  /** Rows after search, filters and sort. */
   rows: Accessor<T[]>;
+  state: Accessor<GridViewState>;
+  widths: Accessor<Record<string, number>>;
   search: Accessor<string>;
-  setSearch: Setter<string>;
+  setSearch: (search: string) => void;
   query: Accessor<QueryGroup | undefined>;
-  setQuery: Setter<QueryGroup | undefined>;
+  setQuery: (query: QueryGroup | undefined) => void;
   columnState: Accessor<ColumnState[]>;
-  setColumnState: Setter<ColumnState[]>;
+  setColumnState: (columns: ColumnState[]) => void;
   sort: Accessor<RowSort | null>;
-  setSort: Setter<RowSort | null>;
+  setSort: (sort: RowSort | null) => void;
+  setWidth: (key: string, width: number) => void;
   activeFilters: Accessor<number>;
+  error: Accessor<Error | undefined>;
+  reportError: (cause: unknown) => void;
+  reset: () => void;
+  importSettings: (json: string) => boolean;
+  exportSettings: () => string;
 }
 
-export const createGridView = <T extends object>(options: GridViewOptions<T>): GridView<T> => {
-  const [sort, setSort] = createSignal<RowSort | null>(null);
-  const [search, setSearch] = createSignal('');
-  const [query, setQuery] = createSignal<QueryGroup | undefined>(
-    untrack(() => {
-      const fields = options.filterFields();
-      return fields ? emptyQuery(fields) : undefined;
-    }),
-  );
-  const [columnState, setColumnState] = createSignal<ColumnState[]>(
-    untrack(() => initialColumnState(options.columns(), options.stickyFirst())),
-  );
-
-  const cols = createMemo(() => applyColumns(options.columns(), columnState()));
-  const activeFilters = () => {
-    const q = query();
-    return q ? countActiveRules(q) : 0;
+export const createGridView = <T extends object>(config: Accessor<DataGridProps<T>>): GridView<T> => {
+  const defaults = untrack(() => config().defaultView ?? {});
+  const normalize = (state: Partial<GridViewState>) =>
+    normalizeGridView(state, config().columns, config().stickyFirst ?? true, config().filterFields ?? []);
+  const [raw, setRaw] = createControllable<GridViewState>({
+    value: () => config().view,
+    defaultValue: untrack(() => normalize(defaults)),
+    onChange: (next) => config().onViewChange?.(next),
+  });
+  const state = createMemo(() => normalize(raw()));
+  const search = createMemo(() => state().search);
+  const query = createMemo(() => state().query);
+  const sort = createMemo(() => state().sort, undefined, {
+    equals: (previous, next) => previous?.key === next?.key && previous?.dir === next?.dir,
+  });
+  const columnState = createMemo(() => state().columns, undefined, { equals: sameColumnState });
+  const widths = createMemo(() => state().widths, undefined, {
+    equals: (previous, next) =>
+      Object.keys(previous).length === Object.keys(next).length &&
+      Object.entries(previous).every(([key, value]) => Object.hasOwn(next, key) && next[key] === value),
+  });
+  const [error, setError] = createSignal<Error>();
+  const reportError = (cause: unknown) => {
+    const next = cause instanceof Error ? cause : new Error('Grid view settings could not be applied.');
+    setError(next);
+    config().onViewError?.(next);
   };
-
+  const replace = (next: Partial<GridViewState>) => {
+    setError(undefined);
+    setRaw(normalize(next));
+  };
+  const update = (next: Partial<GridViewState>) => replace({ ...state(), ...next });
+  const cols = createMemo(() => applyColumns(config().columns, columnState()));
+  const activeFilters = () => {
+    const current = query();
+    return current ? countActiveRules(current) : 0;
+  };
   const rows = createMemo(() => {
-    let out = options.rows();
-    const needle = search().trim().toLowerCase();
-    if (needle)
-      out = out.filter((r) => cols().some((c) => cellText(rowValue(r, c.key)).toLowerCase().includes(needle)));
-    const q = query();
-    if (q && activeFilters()) out = out.filter((r) => matchesQuery(q, r));
-    const current = sort();
-    if (current) out = sortRows(out, (r) => rowValue(r, current.key), current.dir);
+    let out = config().rows;
+    if (!config().manualFiltering) {
+      const needle = search().trim().toLowerCase();
+      if (needle)
+        out = out.filter((row) =>
+          cols().some((column) =>
+            column.filterFn
+              ? column.filterFn(row, needle)
+              : cellText(column.filterAccessor ? column.filterAccessor(row) : rowValue(row, column.key))
+                  .toLowerCase()
+                  .includes(needle),
+          ),
+        );
+      const currentQuery = query();
+      if (currentQuery && activeFilters())
+        out = out.filter((row) =>
+          matchesQuery(currentQuery, row, (key) => {
+            const column = config().columns.find((candidate) => candidate.key === key);
+            return column?.filterAccessor ? column.filterAccessor(row) : rowValue(row, key);
+          }),
+        );
+    }
+    const currentSort = sort();
+    const column = currentSort && config().columns.find((candidate) => candidate.key === currentSort.key);
+    if (!config().manualSorting && currentSort && column) {
+      const value = (row: T) => (column.sortAccessor ? column.sortAccessor(row) : rowValue(row, column.key));
+      out = [...out].sort(
+        (a, b) =>
+          (column.sortFn ? column.sortFn(a, b) : compareValues(value(a), value(b))) *
+          (currentSort.dir === 'asc' ? 1 : -1),
+      );
+    }
     return out;
   });
-
-  return { cols, rows, search, setSearch, query, setQuery, columnState, setColumnState, sort, setSort, activeFilters };
+  createGridPersistence({ key: () => config().persistenceKey, view: state, restore: replace, onError: reportError });
+  return {
+    cols,
+    rows,
+    state,
+    widths,
+    activeFilters,
+    error,
+    reportError,
+    search,
+    setSearch: (search) => update({ search }),
+    query,
+    setQuery: (query) => update({ query }),
+    columnState,
+    setColumnState: (columns) => update({ columns }),
+    sort,
+    setSort: (sort) => update({ sort }),
+    setWidth: (key, width) => update({ widths: { ...state().widths, [key]: width } }),
+    reset: () => replace(defaults),
+    importSettings: (json) => {
+      let next: GridViewState;
+      try {
+        next = parseGridView(json);
+      } catch (cause) {
+        reportError(cause);
+        return false;
+      }
+      replace(next);
+      return true;
+    },
+    exportSettings: () => serializeGridView(state()),
+  };
 };

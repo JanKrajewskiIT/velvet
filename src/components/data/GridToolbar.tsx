@@ -8,8 +8,10 @@ import { emptyQuery, QueryBuilder } from '../patterns/QueryBuilder';
 import { Count } from '../primitives/Count';
 import { ColumnManager } from './ColumnManager';
 import type { DataGridController } from './dataGridController';
+import { initialColumnState } from './gridColumns';
 import { exportGridRows } from './gridExport';
 import { GridSelectedCount } from './GridSelectedCount';
+import { GridViewSettings } from './GridViewSettings';
 
 export interface GridToolbarProps<T extends object> {
   grid: DataGridController<T>;
@@ -18,10 +20,25 @@ export interface GridToolbarProps<T extends object> {
 /** Search or bulk bar on the left; Filters, Columns, Export and `toolbarEnd` on the right. Renders nothing when no tool is enabled. */
 export const GridToolbar = <T extends object>(props: GridToolbarProps<T>) => {
   const translate = useTranslate();
+  const managedColumns = () => {
+    const columns = props.grid.config.columns;
+    const defaults = initialColumnState(columns, props.grid.config.stickyFirst ?? true);
+    return columns.map((column, index) => ({
+      key: column.key,
+      label: column.label,
+      visible: !column.hidden,
+      pin: defaults[index]?.pin ?? undefined,
+      locked: column.locked,
+      canHide: column.canHide,
+      canPin: column.canPin,
+      canMove: column.canMove,
+    }));
+  };
   const hasToolbar = () =>
     props.grid.config.searchable ||
     !!props.grid.config.filterFields ||
     props.grid.config.columnManager ||
+    props.grid.config.viewSettings ||
     props.grid.config.onExport !== undefined ||
     !!props.grid.config.toolbarEnd ||
     (props.grid.config.selectable && !!props.grid.config.bulkActions);
@@ -99,14 +116,10 @@ export const GridToolbar = <T extends object>(props: GridToolbarProps<T>) => {
               }
             >
               <ColumnManager
-                columns={props.grid.config.columns.map((c) => ({
-                  key: c.key,
-                  label: c.label,
-                  visible: !c.hidden,
-                  pin: c.pin,
-                  locked: c.locked,
-                }))}
+                columns={managedColumns()}
                 value={props.grid.view.columnState()}
+                pinRight
+                minVisible={1}
                 onValueChange={props.grid.view.setColumnState}
               />
             </Popover>
@@ -122,6 +135,9 @@ export const GridToolbar = <T extends object>(props: GridToolbarProps<T>) => {
             </Button>
           </Show>
           {props.grid.config.toolbarEnd}
+          <Show when={props.grid.config.viewSettings}>
+            <GridViewSettings grid={props.grid} />
+          </Show>
         </div>
       </div>
     </Show>

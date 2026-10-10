@@ -1,10 +1,8 @@
-import type { QueryGroup, QueryRule } from '../patterns/QueryBuilder';
+import type { QueryGroup, QueryRule } from '../patterns/queryModel';
+import { VALUELESS_OPS } from '../patterns/queryModel';
 import { cellText, rowValue } from './rowData';
 
 type QueryNode = QueryRule | QueryGroup;
-
-/** Operators that need no operand. */
-const VALUELESS_OPS = ['empty', 'not_empty', 'true', 'false'];
 
 const isGroup = (node: QueryNode): node is QueryGroup => 'rules' in node;
 
@@ -17,8 +15,8 @@ export const countActiveRules = (node: QueryNode): number => {
   return isActive(node) ? 1 : 0;
 };
 
-const matchesRule = (rule: QueryRule, row: object): boolean => {
-  const value = rowValue(row, rule.field);
+const matchesRule = (rule: QueryRule, row: object, getValue?: (key: string) => unknown): boolean => {
+  const value = getValue ? getValue(rule.field) : rowValue(row, rule.field);
   const text = cellText(value).toLowerCase();
   const operand = cellText(rule.value).toLowerCase();
   const number = parseFloat(cellText(value));
@@ -36,6 +34,8 @@ const matchesRule = (rule: QueryRule, row: object): boolean => {
       return isNumber ? number !== operandNumber : text !== operand;
     case 'starts':
       return text.startsWith(operand);
+    case 'ends':
+      return text.endsWith(operand);
     case 'empty':
       return isBlank;
     case 'not_empty':
@@ -64,11 +64,11 @@ const matchesRule = (rule: QueryRule, row: object): boolean => {
 };
 
 /** Whether `row` satisfies every (and) or any (or) active rule of the query tree. */
-export const matchesQuery = (node: QueryNode, row: object): boolean => {
-  if (!isGroup(node)) return matchesRule(node, row);
+export const matchesQuery = (node: QueryNode, row: object, getValue?: (key: string) => unknown): boolean => {
+  if (!isGroup(node)) return matchesRule(node, row, getValue);
   const active = node.rules.filter(isActive);
   if (!active.length) return true;
   return node.combinator === 'or'
-    ? active.some((r) => matchesQuery(r, row))
-    : active.every((r) => matchesQuery(r, row));
+    ? active.some((r) => matchesQuery(r, row, getValue))
+    : active.every((r) => matchesQuery(r, row, getValue));
 };

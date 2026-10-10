@@ -50,7 +50,15 @@ export const ErrorSummary = (props: ErrorSummaryProps) => {
 
   return (
     <Show when={p.errors.length > 0}>
-      <div ref={root} tabIndex={-1} role="alert" aria-labelledby={titleId} class={cx('vui-errsum', p.class)}>
+      <div
+        ref={(element) => {
+          root = element;
+        }}
+        tabIndex={-1}
+        role="alert"
+        aria-labelledby={titleId}
+        class={cx('vui-errsum', p.class)}
+      >
         <div class="vui-errsum__head">
           <Glyph name="circle-x" />
           <span id={titleId}>

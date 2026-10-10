@@ -6,7 +6,7 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { addMonths, DAY_MS, fmtDate, sameDay } from '../../utils/date';
 import { Button } from '../actions/Button';
-import { FieldLabel } from '../primitives/Field';
+import { FieldLabel } from '../primitives/FieldLabel';
 import { Calendar, type DateRange } from './Calendar';
 import { startOfMonth } from './calendarGrid';
 import { callbackAlias } from './callbackAlias';
@@ -25,7 +25,7 @@ export interface DateRangePickerProps {
   /** Alias of `onValueChange`. */
   onChange?: (range: DateRange) => void;
   /** Defaults: Today, Last 7 / 30 days, This / Last month, This year. [] hides the column. */
-  presets?: RangePreset[];
+  presets?: readonly RangePreset[];
   /** @default localized "Select dates" */
   placeholder?: string;
   min?: Date;
@@ -75,7 +75,7 @@ export const DateRangePicker = (props: DateRangePickerProps) => {
       () => p.onChange,
     ),
   });
-  const popover = createPickerPopover(p.defaultOpen);
+  const popover = createPickerPopover(p.defaultOpen, () => p.align);
   const [draft, setDraft] = createSignal<DateRange>(current());
   const [narrow, setNarrow] = createSignal(false);
   const [month, setMonth] = createSignal(startOfMonth(new Date()));
@@ -156,6 +156,8 @@ export const DateRangePicker = (props: DateRangePickerProps) => {
         </div>
         <Show when={popover.open()}>
           <div
+            ref={popover.floating.ref}
+            style={popover.floating.style()}
             class={cx('vui-popover', 'vui-datepop', 'vui-rangepop', p.align === 'end' && 'vui-popover--end')}
             role="dialog"
             aria-label={translate('velvet.forms.dateRangePicker.dialogLabel')}

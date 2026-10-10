@@ -280,6 +280,9 @@ export const patternsEn = defineDictionary({
     hintSend: '↵ send · ⇧↵ new line',
   },
   queryBuilder: {
+    clearRules: 'Clear conditions',
+    moveUp: 'Move condition or group up',
+    moveDown: 'Move condition or group down',
     query: 'Query',
     conditions: 'Conditions',
     conditionGroup: 'Condition group',
@@ -301,6 +304,7 @@ export const patternsEn = defineDictionary({
       is: 'is',
       isNot: 'is not',
       startsWith: 'starts with',
+      endsWith: 'ends with',
       isEmpty: 'is empty',
       isNotEmpty: 'is not empty',
       isOn: 'is on',

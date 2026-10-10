@@ -6,6 +6,7 @@ export const actionsPl: TranslationOf<typeof actionsEn> = {
   authButton: {
     signIn: 'Zaloguj się',
     signOut: 'Wyloguj się',
+    failed: 'Nie udało się uwierzytelnić. Spróbuj ponownie.',
   },
   calendarEventButton: {
     label: 'Dodaj do kalendarza',
