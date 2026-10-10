@@ -57,6 +57,12 @@ export const navigationEn = defineDictionary({
   treeView: {
     loading: 'Loading…',
     loadFailed: 'Couldn’t load',
+    moveInstructions:
+      'To move an item, press Space (Ctrl+Space in a checkable tree), use the arrow keys to choose a parent, then press Enter. Press Escape to cancel.',
+    moveStarted: 'Choose a parent with the arrow keys, then press Enter to move. Press Escape to cancel.',
+    moveCompleted: 'Item moved.',
+    moveCancelled: 'Move cancelled.',
+    invalidMove: 'That item cannot be moved into the selected item.',
   },
   wizard: {
     finish: 'Finish',

@@ -20,5 +20,5 @@ export { type ScrollContainer } from './scrollContainer';
 export { type StepItem, Stepper, type StepperLabels, type StepperProps, type StepStatus } from './Stepper';
 export { type TabItem, Tabs, type TabsProps } from './Tabs';
 export { type TreeNode } from './treeData';
-export { TreeView, type TreeViewLabels, type TreeViewProps } from './TreeView';
+export { TreeView, type TreeViewLabels, type TreeViewMoveLabels, type TreeViewProps } from './TreeView';
 export { Wizard, type WizardLabels, type WizardProps, type WizardStep } from './Wizard';

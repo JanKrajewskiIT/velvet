@@ -13,6 +13,34 @@ export const createTreeKeyboard = (tree: TreeController) => (e: KeyboardEvent) =
     e.preventDefault();
     focus.focusRow(id);
   };
+  if (tree.move.keyboard()) {
+    switch (e.key) {
+      case 'ArrowDown':
+        move(list[index + 1]?.id);
+        break;
+      case 'ArrowUp':
+        move(list[index - 1]?.id);
+        break;
+      case 'Home':
+        move(list[0]?.id);
+        break;
+      case 'End':
+        move(list[list.length - 1]?.id);
+        break;
+      case 'Enter':
+      case ' ':
+        if (row.kind === 'node') {
+          e.preventDefault();
+          tree.move.drop(row.id);
+        }
+        break;
+      case 'Escape':
+        e.preventDefault();
+        tree.move.cancel();
+        break;
+    }
+    return;
+  }
   if (row.kind === 'status') {
     if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') move(row.parent);
     else if (e.key === 'ArrowDown') move(list[index + 1]?.id);
@@ -23,6 +51,11 @@ export const createTreeKeyboard = (tree: TreeController) => (e: KeyboardEvent) =
     return;
   }
   const { node } = row;
+  if (tree.move.enabled() && e.key === ' ' && (config.checkable ? e.ctrlKey : !e.ctrlKey && !e.altKey && !e.metaKey)) {
+    e.preventDefault();
+    tree.move.start(node.id, 'keyboard');
+    return;
+  }
   const branch = isBranch(node);
   const isOpen = model.open().has(node.id);
   switch (e.key) {

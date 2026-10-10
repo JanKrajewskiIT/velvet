@@ -35,7 +35,13 @@ export const TreeNodeRow = (props: TreeNodeRowProps) => {
         props.tree.config.checkable ? (checkState() === 'mixed' ? 'mixed' : checkState() === 'on') : undefined
       }
       tabIndex={props.tree.focus.tabbableId() === props.row.id ? 0 : -1}
-      class={cx('vui-tree__row', props.tree.model.selected() === node().id && 'vui-tree__row--sel')}
+      draggable={props.tree.move.enabled()}
+      class={cx(
+        'vui-tree__row',
+        props.tree.model.selected() === node().id && 'vui-tree__row--sel',
+        props.tree.move.sourceId() === node().id && 'vui-tree__row--moving',
+        props.tree.move.targetId() === node().id && 'vui-tree__row--drop-target',
+      )}
       style={{ '--lvl': props.row.level - 1 }}
       onClick={() => {
         props.tree.focus.setFocusId(props.row.id);
@@ -48,6 +54,29 @@ export const TreeNodeRow = (props: TreeNodeRowProps) => {
         if (branch()) props.tree.model.toggleNode(node());
       }}
       onFocusIn={() => props.tree.focus.setFocusId(props.row.id)}
+      onDragStart={(event) => {
+        if (!props.tree.move.enabled()) return;
+        event.dataTransfer?.setData('text/plain', node().id);
+        if (event.dataTransfer) event.dataTransfer.effectAllowed = 'move';
+        props.tree.move.start(node().id, 'pointer');
+      }}
+      onDragOver={(event) => {
+        if (!props.tree.move.canDrop(node().id)) return;
+        event.preventDefault();
+        if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
+        props.tree.move.setTarget(node().id);
+      }}
+      onDragLeave={() => {
+        if (props.tree.move.targetId() === node().id) props.tree.move.setTarget(null);
+      }}
+      onDrop={(event) => {
+        if (!props.tree.move.canDrop(node().id)) return;
+        event.preventDefault();
+        props.tree.move.drop(node().id);
+      }}
+      onDragEnd={() => {
+        if (props.tree.move.sourceId() === node().id && !props.tree.move.keyboard()) props.tree.move.cancel();
+      }}
     >
       <Index each={Array.from({ length: props.row.level - 1 })}>
         {(_, k) => (

@@ -59,6 +59,12 @@ export const navigationPl: TranslationOf<typeof navigationEn> = {
   treeView: {
     loading: 'Ładowanie…',
     loadFailed: 'Nie udało się wczytać',
+    moveInstructions:
+      'Aby przenieść element, naciśnij spację (Ctrl+spację w drzewie z polami wyboru), wybierz strzałkami nowego rodzica i naciśnij Enter. Naciśnij Escape, aby anulować.',
+    moveStarted: 'Wybierz strzałkami nowego rodzica i naciśnij Enter. Naciśnij Escape, aby anulować.',
+    moveCompleted: 'Element został przeniesiony.',
+    moveCancelled: 'Anulowano przenoszenie.',
+    invalidMove: 'Nie można przenieść elementu do wskazanego elementu.',
   },
   wizard: {
     finish: 'Zakończ',

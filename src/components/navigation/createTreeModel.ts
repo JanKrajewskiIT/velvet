@@ -11,7 +11,7 @@ export interface TreeModel {
   checkedSet: Accessor<ReadonlySet<string>>;
   rows: Accessor<TreeRow[]>;
   loadChildren: (node: TreeNode) => Promise<void>;
-  setNodeOpen: (node: TreeNode, want: boolean) => void;
+  setNodeOpen: (node: TreeNode, want: boolean, loadChildren?: boolean) => void;
   toggleNode: (node: TreeNode) => void;
   expandSiblingsOf: (row: TreeRow) => void;
   toggleCheck: (node: TreeNode) => void;
@@ -39,12 +39,12 @@ export const createTreeModel = (config: TreeViewConfig): TreeModel => {
   const { load, loadChildren } = createTreeLoading(config);
   const rows = createMemo<TreeRow[]>((previous = []) => reuseRows(previous, flattenTree(config.data, open(), load())));
 
-  const setNodeOpen = (node: TreeNode, want: boolean) => {
+  const setNodeOpen = (node: TreeNode, want: boolean, shouldLoadChildren = true) => {
     const next = new Set(open());
     if (want) next.add(node.id);
     else next.delete(node.id);
     setExpanded([...next]);
-    if (want && node.lazy && !hasChildren(node)) void loadChildren(node);
+    if (shouldLoadChildren && want && node.lazy && !hasChildren(node)) void loadChildren(node);
   };
   const toggleNode = (node: TreeNode) => setNodeOpen(node, !open().has(node.id));
   const expandSiblingsOf = (row: TreeRow) => {

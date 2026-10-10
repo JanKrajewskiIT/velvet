@@ -1,0 +1,3 @@
+.vui-file-url-import__form{display:flex;flex-direction:column;gap:var(--space-4)}
+.vui-file-url-import__empty{margin:0;color:var(--fg-secondary)}
+.vui-file-url-import__error{color:var(--status-danger-fg);font-size:var(--type-body-sm-size)}

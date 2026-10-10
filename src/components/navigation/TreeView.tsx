@@ -1,21 +1,23 @@
-import { For, Match, mergeProps, Switch } from 'solid-js';
+import { createUniqueId, For, Match, mergeProps, Switch } from 'solid-js';
 
 import { cx } from '../../utils/cx';
 import { createTreeFocus } from './createTreeFocus';
 import { createTreeKeyboard } from './createTreeKeyboard';
 import { createTreeModel } from './createTreeModel';
+import { createTreeMove } from './createTreeMove';
 import { createTreeViewLabels } from './createTreeViewLabels';
 import type { TreeController } from './treeController';
 import { TreeNodeRow } from './TreeNodeRow';
 import { TreeStatusRow } from './TreeStatusRow';
 import type { TreeViewLabels, TreeViewProps } from './treeViewTypes';
 
-export type { TreeViewLabels, TreeViewProps };
+export type { TreeViewLabels, TreeViewMoveLabels, TreeViewProps };
 
 /**
  * Hierarchical list (files, categories, org). WAI-ARIA tree keyboard: ↑↓ move · → expand / into child · ← collapse / to parent ·
  * Home/End · Enter select · * expand siblings. With `checkable`: tri-state checkboxes (parent = all / some / none of its leaves),
- * Space or click toggles; the value is the list of checked LEAF ids.
+ * Space or click toggles; the value is the list of checked LEAF ids. With `draggable` and `onMove`, nodes can be dropped as
+ * children of other nodes; keyboard users press Space (Ctrl+Space when checkable), navigate to a parent, then press Enter.
  */
 export const TreeView = (props: TreeViewProps) => {
   const p = mergeProps(
@@ -24,28 +26,43 @@ export const TreeView = (props: TreeViewProps) => {
   );
   const model = createTreeModel(p);
   const focus = createTreeFocus(model.rows, () => model.selected() ?? p.data[0]?.id);
-  const tree: TreeController = { config: p, labels: createTreeViewLabels(() => p.labels), model, focus };
+  const labels = createTreeViewLabels(() => p.labels);
+  const move = createTreeMove(p, labels, model, focus);
+  const tree: TreeController = { config: p, labels, model, focus, move };
   const onKeyDown = createTreeKeyboard(tree);
 
+  const instructionsId = `vui-tree-instructions-${createUniqueId()}`;
+
   return (
-    <ul
-      ref={focus.setRoot}
-      role="tree"
-      aria-label={p.label}
-      aria-multiselectable={p.checkable || undefined}
-      class={cx('vui-tree', p.checkable && 'vui-tree--checkable', p.class)}
-      onKeyDown={onKeyDown}
-    >
-      <For each={model.rows()}>
-        {(row) => (
-          <Switch>
-            <Match when={row.kind === 'status' && row}>
-              {(statusRow) => <TreeStatusRow tree={tree} row={statusRow()} />}
-            </Match>
-            <Match when={row.kind === 'node' && row}>{(nodeRow) => <TreeNodeRow tree={tree} row={nodeRow()} />}</Match>
-          </Switch>
-        )}
-      </For>
-    </ul>
+    <>
+      <span class="vui-sr-only" id={instructionsId}>
+        {labels().moveInstructions}
+      </span>
+      <span class="vui-sr-only" aria-live="polite">
+        {move.announcement()}
+      </span>
+      <ul
+        ref={focus.setRoot}
+        role="tree"
+        aria-label={p.label}
+        aria-describedby={move.enabled() ? instructionsId : undefined}
+        aria-multiselectable={p.checkable || undefined}
+        class={cx('vui-tree', p.checkable && 'vui-tree--checkable', p.class)}
+        onKeyDown={onKeyDown}
+      >
+        <For each={model.rows()}>
+          {(row) => (
+            <Switch>
+              <Match when={row.kind === 'status' && row}>
+                {(statusRow) => <TreeStatusRow tree={tree} row={statusRow()} />}
+              </Match>
+              <Match when={row.kind === 'node' && row}>
+                {(nodeRow) => <TreeNodeRow tree={tree} row={nodeRow()} />}
+              </Match>
+            </Switch>
+          )}
+        </For>
+      </ul>
+    </>
   );
 };

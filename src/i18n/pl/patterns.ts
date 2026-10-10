@@ -268,6 +268,18 @@ export const patternsPl: TranslationOf<typeof patternsEn> = {
     connect: 'Połącz',
     reconnect: 'Połącz ponownie',
   },
+  fileUrlImportDialog: {
+    title: 'Importuj z adresu URL lub pliku',
+    description: 'Wybierz źródło i podaj adres URL albo wskaż plik na urządzeniu.',
+    urlPlaceholder: 'https://przyklad.pl/dane',
+    urlHint: 'Podaj adres z protokołem http lub https.',
+    fileHint: 'Wybierz jeden plik z urządzenia.',
+    fileTypeRejected: 'Ten typ pliku nie jest obsługiwany przez wybrane źródło.',
+    submit: 'Importuj',
+    cancel: 'Anuluj',
+    failed: 'Import nie powiódł się. Sprawdź źródło i spróbuj ponownie.',
+    emptySources: 'Brak dostępnych źródeł importu.',
+  },
   pricingTable: {
     billingPeriod: 'Okres rozliczeniowy',
     billing: { monthly: 'Miesięcznie', yearly: 'Rocznie' },

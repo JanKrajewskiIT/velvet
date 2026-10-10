@@ -259,6 +259,18 @@ export const patternsEn = defineDictionary({
     connect: 'Connect',
     reconnect: 'Reconnect',
   },
+  fileUrlImportDialog: {
+    title: 'Import from a URL or file',
+    description: 'Choose a source and provide its URL or select a local file.',
+    urlPlaceholder: 'https://example.com/data',
+    urlHint: 'Use an http or https address.',
+    fileHint: 'Choose one file from your device.',
+    fileTypeRejected: 'This file type is not accepted for this source.',
+    submit: 'Import',
+    cancel: 'Cancel',
+    failed: 'Import failed. Check the source and try again.',
+    emptySources: 'No import sources are available.',
+  },
   pricingTable: {
     billingPeriod: 'Billing period',
     billing: { monthly: 'Monthly', yearly: 'Yearly' },

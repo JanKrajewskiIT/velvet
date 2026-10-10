@@ -35,6 +35,14 @@ export { ColorLabelSelectionDialog, type ColorLabelSelectionDialogProps } from '
 export { CommentThread, type CommentThreadProps } from './CommentThread';
 export { type Comment, type CommentAuthor, type CommentId } from './commentTree';
 export { DualFilterBar, type DualFilterBarProps, type DualFilterOption } from './DualFilterBar';
+export {
+  type FileImportSource,
+  FileUrlImportDialog,
+  type FileUrlImportDialogProps,
+  type FileUrlImportPayload,
+  type FileUrlImportSource,
+  type UrlImportSource,
+} from './FileUrlImportDialog';
 export { FilterBar, type FilterBarProps } from './FilterBar';
 export { type FilterDef, type FilterOption, type FilterValue } from './filterDefs';
 export {
