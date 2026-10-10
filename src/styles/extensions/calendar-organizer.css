@@ -3,7 +3,7 @@
   box-shadow: inset 0 0 0 var(--border-width-medium) var(--border-brand);
 }
 
-.vui-organizer__ev[draggable="true"] {
+.vui-organizer__ev[draggable='true'] {
   cursor: grab;
 }
 
