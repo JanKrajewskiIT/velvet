@@ -47,7 +47,7 @@ export const Fab = (props: FabProps) => {
 
   createDismiss(open, () => setOpen(false), wrap, { refocus: '.vui-fab' });
 
-  const floating = createFloating(open, () => wrap()?.querySelector('.vui-fab'), {
+  const floating = createFloating(open, () => wrap()?.querySelector<HTMLButtonElement>('.vui-fab') ?? undefined, {
     side: () => 'top',
     align: () => 'end',
     offset: 12,

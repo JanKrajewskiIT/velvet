@@ -9,7 +9,7 @@ import { createTreeViewLabels } from './createTreeViewLabels';
 import type { TreeController } from './treeController';
 import { TreeNodeRow } from './TreeNodeRow';
 import { TreeStatusRow } from './TreeStatusRow';
-import type { TreeViewLabels, TreeViewProps } from './treeViewTypes';
+import type { TreeViewLabels, TreeViewMoveLabels, TreeViewProps } from './treeViewTypes';
 
 export type { TreeViewLabels, TreeViewMoveLabels, TreeViewProps };
 

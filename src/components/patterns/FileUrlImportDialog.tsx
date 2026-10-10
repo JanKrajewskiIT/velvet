@@ -151,7 +151,13 @@ export const FileUrlImportDialog = (props: FileUrlImportDialogProps) => {
         </>
       }
     >
-      <form id={formId} class="vui-file-url-import__form" onSubmit={submit}>
+      <form
+        id={formId}
+        class="vui-file-url-import__form"
+        onSubmit={(event) => {
+          void submit(event);
+        }}
+      >
         <Show
           when={props.sources.length > 0}
           fallback={
