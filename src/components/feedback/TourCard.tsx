@@ -58,15 +58,15 @@ export const TourCard = (props: TourCardProps) => {
   const doneLabel = () => props.tour.doneLabel ?? translate('velvet.feedback.tour.done');
 
   createEffect(() => {
-    const el = card();
-    if (!el) return;
+    const initialCard = card();
+    if (!initialCard) return;
     const rect = props.rect;
     const padding = props.tour.padding;
     const side = props.step.placement;
-    const measure = () => setPosition(placeCard(rect, el.getBoundingClientRect(), padding, side));
+    const measure = () => setPosition(placeCard(rect, initialCard.getBoundingClientRect(), padding, side));
     measure();
     const observer = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(measure);
-    observer?.observe(el);
+    observer?.observe(initialCard);
     onCleanup(() => observer?.disconnect());
   });
   createEffect(() => card()?.focus({ preventScroll: true }));

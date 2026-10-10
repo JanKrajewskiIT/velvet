@@ -28,8 +28,8 @@ export const MediaFrameContent = (props: MediaFrameContentProps) => {
               class="vui-media__el"
               src={poster()}
               alt=""
-              onLoad={props.onReady}
-              onError={props.onError}
+              onLoad={() => props.onReady()}
+              onError={() => props.onError()}
               style={props.style}
             />
           )}
@@ -43,8 +43,8 @@ export const MediaFrameContent = (props: MediaFrameContentProps) => {
           controls
           autoplay
           playsinline
-          onLoadedData={props.onReady}
-          onError={props.onError}
+          onLoadedData={() => props.onReady()}
+          onError={() => props.onError()}
           style={props.style}
         />
       </Match>
@@ -55,7 +55,7 @@ export const MediaFrameContent = (props: MediaFrameContentProps) => {
           title={props.title || props.alt || translate('velvet.media.mediaFrame.embed')}
           loading="lazy"
           allow={EMBED_PERMISSIONS}
-          onLoad={props.onReady}
+          onLoad={() => props.onReady()}
         />
       </Match>
       <Match when={true}>
@@ -65,8 +65,8 @@ export const MediaFrameContent = (props: MediaFrameContentProps) => {
           alt={props.alt}
           loading="lazy"
           decoding="async"
-          onLoad={props.onReady}
-          onError={props.onError}
+          onLoad={() => props.onReady()}
+          onError={() => props.onError()}
           style={props.style}
         />
       </Match>

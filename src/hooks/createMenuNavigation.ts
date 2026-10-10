@@ -50,7 +50,7 @@ export const createMenuNavigation = (
         if (event.key.length === 1 && event.key !== ' ' && !event.ctrlKey && !event.metaKey && !event.altKey) {
           const found = search(
             event.key,
-            nodes().map((node) => node.getAttribute('aria-label') ?? node.textContent ?? ''),
+            nodes().map((node) => node.getAttribute('aria-label') ?? node.textContent),
             active(),
           );
           if (found >= 0) next = found;

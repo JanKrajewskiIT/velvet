@@ -68,14 +68,19 @@ export const MentionInput = (props: MentionInputProps) => {
   );
   const anchor = createMemo(() => {
     layout.popoverPosition();
-    const marker = caret();
-    const field = textarea();
-    if (!marker || !field) return undefined;
+    const initialMarker = caret();
+    const initialField = textarea();
+    if (!initialMarker || !initialField) return undefined;
     return {
-      contextElement: field,
+      contextElement: initialField,
       getBoundingClientRect: () => {
-        const rect = marker.getBoundingClientRect();
-        return new DOMRect(rect.left - CARET_LEFT_OFFSET_PX, rect.top - field.scrollTop, rect.width, rect.height);
+        const rect = initialMarker.getBoundingClientRect();
+        return new DOMRect(
+          rect.left - CARET_LEFT_OFFSET_PX,
+          rect.top - initialField.scrollTop,
+          rect.width,
+          rect.height,
+        );
       },
     };
   });
