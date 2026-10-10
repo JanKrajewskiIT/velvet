@@ -1,24 +1,21 @@
-import { fixupConfigRules } from '@eslint/compat';
-import { buildLiteralI18nKeySelectors, createEslintConfig } from '@jankrajewskiit/configs/eslint';
+import {
+  buildAllowEmptyInterfaceConfig,
+  buildLiteralI18nKeyRule,
+  buildRuleOverrideConfig,
+  buildSolidHtmlForCompatConfig,
+  createEslintConfig,
+} from '@jankrajewskiit/configs/eslint';
 
-export default fixupConfigRules(
-  createEslintConfig({
-    tsconfigRootDir: import.meta.dirname,
-    ignorePaths: ['velvet/**'],
-    extraConfigs: [
-      {
-        files: ['src/**/*.{ts,tsx,js,jsx}'],
-        rules: {
-          'no-restricted-syntax': ['error', ...buildLiteralI18nKeySelectors({ staticFunction: 'translate' })],
-        },
-      },
-      {
-        files: ['src/**/*.tsx'],
-        rules: {
-          // FieldLabel keeps the reference prop name `htmlFor`; className and key are already rejected by the JSX types.
-          'solid/no-react-specific-props': 'off',
-        },
-      },
-    ],
-  }),
-);
+export default createEslintConfig({
+  tsconfigRootDir: import.meta.dirname,
+  ignorePaths: ['velvet/**'],
+  extraConfigs: [
+    buildRuleOverrideConfig({
+      name: 'ui/literal-i18n-keys',
+      files: ['src/**/*.{ts,tsx,js,jsx}'],
+      rules: { 'no-restricted-syntax': buildLiteralI18nKeyRule({ staticFunction: 'translate' }) },
+    }),
+    buildSolidHtmlForCompatConfig(['src/**/*.tsx']),
+    buildAllowEmptyInterfaceConfig(['src/i18n/augment.ts']),
+  ],
+});
