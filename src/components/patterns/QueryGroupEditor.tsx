@@ -27,6 +27,8 @@ export interface QueryGroupEditorProps {
   maxDepth: number;
   disabled?: boolean;
   reorderable?: boolean;
+  clearable?: boolean;
+  onClear?: () => void;
 }
 
 const asGroup = (node: QueryNode): QueryGroup | undefined => (isQueryGroup(node) ? node : undefined);
@@ -38,7 +40,7 @@ export const QueryGroupEditor = (props: QueryGroupEditorProps) => {
   const translate = useTranslate();
   const ids = createMemo(() => props.group.rules.map((node) => node.id));
   const combinator = () => props.group.combinator;
-  const canRemoveRule = () => props.group.rules.length > 1 || props.depth > 0;
+  const canRemoveRule = () => props.group.rules.length > 1 || props.depth > 0 || !!props.clearable;
   const canAddGroup = () => props.depth + 1 < props.maxDepth;
 
   const replace = (id: string, next: QueryNode) =>
@@ -63,11 +65,14 @@ export const QueryGroupEditor = (props: QueryGroupEditorProps) => {
         props.depth ? 'velvet.patterns.queryBuilder.conditionGroup' : 'velvet.patterns.queryBuilder.conditions',
       )}
     >
+      <Show when={props.group.rules.length === 0}>
+        <div class="vui-qb__empty">{translate('velvet.patterns.queryBuilder.empty')}</div>
+      </Show>
       <For each={ids()}>
         {(id, position) => (
           <Show when={props.group.rules.find((node) => node.id === id)}>
             {(node) => (
-              <div class="vui-qb__row">
+              <div class={cx('vui-qb__row', props.reorderable && 'vui-qb__row--move')}>
                 <div class="vui-qb__lead">
                   <Switch fallback={<span>{combinatorLabel(combinator(), translate)}</span>}>
                     <Match when={position() === 0}>
@@ -120,8 +125,8 @@ export const QueryGroupEditor = (props: QueryGroupEditorProps) => {
                     )}
                   </Match>
                 </Switch>
-                <Show when={props.reorderable && props.group.rules.length > 1}>
-                  <div class="vui-qb__order">
+                <Show when={props.reorderable}>
+                  <div class="vui-qb__move">
                     <IconButton
                       size="xs"
                       icon="arrow-up"
@@ -173,6 +178,17 @@ export const QueryGroupEditor = (props: QueryGroupEditorProps) => {
             onClick={() => props.onRemove()}
           >
             {translate('velvet.patterns.queryBuilder.removeGroup')}
+          </Button>
+        </Show>
+        <Show when={props.depth === 0 && props.clearable}>
+          <Button
+            variant="ghost"
+            size="sm"
+            class="vui-qb__drop"
+            disabled={props.disabled || !props.group.rules.length}
+            onClick={() => props.onClear?.()}
+          >
+            {translate('velvet.patterns.queryBuilder.clearRules')}
           </Button>
         </Show>
       </div>

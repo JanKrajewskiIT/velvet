@@ -99,6 +99,23 @@ Consumers must supply unique stable keys for reorderable collections (`getKey` i
 
 Exported shared configuration arrays and their plain record entries are readonly and frozen at runtime, including calendar providers, locale options, date presets, phone countries, analysis depths and score bands. The label color palette and public lists of tones, themes, aspects, loader variants, flashcard modes and billing periods are frozen too. Configuration props accept readonly arrays; consumers provide their own configuration rather than modifying library defaults.
 
+## Git-scoped resync on 2026-10-11
+
+This resync uses only the staged changes under `velvet/` relative to HEAD. It covers the changed component implementations, declarations, styles and tokens. Recron templates belong to a product application; generated reference bundles, specimens and manifests do not become library runtime code.
+
+- NavbarUser adds the compact account panel with identity details, optional theme radios and sign-out. The panel uses shared floating placement and dismissal, returns focus on Escape, and closes when focus leaves. Navbar indicator and icon motion follow the updated reference tokens.
+- Menu and MenuPanel add `iconPosition="end"`; checkbox indicators remain at the start. Table adds `layout="fixed"`. The existing JSX `addRow` slot and TableAddRowAction keep their loading, native button props and composition while adopting the reference sticky add-row styling.
+- DataGrid adds `rowCount`, an automatic Reset view action, resets filters and columns to `defaultView`, and stores only resized width overrides. `defaultGridView` and `reconcileGridView` are public; the latter uses the existing bounded JSON codec and rejects malformed settings before schema reconciliation. The library keeps the name `GridViewState`, optional queries, versioned imports, persistence, right pins and virtualization.
+- ColumnManager adds `resetValue`. Both it and GridColumn accept `hideable`, `pinnable` and `movable`; the existing `canHide`, `canPin` and `canMove` names take precedence. The standalone manager keeps `minVisible=0`; DataGrid keeps at least one visible column.
+- TreeView adds positional pointer moves, Alt+arrow shortcuts, `canDrop`, drop indicators and the pure `moveTreeNode` helper. Its existing two-argument `onMove(id, targetId)` and Space/Enter move mode remain supported. Positional moves use `onMovePosition(move)` to avoid changing the existing callback contract. Empty `children` arrays identify folders; self and descendant moves are rejected, and focus returns to the moved item after rendering.
+- CalendarOrganizer adds the reference `selected`, `defaultSelected` and `onSelectedChange` aliases, with the existing selectedDate API taking precedence. Controlled day changes follow the selected month. `confirmDelete=true` now uses inline Cancel/Delete actions with focus on Cancel, Escape cancellation and focus recovery after deletion; false deletes immediately. Multi-day events, inline editing and drag-to-move remain available.
+- QueryBuilder adds optional `clearable`, `onClear`, `clearQuery`, an empty-state message and an All records summary. It keeps its existing reorderable default, typed operator restrictions and disabled controls. DataGrid enables clearing explicitly.
+- AuthButton presents session initialization separately and uses the new error styling and glyph while retaining the shared Auth context and localized feedback.
+- Markdown adds bare `www.` links, angle-bracket email links and reference images. Heading IDs remain unique even when a generated suffix is another heading's base; empty slugs use `section`. The existing escape-first renderer and URL allow-list remain in place.
+- Four filled icons are added to the SVG registry and existing icon category. Changed CSS and motion/icon tokens are copied verbatim. The reference changes the CSS mask for `moon` without changing its SVG registry path; that upstream inconsistency is retained.
+
+The 11 changed declaration files are mapped to the existing library components and public barrels. All 10 changed component/token CSS files have identical SHA-256 hashes to their reference counterparts. Authorized command results are recorded below; browser and VelvetDemo comparison remain unrun.
+
 ## Architecture map
 
 - `src/components/<group>` contains actions, charts, data, display, feedback, forms, layout, media, menus, navigation, patterns and primitives, each with a public barrel.
@@ -154,23 +171,27 @@ Grid columns support left/right pins, `sortable`, `sortAccessor`, ascending `sor
 
 `QueryField.operators` restricts the field's built-in operator set. Text fields add `ends`; `QueryOperatorValue` exposes the supported operator union. `QueryBuilder.disabled` blocks all edits; `reorderable` supplies move-up/down buttons for rules and nested groups. Clearing produces an empty root group while retaining its ID and combinator. Date, boolean and nested-group support remains available.
 
-`TableAddRowAction` renders a native row and cell containing a dashed `Button`. Place it in `Table.addRow` or a native tbody and supply `colSpan` including selection/expansion columns. The action is keyboard accessible, forwards native button attributes and leaves record creation to the application. The `addRow` slot is hidden while Table is loading.
+`TableAddRowAction` renders a native row and cell containing a ghost `Button` with the reference add-row styling. Place it in `Table.addRow` or a native tbody and supply `colSpan` including selection/expansion columns. The action is keyboard accessible, forwards native button attributes and leaves record creation to the application. The `addRow` slot is hidden while Table is loading.
 
 TradingView's `lightweight-charts` engine and VelvetData's application adapter remain outside VelvetUi. The adapter includes trading-specific series, overlays and live-data coordination; they are not generic UI responsibilities. VelvetDemo can demonstrate that integration after consuming the published library. No dependency on VelvetData or lightweight-charts was added to VelvetUi. Demo specimens and their variants remain in VelvetDemo rather than a second variants guide here.
 
 ## Verification status and remaining limits
 
-This correction round was reviewed from source and configuration only. No tests were added or changed. No build, typecheck, test, verification script, lint, formatter, development server or runtime/manual verification was run. Current compile status and full behavioral or pixel parity therefore remain unconfirmed.
+The 2026-10-10 correction round was reviewed from source and configuration only. The Git-scoped resync on 2026-10-11 includes the following user-authorized checks. No tests were added or changed, and no application or development server was started. Browser behavior, pixel parity and the distributable package remain unverified.
 
-The user owns the following checks. These commands are listed for reproducibility and have not been executed for the current changes:
+All commands below use the VelvetUi repository root:
 
-- `npm run typecheck`
-- `npm run lint`
-- `npm run lint:css`
-- `npm run format:check`
-- `npm run build`
-- `npm run verify:pkg`
-- `npm run verify` combines formatting, linting, stylesheet linting, build and package verification; individual checks above need not be repeated if this is used.
+| Command                                                       | Result on 2026-10-11                                                   |
+| ------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| `npm run typecheck`                                           | Passed                                                                 |
+| `npm run lint`                                                | Passed after correcting five lint findings                             |
+| `npm run lint:css`                                            | Passed                                                                 |
+| `npm run format:check`                                        | Passed after authorized formatting                                     |
+| `npm exec -- prettier --write src docs/design-system-port.md` | Completed; reference styles and `velvet/` are ignored                  |
+| `npm run build`                                               | Unrun; separate execution authorization required                       |
+| `npm run verify:pkg`                                          | Unrun; requires the built package and separate execution authorization |
+
+`npm run verify` combines formatting, linting, stylesheet linting, build and package verification and remains unrun.
 
 There is no test script or generated test suite. The initial showcase cleanup did not require dependency resolution, and the VelvetData extraction adds no dependency. Velvet Auth is now declared as a `^3.3.4` peer and development dependency. The existing `package-lock.json` has not been regenerated; the owner must run the package manager's lockfile update before using clean-install workflows or publishing.
 

@@ -23,6 +23,7 @@ export interface OrganizerEditing {
   askDelete: (event: OrganizerEvent) => void;
   cancelDelete: () => void;
   confirmDelete: () => void;
+  deleteEvent: (event: OrganizerEvent) => void;
 }
 
 export const createOrganizerEditing = (
@@ -54,10 +55,13 @@ export const createOrganizerEditing = (
   };
   const askDelete = (event: OrganizerEvent) => setPendingDelete(event);
   const cancelDelete = () => setPendingDelete(undefined);
+  const deleteEvent = (target: OrganizerEvent) => {
+    setPendingDelete(undefined);
+    source.onEventsChange?.(source.events.filter((event) => event.id !== target.id));
+  };
   const confirmDelete = () => {
     const target = pendingDelete();
-    setPendingDelete(undefined);
-    if (target) source.onEventsChange?.(source.events.filter((event) => event.id !== target.id));
+    if (target) deleteEvent(target);
   };
 
   return {
@@ -71,5 +75,6 @@ export const createOrganizerEditing = (
     askDelete,
     cancelDelete,
     confirmDelete,
+    deleteEvent,
   };
 };

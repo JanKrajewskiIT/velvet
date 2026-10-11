@@ -35,6 +35,6 @@ export declare function Navbar(props: NavbarProps): JSX.Element;
 export interface NavbarLocaleProps { value?: string; onClick?: () => void; label?: string }
 export declare function NavbarLocale(props: NavbarLocaleProps): JSX.Element;
 import type { MenuItem } from '../menus/Menu';
-/** Account pill for the menubar's actions slot — avatar + first name + chevron → Menu (profile, settings, sign in/out). Name hides under 960px. */
-export interface NavbarUserProps { name?: string; src?: string; items: MenuItem[]; /** @default true */ showName?: boolean; /** @default 'Account menu' */ label?: string; /** @default 220 */ width?: number }
+/** Account control for the menubar's actions slot. Default: avatar + first name + chevron pill → Menu (name hides under 960px). compact: avatar-only circle → account panel — identity header (name, email, meta), link list, Light/Dark/System theme switch, Sign out. */
+export interface NavbarUserProps { name?: string; src?: string; /** Menu items (default) or panel links (compact — label, icon, onSelect, shortcut). Sections/dividers ignored in compact. */ items: MenuItem[]; /** @default true */ showName?: boolean; /** Avatar-only trigger → account panel. @default false */ compact?: boolean; /** compact: shown under the name */ email?: string; /** compact: small third line, e.g. role or plan */ meta?: React.ReactNode; /** compact: current theme for the switch */ theme?: 'light' | 'dark' | 'system'; /** compact: renders the theme switch when set */ onThemeChange?: (t: 'light' | 'dark' | 'system') => void; /** compact: renders the Sign out footer when set */ onSignOut?: () => void; label?: string; width?: number }
 export declare function NavbarUser(props: NavbarUserProps): JSX.Element;

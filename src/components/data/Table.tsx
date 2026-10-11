@@ -101,6 +101,7 @@ export const Table = <T extends object>(props: TableProps<T>): JSX.Element => {
             'vui-table',
             sticky() && 'vui-table--sticky',
             widths.anyWidth() && 'vui-table--fixed',
+            p.layout === 'fixed' && 'vui-table--layout-fixed',
             pins.hasPins() && 'vui-table--pins',
           )}
           aria-busy={p.loading || undefined}

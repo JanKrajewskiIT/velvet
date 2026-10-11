@@ -76,6 +76,7 @@ export {
 } from './PricingTable';
 export { type PromptAttachment, PromptInput, type PromptInputProps } from './PromptInput';
 export {
+  clearQuery,
   describeQuery,
   emptyQuery,
   QueryBuilder,

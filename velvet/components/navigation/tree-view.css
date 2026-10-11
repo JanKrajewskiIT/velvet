@@ -19,3 +19,8 @@
 .vui-tree__row--error{color:var(--status-danger-fg)}
 .vui-tree__row--error .vui-tree__icon{color:inherit}
 .vui-tree__retry{margin-left:auto;height:var(--control-height-xs)}
+.vui-tree__row[draggable="true"]{cursor:grab}
+.vui-tree__row--dragging{opacity:.45}
+.vui-tree__row--drop-inside,.vui-tree__row--drop-inside:hover{background:var(--bg-selected);box-shadow:inset 0 0 0 var(--border-width) var(--border-brand)}
+.vui-tree__row--drop-before::after,.vui-tree__row--drop-after::after{content:"";position:absolute;left:calc(var(--space-2) + var(--lvl) * var(--space-5));right:var(--space-2);height:var(--border-width-thick);border-radius:var(--radius-full);background:var(--border-brand);pointer-events:none}
+.vui-tree__row--drop-before::after{top:-1px}.vui-tree__row--drop-after::after{bottom:-1px}

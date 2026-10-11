@@ -37,6 +37,10 @@ export interface GridColumn<T extends object = object> {
   canHide?: boolean;
   canPin?: boolean;
   canMove?: boolean;
+  /** Reference aliases; canHide/canPin/canMove take precedence. */
+  hideable?: boolean;
+  pinnable?: boolean;
+  movable?: boolean;
 }
 
 export interface GridRowChange {
@@ -59,6 +63,8 @@ export interface DataGridProps<T extends object = object> {
   /** Keep filtering and sorting in the consumer's server query. */
   manualFiltering?: boolean;
   manualSorting?: boolean;
+  /** Total record count when rows contains one server page. */
+  rowCount?: number;
   /** Optional localStorage key. Only view settings are stored, never records. */
   persistenceKey?: string;
   onViewError?: (error: Error) => void;

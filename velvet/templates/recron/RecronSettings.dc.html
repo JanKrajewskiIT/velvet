@@ -23,7 +23,7 @@
 </x-import>
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FormSection" layout="aside" divider="{{ true }}" title="Career" description="Used to match offers and suggest questions." hint-size="100%,320px">
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FormLayout" as="div" hint-size="100%,300px">
-<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Select" label="Preferred role" options="{{ roles }}" default-value="{{ p.role }}" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Select" label="Preferred role" options="{{ roles }}" value="{{ roleId }}" on-value-change="{{ setRole }}" hint="Filters Prep questions and tailors AI answers" hint-size="100%,64px"></x-import>
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Slider" label="Experience" min="{{ 0 }}" max="{{ 15 }}" default-value="{{ p.years }}" format="{{ fmtYears }}" marks="{{ yearMarks }}" hint-size="100%,72px"></x-import>
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.TagInput" label="Skills" default-value="{{ p.skills }}" max="{{ 20 }}" hint-size="100%,72px"></x-import>
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Textarea" label="Short bio" optional="{{ true }}" default-value="{{ p.bio }}" rows="{{ 2 }}" max-length="{{ 280 }}" show-count="{{ true }}" hint-size="100%,96px"></x-import>
@@ -105,7 +105,7 @@ class Component extends DCLogic {
       section: s.section, setSection: (v) => this.setState({ section: v }),
       sec: { [s.section]: true },
       p: D.profile,
-      roles: ['Frontend Developer', 'Backend Developer', 'Fullstack Developer', 'Mobile Developer', 'QA Engineer', 'DevOps Engineer', 'Product Designer'],
+      roles: D.roles.map((r) => ({ value: r.id, label: r.name })), roleId: app.roleId || 'frontend', setRole: (v) => app.setRole && app.setRole(v),
       fmtYears: (v) => (v === 15 ? '15+ years' : v + (v === 1 ? ' year' : ' years')),
       yearMarks: [{ value: 0, label: 'Junior' }, { value: 3, label: 'Mid' }, { value: 6, label: 'Senior' }, { value: 10, label: 'Lead' }],
       save: () => { this.setState({ saved: true }); app.markDone('profile'); app.toast('Profile saved', 'success'); },

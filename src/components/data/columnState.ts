@@ -1,3 +1,4 @@
+import { columnCapabilities } from './columnCapabilities';
 import type { ColumnState, ManagedColumn } from './columnManagerTypes';
 
 export const initialManagedColumns = (columns: ManagedColumn[]): ColumnState[] =>
@@ -22,15 +23,16 @@ export const reconcileColumnState = (saved: ColumnState[], columns: ManagedColum
     const initial = byKey.get(entry.key);
     if (!column || !initial || seen.has(entry.key)) continue;
     seen.add(entry.key);
+    const capabilities = columnCapabilities(column);
     ordered.push({
       key: entry.key,
-      visible: column.locked || column.canHide === false ? initial.visible : entry.visible,
-      pin: column.locked || column.canPin === false ? initial.pin : entry.pin,
+      visible: capabilities.hide ? entry.visible : initial.visible,
+      pin: capabilities.pin ? entry.pin : initial.pin,
     });
   }
   defaults.forEach((initial, index) => {
     const column = definitions.get(initial.key);
-    if (!column?.locked && column?.canMove !== false) return;
+    if (!column || columnCapabilities(column).move) return;
     const position = ordered.findIndex((entry) => entry.key === initial.key);
     if (position < 0) return;
     const fixed = ordered.splice(position, 1)[0];

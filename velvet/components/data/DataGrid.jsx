@@ -27,15 +27,51 @@ function test(r, row) {
   }
 }
 const RN = 44, CHK = 40;
-export function DataGrid({ columns = [], rows = [], rowKey = 'id', onRowsChange, height = 360, stickyFirst = true, rowNumbers = true, selectable = false, selected, onSelectionChange, bulkActions, renderDetail, searchable = false, searchPlaceholder, filterFields, columnManager = false, onExport, toolbarEnd, footer = false, className }) {
+const clampW = (c, w) => Math.round(Math.min(c.maxWidth ?? Infinity, Math.max(c.minWidth ?? 64, w)));
+const capsOf = (c) => ({ hide: !c.locked && c.hideable !== false, pin: !c.locked && c.pinnable !== false });
+export function defaultGridView(columns = [], { stickyFirst = true, filterFields } = {}) {
+  const anyPin = columns.some((c) => c.pin);
+  return { search: '', query: filterFields ? emptyQuery(filterFields) : null, sort: null, columns: columns.map((c, i) => ({ key: c.key, visible: !c.hidden, pin: c.pin || (!anyPin && stickyFirst && i === 0 ? 'left' : null) })), widths: {} };
+}
+/** Fits a saved/foreign view onto the current column schema: drops unknown keys, appends new columns, clamps widths, keeps ≥1 column visible. */
+export function reconcileGridView(view, columns = [], opts = {}) {
+  const base = defaultGridView(columns, opts);
+  if (!view || typeof view !== 'object') return base;
+  const byKey = new Map(columns.map((c) => [c.key, c])); const seen = new Set();
+  const cs = (Array.isArray(view.columns) ? view.columns : []).filter((x) => x && byKey.has(x.key) && !seen.has(x.key) && seen.add(x.key)).map((x) => {
+    const c = byKey.get(x.key); const cp = capsOf(c); const b = base.columns.find((y) => y.key === x.key);
+    return { key: x.key, visible: cp.hide ? x.visible !== false : true, pin: cp.pin ? (x.pin === 'left' ? 'left' : null) : b.pin };
+  });
+  base.columns.forEach((b) => { if (!seen.has(b.key)) cs.push(b); });
+  if (cs.length && !cs.some((x) => x.visible)) cs[0] = { ...cs[0], visible: true };
+  const widths = {}; Object.entries(view.widths || {}).forEach(([k, w]) => { if (byKey.has(k) && typeof w === 'number' && isFinite(w)) widths[k] = clampW(byKey.get(k), w); });
+  const sort = view.sort && byKey.has(view.sort.key) && (view.sort.dir === 'asc' || view.sort.dir === 'desc') ? { key: view.sort.key, dir: view.sort.dir } : null;
+  const fk = new Set((opts.filterFields || []).map((f) => f.key));
+  const prune = (g) => ({ ...g, combinator: g.combinator === 'or' ? 'or' : 'and', rules: (g.rules || []).filter((r) => r && (r.rules ? true : fk.has(r.field))).map((r) => (r.rules ? prune(r) : r)) });
+  const query = opts.filterFields ? (view.query && Array.isArray(view.query.rules) ? prune(view.query) : base.query) : null;
+  return { search: typeof view.search === 'string' ? view.search : '', query, sort, columns: cs, widths };
+}
+export function DataGrid({ columns = [], rows = [], rowKey = 'id', view: viewProp, defaultView, onViewChange, manualFiltering = false, manualSorting = false, rowCount, onRowsChange, height = 360, stickyFirst = true, rowNumbers = true, selectable = false, selected, onSelectionChange, bulkActions, renderDetail, searchable = false, searchPlaceholder, filterFields, columnManager = false, onExport, toolbarEnd, footer = false, className }) {
   const [cell, setCell] = React.useState({ r: 0, c: 0 });
   const [edit, setEdit] = React.useState(null);
   const [draft, setDraft] = React.useState('');
-  const [widths, setWidths] = React.useState(() => Object.fromEntries(columns.map((c) => [c.key, c.width || 160])));
-  const [sort, setSort] = React.useState(null);
-  const [q, setQ] = React.useState('');
-  const [query, setQuery] = React.useState(() => (filterFields ? emptyQuery(filterFields) : null));
-  const [colState, setColState] = React.useState(() => { const anyPin = columns.some((c) => c.pin); return columns.map((c, i) => ({ key: c.key, visible: !c.hidden, pin: c.pin || (!anyPin && stickyFirst && i === 0 ? 'left' : null) })); });
+  const vOpts = { stickyFirst, filterFields };
+  const schema = columns.map((c) => c.key + (c.locked ? '!' : '')).join('|') + '#' + (filterFields || []).map((f) => f.key).join('|');
+  const initialView = React.useMemo(() => reconcileGridView(defaultView, columns, vOpts), [schema]);
+  const [innerView, setInnerView] = React.useState(initialView);
+  const gv = React.useMemo(() => reconcileGridView(viewProp !== undefined ? viewProp : innerView, columns, vOpts), [viewProp, innerView, schema]);
+  const gvRef = React.useRef(gv); gvRef.current = gv;
+  const update = (patch) => { const next = { ...gvRef.current, ...(typeof patch === 'function' ? patch(gvRef.current) : patch) }; gvRef.current = next; if (viewProp === undefined) setInnerView(next); onViewChange && onViewChange(next); };
+  const resetView = () => update(initialView);
+  const isDefault = JSON.stringify(gv) === JSON.stringify(initialView);
+  const colByKey = React.useMemo(() => Object.fromEntries(columns.map((c) => [c.key, c])), [columns]);
+  const widths = React.useMemo(() => Object.fromEntries(columns.map((c) => [c.key, clampW(c, gv.widths[c.key] ?? c.width ?? 160)])), [columns, gv.widths]);
+  const sort = gv.sort && { key: gv.sort.key, dir: gv.sort.dir === 'desc' ? -1 : 1 };
+  const setSort = (s) => update({ sort: s && { key: s.key, dir: s.dir < 0 ? 'desc' : 'asc' } });
+  const q = gv.search; const setQ = (v) => update({ search: v });
+  const query = gv.query; const setQuery = (v) => update({ query: v });
+  const colState = gv.columns; const setColState = (v) => update({ columns: v.some((x) => x.visible) ? v : gvRef.current.columns });
+  React.useEffect(() => { const ks = rows.map((r) => r[rowKey]); if (ks.some((k) => k == null) || new Set(ks).size !== ks.length) console.warn('DataGrid: every row needs a unique, stable "' + rowKey + '" — edits, selection and focus are keyed by it.'); }, [rows, rowKey]);
   const [selInner, setSelInner] = React.useState([]);
   const sel = new Set(selected !== undefined ? selected : selInner);
   const [open, setOpen] = React.useState(() => new Set());
@@ -45,11 +81,11 @@ export function DataGrid({ columns = [], rows = [], rowKey = 'id', onRowsChange,
   const view = React.useMemo(() => {
     let out = rows;
     const t = q.trim().toLowerCase();
-    if (t) out = out.filter((r) => cols.some((c) => String(r[c.key] ?? '').toLowerCase().includes(t)));
-    if (query && countActive(query)) out = out.filter((r) => test(query, r));
-    if (sort) { const k = sort.key; const typed = columns.find((c) => c.key === k); out = [...out].sort((a, b) => { const x = a[k], y = b[k]; return typeof x === 'number' ? x - y : String(x ?? '').localeCompare(String(y ?? ''), undefined, { numeric: true }); }); if (sort.dir < 0) out.reverse(); }
+    if (!manualFiltering && t) out = out.filter((r) => cols.some((c) => String(r[c.key] ?? '').toLowerCase().includes(t)));
+    if (!manualFiltering && query && countActive(query)) out = out.filter((r) => test(query, r));
+    if (sort && !manualSorting) { const k = sort.key; const typed = columns.find((c) => c.key === k); out = [...out].sort((a, b) => { const x = a[k], y = b[k]; return typeof x === 'number' ? x - y : String(x ?? '').localeCompare(String(y ?? ''), undefined, { numeric: true }); }); if (sort.dir < 0) out.reverse(); }
     return out;
-  }, [rows, sort, q, query, cols]);
+  }, [rows, gv.sort, q, query, cols, manualFiltering, manualSorting]);
   const setSel = (s) => { const v = [...s]; if (selected === undefined) setSelInner(v); onSelectionChange && onSelectionChange(v); };
   const allOn = view.length > 0 && view.every((r) => sel.has(r[rowKey]));
   const someOn = !allOn && view.some((r) => sel.has(r[rowKey]));
@@ -93,7 +129,7 @@ export function DataGrid({ columns = [], rows = [], rowKey = 'id', onRowsChange,
   const pinSty = (c) => (c.pin === 'left' ? { left: pinLeft[c.key] } : undefined);
   const nFilters = query ? countActive(query) : 0;
   const nSel = rows.filter((r) => sel.has(r[rowKey])).length;
-  const hasToolbar = searchable || filterFields || columnManager || onExport !== undefined || toolbarEnd || (selectable && bulkActions);
+  const hasToolbar = searchable || filterFields || columnManager || onExport !== undefined || toolbarEnd || (selectable && bulkActions) || !isDefault;
   const exportOn = onExport !== undefined;
   return (
     <div className={cx('vui-dgrid', className)}>
@@ -112,14 +148,15 @@ export function DataGrid({ columns = [], rows = [], rowKey = 'id', onRowsChange,
             {filterFields && (
               <Popover className="vui-dgrid__pop vui-dgrid__pop--wide" align="end" title="Filters" trigger={<Button size="sm" variant="secondary" iconLeft="filter">Filters{nFilters > 0 && <Count value={nFilters} size="sm" className="vui-dgrid__count" />}</Button>}>
                 <QueryBuilder fields={filterFields} value={query} onChange={setQuery} />
-                {nFilters > 0 && <div className="vui-dgrid__popfoot"><Button size="sm" variant="ghost" onClick={() => setQuery(emptyQuery(filterFields))}>Reset filters</Button></div>}
+                {nFilters > 0 && <div className="vui-dgrid__popfoot"><Button size="sm" variant="ghost" onClick={() => setQuery(initialView.query || emptyQuery(filterFields))}>Reset filters</Button></div>}
               </Popover>
             )}
             {columnManager && (
               <Popover className="vui-dgrid__pop" align="end" trigger={<Button size="sm" variant="secondary" iconLeft="sliders">Columns</Button>}>
-                <ColumnManager columns={columns.map((c) => ({ key: c.key, label: c.label, visible: !c.hidden, pin: c.pin, locked: c.locked }))} value={colState} onChange={setColState} />
+                <ColumnManager columns={columns.map((c) => ({ key: c.key, label: c.label, visible: !c.hidden, pin: c.pin, locked: c.locked, hideable: c.hideable, pinnable: c.pinnable, movable: c.movable }))} value={colState} onChange={setColState} resetValue={initialView.columns} />
               </Popover>
             )}
+            {!isDefault && <Button size="sm" variant="ghost" iconLeft="rotate-ccw" onClick={resetView}>Reset view</Button>}
             {exportOn && <Button size="sm" variant="secondary" iconLeft="download" onClick={exportCsv}>Export</Button>}
             {toolbarEnd}
           </div>
@@ -133,7 +170,7 @@ export function DataGrid({ columns = [], rows = [], rowKey = 'id', onRowsChange,
           {cols.map((c) => (
             <div key={c.key} role="columnheader" aria-sort={sort && sort.key === c.key ? (sort.dir > 0 ? 'ascending' : 'descending') : undefined} className={cx('vui-grid__hd', c.type === 'number' && 'vui-grid__num', pinCls(c))} style={pinSty(c)}>
               <button type="button" tabIndex={-1} className="vui-grid__hbtn" onClick={() => setSort(!sort || sort.key !== c.key ? { key: c.key, dir: 1 } : sort.dir > 0 ? { key: c.key, dir: -1 } : null)}>{c.label}{sort && sort.key === c.key ? <Glyph name={'arrow-' + (sort.dir > 0 ? 'up' : 'down')} className="vui-grid__sort" /> : <Glyph name="chevrons-up-down" className="vui-grid__sort vui-grid__sort--idle" />}{c.editable && <Glyph name="pencil" className="vui-grid__edit-ic" />}</button>
-              <ColumnResize label={'Resize ' + (typeof c.label === 'string' ? c.label : c.key)} width={widths[c.key]} onResize={(w) => setWidths((x) => ({ ...x, [c.key]: w }))} />
+              <ColumnResize label={'Resize ' + (typeof c.label === 'string' ? c.label : c.key)} width={widths[c.key]} min={c.minWidth ?? 64} onResize={(w) => update((v) => ({ widths: { ...v.widths, [c.key]: clampW(colByKey[c.key] || c, w) } }))} onReset={() => update((v) => { const { [c.key]: _, ...rest } = v.widths; return { widths: rest }; })} />
             </div>
           ))}
         </div>
@@ -172,7 +209,7 @@ export function DataGrid({ columns = [], rows = [], rowKey = 'id', onRowsChange,
       </div>
       {footer && (
         <div className="vui-dgrid__foot">
-          <span aria-live="polite">Showing <b>{view.length}</b> of {rows.length}</span>
+          <span aria-live="polite">Showing <b>{view.length}</b> of {rowCount ?? rows.length}</span>
           {selectable && nSel > 0 && <span><b>{nSel}</b> selected</span>}
           {typeof footer !== 'boolean' && <span className="vui-dgrid__foot-end">{footer}</span>}
         </div>

@@ -152,6 +152,10 @@ export const IconCategories = {
     'heart-filled',
     'message-square-filled',
     'star-filled',
+    'briefcase-filled',
+    'graduation-cap-filled',
+    'person-filled',
+    'desktop-filled',
   ],
 } as const satisfies Record<string, readonly IconName[]>;
 

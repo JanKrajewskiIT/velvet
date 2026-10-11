@@ -301,6 +301,8 @@ export const patternsPl: TranslationOf<typeof patternsEn> = {
     hintSend: '↵ — wyślij · ⇧↵ — nowy wiersz',
   },
   queryBuilder: {
+    empty: 'Brak warunków — pasuje każdy rekord.',
+    allRecords: 'Wszystkie rekordy',
     clearRules: 'Wyczyść warunki',
     moveUp: 'Przesuń warunek lub grupę w górę',
     moveDown: 'Przesuń warunek lub grupę w dół',

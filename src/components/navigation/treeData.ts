@@ -27,8 +27,8 @@ export type CheckState = 'off' | 'on' | 'mixed';
 
 export const hasChildren = (node: TreeNode): boolean => (node.children?.length ?? 0) > 0;
 
-/** A node that can expand: it has children now or will load them. */
-export const isBranch = (node: TreeNode): boolean => hasChildren(node) || !!node.lazy;
+/** A folder, including an empty folder, or a node whose children will load. */
+export const isBranch = (node: TreeNode): boolean => Array.isArray(node.children) || !!node.lazy;
 
 export const leavesOf = (node: TreeNode): string[] =>
   node.children && hasChildren(node) ? node.children.flatMap(leavesOf) : [node.id];

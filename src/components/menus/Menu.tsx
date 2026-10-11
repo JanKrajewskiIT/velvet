@@ -35,6 +35,8 @@ export interface MenuProps {
   onOpenChange?: (open: boolean) => void;
   /** Min panel width (px). */
   width?: number;
+  /** @default 'start' */
+  iconPosition?: 'start' | 'end';
   class?: string;
 }
 
@@ -87,6 +89,7 @@ export const Menu = (props: MenuProps) => {
         <MenuPanel
           ref={floating.ref}
           items={p.items}
+          iconPosition={p.iconPosition}
           onClose={close}
           class={cx(
             'vui-menu--pop',

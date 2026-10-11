@@ -47,9 +47,11 @@ export const AuthButton = (props: AuthButtonProps) => {
   const errorId = createUniqueId();
   const busy = () => action.busy() || auth.isLoading();
   const label = () =>
-    auth.isAuthenticated()
-      ? (local.signOutLabel ?? translate('velvet.actions.authButton.signOut'))
-      : (local.signInLabel ?? translate('velvet.actions.authButton.signIn'));
+    auth.isLoading()
+      ? translate('velvet.actions.authButton.initializing')
+      : auth.isAuthenticated()
+        ? (local.signOutLabel ?? translate('velvet.actions.authButton.signOut'))
+        : (local.signInLabel ?? translate('velvet.actions.authButton.signIn'));
 
   const click: JSX.EventHandler<HTMLButtonElement, MouseEvent> = (event) => {
     const handler = local.onClick;
@@ -66,11 +68,12 @@ export const AuthButton = (props: AuthButtonProps) => {
         type="button"
         class={cx(
           buttonClass({
-            variant: local.variant ?? (auth.isAuthenticated() ? 'secondary' : 'primary'),
+            variant: local.variant ?? (auth.isAuthenticated() || auth.isLoading() ? 'secondary' : 'primary'),
             size: local.size,
             icon: local.iconOnly,
           }),
           'vui-auth',
+          action.failed() && !busy() && 'vui-auth--error',
           local.class,
         )}
         disabled={local.disabled || busy()}
@@ -88,8 +91,8 @@ export const AuthButton = (props: AuthButtonProps) => {
       >
         <Show when={!busy()} fallback={<Spinner size="inline" tone="current" />}>
           <span class="vui-auth__icon" aria-hidden="true">
-            <Show when={auth.isAuthenticated()} fallback={<Glyph name="log-in" />}>
-              <Glyph name="log-out" />
+            <Show when={action.failed()} fallback={<Glyph name={auth.isAuthenticated() ? 'log-out' : 'log-in'} />}>
+              <Glyph name="alert-circle" />
             </Show>
           </span>
         </Show>

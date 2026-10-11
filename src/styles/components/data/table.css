@@ -32,6 +32,9 @@
 .vui-table-wrap>.vui-table__scroll:first-child .vui-table thead th:first-child{border-top-left-radius:var(--_r)}
 .vui-table-wrap>.vui-table__scroll:first-child .vui-table thead th:last-child{border-top-right-radius:var(--_r)}
 .vui-table--fixed{table-layout:fixed}
+.vui-table--layout-fixed{table-layout:fixed;width:100%}
+.vui-table__scroll:has(>.vui-table--layout-fixed){overflow:visible}
+.vui-table--layout-fixed td{overflow-wrap:anywhere}
 .vui-table--fixed td,.vui-table--fixed th{overflow:hidden;text-overflow:ellipsis}
 .vui-table--sticky thead th{position:sticky;top:0;z-index:2;box-shadow:inset 0 calc(-1 * var(--border-width)) 0 var(--border-subtle)}
 .vui-table th{position:relative}
@@ -63,3 +66,11 @@
 .vui-table__scroll--l .vui-table__pin--edge.vui-table__pin--left{box-shadow:inset calc(-1 * var(--border-width)) 0 0 var(--border-default),var(--table-pin-shadow)}
 .vui-table__scroll--r .vui-table__pin--edge.vui-table__pin--right{box-shadow:inset var(--border-width) 0 0 var(--border-default),var(--table-pin-shadow-end)}
 .vui-table--pins.vui-table--sticky thead th.vui-table__pin{z-index:4}
+
+.vui-table tbody tr.vui-table__addrow,.vui-table tbody tr.vui-table__addrow:hover{background:none}
+.vui-table tbody tr.vui-table__addrow>td{position:sticky;bottom:0;z-index:2;padding:0;background:var(--bg-raised);box-shadow:inset 0 var(--border-width) 0 var(--table-border);border-bottom:0}
+.vui-table__addbtn{display:flex;align-items:center;gap:var(--space-2);width:100%;height:var(--table-row-height);padding:0 var(--cell-px);border:0;background:none;font:var(--type-label);color:var(--fg-tertiary);cursor:pointer;text-align:left;transition:color var(--motion-fast),background-color var(--motion-fast)}
+.vui-table__addbtn:hover:not(:disabled){color:var(--fg-brand);background:var(--table-row-hover)}
+.vui-table__addbtn:focus-visible{outline:none;box-shadow:var(--focus-ring-inset)}
+.vui-table__addbtn:disabled{opacity:.5;cursor:not-allowed}
+.vui-table__addbtn .vui-icon{font-size:var(--type-body-size)}

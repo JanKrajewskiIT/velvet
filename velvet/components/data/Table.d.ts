@@ -17,8 +17,10 @@ export interface TableColumn<T = any> {
   sortValue?: (row: T) => string | number;
 }
 export interface TableSort { key: string; dir: 'asc' | 'desc' }
-/** Data table: toolbar (title · count · actions), sort, row selection (Shift-click selects a range) with bulk-action bar, drag-to-resize columns, expandable detail rows, sticky header, keyboard (↑↓ move · Space select · →/← expand · ⌘A all · Esc clear), skeleton loading, empty state. Framed on its own; borderless inside <Card padding="none">. */
+/** Data table: toolbar (title · count · actions), sort, row selection (Shift-click selects a range) with bulk-action bar, drag-to-resize columns, expandable detail rows, sticky header, keyboard (↑↓ move · Space select · →/← expand · ⌘A all · Esc clear), skeleton loading, empty state, optional add-row action. Framed on its own; borderless inside <Card padding="none">. */
 export interface TableProps<T = any> {
+  /** fixed = columns never grow past the container: px/% widths are honoured and columns without a width share what's left. Use to rule out horizontal scroll. @default 'auto' */
+  layout?: 'auto' | 'fixed';
   columns: TableColumn<T>[];
   rows: T[];
   /** Unique key field. @default 'id' */
@@ -53,6 +55,8 @@ export interface TableProps<T = any> {
   maxHeight?: number | string;
   /** @default true when maxHeight is set */
   stickyHeader?: boolean;
+  /** Last-row "+ Add" action (a real button: Tab/Enter/Space). Only calls onAdd — the app creates/saves the record. Hidden while loading. */
+  addRow?: { onAdd: () => void; /** @default 'Add row' */ label?: React.ReactNode; disabled?: boolean };
   className?: string;
 }
 export declare function Table<T = any>(props: TableProps<T>): JSX.Element;

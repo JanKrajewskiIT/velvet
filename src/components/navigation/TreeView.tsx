@@ -1,5 +1,6 @@
 import { createUniqueId, For, Match, mergeProps, Switch } from 'solid-js';
 
+import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { createTreeFocus } from './createTreeFocus';
 import { createTreeKeyboard } from './createTreeKeyboard';
@@ -18,6 +19,7 @@ export type { TreeViewLabels, TreeViewMoveLabels, TreeViewProps };
  * Home/End · Enter select · * expand siblings. With `checkable`: tri-state checkboxes (parent = all / some / none of its leaves),
  * Space or click toggles; the value is the list of checked LEAF ids. With `draggable` and `onMove`, nodes can be dropped as
  * children of other nodes; keyboard users press Space (Ctrl+Space when checkable), navigate to a parent, then press Enter.
+ * With onMovePosition, edge drops reorder siblings, folder centers accept children, and Alt+arrows reorder or change parents.
  */
 export const TreeView = (props: TreeViewProps) => {
   const p = mergeProps(
@@ -25,6 +27,7 @@ export const TreeView = (props: TreeViewProps) => {
     props,
   );
   const model = createTreeModel(p);
+  const translate = useTranslate();
   const focus = createTreeFocus(model.rows, () => model.selected() ?? p.data[0]?.id);
   const labels = createTreeViewLabels(() => p.labels);
   const move = createTreeMove(p, labels, model, focus);
@@ -36,7 +39,9 @@ export const TreeView = (props: TreeViewProps) => {
   return (
     <>
       <span class="vui-sr-only" id={instructionsId}>
-        {labels().moveInstructions}
+        {p.onMovePosition && !p.labels?.moveInstructions
+          ? translate('velvet.navigation.treeView.positionInstructions')
+          : labels().moveInstructions}
       </span>
       <span class="vui-sr-only" aria-live="polite">
         {move.announcement()}

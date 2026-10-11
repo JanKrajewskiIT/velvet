@@ -1,4 +1,4 @@
-<!-- @dsCard group="13 Display" viewport="960x448" name="Markdown" subtitle="Safe Markdown → prose · lists · tasks · code · tables · quotes" -->
+<!-- @dsCard group="13 Display" viewport="960x720" name="Markdown" subtitle="Safe Markdown → prose · nested + task lists · setext · reference & auto links · hard breaks · unique heading ids" -->
 <!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
@@ -9,13 +9,16 @@
 <script type="text/babel">
 const NS = window.VelvetUIDesignSystem_ee2bd8;
 const { Markdown } = NS;
-const md=`## Release notes
-Velvet **2.4** adds atoms, a \`Count\` pill and *hover cards*. See the [migration guide](#).
+const md=`Release notes
+=============
+Velvet **2.4** adds atoms, a \`Count\` pill and _hover cards_. See the [migration guide][mig] or <https://velvet.dev/changelog>.  
+Shipped by the design-systems team.
 
 - Surface now paints every container
-- Field + Control power all inputs
-- [x] Ship DateTimePicker
-- [ ] Split per-component CSS
+  - Field + Control power all inputs
+    - incl. __Select__ and Combobox
+- [x] Ship **DateTimePicker**
+- [ ] Split per-component CSS — tracked at www.velvet.dev/roadmap
 
 > Tokens first, components second.
 
@@ -24,9 +27,16 @@ Velvet **2.4** adds atoms, a \`Count\` pill and *hover cards*. See the [migratio
 | --action-primary | velvet-700 | velvet-600 |
 | --bg-page | neutral-25 | neutral-950 |
 
+Usage
+-----
 \`\`\`css
 .vui-btn--primary{background:var(--button-primary-bg)}
-\`\`\``;
-const App=()=>(<div className="pane"><Markdown source={md} size="sm" /></div>);
+\`\`\`
+
+## Usage
+A repeated heading gets its own id.
+
+[mig]: #migration "Migration guide"`;
+const App=()=>{const ref=React.useRef(null);const[ids,setIds]=React.useState('');React.useEffect(()=>{setIds([...ref.current.querySelectorAll('[id]')].map(h=>'#'+h.id).join('  '));},[]);return(<div className="pane"><div ref={ref}><Markdown source={md} size="sm" /></div><span className="lbl">Heading ids: {ids}</span></div>);};
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script></body></html>

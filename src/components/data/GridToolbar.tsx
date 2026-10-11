@@ -4,7 +4,7 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { Button } from '../actions/Button';
 import { Popover } from '../feedback/Popover';
 import { SearchInput } from '../forms/SearchInput';
-import { emptyQuery, QueryBuilder } from '../patterns/QueryBuilder';
+import { QueryBuilder } from '../patterns/QueryBuilder';
 import { Count } from '../primitives/Count';
 import { ColumnManager } from './ColumnManager';
 import type { DataGridController } from './dataGridController';
@@ -32,6 +32,9 @@ export const GridToolbar = <T extends object>(props: GridToolbarProps<T>) => {
       canHide: column.canHide,
       canPin: column.canPin,
       canMove: column.canMove,
+      hideable: column.hideable,
+      pinnable: column.pinnable,
+      movable: column.movable,
     }));
   };
   const hasToolbar = () =>
@@ -39,6 +42,7 @@ export const GridToolbar = <T extends object>(props: GridToolbarProps<T>) => {
     !!props.grid.config.filterFields ||
     props.grid.config.columnManager ||
     props.grid.config.viewSettings ||
+    !props.grid.view.isDefault() ||
     props.grid.config.onExport !== undefined ||
     !!props.grid.config.toolbarEnd ||
     (props.grid.config.selectable && !!props.grid.config.bulkActions);
@@ -94,10 +98,15 @@ export const GridToolbar = <T extends object>(props: GridToolbarProps<T>) => {
                   fields={fields()}
                   value={props.grid.view.query()}
                   onValueChange={props.grid.view.setQuery}
+                  clearable
                 />
                 <Show when={props.grid.view.activeFilters() > 0}>
                   <div class="vui-dgrid__popfoot">
-                    <Button size="sm" variant="ghost" onClick={() => props.grid.view.setQuery(emptyQuery(fields()))}>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => props.grid.view.setQuery(props.grid.view.initial().query)}
+                    >
                       {translate('velvet.data.dataGrid.resetFilters')}
                     </Button>
                   </div>
@@ -118,6 +127,7 @@ export const GridToolbar = <T extends object>(props: GridToolbarProps<T>) => {
               <ColumnManager
                 columns={managedColumns()}
                 value={props.grid.view.columnState()}
+                resetValue={props.grid.view.initial().columns}
                 pinRight
                 minVisible={1}
                 onValueChange={props.grid.view.setColumnState}
@@ -132,6 +142,11 @@ export const GridToolbar = <T extends object>(props: GridToolbarProps<T>) => {
               onClick={() => exportGridRows(props.grid.view.rows(), props.grid.view.cols(), props.grid.config.onExport)}
             >
               {translate('velvet.data.dataGrid.export')}
+            </Button>
+          </Show>
+          <Show when={!props.grid.view.isDefault()}>
+            <Button size="sm" variant="ghost" iconLeft="rotate-ccw" onClick={props.grid.view.reset}>
+              {translate('velvet.data.dataGrid.resetView')}
             </Button>
           </Show>
           {props.grid.config.toolbarEnd}

@@ -52,7 +52,12 @@ export const normalizeGridView = <T extends object>(
     sort: sortedColumn && sortedColumn.sortable !== false ? (state.sort ?? null) : null,
     columns: reconcileColumnState(state.columns ?? [], managed, 1),
     widths: Object.fromEntries(
-      columns.map((column) => [column.key, gridColumnWidth(column, state.widths?.[column.key])]),
+      columns.flatMap((column) => {
+        const width = state.widths?.[column.key];
+        return typeof width === 'number' && Number.isFinite(width)
+          ? [[column.key, gridColumnWidth(column, width)]]
+          : [];
+      }),
     ),
   };
 };

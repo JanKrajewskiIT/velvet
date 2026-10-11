@@ -4,6 +4,7 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { fmtDate } from '../../utils/date';
 import { IconButton } from '../actions/IconButton';
+import { OrganizerDeleteConfirm } from './OrganizerDeleteConfirm';
 import { eventEnd, eventStart, type OrganizerEvent } from './organizerEvents';
 
 const RANGE_DAY: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric' };
@@ -18,6 +19,9 @@ export interface OrganizerEventRowProps {
   onSelect: () => void;
   onEdit: () => void;
   onDelete: () => void;
+  confirmingDelete: boolean;
+  onCancelDelete: () => void;
+  onConfirmDelete: () => void;
   onDragStart: (dataTransfer: DataTransfer | null) => void;
   onDragEnd: () => void;
 }
@@ -35,9 +39,10 @@ export const OrganizerEventRow = (props: OrganizerEventRowProps) => {
 
   return (
     <li
+      data-event-id={props.event.id}
       class={cx('vui-organizer__ev', props.dragging && 'vui-organizer__ev--drag')}
       style={{ '--ec': props.event.color ?? 'var(--dv-1)' }}
-      draggable={props.draggable}
+      draggable={props.draggable && !props.confirmingDelete}
       onDragStart={(e) => props.onDragStart(e.dataTransfer)}
       onDragEnd={() => props.onDragEnd()}
     >
@@ -53,18 +58,30 @@ export const OrganizerEventRow = (props: OrganizerEventRowProps) => {
         </Show>
       </button>
       <Show when={props.editable}>
-        <IconButton
-          icon="pencil"
-          label={translate('velvet.patterns.calendarOrganizer.editEvent', { title: props.event.title })}
-          size="sm"
-          onClick={() => props.onEdit()}
-        />
-        <IconButton
-          icon="trash-2"
-          label={translate('velvet.patterns.calendarOrganizer.deleteEvent', { title: props.event.title })}
-          size="sm"
-          onClick={() => props.onDelete()}
-        />
+        <Show
+          when={!props.confirmingDelete}
+          fallback={
+            <OrganizerDeleteConfirm
+              title={props.event.title}
+              onCancel={props.onCancelDelete}
+              onConfirm={props.onConfirmDelete}
+            />
+          }
+        >
+          <IconButton
+            icon="pencil"
+            label={translate('velvet.patterns.calendarOrganizer.editEvent', { title: props.event.title })}
+            size="sm"
+            onClick={() => props.onEdit()}
+          />
+          <IconButton
+            data-delete=""
+            icon="trash-2"
+            label={translate('velvet.patterns.calendarOrganizer.deleteEvent', { title: props.event.title })}
+            size="sm"
+            onClick={() => props.onDelete()}
+          />
+        </Show>
       </Show>
     </li>
   );

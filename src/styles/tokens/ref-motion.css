@@ -1,6 +1,6 @@
 /* REF · MOTION & LAYERS — 5 durations, 5 curves, blur, z-index, opacity. Composed intents live in sys-motion.css. */
 :root{
---ease-linear:linear;/* @kind other */--ease-standard:cubic-bezier(.2,0,0,1);/* @kind other */--ease-emphasized:cubic-bezier(.3,0,0,1);/* @kind other */--ease-exit:cubic-bezier(.4,0,1,1);/* @kind other */--ease-spring:cubic-bezier(.34,1.56,.64,1);/* @kind other */
+--ease-linear:linear;/* @kind other */--ease-back:cubic-bezier(.34,1.56,.64,1);/* @kind other */--ease-standard:cubic-bezier(.2,0,0,1);/* @kind other */--ease-emphasized:cubic-bezier(.3,0,0,1);/* @kind other */--ease-exit:cubic-bezier(.4,0,1,1);/* @kind other */--ease-spring:cubic-bezier(.34,1.56,.64,1);/* @kind other */
 --dur-instant:80ms;/* @kind other */--dur-fast:140ms;/* @kind other */--dur-base:200ms;/* @kind other */--dur-slow:320ms;/* @kind other */--dur-slower:500ms;/* @kind other */
 --blur-sm:4px;/* @kind other */--blur-md:12px;/* @kind other */--blur-lg:24px;/* @kind other */
 --z-base:0;/* @kind other */--z-raised:10;/* @kind other */--z-dropdown:1000;/* @kind other */--z-sticky:1100;/* @kind other */--z-overlay:1300;/* @kind other */--z-modal:1400;/* @kind other */--z-toast:1500;/* @kind other */--z-tooltip:1600;/* @kind other */

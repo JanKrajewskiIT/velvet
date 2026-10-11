@@ -292,6 +292,8 @@ export const patternsEn = defineDictionary({
     hintSend: '↵ send · ⇧↵ new line',
   },
   queryBuilder: {
+    empty: 'No conditions — every record matches.',
+    allRecords: 'All records',
     clearRules: 'Clear conditions',
     moveUp: 'Move condition or group up',
     moveDown: 'Move condition or group down',

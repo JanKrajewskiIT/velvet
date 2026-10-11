@@ -3,6 +3,7 @@ import { type Accessor, createMemo, type JSX, untrack } from 'solid-js';
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
 import { clamp } from '../../utils/math';
+import { columnCapabilities } from './columnCapabilities';
 import type { ColumnPin, ColumnState, ManagedColumn } from './columnManagerTypes';
 import { initialManagedColumns, reconcileColumnState } from './columnState';
 import { type Zone, type ZoneKey, zoneOf, ZONES } from './columnZones';
@@ -11,6 +12,7 @@ export interface ColumnModelOptions {
   columns: Accessor<ManagedColumn[]>;
   value: Accessor<ColumnState[] | undefined>;
   defaultValue: Accessor<ColumnState[] | undefined>;
+  resetValue: Accessor<ColumnState[] | undefined>;
   onChange: (state: ColumnState[]) => void;
   pinRight: Accessor<boolean>;
   maxPinned: Accessor<number | undefined>;
@@ -57,16 +59,16 @@ export const createColumnModel = (options: ColumnModelOptions): ColumnModel => {
   };
   const labelOf = (key: string) => options.columns().find((c) => c.key === key)?.label ?? key;
   const isLocked = (key: string) => !!options.columns().find((c) => c.key === key)?.locked;
-  const capability = (key: string, name: 'canHide' | 'canPin' | 'canMove') => {
+  const capability = (key: string, name: keyof ReturnType<typeof columnCapabilities>) => {
     const column = options.columns().find((candidate) => candidate.key === key);
-    return !!column && !column.locked && column[name] !== false;
+    return !!column && columnCapabilities(column)[name];
   };
   const canHide = (key: string) =>
-    capability(key, 'canHide') &&
+    capability(key, 'hide') &&
     (!state().find((column) => column.key === key)?.visible ||
       state().filter((column) => column.visible).length > (options.minVisible() ?? 0));
-  const canPin = (key: string) => capability(key, 'canPin');
-  const canMove = (key: string) => capability(key, 'canMove');
+  const canPin = (key: string) => capability(key, 'pin');
+  const canMove = (key: string) => capability(key, 'move');
   const nameOf = (key: string) => {
     const label = labelOf(key);
     return typeof label === 'string' ? label : key;
@@ -106,7 +108,14 @@ export const createColumnModel = (options: ColumnModelOptions): ColumnModel => {
   };
   const toggleVisible = (c: ColumnState) =>
     canHide(c.key) && setState(state().map((x) => (x.key === c.key ? { ...x, visible: !x.visible } : x)));
-  const reset = () => setState(initialManagedColumns(options.columns()));
+  const reset = () =>
+    setState(
+      reconcileColumnState(
+        options.resetValue() ?? initialManagedColumns(options.columns()),
+        options.columns(),
+        options.minVisible(),
+      ),
+    );
 
   return {
     state,

@@ -5,7 +5,7 @@ import { cx } from '../../utils/cx';
 import { ColumnResize } from '../primitives/ColumnResize';
 import { Glyph } from '../primitives/Glyph';
 import type { DataGridController } from './dataGridController';
-import { columnName, DEFAULT_COLUMN_WIDTH } from './gridColumns';
+import { columnName } from './gridColumns';
 import { nextSort } from './rowData';
 
 export interface GridHeaderCellProps<T extends object> {
@@ -60,7 +60,7 @@ export const GridHeaderCell = <T extends object>(props: GridHeaderCellProps<T>) 
             min={current().minWidth}
             max={current().maxWidth}
             onResize={(width) => props.grid.layout.setWidth(props.columnKey, width)}
-            onReset={() => props.grid.layout.setWidth(props.columnKey, current().width ?? DEFAULT_COLUMN_WIDTH)}
+            onReset={() => props.grid.view.resetWidth(props.columnKey)}
           />
         </div>
       )}

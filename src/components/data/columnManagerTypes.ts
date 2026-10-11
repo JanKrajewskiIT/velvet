@@ -14,6 +14,10 @@ export interface ManagedColumn {
   canHide?: boolean;
   canPin?: boolean;
   canMove?: boolean;
+  /** Reference aliases; canHide/canPin/canMove take precedence. */
+  hideable?: boolean;
+  pinnable?: boolean;
+  movable?: boolean;
 }
 
 export interface ColumnState {
@@ -27,6 +31,8 @@ export interface ColumnManagerProps {
   columns: ManagedColumn[];
   value?: ColumnState[];
   defaultValue?: ColumnState[];
+  /** What Reset restores; defaults to the column definitions. */
+  resetValue?: ColumnState[];
   onChange?: (state: ColumnState[]) => void;
   /** Preferred name — same callback as onChange (onChange stays as an alias). */
   onValueChange?: (state: ColumnState[]) => void;

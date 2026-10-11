@@ -20,6 +20,7 @@ export { type CalendarEvent, EventCalendar, type EventCalendarProps } from './Ev
 export { FeatureCard, type FeatureCardProps } from './FeatureCard';
 export { FlipCard, type FlipCardProps } from './FlipCard';
 export { parseGridView, serializeGridView } from './gridViewCodec';
+export { defaultGridView, type GridViewOptions, reconcileGridView } from './gridViewHelpers';
 export { Kanban, type KanbanCard, type KanbanColumn, type KanbanProps } from './Kanban';
 export { List, type ListItemData, type ListProps } from './List';
 export { type LogLevel, type LogLine } from './logLines';

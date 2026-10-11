@@ -31,9 +31,11 @@ export interface MenuProps {
   onOpenChange?: (open: boolean) => void;
   /** Min panel width (px) */
   width?: number;
+  /** Where item icons sit. end = label first, icon trailing on the right (row/action menus where the verb should lead). @default 'start' */
+  iconPosition?: 'start' | 'end';
   className?: string;
 }
 export declare function Menu(props: MenuProps): JSX.Element;
 /** The bare menu panel — for custom positioning (ContextMenu uses it). onClose(refocus) */
-export interface MenuPanelProps { items: MenuItem[]; onClose?: (refocus: boolean) => void; style?: React.CSSProperties; className?: string; autoFocus?: boolean }
+export interface MenuPanelProps { items: MenuItem[]; onClose?: (refocus: boolean) => void; style?: React.CSSProperties; className?: string; autoFocus?: boolean; iconPosition?: 'start' | 'end' }
 export declare function MenuPanel(props: MenuPanelProps): JSX.Element;

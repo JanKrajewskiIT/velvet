@@ -13,7 +13,7 @@ export type FilledIconBase = IconName extends infer Name
 
 const hasFilledTwin = (name: string): name is FilledIconBase => `${name}${FILLED_SUFFIX}` in VelvetIcons;
 
-/** Base names that have a `<name>-filled` twin. Filled = selected state only (active tab, pressed toggle), never decoration. */
+/** Base names with a filled twin for selected states or contexts where a filled glyph is required, such as print. */
 export const IconFilled: readonly FilledIconBase[] = Object.keys(VelvetIcons)
   .filter((name) => name.endsWith(FILLED_SUFFIX))
   .map((name) => name.slice(0, -FILLED_SUFFIX.length))

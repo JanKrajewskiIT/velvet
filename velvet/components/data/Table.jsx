@@ -5,7 +5,7 @@ import { Button } from '../actions/Button.jsx';
 import { Glyph } from '../primitives/Glyph.jsx';
 import { cx } from '../primitives/cx.js';
 import { ColumnResize } from '../primitives/ColumnResize.jsx';
-export function Table({ columns = [], rows = [], rowKey = 'id', selectable = false, selected = [], onSelectedChange, bulkActions, sort, defaultSort, onSortChange, loading = false, loadingRows = 4, empty = 'Nothing here yet.', title, count, toolbar, resizable = false, renderExpanded, maxHeight, stickyHeader, className }) {
+export function Table({ layout = 'auto', columns = [], rows = [], rowKey = 'id', selectable = false, selected = [], onSelectedChange, bulkActions, sort, defaultSort, onSortChange, loading = false, loadingRows = 4, empty = 'Nothing here yet.', title, count, toolbar, resizable = false, renderExpanded, maxHeight, stickyHeader, addRow, className }) {
   const [innerSort, setInnerSort] = React.useState(defaultSort || null);
   const curSort = sort !== undefined ? sort : innerSort;
   const [widths, setWidths] = React.useState({});
@@ -101,7 +101,7 @@ export function Table({ columns = [], rows = [], rowKey = 'id', selectable = fal
         </div>
       )}
       <div ref={scrollRef} onScroll={onScroll} className={cx('vui-table__scroll', scrolled.l && 'vui-table__scroll--l', scrolled.r && 'vui-table__scroll--r')} style={maxHeight ? { maxHeight, overflowY: 'auto' } : undefined}>
-        <table className={cx('vui-table', sticky && 'vui-table--sticky', anyWidth && 'vui-table--fixed', hasPins && 'vui-table--pins')} aria-busy={loading || undefined}>
+        <table className={cx('vui-table', sticky && 'vui-table--sticky', anyWidth && 'vui-table--fixed', layout === 'fixed' && 'vui-table--layout-fixed', hasPins && 'vui-table--pins')} aria-busy={loading || undefined}>
           <thead ref={theadRef}><tr>
             {selectable && <th className={cx('vui-table__check', checkPin && 'vui-table__pin vui-table__pin--left')} style={checkPin ? { position: 'sticky', left: 0 } : undefined}><Checkbox aria-label="Select all" checked={allOn} onChange={toggleAll} disabled={loading} indeterminate={someOn} /></th>}
             {columns.map((c) => {
@@ -131,6 +131,7 @@ export function Table({ columns = [], rows = [], rowKey = 'id', selectable = fal
               </React.Fragment>
             ); })}
             {!loading && !rows.length && <tr><td className="vui-table__empty" colSpan={span}>{empty}</td></tr>}
+            {!loading && addRow && <tr className="vui-table__addrow"><td colSpan={span}><button type="button" className="vui-table__addbtn" disabled={addRow.disabled} onClick={addRow.onAdd}><Glyph name="plus" />{addRow.label ?? 'Add row'}</button></td></tr>}
           </tbody>
         </table>
       </div>

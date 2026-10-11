@@ -15,18 +15,14 @@
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.SearchInput" size="sm" placeholder="Search role or company…" value="{{ query }}" on-value-change="{{ setQuery }}" aria-label="Search offers" hint-size="100%,36px"></x-import>
 </div>
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.ChipGroup" size="sm" label="Filter by status" options="{{ statusOptions }}" value="{{ statuses }}" on-value-change="{{ setStatuses }}" hint-size="420px,32px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.ChipGroup" size="sm" label="Filter by tag" options="{{ tagOptions }}" value="{{ tagFilter }}" on-value-change="{{ setTagFilter }}" hint-size="420px,32px"></x-import>
 <div style="flex:1"></div>
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.OptionSwitcher" size="sm" label="View" icon-only="{{ true }}" options="{{ viewOptions }}" value="{{ view }}" on-value-change="{{ setView }}" hint-size="76px,32px"></x-import>
 </div>
 <sc-if value="{{ isTable }}" hint-placeholder-val="{{ true }}">
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));grid-template-columns:minmax(0,1fr) auto;gap:var(--space-4);align-items:start">
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" padding="none" style="min-width:0" hint-size="100%,520px">
-<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Table" columns="{{ columns }}" rows="{{ rows }}" selectable="{{ compare }}" selected="{{ selected }}" on-selected-change="{{ setSelected }}" default-sort="{{ defaultSort }}" empty="{{ empty }}" hint-size="100%,500px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Table" layout="fixed" columns="{{ columns }}" rows="{{ rows }}" selectable="{{ compare }}" selected="{{ selected }}" on-selected-change="{{ setSelected }}" default-sort="{{ defaultSort }}" empty="{{ empty }}" hint-size="100%,500px"></x-import>
 </x-import>
-<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Coming up" description="{{ upcomingDesc }}" actions="{{ upcomingAction }}" style="position:sticky;top:96px" hint-size="300px,460px">
-<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.EventCalendar" events="{{ calEvents }}" default-value="{{ calStart }}" locale="en-GB" empty-text="No interviews this day." hint-size="252px,400px"></x-import>
-</x-import>
-</div>
 </sc-if>
 <sc-if value="{{ isBoard }}" hint-placeholder-val="{{ false }}">
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Kanban" columns="{{ kanbanColumns }}" cards="{{ kanbanCards }}" on-cards-change="{{ onCardsChange }}" on-card-click="{{ onCardClick }}" on-add-card="{{ onAddCard }}" hint-size="100%,560px"></x-import>
@@ -39,7 +35,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = { query: '', statuses: [], view: 'table', compare: false, selected: [], compareOpen: false, insights: null, insightsStatus: 'idle' };
+  state = { query: '', statuses: [], tagFilter: [], view: 'table', compare: false, selected: [], compareOpen: false, insights: null, insightsStatus: 'idle' };
   renderVals() {
     const app = this.props.app || (window.RecronStandalone && window.VelvetUIDesignSystem_ee2bd8 && window.RecronStandalone(this));
     if (!app) { clearTimeout(this._wt); this._wt = setTimeout(() => this.forceUpdate(), 80); return {}; }
@@ -48,27 +44,30 @@ class Component extends DCLogic {
     const s = this.state;
     const counts = {}; offers.forEach((o) => { counts[o.status] = (counts[o.status] || 0) + 1; });
     const q = s.query.trim().toLowerCase();
-    const rows = offers.filter((o) => (!s.statuses.length || s.statuses.includes(o.status)) && (!q || (o.name + ' ' + o.company + ' ' + o.city).toLowerCase().includes(q)));
+    const rows = offers.filter((o) => (!s.statuses.length || s.statuses.includes(o.status)) && (!s.tagFilter.length || s.tagFilter.some((x) => o.tags.includes(x))) && (!q || (o.name + ' ' + o.company + ' ' + o.city).toLowerCase().includes(q)));
     const nextOf = (id) => interviews.filter((i) => i.offerId === id && i.status === 'scheduled' && new Date(i.at) >= D.TODAY).sort((a, b) => new Date(a.at) - new Date(b.at))[0];
     const lastStage = (id) => { const l = interviews.filter((i) => i.offerId === id && i.status === 'done').sort((a, b) => new Date(b.at) - new Date(a.at))[0]; return l && l.stage; };
     const statusBadge = (st) => h(NS.Badge, { tone: D.STATUS[st].tone, dot: true }, D.STATUS[st].label);
-    const roleCell = (o) => h('button', { type: 'button', onClick: () => app.openOffer(o.id), style: { display: 'flex', alignItems: 'center', gap: 'var(--space-3)', padding: 0, border: 0, background: 'none', font: 'inherit', color: 'inherit', textAlign: 'left', cursor: 'pointer', minWidth: 0 } },
+    const roleCell = (o) => h('button', { type: 'button', onClick: () => app.openOffer(o.id), style: { width: '100%', minWidth: 0, display: 'flex', alignItems: 'center', gap: 'var(--space-3)', padding: 0, border: 0, background: 'none', font: 'inherit', color: 'inherit', textAlign: 'left', cursor: 'pointer', minWidth: 0 } },
       h(NS.Avatar, { name: o.company, color: 'auto', size: 'sm' }),
-      h('span', { style: { display: 'flex', flexDirection: 'column', minWidth: 0 } },
-        h('span', { style: { fontWeight: 'var(--type-title-weight)', color: 'var(--fg-primary)' } }, o.name),
-        h('span', { style: { fontSize: 'var(--type-caption-size)', color: 'var(--fg-secondary)' } }, o.company + ' · ' + o.city)));
+      h('span', { style: { display: 'flex', flexDirection: 'column', minWidth: 0, flex: 1 } },
+        h('span', { style: { fontWeight: 'var(--type-title-weight)', color: 'var(--fg-primary)', textWrap: 'pretty' } }, o.name),
+        h('span', { style: { display: 'flex', alignItems: 'center', minWidth: 0, gap: 'var(--space-2)', fontSize: 'var(--type-caption-size)', color: 'var(--fg-secondary)' } }, h('span', { title: o.intermediary ? 'via ' + o.intermediary : undefined, style: { minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' } }, o.company + ' · ' + (o.workMode === 'Remote' ? 'Remote' : o.city + ' · ' + o.workMode) + (o.intermediary ? ' · via ' + o.intermediary : '')),
+          o.tags.length ? h('span', { title: o.tags.join(', '), style: { display: 'inline-flex', flex: 'none', gap: 3 } }, o.tags.map((x) => h('span', { key: x, style: { width: 8, height: 8, borderRadius: '50%', background: U.tagColor(app.tags, x) } }))) : null)));
     const matchCell = (o) => o.match == null ? h('span', { style: { color: 'var(--fg-tertiary)', fontSize: 'var(--type-caption-size)' } }, 'Not run')
-      : h('span', { style: { display: 'inline-flex', alignItems: 'center', gap: 'var(--space-2)', minWidth: 96 } }, h(NS.Meter, { value: o.match, size: 'sm', tone: o.match >= 75 ? 'success' : o.match >= 50 ? 'warning' : 'danger', style: { width: 48 } }), h('span', { style: { fontVariantNumeric: 'tabular-nums' } }, o.match + '%'));
+      : h('span', { style: { display: 'inline-flex', alignItems: 'center', gap: 'var(--space-2)', minWidth: 0, width: '100%' } }, h(NS.Meter, { value: o.match, size: 'sm', tone: o.match >= 75 ? 'success' : o.match >= 50 ? 'warning' : 'danger', style: { width: 48 } }), h('span', { style: { fontVariantNumeric: 'tabular-nums' } }, o.match + '%'));
     const nextCell = (o) => { const n = nextOf(o.id); if (n) return h('span', { style: { display: 'flex', flexDirection: 'column' } }, h('span', null, n.stage), h('span', { style: { fontSize: 'var(--type-caption-size)', color: 'var(--fg-secondary)' } }, U.relDay(n.at) + ', ' + U.fmtTime(n.at))); const l = lastStage(o.id); return h('span', { style: { color: 'var(--fg-tertiary)' } }, l ? l + ' done' : '—'); };
-    const rowMenu = (o) => h(NS.Menu, { align: 'end', trigger: h(NS.IconButton, { icon: 'more-horizontal', label: 'Actions for ' + o.name, size: 'sm' }), items: [
+    const rowMenu = (o) => h('span', { style: { display: 'inline-flex', paddingRight: 'var(--space-2)' } }, h(NS.Menu, { align: 'end', iconPosition: 'end', width: 220, trigger: h(NS.IconButton, { icon: 'more-horizontal', label: 'Actions for ' + o.name, size: 'sm' }), items: [
       { label: 'Open', icon: 'arrow-up-right', onSelect: () => app.openOffer(o.id) },
+      { label: 'Edit', icon: 'pencil', onSelect: () => app.editOffer(o.id) },
+      { label: 'Duplicate', icon: 'copy', onSelect: () => app.duplicateOffer(o.id) },
+      { label: 'Edit tags', icon: 'tag', onSelect: () => app.openTags && app.openTags(o.id) },
       { label: 'Run CV match', icon: 'sparkles', onSelect: () => app.openOffer(o.id, 'match') },
       { section: 'Move to' },
-      ...D.STATUS_ORDER.map((st) => ({ label: D.STATUS[st].label, checked: o.status === st, onSelect: () => { app.updateOffer(o.id, { status: st }); app.toast('Moved to ' + D.STATUS[st].label, 'neutral', o.name); } })),
+      ...D.STATUS_ORDER.map((st) => ({ label: D.STATUS[st].label, checked: o.status === st, onSelect: () => app.decide(o.id, st) })),
       { divider: true },
       { label: 'Delete', icon: 'trash-2', danger: true, onSelect: () => app.removeOffer(o.id) }
-    ] });
-    const upcomingAll = interviews.filter((i) => i.status === 'scheduled' && new Date(i.at) >= D.TODAY && offers.some((o) => o.id === i.offerId)).sort((a, b) => new Date(a.at) - new Date(b.at));
+    ] }));
     const sel = offers.filter((o) => s.selected.includes(o.id));
     const maxSalary = Math.max(1, ...sel.map((o) => U.monthly(o) || 0));
     const stageIdx = (o) => { const l = lastStage(o.id); return l ? (D.STAGES.indexOf(l) + 1) * 20 : o.status === 'applied' ? 10 : 0; };
@@ -77,33 +76,31 @@ class Component extends DCLogic {
     return {
       headerActions: h(React.Fragment, null,
         h(NS.Button, { variant: s.compare ? 'soft' : 'secondary', iconLeft: 'layers', 'aria-pressed': s.compare, onClick: () => this.setState({ compare: !s.compare, selected: [], view: 'table' }) }, s.compare ? 'Done comparing' : 'Compare'),
+        app.manageTags ? h(NS.Button, { variant: 'secondary', iconLeft: 'tag', onClick: app.manageTags }, 'Tags') : null,
         h(NS.Button, { iconLeft: 'plus', onClick: app.openAdd }, 'Add offer')),
       query: s.query, setQuery: (v) => this.setState({ query: v }),
       statusOptions: D.STATUS_ORDER.map((st) => ({ value: st, label: D.STATUS[st].label, count: counts[st] || 0 })),
       statuses: s.statuses, setStatuses: (v) => this.setState({ statuses: v }),
+      tagOptions: app.tags.filter((tg) => offers.some((o) => o.tags.includes(tg.name))).map((tg) => ({ value: tg.name, count: offers.filter((o) => o.tags.includes(tg.name)).length, label: h('span', { style: { display: 'inline-flex', alignItems: 'center', gap: 6 } }, h('span', { style: { width: 8, height: 8, borderRadius: '50%', background: tg.color } }), tg.name) })),
+      tagFilter: s.tagFilter, setTagFilter: (v) => this.setState({ tagFilter: v }),
       viewOptions: [{ value: 'table', label: 'Table', icon: 'list' }, { value: 'board', label: 'Board', icon: 'kanban' }],
       view: s.view, setView: (v) => this.setState({ view: v, compare: v === 'board' ? false : s.compare }),
       isTable: s.view === 'table', isBoard: s.view === 'board',
       defaultSort: { key: 'added', dir: 'desc' },
       columns: [
         { key: 'name', label: 'Role', render: roleCell, sortable: true, sortValue: (o) => o.name },
-        { key: 'status', label: 'Status', render: (o) => statusBadge(o.status), sortable: true, sortValue: (o) => D.STATUS_ORDER.indexOf(o.status) },
-        { key: 'salary', label: 'Salary', render: (o) => U.salary(o), sortable: true, sortValue: (o) => U.monthly(o) || 0, hideOnMobile: true },
-        { key: 'workMode', label: 'Mode', hideOnMobile: true },
-        { key: 'match', label: 'CV match', render: matchCell, sortable: true, sortValue: (o) => o.match ?? -1, hideOnMobile: true },
-        { key: 'added', label: 'Added', render: (o) => U.relDay(o.added), sortable: true, sortValue: (o) => o.added, hideOnMobile: true },
-        { key: 'menu', label: h('span', { className: 'vui-sr-only' }, 'Actions'), render: rowMenu, width: 48, align: 'right' }
+        { key: 'status', label: 'Status', width: 150, render: (o) => (o.reasons || []).length && o.status !== 'new' ? h('span', { style: { display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 2 } }, statusBadge(o.status), h('span', { title: o.reasons.join(' · '), style: { fontSize: 'var(--type-caption-size)', color: 'var(--fg-tertiary)', display: 'block', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' } }, o.reasons[0] + (o.reasons.length > 1 ? ' +' + (o.reasons.length - 1) : ''))) : statusBadge(o.status), sortable: true, sortValue: (o) => D.STATUS_ORDER.indexOf(o.status) },
+        { key: 'salary', label: 'Salary', width: 132, render: (o) => { const s = U.salary(o); const k = s.lastIndexOf(' '); return k < 0 ? s : h('span', { style: { display: 'flex', flexDirection: 'column', whiteSpace: 'nowrap' } }, h('span', { style: { fontVariantNumeric: 'tabular-nums' } }, s.slice(0, k)), h('span', { style: { fontSize: 'var(--type-caption-size)', color: 'var(--fg-tertiary)' } }, s.slice(k + 1))); }, sortable: true, sortValue: (o) => U.monthly(o) || 0, hideOnMobile: true },
+        { key: 'match', label: 'CV match', width: 120, render: matchCell, sortable: true, sortValue: (o) => o.match ?? -1, hideOnMobile: true },
+        { key: 'added', label: 'Added', width: 104, render: (o) => h('span', { style: { whiteSpace: 'nowrap' } }, U.relDay(o.added)), sortable: true, sortValue: (o) => o.added, hideOnMobile: true },
+        { key: 'menu', label: h('span', { className: 'vui-sr-only' }, 'Actions'), render: rowMenu, width: 56, align: 'right' }
       ],
-      upcomingDesc: (() => { const n = upcomingAll.length; return n ? n + ' scheduled interview' + (n === 1 ? '' : 's') : 'Nothing scheduled'; })(),
-      upcomingAction: h(NS.Button, { size: 'sm', variant: 'ghost', iconRight: 'arrow-right', onClick: () => app.go('interviews') }, 'All'),
-      calEvents: upcomingAll.map((i) => { const o = offers.find((x) => x.id === i.offerId); const d = new Date(i.at); return { id: i.id, date: d, time: String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'), title: i.stage + ' · ' + (o ? o.company : ''), description: o ? o.name : undefined, tone: { Screening: 'info', Technical: 'brand', HR: 'success', Offer: 'warning' }[i.stage] || 'brand' }; }),
-      calStart: upcomingAll.length ? new Date(upcomingAll[0].at) : D.TODAY,
       rows, compare: s.compare, selected: s.selected, setSelected,
-      empty: offers.length ? h(NS.EmptyState, { size: 'sm', icon: 'search', title: 'No offers match', description: 'Try another status or search.', actions: h(NS.Button, { size: 'sm', variant: 'secondary', onClick: () => this.setState({ query: '', statuses: [] }) }, 'Clear filters') })
+      empty: offers.length ? h(NS.EmptyState, { size: 'sm', icon: 'search', title: 'No offers match', description: 'Try another status or search.', actions: h(NS.Button, { size: 'sm', variant: 'secondary', onClick: () => this.setState({ query: '', statuses: [], tagFilter: [] }) }, 'Clear filters') })
         : h(NS.EmptyState, { size: 'md', icon: 'briefcase', title: 'Track your first offer', description: 'Paste a link from LinkedIn, JustJoin.it or any job board — Recron reads it and fills in the details.', actions: h(NS.Button, { size: 'sm', iconLeft: 'plus', onClick: app.openAdd }, 'Add offer') }),
       kanbanColumns: D.STATUS_ORDER.map((st) => ({ id: st, title: D.STATUS[st].label, color: D.STATUS[st].color })),
       kanbanCards: rows.map((o) => ({ id: o.id, column: o.status, title: o.name, tag: o.workMode, tagTone: o.workMode === 'Remote' ? 'success' : 'neutral', meta: o.company + ' · ' + U.salary(o), assignee: h(NS.Avatar, { name: o.company, color: 'auto', size: 'xs' }) })),
-      onCardsChange: (cards) => app.setOffers(offers.map((o) => { const c = cards.find((x) => x.id === o.id); return c && c.column !== o.status ? { ...o, status: c.column } : o; })),
+      onCardsChange: (cards) => { const moved = cards.find((c) => { const o = offers.find((x) => x.id === c.id); return o && o.status !== c.column; }); if (moved) app.decide(moved.id, moved.column); },
       onCardClick: (c) => app.openOffer(c.id),
       onAddCard: app.openAdd,
       compareItems, noun: ['offer', 'offers'],

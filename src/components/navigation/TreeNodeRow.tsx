@@ -6,6 +6,7 @@ import { Chevron } from '../primitives/Chevron';
 import { Glyph } from '../primitives/Glyph';
 import type { TreeController } from './treeController';
 import { checkStateOf, isBranch, type NodeRow } from './treeData';
+import { canNestIn, type TreeMovePosition } from './treeMoves';
 
 export interface TreeNodeRowProps {
   tree: TreeController;
@@ -21,6 +22,12 @@ export const TreeNodeRow = (props: TreeNodeRowProps) => {
   const branch = () => isBranch(node());
   const isOpen = () => branch() && props.tree.model.open().has(node().id);
   const checkState = () => checkStateOf(node(), props.tree.model.checkedSet());
+  const dropPosition = (event: DragEvent & { currentTarget: HTMLLIElement }): TreeMovePosition => {
+    if (!props.tree.config.onMovePosition) return 'inside';
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const y = (event.clientY - bounds.top) / bounds.height;
+    return canNestIn(node()) && y > 0.28 && y < 0.72 ? 'inside' : y < 0.5 ? 'before' : 'after';
+  };
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events -- rows use roving tabindex and the tree owner handles keyboard activation (Enter/Space)
     <li
@@ -39,8 +46,8 @@ export const TreeNodeRow = (props: TreeNodeRowProps) => {
       class={cx(
         'vui-tree__row',
         props.tree.model.selected() === node().id && 'vui-tree__row--sel',
-        props.tree.move.sourceId() === node().id && 'vui-tree__row--moving',
-        props.tree.move.targetId() === node().id && 'vui-tree__row--drop-target',
+        props.tree.move.sourceId() === node().id && 'vui-tree__row--dragging',
+        props.tree.move.targetId() === node().id && `vui-tree__row--drop-${props.tree.move.position()}`,
       )}
       style={{ '--lvl': props.row.level - 1 }}
       onClick={() => {
@@ -61,18 +68,23 @@ export const TreeNodeRow = (props: TreeNodeRowProps) => {
         props.tree.move.start(node().id, 'pointer');
       }}
       onDragOver={(event) => {
-        if (!props.tree.move.canDrop(node().id)) return;
+        const position = dropPosition(event);
+        if (!props.tree.move.canDrop(node().id, position)) {
+          props.tree.move.setTarget(null);
+          return;
+        }
         event.preventDefault();
         if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
-        props.tree.move.setTarget(node().id);
+        props.tree.move.setTarget(node().id, position);
       }}
       onDragLeave={() => {
         if (props.tree.move.targetId() === node().id) props.tree.move.setTarget(null);
       }}
       onDrop={(event) => {
-        if (!props.tree.move.canDrop(node().id)) return;
+        const position = dropPosition(event);
+        if (!props.tree.move.canDrop(node().id, position)) return;
         event.preventDefault();
-        props.tree.move.drop(node().id);
+        props.tree.move.drop(node().id, position);
       }}
       onDragEnd={() => {
         if (props.tree.move.sourceId() === node().id && !props.tree.move.keyboard()) props.tree.move.cancel();

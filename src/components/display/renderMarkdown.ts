@@ -16,11 +16,14 @@ const HARD_BREAK = /(?: {2,}|\\)\n/gu;
 const CODE_SPAN = /`([^`]+)`/gu;
 const BACKSLASH_ESCAPE = /\\([\\`*_{}[\]()#+\-.!~|<>])/gu;
 const ANGLE_AUTOLINK = /<((?:https?:\/\/|mailto:)[^\s<>]+)>/giu;
+const ANGLE_EMAIL = /<([\w.+-]+@[\w.-]+\.[a-z]{2,})>/giu;
 const IMAGE = new RegExp(String.raw`!\[([^\]]*)\]\(${URL_PART}\)`, 'gu');
+const REFERENCE_IMAGE = /!\[([^\]]*)\]\[([^\]]*)\]/gu;
+const SHORTCUT_IMAGE = /!\[([^\]]+)\](?![([])/gu;
 const INLINE_LINK = new RegExp(String.raw`\[((?:[^[\]]|\[[^\]]*\])*)\]\(${URL_PART}\)`, 'gu');
 const REFERENCE_LINK = /\[((?:[^[\]]|\[[^\]]*\])+)\]\[([^\]]*)\]/gu;
 const SHORTCUT_REFERENCE = /\[([^[\]]+)\](?![([])/gu;
-const BARE_URL = /(^|[\s(])(https?:\/\/(?:(?!&quot;|&lt;|&gt;)[^\s\uE000])+)/giu;
+const BARE_URL = /(^|[\s(])((?:https?:\/\/|www\.)(?:(?!&quot;|&lt;|&gt;)[^\s\uE000])+)/giu;
 const TRAILING_PUNCTUATION = /[.,:;!?)\]]+$/u;
 
 const FENCE = /^\s*(```|~~~)\s*([\w+-]*)/u;
@@ -44,7 +47,7 @@ interface LinkTarget {
 
 interface Context {
   references: ReadonlyMap<string, LinkTarget>;
-  headingIds: Map<string, number>;
+  headingIds: Set<string>;
 }
 
 const escapeHtml = (text: string): string => text.replace(/[&<>"]/gu, (char) => ESCAPES[char] ?? char);
@@ -95,18 +98,28 @@ const renderInline = (source: string, references: ReadonlyMap<string, LinkTarget
     const target = references.get(referenceKey(key));
     return target ? link(escapeHtml(target.url), emphasize(label), target.title && escapeHtml(target.title)) : match;
   };
+  const image = (url: string, alt: string, title?: string): string => {
+    const caption = title ? ` title="${plain(title)}"` : '';
+    return stash.put(`<img src="${safeUrl(stripUrlBrackets(url))}" alt="${plain(alt)}"${caption} loading="lazy">`);
+  };
+  const imageToReference = (match: string, alt: string, key: string): string => {
+    const target = references.get(referenceKey(key || alt));
+    return target ? image(escapeHtml(target.url), alt, target.title && escapeHtml(target.title)) : stash.put(match);
+  };
 
   let text = source.replaceAll(PLACEHOLDER, '');
   text = text.replace(HARD_BREAK, () => stash.put('<br>'));
   text = text.replace(CODE_SPAN, (_match, code: string) => stash.put(`<code>${escapeHtml(code)}</code>`));
   text = text.replace(BACKSLASH_ESCAPE, (_match, char: string) => stash.put(escapeHtml(char)));
-  text = text.replace(ANGLE_AUTOLINK, (_match, url: string) => link(escapeHtml(url), escapeHtml(url)));
+  text = text.replace(ANGLE_AUTOLINK, (_match, url: string) =>
+    link(escapeHtml(url), escapeHtml(url.replace(/^mailto:/iu, ''))),
+  );
+  text = text.replace(ANGLE_EMAIL, (_match, email: string) => link(`mailto:${escapeHtml(email)}`, escapeHtml(email)));
   text = escapeHtml(text);
 
-  text = text.replace(IMAGE, (_match, alt: string, url: string, title?: string) => {
-    const caption = title ? ` title="${plain(title)}"` : '';
-    return stash.put(`<img src="${safeUrl(stripUrlBrackets(url))}" alt="${plain(alt)}"${caption} loading="lazy">`);
-  });
+  text = text.replace(IMAGE, (_match, alt: string, url: string, title?: string) => image(url, alt, title));
+  text = text.replace(REFERENCE_IMAGE, imageToReference);
+  text = text.replace(SHORTCUT_IMAGE, (match, alt: string) => imageToReference(match, alt, alt));
   text = text.replace(INLINE_LINK, (_match, label: string, url: string, title?: string) =>
     link(stripUrlBrackets(url), emphasize(label), title),
   );
@@ -117,7 +130,7 @@ const renderInline = (source: string, references: ReadonlyMap<string, LinkTarget
   text = text.replace(BARE_URL, (_match, lead: string, url: string) => {
     const trailing = TRAILING_PUNCTUATION.exec(url)?.[0] ?? '';
     const target = url.slice(0, url.length - trailing.length);
-    return `${lead}${link(target, target)}${trailing}`;
+    return `${lead}${link(/^www\./iu.test(target) ? `https://${target}` : target, target)}${trailing}`;
   });
 
   return stash.restore(emphasize(text).replaceAll('\n', ' '));
@@ -126,15 +139,17 @@ const renderInline = (source: string, references: ReadonlyMap<string, LinkTarget
 const decodeEntities = (text: string): string =>
   text.replace(/&(?:amp|lt|gt|quot);/gu, (entity) => ENTITY_TEXT[entity] ?? entity);
 
-const uniqueHeadingId = (html: string, ids: Map<string, number>): string => {
-  const base = decodeEntities(html.replace(/<[^>]+>/gu, ''))
-    .toLowerCase()
-    .replace(/[^\p{L}\p{N}]+/gu, '-')
-    .replace(/^-+|-+$/gu, '');
-  if (!base) return '';
-  const seen = ids.get(base) ?? 0;
-  ids.set(base, seen + 1);
-  return seen === 0 ? base : `${base}-${seen}`;
+const uniqueHeadingId = (html: string, ids: Set<string>): string => {
+  const base =
+    decodeEntities(html.replace(/<[^>]+>/gu, ''))
+      .toLowerCase()
+      .replace(/[^\p{L}\p{N}]+/gu, '-')
+      .replace(/^-+|-+$/gu, '') || 'section';
+  let id = base;
+  let suffix = 1;
+  while (ids.has(id)) id = `${base}-${suffix++}`;
+  ids.add(id);
+  return id;
 };
 
 const renderHeading = (level: number, text: string, context: Context): string => {
@@ -337,5 +352,5 @@ const extractReferences = (lines: readonly string[]): { references: Map<string, 
 export const renderMarkdown = (source = ''): string => {
   const lines = source.replace(/\r\n?/gu, '\n').replaceAll('\t', '    ').split('\n');
   const { references, content } = extractReferences(lines);
-  return parseBlocks(content, { references, headingIds: new Map() }, 0);
+  return parseBlocks(content, { references, headingIds: new Set() }, 0);
 };

@@ -3,13 +3,12 @@ import { mergeProps, Show, untrack } from 'solid-js';
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
-import { Button } from '../actions/Button';
 import { SectionLabel } from '../primitives/SectionLabel';
 import { QueryGroupEditor } from './QueryGroupEditor';
-import { describeQuery, emptyQuery, type QueryField, type QueryGroup } from './queryModel';
+import { clearQuery, describeQuery, emptyQuery, type QueryField, type QueryGroup } from './queryModel';
 
 export type { QueryField, QueryFieldType, QueryGroup, QueryNode, QueryOperatorValue, QueryRule } from './queryModel';
-export { describeQuery, emptyQuery } from './queryModel';
+export { clearQuery, describeQuery, emptyQuery } from './queryModel';
 
 export interface QueryBuilderProps {
   fields: QueryField[];
@@ -25,6 +24,9 @@ export interface QueryBuilderProps {
   disabled?: boolean;
   /** Offer accessible move-up/down controls for rules and groups. @default true */
   reorderable?: boolean;
+  /** @default false */
+  clearable?: boolean;
+  onClear?: (query: QueryGroup) => void;
   class?: string;
 }
 
@@ -46,7 +48,7 @@ export const QueryBuilder = (props: QueryBuilderProps) => {
   });
 
   return (
-    <div class={cx('vui-qb', p.class)}>
+    <div class={cx('vui-qb', p.disabled && 'vui-qb--disabled', p.class)} aria-disabled={p.disabled || undefined}>
       <QueryGroupEditor
         group={query()}
         fields={p.fields}
@@ -58,19 +60,14 @@ export const QueryBuilder = (props: QueryBuilderProps) => {
           if (!p.disabled) setQuery(next);
         }}
         onRemove={() => undefined}
+        clearable={p.clearable}
+        onClear={() => {
+          if (p.disabled) return;
+          const next = clearQuery(query());
+          setQuery(next);
+          p.onClear?.(next);
+        }}
       />
-      <Show when={query().rules.length > 0}>
-        <Button
-          variant="ghost"
-          size="sm"
-          disabled={p.disabled}
-          onClick={() => {
-            if (!p.disabled) setQuery({ ...query(), rules: [] });
-          }}
-        >
-          {translate('velvet.patterns.queryBuilder.clearRules')}
-        </Button>
-      </Show>
       <Show when={p.showSummary}>
         <div class="vui-qb__summary">
           <SectionLabel as="span">{translate('velvet.patterns.queryBuilder.query')}</SectionLabel>

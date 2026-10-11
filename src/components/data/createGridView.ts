@@ -9,9 +9,11 @@ import { createGridPersistence } from './createGridPersistence';
 import type { DataGridProps, GridColumn } from './dataGridTypes';
 import { countActiveRules, matchesQuery } from './gridFilter';
 import { parseGridView, serializeGridView } from './gridViewCodec';
-import { normalizeGridView } from './gridViewState';
+import { defaultGridView } from './gridViewHelpers';
+import { gridColumnWidth, normalizeGridView } from './gridViewState';
 import type { GridViewState } from './gridViewTypes';
 import { cellText, compareValues, type RowSort, rowValue } from './rowData';
+import { sameGridView } from './sameGridView';
 
 export interface GridView<T extends object> {
   cols: Accessor<GridColumn<T>[]>;
@@ -27,6 +29,9 @@ export interface GridView<T extends object> {
   sort: Accessor<RowSort | null>;
   setSort: (sort: RowSort | null) => void;
   setWidth: (key: string, width: number) => void;
+  resetWidth: (key: string) => void;
+  initial: Accessor<GridViewState>;
+  isDefault: Accessor<boolean>;
   activeFilters: Accessor<number>;
   error: Accessor<Error | undefined>;
   reportError: (cause: unknown) => void;
@@ -36,7 +41,7 @@ export interface GridView<T extends object> {
 }
 
 export const createGridView = <T extends object>(config: Accessor<DataGridProps<T>>): GridView<T> => {
-  const defaults = untrack(() => config().defaultView ?? {});
+  const defaults = untrack(() => ({ ...defaultGridView(config().columns, config()), ...config().defaultView }));
   const normalize = (state: Partial<GridViewState>) =>
     normalizeGridView(state, config().columns, config().stickyFirst ?? true, config().filterFields ?? []);
   const [raw, setRaw] = createControllable<GridViewState>({
@@ -45,17 +50,26 @@ export const createGridView = <T extends object>(config: Accessor<DataGridProps<
     onChange: (next) => config().onViewChange?.(next),
   });
   const state = createMemo(() => normalize(raw()));
+  const initial = createMemo(() => normalize(defaults));
+  const isDefault = () => sameGridView(state(), initial());
   const search = createMemo(() => state().search);
   const query = createMemo(() => state().query);
   const sort = createMemo(() => state().sort, undefined, {
     equals: (previous, next) => previous?.key === next?.key && previous?.dir === next?.dir,
   });
   const columnState = createMemo(() => state().columns, undefined, { equals: sameColumnState });
-  const widths = createMemo(() => state().widths, undefined, {
-    equals: (previous, next) =>
-      Object.keys(previous).length === Object.keys(next).length &&
-      Object.entries(previous).every(([key, value]) => Object.hasOwn(next, key) && next[key] === value),
-  });
+  const widths = createMemo(
+    () =>
+      Object.fromEntries(
+        config().columns.map((column) => [column.key, gridColumnWidth(column, state().widths[column.key])]),
+      ),
+    undefined,
+    {
+      equals: (previous, next) =>
+        Object.keys(previous).length === Object.keys(next).length &&
+        Object.entries(previous).every(([key, value]) => Object.hasOwn(next, key) && next[key] === value),
+    },
+  );
   const [error, setError] = createSignal<Error>();
   const reportError = (cause: unknown) => {
     const next = cause instanceof Error ? cause : new Error('Grid view settings could not be applied.');
@@ -125,6 +139,12 @@ export const createGridView = <T extends object>(config: Accessor<DataGridProps<
     sort,
     setSort: (sort) => update({ sort }),
     setWidth: (key, width) => update({ widths: { ...state().widths, [key]: width } }),
+    resetWidth: (key) => {
+      const widths = Object.fromEntries(Object.entries(state().widths).filter(([columnKey]) => columnKey !== key));
+      update({ widths });
+    },
+    initial,
+    isDefault,
     reset: () => replace(defaults),
     importSettings: (json) => {
       let next: GridViewState;

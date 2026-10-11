@@ -1,6 +1,6 @@
 /* Menu */
 .vui-menu-wrap{position:relative;display:inline-flex}
-.vui-menu{z-index:var(--z-dropdown);min-width:var(--overlay-min-w);max-width:var(--overlay-w);max-height:min(360px,70vh);overflow-y:auto;padding:var(--panel-pad);outline:0;transform-origin:top left;animation:vui-select-in var(--motion-reveal)}
+.vui-menu{text-align:left;z-index:var(--z-dropdown);min-width:var(--overlay-min-w);max-width:var(--overlay-w);max-height:calc(100vh - 96px);overflow-y:auto;padding:var(--panel-pad);outline:0;transform-origin:top left;animation:vui-select-in var(--motion-reveal)}
 .vui-menu--pop{position:absolute;top:calc(100% + var(--panel-offset));left:0}
 .vui-menu--end{left:auto;right:0;transform-origin:top right}
 .vui-menu--top{top:auto;bottom:calc(100% + var(--overlay-offset));transform-origin:bottom left}
@@ -10,3 +10,5 @@
 .vui-menu__check{display:grid;place-items:center;flex:none;width:16px;color:var(--option-check);font-size:var(--size-icon-md)}
 .vui-menu__sep{height:var(--border-width);margin:var(--space-1) calc(-1 * var(--space-1));background:var(--border-subtle)}
 .vui-menu__section{padding:var(--space-2) var(--space-2-5) var(--space-1)}
+.vui-menu__label+.vui-icon,.vui-menu__kbd+.vui-icon{flex:none;font-size:var(--size-icon-md);color:var(--option-icon);margin-left:var(--space-3)}
+.vui-menu__item--danger>.vui-menu__label+.vui-icon{color:var(--option-danger-fg)}

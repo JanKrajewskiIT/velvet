@@ -57,6 +57,8 @@ export const navigationEn = defineDictionary({
   treeView: {
     loading: 'Loading…',
     loadFailed: 'Couldn’t load',
+    positionInstructions:
+      'Alt+Up or Alt+Down reorders siblings. Alt+Right moves into the previous folder. Alt+Left moves out of the parent. Space (Ctrl+Space in a checkable tree) starts a move into a folder; Enter confirms and Escape cancels.',
     moveInstructions:
       'To move an item, press Space (Ctrl+Space in a checkable tree), use the arrow keys to choose a parent, then press Enter. Press Escape to cancel.',
     moveStarted: 'Choose a parent with the arrow keys, then press Enter to move. Press Escape to cancel.',

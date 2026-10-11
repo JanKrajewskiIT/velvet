@@ -137,6 +137,14 @@ export const VelvetIcons = {
     '<path d="M12 6.5C10.5 5 8.3 4.5 3.5 4.5v14c4.8 0 7 .5 8.5 2 1.5-1.5 3.7-2 8.5-2v-14c-4.8 0-7 .5-8.5 2zM12 6.5v14"/>',
   briefcase:
     '<rect x="3.5" y="7" width="17" height="13" rx="2.5"/><path d="M9 7V5.5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2V7M3.5 12.5h17"/>',
+  'briefcase-filled':
+    '<path d="M8.5 7V5A1.5 1.5 0 0 1 10 3.5h4A1.5 1.5 0 0 1 15.5 5v2h-2V5.5h-3V7z" fill="currentColor" stroke="none"/><path d="M2.5 9a2 2 0 0 1 2-2h15a2 2 0 0 1 2 2v3.25h-19z" fill="currentColor" stroke="none"/><path d="M2.5 13.5h19V19a2 2 0 0 1-2 2h-15a2 2 0 0 1-2-2z" fill="currentColor" stroke="none"/>',
+  'graduation-cap-filled':
+    '<path d="M12 4.5L2.5 9.25 12 14l9.5-4.75z" fill="currentColor"/><path d="M6.5 12v3.75c0 1.5 2.5 2.75 5.5 2.75s5.5-1.25 5.5-2.75V12L12 14.75z" fill="currentColor"/><path d="M21.5 9.25v5"/>',
+  'person-filled':
+    '<path d="M7.2 5.8A5 5 0 0 1 16.6 5.2C14.6 7.1 11.2 4.6 7.2 5.8z" fill="currentColor" stroke="none"/><path d="M7.05 7.3C11 6 14.4 8.6 16.9 6.6A5 5 0 0 1 7.05 7.3z" fill="currentColor" stroke="none"/><path d="M3.5 22v-3.5A4.5 4.5 0 0 1 8 14h8a4.5 4.5 0 0 1 4.5 4.5V22z" fill="currentColor" stroke="none"/>',
+  'desktop-filled':
+    '<path d="M1.5 4.5A1.5 1.5 0 0 1 3 3h11a1.5 1.5 0 0 1 1.5 1.5v9A1.5 1.5 0 0 1 14 15H3a1.5 1.5 0 0 1-1.5-1.5zM3.4 4.9v8.2h10.2V4.9z" fill="currentColor" fill-rule="evenodd" stroke="none"/><path d="M7.5 15h2v3.25h-2z" fill="currentColor" stroke="none"/><rect x="4.5" y="18" width="8" height="2.25" rx="1" fill="currentColor" stroke="none"/><path d="M17 3h4.5a1 1 0 0 1 1 1v16.5a1 1 0 0 1-1 1H17a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM17.6 5.4v1.1h3.3V5.4zM17.6 7.8v1.1h3.3V7.8zM18.35 15a.9.9 0 1 0 1.8 0a.9.9 0 1 0-1.8 0z" fill="currentColor" fill-rule="evenodd" stroke="none"/>',
   'calendar-plus':
     '<rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4M12 13v5M9.5 15.5h5"/>',
   phone:

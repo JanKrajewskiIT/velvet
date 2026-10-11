@@ -10,6 +10,7 @@
 --motion-spring:var(--dur-base) var(--ease-spring);/* @kind other */
 --motion-move:var(--dur-base) var(--ease-emphasized);/* @kind other */--motion-lift:var(--motion-move);/* @kind other */--motion-reveal:var(--dur-fast) var(--ease-emphasized);/* @kind other */--motion-bounce:var(--dur-fast) var(--ease-spring);/* @kind other */--motion-progress:var(--dur-slower) var(--ease-standard);/* @kind other */
 --motion-pop:var(--dur-slow) var(--ease-spring);/* @kind other */
+--motion-travel:400ms var(--ease-back);/* @kind other */
 --motion-slide:var(--dur-slower) var(--ease-emphasized);/* @kind other */
 --motion-track:var(--dur-instant) var(--ease-linear);/* @kind other */
 --transition-colors:color var(--motion-fast),background-color var(--motion-fast),border-color var(--motion-fast),box-shadow var(--motion-fast);/* @kind other */

@@ -51,6 +51,11 @@ export const createTreeKeyboard = (tree: TreeController) => (e: KeyboardEvent) =
     return;
   }
   const { node } = row;
+  if (tree.move.enabled() && config.onMovePosition && e.altKey && e.key.startsWith('Arrow')) {
+    e.preventDefault();
+    tree.move.keyboardMove(node.id, e.key);
+    return;
+  }
   if (tree.move.enabled() && e.key === ' ' && (config.checkable ? e.ctrlKey : !e.ctrlKey && !e.altKey && !e.metaKey)) {
     e.preventDefault();
     tree.move.start(node.id, 'keyboard');

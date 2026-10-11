@@ -1,4 +1,4 @@
-/* @ds-bundle: {"format":4,"namespace":"VelvetUIDesignSystem_ee2bd8","components":[{"name":"AuthButton","sourcePath":"components/actions/AuthButton.jsx"},{"name":"Button","sourcePath":"components/actions/Button.jsx"},{"name":"ButtonGroup","sourcePath":"components/actions/ButtonGroup.jsx"},{"name":"CalendarEventButton","sourcePath":"components/actions/CalendarEventButton.jsx"},{"name":"CopyButton","sourcePath":"components/actions/CopyButton.jsx"},{"name":"CopyField","sourcePath":"components/actions/CopyButton.jsx"},{"name":"Fab","sourcePath":"components/actions/Fab.jsx"},{"name":"IconButton","sourcePath":"components/actions/IconButton.jsx"},{"name":"LocaleSwitcher","sourcePath":"components/actions/LocaleSwitcher.jsx"},{"name":"ThemeToggle","sourcePath":"components/actions/ThemeToggle.jsx"},{"name":"ToggleButton","sourcePath":"components/actions/ToggleButton.jsx"},{"name":"ToggleGroup","sourcePath":"components/actions/ToggleGroup.jsx"},{"name":"BarChart","sourcePath":"components/charts/BarChart.jsx"},{"name":"ComparisonBar","sourcePath":"components/charts/ComparisonBar.jsx"},{"name":"ComparisonDialog","sourcePath":"components/charts/ComparisonBar.jsx"},{"name":"DonutChart","sourcePath":"components/charts/DonutChart.jsx"},{"name":"FunnelChart","sourcePath":"components/charts/FunnelChart.jsx"},{"name":"Gantt","sourcePath":"components/charts/Gantt.jsx"},{"name":"Gauge","sourcePath":"components/charts/Gauge.jsx"},{"name":"HEATMAP_COLORS","sourcePath":"components/charts/Heatmap.jsx"},{"name":"Heatmap","sourcePath":"components/charts/Heatmap.jsx"},{"name":"LineChart","sourcePath":"components/charts/LineChart.jsx"},{"name":"RadarChart","sourcePath":"components/charts/RadarChart.jsx"},{"name":"Sparkline","sourcePath":"components/charts/Sparkline.jsx"},{"name":"Accordion","sourcePath":"components/data/Accordion.jsx"},{"name":"Avatar","sourcePath":"components/data/Avatar.jsx"},{"name":"AvatarGroup","sourcePath":"components/data/Avatar.jsx"},{"name":"CodeSnippet","sourcePath":"components/data/CodeSnippet.jsx"},{"name":"ApplyColumns","sourcePath":"components/data/ColumnManager.jsx"},{"name":"ColumnManager","sourcePath":"components/data/ColumnManager.jsx"},{"name":"DataGrid","sourcePath":"components/data/DataGrid.jsx"},{"name":"DescriptionList","sourcePath":"components/data/DescriptionList.jsx"},{"name":"DiffViewer","sourcePath":"components/data/DiffViewer.jsx"},{"name":"Divider","sourcePath":"components/data/Divider.jsx"},{"name":"EventCalendar","sourcePath":"components/data/EventCalendar.jsx"},{"name":"FeatureCard","sourcePath":"components/data/FeatureCard.jsx"},{"name":"FlipCard","sourcePath":"components/data/FlipCard.jsx"},{"name":"Kanban","sourcePath":"components/data/Kanban.jsx"},{"name":"List","sourcePath":"components/data/List.jsx"},{"name":"LogViewer","sourcePath":"components/data/LogViewer.jsx"},{"name":"QuestionCard","sourcePath":"components/data/QuestionCard.jsx"},{"name":"Scheduler","sourcePath":"components/data/Scheduler.jsx"},{"name":"ScoreCard","sourcePath":"components/data/ScoreCard.jsx"},{"name":"SkillBar","sourcePath":"components/data/SkillBar.jsx"},{"name":"Stat","sourcePath":"components/data/Stat.jsx"},{"name":"Table","sourcePath":"components/data/Table.jsx"},{"name":"Timeline","sourcePath":"components/data/Timeline.jsx"},{"name":"VirtualList","sourcePath":"components/data/VirtualList.jsx"},{"name":"VirtualTable","sourcePath":"components/data/VirtualTable.jsx"},{"name":"Badge","sourcePath":"components/display/Badge.jsx"},{"name":"BrandLogo","sourcePath":"components/display/BrandLogo.jsx"},{"name":"Card","sourcePath":"components/display/Card.jsx"},{"name":"VelvetIcons","sourcePath":"components/display/Icon.jsx"},{"name":"IconCategories","sourcePath":"components/display/Icon.jsx"},{"name":"IconAliases","sourcePath":"components/display/Icon.jsx"},{"name":"IconFilled","sourcePath":"components/display/Icon.jsx"},{"name":"Icon","sourcePath":"components/display/Icon.jsx"},{"name":"Markdown","sourcePath":"components/display/Markdown.jsx"},{"name":"MarkdownEditor","sourcePath":"components/display/MarkdownEditor.jsx"},{"name":"MarkdownEditDialog","sourcePath":"components/display/MarkdownEditor.jsx"},{"name":"QRCode","sourcePath":"components/display/QRCode.jsx"},{"name":"StructuredCard","sourcePath":"components/display/StructuredCard.jsx"},{"name":"Tag","sourcePath":"components/display/Tag.jsx"},{"name":"Watermark","sourcePath":"components/display/Watermark.jsx"},{"name":"R_MARK","sourcePath":"components/display/recron-logo-paths.js"},{"name":"R_WORD","sourcePath":"components/display/recron-logo-paths.js"},{"name":"Alert","sourcePath":"components/feedback/Alert.jsx"},{"name":"Banner","sourcePath":"components/feedback/Alert.jsx"},{"name":"BottomSheet","sourcePath":"components/feedback/BottomSheet.jsx"},{"name":"ConfirmDialog","sourcePath":"components/feedback/ConfirmDialog.jsx"},{"name":"ConfirmAction","sourcePath":"components/feedback/ConfirmDialog.jsx"},{"name":"Countdown","sourcePath":"components/feedback/Countdown.jsx"},{"name":"Dialog","sourcePath":"components/feedback/Dialog.jsx"},{"name":"EmptyState","sourcePath":"components/feedback/EmptyState.jsx"},{"name":"ErrorState","sourcePath":"components/feedback/EmptyState.jsx"},{"name":"StatusPage","sourcePath":"components/feedback/EmptyState.jsx"},{"name":"LOADER_VARIANTS","sourcePath":"components/feedback/Loader.jsx"},{"name":"Loader","sourcePath":"components/feedback/Loader.jsx"},{"name":"PageLoader","sourcePath":"components/feedback/Loader.jsx"},{"name":"NotificationList","sourcePath":"components/feedback/NotificationCenter.jsx"},{"name":"NotificationCenter","sourcePath":"components/feedback/NotificationCenter.jsx"},{"name":"Popover","sourcePath":"components/feedback/Popover.jsx"},{"name":"Progress","sourcePath":"components/feedback/Progress.jsx"},{"name":"ProgressRing","sourcePath":"components/feedback/Progress.jsx"},{"name":"SetupChecklist","sourcePath":"components/feedback/SetupChecklist.jsx"},{"name":"Skeleton","sourcePath":"components/feedback/Skeleton.jsx"},{"name":"SkeletonText","sourcePath":"components/feedback/Skeleton.jsx"},{"name":"Spinner","sourcePath":"components/feedback/Spinner.jsx"},{"name":"LoadingOverlay","sourcePath":"components/feedback/Spinner.jsx"},{"name":"Toast","sourcePath":"components/feedback/Toast.jsx"},{"name":"ToastRegion","sourcePath":"components/feedback/Toast.jsx"},{"name":"Tooltip","sourcePath":"components/feedback/Tooltip.jsx"},{"name":"Tour","sourcePath":"components/feedback/Tour.jsx"},{"name":"Autocomplete","sourcePath":"components/forms/Autocomplete.jsx"},{"name":"Calendar","sourcePath":"components/forms/Calendar.jsx"},{"name":"Cascader","sourcePath":"components/forms/Cascader.jsx"},{"name":"Checkbox","sourcePath":"components/forms/Checkbox.jsx"},{"name":"Chip","sourcePath":"components/forms/Chip.jsx"},{"name":"ChipGroup","sourcePath":"components/forms/ChipGroup.jsx"},{"name":"ColorPicker","sourcePath":"components/forms/ColorPicker.jsx"},{"name":"DatePicker","sourcePath":"components/forms/DatePicker.jsx"},{"name":"DEFAULT_RANGE_PRESETS","sourcePath":"components/forms/DatePicker.jsx"},{"name":"DateRangePicker","sourcePath":"components/forms/DatePicker.jsx"},{"name":"TimePicker","sourcePath":"components/forms/DatePicker.jsx"},{"name":"DateTimePicker","sourcePath":"components/forms/DateTimePicker.jsx"},{"name":"EditableCollection","sourcePath":"components/forms/EditableCollection.jsx"},{"name":"ErrorSummary","sourcePath":"components/forms/ErrorSummary.jsx"},{"name":"FileUpload","sourcePath":"components/forms/FileUpload.jsx"},{"name":"FormLayout","sourcePath":"components/forms/FormLayout.jsx"},{"name":"FormSection","sourcePath":"components/forms/FormLayout.jsx"},{"name":"FormGrid","sourcePath":"components/forms/FormLayout.jsx"},{"name":"FormSpan","sourcePath":"components/forms/FormLayout.jsx"},{"name":"ActionRow","sourcePath":"components/forms/FormLayout.jsx"},{"name":"InlineEdit","sourcePath":"components/forms/InlineEdit.jsx"},{"name":"Input","sourcePath":"components/forms/Input.jsx"},{"name":"MentionInput","sourcePath":"components/forms/MentionInput.jsx"},{"name":"MultiSelect","sourcePath":"components/forms/MultiSelect.jsx"},{"name":"NumberInput","sourcePath":"components/forms/NumberInput.jsx"},{"name":"OptionSwitcher","sourcePath":"components/forms/OptionSwitcher.jsx"},{"name":"OtpInput","sourcePath":"components/forms/OtpInput.jsx"},{"name":"PasswordInput","sourcePath":"components/forms/PasswordInput.jsx"},{"name":"PHONE_COUNTRIES","sourcePath":"components/forms/PhoneInput.jsx"},{"name":"PhoneInput","sourcePath":"components/forms/PhoneInput.jsx"},{"name":"Radio","sourcePath":"components/forms/Radio.jsx"},{"name":"RangeInput","sourcePath":"components/forms/RangeInput.jsx"},{"name":"Rating","sourcePath":"components/forms/Rating.jsx"},{"name":"RatingSummary","sourcePath":"components/forms/RatingSummary.jsx"},{"name":"RichTextEditor","sourcePath":"components/forms/RichTextEditor.jsx"},{"name":"SearchInput","sourcePath":"components/forms/SearchInput.jsx"},{"name":"Select","sourcePath":"components/forms/Select.jsx"},{"name":"SignaturePad","sourcePath":"components/forms/SignaturePad.jsx"},{"name":"Slider","sourcePath":"components/forms/Slider.jsx"},{"name":"Switch","sourcePath":"components/forms/Switch.jsx"},{"name":"TagInput","sourcePath":"components/forms/TagInput.jsx"},{"name":"Textarea","sourcePath":"components/forms/Textarea.jsx"},{"name":"TimeStepper","sourcePath":"components/forms/TimeStepper.jsx"},{"name":"TransferList","sourcePath":"components/forms/TransferList.jsx"},{"name":"TreeSelect","sourcePath":"components/forms/TreeSelect.jsx"},{"name":"Footer","sourcePath":"components/layout/Footer.jsx"},{"name":"PageHeader","sourcePath":"components/layout/PageHeader.jsx"},{"name":"ScrollArea","sourcePath":"components/layout/ScrollArea.jsx"},{"name":"SearchTrigger","sourcePath":"components/layout/SearchTrigger.jsx"},{"name":"Sidebar","sourcePath":"components/layout/Sidebar.jsx"},{"name":"NavItem","sourcePath":"components/layout/Sidebar.jsx"},{"name":"NavSection","sourcePath":"components/layout/Sidebar.jsx"},{"name":"SplitPane","sourcePath":"components/layout/SplitPane.jsx"},{"name":"Stack","sourcePath":"components/layout/Stack.jsx"},{"name":"Grid","sourcePath":"components/layout/Stack.jsx"},{"name":"AudioPlayer","sourcePath":"components/media/AudioPlayer.jsx"},{"name":"Carousel","sourcePath":"components/media/Carousel.jsx"},{"name":"ImageCropper","sourcePath":"components/media/ImageCropper.jsx"},{"name":"Lightbox","sourcePath":"components/media/Lightbox.jsx"},{"name":"ImageGrid","sourcePath":"components/media/Lightbox.jsx"},{"name":"Marquee","sourcePath":"components/media/Marquee.jsx"},{"name":"MediaFrame","sourcePath":"components/media/MediaFrame.jsx"},{"name":"PlayerButton","sourcePath":"components/media/VideoPlayer.jsx"},{"name":"VideoPlayer","sourcePath":"components/media/VideoPlayer.jsx"},{"name":"CommandPalette","sourcePath":"components/menus/CommandPalette.jsx"},{"name":"ContextMenu","sourcePath":"components/menus/ContextMenu.jsx"},{"name":"DropdownButton","sourcePath":"components/menus/DropdownButton.jsx"},{"name":"MenuPanel","sourcePath":"components/menus/Menu.jsx"},{"name":"Menu","sourcePath":"components/menus/Menu.jsx"},{"name":"MenuChip","sourcePath":"components/menus/MenuChip.jsx"},{"name":"Toolbar","sourcePath":"components/menus/Toolbar.jsx"},{"name":"Anchor","sourcePath":"components/navigation/Anchor.jsx"},{"name":"BackToTop","sourcePath":"components/navigation/BackToTop.jsx"},{"name":"BottomNav","sourcePath":"components/navigation/BottomNav.jsx"},{"name":"Breadcrumb","sourcePath":"components/navigation/Breadcrumb.jsx"},{"name":"HierarchyNavigator","sourcePath":"components/navigation/HierarchyNavigator.jsx"},{"name":"Link","sourcePath":"components/navigation/Link.jsx"},{"name":"LoadMore","sourcePath":"components/navigation/LoadMore.jsx"},{"name":"Navbar","sourcePath":"components/navigation/Navbar.jsx"},{"name":"NavbarLocale","sourcePath":"components/navigation/Navbar.jsx"},{"name":"NavbarUser","sourcePath":"components/navigation/Navbar.jsx"},{"name":"Pagination","sourcePath":"components/navigation/Pagination.jsx"},{"name":"Stepper","sourcePath":"components/navigation/Stepper.jsx"},{"name":"Tabs","sourcePath":"components/navigation/Tabs.jsx"},{"name":"TreeView","sourcePath":"components/navigation/TreeView.jsx"},{"name":"Wizard","sourcePath":"components/navigation/Wizard.jsx"},{"name":"AiResultPanel","sourcePath":"components/patterns/AiResultPanel.jsx"},{"name":"AnalysisRequest","sourcePath":"components/patterns/AnalysisRequest.jsx"},{"name":"SCORE_BANDS","sourcePath":"components/patterns/AtsAnalysisPanel.jsx"},{"name":"AtsAnalysisPanel","sourcePath":"components/patterns/AtsAnalysisPanel.jsx"},{"name":"CalendarOrganizer","sourcePath":"components/patterns/CalendarOrganizer.jsx"},{"name":"TypingIndicator","sourcePath":"components/patterns/ChatMessage.jsx"},{"name":"ChatMessage","sourcePath":"components/patterns/ChatMessage.jsx"},{"name":"ChatThread","sourcePath":"components/patterns/ChatMessage.jsx"},{"name":"LABEL_COLORS","sourcePath":"components/patterns/ColorLabelManager.jsx"},{"name":"ColorLabelManager","sourcePath":"components/patterns/ColorLabelManager.jsx"},{"name":"ColorLabelSelectionDialog","sourcePath":"components/patterns/ColorLabelSelectionDialog.jsx"},{"name":"CommentThread","sourcePath":"components/patterns/CommentThread.jsx"},{"name":"DualFilterBar","sourcePath":"components/patterns/DualFilterBar.jsx"},{"name":"FilterBar","sourcePath":"components/patterns/FilterBar.jsx"},{"name":"FlashcardSetup","sourcePath":"components/patterns/FlashcardSession.jsx"},{"name":"FlashcardSession","sourcePath":"components/patterns/FlashcardSession.jsx"},{"name":"FlashcardSummary","sourcePath":"components/patterns/FlashcardSession.jsx"},{"name":"ImportSourcesDialog","sourcePath":"components/patterns/ImportSourcesDialog.jsx"},{"name":"PricingTable","sourcePath":"components/patterns/PricingTable.jsx"},{"name":"PromptInput","sourcePath":"components/patterns/PromptInput.jsx"},{"name":"QueryBuilder","sourcePath":"components/patterns/QueryBuilder.jsx"},{"name":"Checkmark","sourcePath":"components/primitives/Checkmark.jsx"},{"name":"Chevron","sourcePath":"components/primitives/Chevron.jsx"},{"name":"CloseButton","sourcePath":"components/primitives/CloseButton.jsx"},{"name":"ColumnResize","sourcePath":"components/primitives/ColumnResize.jsx"},{"name":"Control","sourcePath":"components/primitives/Control.jsx"},{"name":"Count","sourcePath":"components/primitives/Count.jsx"},{"name":"Dot","sourcePath":"components/primitives/Dot.jsx"},{"name":"EmptyText","sourcePath":"components/primitives/EmptyText.jsx"},{"name":"FieldLabel","sourcePath":"components/primitives/Field.jsx"},{"name":"FieldHint","sourcePath":"components/primitives/Field.jsx"},{"name":"Field","sourcePath":"components/primitives/Field.jsx"},{"name":"Glyph","sourcePath":"components/primitives/Glyph.jsx"},{"name":"Handle","sourcePath":"components/primitives/Handle.jsx"},{"name":"IconTile","sourcePath":"components/primitives/IconTile.jsx"},{"name":"Indicator","sourcePath":"components/primitives/Indicator.jsx"},{"name":"Kbd","sourcePath":"components/primitives/Kbd.jsx"},{"name":"ListItem","sourcePath":"components/primitives/ListItem.jsx"},{"name":"Mark","sourcePath":"components/primitives/Mark.jsx"},{"name":"Marker","sourcePath":"components/primitives/Marker.jsx"},{"name":"Meter","sourcePath":"components/primitives/Meter.jsx"},{"name":"Option","sourcePath":"components/primitives/Option.jsx"},{"name":"Rail","sourcePath":"components/primitives/Rail.jsx"},{"name":"RailItem","sourcePath":"components/primitives/Rail.jsx"},{"name":"SectionLabel","sourcePath":"components/primitives/SectionLabel.jsx"},{"name":"Segmented","sourcePath":"components/primitives/Segmented.jsx"},{"name":"SegmentedItem","sourcePath":"components/primitives/Segmented.jsx"},{"name":"Separator","sourcePath":"components/primitives/Separator.jsx"},{"name":"Surface","sourcePath":"components/primitives/Surface.jsx"},{"name":"Swatch","sourcePath":"components/primitives/Swatch.jsx"},{"name":"Text","sourcePath":"components/primitives/Text.jsx"},{"name":"VisuallyHidden","sourcePath":"components/primitives/VisuallyHidden.jsx"},{"name":"SkipLink","sourcePath":"components/primitives/VisuallyHidden.jsx"},{"name":"LiveRegion","sourcePath":"components/primitives/VisuallyHidden.jsx"},{"name":"Weekday","sourcePath":"components/primitives/Weekday.jsx"},{"name":"DAY_MS","sourcePath":"components/primitives/date.js"},{"name":"TONES","sourcePath":"components/primitives/tone.js"},{"name":"TONE_ICON","sourcePath":"components/primitives/tone.js"}],"sourceHashes":{"assets/theme-toggle.js":"e9ca04f68377","components/actions/AuthButton.jsx":"b9af57a1009e","components/actions/Button.jsx":"f30c8df9da73","components/actions/ButtonGroup.jsx":"d4f837263947","components/actions/CalendarEventButton.jsx":"ea610cb0c6fa","components/actions/CopyButton.jsx":"287de0770bc8","components/actions/Fab.jsx":"55f57a5affeb","components/actions/IconButton.jsx":"fa1701ff8a50","components/actions/LocaleSwitcher.jsx":"f7d7a1fd7b8e","components/actions/ThemeToggle.jsx":"8c5597eb6850","components/actions/ToggleButton.jsx":"aefec88ee83a","components/actions/ToggleGroup.jsx":"79ecb96a400d","components/charts/BarChart.jsx":"93ec80049dd4","components/charts/ComparisonBar.jsx":"56b5a07e6566","components/charts/DonutChart.jsx":"fe363ce797f2","components/charts/FunnelChart.jsx":"859e1a231535","components/charts/Gantt.jsx":"39a878c8efc0","components/charts/Gauge.jsx":"28663ceb2c05","components/charts/Heatmap.jsx":"e33090b6acc0","components/charts/LineChart.jsx":"70b2e2061144","components/charts/RadarChart.jsx":"f3ce12a9238f","components/charts/Sparkline.jsx":"e8624e6824bc","components/charts/useSize.js":"bfee1d22d261","components/data/Accordion.jsx":"59ab393ccd34","components/data/Avatar.jsx":"fb2a401ecd84","components/data/CodeSnippet.jsx":"d4a0bc823140","components/data/ColumnManager.jsx":"f302a221f740","components/data/DataGrid.jsx":"6754400bef3e","components/data/DescriptionList.jsx":"d92c36bf6904","components/data/DiffViewer.jsx":"204e90b966bf","components/data/Divider.jsx":"0068dbd45afa","components/data/EventCalendar.jsx":"3baf627add1b","components/data/FeatureCard.jsx":"077269c2c190","components/data/FlipCard.jsx":"b4fd0508d9e3","components/data/Kanban.jsx":"f0aa23ca171a","components/data/List.jsx":"2acda982f50d","components/data/LogViewer.jsx":"056c1e2e593a","components/data/QuestionCard.jsx":"b7b6cecfb35c","components/data/Scheduler.jsx":"ba2b1ab1b3da","components/data/ScoreCard.jsx":"93542b74eee6","components/data/SkillBar.jsx":"376a720cbd87","components/data/Stat.jsx":"6e252b508ccd","components/data/Table.jsx":"30e9d2034b7e","components/data/Timeline.jsx":"961ba667c892","components/data/VirtualList.jsx":"7bfa72d4438f","components/data/VirtualTable.jsx":"4b1f4eb94ad6","components/display/Badge.jsx":"add2d2d91fcd","components/display/BrandLogo.jsx":"2dd99ee7031b","components/display/Card.jsx":"9e0ac18c699a","components/display/Icon.jsx":"56a61f7b6d0d","components/display/Markdown.jsx":"3e9cc5209a9e","components/display/MarkdownEditor.jsx":"33bd9f997187","components/display/QRCode.jsx":"e157ac29decb","components/display/StructuredCard.jsx":"066bfcb48133","components/display/Tag.jsx":"bd7dcd3fd745","components/display/Watermark.jsx":"db7529587631","components/display/recron-logo-paths.js":"ea9cd3ae6b10","components/feedback/Alert.jsx":"a8ffc5d29cea","components/feedback/BottomSheet.jsx":"7e104bc30372","components/feedback/ConfirmDialog.jsx":"133f963178d3","components/feedback/Countdown.jsx":"dc5bbad21cb1","components/feedback/Dialog.jsx":"66d34e8dd75c","components/feedback/EmptyState.jsx":"60c3508ae08d","components/feedback/Loader.jsx":"c3d9b87835f5","components/feedback/NotificationCenter.jsx":"5cc26cb3a8ac","components/feedback/Popover.jsx":"ae63e5598c2f","components/feedback/Progress.jsx":"e1aa90e87063","components/feedback/SetupChecklist.jsx":"5c64e0603894","components/feedback/Skeleton.jsx":"a9f6a224af87","components/feedback/Spinner.jsx":"09f1cb8b5c09","components/feedback/Toast.jsx":"aa2ce48f9eb6","components/feedback/Tooltip.jsx":"4fa1a2ed4e1b","components/feedback/Tour.jsx":"b8d37b5156d9","components/forms/Autocomplete.jsx":"b09aa856e47d","components/forms/Calendar.jsx":"5d7c8cbfb1fb","components/forms/Cascader.jsx":"c5b93fff8f77","components/forms/Checkbox.jsx":"38a0737c95c2","components/forms/Chip.jsx":"1a4e3d13d779","components/forms/ChipGroup.jsx":"6ad7d1f14e62","components/forms/ColorPicker.jsx":"94d63afd7db9","components/forms/DatePicker.jsx":"8558f71751c2","components/forms/DateTimePicker.jsx":"bdd0ef2fee83","components/forms/EditableCollection.jsx":"280b7e4ff77f","components/forms/ErrorSummary.jsx":"d69e68eeb926","components/forms/FileUpload.jsx":"7b723bf3fb0e","components/forms/FormLayout.jsx":"9fea34ba5e59","components/forms/InlineEdit.jsx":"732e316d6009","components/forms/Input.jsx":"9a2fe064b743","components/forms/MentionInput.jsx":"9385bfafadf3","components/forms/MultiSelect.jsx":"a264680af214","components/forms/NumberInput.jsx":"b10ec7253845","components/forms/OptionSwitcher.jsx":"27ee85eb7f14","components/forms/OtpInput.jsx":"79870a223aa8","components/forms/PasswordInput.jsx":"c5f49146f57a","components/forms/PhoneInput.jsx":"57e1b79a57a3","components/forms/Radio.jsx":"486c8b472ba2","components/forms/RangeInput.jsx":"833d5c08362a","components/forms/Rating.jsx":"b7a2f7cfb7c1","components/forms/RatingSummary.jsx":"824a8b6ace25","components/forms/RichTextEditor.jsx":"2d6e1a236576","components/forms/SearchInput.jsx":"f82465eff6f4","components/forms/Select.jsx":"0f287a310e23","components/forms/SignaturePad.jsx":"caf3b3cbe9f3","components/forms/Slider.jsx":"4d4cb8d320f1","components/forms/Switch.jsx":"98fedfdb000e","components/forms/TagInput.jsx":"221bbcf825d6","components/forms/Textarea.jsx":"91607c34cbae","components/forms/TimeStepper.jsx":"87e93c8d0658","components/forms/TransferList.jsx":"7a5353fbdd57","components/forms/TreeSelect.jsx":"76acd74e7a4c","components/layout/Footer.jsx":"e2a9558eb0d5","components/layout/PageHeader.jsx":"f28c6e13e56d","components/layout/ScrollArea.jsx":"8fc22128e3e3","components/layout/SearchTrigger.jsx":"bb8bea3167a8","components/layout/Sidebar.jsx":"b776b6d4786a","components/layout/SplitPane.jsx":"d089560145ea","components/layout/Stack.jsx":"5fa93e5f8dc3","components/media/AudioPlayer.jsx":"12ff1dd2c832","components/media/Carousel.jsx":"546d0706c61f","components/media/ImageCropper.jsx":"f47d5da4cb0e","components/media/Lightbox.jsx":"1d3e53ab665e","components/media/Marquee.jsx":"c547d193b50a","components/media/MediaFrame.jsx":"6af9a83e17b5","components/media/VideoPlayer.jsx":"6aefc6ca6215","components/media/time.js":"6cbfc6d74643","components/menus/CommandPalette.jsx":"a6f2b4e4552b","components/menus/ContextMenu.jsx":"28425e9faa8e","components/menus/DropdownButton.jsx":"ad7131854534","components/menus/Menu.jsx":"c90bf284fb3f","components/menus/MenuChip.jsx":"7bbc2dae9656","components/menus/Toolbar.jsx":"5d87bb98dcc9","components/navigation/Anchor.jsx":"6b3d91dfc09e","components/navigation/BackToTop.jsx":"d1a2cb51a2a7","components/navigation/BottomNav.jsx":"5c8a1cf63047","components/navigation/Breadcrumb.jsx":"a3aa2a9b324e","components/navigation/HierarchyNavigator.jsx":"e08c5d99d398","components/navigation/Link.jsx":"3e8ece6b8588","components/navigation/LoadMore.jsx":"17b1e3cbb09d","components/navigation/Navbar.jsx":"a1de9be8e7f1","components/navigation/Pagination.jsx":"c55069eda7a4","components/navigation/Stepper.jsx":"b8dc630b6f8c","components/navigation/Tabs.jsx":"c06f11296563","components/navigation/TreeView.jsx":"2d24ea4ca040","components/navigation/Wizard.jsx":"749b224d2c4f","components/patterns/AiResultPanel.jsx":"c00c123530a5","components/patterns/AnalysisRequest.jsx":"518c2895224e","components/patterns/AtsAnalysisPanel.jsx":"2498349993a3","components/patterns/CalendarOrganizer.jsx":"ed9f3e9e2b2c","components/patterns/ChatMessage.jsx":"0a752a990ae1","components/patterns/ColorLabelManager.jsx":"f0a23e6586a0","components/patterns/ColorLabelSelectionDialog.jsx":"48a55c174e28","components/patterns/CommentThread.jsx":"00663b7bdc5b","components/patterns/DualFilterBar.jsx":"579c6f7f2eca","components/patterns/FilterBar.jsx":"eca1bf33d4a0","components/patterns/FlashcardSession.jsx":"c4f749308e54","components/patterns/ImportSourcesDialog.jsx":"3fb8cc06a760","components/patterns/PricingTable.jsx":"6d323fef8e65","components/patterns/PromptInput.jsx":"8ec5b3e4e473","components/patterns/QueryBuilder.jsx":"9bd1be2c8752","components/primitives/Checkmark.jsx":"b5971ecb4dab","components/primitives/Chevron.jsx":"c8452dafb135","components/primitives/CloseButton.jsx":"e04946a9575e","components/primitives/ColumnResize.jsx":"7096cb3b65e5","components/primitives/Control.jsx":"ccb1a2d379c5","components/primitives/Count.jsx":"ca89f6ac6e25","components/primitives/Dot.jsx":"94492da759a3","components/primitives/EmptyText.jsx":"0803c7e4de8d","components/primitives/Field.jsx":"de8c5e4f2c30","components/primitives/Glyph.jsx":"555e59bb17ca","components/primitives/Handle.jsx":"7b7a1b407496","components/primitives/IconTile.jsx":"2b20b72c6cd0","components/primitives/Indicator.jsx":"56f0e12b0260","components/primitives/Kbd.jsx":"e1413c9d88a5","components/primitives/ListItem.jsx":"ecba551c8441","components/primitives/Mark.jsx":"43a29f3ac95d","components/primitives/Marker.jsx":"3df1880dd4f0","components/primitives/Meter.jsx":"ef9321a0e799","components/primitives/Option.jsx":"9dd9199950d7","components/primitives/Rail.jsx":"0188d8b2a963","components/primitives/SectionLabel.jsx":"35af4ccf5ceb","components/primitives/Segmented.jsx":"705a61a2688e","components/primitives/Separator.jsx":"5640a9df5349","components/primitives/Surface.jsx":"a44948a6c5a0","components/primitives/Swatch.jsx":"62c96c7324b8","components/primitives/Text.jsx":"2981dd22685a","components/primitives/VisuallyHidden.jsx":"641fa994d442","components/primitives/Weekday.jsx":"96868ee0a3ff","components/primitives/cx.js":"74d7f0acace2","components/primitives/date.js":"4f5f5d3dcf95","components/primitives/tone.js":"8bceac1a522b","components/primitives/useDismiss.js":"770b300e0e75","guidelines/card.js":"567e10500645"},"inlinedExternals":[],"unexposedExports":[{"name":"addDays","sourcePath":"components/primitives/date.js"},{"name":"addMonths","sourcePath":"components/primitives/date.js"},{"name":"applyColumns","sourcePath":"components/data/ColumnManager.jsx"},{"name":"buildGoogleCalendarUrl","sourcePath":"components/actions/CalendarEventButton.jsx"},{"name":"buildIcs","sourcePath":"components/actions/CalendarEventButton.jsx"},{"name":"buildOutlookCalendarUrl","sourcePath":"components/actions/CalendarEventButton.jsx"},{"name":"compact","sourcePath":"components/charts/useSize.js"},{"name":"cx","sourcePath":"components/primitives/cx.js"},{"name":"describeQuery","sourcePath":"components/patterns/QueryBuilder.jsx"},{"name":"diffLines","sourcePath":"components/data/DiffViewer.jsx"},{"name":"emptyQuery","sourcePath":"components/patterns/QueryBuilder.jsx"},{"name":"encodeQR","sourcePath":"components/display/QRCode.jsx"},{"name":"filledIcon","sourcePath":"components/display/Icon.jsx"},{"name":"fmtDate","sourcePath":"components/primitives/date.js"},{"name":"fmtTime","sourcePath":"components/media/time.js"},{"name":"formatBytes","sourcePath":"components/forms/FileUpload.jsx"},{"name":"hexToHsv","sourcePath":"components/forms/ColorPicker.jsx"},{"name":"highlight","sourcePath":"components/data/CodeSnippet.jsx"},{"name":"highlightMatch","sourcePath":"components/primitives/Mark.jsx"},{"name":"hsvToHex","sourcePath":"components/forms/ColorPicker.jsx"},{"name":"minutesOfDay","sourcePath":"components/primitives/date.js"},{"name":"niceTicks","sourcePath":"components/charts/useSize.js"},{"name":"pad","sourcePath":"components/primitives/date.js"},{"name":"pageRange","sourcePath":"components/navigation/Pagination.jsx"},{"name":"parseTime","sourcePath":"components/forms/DatePicker.jsx"},{"name":"passwordScore","sourcePath":"components/forms/PasswordInput.jsx"},{"name":"renderIcon","sourcePath":"components/primitives/Glyph.jsx"},{"name":"renderMarkdown","sourcePath":"components/display/Markdown.jsx"},{"name":"sameDay","sourcePath":"components/primitives/date.js"},{"name":"sanitizeRichText","sourcePath":"components/forms/RichTextEditor.jsx"},{"name":"scoreBand","sourcePath":"components/patterns/AtsAnalysisPanel.jsx"},{"name":"startOfDay","sourcePath":"components/primitives/date.js"},{"name":"toDate","sourcePath":"components/primitives/date.js"},{"name":"toggleCtx","sourcePath":"components/actions/ToggleButton.jsx"},{"name":"toneIcon","sourcePath":"components/primitives/tone.js"},{"name":"useAsyncOptions","sourcePath":"components/forms/Autocomplete.jsx"},{"name":"useDismiss","sourcePath":"components/primitives/useDismiss.js"},{"name":"useWidth","sourcePath":"components/charts/useSize.js"},{"name":"weekdayNames","sourcePath":"components/primitives/date.js"},{"name":"ymd","sourcePath":"components/primitives/date.js"}]} */
+/* @ds-bundle: {"format":4,"namespace":"VelvetUIDesignSystem_ee2bd8","components":[{"name":"AuthButton","sourcePath":"components/actions/AuthButton.jsx"},{"name":"Button","sourcePath":"components/actions/Button.jsx"},{"name":"ButtonGroup","sourcePath":"components/actions/ButtonGroup.jsx"},{"name":"CalendarEventButton","sourcePath":"components/actions/CalendarEventButton.jsx"},{"name":"CopyButton","sourcePath":"components/actions/CopyButton.jsx"},{"name":"CopyField","sourcePath":"components/actions/CopyButton.jsx"},{"name":"Fab","sourcePath":"components/actions/Fab.jsx"},{"name":"IconButton","sourcePath":"components/actions/IconButton.jsx"},{"name":"LocaleSwitcher","sourcePath":"components/actions/LocaleSwitcher.jsx"},{"name":"ThemeToggle","sourcePath":"components/actions/ThemeToggle.jsx"},{"name":"ToggleButton","sourcePath":"components/actions/ToggleButton.jsx"},{"name":"ToggleGroup","sourcePath":"components/actions/ToggleGroup.jsx"},{"name":"BarChart","sourcePath":"components/charts/BarChart.jsx"},{"name":"ComparisonBar","sourcePath":"components/charts/ComparisonBar.jsx"},{"name":"ComparisonDialog","sourcePath":"components/charts/ComparisonBar.jsx"},{"name":"DonutChart","sourcePath":"components/charts/DonutChart.jsx"},{"name":"FunnelChart","sourcePath":"components/charts/FunnelChart.jsx"},{"name":"Gantt","sourcePath":"components/charts/Gantt.jsx"},{"name":"Gauge","sourcePath":"components/charts/Gauge.jsx"},{"name":"HEATMAP_COLORS","sourcePath":"components/charts/Heatmap.jsx"},{"name":"Heatmap","sourcePath":"components/charts/Heatmap.jsx"},{"name":"LineChart","sourcePath":"components/charts/LineChart.jsx"},{"name":"RadarChart","sourcePath":"components/charts/RadarChart.jsx"},{"name":"Sparkline","sourcePath":"components/charts/Sparkline.jsx"},{"name":"Accordion","sourcePath":"components/data/Accordion.jsx"},{"name":"Avatar","sourcePath":"components/data/Avatar.jsx"},{"name":"AvatarGroup","sourcePath":"components/data/Avatar.jsx"},{"name":"CodeSnippet","sourcePath":"components/data/CodeSnippet.jsx"},{"name":"ApplyColumns","sourcePath":"components/data/ColumnManager.jsx"},{"name":"ColumnManager","sourcePath":"components/data/ColumnManager.jsx"},{"name":"DataGrid","sourcePath":"components/data/DataGrid.jsx"},{"name":"DescriptionList","sourcePath":"components/data/DescriptionList.jsx"},{"name":"DiffViewer","sourcePath":"components/data/DiffViewer.jsx"},{"name":"Divider","sourcePath":"components/data/Divider.jsx"},{"name":"EventCalendar","sourcePath":"components/data/EventCalendar.jsx"},{"name":"FeatureCard","sourcePath":"components/data/FeatureCard.jsx"},{"name":"FlipCard","sourcePath":"components/data/FlipCard.jsx"},{"name":"Kanban","sourcePath":"components/data/Kanban.jsx"},{"name":"List","sourcePath":"components/data/List.jsx"},{"name":"LogViewer","sourcePath":"components/data/LogViewer.jsx"},{"name":"QuestionCard","sourcePath":"components/data/QuestionCard.jsx"},{"name":"Scheduler","sourcePath":"components/data/Scheduler.jsx"},{"name":"ScoreCard","sourcePath":"components/data/ScoreCard.jsx"},{"name":"SkillBar","sourcePath":"components/data/SkillBar.jsx"},{"name":"Stat","sourcePath":"components/data/Stat.jsx"},{"name":"Table","sourcePath":"components/data/Table.jsx"},{"name":"Timeline","sourcePath":"components/data/Timeline.jsx"},{"name":"VirtualList","sourcePath":"components/data/VirtualList.jsx"},{"name":"VirtualTable","sourcePath":"components/data/VirtualTable.jsx"},{"name":"Badge","sourcePath":"components/display/Badge.jsx"},{"name":"BrandLogo","sourcePath":"components/display/BrandLogo.jsx"},{"name":"Card","sourcePath":"components/display/Card.jsx"},{"name":"VelvetIcons","sourcePath":"components/display/Icon.jsx"},{"name":"IconCategories","sourcePath":"components/display/Icon.jsx"},{"name":"IconAliases","sourcePath":"components/display/Icon.jsx"},{"name":"IconFilled","sourcePath":"components/display/Icon.jsx"},{"name":"Icon","sourcePath":"components/display/Icon.jsx"},{"name":"Markdown","sourcePath":"components/display/Markdown.jsx"},{"name":"MarkdownEditor","sourcePath":"components/display/MarkdownEditor.jsx"},{"name":"MarkdownEditDialog","sourcePath":"components/display/MarkdownEditor.jsx"},{"name":"QRCode","sourcePath":"components/display/QRCode.jsx"},{"name":"StructuredCard","sourcePath":"components/display/StructuredCard.jsx"},{"name":"Tag","sourcePath":"components/display/Tag.jsx"},{"name":"Watermark","sourcePath":"components/display/Watermark.jsx"},{"name":"R_MARK","sourcePath":"components/display/recron-logo-paths.js"},{"name":"R_WORD","sourcePath":"components/display/recron-logo-paths.js"},{"name":"Alert","sourcePath":"components/feedback/Alert.jsx"},{"name":"Banner","sourcePath":"components/feedback/Alert.jsx"},{"name":"BottomSheet","sourcePath":"components/feedback/BottomSheet.jsx"},{"name":"ConfirmDialog","sourcePath":"components/feedback/ConfirmDialog.jsx"},{"name":"ConfirmAction","sourcePath":"components/feedback/ConfirmDialog.jsx"},{"name":"Countdown","sourcePath":"components/feedback/Countdown.jsx"},{"name":"Dialog","sourcePath":"components/feedback/Dialog.jsx"},{"name":"EmptyState","sourcePath":"components/feedback/EmptyState.jsx"},{"name":"ErrorState","sourcePath":"components/feedback/EmptyState.jsx"},{"name":"StatusPage","sourcePath":"components/feedback/EmptyState.jsx"},{"name":"LOADER_VARIANTS","sourcePath":"components/feedback/Loader.jsx"},{"name":"Loader","sourcePath":"components/feedback/Loader.jsx"},{"name":"PageLoader","sourcePath":"components/feedback/Loader.jsx"},{"name":"NotificationList","sourcePath":"components/feedback/NotificationCenter.jsx"},{"name":"NotificationCenter","sourcePath":"components/feedback/NotificationCenter.jsx"},{"name":"Popover","sourcePath":"components/feedback/Popover.jsx"},{"name":"Progress","sourcePath":"components/feedback/Progress.jsx"},{"name":"ProgressRing","sourcePath":"components/feedback/Progress.jsx"},{"name":"SetupChecklist","sourcePath":"components/feedback/SetupChecklist.jsx"},{"name":"Skeleton","sourcePath":"components/feedback/Skeleton.jsx"},{"name":"SkeletonText","sourcePath":"components/feedback/Skeleton.jsx"},{"name":"Spinner","sourcePath":"components/feedback/Spinner.jsx"},{"name":"LoadingOverlay","sourcePath":"components/feedback/Spinner.jsx"},{"name":"Toast","sourcePath":"components/feedback/Toast.jsx"},{"name":"ToastRegion","sourcePath":"components/feedback/Toast.jsx"},{"name":"Tooltip","sourcePath":"components/feedback/Tooltip.jsx"},{"name":"Tour","sourcePath":"components/feedback/Tour.jsx"},{"name":"Autocomplete","sourcePath":"components/forms/Autocomplete.jsx"},{"name":"Calendar","sourcePath":"components/forms/Calendar.jsx"},{"name":"Cascader","sourcePath":"components/forms/Cascader.jsx"},{"name":"Checkbox","sourcePath":"components/forms/Checkbox.jsx"},{"name":"Chip","sourcePath":"components/forms/Chip.jsx"},{"name":"ChipGroup","sourcePath":"components/forms/ChipGroup.jsx"},{"name":"ColorPicker","sourcePath":"components/forms/ColorPicker.jsx"},{"name":"DatePicker","sourcePath":"components/forms/DatePicker.jsx"},{"name":"DEFAULT_RANGE_PRESETS","sourcePath":"components/forms/DatePicker.jsx"},{"name":"DateRangePicker","sourcePath":"components/forms/DatePicker.jsx"},{"name":"TimePicker","sourcePath":"components/forms/DatePicker.jsx"},{"name":"DateTimePicker","sourcePath":"components/forms/DateTimePicker.jsx"},{"name":"EditableCollection","sourcePath":"components/forms/EditableCollection.jsx"},{"name":"ErrorSummary","sourcePath":"components/forms/ErrorSummary.jsx"},{"name":"FileUpload","sourcePath":"components/forms/FileUpload.jsx"},{"name":"FormLayout","sourcePath":"components/forms/FormLayout.jsx"},{"name":"FormSection","sourcePath":"components/forms/FormLayout.jsx"},{"name":"FormGrid","sourcePath":"components/forms/FormLayout.jsx"},{"name":"FormSpan","sourcePath":"components/forms/FormLayout.jsx"},{"name":"ActionRow","sourcePath":"components/forms/FormLayout.jsx"},{"name":"InlineEdit","sourcePath":"components/forms/InlineEdit.jsx"},{"name":"Input","sourcePath":"components/forms/Input.jsx"},{"name":"MentionInput","sourcePath":"components/forms/MentionInput.jsx"},{"name":"MultiSelect","sourcePath":"components/forms/MultiSelect.jsx"},{"name":"NumberInput","sourcePath":"components/forms/NumberInput.jsx"},{"name":"OptionSwitcher","sourcePath":"components/forms/OptionSwitcher.jsx"},{"name":"OtpInput","sourcePath":"components/forms/OtpInput.jsx"},{"name":"PasswordInput","sourcePath":"components/forms/PasswordInput.jsx"},{"name":"PHONE_COUNTRIES","sourcePath":"components/forms/PhoneInput.jsx"},{"name":"PhoneInput","sourcePath":"components/forms/PhoneInput.jsx"},{"name":"Radio","sourcePath":"components/forms/Radio.jsx"},{"name":"RangeInput","sourcePath":"components/forms/RangeInput.jsx"},{"name":"Rating","sourcePath":"components/forms/Rating.jsx"},{"name":"RatingSummary","sourcePath":"components/forms/RatingSummary.jsx"},{"name":"RichTextEditor","sourcePath":"components/forms/RichTextEditor.jsx"},{"name":"SearchInput","sourcePath":"components/forms/SearchInput.jsx"},{"name":"Select","sourcePath":"components/forms/Select.jsx"},{"name":"SignaturePad","sourcePath":"components/forms/SignaturePad.jsx"},{"name":"Slider","sourcePath":"components/forms/Slider.jsx"},{"name":"Switch","sourcePath":"components/forms/Switch.jsx"},{"name":"TagInput","sourcePath":"components/forms/TagInput.jsx"},{"name":"Textarea","sourcePath":"components/forms/Textarea.jsx"},{"name":"TimeStepper","sourcePath":"components/forms/TimeStepper.jsx"},{"name":"TransferList","sourcePath":"components/forms/TransferList.jsx"},{"name":"TreeSelect","sourcePath":"components/forms/TreeSelect.jsx"},{"name":"Footer","sourcePath":"components/layout/Footer.jsx"},{"name":"PageHeader","sourcePath":"components/layout/PageHeader.jsx"},{"name":"ScrollArea","sourcePath":"components/layout/ScrollArea.jsx"},{"name":"SearchTrigger","sourcePath":"components/layout/SearchTrigger.jsx"},{"name":"Sidebar","sourcePath":"components/layout/Sidebar.jsx"},{"name":"NavItem","sourcePath":"components/layout/Sidebar.jsx"},{"name":"NavSection","sourcePath":"components/layout/Sidebar.jsx"},{"name":"SplitPane","sourcePath":"components/layout/SplitPane.jsx"},{"name":"Stack","sourcePath":"components/layout/Stack.jsx"},{"name":"Grid","sourcePath":"components/layout/Stack.jsx"},{"name":"AudioPlayer","sourcePath":"components/media/AudioPlayer.jsx"},{"name":"Carousel","sourcePath":"components/media/Carousel.jsx"},{"name":"ImageCropper","sourcePath":"components/media/ImageCropper.jsx"},{"name":"Lightbox","sourcePath":"components/media/Lightbox.jsx"},{"name":"ImageGrid","sourcePath":"components/media/Lightbox.jsx"},{"name":"Marquee","sourcePath":"components/media/Marquee.jsx"},{"name":"MediaFrame","sourcePath":"components/media/MediaFrame.jsx"},{"name":"PlayerButton","sourcePath":"components/media/VideoPlayer.jsx"},{"name":"VideoPlayer","sourcePath":"components/media/VideoPlayer.jsx"},{"name":"CommandPalette","sourcePath":"components/menus/CommandPalette.jsx"},{"name":"ContextMenu","sourcePath":"components/menus/ContextMenu.jsx"},{"name":"DropdownButton","sourcePath":"components/menus/DropdownButton.jsx"},{"name":"MenuPanel","sourcePath":"components/menus/Menu.jsx"},{"name":"Menu","sourcePath":"components/menus/Menu.jsx"},{"name":"MenuChip","sourcePath":"components/menus/MenuChip.jsx"},{"name":"Toolbar","sourcePath":"components/menus/Toolbar.jsx"},{"name":"Anchor","sourcePath":"components/navigation/Anchor.jsx"},{"name":"BackToTop","sourcePath":"components/navigation/BackToTop.jsx"},{"name":"BottomNav","sourcePath":"components/navigation/BottomNav.jsx"},{"name":"Breadcrumb","sourcePath":"components/navigation/Breadcrumb.jsx"},{"name":"HierarchyNavigator","sourcePath":"components/navigation/HierarchyNavigator.jsx"},{"name":"Link","sourcePath":"components/navigation/Link.jsx"},{"name":"LoadMore","sourcePath":"components/navigation/LoadMore.jsx"},{"name":"Navbar","sourcePath":"components/navigation/Navbar.jsx"},{"name":"NavbarLocale","sourcePath":"components/navigation/Navbar.jsx"},{"name":"NavbarUser","sourcePath":"components/navigation/Navbar.jsx"},{"name":"Pagination","sourcePath":"components/navigation/Pagination.jsx"},{"name":"Stepper","sourcePath":"components/navigation/Stepper.jsx"},{"name":"Tabs","sourcePath":"components/navigation/Tabs.jsx"},{"name":"TreeView","sourcePath":"components/navigation/TreeView.jsx"},{"name":"Wizard","sourcePath":"components/navigation/Wizard.jsx"},{"name":"AiResultPanel","sourcePath":"components/patterns/AiResultPanel.jsx"},{"name":"AnalysisRequest","sourcePath":"components/patterns/AnalysisRequest.jsx"},{"name":"SCORE_BANDS","sourcePath":"components/patterns/AtsAnalysisPanel.jsx"},{"name":"AtsAnalysisPanel","sourcePath":"components/patterns/AtsAnalysisPanel.jsx"},{"name":"CalendarOrganizer","sourcePath":"components/patterns/CalendarOrganizer.jsx"},{"name":"TypingIndicator","sourcePath":"components/patterns/ChatMessage.jsx"},{"name":"ChatMessage","sourcePath":"components/patterns/ChatMessage.jsx"},{"name":"ChatThread","sourcePath":"components/patterns/ChatMessage.jsx"},{"name":"LABEL_COLORS","sourcePath":"components/patterns/ColorLabelManager.jsx"},{"name":"ColorLabelManager","sourcePath":"components/patterns/ColorLabelManager.jsx"},{"name":"ColorLabelSelectionDialog","sourcePath":"components/patterns/ColorLabelSelectionDialog.jsx"},{"name":"CommentThread","sourcePath":"components/patterns/CommentThread.jsx"},{"name":"DualFilterBar","sourcePath":"components/patterns/DualFilterBar.jsx"},{"name":"FilterBar","sourcePath":"components/patterns/FilterBar.jsx"},{"name":"FlashcardSetup","sourcePath":"components/patterns/FlashcardSession.jsx"},{"name":"FlashcardSession","sourcePath":"components/patterns/FlashcardSession.jsx"},{"name":"FlashcardSummary","sourcePath":"components/patterns/FlashcardSession.jsx"},{"name":"ImportSourcesDialog","sourcePath":"components/patterns/ImportSourcesDialog.jsx"},{"name":"PricingTable","sourcePath":"components/patterns/PricingTable.jsx"},{"name":"PromptInput","sourcePath":"components/patterns/PromptInput.jsx"},{"name":"QueryBuilder","sourcePath":"components/patterns/QueryBuilder.jsx"},{"name":"Checkmark","sourcePath":"components/primitives/Checkmark.jsx"},{"name":"Chevron","sourcePath":"components/primitives/Chevron.jsx"},{"name":"CloseButton","sourcePath":"components/primitives/CloseButton.jsx"},{"name":"ColumnResize","sourcePath":"components/primitives/ColumnResize.jsx"},{"name":"Control","sourcePath":"components/primitives/Control.jsx"},{"name":"Count","sourcePath":"components/primitives/Count.jsx"},{"name":"Dot","sourcePath":"components/primitives/Dot.jsx"},{"name":"EmptyText","sourcePath":"components/primitives/EmptyText.jsx"},{"name":"FieldLabel","sourcePath":"components/primitives/Field.jsx"},{"name":"FieldHint","sourcePath":"components/primitives/Field.jsx"},{"name":"Field","sourcePath":"components/primitives/Field.jsx"},{"name":"Glyph","sourcePath":"components/primitives/Glyph.jsx"},{"name":"Handle","sourcePath":"components/primitives/Handle.jsx"},{"name":"IconTile","sourcePath":"components/primitives/IconTile.jsx"},{"name":"Indicator","sourcePath":"components/primitives/Indicator.jsx"},{"name":"Kbd","sourcePath":"components/primitives/Kbd.jsx"},{"name":"ListItem","sourcePath":"components/primitives/ListItem.jsx"},{"name":"Mark","sourcePath":"components/primitives/Mark.jsx"},{"name":"Marker","sourcePath":"components/primitives/Marker.jsx"},{"name":"Meter","sourcePath":"components/primitives/Meter.jsx"},{"name":"Option","sourcePath":"components/primitives/Option.jsx"},{"name":"Rail","sourcePath":"components/primitives/Rail.jsx"},{"name":"RailItem","sourcePath":"components/primitives/Rail.jsx"},{"name":"SectionLabel","sourcePath":"components/primitives/SectionLabel.jsx"},{"name":"Segmented","sourcePath":"components/primitives/Segmented.jsx"},{"name":"SegmentedItem","sourcePath":"components/primitives/Segmented.jsx"},{"name":"Separator","sourcePath":"components/primitives/Separator.jsx"},{"name":"Surface","sourcePath":"components/primitives/Surface.jsx"},{"name":"Swatch","sourcePath":"components/primitives/Swatch.jsx"},{"name":"Text","sourcePath":"components/primitives/Text.jsx"},{"name":"VisuallyHidden","sourcePath":"components/primitives/VisuallyHidden.jsx"},{"name":"SkipLink","sourcePath":"components/primitives/VisuallyHidden.jsx"},{"name":"LiveRegion","sourcePath":"components/primitives/VisuallyHidden.jsx"},{"name":"Weekday","sourcePath":"components/primitives/Weekday.jsx"},{"name":"DAY_MS","sourcePath":"components/primitives/date.js"},{"name":"TONES","sourcePath":"components/primitives/tone.js"},{"name":"TONE_ICON","sourcePath":"components/primitives/tone.js"}],"sourceHashes":{"assets/theme-toggle.js":"e9ca04f68377","components/actions/AuthButton.jsx":"9b4650c55c79","components/actions/Button.jsx":"f30c8df9da73","components/actions/ButtonGroup.jsx":"d4f837263947","components/actions/CalendarEventButton.jsx":"ea610cb0c6fa","components/actions/CopyButton.jsx":"287de0770bc8","components/actions/Fab.jsx":"55f57a5affeb","components/actions/IconButton.jsx":"fa1701ff8a50","components/actions/LocaleSwitcher.jsx":"f7d7a1fd7b8e","components/actions/ThemeToggle.jsx":"8c5597eb6850","components/actions/ToggleButton.jsx":"aefec88ee83a","components/actions/ToggleGroup.jsx":"79ecb96a400d","components/charts/BarChart.jsx":"93ec80049dd4","components/charts/ComparisonBar.jsx":"56b5a07e6566","components/charts/DonutChart.jsx":"fe363ce797f2","components/charts/FunnelChart.jsx":"859e1a231535","components/charts/Gantt.jsx":"39a878c8efc0","components/charts/Gauge.jsx":"28663ceb2c05","components/charts/Heatmap.jsx":"e33090b6acc0","components/charts/LineChart.jsx":"70b2e2061144","components/charts/RadarChart.jsx":"f3ce12a9238f","components/charts/Sparkline.jsx":"e8624e6824bc","components/charts/useSize.js":"bfee1d22d261","components/data/Accordion.jsx":"59ab393ccd34","components/data/Avatar.jsx":"fb2a401ecd84","components/data/CodeSnippet.jsx":"d4a0bc823140","components/data/ColumnManager.jsx":"d06e4ff5a370","components/data/DataGrid.jsx":"1ef14ba34bf0","components/data/DescriptionList.jsx":"d92c36bf6904","components/data/DiffViewer.jsx":"204e90b966bf","components/data/Divider.jsx":"0068dbd45afa","components/data/EventCalendar.jsx":"3baf627add1b","components/data/FeatureCard.jsx":"077269c2c190","components/data/FlipCard.jsx":"b4fd0508d9e3","components/data/Kanban.jsx":"f0aa23ca171a","components/data/List.jsx":"2acda982f50d","components/data/LogViewer.jsx":"056c1e2e593a","components/data/QuestionCard.jsx":"b7b6cecfb35c","components/data/Scheduler.jsx":"ba2b1ab1b3da","components/data/ScoreCard.jsx":"93542b74eee6","components/data/SkillBar.jsx":"376a720cbd87","components/data/Stat.jsx":"6e252b508ccd","components/data/Table.jsx":"065530d94b30","components/data/Timeline.jsx":"961ba667c892","components/data/VirtualList.jsx":"7bfa72d4438f","components/data/VirtualTable.jsx":"4b1f4eb94ad6","components/display/Badge.jsx":"add2d2d91fcd","components/display/BrandLogo.jsx":"2dd99ee7031b","components/display/Card.jsx":"9e0ac18c699a","components/display/Icon.jsx":"8bd9046f4401","components/display/Markdown.jsx":"cc95abbee80b","components/display/MarkdownEditor.jsx":"33bd9f997187","components/display/QRCode.jsx":"e157ac29decb","components/display/StructuredCard.jsx":"066bfcb48133","components/display/Tag.jsx":"bd7dcd3fd745","components/display/Watermark.jsx":"db7529587631","components/display/recron-logo-paths.js":"ea9cd3ae6b10","components/feedback/Alert.jsx":"a8ffc5d29cea","components/feedback/BottomSheet.jsx":"7e104bc30372","components/feedback/ConfirmDialog.jsx":"133f963178d3","components/feedback/Countdown.jsx":"dc5bbad21cb1","components/feedback/Dialog.jsx":"66d34e8dd75c","components/feedback/EmptyState.jsx":"60c3508ae08d","components/feedback/Loader.jsx":"c3d9b87835f5","components/feedback/NotificationCenter.jsx":"5cc26cb3a8ac","components/feedback/Popover.jsx":"ae63e5598c2f","components/feedback/Progress.jsx":"e1aa90e87063","components/feedback/SetupChecklist.jsx":"5c64e0603894","components/feedback/Skeleton.jsx":"a9f6a224af87","components/feedback/Spinner.jsx":"09f1cb8b5c09","components/feedback/Toast.jsx":"aa2ce48f9eb6","components/feedback/Tooltip.jsx":"4fa1a2ed4e1b","components/feedback/Tour.jsx":"b8d37b5156d9","components/forms/Autocomplete.jsx":"b09aa856e47d","components/forms/Calendar.jsx":"5d7c8cbfb1fb","components/forms/Cascader.jsx":"c5b93fff8f77","components/forms/Checkbox.jsx":"38a0737c95c2","components/forms/Chip.jsx":"1a4e3d13d779","components/forms/ChipGroup.jsx":"6ad7d1f14e62","components/forms/ColorPicker.jsx":"94d63afd7db9","components/forms/DatePicker.jsx":"8558f71751c2","components/forms/DateTimePicker.jsx":"bdd0ef2fee83","components/forms/EditableCollection.jsx":"280b7e4ff77f","components/forms/ErrorSummary.jsx":"d69e68eeb926","components/forms/FileUpload.jsx":"7b723bf3fb0e","components/forms/FormLayout.jsx":"9fea34ba5e59","components/forms/InlineEdit.jsx":"732e316d6009","components/forms/Input.jsx":"9a2fe064b743","components/forms/MentionInput.jsx":"9385bfafadf3","components/forms/MultiSelect.jsx":"a264680af214","components/forms/NumberInput.jsx":"b10ec7253845","components/forms/OptionSwitcher.jsx":"27ee85eb7f14","components/forms/OtpInput.jsx":"79870a223aa8","components/forms/PasswordInput.jsx":"c5f49146f57a","components/forms/PhoneInput.jsx":"57e1b79a57a3","components/forms/Radio.jsx":"486c8b472ba2","components/forms/RangeInput.jsx":"833d5c08362a","components/forms/Rating.jsx":"b7a2f7cfb7c1","components/forms/RatingSummary.jsx":"824a8b6ace25","components/forms/RichTextEditor.jsx":"2d6e1a236576","components/forms/SearchInput.jsx":"f82465eff6f4","components/forms/Select.jsx":"0f287a310e23","components/forms/SignaturePad.jsx":"caf3b3cbe9f3","components/forms/Slider.jsx":"4d4cb8d320f1","components/forms/Switch.jsx":"98fedfdb000e","components/forms/TagInput.jsx":"221bbcf825d6","components/forms/Textarea.jsx":"91607c34cbae","components/forms/TimeStepper.jsx":"87e93c8d0658","components/forms/TransferList.jsx":"7a5353fbdd57","components/forms/TreeSelect.jsx":"76acd74e7a4c","components/layout/Footer.jsx":"e2a9558eb0d5","components/layout/PageHeader.jsx":"f28c6e13e56d","components/layout/ScrollArea.jsx":"8fc22128e3e3","components/layout/SearchTrigger.jsx":"bb8bea3167a8","components/layout/Sidebar.jsx":"b776b6d4786a","components/layout/SplitPane.jsx":"d089560145ea","components/layout/Stack.jsx":"5fa93e5f8dc3","components/media/AudioPlayer.jsx":"12ff1dd2c832","components/media/Carousel.jsx":"546d0706c61f","components/media/ImageCropper.jsx":"f47d5da4cb0e","components/media/Lightbox.jsx":"1d3e53ab665e","components/media/Marquee.jsx":"c547d193b50a","components/media/MediaFrame.jsx":"6af9a83e17b5","components/media/VideoPlayer.jsx":"6aefc6ca6215","components/media/time.js":"6cbfc6d74643","components/menus/CommandPalette.jsx":"a6f2b4e4552b","components/menus/ContextMenu.jsx":"28425e9faa8e","components/menus/DropdownButton.jsx":"ad7131854534","components/menus/Menu.jsx":"1314d60bcce5","components/menus/MenuChip.jsx":"7bbc2dae9656","components/menus/Toolbar.jsx":"5d87bb98dcc9","components/navigation/Anchor.jsx":"6b3d91dfc09e","components/navigation/BackToTop.jsx":"d1a2cb51a2a7","components/navigation/BottomNav.jsx":"5c8a1cf63047","components/navigation/Breadcrumb.jsx":"a3aa2a9b324e","components/navigation/HierarchyNavigator.jsx":"e08c5d99d398","components/navigation/Link.jsx":"3e8ece6b8588","components/navigation/LoadMore.jsx":"17b1e3cbb09d","components/navigation/Navbar.jsx":"33adaf574d81","components/navigation/Pagination.jsx":"c55069eda7a4","components/navigation/Stepper.jsx":"b8dc630b6f8c","components/navigation/Tabs.jsx":"c06f11296563","components/navigation/TreeView.jsx":"d185189380d3","components/navigation/Wizard.jsx":"749b224d2c4f","components/patterns/AiResultPanel.jsx":"c00c123530a5","components/patterns/AnalysisRequest.jsx":"518c2895224e","components/patterns/AtsAnalysisPanel.jsx":"2498349993a3","components/patterns/CalendarOrganizer.jsx":"8ece2ccb1bd9","components/patterns/ChatMessage.jsx":"0a752a990ae1","components/patterns/ColorLabelManager.jsx":"f0a23e6586a0","components/patterns/ColorLabelSelectionDialog.jsx":"48a55c174e28","components/patterns/CommentThread.jsx":"00663b7bdc5b","components/patterns/DualFilterBar.jsx":"579c6f7f2eca","components/patterns/FilterBar.jsx":"eca1bf33d4a0","components/patterns/FlashcardSession.jsx":"c4f749308e54","components/patterns/ImportSourcesDialog.jsx":"3fb8cc06a760","components/patterns/PricingTable.jsx":"6d323fef8e65","components/patterns/PromptInput.jsx":"8ec5b3e4e473","components/patterns/QueryBuilder.jsx":"c9a97f160fe8","components/primitives/Checkmark.jsx":"b5971ecb4dab","components/primitives/Chevron.jsx":"c8452dafb135","components/primitives/CloseButton.jsx":"e04946a9575e","components/primitives/ColumnResize.jsx":"7096cb3b65e5","components/primitives/Control.jsx":"ccb1a2d379c5","components/primitives/Count.jsx":"ca89f6ac6e25","components/primitives/Dot.jsx":"94492da759a3","components/primitives/EmptyText.jsx":"0803c7e4de8d","components/primitives/Field.jsx":"de8c5e4f2c30","components/primitives/Glyph.jsx":"555e59bb17ca","components/primitives/Handle.jsx":"7b7a1b407496","components/primitives/IconTile.jsx":"2b20b72c6cd0","components/primitives/Indicator.jsx":"56f0e12b0260","components/primitives/Kbd.jsx":"e1413c9d88a5","components/primitives/ListItem.jsx":"ecba551c8441","components/primitives/Mark.jsx":"43a29f3ac95d","components/primitives/Marker.jsx":"3df1880dd4f0","components/primitives/Meter.jsx":"ef9321a0e799","components/primitives/Option.jsx":"9dd9199950d7","components/primitives/Rail.jsx":"0188d8b2a963","components/primitives/SectionLabel.jsx":"35af4ccf5ceb","components/primitives/Segmented.jsx":"705a61a2688e","components/primitives/Separator.jsx":"5640a9df5349","components/primitives/Surface.jsx":"a44948a6c5a0","components/primitives/Swatch.jsx":"62c96c7324b8","components/primitives/Text.jsx":"2981dd22685a","components/primitives/VisuallyHidden.jsx":"641fa994d442","components/primitives/Weekday.jsx":"96868ee0a3ff","components/primitives/cx.js":"74d7f0acace2","components/primitives/date.js":"4f5f5d3dcf95","components/primitives/tone.js":"8bceac1a522b","components/primitives/useDismiss.js":"770b300e0e75","guidelines/card.js":"567e10500645"},"inlinedExternals":[],"unexposedExports":[{"name":"addDays","sourcePath":"components/primitives/date.js"},{"name":"addMonths","sourcePath":"components/primitives/date.js"},{"name":"applyColumns","sourcePath":"components/data/ColumnManager.jsx"},{"name":"buildGoogleCalendarUrl","sourcePath":"components/actions/CalendarEventButton.jsx"},{"name":"buildIcs","sourcePath":"components/actions/CalendarEventButton.jsx"},{"name":"buildOutlookCalendarUrl","sourcePath":"components/actions/CalendarEventButton.jsx"},{"name":"clearQuery","sourcePath":"components/patterns/QueryBuilder.jsx"},{"name":"compact","sourcePath":"components/charts/useSize.js"},{"name":"cx","sourcePath":"components/primitives/cx.js"},{"name":"defaultGridView","sourcePath":"components/data/DataGrid.jsx"},{"name":"describeQuery","sourcePath":"components/patterns/QueryBuilder.jsx"},{"name":"diffLines","sourcePath":"components/data/DiffViewer.jsx"},{"name":"emptyQuery","sourcePath":"components/patterns/QueryBuilder.jsx"},{"name":"encodeQR","sourcePath":"components/display/QRCode.jsx"},{"name":"filledIcon","sourcePath":"components/display/Icon.jsx"},{"name":"fmtDate","sourcePath":"components/primitives/date.js"},{"name":"fmtTime","sourcePath":"components/media/time.js"},{"name":"formatBytes","sourcePath":"components/forms/FileUpload.jsx"},{"name":"hexToHsv","sourcePath":"components/forms/ColorPicker.jsx"},{"name":"highlight","sourcePath":"components/data/CodeSnippet.jsx"},{"name":"highlightMatch","sourcePath":"components/primitives/Mark.jsx"},{"name":"hsvToHex","sourcePath":"components/forms/ColorPicker.jsx"},{"name":"minutesOfDay","sourcePath":"components/primitives/date.js"},{"name":"moveTreeNode","sourcePath":"components/navigation/TreeView.jsx"},{"name":"niceTicks","sourcePath":"components/charts/useSize.js"},{"name":"pad","sourcePath":"components/primitives/date.js"},{"name":"pageRange","sourcePath":"components/navigation/Pagination.jsx"},{"name":"parseTime","sourcePath":"components/forms/DatePicker.jsx"},{"name":"passwordScore","sourcePath":"components/forms/PasswordInput.jsx"},{"name":"reconcileGridView","sourcePath":"components/data/DataGrid.jsx"},{"name":"renderIcon","sourcePath":"components/primitives/Glyph.jsx"},{"name":"renderMarkdown","sourcePath":"components/display/Markdown.jsx"},{"name":"sameDay","sourcePath":"components/primitives/date.js"},{"name":"sanitizeRichText","sourcePath":"components/forms/RichTextEditor.jsx"},{"name":"scoreBand","sourcePath":"components/patterns/AtsAnalysisPanel.jsx"},{"name":"startOfDay","sourcePath":"components/primitives/date.js"},{"name":"toDate","sourcePath":"components/primitives/date.js"},{"name":"toggleCtx","sourcePath":"components/actions/ToggleButton.jsx"},{"name":"toneIcon","sourcePath":"components/primitives/tone.js"},{"name":"useAsyncOptions","sourcePath":"components/forms/Autocomplete.jsx"},{"name":"useDismiss","sourcePath":"components/primitives/useDismiss.js"},{"name":"useWidth","sourcePath":"components/charts/useSize.js"},{"name":"weekdayNames","sourcePath":"components/primitives/date.js"},{"name":"ymd","sourcePath":"components/primitives/date.js"}]} */
 
 (() => {
 
@@ -263,7 +263,11 @@ const VelvetIcons = {
   "error": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M9 9l6 6M15 9l-6 6\"/>",
   "help": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M9.6 9.3a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.2-2.4 3.6\"/><circle cx=\"12\" cy=\"17\" r=\"1.1\" fill=\"currentColor\" stroke=\"none\"/>",
   "logout": "<path d=\"M9.5 20.5H6a2 2 0 0 1-2-2v-13a2 2 0 0 1 2-2h3.5M15.5 16.5L20 12l-4.5-4.5M20 12H9.5\"/>",
-  "expand": "<path d=\"M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5\"/>"
+  "expand": "<path d=\"M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5\"/>",
+  "briefcase-filled": "<path d=\"M8.5 7V5A1.5 1.5 0 0 1 10 3.5h4A1.5 1.5 0 0 1 15.5 5v2h-2V5.5h-3V7z\" fill=\"currentColor\" stroke=\"none\"/><path d=\"M2.5 9a2 2 0 0 1 2-2h15a2 2 0 0 1 2 2v3.25h-19z\" fill=\"currentColor\" stroke=\"none\"/><path d=\"M2.5 13.5h19V19a2 2 0 0 1-2 2h-15a2 2 0 0 1-2-2z\" fill=\"currentColor\" stroke=\"none\"/>",
+  "graduation-cap-filled": "<path d=\"M12 4.5L2.5 9.25 12 14l9.5-4.75z\" fill=\"currentColor\"/><path d=\"M6.5 12v3.75c0 1.5 2.5 2.75 5.5 2.75s5.5-1.25 5.5-2.75V12L12 14.75z\" fill=\"currentColor\"/><path d=\"M21.5 9.25v5\"/>",
+  "person-filled": "<path d=\"M7.2 5.8A5 5 0 0 1 16.6 5.2C14.6 7.1 11.2 4.6 7.2 5.8z\" fill=\"currentColor\" stroke=\"none\"/><path d=\"M7.05 7.3C11 6 14.4 8.6 16.9 6.6A5 5 0 0 1 7.05 7.3z\" fill=\"currentColor\" stroke=\"none\"/><path d=\"M3.5 22v-3.5A4.5 4.5 0 0 1 8 14h8a4.5 4.5 0 0 1 4.5 4.5V22z\" fill=\"currentColor\" stroke=\"none\"/>",
+  "desktop-filled": "<path d=\"M1.5 4.5A1.5 1.5 0 0 1 3 3h11a1.5 1.5 0 0 1 1.5 1.5v9A1.5 1.5 0 0 1 14 15H3a1.5 1.5 0 0 1-1.5-1.5zM3.4 4.9v8.2h10.2V4.9z\" fill=\"currentColor\" fill-rule=\"evenodd\" stroke=\"none\"/><path d=\"M7.5 15h2v3.25h-2z\" fill=\"currentColor\" stroke=\"none\"/><rect x=\"4.5\" y=\"18\" width=\"8\" height=\"2.25\" rx=\"1\" fill=\"currentColor\" stroke=\"none\"/><path d=\"M17 3h4.5a1 1 0 0 1 1 1v16.5a1 1 0 0 1-1 1H17a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM17.6 5.4v1.1h3.3V5.4zM17.6 7.8v1.1h3.3V7.8zM18.35 15a.9.9 0 1 0 1.8 0a.9.9 0 1 0-1.8 0z\" fill=\"currentColor\" fill-rule=\"evenodd\" stroke=\"none\"/>"
 };
 const IconCategories = {
   "Actions": ["plus", "minus", "x", "check", "pencil", "trash-2", "copy", "link", "download", "upload", "refresh", "search", "filter", "sliders", "external-link", "log-out", "check-double", "clipboard", "cloud-upload", "share", "save", "wand", "send", "rotate-ccw", "zoom-in", "maximize", "log-in", "paperclip"],
@@ -273,7 +277,7 @@ const IconCategories = {
   "Text editing": ["bold", "italic", "underline", "strikethrough", "list-ordered", "align-left", "align-center", "align-right"],
   "Work & data": ["briefcase", "building", "graduation-cap", "handshake", "trending-up", "dollar-sign", "sitemap", "server", "git-branch", "git-merge"],
   "Media": ["play", "pause", "stop", "skip-forward", "volume", "mic", "video"],
-  "Filled · selected": ["home-filled", "bell-filled", "user-filled", "folder-filled", "bookmark-filled", "heart-filled", "message-square-filled", "star-filled"]
+  "Filled · selected": ["home-filled", "bell-filled", "user-filled", "folder-filled", "bookmark-filled", "heart-filled", "message-square-filled", "star-filled", "briefcase-filled", "graduation-cap-filled", "person-filled", "desktop-filled"]
 };
 /** Legacy alias → canonical Velvet name */
 const IconAliases = {
@@ -1736,24 +1740,95 @@ Object.assign(__ds_scope, { BrandLogo });
 try { (() => {
 const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const safeUrl = u => /^(https?:|mailto:|#|\/|\.)/i.test(u) ? u : '#';
-function inline(s) {
-  const codes = [];
-  s = s.replace(/`([^`]+)`/g, (_, c) => {
-    codes.push(c);
-    return '\u0000' + (codes.length - 1) + '\u0000';
-  });
-  s = esc(s);
-  s = s.replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, (_, a, u) => '<img src="' + safeUrl(u) + '" alt="' + a + '" loading="lazy">');
-  s = s.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_, t, u) => {
-    const url = safeUrl(u);
-    const ext = /^https?:/i.test(url);
-    return '<a href="' + url + '"' + (ext ? ' target="_blank" rel="noreferrer"' : '') + '>' + t + '</a>';
-  });
-  s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>').replace(/(^|[^*])\*([^*\s][^*]*)\*/g, '$1<em>$2</em>').replace(/~~([^~]+)~~/g, '<del>$1</del>');
-  return s.replace(/\u0000(\d+)\u0000/g, (_, i) => '<code>' + esc(codes[+i]) + '</code>');
+const refKey = k => esc(k.trim().replace(/\s+/g, ' ').toLowerCase());
+const anchor = (u, text, title) => {
+  const url = safeUrl(u);
+  const ext = /^https?:/i.test(url);
+  return '<a href="' + url + '"' + (title ? ' title="' + esc(title) + '"' : '') + (ext ? ' target="_blank" rel="noreferrer"' : '') + '>' + text + '</a>';
+};
+const img = (u, alt, title) => '<img src="' + safeUrl(u) + '" alt="' + alt + '"' + (title ? ' title="' + esc(title) + '"' : '') + ' loading="lazy">';
+function emph(s) {
+  return s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>').replace(/(^|[^\w])__([^_\s](?:[^_]*[^_\s])?)__(?!\w)/g, '$1<strong>$2</strong>').replace(/(^|[^*])\*([^*\s][^*]*)\*/g, '$1<em>$2</em>').replace(/(^|[^\w])_([^_\s](?:[^_]*[^_\s])?)_(?!\w)/g, '$1<em>$2</em>').replace(/~~([^~]+)~~/g, '<del>$1</del>');
 }
-function renderMarkdown(src = '') {
-  const lines = String(src).replace(/\r/g, '').split('\n');
+function inline(s, refs = {}) {
+  const tok = [];
+  const put = h => {
+    tok.push(h);
+    return '\u0000' + (tok.length - 1) + '\u0000';
+  };
+  s = s.replace(/[ \t]+$/, '').replace(/( {2,}|\\)\n/g, '\u0001');
+  s = s.replace(/`([^`]+)`/g, (_, c) => put('<code>' + esc(c) + '</code>'));
+  s = s.replace(/<((?:https?:\/\/|mailto:)[^\s>]+)>/gi, (_, u) => put(anchor(u, esc(u.replace(/^mailto:/i, '')))));
+  s = s.replace(/<([^\s@<>]+@[^\s@<>]+\.[a-z]{2,})>/gi, (_, e) => put(anchor('mailto:' + e, esc(e))));
+  s = esc(s);
+  const ref = k => refs[refKey(k)];
+  s = s.replace(/!\[([^\]]*)\]\(([^)\s]+)(?:\s+&quot;(.*?)&quot;)?\)/g, (_, a, u, t) => put(img(u, a, t)));
+  s = s.replace(/!\[([^\]]*)\]\[([^\]]*)\]/g, (m, a, k) => {
+    const r = ref(k || a);
+    return r ? put(img(r.url, a, r.title)) : m;
+  });
+  s = s.replace(/\[([^\]]+)\]\(([^)\s]+)(?:\s+&quot;(.*?)&quot;)?\)/g, (_, t, u, ti) => put(anchor(u, emph(t), ti)));
+  s = s.replace(/\[([^\]]+)\]\[([^\]]*)\]/g, (m, t, k) => {
+    const r = ref(k || t);
+    return r ? put(anchor(r.url, emph(t), r.title)) : m;
+  });
+  s = s.replace(/\[([^\]]+)\](?![(\[:])/g, (m, t) => {
+    const r = ref(t);
+    return r ? put(anchor(r.url, emph(t), r.title)) : m;
+  });
+  s = s.replace(/(^|[\s(])((?:https?:\/\/|www\.)[^\s<]*[^\s<.,:;!?)\]'"])/gi, (_, p, u) => p + put(anchor(/^www\./i.test(u) ? 'https://' + u : u.replace(/&amp;/g, '&'), u)));
+  s = emph(s).replace(/\u0001/g, '<br>');
+  while (/\u0000\d+\u0000/.test(s)) s = s.replace(/\u0000(\d+)\u0000/g, (_, i) => tok[+i]);
+  return s;
+}
+const indentOf = l => l.match(/^ */)[0].length;
+const LIST = /^( *)([-*+]|\d+[.)])( +|$)/;
+function slug(html, ids) {
+  const base = html.replace(/<[^>]+>/g, '').replace(/&\w+;|&#\d+;/g, '').toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '-').replace(/^-+|-+$/g, '') || 'section';
+  let id = base;
+  let n = 0;
+  while (ids[id]) id = base + '-' + ++n;
+  ids[id] = true;
+  return id;
+}
+function heading(n, text, ctx) {
+  const h = inline(text, ctx.refs);
+  return '<h' + n + ' id="' + slug(h, ctx.ids) + '">' + h + '</h' + n + '>';
+}
+function renderList(block, ctx) {
+  const first = block[0].match(LIST);
+  const base = first[1].length;
+  const ordered = /\d/.test(first[2]);
+  const items = [];
+  for (const l of block) {
+    const m = l.match(LIST);
+    if (m && m[1].length < base + 2) items.push({
+      head: l.slice(m[0].length),
+      off: m[0].length,
+      body: []
+    });else if (items.length) items[items.length - 1].body.push(l);
+  }
+  const li = items.map(({
+    head,
+    off,
+    body
+  }) => {
+    const ded = body.map(l => l.slice(Math.min(off, indentOf(l))));
+    const cut = ded.findIndex(l => !l.trim() || LIST.test(l) || /^```/.test(l) || /^>/.test(l));
+    const lead = [head, ...(cut < 0 ? ded : ded.slice(0, cut))].join('\n');
+    const rest = cut < 0 ? '' : render(ded.slice(cut).join('\n'), ctx);
+    const tm = lead.match(/^\[( |x)\]\s+([\s\S]*)/i);
+    if (tm) {
+      const on = tm[1] !== ' ';
+      return '<li class="vui-prose__task"><span class="vui-prose__check' + (on ? ' vui-prose__check--on' : '') + '" aria-hidden="true"></span><span' + (on ? ' class="vui-prose__done"' : '') + '>' + inline(tm[2], ctx.refs) + '</span>' + rest + '</li>';
+    }
+    return '<li>' + inline(lead, ctx.refs) + rest + '</li>';
+  }).join('');
+  const start = ordered ? parseInt(first[2], 10) : 1;
+  return ordered ? '<ol' + (start !== 1 ? ' start="' + start + '"' : '') + '>' + li + '</ol>' : '<ul>' + li + '</ul>';
+}
+function render(src, ctx) {
+  const lines = src.split('\n');
   const out = [];
   let i = 0;
   const isBlock = l => /^(#{1,6}\s|>|\s*[-*+]\s|\s*\d+[.)]\s|```|---+\s*$|\|)/.test(l);
@@ -1773,13 +1848,11 @@ function renderMarkdown(src = '') {
       continue;
     }
     if (m = l.match(/^(#{1,6})\s+(.*)/)) {
-      const n = m[1].length;
-      const id = m[2].toLowerCase().replace(/[^\w]+/g, '-').replace(/^-|-$/g, '');
-      out.push('<h' + n + ' id="' + id + '">' + inline(m[2]) + '</h' + n + '>');
+      out.push(heading(m[1].length, m[2].replace(/\s+#+\s*$/, ''), ctx));
       i++;
       continue;
     }
-    if (/^---+\s*$/.test(l)) {
+    if (/^ {0,3}([-*_])( *\1){2,} *$/.test(l)) {
       out.push('<hr>');
       i++;
       continue;
@@ -1787,7 +1860,7 @@ function renderMarkdown(src = '') {
     if (l.startsWith('>')) {
       const buf = [];
       while (i < lines.length && lines[i].startsWith('>')) buf.push(lines[i++].replace(/^>\s?/, ''));
-      out.push('<blockquote>' + renderMarkdown(buf.join('\n')) + '</blockquote>');
+      out.push('<blockquote>' + render(buf.join('\n'), ctx) + '</blockquote>');
       continue;
     }
     if (/^\|/.test(l) && lines[i + 1] && /^\|?\s*:?-+/.test(lines[i + 1])) {
@@ -1797,29 +1870,72 @@ function renderMarkdown(src = '') {
       i += 2;
       const body = [];
       while (i < lines.length && /^\|/.test(lines[i])) body.push(row(lines[i++]));
-      out.push('<div class="vui-prose__table"><table><thead><tr>' + head.map((h, k) => '<th style="text-align:' + al[k] + '">' + inline(h) + '</th>').join('') + '</tr></thead><tbody>' + body.map(r => '<tr>' + r.map((c, k) => '<td style="text-align:' + al[k] + '">' + inline(c) + '</td>').join('') + '</tr>').join('') + '</tbody></table></div>');
+      out.push('<div class="vui-prose__table"><table><thead><tr>' + head.map((h, k) => '<th style="text-align:' + al[k] + '">' + inline(h, ctx.refs) + '</th>').join('') + '</tr></thead><tbody>' + body.map(r => '<tr>' + r.map((c, k) => '<td style="text-align:' + al[k] + '">' + inline(c, ctx.refs) + '</td>').join('') + '</tr>').join('') + '</tbody></table></div>');
       continue;
     }
-    if (m = l.match(/^\s*([-*+]|\d+[.)])\s/)) {
-      const ordered = /\d/.test(m[1]);
-      const items = [];
-      while (i < lines.length && /^\s*([-*+]|\d+[.)])\s/.test(lines[i])) {
-        items.push(lines[i].replace(/^\s*([-*+]|\d+[.)])\s+/, ''));
-        i++;
+    if (m = l.match(LIST)) {
+      const base = m[1].length;
+      const block = [l];
+      i++;
+      const kind = x => /\d/.test(x[2]) ? 'o' : 'u';
+      const fits = n => {
+        if (indentOf(n) >= base + 2) return true;
+        if (/^ {0,3}([-*_])( *\1){2,} *$/.test(n)) return false;
+        const lm = n.match(LIST);
+        return !!lm && lm[1].length >= base && kind(lm) === kind(m);
+      };
+      while (i < lines.length) {
+        const n = lines[i];
+        if (n.trim()) {
+          if (fits(n)) {
+            block.push(n);
+            i++;
+            continue;
+          }
+          break;
+        }
+        let j = i;
+        while (j < lines.length && !lines[j].trim()) j++;
+        if (j < lines.length && fits(lines[j])) {
+          while (i < j) block.push(lines[i++]);
+          continue;
+        }
+        break;
       }
-      const li = items.map(t => {
-        const tm = t.match(/^\[( |x)\]\s+(.*)/i);
-        return tm ? '<li class="vui-prose__task"><span class="vui-prose__check' + (tm[1] !== ' ' ? ' vui-prose__check--on' : '') + '" aria-hidden="true"></span><span' + (tm[1] !== ' ' ? ' class="vui-prose__done"' : '') + '>' + inline(tm[2]) + '</span></li>' : '<li>' + inline(t) + '</li>';
-      }).join('');
-      out.push(ordered ? '<ol>' + li + '</ol>' : '<ul>' + li + '</ul>');
+      out.push(renderList(block, ctx));
       continue;
     }
     const buf = [l];
     i++;
-    while (i < lines.length && lines[i].trim() && !isBlock(lines[i])) buf.push(lines[i++]);
-    out.push('<p>' + inline(buf.join(' ')) + '</p>');
+    while (i < lines.length && lines[i].trim() && !isBlock(lines[i]) && !/^ {0,3}=+\s*$/.test(lines[i])) buf.push(lines[i++]);
+    if (i < lines.length && (m = lines[i].match(/^ {0,3}(=+|-+)\s*$/))) {
+      out.push(heading(m[1][0] === '=' ? 1 : 2, buf.join(' ').trim(), ctx));
+      i++;
+      continue;
+    }
+    out.push('<p>' + inline(buf.join('\n'), ctx.refs) + '</p>');
   }
   return out.join('');
+}
+function renderMarkdown(src = '') {
+  const refs = {};
+  let fence = false;
+  const lines = String(src).replace(/\r/g, '').replace(/^\t+/gm, t => '    '.repeat(t.length)).split('\n').filter(l => {
+    if (/^```/.test(l)) fence = !fence;
+    if (fence) return true;
+    const m = l.match(/^ {0,3}\[([^\]]+)\]:\s*<?([^\s>]+)>?(?:\s+["'(](.*)["')])?\s*$/);
+    if (!m) return true;
+    const k = refKey(m[1]);
+    if (!refs[k]) refs[k] = {
+      url: m[2],
+      title: m[3]
+    };
+    return false;
+  });
+  return render(lines.join('\n'), {
+    refs,
+    ids: {}
+  });
 }
 function Markdown({
   source,
@@ -3518,37 +3634,53 @@ function AuthButton({
   onSignOut,
   signInLabel = 'Sign in',
   signOutLabel = 'Sign out',
+  initializing = false,
+  pending = false,
+  error,
   iconOnly = false,
   size = 'md',
   className
 }) {
   const [busy, setBusy] = React.useState(false);
+  const [fail, setFail] = React.useState(null);
+  const errId = React.useId();
   const run = async () => {
     setBusy(true);
+    setFail(null);
     try {
       await (signedIn ? onSignOut && onSignOut() : onSignIn && onSignIn());
+    } catch (e) {
+      setFail(e && e.message || 'Something went wrong');
     } finally {
       setBusy(false);
     }
   };
-  const lbl = signedIn ? signOutLabel : signInLabel;
+  const err = error || fail;
+  const wait = busy || pending || initializing;
+  const lbl = initializing ? 'Checking session…' : signedIn ? signOutLabel : signInLabel;
   return /*#__PURE__*/React.createElement("button", {
     type: "button",
-    className: __ds_scope.cx('vui-btn', signedIn ? 'vui-btn--secondary' : 'vui-btn--primary', size !== 'md' && 'vui-btn--' + size, iconOnly && 'vui-btn--icon', 'vui-auth', className),
-    disabled: busy,
+    className: __ds_scope.cx('vui-btn', signedIn || initializing ? 'vui-btn--secondary' : 'vui-btn--primary', size !== 'md' && 'vui-btn--' + size, iconOnly && 'vui-btn--icon', 'vui-auth', err && !wait && 'vui-auth--error', className),
+    disabled: wait,
+    "aria-busy": wait || undefined,
     onClick: run,
     "aria-label": iconOnly ? lbl : undefined,
-    title: iconOnly ? lbl : undefined
-  }, busy ? /*#__PURE__*/React.createElement(__ds_scope.Spinner, {
+    "aria-describedby": err ? errId : undefined,
+    title: iconOnly || err ? err && !iconOnly ? err : lbl : undefined
+  }, wait ? /*#__PURE__*/React.createElement(__ds_scope.Spinner, {
     size: "inline",
     tone: "current"
   }) : /*#__PURE__*/React.createElement("span", {
     className: "vui-auth__icon",
-    key: String(signedIn),
+    key: String(signedIn) + !!err,
     "aria-hidden": "true"
   }, /*#__PURE__*/React.createElement(__ds_scope.Glyph, {
-    name: signedIn ? 'log-out' : 'log-in'
-  })), !iconOnly && /*#__PURE__*/React.createElement("span", null, lbl));
+    name: err ? 'alert-circle' : signedIn ? 'log-out' : 'log-in'
+  })), !iconOnly && /*#__PURE__*/React.createElement("span", null, lbl), err && /*#__PURE__*/React.createElement("span", {
+    id: errId,
+    className: "vui-sr-only",
+    role: "alert"
+  }, err));
 }
 Object.assign(__ds_scope, { AuthButton });
 })(); } catch (e) { __ds_ns.__errors.push({ path: "components/actions/AuthButton.jsx", error: String((e && e.message) || e) }); }
@@ -4581,6 +4713,7 @@ Object.assign(__ds_scope, { LogViewer });
 // components/data/Table.jsx
 try { (() => {
 function Table({
+  layout = 'auto',
   columns = [],
   rows = [],
   rowKey = 'id',
@@ -4601,6 +4734,7 @@ function Table({
   renderExpanded,
   maxHeight,
   stickyHeader,
+  addRow,
   className
 }) {
   const [innerSort, setInnerSort] = React.useState(defaultSort || null);
@@ -4788,7 +4922,7 @@ function Table({
       overflowY: 'auto'
     } : undefined
   }, /*#__PURE__*/React.createElement("table", {
-    className: __ds_scope.cx('vui-table', sticky && 'vui-table--sticky', anyWidth && 'vui-table--fixed', hasPins && 'vui-table--pins'),
+    className: __ds_scope.cx('vui-table', sticky && 'vui-table--sticky', anyWidth && 'vui-table--fixed', layout === 'fixed' && 'vui-table--layout-fixed', hasPins && 'vui-table--pins'),
     "aria-busy": loading || undefined
   }, /*#__PURE__*/React.createElement("thead", {
     ref: theadRef
@@ -4911,7 +5045,18 @@ function Table({
   }), !loading && !rows.length && /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
     className: "vui-table__empty",
     colSpan: span
-  }, empty))))));
+  }, empty)), !loading && addRow && /*#__PURE__*/React.createElement("tr", {
+    className: "vui-table__addrow"
+  }, /*#__PURE__*/React.createElement("td", {
+    colSpan: span
+  }, /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    className: "vui-table__addbtn",
+    disabled: addRow.disabled,
+    onClick: addRow.onAdd
+  }, /*#__PURE__*/React.createElement(__ds_scope.Glyph, {
+    name: "plus"
+  }), addRow.label ?? 'Add row')))))));
 }
 Object.assign(__ds_scope, { Table });
 })(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/Table.jsx", error: String((e && e.message) || e) }); }
@@ -7489,6 +7634,7 @@ Object.assign(__ds_scope, { Tabs });
 
 // components/navigation/TreeView.jsx
 try { (() => {
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 function flatten(nodes, open, load, level = 1, parent = null, out = []) {
   nodes.forEach((n, i) => {
     out.push({
@@ -7513,6 +7659,54 @@ function flatten(nodes, open, load, level = 1, parent = null, out = []) {
   });
   return out;
 }
+function indexTree(nodes, parent = null, map = new Map()) {
+  nodes.forEach((n, i) => {
+    map.set(n.id, {
+      n,
+      parent,
+      siblings: nodes,
+      index: i
+    });
+    if (n.children) indexTree(n.children, n.id, map);
+  });
+  return map;
+}
+const isWithin = (map, id, ancestor) => {
+  for (let x = id; x != null; x = map.get(x) && map.get(x).parent) if (x === ancestor) return true;
+  return false;
+};
+const canNest = n => Array.isArray(n.children) || !!n.lazy;
+/** Pure helper: returns a new tree with the move applied (app decides whether to use it). */
+function moveTreeNode(data, {
+  id,
+  targetId,
+  position
+}) {
+  let picked = null;
+  const strip = list => list.filter(n => n.id === id ? (picked = n, false) : true).map(n => n.children ? {
+    ...n,
+    children: strip(n.children)
+  } : n);
+  const rest = strip(data);
+  if (!picked) return data;
+  const put = list => {
+    const i = list.findIndex(n => n.id === targetId);
+    if (i >= 0) {
+      if (position === 'inside') return list.map(n => n.id === targetId ? {
+        ...n,
+        children: [...(n.children || []), picked]
+      } : n);
+      const c = list.slice();
+      c.splice(position === 'before' ? i : i + 1, 0, picked);
+      return c;
+    }
+    return list.map(n => n.children ? {
+      ...n,
+      children: put(n.children)
+    } : n);
+  };
+  return put(rest);
+}
 const leavesOf = n => n.children && n.children.length ? n.children.flatMap(leavesOf) : [n.id];
 function TreeView({
   onLoadChildren,
@@ -7527,6 +7721,8 @@ function TreeView({
   expanded,
   defaultExpanded = [],
   onExpandedChange,
+  onMove,
+  canDrop,
   label,
   className
 }) {
@@ -7566,6 +7762,100 @@ function TreeView({
     }
   };
   const rows = flatten(data, open, load);
+  const map = React.useMemo(() => indexTree(data), [data]);
+  const [drag, setDrag] = React.useState(null);
+  const [drop, setDrop] = React.useState(null);
+  const [said, setSaid] = React.useState('');
+  const refocus = React.useRef(false);
+  const nameOf = n => typeof n.label === 'string' ? n.label : n.id;
+  const validMove = (id, targetId, position) => {
+    if (!onMove || id == null || targetId == null || id === targetId) return false;
+    const t = map.get(targetId);
+    const d = map.get(id);
+    if (!t || !d) return false;
+    if (isWithin(map, targetId, id)) return false;
+    if (position === 'inside' && !canNest(t.n)) return false;
+    return canDrop ? canDrop(d.n, t.n, position) !== false : true;
+  };
+  const doMove = (id, targetId, position, kbd) => {
+    if (!validMove(id, targetId, position)) {
+      if (kbd) setSaid('Can’t move there');
+      return;
+    }
+    if (position === 'inside' && !open.has(targetId)) {
+      const s2 = new Set(open);
+      s2.add(targetId);
+      setOpen(s2);
+    }
+    onMove({
+      id,
+      targetId,
+      position
+    });
+    const t = map.get(targetId).n;
+    setSaid(nameOf(map.get(id).n) + ' moved ' + (position === 'inside' ? 'into ' : position + ' ') + nameOf(t));
+    if (kbd) refocus.current = true;
+  };
+  React.useEffect(() => {
+    if (!refocus.current) return;
+    refocus.current = false;
+    const el = root.current && root.current.querySelector('[data-id="' + CSS.escape(String(focus)) + '"]');
+    el && el.focus();
+  }, [data]);
+  const kbMove = (id, key) => {
+    const m = map.get(id);
+    if (!m) return;
+    const {
+      siblings,
+      index,
+      parent
+    } = m;
+    if (key === 'ArrowUp' && index > 0) doMove(id, siblings[index - 1].id, 'before', true);else if (key === 'ArrowDown' && index < siblings.length - 1) doMove(id, siblings[index + 1].id, 'after', true);else if (key === 'ArrowRight' && index > 0) doMove(id, siblings[index - 1].id, 'inside', true);else if (key === 'ArrowLeft' && parent != null) doMove(id, parent, 'after', true);else setSaid('Can’t move further');
+  };
+  const dropPos = (e, n) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    const y = (e.clientY - r.top) / r.height;
+    return canNest(n) && y > 0.28 && y < 0.72 ? 'inside' : y < 0.5 ? 'before' : 'after';
+  };
+  const dnd = n => onMove ? {
+    draggable: true,
+    onDragStart: e => {
+      setDrag(n.id);
+      e.dataTransfer.effectAllowed = 'move';
+      try {
+        e.dataTransfer.setData('text/plain', String(n.id));
+      } catch (_) {}
+    },
+    onDragEnd: () => {
+      setDrag(null);
+      setDrop(null);
+    },
+    onDragOver: e => {
+      if (drag == null) return;
+      const p = dropPos(e, n);
+      if (!validMove(drag, n.id, p)) {
+        if (drop) setDrop(null);
+        return;
+      }
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      if (!drop || drop.id !== n.id || drop.p !== p) setDrop({
+        id: n.id,
+        p
+      });
+    },
+    onDragLeave: e => {
+      if (!e.currentTarget.contains(e.relatedTarget) && drop && drop.id === n.id) setDrop(null);
+    },
+    onDrop: e => {
+      e.preventDefault();
+      const p = dropPos(e, n);
+      const id = drag;
+      setDrag(null);
+      setDrop(null);
+      doMove(id, n.id, p);
+    }
+  } : {};
   const [innerChk, setInnerChk] = React.useState(defaultChecked);
   const chk = new Set(checked !== undefined ? checked : innerChk);
   const chkState = n => {
@@ -7629,6 +7919,11 @@ function TreeView({
       kb.current = true;
       setFocus(id);
     };
+    if (onMove && e.altKey && e.key.startsWith('Arrow')) {
+      e.preventDefault();
+      kbMove(r.n.id, e.key);
+      return;
+    }
     if (e.key === 'ArrowDown' && rows[i + 1]) move(rows[i + 1].n.id);else if (e.key === 'ArrowUp' && rows[i - 1]) move(rows[i - 1].n.id);else if (e.key === 'Home') move(rows[0].n.id);else if (e.key === 'End') move(rows[rows.length - 1].n.id);else if (e.key === 'ArrowRight') {
       e.preventDefault();
       if (has && !open.has(r.n.id)) toggle(r.n.id, true);else if (has && rows[i + 1] && rows[i + 1].parent === r.n.id) move(rows[i + 1].n.id);
@@ -7648,7 +7943,7 @@ function TreeView({
       setOpen(s);
     }
   };
-  return /*#__PURE__*/React.createElement("ul", {
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("ul", {
     ref: root,
     role: "tree",
     "aria-label": label,
@@ -7700,7 +7995,7 @@ function TreeView({
     const has = n.children && n.children.length || n.lazy;
     const isOpen = has && open.has(n.id);
     const cs = checkable ? chkState(n) : null;
-    return /*#__PURE__*/React.createElement("li", {
+    return /*#__PURE__*/React.createElement("li", _extends({
       key: n.id,
       "data-id": n.id,
       role: "treeitem",
@@ -7710,8 +8005,10 @@ function TreeView({
       "aria-expanded": has ? isOpen : undefined,
       "aria-selected": checkable ? undefined : sel === n.id,
       "aria-checked": checkable ? cs === 'mixed' ? 'mixed' : cs === 'on' : undefined,
-      tabIndex: focus === n.id ? 0 : -1,
-      className: __ds_scope.cx('vui-tree__row', sel === n.id && 'vui-tree__row--sel'),
+      tabIndex: focus === n.id ? 0 : -1
+    }, dnd(n), {
+      "aria-roledescription": onMove ? 'movable item' : undefined,
+      className: __ds_scope.cx('vui-tree__row', sel === n.id && 'vui-tree__row--sel', drag === n.id && 'vui-tree__row--dragging', drop && drop.id === n.id && 'vui-tree__row--drop-' + drop.p),
       style: {
         '--lvl': level - 1
       },
@@ -7725,7 +8022,7 @@ function TreeView({
         if (has) toggle(n.id);
       },
       onFocus: () => setFocus(n.id)
-    }, Array.from({
+    }), Array.from({
       length: level - 1
     }).map((_, k) => /*#__PURE__*/React.createElement("span", {
       key: k,
@@ -7758,9 +8055,12 @@ function TreeView({
     }, n.label), n.meta != null && /*#__PURE__*/React.createElement("span", {
       className: "vui-tree__meta"
     }, n.meta));
-  }));
+  })), onMove && /*#__PURE__*/React.createElement("span", {
+    className: "vui-sr-only",
+    "aria-live": "polite"
+  }, said));
 }
-Object.assign(__ds_scope, { TreeView });
+Object.assign(__ds_scope, { moveTreeNode, TreeView });
 })(); } catch (e) { __ds_ns.__errors.push({ path: "components/navigation/TreeView.jsx", error: String((e && e.message) || e) }); }
 
 // components/patterns/ChatMessage.jsx
@@ -15052,10 +15352,16 @@ function applyColumns(columns, state) {
   }).filter(Boolean);
 }
 const ApplyColumns = applyColumns;
+const capsOf = m => ({
+  hide: !m.locked && m.hideable !== false,
+  pin: !m.locked && m.pinnable !== false,
+  move: !m.locked && m.movable !== false
+});
 function ColumnManager({
   columns = [],
   value,
   defaultValue,
+  resetValue,
   onChange: onChangeProp,
   onValueChange,
   title = 'Columns',
@@ -15074,6 +15380,11 @@ function ColumnManager({
   };
   const meta = k => columns.find(c => c.key === k) || {
     label: k
+  };
+  const caps = k => capsOf(meta(k));
+  const zoneOk = (key, z) => {
+    const c = cur.find(x => x.key === key);
+    return !!c && ((c.pin || null) === z || caps(key).pin);
   };
   const [q, setQ] = React.useState('');
   const [drag, setDrag] = React.useState(null);
@@ -15138,14 +15449,15 @@ function ColumnManager({
       e.preventDefault();
       const d = e.key === 'ArrowUp' ? -1 : 1;
       const to = i + d;
+      if (!caps(c.key).move) return;
       if (to >= 0 && to < list.length) {
-        if (meta(list[to].key).locked) return;
+        if (!caps(list[to].key).move) return;
         moveTo(c.key, z, to);
         setMsg(name(c.key) + ' moved to position ' + (to + 1));
       } else {
         const zi = zones.findIndex(([x]) => x === z);
         const nz = zones[zi + d];
-        if (nz && !(nz[0] && maxPinned != null && !z && pinnedCount >= maxPinned)) {
+        if (nz && zoneOk(c.key, nz[0]) && !(nz[0] && maxPinned != null && !z && pinnedCount >= maxPinned)) {
           moveTo(c.key, nz[0], d < 0 ? undefined : 0);
           setMsg(name(c.key) + ' moved to ' + nz[1].toLowerCase());
         }
@@ -15162,11 +15474,12 @@ function ColumnManager({
     z
   }) => {
     const m = meta(c.key);
-    const locked = m.locked;
+    const cp = caps(c.key);
+    const lastOn = c.visible && visible <= 1;
     const atMax = !c.pin && maxPinned != null && pinnedCount >= maxPinned;
     return /*#__PURE__*/React.createElement("li", {
       className: __ds_scope.cx('vui-colman__item', !c.visible && 'vui-colman__item--off', drag === c.key && 'vui-colman__item--drag', over && over.key === c.key && drag && drag !== c.key && 'vui-colman__item--' + over.pos),
-      draggable: !locked,
+      draggable: cp.move,
       onDragStart: e => {
         setDrag(c.key);
         e.dataTransfer.effectAllowed = 'move';
@@ -15191,7 +15504,7 @@ function ColumnManager({
       onDrop: e => {
         e.preventDefault();
         e.stopPropagation();
-        if (drag && over) {
+        if (drag && over && zoneOk(drag, z)) {
           const list = inZone(z).filter(x => x.key !== drag);
           let idx = list.findIndex(x => x.key === c.key);
           if (over.pos === 'below') idx++;
@@ -15203,8 +15516,8 @@ function ColumnManager({
     }, /*#__PURE__*/React.createElement(__ds_scope.Handle, {
       "data-grip": c.key,
       className: "vui-colman__grip",
-      icon: locked ? 'lock' : 'grip-vertical',
-      disabled: locked,
+      icon: cp.move ? 'grip-vertical' : 'lock',
+      disabled: !cp.move,
       label: 'Reorder ' + name(c.key) + '. Arrow keys move it, across sections too.',
       onKeyDown: e => keyMove(e, c)
     }), /*#__PURE__*/React.createElement("span", {
@@ -15215,14 +15528,15 @@ function ColumnManager({
       label: (c.pin ? 'Unpin ' : 'Pin ') + name(c.key),
       title: atMax ? 'Pin limit reached' : c.pin ? 'Unpin' : 'Pin left',
       className: __ds_scope.cx('vui-colman__pin', c.pin && 'vui-colman__pin--on'),
-      disabled: locked || atMax,
+      disabled: !cp.pin || atMax,
       "aria-pressed": !!c.pin,
       onClick: () => togglePin(c)
     }), /*#__PURE__*/React.createElement(__ds_scope.Switch, {
       size: "sm",
       "aria-label": 'Show ' + name(c.key),
+      title: lastOn ? 'At least one column stays visible' : undefined,
       checked: c.visible,
-      disabled: locked,
+      disabled: !cp.hide || lastOn,
       onChange: () => toggleVis(c)
     }));
   };
@@ -15237,7 +15551,7 @@ function ColumnManager({
     variant: "link",
     size: "xs",
     onClick: () => {
-      set(initial);
+      set(resetValue || initial);
       setQ('');
       setMsg('Columns reset');
     }
@@ -15279,7 +15593,7 @@ function ColumnManager({
         }
       },
       onDrop: e => {
-        if (drag && !all.length) {
+        if (drag && !all.length && zoneOk(drag, z)) {
           e.preventDefault();
           moveTo(drag, z, 0);
           setDrag(null);
@@ -15990,7 +16304,8 @@ function MenuPanel({
   onClose,
   style,
   className,
-  autoFocus = true
+  autoFocus = true,
+  iconPosition = 'start'
 }) {
   const ref = React.useRef(null);
   const id = React.useId();
@@ -16094,14 +16409,14 @@ function MenuPanel({
       className: "vui-menu__check"
     }, it.checked && /*#__PURE__*/React.createElement(__ds_scope.Glyph, {
       name: "check"
-    })) : __ds_scope.renderIcon(it.icon), /*#__PURE__*/React.createElement("span", {
+    })) : iconPosition === 'start' && __ds_scope.renderIcon(it.icon), /*#__PURE__*/React.createElement("span", {
       className: "vui-menu__label"
     }, it.label, it.description && /*#__PURE__*/React.createElement("span", {
       className: "vui-menu__desc"
     }, it.description)), it.shortcut && /*#__PURE__*/React.createElement(__ds_scope.Kbd, {
       plain: true,
       className: "vui-menu__kbd"
-    }, it.shortcut));
+    }, it.shortcut), !check && iconPosition === 'end' && __ds_scope.renderIcon(it.icon));
   }));
 }
 function Menu({
@@ -16113,7 +16428,8 @@ function Menu({
   defaultOpen = false,
   onOpenChange,
   width,
-  className
+  className,
+  iconPosition = 'start'
 }) {
   const [inner, setInner] = React.useState(defaultOpen);
   const isOpen = open !== undefined ? open : inner;
@@ -16161,6 +16477,7 @@ function Menu({
     className: __ds_scope.cx('vui-menu-wrap', className)
   }, trig, isOpen && /*#__PURE__*/React.createElement(MenuPanel, {
     items: items,
+    iconPosition: iconPosition,
     onClose: close,
     className: __ds_scope.cx('vui-menu--pop', align === 'end' && 'vui-menu--end', side === 'top' && 'vui-menu--top'),
     style: width ? {
@@ -16655,35 +16972,176 @@ function NavbarLocale({
     onClick: onClick
   }, value);
 }
-/** Account pill for the menubar's actions slot: avatar + name → Menu (profile, settings, sign out…). */
+/** Account control for the menubar's actions slot. Default: avatar + name pill → Menu. compact: avatar-only → account panel (identity header, links, theme, sign out). */
 function NavbarUser({
   name,
+  email,
+  meta,
   src,
   items = [],
   showName = true,
+  compact = false,
+  theme,
+  onThemeChange,
+  onSignOut,
   label = 'Account menu',
   width = 220
 }) {
-  const trigger = /*#__PURE__*/React.createElement("button", {
+  if (!compact) {
+    const trigger = /*#__PURE__*/React.createElement("button", {
+      type: "button",
+      className: "vui-navbar-mb__user",
+      "aria-label": label + (name ? ' — ' + name : '')
+    }, /*#__PURE__*/React.createElement(__ds_scope.Avatar, {
+      name: name,
+      src: src,
+      size: "sm",
+      tone: "neutral"
+    }), showName && name && /*#__PURE__*/React.createElement("span", {
+      className: "vui-navbar-mb__user-name"
+    }, String(name).split(' ')[0]), /*#__PURE__*/React.createElement(__ds_scope.Glyph, {
+      name: "chevron-down"
+    }));
+    return /*#__PURE__*/React.createElement(__ds_scope.Menu, {
+      trigger: trigger,
+      items: items,
+      align: "end",
+      width: width
+    });
+  }
+  return /*#__PURE__*/React.createElement(AccountPanel, {
+    name,
+    email,
+    meta,
+    src,
+    items,
+    theme,
+    onThemeChange,
+    onSignOut,
+    label
+  });
+}
+const THEMES = [{
+  v: 'light',
+  icon: 'sun',
+  l: 'Light'
+}, {
+  v: 'dark',
+  icon: 'moon',
+  l: 'Dark'
+}, {
+  v: 'system',
+  icon: 'monitor',
+  l: 'System'
+}];
+function AccountPanel({
+  name,
+  email,
+  meta,
+  src,
+  items,
+  theme,
+  onThemeChange,
+  onSignOut,
+  label
+}) {
+  const [open, setOpen] = React.useState(false);
+  const wrap = React.useRef(null),
+    btn = React.useRef(null);
+  React.useEffect(() => {
+    if (!open) return;
+    const down = e => {
+      if (wrap.current && !wrap.current.contains(e.target)) setOpen(false);
+    };
+    const key = e => {
+      if (e.key === 'Escape') {
+        setOpen(false);
+        btn.current && btn.current.focus();
+      }
+    };
+    document.addEventListener('mousedown', down);
+    document.addEventListener('keydown', key);
+    return () => {
+      document.removeEventListener('mousedown', down);
+      document.removeEventListener('keydown', key);
+    };
+  }, [open]);
+  const run = fn => () => {
+    setOpen(false);
+    fn && fn();
+  };
+  return /*#__PURE__*/React.createElement("div", {
+    className: "vui-acct",
+    ref: wrap
+  }, /*#__PURE__*/React.createElement("button", {
+    ref: btn,
     type: "button",
-    className: "vui-navbar-mb__user",
-    "aria-label": label + (name ? ' — ' + name : '')
+    className: "vui-acct__trigger",
+    "aria-haspopup": "dialog",
+    "aria-expanded": open,
+    "aria-label": label + (name ? ' — ' + name : ''),
+    title: name,
+    onClick: () => setOpen(o => !o)
   }, /*#__PURE__*/React.createElement(__ds_scope.Avatar, {
     name: name,
     src: src,
-    size: "sm",
-    tone: "neutral"
-  }), showName && name && /*#__PURE__*/React.createElement("span", {
-    className: "vui-navbar-mb__user-name"
-  }, String(name).split(' ')[0]), /*#__PURE__*/React.createElement(__ds_scope.Glyph, {
-    name: "chevron-down"
-  }));
-  return /*#__PURE__*/React.createElement(__ds_scope.Menu, {
-    trigger: trigger,
-    items: items,
-    align: "end",
-    width: width
-  });
+    size: "sm"
+  })), open && /*#__PURE__*/React.createElement("div", {
+    className: "vui-acct__panel",
+    role: "dialog",
+    "aria-label": label
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "vui-acct__head"
+  }, /*#__PURE__*/React.createElement(__ds_scope.Avatar, {
+    name: name,
+    src: src,
+    size: "lg"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "vui-acct__id"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "vui-acct__name"
+  }, name), email && /*#__PURE__*/React.createElement("span", {
+    className: "vui-acct__email"
+  }, email), meta && /*#__PURE__*/React.createElement("span", {
+    className: "vui-acct__meta"
+  }, meta))), items.length > 0 && /*#__PURE__*/React.createElement("ul", {
+    className: "vui-acct__list"
+  }, items.filter(it => it.label).map((it, i) => /*#__PURE__*/React.createElement("li", {
+    key: i
+  }, /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    className: "vui-acct__item",
+    onClick: run(it.onSelect)
+  }, it.icon && /*#__PURE__*/React.createElement(__ds_scope.Glyph, {
+    name: it.icon
+  }), /*#__PURE__*/React.createElement("span", null, it.label), it.shortcut && /*#__PURE__*/React.createElement("span", {
+    className: "vui-acct__hint"
+  }, it.shortcut))))), onThemeChange && /*#__PURE__*/React.createElement("div", {
+    className: "vui-acct__row"
+  }, /*#__PURE__*/React.createElement("span", null, "Theme"), /*#__PURE__*/React.createElement("div", {
+    className: "vui-acct__seg",
+    role: "radiogroup",
+    "aria-label": "Theme"
+  }, THEMES.map(t => /*#__PURE__*/React.createElement("button", {
+    key: t.v,
+    type: "button",
+    role: "radio",
+    "aria-checked": theme === t.v,
+    "aria-label": t.l,
+    title: t.l,
+    className: "vui-acct__segbtn",
+    onClick: () => onThemeChange(t.v)
+  }, /*#__PURE__*/React.createElement(__ds_scope.Glyph, {
+    name: t.icon
+  }))))), onSignOut && /*#__PURE__*/React.createElement("div", {
+    className: "vui-acct__foot"
+  }, /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    className: "vui-acct__item",
+    onClick: run(onSignOut)
+  }, /*#__PURE__*/React.createElement(__ds_scope.Glyph, {
+    name: "log-out"
+  }), /*#__PURE__*/React.createElement("span", null, "Sign out")))));
 }
 Object.assign(__ds_scope, { Navbar, NavbarLocale, NavbarUser });
 })(); } catch (e) { __ds_ns.__errors.push({ path: "components/navigation/Navbar.jsx", error: String((e && e.message) || e) }); }
@@ -17499,6 +17957,7 @@ Object.assign(__ds_scope, { ImportSourcesDialog });
 
 // components/patterns/QueryBuilder.jsx
 try { (() => {
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 const OPS = {
   text: [['contains', 'contains'], ['not_contains', 'does not contain'], ['eq', 'is'], ['starts', 'starts with'], ['empty', 'is empty'], ['not_empty', 'is not empty']],
   number: [['eq', '='], ['neq', '≠'], ['gt', '>'], ['gte', '≥'], ['lt', '<'], ['lte', '≤'], ['empty', 'is empty']],
@@ -17509,7 +17968,12 @@ const OPS = {
 const NOVALUE = ['empty', 'not_empty', 'true', 'false'];
 let seq = 0;
 const uid = () => 'q' + Date.now().toString(36) + seq++;
-const opsFor = f => OPS[f && f.type || 'text'];
+const opsFor = f => {
+  const all = OPS[f && f.type || 'text'];
+  const allow = f && f.operators;
+  const ops = allow ? all.filter(([v]) => allow.includes(v)) : all;
+  return ops.length ? ops : all;
+};
 const newRule = fields => ({
   id: uid(),
   field: fields[0] && fields[0].key,
@@ -17521,13 +17985,18 @@ const emptyQuery = (fields = []) => ({
   combinator: 'and',
   rules: [newRule(fields)]
 });
+const clearQuery = q => ({
+  ...q,
+  rules: []
+});
 const Sel = ({
   value,
   onChange,
   options,
   label,
   className,
-  placeholder
+  placeholder,
+  disabled
 }) => /*#__PURE__*/React.createElement("div", {
   className: className
 }, /*#__PURE__*/React.createElement(__ds_scope.Select, {
@@ -17536,6 +18005,7 @@ const Sel = ({
   value: value,
   options: options,
   placeholder: placeholder,
+  disabled: disabled,
   onValueChange: onChange
 }));
 function Rule({
@@ -17543,7 +18013,8 @@ function Rule({
   fields,
   onChange,
   onRemove,
-  canRemove
+  canRemove,
+  disabled
 }) {
   const f = fields.find(x => x.key === r.field) || fields[0];
   const ops = opsFor(f);
@@ -17559,6 +18030,7 @@ function Rule({
   return /*#__PURE__*/React.createElement("div", {
     className: "vui-qb__rule"
   }, /*#__PURE__*/React.createElement(Sel, {
+    disabled: disabled,
     label: "Field",
     value: r.field,
     onChange: setField,
@@ -17568,6 +18040,7 @@ function Rule({
       label: x.label
     }))
   }), /*#__PURE__*/React.createElement(Sel, {
+    disabled: disabled,
     label: "Operator",
     value: r.op,
     onChange: op => onChange({
@@ -17582,6 +18055,7 @@ function Rule({
   }), NOVALUE.includes(r.op) ? /*#__PURE__*/React.createElement("span", {
     className: "vui-qb__value"
   }) : f && f.type === 'select' ? /*#__PURE__*/React.createElement(Sel, {
+    disabled: disabled,
     label: "Value",
     value: r.value,
     onChange: value => onChange({
@@ -17596,6 +18070,7 @@ function Rule({
   }, /*#__PURE__*/React.createElement(__ds_scope.Input, {
     size: "sm",
     "aria-label": "Value",
+    disabled: disabled,
     type: f && f.type === 'number' ? 'number' : f && f.type === 'date' ? 'date' : 'text',
     placeholder: f && f.placeholder || 'Value',
     value: r.value,
@@ -17605,7 +18080,7 @@ function Rule({
     })
   })), /*#__PURE__*/React.createElement(__ds_scope.CloseButton, {
     "aria-label": "Remove condition",
-    disabled: !canRemove,
+    disabled: disabled || !canRemove,
     onClick: onRemove
   }));
 }
@@ -17615,7 +18090,10 @@ function Group({
   onChange,
   onRemove,
   depth,
-  maxDepth
+  maxDepth,
+  disabled,
+  reorderable,
+  onClear
 }) {
   const setRule = (i, v) => onChange({
     ...g,
@@ -17625,14 +18103,33 @@ function Group({
     ...g,
     rules: g.rules.filter((_, k) => k !== i)
   });
+  const move = (i, d) => {
+    const j = i + d;
+    if (j < 0 || j >= g.rules.length) return;
+    const next = g.rules.slice();
+    [next[i], next[j]] = [next[j], next[i]];
+    onChange({
+      ...g,
+      rules: next
+    });
+  };
   const total = g.rules.length;
+  const kind = r => r.rules ? 'group' : 'condition';
+  const sub = {
+    fields,
+    maxDepth,
+    disabled,
+    reorderable
+  };
   return /*#__PURE__*/React.createElement("div", {
     className: __ds_scope.cx('vui-qb__group', depth > 0 && 'vui-qb__group--nested'),
     role: "group",
     "aria-label": depth ? 'Condition group' : 'Conditions'
-  }, g.rules.map((r, i) => /*#__PURE__*/React.createElement("div", {
+  }, total === 0 && /*#__PURE__*/React.createElement("div", {
+    className: "vui-qb__empty"
+  }, "No conditions \u2014 every record matches."), g.rules.map((r, i) => /*#__PURE__*/React.createElement("div", {
     key: r.id,
-    className: "vui-qb__row"
+    className: __ds_scope.cx('vui-qb__row', reorderable && 'vui-qb__row--move')
   }, /*#__PURE__*/React.createElement("div", {
     className: "vui-qb__lead"
   }, i === 0 ? /*#__PURE__*/React.createElement("span", null, "Where") : i === 1 ? /*#__PURE__*/React.createElement(__ds_scope.Button, {
@@ -17641,29 +18138,45 @@ function Group({
     iconRight: "chevrons-up-down",
     className: "vui-qb__comb",
     "aria-label": 'Match ' + (g.combinator === 'and' ? 'all' : 'any') + ' conditions, click to switch',
+    disabled: disabled,
     onClick: () => onChange({
       ...g,
       combinator: g.combinator === 'and' ? 'or' : 'and'
     })
-  }, g.combinator) : /*#__PURE__*/React.createElement("span", null, g.combinator)), r.rules ? /*#__PURE__*/React.createElement(Group, {
-    g: r,
-    fields: fields,
+  }, g.combinator) : /*#__PURE__*/React.createElement("span", null, g.combinator)), r.rules ? /*#__PURE__*/React.createElement(Group, _extends({
+    g: r
+  }, sub, {
     depth: depth + 1,
-    maxDepth: maxDepth,
     onChange: v => setRule(i, v),
     onRemove: () => remove(i)
-  }) : /*#__PURE__*/React.createElement(Rule, {
+  })) : /*#__PURE__*/React.createElement(Rule, {
     r: r,
     fields: fields,
+    disabled: disabled,
     onChange: v => setRule(i, v),
     onRemove: () => remove(i),
-    canRemove: total > 1 || depth > 0
-  }))), /*#__PURE__*/React.createElement("div", {
+    canRemove: total > 1 || depth > 0 || !!onClear
+  }), reorderable && /*#__PURE__*/React.createElement("div", {
+    className: "vui-qb__move"
+  }, /*#__PURE__*/React.createElement(__ds_scope.IconButton, {
+    size: "xs",
+    icon: "arrow-up",
+    label: 'Move ' + kind(r) + ' ' + (i + 1) + ' up',
+    disabled: disabled || i === 0,
+    onClick: () => move(i, -1)
+  }), /*#__PURE__*/React.createElement(__ds_scope.IconButton, {
+    size: "xs",
+    icon: "arrow-down",
+    label: 'Move ' + kind(r) + ' ' + (i + 1) + ' down',
+    disabled: disabled || i === total - 1,
+    onClick: () => move(i, 1)
+  })))), /*#__PURE__*/React.createElement("div", {
     className: "vui-qb__add"
   }, /*#__PURE__*/React.createElement(__ds_scope.Button, {
     variant: "ghost",
     size: "sm",
     iconLeft: "plus",
+    disabled: disabled,
     onClick: () => onChange({
       ...g,
       rules: [...g.rules, newRule(fields)]
@@ -17672,6 +18185,7 @@ function Group({
     variant: "ghost",
     size: "sm",
     iconLeft: "plus",
+    disabled: disabled,
     onClick: () => onChange({
       ...g,
       rules: [...g.rules, {
@@ -17684,8 +18198,15 @@ function Group({
     variant: "ghost",
     size: "sm",
     className: "vui-qb__drop",
+    disabled: disabled,
     onClick: onRemove
-  }, "Remove group")));
+  }, "Remove group"), depth === 0 && onClear && /*#__PURE__*/React.createElement(__ds_scope.Button, {
+    variant: "ghost",
+    size: "sm",
+    className: "vui-qb__drop",
+    disabled: disabled || total === 0,
+    onClick: onClear
+  }, "Clear all")));
 }
 function describeQuery(q, fields = []) {
   const one = r => {
@@ -17695,7 +18216,7 @@ function describeQuery(q, fields = []) {
     const val = f.type === 'select' ? ((f.options || []).find(o => o.value === r.value) || {}).label || '…' : r.value || '…';
     return f.label + ' ' + op + (NOVALUE.includes(r.op) ? '' : ' ' + val);
   };
-  return q.rules.map(one).join(' ' + q.combinator.toUpperCase() + ' ');
+  return q.rules.length ? q.rules.map(one).join(' ' + q.combinator.toUpperCase() + ' ') : 'All records';
 }
 function QueryBuilder({
   fields = [],
@@ -17705,6 +18226,10 @@ function QueryBuilder({
   onValueChange,
   maxDepth = 2,
   showSummary = false,
+  disabled = false,
+  reorderable = false,
+  clearable = false,
+  onClear,
   className
 }) {
   const onChange = onChangeProp || onValueChange;
@@ -17715,20 +18240,28 @@ function QueryBuilder({
     onChange && onChange(v);
   };
   return /*#__PURE__*/React.createElement("div", {
-    className: __ds_scope.cx('vui-qb', className)
+    className: __ds_scope.cx('vui-qb', disabled && 'vui-qb--disabled', className),
+    "aria-disabled": disabled || undefined
   }, /*#__PURE__*/React.createElement(Group, {
     g: cur,
     fields: fields,
     depth: 0,
     maxDepth: maxDepth,
-    onChange: set
+    disabled: disabled,
+    reorderable: reorderable,
+    onChange: set,
+    onClear: clearable ? () => {
+      const v = clearQuery(cur);
+      set(v);
+      onClear && onClear(v);
+    } : undefined
   }), showSummary && /*#__PURE__*/React.createElement("div", {
     className: "vui-qb__summary"
   }, /*#__PURE__*/React.createElement(__ds_scope.SectionLabel, {
     as: "span"
   }, "Query"), /*#__PURE__*/React.createElement("code", null, describeQuery(cur, fields))));
 }
-Object.assign(__ds_scope, { emptyQuery, describeQuery, QueryBuilder });
+Object.assign(__ds_scope, { emptyQuery, clearQuery, describeQuery, QueryBuilder });
 })(); } catch (e) { __ds_ns.__errors.push({ path: "components/patterns/QueryBuilder.jsx", error: String((e && e.message) || e) }); }
 
 // components/data/DataGrid.jsx
@@ -17787,10 +18320,84 @@ function test(r, row) {
 }
 const RN = 44,
   CHK = 40;
+const clampW = (c, w) => Math.round(Math.min(c.maxWidth ?? Infinity, Math.max(c.minWidth ?? 64, w)));
+const capsOf = c => ({
+  hide: !c.locked && c.hideable !== false,
+  pin: !c.locked && c.pinnable !== false
+});
+function defaultGridView(columns = [], {
+  stickyFirst = true,
+  filterFields
+} = {}) {
+  const anyPin = columns.some(c => c.pin);
+  return {
+    search: '',
+    query: filterFields ? __ds_scope.emptyQuery(filterFields) : null,
+    sort: null,
+    columns: columns.map((c, i) => ({
+      key: c.key,
+      visible: !c.hidden,
+      pin: c.pin || (!anyPin && stickyFirst && i === 0 ? 'left' : null)
+    })),
+    widths: {}
+  };
+}
+/** Fits a saved/foreign view onto the current column schema: drops unknown keys, appends new columns, clamps widths, keeps ≥1 column visible. */
+function reconcileGridView(view, columns = [], opts = {}) {
+  const base = defaultGridView(columns, opts);
+  if (!view || typeof view !== 'object') return base;
+  const byKey = new Map(columns.map(c => [c.key, c]));
+  const seen = new Set();
+  const cs = (Array.isArray(view.columns) ? view.columns : []).filter(x => x && byKey.has(x.key) && !seen.has(x.key) && seen.add(x.key)).map(x => {
+    const c = byKey.get(x.key);
+    const cp = capsOf(c);
+    const b = base.columns.find(y => y.key === x.key);
+    return {
+      key: x.key,
+      visible: cp.hide ? x.visible !== false : true,
+      pin: cp.pin ? x.pin === 'left' ? 'left' : null : b.pin
+    };
+  });
+  base.columns.forEach(b => {
+    if (!seen.has(b.key)) cs.push(b);
+  });
+  if (cs.length && !cs.some(x => x.visible)) cs[0] = {
+    ...cs[0],
+    visible: true
+  };
+  const widths = {};
+  Object.entries(view.widths || {}).forEach(([k, w]) => {
+    if (byKey.has(k) && typeof w === 'number' && isFinite(w)) widths[k] = clampW(byKey.get(k), w);
+  });
+  const sort = view.sort && byKey.has(view.sort.key) && (view.sort.dir === 'asc' || view.sort.dir === 'desc') ? {
+    key: view.sort.key,
+    dir: view.sort.dir
+  } : null;
+  const fk = new Set((opts.filterFields || []).map(f => f.key));
+  const prune = g => ({
+    ...g,
+    combinator: g.combinator === 'or' ? 'or' : 'and',
+    rules: (g.rules || []).filter(r => r && (r.rules ? true : fk.has(r.field))).map(r => r.rules ? prune(r) : r)
+  });
+  const query = opts.filterFields ? view.query && Array.isArray(view.query.rules) ? prune(view.query) : base.query : null;
+  return {
+    search: typeof view.search === 'string' ? view.search : '',
+    query,
+    sort,
+    columns: cs,
+    widths
+  };
+}
 function DataGrid({
   columns = [],
   rows = [],
   rowKey = 'id',
+  view: viewProp,
+  defaultView,
+  onViewChange,
+  manualFiltering = false,
+  manualSorting = false,
+  rowCount,
   onRowsChange,
   height = 360,
   stickyFirst = true,
@@ -17815,18 +18422,55 @@ function DataGrid({
   });
   const [edit, setEdit] = React.useState(null);
   const [draft, setDraft] = React.useState('');
-  const [widths, setWidths] = React.useState(() => Object.fromEntries(columns.map(c => [c.key, c.width || 160])));
-  const [sort, setSort] = React.useState(null);
-  const [q, setQ] = React.useState('');
-  const [query, setQuery] = React.useState(() => filterFields ? __ds_scope.emptyQuery(filterFields) : null);
-  const [colState, setColState] = React.useState(() => {
-    const anyPin = columns.some(c => c.pin);
-    return columns.map((c, i) => ({
-      key: c.key,
-      visible: !c.hidden,
-      pin: c.pin || (!anyPin && stickyFirst && i === 0 ? 'left' : null)
-    }));
+  const vOpts = {
+    stickyFirst,
+    filterFields
+  };
+  const schema = columns.map(c => c.key + (c.locked ? '!' : '')).join('|') + '#' + (filterFields || []).map(f => f.key).join('|');
+  const initialView = React.useMemo(() => reconcileGridView(defaultView, columns, vOpts), [schema]);
+  const [innerView, setInnerView] = React.useState(initialView);
+  const gv = React.useMemo(() => reconcileGridView(viewProp !== undefined ? viewProp : innerView, columns, vOpts), [viewProp, innerView, schema]);
+  const gvRef = React.useRef(gv);
+  gvRef.current = gv;
+  const update = patch => {
+    const next = {
+      ...gvRef.current,
+      ...(typeof patch === 'function' ? patch(gvRef.current) : patch)
+    };
+    gvRef.current = next;
+    if (viewProp === undefined) setInnerView(next);
+    onViewChange && onViewChange(next);
+  };
+  const resetView = () => update(initialView);
+  const isDefault = JSON.stringify(gv) === JSON.stringify(initialView);
+  const colByKey = React.useMemo(() => Object.fromEntries(columns.map(c => [c.key, c])), [columns]);
+  const widths = React.useMemo(() => Object.fromEntries(columns.map(c => [c.key, clampW(c, gv.widths[c.key] ?? c.width ?? 160)])), [columns, gv.widths]);
+  const sort = gv.sort && {
+    key: gv.sort.key,
+    dir: gv.sort.dir === 'desc' ? -1 : 1
+  };
+  const setSort = s => update({
+    sort: s && {
+      key: s.key,
+      dir: s.dir < 0 ? 'desc' : 'asc'
+    }
   });
+  const q = gv.search;
+  const setQ = v => update({
+    search: v
+  });
+  const query = gv.query;
+  const setQuery = v => update({
+    query: v
+  });
+  const colState = gv.columns;
+  const setColState = v => update({
+    columns: v.some(x => x.visible) ? v : gvRef.current.columns
+  });
+  React.useEffect(() => {
+    const ks = rows.map(r => r[rowKey]);
+    if (ks.some(k => k == null) || new Set(ks).size !== ks.length) console.warn('DataGrid: every row needs a unique, stable "' + rowKey + '" — edits, selection and focus are keyed by it.');
+  }, [rows, rowKey]);
   const [selInner, setSelInner] = React.useState([]);
   const sel = new Set(selected !== undefined ? selected : selInner);
   const [open, setOpen] = React.useState(() => new Set());
@@ -17836,9 +18480,9 @@ function DataGrid({
   const view = React.useMemo(() => {
     let out = rows;
     const t = q.trim().toLowerCase();
-    if (t) out = out.filter(r => cols.some(c => String(r[c.key] ?? '').toLowerCase().includes(t)));
-    if (query && countActive(query)) out = out.filter(r => test(query, r));
-    if (sort) {
+    if (!manualFiltering && t) out = out.filter(r => cols.some(c => String(r[c.key] ?? '').toLowerCase().includes(t)));
+    if (!manualFiltering && query && countActive(query)) out = out.filter(r => test(query, r));
+    if (sort && !manualSorting) {
       const k = sort.key;
       const typed = columns.find(c => c.key === k);
       out = [...out].sort((a, b) => {
@@ -17851,7 +18495,7 @@ function DataGrid({
       if (sort.dir < 0) out.reverse();
     }
     return out;
-  }, [rows, sort, q, query, cols]);
+  }, [rows, gv.sort, q, query, cols, manualFiltering, manualSorting]);
   const setSel = s => {
     const v = [...s];
     if (selected === undefined) setSelInner(v);
@@ -17975,7 +18619,7 @@ function DataGrid({
   } : undefined;
   const nFilters = query ? countActive(query) : 0;
   const nSel = rows.filter(r => sel.has(r[rowKey])).length;
-  const hasToolbar = searchable || filterFields || columnManager || onExport !== undefined || toolbarEnd || selectable && bulkActions;
+  const hasToolbar = searchable || filterFields || columnManager || onExport !== undefined || toolbarEnd || selectable && bulkActions || !isDefault;
   const exportOn = onExport !== undefined;
   return /*#__PURE__*/React.createElement("div", {
     className: __ds_scope.cx('vui-dgrid', className)
@@ -18020,7 +18664,7 @@ function DataGrid({
   }, /*#__PURE__*/React.createElement(__ds_scope.Button, {
     size: "sm",
     variant: "ghost",
-    onClick: () => setQuery(__ds_scope.emptyQuery(filterFields))
+    onClick: () => setQuery(initialView.query || __ds_scope.emptyQuery(filterFields))
   }, "Reset filters"))), columnManager && /*#__PURE__*/React.createElement(__ds_scope.Popover, {
     className: "vui-dgrid__pop",
     align: "end",
@@ -18035,11 +18679,20 @@ function DataGrid({
       label: c.label,
       visible: !c.hidden,
       pin: c.pin,
-      locked: c.locked
+      locked: c.locked,
+      hideable: c.hideable,
+      pinnable: c.pinnable,
+      movable: c.movable
     })),
     value: colState,
-    onChange: setColState
-  })), exportOn && /*#__PURE__*/React.createElement(__ds_scope.Button, {
+    onChange: setColState,
+    resetValue: initialView.columns
+  })), !isDefault && /*#__PURE__*/React.createElement(__ds_scope.Button, {
+    size: "sm",
+    variant: "ghost",
+    iconLeft: "rotate-ccw",
+    onClick: resetView
+  }, "Reset view"), exportOn && /*#__PURE__*/React.createElement(__ds_scope.Button, {
     size: "sm",
     variant: "secondary",
     iconLeft: "download",
@@ -18105,10 +18758,22 @@ function DataGrid({
   })), /*#__PURE__*/React.createElement(__ds_scope.ColumnResize, {
     label: 'Resize ' + (typeof c.label === 'string' ? c.label : c.key),
     width: widths[c.key],
-    onResize: w => setWidths(x => ({
-      ...x,
-      [c.key]: w
-    }))
+    min: c.minWidth ?? 64,
+    onResize: w => update(v => ({
+      widths: {
+        ...v.widths,
+        [c.key]: clampW(colByKey[c.key] || c, w)
+      }
+    })),
+    onReset: () => update(v => {
+      const {
+        [c.key]: _,
+        ...rest
+      } = v.widths;
+      return {
+        widths: rest
+      };
+    })
   })))), view.length === 0 && /*#__PURE__*/React.createElement(__ds_scope.EmptyText, {
     className: "vui-grid__empty"
   }, "No rows match", q ? ' “' + q + '”' : '', nFilters ? ' and ' + nFilters + ' filter' + (nFilters > 1 ? 's' : '') : '', "."), view.map((row, r) => {
@@ -18220,11 +18885,11 @@ function DataGrid({
     className: "vui-dgrid__foot"
   }, /*#__PURE__*/React.createElement("span", {
     "aria-live": "polite"
-  }, "Showing ", /*#__PURE__*/React.createElement("b", null, view.length), " of ", rows.length), selectable && nSel > 0 && /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("b", null, nSel), " selected"), typeof footer !== 'boolean' && /*#__PURE__*/React.createElement("span", {
+  }, "Showing ", /*#__PURE__*/React.createElement("b", null, view.length), " of ", rowCount ?? rows.length), selectable && nSel > 0 && /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("b", null, nSel), " selected"), typeof footer !== 'boolean' && /*#__PURE__*/React.createElement("span", {
     className: "vui-dgrid__foot-end"
   }, footer)));
 }
-Object.assign(__ds_scope, { DataGrid });
+Object.assign(__ds_scope, { defaultGridView, reconcileGridView, DataGrid });
 })(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/DataGrid.jsx", error: String((e && e.message) || e) }); }
 
 // components/primitives/Segmented.jsx
@@ -21737,6 +22402,10 @@ function CalendarOrganizer({
   onEventsChange,
   onEventClick,
   defaultMonth,
+  selected,
+  defaultSelected,
+  onSelectedChange,
+  confirmDelete = true,
   weekStartsOn = 1,
   locale = 'en-US',
   maxChips = 2,
@@ -21744,10 +22413,30 @@ function CalendarOrganizer({
 }) {
   const today = __ds_scope.startOfDay(new Date());
   const [view, setView] = React.useState(() => {
-    const d = defaultMonth || today;
+    const d = defaultMonth || selected && __ds_scope.startOfDay(new Date(selected)) || defaultSelected || today;
     return new Date(d.getFullYear(), d.getMonth(), 1);
   });
-  const [sel, setSel] = React.useState(today);
+  const [innerSel, setInnerSel] = React.useState(() => __ds_scope.startOfDay(new Date(defaultSelected || today)));
+  const sel = selected != null ? __ds_scope.startOfDay(new Date(selected)) : innerSel;
+  const setSel = d => {
+    if (selected === undefined) setInnerSel(d);
+    onSelectedChange && onSelectedChange(d);
+  };
+  React.useEffect(() => {
+    if (selected == null) return;
+    const d = new Date(selected);
+    if (d.getMonth() !== view.getMonth() || d.getFullYear() !== view.getFullYear()) setView(new Date(d.getFullYear(), d.getMonth(), 1));
+  }, [selected && +new Date(selected)]);
+  const [asking, setAsking] = React.useState(null);
+  const panel = React.useRef(null);
+  const del = e => {
+    onEventsChange(events.filter(x => x.id !== e.id));
+    setAsking(null);
+    requestAnimationFrame(() => {
+      const b = panel.current && panel.current.querySelector('.vui-organizer__evb, .vui-organizer__add input');
+      b && b.focus();
+    });
+  };
   const [title, setTitle] = React.useState('');
   const [time, setTime] = React.useState('');
   const grid = React.useRef(null);
@@ -21778,7 +22467,7 @@ function CalendarOrganizer({
     kb.current = false;
     const b = grid.current && grid.current.querySelector('[data-k="' + key(sel) + '"]');
     b && b.focus();
-  }, [sel]);
+  }, [+sel]);
   const pick = d => {
     setSel(d);
     if (d.getMonth() !== view.getMonth()) setView(new Date(d.getFullYear(), d.getMonth(), 1));
@@ -21886,6 +22575,7 @@ function CalendarOrganizer({
       className: "vui-organizer__more"
     }, "+", list.length - maxChips, " more")));
   }))), /*#__PURE__*/React.createElement("aside", {
+    ref: panel,
     className: "vui-organizer__panel",
     "aria-live": "polite"
   }, /*#__PURE__*/React.createElement("div", {
@@ -21913,12 +22603,27 @@ function CalendarOrganizer({
     className: "vui-organizer__evt"
   }, e.title), /*#__PURE__*/React.createElement("span", {
     className: "vui-organizer__evm"
-  }, e.time || 'All day', e.location ? ' · ' + e.location : '')), onEventsChange && /*#__PURE__*/React.createElement(__ds_scope.IconButton, {
+  }, e.time || 'All day', e.location ? ' · ' + e.location : '')), onEventsChange && (asking === e.id ? /*#__PURE__*/React.createElement("div", {
+    className: "vui-organizer__confirm",
+    role: "group",
+    "aria-label": 'Delete ' + e.title + '?'
+  }, /*#__PURE__*/React.createElement(__ds_scope.Button, {
+    size: "xs",
+    variant: "ghost",
+    autoFocus: true,
+    onClick: () => setAsking(null),
+    onKeyDown: k => k.key === 'Escape' && setAsking(null)
+  }, "Cancel"), /*#__PURE__*/React.createElement(__ds_scope.Button, {
+    size: "xs",
+    variant: "danger",
+    onClick: () => del(e),
+    onKeyDown: k => k.key === 'Escape' && setAsking(null)
+  }, "Delete")) : /*#__PURE__*/React.createElement(__ds_scope.IconButton, {
     icon: "trash-2",
     label: 'Delete ' + e.title,
     size: "sm",
-    onClick: () => onEventsChange(events.filter(x => x.id !== e.id))
-  })))) : /*#__PURE__*/React.createElement(__ds_scope.EmptyText, {
+    onClick: () => confirmDelete ? setAsking(e.id) : del(e)
+  }))))) : /*#__PURE__*/React.createElement(__ds_scope.EmptyText, {
     icon: "sun",
     className: "vui-organizer__empty"
   }, /*#__PURE__*/React.createElement("b", null, "Nothing scheduled"), /*#__PURE__*/React.createElement("span", null, "Enjoy the free day.")), onEventsChange && /*#__PURE__*/React.createElement("div", {

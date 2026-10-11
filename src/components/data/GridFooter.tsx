@@ -17,7 +17,7 @@ export const GridFooter = <T extends object>(props: GridFooterProps<T>) => {
         <span aria-live="polite">
           {translateRich('velvet.data.dataGrid.showing', {
             shown: props.grid.view.rows().length,
-            total: props.grid.config.rows.length,
+            total: props.grid.config.rowCount ?? props.grid.config.rows.length,
             b: (children) => <b>{children}</b>,
           })}
         </span>

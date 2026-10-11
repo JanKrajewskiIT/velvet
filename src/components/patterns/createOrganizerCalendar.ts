@@ -1,7 +1,8 @@
 import { type Accessor, batch, createMemo, createSignal, type JSX } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
-import { addDays, addMonths, fmtDate, startOfDay, weekdayNames, ymd } from '../../utils/date';
+import { createFrameFocus } from '../../hooks/createFrameFocus';
+import { addDays, addMonths, fmtDate, startOfDay, toDate, weekdayNames, ymd } from '../../utils/date';
 import { firstOfMonth, sameMonth } from './organizerMonth';
 
 export interface OrganizerCalendarInput {
@@ -11,6 +12,9 @@ export interface OrganizerCalendarInput {
   selectedDate?: Date;
   defaultSelectedDate?: Date;
   onSelectedDateChange?: (date: Date) => void;
+  selected?: Date | string;
+  defaultSelected?: Date;
+  onSelectedChange?: (date: Date) => void;
 }
 
 export interface OrganizerCalendar {
@@ -26,6 +30,7 @@ export interface OrganizerCalendar {
   shiftMonth: (delta: number) => void;
   pick: (d: Date) => void;
   goToday: () => void;
+  setGrid: (element: HTMLDivElement) => void;
   onGridKeyDown: JSX.EventHandler<HTMLDivElement, KeyboardEvent>;
 }
 
@@ -40,12 +45,42 @@ const MONTH_YEAR: Intl.DateTimeFormatOptions = { month: 'long', year: 'numeric' 
 
 export const createOrganizerCalendar = (input: OrganizerCalendarInput, locale: Accessor<string>): OrganizerCalendar => {
   const today = () => startOfDay(new Date());
-  const [view, setView] = createSignal(firstOfMonth(input.defaultMonth ?? today()));
-  const [selected, setSelected] = createControllable({
-    value: () => (input.selectedDate ? startOfDay(input.selectedDate) : undefined),
-    defaultValue: startOfDay(input.defaultSelectedDate ?? today()),
-    onChange: (date) => input.onSelectedDateChange?.(date),
+  const controlled = () => {
+    const value = input.selectedDate ?? input.selected;
+    return value === undefined ? undefined : startOfDay(toDate(value));
+  };
+  const selectionKey = () => controlled()?.getTime();
+  const [navigation, setNavigation] = createSignal({
+    month: firstOfMonth(
+      controlled() ?? input.defaultMonth ?? input.defaultSelectedDate ?? input.defaultSelected ?? today(),
+    ),
+    selectionKey: selectionKey(),
   });
+  const visibleMonth = createMemo<{
+    month: Date;
+    selectionKey: number | undefined;
+    navigation: ReturnType<typeof navigation>;
+  }>((previous) => {
+    const current = controlled();
+    const state = navigation();
+    const key = selectionKey();
+    const sameNavigation = previous?.navigation === state;
+    const month =
+      sameNavigation && current && key !== previous.selectionKey
+        ? firstOfMonth(current)
+        : sameNavigation
+          ? previous.month
+          : state.month;
+    return { month, selectionKey: key, navigation: state };
+  });
+  const view = () => visibleMonth().month;
+  const [selected, setSelected] = createControllable({
+    value: controlled,
+    defaultValue: startOfDay(input.defaultSelectedDate ?? input.defaultSelected ?? today()),
+    onChange: (date) => (input.onSelectedDateChange ?? input.onSelectedChange)?.(date),
+  });
+  let grid: HTMLDivElement | undefined;
+  const focusDay = createFrameFocus(() => grid);
 
   const offset = () => (view().getDay() - input.weekStartsOn + DAYS_PER_WEEK) % DAYS_PER_WEEK;
   const days = createMemo(() => {
@@ -62,7 +97,7 @@ export const createOrganizerCalendar = (input: OrganizerCalendarInput, locale: A
 
   const showMonth = (month: Date) => {
     const first = firstOfMonth(month);
-    setView(first);
+    setNavigation({ month: first, selectionKey: selectionKey() });
     input.onMonthChange?.(first);
   };
   const shiftMonth = (delta: number) => showMonth(addMonths(view(), delta));
@@ -83,7 +118,7 @@ export const createOrganizerCalendar = (input: OrganizerCalendarInput, locale: A
     e.preventDefault();
     const next = addDays(selected(), step);
     pick(next);
-    e.currentTarget.querySelector<HTMLElement>(`[data-k="${ymd(next)}"]`)?.focus();
+    focusDay(`[data-k="${ymd(next)}"]`);
   };
 
   return {
@@ -99,6 +134,9 @@ export const createOrganizerCalendar = (input: OrganizerCalendarInput, locale: A
     shiftMonth,
     pick,
     goToday,
+    setGrid: (element) => {
+      grid = element;
+    },
     onGridKeyDown,
   };
 };

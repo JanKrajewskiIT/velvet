@@ -1,10 +1,8 @@
 import { useI18n } from '@jankrajewskiit/i18n';
 import { createMemo, mergeProps } from 'solid-js';
 
-import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { ymd } from '../../utils/date';
-import { ConfirmDialog } from '../feedback/ConfirmDialog';
 import { createOrganizerCalendar } from './createOrganizerCalendar';
 import { createOrganizerDrag } from './createOrganizerDrag';
 import { createOrganizerEditing } from './createOrganizerEditing';
@@ -25,6 +23,12 @@ export interface CalendarOrganizerProps {
   selectedDate?: Date;
   defaultSelectedDate?: Date;
   onSelectedDateChange?: (date: Date) => void;
+  /** Reference API aliases; selectedDate and its callback take precedence. */
+  selected?: Date | string;
+  defaultSelected?: Date;
+  onSelectedChange?: (date: Date) => void;
+  /** Ask inline before deleting an event. @default true */
+  confirmDelete?: boolean;
   /** Drag an event from the day panel onto a day to move it. Needs `onEventsChange`. @default true */
   draggableEvents?: boolean;
   /** 0 = Sunday. @default 1 */
@@ -39,11 +43,15 @@ export interface CalendarOrganizerProps {
 /** Month planner: day grid with event chips beside a detail panel for the selected day, with quick add, edit, delete and drag-to-move. Multi-day events span their days. Arrow keys move between days. */
 export const CalendarOrganizer = (props: CalendarOrganizerProps) => {
   const p = mergeProps(
-    { weekStartsOn: 1, maxChips: 2, draggableEvents: true } satisfies Partial<CalendarOrganizerProps>,
+    {
+      weekStartsOn: 1,
+      maxChips: 2,
+      draggableEvents: true,
+      confirmDelete: true,
+    } satisfies Partial<CalendarOrganizerProps>,
     props,
   );
   const i18n = useI18n();
-  const translate = useTranslate();
   const locale = () => p.locale ?? i18n.locale();
   const calendar = createOrganizerCalendar(p, locale);
   const drag = createOrganizerDrag(p);
@@ -66,18 +74,8 @@ export const CalendarOrganizer = (props: CalendarOrganizerProps) => {
         events={eventsOn(calendar.selected())}
         editable={canEdit()}
         draggableEvents={p.draggableEvents}
+        confirmDelete={p.confirmDelete}
         onEventClick={p.onEventClick}
-      />
-      <ConfirmDialog
-        open={editing.pendingDelete() !== undefined}
-        tone="danger"
-        title={translate('velvet.patterns.calendarOrganizer.deleteTitle')}
-        description={translate('velvet.patterns.calendarOrganizer.deleteMessage', {
-          title: editing.pendingDelete()?.title ?? '',
-        })}
-        confirmLabel={translate('velvet.common.delete')}
-        onCancel={editing.cancelDelete}
-        onConfirm={editing.confirmDelete}
       />
     </div>
   );

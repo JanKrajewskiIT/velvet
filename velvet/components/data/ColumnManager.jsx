@@ -16,13 +16,16 @@ export function applyColumns(columns, state) {
   return order.filter((s) => s.visible).map((s) => { const c = columns.find((x) => x.key === s.key); return c && { ...c, pin: s.pin || undefined }; }).filter(Boolean);
 }
 export const ApplyColumns = applyColumns;
-export function ColumnManager({ columns = [], value, defaultValue, onChange: onChangeProp, onValueChange, title = 'Columns', pinRight = false, maxPinned, searchable, className }) {
+const capsOf = (m) => ({ hide: !m.locked && m.hideable !== false, pin: !m.locked && m.pinnable !== false, move: !m.locked && m.movable !== false });
+export function ColumnManager({ columns = [], value, defaultValue, resetValue, onChange: onChangeProp, onValueChange, title = 'Columns', pinRight = false, maxPinned, searchable, className }) {
   const onChange = onChangeProp || onValueChange;
   const initial = React.useMemo(() => norm(columns), []);
   const [inner, setInner] = React.useState(() => defaultValue || initial);
   const cur = value !== undefined ? value : inner;
   const set = (v) => { if (value === undefined) setInner(v); onChange && onChange(v); };
   const meta = (k) => columns.find((c) => c.key === k) || { label: k };
+  const caps = (k) => capsOf(meta(k));
+  const zoneOk = (key, z) => { const c = cur.find((x) => x.key === key); return !!c && ((c.pin || null) === z || caps(key).pin); };
   const [q, setQ] = React.useState('');
   const [drag, setDrag] = React.useState(null);
   const [over, setOver] = React.useState(null);
@@ -54,8 +57,9 @@ export function ColumnManager({ columns = [], value, defaultValue, onChange: onC
     const z = c.pin || null; const list = inZone(z); const i = list.findIndex((x) => x.key === c.key);
     if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
       e.preventDefault(); const d = e.key === 'ArrowUp' ? -1 : 1; const to = i + d;
-      if (to >= 0 && to < list.length) { if (meta(list[to].key).locked) return; moveTo(c.key, z, to); setMsg(name(c.key) + ' moved to position ' + (to + 1)); }
-      else { const zi = zones.findIndex(([x]) => x === z); const nz = zones[zi + d]; if (nz && !(nz[0] && maxPinned != null && !z && pinnedCount >= maxPinned)) { moveTo(c.key, nz[0], d < 0 ? undefined : 0); setMsg(name(c.key) + ' moved to ' + nz[1].toLowerCase()); } }
+      if (!caps(c.key).move) return;
+      if (to >= 0 && to < list.length) { if (!caps(list[to].key).move) return; moveTo(c.key, z, to); setMsg(name(c.key) + ' moved to position ' + (to + 1)); }
+      else { const zi = zones.findIndex(([x]) => x === z); const nz = zones[zi + d]; if (nz && zoneOk(c.key, nz[0]) && !(nz[0] && maxPinned != null && !z && pinnedCount >= maxPinned)) { moveTo(c.key, nz[0], d < 0 ? undefined : 0); setMsg(name(c.key) + ' moved to ' + nz[1].toLowerCase()); } }
       focusGrip(c.key);
     }
   };
@@ -63,18 +67,18 @@ export function ColumnManager({ columns = [], value, defaultValue, onChange: onC
   const ql = q.trim().toLowerCase();
   const rowsFor = (z) => inZone(z).filter((c) => !ql || name(c.key).toLowerCase().includes(ql));
   const Row = ({ c, i, z }) => {
-    const m = meta(c.key); const locked = m.locked;
+    const m = meta(c.key); const cp = caps(c.key); const lastOn = c.visible && visible <= 1;
     const atMax = !c.pin && maxPinned != null && pinnedCount >= maxPinned;
     return (
       <li className={cx('vui-colman__item', !c.visible && 'vui-colman__item--off', drag === c.key && 'vui-colman__item--drag', over && over.key === c.key && drag && drag !== c.key && 'vui-colman__item--' + over.pos)}
-        draggable={!locked} onDragStart={(e) => { setDrag(c.key); e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', c.key); }}
+        draggable={cp.move} onDragStart={(e) => { setDrag(c.key); e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', c.key); }}
         onDragOver={(e) => { if (!drag) return; e.preventDefault(); e.stopPropagation(); const r = e.currentTarget.getBoundingClientRect(); setOver({ key: c.key, z, i, pos: e.clientY < r.top + r.height / 2 ? 'above' : 'below' }); }}
         onDragEnd={() => { setDrag(null); setOver(null); }}
-        onDrop={(e) => { e.preventDefault(); e.stopPropagation(); if (drag && over) { const list = inZone(z).filter((x) => x.key !== drag); let idx = list.findIndex((x) => x.key === c.key); if (over.pos === 'below') idx++; if (!(z && !cur.find((x) => x.key === drag).pin && maxPinned != null && pinnedCount >= maxPinned)) moveTo(drag, z, idx); } setDrag(null); setOver(null); }}>
-        <Handle data-grip={c.key} className="vui-colman__grip" icon={locked ? 'lock' : 'grip-vertical'} disabled={locked} label={'Reorder ' + name(c.key) + '. Arrow keys move it, across sections too.'} onKeyDown={(e) => keyMove(e, c)} />
+        onDrop={(e) => { e.preventDefault(); e.stopPropagation(); if (drag && over && zoneOk(drag, z)) { const list = inZone(z).filter((x) => x.key !== drag); let idx = list.findIndex((x) => x.key === c.key); if (over.pos === 'below') idx++; if (!(z && !cur.find((x) => x.key === drag).pin && maxPinned != null && pinnedCount >= maxPinned)) moveTo(drag, z, idx); } setDrag(null); setOver(null); }}>
+        <Handle data-grip={c.key} className="vui-colman__grip" icon={cp.move ? 'grip-vertical' : 'lock'} disabled={!cp.move} label={'Reorder ' + name(c.key) + '. Arrow keys move it, across sections too.'} onKeyDown={(e) => keyMove(e, c)} />
         <span className="vui-colman__name">{m.label}</span>
-        <IconButton size="xs" icon="pin" label={(c.pin ? 'Unpin ' : 'Pin ') + name(c.key)} title={atMax ? 'Pin limit reached' : c.pin ? 'Unpin' : 'Pin left'} className={cx('vui-colman__pin', c.pin && 'vui-colman__pin--on')} disabled={locked || atMax} aria-pressed={!!c.pin} onClick={() => togglePin(c)} />
-        <Switch size="sm" aria-label={'Show ' + name(c.key)} checked={c.visible} disabled={locked} onChange={() => toggleVis(c)} />
+        <IconButton size="xs" icon="pin" label={(c.pin ? 'Unpin ' : 'Pin ') + name(c.key)} title={atMax ? 'Pin limit reached' : c.pin ? 'Unpin' : 'Pin left'} className={cx('vui-colman__pin', c.pin && 'vui-colman__pin--on')} disabled={!cp.pin || atMax} aria-pressed={!!c.pin} onClick={() => togglePin(c)} />
+        <Switch size="sm" aria-label={'Show ' + name(c.key)} title={lastOn ? 'At least one column stays visible' : undefined} checked={c.visible} disabled={!cp.hide || lastOn} onChange={() => toggleVis(c)} />
       </li>
     );
   };
@@ -82,7 +86,7 @@ export function ColumnManager({ columns = [], value, defaultValue, onChange: onC
     <div ref={rootRef} className={cx('vui-colman', className)}>
       <div className="vui-colman__head">
         <span className="vui-colman__title">{title}</span>
-        <Button variant="link" size="xs" onClick={() => { set(initial); setQ(''); setMsg('Columns reset'); }}>Reset</Button>
+        <Button variant="link" size="xs" onClick={() => { set(resetValue || initial); setQ(''); setMsg('Columns reset'); }}>Reset</Button>
       </div>
       {showSearch && <SearchInput size="sm" className="vui-colman__search" placeholder="Find a column…" aria-label="Find a column" value={q} onValueChange={setQ} />}
       <div className="vui-colman__body">
@@ -92,7 +96,7 @@ export function ColumnManager({ columns = [], value, defaultValue, onChange: onC
           return (
             <section key={label} className={cx('vui-colman__zone', z && 'vui-colman__zone--pinned')} aria-label={label}>
               <SectionLabel className="vui-colman__sec" end={z && all.length > 0 ? <Count value={all.length} size="sm" tone="soft" /> : null}>{label}</SectionLabel>
-              <ul className="vui-colman__list" onDragOver={(e) => { if (drag && !all.length) { e.preventDefault(); setOver({ key: null, z, i: 0, pos: 'below' }); } }} onDrop={(e) => { if (drag && !all.length) { e.preventDefault(); moveTo(drag, z, 0); setDrag(null); setOver(null); } }}>
+              <ul className="vui-colman__list" onDragOver={(e) => { if (drag && !all.length) { e.preventDefault(); setOver({ key: null, z, i: 0, pos: 'below' }); } }} onDrop={(e) => { if (drag && !all.length && zoneOk(drag, z)) { e.preventDefault(); moveTo(drag, z, 0); setDrag(null); setOver(null); } }}>
                 {rows.map((c, i) => <Row key={c.key} c={c} i={i} z={z} />)}
                 {!all.length && <li className={cx('vui-colman__drop', drag && over && over.z === z && 'vui-colman__drop--on')}>{z ? 'Drag a column here or use its pin' : 'All columns are pinned'}</li>}
               </ul>

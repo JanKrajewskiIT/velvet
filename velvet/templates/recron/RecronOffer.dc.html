@@ -23,10 +23,22 @@
 </sc-if>
 <sc-if value="{{ noMatch }}" hint-placeholder-val="{{ false }}">
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" hint-size="100%,220px">
-<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.EmptyState" size="sm" icon="sparkles" title="How well do you fit?" description="Compare your CV with this posting — strengths, gaps and what to change." actions="{{ runMatchBtn }}" hint-size="100%,200px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.EmptyState" size="md" icon="sparkles" title="How well do you fit?" description="Compare your CV with this posting — strengths, gaps and what to change." actions="{{ runMatchBtn }}" hint-size="100%,200px"></x-import>
 </x-import>
 </sc-if>
-<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Details" hint-size="100%,300px">
+<sc-if value="{{ hasDecision }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="{{ decisionTitle }}" description="{{ decisionDesc }}" actions="{{ decisionEdit }}" hint-size="100%,140px">
+<div style="display:flex;flex-wrap:wrap;gap:var(--space-2)">
+<sc-for list="{{ offer.reasons }}" as="r" hint-placeholder-count="2">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Tag" size="sm" variant="soft" tone="{{ reasonTone }}" shape="pill" hint-size="100px,24px">{{ r }}</x-import>
+</sc-for>
+</div>
+</x-import>
+</sc-if>
+<sc-if value="{{ offer.aiParsed }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Alert" tone="brand" icon="sparkles" title="Read from the posting by AI" hint-size="100%,72px">Role, company and salary came from the link. Double-check the salary range.</x-import>
+</sc-if>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Details" actions="{{ editTagsBtn }}" hint-size="100%,300px">
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.DescriptionList" items="{{ details }}" hint-size="100%,260px"></x-import>
 </x-import>
 </div>
@@ -140,10 +152,10 @@ class Component extends DCLogic {
       eyebrow: offer.company,
       title: offer.name,
       status: { label: st.label, tone: st.tone },
-      meta: [{ icon: 'map-pin', label: offer.city + ' · ' + offer.workMode }, { icon: 'dollar-sign', label: U.salary(offer) }, { icon: 'link', label: offer.source + ' · added ' + U.relDay(offer.added).toLowerCase() }],
+      meta: [{ icon: 'map-pin', label: offer.city + ' · ' + offer.workMode }, { icon: 'dollar-sign', label: U.salary(offer) }, { icon: 'link', label: offer.source + (offer.intermediary ? ' via ' + offer.intermediary : '') + ' · added ' + U.relDay(offer.added).toLowerCase() }],
       headerActions: h(React.Fragment, null,
-        h(NS.DropdownButton, { variant: 'secondary', items: D.STATUS_ORDER.map((k) => ({ label: D.STATUS[k].label, checked: offer.status === k, onSelect: () => { app.updateOffer(offer.id, { status: k }); app.toast('Moved to ' + D.STATUS[k].label, 'neutral', offer.name); } })) }, 'Move to'),
-        offer.status === 'applied' ? h(NS.Button, { iconLeft: 'calendar-plus', onClick: () => { app.setOfferTab('interviews'); this.setState({ scheduleOpen: true }); } }, 'Schedule interview') : h(NS.Button, { iconLeft: 'send', onClick: () => { app.updateOffer(offer.id, { status: 'applied' }); app.toast('Marked as applied', 'success', offer.company); } }, 'Mark as applied')),
+        h(NS.DropdownButton, { variant: 'secondary', items: D.STATUS_ORDER.map((k) => ({ label: D.STATUS[k].label, checked: offer.status === k, onSelect: () => app.decide(offer.id, k) })) }, 'Move to'),
+        offer.status === 'applied' ? h(NS.Button, { iconLeft: 'calendar-plus', onClick: () => { app.setOfferTab('interviews'); this.setState({ scheduleOpen: true }); } }, 'Schedule interview') : h(NS.Button, { iconLeft: 'send', onClick: () => app.decide(offer.id, 'applied') }, 'Mark as applied')),
       tabs: [{ value: 'overview', label: 'Overview' }, { value: 'match', label: 'CV match', icon: 'sparkles' }, { value: 'letter', label: 'Cover letter' }, { value: 'ats', label: 'ATS check' }, { value: 'interviews', label: 'Interviews', count: loopItems.length || undefined }],
       setTab: app.setOfferTab,
       postingLink: h(NS.Button, { variant: 'ghost', size: 'sm', iconRight: 'external-link', onClick: () => window.open(offer.link, '_blank') }, 'Original posting'),
@@ -153,30 +165,39 @@ class Component extends DCLogic {
       runMatchBtn: h(NS.Button, { size: 'sm', iconLeft: 'sparkles', onClick: () => app.setOfferTab('match') }, 'Run CV match'),
       details: [
         { term: 'Company', description: offer.company }, { term: 'Location', description: offer.city }, { term: 'Work mode', description: offer.workMode },
-        { term: 'Salary', description: U.salary(offer) }, { term: 'Source', description: offer.source },
-        { term: 'Tags', description: offer.tags.length ? h('span', { style: { display: 'flex', flexWrap: 'wrap', gap: 'var(--space-1)' } }, offer.tags.map((x) => h(NS.Tag, { key: x, size: 'sm', variant: 'soft', tone: 'brand' }, x))) : null }
+        { term: 'Salary', description: U.salary(offer) }, { term: 'Source', description: offer.source }, { term: 'Via', description: offer.intermediary || '—' },
+        { term: 'Tags', description: offer.tags.length ? h('span', { style: { display: 'flex', flexWrap: 'wrap', gap: 'var(--space-1)' } }, offer.tags.map((x) => h(NS.Tag, { key: x, size: 'sm', shape: 'pill', icon: h('span', { style: { width: 8, height: 8, borderRadius: '50%', background: U.tagColor(app.tags, x) } }) }, x))) : null }
       ],
+      editTagsBtn: app.openTags ? h(NS.Button, { variant: 'ghost', size: 'sm', iconLeft: 'tag', onClick: () => app.openTags(offer.id) }, 'Tags') : null,
+      hasDecision: offer.status !== 'new' && (offer.reasons || []).length > 0,
+      decisionTitle: offer.status === 'rejected' ? (offer.decidedBy === 'them' ? 'Why they passed' : 'Why you passed') : offer.status === 'applied' ? 'Why you applied' : 'Why it’s worth considering',
+      decisionDesc: 'Your reasons, in your words',
+      reasonTone: offer.status === 'rejected' ? 'danger' : offer.status === 'applied' ? 'success' : 'warning',
+      decisionEdit: h(NS.Button, { variant: 'ghost', size: 'sm', iconLeft: 'pencil', onClick: () => app.decide(offer.id, offer.status, true) }, 'Edit'),
       matchIdle: !matchDone, matchDone, mr,
       matchRun: s.matchRun, matchStep: s.matchStep, matchSteps: ['Reading your CV', 'Reading the posting', 'Matching requirements', 'Writing the summary'],
       sources: [{ id: 'cv', label: 'Your CV', kind: 'cv', detail: 'Updated 3 days ago · 2 pages' }, { id: 'job', label: offer.name, kind: 'job', detail: offer.company }, { id: 'profile', label: 'Profile', kind: 'profile', detail: D.profile.role + ' · ' + D.profile.years + ' yrs' }],
       analyses: [{ id: 'match', label: 'Fit check', description: 'Score, strengths, gaps, next steps', icon: 'target', requires: ['cv', 'job'] }, { id: 'gaps', label: 'Gap analysis', description: 'Only what’s missing', icon: 'search', requires: ['cv', 'job'] }],
       runMatch, rerunMatch: () => { this.setState({ matchDone: { ...s.matchDone, [offer.id]: false } }); },
-      tones: ['Formal', 'Friendly', 'Concise'], tone: s.tone, setTone: (v) => this.setState({ tone: v }),
+      tones: ['Formal', 'Friendly', 'Creative', 'Concise'], tone: s.tone, setTone: (v) => this.setState({ tone: v }),
       letterLoading: s.letterLoading, genLetter, genLabel: letter ? 'Regenerate' : 'Generate draft',
       hasLetter: !!letter, noLetter: !letter, letter: letter ? letter.text : '',
       letterMeta: letter ? letter.tone + ' · ' + letter.text.split(/\s+/).length + ' words' : '',
       editLetter: (e) => this.setState({ letters: { ...s.letters, [offer.id]: { ...letter, text: e.target.value } } }),
       letterFooter: letter ? h(React.Fragment, null, h(NS.CopyButton, { value: letter.text, variant: 'secondary', size: 'sm' }), h(NS.Button, { size: 'sm', iconLeft: 'download', onClick: () => app.toast('Downloaded', 'success', 'cover-letter-' + offer.company.toLowerCase().replace(/\s+/g, '-') + '.pdf') }, 'Download PDF')) : null,
       atsStatus, ats: atsStatus === 'done' ? U.atsFor(offer) : null, atsEmpty: atsStatus === 'empty', runAts, atsStep: s.atsStep, atsSteps: ['Parsing CV layout', 'Extracting keywords', 'Scoring sections', 'Writing recommendations'],
-      loopDesc: loopItems.length ? loopItems.filter((i) => i.status === 'done').length + ' of ' + loopItems.length + ' done' + (firstUpcoming ? ' · next ' + U.relDay(firstUpcoming.at).toLowerCase() : '') : 'Nothing scheduled yet',
-      loop: loopItems.map((i) => ({
-        id: i.id, title: i.stage, description: i.notes || undefined,
+      loopDesc: loopItems.length ? loopItems.filter((i) => i.status === 'done').length + ' passed · ' + loopItems.filter((i) => i.status === 'scheduled').length + ' ahead' + (firstUpcoming ? ' · next ' + U.relDay(firstUpcoming.at).toLowerCase() : '') : 'Nothing scheduled yet',
+      loop: loopItems.map((i) => { const IS = D.INTERVIEW[i.status]; const past = i.status === 'scheduled' && new Date(i.at) < D.TODAY; const mark = (status, label) => () => { app.updateInterview(i.id, { status }); app.toast(i.stage + ': ' + label, status === 'failed' ? 'neutral' : 'success', offer.company); }; return {
+        id: i.id, title: i.stage, description: [i.notes, i.outcomeNote].filter(Boolean).join(' — ') || undefined,
         time: U.fmtDate(i.at, { weekday: 'short', day: 'numeric', month: 'short' }) + ', ' + U.fmtTime(i.at),
-        status: i.status === 'done' ? 'done' : i === firstUpcoming ? 'current' : 'upcoming',
-        badge: i.status === 'done' ? { label: 'Done', icon: 'check', tone: 'success' } : i === firstUpcoming ? { label: U.relDay(i.at), tone: 'brand' } : undefined,
+        status: i.status === 'done' ? 'done' : i === firstUpcoming ? 'current' : i.status === 'scheduled' ? 'upcoming' : undefined,
+        icon: i.status === 'failed' ? 'x' : i.status === 'cancelled' ? 'x-circle' : undefined, tone: i.status === 'failed' ? 'danger' : i.status === 'cancelled' ? 'neutral' : undefined,
+        badge: past ? { label: 'How did it go?', icon: 'help-circle', tone: 'warning' } : i.status !== 'scheduled' ? { label: IS.label, icon: IS.icon, tone: IS.tone } : i === firstUpcoming ? { label: U.relDay(i.at), tone: 'brand' } : undefined,
         meta: [{ icon: 'clock', label: i.duration + ' min' }, { icon: 'map-pin', label: i.location }],
-        actions: i.status === 'done' ? [] : [{ id: 'cal', label: 'Add to calendar', icon: 'calendar-plus', onClick: () => app.toast('Added to Google Calendar', 'success', i.stage + ' · ' + offer.company) }, { id: 'del', label: 'Cancel interview', icon: 'trash-2', tone: 'danger', confirm: 'Cancel this interview?', onClick: () => app.removeInterview(i.id) }]
-      })),
+        actions: past ? [{ id: 'pass', label: 'Passed', icon: 'check', onClick: mark('done', 'passed') }, { id: 'fail', label: 'Not passed', icon: 'x', onClick: mark('failed', 'not passed') }, { id: 'cxl', label: 'Didn’t happen', icon: 'x-circle', onClick: mark('cancelled', 'cancelled') }]
+          : i.status === 'scheduled' ? [{ id: 'cal', label: 'Add to calendar', icon: 'calendar-plus', onClick: () => app.toast('Added to Google Calendar', 'success', i.stage + ' · ' + offer.company) }, { id: 'cxl', label: 'Cancel interview', icon: 'x-circle', tone: 'danger', confirm: 'Mark this interview as cancelled?', onClick: mark('cancelled', 'cancelled') }]
+          : [{ id: 'undo', label: 'Change outcome', icon: 'rotate-ccw', onClick: () => app.updateInterview(i.id, { status: 'scheduled' }) }]
+      }; }),
       openSchedule: () => this.setState({ scheduleOpen: true }),
       prepList: related.map((q) => ({ id: q.id, title: q.question, leading: h(NS.Badge, { size: 'sm', tone: 'brand' }, q.category) })),
       prepFooter: h(NS.Button, { size: 'sm', variant: 'soft', iconLeft: 'book-open', onClick: () => { app.setPrepTab('practice'); app.go('prep'); } }, 'Practise these'),

@@ -25,6 +25,7 @@
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="From" size="sm" value="{{ e.start }}" on-change="{{ e.setStart }}" hint-size="100%,60px"></x-import>
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="To" size="sm" placeholder="Present" value="{{ e.end }}" on-change="{{ e.setEnd }}" hint-size="100%,60px"></x-import>
 </x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Tech stack" size="sm" placeholder="React, TypeScript…" value="{{ e.tech }}" on-change="{{ e.setTech }}" hint-size="100%,60px"></x-import>
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Textarea" label="What you did" size="sm" rows="{{ 2 }}" value="{{ e.desc }}" on-change="{{ e.setDesc }}" hint-size="100%,80px"></x-import>
 <div style="display:flex;justify-content:space-between;align-items:center;gap:var(--space-3)">
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Button" variant="ghost" size="sm" icon-left="sparkles" on-click="{{ e.improve }}" loading="{{ e.improving }}" hint-size="140px,32px">Improve with AI</x-import>
@@ -33,6 +34,35 @@
 </div>
 </sc-for>
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Button" variant="dashed" block="{{ true }}" icon-left="plus" on-click="{{ addExp }}" hint-size="100%,40px">Add position</x-import>
+</div>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Projects" description="Side projects, open source, things you built. Link them." hint-size="100%,420px">
+<div style="display:flex;flex-direction:column;gap:var(--space-5)">
+<sc-for list="{{ projects }}" as="pr" hint-placeholder-count="2">
+<div style="display:flex;flex-direction:column;gap:var(--space-3);padding-bottom:var(--space-5);border-bottom:var(--border-width) solid var(--border-subtle)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FormGrid" columns="{{ 2 }}" gap="sm" hint-size="100%,140px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Name" size="sm" value="{{ pr.name }}" on-change="{{ pr.setName }}" hint-size="100%,60px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Link" size="sm" icon-left="link" value="{{ pr.link }}" on-change="{{ pr.setLink }}" hint-size="100%,60px"></x-import>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Tech" size="sm" placeholder="React, TypeScript…" value="{{ pr.tech }}" on-change="{{ pr.setTech }}" hint-size="100%,60px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Textarea" label="What it does" size="sm" rows="{{ 2 }}" value="{{ pr.desc }}" on-change="{{ pr.setDesc }}" hint-size="100%,80px"></x-import>
+<div style="display:flex;justify-content:flex-end"><x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.IconButton" icon="trash-2" label="Remove project" size="sm" on-click="{{ pr.remove }}" hint-size="32px,32px"></x-import></div>
+</div>
+</sc-for>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Button" variant="dashed" block="{{ true }}" icon-left="plus" on-click="{{ addProject }}" hint-size="100%,40px">Add project</x-import>
+</div>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Certifications" hint-size="100%,240px">
+<div style="display:flex;flex-direction:column;gap:var(--space-3)">
+<sc-for list="{{ certs }}" as="c" hint-placeholder-count="2">
+<div style="display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr) 72px auto;gap:var(--space-2);align-items:end">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Certificate" size="sm" value="{{ c.name }}" on-change="{{ c.setName }}" hint-size="100%,60px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Issuer" size="sm" value="{{ c.issuer }}" on-change="{{ c.setIssuer }}" hint-size="100%,60px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Year" size="sm" value="{{ c.year }}" on-change="{{ c.setYear }}" hint-size="100%,60px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.IconButton" icon="trash-2" label="Remove certificate" size="sm" on-click="{{ c.remove }}" hint-size="32px,32px"></x-import>
+</div>
+</sc-for>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Button" variant="dashed" block="{{ true }}" icon-left="plus" on-click="{{ addCert }}" hint-size="100%,40px">Add certificate</x-import>
 </div>
 </x-import>
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" hint-size="100%,320px">
@@ -48,21 +78,11 @@
 <span style="font-size:var(--type-caption-size);color:var(--fg-tertiary)">A4 · 1 page</span>
 </div>
 <div style="background:var(--bg-sunken);border-radius:var(--radius-lg);padding:var(--space-5);max-height:calc(100vh - 120px);overflow:auto">
-<sc-if value="{{ st.minimal }}" hint-placeholder-val="{{ true }}">
-<div style="--cv-accent:#1d1b1c;--cv-name:#1d1b1c;--cv-rule:1px solid #e6e1e3;--cv-cols:1fr">
-<dc-import name="RecronCvPaper" cv="{{ cv }}" p="{{ p }}" exp="{{ exp }}" is-columns="{{ isColumns }}" not-columns="{{ notColumns }}" contact-line="{{ contactLine }}" skill-line="{{ skillLine }}" lang-line="{{ langLine }}" hint-size="100%,640px"></dc-import>
-</div>
-</sc-if>
-<sc-if value="{{ st.columns }}" hint-placeholder-val="{{ false }}">
-<div style="--cv-accent:var(--velvet-700);--cv-name:#1d1b1c;--cv-rule:1px solid #e6e1e3;--cv-cols:34% 1fr">
-<dc-import name="RecronCvPaper" cv="{{ cv }}" p="{{ p }}" exp="{{ exp }}" is-columns="{{ isColumns }}" not-columns="{{ notColumns }}" contact-line="{{ contactLine }}" skill-line="{{ skillLine }}" lang-line="{{ langLine }}" hint-size="100%,640px"></dc-import>
-</div>
-</sc-if>
-<sc-if value="{{ st.accent }}" hint-placeholder-val="{{ false }}">
-<div style="--cv-accent:var(--velvet-700);--cv-name:var(--velvet-700);--cv-rule:2px solid var(--velvet-700);--cv-cols:1fr">
-<dc-import name="RecronCvPaper" cv="{{ cv }}" p="{{ p }}" exp="{{ exp }}" is-columns="{{ isColumns }}" not-columns="{{ notColumns }}" contact-line="{{ contactLine }}" skill-line="{{ skillLine }}" lang-line="{{ langLine }}" hint-size="100%,640px"></dc-import>
-</div>
-</sc-if>
+<div style="width:100%"><div ref="{{ paperRef }}" style="width:794px;zoom:0.6;box-shadow:0 1px 2px rgba(20,10,14,.08),0 8px 24px rgba(20,10,14,.08)">
+<sc-if value="{{ st.minimal }}" hint-placeholder-val="{{ true }}"><dc-import name="RecronCvMinimal" cv="{{ cv }}" p="{{ p }}" exp="{{ exp }}" projects="{{ paperProjects }}" skills="{{ paperSkills }}" langs="{{ paperLangs }}" first="{{ firstUp }}" last="{{ lastUp }}" initials="{{ initials }}" hint-size="794px,1123px"></dc-import></sc-if>
+<sc-if value="{{ st.columns }}" hint-placeholder-val="{{ false }}"><dc-import name="RecronCvColumns" cv="{{ cv }}" p="{{ p }}" exp="{{ exp }}" projects="{{ paperProjects }}" skills="{{ paperSkills }}" langs="{{ paperLangs }}" first="{{ firstUp }}" last="{{ lastUp }}" initials="{{ initials }}" hint-size="794px,1123px"></dc-import></sc-if>
+<sc-if value="{{ st.accent }}" hint-placeholder-val="{{ false }}"><dc-import name="RecronCvBurgundy" cv="{{ cv }}" p="{{ p }}" exp="{{ exp }}" projects="{{ paperProjects }}" skills="{{ paperSkills }}" langs="{{ paperLangs }}" first="{{ firstUp }}" last="{{ lastUp }}" initials="{{ initials }}" hint-size="794px,1123px"></dc-import></sc-if>
+</div></div>
 </div>
 </div>
 </div>
@@ -70,7 +90,8 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = { cv: null, style: 'minimal', improving: null, saved: 'Saved just now' };
+  state = { cv: null, style: 'minimal', improving: null, saved: 'Saved just now', zoom: 0.6 };
+  componentWillUnmount() { if (this._ro) this._ro.disconnect(); }
   renderVals() {
     const app = this.props.app || (window.RecronStandalone && window.VelvetUIDesignSystem_ee2bd8 && window.RecronStandalone(this));
     if (!app) { clearTimeout(this._wt); this._wt = setTimeout(() => this.forceUpdate(), 80); return {}; }
@@ -82,9 +103,13 @@ class Component extends DCLogic {
     const setExp = (id, k) => (e) => set({ experience: cv.experience.map((x) => (x.id === id ? { ...x, [k]: e.target.value } : x)) });
     const p = D.profile;
     const style = s.style;
+    const split = (t) => (t || '').split(',').map((v) => v.trim()).filter(Boolean);
+    const dots = (n) => [1, 2, 3, 4, 5].map((i) => ({ on: i <= n, off: i > n }));
+    const SK = { Beginner: 2, Intermediate: 3, Advanced: 4, Expert: 5 }, LG = { A1: 1, A2: 2, B1: 2, B2: 3, C1: 4, C2: 5, Native: 5 };
+    if (!this.paperRef) this.paperRef = (el) => { if (!el || el === this._pel) return; this._pel = el; if (this._ro) this._ro.disconnect(); const host = el.parentElement; const fit = () => { const z = host.clientWidth / 794; if (z > 0) el.style.zoom = z; }; this._ro = new ResizeObserver(fit); this._ro.observe(host); fit(); };
     const accent = style === 'minimal' ? '#1d1b1c' : 'var(--velvet-700)';
     return {
-      meta: [{ icon: 'check', label: s.saved }, { icon: 'file-text', label: cv.experience.length + ' positions · ' + cv.skills.length + ' skills' }],
+      meta: [{ icon: 'check', label: s.saved }, { icon: 'file-text', label: cv.experience.length + ' positions · ' + (cv.projects || []).length + ' projects · ' + cv.skills.length + ' skills' }],
       headerActions: h(React.Fragment, null,
         h(NS.Button, { variant: 'secondary', iconLeft: 'upload', onClick: () => app.toast('Import from LinkedIn', 'info', 'Connect your account in Settings to import') }, 'Import'),
         h(NS.DropdownButton, { variant: 'primary', icon: 'download', items: [
@@ -94,11 +119,16 @@ class Component extends DCLogic {
         ] }, 'Download')),
       cv, p,
       setSummary: (e) => set({ summary: e.target.value }),
-      exp: cv.experience.map((x) => ({ ...x, period: x.start + ' – ' + (x.current || !x.end ? 'Present' : x.end), setRole: setExp(x.id, 'role'), setCompany: setExp(x.id, 'company'), setStart: setExp(x.id, 'start'), setEnd: setExp(x.id, 'end'), setDesc: setExp(x.id, 'desc'),
+      exp: cv.experience.map((x) => ({ ...x, period: x.start + ' – ' + (x.current || !x.end ? 'Present' : x.end), setRole: setExp(x.id, 'role'), setCompany: setExp(x.id, 'company'), setStart: setExp(x.id, 'start'), setEnd: setExp(x.id, 'end'), setDesc: setExp(x.id, 'desc'), setTech: setExp(x.id, 'tech'),
+        periodLong: x.start + ' – ' + (x.current || !x.end ? 'Present' : x.end), placeSuffix: x.place ? ', ' + x.place : '', placeDot: x.place ? ' · ' + x.place : '', techList: split(x.tech),
         improving: s.improving === x.id,
         improve: () => { this.setState({ improving: x.id }); setTimeout(() => { this.setState({ improving: null }); set({ experience: this.state.cv ? this.state.cv.experience.map((y) => (y.id === x.id ? { ...y, desc: y.desc.replace(/\.$/, '') + ' — measured, shipped and adopted across teams.' } : y)) : cv.experience }); }, 1100); },
         remove: () => set({ experience: cv.experience.filter((y) => y.id !== x.id) }) })),
       addExp: () => set({ experience: [{ id: 'e' + Date.now(), role: '', company: '', start: '', end: '', current: false, desc: '' }, ...cv.experience] }),
+      projects: (cv.projects || []).map((x) => { const f = (k) => (e) => set({ projects: cv.projects.map((y) => (y.id === x.id ? { ...y, [k]: e.target.value } : y)) }); return { ...x, setName: f('name'), setLink: f('link'), setTech: f('tech'), setDesc: f('desc'), remove: () => set({ projects: cv.projects.filter((y) => y.id !== x.id) }) }; }),
+      addProject: () => set({ projects: [...(cv.projects || []), { id: 'p' + Date.now(), name: '', link: '', tech: '', desc: '' }] }),
+      certs: (cv.certifications || []).map((x) => { const f = (k) => (e) => set({ certifications: cv.certifications.map((y) => (y.id === x.id ? { ...y, [k]: e.target.value } : y)) }); return { ...x, setName: f('name'), setIssuer: f('issuer'), setYear: f('year'), remove: () => set({ certifications: cv.certifications.filter((y) => y.id !== x.id) }) }; }),
+      addCert: () => set({ certifications: [...(cv.certifications || []), { id: 'c' + Date.now(), name: '', issuer: '', year: '' }] }),
       setSkills: (v) => set({ skills: v }), setLanguages: (v) => set({ languages: v }),
       skillLevels: ['Beginner', 'Intermediate', 'Advanced', 'Expert'], langLevels: ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'Native'],
       styles: [{ value: 'minimal', label: 'Minimal' }, { value: 'columns', label: 'Two-column' }, { value: 'accent', label: 'Burgundy' }],
@@ -108,6 +138,11 @@ class Component extends DCLogic {
       sideBg: 'var(--velvet-50)', accent,
       nameColor: style === 'accent' ? 'var(--velvet-700)' : '#1d1b1c',
       headRule: style === 'accent' ? '2px solid var(--velvet-700)' : '1px solid #e6e1e3',
+      paperRef: this.paperRef,
+      paperSkills: cv.skills.map((x) => { const n = SK[x.level] || 3; return { ...x, dots: dots(n), pct: n * 20 + '%' }; }),
+      paperLangs: cv.languages.map((x) => { const n = LG[x.level] || 3; return { ...x, dots: dots(n), pct: n * 20 + '%' }; }),
+      paperProjects: (cv.projects || []).map((x) => ({ ...x, techList: split(x.tech) })),
+      firstUp: (p.first || '').toUpperCase(), lastUp: (p.last || '').toUpperCase(), initials: (p.first || '').charAt(0) + (p.last || '').charAt(0),
       contactLine: [p.email, p.phone, p.location, p.linkedin].join('  ·  '),
       skillLine: cv.skills.map((x) => x.text).join(' · '),
       langLine: cv.languages.map((x) => x.text + ' (' + x.level + ')').join(' · ')

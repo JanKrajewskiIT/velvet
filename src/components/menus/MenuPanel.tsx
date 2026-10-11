@@ -33,11 +33,13 @@ export interface MenuPanelProps {
   ref?: (element: HTMLDivElement) => void;
   /** Focus the panel and activate the first item on mount. @default true */
   autoFocus?: boolean;
+  /** @default 'start' */
+  iconPosition?: 'start' | 'end';
 }
 
 /** The bare menu panel, for custom positioning (ContextMenu uses it). */
 export const MenuPanel = (props: MenuPanelProps) => {
-  const p = mergeProps({ autoFocus: true } satisfies Partial<MenuPanelProps>, props);
+  const p = mergeProps({ autoFocus: true, iconPosition: 'start' } satisfies Partial<MenuPanelProps>, props);
   let panel!: HTMLDivElement;
   const id = createUniqueId();
   const itemId = (index: number) => `${id}-${index}`;
@@ -173,7 +175,10 @@ export const MenuPanel = (props: MenuPanelProps) => {
               >
                 <MenuItemContent
                   leading={
-                    <Show when={item().checked !== undefined} fallback={renderIcon(item().icon)}>
+                    <Show
+                      when={item().checked !== undefined}
+                      fallback={<Show when={p.iconPosition === 'start'}>{renderIcon(item().icon)}</Show>}
+                    >
                       <span class="vui-menu__check">
                         <Show when={item().checked}>
                           <Glyph name="check" />
@@ -184,6 +189,11 @@ export const MenuPanel = (props: MenuPanelProps) => {
                   label={item().label}
                   description={item().description}
                   shortcut={item().shortcut}
+                  trailing={
+                    <Show when={item().checked === undefined && p.iconPosition === 'end'}>
+                      {renderIcon(item().icon)}
+                    </Show>
+                  }
                 />
               </div>
             </Match>

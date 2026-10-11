@@ -98,6 +98,7 @@ For every card the component appears in (the **Specimens** column):
 - Icons only via `Glyph` / `renderIcon`. Props named `icon*` accept a string name or `JSX.Element`.
 - State contract for interactive components: default · hover · focus-visible · active · selected · disabled · loading · invalid. These are CSS-driven via classes/attributes, so keep the same attributes the reference sets (`aria-busy`, `aria-invalid`, `aria-pressed`, `aria-selected`, `data-state`, `disabled`…).
 - Copy: sentence case, verb + object, no emoji. Keep the reference default strings exactly.
+- Components never own app concerns: no auth/session context or role checks, no data fetching, no persistence (localStorage, view import/export), no record creation. They expose state + callbacks (`signedIn`/`error`, `view`/`onViewChange`, `onMove`, `addRow.onAdd`); the app decides and stores. Need one of these features? Request it in the DS first; don't add it in the port.
 
 ## 9. When stuck
 - A prop's behaviour is unclear → read the `.jsx`, then the card that demonstrates it.

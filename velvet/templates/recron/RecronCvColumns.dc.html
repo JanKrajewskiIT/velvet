@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="width:794px;height:1123px;background:#fff;overflow:hidden;display:grid;grid-template-columns:252px minmax(0,1fr);font-family:var(--font-sans);font-size:11.5px;line-height:1.55;color:#1a1718;font-variant-numeric:tabular-nums">
+<aside style="background:#211c1e;color:#ece6e8;padding:64px 30px 40px 36px;display:flex;flex-direction:column;gap:30px;min-width:0;overflow-wrap:anywhere">
+<div style="width:64px;height:64px;border-radius:50%;border:1.5px solid rgba(255,255,255,.35);display:flex;align-items:center;justify-content:center;font:600 22px/1 var(--font-display);letter-spacing:.02em;color:#fff">{{ initials }}</div>
+<section style="display:flex;flex-direction:column;gap:9px">
+<div style="font:700 9.5px/1 var(--font-sans);letter-spacing:.18em;text-transform:uppercase;color:#e6e2e3;padding-bottom:9px;border-bottom:1px solid rgba(255,255,255,.14);margin-bottom:3px">Contact</div>
+<div style="display:flex;gap:9px;align-items:center"><x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Icon" name="mail" size="{{ 13 }}" color="#a89ea1" hint-size="13px,13px"></x-import><span>{{ p.email }}</span></div>
+<div style="display:flex;gap:9px;align-items:center"><x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Icon" name="phone" size="{{ 13 }}" color="#a89ea1" hint-size="13px,13px"></x-import><span>{{ p.phone }}</span></div>
+<div style="display:flex;gap:9px;align-items:center"><x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Icon" name="map-pin" size="{{ 13 }}" color="#a89ea1" hint-size="13px,13px"></x-import><span>{{ p.location }}</span></div>
+<div style="display:flex;gap:9px;align-items:center"><x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Icon" name="link" size="{{ 13 }}" color="#a89ea1" hint-size="13px,13px"></x-import><span>{{ p.linkedin }}</span></div>
+<div style="display:flex;gap:9px;align-items:center"><x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Icon" name="globe" size="{{ 13 }}" color="#a89ea1" hint-size="13px,13px"></x-import><span>{{ p.website }}</span></div>
+</section>
+<section style="display:flex;flex-direction:column;gap:10px">
+<div style="font:700 9.5px/1 var(--font-sans);letter-spacing:.18em;text-transform:uppercase;color:#e6e2e3;padding-bottom:9px;border-bottom:1px solid rgba(255,255,255,.14);margin-bottom:3px">Skills</div>
+<sc-for list="{{ skills }}" as="s" hint-placeholder-count="5"><div style="display:flex;flex-direction:column;gap:4px"><div style="display:flex;justify-content:space-between;gap:8px"><span>{{ s.text }}</span><span style="color:#a89ea1;font-size:10px">{{ s.level }}</span></div><div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:3px"><sc-for list="{{ s.dots }}" as="d" hint-placeholder-count="5"><sc-if value="{{ d.on }}" hint-placeholder-val="{{ true }}"><span style="height:3px;border-radius:2px;background:#e6e2e3"></span></sc-if><sc-if value="{{ d.off }}" hint-placeholder-val="{{ false }}"><span style="height:3px;border-radius:2px;background:rgba(255,255,255,.14)"></span></sc-if></sc-for></div></div></sc-for>
+</section>
+<section style="display:flex;flex-direction:column;gap:10px">
+<div style="font:700 9.5px/1 var(--font-sans);letter-spacing:.18em;text-transform:uppercase;color:#e6e2e3;padding-bottom:9px;border-bottom:1px solid rgba(255,255,255,.14);margin-bottom:3px">Languages</div>
+<sc-for list="{{ langs }}" as="l" hint-placeholder-count="3"><div style="display:flex;flex-direction:column;gap:4px"><div style="display:flex;justify-content:space-between;gap:8px"><span>{{ l.text }}</span><span style="color:#a89ea1;font-size:10px">{{ l.level }}</span></div><div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:3px"><sc-for list="{{ l.dots }}" as="d" hint-placeholder-count="5"><sc-if value="{{ d.on }}" hint-placeholder-val="{{ true }}"><span style="height:3px;border-radius:2px;background:#e6e2e3"></span></sc-if><sc-if value="{{ d.off }}" hint-placeholder-val="{{ false }}"><span style="height:3px;border-radius:2px;background:rgba(255,255,255,.14)"></span></sc-if></sc-for></div></div></sc-for>
+</section>
+<section style="display:flex;flex-direction:column;gap:10px">
+<div style="font:700 9.5px/1 var(--font-sans);letter-spacing:.18em;text-transform:uppercase;color:#e6e2e3;padding-bottom:9px;border-bottom:1px solid rgba(255,255,255,.14);margin-bottom:3px">Education</div>
+<sc-for list="{{ cv.education }}" as="ed" hint-placeholder-count="1"><div style="display:flex;flex-direction:column;gap:1px"><span style="font-weight:600;color:#fff">{{ ed.degree }}</span><span>{{ ed.school }}</span><span style="color:#a89ea1;font-size:10.5px">{{ ed.start }} – {{ ed.end }}</span></div></sc-for>
+</section>
+<section style="display:flex;flex-direction:column;gap:10px">
+<div style="font:700 9.5px/1 var(--font-sans);letter-spacing:.18em;text-transform:uppercase;color:#e6e2e3;padding-bottom:9px;border-bottom:1px solid rgba(255,255,255,.14);margin-bottom:3px">Certificates</div>
+<sc-for list="{{ cv.certifications }}" as="ce" hint-placeholder-count="2"><div style="display:flex;flex-direction:column;gap:1px"><span style="font-weight:600;color:#fff">{{ ce.name }}</span><span style="color:#a89ea1;font-size:10.5px">{{ ce.issuer }} · {{ ce.year }}</span></div></sc-for>
+</section>
+</aside>
+<main style="padding:64px 52px 40px 44px;display:flex;flex-direction:column;gap:28px;min-width:0">
+<header style="display:flex;flex-direction:column;gap:10px">
+<div style="font:600 40px/1 var(--font-display);letter-spacing:-.025em;color:#1a1718">{{ p.name }}</div>
+<div style="font:700 11px/1 var(--font-sans);letter-spacing:.16em;text-transform:uppercase;color:#6b6466">{{ p.role }}</div>
+<div style="font-size:12.5px;line-height:1.6;color:#3a3436;text-wrap:pretty;margin-top:10px">{{ cv.summary }}</div>
+</header>
+<section style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;align-items:center;gap:12px"><span style="font:700 9.5px/1 var(--font-sans);letter-spacing:.18em;text-transform:uppercase;color:#1a1718;white-space:nowrap">Experience</span><span style="flex:1;height:1px;background:#e7e2e4"></span></div>
+<div style="display:flex;flex-direction:column;border-left:1.5px solid #e3e0e1;margin-left:4px">
+<sc-for list="{{ exp }}" as="e" hint-placeholder-count="2"><div style="position:relative;padding:0 0 20px 22px;display:flex;flex-direction:column;gap:4px">
+<span style="position:absolute;left:-5.5px;top:3px;width:9px;height:9px;border-radius:50%;background:#fff;border:2px solid #1a1718;box-sizing:border-box"></span>
+<div style="font:700 10px/1.4 var(--font-sans);letter-spacing:.08em;text-transform:uppercase;color:#1a1718">{{ e.period }}</div>
+<div><span style="font-weight:600;font-size:13px">{{ e.role }}</span><span style="color:#6b6466"> · {{ e.company }}{{ e.placeDot }}</span></div>
+<div style="text-wrap:pretty;color:#2a2526">{{ e.desc }}</div>
+<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:3px"><sc-for list="{{ e.techList }}" as="t" hint-placeholder-count="4"><span style="background:#f2f1f1;color:#3a3436;border-radius:3px;padding:1px 7px;font-size:10px;line-height:1.6">{{ t }}</span></sc-for></div>
+</div></sc-for>
+</div>
+</section>
+<section style="display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;align-items:center;gap:12px"><span style="font:700 9.5px/1 var(--font-sans);letter-spacing:.18em;text-transform:uppercase;color:#1a1718;white-space:nowrap">Projects</span><span style="flex:1;height:1px;background:#e7e2e4"></span></div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px">
+<sc-for list="{{ projects }}" as="pr" hint-placeholder-count="2"><div style="display:flex;flex-direction:column;gap:4px">
+<span style="font-weight:600;font-size:13px">{{ pr.name }}</span>
+<span style="color:#6b6466;font-size:10.5px;text-decoration:underline;text-underline-offset:2px">{{ pr.link }}</span>
+<div style="text-wrap:pretty;color:#2a2526">{{ pr.desc }}</div>
+<div style="font-size:10.5px;color:#8a8285">{{ pr.tech }}</div>
+</div></sc-for>
+</div>
+</section>
+</main>
+</div>
+</x-dc>
+</body>
+</html>

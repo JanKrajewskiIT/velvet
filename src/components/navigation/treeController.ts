@@ -2,7 +2,7 @@ import type { Accessor } from 'solid-js';
 
 import type { TreeFocus } from './createTreeFocus';
 import type { TreeModel } from './createTreeModel';
-import type { TreeMove } from './createTreeMove';
+import type { TreeMoveController } from './createTreeMove';
 import type { ResolvedTreeViewLabels } from './createTreeViewLabels';
 import type { TreeViewConfig } from './treeViewTypes';
 
@@ -12,5 +12,5 @@ export interface TreeController {
   labels: Accessor<ResolvedTreeViewLabels>;
   model: TreeModel;
   focus: TreeFocus;
-  move: TreeMove;
+  move: TreeMoveController;
 }

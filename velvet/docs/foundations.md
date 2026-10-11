@@ -24,7 +24,7 @@ Example chain: `--velvet-700 → --action-primary → --button-primary-bg → .v
 - Overlays: `--overlay-offset`, `--overlay-min-w/-w-sm/-w/-w-md/-w-lg`, `--overlay-max-h-*`, `--viewport-margin`.
 - Every BEM block has its own CSS file next to its component.
 - Icons only through `Glyph` / `renderIcon()`; Velvet Icons via `tokens/icons.css` (CSS mask) — `<i class="vui-icon icon-NAME">`; raw SVGs in `assets/icons/`.
-- Filled icon twins = selected state only.
+- Filled icon twins = selected state, plus solid section headers in print/CV templates (`person-filled`, `briefcase-filled`, `desktop-filled`, `graduation-cap-filled`).
 
 ## Colour
 One hero colour velvet `#8b0036` (≤10% of a screen); warm rose-tinted neutrals; status colours distinct from brand (danger is orange-red). Text only in `--fg-primary/secondary` (AA); `--fg-tertiary` for meta/18px+. Status never by colour alone (icon/label). Data-viz: `--dv-1…8` in order, `--dv-seq-1…5`; never for status. Labels: `data-tone="violet"` → `--tone/--tone-bg/--tone-fg`.

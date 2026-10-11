@@ -1,4 +1,4 @@
-<!-- @dsCard group="15 Actions" viewport="960x82" name="AuthButton" subtitle="Session toggle · async sign-in · icon-only" -->
+<!-- @dsCard group="15 Actions" viewport="960x82" name="AuthButton" subtitle="Session toggle · async sign-in · initializing · error · icon-only" -->
 <!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
@@ -9,6 +9,6 @@
 <script type="text/babel">
 const { AuthButton } = window.VelvetUIDesignSystem_ee2bd8;
 const later=(f)=>()=>new Promise(r=>setTimeout(()=>{f();r();},600));
-const App=()=>{const[s,setS]=React.useState(false);return(<div className="pane"><AuthButton signedIn={s} onSignIn={later(()=>setS(true))} onSignOut={()=>setS(false)} /><AuthButton signedIn={s} iconOnly size="sm" onSignIn={()=>setS(true)} onSignOut={()=>setS(false)} /></div>);};
+const App=()=>{const[s,setS]=React.useState(false);return(<div className="pane"><AuthButton signedIn={s} onSignIn={later(()=>setS(true))} onSignOut={()=>setS(false)} /><AuthButton signedIn={s} iconOnly size="sm" onSignIn={()=>setS(true)} onSignOut={()=>setS(false)} /><AuthButton signedIn={false} initializing /><AuthButton signedIn={false} error="Popup was blocked — try again" onSignIn={()=>{}} /></div>);};
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script></body></html>

@@ -1,9 +1,9 @@
 import * as React from 'react';
-export interface ManagedColumn { key: string; label: React.ReactNode; /** Start hidden when false. @default true */ visible?: boolean; /** Start pinned */ pin?: 'left' | 'right'; /** Can't be hidden, moved or unpinned (e.g. Name) */ locked?: boolean; }
+export interface ManagedColumn { key: string; label: React.ReactNode; /** Start hidden when false. @default true */ visible?: boolean; /** Start pinned */ pin?: 'left' | 'right'; /** Can't be hidden, moved or unpinned (e.g. Name) — shorthand for the three flags below = false */ locked?: boolean; /** @default true */ hideable?: boolean; /** @default true */ pinnable?: boolean; /** @default true */ movable?: boolean; }
 export interface ColumnState { key: string; visible: boolean; pin: 'left' | 'right' | null; }
 /**
  * Table column settings: visibility (switch), order (drag the grip, or focus it and press ↑/↓ — moves cross section
- * boundaries), and freezing (pin button). Any number of columns can be pinned; sections are Pinned left · Columns ·
+ * boundaries), and freezing (pin button). The last visible column can't be switched off. Any number of columns can be pinned; sections are Pinned left · Columns ·
  * Pinned right (right appears with pinRight or when a column is already pinned right). Search appears past 8 columns.
  * Usually inside a Popover opened from a "Columns" button in the Table toolbar. Feed Table with ApplyColumns(columns, state)
  * — it orders left → middle → right and sets each column's pin so Table makes it sticky.
@@ -16,6 +16,8 @@ export interface ColumnManagerProps {
   onChange?: (state: ColumnState[]) => void;
   /** Preferred name — same callback as onChange (onChange stays as an alias). */
   onValueChange?: (state: ColumnState[]) => void;
+  /** What Reset restores. @default the columns' own visible/pin */
+  resetValue?: ColumnState[];
   /** @default 'Columns' */
   title?: string;
   /** Offer a "Pinned right" section (actions, totals). @default false */

@@ -4,7 +4,7 @@ import { Button } from '../actions/Button.jsx';
 import { SectionLabel } from '../primitives/SectionLabel.jsx';
 import { Glyph, renderIcon } from '../primitives/Glyph.jsx';
 import { cx } from '../primitives/cx.js';
-export function MenuPanel({ items = [], onClose, style, className, autoFocus = true }) {
+export function MenuPanel({ items = [], onClose, style, className, autoFocus = true, iconPosition = 'start' }) {
   const ref = React.useRef(null);
   const id = React.useId();
   const [active, setActive] = React.useState(-1);
@@ -41,16 +41,17 @@ export function MenuPanel({ items = [], onClose, style, className, autoFocus = t
           <div key={i} id={id + '-' + i} role={check ? 'menuitemcheckbox' : 'menuitem'} aria-checked={check ? !!it.checked : undefined} aria-disabled={it.disabled || undefined}
             className={cx('vui-menu__item', i === active && 'vui-menu__item--active', it.danger && 'vui-menu__item--danger')}
             onMouseEnter={() => !it.disabled && setActive(i)} onMouseDown={(e) => e.preventDefault()} onClick={() => choose(it)}>
-            {check ? <span className="vui-menu__check">{it.checked && <Glyph name="check" />}</span> : renderIcon(it.icon)}
+            {check ? <span className="vui-menu__check">{it.checked && <Glyph name="check" />}</span> : iconPosition === 'start' && renderIcon(it.icon)}
             <span className="vui-menu__label">{it.label}{it.description && <span className="vui-menu__desc">{it.description}</span>}</span>
             {it.shortcut && <Kbd plain className="vui-menu__kbd">{it.shortcut}</Kbd>}
+            {!check && iconPosition === 'end' && renderIcon(it.icon)}
           </div>
         );
       })}
     </div>
   );
 }
-export function Menu({ trigger, items = [], align = 'start', side = 'bottom', open, defaultOpen = false, onOpenChange, width, className }) {
+export function Menu({ trigger, items = [], align = 'start', side = 'bottom', open, defaultOpen = false, onOpenChange, width, className, iconPosition = 'start' }) {
   const [inner, setInner] = React.useState(defaultOpen);
   const isOpen = open !== undefined ? open : inner;
   const wrap = React.useRef(null);
@@ -69,7 +70,7 @@ export function Menu({ trigger, items = [], align = 'start', side = 'bottom', op
   return (
     <span ref={wrap} className={cx('vui-menu-wrap', className)}>
       {trig}
-      {isOpen && <MenuPanel items={items} onClose={close} className={cx('vui-menu--pop', align === 'end' && 'vui-menu--end', side === 'top' && 'vui-menu--top')} style={width ? { minWidth: width } : undefined} />}
+      {isOpen && <MenuPanel items={items} iconPosition={iconPosition} onClose={close} className={cx('vui-menu--pop', align === 'end' && 'vui-menu--end', side === 'top' && 'vui-menu--top')} style={width ? { minWidth: width } : undefined} />}
     </span>
   );
 }

@@ -9,10 +9,16 @@ import { cx } from '../primitives/cx.js';
 import { weekdayNames } from '../primitives/date.js';
 import { Weekday } from '../primitives/Weekday.jsx';
 const key = (d) => d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
-export function CalendarOrganizer({ events = [], onEventsChange, onEventClick, defaultMonth, weekStartsOn = 1, locale = 'en-US', maxChips = 2, className }) {
+export function CalendarOrganizer({ events = [], onEventsChange, onEventClick, defaultMonth, selected, defaultSelected, onSelectedChange, confirmDelete = true, weekStartsOn = 1, locale = 'en-US', maxChips = 2, className }) {
   const today = startOfDay(new Date());
-  const [view, setView] = React.useState(() => { const d = defaultMonth || today; return new Date(d.getFullYear(), d.getMonth(), 1); });
-  const [sel, setSel] = React.useState(today);
+  const [view, setView] = React.useState(() => { const d = defaultMonth || (selected && startOfDay(new Date(selected))) || defaultSelected || today; return new Date(d.getFullYear(), d.getMonth(), 1); });
+  const [innerSel, setInnerSel] = React.useState(() => startOfDay(new Date(defaultSelected || today)));
+  const sel = selected != null ? startOfDay(new Date(selected)) : innerSel;
+  const setSel = (d) => { if (selected === undefined) setInnerSel(d); onSelectedChange && onSelectedChange(d); };
+  React.useEffect(() => { if (selected == null) return; const d = new Date(selected); if (d.getMonth() !== view.getMonth() || d.getFullYear() !== view.getFullYear()) setView(new Date(d.getFullYear(), d.getMonth(), 1)); }, [selected && +new Date(selected)]);
+  const [asking, setAsking] = React.useState(null);
+  const panel = React.useRef(null);
+  const del = (e) => { onEventsChange(events.filter((x) => x.id !== e.id)); setAsking(null); requestAnimationFrame(() => { const b = panel.current && panel.current.querySelector('.vui-organizer__evb, .vui-organizer__add input'); b && b.focus(); }); };
   const [title, setTitle] = React.useState('');
   const [time, setTime] = React.useState('');
   const grid = React.useRef(null);
@@ -25,7 +31,7 @@ export function CalendarOrganizer({ events = [], onEventsChange, onEventClick, d
   const wd = weekdayNames(locale, weekStartsOn);
   const monthCount = events.filter((e) => { const d = new Date(e.date); return d.getMonth() === view.getMonth() && d.getFullYear() === view.getFullYear(); }).length;
   const selList = by[key(sel)] || [];
-  React.useEffect(() => { if (!kb.current) return; kb.current = false; const b = grid.current && grid.current.querySelector('[data-k="' + key(sel) + '"]'); b && b.focus(); }, [sel]);
+  React.useEffect(() => { if (!kb.current) return; kb.current = false; const b = grid.current && grid.current.querySelector('[data-k="' + key(sel) + '"]'); b && b.focus(); }, [+sel]);
   const pick = (d) => { setSel(d); if (d.getMonth() !== view.getMonth()) setView(new Date(d.getFullYear(), d.getMonth(), 1)); };
   const onKey = (e) => { const m = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 }[e.key]; if (m == null) return; e.preventDefault(); kb.current = true; pick(addDays(sel, m)); };
   const add = () => { const t = title.trim(); if (!t) return; onEventsChange && onEventsChange([...events, { id: 'e' + Date.now(), date: sel, title: t, time: time || undefined, color: 'var(--dv-' + (((events.length) % 7) + 1) + ')' }]); setTitle(''); setTime(''); };
@@ -57,7 +63,7 @@ export function CalendarOrganizer({ events = [], onEventsChange, onEventClick, d
           })}
         </div>
       </div>
-      <aside className="vui-organizer__panel" aria-live="polite">
+      <aside ref={panel} className="vui-organizer__panel" aria-live="polite">
         <div className="vui-organizer__pday">{fmtDate(sel, locale, { weekday: 'long' })}</div>
         <div className="vui-organizer__pdate">{fmtDate(sel, locale, { month: 'long', day: 'numeric' })}</div>
         {selList.length ? (
@@ -65,7 +71,9 @@ export function CalendarOrganizer({ events = [], onEventsChange, onEventClick, d
             {selList.map((e) => (
               <li key={e.id} className="vui-organizer__ev" style={{ '--ec': e.color || 'var(--dv-1)' }}>
                 <button type="button" className="vui-organizer__evb" onClick={() => onEventClick && onEventClick(e)}><span className="vui-organizer__evt">{e.title}</span><span className="vui-organizer__evm">{e.time || 'All day'}{e.location ? ' · ' + e.location : ''}</span></button>
-                {onEventsChange && <IconButton icon="trash-2" label={'Delete ' + e.title} size="sm" onClick={() => onEventsChange(events.filter((x) => x.id !== e.id))} />}
+                {onEventsChange && (asking === e.id
+                  ? <div className="vui-organizer__confirm" role="group" aria-label={'Delete ' + e.title + '?'}><Button size="xs" variant="ghost" autoFocus onClick={() => setAsking(null)} onKeyDown={(k) => k.key === 'Escape' && setAsking(null)}>Cancel</Button><Button size="xs" variant="danger" onClick={() => del(e)} onKeyDown={(k) => k.key === 'Escape' && setAsking(null)}>Delete</Button></div>
+                  : <IconButton icon="trash-2" label={'Delete ' + e.title} size="sm" onClick={() => (confirmDelete ? setAsking(e.id) : del(e))} />)}
               </li>
             ))}
           </ul>

@@ -26,6 +26,7 @@ export const OrganizerGrid = (props: OrganizerGridProps) => {
         <For each={props.calendar.weekdays()}>{(name) => <Weekday>{name}</Weekday>}</For>
       </div>
       <div
+        ref={props.calendar.setGrid}
         role="grid"
         tabIndex={-1}
         aria-label={props.calendar.monthLabel()}

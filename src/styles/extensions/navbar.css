@@ -1,0 +1,32 @@
+.vui-acct__panel {
+  max-width: calc(100vw - var(--space-6));
+  max-height: calc(100vh - var(--space-6));
+  overflow: auto;
+}
+
+.vui-acct__item:disabled {
+  color: var(--fg-disabled);
+  cursor: not-allowed;
+}
+
+.vui-acct__item:disabled:hover {
+  background: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vui-acct__panel {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .vui-acct__trigger:focus-visible,
+  .vui-acct__item:focus-visible,
+  .vui-acct__segbtn:focus-visible {
+    outline: var(--border-width-thick) solid Highlight;
+  }
+
+  .vui-acct__segbtn[aria-checked='true'] {
+    outline: var(--border-width) solid Highlight;
+  }
+}

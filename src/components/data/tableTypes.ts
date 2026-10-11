@@ -23,6 +23,8 @@ export interface TableColumn<T extends object = object> {
 }
 
 export interface TableProps<T extends object = object> {
+  /** @default 'auto' */
+  layout?: 'auto' | 'fixed';
   columns: TableColumn<T>[];
   rows: T[];
   /** Unique key field. @default 'id' */

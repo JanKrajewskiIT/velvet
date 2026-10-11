@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script></helmet>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Dialog" open="{{ open }}" on-close="{{ close }}" title="{{ title }}" description="{{ description }}" footer="{{ footer }}" size="sm" hint-size="0,0">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<sc-if value="{{ isRejected }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.OptionSwitcher" label="Who closed it?" options="{{ whoOptions }}" value="{{ who }}" on-value-change="{{ setWho }}" hint-size="100%,60px"></x-import>
+</sc-if>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.TagInput" label="Reasons" optional="{{ true }}" placeholder="Type your own and press Enter" value="{{ reasons }}" on-value-change="{{ setReasons }}" hint-size="100%,72px"></x-import>
+<div style="display:flex;flex-direction:column;gap:var(--space-2)">
+<span style="font-size:var(--type-caption-size);color:var(--fg-tertiary)">Suggestions · the number shows how often you used it before</span>
+<div style="display:flex;flex-wrap:wrap;gap:var(--space-2)">
+<sc-for list="{{ suggestions }}" as="s" hint-placeholder-count="6">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Chip" size="sm" selected="{{ s.selected }}" count="{{ s.count }}" on-click="{{ s.toggle }}" hint-size="110px,28px">{{ s.label }}</x-import>
+</sc-for>
+</div>
+</div>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;app&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;object&quot;}}">
+class Component extends DCLogic {
+  state = { key: null, reasons: [], who: 'me' };
+  renderVals() {
+    const app = this.props.app;
+    const d = app && app.decision;
+    if (!app || !d) return { open: false, suggestions: [] };
+    const { D, NS } = app;
+    const h = React.createElement;
+    const key = d.id + d.status;
+    const o = app.offers.find((x) => x.id === d.id) || {};
+    if (this.state.key !== key) { const same = o.status === d.status; setTimeout(() => this.setState({ key, reasons: same ? (o.reasons || []) : [], who: same && o.decidedBy ? o.decidedBy : 'me' }), 0); }
+    const rej = d.status === 'rejected';
+    const pool = rej ? D.REASONS.rejected[this.state.who] : D.REASONS[d.status] || [];
+    const used = {};
+    app.offers.forEach((x) => { if (x.id !== d.id && x.status === d.status) (x.reasons || []).forEach((r) => { used[r] = (used[r] || 0) + 1; }); });
+    const sel = this.state.reasons;
+    const all = [...pool, ...Object.keys(used).filter((r) => !pool.includes(r))];
+    const titles = { considering: 'What makes it worth considering?', applied: 'Why did you apply?', rejected: 'Why is it closed?' };
+    const commit = (reasons) => app.commitDecision({ reasons, decidedBy: rej ? this.state.who : null });
+    return {
+      open: true, close: app.closeDecision,
+      title: titles[d.status] || 'Move offer',
+      description: o.name + ' · ' + o.company + ' → ' + D.STATUS[d.status].label + '. A few words now help you spot patterns later.',
+      isRejected: rej,
+      whoOptions: [{ value: 'me', label: 'I passed', icon: 'user' }, { value: 'them', label: 'They passed', icon: 'building' }],
+      who: this.state.who, setWho: (v) => this.setState({ who: v, reasons: [] }),
+      reasons: sel, setReasons: (v) => this.setState({ reasons: v }),
+      suggestions: all.map((r) => ({ label: r, selected: sel.includes(r), count: used[r] || undefined, toggle: () => this.setState({ reasons: sel.includes(r) ? sel.filter((x) => x !== r) : [...sel, r] }) })),
+      footer: h(React.Fragment, null,
+        h(NS.Button, { variant: 'ghost', onClick: () => commit([]) }, 'Skip'),
+        h(NS.Button, { iconLeft: 'check', onClick: () => commit(sel) }, 'Move to ' + D.STATUS[d.status].label))
+    };
+  }
+}
+</script>
+</body>
+</html>

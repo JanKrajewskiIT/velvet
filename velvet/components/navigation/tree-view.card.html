@@ -1,4 +1,4 @@
-<!-- @dsCard group="22 Navigation" viewport="960x336" name="TreeView" subtitle="Files with selection · checkable tri-state permissions" -->
+<!-- @dsCard group="22 Navigation" viewport="960x364" name="TreeView" subtitle="Files with selection + drag/Alt+arrow moving · checkable tri-state permissions" -->
 <!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
@@ -8,9 +8,9 @@
 <link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
 <script type="text/babel">
 const NS = window.VelvetUIDesignSystem_ee2bd8;
-const { TreeView } = NS;
+const { TreeView, moveTreeNode } = NS;
 const T=[{id:'src',label:'src',meta:'12',children:[{id:'cmp',label:'components',children:[{id:'btn',label:'Button.jsx',icon:'code'},{id:'inp',label:'Input.jsx',icon:'code'},{id:'tbl',label:'Table.jsx',icon:'code'}]},{id:'tok',label:'tokens',children:[{id:'col',label:'colors.css',icon:'palette'},{id:'typ',label:'typography.css',icon:'file'}]},{id:'idx',label:'index.js',icon:'code'}]},{id:'assets',label:'assets',children:[{id:'logo',label:'logo.svg',icon:'image'}]},{id:'readme',label:'README.md',icon:'file'}];
 const P=[{id:'proj',label:'Projects',icon:'folder',children:[{id:'p-r',label:'Read'},{id:'p-w',label:'Write'},{id:'p-d',label:'Delete'}]},{id:'bill',label:'Billing',icon:'dollar-sign',children:[{id:'b-r',label:'View invoices'},{id:'b-m',label:'Manage plan'}]},{id:'adm',label:'Admin',icon:'shield',children:[{id:'a-u',label:'Users'},{id:'a-s',label:'Security'}]}];
-const App=()=>{const[c,setC]=React.useState(['p-r','p-w','b-r','b-m']);return(<div className="pane"><div className="g2"><TreeView label="Files" data={T} defaultExpanded={['src','cmp']} defaultSelected="inp" /><div><TreeView label="Permissions" data={P} checkable checked={c} onCheckedChange={setC} defaultExpanded={['proj','bill']} /><div className="lbl" style={{marginTop:8}}>{c.length} permissions granted</div></div></div></div>);};
+const App=()=>{const[c,setC]=React.useState(['p-r','p-w','b-r','b-m']);const[t,setT]=React.useState(T);return(<div className="pane"><div className="g2"><div><TreeView label="Files" data={t} onMove={(m)=>setT(moveTreeNode(t,m))} defaultExpanded={['src','cmp']} defaultSelected="inp" /><div className="lbl" style={{marginTop:8}}>Drag rows, or Alt+arrows to move</div></div><div><TreeView label="Permissions" data={P} checkable checked={c} onCheckedChange={setC} defaultExpanded={['proj','bill']} /><div className="lbl" style={{marginTop:8}}>{c.length} permissions granted</div></div></div></div>);};
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script></body></html>

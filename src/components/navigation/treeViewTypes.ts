@@ -1,4 +1,5 @@
 import type { TreeNode } from './treeData';
+import type { TreeMove, TreeMovePosition } from './treeMoves';
 
 export interface TreeViewLabels {
   loading: string;
@@ -32,6 +33,9 @@ export interface TreeViewProps {
   draggable?: boolean;
   /** Moves `draggedId` as a child of `targetId`; the consumer updates `data`. */
   onMove?: (draggedId: string, targetId: string) => void;
+  /** Positional moves; also enables moving unless draggable is explicitly false. */
+  onMovePosition?: (move: TreeMove) => void;
+  canDrop?: (node: TreeNode, target: TreeNode, position: TreeMovePosition) => boolean;
   /** Called when a lazy node without children expands. Resolve after you put the children into data; while pending a Loading… row shows, on reject an error row with Retry (Enter / Space on it retries). */
   onLoadChildren?: (node: TreeNode) => Promise<void>;
   /** Receives the rejection of `onLoadChildren`; the row itself only shows a generic message. */

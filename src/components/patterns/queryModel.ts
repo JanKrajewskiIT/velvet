@@ -131,6 +131,8 @@ export const oppositeCombinator = (combinator: QueryGroup['combinator']): QueryG
 /** A query with one empty condition on the first field. */
 export const emptyQuery = (fields: QueryField[] = []): QueryGroup => newQueryGroup('and', fields);
 
+export const clearQuery = (query: QueryGroup): QueryGroup => ({ ...query, rules: [] });
+
 /** The rule with its field replaced; operator and operand reset to the new field's defaults. */
 export const withField = (rule: QueryRule, fields: QueryField[], key: string): QueryRule => ({
   ...rule,
@@ -161,4 +163,5 @@ export const describeQuery = (
   query: QueryGroup,
   fields: QueryField[] = [],
   translate: StaticTranslate = englishText,
-): string => describeRules(query, fields, translate);
+): string =>
+  query.rules.length ? describeRules(query, fields, translate) : translate('velvet.patterns.queryBuilder.allRecords');

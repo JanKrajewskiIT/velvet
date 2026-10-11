@@ -5,6 +5,7 @@ export const actionsEn = defineDictionary({
     signIn: 'Sign in',
     signOut: 'Sign out',
     failed: 'Authentication failed. Try again.',
+    initializing: 'Checking session…',
   },
   calendarEventButton: {
     label: 'Add to calendar',

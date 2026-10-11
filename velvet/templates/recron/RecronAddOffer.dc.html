@@ -8,9 +8,9 @@
 <body>
 <x-dc>
 <helmet><script src="./ds-base.js"></script><style>:root:root{overflow:auto!important;height:auto!important;background:var(--bg-page)!important}html body{margin:0!important;padding:0!important;background:var(--bg-page)!important}</style></helmet>
-<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Dialog" open="{{ open }}" on-close="{{ close }}" title="Add offer" description="Paste a link and let AI read it, or fill it in yourself." footer="{{ footer }}" size="md" hint-size="0,0">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Dialog" open="{{ open }}" on-close="{{ close }}" title="{{ dlgTitle }}" description="{{ dlgDesc }}" footer="{{ footer }}" size="md" hint-size="0,0">
 <div style="display:flex;flex-direction:column;gap:var(--space-4)">
-<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Tabs" variant="segmented" block="{{ true }}" items="{{ modes }}" value="{{ mode }}" on-value-change="{{ setMode }}" hint-size="100%,36px"></x-import>
+<sc-if value="{{ showModes }}" hint-placeholder-val="{{ true }}"><x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Tabs" variant="segmented" block="{{ true }}" items="{{ modes }}" value="{{ mode }}" on-value-change="{{ setMode }}" hint-size="100%,36px"></x-import></sc-if>
 <sc-if value="{{ isLink }}" hint-placeholder-val="{{ true }}">
 <div style="display:flex;flex-direction:column;gap:var(--space-3)">
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Job posting URL" icon-left="link" placeholder="https://www.linkedin.com/jobs/view/…" value="{{ url }}" on-change="{{ setUrl }}" hint="Works with LinkedIn, JustJoin.it, NoFluffJobs, Pracuj.pl and most career pages" hint-size="100%,84px"></x-import>
@@ -31,7 +31,7 @@
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.RangeInput" label="Salary" optional="{{ true }}" locale="pl" value="{{ salary }}" on-value-change="{{ setSalary }}" unit-options="{{ currencies }}" default-unit="PLN" period-options="{{ periods }}" default-period="Monthly" hint-size="100%,84px"></x-import>
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FormGrid" columns="{{ 2 }}" gap="sm" hint-size="100%,72px">
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Select" label="Source" options="{{ sources }}" value="{{ f.source }}" on-value-change="{{ setSource }}" hint-size="100%,64px"></x-import>
-<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Select" label="Status" options="{{ statuses }}" value="{{ f.status }}" on-value-change="{{ setStatus }}" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Via recruiter / agency" optional="{{ true }}" icon-left="users" placeholder="e.g. Hays IT" value="{{ f.intermediary }}" on-change="{{ setIntermediary }}" hint-size="100%,64px"></x-import>
 </x-import>
 </div>
 </sc-if>
@@ -40,8 +40,8 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = { mode: 'link', url: '', parsing: false, parsed: false, f: { name: '', company: '', city: '', workMode: 'Remote', source: 'LinkedIn', status: 'new' }, salary: { min: null, max: null } };
-  reset() { this.setState({ mode: 'link', url: '', parsing: false, parsed: false, f: { name: '', company: '', city: '', workMode: 'Remote', source: 'LinkedIn', status: 'new' }, salary: { min: null, max: null } }); }
+  state = { mode: 'link', url: '', parsing: false, parsed: false, f: { name: '', company: '', city: '', workMode: 'Remote', source: 'LinkedIn', status: 'new', intermediary: '' }, salary: { min: null, max: null } };
+  reset() { this.setState({ loaded: null, mode: 'link', url: '', parsing: false, parsed: false, f: { name: '', company: '', city: '', workMode: 'Remote', source: 'LinkedIn', status: 'new', intermediary: '' }, salary: { min: null, max: null } }); }
   renderVals() {
     const app = this.props.app;
     if (!app) return { open: false };
@@ -52,23 +52,28 @@ class Component extends DCLogic {
     const close = () => { app.closeAdd(); this.reset(); };
     const parse = () => {
       this.setState({ parsing: true });
-      setTimeout(() => this.setState({ parsing: false, parsed: true, mode: 'manual', f: { name: 'Senior Frontend Engineer', company: 'Northwind Labs', city: 'Warsaw', workMode: 'Hybrid', source: /linkedin/i.test(s.url) ? 'LinkedIn' : 'Company site', status: 'new' }, salary: { min: 19000, max: 25000 } }), 1500);
+      setTimeout(() => this.setState({ parsing: false, parsed: true, mode: 'manual', f: { name: 'Senior Frontend Engineer', company: 'Northwind Labs', city: 'Warsaw', workMode: 'Hybrid', source: /linkedin/i.test(s.url) ? 'LinkedIn' : /pracuj/i.test(s.url) ? 'Pracuj.pl' : 'Company site', status: 'new', intermediary: '' }, salary: { min: 19000, max: 25000 } }), 1500);
     };
+    const editing = app.editId && app.offers.find((x) => x.id === app.editId);
+    if (app.addOpen && editing && s.loaded !== editing.id) setTimeout(() => this.setState({ loaded: editing.id, mode: 'manual', parsed: false, f: { name: editing.name, company: editing.company, city: editing.city, workMode: editing.workMode, source: editing.source, status: editing.status, intermediary: editing.intermediary || '' }, salary: { min: editing.salaryMin, max: editing.salaryMax, unit: editing.currency, period: { hour: 'Hourly', year: 'Yearly' }[editing.period] || 'Monthly' } }), 0);
     const canAdd = s.f.name.trim() && s.f.company.trim();
-    const add = () => { app.addOffer({ ...s.f, salaryMin: s.salary.min, salaryMax: s.salary.max, currency: 'PLN', period: 'month', match: null, tags: [], added: '2026-10-06', link: s.url || '#', description: '_No description yet — paste the posting text to enable CV match._' }); this.reset(); };
+    const save = () => { const sv = s.salary || {}; app.saveOffer(editing.id, { ...s.f, salaryMin: sv.min, salaryMax: sv.max, currency: sv.unit || 'PLN', period: { Hourly: 'hour', Yearly: 'year' }[sv.period] || 'month' }); this.reset(); };
+    const add = () => { const sv = s.salary || {}; const per = { Hourly: 'hour', Yearly: 'year' }[sv.period] || 'month';
+    app.addOffer({ ...s.f, salaryMin: sv.min, salaryMax: sv.max, currency: sv.unit || 'PLN', period: per, aiParsed: s.parsed, reasons: [], decidedBy: null, match: null, tags: [], added: '2026-10-06', link: s.url || '#', description: '_No description yet — paste the posting text to enable CV match._' }); this.reset(); };
     return {
-      open: !!app.addOpen, close,
+      open: !!app.addOpen, close, showModes: !editing,
+      dlgTitle: editing ? 'Edit offer' : 'Add offer', dlgDesc: editing ? editing.name + ' · ' + editing.company : 'Paste a link and let AI read it, or fill it in yourself.',
       modes: [{ value: 'link', label: 'From a link', icon: 'sparkles' }, { value: 'manual', label: 'Fill in manually', icon: 'pencil' }],
       mode: s.mode, setMode: (v) => this.setState({ mode: v }),
       isLink: s.mode === 'link', isManual: s.mode === 'manual', parsed: s.parsed,
       url: s.url, setUrl: (e) => this.setState({ url: e.target.value }),
-      f: s.f, setName: setF('name'), setCompany: setF('company'), setCity: setF('city'), setWorkMode: setF('workMode'), setSource: setF('source'), setStatus: setF('status'),
+      f: s.f, setName: setF('name'), setCompany: setF('company'), setCity: setF('city'), setWorkMode: setF('workMode'), setSource: setF('source'), setStatus: setF('status'), setIntermediary: setF('intermediary'),
       salary: s.salary, setSalary: (v) => this.setState({ salary: v }),
       workModes: D.workModes, sources: D.sources, currencies: ['PLN', 'EUR', 'USD', 'GBP'], periods: ['Hourly', 'Monthly', 'Yearly'],
       statuses: D.STATUS_ORDER.map((k) => ({ value: k, label: D.STATUS[k].label })),
       footer: h(React.Fragment, null,
         h(NS.Button, { variant: 'secondary', onClick: close }, 'Cancel'),
-        s.mode === 'link' ? h(NS.Button, { iconLeft: 'sparkles', loading: s.parsing, disabled: !s.url.trim(), onClick: parse }, s.parsing ? 'Reading posting…' : 'Read with AI') : h(NS.Button, { iconLeft: 'plus', disabled: !canAdd, onClick: add }, 'Add offer'))
+        editing ? h(NS.Button, { iconLeft: 'check', disabled: !canAdd, onClick: save }, 'Save changes') : s.mode === 'link' ? h(NS.Button, { iconLeft: 'sparkles', loading: s.parsing, disabled: !s.url.trim(), onClick: parse }, s.parsing ? 'Reading posting…' : 'Read with AI') : h(NS.Button, { iconLeft: 'plus', disabled: !canAdd, onClick: add }, 'Add offer'))
     };
   }
 }

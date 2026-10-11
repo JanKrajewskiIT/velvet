@@ -19,6 +19,11 @@
   cursor: default;
 }
 
+.vui-table__addbtn {
+  justify-content: flex-start;
+  border-radius: 0;
+}
+
 .vui-dgrid__settings {
   display: flex;
   flex-direction: column;
@@ -31,32 +36,18 @@
   font-size: var(--type-body-sm-size);
 }
 
-.vui-qb__row:has(> .vui-qb__order) {
-  grid-template-columns: var(--space-16) minmax(0, 1fr) auto;
-}
-
-.vui-qb__order {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--space-0-5);
-}
-
-.vui-table__add-row > td {
-  padding: var(--space-2);
-}
-
 @media (width <= 599px) {
-  .vui-qb__row:has(> .vui-qb__order) {
+  .vui-qb__row--move {
     grid-template-columns: minmax(0, 1fr) auto;
   }
 
-  .vui-qb__row:has(> .vui-qb__order) > .vui-qb__lead {
+  .vui-qb__row--move > .vui-qb__lead {
     grid-column: 1 / -1;
   }
 }
 
 @container (max-width: 520px) {
-  .vui-dgrid__pop--wide .vui-qb__row:has(> .vui-qb__order) {
+  .vui-dgrid__pop--wide .vui-qb__row--move {
     grid-template-columns: minmax(0, 1fr) auto;
   }
 

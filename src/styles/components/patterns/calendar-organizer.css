@@ -38,3 +38,4 @@
 .vui-organizer__day{min-height:56px}
 .vui-organizer__chip{font-size:0;height:6px;padding:0;box-shadow:none;background:var(--ec)}
 .vui-organizer__chip b{display:none}}
+.vui-organizer__confirm{display:flex;gap:var(--space-1);flex:none;padding-right:var(--space-1);animation:vui-fade-in var(--motion-fast)}

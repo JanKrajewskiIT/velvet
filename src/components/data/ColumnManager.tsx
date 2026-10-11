@@ -34,6 +34,7 @@ export const ColumnManager = (props: ColumnManagerProps): JSX.Element => {
     columns: () => p.columns,
     value: () => p.value,
     defaultValue: () => p.defaultValue,
+    resetValue: () => p.resetValue,
     onChange: (next) => (p.onChange ?? p.onValueChange)?.(next),
     pinRight: () => p.pinRight,
     maxPinned: () => p.maxPinned,

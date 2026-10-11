@@ -59,6 +59,8 @@ export const navigationPl: TranslationOf<typeof navigationEn> = {
   treeView: {
     loading: 'Ładowanie…',
     loadFailed: 'Nie udało się wczytać',
+    positionInstructions:
+      'Alt+strzałka w górę lub w dół zmienia kolejność. Alt+strzałka w prawo przenosi do poprzedniego folderu. Alt+strzałka w lewo przenosi poza rodzica. Spacja (Ctrl+spacja w drzewie z polami wyboru) rozpoczyna przenoszenie do folderu, Enter potwierdza, a Escape anuluje.',
     moveInstructions:
       'Aby przenieść element, naciśnij spację (Ctrl+spację w drzewie z polami wyboru), wybierz strzałkami nowego rodzica i naciśnij Enter. Naciśnij Escape, aby anulować.',
     moveStarted: 'Wybierz strzałkami nowego rodzica i naciśnij Enter. Naciśnij Escape, aby anulować.',
