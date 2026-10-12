@@ -1,6 +1,19 @@
 # Changelog
 
-## Unreleased
+## 3.4.7
+
+### Fixed
+
+- Shared `createLibraryMessages` fallback formats templates directly through I18n, including interpolation, plural rules and rich-text handlers when a provider lacks a library dictionary.
+- Rich translation fallback no longer performs a second plain-text translation or casts a template to a dictionary key.
+
+### Changed
+
+- Require `@jankrajewskiit/i18n` `^3.4.2` for the public template formatters.
+
+## Earlier refactoring notes
+
+These entries describe the port before the advanced data components moved to VelvetData; `VirtualTable` and query nodes below now belong to that package.
 
 ### Breaking
 

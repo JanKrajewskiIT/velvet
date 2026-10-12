@@ -1,6 +1,6 @@
 {
   "name": "@jankrajewskiit/ui",
-  "version": "3.4.6",
+  "version": "3.4.7",
   "description": "SolidJS component library with theming and translations.",
   "keywords": [
     "solidjs",
@@ -62,14 +62,14 @@
   },
   "peerDependencies": {
     "@jankrajewskiit/auth": "^3.3.4",
-    "@jankrajewskiit/i18n": "^3.3.0",
+    "@jankrajewskiit/i18n": "^3.4.2",
     "solid-js": ">=1.9.0 <2"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
     "@jankrajewskiit/auth": "^3.4.1",
-    "@jankrajewskiit/configs": "^3.4.1",
-    "@jankrajewskiit/i18n": "^3.4.1",
+    "@jankrajewskiit/configs": "^3.4.2",
+    "@jankrajewskiit/i18n": "^3.4.3",
     "@size-limit/file": "^14.2.0",
     "@types/node": "^26.6.5",
     "@typescript/native": "npm:typescript@^7.0.2",

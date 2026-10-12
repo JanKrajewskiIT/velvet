@@ -37,7 +37,7 @@ await mountVelvetApp({
 
 ## Shared component primitives
 
-Version 3.4.5 adds `@jankrajewskiit/ui/common`, a public entry point for building components on the same primitives as Velvet UI. It does not import the UI stylesheet, visual components or bootstrap provider.
+Published version 3.4.6 provides `@jankrajewskiit/ui/common`, a public entry point for building components on the same primitives as Velvet UI. It does not import the UI stylesheet, visual components or bootstrap provider.
 
 ```ts
 import { createControllable, createFrameFocus, cx, rowId } from '@jankrajewskiit/ui/common';
@@ -47,7 +47,9 @@ The API includes class composition (`cx`, `ClassValue`), controlled/uncontrolled
 
 Create `createFrameFocus` under a Solid owner; disposal cancels its pending animation frame. The returned function accepts an optional descendant selector. `createId` generates client-side record ids; use consumer-owned stable keys for persisted records and Solid's own id primitive for hydration-sensitive DOM relationships.
 
-`createLibraryMessages(dictionary)` provides `staticTranslate`, `useTranslate` and `useTranslateRich` from one flattened fallback dictionary. The hook functions read the existing i18n provider during component setup, preserve its locale/overrides and use the supplied dictionary for missing messages. `staticTranslate` is available outside an owner for labels in exported constants without interpolation. `LibraryMessages` and `StaticTranslate` describe this contract. The factory contains no package-specific vocabulary: UI supplies `velvetEn`, while Data supplies its English dictionary composed with UI defaults. `RowKey` and `RowSort` remain available through the existing UI root export for compatibility.
+`createLibraryMessages(dictionary)` provides `staticTranslate`, `useTranslate` and `useTranslateRich` from one flattened fallback dictionary. The hook functions read the existing i18n provider during component setup and preserve its locale/overrides. UI 3.4.7 formats missing messages through the public template formatters in I18n 3.4.2, passing the active locale, interpolation/plural parameters and rich-text handlers directly. It does not look up fallback text as another dictionary key. Outside a provider the fallback uses English. A key absent from both the provider and supplied defaults remains the key itself.
+
+`staticTranslate` is available outside an owner for labels in exported constants without interpolation. `LibraryMessages` and `StaticTranslate` describe this contract. The factory contains no package-specific vocabulary: UI supplies `velvetEn`, while Data supplies its English dictionary composed with UI defaults. `RowKey` and `RowSort` remain available through the existing UI root export for compatibility. The prepared 3.4.7 release requires I18n `^3.4.2`; see the [release order](../VelvetData/docs/migration.md#release-order) before refreshing dependencies.
 
 ## Translations
 
