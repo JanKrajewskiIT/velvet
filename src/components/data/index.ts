@@ -1,17 +1,8 @@
 export { Accordion, type AccordionProps } from './Accordion';
 export { type AccordionItem, type AccordionVariant } from './accordionTypes';
-export { ApplyColumns, applyColumns } from './applyColumns';
 export { Avatar, type AvatarProps, type AvatarStatus } from './Avatar';
 export { AvatarGroup, type AvatarGroupProps } from './AvatarGroup';
 export { CodeSnippet, type CodeSnippetProps, type CodeSnippetTab } from './CodeSnippet';
-export {
-  ColumnManager,
-  type ColumnManagerProps,
-  type ColumnPin,
-  type ColumnState,
-  type ManagedColumn,
-} from './ColumnManager';
-export { DataGrid, type DataGridProps, type GridColumn, type GridRowChange, type GridViewState } from './DataGrid';
 export { type DescriptionItem, DescriptionList, type DescriptionListProps } from './DescriptionList';
 export { diffLines, type DiffRow } from './diffLines';
 export { type DiffMode, DiffViewer, type DiffViewerProps } from './DiffViewer';
@@ -19,8 +10,6 @@ export { Divider, type DividerProps } from './Divider';
 export { type CalendarEvent, EventCalendar, type EventCalendarProps } from './EventCalendar';
 export { FeatureCard, type FeatureCardProps } from './FeatureCard';
 export { FlipCard, type FlipCardProps } from './FlipCard';
-export { parseGridView, serializeGridView } from './gridViewCodec';
-export { defaultGridView, type GridViewOptions, reconcileGridView } from './gridViewHelpers';
 export { Kanban, type KanbanCard, type KanbanColumn, type KanbanProps } from './Kanban';
 export { List, type ListItemData, type ListProps } from './List';
 export { type LogLevel, type LogLine } from './logLines';
@@ -41,5 +30,3 @@ export {
   type TimelineMeta,
   type TimelineStatus,
 } from './timelineTypes';
-export { VirtualList, type VirtualListItemState, type VirtualListProps } from './VirtualList';
-export { type VirtualColumn, VirtualTable, type VirtualTableProps } from './VirtualTable';

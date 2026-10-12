@@ -5,7 +5,7 @@ import { cx } from '../../utils/cx';
 import { Checkbox } from '../forms/Checkbox';
 import { ColumnResize } from '../primitives/ColumnResize';
 import { Glyph } from '../primitives/Glyph';
-import { columnName } from './gridColumns';
+import { columnName } from './columnName';
 import { cssLength, nextSort } from './rowData';
 import type { TableController } from './tableController';
 import type { TableColumn, TableSort } from './tableTypes';

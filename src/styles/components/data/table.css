@@ -1,4 +1,5 @@
 /* Table */
+.vui-table__addbtn { justify-content: flex-start; border-radius: 0; }
 /* No clip on the wrapper — toolbar popovers (ColumnManager, menus) must overflow. Rounding is carried by the first/last regions instead. */
 .vui-table-wrap{--_r:calc(var(--radius-lg) - 1px);position:relative;border:var(--border-width) solid var(--border-default);border-radius:var(--radius-lg);background:var(--bg-raised)}
 .vui-table-wrap>:first-child{border-top-left-radius:var(--_r);border-top-right-radius:var(--_r)}

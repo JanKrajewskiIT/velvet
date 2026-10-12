@@ -2,6 +2,8 @@
 
 SolidJS component library published as `@jankrajewskiit/ui`.
 
+Advanced data components (`DataGrid`, `ColumnManager`, `QueryBuilder`, `VirtualTable`, `VirtualList`) and their saved-view/query helpers now live in the sibling VelvetData package, `@jankrajewskiit/data`. Import them and their styles from that package and compose `velvetDataMessages` into the existing provider. Simple `Table` and `TableAddRowAction` remain here. See [migration notes](../VelvetData/docs/migration.md) for import changes and consumer coordination before release.
+
 The live showcase is maintained separately in the sibling `VelvetDemo` project. This repository contains the library and its read-only Velvet reference. The [porting record](docs/design-system-port.md) describes parity, implementation decisions and remaining verification.
 
 ## Install
@@ -32,6 +34,20 @@ await mountVelvetApp({
 ```
 
 `mountVelvetApp` renders the app inside `VelvetProvider`, which syncs the theme with the OS and storage, provides the locale and translations, a toast queue and an error boundary with a retry screen. With `authConfig`, it processes the OIDC callback before rendering and enables the shared auth session. The asynchronous bootstrap returns a disposer, or `undefined` when a callback starts navigation; bootstrap failures reject its Promise and must be handled by the application entry point.
+
+## Shared component primitives
+
+Version 3.4.5 adds `@jankrajewskiit/ui/common`, a public entry point for building components on the same primitives as Velvet UI. It does not import the UI stylesheet, visual components or bootstrap provider.
+
+```ts
+import { createControllable, createFrameFocus, cx, rowId } from '@jankrajewskiit/ui/common';
+```
+
+The API includes class composition (`cx`, `ClassValue`), controlled/uncontrolled state (`createControllable`, `ControllableOptions`), scheduled focus (`createFrameFocus`, `FrameFocus`), client-generated ids (`createId`), numeric clamping (`clamp`), column names/widths (`columnName`, `columnWidthBounds`, `constrainColumnWidth`, `ColumnWidthBounds`, `DEFAULT_COLUMN_MIN_WIDTH`) and record values/sorting (`rowValue`, `rowId`, `cellText`, `compareValues`, `nextSort`, `RowKey`, `RowSort`). Implementations stay in their owning UI modules and are shared by the UI components and VelvetData. UI-only helpers remain private.
+
+Create `createFrameFocus` under a Solid owner; disposal cancels its pending animation frame. The returned function accepts an optional descendant selector. `createId` generates client-side record ids; use consumer-owned stable keys for persisted records and Solid's own id primitive for hydration-sensitive DOM relationships.
+
+`createLibraryMessages(dictionary)` provides `staticTranslate`, `useTranslate` and `useTranslateRich` from one flattened fallback dictionary. The hook functions read the existing i18n provider during component setup, preserve its locale/overrides and use the supplied dictionary for missing messages. `staticTranslate` is available outside an owner for labels in exported constants without interpolation. `LibraryMessages` and `StaticTranslate` describe this contract. The factory contains no package-specific vocabulary: UI supplies `velvetEn`, while Data supplies its English dictionary composed with UI defaults. `RowKey` and `RowSort` remain available through the existing UI root export for compatibility.
 
 ## Translations
 

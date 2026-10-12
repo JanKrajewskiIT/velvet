@@ -75,17 +75,4 @@ export {
   type PricingTier,
 } from './PricingTable';
 export { type PromptAttachment, PromptInput, type PromptInputProps } from './PromptInput';
-export {
-  clearQuery,
-  describeQuery,
-  emptyQuery,
-  QueryBuilder,
-  type QueryBuilderProps,
-  type QueryField,
-  type QueryFieldType,
-  type QueryGroup,
-  type QueryNode,
-  type QueryOperatorValue,
-  type QueryRule,
-} from './QueryBuilder';
 export { TypingIndicator, type TypingIndicatorProps } from './TypingIndicator';

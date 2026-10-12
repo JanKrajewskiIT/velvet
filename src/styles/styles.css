@@ -45,7 +45,6 @@
 @import url("components/actions/auth-button.css");
 @import url("components/actions/locale-switcher.css");
 @import url("components/actions/calendar-event-button.css");
-@import url("components/data/virtual-list.css");
 @import url("components/actions/button-group.css");
 @import url("components/actions/theme-toggle.css");
 @import url("components/actions/toggle.css");
@@ -128,8 +127,6 @@
 @import url("components/data/description-list.css");
 @import url("components/data/timeline.css");
 @import url("components/data/kanban.css");
-@import url("components/data/data-grid.css");
-@import url("components/data/virtual-table.css");
 @import url("components/data/flip-card.css");
 @import url("components/data/code-snippet.css");
 @import url("components/data/skill-bar.css");
@@ -137,7 +134,6 @@
 @import url("components/data/event-calendar.css");
 @import url("components/data/score-card.css");
 @import url("components/data/question-card.css");
-@import url("components/data/column-manager.css");
 @import url("components/data/scheduler.css");
 @import url("components/data/diff-viewer.css");
 @import url("components/data/log-viewer.css");
@@ -182,7 +178,6 @@
 @import url("components/patterns/analysis-request.css");
 @import url("components/patterns/ats-analysis.css");
 @import url("components/patterns/filter-bar.css");
-@import url("components/patterns/query-builder.css");
 @import url("components/patterns/chat.css");
 @import url("components/forms/range-input.css");
 @import url("components/feedback/setup-checklist.css");

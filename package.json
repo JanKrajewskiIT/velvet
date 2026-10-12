@@ -1,6 +1,6 @@
 {
   "name": "@jankrajewskiit/ui",
-  "version": "3.4.4",
+  "version": "3.4.5",
   "description": "SolidJS component library with theming and translations.",
   "keywords": [
     "solidjs",
@@ -19,6 +19,10 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./common": {
+      "types": "./dist/common.d.ts",
+      "import": "./dist/common.js"
     },
     "./styles": {
       "types": "./styles.d.ts",
@@ -52,7 +56,7 @@
     "lint:css": "stylelint \"src/**/*.css\"",
     "lint:css:fix": "stylelint \"src/**/*.css\" --fix",
     "verify": "npm run format:check && npm run lint && npm run lint:css && npm run build && npm run verify:pkg",
-    "verify:pkg": "publint --strict && attw --pack . --entrypoints . --profile esm-only --ignore-rules internal-resolution-error",
+    "verify:pkg": "publint --strict && attw --pack . --entrypoints . ./common --profile esm-only --ignore-rules internal-resolution-error",
     "size": "size-limit",
     "prepare": "husky"
   },
