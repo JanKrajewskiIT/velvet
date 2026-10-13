@@ -1,4 +1,12 @@
-import { fill, LEAF_SELECTOR, LIST_TAG, sanitizeRichText, structure, unwrap } from './richTextModel';
+import {
+  createRichTextFragment,
+  fill,
+  LEAF_SELECTOR,
+  LIST_TAG,
+  sanitizeRichText,
+  structure,
+  unwrap,
+} from './richTextModel';
 import {
   blockOf,
   caretAfter,
@@ -194,9 +202,7 @@ export const insertContent = (root: Element, html: string): void => {
   const range = rangeIn(root);
   if (!range) return;
   if (!range.collapsed) range.deleteContents();
-  const template = document.createElement('template');
-  template.innerHTML = html;
-  const blocks = Array.from(template.content.children);
+  const blocks = Array.from(createRichTextFragment(html).children);
   const firstBlock = blocks[0];
   if (!firstBlock) return;
   const block = blockOf(range.startContainer, root);

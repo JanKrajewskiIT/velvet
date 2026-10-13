@@ -8,7 +8,7 @@ import { createRichTextHistory } from './createRichTextHistory';
 import { createRichTextInput } from './createRichTextInput';
 import { createRichTextState } from './createRichTextState';
 import { resolveLinkLabels, type RichTextLinkLabels, RichTextLinkPopover } from './RichTextLinkPopover';
-import { sanitizeRichText } from './richTextModel';
+import { createRichTextFragment } from './richTextModel';
 import { RichTextToolbar } from './RichTextToolbar';
 import { TOOL_LABEL_KEYS, toolbarEntries, type ToolId } from './richTextTools';
 
@@ -83,7 +83,7 @@ export const RichTextEditor = (props: RichTextEditorProps) => {
   const { link, exec } = commands;
 
   onMount(() => {
-    editor.innerHTML = sanitizeRichText(p.defaultValue);
+    editor.replaceChildren(createRichTextFragment(p.defaultValue));
     history.record();
     state.afterChange();
   });

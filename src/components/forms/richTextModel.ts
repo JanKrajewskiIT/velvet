@@ -168,7 +168,11 @@ export const structure = (root: Element): void => {
   wrapLooseTopLevel(root);
   wrapLooseListContent(root);
   root.querySelectorAll(LEAF_SELECTOR).forEach(fill);
-  if (!root.firstChild) root.innerHTML = '<p><br></p>';
+  if (!root.firstChild) {
+    const paragraph = document.createElement('p');
+    paragraph.append(document.createElement('br'));
+    root.append(paragraph);
+  }
 };
 
 const mergeAdjacentMarks = (root: Element) => {
@@ -208,17 +212,28 @@ export const tidy = (root: Element): void => {
   root.normalize();
 };
 
-/** Allow-list sanitizer used for the default value, paste and output. Still sanitize server-side. */
-export const sanitizeRichText = (html: string): string => {
+const sanitizeRichTextRoot = (html: string): HTMLDivElement => {
   const template = document.createElement('template');
+  // Parse in an inert template; strip unsafe tags and attributes before any nodes enter the live DOM.
+  // nosemgrep: rules.javascript.browser.security.insecure-document-method, rules.javascript.browser.security.insecure-innerhtml
   template.innerHTML = html;
   cleanTree(template.content);
   const holder = document.createElement('div');
   holder.append(template.content);
   structure(holder);
   tidy(holder);
-  return holder.innerHTML;
+  return holder;
 };
+
+/** Allow-list sanitizer used for the default value, paste and history. */
+export const createRichTextFragment = (html: string): DocumentFragment => {
+  const fragment = document.createDocumentFragment();
+  fragment.append(...sanitizeRichTextRoot(html).childNodes);
+  return fragment;
+};
+
+/** Allow-list sanitizer used for output. Still sanitize server-side. */
+export const sanitizeRichText = (html: string): string => sanitizeRichTextRoot(html).innerHTML;
 
 export const escapeHtml = (text: string): string =>
   text.replace(/&/gu, '&amp;').replace(/</gu, '&lt;').replace(/>/gu, '&gt;');

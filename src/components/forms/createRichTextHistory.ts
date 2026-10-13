@@ -1,5 +1,6 @@
 import { type Accessor, batch, createSignal, onCleanup } from 'solid-js';
 
+import { createRichTextFragment } from './richTextModel';
 import { restoreSel, type SavedSelection, saveSel } from './richTextSelection';
 
 const MAX_STEPS = 200;
@@ -70,7 +71,7 @@ export const createRichTextHistory = (options: RichTextHistoryOptions): RichText
     const root = options.root();
     if (!snapshot || !root) return;
     setPosition(target);
-    root.innerHTML = snapshot.html;
+    root.replaceChildren(createRichTextFragment(snapshot.html));
     root.focus();
     restoreSel(root, snapshot.selection);
     options.onRestore();

@@ -153,6 +153,8 @@ See the [Configs release migration](https://github.com/JanKrajewskiIT/velvetconf
 
 Source verification includes Gitleaks, Semgrep, actionlint, zizmor and Trivy configuration scanning. npm audit blocks high/critical advisories under the shared expiring-exception policy. Verification produces a CycloneDX dependency SBOM. Weekly/manual security workflows re-check dependency databases and source history without building the application.
 
+Semgrep excludes the read-only design-system reference in `velvet/` through `.semgrepignore`; the library source remains in scope. Rich-text initialization, paste and history restoration insert allow-listed DOM fragments instead of assigning HTML strings to live elements. HTML parsing stays in an inert template inside the sanitizer, with a local exception for the two generic `innerHTML` rules. Server-side sanitization is still required for stored or rendered editor output.
+
 Knip is available through `npm run deps:check` (JSON report) and `npm run deps:strict` (blocking unused-code check). CI records the report while the initial findings are reviewed; security scans remain blocking. Public library entry exports are preserved.
 
 Configure `CONFIGS_READ_TOKEN` for private Configs source access alongside the existing npm read token. See [shared security controls](https://github.com/JanKrajewskiIT/velvetconfigs/blob/v3.5.0/security/README.md) for required GitHub settings, reports, image signing, staging variables, WAF activation and manual acceptance checks.

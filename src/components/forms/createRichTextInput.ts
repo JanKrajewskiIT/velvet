@@ -6,7 +6,7 @@ import type { RichTextState } from './createRichTextState';
 import { insertContent, insertLineBreak, insertParagraph, repairLive } from './richTextBlocks';
 import { applyMarkdownShortcut } from './richTextMarkdown';
 import { insertPending } from './richTextMarks';
-import { escapeHtml, sanitizeRichText } from './richTextModel';
+import { escapeHtml } from './richTextModel';
 import { rangeIn } from './richTextSelection';
 import { matchesShortcut, TOOLBAR_ENTRIES } from './richTextTools';
 
@@ -112,7 +112,7 @@ export const createRichTextInput = (options: RichTextInputOptions) => {
         .filter((line, index) => line.trim() || (index > 0 && index < lines.length - 1))
         .map((line) => `<p>${escapeHtml(line) || '<br>'}</p>`)
         .join('');
-    run((root) => insertContent(root, sanitizeRichText(html || fromText())));
+    run((root) => insertContent(root, html || fromText()));
   };
 
   const onClick: JSX.EventHandler<HTMLDivElement, MouseEvent> = (event) => {

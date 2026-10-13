@@ -7,7 +7,8 @@ export const createTypeahead = () => {
   let updatedAt = 0;
   return (key: string, labels: readonly string[], current: number): number => {
     const now = Date.now();
-    text = (now - updatedAt > RESET_DELAY_MS ? '' : text) + key.toLocaleLowerCase();
+    if (now - updatedAt > RESET_DELAY_MS) text = '';
+    text += key.toLocaleLowerCase();
     updatedAt = now;
     const characters = Array.from(graphemes.segment(text), ({ segment }) => segment);
     const first = characters[0] ?? '';
