@@ -1,6 +1,6 @@
 {
   "name": "@jankrajewskiit/ui",
-  "version": "3.4.8",
+  "version": "3.4.9",
   "description": "SolidJS component library with theming and translations.",
   "keywords": [
     "solidjs",
@@ -17,19 +17,19 @@
   },
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
     },
     "./common": {
-      "types": "./dist/common.d.ts",
-      "import": "./dist/common.js"
+      "types": "./dist/common.d.mts",
+      "import": "./dist/common.mjs"
     },
     "./styles": {
       "types": "./styles.d.ts",
       "default": "./dist/velvet-ui.css"
     }
   },
-  "types": "./dist/index.d.ts",
+  "types": "./dist/index.d.mts",
   "sideEffects": [
     "**/*.css"
   ],
@@ -42,39 +42,45 @@
     "dist/**/*",
     "styles.d.ts"
   ],
-  "engines": {
-    "node": ">=26"
-  },
   "scripts": {
     "prepublishOnly": "npm run verify",
     "build": "tsc -b && vite build",
     "typecheck": "tsc -b",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint": "eslint . --max-warnings 0",
+    "lint:fix": "eslint . --fix --max-warnings 0",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "lint:css": "stylelint \"src/**/*.css\"",
-    "lint:css:fix": "stylelint \"src/**/*.css\" --fix",
-    "verify": "npm run format:check && npm run lint && npm run lint:css && npm run build && npm run verify:pkg",
-    "verify:pkg": "publint --strict && attw --pack . --entrypoints . ./common --profile esm-only --ignore-rules internal-resolution-error",
+    "lint:css": "stylelint \"src/**/*.css\" --max-warnings 0",
+    "lint:css:fix": "stylelint \"src/**/*.css\" --fix --max-warnings 0",
+    "verify": "npm run toolchain && npm run editor:check && npm run format:check && npm run lint && npm run lint:css && npm run build && npm run verify:pkg && npm run size",
+    "verify:pkg": "npm run verify:types && publint --strict && attw --pack . --entrypoints . ./common --profile esm-only",
     "size": "size-limit",
-    "prepare": "husky"
+    "prepare": "husky",
+    "toolchain": "configs-toolchain",
+    "audit:deps": "configs-audit",
+    "prebuild": "npm run toolchain",
+    "verify:types": "tsc -p tsconfig.declarations.json",
+    "editor:sync": "configs-editor --write",
+    "editor:check": "configs-editor",
+    "deps:check": "knip --no-exit-code --reporter json",
+    "deps:strict": "knip"
   },
   "peerDependencies": {
     "@jankrajewskiit/auth": "^3.3.4",
-    "@jankrajewskiit/i18n": "^3.4.2",
+    "@jankrajewskiit/i18n": ">=3.4.4 <4",
     "solid-js": ">=1.9.0 <2"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
-    "@jankrajewskiit/auth": "^3.4.1",
-    "@jankrajewskiit/configs": "^3.4.2",
-    "@jankrajewskiit/i18n": "^3.4.3",
+    "@jankrajewskiit/auth": "^3.5.4",
+    "@jankrajewskiit/configs": "^3.5.3",
+    "@jankrajewskiit/i18n": "^3.5.3",
     "@size-limit/file": "^14.2.0",
     "@types/node": "^26.6.5",
     "@typescript/native": "npm:typescript@^7.0.2",
     "eslint": "^10.12.0",
     "husky": "^9.1.7",
+    "knip": "^6.41.0",
     "lint-staged": "^17.6.0",
     "prettier": "^3.9.10",
     "publint": "^0.3.25",
@@ -82,18 +88,21 @@
     "solid-js": "^1.9.17",
     "stylelint": "^17.16.0",
     "stylelint-config-standard": "^40.0.0",
-    "typescript": "npm:@typescript/typescript6@^6.0.2",
-    "vite": "^8.3.4",
-    "vite-plugin-dts": "^5.1.2"
+    "typescript": "npm:@typescript/typescript6@~6.0.2",
+    "vite": "^8.3.4"
   },
   "size-limit": [
     {
-      "path": "dist/index.js",
-      "limit": "100 kB"
+      "path": "dist/**/*.mjs",
+      "limit": "450 kB",
+      "name": "Published JavaScript (all modules)"
     },
     {
       "path": "dist/velvet-ui.css",
-      "limit": "50 kB"
+      "limit": "275 kB"
     }
-  ]
+  ],
+  "overrides": {
+    "eslint": "$eslint"
+  }
 }

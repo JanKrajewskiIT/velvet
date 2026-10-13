@@ -7,12 +7,12 @@ export default defineConfig(async () =>
       build: {
         lib: {
           entry: { index: 'src/index.ts', common: 'src/common.ts' },
+          cssFileName: 'velvet-ui',
         },
       },
     },
     {
       fileName: 'velvet-ui',
-      externalizeFromPackageJson: true,
       dts: { tsconfigPath: './tsconfig.app.json' },
     },
   ),

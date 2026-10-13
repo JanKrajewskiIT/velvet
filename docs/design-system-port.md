@@ -193,9 +193,9 @@ All commands below use the VelvetUi repository root:
 | `npm run build`                                               | Unrun; separate execution authorization required                       |
 | `npm run verify:pkg`                                          | Unrun; requires the built package and separate execution authorization |
 
-After adding `/common`, an authorized `npm run verify` passed formatting, linting, stylesheet linting, the build and packed-package verification for the root and `/common` ESM entry points. The package was labelled 3.4.5 during that check and subsequently published as 3.4.6. The prepared 3.4.7 fallback correction has not yet been checked; it requires the new I18n 3.4.2 formatter exports.
+After adding `/common`, an authorized `npm run verify` passed formatting, linting, stylesheet linting, the build and packed-package verification for the root and `/common` ESM entry points. The package was labelled 3.4.5 during that check and subsequently published as 3.4.6. The user has since published the fallback correction as UI 3.4.8 with I18n 3.4.3. Those versions are installed and locked; the agent has not rerun aggregate verification against them.
 
-There is no test script or generated test suite. The initial showcase cleanup did not require dependency resolution, and the VelvetData extraction added no new dependency to UI. Velvet Auth is declared as a `^3.3.4` peer with a `^3.4.1` development dependency. Current manifest versions describe the prepared release; refresh resolved lockfile entries through the package manager after the upstream release, following the [release order](../../VelvetData/docs/migration.md#release-order), before using clean-install workflows or publishing.
+There is no test script or generated test suite. The initial showcase cleanup did not require dependency resolution, and the VelvetData extraction added no new dependency to UI. Velvet Auth is declared as a `^3.3.4` peer with a `^3.4.1` development dependency. Refresh resolved lockfile entries through the package manager when dependencies change, following the [release order](../../VelvetData/docs/migration.md#release-order), before using clean-install workflows or publishing.
 
 Manual verification in VelvetDemo remains unrun, particularly:
 

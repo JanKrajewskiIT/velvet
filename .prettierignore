@@ -6,3 +6,7 @@ src/styles/styles.css
 src/styles/components/
 src/styles/tokens/
 src/styles/fonts/
+
+.artifacts/
+
+.deployment/
