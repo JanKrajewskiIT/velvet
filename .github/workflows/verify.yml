@@ -10,7 +10,7 @@ on:
         required: false
 jobs:
   verify:
-    uses: JanKrajewskiIT/velvetconfigs/.github/workflows/verify-package.yml@7ca311c70a4f694a76ae02a9a90166f704f6c0e1 # v3.6.5
+    uses: JanKrajewskiIT/velvetconfigs/.github/workflows/verify-package.yml@e9100fa7ea7797669afeb410b644cd46ff9c8064 # v3.7.0
     with:
       package-artifact: velvet-package
     permissions:
