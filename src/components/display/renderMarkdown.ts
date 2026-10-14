@@ -52,6 +52,16 @@ interface Context {
 
 const escapeHtml = (text: string): string => text.replace(/[&<>"]/gu, (char) => ESCAPES[char] ?? char);
 
+const stripGeneratedMarkup = (text: string): string => {
+  let stripped = text;
+  let previous: string;
+  do {
+    previous = stripped;
+    stripped = stripped.replace(/<[^>]+>/gu, '');
+  } while (stripped !== previous);
+  return stripped;
+};
+
 const safeUrl = (url: string): string => (SAFE_URL.test(url) && !url.includes(PLACEHOLDER) ? url : '#');
 
 const startsBlock = (line: string): boolean => BLOCK_STARTS.some((pattern) => pattern.test(line));
@@ -88,7 +98,7 @@ const stripUrlBrackets = (url: string): string => url.replace(/^&lt;(.*)&gt;$/u,
 
 const renderInline = (source: string, references: ReadonlyMap<string, LinkTarget>): string => {
   const stash = createStash();
-  const plain = (text: string) => stash.restore(text).replace(/<[^>]+>/gu, '');
+  const plain = (text: string) => stripGeneratedMarkup(stash.restore(text));
   const link = (url: string, label: string, title?: string): string => {
     const href = safeUrl(url);
     const attributes = `${title ? ` title="${plain(title)}"` : ''}${EXTERNAL_URL.test(href) ? ' target="_blank" rel="noreferrer"' : ''}`;
@@ -141,7 +151,7 @@ const decodeEntities = (text: string): string =>
 
 const uniqueHeadingId = (html: string, ids: Set<string>): string => {
   const base =
-    decodeEntities(html.replace(/<[^>]+>/gu, ''))
+    decodeEntities(stripGeneratedMarkup(html))
       .toLowerCase()
       .replace(/[^\p{L}\p{N}]+/gu, '-')
       .replace(/^-+|-+$/gu, '') || 'section';
