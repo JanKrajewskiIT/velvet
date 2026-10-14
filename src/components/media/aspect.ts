@@ -5,7 +5,7 @@ export type Aspect = (typeof ASPECTS)[number];
 /** An `--aspect-*` token name, or any CSS ratio such as `"4/5"`. */
 export type AspectRatio = Aspect | (string & Record<never, never>);
 
-export const ASPECT_LABELS: Record<Aspect, string> = {
+const ASPECT_LABELS: Record<Aspect, string> = {
   square: '1 : 1',
   video: '16 : 9',
   photo: '4 : 3',
@@ -13,7 +13,7 @@ export const ASPECT_LABELS: Record<Aspect, string> = {
   wide: '21 : 9',
 };
 
-export const isAspect = (value: string): value is Aspect => (ASPECTS as readonly string[]).includes(value);
+const isAspect = (value: string): value is Aspect => (ASPECTS as readonly string[]).includes(value);
 
 /** Printable "16 : 9" form of a token name or a literal ratio. */
 export const aspectLabel = (ratio: string): string =>

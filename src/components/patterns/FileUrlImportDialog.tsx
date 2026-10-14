@@ -1,7 +1,9 @@
 import { createEffect, createMemo, createSignal, createUniqueId, type JSX, on, Show } from 'solid-js';
 
+import { createOperation } from '../../hooks/createOperation';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Button } from '../actions/Button';
 import { Dialog } from '../feedback/Dialog';
 import { FileUpload, type UploadFile } from '../forms/FileUpload';
@@ -72,15 +74,15 @@ export const FileUrlImportDialog = (props: FileUrlImportDialogProps) => {
   const [sourceId, setSourceId] = createSignal('');
   const [url, setUrl] = createSignal('');
   const [file, setFile] = createSignal<File>();
-  const [submitting, setSubmitting] = createSignal(false);
+  const operation = createOperation();
   const [failure, setFailure] = createSignal<JSX.Element>();
   const formId = `vui-file-url-import-${createUniqueId()}`;
   const source = createMemo(() => props.sources.find((option) => option.value === sourceId()) ?? props.sources[0]);
-  const busy = () => !!props.busy || submitting();
+  const busy = () => !!props.busy || operation.busy();
   const error = () => props.errorMessage ?? failure();
   const canSubmit = () => {
     const current = source();
-    if (busy() || !current) return false;
+    if (!props.open || busy() || !current) return false;
     return current.kind === 'url' ? validUrl(url().trim()) : !!file();
   };
 
@@ -88,6 +90,7 @@ export const FileUrlImportDialog = (props: FileUrlImportDialogProps) => {
     on(
       () => props.open,
       (open) => {
+        operation.invalidate();
         if (!open) return;
         setSourceId(props.sources[0]?.value ?? '');
         setUrl('');
@@ -96,8 +99,11 @@ export const FileUrlImportDialog = (props: FileUrlImportDialogProps) => {
       },
     ),
   );
+  createEffect(on(source, operation.invalidate, { defer: true }));
 
   const selectSource = (value: string) => {
+    if (busy()) return;
+    operation.invalidate();
     setSourceId(value);
     setUrl('');
     setFile(undefined);
@@ -115,15 +121,17 @@ export const FileUrlImportDialog = (props: FileUrlImportDialogProps) => {
       if (!selectedFile) return;
       payload = { source: current.value, file: selectedFile };
     }
-    setSubmitting(true);
+    const run = operation.begin();
+    if (!run) return;
     setFailure(undefined);
     try {
       await props.onSubmit(payload);
     } catch (error) {
+      if (!run.isCurrent() || !props.open || source() !== current) return;
       setFailure(translate('velvet.patterns.fileUrlImportDialog.failed'));
       props.onError?.(error);
     } finally {
-      setSubmitting(false);
+      run.finish();
     }
   };
 
@@ -135,7 +143,8 @@ export const FileUrlImportDialog = (props: FileUrlImportDialogProps) => {
   return (
     <Dialog
       open={props.open}
-      onClose={props.onClose}
+      onClose={busy() ? undefined : props.onClose}
+      dismissible={!busy()}
       title={props.title ?? translate('velvet.patterns.fileUrlImportDialog.title')}
       description={props.description ?? translate('velvet.patterns.fileUrlImportDialog.description')}
       size="md"
@@ -155,7 +164,7 @@ export const FileUrlImportDialog = (props: FileUrlImportDialogProps) => {
         id={formId}
         class="vui-file-url-import__form"
         onSubmit={(event) => {
-          void submit(event);
+          void submit(event).catch(reportAsyncError);
         }}
       >
         <Show
@@ -170,9 +179,9 @@ export const FileUrlImportDialog = (props: FileUrlImportDialogProps) => {
             onValueChange={selectSource}
             block
           />
-          <Show when={source()}>
+          <Show when={source()} keyed>
             {(current) => {
-              const option = current();
+              const option = current;
               return option.kind === 'url' ? (
                 <Input
                   type="url"

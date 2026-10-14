@@ -121,8 +121,7 @@ const edit = (value: string, selectionStart: number, selectionEnd: number): Text
 });
 
 /** Index of the first character of the line containing `index`. */
-export const lineStart = (value: string, index: number): number =>
-  index <= 0 ? 0 : value.lastIndexOf('\n', index - 1) + 1;
+const lineStart = (value: string, index: number): number => (index <= 0 ? 0 : value.lastIndexOf('\n', index - 1) + 1);
 
 const applyWrap = (tool: WrapTool, value: string, start: number, end: number, placeholder: string): TextEdit => {
   const { marker } = tool;

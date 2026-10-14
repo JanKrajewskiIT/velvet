@@ -21,24 +21,25 @@ export interface OptionListStatusProps {
   onRetry: () => void;
 }
 
-/** Trailing rows of an option list: loading skeletons, the load error with a retry, or the empty message. */
+/** Popup status lives outside the listbox so Retry remains a separate action. */
 export const OptionListStatus = (props: OptionListStatusProps) => {
   const translate = useTranslate();
   const errorText = () => props.errorText ?? translate('velvet.forms.optionListStatus.errorText');
   const retryLabel = () => props.retryLabel ?? translate('velvet.common.retry');
   return (
-    <>
+    <div role="status" aria-live="polite" aria-atomic="true">
       <Show when={props.loading && props.empty}>
+        <span class="vui-sr-only">{translate('velvet.common.loading')}</span>
         <Index each={SKELETON_WIDTHS}>
           {(width) => (
-            <li class="vui-select__option" aria-hidden="true">
+            <div class="vui-select__option" aria-hidden="true">
               <Skeleton width={`${width()}%`} />
-            </li>
+            </div>
           )}
         </Index>
       </Show>
       <Show when={props.failed}>
-        <EmptyText as="li" align="start" class="vui-select__empty vui-select__error">
+        <EmptyText align="start" class="vui-select__empty vui-select__error">
           {errorText()}{' '}
           <Button variant="link" size="sm" onMouseDown={(e) => e.preventDefault()} onClick={() => props.onRetry()}>
             {retryLabel()}
@@ -46,10 +47,10 @@ export const OptionListStatus = (props: OptionListStatusProps) => {
         </EmptyText>
       </Show>
       <Show when={props.empty && !props.loading && !props.failed && props.emptyText}>
-        <EmptyText as="li" align="start" class="vui-select__empty">
+        <EmptyText align="start" class="vui-select__empty">
           {props.emptyText}
         </EmptyText>
       </Show>
-    </>
+    </div>
   );
 };

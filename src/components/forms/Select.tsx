@@ -1,9 +1,11 @@
 import { createEffect, createMemo, createSignal, createUniqueId, For, type JSX, mergeProps, Show } from 'solid-js';
 
+import { createActiveOptionScroll } from '../../hooks/createActiveOptionScroll';
 import { createControllable } from '../../hooks/createControllable';
 import { createDismiss } from '../../hooks/createDismiss';
 import { createFloating } from '../../hooks/createFloating';
 import { useTranslate } from '../../i18n/useTranslate';
+import { activeItemKey } from '../../utils/activeItem';
 import { createTypeahead } from '../../utils/createTypeahead';
 import { cx, modifier } from '../../utils/cx';
 import { Chevron } from '../primitives/Chevron';
@@ -11,6 +13,9 @@ import { Field } from '../primitives/Field';
 import { Glyph, renderIcon } from '../primitives/Glyph';
 import { ComboboxOption } from './ComboboxOption';
 import { ComboboxOptionText } from './ComboboxOptionText';
+import { createFormValidation } from './createFormValidation';
+import type { FormControlProps } from './formControl';
+import { FormValue } from './FormValue';
 import { normalizeOption, type SelectOption } from './selectOption';
 
 const OPENING_KEYS = ['ArrowDown', 'ArrowUp', 'Enter', ' '];
@@ -20,7 +25,7 @@ export interface SelectChangeEvent {
   target: { value: string; name?: string };
 }
 
-export interface SelectProps {
+export interface SelectProps extends FormControlProps {
   label?: JSX.Element;
   hint?: JSX.Element;
   error?: JSX.Element;
@@ -35,8 +40,6 @@ export interface SelectProps {
   size?: 'sm' | 'md' | 'lg';
   disabled?: boolean;
   id?: string;
-  /** Adds a hidden input for form submission. */
-  name?: string;
   /** Controlled value. */
   value?: string;
   defaultValue?: string;
@@ -46,14 +49,13 @@ export interface SelectProps {
   onChange?: (event: SelectChangeEvent) => void;
   /** Styles the trigger. */
   class?: string;
-  /** Accessible name when there is no visible label (inline use in query rows, table cells, toolbars). */
-  'aria-label'?: string;
 }
 
 /** Custom listbox select (WAI-ARIA select-only combobox). ↑ ↓ Home End Enter Space Esc and type-ahead; the list flips upward near the viewport bottom and is not clipped by scrolling ancestors. */
 export const Select = (props: SelectProps) => {
   const p = mergeProps({ options: NO_OPTIONS, size: 'md', defaultValue: '' } satisfies SelectProps, props);
   const translate = useTranslate();
+  const validation = createFormValidation();
   const autoId = createUniqueId();
   const id = () => p.id ?? autoId;
   const listId = () => `${id()}-list`;
@@ -71,13 +73,26 @@ export const Select = (props: SelectProps) => {
   const selected = () => options().find((option) => option.value === current());
 
   const [open, setOpen] = createSignal(false);
-  const [active, setActive] = createSignal(-1);
+  const [activeKey, setActiveKey] = createSignal<string>();
+  const active = () => {
+    const key = activeItemKey(
+      options(),
+      activeKey(),
+      (option) => option.value,
+      (option) => !option.disabled,
+    );
+    return options().findIndex((option) => option.value === key);
+  };
+  const setActive = (index: number) => setActiveKey(options()[index]?.value);
   const [root, setRoot] = createSignal<HTMLElement>();
   let trigger!: HTMLButtonElement;
   const search = createTypeahead();
 
   createDismiss(open, () => setOpen(false), root);
   const floating = createFloating(open, root, { matchWidth: true });
+  createEffect(() => {
+    if (p.disabled) setOpen(false);
+  });
 
   const openList = () => {
     if (p.disabled) return;
@@ -90,7 +105,7 @@ export const Select = (props: SelectProps) => {
     setOpen(true);
   };
   const pick = (option: SelectOption | undefined) => {
-    if (!option || option.disabled) return;
+    if (p.disabled || !open() || !option || option.disabled) return;
     setCurrent(option.value);
     setOpen(false);
     trigger.focus();
@@ -119,6 +134,7 @@ export const Select = (props: SelectProps) => {
   };
 
   const onKeyDown: JSX.EventHandler<HTMLButtonElement, KeyboardEvent> = (e) => {
+    if (p.disabled) return;
     if (!open()) {
       if (OPENING_KEYS.includes(e.key)) {
         e.preventDefault();
@@ -150,21 +166,10 @@ export const Select = (props: SelectProps) => {
     }
   };
 
-  createEffect(() => {
-    if (!open() || active() < 0) return;
-    const row = document.getElementById(optionId(active()));
-    const list = row?.parentElement;
-    if (
-      row &&
-      list &&
-      (row.offsetTop < list.scrollTop || row.offsetTop + row.offsetHeight > list.scrollTop + list.clientHeight)
-    ) {
-      list.scrollTop = row.offsetTop - list.clientHeight / 2 + row.offsetHeight / 2;
-    }
-  });
+  createActiveOptionScroll(open, () => (active() >= 0 ? optionId(active()) : undefined));
 
   return (
-    <Field label={p.label} hint={p.hint} error={p.error} optional={p.optional} id={id()}>
+    <Field label={p.label} hint={p.hint} error={p.error} optional={p.optional} required={p.required} id={id()}>
       {(control) => (
         <div ref={setRoot} class="vui-select">
           <button
@@ -176,17 +181,19 @@ export const Select = (props: SelectProps) => {
             disabled={p.disabled}
             role="combobox"
             aria-label={p['aria-label']}
+            aria-labelledby={p['aria-labelledby']}
+            aria-required={p.required || undefined}
             aria-haspopup="listbox"
             aria-expanded={open()}
             aria-controls={listId()}
             aria-activedescendant={open() && active() >= 0 ? optionId(active()) : undefined}
-            aria-describedby={control.describedBy}
-            aria-invalid={control.invalid || undefined}
+            aria-describedby={validation.describedBy(control.describedBy)}
+            aria-invalid={control.invalid || validation.invalid() || undefined}
             class={cx(
               'vui-control',
               'vui-select__trigger',
               modifier('vui-control', p.size, 'md'),
-              control.invalid && 'vui-control--invalid',
+              (control.invalid || validation.invalid()) && 'vui-control--invalid',
               p.disabled && 'vui-control--disabled',
               open() && 'vui-select__trigger--open',
               p.class,
@@ -202,15 +209,26 @@ export const Select = (props: SelectProps) => {
             </span>
             <Chevron class="vui-select__chevron" />
           </button>
-          <Show when={p.name}>
-            <input type="hidden" name={p.name} value={current()} />
-          </Show>
+          <FormValue
+            validation={validation}
+            name={p.name}
+            form={p.form}
+            required={p.required}
+            disabled={p.disabled}
+            value={current()}
+            focusInvalid={() => trigger.focus()}
+            onReset={() => {
+              setCurrent(p.defaultValue);
+              setOpen(false);
+            }}
+          />
           <Show when={open()}>
             <ul
               ref={floating.ref}
               id={listId()}
               role="listbox"
-              aria-labelledby={p.label ? undefined : control.id}
+              aria-label={p['aria-label']}
+              aria-labelledby={p['aria-labelledby'] ?? (p.label ? `${id()}-label` : control.id)}
               class={cx('vui-select__menu', floating.side() === 'top' && 'vui-select__menu--up')}
               style={floating.style()}
             >

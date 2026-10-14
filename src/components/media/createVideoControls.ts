@@ -1,6 +1,7 @@
 import { useI18n } from '@jankrajewskiit/i18n';
 import { createEffect, createMemo, createSignal, onCleanup, onMount, untrack } from 'solid-js';
 
+import { reportAsyncError } from '../../utils/reportAsyncError';
 import { nextRate, type PlaybackState, rateLabel, readPlayback, seekMedia, togglePlayback } from './playback';
 import { safeMediaUrl } from './safeUrl';
 
@@ -120,7 +121,7 @@ export const createVideoControls = (options: VideoControlsOptions) => {
         toggleMute();
         return true;
       case 'f':
-        void toggleFullscreen();
+        void toggleFullscreen().catch(reportAsyncError);
         return true;
       case 'c':
         toggleCaptions();

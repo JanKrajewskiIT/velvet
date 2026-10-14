@@ -3,32 +3,24 @@ import { createEffect, For, type JSX, mergeProps, onMount, Show } from 'solid-js
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { reportAsyncError } from '../../utils/reportAsyncError';
 import { IconButton } from '../actions/IconButton';
 import { Glyph } from '../primitives/Glyph';
+import { createPromptSubmission } from './createPromptSubmission';
+import type { PromptAttachment, PromptSubmissionProps } from './promptSubmissionTypes';
+export type { PromptAttachment, PromptSubmissionProps } from './promptSubmissionTypes';
 
-export interface PromptAttachment {
-  id?: string;
-  name: string;
-  size?: string;
-  icon?: string;
-}
-
-export interface PromptInputProps {
+export interface PromptInputProps extends PromptSubmissionProps {
   value?: string;
   /** @default '' */
   defaultValue?: string;
   onValueChange?: (value: string) => void;
-  /** Called with trimmed text + current attachments; the field clears itself */
-  onSubmit?: (text: string, attachments: PromptAttachment[]) => void;
-  /** Generating — shows Stop */
-  loading?: boolean;
+  submitErrorText?: string;
   onStop?: () => void;
   /** @default localized "Ask anything…" */
   placeholder?: string;
   /** @default 8 */
   maxRows?: number;
-  /** @default [] */
-  attachments?: PromptAttachment[];
   /** Shows the paperclip button */
   onAttach?: () => void;
   onRemoveAttachment?: (attachment: PromptAttachment) => void;
@@ -39,7 +31,6 @@ export interface PromptInputProps {
   toolbar?: JSX.Element;
   /** Replaces the keyboard hint */
   hint?: JSX.Element;
-  disabled?: boolean;
   autoFocus?: boolean;
   /** Accessible name. @default localized "Message" */
   label?: string;
@@ -84,11 +75,15 @@ export const PromptInput = (props: PromptInputProps) => {
     if (p.autoFocus) input.focus();
   });
 
-  const canSend = () => !p.disabled && !p.loading && (text().trim() !== '' || p.attachments.length > 0);
+  const submission = createPromptSubmission(p, text, setText);
   const send = () => {
-    if (!canSend()) return;
-    p.onSubmit?.(text().trim(), p.attachments);
-    setText('');
+    void submission.send().catch(reportAsyncError);
+  };
+  const stop = () => {
+    if (!p.disabled && p.onStop) {
+      submission.cancel();
+      p.onStop();
+    }
   };
   const onKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) {
@@ -96,10 +91,11 @@ export const PromptInput = (props: PromptInputProps) => {
       send();
     } else if (e.key === 'Escape' && p.loading && p.onStop) {
       e.preventDefault();
-      p.onStop();
+      stop();
     }
   };
   const pickSuggestion = (suggestion: string) => {
+    if (p.disabled || p.loading || submission.pending()) return;
     if (p.onSuggestion) p.onSuggestion(suggestion);
     else setText(suggestion);
     input.focus();
@@ -112,7 +108,12 @@ export const PromptInput = (props: PromptInputProps) => {
         <div class="vui-prompt__sugs">
           <For each={p.suggestions}>
             {(suggestion) => (
-              <button type="button" class="vui-prompt__sug" onClick={() => pickSuggestion(suggestion)}>
+              <button
+                type="button"
+                class="vui-prompt__sug"
+                disabled={p.disabled || p.loading || submission.pending()}
+                onClick={() => pickSuggestion(suggestion)}
+              >
                 {suggestion}
               </button>
             )}
@@ -143,6 +144,7 @@ export const PromptInput = (props: PromptInputProps) => {
                       type="button"
                       class="vui-prompt__fx"
                       aria-label={translate('velvet.patterns.promptInput.remove', { name: attachment.name })}
+                      disabled={p.disabled || p.loading || submission.pending()}
                       onClick={() => p.onRemoveAttachment?.(attachment)}
                     >
                       <Glyph name="x" />
@@ -174,7 +176,7 @@ export const PromptInput = (props: PromptInputProps) => {
               size="sm"
               variant="ghost"
               onClick={() => p.onAttach?.()}
-              disabled={p.disabled}
+              disabled={p.disabled || p.loading || submission.pending()}
             />
           </Show>
           {p.toolbar}
@@ -183,15 +185,22 @@ export const PromptInput = (props: PromptInputProps) => {
               translate(p.loading ? 'velvet.patterns.promptInput.hintStop' : 'velvet.patterns.promptInput.hintSend')}
           </span>
           <Show
-            when={p.loading}
+            when={p.loading && p.onStop}
             fallback={
               <IconButton
-                icon="arrow-up"
+                icon={
+                  submission.pending() ? (
+                    <span class="vui-loader vui-loader--ring vui-loader--sm" aria-hidden="true" />
+                  ) : (
+                    'arrow-up'
+                  )
+                }
                 label={translate('velvet.patterns.promptInput.send')}
                 size="sm"
                 variant="primary"
                 shape="circle"
-                disabled={!canSend()}
+                disabled={!submission.canSend()}
+                aria-busy={submission.pending() || undefined}
                 onClick={send}
               />
             }
@@ -202,11 +211,17 @@ export const PromptInput = (props: PromptInputProps) => {
               size="sm"
               variant="secondary"
               shape="circle"
-              onClick={() => p.onStop?.()}
+              disabled={p.disabled}
+              onClick={stop}
             />
           </Show>
         </div>
       </div>
+      <Show when={submission.failed()}>
+        <div class="vui-hint vui-hint--error" role="alert">
+          {p.submitErrorText ?? translate('velvet.patterns.promptInput.submitError')}
+        </div>
+      </Show>
     </div>
   );
 };

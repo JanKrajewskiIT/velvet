@@ -37,7 +37,9 @@ export interface TreeViewProps {
   onMovePosition?: (move: TreeMove) => void;
   canDrop?: (node: TreeNode, target: TreeNode, position: TreeMovePosition) => boolean;
   /** Called when a lazy node without children expands. Resolve after you put the children into data; while pending a Loading… row shows, on reject an error row with Retry (Enter / Space on it retries). */
-  onLoadChildren?: (node: TreeNode) => Promise<void>;
+  onLoadChildren?: (node: TreeNode, signal: AbortSignal) => Promise<void>;
+  /** Change when replacing the logical tree while retaining node IDs. */
+  dataKey?: string | number;
   /** Receives the rejection of `onLoadChildren`; the row itself only shows a generic message. */
   onLoadError?: (node: TreeNode, error: unknown) => void;
   /** Accessible name */

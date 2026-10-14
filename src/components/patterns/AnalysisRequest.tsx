@@ -3,6 +3,7 @@ import { createMemo, type JSX, mergeProps, Show } from 'solid-js';
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Button } from '../actions/Button';
 import { Glyph } from '../primitives/Glyph';
 import { IconTile } from '../primitives/IconTile';
@@ -52,7 +53,7 @@ export interface AnalysisRequestProps {
   step?: number;
   error?: JSX.Element;
   /** May return a Promise; the form locks while it is pending. A rejection shows `runErrorText` and is passed to `onError`. */
-  onRun?: (payload: AnalysisRunPayload) => void | Promise<void>;
+  onRun?: (payload: AnalysisRunPayload, signal: AbortSignal) => void | Promise<void>;
   /** Receives the error `onRun` rejected with. */
   onError?: (error: unknown) => void;
   onCancel?: () => void;
@@ -97,7 +98,7 @@ export const AnalysisRequest = (props: AnalysisRequestProps) => {
     defaultValue: p.defaultDepth,
     onChange: (value) => p.onDepthChange?.(value),
   });
-  const { running, shownError, run } = createAnalysisRun(p, {
+  const { running, shownError, run, cancel } = createAnalysisRun(p, {
     blocked: selection.blocked,
     payload: () => ({
       analysis: selection.analysis() ?? '',
@@ -154,7 +155,7 @@ export const AnalysisRequest = (props: AnalysisRequestProps) => {
               onKeyDown={(e) => {
                 if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
                   e.preventDefault();
-                  void run();
+                  void run().catch(reportAsyncError);
                 }
               }}
             />
@@ -178,7 +179,13 @@ export const AnalysisRequest = (props: AnalysisRequestProps) => {
           {note() ?? (p.estimate || translate('velvet.patterns.analysisRequest.dataNote'))}
         </span>
         <Show when={running() && p.onCancel}>
-          <Button variant="ghost" onClick={() => p.onCancel?.()}>
+          <Button
+            variant="ghost"
+            onClick={() => {
+              cancel();
+              p.onCancel?.();
+            }}
+          >
             {translate('velvet.common.cancel')}
           </Button>
         </Show>
@@ -187,7 +194,7 @@ export const AnalysisRequest = (props: AnalysisRequestProps) => {
           iconLeft="sparkles"
           loading={running()}
           disabled={selection.blocked()}
-          onClick={() => void run()}
+          onClick={() => void run().catch(reportAsyncError)}
         >
           {running() ? translate('velvet.patterns.analysisRequest.analysing') : runLabel()}
         </Button>

@@ -1,3 +1,5 @@
+import { numberRange, parseDecimal } from '../../utils/decimalValue';
+
 export interface RangeValue {
   min?: number | null;
   max?: number | null;
@@ -20,7 +22,8 @@ export const parseBound = (
 ): number | null => {
   const raw = text.replace(/[\s\u00a0]/gu, '').replace(',', '.');
   if (raw === '') return null;
-  const parsed = Number.parseFloat(raw);
-  const base = Number.isNaN(parsed) ? previous : parsed;
-  return isBoundSet(base) ? Math.min(max ?? Infinity, Math.max(min ?? -Infinity, base)) : null;
+  const parsed = parseDecimal(raw);
+  const base = parsed === undefined ? previous : parsed;
+  const bounds = numberRange(min, max);
+  return isBoundSet(base) ? Math.min(bounds.max, Math.max(bounds.min, base)) : null;
 };

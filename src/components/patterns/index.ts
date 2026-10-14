@@ -74,5 +74,5 @@ export {
   type PricingTableProps,
   type PricingTier,
 } from './PricingTable';
-export { type PromptAttachment, PromptInput, type PromptInputProps } from './PromptInput';
+export { type PromptAttachment, PromptInput, type PromptInputProps, type PromptSubmissionProps } from './PromptInput';
 export { TypingIndicator, type TypingIndicatorProps } from './TypingIndicator';

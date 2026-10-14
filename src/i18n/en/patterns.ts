@@ -122,6 +122,7 @@ export const patternsEn = defineDictionary({
     badResponse: 'Bad response',
   },
   chatThread: {
+    jumpToLatest: 'Jump to latest messages',
     label: 'Conversation',
   },
   colorLabelManager: {
@@ -282,6 +283,7 @@ export const patternsEn = defineDictionary({
     notIncluded: '(not included)',
   },
   promptInput: {
+    submitError: 'Couldn’t send the message. Your draft is kept; try again.',
     placeholder: 'Ask anything…',
     label: 'Message',
     attach: 'Attach files',

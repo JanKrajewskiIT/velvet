@@ -1,5 +1,6 @@
 import { mergeProps, splitProps } from 'solid-js';
 
+import { cssLength } from '../../utils/cssLength';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
 
@@ -11,10 +12,6 @@ export interface SkeletonProps extends HtmlProps<HTMLSpanElement> {
   circle?: boolean;
   radius?: number | string;
 }
-
-/** Numbers are px, like React's style prop in the reference. */
-const cssLength = (value: number | string | undefined): string | undefined =>
-  typeof value === 'number' ? `${value}px` : value;
 
 /** Shimmering placeholder in the shape of content that is loading. Wrap the loading region in `aria-busy="true"`. */
 export const Skeleton = (props: SkeletonProps) => {

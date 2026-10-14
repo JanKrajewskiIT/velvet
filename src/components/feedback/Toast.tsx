@@ -1,6 +1,8 @@
-import { type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import { createSignal, type JSX, mergeProps, Show, splitProps } from 'solid-js';
 
+import { createAutoDismiss, dismissDuration } from '../../hooks/createAutoDismiss';
 import { useTranslate } from '../../i18n/useTranslate';
+import { callHandler } from '../../utils/callHandler';
 import { cx } from '../../utils/cx';
 import { type StatusTone, toneIcon } from '../../utils/tone';
 import { Button } from '../actions/Button';
@@ -43,11 +45,43 @@ export const Toast = (props: ToastProps) => {
     'undoLabel',
     'closeLabel',
     'class',
+    'onMouseEnter',
+    'onMouseLeave',
+    'onFocusIn',
+    'onFocusOut',
   ]);
+  const [hovered, setHovered] = createSignal(false);
+  const [focused, setFocused] = createSignal(false);
+  const duration = () => dismissDuration(local.duration);
+  createAutoDismiss(
+    duration,
+    () => hovered() || focused(),
+    () => local.onClose?.(),
+  );
   const translate = useTranslate();
   const glyph = () => (local.icon === undefined ? toneIcon(local.tone) : local.icon);
   return (
-    <div {...rest} role="status" class={cx('vui-toast', `vui-toast--${local.tone}`, local.class)}>
+    <div
+      {...rest}
+      role="status"
+      class={cx('vui-toast', `vui-toast--${local.tone}`, local.class)}
+      onMouseEnter={(event) => {
+        setHovered(true);
+        callHandler(local.onMouseEnter, event);
+      }}
+      onMouseLeave={(event) => {
+        setHovered(false);
+        callHandler(local.onMouseLeave, event);
+      }}
+      onFocusIn={(event) => {
+        setFocused(true);
+        callHandler(local.onFocusIn, event);
+      }}
+      onFocusOut={(event) => {
+        setFocused(event.relatedTarget instanceof Node && event.currentTarget.contains(event.relatedTarget));
+        callHandler(local.onFocusOut, event);
+      }}
+    >
       <Show when={glyph()}>{(name) => <Glyph name={name()} class="vui-toast__icon" />}</Show>
       <div class="vui-toast__content">
         <Show when={local.title}>
@@ -74,15 +108,10 @@ export const Toast = (props: ToastProps) => {
           <CloseButton label={local.closeLabel ?? translate('velvet.common.dismiss')} onClick={() => close()()} />
         )}
       </Show>
-      <Show when={local.duration}>
+      <Show when={duration()}>
         {(duration) => (
           <Show when={duration() > 0}>
-            <span
-              class="vui-toast__progress"
-              style={{ 'animation-duration': `${duration()}ms` }}
-              onAnimationEnd={() => local.onClose?.()}
-              aria-hidden="true"
-            />
+            <span class="vui-toast__progress" style={{ 'animation-duration': `${duration()}ms` }} aria-hidden="true" />
           </Show>
         )}
       </Show>

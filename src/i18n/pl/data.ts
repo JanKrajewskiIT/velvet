@@ -39,6 +39,7 @@ export const dataPl: TranslationOf<typeof dataEn> = {
     showingFront: '{label} (widoczny przód)',
   },
   kanban: {
+    moveError: 'Nie udało się przenieść karty. Spróbuj ponownie.',
     cardFallback: 'Karta',
     cardMoved: '{card}: przeniesiono do {column}, pozycja {position}',
     addCard: 'Dodaj kartę do: {column}',
@@ -71,6 +72,7 @@ export const dataPl: TranslationOf<typeof dataEn> = {
     showAnswer: 'Pokaż odpowiedź',
   },
   scheduler: {
+    slotLabel: 'Dodaj wydarzenie o {time}, {date}. Wybierz termin strzałkami i zatwierdź Enterem.',
     viewDay: 'Dzień',
     viewWeek: 'Tydzień',
     navigateLabel: 'Nawigacja',

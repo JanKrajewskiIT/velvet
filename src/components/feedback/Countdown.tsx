@@ -86,7 +86,7 @@ export const Countdown = (props: CountdownProps) => {
 
   let completedFor: number | undefined;
   createEffect(() => {
-    if (remainingSeconds() !== 0 || target() === completedFor) return;
+    if (!Number.isFinite(target()) || now() < target() || target() === completedFor) return;
     completedFor = target();
     untrack(() => local.onComplete?.());
   });

@@ -1,5 +1,20 @@
 # Changelog
 
+## 3.6.1
+
+- Complete the behavioral follow-up: strict numeric drafts and native form integration, effective disabled state, independent toast timers, stable record selection, acknowledged async actions, day-segmented scheduling and finite chart scales with missing-data gaps.
+- Add upload rejection contracts, conversation resize following and the optional CSS-free `/patterns` entry; retain existing root/bare exports.
+- Export shared operation ownership and sanitized async diagnostics through `/common` for VelvetData.
+- Connect native required errors to visible fields; enforce picker constraints for typing, Today and range presets.
+- Add TabPanel/manual tab activation and normalize Carousel/Marquee numeric options.
+
+## 3.6.0
+
+- Handle detached operation rejections through payload-free async diagnostics and release font measurement ownership safely.
+- Add the CSS-free `bare` API, separate font/base/component stylesheet groups and package their original asset paths.
+- Add forced-colors focus and reduced-motion defaults plus dialog initial/return-focus hooks and a fallback target.
+- Allow applications to report rendering failures through `VelvetProvider.onError`.
+
 ## 3.4.9
 
 - Add shared source/image security gates, CycloneDX SBOMs, pinned CI tooling, periodic security scans and Knip reports without changing the package version.

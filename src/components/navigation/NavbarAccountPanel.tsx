@@ -7,7 +7,7 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { Avatar } from '../data/Avatar';
 import { renderIcon } from '../primitives/Glyph';
 import { NavbarAccountTheme } from './NavbarAccountTheme';
-import type { NavbarUserProps } from './NavbarUser';
+import type { NavbarUserProps } from './navbarUserTypes';
 
 export interface NavbarAccountPanelProps extends NavbarUserProps {
   label: string;

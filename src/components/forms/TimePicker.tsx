@@ -1,6 +1,7 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { createEffect, createMemo, createSignal, createUniqueId, For, type JSX, mergeProps, on, Show } from 'solid-js';
+import { createEffect, createMemo, createSignal, createUniqueId, type JSX, mergeProps, on, Show } from 'solid-js';
 
+import { createActiveOptionScroll } from '../../hooks/createActiveOptionScroll';
 import { createControllable } from '../../hooks/createControllable';
 import { createDismiss } from '../../hooks/createDismiss';
 import { createFloating } from '../../hooks/createFloating';
@@ -9,12 +10,14 @@ import { cx } from '../../utils/cx';
 import { pad } from '../../utils/date';
 import { Control } from '../primitives/Control';
 import { FieldLabel } from '../primitives/FieldLabel';
-import { Glyph } from '../primitives/Glyph';
 import { callbackAlias } from './callbackAlias';
-import { ComboboxOption } from './ComboboxOption';
+import { createFormValidation } from './createFormValidation';
+import type { FormControlProps } from './formControl';
+import { FormValue } from './FormValue';
 import { exampleTime, formatMinutes, formatTime, minutesOfTime, parseTime } from './time';
+import { TimePickerMenu } from './TimePickerMenu';
 
-export interface TimePickerProps {
+export interface TimePickerProps extends FormControlProps {
   label?: JSX.Element;
   hint?: JSX.Element;
   error?: JSX.Element;
@@ -48,6 +51,7 @@ export const TimePicker = (props: TimePickerProps) => {
   );
   const i18n = useI18n();
   const translate = useTranslate();
+  const validation = createFormValidation();
   const autoId = createUniqueId();
   const id = () => p.id ?? autoId;
   const listId = () => `${id()}-list`;
@@ -65,18 +69,28 @@ export const TimePicker = (props: TimePickerProps) => {
   const [open, setOpen] = createSignal(false);
   const [highlighted, setActive] = createSignal(-1);
   const [typed, setTyped] = createSignal<string | null>(null);
-  const [invalidText, setInvalidText] = createSignal(false);
+  const [invalidText, setInvalidText] = createSignal<'format' | 'range' | undefined>();
   const [wrap, setWrap] = createSignal<HTMLElement>();
   const floating = createFloating(open, wrap, { matchWidth: true });
-  let list: HTMLUListElement | undefined;
+  let input!: HTMLInputElement;
 
   const text = () => typed() ?? formatTime(current(), p.hour12, i18n.locale());
-  const message = () =>
-    p.error || (invalidText() ? translate('velvet.forms.timePicker.invalidTime', { example: example() }) : null);
+  const message = () => {
+    if (p.error) return p.error;
+    if (invalidText() === 'range') return translate('velvet.forms.timePicker.outsideRange', { min: p.min, max: p.max });
+    return invalidText() ? translate('velvet.forms.timePicker.invalidTime', { example: example() }) : null;
+  };
+  const bounds = createMemo(() => ({ min: parseTime(p.min), max: parseTime(p.max) }));
+  const isAllowed = (time: string) => {
+    const { min, max } = bounds();
+    return !!min && !!max && time >= min && time <= max;
+  };
   const options = createMemo(() => {
-    const step = Math.max(1, p.step);
+    const step = Number.isFinite(p.step) ? Math.max(1, Math.min(1440, Math.trunc(p.step))) : 15;
     const result: string[] = [];
-    for (let minutes = minutesOfTime(p.min); minutes <= minutesOfTime(p.max); minutes += step)
+    const { min, max } = bounds();
+    if (!min || !max || min > max) return result;
+    for (let minutes = minutesOfTime(min); minutes <= minutesOfTime(max); minutes += step)
       result.push(formatMinutes(minutes, false));
     return result;
   });
@@ -84,7 +98,12 @@ export const TimePicker = (props: TimePickerProps) => {
   const active = () => (options().length ? Math.min(Math.max(0, highlighted()), options().length - 1) : -1);
 
   const set = (time: string | null) => {
-    setInvalidText(false);
+    if (p.disabled) return;
+    if (time && !isAllowed(time)) {
+      setInvalidText('range');
+      return;
+    }
+    setInvalidText(undefined);
     setTyped(null);
     setCurrent(time);
   };
@@ -95,7 +114,7 @@ export const TimePicker = (props: TimePickerProps) => {
     }
     const parsed = parseTime(input);
     if (parsed) set(parsed);
-    else setInvalidText(true);
+    else setInvalidText('format');
   };
 
   createDismiss(
@@ -109,6 +128,12 @@ export const TimePicker = (props: TimePickerProps) => {
     { refocus: false },
   );
   createEffect(on(current, () => setTyped(null), { defer: true }));
+  createEffect(() => {
+    if (p.disabled) {
+      setOpen(false);
+      setTyped(null);
+    }
+  });
   createEffect(
     on(open, (isOpen) => {
       if (!isOpen) return;
@@ -117,13 +142,10 @@ export const TimePicker = (props: TimePickerProps) => {
       setActive(index < 0 ? 0 : index);
     }),
   );
-  createEffect(() => {
-    const row = list?.children[active()];
-    if (!open() || !list || !(row instanceof HTMLElement)) return;
-    list.scrollTop = row.offsetTop - list.clientHeight / 2 + row.offsetHeight / 2;
-  });
+  createActiveOptionScroll(open, () => (active() >= 0 ? `${listId()}-${active()}` : undefined));
 
   const onKeyDown = (e: KeyboardEvent) => {
+    if (p.disabled) return;
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault();
@@ -151,7 +173,7 @@ export const TimePicker = (props: TimePickerProps) => {
   const onInput = (e: InputEvent & { currentTarget: HTMLInputElement }) => {
     const value = e.currentTarget.value;
     setTyped(value);
-    setInvalidText(false);
+    setInvalidText(undefined);
     const parsed = parseTime(value);
     const index = parsed ? indexAtOrAfter(parsed) : -1;
     if (index >= 0) setActive(index);
@@ -160,20 +182,26 @@ export const TimePicker = (props: TimePickerProps) => {
   return (
     <div class="vui-field">
       <Show when={p.label}>
-        <FieldLabel htmlFor={id()} optional={p.optional}>
+        <FieldLabel id={`${id()}-label`} htmlFor={id()} optional={p.optional} required={p.required}>
           {p.label}
         </FieldLabel>
       </Show>
       <div ref={setWrap} class="vui-select">
-        <Control size={p.size} invalid={!!message()} disabled={p.disabled} iconLeft="clock">
+        <Control size={p.size} invalid={!!message() || validation.invalid()} disabled={p.disabled} iconLeft="clock">
           <input
+            ref={(element) => {
+              input = element;
+            }}
             id={id()}
             role="combobox"
             aria-expanded={open()}
             aria-controls={listId()}
             aria-activedescendant={open() && active() >= 0 ? `${listId()}-${active()}` : undefined}
-            aria-describedby={message() || p.hint ? hintId() : undefined}
-            aria-invalid={!!message() || undefined}
+            aria-describedby={validation.describedBy(message() || p.hint ? hintId() : undefined)}
+            aria-invalid={!!message() || validation.invalid() || undefined}
+            aria-label={p['aria-label']}
+            aria-labelledby={p['aria-labelledby']}
+            aria-required={p.required || undefined}
             class="vui-control__input vui-time__input"
             value={text()}
             placeholder={p.placeholder ?? example()}
@@ -181,44 +209,45 @@ export const TimePicker = (props: TimePickerProps) => {
             autocomplete="off"
             inputMode="numeric"
             onInput={onInput}
-            onFocus={() => setOpen(true)}
-            onClick={() => setOpen(true)}
+            onFocus={() => !p.disabled && setOpen(true)}
+            onClick={() => !p.disabled && setOpen(true)}
             onKeyDown={onKeyDown}
           />
         </Control>
+        <FormValue
+          validation={validation}
+          name={p.name}
+          form={p.form}
+          required={p.required}
+          disabled={p.disabled}
+          value={current() ?? ''}
+          focusInvalid={() => input.focus()}
+          onReset={() => {
+            setCurrent(p.defaultValue ?? null);
+            setTyped(null);
+            setInvalidText(undefined);
+            setOpen(false);
+            input.value = text();
+          }}
+        />
         <Show when={open()}>
-          <ul
-            ref={(element) => {
-              list = element;
-              floating.ref(element);
-            }}
+          <TimePickerMenu
+            ref={floating.ref}
             style={floating.style()}
             id={listId()}
-            role="listbox"
-            class="vui-select__menu vui-time__menu"
-          >
-            <For each={options()}>
-              {(option, index) => (
-                <ComboboxOption
-                  id={`${listId()}-${index()}`}
-                  selected={option === current()}
-                  active={index() === active()}
-                  onHover={() => setActive(index())}
-                  onPick={() => {
-                    set(option);
-                    setOpen(false);
-                  }}
-                >
-                  <span class="vui-select__label" style={{ 'font-variant-numeric': 'tabular-nums' }}>
-                    {formatTime(option, p.hour12, i18n.locale())}
-                  </span>
-                  <Show when={option === current()}>
-                    <Glyph name="check" class="vui-select__check" />
-                  </Show>
-                </ComboboxOption>
-              )}
-            </For>
-          </ul>
+            label={p['aria-label'] ?? translate('velvet.forms.timePicker.optionsLabel')}
+            labelledBy={p['aria-labelledby'] ?? (p.label ? `${id()}-label` : undefined)}
+            options={options()}
+            value={current()}
+            active={active()}
+            hour12={p.hour12}
+            locale={i18n.locale()}
+            onHover={setActive}
+            onSelect={(time) => {
+              set(time);
+              setOpen(false);
+            }}
+          />
         </Show>
       </div>
       <Show when={message() || p.hint}>

@@ -6,7 +6,7 @@ export default defineConfig(async () =>
     {
       build: {
         lib: {
-          entry: { index: 'src/index.ts', common: 'src/common.ts' },
+          entry: { index: 'src/index.ts', bare: 'src/bare.ts', common: 'src/common.ts', patterns: 'src/patterns.ts' },
           cssFileName: 'velvet-ui',
         },
       },

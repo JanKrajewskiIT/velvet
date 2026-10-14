@@ -1,6 +1,7 @@
 import { createEffect, createSignal, type JSX, mergeProps, on, Show, untrack } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Button } from '../actions/Button';
 import { Dialog } from '../feedback/Dialog';
 import { Glyph } from '../primitives/Glyph';
@@ -127,7 +128,7 @@ export const MarkdownEditDialog = (props: MarkdownEditDialogProps) => {
               <Button variant="secondary" onClick={close} disabled={busy()}>
                 {cancelLabel()}
               </Button>
-              <Button onClick={() => void save()} disabled={!dirty()} loading={busy()}>
+              <Button onClick={() => void save().catch(reportAsyncError)} disabled={!dirty()} loading={busy()}>
                 {busy() ? translate('velvet.display.markdownEditDialog.saving') : saveLabel()}
               </Button>
             </>
@@ -161,7 +162,7 @@ export const MarkdownEditDialog = (props: MarkdownEditDialogProps) => {
         onKeyDown={(e) => {
           if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
             e.preventDefault();
-            void save();
+            void save().catch(reportAsyncError);
           }
         }}
       />

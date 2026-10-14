@@ -1,3 +1,4 @@
+import { useI18n } from '@jankrajewskiit/i18n';
 import { Match, Show, Switch } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
@@ -24,6 +25,7 @@ export interface UploadFile {
 
 export interface FileUploadRowProps {
   file: UploadFile;
+  disabled?: boolean;
   onRemove?: (id: string | number) => void;
   onRetry?: (id: string | number) => void;
 }
@@ -33,6 +35,7 @@ const IMAGE_NAME = /\.(png|jpe?g|gif|webp|svg|avif)$/iu;
 /** One file of the FileUpload list: thumbnail, name, status, progress and its retry / remove actions. */
 export const FileUploadRow = (props: FileUploadRowProps) => {
   const translate = useTranslate();
+  const i18n = useI18n();
   const status = () => props.file.status ?? 'done';
   const progress = () => Math.round(props.file.progress ?? 0);
   return (
@@ -47,7 +50,7 @@ export const FileUploadRow = (props: FileUploadRowProps) => {
               <Match when={status() === 'done'}>
                 <Glyph name="circle-check" />
                 {props.file.size != null
-                  ? formatBytes(props.file.size)
+                  ? formatBytes(props.file.size, i18n.locale())
                   : translate('velvet.forms.fileUploadRow.uploaded')}
               </Match>
               <Match when={status() === 'error'}>
@@ -68,7 +71,13 @@ export const FileUploadRow = (props: FileUploadRowProps) => {
       </div>
       <Show when={status() === 'error' && props.onRetry}>
         {(retry) => (
-          <Button variant="ghost" size="sm" iconLeft="refresh" onClick={() => retry()(props.file.id)}>
+          <Button
+            variant="ghost"
+            size="sm"
+            iconLeft="refresh"
+            disabled={props.disabled}
+            onClick={() => !props.disabled && retry()(props.file.id)}
+          >
             {translate('velvet.common.retry')}
           </Button>
         )}
@@ -83,7 +92,8 @@ export const FileUploadRow = (props: FileUploadRowProps) => {
                 : translate('velvet.forms.fileUploadRow.removeFile', { name: props.file.name })
             }
             size="sm"
-            onClick={() => remove()(props.file.id)}
+            disabled={props.disabled}
+            onClick={() => !props.disabled && remove()(props.file.id)}
           />
         )}
       </Show>

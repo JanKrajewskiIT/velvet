@@ -1,5 +1,8 @@
-import { For, type JSX, mergeProps, Show } from 'solid-js';
+import { createMemo, For, type JSX, mergeProps, Show } from 'solid-js';
 
+import { createControllable } from '../../hooks/createControllable';
+import { createRecordKeys } from '../../hooks/createRecordKeys';
+import { createRowIdentity } from '../../hooks/createRowIdentity';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { createTableExpansion } from './createTableExpansion';
@@ -8,7 +11,7 @@ import { createTablePins } from './createTablePins';
 import { createTableSelection } from './createTableSelection';
 import { createTableSort } from './createTableSort';
 import { createTableWidths } from './createTableWidths';
-import { cssLength, rowId, type RowKey } from './rowData';
+import { cssLength, type RowKey } from './rowData';
 import { TableBulkBar } from './TableBulkBar';
 import type { TableController } from './tableController';
 import { TableHeaderRow } from './TableHeaderRow';
@@ -19,7 +22,7 @@ import type { TableProps } from './tableTypes';
 
 export type { TableColumn, TableProps, TableSort } from './tableTypes';
 
-const NO_SELECTION: RowKey[] = [];
+const NO_SELECTION: readonly RowKey[] = Object.freeze([]);
 
 /** Data table: toolbar (title · count · actions), sort, row selection (Shift-click selects a range) with bulk-action bar, drag-to-resize columns, expandable detail rows, sticky header, keyboard (↑↓ move · Space select · →/← expand · ⌘A all · Esc clear), skeleton loading, empty state. Framed on its own; borderless inside `<Card padding="none">`. */
 export const Table = <T extends object>(props: TableProps<T>): JSX.Element => {
@@ -27,7 +30,6 @@ export const Table = <T extends object>(props: TableProps<T>): JSX.Element => {
     {
       rowKey: 'id',
       selectable: false,
-      selected: NO_SELECTION,
       loading: false,
       loadingRows: 4,
       resizable: false,
@@ -35,6 +37,16 @@ export const Table = <T extends object>(props: TableProps<T>): JSX.Element => {
     props,
   );
   const translate = useTranslate();
+  const [selected, setSelected] = createControllable({
+    value: () => p.selected,
+    defaultValue: p.defaultSelected ?? [...NO_SELECTION],
+    onChange: (keys) => p.onSelectedChange?.(keys),
+  });
+  const config = mergeProps(p, {
+    get selected() {
+      return selected();
+    },
+  });
   const empty = () => p.empty ?? translate('velvet.data.table.empty');
   let body!: HTMLTableSectionElement;
   let head!: HTMLTableSectionElement;
@@ -47,7 +59,7 @@ export const Table = <T extends object>(props: TableProps<T>): JSX.Element => {
     sort: () => p.sort,
     defaultSort: () => p.defaultSort,
     onChange: (next) => p.onSortChange?.(next),
-    serverSorted: () => !!p.onSortChange && p.sort !== undefined,
+    serverSorted: () => p.manualSorting ?? (!!p.onSortChange && p.sort !== undefined),
   });
   const pins = createTablePins<T>({
     columns: () => p.columns,
@@ -57,15 +69,24 @@ export const Table = <T extends object>(props: TableProps<T>): JSX.Element => {
     head: () => head,
     scroller: () => scroller,
   });
-  const keyOf = (row: T, index: number) => rowId(row, p.rowKey, index);
+  const identity = createRowIdentity<T>(
+    () => p.rowKey,
+    () => p.getRowId,
+  );
+  const records = createRecordKeys(() => p.rows, identity, 'Table');
+  const identities = createMemo(
+    () => new Map<T, RowKey>(p.rows.map((row, index) => [row, records.keys()[index] ?? identity(row)])),
+  );
+  const keyOf = (row: T, _index: number) => identities().get(row) ?? identity(row);
   const selection = createTableSelection<T>({
     rows: () => p.rows,
     sorted: sort.sorted,
-    selected: () => p.selected,
-    onChange: (keys) => p.onSelectedChange?.(keys),
+    selected,
+    onChange: setSelected,
+    dataKey: () => p.dataKey,
     keyOf,
   });
-  const expansion = createTableExpansion();
+  const expansion = createTableExpansion(records.keys, () => p.dataKey);
   const onRowKey = createTableKeyboard({
     body: () => body,
     selectable: () => p.selectable,
@@ -74,7 +95,7 @@ export const Table = <T extends object>(props: TableProps<T>): JSX.Element => {
     expansion,
   });
   const span = () => p.columns.length + (p.selectable ? 1 : 0) + (p.renderExpanded ? 1 : 0);
-  const table: TableController<T> = { config: p, sort, widths, pins, selection, expansion, onRowKey, keyOf, span };
+  const table: TableController<T> = { config, sort, widths, pins, selection, expansion, onRowKey, keyOf, span };
 
   const sticky = () => p.stickyHeader ?? !!p.maxHeight;
   const scrollStyle = (): JSX.CSSProperties | undefined =>

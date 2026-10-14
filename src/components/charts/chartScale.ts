@@ -1,15 +1,14 @@
-const TICK_MULTIPLIERS = [1, 2, 2.5, 5, 10];
+import { numericScale } from './numericScale';
+
 const DEFAULT_TICK_COUNT = 4;
 const SERIES_COLOR_COUNT = 8;
 
 /** Round axis ticks from 0 up to the first "nice" step at or above `max`. */
 export const niceTicks = (max: number, count = DEFAULT_TICK_COUNT): number[] => {
+  if (!Number.isFinite(max) || !Number.isInteger(count) || count < 1 || count > 100)
+    throw new RangeError('Axis maximum must be finite and tick count must be an integer from 1 to 100.');
   if (max <= 0) return [0];
-  const raw = max / count;
-  const unit = 10 ** Math.floor(Math.log10(raw));
-  const step = TICK_MULTIPLIERS.map((m) => m * unit).find((s) => s >= raw) ?? unit * 10;
-  const top = Math.ceil(max / step) * step;
-  return Array.from({ length: Math.round(top / step) + 1 }, (_, i) => +(i * step).toFixed(10));
+  return numericScale([max], count).ticks;
 };
 
 const COMPACT_FROM = 1e3;

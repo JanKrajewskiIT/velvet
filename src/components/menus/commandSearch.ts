@@ -25,7 +25,7 @@ export interface CommandPaletteLabels {
   resultMany: string;
 }
 
-export interface CommandResult {
+interface CommandResult {
   item: CommandItem;
   /** Position among all visible results; matches the option id. */
   index: number;

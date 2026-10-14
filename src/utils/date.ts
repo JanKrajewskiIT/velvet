@@ -36,7 +36,7 @@ export const weekdayNames = (locale = 'en-US', weekStartsOn = 1, length?: number
   });
 };
 
-export const DEFAULT_DATE_FORMAT: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric', year: 'numeric' };
+const DEFAULT_DATE_FORMAT: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric', year: 'numeric' };
 
 export const fmtDate = (d: Date | null | undefined, locale = 'en-US', options = DEFAULT_DATE_FORMAT): string =>
   d ? new Intl.DateTimeFormat(locale, options).format(d) : '';

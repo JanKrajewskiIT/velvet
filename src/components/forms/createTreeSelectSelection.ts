@@ -12,6 +12,8 @@ export interface TreeSelectSelection {
   setValue: (next: SelectionValue) => void;
   removePicked: (id: string) => void;
   clear: () => void;
+  reset: () => void;
+  value: Accessor<SelectionValue>;
   /** Multiple mode: selects every leaf of the node, or deselects them when all are already selected. */
   toggleLeaves: (node: TreeSelectNode) => void;
 }
@@ -33,9 +35,15 @@ export const createTreeSelectSelection = (props: TreeSelectModelProps): TreeSele
   const selectedIds = () => [...selected()];
   const picked = createMemo(() => selectedIds().flatMap((id) => findNode(props.data, id) ?? []));
 
-  const removePicked = (id: string) => setValue(selectedIds().filter((x) => x !== id));
-  const clear = () => setValue([]);
+  const removePicked = (id: string) => {
+    if (!props.disabled) setValue(selectedIds().filter((x) => x !== id));
+  };
+  const clear = () => {
+    if (!props.disabled) setValue(props.multiple ? [] : null);
+  };
+  const reset = () => setValue(props.defaultValue ?? (props.multiple ? [] : null));
   const toggleLeaves = (node: TreeSelectNode) => {
+    if (props.disabled) return;
     const leaves = leafIds(node);
     const all = leaves.every((id) => selected().has(id));
     const next = new Set(selected());
@@ -43,5 +51,5 @@ export const createTreeSelectSelection = (props: TreeSelectModelProps): TreeSele
     setValue([...next]);
   };
 
-  return { selected, picked, setValue, removePicked, clear, toggleLeaves };
+  return { selected, picked, setValue, removePicked, clear, reset, value, toggleLeaves };
 };

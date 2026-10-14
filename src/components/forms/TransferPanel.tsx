@@ -12,7 +12,7 @@ import { TransferPanelFooter } from './TransferPanelFooter';
 import { TransferPanelHeader } from './TransferPanelHeader';
 import { TransferRow } from './TransferRow';
 
-export interface TransferPanelLabels {
+interface TransferPanelLabels {
   title: string;
   moveLabel: string;
   searchPlaceholder: string;

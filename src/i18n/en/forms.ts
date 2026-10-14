@@ -73,6 +73,8 @@ export const formsEn = defineDictionary({
     title: '{count, plural, one {There’s # problem to fix} other {There are # problems to fix}}',
   },
   fileUpload: {
+    rejectedType: '{name} — unsupported file type',
+    rejectedCount: '{name} — file count limit reached',
     title: 'Drop files here or browse',
     releaseToUpload: 'Release to upload',
     rejected: '{names} — over {limit}',
@@ -107,11 +109,15 @@ export const formsEn = defineDictionary({
     thisYear: 'This year',
   },
   numberInput: {
+    invalidNumber: 'Enter a valid number.',
     decreaseLabel: 'Decrease',
     increaseLabel: 'Increase',
   },
   optionListStatus: {
     errorText: 'Couldn’t load options',
+  },
+  formValue: {
+    required: 'This field is required.',
   },
   otpInput: {
     cellLabel: 'Digit {index} of {length}',
@@ -193,6 +199,7 @@ export const formsEn = defineDictionary({
     emptyLabel: 'empty',
   },
   slider: {
+    valueLabel: 'Value',
     thumbMinimum: 'Minimum',
     thumbMaximum: 'Maximum',
   },
@@ -201,7 +208,9 @@ export const formsEn = defineDictionary({
     removeLabel: 'Remove {tag}',
   },
   timePicker: {
+    optionsLabel: 'Time options',
     invalidTime: 'Enter a time like {example}',
+    outsideRange: 'Enter a time between {min} and {max}',
   },
   timeStepper: {
     label: 'Time',

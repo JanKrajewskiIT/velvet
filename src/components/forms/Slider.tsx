@@ -1,9 +1,25 @@
-import { createUniqueId, For, Index, type JSX, mergeProps, onCleanup, Show, untrack } from 'solid-js';
+import {
+  createEffect,
+  createMemo,
+  createUniqueId,
+  For,
+  Index,
+  type JSX,
+  mergeProps,
+  onCleanup,
+  Show,
+  untrack,
+} from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { numberRange } from '../../utils/decimalValue';
+import { clamp } from '../../utils/math';
 import { FieldLabel } from '../primitives/FieldLabel';
+import { createFormValidation } from './createFormValidation';
+import type { FormControlProps } from './formControl';
+import { FormValue } from './FormValue';
 import { adjacentMark, nearestMark, resolveMarks, type SliderMarks, snapToStep } from './sliderMarks';
 
 const PERCENT = 100;
@@ -13,7 +29,7 @@ const NO_THUMB = -1;
 
 export type SliderValue = number | [number, number];
 
-export interface SliderProps {
+export interface SliderProps extends FormControlProps {
   label?: JSX.Element;
   /** A number is one thumb, `[low, high]` is two — thumbs can never cross. */
   value?: SliderValue;
@@ -63,18 +79,33 @@ export const Slider = (props: SliderProps) => {
   });
 
   const isRange = () => typeof current() !== 'number';
-  const values = () => asList(current());
+  const bounds = createMemo(() => {
+    const result = numberRange(p.min, p.max, p.step);
+    if (!Number.isFinite(result.min) || !Number.isFinite(result.max))
+      throw new RangeError('Slider bounds must be finite.');
+    return result;
+  });
+  const values = () =>
+    asList(current())
+      .map((value) => clamp(Number.isFinite(value) ? value : bounds().min, bounds().min, bounds().max))
+      .sort((a, b) => a - b);
+  const validation = createFormValidation();
+  const invalidValue = () =>
+    asList(current()).some((value) => !Number.isFinite(value) || value < bounds().min || value > bounds().max) ||
+    (isRange() && (asList(current())[0] ?? 0) > (asList(current())[1] ?? 0));
   const low = () => values()[0] ?? p.min;
   const high = () => values().at(-1) ?? low();
-  const percent = (value: number) => ((value - p.min) / (p.max - p.min)) * PERCENT;
+  const percent = (value: number) =>
+    bounds().max === bounds().min ? 0 : ((value - bounds().min) / (bounds().max - bounds().min)) * PERCENT;
   const fillStart = () => (isRange() ? percent(low()) : 0);
   const fillEnd = () => percent(high());
-  const markList = () => resolveMarks(p.marks, p.min, p.max, p.step);
+  const markList = createMemo(() => resolveMarks(p.marks, bounds().min, bounds().max, bounds().step));
   const snapsToMarks = () => p.snapToMarks && markList().length > 0;
   const labelled = () => p.marks === true || markList().some((mark) => mark.label != null);
 
   const snap = (value: number) => (snapsToMarks() ? (nearestMark(markList(), value) ?? value) : snapToStep(value, p));
   const moveThumb = (index: number, raw: number) => {
+    if (p.disabled || !Number.isFinite(raw)) return;
     const snapped = snap(raw);
     const next: SliderValue = !isRange()
       ? snapped
@@ -86,6 +117,7 @@ export const Slider = (props: SliderProps) => {
 
   let track!: HTMLDivElement;
   let dragging = NO_THUMB;
+  let pointerId: number | undefined;
   let pendingX: number | undefined;
   let frame = 0;
   const valueAt = (x: number) => {
@@ -111,12 +143,13 @@ export const Slider = (props: SliderProps) => {
     if (p.disabled || e.button !== 0) return;
     const value = valueAt(e.clientX);
     dragging = nearestThumb(value);
+    pointerId = e.pointerId;
     moveThumb(dragging, value);
     track.setPointerCapture(e.pointerId);
     track.querySelectorAll<HTMLElement>('[role="slider"]')[dragging]?.focus();
   };
   const onPointerMove: JSX.EventHandler<HTMLDivElement, PointerEvent> = (e) => {
-    if (dragging === NO_THUMB) return;
+    if (p.disabled || dragging === NO_THUMB) return;
     pendingX = e.clientX;
     frame ||= requestAnimationFrame(flushPointer);
   };
@@ -124,9 +157,13 @@ export const Slider = (props: SliderProps) => {
     cancelAnimationFrame(frame);
     flushPointer();
     dragging = NO_THUMB;
+    const captured = pointerId;
+    pointerId = undefined;
+    if (captured !== undefined && track.hasPointerCapture(captured)) track.releasePointerCapture(captured);
   };
 
   const onKeyDown = (index: number, e: KeyboardEvent) => {
+    if (p.disabled || e.defaultPrevented) return;
     const value = values()[index] ?? p.min;
     const page = Math.max(p.step, (p.max - p.min) / PAGE_FRACTION);
     const deltas: Record<string, number | undefined> = {
@@ -151,6 +188,9 @@ export const Slider = (props: SliderProps) => {
   };
 
   const valueText = () => (isRange() ? `${p.format(low())} – ${p.format(high())}` : p.format(low()));
+  createEffect(() => {
+    if (p.disabled) endDrag();
+  });
 
   return (
     <div
@@ -181,6 +221,7 @@ export const Slider = (props: SliderProps) => {
         onPointerMove={onPointerMove}
         onPointerUp={endDrag}
         onPointerCancel={endDrag}
+        onLostPointerCapture={endDrag}
       >
         <span class="vui-slider__fill" style={{ left: `${fillStart()}%`, width: `${fillEnd() - fillStart()}%` }} />
         <For each={markList()}>
@@ -206,20 +247,37 @@ export const Slider = (props: SliderProps) => {
         </For>
         <Index each={values()}>
           {(value, index) => (
-            <span
-              role="slider"
-              tabIndex={p.disabled ? -1 : 0}
-              class="vui-slider__thumb"
-              style={{ left: `${percent(value())}%` }}
-              aria-labelledby={p.label ? `${id()}-label` : undefined}
-              aria-label={isRange() ? thumbLabel(index) : undefined}
-              aria-valuemin={isRange() && index === 1 ? low() : p.min}
-              aria-valuemax={isRange() && index === 0 ? high() : p.max}
-              aria-valuenow={value()}
-              aria-valuetext={p.format(value())}
-              aria-disabled={p.disabled || undefined}
-              onKeyDown={(e) => onKeyDown(index, e)}
-            />
+            <>
+              <Show when={isRange()}>
+                <span id={`${id()}-thumb-${index}-label`} class="vui-sr-only">
+                  {thumbLabel(index)}
+                </span>
+              </Show>
+              <span
+                role="slider"
+                tabIndex={p.disabled ? -1 : 0}
+                class="vui-slider__thumb"
+                style={{ left: `${percent(value())}%` }}
+                aria-labelledby={
+                  isRange()
+                    ? `${p['aria-labelledby'] ?? (p.label ? `${id()}-label` : '')} ${id()}-thumb-${index}-label`.trim()
+                    : (p['aria-labelledby'] ?? (p.label ? `${id()}-label` : undefined))
+                }
+                aria-label={
+                  isRange()
+                    ? undefined
+                    : (p['aria-label'] ?? (p.label ? undefined : translate('velvet.forms.slider.valueLabel')))
+                }
+                aria-describedby={validation.describedBy(undefined)}
+                aria-invalid={validation.invalid() || undefined}
+                aria-valuemin={isRange() && index === 1 ? low() : p.min}
+                aria-valuemax={isRange() && index === 0 ? high() : p.max}
+                aria-valuenow={value()}
+                aria-valuetext={p.format(value())}
+                aria-disabled={p.disabled || undefined}
+                onKeyDown={(e) => onKeyDown(index, e)}
+              />
+            </>
           )}
         </Index>
       </div>
@@ -229,6 +287,20 @@ export const Slider = (props: SliderProps) => {
           <span>{p.format(p.max)}</span>
         </div>
       </Show>
+      <FormValue
+        name={p.name}
+        form={p.form}
+        required={p.required}
+        disabled={p.disabled}
+        value={values().map(String)}
+        validation={validation}
+        invalidMessage={invalidValue() ? translate('velvet.forms.numberInput.invalidNumber') : undefined}
+        focusInvalid={() => track.querySelector<HTMLElement>('[role="slider"]')?.focus()}
+        onReset={() => {
+          endDrag();
+          setCurrent(p.defaultValue ?? (isRange() ? [p.min, p.max] : p.min));
+        }}
+      />
     </div>
   );
 };

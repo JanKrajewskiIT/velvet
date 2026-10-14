@@ -10,7 +10,7 @@ export { Divider, type DividerProps } from './Divider';
 export { type CalendarEvent, EventCalendar, type EventCalendarProps } from './EventCalendar';
 export { FeatureCard, type FeatureCardProps } from './FeatureCard';
 export { FlipCard, type FlipCardProps } from './FlipCard';
-export { Kanban, type KanbanCard, type KanbanColumn, type KanbanProps } from './Kanban';
+export { Kanban, type KanbanCard, type KanbanColumn, type KanbanMove, type KanbanProps } from './Kanban';
 export { List, type ListItemData, type ListProps } from './List';
 export { type LogLevel, type LogLine } from './logLines';
 export { LogViewer, type LogViewerProps } from './LogViewer';

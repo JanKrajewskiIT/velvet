@@ -1,7 +1,7 @@
 import { clamp } from '../../utils/math';
 import { LEAF_SELECTOR, LIST_TAG, tidy } from './richTextModel';
 
-export type SavedPoint = readonly [blockIndex: number, offset: number];
+type SavedPoint = readonly [blockIndex: number, offset: number];
 export type SavedSelection = readonly [start: SavedPoint, end: SavedPoint];
 export type DomPoint = readonly [node: Node, offset: number];
 

@@ -16,6 +16,10 @@ export interface DialogProps {
   dismissible?: boolean;
   /** Accessible name of the close button. @default localized "Close" */
   closeLabel?: string;
+  /** Selector within the dialog for its initial focus target. */
+  initialFocus?: string;
+  /** Logical fallback when the element that opened the dialog no longer exists. */
+  restoreFocus?: () => HTMLElement | undefined;
   class?: string;
   children?: JSX.Element;
 }

@@ -1,7 +1,9 @@
 import { createSignal, mergeProps, onCleanup, Show } from 'solid-js';
 
+import { createOperation } from '../../hooks/createOperation';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Glyph } from '../primitives/Glyph';
 import { buttonClass } from './buttonClass';
 
@@ -32,20 +34,28 @@ export const CopyButton = (props: CopyButtonProps) => {
   const translate = useTranslate();
   const label = () => p.label ?? translate('velvet.common.copy');
   const [status, setStatus] = createSignal<CopyStatus>('idle');
+  const operation = createOperation();
   let resetTimer: ReturnType<typeof setTimeout> | undefined;
   onCleanup(() => clearTimeout(resetTimer));
 
   const copy = async () => {
+    if (operation.busy()) return;
     const text = typeof p.value === 'function' ? p.value() : p.value;
+    const run = operation.begin();
+    if (!run) return;
+    let outcome: Exclude<CopyStatus, 'idle'>;
     try {
       await navigator.clipboard.writeText(text);
-      setStatus('copied');
-      p.onCopy?.(text);
+      outcome = 'copied';
     } catch {
-      setStatus('failed');
+      outcome = 'failed';
     }
+    if (!run.isCurrent()) return;
+    run.finish();
+    setStatus(outcome);
     clearTimeout(resetTimer);
     resetTimer = setTimeout(() => setStatus('idle'), COPIED_FEEDBACK_MS);
+    if (outcome === 'copied') p.onCopy?.(text);
   };
 
   const feedback = () => {
@@ -64,7 +74,9 @@ export const CopyButton = (props: CopyButtonProps) => {
         status() === 'copied' && 'vui-copy--done',
         p.class,
       )}
-      onClick={() => void copy()}
+      onClick={() => void copy().catch(reportAsyncError)}
+      disabled={operation.busy()}
+      aria-busy={operation.busy() || undefined}
       aria-label={p.iconOnly ? caption() : undefined}
       title={p.iconOnly ? label() : undefined}
     >

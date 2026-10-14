@@ -11,7 +11,7 @@ export interface TreeNode {
   lazy?: boolean;
 }
 
-export type LoadStatus = { kind: 'loading' } | { kind: 'error' };
+type LoadStatus = { kind: 'loading' } | { kind: 'error' };
 
 export type LoadStatuses = Readonly<Record<string, LoadStatus>>;
 

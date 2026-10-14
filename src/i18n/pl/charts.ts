@@ -8,6 +8,7 @@ export const chartsPl: TranslationOf<typeof chartsEn> = {
     instructions: '{label}. Użyj klawiszy strzałek, aby odczytać wartości.',
   },
   chartSeries: {
+    noValue: 'Brak pomiaru',
     valueLabel: 'Wartość',
   },
   comparisonBar: {

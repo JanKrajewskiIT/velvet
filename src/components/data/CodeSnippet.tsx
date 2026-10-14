@@ -3,6 +3,7 @@ import { createMemo, createSignal, createUniqueId, For, mergeProps, onCleanup, S
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Glyph } from '../primitives/Glyph';
 import { cssLength } from './cssLength';
 import { highlight } from './highlight';
@@ -135,7 +136,7 @@ export const CodeSnippet = (props: CodeSnippetProps) => {
         <button
           type="button"
           class={cx('vui-code__copy', copyStatus() === 'copied' && 'vui-code__copy--done')}
-          onClick={() => void copy()}
+          onClick={() => void copy().catch(reportAsyncError)}
           aria-label={copyStatus() === 'idle' ? translate('velvet.data.codeSnippet.copyCode') : copyLabel()}
         >
           <Glyph name={copyStatus() === 'copied' ? 'check' : 'copy'} />

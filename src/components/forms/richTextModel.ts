@@ -10,7 +10,7 @@ export const MARK_TAGS: Readonly<Record<MarkName, string>> = {
   code: 'CODE',
 };
 
-export const MARK_SELECTOR = 'strong,em,u,s,code,a';
+const MARK_SELECTOR = 'strong,em,u,s,code,a';
 export const LEAF_SELECTOR = ':scope>p,:scope>h2,:scope>h3,:scope>blockquote,:scope>pre,li';
 export const LIST_TAG = /^(UL|OL)$/u;
 export const SAFE_URL = /^(https?:|mailto:|tel:|\/|#)/iu;

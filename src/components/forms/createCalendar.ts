@@ -2,10 +2,12 @@ import { useI18n } from '@jankrajewskiit/i18n';
 import { batch, createEffect, createMemo, createSignal, on, untrack } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
+import { createToday } from '../../hooks/createToday';
 import { addMonths, sameDay, startOfDay, weekdayNames } from '../../utils/date';
 import { monthKey, navigateDay, startOfMonth } from './calendarGrid';
 import type { CalendarConfig, CalendarValue, DateRange } from './calendarTypes';
 import { callbackAlias } from './callbackAlias';
+import { isDateAllowed } from './dateConstraints';
 
 const EMPTY_RANGE: DateRange = { start: null, end: null };
 const DAY_LABEL: Intl.DateTimeFormatOptions = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
@@ -47,7 +49,7 @@ export const createCalendar = (p: CalendarConfig) => {
 
   const [focus, setFocus] = createSignal(startOfDay(anchor() ?? new Date()));
   const [hover, setHover] = createSignal<Date | null>(null);
-  const today = createMemo(() => startOfDay(new Date()));
+  const today = createToday();
   let root: HTMLDivElement | undefined;
   let keyboardMove = false;
 
@@ -55,8 +57,7 @@ export const createCalendar = (p: CalendarConfig) => {
   const weekdays = createMemo(() => weekdayNames(locale(), p.weekStartsOn, WEEKDAY_LENGTH));
   const monthOffsets = createMemo(() => Array.from({ length: months() }, (_, i) => i));
 
-  const isOff = (d: Date): boolean =>
-    (!!p.min && d < startOfDay(p.min)) || (!!p.max && d > startOfDay(p.max)) || !!p.isDisabled?.(d);
+  const isOff = (d: Date): boolean => !isDateAllowed(d, p);
   const isMarked = (d: Date): boolean => {
     const marks = p.marks;
     if (typeof marks === 'function') return marks(d);

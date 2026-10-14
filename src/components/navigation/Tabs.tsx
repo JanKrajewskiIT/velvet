@@ -1,6 +1,7 @@
 import {
   createEffect,
   createSignal,
+  createUniqueId,
   For,
   type JSX,
   mergeProps,
@@ -13,9 +14,14 @@ import {
 } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
+import { activeItemKey } from '../../utils/activeItem';
+import { assignRef } from '../../utils/assignRef';
+import { callHandler } from '../../utils/callHandler';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { reportAsyncError } from '../../utils/reportAsyncError';
 import { renderIcon } from '../primitives/Glyph';
+import { tabIds } from './tabIds';
 
 export interface TabItem {
   value: string;
@@ -23,6 +29,8 @@ export interface TabItem {
   icon?: JSX.Element;
   count?: number;
   disabled?: boolean;
+  id?: string;
+  panelId?: string;
 }
 
 export interface TabsProps extends HtmlProps<HTMLDivElement, 'onChange' | 'children'> {
@@ -37,6 +45,8 @@ export interface TabsProps extends HtmlProps<HTMLDivElement, 'onChange' | 'child
   /** vertical = settings-style list (underline variant only). @default 'horizontal' */
   orientation?: 'horizontal' | 'vertical';
   block?: boolean;
+  /** Use manual activation for panels that must load before display. @default 'automatic' */
+  activation?: 'automatic' | 'manual';
 }
 
 const ENABLED_TAB = '[role="tab"]:not(:disabled)';
@@ -58,14 +68,30 @@ export const Tabs = (props: TabsProps) => {
     'orientation',
     'block',
     'class',
+    'onKeyDown',
+    'activation',
+    'id',
+    'ref',
   ]);
-  const [current, select] = createControllable<string | undefined>({
+  const [value, select] = createControllable<string | undefined>({
     value: () => local.value,
-    defaultValue: untrack(() => props.defaultValue ?? props.items[0]?.value),
+    defaultValue: untrack(() => props.defaultValue ?? props.items.find((item) => !item.disabled)?.value),
     onChange: (value) => {
       if (value !== undefined) (local.onValueChange ?? local.onChange)?.(value);
     },
   });
+  const availableKey = (key: string | undefined) =>
+    activeItemKey(
+      local.items,
+      key,
+      (item) => item.value,
+      (item) => !item.disabled,
+    );
+  const current = () => (local.value === undefined ? availableKey(value()) : value());
+  const [focused, setFocused] = createSignal<string>();
+  const tabStop = () => availableKey(local.activation === 'manual' ? (focused() ?? current()) : current());
+  const autoId = createUniqueId();
+  const id = () => local.id ?? autoId;
   const vertical = () => local.orientation === 'vertical' && local.variant !== 'segmented';
   const [indicator, setIndicator] = createSignal<JSX.CSSProperties | null>(null);
   let list!: HTMLDivElement;
@@ -79,21 +105,32 @@ export const Tabs = (props: TabsProps) => {
     setIndicator({ transform: `translateX(${tab.offsetLeft}px)${lift}`, width: `${tab.offsetWidth}px` });
   };
 
-  createEffect(on([current, () => local.items.length, vertical, () => local.variant], measure));
+  createEffect(on([current, () => local.items, tabStop, vertical, () => local.variant], measure));
 
   onMount(() => {
     if (typeof ResizeObserver === 'undefined') return;
     const observer = new ResizeObserver(measure);
     observer.observe(list);
-    void document.fonts.ready.then(measure);
-    onCleanup(() => observer.disconnect());
+    let disposed = false;
+    void document.fonts.ready
+      .then(() => {
+        if (!disposed) measure();
+      })
+      .catch(reportAsyncError);
+    onCleanup(() => {
+      disposed = true;
+      observer.disconnect();
+    });
   });
 
   const onKeyDown: JSX.EventHandler<HTMLDivElement, KeyboardEvent> = (e) => {
+    callHandler(local.onKeyDown, e);
+    if (e.defaultPrevented) return;
     const keys = ARROW_KEYS[vertical() ? 'vertical' : 'horizontal'];
     const enabled = local.items.filter((item) => !item.disabled);
     if (enabled.length === 0) return;
-    let index = enabled.findIndex((item) => item.value === current());
+    const focusedTab = e.target instanceof Element ? e.target.closest<HTMLElement>('[role="tab"]') : undefined;
+    let index = enabled.findIndex((item) => item.value === (focusedTab?.dataset.value ?? tabStop()));
     if (e.key === keys.next) index = (index + 1) % enabled.length;
     else if (e.key === keys.previous) index = (index - 1 + enabled.length) % enabled.length;
     else if (e.key === 'Home') index = 0;
@@ -102,7 +139,8 @@ export const Tabs = (props: TabsProps) => {
     e.preventDefault();
     const target = enabled[index];
     if (!target) return;
-    select(target.value);
+    setFocused(target.value);
+    if (local.activation !== 'manual') select(target.value);
     list.querySelectorAll<HTMLElement>(ENABLED_TAB)[index]?.focus();
   };
 
@@ -112,7 +150,9 @@ export const Tabs = (props: TabsProps) => {
       {...rest}
       ref={(element) => {
         list = element;
+        assignRef(local.ref, element);
       }}
+      id={id()}
       role="tablist"
       aria-orientation={vertical() ? 'vertical' : 'horizontal'}
       onKeyDown={onKeyDown}
@@ -132,13 +172,16 @@ export const Tabs = (props: TabsProps) => {
         {(item) => (
           <button
             data-value={item.value}
+            id={item.id ?? tabIds(id(), item.value).tab}
+            aria-controls={item.panelId ?? tabIds(id(), item.value).panel}
             role="tab"
             type="button"
             aria-selected={current() === item.value}
-            tabIndex={current() === item.value ? 0 : -1}
+            tabIndex={!item.disabled && tabStop() === item.value ? 0 : -1}
             disabled={item.disabled}
             class="vui-tab"
-            onClick={() => select(item.value)}
+            onClick={() => !item.disabled && select(item.value)}
+            onFocus={() => setFocused(item.value)}
           >
             {renderIcon(item.icon)}
             {item.label}

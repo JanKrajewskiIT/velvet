@@ -25,3 +25,5 @@ button.vui-sched__evt:hover{box-shadow:var(--elevation-card-hover);z-index:2}
 .vui-sched__now::before{content:"";position:absolute;left:-4px;top:-3px;width:var(--size-dot-lg);height:var(--size-dot-lg);border-radius:50%;background:var(--status-danger-solid)}
 
 .vui-sched__col--click:focus-visible{outline:none;box-shadow:var(--focus-ring-inset)}
+.vui-sched__slot{position:absolute;left:0;right:0;width:100%;border:1px solid transparent;background:transparent;pointer-events:none}
+.vui-sched__slot:focus-visible{border-color:var(--fg-brand);background:var(--bg-hover);z-index:1}

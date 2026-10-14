@@ -1,13 +1,16 @@
-import { createSignal, For, type JSX, mergeProps, Show } from 'solid-js';
+import { useI18n } from '@jankrajewskiit/i18n';
+import { createEffect, createSignal, For, type JSX, mergeProps, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { EmptyText } from '../primitives/EmptyText';
 import { Glyph } from '../primitives/Glyph';
+import { partitionFiles, type RejectedFile } from './fileAcceptance';
 import { FileUploadRow, type UploadFile } from './FileUploadRow';
 import { formatBytes } from './formatBytes';
 
 export type { UploadFile };
+export type { RejectedFile, UploadRejectionReason } from './fileAcceptance';
 
 export interface FileUploadProps {
   files?: UploadFile[];
@@ -20,6 +23,8 @@ export interface FileUploadProps {
   multiple?: boolean;
   /** Bytes. Larger files are rejected with an inline error. */
   maxSize?: number;
+  maxFiles?: number;
+  onReject?: (files: readonly RejectedFile[]) => void;
   /** @default localized "Drop files here or browse" */
   title?: JSX.Element;
   /** e.g. "PNG, JPG or PDF — up to 20 MB". */
@@ -34,45 +39,56 @@ export interface FileUploadProps {
 export const FileUpload = (props: FileUploadProps) => {
   const p = mergeProps({ files: [], multiple: true } satisfies Partial<FileUploadProps>, props);
   const translate = useTranslate();
+  const i18n = useI18n();
   const [over, setOver] = createSignal(false);
   const [rejected, setRejected] = createSignal<string | null>(null);
   let input: HTMLInputElement | undefined;
   let dragDepth = 0;
+  const canPick = () => !p.disabled && !!p.onFiles;
+  createEffect(() => {
+    if (!canPick()) {
+      dragDepth = 0;
+      setOver(false);
+    }
+  });
 
   const take = (list: FileList | null | undefined) => {
-    let accepted = Array.from(list ?? []);
-    if (!p.multiple) accepted = accepted.slice(0, 1);
-    const limit = p.maxSize;
-    const tooBig = limit ? accepted.filter((file) => file.size > limit) : [];
-    setRejected(
-      limit && tooBig.length
+    if (!canPick()) return;
+    const { accepted, rejected } = partitionFiles(Array.from(list ?? []), p, p.files.length);
+    const errors = rejected.map(({ file, reason }) =>
+      reason === 'size'
         ? translate('velvet.forms.fileUpload.rejected', {
-            names: tooBig.map((file) => file.name).join(', '),
-            limit: formatBytes(limit),
+            names: file.name,
+            limit: formatBytes(p.maxSize ?? 0, i18n.locale()),
           })
-        : null,
+        : reason === 'type'
+          ? translate('velvet.forms.fileUpload.rejectedType', { name: file.name })
+          : translate('velvet.forms.fileUpload.rejectedCount', { name: file.name }),
     );
-    accepted = accepted.filter((file) => !limit || file.size <= limit);
+    setRejected(errors.length ? errors.join(' · ') : null);
+    if (rejected.length) p.onReject?.(rejected);
     if (accepted.length) p.onFiles?.(accepted);
   };
-  const browse = () => input?.click();
+  const browse = () => {
+    if (canPick()) input?.click();
+  };
 
   return (
     <div class={cx('vui-upload', p.class)}>
       <div
         role="button"
-        tabIndex={p.disabled ? -1 : 0}
-        aria-disabled={p.disabled || undefined}
-        class={cx('vui-upload__zone', over() && 'vui-upload__zone--over', p.disabled && 'vui-upload__zone--disabled')}
-        onClick={() => !p.disabled && browse()}
+        tabIndex={canPick() ? 0 : -1}
+        aria-disabled={!canPick() || undefined}
+        class={cx('vui-upload__zone', over() && 'vui-upload__zone--over', !canPick() && 'vui-upload__zone--disabled')}
+        onClick={browse}
         onKeyDown={(e) => {
-          if (p.disabled || (e.key !== 'Enter' && e.key !== ' ')) return;
+          if (!canPick() || (e.key !== 'Enter' && e.key !== ' ')) return;
           e.preventDefault();
           browse();
         }}
         onDragEnter={(e) => {
           e.preventDefault();
-          if (p.disabled) return;
+          if (!canPick()) return;
           dragDepth++;
           setOver(true);
         }}
@@ -85,7 +101,7 @@ export const FileUpload = (props: FileUploadProps) => {
           e.preventDefault();
           dragDepth = 0;
           setOver(false);
-          if (!p.disabled) take(e.dataTransfer?.files);
+          if (canPick()) take(e.dataTransfer?.files);
         }}
       >
         <span class="vui-upload__icon">
@@ -109,6 +125,7 @@ export const FileUpload = (props: FileUploadProps) => {
           hidden
           accept={p.accept}
           multiple={p.multiple}
+          disabled={!canPick()}
           onChange={(e) => {
             take(e.currentTarget.files);
             e.currentTarget.value = '';
@@ -129,7 +146,9 @@ export const FileUpload = (props: FileUploadProps) => {
         }
       >
         <ul class="vui-upload__list">
-          <For each={p.files}>{(file) => <FileUploadRow file={file} onRemove={p.onRemove} onRetry={p.onRetry} />}</For>
+          <For each={p.files}>
+            {(file) => <FileUploadRow file={file} disabled={p.disabled} onRemove={p.onRemove} onRetry={p.onRetry} />}
+          </For>
         </ul>
       </Show>
     </div>

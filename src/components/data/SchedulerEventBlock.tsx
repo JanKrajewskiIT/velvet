@@ -8,6 +8,7 @@ import type { SchedulerEvent } from './schedulerTypes';
 export interface SchedulerEventBlockProps {
   scheduler: SchedulerController;
   event: SchedulerEvent;
+  originalEvent?: SchedulerEvent;
   lane: number;
   lanes: number;
 }
@@ -29,7 +30,7 @@ export const SchedulerEventBlock = (props: SchedulerEventBlockProps) => {
       data-tone={props.event.tone ?? 'brand'}
       class={cx('vui-sched__evt', geometry().short && 'vui-sched__evt--short')}
       style={geometry().style}
-      onClick={config().onEventClick ? () => config().onEventClick?.(props.event) : undefined}
+      onClick={config().onEventClick ? () => config().onEventClick?.(props.originalEvent ?? props.event) : undefined}
       aria-label={translate('velvet.data.scheduler.eventLabel', {
         title: props.event.title,
         start: formatTime(props.event.start),

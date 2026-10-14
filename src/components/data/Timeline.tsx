@@ -2,6 +2,7 @@ import { createSignal, For, mergeProps, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Button } from '../actions/Button';
 import { Glyph } from '../primitives/Glyph';
 import { Marker } from '../primitives/Marker';
@@ -64,7 +65,7 @@ export const Timeline = (props: TimelineProps) => {
 
   const activate = (action: TimelineAction, item: TimelineItem, key: string | number) => {
     if (!action.confirm) {
-      void run(action, item);
+      void run(action, item).catch(reportAsyncError);
       return;
     }
     const open = confirm();
@@ -101,7 +102,7 @@ export const Timeline = (props: TimelineProps) => {
               error={failed() ? errorText() : undefined}
               onActivate={(action) => activate(action, keyed(), key())}
               onCancel={cancel}
-              onConfirm={(action) => void run(action, keyed())}
+              onConfirm={(action) => void run(action, keyed()).catch(reportAsyncError)}
             />
           );
         }}

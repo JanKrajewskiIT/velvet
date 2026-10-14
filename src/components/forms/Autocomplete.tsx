@@ -1,23 +1,21 @@
-import { createSignal, For, type JSX, mergeProps, Show } from 'solid-js';
+import { createEffect, createMemo, createSignal, type JSX, mergeProps, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { createDismiss } from '../../hooks/createDismiss';
 import { useTranslate } from '../../i18n/useTranslate';
-import { cx } from '../../utils/cx';
 import { Spinner } from '../feedback/Spinner';
 import { CloseButton } from '../primitives/CloseButton';
 import { Control } from '../primitives/Control';
 import { Field } from '../primitives/Field';
 import { Glyph, renderIcon } from '../primitives/Glyph';
-import { highlightMatch } from '../primitives/Mark';
-import { AutocompleteCustomOption } from './AutocompleteCustomOption';
+import { AutocompleteMenu } from './AutocompleteMenu';
 import type { AutocompleteProps } from './autocompleteTypes';
 import { callbackAlias } from './callbackAlias';
-import { ComboboxOption } from './ComboboxOption';
-import { ComboboxOptionText } from './ComboboxOptionText';
 import { createComboboxOptions } from './createComboboxOptions';
 import { createComboboxPopup } from './createComboboxPopup';
-import { OptionListStatus } from './OptionListStatus';
+import { createFormValidation } from './createFormValidation';
+import { FormValue } from './FormValue';
+import type { OptionListStatusProps } from './OptionListStatus';
 import type { AutocompleteOption, SelectOption } from './selectOption';
 
 export type { AutocompleteProps };
@@ -37,10 +35,14 @@ export const Autocomplete = (props: AutocompleteProps) => {
     props,
   );
   const translate = useTranslate();
+  const validation = createFormValidation();
   const customLabel = (text: string) =>
     p.customLabel?.(text) ?? translate('velvet.forms.autocomplete.customLabel', { text });
-  const popup = createComboboxPopup(() => p.id);
-  const { id, listId, optionId, open, setOpen, active, setActive, floating } = popup;
+  const popup = createComboboxPopup(
+    () => p.id,
+    () => navigation(),
+  );
+  const { id, listId, open, setOpen, active, setActive } = popup;
 
   const [value, setValue] = createControllable<string | null>({
     value: () => p.value,
@@ -50,9 +52,10 @@ export const Autocomplete = (props: AutocompleteProps) => {
       () => p.onChange,
     ),
   });
-  const [picked, setPicked] = createSignal<Record<string, SelectOption>>({});
+  const [picked, setPicked] = createSignal<SelectOption>();
   const [text, setText] = createSignal('');
   const [typing, setTyping] = createSignal(false);
+  let input!: HTMLInputElement;
 
   const query = () => (typing() ? text() : '');
   const { local, remote, list } = createComboboxOptions(
@@ -65,7 +68,9 @@ export const Autocomplete = (props: AutocompleteProps) => {
     const current = value();
     if (current === null) return '';
     const known =
-      picked()[current] ?? local().find((o) => o.value === current) ?? remote.items().find((o) => o.value === current);
+      (picked()?.value === current ? picked() : undefined) ??
+      local().find((o) => o.value === current) ??
+      remote.items().find((o) => o.value === current);
     return known?.label ?? current;
   };
   const shownText = () => (typing() ? text() : selectedLabel());
@@ -75,26 +80,67 @@ export const Autocomplete = (props: AutocompleteProps) => {
     typing() &&
     !!customText() &&
     !list().some((option) => option.label.toLowerCase() === customText().toLowerCase());
+  const navigation = createMemo(() => {
+    const options = list().map((option) => ({ ...option, value: `option:${option.value}` }));
+    if (showCustom()) options.push({ value: 'custom', label: customLabel(customText()) });
+    return options;
+  });
+  const pickCustom = () => {
+    if (p.disabled || !open() || !showCustom()) return;
+    commitText();
+    setOpen(false);
+  };
 
   const pick = (option: SelectOption) => {
-    setPicked((previous) => ({ ...previous, [option.value]: option }));
+    if (p.disabled || option.disabled || !open()) return;
+    setPicked(option);
     setValue(option.value);
     setTyping(false);
     setOpen(false);
   };
   /** Ends editing without a pick: free text becomes the value, an emptied field clears it, anything else reverts. */
   const commitText = () => {
-    if (!typing()) return;
+    if (p.disabled || !typing()) return;
     if (p.allowCustom && customText()) setValue(customText());
     else if (!text()) setValue(null);
     setTyping(false);
   };
+  const custom = createMemo(() =>
+    showCustom() ? { label: customLabel(customText()), onPick: pickCustom } : undefined,
+  );
+  const status: OptionListStatusProps = {
+    get loading() {
+      return remote.loading();
+    },
+    get failed() {
+      return remote.failed();
+    },
+    get empty() {
+      return list().length === 0;
+    },
+    get emptyText() {
+      return showCustom() ? undefined : (p.emptyText ?? translate('velvet.forms.autocomplete.emptyText'));
+    },
+    get errorText() {
+      return p.errorText;
+    },
+    get retryLabel() {
+      return p.retryLabel;
+    },
+    onRetry: remote.retry,
+  };
   const edit = (next: string) => {
+    if (p.disabled) return;
     setText(next);
     setTyping(true);
     setOpen(true);
     setActive(0);
   };
+  createEffect(() => {
+    if (!p.disabled) return;
+    setOpen(false);
+    setTyping(false);
+  });
 
   createDismiss(
     open,
@@ -107,9 +153,15 @@ export const Autocomplete = (props: AutocompleteProps) => {
   );
 
   const onKeyDown: JSX.EventHandler<HTMLInputElement, KeyboardEvent> = (e) => {
-    if (popup.handleArrowKey(e, list().length)) return;
+    if (p.disabled) return;
+    if (popup.handleArrowKey(e)) return;
     switch (e.key) {
       case 'Enter': {
+        if (open() && showCustom() && active() === list().length) {
+          e.preventDefault();
+          pickCustom();
+          break;
+        }
         const option = list()[active()];
         if (open() && option) {
           e.preventDefault();
@@ -128,6 +180,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
         }
         break;
       case 'Tab':
+        if (remote.failed() && !e.shiftKey) break;
         setOpen(false);
         commitText();
         break;
@@ -135,10 +188,15 @@ export const Autocomplete = (props: AutocompleteProps) => {
   };
 
   return (
-    <Field label={p.label} hint={p.hint} error={p.error} optional={p.optional} id={id()}>
+    <Field label={p.label} hint={p.hint} error={p.error} optional={p.optional} required={p.required} id={id()}>
       {(control) => (
         <div ref={popup.setRoot} class="vui-select">
-          <Control size={p.size} invalid={control.invalid} disabled={p.disabled} class={p.class}>
+          <Control
+            size={p.size}
+            invalid={control.invalid || validation.invalid()}
+            disabled={p.disabled}
+            class={p.class}
+          >
             <Show when={p.iconLeft}>
               <span class="vui-control__adorn">
                 <Show when={remote.loading()} fallback={renderIcon(p.iconLeft)}>
@@ -147,21 +205,27 @@ export const Autocomplete = (props: AutocompleteProps) => {
               </span>
             </Show>
             <input
+              ref={(element) => {
+                input = element;
+              }}
               id={control.id}
               role="combobox"
               aria-expanded={open()}
               aria-controls={listId()}
               aria-autocomplete="list"
-              aria-activedescendant={popup.activeDescendant(list())}
-              aria-invalid={control.invalid || undefined}
-              aria-describedby={control.describedBy}
+              aria-activedescendant={popup.activeDescendant(navigation())}
+              aria-label={p['aria-label']}
+              aria-labelledby={p['aria-labelledby']}
+              aria-required={p.required || undefined}
+              aria-invalid={control.invalid || validation.invalid() || undefined}
+              aria-describedby={validation.describedBy(control.describedBy)}
               class="vui-control__input"
               value={shownText()}
               placeholder={p.placeholder ?? translate('velvet.forms.autocomplete.placeholder')}
               disabled={p.disabled}
               autocomplete="off"
               onInput={(e) => edit(e.currentTarget.value)}
-              onFocus={() => setOpen(true)}
+              onFocus={() => !p.disabled && setOpen(true)}
               onKeyDown={onKeyDown}
             />
             <Show when={value() !== null && !p.disabled}>
@@ -178,53 +242,33 @@ export const Autocomplete = (props: AutocompleteProps) => {
               <Glyph name="chevron-down" />
             </span>
           </Control>
+          <FormValue
+            validation={validation}
+            name={p.name}
+            form={p.form}
+            required={p.required}
+            disabled={p.disabled}
+            value={value() ?? ''}
+            focusInvalid={() => input.focus()}
+            onReset={() => {
+              setValue(p.defaultValue);
+              setTyping(false);
+              setOpen(false);
+              input.value = shownText();
+            }}
+          />
           <Show when={open()}>
-            <ul
-              ref={floating.ref}
-              id={listId()}
-              role="listbox"
-              class={cx('vui-select__menu', floating.side() === 'top' && 'vui-select__menu--up')}
-              style={floating.style()}
-            >
-              <For each={list()}>
-                {(option, index) => (
-                  <ComboboxOption
-                    id={optionId(index())}
-                    selected={value() === option.value}
-                    active={index() === active()}
-                    onHover={() => setActive(index())}
-                    onPick={() => pick(option)}
-                  >
-                    <Show when={option.icon}>{(icon) => <Glyph name={icon()} />}</Show>
-                    <ComboboxOptionText
-                      label={highlightMatch(option.label, query())}
-                      description={option.description}
-                    />
-                    <Show when={value() === option.value}>
-                      <Glyph name="check" class="vui-select__check" />
-                    </Show>
-                  </ComboboxOption>
-                )}
-              </For>
-              <Show when={showCustom()}>
-                <AutocompleteCustomOption
-                  label={customLabel(customText())}
-                  onPick={() => {
-                    commitText();
-                    setOpen(false);
-                  }}
-                />
-              </Show>
-              <OptionListStatus
-                loading={remote.loading()}
-                failed={remote.failed()}
-                empty={list().length === 0}
-                emptyText={showCustom() ? undefined : (p.emptyText ?? translate('velvet.forms.autocomplete.emptyText'))}
-                errorText={p.errorText}
-                retryLabel={p.retryLabel}
-                onRetry={remote.retry}
-              />
-            </ul>
+            <AutocompleteMenu
+              popup={popup}
+              options={list()}
+              value={value()}
+              query={query()}
+              label={p['aria-label']}
+              labelledBy={p['aria-labelledby'] ?? (p.label ? `${id()}-label` : undefined)}
+              custom={custom()}
+              status={status}
+              onPick={pick}
+            />
           </Show>
         </div>
       )}

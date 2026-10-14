@@ -1,7 +1,9 @@
-import { createEffect, createSignal, type JSX, mergeProps, on, Show } from 'solid-js';
+import { createEffect, createMemo, createSignal, type JSX, mergeProps, on, Show } from 'solid-js';
 
+import { createOperation } from '../../hooks/createOperation';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Button } from '../actions/Button';
 import { Stepper } from './Stepper';
 
@@ -54,43 +56,47 @@ export const Wizard = (props: WizardProps) => {
   const finishLabel = () => p.finishLabel ?? translate('velvet.navigation.wizard.finish');
   const [index, setIndex] = createSignal(p.defaultStep);
   const [error, setError] = createSignal<string | null>(null);
-  const [busy, setBusy] = createSignal(false);
-  const step = () => p.steps[index()];
-  const last = () => index() === p.steps.length - 1;
+  const operation = createOperation();
+  const busy = operation.busy;
+  const steps = createMemo(() => p.steps);
+  const step = () => steps()[index()];
+  const last = () => index() === steps().length - 1;
   let panel: HTMLDivElement | undefined;
-  let run = 0;
 
   createEffect(on(index, () => panel?.focus({ preventScroll: true }), { defer: true }));
+  createEffect(on(step, operation.invalidate, { defer: true }));
 
   const goTo = (target: number) => {
-    run += 1;
-    setBusy(false);
+    operation.invalidate();
     setError(null);
     setIndex(target);
   };
 
   const next = async () => {
-    const current = step();
-    const mine = ++run;
+    const initialStep = step();
+    if (!initialStep) return;
+    const run = operation.begin();
+    if (!run) return;
+    const isCurrent = () => run.isCurrent() && step() === initialStep;
     setError(null);
     try {
-      const message = await current?.validate?.();
-      if (mine !== run) return;
+      const message = await initialStep.validate?.();
+      if (!isCurrent()) return;
       if (message) return setError(message);
       if (!last()) return setIndex(index() + 1);
-      setBusy(true);
       await p.onFinish?.();
     } catch (failure) {
-      if (mine !== run) return;
+      if (!isCurrent()) return;
       setError(labels().failed);
       p.onError?.(failure);
+    } finally {
+      run.finish();
     }
-    if (mine === run) setBusy(false);
   };
 
   return (
     <div class={cx('vui-wizard', p.class)}>
-      <Stepper steps={p.steps} current={index()} errorAt={error() ? index() : undefined} onStepClick={goTo} />
+      <Stepper steps={steps()} current={index()} errorAt={error() ? index() : undefined} onStepClick={goTo} />
       <Show when={step()} keyed>
         {(current) => (
           <div
@@ -130,12 +136,23 @@ export const Wizard = (props: WizardProps) => {
             </Button>
           }
         >
-          <Button variant="ghost" onClick={() => p.onCancel?.()}>
+          <Button
+            variant="ghost"
+            onClick={() => {
+              operation.invalidate();
+              p.onCancel?.();
+            }}
+          >
             {labels().cancel}
           </Button>
         </Show>
-        <span class="vui-wizard__count">{labels().step(index() + 1, p.steps.length)}</span>
-        <Button loading={busy()} iconRight={last() ? null : 'arrow-right'} onClick={() => void next()}>
+        <span class="vui-wizard__count">{labels().step(index() + 1, steps().length)}</span>
+        <Button
+          loading={busy()}
+          disabled={!step()}
+          iconRight={last() ? null : 'arrow-right'}
+          onClick={() => void next().catch(reportAsyncError)}
+        >
           {last() ? finishLabel() : labels().next}
         </Button>
       </div>

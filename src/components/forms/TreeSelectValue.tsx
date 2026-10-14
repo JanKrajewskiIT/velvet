@@ -11,6 +11,7 @@ export interface TreeSelectValueProps {
   /** @default localized "Select…" */
   placeholder?: string;
   onRemove: (id: string) => void;
+  disabled?: boolean;
 }
 
 /** Trigger content of the TreeSelect: placeholder, single label, or tags with a "+N" overflow. */
@@ -27,7 +28,7 @@ export const TreeSelectValue = (props: TreeSelectValueProps) => {
       <Show when={props.multiple}>
         <For each={props.picked.slice(0, props.maxTags)}>
           {(node) => (
-            <Tag size="sm" onRemove={() => props.onRemove(node.id)}>
+            <Tag size="sm" disabled={props.disabled} onRemove={() => props.onRemove(node.id)}>
               {node.label}
             </Tag>
           )}

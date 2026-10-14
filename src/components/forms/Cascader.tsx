@@ -24,8 +24,13 @@ import { type CascaderNode, lastOf, pathTo } from './cascaderPaths';
 import { CascaderSearchResults } from './CascaderSearchResults';
 import { createCascaderNavigation } from './createCascaderNavigation';
 import { createCascaderSearch } from './createCascaderSearch';
+import { createFormValidation } from './createFormValidation';
+import type { FormControlProps } from './formControl';
+import { FormValue } from './FormValue';
 
-export interface CascaderProps {
+export interface CascaderProps extends FormControlProps {
+  /** Notifies a native reset, including an empty controlled value. */
+  onResetValue?: (value: string | null) => void;
   label?: JSX.Element;
   hint?: JSX.Element;
   error?: JSX.Element;
@@ -69,6 +74,7 @@ export const Cascader = (props: CascaderProps) => {
     props,
   );
   const translate = useTranslate();
+  const validation = createFormValidation();
   const [value, setValue] = createControllable<string | null>({
     value: () => p.value,
     defaultValue: p.defaultValue ?? null,
@@ -77,6 +83,9 @@ export const Cascader = (props: CascaderProps) => {
   const listId = createUniqueId();
   const [open, setOpen] = createSignal(false);
   const [root, setRoot] = createSignal<HTMLElement>();
+  createEffect(() => {
+    if (p.disabled) setOpen(false);
+  });
   const floating = createFloating(open, root, { minWidth: true });
   let menu: HTMLDivElement | undefined;
   let search: HTMLInputElement | undefined;
@@ -91,6 +100,7 @@ export const Cascader = (props: CascaderProps) => {
     root()?.querySelector<HTMLElement>('.vui-casc__trigger')?.focus();
   };
   const commit = (path: CascaderNode[]) => {
+    if (p.disabled) return;
     const leaf = lastOf(path);
     if (!leaf) return;
     setValue(leaf.id);
@@ -140,7 +150,7 @@ export const Cascader = (props: CascaderProps) => {
         <div ref={setRoot} class="vui-casc">
           <Control
             size={p.size}
-            invalid={control.invalid}
+            invalid={control.invalid || validation.invalid()}
             disabled={p.disabled}
             class={cx(open() && 'vui-casc__control--open')}
           >
@@ -148,11 +158,14 @@ export const Cascader = (props: CascaderProps) => {
               id={control.id}
               type="button"
               class="vui-casc__trigger vui-tselect__trigger"
+              role="combobox"
               disabled={p.disabled}
               aria-haspopup="dialog"
               aria-expanded={open()}
               aria-controls={listId}
-              aria-describedby={control.describedBy}
+              aria-describedby={validation.describedBy(control.describedBy)}
+              aria-label={p['aria-label']}
+              aria-labelledby={p['aria-labelledby'] ?? (p.label ? `${control.id}-label` : undefined)}
               onClick={() => setOpen(!open())}
             >
               <Show
@@ -175,6 +188,23 @@ export const Cascader = (props: CascaderProps) => {
             </button>
             <Chevron open={open()} class="vui-control__chevron vui-casc__chev" />
           </Control>
+          <FormValue
+            name={p.name}
+            form={p.form}
+            required={p.required}
+            disabled={p.disabled}
+            value={value() ?? ''}
+            validation={validation}
+            focusInvalid={() => root()?.querySelector<HTMLElement>('.vui-casc__trigger')?.focus()}
+            onReset={() => {
+              const next = p.defaultValue ?? null;
+              setValue(next);
+              p.onResetValue?.(next);
+              if (next !== null) emit(next, pathTo(p.data, next) ?? []);
+              setOpen(false);
+              finder.reset();
+            }}
+          />
           <Show when={open()}>
             {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- dialog owns arrow/Enter/Escape navigation of its columns; tabIndex -1 is for programmatic focus */}
             <div

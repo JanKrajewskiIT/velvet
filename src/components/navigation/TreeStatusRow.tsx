@@ -1,6 +1,7 @@
 import { Show } from 'solid-js';
 
 import { cx } from '../../utils/cx';
+import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Button } from '../actions/Button';
 import { Spinner } from '../feedback/Spinner';
 import { Glyph } from '../primitives/Glyph';
@@ -44,7 +45,7 @@ export const TreeStatusRow = (props: TreeStatusRowProps) => (
         tabIndex={-1}
         onClick={(e) => {
           e.stopPropagation();
-          void props.tree.model.loadChildren(props.row.owner);
+          void props.tree.model.loadChildren(props.row.owner).catch(reportAsyncError);
         }}
       >
         {props.tree.labels().retry}

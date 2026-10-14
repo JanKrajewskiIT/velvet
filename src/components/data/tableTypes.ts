@@ -29,9 +29,12 @@ export interface TableProps<T extends object = object> {
   rows: T[];
   /** Unique key field. @default 'id' */
   rowKey?: string;
+  getRowId?: (row: T) => RowKey;
+  dataKey?: string | number;
   selectable?: boolean;
   /** Selected row keys. */
   selected?: RowKey[];
+  defaultSelected?: RowKey[];
   onSelectedChange?: (keys: RowKey[]) => void;
   /** Buttons shown in the bar that appears while rows are selected. */
   bulkActions?: JSX.Element;
@@ -39,6 +42,8 @@ export interface TableProps<T extends object = object> {
   sort?: TableSort | null;
   defaultSort?: TableSort;
   onSortChange?: (sort: TableSort | null) => void;
+  /** Explicitly choose server sorting; omitted retains the legacy controlled-sort behavior. */
+  manualSorting?: boolean;
   /** Show skeleton rows. */
   loading?: boolean;
   /** @default 4 */

@@ -1,14 +1,15 @@
 import type { JSX } from 'solid-js';
 
 import type { LoadOptions } from './createAsyncOptions';
-import type { AutocompleteOption } from './selectOption';
+import type { FormControlProps } from './formControl';
+import type { SelectOption } from './selectOption';
 
-export interface AutocompleteProps {
+export interface AutocompleteProps extends FormControlProps {
   label?: JSX.Element;
   hint?: JSX.Element;
   error?: JSX.Element;
   optional?: boolean;
-  options?: ReadonlyArray<string | AutocompleteOption>;
+  options?: ReadonlyArray<string | SelectOption>;
   /** Controlled value; `null` is a controlled empty selection. */
   value?: string | null;
   defaultValue?: string | null;

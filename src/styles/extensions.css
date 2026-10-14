@@ -5,3 +5,8 @@
 @import url('extensions/modal.css');
 @import url('extensions/floating.css');
 @import url('extensions/navbar.css');
+@import url('extensions/accessibility.css');
+@import url('extensions/forms.css');
+@import url('extensions/media.css');
+@import url('extensions/table.css');
+@import url('extensions/stepper.css');

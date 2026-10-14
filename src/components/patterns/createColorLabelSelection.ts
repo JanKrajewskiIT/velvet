@@ -1,5 +1,6 @@
 import { type Accessor, createEffect, createMemo, createSignal, type JSX, on, untrack } from 'solid-js';
 
+import { reportAsyncError } from '../../utils/reportAsyncError';
 import { type ColorLabel, nextLabelColor, normalizeLabelText } from './colorLabel';
 
 export interface ColorLabelSelectionInput {
@@ -147,7 +148,7 @@ export const createColorLabelSelection = (
     const [first] = visible();
     const onlyMatch = visible().length === 1 ? first : undefined;
     if (onlyMatch && !input.onCreate) toggle(onlyMatch.id);
-    else if (!exactMatch() && trimmedQuery()) void create();
+    else if (!exactMatch() && trimmedQuery()) void create().catch(reportAsyncError);
     else if (onlyMatch) toggle(onlyMatch.id);
   };
 

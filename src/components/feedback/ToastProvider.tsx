@@ -1,4 +1,4 @@
-import { createContext, createSignal, For, type JSX, mergeProps, splitProps, useContext } from 'solid-js';
+import { createContext, createEffect, createSignal, For, type JSX, mergeProps, splitProps, useContext } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
 import { Toast, type ToastProps } from './Toast';
@@ -40,6 +40,17 @@ export const ToastProvider = (props: ToastProviderProps) => {
   const p = mergeProps({ max: 5, defaultDuration: 5000 } satisfies Partial<ToastProviderProps>, props);
   const [entries, setEntries] = createSignal<ToastEntry[]>([]);
   let sequence = 0;
+  const max = () => (Number.isFinite(p.max) && p.max >= 0 ? Math.min(100, Math.floor(p.max)) : 5);
+  const trim = (list: ToastEntry[]) => {
+    const keep = max();
+    const evicted = list.slice(0, Math.max(0, list.length - keep));
+    setEntries(keep ? list.slice(-keep) : []);
+    evicted.forEach((entry) => entry.options.onClose?.());
+  };
+  createEffect(() => {
+    const limit = max();
+    if (entries().length > limit) trim(entries());
+  });
 
   const dismiss = (id: string) => {
     const entry = entries().find((e) => e.id === id);
@@ -51,9 +62,8 @@ export const ToastProvider = (props: ToastProviderProps) => {
     sequence += 1;
     const id = options.id ?? `toast-${sequence}`;
     const entry: ToastEntry = { id, options };
-    setEntries((list) =>
-      list.some((e) => e.id === id) ? list.map((e) => (e.id === id ? entry : e)) : [...list, entry].slice(-p.max),
-    );
+    const list = entries();
+    trim(list.some((e) => e.id === id) ? list.map((e) => (e.id === id ? entry : e)) : [...list, entry]);
     return id;
   };
   const clear = () => entries().forEach((entry) => dismiss(entry.id));

@@ -26,9 +26,10 @@ export {
   type EditableItemId,
 } from './EditableCollection';
 export { ErrorSummary, type ErrorSummaryItem, type ErrorSummaryProps } from './ErrorSummary';
-export { FileUpload, type FileUploadProps } from './FileUpload';
+export { FileUpload, type FileUploadProps, type RejectedFile, type UploadRejectionReason } from './FileUpload';
 export { type UploadFile } from './FileUploadRow';
 export { formatBytes } from './formatBytes';
+export { type FormControlProps } from './formControl';
 export { FormGrid, type FormGridProps } from './FormGrid';
 export { type FormGap, FormLayout, type FormLayoutProps } from './FormLayout';
 export { FormSection, type FormSectionProps } from './FormSection';

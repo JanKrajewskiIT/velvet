@@ -6,6 +6,7 @@ import { ErrorState } from '../components/feedback/ErrorState';
 import { PageLoader } from '../components/feedback/PageLoader';
 import { StatusPage } from '../components/feedback/StatusPage';
 import { useTranslate } from '../i18n/useTranslate';
+import { reportAsyncError } from '../utils/reportAsyncError';
 import { createAuthAction } from './createAuthAction';
 
 export type Role = string;
@@ -37,7 +38,7 @@ export const AuthGuard = (props: AuthGuardProps) => {
   const requiredRoles = createMemo(() => (typeof p.roles === 'string' ? [p.roles] : (p.roles ?? [])));
   const hasAccess = () => requiredRoles().length === 0 || auth.hasAnyRole(...requiredRoles());
 
-  const signIn = () => void action.signIn();
+  const signIn = () => void action.signIn().catch(reportAsyncError);
 
   createEffect(
     on([auth.isLoading, auth.isAuthenticated, redirecting], ([loading, authenticated, redirect]) => {

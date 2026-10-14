@@ -1,6 +1,7 @@
-import { mergeProps, splitProps } from 'solid-js';
+import { type JSX, mergeProps, splitProps } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { callHandler } from '../../utils/callHandler';
 import { cx, modifier } from '../../utils/cx';
 import { type HtmlProps, Polymorphic } from '../../utils/polymorphic';
 import { Glyph } from './Glyph';
@@ -35,33 +36,45 @@ export const CloseButton = (props: CloseButtonProps) => {
     { variant: 'button', size: 'sm', icon: 'x', as: 'button' } satisfies CloseButtonProps,
     props,
   );
-  const [local, rest] = splitProps(merged, ['variant', 'size', 'label', 'icon', 'as', 'disabled', 'onClick', 'class']);
+  const [local, rest] = splitProps(merged, [
+    'variant',
+    'size',
+    'label',
+    'icon',
+    'as',
+    'disabled',
+    'onClick',
+    'onKeyDown',
+    'class',
+  ]);
   const translate = useTranslate();
   const isSpan = () => local.as === 'span';
 
   const fire = (e: MouseEvent | KeyboardEvent) => {
     if (isSpan()) e.stopPropagation();
+    if (local.disabled) return;
     local.onClick?.(e);
   };
-  const onKeyDown = (e: KeyboardEvent) => {
-    if (!isSpan() || (e.key !== 'Enter' && e.key !== ' ')) return;
+  const onKeyDown: JSX.EventHandler<HTMLElement, KeyboardEvent> = (e) => {
+    callHandler(local.onKeyDown, e);
+    if (e.defaultPrevented || !isSpan() || (e.key !== 'Enter' && e.key !== ' ')) return;
     e.preventDefault();
     fire(e);
   };
 
   return (
     <Polymorphic
+      {...rest}
       tag={local.as}
       type={isSpan() ? undefined : 'button'}
       role={isSpan() ? 'button' : undefined}
-      tabIndex={isSpan() ? 0 : undefined}
+      tabIndex={isSpan() ? (local.disabled ? -1 : 0) : undefined}
       disabled={isSpan() ? undefined : local.disabled}
       aria-disabled={isSpan() && local.disabled ? true : undefined}
       aria-label={local.label ?? translate('velvet.common.close')}
       class={cx(BASE[local.variant], local.variant === 'button' && modifier('vui-btn', local.size, 'md'), local.class)}
       onClick={fire}
       onKeyDown={onKeyDown}
-      {...rest}
     >
       <Glyph name={local.icon} />
     </Polymorphic>

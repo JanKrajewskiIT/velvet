@@ -1,4 +1,4 @@
-import { createSignal, createUniqueId, For, mergeProps, Show } from 'solid-js';
+import { createEffect, createSignal, createUniqueId, For, mergeProps, Show } from 'solid-js';
 
 import { createDismiss } from '../../hooks/createDismiss';
 import { createFloating } from '../../hooks/createFloating';
@@ -9,21 +9,18 @@ import { Control } from '../primitives/Control';
 import { EmptyText } from '../primitives/EmptyText';
 import { Field } from '../primitives/Field';
 import { Glyph } from '../primitives/Glyph';
+import { createFormValidation } from './createFormValidation';
 import { createTreeSelectKeyboard } from './createTreeSelectKeyboard';
 import { createTreeSelectPopup } from './createTreeSelectPopup';
 import { createTreeSelectSelection } from './createTreeSelectSelection';
 import { createTreeSelectView } from './createTreeSelectView';
+import { FormValue } from './FormValue';
 import { TreeSelectRow } from './TreeSelectRow';
 import { selectionState, type TreeSelectNode } from './treeSelectRows';
-import type {
-  TreeSelectModelProps,
-  TreeSelectMultipleProps,
-  TreeSelectProps,
-  TreeSelectSingleProps,
-} from './treeSelectTypes';
+import type { TreeSelectModelProps, TreeSelectProps } from './treeSelectTypes';
 import { TreeSelectValue } from './TreeSelectValue';
 
-export type { TreeSelectMultipleProps, TreeSelectNode, TreeSelectProps, TreeSelectSingleProps };
+export type { TreeSelectProps };
 
 /**
  * Select over hierarchical options — departments, categories, locations. Expand with the chevron or →/←, search filters and
@@ -42,9 +39,13 @@ export const TreeSelect = (props: TreeSelectProps) => {
   );
   const translate = useTranslate();
   const selection = createTreeSelectSelection(p);
+  const validation = createFormValidation();
   const listId = createUniqueId();
   const [open, setOpen] = createSignal(false);
   const [root, setRoot] = createSignal<HTMLElement>();
+  createEffect(() => {
+    if (p.disabled) setOpen(false);
+  });
   const floating = createFloating(open, root, { matchWidth: true });
   const view = createTreeSelectView(() => p.data, p.defaultExpanded);
   const rowId = (id: string) => `${listId}-${id}`;
@@ -53,6 +54,7 @@ export const TreeSelect = (props: TreeSelectProps) => {
   const popup = createTreeSelectPopup(open, view);
 
   const pick = (node: TreeSelectNode, hasChildren: boolean) => {
+    if (p.disabled) return;
     if (p.multiple) selection.toggleLeaves(node);
     else if (hasChildren && p.leavesOnly) view.toggleExpanded(node.id);
     else {
@@ -62,6 +64,10 @@ export const TreeSelect = (props: TreeSelectProps) => {
     }
   };
   const onKeyDown = createTreeSelectKeyboard(view, pick);
+  const serialized = () => {
+    const value = selection.value();
+    return Array.isArray(value) ? value : (value ?? '');
+  };
 
   return (
     <Field label={p.label} hint={p.hint} error={p.error} optional={p.optional} required={p.required} id={p.id}>
@@ -69,31 +75,62 @@ export const TreeSelect = (props: TreeSelectProps) => {
         <div ref={setRoot} class="vui-select vui-tselect">
           <Control
             size={p.size}
-            invalid={control.invalid}
+            invalid={control.invalid || validation.invalid()}
             disabled={p.disabled}
             class={cx(p.multiple && selection.picked().length > 0 && 'vui-tselect__control--tags')}
           >
+            <Show when={p.multiple && selection.picked().length > 0}>
+              <TreeSelectValue
+                picked={selection.picked()}
+                multiple
+                maxTags={p.maxTags}
+                disabled={p.disabled}
+                onRemove={selection.removePicked}
+              />
+            </Show>
             <button
               id={control.id}
               type="button"
               class="vui-tselect__trigger"
+              role="combobox"
               disabled={p.disabled}
               aria-haspopup="tree"
               aria-expanded={open()}
               aria-controls={listId}
-              aria-describedby={control.describedBy}
+              aria-describedby={validation.describedBy(control.describedBy)}
+              aria-label={p['aria-label']}
+              aria-labelledby={p['aria-labelledby'] ?? (p.label ? `${control.id}-label` : undefined)}
               onClick={() => setOpen(!open())}
             >
-              <TreeSelectValue
-                picked={selection.picked()}
-                multiple={p.multiple}
-                maxTags={p.maxTags}
-                placeholder={p.placeholder}
-                onRemove={selection.removePicked}
-              />
+              <Show when={!p.multiple || selection.picked().length === 0}>
+                <TreeSelectValue
+                  picked={selection.picked()}
+                  multiple={p.multiple}
+                  maxTags={p.maxTags}
+                  placeholder={p.placeholder}
+                  onRemove={selection.removePicked}
+                />
+              </Show>
+              <Show when={p.multiple && selection.picked().length > 0}>
+                <span class="vui-sr-only">{translate('velvet.forms.treeSelect.placeholder')}</span>
+              </Show>
             </button>
             <Glyph name="chevron-down" class="vui-control__chevron" />
           </Control>
+          <FormValue
+            name={p.name}
+            form={p.form}
+            required={p.required}
+            disabled={p.disabled}
+            validation={validation}
+            value={serialized()}
+            focusInvalid={() => root()?.querySelector<HTMLElement>('.vui-tselect__trigger')?.focus()}
+            onReset={() => {
+              selection.reset();
+              setOpen(false);
+              view.search('');
+            }}
+          />
           <Show when={open()}>
             {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions -- relays key events bubbling from the search input and the tree */}
             <div

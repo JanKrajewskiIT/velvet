@@ -1,13 +1,16 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { createMemo, createSignal, For, mergeProps, Show } from 'solid-js';
+import { createEffect, createMemo, createSignal, For, mergeProps, Show } from 'solid-js';
 
+import { createRecordKeys } from '../../hooks/createRecordKeys';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import type { RowKey } from '../data/rowData';
 import { percentOf, seriesColor } from './chartScale';
 
 const MAX_GAP = 3;
 
 export interface DonutDatum {
+  id?: RowKey;
   label: string;
   value: number;
   /** Defaults to --dv-N in order. */
@@ -15,6 +18,7 @@ export interface DonutDatum {
 }
 
 export interface DonutChartProps {
+  getKey?: (datum: DonutDatum, index: number) => RowKey;
   data: DonutDatum[];
   /** px. @default 180 */
   size?: number;
@@ -37,12 +41,40 @@ export const DonutChart = (props: DonutChartProps) => {
   const format = (v: number) => (merged.format ?? ((n: number) => i18n.formatNumber(n)))(v);
   const label = () => merged.label ?? translate('velvet.charts.donutChart.label');
   const centerLabel = () => merged.centerLabel ?? translate('velvet.charts.donutChart.centerLabel');
-  const [excluded, setExcluded] = createSignal<string[]>([]);
-  const [hover, setHover] = createSignal<string | null>(null);
+  const [excluded, setExcluded] = createSignal<RowKey[]>([]);
+  const [hover, setHover] = createSignal<RowKey | null>(null);
+  const keys = createRecordKeys(
+    () => merged.data,
+    (datum, index) => merged.getKey?.(datum, index) ?? datum.id ?? datum.label,
+    'DonutChart',
+  );
 
-  const items = createMemo(() => merged.data.map((d, i) => ({ ...d, color: d.color ?? seriesColor(i) })));
-  const visible = createMemo(() => items().filter((d) => !excluded().includes(d.label)));
-  const total = createMemo(() => visible().reduce((sum, d) => sum + d.value, 0));
+  const items = createMemo(() => {
+    if (
+      !Number.isFinite(merged.size) ||
+      merged.size <= 0 ||
+      !Number.isFinite(merged.thickness) ||
+      merged.thickness <= 0 ||
+      merged.thickness >= merged.size
+    )
+      throw new RangeError('Donut thickness must be positive and smaller than its finite size.');
+    if (merged.data.some((datum) => !Number.isFinite(datum.value) || datum.value < 0))
+      throw new RangeError('Donut values must be finite and non-negative.');
+    return merged.data.map((d, i) => ({ ...d, key: keys.keys()[i] ?? i, color: d.color ?? seriesColor(i) }));
+  });
+  createEffect(() => {
+    const available = new Set(items().map((item) => item.key));
+    setExcluded((current) => {
+      const next = current.filter((key) => available.has(key));
+      return available.size && next.length === available.size ? next.slice(1) : next;
+    });
+  });
+  const visible = createMemo(() => items().filter((d) => !excluded().includes(d.key)));
+  const total = createMemo(() => {
+    const value = visible().reduce((sum, d) => sum + d.value, 0);
+    if (!Number.isFinite(value)) throw new RangeError('Donut total must be finite.');
+    return value;
+  });
   const radius = () => (merged.size - merged.thickness) / 2;
   const circumference = () => 2 * Math.PI * radius();
   const centre = () => merged.size / 2;
@@ -58,13 +90,13 @@ export const DonutChart = (props: DonutChartProps) => {
     });
   });
 
-  const hovered = () => visible().find((d) => d.label === hover());
+  const hovered = () => visible().find((d) => d.key === hover());
   const summary = () =>
     visible()
       .map((d) => `${d.label} ${percentOf(d.value, total())}%`)
       .join(', ');
 
-  const toggle = (label: string) =>
+  const toggle = (label: RowKey) =>
     setExcluded((current) => {
       if (current.includes(label)) return current.filter((x) => x !== label);
       return visible().length > 1 ? [...current, label] : current;
@@ -82,13 +114,13 @@ export const DonutChart = (props: DonutChartProps) => {
                 cy={centre()}
                 r={radius()}
                 stroke-width={merged.thickness}
-                class={cx('vui-donut__seg', hover() && hover() !== s.label && 'vui-donut__seg--dim')}
+                class={cx('vui-donut__seg', hover() !== null && hover() !== s.key && 'vui-donut__seg--dim')}
                 style={{
                   stroke: s.color,
                   'stroke-dasharray': `${s.dash} ${circumference()}`,
                   'stroke-dashoffset': -s.offset,
                 }}
-                onMouseEnter={() => setHover(s.label)}
+                onMouseEnter={() => setHover(s.key)}
                 onMouseLeave={() => setHover(null)}
               />
             )}
@@ -110,18 +142,18 @@ export const DonutChart = (props: DonutChartProps) => {
       <ul class="vui-donut__legend">
         <For each={items()}>
           {(d) => {
-            const on = () => !excluded().includes(d.label);
+            const on = () => !excluded().includes(d.key);
             return (
               <li>
                 <button
                   type="button"
                   aria-pressed={on()}
                   class={cx('vui-donut__item', !on() && 'vui-donut__item--off')}
-                  onMouseEnter={() => on() && setHover(d.label)}
+                  onMouseEnter={() => on() && setHover(d.key)}
                   onMouseLeave={() => setHover(null)}
-                  onFocus={() => on() && setHover(d.label)}
+                  onFocus={() => on() && setHover(d.key)}
                   onBlur={() => setHover(null)}
-                  onClick={() => toggle(d.label)}
+                  onClick={() => toggle(d.key)}
                 >
                   <i style={{ background: d.color }} />
                   <span class="vui-donut__name">{d.label}</span>

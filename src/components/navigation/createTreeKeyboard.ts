@@ -1,3 +1,4 @@
+import { reportAsyncError } from '../../utils/reportAsyncError';
 import type { TreeController } from './treeController';
 import { isBranch } from './treeData';
 
@@ -46,7 +47,7 @@ export const createTreeKeyboard = (tree: TreeController) => (e: KeyboardEvent) =
     else if (e.key === 'ArrowDown') move(list[index + 1]?.id);
     else if ((e.key === 'Enter' || e.key === ' ') && row.status.kind === 'error') {
       e.preventDefault();
-      void model.loadChildren(row.owner);
+      void model.loadChildren(row.owner).catch(reportAsyncError);
     }
     return;
   }

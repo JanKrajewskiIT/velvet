@@ -1,6 +1,7 @@
 import { Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Button } from '../actions/Button';
 import type { ColorLabelSelection } from './createColorLabelSelection';
 
@@ -35,7 +36,7 @@ export const ColorLabelSelectionFooter = (props: ColorLabelSelectionFooterProps)
       <Button
         loading={props.selection.busy()}
         disabled={!props.selection.dirty()}
-        onClick={() => void props.selection.submit()}
+        onClick={() => void props.selection.submit().catch(reportAsyncError)}
       >
         {props.selection.busy() ? translate('velvet.patterns.colorLabelSelectionDialog.applying') : props.submitLabel}
       </Button>

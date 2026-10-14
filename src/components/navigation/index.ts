@@ -18,6 +18,8 @@ export { PAGE_GAP, pageRange, type PageRangeItem } from './pageRange';
 export { Pagination, type PaginationLabels, type PaginationProps } from './Pagination';
 export { type ScrollContainer } from './scrollContainer';
 export { type StepItem, Stepper, type StepperLabels, type StepperProps, type StepStatus } from './Stepper';
+export { tabIds } from './tabIds';
+export { TabPanel, type TabPanelProps } from './TabPanel';
 export { type TabItem, Tabs, type TabsProps } from './Tabs';
 export { type TreeNode } from './treeData';
 export { moveTreeNode, type TreeMove, type TreeMovePosition } from './treeMoves';

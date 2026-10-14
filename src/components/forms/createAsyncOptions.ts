@@ -2,7 +2,7 @@ import { type Accessor, createEffect, createSignal, onCleanup } from 'solid-js';
 
 import { normalizeOption, type SelectOption } from './selectOption';
 
-export const ASYNC_OPTIONS_DELAY_MS = 250;
+const ASYNC_OPTIONS_DELAY_MS = 250;
 
 export type LoadOptions = (query: string) => Promise<ReadonlyArray<string | SelectOption>>;
 
@@ -45,7 +45,7 @@ export const createAsyncOptions = (
     }
 
     let latest = true;
-    setState((previous) => ({ ...previous, loading: true, failed: false }));
+    setState({ items: [], loading: true, failed: false });
     const timer = setTimeout(() => {
       new Promise<ReadonlyArray<string | SelectOption>>((resolve) => resolve(loader(text))).then(
         (result) => {

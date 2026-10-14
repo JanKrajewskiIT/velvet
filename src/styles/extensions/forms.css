@@ -1,0 +1,31 @@
+.vui-combobox__menu {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.vui-combobox__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.vui-rangepop__preset:disabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+  background: none;
+  color: var(--fg-secondary);
+}
+
+.vui-tselect__control--tags {
+  flex-wrap: wrap;
+}
+
+.vui-tselect__control--tags > .vui-tselect__trigger {
+  flex: 1;
+  width: auto;
+  min-width: var(--space-8);
+}

@@ -129,6 +129,7 @@ export const patternsPl: TranslationOf<typeof patternsEn> = {
     badResponse: 'Zła odpowiedź',
   },
   chatThread: {
+    jumpToLatest: 'Przejdź do najnowszych wiadomości',
     label: 'Rozmowa',
   },
   colorLabelManager: {
@@ -291,6 +292,7 @@ export const patternsPl: TranslationOf<typeof patternsEn> = {
     notIncluded: '(niewliczone)',
   },
   promptInput: {
+    submitError: 'Nie udało się wysłać wiadomości. Treść została zachowana; spróbuj ponownie.',
     placeholder: 'Zapytaj o cokolwiek…',
     label: 'Wiadomość',
     attach: 'Dołącz pliki',

@@ -1,5 +1,7 @@
-import { createSignal, type JSX, mergeProps, onCleanup, onMount, Show, splitProps } from 'solid-js';
+import { createEffect, createSignal, type JSX, mergeProps, on, onCleanup, onMount, Show, splitProps } from 'solid-js';
 
+import { assignRef } from '../../utils/assignRef';
+import { callHandler } from '../../utils/callHandler';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
 import { lengthValue } from './space';
@@ -40,6 +42,9 @@ export const ScrollArea = (props: ScrollAreaProps) => {
     'class',
     'style',
     'children',
+    'onScroll',
+    'ref',
+    'tabIndex',
   ]);
   let area!: HTMLDivElement;
   const [edges, setEdges] = createSignal<ScrollEdges>({ start: false, end: false }, { equals: sameEdges });
@@ -53,11 +58,27 @@ export const ScrollArea = (props: ScrollAreaProps) => {
 
   onMount(() => {
     measure();
-    if (typeof ResizeObserver === 'undefined') return;
-    const observer = new ResizeObserver(measure);
-    observer.observe(area);
-    if (area.firstElementChild) observer.observe(area.firstElementChild);
-    onCleanup(() => observer.disconnect());
+    let frame = 0;
+    const schedule = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(measure);
+    };
+    const observer = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(schedule);
+    const observe = () => {
+      observer?.disconnect();
+      observer?.observe(area);
+      for (const child of area.children) observer?.observe(child);
+      schedule();
+    };
+    const mutations = new MutationObserver(observe);
+    mutations.observe(area, { childList: true, subtree: true, characterData: true, attributes: true });
+    observe();
+    createEffect(on(() => local.orientation, schedule));
+    onCleanup(() => {
+      observer?.disconnect();
+      mutations.disconnect();
+      cancelAnimationFrame(frame);
+    });
   });
 
   const fadeSize = (visible: boolean) => (local.fade && visible ? FADE_SIZE : '0px');
@@ -75,9 +96,13 @@ export const ScrollArea = (props: ScrollAreaProps) => {
       {...rest}
       ref={(element) => {
         area = element;
+        assignRef(local.ref, element);
       }}
-      onScroll={measure}
-      tabIndex={0}
+      onScroll={(event) => {
+        measure();
+        callHandler(local.onScroll, event);
+      }}
+      tabIndex={local.tabIndex ?? 0}
       role={local.label ? 'region' : undefined}
       aria-label={local.label}
       class={cx('vui-scroll', `vui-scroll--${AXIS[local.orientation]}`, local.class)}

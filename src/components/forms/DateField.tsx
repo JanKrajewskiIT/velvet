@@ -1,6 +1,7 @@
-import { mergeProps, Show } from 'solid-js';
+import { type JSX, mergeProps, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { assignRef } from '../../utils/assignRef';
 import { cx } from '../../utils/cx';
 import { CloseButton } from '../primitives/CloseButton';
 import { Control } from '../primitives/Control';
@@ -8,6 +9,9 @@ import { Glyph } from '../primitives/Glyph';
 
 export interface DateFieldProps {
   id: string;
+  ref?: JSX.HTMLAttributes<HTMLButtonElement>['ref'];
+  'aria-label'?: string;
+  'aria-labelledby'?: string;
   describedBy?: string;
   size?: 'sm' | 'md' | 'lg';
   invalid?: boolean;
@@ -33,6 +37,7 @@ export const DateField = (props: DateFieldProps) => {
   return (
     <Control size={p.size} invalid={p.invalid} disabled={p.disabled}>
       <button
+        ref={(element) => assignRef(p.ref, element)}
         id={p.id}
         type="button"
         class="vui-datefield"
@@ -40,6 +45,8 @@ export const DateField = (props: DateFieldProps) => {
         aria-haspopup="dialog"
         aria-expanded={p.open}
         aria-describedby={p.describedBy}
+        aria-label={p['aria-label']}
+        aria-labelledby={p['aria-labelledby']}
         onClick={() => p.onToggle()}
       >
         <Glyph name={p.icon} />

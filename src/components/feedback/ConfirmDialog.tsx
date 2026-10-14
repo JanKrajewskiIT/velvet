@@ -1,6 +1,8 @@
-import { createEffect, createSignal, type JSX, mergeProps, on, onCleanup, Show } from 'solid-js';
+import { createEffect, createSignal, type JSX, mergeProps, on, Show } from 'solid-js';
 
+import { createOperation } from '../../hooks/createOperation';
 import { useTranslate, useTranslateRich } from '../../i18n/useTranslate';
+import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Button } from '../actions/Button';
 import { Control } from '../primitives/Control';
 import { Field } from '../primitives/Field';
@@ -41,45 +43,36 @@ export const ConfirmDialog = (props: ConfirmDialogProps) => {
   const errorMessage = () => p.errorMessage ?? translate('velvet.feedback.confirmDialog.errorMessage');
   const translateRich = useTranslateRich();
   const [typed, setTyped] = createSignal('');
-  const [busy, setBusy] = createSignal(false);
+  const operation = createOperation();
+  const busy = operation.busy;
   const [failed, setFailed] = createSignal(false);
   const danger = () => p.tone === 'danger';
   const confirmed = () => !p.requireText || typed().trim() === p.requireText;
-  let run = 0;
-  let disposed = false;
-  const isCurrent = (current: number) => !disposed && p.open && current === run;
-
-  onCleanup(() => {
-    disposed = true;
-    run += 1;
-  });
-
   createEffect(
     on(
       () => p.open,
       (open) => {
-        run += 1;
+        operation.invalidate();
         if (!open) return;
         setTyped('');
-        setBusy(false);
         setFailed(false);
       },
     ),
   );
 
   const confirm = async () => {
-    if (disposed || !p.open || !confirmed() || busy()) return;
-    const current = ++run;
-    setBusy(true);
+    if (!p.open || !confirmed()) return;
+    const run = operation.begin();
+    if (!run) return;
     setFailed(false);
     try {
       await p.onConfirm?.();
     } catch (error) {
-      if (!isCurrent(current)) return;
+      if (!run.isCurrent()) return;
       setFailed(true);
       p.onError?.(error);
     } finally {
-      if (isCurrent(current)) setBusy(false);
+      run.finish();
     }
   };
 
@@ -108,7 +101,7 @@ export const ConfirmDialog = (props: ConfirmDialogProps) => {
             loading={busy()}
             disabled={!confirmed()}
             autofocus={!danger()}
-            onClick={() => void confirm()}
+            onClick={() => void confirm().catch(reportAsyncError)}
           >
             {confirmLabel()}
           </Button>
@@ -138,7 +131,7 @@ export const ConfirmDialog = (props: ConfirmDialogProps) => {
                   value={typed()}
                   onInput={(e) => setTyped(e.currentTarget.value)}
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter') void confirm();
+                    if (e.key === 'Enter') void confirm().catch(reportAsyncError);
                   }}
                   autocomplete="off"
                   spellcheck={false}

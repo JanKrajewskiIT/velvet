@@ -1,16 +1,22 @@
-import { createUniqueId, type JSX, mergeProps, Show } from 'solid-js';
+import { createMemo, createSignal, createUniqueId, type JSX, mergeProps, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { numberRange } from '../../utils/decimalValue';
 import { FieldHint } from '../primitives/FieldHint';
 import { FieldLabel } from '../primitives/FieldLabel';
+import { createFormValidation } from './createFormValidation';
+import type { FormControlProps } from './formControl';
+import { FormValue } from './FormValue';
 import { RangeBound } from './RangeBound';
 import { isInverted, type RangeBoundKey, type RangeValue } from './rangeValue';
 import { Select } from './Select';
 import type { SelectOption } from './selectOption';
 
-export interface RangeInputProps {
+export interface RangeInputProps extends FormControlProps {
+  unitName?: string;
+  periodName?: string;
   label?: JSX.Element;
   hint?: JSX.Element;
   error?: JSX.Element;
@@ -67,6 +73,11 @@ export const RangeInput = (props: RangeInputProps) => {
   const autoId = createUniqueId();
   const id = () => p.id ?? autoId;
   const hintId = () => `${id()}-hint`;
+  const validation = createFormValidation();
+  const [invalidBounds, setInvalidBounds] = createSignal({ min: false, max: false });
+  const [resetKey, setResetKey] = createSignal(0);
+  const limits = createMemo(() => numberRange(p.min, p.max));
+  let firstInput: HTMLInputElement | undefined;
 
   const [range, setRange] = createControllable<RangeValue>({
     value: () => p.value,
@@ -83,35 +94,52 @@ export const RangeInput = (props: RangeInputProps) => {
     defaultValue: p.defaultPeriod ?? '',
     onChange: (next) => p.onPeriodChange?.(next),
   });
+  const invalidNumber = () =>
+    invalidBounds().min ||
+    invalidBounds().max ||
+    [range().min, range().max].some(
+      (value) => value != null && (!Number.isFinite(value) || value < limits().min || value > limits().max),
+    );
 
   const message = () =>
     p.error ||
+    (invalidNumber() ? translate('velvet.forms.numberInput.invalidNumber') : undefined) ||
     (isInverted(range()) ? (p.invertedError ?? translate('velvet.forms.rangeInput.invertedError')) : undefined);
   const groupLabel = () => (typeof p.label === 'string' ? p.label : undefined);
   const commit = (key: RangeBoundKey) => (bound: number | null) => setRange({ ...range(), [key]: bound });
   const shared = () => ({
     locale: p.locale,
-    min: p.min,
-    max: p.max,
+    min: limits().min,
+    max: limits().max,
     size: p.size,
     disabled: p.disabled,
-    invalid: !!message(),
+    invalid: !!message() || validation.invalid(),
     prefix: p.prefix,
     suffix: p.suffix,
-    describedBy: message() || p.hint ? hintId() : undefined,
+    describedBy: validation.describedBy(message() || p.hint ? hintId() : undefined),
+    resetKey: resetKey(),
   });
 
   return (
     <div class={cx('vui-field', 'vui-range', p.class)}>
       <Show when={p.label}>
-        <FieldLabel htmlFor={`${id()}-min`} optional={p.optional} required={p.required}>
+        <FieldLabel id={`${id()}-label`} htmlFor={`${id()}-min`} optional={p.optional} required={p.required}>
           {p.label}
         </FieldLabel>
       </Show>
-      <div class="vui-range__row" role="group" aria-label={groupLabel()}>
+      <div
+        class="vui-range__row"
+        role="group"
+        aria-label={p['aria-label'] ?? groupLabel()}
+        aria-labelledby={p['aria-labelledby'] ?? (p.label ? `${id()}-label` : undefined)}
+      >
         <div class="vui-range__bounds">
           <RangeBound
             {...shared()}
+            ref={(element) => {
+              firstInput = element;
+            }}
+            onValidityChange={(invalid) => setInvalidBounds((current) => ({ ...current, min: invalid }))}
             id={`${id()}-min`}
             value={range().min}
             onCommit={commit('min')}
@@ -123,6 +151,7 @@ export const RangeInput = (props: RangeInputProps) => {
           </span>
           <RangeBound
             {...shared()}
+            onValidityChange={(invalid) => setInvalidBounds((current) => ({ ...current, max: invalid }))}
             value={range().max}
             onCommit={commit('max')}
             placeholder={toLabel()}
@@ -133,6 +162,8 @@ export const RangeInput = (props: RangeInputProps) => {
           {(options) => (
             <Select
               class="vui-range__select"
+              name={p.unitName}
+              form={p.form}
               size={p.size}
               disabled={p.disabled}
               options={options()}
@@ -147,6 +178,8 @@ export const RangeInput = (props: RangeInputProps) => {
           {(options) => (
             <Select
               class="vui-range__select vui-range__select--wide"
+              name={p.periodName}
+              form={p.form}
               size={p.size}
               disabled={p.disabled}
               options={options()}
@@ -158,6 +191,28 @@ export const RangeInput = (props: RangeInputProps) => {
           )}
         </Show>
       </div>
+      <FormValue
+        name={p.name}
+        form={p.form}
+        required={p.required}
+        disabled={p.disabled}
+        validation={validation}
+        value={[range().min == null ? '' : String(range().min), range().max == null ? '' : String(range().max)]}
+        invalidMessage={
+          invalidNumber()
+            ? translate('velvet.forms.numberInput.invalidNumber')
+            : isInverted(range())
+              ? (p.invertedError ?? translate('velvet.forms.rangeInput.invertedError'))
+              : undefined
+        }
+        focusInvalid={() => firstInput?.focus()}
+        onReset={() => {
+          setRange(p.defaultValue);
+          setUnit(p.defaultUnit ?? '');
+          setPeriod(p.defaultPeriod ?? '');
+          setResetKey((key) => key + 1);
+        }}
+      />
       <Show when={message() || p.hint}>
         <FieldHint id={hintId()} error={!!message()}>
           {message() || p.hint}

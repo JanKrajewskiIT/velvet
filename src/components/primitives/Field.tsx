@@ -60,6 +60,7 @@ export const Field = (props: FieldProps) => {
     <div class={cx('vui-field', props.class)}>
       <Show when={props.label}>
         <FieldLabel
+          id={`${id()}-label`}
           htmlFor={id()}
           optional={props.optional}
           required={props.required}

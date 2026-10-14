@@ -45,11 +45,13 @@ import { createControllable, createFrameFocus, cx, rowId } from '@jankrajewskiit
 
 The API includes class composition (`cx`, `ClassValue`), controlled/uncontrolled state (`createControllable`, `ControllableOptions`), scheduled focus (`createFrameFocus`, `FrameFocus`), client-generated ids (`createId`), numeric clamping (`clamp`), column names/widths (`columnName`, `columnWidthBounds`, `constrainColumnWidth`, `ColumnWidthBounds`, `DEFAULT_COLUMN_MIN_WIDTH`) and record values/sorting (`rowValue`, `rowId`, `cellText`, `compareValues`, `nextSort`, `RowKey`, `RowSort`). Implementations stay in their owning UI modules and are shared by the UI components and VelvetData. UI-only helpers remain private.
 
+The current source extends `/common` with strict decimals, record identity/key resolution, selection scopes, typeahead and nested-control detection. `/patterns` provides an optional CSS-free entry for composed workflows while existing root/bare exports remain available. See [behavioral contracts](docs/component-contracts.md) for form serialization/reset, asynchronous acknowledgements, scheduling and chart data. These additions have not been built or published in this revision.
+
 Create `createFrameFocus` under a Solid owner; disposal cancels its pending animation frame. The returned function accepts an optional descendant selector. `createId` generates client-side record ids; use consumer-owned stable keys for persisted records and Solid's own id primitive for hydration-sensitive DOM relationships.
 
 `createLibraryMessages(dictionary)` provides `staticTranslate`, `useTranslate` and `useTranslateRich` from one flattened fallback dictionary. The hook functions read the existing i18n provider during component setup and preserve its locale/overrides. UI formats missing messages through the public template formatters available since I18n 3.4.2, passing the active locale, interpolation/plural parameters and rich-text handlers directly. It does not look up fallback text as another dictionary key. Outside a provider the fallback uses English. A key absent from both the provider and supplied defaults remains the key itself.
 
-`staticTranslate` is available outside an owner for labels in exported constants without interpolation. `LibraryMessages` and `StaticTranslate` describe this contract. The factory contains no package-specific vocabulary: UI supplies `velvetEn`, while Data supplies its English dictionary composed with UI defaults. `RowKey` and `RowSort` remain available through the existing UI root export for compatibility. This API requires I18n `^3.4.2`; see the [release order](../VelvetData/docs/migration.md#release-order) before refreshing dependencies.
+`staticTranslate` is available outside an owner for labels in exported constants without interpolation. `LibraryMessages` and `StaticTranslate` describe this contract. The factory contains no package-specific vocabulary: UI supplies `velvetEn`, while Data supplies its English dictionary composed with UI defaults. `RowKey` and `RowSort` remain available through the existing UI root export for compatibility. The current package requires I18n `>=3.4.4 <4`; see the [release order](../VelvetData/docs/migration.md#release-order) before refreshing dependencies.
 
 ## Translations
 
@@ -95,6 +97,8 @@ Migration from the temporary prop-driven API: remove `signedIn`, `onSignIn` and 
 
 ## Scripts
 
+See [component behavior](docs/component-behavior.md) for form submission/reset, keyboard contracts, tab panels, asynchronous ownership and presentation copies.
+
 | Script                              | Purpose                               |
 | ----------------------------------- | ------------------------------------- |
 | `npm run typecheck`                 | `tsc -b` for the library              |
@@ -135,6 +139,12 @@ Protect the default branch with:
 - a branch that is up to date before merging;
 - force pushes and non-administrative direct pushes disabled.
 
+## Optional stylesheet groups
+
+The existing package root and `@jankrajewskiit/ui/styles` retain the full stylesheet contract. `@jankrajewskiit/ui/bare` exposes the same JavaScript API without importing CSS. Use it when choosing `styles/base`, optional `styles/fonts`, and the required groups: `actions`, `display`, `forms`, `feedback`, `layout`, `navigation`, `menus`, `data`, `patterns`, `charts` and `media`. Import base first. Groups contain their owned extension styles; base includes keyboard-focus, forced-colors and reduced-motion defaults. Fonts remain separate so an application can choose its own typography or load the WOFF2 resources independently.
+
+The build copies the CSS tree into `dist/styles`; relative imports and font URLs are preserved for the application's bundler. Do not combine the full stylesheet with selected groups. Components composed from several families need those families as well; this is an explicit composition contract, not automatic CSS dependency inference. Dialogs support `initialFocus` and `restoreFocus` for task-specific focus placement and a fallback after the trigger disappears.
+
 ## Tooling gates
 
 Configs 3.5 owns Vite plugins, staged-file chunking and the Velvet Stylelint naming preset. The consumer keeps its runtimes and stylesheet exclusions. The root ESLint override selects ESLint 10 for accessibility-plugin peers; the preset also adapts legacy rule APIs. `verify` runs formatting, ESLint, Stylelint, the build, package validation and size limits. The JavaScript budget covers all published `dist/**/*.mjs` modules compressed individually with Brotli (450 kB); it measures package output, not a tree-shaken application bundle or external peer dependencies.
@@ -158,3 +168,7 @@ Semgrep excludes the read-only design-system reference in `velvet/` through `.se
 Knip is available through `npm run deps:check` (JSON report) and `npm run deps:strict` (blocking unused-code check). CI records the report while the initial findings are reviewed; security scans remain blocking. Public library entry exports are preserved.
 
 Configure `CONFIGS_READ_TOKEN` for private Configs source access alongside the existing npm read token. See [shared security controls](https://github.com/JanKrajewskiIT/velvetconfigs/blob/v3.5.0/security/README.md) for required GitHub settings, reports, image signing, staging variables, WAF activation and manual acceptance checks.
+
+## Code quality
+
+The shared Configs policy runs architecture, duplication and strict unused-code checks through `npm run quality:check` in `verify`. See [quality controls and rollout](https://github.com/JanKrajewskiIT/velvetconfigs/blob/main/quality/README.md) for commands, reports and CodeQL activation. No tests or coverage gate are added.

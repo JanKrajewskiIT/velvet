@@ -1,6 +1,7 @@
 import { Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Button } from '../actions/Button';
 import type { ColorLabelManagerController } from './createColorLabelManager';
 
@@ -26,7 +27,7 @@ export const ColorLabelManagerFooter = (props: ColorLabelManagerFooterProps) => 
             {translate('velvet.common.cancel')}
           </Button>
           <Button
-            onClick={() => void props.manager.save()}
+            onClick={() => void props.manager.save().catch(reportAsyncError)}
             disabled={!current().name.trim() || props.manager.busy()}
             loading={props.manager.busy()}
           >

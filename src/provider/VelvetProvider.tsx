@@ -6,6 +6,7 @@ import { ErrorState } from '../components/feedback/ErrorState';
 import { ToastProvider, type ToastProviderProps } from '../components/feedback/ToastProvider';
 import { velvetMessages } from '../i18n';
 import { initTheme } from '../theme/theme';
+import { reportAsyncError } from '../utils/reportAsyncError';
 
 export const LOCALE_STORAGE_KEY = 'vui-locale';
 
@@ -20,6 +21,8 @@ export interface VelvetProviderProps {
   toasts?: Omit<ToastProviderProps, 'children'>;
   /** Replaces the default retry screen shown when rendering throws. */
   errorFallback?: (error: unknown, reset: () => void) => JSX.Element;
+  /** Receives rendering failures once per boundary failure. The application owns redaction and reporting. */
+  onError?: (error: unknown) => void;
   children?: JSX.Element;
 }
 
@@ -35,7 +38,8 @@ export const VelvetProvider = (props: VelvetProviderProps) => {
   onMount(() => onCleanup(initTheme()));
 
   const fallback = (error: unknown, reset: () => void) => {
-    console.error(error);
+    if (props.onError) props.onError(error);
+    else reportAsyncError(error);
     return props.errorFallback?.(error, reset) ?? <ErrorState size="lg" onRetry={reset} />;
   };
 

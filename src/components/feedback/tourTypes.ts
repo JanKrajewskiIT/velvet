@@ -1,6 +1,6 @@
 import type { JSX } from 'solid-js';
 
-export type TourPlacement = 'bottom' | 'top' | 'left' | 'right';
+type TourPlacement = 'bottom' | 'top' | 'left' | 'right';
 export type CardSide = TourPlacement | 'center';
 
 export interface TourStep {

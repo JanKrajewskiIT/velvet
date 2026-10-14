@@ -86,7 +86,7 @@ export const ContextMenu = (props: ContextMenuProps) => {
   };
 
   return (
-    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+    // eslint-disable-next-line jsx-a11y/no-static-element-interactions -- delegates context-menu events from the supplied content; the focusable zone also handles Shift+F10
     <div
       ref={(element) => {
         zone = element;

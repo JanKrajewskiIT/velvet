@@ -36,6 +36,7 @@ export const dataEn = defineDictionary({
     showingFront: '{label} (showing front)',
   },
   kanban: {
+    moveError: 'Couldn’t move the card. Try again.',
     cardFallback: 'Card',
     cardMoved: '{card} moved to {column}, position {position}',
     addCard: 'Add card to {column}',
@@ -68,6 +69,7 @@ export const dataEn = defineDictionary({
     showAnswer: 'Show answer',
   },
   scheduler: {
+    slotLabel: 'Add event at {time} on {date}. Use arrows to choose a slot, Enter to create.',
     viewDay: 'Day',
     viewWeek: 'Week',
     navigateLabel: 'Navigate',

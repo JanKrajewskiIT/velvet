@@ -1,14 +1,17 @@
 import { Glyph } from '../primitives/Glyph';
+import { ComboboxOption } from './ComboboxOption';
 
 export interface AutocompleteCustomOptionProps {
   label: string;
+  id: string;
+  active: boolean;
+  onHover: () => void;
   onPick: () => void;
 }
 
 export const AutocompleteCustomOption = (props: AutocompleteCustomOptionProps) => (
-  // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions -- keyboard handled by the combobox input; pointer-only shortcut for the custom entry
-  <li class="vui-select__option" onMouseDown={(e) => e.preventDefault()} onClick={() => props.onPick()}>
+  <ComboboxOption id={props.id} selected={false} active={props.active} onHover={props.onHover} onPick={props.onPick}>
     <Glyph name="plus" />
     {props.label}
-  </li>
+  </ComboboxOption>
 );

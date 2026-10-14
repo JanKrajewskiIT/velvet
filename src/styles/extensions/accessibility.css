@@ -1,0 +1,37 @@
+:where(.vui-form-value) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+:where([class^='vui-'], [class*=' vui-']):focus-visible {
+  outline: 2px solid currentcolor;
+  outline-offset: 3px;
+}
+
+@media (forced-colors: active) {
+  :where([class^='vui-'], [class*=' vui-']):focus-visible {
+    outline: 2px solid Highlight !important;
+    outline-offset: 3px !important;
+    box-shadow: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vui-toast__progress {
+    display: none;
+  }
+
+  :where([class^='vui-'], [class*=' vui-']),
+  :where([class^='vui-'], [class*=' vui-'])::before,
+  :where([class^='vui-'], [class*=' vui-'])::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

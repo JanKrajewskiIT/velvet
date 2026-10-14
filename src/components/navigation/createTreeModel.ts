@@ -1,6 +1,7 @@
 import { type Accessor, createMemo } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
+import { reportAsyncError } from '../../utils/reportAsyncError';
 import { createTreeLoading } from './createTreeLoading';
 import { flattenTree, hasChildren, leavesOf, reuseRows, type TreeNode, type TreeRow } from './treeData';
 import type { TreeViewConfig } from './treeViewTypes';
@@ -44,7 +45,7 @@ export const createTreeModel = (config: TreeViewConfig): TreeModel => {
     if (want) next.add(node.id);
     else next.delete(node.id);
     setExpanded([...next]);
-    if (shouldLoadChildren && want && node.lazy && !hasChildren(node)) void loadChildren(node);
+    if (shouldLoadChildren && want && node.lazy && !hasChildren(node)) void loadChildren(node).catch(reportAsyncError);
   };
   const toggleNode = (node: TreeNode) => setNodeOpen(node, !open().has(node.id));
   const expandSiblingsOf = (row: TreeRow) => {

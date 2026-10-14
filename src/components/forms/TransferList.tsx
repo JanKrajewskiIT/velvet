@@ -9,8 +9,6 @@ import { VisuallyHidden } from '../primitives/VisuallyHidden';
 import { type TransferItem, type TransferRowState, type TransferSide } from './transferItem';
 import { TransferPanel } from './TransferPanel';
 
-export type { TransferItem, TransferRowState };
-
 export interface TransferListProps {
   items: TransferItem[];
   /** Ordered values of the right list. */

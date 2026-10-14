@@ -4,10 +4,18 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { clamp } from '../../utils/math';
 import { REDUCED_MOTION_QUERY } from '../../utils/motion';
+import { nonNegativeNumber, positiveInteger } from '../../utils/numericOption';
 import { IconButton } from '../actions/IconButton';
 
 const DRAG_THRESHOLD_PX = 4;
 const SWIPE_DISTANCE_PX = 50;
+const DEFAULT_PER_VIEW = 1;
+const DEFAULT_GAP_PX = 16;
+const DEFAULT_AUTOPLAY_MS = 0;
+const MAX_TIMER_MS = 2147483647;
+const INDEPENDENT_CONTROL =
+  'input,textarea,select,button,a[href],[contenteditable]:not([contenteditable="false"]),[role="slider"],[role="combobox"],[role="spinbutton"],[role="tab"],[role="menuitem"],[role="option"],[role="gridcell"],[role="treeitem"],[tabindex]:not([tabindex="-1"])';
+const CAROUSEL_CONTROL = '.vui-carousel__arrow,.vui-carousel__dot,.vui-carousel__play';
 
 export interface CarouselProps {
   slides: JSX.Element[];
@@ -27,14 +35,14 @@ export interface CarouselProps {
   class?: string;
 }
 
-/** Horizontal slider: arrows, dots, swipe/drag, ←→ keys. Off-screen slides are inert. Autoplay pauses on hover/focus and is disabled under reduced motion. */
+/** Horizontal slider with inert off-screen slides. Focus stops autoplay until explicitly resumed; hover pauses it temporarily. */
 export const Carousel = (props: CarouselProps) => {
   const p = mergeProps(
     {
-      perView: 1,
-      gap: 16,
+      perView: DEFAULT_PER_VIEW,
+      gap: DEFAULT_GAP_PX,
       loop: false,
-      autoplay: 0,
+      autoplay: DEFAULT_AUTOPLAY_MS,
       showDots: true,
       showArrows: true,
     } satisfies Partial<CarouselProps>,
@@ -45,20 +53,23 @@ export const Carousel = (props: CarouselProps) => {
   let dragStartX: number | undefined;
   const [position, setPosition] = createSignal(0);
   const [hovered, setHovered] = createSignal(false);
-  const [focused, setFocused] = createSignal(false);
   const [userPaused, setUserPaused] = createSignal(false);
   const [reducedMotion, setReducedMotion] = createSignal(false);
   const [dragOffset, setDragOffset] = createSignal(0);
   const [width, setWidth] = createSignal(0);
 
   const slides = createMemo(() => p.slides);
-  const max = () => Math.max(0, slides().length - p.perView);
+  const perView = () => positiveInteger(p.perView, DEFAULT_PER_VIEW);
+  const gap = () => nonNegativeNumber(p.gap, DEFAULT_GAP_PX);
+  const autoplay = () => Math.min(MAX_TIMER_MS, Math.trunc(nonNegativeNumber(p.autoplay, DEFAULT_AUTOPLAY_MS)));
+  const max = () => Math.max(0, slides().length - perView());
   const index = () => Math.min(position(), max());
-  const paused = () => userPaused() || hovered() || focused();
-  const slideWidth = () => (width() - p.gap * (p.perView - 1)) / p.perView;
-  const offset = () => -(index() * (slideWidth() + p.gap)) + dragOffset();
+  const paused = () => userPaused() || hovered();
+  const slideWidth = () => Math.max(0, (width() - gap() * (perView() - 1)) / perView());
+  const offset = () => -(index() * (slideWidth() + gap())) + dragOffset();
   const dots = createMemo(() => Array.from({ length: max() + 1 }, (_, k) => k));
-  const visible = (k: number) => k >= index() && k < index() + p.perView;
+  const visible = (k: number) => k >= index() && k < index() + perView();
+  const rotating = () => autoplay() > 0 && !paused() && !reducedMotion() && max() > 0;
   const go = (target: number) => {
     if (p.loop) setPosition(target < 0 ? max() : target > max() ? 0 : target);
     else setPosition(clamp(target, 0, max()));
@@ -78,8 +89,8 @@ export const Carousel = (props: CarouselProps) => {
   });
 
   createEffect(() => {
-    const interval = p.autoplay;
-    if (!interval || paused() || reducedMotion()) return;
+    if (!rotating()) return;
+    const interval = autoplay();
     const timer = setInterval(() => setPosition((x) => (x >= max() ? 0 : x + 1)), interval);
     onCleanup(() => clearInterval(timer));
   });
@@ -97,9 +108,10 @@ export const Carousel = (props: CarouselProps) => {
       aria-label={p.label ?? translate('velvet.media.carousel.label')}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      onFocusIn={() => setFocused(true)}
-      onFocusOut={() => setFocused(false)}
+      onFocusIn={() => setUserPaused(true)}
       onKeyDown={(e) => {
+        if (e.defaultPrevented || !(e.target instanceof Element)) return;
+        if (e.target.closest(INDEPENDENT_CONTROL) && !e.target.closest(CAROUSEL_CONTROL)) return;
         if (e.key === 'ArrowRight') go(index() + 1);
         else if (e.key === 'ArrowLeft') go(index() - 1);
         else return;
@@ -112,6 +124,13 @@ export const Carousel = (props: CarouselProps) => {
         }}
         class="vui-carousel__viewport"
         onPointerDown={(e) => {
+          if (
+            e.defaultPrevented ||
+            (e.target instanceof Element &&
+              (e.target.closest(INDEPENDENT_CONTROL) ||
+                e.target.closest('.vui-carousel__viewport') !== e.currentTarget))
+          )
+            return;
           if (e.pointerType === 'mouse' && e.button !== 0) return;
           dragStartX = e.clientX;
         }}
@@ -130,11 +149,12 @@ export const Carousel = (props: CarouselProps) => {
           endDrag();
         }}
         onPointerCancel={endDrag}
+        onLostPointerCapture={endDrag}
       >
         <div
           class={cx('vui-carousel__track', dragOffset() !== 0 && 'vui-carousel__track--drag')}
-          style={{ gap: `${p.gap}px`, transform: `translateX(${offset()}px)` }}
-          aria-live={p.autoplay && !paused() ? 'off' : 'polite'}
+          style={{ gap: `${gap()}px`, transform: `translateX(${offset()}px)` }}
+          aria-live={rotating() ? 'off' : 'polite'}
         >
           <For each={slides()}>
             {(slide, k) => (
@@ -153,7 +173,7 @@ export const Carousel = (props: CarouselProps) => {
           </For>
         </div>
       </div>
-      <Show when={p.showArrows && slides().length > p.perView}>
+      <Show when={p.showArrows && slides().length > perView()}>
         <IconButton
           variant="raised"
           shape="circle"
@@ -173,20 +193,22 @@ export const Carousel = (props: CarouselProps) => {
           onClick={() => go(index() + 1)}
         />
       </Show>
-      <Show when={p.showDots && max() > 0}>
+      <Show when={(p.showDots && max() > 0) || autoplay() > 0}>
         <div class="vui-carousel__dots">
-          <For each={dots()}>
-            {(k) => (
-              <button
-                type="button"
-                aria-label={translate('velvet.media.carousel.goTo', { index: k + 1 })}
-                aria-current={k === index() ? true : undefined}
-                class={cx('vui-carousel__dot', k === index() && 'vui-carousel__dot--on')}
-                onClick={() => setPosition(k)}
-              />
-            )}
-          </For>
-          <Show when={p.autoplay > 0}>
+          <Show when={p.showDots && max() > 0}>
+            <For each={dots()}>
+              {(k) => (
+                <button
+                  type="button"
+                  aria-label={translate('velvet.media.carousel.goTo', { index: k + 1 })}
+                  aria-current={k === index() ? true : undefined}
+                  class={cx('vui-carousel__dot', k === index() && 'vui-carousel__dot--on')}
+                  onClick={() => setPosition(k)}
+                />
+              )}
+            </For>
+          </Show>
+          <Show when={autoplay() > 0}>
             <IconButton
               variant="soft"
               shape="circle"

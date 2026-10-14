@@ -1,0 +1,21 @@
+name: CodeQL
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  schedule:
+    - cron: '41 6 * * 2'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  analysis:
+    uses: JanKrajewskiIT/velvetconfigs/.github/workflows/codeql-analysis.yml@f69d3572370104eb3015fbd46c5fa86bdbb1cdad # v3.6.3
+    permissions:
+      actions: read
+      contents: read
+      security-events: write

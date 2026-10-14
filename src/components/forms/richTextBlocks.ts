@@ -28,7 +28,7 @@ const EXITABLE_WHEN_EMPTY = /^(LI|BLOCKQUOTE|H2|H3)$/u;
 const STRAY_LIVE_MARKUP =
   ':scope>div,:scope>br,:scope>strong,:scope>em,:scope>u,:scope>s,:scope>code,:scope>a,span,font,b,i,[style]';
 
-export const retag = (block: Element, tag: string): Element => {
+const retag = (block: Element, tag: string): Element => {
   const element = document.createElement(tag);
   element.append(...block.childNodes);
   block.replaceWith(element);

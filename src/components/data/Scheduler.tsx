@@ -1,4 +1,4 @@
-import { createEffect, For, type JSX, mergeProps } from 'solid-js';
+import { createEffect, createMemo, For, type JSX, mergeProps } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
@@ -10,6 +10,7 @@ import { createSchedulerNow } from './createSchedulerNow';
 import { cssLength } from './rowData';
 import { SchedulerColumn } from './SchedulerColumn';
 import type { SchedulerController } from './schedulerController';
+import { schedulerOptions } from './schedulerOptions';
 import { SchedulerToolbar } from './SchedulerToolbar';
 import type { SchedulerConfig, SchedulerProps, SchedulerView } from './schedulerTypes';
 
@@ -20,7 +21,7 @@ const MIN_DAY_COLUMN_PX: Record<SchedulerView, number> = { day: 200, week: 96 };
 
 /** Day / week time grid for bookings, shifts and meetings. Overlapping events split into lanes, a now-line marks the current time, clicking an empty slot reports the slot (snap to `slotMinutes`) so you can open a create dialog. Use EventCalendar for a month overview, Timeline for sequences without a clock. */
 export const Scheduler = (props: SchedulerProps): JSX.Element => {
-  const p: SchedulerConfig = mergeProps(
+  const raw: SchedulerConfig = mergeProps(
     {
       events: [],
       defaultView: 'week',
@@ -35,6 +36,24 @@ export const Scheduler = (props: SchedulerProps): JSX.Element => {
     } satisfies Partial<SchedulerProps>,
     props,
   );
+  const options = createMemo(() => schedulerOptions(raw));
+  const p: SchedulerConfig = mergeProps(raw, {
+    get startHour() {
+      return options().startHour;
+    },
+    get endHour() {
+      return options().endHour;
+    },
+    get slotMinutes() {
+      return options().slotMinutes;
+    },
+    get hourHeight() {
+      return options().hourHeight;
+    },
+    get weekStartsOn() {
+      return options().weekStartsOn;
+    },
+  });
   const translate = useTranslate();
   const { locale, formatTime } = createSchedulerFormat(p);
   const calendar = createSchedulerCalendar(p, locale);

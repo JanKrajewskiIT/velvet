@@ -1,6 +1,6 @@
 import type { JSX } from 'solid-js';
 
-import { minutesOfDay } from '../../utils/date';
+import { minutesOfDay, sameDay } from '../../utils/date';
 
 const MINUTES_PER_DAY = 1440;
 const MIN_EVENT_HEIGHT = 20;
@@ -60,10 +60,12 @@ export interface SchedulerGrid {
 export const eventStyle = (e: TimedEvent, lane: number, lanes: number, grid: SchedulerGrid) => {
   const startMinutes = minutesOfDay(e.start);
   const top = Math.max(0, (startMinutes - grid.startHour * 60) * grid.pxPerMinute);
-  const visibleEnd = Math.min(minutesOfDay(e.end) || MINUTES_PER_DAY, grid.endHour * 60);
-  const height = Math.max(
-    MIN_EVENT_HEIGHT,
-    (visibleEnd - Math.max(startMinutes, grid.startHour * 60)) * grid.pxPerMinute - 2,
+  const visibleEnd = Math.min(sameDay(e.start, e.end) ? minutesOfDay(e.end) : MINUTES_PER_DAY, grid.endHour * 60);
+  const visibleStart = Math.max(startMinutes, grid.startHour * 60);
+  const availableHeight = Math.max(0, (grid.endHour * 60 - visibleStart) * grid.pxPerMinute);
+  const height = Math.min(
+    availableHeight,
+    Math.max(MIN_EVENT_HEIGHT, (visibleEnd - visibleStart) * grid.pxPerMinute - 2),
   );
   const style: JSX.CSSProperties = {
     top: `${top}px`,

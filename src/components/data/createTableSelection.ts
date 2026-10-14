@@ -1,5 +1,6 @@
-import type { Accessor } from 'solid-js';
+import { type Accessor, createEffect, on } from 'solid-js';
 
+import { toggleKey, toggleKeyScope } from '../../utils/keySelection';
 import type { RowKey } from './rowData';
 
 export interface TableSelectionOptions<T extends object> {
@@ -8,6 +9,7 @@ export interface TableSelectionOptions<T extends object> {
   selected: Accessor<RowKey[]>;
   onChange: (keys: RowKey[]) => void;
   keyOf: (row: T, index: number) => RowKey;
+  dataKey: Accessor<string | number | undefined>;
 }
 
 export interface TableSelection {
@@ -23,7 +25,17 @@ export interface TableSelection {
 }
 
 export const createTableSelection = <T extends object>(options: TableSelectionOptions<T>): TableSelection => {
-  let lastIndex: number | undefined;
+  let anchor: RowKey | undefined;
+  createEffect(
+    on(
+      options.dataKey,
+      () => {
+        anchor = undefined;
+        options.onChange([]);
+      },
+      { defer: true },
+    ),
+  );
 
   const isSelected = (key: RowKey) => options.selected().includes(key);
   const allKeys = () => options.rows().map((r, i) => options.keyOf(r, i));
@@ -31,12 +43,13 @@ export const createTableSelection = <T extends object>(options: TableSelectionOp
   const someOn = () => !allOn() && allKeys().some(isSelected);
   const set = (keys: RowKey[]) => options.onChange(keys);
   const clear = () => set([]);
-  const toggle = (key: RowKey) =>
-    set(isSelected(key) ? options.selected().filter((x) => x !== key) : [...options.selected(), key]);
-  const toggleAll = () => set(allOn() ? [] : allKeys());
+  const toggle = (key: RowKey) => set(toggleKey(options.selected(), key));
+  const toggleAll = () => set(toggleKeyScope(options.selected(), allKeys()));
 
   const clickCheck = (e: MouseEvent, index: number, key: RowKey) => {
-    if (e.shiftKey && lastIndex !== undefined) {
+    const lastIndex =
+      anchor === undefined ? -1 : options.sorted().findIndex((row, at) => options.keyOf(row, at) === anchor);
+    if (e.shiftKey && lastIndex >= 0) {
       const from = Math.min(lastIndex, index);
       const to = Math.max(lastIndex, index);
       const rangeKeys = options
@@ -52,7 +65,7 @@ export const createTableSelection = <T extends object>(options: TableSelectionOp
     } else {
       toggle(key);
     }
-    lastIndex = index;
+    anchor = key;
   };
 
   return { isSelected, allOn, someOn, allKeys, set, clear, toggle, toggleAll, clickCheck };

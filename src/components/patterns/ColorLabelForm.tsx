@@ -1,6 +1,7 @@
 import { For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Control } from '../primitives/Control';
 import { FieldLabel } from '../primitives/FieldLabel';
 import type { LabelDraft } from './colorLabelManagerTypes';
@@ -32,7 +33,7 @@ export const ColorLabelForm = (props: ColorLabelFormProps) => {
             value={props.draft.name}
             onInput={(e) => props.manager.rename(e.currentTarget.value)}
             onKeyDown={(e) => {
-              if (e.key === 'Enter') void props.manager.save();
+              if (e.key === 'Enter') void props.manager.save().catch(reportAsyncError);
             }}
             aria-invalid={!!props.manager.nameError() || undefined}
           />

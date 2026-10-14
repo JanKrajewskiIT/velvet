@@ -1,18 +1,25 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { createUniqueId, type JSX, mergeProps, Show } from 'solid-js';
+import { createEffect, createUniqueId, type JSX, mergeProps, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
+import { createToday } from '../../hooks/createToday';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
-import { fmtDate, startOfDay } from '../../utils/date';
+import { fmtDate } from '../../utils/date';
 import { Button } from '../actions/Button';
 import { FieldLabel } from '../primitives/FieldLabel';
 import { Calendar } from './Calendar';
 import { callbackAlias } from './callbackAlias';
+import { createFormValidation } from './createFormValidation';
 import { createPickerPopover } from './createPickerPopover';
+import { isDateAllowed } from './dateConstraints';
 import { DateField } from './DateField';
+import type { FormControlProps } from './formControl';
+import { formDate } from './formDate';
+import { FormValue } from './FormValue';
 
-export interface DatePickerProps {
+export interface DatePickerProps extends FormControlProps {
+  serializeValue?: (date: Date) => string;
   label?: JSX.Element;
   hint?: JSX.Element;
   error?: JSX.Element;
@@ -59,6 +66,8 @@ export const DatePicker = (props: DatePickerProps) => {
   );
   const i18n = useI18n();
   const translate = useTranslate();
+  const validation = createFormValidation();
+  const today = createToday();
   const locale = () => p.locale ?? i18n.locale();
   const autoId = createUniqueId();
   const id = () => p.id ?? autoId;
@@ -72,12 +81,21 @@ export const DatePicker = (props: DatePickerProps) => {
     ),
   });
   const popover = createPickerPopover(p.defaultOpen, () => p.align);
+  let trigger!: HTMLButtonElement;
+  createEffect(() => {
+    if (p.disabled) popover.close();
+  });
+  const serialized = () => {
+    const date = current();
+    return date ? (p.serializeValue ?? formDate)(date) : '';
+  };
   const text = () => {
     const date = current();
     if (!date) return '';
     return p.format ? p.format(date) : fmtDate(date, locale());
   };
   const choose = (date: Date | null) => {
+    if (p.disabled || (date && !isDateAllowed(date, p))) return;
     setCurrent(date);
     popover.closeToField();
   };
@@ -87,21 +105,39 @@ export const DatePicker = (props: DatePickerProps) => {
       <span ref={popover.setWrap} class="vui-popover-wrap vui-datepicker">
         <div class="vui-field" style={{ width: '100%' }}>
           <Show when={p.label}>
-            <FieldLabel htmlFor={id()} optional={p.optional}>
+            <FieldLabel htmlFor={id()} optional={p.optional} required={p.required}>
               {p.label}
             </FieldLabel>
           </Show>
           <DateField
+            ref={(element) => {
+              trigger = element;
+            }}
+            aria-label={p['aria-label']}
+            aria-labelledby={p['aria-labelledby']}
             id={id()}
-            describedBy={p.error || p.hint ? hintId() : undefined}
+            describedBy={validation.describedBy(p.error || p.hint ? hintId() : undefined)}
             size={p.size}
-            invalid={!!p.error}
+            invalid={!!p.error || validation.invalid()}
             disabled={p.disabled}
             text={text()}
             placeholder={p.placeholder ?? translate('velvet.forms.datePicker.placeholder')}
             open={popover.open()}
             onToggle={() => popover.setOpen(!popover.open())}
             onClear={p.clearable ? () => setCurrent(null) : undefined}
+          />
+          <FormValue
+            validation={validation}
+            name={p.name}
+            form={p.form}
+            required={p.required}
+            disabled={p.disabled}
+            value={serialized()}
+            focusInvalid={() => trigger.focus()}
+            onReset={() => {
+              setCurrent(p.defaultValue ?? null);
+              popover.close();
+            }}
           />
         </div>
         <Show when={popover.open()}>
@@ -122,7 +158,7 @@ export const DatePicker = (props: DatePickerProps) => {
               weekStartsOn={p.weekStartsOn}
             />
             <div class="vui-datepop__foot">
-              <Button variant="ghost" size="sm" onClick={() => choose(startOfDay(new Date()))}>
+              <Button variant="ghost" size="sm" disabled={!isDateAllowed(today(), p)} onClick={() => choose(today())}>
                 {translate('velvet.common.today')}
               </Button>
               <Show when={p.clearable && current()}>

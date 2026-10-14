@@ -1,5 +1,6 @@
 import {
   createEffect,
+  createMemo,
   createSignal,
   createUniqueId,
   type JSX,
@@ -11,20 +12,20 @@ import {
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
+import { assignRef } from '../../utils/assignRef';
 import { cx } from '../../utils/cx';
+import { decimalPlaces, numberRange, parseDecimal } from '../../utils/decimalValue';
 import { clamp } from '../../utils/math';
 import { Control } from '../primitives/Control';
 import { Field } from '../primitives/Field';
 import { Glyph } from '../primitives/Glyph';
 import { callHandler } from './callHandler';
+import { createFormValidation } from './createFormValidation';
+import { FormValue } from './FormValue';
 
 const HOLD_DELAY_MS = 450;
 const HOLD_REPEAT_MS = 60;
 const SHIFT_MULTIPLIER = 10;
-const NON_NUMERIC = /[^\d.,-]/gu;
-
-const decimalPlaces = (step: number): number => String(step).split('.')[1]?.length ?? 0;
-const parseNumber = (text: string): number => parseFloat(text.replace(',', '.'));
 
 export interface NumberInputProps extends Omit<
   JSX.InputHTMLAttributes<HTMLInputElement>,
@@ -82,6 +83,9 @@ export const NumberInput = (props: NumberInputProps) => {
     'onBlur',
     'onInput',
     'onKeyDown',
+    'name',
+    'form',
+    'required',
   ]);
   const translate = useTranslate();
   const autoId = createUniqueId();
@@ -93,19 +97,29 @@ export const NumberInput = (props: NumberInputProps) => {
   });
   /** What the user is typing; `undefined` while the field shows the committed value. */
   const [draft, setDraft] = createSignal<string>();
-  const places = () => decimalPlaces(local.step);
+  const validation = createFormValidation();
+  const bounds = createMemo(() => numberRange(local.min, local.max, local.step));
+  const places = () => decimalPlaces(bounds().step);
+  const invalidDraft = () => draft() !== undefined && parseDecimal(draft()) === undefined;
+  const message = () =>
+    invalidDraft() || !Number.isFinite(current()) || current() < bounds().min || current() > bounds().max
+      ? translate('velvet.forms.numberInput.invalidNumber')
+      : undefined;
+  let input: HTMLInputElement | undefined;
   const atMin = () => current() <= local.min;
   const atMax = () => current() >= local.max;
 
   const commit = (n: number) => {
-    setCurrent(clamp(Number(n.toFixed(places())), local.min, local.max));
+    if (local.disabled || !Number.isFinite(n)) return;
+    setCurrent(clamp(places() <= 100 ? Number(n.toFixed(places())) : n, bounds().min, bounds().max));
     setDraft(undefined);
   };
   const commitDraft = () => {
-    const parsed = parseNumber(draft() ?? '');
-    commit(Number.isNaN(parsed) ? current() : parsed);
+    if (draft() === undefined) return;
+    const parsed = parseDecimal(draft());
+    if (parsed !== undefined) commit(parsed);
   };
-  const bump = (direction: 1 | -1, multiplier = 1) => commit((current() || 0) + direction * local.step * multiplier);
+  const bump = (direction: 1 | -1, multiplier = 1) => commit((current() || 0) + direction * bounds().step * multiplier);
 
   let holdTimer: ReturnType<typeof setTimeout> | undefined;
   let repeatTimer: ReturnType<typeof setInterval> | undefined;
@@ -115,7 +129,7 @@ export const NumberInput = (props: NumberInputProps) => {
   };
   onCleanup(stopHold);
   createEffect(() => {
-    if (atMin() || atMax()) stopHold();
+    if (local.disabled || atMin() || atMax()) stopHold();
   });
   const stepHandlers = (direction: 1 | -1) => ({
     onPointerDown: (e: PointerEvent) => {
@@ -131,7 +145,7 @@ export const NumberInput = (props: NumberInputProps) => {
     onPointerLeave: stopHold,
     onPointerCancel: stopHold,
     onKeyDown: (e: KeyboardEvent) => {
-      if (e.key !== 'Enter' && e.key !== ' ') return;
+      if (local.disabled || (e.key !== 'Enter' && e.key !== ' ')) return;
       e.preventDefault();
       bump(direction);
     },
@@ -139,6 +153,7 @@ export const NumberInput = (props: NumberInputProps) => {
 
   const onKeyDown: JSX.EventHandler<HTMLInputElement, KeyboardEvent> = (e) => {
     callHandler(local.onKeyDown, e);
+    if (e.defaultPrevented || local.disabled) return;
     const multiplier = e.shiftKey ? SHIFT_MULTIPLIER : 1;
     if (e.key === 'ArrowUp') {
       e.preventDefault();
@@ -158,7 +173,14 @@ export const NumberInput = (props: NumberInputProps) => {
   };
 
   return (
-    <Field label={local.label} hint={local.hint} error={local.error} optional={local.optional} id={id()}>
+    <Field
+      label={local.label}
+      hint={local.hint}
+      error={local.error || message()}
+      optional={local.optional}
+      required={local.required}
+      id={id()}
+    >
       {(control) => (
         <Control
           size={local.size}
@@ -178,22 +200,24 @@ export const NumberInput = (props: NumberInputProps) => {
           </button>
           <input
             {...rest}
+            ref={(element) => {
+              input = element;
+              assignRef(rest.ref, element);
+            }}
             id={control.id}
             type="text"
             role="spinbutton"
             inputMode={places() ? 'decimal' : 'numeric'}
-            aria-valuenow={current()}
+            aria-valuenow={Number.isFinite(current()) ? current() : undefined}
             aria-valuemin={Number.isFinite(local.min) ? local.min : undefined}
             aria-valuemax={Number.isFinite(local.max) ? local.max : undefined}
-            aria-invalid={control.invalid || undefined}
-            aria-describedby={control.describedBy}
+            aria-invalid={control.invalid || validation.invalid() || undefined}
+            aria-describedby={validation.describedBy(control.describedBy)}
             class="vui-control__input vui-number__input"
             value={draft() ?? String(current())}
             disabled={local.disabled}
             onInput={(e) => {
-              const typed = e.currentTarget.value.replace(NON_NUMERIC, '');
-              e.currentTarget.value = typed;
-              setDraft(typed);
+              setDraft(e.currentTarget.value);
               callHandler(local.onInput, e);
             }}
             onBlur={(e) => {
@@ -201,6 +225,21 @@ export const NumberInput = (props: NumberInputProps) => {
               callHandler(local.onBlur, e);
             }}
             onKeyDown={onKeyDown}
+          />
+          <FormValue
+            name={local.name}
+            form={local.form}
+            required={local.required}
+            disabled={local.disabled}
+            value={Number.isFinite(current()) ? String(current()) : ''}
+            validation={validation}
+            invalidMessage={message()}
+            focusInvalid={() => input?.focus()}
+            onReset={() => {
+              setCurrent(local.defaultValue);
+              setDraft(undefined);
+              stopHold();
+            }}
           />
           <Show when={local.suffix}>
             <span class="vui-control__affix vui-control__affix--end" style={{ 'padding-left': 0 }}>

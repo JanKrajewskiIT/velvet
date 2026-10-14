@@ -1,3 +1,4 @@
+import { calendarDays } from '../../utils/calendarInterval';
 import { addDays, DAY_MS, startOfDay, toDate, ymd } from '../../utils/date';
 import { createId } from '../../utils/id';
 
@@ -34,7 +35,7 @@ const UNTIMED_SORT_KEY = '99';
 
 export const createEventId = (): string => createId('e');
 
-export const dayDistance = (from: Date, to: Date): number =>
+const dayDistance = (from: Date, to: Date): number =>
   Math.round((startOfDay(to).getTime() - startOfDay(from).getTime()) / DAY_MS);
 
 const isValidDate = (d: Date): boolean => !Number.isNaN(d.getTime());
@@ -57,10 +58,11 @@ export const eventsByDay = (events: readonly OrganizerEvent[]): Map<string, Orga
   const days = new Map<string, OrganizerEvent[]>();
   for (const event of events) {
     const start = eventStart(event);
-    const length = Math.min(MAX_SPAN_DAYS, dayDistance(start, eventEnd(event)));
-    for (let offset = 0; offset <= length; offset++) {
-      const key = ymd(addDays(start, offset));
-      days.set(key, [...(days.get(key) ?? []), event]);
+    for (const day of calendarDays(start, eventEnd(event), MAX_SPAN_DAYS + 1)) {
+      const key = ymd(day);
+      const list = days.get(key) ?? [];
+      list.push(event);
+      days.set(key, list);
     }
   }
   for (const list of days.values())

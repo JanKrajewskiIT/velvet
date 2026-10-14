@@ -7,6 +7,7 @@ import { Spinner } from '../components/feedback/Spinner';
 import { Glyph } from '../components/primitives/Glyph';
 import { useTranslate } from '../i18n/useTranslate';
 import { cx } from '../utils/cx';
+import { reportAsyncError } from '../utils/reportAsyncError';
 import { createAuthAction } from './createAuthAction';
 
 export interface AuthButtonProps extends Omit<JSX.ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
@@ -58,7 +59,7 @@ export const AuthButton = (props: AuthButtonProps) => {
     if (typeof handler === 'function') handler(event);
     else if (handler) handler[0](handler[1], event);
     if (event.defaultPrevented || local.disabled || busy()) return;
-    void (auth.isAuthenticated() ? action.signOut() : action.signIn());
+    void (auth.isAuthenticated() ? action.signOut() : action.signIn()).catch(reportAsyncError);
   };
 
   return (

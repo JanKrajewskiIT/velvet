@@ -5,7 +5,6 @@
 .vui-stepper--horizontal .vui-step__inner{flex-direction:column;gap:var(--space-2)}
 .vui-stepper--horizontal .vui-step__text{padding:0 var(--space-3) 0 0}
 .vui-stepper--horizontal .vui-step__line{top:calc(var(--marker-size) / 2);left:calc(var(--marker-size) + var(--space-2));right:var(--space-2);height:var(--rail-w);border-radius:var(--radius-2xs)}
-.vui-stepper--horizontal .vui-step:last-child{flex:0 0 auto}
 .vui-stepper--vertical{flex-direction:column}
 .vui-stepper--vertical .vui-step{padding-bottom:var(--space-5)}
 .vui-stepper--vertical .vui-step:last-child{padding-bottom:0}

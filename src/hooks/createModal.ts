@@ -7,7 +7,8 @@ const FOCUSABLE =
 
 export interface ModalOptions {
   onEscape?: () => void;
-  initialFocus?: string;
+  initialFocus?: string | undefined;
+  restoreFocus?: (() => HTMLElement | undefined) | undefined;
 }
 
 interface ScrollLock {
@@ -35,7 +36,8 @@ const focusInitial = (root: HTMLDialogElement, selector?: string) => {
   const target =
     (selector && root.querySelector<HTMLElement>(selector)) ||
     root.querySelector<HTMLElement>('[autofocus]') ||
-    root.querySelector<HTMLElement>(FOCUSABLE);
+    root.querySelector<HTMLElement>(FOCUSABLE) ||
+    root.querySelector<HTMLElement>('[data-vui-focus-fallback]');
   target?.focus({ preventScroll: true });
 };
 
@@ -63,8 +65,9 @@ export const createModal = (
       dialog.removeEventListener('cancel', onCancel);
       dialog.close();
       unlock();
-      if (previouslyFocused?.isConnected && !previouslyFocused.closest('[inert]')) {
-        previouslyFocused.focus({ preventScroll: true });
+      const target = previouslyFocused?.isConnected ? previouslyFocused : options.restoreFocus?.();
+      if (target?.isConnected && !target.closest('[inert]') && !target.closest('dialog:not([open])')) {
+        target.focus({ preventScroll: true });
       }
     });
   });

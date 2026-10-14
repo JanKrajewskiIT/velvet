@@ -1,6 +1,7 @@
 import { Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { reportAsyncError } from '../../utils/reportAsyncError';
 import type { VideoControls } from './createVideoControls';
 import { PlayerButton } from './PlayerButton';
 import { fmtTime } from './time';
@@ -99,7 +100,7 @@ export const VideoControlsBar = (props: VideoControlsBarProps) => {
               : 'velvet.media.videoPlayer.fullscreenKey',
             { key: 'f' },
           )}
-          onClick={() => void props.controls.toggleFullscreen()}
+          onClick={() => void props.controls.toggleFullscreen().catch(reportAsyncError)}
         />
       </div>
     </div>

@@ -6,12 +6,15 @@ import { cx } from '../../utils/cx';
 import { Tag } from '../display/Tag';
 import { Control } from '../primitives/Control';
 import { Field } from '../primitives/Field';
+import { createFormValidation } from './createFormValidation';
+import type { FormControlProps } from './formControl';
+import { FormValue } from './FormValue';
 
 const DUPLICATE_FLASH_MS = 600;
 const LIST_SEPARATOR = ',';
 const PASTED_LIST = /[,\n]/u;
 
-export interface TagInputProps {
+export interface TagInputProps extends FormControlProps {
   label?: JSX.Element;
   hint?: JSX.Element;
   error?: JSX.Element;
@@ -56,6 +59,7 @@ export const TagInput = (props: TagInputProps) => {
   });
   const [text, setText] = createSignal('');
   const [duplicate, setDuplicate] = createSignal<number>();
+  const validation = createFormValidation();
   let input!: HTMLInputElement;
   let flashTimer: ReturnType<typeof setTimeout> | undefined;
   onCleanup(() => clearTimeout(flashTimer));
@@ -67,6 +71,7 @@ export const TagInput = (props: TagInputProps) => {
     flashTimer = setTimeout(() => setDuplicate(undefined), DUPLICATE_FLASH_MS);
   };
   const add = (raw: string) => {
+    if (p.disabled) return;
     const next = [...tags()];
     const parts = raw
       .split(LIST_SEPARATOR)
@@ -82,11 +87,13 @@ export const TagInput = (props: TagInputProps) => {
     setText('');
   };
   const remove = (index: number) => {
+    if (p.disabled) return;
     setTags(tags().filter((_, at) => at !== index));
     input.focus();
   };
 
   const onKeyDown: JSX.EventHandler<HTMLInputElement, KeyboardEvent> = (e) => {
+    if (p.disabled || e.isComposing) return;
     if (p.separators.includes(e.key) && text().trim()) {
       e.preventDefault();
       add(text());
@@ -102,13 +109,14 @@ export const TagInput = (props: TagInputProps) => {
       hint={p.hint}
       error={p.error}
       optional={p.optional}
+      required={p.required}
       id={id()}
       count={tags().length}
       maxCount={p.max}
     >
       {(control) => (
         <Control
-          invalid={control.invalid}
+          invalid={control.invalid || validation.invalid()}
           disabled={p.disabled}
           class={cx('vui-taginput', p.size === 'sm' && 'vui-taginput--sm', p.class)}
           onMouseDown={(e) => {
@@ -138,12 +146,15 @@ export const TagInput = (props: TagInputProps) => {
             id={control.id}
             class="vui-taginput__input"
             value={text()}
-            disabled={p.disabled || isFull()}
+            disabled={p.disabled}
+            readOnly={isFull()}
             placeholder={
               isFull() || tags().length ? '' : (p.placeholder ?? translate('velvet.forms.tagInput.placeholder'))
             }
-            aria-describedby={control.describedBy}
-            aria-invalid={control.invalid || undefined}
+            aria-describedby={validation.describedBy(control.describedBy)}
+            aria-invalid={control.invalid || validation.invalid() || undefined}
+            aria-label={p['aria-label']}
+            aria-labelledby={p['aria-labelledby']}
             onInput={(e) => {
               const typed = e.currentTarget.value;
               if (typed.includes(LIST_SEPARATOR) && p.separators.includes(LIST_SEPARATOR)) add(typed);
@@ -159,6 +170,21 @@ export const TagInput = (props: TagInputProps) => {
               if (!PASTED_LIST.test(pasted)) return;
               e.preventDefault();
               add(pasted.replace(/\n/gu, LIST_SEPARATOR));
+            }}
+          />
+          <FormValue
+            name={p.name}
+            form={p.form}
+            required={p.required}
+            disabled={p.disabled}
+            value={tags()}
+            validation={validation}
+            focusInvalid={() => input.focus()}
+            onReset={() => {
+              setTags(p.defaultValue);
+              setText('');
+              setDuplicate(undefined);
+              clearTimeout(flashTimer);
             }}
           />
         </Control>

@@ -33,6 +33,7 @@ export const DialogPanel = (props: DialogPanelProps) => {
     >
       <div
         tabIndex={-1}
+        data-vui-focus-fallback
         class={cx(
           'vui-dialog',
           drawer() && 'vui-dialog--drawer',

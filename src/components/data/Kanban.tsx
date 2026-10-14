@@ -3,15 +3,16 @@ import { createSignal, createUniqueId, For, type JSX, Show } from 'solid-js';
 import { createFrameFocus } from '../../hooks/createFrameFocus';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
-import { clamp } from '../../utils/math';
+import { isInteractiveTarget } from '../../utils/interactiveTarget';
 import { IconButton } from '../actions/IconButton';
 import { Count } from '../primitives/Count';
 import { Dot } from '../primitives/Dot';
 import { EmptyText } from '../primitives/EmptyText';
+import { createKanbanMove } from './createKanbanMove';
 import { KanbanCardBody } from './KanbanCardBody';
 import type { KanbanCard, KanbanProps } from './kanbanTypes';
 
-export type { KanbanCard, KanbanColumn, KanbanProps } from './kanbanTypes';
+export type { KanbanCard, KanbanColumn, KanbanMove, KanbanProps } from './kanbanTypes';
 
 interface DropTarget {
   column: string;
@@ -32,28 +33,20 @@ export const Kanban = (props: KanbanProps): JSX.Element => {
   const focusFrame = createFrameFocus(() => board);
   const cardsIn = (columnId: string) => props.cards.filter((c) => c.column === columnId);
 
-  const move = (id: KanbanCard['id'], columnId: string, index?: number) => {
-    const card = props.cards.find((x) => x.id === id);
-    if (!card) return;
-    const rest = props.cards.filter((x) => x.id !== id);
-    const inColumn = rest.filter((x) => x.column === columnId);
-    const at = index == null ? inColumn.length : clamp(index, 0, inColumn.length);
-    const before = inColumn[at];
-    const moved = { ...card, column: columnId };
-    const insertAt = before ? rest.indexOf(before) : rest.length;
-    props.onCardsChange?.([...rest.slice(0, insertAt), moved, ...rest.slice(insertAt)]);
-    const column = props.columns.find((x) => x.id === columnId);
+  const movement = createKanbanMove(props, (card, column, at) => {
     setAnnouncement(
       translate('velvet.data.kanban.cardMoved', {
         card: typeof card.title === 'string' ? card.title : translate('velvet.data.kanban.cardFallback'),
-        column: column?.title ?? columnId,
+        column: column.title,
         position: at + 1,
       }),
     );
-    focusFrame(`[data-card="${CSS.escape(String(id))}"]`);
-  };
+    focusFrame(`[data-card="${CSS.escape(String(card.id))}"]`);
+  });
+  const move = movement.move;
 
   const onCardKey = (e: KeyboardEvent & { currentTarget: HTMLElement }, card: KanbanCard) => {
+    if (props.disabled || e.defaultPrevented || e.target !== e.currentTarget) return;
     if (!(e.ctrlKey || e.metaKey || e.altKey)) {
       if (e.key === 'Enter') props.onCardClick?.(card);
       if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
@@ -63,6 +56,7 @@ export const Kanban = (props: KanbanProps): JSX.Element => {
       }
       return;
     }
+    if (!movement.movable()) return;
     const columnIndex = props.columns.findIndex((x) => x.id === card.column);
     const siblings = cardsIn(card.column);
     const position = siblings.findIndex((x) => x.id === card.id);
@@ -106,10 +100,16 @@ export const Kanban = (props: KanbanProps): JSX.Element => {
         board = element;
       }}
       class={cx('vui-kanban', props.class)}
+      aria-busy={movement.pending() || undefined}
     >
       <span class="vui-sr-only" aria-live="assertive">
         {announcement()}
       </span>
+      <Show when={movement.failed()}>
+        <div class="vui-hint vui-hint--error" role="alert">
+          {props.moveErrorText ?? translate('velvet.data.kanban.moveError')}
+        </div>
+      </Show>
       <For each={props.columns}>
         {(col) => {
           const list = () => cardsIn(col.id);
@@ -153,6 +153,7 @@ export const Kanban = (props: KanbanProps): JSX.Element => {
                       icon="plus"
                       label={translate('velvet.data.kanban.addCard', { column: col.title })}
                       size="sm"
+                      disabled={props.disabled}
                       onClick={() => onAdd()(col.id)}
                       style={{ 'margin-left': 'auto' }}
                     />
@@ -176,11 +177,15 @@ export const Kanban = (props: KanbanProps): JSX.Element => {
                         data-card={card.id}
                         // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- each card is a keyboard-operable item (arrows move focus, modifiers move the card)
                         tabIndex={0}
-                        draggable={true}
+                        draggable={movement.movable()}
                         class={cx('vui-kanban__card', dragId() === card.id && 'vui-kanban__card--drag')}
                         aria-roledescription={translate('velvet.data.kanban.cardRoleDescription')}
                         aria-describedby={helpId}
                         onDragStart={(e) => {
+                          if (!movement.movable() || isInteractiveTarget(e.target, e.currentTarget)) {
+                            e.preventDefault();
+                            return;
+                          }
                           setDragId(card.id);
                           if (!e.dataTransfer) return;
                           e.dataTransfer.effectAllowed = 'move';
@@ -188,7 +193,10 @@ export const Kanban = (props: KanbanProps): JSX.Element => {
                         }}
                         onDragEnd={endDrag}
                         onKeyDown={(e) => onCardKey(e, card)}
-                        onClick={() => props.onCardClick?.(card)}
+                        onClick={(event) => {
+                          if (!props.disabled && !isInteractiveTarget(event.target, event.currentTarget))
+                            props.onCardClick?.(card);
+                        }}
                       >
                         <KanbanCardBody card={card} render={props.renderCard} />
                       </article>

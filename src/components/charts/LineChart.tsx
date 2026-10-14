@@ -3,10 +3,11 @@ import { createMemo, createSignal, createUniqueId, For, Index, mergeProps, Show,
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { clamp } from '../../utils/math';
+import { positiveNumber } from '../../utils/numericOption';
 import { Button } from '../actions/Button';
 import { VisuallyHidden } from '../primitives/VisuallyHidden';
 import { ChartLegend } from './ChartLegend';
-import { type ChartDatum, type ChartSeries, colorOf, defaultSeries, valueOf } from './chartSeries';
+import { type ChartDatum, type ChartSeries, chartValueText, colorOf, defaultSeries, valueOf } from './chartSeries';
 import { createChartFormat } from './createChartFormat';
 import { createLineCursor } from './createLineCursor';
 import { createLineGeometry, LINE_PAD } from './createLineGeometry';
@@ -42,6 +43,7 @@ export const LineChart = (props: LineChartProps) => {
   const { ref, width } = createWidth();
   const [table, setTable] = createSignal(untrack(() => props.showTable ?? false));
   const gradientId = createUniqueId();
+  const height = () => positiveNumber(merged.height, 240);
 
   const label = () => merged.label ?? translate('velvet.charts.lineChart.label');
   const series = createMemo(() => merged.series ?? defaultSeries(translate));
@@ -49,7 +51,7 @@ export const LineChart = (props: LineChartProps) => {
     data: () => merged.data,
     series,
     width,
-    height: () => merged.height,
+    height,
     curved: () => merged.curved,
     area: () => merged.area,
     gradientId,
@@ -61,7 +63,7 @@ export const LineChart = (props: LineChartProps) => {
   const hovered = () => (hover() >= 0 ? merged.data[hover()] : undefined);
   const announcement = (d: ChartDatum) =>
     `${d.label}: ${series()
-      .map((s) => `${s.label} ${format(valueOf(d, s.key))}`)
+      .map((s) => `${s.label} ${chartValueText(d, s.key, format, translate('velvet.charts.chartSeries.noValue'))}`)
       .join(', ')}`;
 
   return (
@@ -81,10 +83,10 @@ export const LineChart = (props: LineChartProps) => {
         </Button>
       </div>
       <Show when={!table()} fallback={<LineChartTable data={merged.data} series={series()} format={format} />}>
-        <div class="vui-chart__plot" style={{ height: `${merged.height}px` }}>
+        <div class="vui-chart__plot" style={{ height: `${height()}px` }}>
           <svg
             width={width()}
-            height={merged.height}
+            height={height()}
             role="img"
             aria-label={translate('velvet.charts.lineChart.instructions', { label: label() })}
             tabindex={0}
@@ -119,7 +121,7 @@ export const LineChart = (props: LineChartProps) => {
                 <Show when={i() % geometry.labelEvery() === 0}>
                   <text
                     x={x(i())}
-                    y={merged.height - 8}
+                    y={height() - 8}
                     text-anchor="middle"
                     class={cx('vui-chart__tick', hover() === i() && 'vui-chart__tick--on')}
                   >
@@ -150,13 +152,15 @@ export const LineChart = (props: LineChartProps) => {
                   />
                   <Index each={series()}>
                     {(s, k) => (
-                      <circle
-                        cx={x(hover())}
-                        cy={y(valueOf(d(), s().key))}
-                        r="4.5"
-                        class="vui-chart__pt"
-                        style={{ stroke: colorOf(s(), k) }}
-                      />
+                      <Show when={valueOf(d(), s().key) !== undefined}>
+                        <circle
+                          cx={x(hover())}
+                          cy={y(valueOf(d(), s().key) ?? 0)}
+                          r="4.5"
+                          class="vui-chart__pt"
+                          style={{ stroke: colorOf(s(), k) }}
+                        />
+                      </Show>
                     )}
                   </Index>
                 </>

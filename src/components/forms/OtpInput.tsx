@@ -4,9 +4,13 @@ import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { clamp } from '../../utils/math';
+import { positiveInteger } from '../../utils/numericOption';
 import { FieldHint } from '../primitives/FieldHint';
 import { FieldLabel } from '../primitives/FieldLabel';
 import { Separator } from '../primitives/Separator';
+import { createFormValidation } from './createFormValidation';
+import type { FormControlProps } from './formControl';
+import { FormValue } from './FormValue';
 
 const BLANK = ' ';
 const NUMERIC_CHAR = /^[0-9]$/u;
@@ -14,7 +18,7 @@ const ALPHANUMERIC_CHAR = /^[a-z0-9]$/iu;
 const SIX_BOXES = 6;
 const EIGHT_BOXES = 8;
 
-export interface OtpInputProps {
+export interface OtpInputProps extends FormControlProps {
   /** @default 6 */
   length?: number;
   label?: JSX.Element;
@@ -47,6 +51,8 @@ const defaultGroupAt = (length: number): number => {
 export const OtpInput = (props: OtpInputProps) => {
   const p = mergeProps({ length: SIX_BOXES, numeric: true, defaultValue: '' } satisfies OtpInputProps, props);
   const translate = useTranslate();
+  const validation = createFormValidation();
+  const length = () => Math.min(32, positiveInteger(p.length, SIX_BOXES));
   const cellLabel = (index: number, length: number) =>
     p.cellLabel ? p.cellLabel(index, length) : translate('velvet.forms.otpInput.cellLabel', { index, length });
   const autoId = createUniqueId();
@@ -56,26 +62,28 @@ export const OtpInput = (props: OtpInputProps) => {
     defaultValue: p.defaultValue,
     onChange: (next) => {
       p.onValueChange?.(next);
-      if (next.length === p.length && !next.includes(BLANK)) p.onComplete?.(next);
+      if (next.length === length() && !next.includes(BLANK)) p.onComplete?.(next);
     },
   });
   const cells: HTMLInputElement[] = [];
 
   /** One entry per box; `BLANK` marks an empty one. */
-  const slots = () => stored().slice(0, p.length).padEnd(p.length, BLANK).split('');
+  const slots = () => stored().slice(0, length()).padEnd(length(), BLANK).split('');
   const charAt = (index: number) => {
     const char = slots()[index];
     return char && char !== BLANK ? char : '';
   };
-  const split = () => p.groupAt ?? defaultGroupAt(p.length);
+  const split = () => p.groupAt ?? defaultGroupAt(length());
   const accepted = (chars: string) => {
     const pattern = p.numeric ? NUMERIC_CHAR : ALPHANUMERIC_CHAR;
     const kept = Array.from(chars).filter((char) => pattern.test(char));
     return p.numeric ? kept : kept.map((char) => char.toUpperCase());
   };
-  const commit = (next: string[]) => setStored(next.join('').replace(/\s+$/u, ''));
+  const commit = (next: string[]) => {
+    if (!p.disabled) setStored(next.join('').replace(/\s+$/u, ''));
+  };
   const focusCell = (index: number) => {
-    const cell = cells[clamp(index, 0, p.length - 1)];
+    const cell = cells[clamp(index, 0, length() - 1)];
     cell?.focus();
     cell?.select();
   };
@@ -83,7 +91,7 @@ export const OtpInput = (props: OtpInputProps) => {
     const next = slots();
     let at = index;
     for (const char of chars) {
-      if (at >= p.length) break;
+      if (at >= length()) break;
       next[at++] = char;
     }
     commit(next);
@@ -91,6 +99,7 @@ export const OtpInput = (props: OtpInputProps) => {
   };
 
   const onKeyDown = (index: number, e: KeyboardEvent) => {
+    if (p.disabled || e.isComposing) return;
     if (e.key === 'Backspace') {
       e.preventDefault();
       const next = slots();
@@ -122,9 +131,16 @@ export const OtpInput = (props: OtpInputProps) => {
   };
 
   return (
-    <div class="vui-field" role="group" aria-labelledby={p.label ? `${id()}-label` : undefined}>
+    <div
+      class="vui-field"
+      role="group"
+      aria-label={p['aria-label']}
+      aria-labelledby={p['aria-labelledby'] ?? (p.label ? `${id()}-label` : undefined)}
+    >
       <Show when={p.label}>
-        <FieldLabel id={`${id()}-label`}>{p.label}</FieldLabel>
+        <FieldLabel id={`${id()}-label`} required={p.required}>
+          {p.label}
+        </FieldLabel>
       </Show>
       <div class={cx('vui-otp', p.class)}>
         <Index each={slots()}>
@@ -143,12 +159,12 @@ export const OtpInput = (props: OtpInputProps) => {
                 value={charAt(index)}
                 inputMode={p.numeric ? 'numeric' : 'text'}
                 autocomplete={index === 0 ? 'one-time-code' : 'off'}
-                maxLength={p.length}
+                maxLength={length()}
                 disabled={p.disabled}
                 autofocus={p.autoFocus && index === 0}
-                aria-label={cellLabel(index + 1, p.length)}
-                aria-invalid={!!p.error || undefined}
-                aria-describedby={p.error || p.hint ? `${id()}-hint` : undefined}
+                aria-label={cellLabel(index + 1, length())}
+                aria-invalid={!!p.error || validation.invalid() || undefined}
+                aria-describedby={validation.describedBy(p.error || p.hint ? `${id()}-hint` : undefined)}
                 onInput={(e) => onInput(index, e.currentTarget)}
                 onKeyDown={(e) => onKeyDown(index, e)}
                 onPaste={(e) => onPaste(index, e)}
@@ -158,6 +174,16 @@ export const OtpInput = (props: OtpInputProps) => {
           )}
         </Index>
       </div>
+      <FormValue
+        name={p.name}
+        form={p.form}
+        required={p.required}
+        disabled={p.disabled}
+        validation={validation}
+        value={stored().length === length() && !stored().includes(BLANK) ? stored() : ''}
+        focusInvalid={() => focusCell(0)}
+        onReset={() => setStored(p.defaultValue)}
+      />
       <Show when={p.error || p.hint}>
         <FieldHint id={`${id()}-hint`} error={!!p.error} aria-live="polite">
           {p.error || p.hint}

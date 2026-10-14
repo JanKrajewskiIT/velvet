@@ -1,8 +1,10 @@
 import { batch, createSignal, type JSX, mergeProps, onCleanup, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
+import { createOperation } from '../../hooks/createOperation';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { reportAsyncError } from '../../utils/reportAsyncError';
 import { IconButton } from '../actions/IconButton';
 import { Control } from '../primitives/Control';
 import { Glyph } from '../primitives/Glyph';
@@ -45,12 +47,14 @@ export const InlineEdit = (props: InlineEditProps) => {
   const [draft, setDraft] = createSignal('');
   const [error, setError] = createSignal<string>();
   const [saved, setSaved] = createSignal(false);
-  const [busy, setBusy] = createSignal(false);
+  const operation = createOperation({ concurrency: 'single-flight' });
+  const busy = operation.busy;
   let trigger: HTMLButtonElement | undefined;
   let flashTimer: ReturnType<typeof setTimeout> | undefined;
   onCleanup(() => clearTimeout(flashTimer));
 
   const close = (restoreFocus: boolean) => {
+    operation.invalidate();
     batch(() => {
       setEditing(false);
       setError(undefined);
@@ -59,7 +63,8 @@ export const InlineEdit = (props: InlineEditProps) => {
   };
 
   const start = () => {
-    if (p.disabled) return;
+    if (p.disabled || busy()) return;
+    operation.invalidate();
     batch(() => {
       setDraft(current());
       setError(undefined);
@@ -74,7 +79,7 @@ export const InlineEdit = (props: InlineEditProps) => {
   };
 
   const save = async (restoreFocus: boolean) => {
-    if (busy() || p.disabled) return;
+    if (!editing() || busy() || p.disabled) return;
     const next = draft().trim();
     const invalid = p.validate?.(next);
     if (invalid) {
@@ -82,20 +87,21 @@ export const InlineEdit = (props: InlineEditProps) => {
       return;
     }
     if (next !== current()) {
-      setBusy(true);
+      const run = operation.begin();
+      if (!run) return;
       try {
         await p.onSave?.(next);
       } catch {
-        batch(() => {
-          setBusy(false);
-          setError(p.saveErrorText ?? translate('velvet.forms.inlineEdit.saveErrorText'));
-        });
+        if (run.isCurrent()) setError(p.saveErrorText ?? translate('velvet.forms.inlineEdit.saveErrorText'));
+        run.finish();
         return;
       }
-      batch(() => {
-        setBusy(false);
-        setCurrent(next);
-      });
+      if (!run.isCurrent()) {
+        run.finish();
+        return;
+      }
+      run.finish();
+      setCurrent(next);
       flashSaved();
     }
     close(restoreFocus);
@@ -104,7 +110,7 @@ export const InlineEdit = (props: InlineEditProps) => {
   const onKeyDown: JSX.EventHandler<HTMLInputElement, KeyboardEvent> = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      void save(true);
+      void save(true).catch(reportAsyncError);
     } else if (event.key === 'Escape') {
       event.preventDefault();
       close(true);
@@ -115,6 +121,7 @@ export const InlineEdit = (props: InlineEditProps) => {
 
   const focusAndSelect = (input: HTMLInputElement) =>
     queueMicrotask(() => {
+      if (!input.isConnected) return;
       input.focus();
       input.select();
     });
@@ -137,6 +144,8 @@ export const InlineEdit = (props: InlineEditProps) => {
           )}
           onClick={start}
           disabled={p.disabled}
+          aria-disabled={p.disabled || busy() || undefined}
+          aria-busy={busy() || undefined}
           aria-label={p.label ? `${p.label}: ${current() || placeholder()}` : undefined}
         >
           <span class="vui-inline-edit__text">{current() || placeholder()}</span>
@@ -159,7 +168,7 @@ export const InlineEdit = (props: InlineEditProps) => {
               setError(undefined);
             }}
             onKeyDown={onKeyDown}
-            onBlur={() => void save(false)}
+            onBlur={() => void save(false).catch(reportAsyncError)}
           />
         </Control>
         <Show when={!p.disabled}>
@@ -171,7 +180,7 @@ export const InlineEdit = (props: InlineEditProps) => {
             disabled={busy()}
             aria-busy={busy() || undefined}
             onMouseDown={keepInputFocus}
-            onClick={() => void save(true)}
+            onClick={() => void save(true).catch(reportAsyncError)}
           />
         </Show>
         <IconButton

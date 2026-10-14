@@ -31,7 +31,7 @@ const TIME_FORMAT = new Intl.DateTimeFormat('en-GB', {
   second: '2-digit',
 });
 
-export const detectLevel = (message: string): LogLevel => {
+const detectLevel = (message: string): LogLevel => {
   const keyword = LEVEL_PATTERN.exec(message)?.[1]?.toUpperCase();
   if (!keyword) return 'info';
   if (keyword.startsWith('ERR') || keyword === 'FATAL') return 'error';

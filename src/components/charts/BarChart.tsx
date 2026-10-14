@@ -3,11 +3,12 @@ import { createMemo, createSignal, For, mergeProps, Show } from 'solid-js';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { clamp } from '../../utils/math';
+import { positiveNumber } from '../../utils/numericOption';
 import { VisuallyHidden } from '../primitives/VisuallyHidden';
-import { niceTicks } from './chartScale';
-import { type ChartDatum, type ChartSeries, colorOf, defaultSeries, valueOf } from './chartSeries';
+import { type ChartDatum, type ChartSeries, chartValueText, colorOf, defaultSeries, valueOf } from './chartSeries';
 import { createChartFormat } from './createChartFormat';
 import { createWidth } from './createWidth';
+import { numericScale } from './numericScale';
 
 const PAD = { l: 40, r: 8, t: 12, b: 28 } as const;
 const MAX_GROUP_WIDTH = 56;
@@ -37,46 +38,58 @@ export const BarChart = (props: BarChartProps) => {
   const format = createChartFormat(() => merged.format);
   const { ref, width } = createWidth();
   const [hover, setHover] = createSignal(-1);
+  const height = () => positiveNumber(merged.height, 240);
 
   const label = () => merged.label ?? translate('velvet.charts.barChart.label');
   const series = createMemo(() => merged.series ?? defaultSeries(translate));
-  const innerWidth = () => width() - PAD.l - PAD.r;
-  const innerHeight = () => merged.height - PAD.t - PAD.b;
+  const innerWidth = () => Math.max(0, width() - PAD.l - PAD.r);
+  const innerHeight = () => Math.max(0, height() - PAD.t - PAD.b);
   const lastIndex = () => merged.data.length - 1;
 
-  const ticks = createMemo(() => {
-    const totals = merged.data.map((d) =>
-      merged.stacked
-        ? series().reduce((sum, s) => sum + valueOf(d, s.key), 0)
-        : Math.max(...series().map((s) => valueOf(d, s.key))),
-    );
-    return niceTicks(Math.max(1, ...totals));
+  const scale = createMemo(() => {
+    const totals = merged.data.flatMap((datum) => {
+      const values = series().flatMap((entry) => {
+        const value = valueOf(datum, entry.key);
+        return value === undefined ? [] : [value];
+      });
+      if (!merged.stacked) return values;
+      const positive = values.filter((value) => value >= 0).reduce((sum, value) => sum + value, 0);
+      const negative = values.filter((value) => value < 0).reduce((sum, value) => sum + value, 0);
+      if (!Number.isFinite(positive) || !Number.isFinite(negative))
+        throw new RangeError('Stacked chart totals must be finite.');
+      return [positive, negative];
+    });
+    return numericScale(totals);
   });
-  const top = () => ticks().at(-1) ?? 1;
-  const y = (v: number) => PAD.t + innerHeight() - (v / top()) * innerHeight();
+  const ticks = () => scale().ticks;
+  const y = (v: number) => PAD.t + innerHeight() * (1 - scale().position(v));
   const band = () => innerWidth() / Math.max(1, merged.data.length);
   const groupWidth = () => Math.min(MAX_GROUP_WIDTH, band() * 0.64);
-  const barWidth = () => (merged.stacked ? groupWidth() : groupWidth() / series().length);
+  const barWidth = () => (merged.stacked ? groupWidth() : groupWidth() / Math.max(1, series().length));
   const bandCentre = (i: number) => PAD.l + band() * i + band() / 2;
 
   const bars = (d: ChartDatum, i: number) => {
     const x0 = PAD.l + band() * i + (band() - groupWidth()) / 2;
-    let acc = 0;
-    return series().map((s, k) => {
+    let positive = 0;
+    let negative = 0;
+    return series().flatMap((s, k) => {
       const v = valueOf(d, s.key);
-      const h = (v / top()) * innerHeight();
+      if (v === undefined) return [];
       const stackedBar = merged.stacked;
+      const from = stackedBar ? (v >= 0 ? positive : negative) : 0;
+      const to = from + v;
       const bar = {
         key: s.key,
         color: colorOf(s, k),
         x: (stackedBar ? x0 : x0 + k * barWidth()) + (stackedBar ? 0 : 1),
-        y: stackedBar ? y(acc + v) : y(v),
+        y: Math.min(y(from), y(to)),
         width: Math.max(1, barWidth() - (stackedBar ? 0 : 2)),
-        height: Math.max(0, h - (stackedBar && k ? 1 : 0)),
+        height: Math.max(0, Math.abs(y(to) - y(from)) - (stackedBar && from ? 1 : 0)),
         radius: stackedBar && k !== series().length - 1 ? 0 : 4,
       };
-      acc += v;
-      return bar;
+      if (v >= 0) positive = to;
+      else negative = to;
+      return [bar];
     });
   };
 
@@ -93,7 +106,7 @@ export const BarChart = (props: BarChartProps) => {
   const hovered = () => (hover() >= 0 ? merged.data[hover()] : undefined);
   const announcement = (d: ChartDatum) =>
     `${d.label}: ${series()
-      .map((s) => `${s.label} ${format(valueOf(d, s.key))}`)
+      .map((s) => `${s.label} ${chartValueText(d, s.key, format, translate('velvet.charts.chartSeries.noValue'))}`)
       .join(', ')}`;
 
   return (
@@ -110,10 +123,10 @@ export const BarChart = (props: BarChartProps) => {
           </For>
         </div>
       </Show>
-      <div class="vui-chart__plot" style={{ height: `${merged.height}px` }}>
+      <div class="vui-chart__plot" style={{ height: `${height()}px` }}>
         <svg
           width={width()}
-          height={merged.height}
+          height={height()}
           role="img"
           aria-label={translate('velvet.charts.barChart.instructions', { label: label() })}
           tabindex={0}
@@ -154,7 +167,7 @@ export const BarChart = (props: BarChartProps) => {
                 </For>
                 <text
                   x={bandCentre(i())}
-                  y={merged.height - 8}
+                  y={height() - 8}
                   text-anchor="middle"
                   class={cx('vui-chart__tick', hover() === i() && 'vui-chart__tick--on')}
                 >
@@ -180,7 +193,7 @@ export const BarChart = (props: BarChartProps) => {
                   <div class="vui-chart__tip-r">
                     <i style={{ background: colorOf(s, k()) }} />
                     {s.label}
-                    <b>{format(valueOf(d(), s.key))}</b>
+                    <b>{chartValueText(d(), s.key, format, translate('velvet.charts.chartSeries.noValue'))}</b>
                   </div>
                 )}
               </For>

@@ -76,6 +76,8 @@ export const formsPl: TranslationOf<typeof formsEn> = {
       '{count, plural, one {Do poprawienia jest # problem} few {Do poprawienia są # problemy} many {Do poprawienia jest # problemów} other {Do poprawienia jest # problemu}}',
   },
   fileUpload: {
+    rejectedType: '{name} — nieobsługiwany typ pliku',
+    rejectedCount: '{name} — osiągnięto limit liczby plików',
     title: 'Upuść pliki tutaj lub przeglądaj',
     releaseToUpload: 'Upuść, aby przesłać',
     rejected: '{names} — przekracza {limit}',
@@ -110,11 +112,15 @@ export const formsPl: TranslationOf<typeof formsEn> = {
     thisYear: 'Ten rok',
   },
   numberInput: {
+    invalidNumber: 'Wpisz prawidłową liczbę.',
     decreaseLabel: 'Zmniejsz',
     increaseLabel: 'Zwiększ',
   },
   optionListStatus: {
     errorText: 'Nie udało się wczytać opcji',
+  },
+  formValue: {
+    required: 'To pole jest wymagane.',
   },
   otpInput: {
     cellLabel: 'Cyfra {index} z {length}',
@@ -198,6 +204,7 @@ export const formsPl: TranslationOf<typeof formsEn> = {
     emptyLabel: 'pusty',
   },
   slider: {
+    valueLabel: 'Wartość',
     thumbMinimum: 'Minimum',
     thumbMaximum: 'Maksimum',
   },
@@ -206,7 +213,9 @@ export const formsPl: TranslationOf<typeof formsEn> = {
     removeLabel: 'Usuń: {tag}',
   },
   timePicker: {
+    optionsLabel: 'Godziny do wyboru',
     invalidTime: 'Wpisz godzinę, na przykład {example}',
+    outsideRange: 'Wpisz godzinę między {min} a {max}',
   },
   timeStepper: {
     label: 'Godzina',

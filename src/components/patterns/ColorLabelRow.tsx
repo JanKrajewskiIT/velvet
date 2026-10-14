@@ -2,6 +2,7 @@ import { Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Button } from '../actions/Button';
 import { IconButton } from '../actions/IconButton';
 import { ListItem } from '../primitives/ListItem';
@@ -67,7 +68,7 @@ export const ColorLabelRow = (props: ColorLabelRowProps) => {
             variant="danger"
             size="xs"
             loading={props.manager.busy()}
-            onClick={() => void props.manager.remove(props.label)}
+            onClick={() => void props.manager.remove(props.label).catch(reportAsyncError)}
           >
             {translate('velvet.common.delete')}
           </Button>

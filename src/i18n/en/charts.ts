@@ -6,6 +6,7 @@ export const chartsEn = defineDictionary({
     instructions: '{label}. Use arrow keys to read values.',
   },
   chartSeries: {
+    noValue: 'No measurement',
     valueLabel: 'Value',
   },
   comparisonBar: {

@@ -1,6 +1,7 @@
 import { For, type JSX, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Spinner } from '../feedback/Spinner';
 import { Chip } from '../forms/Chip';
 import { EmptyText } from '../primitives/EmptyText';
@@ -52,7 +53,7 @@ export const ColorLabelChips = (props: ColorLabelChipsProps) => {
           check={false}
           icon={createChipIcon()}
           disabled={props.selection.creating() || props.selection.busy()}
-          onClick={() => void props.selection.create()}
+          onClick={() => void props.selection.create().catch(reportAsyncError)}
         >
           {translate('velvet.patterns.colorLabelSelectionDialog.create', { name: props.selection.trimmedQuery() })}
         </Chip>

@@ -1,20 +1,29 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { createEffect, createMemo, createSignal, createUniqueId, For, type JSX, mergeProps, on, Show } from 'solid-js';
+import { createEffect, createMemo, createSignal, createUniqueId, type JSX, mergeProps, on, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
+import { createToday } from '../../hooks/createToday';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { addMonths, DAY_MS, fmtDate, sameDay } from '../../utils/date';
 import { Button } from '../actions/Button';
 import { FieldLabel } from '../primitives/FieldLabel';
-import { Calendar, type DateRange } from './Calendar';
+import { Calendar } from './Calendar';
 import { startOfMonth } from './calendarGrid';
+import type { DateRange } from './calendarTypes';
 import { callbackAlias } from './callbackAlias';
+import { createFormValidation } from './createFormValidation';
 import { createPickerPopover } from './createPickerPopover';
+import { isDateRangeAllowed } from './dateConstraints';
 import { DateField } from './DateField';
+import { DateRangePresets } from './DateRangePresets';
+import type { FormControlProps } from './formControl';
+import { formDate } from './formDate';
+import { FormValue } from './FormValue';
 import { DEFAULT_RANGE_PRESETS, presetLabel, type RangePreset } from './rangePresets';
 
-export interface DateRangePickerProps {
+export interface DateRangePickerProps extends FormControlProps {
+  serializeValue?: (range: DateRange) => string | readonly string[];
   label?: JSX.Element;
   hint?: JSX.Element;
   error?: JSX.Element;
@@ -48,10 +57,12 @@ export interface DateRangePickerProps {
 const NARROW_QUERY = '(max-width: 599px)';
 
 const emptyRange = (): DateRange => ({ start: null, end: null });
+type ResolvedDateRangePickerProps = DateRangePickerProps &
+  Required<Pick<DateRangePickerProps, 'presets' | 'weekStartsOn' | 'align' | 'size' | 'defaultOpen'>>;
 
 /** Range field → popover with presets column + two months (one on narrow screens). Changes are a draft until Apply; footer shows the span in days. */
 export const DateRangePicker = (props: DateRangePickerProps) => {
-  const p = mergeProps(
+  const p: ResolvedDateRangePickerProps = mergeProps(
     {
       presets: DEFAULT_RANGE_PRESETS,
       weekStartsOn: 1,
@@ -63,6 +74,8 @@ export const DateRangePicker = (props: DateRangePickerProps) => {
   );
   const i18n = useI18n();
   const translate = useTranslate();
+  const validation = createFormValidation();
+  const today = createToday();
   const locale = () => p.locale ?? i18n.locale();
   const autoId = createUniqueId();
   const id = () => p.id ?? autoId;
@@ -76,6 +89,15 @@ export const DateRangePicker = (props: DateRangePickerProps) => {
     ),
   });
   const popover = createPickerPopover(p.defaultOpen, () => p.align);
+  let trigger!: HTMLButtonElement;
+  createEffect(() => {
+    if (p.disabled) popover.close();
+  });
+  const serialized = () => {
+    const range = current();
+    if (!range.start || !range.end) return [];
+    return p.serializeValue ? p.serializeValue(range) : [formDate(range.start), formDate(range.end)];
+  };
   const [draft, setDraft] = createSignal<DateRange>(current());
   const [narrow, setNarrow] = createSignal(false);
   const [month, setMonth] = createSignal(startOfMonth(new Date()));
@@ -114,12 +136,16 @@ export const DateRangePicker = (props: DateRangePickerProps) => {
     const { start, end } = draft();
     return start && end ? Math.round((end.getTime() - start.getTime()) / DAY_MS) + 1 : 0;
   };
-  const activePreset = createMemo(() =>
-    p.presets.findIndex((preset) => {
+  const presetChoices = createMemo(() => {
+    today();
+    return p.presets.map((preset) => {
       const range = preset.range();
-      return sameDay(range.start, draft().start) && sameDay(range.end, draft().end);
-    }),
-  );
+      return { range, label: presetLabel(preset, translate), disabled: !isDateRangeAllowed(range, p) };
+    });
+  });
+  const activePreset = () =>
+    presetChoices().findIndex(({ range }) => sameDay(range.start, draft().start) && sameDay(range.end, draft().end));
+  const canApply = () => isDateRangeAllowed(draft(), p);
   const summary = () => {
     if (!draft().start) return translate('velvet.forms.dateRangePicker.pickStartDate');
     const count = days();
@@ -128,6 +154,7 @@ export const DateRangePicker = (props: DateRangePickerProps) => {
       : formatRange(draft());
   };
   const apply = () => {
+    if (p.disabled || !canApply()) return;
     setCurrent(draft());
     popover.closeToField();
   };
@@ -137,21 +164,39 @@ export const DateRangePicker = (props: DateRangePickerProps) => {
       <span ref={popover.setWrap} class="vui-popover-wrap vui-datepicker">
         <div class="vui-field" style={{ width: '100%' }}>
           <Show when={p.label}>
-            <FieldLabel htmlFor={id()} optional={p.optional}>
+            <FieldLabel htmlFor={id()} optional={p.optional} required={p.required}>
               {p.label}
             </FieldLabel>
           </Show>
           <DateField
+            ref={(element) => {
+              trigger = element;
+            }}
+            aria-label={p['aria-label']}
+            aria-labelledby={p['aria-labelledby']}
             id={id()}
-            describedBy={p.error || p.hint ? hintId() : undefined}
+            describedBy={validation.describedBy(p.error || p.hint ? hintId() : undefined)}
             size={p.size}
-            invalid={!!p.error}
+            invalid={!!p.error || validation.invalid()}
             disabled={p.disabled}
             text={formatRange(current())}
             placeholder={p.placeholder ?? translate('velvet.forms.dateRangePicker.placeholder')}
             open={popover.open()}
             onToggle={() => popover.setOpen(!popover.open())}
             onClear={() => setCurrent(emptyRange())}
+          />
+          <FormValue
+            validation={validation}
+            name={p.name}
+            form={p.form}
+            required={p.required}
+            disabled={p.disabled}
+            value={serialized()}
+            focusInvalid={() => trigger.focus()}
+            onReset={() => {
+              setCurrent(p.defaultValue ?? emptyRange());
+              popover.close();
+            }}
           />
         </div>
         <Show when={popover.open()}>
@@ -164,25 +209,14 @@ export const DateRangePicker = (props: DateRangePickerProps) => {
           >
             <div class="vui-rangepop__body">
               <Show when={p.presets.length > 0}>
-                <div
-                  class="vui-rangepop__presets"
-                  role="listbox"
-                  aria-label={translate('velvet.forms.dateRangePicker.presetsLabel')}
-                >
-                  <For each={p.presets}>
-                    {(preset, index) => (
-                      <button
-                        type="button"
-                        role="option"
-                        aria-selected={index() === activePreset()}
-                        class={cx('vui-rangepop__preset', index() === activePreset() && 'vui-rangepop__preset--on')}
-                        onClick={() => showRange(preset.range())}
-                      >
-                        {presetLabel(preset, translate)}
-                      </button>
-                    )}
-                  </For>
-                </div>
+                <DateRangePresets
+                  choices={presetChoices()}
+                  active={activePreset()}
+                  label={translate('velvet.forms.dateRangePicker.presetsLabel')}
+                  onSelect={(range) => {
+                    if (!p.disabled && isDateRangeAllowed(range, p)) showRange(range);
+                  }}
+                />
               </Show>
               <Calendar
                 mode="range"
@@ -203,7 +237,7 @@ export const DateRangePicker = (props: DateRangePickerProps) => {
               <Button variant="ghost" size="sm" onClick={popover.closeToField}>
                 {translate('velvet.common.cancel')}
               </Button>
-              <Button size="sm" disabled={!draft().start || !draft().end} onClick={apply}>
+              <Button size="sm" disabled={!canApply()} onClick={apply}>
                 {translate('velvet.common.apply')}
               </Button>
             </div>

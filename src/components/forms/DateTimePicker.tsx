@@ -1,5 +1,5 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { createEffect, createMemo, createSignal, For, type JSX, mergeProps, on, Show } from 'solid-js';
+import { createEffect, createMemo, createSignal, type JSX, mergeProps, on, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
@@ -10,16 +10,21 @@ import { Field } from '../primitives/Field';
 import { Glyph } from '../primitives/Glyph';
 import { Calendar } from './Calendar';
 import { callbackAlias } from './callbackAlias';
+import { createFormValidation } from './createFormValidation';
 import { createPickerPopover } from './createPickerPopover';
 import { DateField } from './DateField';
+import { DateTimeSlots } from './DateTimeSlots';
+import type { FormControlProps } from './formControl';
+import { formDateTime } from './formDate';
+import { FormValue } from './FormValue';
 import { formatMinutes } from './time';
 
-export interface DateTimePickerProps {
+export interface DateTimePickerProps extends FormControlProps {
+  serializeValue?: (date: Date) => string;
   label?: JSX.Element;
   hint?: JSX.Element;
   error?: JSX.Element;
   optional?: boolean;
-  required?: boolean;
   value?: Date | null;
   defaultValue?: Date | null;
   onValueChange?: (value: Date | null) => void;
@@ -60,10 +65,6 @@ const roundedNow = (step: number): Date => {
   return new Date(now.getFullYear(), now.getMonth(), now.getDate(), Math.floor(minutes / 60), minutes % 60);
 };
 
-/** The slot that contains the draft minute — scroll target when the draft is not on a step boundary. */
-const isNear = (draftMinute: number | null, slot: number, step: number): boolean =>
-  draftMinute !== null && slot <= draftMinute && draftMinute < slot + step;
-
 const withTime = (day: Date, minutes: number): Date =>
   new Date(day.getFullYear(), day.getMonth(), day.getDate(), Math.floor(minutes / 60), minutes % 60);
 
@@ -87,8 +88,9 @@ export const DateTimePicker = (props: DateTimePickerProps) => {
   );
   const i18n = useI18n();
   const translate = useTranslate();
+  const validation = createFormValidation();
   const locale = () => p.locale ?? i18n.locale();
-  const step = () => Math.max(1, p.step);
+  const step = () => (Number.isFinite(p.step) ? Math.max(1, Math.min(MINUTES_PER_DAY, Math.trunc(p.step))) : 30);
   const [current, setCurrent] = createControllable<Date | null>({
     value: () => p.value,
     defaultValue: p.defaultValue ?? null,
@@ -100,6 +102,14 @@ export const DateTimePicker = (props: DateTimePickerProps) => {
   const popover = createPickerPopover(p.defaultOpen, () => p.align);
   const [draft, setDraft] = createSignal<Date | null>(current());
   let list: HTMLDivElement | undefined;
+  let trigger!: HTMLButtonElement;
+  const serialized = () => {
+    const date = current();
+    return date ? (p.serializeValue ?? formDateTime)(date) : '';
+  };
+  createEffect(() => {
+    if (p.disabled) popover.close();
+  });
 
   createEffect(
     on(popover.open, (isOpen) => {
@@ -127,12 +137,14 @@ export const DateTimePicker = (props: DateTimePickerProps) => {
   };
   const text = () => {
     const d = current();
-    return d ? `${fmtDate(d, locale())}, ${formatMinutes(minutesOfDay(d), p.hour12)}` : '';
+    return d ? `${fmtDate(d, locale())}, ${formatMinutes(minutesOfDay(d), p.hour12, locale())}` : '';
   };
   const summary = () => {
     const d = draft();
     const minutes = draftMinutes();
-    return d && minutes !== null ? `${fmtDate(d, locale(), SUMMARY_FORMAT)} · ${formatMinutes(minutes, p.hour12)}` : '';
+    return d && minutes !== null
+      ? `${fmtDate(d, locale(), SUMMARY_FORMAT)} · ${formatMinutes(minutes, p.hour12, locale())}`
+      : '';
   };
 
   createEffect(
@@ -146,12 +158,15 @@ export const DateTimePicker = (props: DateTimePickerProps) => {
   );
 
   const setDay = (day: Date | null) => {
-    if (!day) return;
+    if (p.disabled || !day) return;
     const base = draft() ?? roundedNow(step());
     setDraft(withTime(day, minutesOfDay(base)));
   };
-  const setTime = (minutes: number) => setDraft(withTime(draft() ?? startOfDay(new Date()), minutes));
+  const setTime = (minutes: number) => {
+    if (!p.disabled && !isOff(minutes)) setDraft(withTime(draft() ?? startOfDay(new Date()), minutes));
+  };
   const apply = () => {
+    if (p.disabled || !isValid()) return;
     setCurrent(draft());
     popover.closeToField();
   };
@@ -161,10 +176,15 @@ export const DateTimePicker = (props: DateTimePickerProps) => {
       {(control) => (
         <span ref={popover.setWrap} class="vui-popover-wrap vui-datepicker">
           <DateField
+            ref={(element) => {
+              trigger = element;
+            }}
+            aria-label={p['aria-label']}
+            aria-labelledby={p['aria-labelledby']}
             id={control.id}
-            describedBy={control.describedBy}
+            describedBy={validation.describedBy(control.describedBy)}
             size={p.size}
-            invalid={control.invalid}
+            invalid={control.invalid || validation.invalid()}
             disabled={p.disabled}
             text={text()}
             placeholder={p.placeholder ?? translate('velvet.forms.dateTimePicker.placeholder')}
@@ -173,6 +193,19 @@ export const DateTimePicker = (props: DateTimePickerProps) => {
             onClear={p.clearable ? () => setCurrent(null) : undefined}
             clearLabel={translate('velvet.common.clear')}
             tabular
+          />
+          <FormValue
+            validation={validation}
+            name={p.name}
+            form={p.form}
+            required={p.required}
+            disabled={p.disabled}
+            value={serialized()}
+            focusInvalid={() => trigger.focus()}
+            onReset={() => {
+              setCurrent(p.defaultValue ?? null);
+              popover.close();
+            }}
           />
           <Show when={popover.open()}>
             <div
@@ -196,30 +229,19 @@ export const DateTimePicker = (props: DateTimePickerProps) => {
                     <Glyph name="clock" />
                     {translate('velvet.forms.dateTimePicker.timeLabel')}
                   </div>
-                  <div
+                  <DateTimeSlots
                     ref={(element) => {
                       list = element;
                     }}
-                    class="vui-dtpop__list"
-                    role="listbox"
-                    aria-label={translate('velvet.forms.dateTimePicker.timeLabel')}
-                  >
-                    <For each={slots()}>
-                      {(minutes) => (
-                        <button
-                          type="button"
-                          role="option"
-                          aria-selected={minutes === draftMinutes()}
-                          data-near={isNear(draftMinutes(), minutes, step()) ? 'true' : undefined}
-                          disabled={isOff(minutes)}
-                          class={cx('vui-dtpop__slot', minutes === draftMinutes() && 'vui-dtpop__slot--on')}
-                          onClick={() => setTime(minutes)}
-                        >
-                          {formatMinutes(minutes, p.hour12)}
-                        </button>
-                      )}
-                    </For>
-                  </div>
+                    slots={slots()}
+                    value={draftMinutes()}
+                    step={step()}
+                    hour12={p.hour12}
+                    locale={locale()}
+                    label={translate('velvet.forms.dateTimePicker.timeLabel')}
+                    isDisabled={isOff}
+                    onSelect={setTime}
+                  />
                 </div>
               </div>
               <div class="vui-datepop__foot vui-rangepop__foot">

@@ -1,30 +1,13 @@
-import { type JSX, mergeProps, Show } from 'solid-js';
+import { mergeProps, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
-import type { ThemePreference } from '../../theme/theme';
 import { Avatar } from '../data/Avatar';
 import { Menu } from '../menus/Menu';
-import type { MenuItem } from '../menus/menuItem';
 import { Glyph } from '../primitives/Glyph';
 import { NavbarAccountPanel } from './NavbarAccountPanel';
+import type { NavbarUserProps } from './navbarUserTypes';
 
-export interface NavbarUserProps {
-  name?: string;
-  src?: string;
-  items: MenuItem[];
-  /** Name hides under 960px. @default true */
-  showName?: boolean;
-  /** @default localized "Account menu" */
-  label?: string;
-  /** Menu min width in px. @default 220 */
-  width?: number;
-  compact?: boolean;
-  email?: string;
-  meta?: JSX.Element;
-  theme?: ThemePreference;
-  onThemeChange?: (theme: ThemePreference) => void;
-  onSignOut?: () => void;
-}
+export type { NavbarUserProps } from './navbarUserTypes';
 
 /** Account pill for the menubar's actions slot — avatar + first name + chevron → Menu (profile, settings, sign in/out). */
 export const NavbarUser = (props: NavbarUserProps) => {

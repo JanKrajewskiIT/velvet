@@ -34,12 +34,12 @@ export interface PlacedTask {
   color: string;
 }
 
-export interface GanttGroupRow {
+interface GanttGroupRow {
   kind: 'group';
   group: string;
 }
 
-export interface GanttTaskRow {
+interface GanttTaskRow {
   kind: 'task';
   placed: PlacedTask;
 }

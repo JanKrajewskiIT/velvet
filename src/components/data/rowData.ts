@@ -35,10 +35,7 @@ export const nextSort = (current: RowSort | null, key: string): RowSort | null =
 };
 
 export const sortRows = <T extends object>(rows: T[], get: (row: T) => unknown, dir: RowSort['dir']): T[] => {
-  const sorted = [...rows].sort((a, b) => compareValues(get(a), get(b)));
-  return dir === 'desc' ? sorted.reverse() : sorted;
+  return [...rows].sort((a, b) => compareValues(get(a), get(b)) * (dir === 'desc' ? -1 : 1));
 };
 
-/** Numbers become px lengths (Solid does not append units); strings pass through. */
-export const cssLength = (value: number | string | undefined): string | undefined =>
-  typeof value === 'number' ? `${value}px` : value;
+export { cssLength } from '../../utils/cssLength';

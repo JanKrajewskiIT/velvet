@@ -28,8 +28,6 @@ export interface MarkdownEditorOptions {
   onKeyDown?: (e: KeyboardEvent) => void;
 }
 
-export type MarkdownEditorController = ReturnType<typeof createMarkdownEditor>;
-
 const countWords = (text: string): number => text.trim().match(/\S+/gu)?.length ?? 0;
 
 export const createMarkdownEditor = (options: MarkdownEditorOptions) => {

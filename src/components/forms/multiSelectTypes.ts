@@ -1,14 +1,15 @@
 import type { JSX } from 'solid-js';
 
 import type { LoadOptions } from './createAsyncOptions';
-import type { AutocompleteOption } from './selectOption';
+import type { FormControlProps } from './formControl';
+import type { SelectOption } from './selectOption';
 
-export interface MultiSelectProps {
+export interface MultiSelectProps extends FormControlProps {
   label?: JSX.Element;
   hint?: JSX.Element;
   error?: JSX.Element;
   optional?: boolean;
-  options?: ReadonlyArray<string | AutocompleteOption>;
+  options?: ReadonlyArray<string | SelectOption>;
   /** Controlled selection. */
   value?: string[];
   defaultValue?: string[];

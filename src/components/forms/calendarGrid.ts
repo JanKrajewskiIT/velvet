@@ -1,6 +1,6 @@
 import { addDays, addMonths } from '../../utils/date';
 
-export const WEEK_LENGTH = 7;
+const WEEK_LENGTH = 7;
 const GRID_DAYS = 42;
 const MONTHS_PER_YEAR = 12;
 
@@ -9,8 +9,7 @@ export const monthKey = (d: Date): number => d.getFullYear() * MONTHS_PER_YEAR +
 export const startOfMonth = (d: Date): Date => new Date(d.getFullYear(), d.getMonth(), 1);
 
 /** Days between the week start and `d`'s weekday. */
-export const weekOffset = (d: Date, weekStartsOn: number): number =>
-  (d.getDay() - weekStartsOn + WEEK_LENGTH) % WEEK_LENGTH;
+const weekOffset = (d: Date, weekStartsOn: number): number => (d.getDay() - weekStartsOn + WEEK_LENGTH) % WEEK_LENGTH;
 
 /** Six weeks of days that cover the month starting at `first`. */
 export const monthGrid = (first: Date, weekStartsOn: number): Date[] => {

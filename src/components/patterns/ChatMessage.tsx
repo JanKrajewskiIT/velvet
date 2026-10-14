@@ -3,6 +3,7 @@ import { children as resolveChildren, createSignal, For, type JSX, mergeProps, o
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { reportAsyncError } from '../../utils/reportAsyncError';
 import { IconButton } from '../actions/IconButton';
 import { Avatar } from '../data/Avatar';
 import { Glyph } from '../primitives/Glyph';
@@ -177,7 +178,7 @@ export const ChatMessage = (props: ChatMessageProps) => {
                 label={copyLabel()}
                 size="xs"
                 variant="ghost"
-                onClick={() => void copy()}
+                onClick={() => void copy().catch(reportAsyncError)}
               />
               <Show when={p.onRetry}>
                 <IconButton

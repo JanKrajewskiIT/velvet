@@ -1,7 +1,8 @@
-import { type JSX, onCleanup, onMount } from 'solid-js';
+import { createSignal, type JSX, onCleanup, onMount, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { Button } from '../actions/Button';
 import { cssLength } from '../data/cssLength';
 
 export interface ChatThreadProps {
@@ -12,6 +13,7 @@ export interface ChatThreadProps {
   label?: string;
   class?: string;
   style?: JSX.CSSProperties;
+  jumpToLatestLabel?: string;
 }
 
 /** Distance from the bottom, in px, within which the thread keeps following new content. */
@@ -21,35 +23,68 @@ const STICK_THRESHOLD = 48;
 export const ChatThread = (props: ChatThreadProps) => {
   const translate = useTranslate();
   let thread!: HTMLDivElement;
-  let stickToBottom = true;
+  const [following, setFollowing] = createSignal(true);
 
   const follow = () => {
-    if (stickToBottom) thread.scrollTop = thread.scrollHeight;
+    if (following()) thread.scrollTop = thread.scrollHeight;
   };
 
   onMount(() => {
     follow();
-    const observer = new MutationObserver(follow);
+    let frame = 0;
+    const schedule = () => {
+      frame ||= requestAnimationFrame(() => {
+        frame = 0;
+        follow();
+      });
+    };
+    const resizing = new ResizeObserver(schedule);
+    const observeChildren = () => {
+      resizing.disconnect();
+      resizing.observe(thread);
+      for (const child of thread.children) resizing.observe(child);
+      schedule();
+    };
+    const observer = new MutationObserver(observeChildren);
+    observeChildren();
     observer.observe(thread, { childList: true, subtree: true, characterData: true });
-    onCleanup(() => observer.disconnect());
+    onCleanup(() => {
+      observer.disconnect();
+      resizing.disconnect();
+      cancelAnimationFrame(frame);
+    });
   });
 
   return (
-    <div
-      ref={(element) => {
-        thread = element;
-      }}
-      role="log"
-      aria-label={props.label ?? translate('velvet.patterns.chatThread.label')}
-      // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a scrollable log region must be focusable so keyboard users can scroll it
-      tabIndex={0}
-      class={cx('vui-chatthread', props.class)}
-      style={{ height: cssLength(props.height), ...props.style }}
-      onScroll={() => {
-        stickToBottom = thread.scrollHeight - thread.scrollTop - thread.clientHeight < STICK_THRESHOLD;
-      }}
-    >
-      {props.children}
-    </div>
+    <>
+      <div
+        ref={(element) => {
+          thread = element;
+        }}
+        role="log"
+        aria-label={props.label ?? translate('velvet.patterns.chatThread.label')}
+        // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a scrollable log region must be focusable so keyboard users can scroll it
+        tabIndex={0}
+        class={cx('vui-chatthread', props.class)}
+        style={{ height: cssLength(props.height), ...props.style }}
+        onScroll={() => {
+          setFollowing(thread.scrollHeight - thread.scrollTop - thread.clientHeight < STICK_THRESHOLD);
+        }}
+      >
+        {props.children}
+      </div>
+      <Show when={!following()}>
+        <Button
+          size="sm"
+          variant="secondary"
+          onClick={() => {
+            setFollowing(true);
+            follow();
+          }}
+        >
+          {props.jumpToLatestLabel ?? translate('velvet.patterns.chatThread.jumpToLatest')}
+        </Button>
+      </Show>
+    </>
   );
 };

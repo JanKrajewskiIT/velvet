@@ -1,0 +1,9 @@
+@import url('../components/charts/chart.css');
+@import url('../components/charts/donut-chart.css');
+@import url('../components/charts/sparkline.css');
+@import url('../components/charts/heatmap.css');
+@import url('../components/charts/radar-chart.css');
+@import url('../components/charts/comparison.css');
+@import url('../components/charts/gauge.css');
+@import url('../components/charts/funnel-chart.css');
+@import url('../components/charts/gantt.css');

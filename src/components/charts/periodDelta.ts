@@ -6,5 +6,8 @@ export const periodDelta = (data: ChartDatum[], i: number, key: string): number 
   const current = data[i];
   if (!previous || !current) return null;
   const base = valueOf(previous, key);
-  return base ? (valueOf(current, key) - base) / base : null;
+  const value = valueOf(current, key);
+  if (base === undefined || base === 0 || value === undefined) return null;
+  const delta = (value - base) / Math.abs(base);
+  return Number.isFinite(delta) ? delta : null;
 };

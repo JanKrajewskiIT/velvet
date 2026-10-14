@@ -12,7 +12,7 @@ export interface ToggleGroupState {
   disabled: Accessor<boolean | undefined>;
 }
 
-export const ToggleGroupContext = createContext<ToggleGroupState>();
+const ToggleGroupContext = createContext<ToggleGroupState>();
 
 export const useToggleGroup = (): ToggleGroupState | undefined => useContext(ToggleGroupContext);
 

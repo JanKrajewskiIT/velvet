@@ -2,6 +2,7 @@ import { For, mergeProps, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Glyph } from '../primitives/Glyph';
 import { type Aspect, aspectRatioValue } from './aspect';
 import { createVideoControls, type VideoTrack } from './createVideoControls';
@@ -84,7 +85,7 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
         playsinline
         preload="metadata"
         onClick={controls.toggle}
-        onDblClick={() => void controls.toggleFullscreen()}
+        onDblClick={() => void controls.toggleFullscreen().catch(reportAsyncError)}
         onPlay={controls.sync}
         onPause={controls.sync}
         onTimeUpdate={controls.sync}

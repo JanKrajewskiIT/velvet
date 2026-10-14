@@ -1,5 +1,5 @@
 /** Token kinds map to the `tk-*` classes of the code surface. */
-export type TokenKind = 'c' | 's' | 'k' | 'n' | 't' | 'p';
+type TokenKind = 'c' | 's' | 'k' | 'n' | 't' | 'p';
 
 export interface HighlightToken {
   /** Absent for plain text. */

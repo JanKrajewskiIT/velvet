@@ -1,6 +1,6 @@
 import type { TreeNode } from './treeData';
 
-export const TREE_MOVE_POSITIONS = ['before', 'after', 'inside'] as const;
+const TREE_MOVE_POSITIONS = ['before', 'after', 'inside'] as const;
 export type TreeMovePosition = (typeof TREE_MOVE_POSITIONS)[number];
 export interface TreeMove {
   id: string;
