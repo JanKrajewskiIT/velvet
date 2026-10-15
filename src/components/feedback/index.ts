@@ -8,7 +8,7 @@ export { Dialog, type DialogProps } from './Dialog';
 export { EmptyState, type EmptyStateProps } from './EmptyState';
 export { ErrorState, type ErrorStateProps } from './ErrorState';
 export { Loader, LOADER_VARIANTS, type LoaderProps, type LoaderVariant } from './Loader';
-export type { LoaderShape } from './loaderBodies';
+export type { LoaderShape } from './loaderTypes';
 export { LoadingOverlay, type LoadingOverlayProps } from './LoadingOverlay';
 export { NotificationCenter, type NotificationCenterProps } from './NotificationCenter';
 export type { NotificationItem } from './NotificationItem';

@@ -5,7 +5,8 @@ import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
 import styles from './Loader.module.css';
-import { LOADER_BODIES, LOADER_CLASS_SUFFIX, type LoaderShape } from './loaderBodies';
+import { LOADER_BODIES, LOADER_CLASS_SUFFIX } from './loaderBodies';
+import type { LoaderShape } from './loaderTypes';
 
 const LD_CLASSES = {
   bike: styles.ldBike,

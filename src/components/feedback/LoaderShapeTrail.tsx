@@ -1,8 +1,8 @@
 import { Match, Switch } from 'solid-js';
 
 import { cx } from '../../utils/cx';
-import type { LoaderShape } from './loaderBodies';
 import styles from './LoaderShapeTrail.module.css';
+import type { LoaderShape } from './loaderTypes';
 
 export interface LoaderShapeTrailProps {
   shape: LoaderShape;

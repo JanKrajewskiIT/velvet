@@ -18,7 +18,7 @@ const COUNT_CLASSES = {
   pop: styles.countVariantPop,
 } as const;
 
-export const COUNT_TYPOGRAPHY = {
+const COUNT_TYPOGRAPHY = {
   sm: 'micro',
   md: 'kbd',
   lg: 'label-sm',
@@ -44,7 +44,7 @@ export interface CountProps extends HtmlProps<HTMLSpanElement, 'children'> {
   label?: string;
 }
 
-export const formatCount = (value: number | string | undefined, max: number): number | string | undefined =>
+const formatCount = (value: number | string | undefined, max: number): number | string | undefined =>
   typeof value === 'number' && value > max ? `${max}+` : value;
 
 /** Numeric pill for unread counts, tab/chip totals and cart items. */

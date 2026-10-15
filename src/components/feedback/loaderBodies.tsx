@@ -4,8 +4,7 @@ import { LoaderBike } from './LoaderBike';
 import styles from './loaderBodies.module.css';
 import { LoaderShapeTrail } from './LoaderShapeTrail';
 import { LoaderSpans } from './LoaderSpans';
-
-export type LoaderShape = 'circle' | 'triangle' | 'square';
+import type { LoaderShape } from './loaderTypes';
 
 /** What a variant needs besides its own constants. */
 export interface LoaderBodyContext {

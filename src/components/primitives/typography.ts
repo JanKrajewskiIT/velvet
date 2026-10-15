@@ -39,7 +39,7 @@ export type TextVariant = keyof typeof TEXT_ROLES;
 /** Font role only; leaves colour, layout and element semantics to the owner. */
 export const typographyClass = (variant: TextVariant): string => `vui-type-${variant}`;
 
-export const TEXT_ROLE_CLASSES: Partial<Record<TextVariant, string>> = {
+const TEXT_ROLE_CLASSES: Partial<Record<TextVariant, string>> = {
   label: 'vui-label-text',
   section: 'vui-section-text',
   code: 'vui-code-text',

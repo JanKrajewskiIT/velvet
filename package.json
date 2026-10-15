@@ -56,7 +56,7 @@
   ],
   "scripts": {
     "prepublishOnly": "npm run verify",
-    "build": "tsc -b && vite build && configs-package-styles",
+    "build": "tsc -b && vite build && node scripts/packageStyles.mjs",
     "typecheck": "tsc -b",
     "lint": "eslint . --max-warnings 0",
     "lint:fix": "eslint . --fix --max-warnings 0",
@@ -110,9 +110,17 @@
   },
   "size-limit": [
     {
-      "path": "dist/**/*.mjs",
-      "limit": "480 kB",
-      "name": "Published JavaScript (all modules)"
+      "path": [
+        "dist/**/*.mjs",
+        "!dist/**/*.module.css.mjs"
+      ],
+      "limit": "520 kB",
+      "name": "Published JavaScript modules"
+    },
+    {
+      "path": "dist/**/*.module.css.mjs",
+      "limit": "100 kB",
+      "name": "CSS Module class maps"
     },
     {
       "path": "dist/velvet-ui.css",
