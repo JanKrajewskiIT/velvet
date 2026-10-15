@@ -1,14 +1,18 @@
 import { createMemo, createSignal, For, type JSX, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { Button } from '../actions/Button';
 import { CopyButton } from '../actions/CopyButton';
 import { Badge } from '../display/Badge';
 import { ProgressRing } from '../feedback/ProgressRing';
 import { Glyph } from '../primitives/Glyph';
+import { Heading } from '../primitives/Heading';
 import { Meter } from '../primitives/Meter';
 import { SectionLabel } from '../primitives/SectionLabel';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import type { AiFeedback } from './AiResultPanel';
 import {
   type AtsResult,
@@ -21,7 +25,21 @@ import {
 } from './atsAnalysis';
 import { AtsKeywordList } from './AtsKeywordList';
 import { AtsRecommendationList } from './AtsRecommendationList';
+import styles from './AtsResultView.module.css';
 import { plainText } from './plainText';
+
+const ATS_PART_TCHIP_CLASSES = {
+  danger: styles.atsPartTchipVariantDanger,
+  warning: styles.atsPartTchipVariantWarning,
+  info: styles.atsPartTchipVariantInfo,
+} as const;
+
+const ATS_PART_CATV_CLASSES = {
+  success: styles.atsPartCatvVariantSuccess,
+  brand: styles.atsPartCatvVariantBrand,
+  warning: styles.atsPartCatvVariantWarning,
+  danger: styles.atsPartCatvVariantDanger,
+} as const;
 
 export interface AtsResultViewProps {
   result: AtsResult;
@@ -100,10 +118,10 @@ export const AtsResultView = (props: AtsResultViewProps) => {
   };
 
   return (
-    <article class={cx('vui-ats', props.class)} data-band={band().tone}>
+    <article class={cx(typographyClass('body'), styles.ats, props.class)} data-band={band().tone}>
       {props.header}
-      <div class="vui-ats__body">
-        <div class="vui-ats__hero">
+      <div class={styles.atsPartBody}>
+        <div class={styles.atsPartHero}>
           <ProgressRing
             value={clampScore(props.result.score)}
             size={RING_SIZE}
@@ -111,31 +129,45 @@ export const AtsResultView = (props: AtsResultViewProps) => {
             tone={band().tone}
             role="img"
             label={translate('velvet.patterns.atsResultView.scoreLabel', { score: rounded(), max: MAX_SCORE })}
-            class="vui-ats__ring"
+            class={styles.atsPartRing}
           >
-            <span class="vui-ats__score" aria-hidden="true">
+            <Text as="span" variant="kpi" tone="inherit" class={styles.atsPartScore} aria-hidden="true">
               {rounded()}
-              <small>/{MAX_SCORE}</small>
-            </span>
+              <Text as="small" variant="label-sm" tone="inherit">
+                /{MAX_SCORE}
+              </Text>
+            </Text>
           </ProgressRing>
-          <div class="vui-ats__verdict">
+          <div class={styles.atsPartVerdict}>
             <Badge tone={band().tone} class="vui-ats__band">
               {band().label}
             </Badge>
             <Show when={props.result.verdict}>
-              <h3 class="vui-ats__vh">{props.result.verdict}</h3>
+              <Heading level={3} variant="title-lg" class={styles.atsPartVh}>
+                {props.result.verdict}
+              </Heading>
             </Show>
             <Show when={props.result.summary}>
-              <p class="vui-ats__sum">{props.result.summary}</p>
+              <Text as="p" variant="body-sm" tone="secondary" class={styles.atsPartSum}>
+                {props.result.summary}
+              </Text>
             </Show>
             <Show when={tally().length > 0}>
-              <div class="vui-ats__tally">
+              <div class={styles.atsPartTally}>
                 <For each={tally()}>
                   {(entry) => (
-                    <span class={`vui-ats__tchip vui-ats__tchip--${SEVERITY[entry.severity].tone}`}>
+                    <Text
+                      as="span"
+                      variant="caption"
+                      tone="secondary"
+                      class={cx(
+                        styles.atsPartTchip,
+                        variantClass(ATS_PART_TCHIP_CLASSES, SEVERITY[entry.severity].tone),
+                      )}
+                    >
                       <Glyph name={SEVERITY[entry.severity].icon} />
                       {translate(SEVERITY[entry.severity].tallyKey, { count: entry.count })}
-                    </span>
+                    </Text>
                   )}
                 </For>
               </div>
@@ -143,35 +175,46 @@ export const AtsResultView = (props: AtsResultViewProps) => {
           </div>
         </div>
         <Show when={categories().length > 0}>
-          <section class="vui-ats__sec">
-            <SectionLabel as="h4" class="vui-ats__h">
+          <section class={styles.atsPartSec}>
+            <SectionLabel as="h4" class={styles.atsPartH}>
               {translate('velvet.patterns.atsResultView.breakdown')}
             </SectionLabel>
-            <ul class="vui-ats__cats">
+            <ul class={styles.atsPartCats}>
               <For each={categories()}>
                 {(category) => {
                   const categoryBand = () => scoreBand(category.score, props.bands);
                   return (
-                    <li class="vui-ats__cat">
-                      <div class="vui-ats__cath">
-                        <span class="vui-ats__catl">
+                    <li class={styles.atsPartCat}>
+                      <div class={styles.atsPartCath}>
+                        <Text as="span" variant="label" tone="inherit" class={styles.atsPartCatl}>
                           {category.label}
                           <Show when={category.weight != null}>
-                            <small>×{category.weight}</small>
+                            <Text as="small" variant="micro" tone="inherit">
+                              ×{category.weight}
+                            </Text>
                           </Show>
-                        </span>
-                        <span class={`vui-ats__catv vui-ats__catv--${categoryBand().tone}`}>
+                        </Text>
+                        <Text
+                          as="span"
+                          variant="label"
+                          mono
+                          tabular
+                          tone="inherit"
+                          class={cx(styles.atsPartCatv, variantClass(ATS_PART_CATV_CLASSES, categoryBand().tone))}
+                        >
                           {Math.round(category.score)}
-                        </span>
+                        </Text>
                       </div>
                       <Meter
                         value={category.score}
                         tone={categoryBand().tone === 'brand' ? undefined : categoryBand().tone}
                         label={category.label}
-                        class="vui-ats__bar"
+                        class={styles.atsPartBar}
                       />
                       <Show when={category.note}>
-                        <span class="vui-ats__catn">{category.note}</span>
+                        <Text as="span" variant="caption" tone="inherit" class={styles.atsPartCatn}>
+                          {category.note}
+                        </Text>
                       </Show>
                     </li>
                   );
@@ -184,24 +227,36 @@ export const AtsResultView = (props: AtsResultViewProps) => {
           <AtsKeywordList matched={matched()} partial={partial()} missing={missing()} />
         </Show>
         <Show when={strengths().length > 0 || gaps().length > 0}>
-          <div class="vui-ats__sg">
+          <div class={styles.atsPartSg}>
             <Show when={strengths().length > 0}>
-              <section class="vui-ats__sgcol vui-ats__sgcol--pos">
-                <SectionLabel as="h4" class="vui-ats__h" icon="thumbs-up">
+              <section class={cx(styles.atsPartSgcol, styles.atsPartSgcolVariantPos)}>
+                <SectionLabel as="h4" class={styles.atsPartH} icon="thumbs-up">
                   {translate('velvet.patterns.atsResultView.strengths')}
                 </SectionLabel>
                 <ul>
-                  <For each={strengths()}>{(item) => <li>{item}</li>}</For>
+                  <For each={strengths()}>
+                    {(item) => (
+                      <Text as="li" variant="body-sm" tone="inherit">
+                        {item}
+                      </Text>
+                    )}
+                  </For>
                 </ul>
               </section>
             </Show>
             <Show when={gaps().length > 0}>
-              <section class="vui-ats__sgcol vui-ats__sgcol--neg">
-                <SectionLabel as="h4" class="vui-ats__h" icon="target">
+              <section class={cx(styles.atsPartSgcol, styles.atsPartSgcolVariantNeg)}>
+                <SectionLabel as="h4" class={styles.atsPartH} icon="target">
                   {translate('velvet.patterns.atsResultView.gaps')}
                 </SectionLabel>
                 <ul>
-                  <For each={gaps()}>{(item) => <li>{item}</li>}</For>
+                  <For each={gaps()}>
+                    {(item) => (
+                      <Text as="li" variant="body-sm" tone="inherit">
+                        {item}
+                      </Text>
+                    )}
+                  </For>
                 </ul>
               </section>
             </Show>
@@ -211,10 +266,12 @@ export const AtsResultView = (props: AtsResultViewProps) => {
           <AtsRecommendationList recommendations={recommendations()} />
         </Show>
         <Show when={props.disclaimer}>
-          <p class="vui-ai__disclaimer">{props.disclaimer}</p>
+          <Text as="p" variant="overline" tone="inherit" class={styles.aiPartDisclaimer}>
+            {props.disclaimer}
+          </Text>
         </Show>
       </div>
-      <footer class="vui-ai__foot">
+      <footer class={styles.aiPartFoot}>
         <CopyButton value={plain} variant="ghost" size="sm" />
         <Show when={props.onExport}>
           <Button variant="ghost" size="sm" iconLeft="download" onClick={() => props.onExport?.()}>
@@ -227,15 +284,24 @@ export const AtsResultView = (props: AtsResultViewProps) => {
           </Button>
         </Show>
         <Show when={props.onFeedback}>
-          <span class="vui-ai__fb" role="group" aria-label={translate('velvet.patterns.atsResultView.feedbackLabel')}>
-            <span>{translate('velvet.patterns.atsResultView.accurate')}</span>
+          <Text
+            as="span"
+            variant="caption"
+            tone="tertiary"
+            class={styles.aiPartFb}
+            role="group"
+            aria-label={translate('velvet.patterns.atsResultView.feedbackLabel')}
+          >
+            <Text as="span" variant="button-sm" tone="inherit">
+              {translate('velvet.patterns.atsResultView.accurate')}
+            </Text>
             <Button variant="ghost" size="sm" aria-pressed={vote() === 'up'} onClick={() => toggleVote('up')}>
               {translate('velvet.common.yes')}
             </Button>
             <Button variant="ghost" size="sm" aria-pressed={vote() === 'down'} onClick={() => toggleVote('down')}>
               {translate('velvet.common.no')}
             </Button>
-          </span>
+          </Text>
         </Show>
       </footer>
     </article>

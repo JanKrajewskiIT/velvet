@@ -1,0 +1,3 @@
+.root {
+  composes: segmented from '../../styles/shared/primitives/segmented.module.css';
+}

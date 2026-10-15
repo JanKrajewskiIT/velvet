@@ -1,6 +1,7 @@
 import { type JSX, mergeProps, splitProps } from 'solid-js';
 
 import { cx } from '../../utils/cx';
+import styles from './Icon.module.css';
 import { type IconName, VelvetIcons } from './VelvetIcons';
 
 const DEFAULT_STROKE_WIDTH = 1.75;
@@ -37,8 +38,8 @@ export const Icon = (props: IconProps) => {
       stroke-width={local.strokeWidth}
       stroke-linecap="round"
       stroke-linejoin="round"
-      class={cx('vui-svg-icon', local.class)}
-      style={{ flex: 'none', color: local.color, 'vertical-align': '-0.18em', ...local.style }}
+      class={cx(styles.root, local.class)}
+      style={{ color: local.color, ...local.style }}
       aria-hidden={local.label ? undefined : 'true'}
       aria-label={local.label}
       role={local.label ? 'img' : undefined}

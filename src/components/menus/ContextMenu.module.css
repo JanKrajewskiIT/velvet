@@ -1,0 +1,3 @@
+.root {
+  composes: focusable from '../../styles/shared/primitives/focusable.module.css';
+}

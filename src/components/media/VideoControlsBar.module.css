@@ -1,0 +1,130 @@
+.playerPartBar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-0-5);
+  padding: var(--space-8) var(--space-3) var(--space-2);
+  background: linear-gradient(transparent, color-mix(in oklab, var(--black) 72%, transparent));
+  transition:
+    opacity var(--motion-base),
+    transform var(--motion-base);
+  opacity: var(--player-bar-opacity, 1);
+  transform: var(--player-bar-transform, none);
+  pointer-events: var(--player-bar-pointer-events, auto);
+}
+
+.playerPartRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.playerPartSp {
+  flex: 1;
+}
+
+.playerPartTime {
+  padding: 0 var(--space-2);
+  white-space: nowrap;
+}
+
+.playerPartTime span {
+  opacity: 0.72;
+}
+
+.playerPartVol {
+  display: flex;
+  align-items: center;
+}
+
+.playerPartRange {
+  appearance: none;
+  height: 16px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.playerPartRange:focus {
+  outline: 0;
+}
+
+.playerPartRange::-webkit-slider-runnable-track,
+.playerPartRange::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(
+    to right,
+    var(--white) 0 var(--p),
+    color-mix(in oklab, var(--white) 45%, transparent) var(--p) var(--b, var(--p)),
+    color-mix(in oklab, var(--white) 24%, transparent) var(--b, var(--p))
+  );
+}
+
+.playerPartRange::-webkit-slider-thumb {
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  margin-top: calc(-1 * var(--space-1));
+  border: 0;
+  border-radius: 50%;
+  background: var(--white);
+  box-shadow: 0 1px 3px color-mix(in oklab, var(--black) 40%, transparent);
+  transform: var(--player-thumb-transform, scale(0));
+  transition: transform var(--motion-fast);
+}
+
+.playerPartRange::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--white);
+  transform: var(--player-thumb-transform, scale(0));
+  transition: transform var(--motion-fast);
+}
+
+.playerPartRange:focus-visible::-webkit-slider-thumb,
+.playerPartRange:focus-visible::-moz-range-thumb {
+  transform: none;
+}
+
+.playerPartRange:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--white) 45%, transparent);
+}
+
+.playerPartSeek {
+  width: 100%;
+}
+
+.playerPartVolume {
+  width: 0;
+  opacity: 0;
+  transition:
+    width var(--motion-base),
+    opacity var(--motion-base);
+}
+
+.playerPartVol:hover .playerPartVolume,
+.playerPartVol:focus-within .playerPartVolume {
+  width: 72px;
+  opacity: 1;
+  margin-right: var(--space-1);
+}
+
+@media (width <= 639px) {
+  .playerPartVolume {
+    display: none;
+  }
+}
+
+.playerPartBtnVariantMuted {
+  composes: playerpartbtnvariantmuted from '../../styles/shared/media/player.module.css';
+}
+
+.playerPartBtnVariantTxt {
+  composes: playerpartbtnvarianttxt from '../../styles/shared/media/player.module.css';
+}

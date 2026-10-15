@@ -1,0 +1,23 @@
+.loadmorePartBar {
+  --progress-head-justify: center;
+
+  width: min(100%, 280px);
+}
+
+.loadmore {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) 0;
+  font-family: var(--font-sans);
+}
+
+.loadmorePartCount {
+  color: var(--fg-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.loadmorePartDone {
+  color: var(--fg-tertiary);
+}

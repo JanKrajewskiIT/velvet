@@ -1,0 +1,14 @@
+.tselectPartPh {
+  composes: tselectpartph from '../../styles/shared/patterns/filter-bar.module.css';
+}
+
+.tselectPartVal {
+  composes: tselectpartval from '../../styles/shared/patterns/filter-bar.module.css';
+}
+
+.tag {
+  flex: none;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

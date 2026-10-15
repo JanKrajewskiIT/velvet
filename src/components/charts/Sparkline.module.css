@@ -1,0 +1,38 @@
+.spark {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+}
+
+.spark svg {
+  display: block;
+  overflow: visible;
+  outline: 0;
+  border-radius: var(--radius-xs);
+}
+
+.spark svg:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+.sparkPartVal {
+  position: absolute;
+  top: -22px;
+  right: 0;
+  display: inline-flex;
+  gap: var(--space-1-5);
+  padding: var(--space-0-5) var(--space-1-5);
+  border-radius: var(--radius-sm);
+  background: var(--bg-overlay);
+  box-shadow: var(--elevation-card);
+  pointer-events: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.sparkPartVal span {
+  color: var(--fg-tertiary);
+}
+
+.chartPartCross {
+  composes: chartpartcross from '../../styles/shared/charts/chart.module.css';
+}

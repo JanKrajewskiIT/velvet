@@ -1,0 +1,80 @@
+:import('../../styles/shared/navigation/tree-view.module.css') {
+  externalTreePartIcon: treeparticon;
+}
+
+.treePartRowVariantSel,
+.treePartRowVariantSel:hover {
+  background: var(--bg-selected);
+  color: var(--fg-brand);
+  font-weight: var(--type-label-weight);
+}
+
+.treePartGuide {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--border-width);
+  background: var(--border-subtle);
+}
+
+.treePartRowVariantSel :global(.externalTreePartIcon) {
+  color: var(--fg-brand);
+}
+
+.treePartCheck {
+  cursor: pointer;
+}
+
+.treePartCheck:hover {
+  border-color: var(--action-primary);
+}
+
+.treePartMeta {
+  color: var(--fg-tertiary);
+}
+
+.treePartRowVariantDragging {
+  opacity: 0.45;
+}
+
+.treePartRowVariantDropInside,
+.treePartRowVariantDropInside:hover {
+  background: var(--bg-selected);
+  box-shadow: inset 0 0 0 var(--border-width) var(--border-brand);
+}
+
+.treePartRowVariantDropBefore::after,
+.treePartRowVariantDropAfter::after {
+  content: '';
+  position: absolute;
+  left: calc(var(--space-2) + var(--lvl) * var(--space-5));
+  right: var(--space-2);
+  height: var(--border-width-thick);
+  border-radius: var(--radius-full);
+  background: var(--border-brand);
+  pointer-events: none;
+}
+
+.treePartRowVariantDropBefore::after {
+  top: -1px;
+}
+
+.treePartRowVariantDropAfter::after {
+  bottom: -1px;
+}
+
+.treePartRow {
+  composes: treepartrow from '../../styles/shared/navigation/tree-view.module.css';
+}
+
+.treePartCaret {
+  composes: treepartcaret from '../../styles/shared/navigation/tree-view.module.css';
+}
+
+.treePartIcon {
+  composes: treeparticon from '../../styles/shared/navigation/tree-view.module.css';
+}
+
+.treePartLabel {
+  composes: treepartlabel from '../../styles/shared/navigation/tree-view.module.css';
+}

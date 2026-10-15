@@ -1,0 +1,3 @@
+.root {
+  composes: icon from '../../styles/shared/actions/theme-icon.module.css';
+}

@@ -1,0 +1,48 @@
+.rangepopPartPresets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  padding-bottom: var(--space-2-5);
+  border-bottom: var(--border-width) solid var(--border-subtle);
+}
+
+.rangepopPartPreset {
+  height: var(--control-height-sm);
+  padding: 0 var(--space-2-5);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: none;
+  color: var(--fg-secondary);
+  text-align: left;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.rangepopPartPreset:hover {
+  background: var(--bg-hover);
+  color: var(--fg-primary);
+}
+
+.rangepopPartPreset:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.rangepopPartPresetVariantOn {
+  background: var(--bg-selected);
+  color: var(--fg-brand);
+}
+
+@media (width <= 639px) {
+  .rangepopPartPresets {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+}
+
+.rangepopPartPreset:disabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+  background: none;
+  color: var(--fg-secondary);
+}

@@ -1,0 +1,3 @@
+.toastRegion {
+  --toast-animation: vui-toast-in var(--motion-pop);
+}

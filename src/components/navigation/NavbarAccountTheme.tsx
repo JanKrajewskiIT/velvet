@@ -2,7 +2,11 @@ import { For, type JSX } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import type { ThemePreference } from '../../theme/theme';
+import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './NavbarAccountTheme.module.css';
 
 const THEME_ICONS = { light: 'sun', dark: 'moon', system: 'monitor' } as const;
 const ACCOUNT_THEMES = Object.freeze(['light', 'dark', 'system'] as const satisfies readonly ThemePreference[]);
@@ -31,15 +35,17 @@ export const NavbarAccountTheme = (props: NavbarAccountThemeProps) => {
   };
 
   return (
-    <div class="vui-acct__row">
-      <span>{translate('velvet.actions.themeToggle.label')}</span>
-      <div class="vui-acct__seg" role="radiogroup" aria-label={translate('velvet.actions.themeToggle.label')}>
+    <div class={cx(styles.acctPartRow, typographyClass('body-sm'))}>
+      <Text as="span" variant="body-sm" tone="inherit">
+        {translate('velvet.actions.themeToggle.label')}
+      </Text>
+      <div class={styles.acctPartSeg} role="radiogroup" aria-label={translate('velvet.actions.themeToggle.label')}>
         <For each={ACCOUNT_THEMES}>
           {(theme) => (
             <button
               type="button"
               role="radio"
-              class="vui-acct__segbtn"
+              class={styles.acctPartSegbtn}
               aria-checked={selected() === theme}
               tabIndex={selected() === theme ? 0 : -1}
               aria-label={translate(`velvet.actions.themeToggle.${theme}`)}

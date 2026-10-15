@@ -3,6 +3,7 @@ import { createMemo, mergeProps } from 'solid-js';
 
 import { cx } from '../../utils/cx';
 import { ymd } from '../../utils/date';
+import styles from './CalendarOrganizer.module.css';
 import { createOrganizerCalendar } from './createOrganizerCalendar';
 import { createOrganizerDrag } from './createOrganizerDrag';
 import { createOrganizerEditing } from './createOrganizerEditing';
@@ -62,8 +63,8 @@ export const CalendarOrganizer = (props: CalendarOrganizerProps) => {
   const eventsOn = (d: Date): OrganizerEvent[] => byDay().get(ymd(d)) ?? [];
 
   return (
-    <div class={cx('vui-organizer', p.class)}>
-      <div class="vui-organizer__main">
+    <div class={cx(styles.organizer, p.class)}>
+      <div class={styles.organizerPartMain}>
         <OrganizerHead calendar={calendar} events={p.events} />
         <OrganizerGrid calendar={calendar} drag={drag} eventsOn={eventsOn} maxChips={p.maxChips} />
       </div>

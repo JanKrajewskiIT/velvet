@@ -3,6 +3,7 @@ import { createSignal, type JSX, mergeProps, onCleanup, splitProps, untrack } fr
 import { columnWidthBounds, constrainColumnWidth } from '../../utils/columnWidth';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import styles from './ColumnResize.module.css';
 
 export interface ColumnResizeProps extends HtmlProps<HTMLSpanElement, 'onResize'> {
   /** Accessible name, e.g. "Resize Name". */
@@ -77,7 +78,7 @@ export const ColumnResize = (props: ColumnResizeProps) => {
       aria-valuenow={local.width ? Math.round(local.width) : undefined}
       aria-valuemin={bounds().min}
       aria-valuemax={Number.isFinite(bounds().max) ? bounds().max : undefined}
-      class={cx('vui-col-resize', active() && 'vui-col-resize--active', local.class)}
+      class={cx(styles.colResize, active() && styles.colResizeVariantActive, local.class)}
       onPointerDown={onPointerDown}
       onKeyDown={onKeyDown}
       onDblClick={() => local.onReset?.()}

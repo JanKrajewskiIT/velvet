@@ -1,7 +1,15 @@
 import { type Accessor, createEffect, createMemo, createSignal, type JSX, onCleanup } from 'solid-js';
 
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import styles from './createTablePins.module.css';
 import type { TableColumn } from './tableTypes';
+
+const TABLE_PART_PIN_CLASSES = {
+  edge: styles.tablePartPinVariantEdge,
+  left: styles.tablePartPinVariantLeft,
+  right: styles.tablePartPinVariantRight,
+} as const;
 
 interface PinOffset {
   side: 'left' | 'right';
@@ -106,10 +114,17 @@ export const createTablePins = <T extends object>(options: TablePinsOptions<T>):
   };
   const pinClass = (key: string) => {
     const pin = pinOffsets()[key];
-    return pin && cx('vui-table__pin', `vui-table__pin--${pin.side}`, pin.edge && 'vui-table__pin--edge');
+    return (
+      pin &&
+      cx(
+        styles.tablePartPin,
+        variantClass(TABLE_PART_PIN_CLASSES, pin.side),
+        pin.edge && styles.tablePartPinVariantEdge,
+      )
+    );
   };
   const cellClass = (c: TableColumn<T>) =>
-    cx(c.align === 'right' && 'vui-table__num', c.hideOnMobile && 'vui-hide-sm', pinClass(c.key));
+    cx(c.align === 'right' && styles.tablePartNum, c.hideOnMobile && styles.hideSm, pinClass(c.key));
 
   return { hasPins, checkPinned, scrolled, updateScrolled, pinStyle, cellClass };
 };

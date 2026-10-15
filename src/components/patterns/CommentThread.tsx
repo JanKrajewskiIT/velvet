@@ -5,8 +5,11 @@ import { cx } from '../../utils/cx';
 import { createId } from '../../utils/id';
 import { Count } from '../primitives/Count';
 import { EmptyText } from '../primitives/EmptyText';
+import { Heading } from '../primitives/Heading';
+import { typographyClass } from '../primitives/typography';
 import { CommentComposer } from './CommentComposer';
 import { CommentItem, type CommentThreadController, type ReplyTarget } from './CommentItem';
+import styles from './CommentThread.module.css';
 import {
   authorName,
   type Comment,
@@ -157,22 +160,24 @@ export const CommentThread = (props: CommentThreadProps) => {
   };
 
   return (
-    <section class={cx('vui-cthread', p.class)} aria-label={title()}>
+    <section class={cx(typographyClass('body'), styles.cthread, p.class)} aria-label={title()}>
       <Show when={title()}>
-        <header class="vui-cthread__head">
-          <h3 class="vui-cthread__title">{title()}</h3>
+        <header class={styles.cthreadPartHead}>
+          <Heading level={3} variant="title" class={styles.cthreadPartTitle}>
+            {title()}
+          </Heading>
           <Count tone="neutral" value={count()} />
         </header>
       </Show>
       <Show
         when={list().length}
         fallback={
-          <EmptyText as="p" align="start" class="vui-cthread__empty">
+          <EmptyText as="p" align="start" class={styles.cthreadPartEmpty}>
             {emptyText()}
           </EmptyText>
         }
       >
-        <ol class="vui-cthread__list">
+        <ol class={styles.cthreadPartList}>
           <For each={list().map((comment) => comment.id)}>{(id) => <CommentItem id={id} thread={thread} />}</For>
         </ol>
       </Show>

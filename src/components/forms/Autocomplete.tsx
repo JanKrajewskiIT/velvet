@@ -3,11 +3,14 @@ import { createEffect, createMemo, createSignal, type JSX, mergeProps, Show } fr
 import { createControllable } from '../../hooks/createControllable';
 import { createDismiss } from '../../hooks/createDismiss';
 import { useTranslate } from '../../i18n/useTranslate';
+import { cx } from '../../utils/cx';
 import { Spinner } from '../feedback/Spinner';
 import { CloseButton } from '../primitives/CloseButton';
 import { Control } from '../primitives/Control';
+import { ControlInput } from '../primitives/ControlInput';
 import { Field } from '../primitives/Field';
 import { Glyph, renderIcon } from '../primitives/Glyph';
+import styles from './Autocomplete.module.css';
 import { AutocompleteMenu } from './AutocompleteMenu';
 import type { AutocompleteProps } from './autocompleteTypes';
 import { callbackAlias } from './callbackAlias';
@@ -190,7 +193,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
   return (
     <Field label={p.label} hint={p.hint} error={p.error} optional={p.optional} required={p.required} id={id()}>
       {(control) => (
-        <div ref={popup.setRoot} class="vui-select">
+        <div ref={popup.setRoot} class={styles.select}>
           <Control
             size={p.size}
             invalid={control.invalid || validation.invalid()}
@@ -198,13 +201,13 @@ export const Autocomplete = (props: AutocompleteProps) => {
             class={p.class}
           >
             <Show when={p.iconLeft}>
-              <span class="vui-control__adorn">
+              <span class={styles.controlPartAdorn}>
                 <Show when={remote.loading()} fallback={renderIcon(p.iconLeft)}>
                   <Spinner size="inline" tone="current" />
                 </Show>
               </span>
             </Show>
-            <input
+            <ControlInput
               ref={(element) => {
                 input = element;
               }}
@@ -219,7 +222,6 @@ export const Autocomplete = (props: AutocompleteProps) => {
               aria-required={p.required || undefined}
               aria-invalid={control.invalid || validation.invalid() || undefined}
               aria-describedby={validation.describedBy(control.describedBy)}
-              class="vui-control__input"
               value={shownText()}
               placeholder={p.placeholder ?? translate('velvet.forms.autocomplete.placeholder')}
               disabled={p.disabled}
@@ -238,7 +240,10 @@ export const Autocomplete = (props: AutocompleteProps) => {
                 }}
               />
             </Show>
-            <span class="vui-control__adorn vui-control__adorn--end" style={{ 'pointer-events': 'none' }}>
+            <span
+              class={cx(styles.controlPartAdorn, styles.controlPartAdornVariantEnd)}
+              style={{ 'pointer-events': 'none' }}
+            >
               <Glyph name="chevron-down" />
             </span>
           </Control>

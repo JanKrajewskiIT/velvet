@@ -1,0 +1,8 @@
+.weekday {
+  color: var(--fg-tertiary);
+  text-transform: uppercase;
+}
+
+.weekdayVariantToday {
+  color: var(--fg-brand);
+}

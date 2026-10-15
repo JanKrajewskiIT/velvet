@@ -1,0 +1,104 @@
+.listItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: var(--row-height-lg);
+  padding: var(--space-2-5) var(--space-3);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+.listItemVariantSm {
+  min-height: var(--row-height-sm);
+  padding: var(--space-1-5) var(--space-3);
+}
+
+.listItemVariantTop {
+  align-items: flex-start;
+}
+
+.listItemVariantAction {
+  cursor: pointer;
+  transition:
+    background-color var(--motion-fast),
+    border-color var(--motion-fast);
+}
+
+.listItemVariantAction:hover {
+  background: var(--bg-hover);
+}
+
+.listItemVariantAction:active {
+  background: var(--bg-pressed);
+}
+
+.listItemVariantAction:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.listItemVariantDisabled,
+.listItem:disabled {
+  opacity: var(--opacity-disabled);
+  pointer-events: none;
+}
+
+.listItemVariantSelected,
+.listItemVariantSelected:hover {
+  background: var(--bg-selected);
+}
+
+.listItemPartLeading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2-5);
+  flex: none;
+  color: var(--fg-secondary);
+}
+
+.listItemPartMain {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-0-5);
+}
+
+.listItemPartTitle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--fg-primary);
+}
+
+.listItemPartDesc {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--fg-secondary);
+}
+
+.listItemPartDescVariantClamp {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  white-space: normal;
+}
+
+.listItemPartMeta {
+  color: var(--fg-tertiary);
+}
+
+.listItemPartTrailing {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: none;
+  color: var(--fg-tertiary);
+}

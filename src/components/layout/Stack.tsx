@@ -3,6 +3,7 @@ import { type JSX, mergeProps, splitProps } from 'solid-js';
 import { cx } from '../../utils/cx';
 import { type ElementTag, type HtmlProps, Polymorphic } from '../../utils/polymorphic';
 import { spaceValue } from './space';
+import styles from './Stack.module.css';
 
 export interface StackProps extends HtmlProps<HTMLElement> {
   /** @default 'div' */
@@ -36,7 +37,7 @@ export const Stack = (props: StackProps) => {
     <Polymorphic
       tag={local.as}
       {...rest}
-      class={cx('vui-stack', local.divider && 'vui-stack--divided', local.class)}
+      class={cx(styles.stack, local.divider && styles.stackVariantDivided, local.class)}
       style={{
         'flex-direction': local.direction,
         gap: spaceValue(local.gap),

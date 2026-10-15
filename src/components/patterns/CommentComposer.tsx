@@ -1,8 +1,12 @@
 import { createEffect, createSignal, mergeProps, onMount, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { cx } from '../../utils/cx';
 import { Button } from '../actions/Button';
 import { Avatar } from '../data/Avatar';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './CommentComposer.module.css';
 import { authorName, authorSrc, type CommentAuthor } from './commentTree';
 
 const MAX_HEIGHT_PX = 240;
@@ -54,29 +58,29 @@ export const CommentComposer = (props: CommentComposerProps) => {
   };
 
   return (
-    <div class="vui-cmt-compose">
+    <div class={styles.cmtCompose}>
       <Show when={p.user}>
         {(user) => <Avatar name={authorName(user())} src={authorSrc(user())} size={p.small ? 'xs' : 'sm'} />}
       </Show>
-      <div class="vui-cmt-compose__box">
+      <div class={styles.cmtComposePartBox}>
         <textarea
           ref={(element) => {
             input = element;
           }}
           rows={1}
-          class="vui-cmt-compose__input"
+          class={cx(styles.cmtComposePartInput, typographyClass('body-sm'))}
           placeholder={p.placeholder}
           aria-label={p.placeholder}
           value={text()}
           onInput={(e) => setText(e.currentTarget.value)}
           onKeyDown={onKeyDown}
         />
-        <div class="vui-cmt-compose__foot">
-          <span class="vui-cmt-compose__hint">
+        <div class={styles.cmtComposePartFoot}>
+          <Text as="span" variant="overline" tone="inherit" class={styles.cmtComposePartHint}>
             {p.onCancel
               ? translate('velvet.patterns.commentComposer.hintSendCancel')
               : translate('velvet.patterns.commentComposer.hintSend')}
-          </span>
+          </Text>
           <Show when={p.onCancel}>
             <Button variant="ghost" size="sm" onClick={() => p.onCancel?.()}>
               {translate('velvet.common.cancel')}

@@ -1,0 +1,23 @@
+.organizer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  overflow: hidden;
+  background: var(--surface-bg);
+  border: var(--border-width) solid var(--surface-border);
+  border-radius: var(--surface-radius);
+  box-shadow: var(--elevation-control);
+  color: var(--fg-primary);
+}
+
+.organizerPartMain {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: var(--space-4);
+}
+
+@media (width <= 1023px) {
+  .organizer {
+    grid-template-columns: 1fr;
+  }
+}

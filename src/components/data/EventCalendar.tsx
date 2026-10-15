@@ -3,11 +3,21 @@ import { createMemo, For, type JSX, mergeProps, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { fmtDate, sameDay, toDate } from '../../utils/date';
 import { Calendar } from '../forms/Calendar';
 import { Dot } from '../primitives/Dot';
 import { EmptyText } from '../primitives/EmptyText';
+import { Text } from '../primitives/Text';
+import styles from './EventCalendar.module.css';
+
+const EVCAL_PART_EV_CLASSES = {
+  success: styles.evcalPartEvVariantSuccess,
+  warning: styles.evcalPartEvVariantWarning,
+  danger: styles.evcalPartEvVariantDanger,
+  info: styles.evcalPartEvVariantInfo,
+} as const;
 
 export interface CalendarEvent {
   id?: string | number;
@@ -33,7 +43,7 @@ export interface EventCalendarProps {
   weekStartsOn?: 0 | 1;
   /** Shown when the selected day has no events. @default localized "No events this day." */
   emptyText?: string;
-  /** stacked = agenda under the grid, as wide as the grid · split = agenda to the right (≤300px), stacks under 620px. @default 'stacked' */
+  /** stacked = agenda under the grid, as wide as the grid · split = agenda to the right (≤300px), stacks under 640px. @default 'stacked' */
   layout?: 'stacked' | 'split';
   class?: string;
 }
@@ -64,7 +74,7 @@ export const EventCalendar = (props: EventCalendarProps) => {
   };
 
   return (
-    <div class={cx('vui-evcal', merged.layout === 'split' && 'vui-evcal--split', merged.class)}>
+    <div class={cx(styles.evcal, merged.layout === 'split' && styles.evcalVariantSplit, merged.class)}>
       <Calendar
         value={selected()}
         onValueChange={select}
@@ -72,26 +82,36 @@ export const EventCalendar = (props: EventCalendarProps) => {
         weekStartsOn={merged.weekStartsOn}
         locale={locale()}
       />
-      <div class="vui-evcal__agenda" aria-live="polite">
-        <div class="vui-evcal__date">{fmtDate(selected(), locale(), AGENDA_DATE_FORMAT)}</div>
+      <div class={styles.evcalPartAgenda} aria-live="polite">
+        <Text as="div" variant="title" tone="inherit" class={'vui-evcal__date'}>
+          {fmtDate(selected(), locale(), AGENDA_DATE_FORMAT)}
+        </Text>
         <Show
           when={agenda().length}
           fallback={
-            <EmptyText align="start" class="vui-evcal__empty">
+            <EmptyText align="start" class={styles.evcalPartEmpty}>
               {emptyText()}
             </EmptyText>
           }
         >
-          <ul class="vui-evcal__list">
+          <ul class={styles.evcalPartList}>
             <For each={agenda()}>
               {(event) => (
-                <li class={cx('vui-evcal__ev', `vui-evcal__ev--${event.tone ?? 'brand'}`)}>
-                  <span class="vui-evcal__time">{event.time || translate('velvet.data.eventCalendar.allDay')}</span>
-                  <Dot size="lg" class="vui-evcal__dot" />
-                  <span class="vui-evcal__body">
-                    <span class="vui-evcal__title">{event.title}</span>
+                <li class={cx(styles.evcalPartEv, variantClass(EVCAL_PART_EV_CLASSES, event.tone ?? 'brand'))}>
+                  <Text as="span" variant="label-sm" mono tone="tertiary" tabular class="vui-evcal__time">
+                    {event.time || translate('velvet.data.eventCalendar.allDay')}
+                  </Text>
+                  <Dot size="lg" class={styles.evcalPartDot} />
+                  <span class={styles.evcalPartBody}>
+                    <Text as="span" variant="body-sm" tone="primary" class="vui-evcal__title">
+                      {event.title}
+                    </Text>
                     <Show when={event.description}>
-                      {(description) => <span class="vui-evcal__desc">{description()}</span>}
+                      {(description) => (
+                        <Text as="span" variant="caption" tone="secondary" class="vui-evcal__desc">
+                          {description()}
+                        </Text>
+                      )}
                     </Show>
                   </span>
                 </li>

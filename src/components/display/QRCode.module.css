@@ -1,0 +1,46 @@
+.qr {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: var(--white);
+  box-shadow: 0 0 0 var(--border-width) var(--border-subtle);
+}
+
+.qr svg {
+  display: block;
+}
+
+.qrPartBg {
+  fill: var(--white);
+}
+
+.qrPartFg {
+  fill: var(--neutral-1000, var(--black));
+}
+
+.qrPartLogo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  border-radius: 22%;
+  background: var(--white);
+  box-shadow: 0 0 0 3px var(--white);
+  color: var(--action-primary);
+
+  --glyph-size: 1em;
+}
+
+.qrVariantError {
+  display: grid;
+  place-items: center;
+  padding: var(--space-3);
+  box-sizing: border-box;
+  background: var(--bg-subtle);
+  color: var(--fg-tertiary);
+  text-align: center;
+}

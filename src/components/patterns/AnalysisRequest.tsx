@@ -6,9 +6,13 @@ import { cx } from '../../utils/cx';
 import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Button } from '../actions/Button';
 import { Glyph } from '../primitives/Glyph';
+import { Heading } from '../primitives/Heading';
 import { IconTile } from '../primitives/IconTile';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { AnalysisContext } from './AnalysisContext';
 import { AnalysisDepthPicker } from './AnalysisDepthPicker';
+import styles from './AnalysisRequest.module.css';
 import {
   type AnalysisDepth,
   type AnalysisRunPayload,
@@ -119,20 +123,29 @@ export const AnalysisRequest = (props: AnalysisRequestProps) => {
   };
 
   return (
-    <section class={cx('vui-areq', running() && 'vui-areq--running', p.class)} aria-busy={running() || undefined}>
-      <header class="vui-areq__head">
-        <IconTile class="vui-areq__spark" icon="sparkles" />
-        <div class="vui-areq__ht">
-          <h3 class="vui-areq__title">{title()}</h3>
+    <section
+      class={cx(typographyClass('body'), styles.areq, running() && 'vui-areq--running', p.class)}
+      aria-busy={running() || undefined}
+    >
+      <header class={styles.areqPartHead}>
+        <IconTile class={styles.areqPartSpark} icon="sparkles" />
+        <div class={styles.areqPartHt}>
+          <Heading level={3} variant="title" class={styles.areqPartTitle}>
+            {title()}
+          </Heading>
           <Show when={p.description}>
-            <p class="vui-areq__desc">{p.description}</p>
+            <Text as="p" variant="body-sm" tone="secondary" class={styles.areqPartDesc}>
+              {p.description}
+            </Text>
           </Show>
         </div>
         <Show when={p.model}>
-          <span class="vui-areq__model">{p.model}</span>
+          <Text as="span" variant="kbd" tone="tertiary" class={styles.areqPartModel}>
+            {p.model}
+          </Text>
         </Show>
       </header>
-      <div class="vui-areq__body">
+      <div class={styles.areqPartBody}>
         <Show when={selection.analyses().length > 0}>
           <AnalysisTypePicker
             analyses={selection.analyses()}
@@ -142,11 +155,13 @@ export const AnalysisRequest = (props: AnalysisRequestProps) => {
           />
         </Show>
         <AnalysisContext sources={p.sources} selection={selection} disabled={running()} onToggle={toggleSource} />
-        <div class="vui-areq__row">
-          <label class="vui-areq__set vui-areq__ins">
-            <span class="vui-areq__lbl">{translate('velvet.patterns.analysisRequest.instructions')}</span>
+        <div class={styles.areqPartRow}>
+          <label class={cx(styles.areqPartSet, 'vui-areq__ins')}>
+            <Text as="span" variant="section" tone="tertiary" class={styles.areqPartLbl}>
+              {translate('velvet.patterns.analysisRequest.instructions')}
+            </Text>
             <textarea
-              class="vui-areq__ta"
+              class={cx(styles.areqPartTa, typographyClass('body-sm'))}
               rows={2}
               value={instructions()}
               placeholder={instructionsPlaceholder()}
@@ -168,16 +183,16 @@ export const AnalysisRequest = (props: AnalysisRequestProps) => {
           <AnalysisSteps steps={p.steps} step={p.step} />
         </Show>
         <Show when={shownError() && !running()}>
-          <div class="vui-areq__err" role="alert">
+          <Text as="div" variant="body-sm" tone="danger" class={styles.areqPartErr} role="alert">
             <Glyph name="alert-circle" />
             {shownError()}
-          </div>
+          </Text>
         </Show>
       </div>
-      <footer class="vui-areq__foot">
-        <span class="vui-areq__note">
+      <footer class={styles.areqPartFoot}>
+        <Text as="span" variant="caption" tone="tertiary" class={styles.areqPartNote}>
           {note() ?? (p.estimate || translate('velvet.patterns.analysisRequest.dataNote'))}
-        </span>
+        </Text>
         <Show when={running() && p.onCancel}>
           <Button
             variant="ghost"
@@ -190,7 +205,7 @@ export const AnalysisRequest = (props: AnalysisRequestProps) => {
           </Button>
         </Show>
         <Button
-          class="vui-areq__run"
+          class={styles.areqPartRun}
           iconLeft="sparkles"
           loading={running()}
           disabled={selection.blocked()}

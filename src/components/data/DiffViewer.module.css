@@ -1,0 +1,107 @@
+:import('../../styles/shared/data/diff-viewer.module.css') {
+  externalDiffPartCVariantAdd: diffpartcvariantadd;
+  externalDiffPartCVariantDel: diffpartcvariantdel;
+}
+
+.diffVariantSplit {
+  --diff-skip-padding: var(--space-4);
+}
+
+.lineText {
+  composes: diffpartcode from '../../styles/shared/data/diff-viewer.module.css';
+}
+
+.diffPartStats {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.diffPartPlus {
+  color: var(--code-added);
+}
+
+.diffPartMinus {
+  color: color-mix(in oklab, var(--status-danger-solid) 55%, var(--white));
+}
+
+.diffPartModes {
+  display: flex;
+  gap: var(--space-0-5);
+}
+
+.diffPartBody {
+  overflow: auto;
+  padding: var(--space-1) 0;
+  tab-size: 2;
+}
+
+.diffPartRow {
+  display: grid;
+  grid-template-columns: 44px 44px 22px minmax(0, 1fr);
+}
+
+.diffVariantSplit .diffPartRow {
+  grid-template-columns: 44px 22px minmax(0, 1fr) 44px 22px minmax(0, 1fr);
+}
+
+.diffVariantSplit .diffPartRow > :nth-child(3) {
+  border-right: var(--border-width) solid var(--code-line);
+}
+
+.diffPartRow:global(.externalDiffPartCVariantAdd) > * {
+  background: color-mix(in oklab, var(--code-added) 14%, transparent);
+}
+
+.diffPartRow:global(.externalDiffPartCVariantDel) > * {
+  background: color-mix(in oklab, var(--status-danger-solid) 18%, transparent);
+}
+
+@media (width <= 639px) {
+  .diffPartRow {
+    grid-template-columns: 36px 36px 18px minmax(0, 1fr);
+  }
+
+  .diffVariantSplit .diffPartRow {
+    grid-template-columns: 32px 16px minmax(0, 1fr) 32px 16px minmax(0, 1fr);
+  }
+}
+
+.code {
+  composes: code from '../../styles/shared/data/code-snippet.module.css';
+}
+
+.codePartBar {
+  composes: codepartbar from '../../styles/shared/data/code-snippet.module.css';
+}
+
+.codePartTitle {
+  composes: codeparttitle from '../../styles/shared/data/code-snippet.module.css';
+}
+
+.codePartTab {
+  composes: codeparttab from '../../styles/shared/data/code-snippet.module.css';
+}
+
+.codePartTabVariantOn {
+  composes: codeparttabvarianton from '../../styles/shared/data/code-snippet.module.css';
+}
+
+.diffPartLn {
+  composes: diffpartln from '../../styles/shared/data/diff-viewer.module.css';
+}
+
+.diffPartSign {
+  composes: diffpartsign from '../../styles/shared/data/diff-viewer.module.css';
+}
+
+.diffPartCVariantAdd {
+  composes: diffpartcvariantadd from '../../styles/shared/data/diff-viewer.module.css';
+}
+
+.diffPartCVariantDel {
+  composes: diffpartcvariantdel from '../../styles/shared/data/diff-viewer.module.css';
+}
+
+.diffPartCode {
+  composes: diffpartcode from '../../styles/shared/data/diff-viewer.module.css';
+}

@@ -1,7 +1,14 @@
 import { type JSX, mergeProps, splitProps } from 'solid-js';
 
-import { cx, modifier } from '../../utils/cx';
+import { variantClass } from '../../utils/cssModule';
+import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import styles from './Mark.module.css';
+
+const MARK_CLASSES = {
+  text: styles.markVariantText,
+  mention: styles.markVariantMention,
+} as const;
 
 export type MarkVariant = 'highlight' | 'text' | 'mention';
 
@@ -14,7 +21,9 @@ export interface MarkProps extends HtmlProps<HTMLElement> {
 export const Mark = (props: MarkProps) => {
   const merged = mergeProps({ variant: 'highlight' } satisfies MarkProps, props);
   const [local, rest] = splitProps(merged, ['variant', 'class']);
-  return <mark class={cx('vui-mark', modifier('vui-mark', local.variant, 'highlight'), local.class)} {...rest} />;
+  return (
+    <mark {...rest} class={cx(styles.mark, variantClass(MARK_CLASSES, local.variant, 'highlight'), local.class)} />
+  );
 };
 
 const DIACRITICS = /[̀-ͯ]/gu;

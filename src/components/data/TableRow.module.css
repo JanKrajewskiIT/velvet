@@ -1,0 +1,74 @@
+:import('../../styles/shared/data/table.module.css') {
+  externalTable: table;
+}
+
+:import('../../styles/shared/primitives/glyph.module.css') {
+  externalIcon: icon;
+}
+
+.tablePartExpbtn {
+  display: inline-grid;
+  place-items: center;
+  width: var(--control-height-inner);
+  height: var(--control-height-inner);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--fg-tertiary);
+  cursor: pointer;
+  transition:
+    background-color var(--motion-fast),
+    color var(--motion-fast);
+}
+
+.tablePartExpbtn:hover {
+  background: var(--bg-hover);
+  color: var(--fg-primary);
+}
+
+:global(.externalTable) tbody tr.tablePartRowVariantOpen td {
+  border-bottom-color: transparent;
+}
+
+:global(.externalTable) tbody tr.tablePartDetail,
+:global(.externalTable) tbody tr.tablePartDetail:hover {
+  background: var(--bg-subtle);
+}
+
+.tablePartDetail > td {
+  height: auto;
+  padding: 0;
+  white-space: normal;
+}
+
+.tablePartDetailIn {
+  padding: var(--space-4) var(--cell-px) var(--space-5) calc(var(--cell-px) + var(--space-10));
+  animation: vui-fade-in var(--motion-fast);
+}
+
+.tablePartExpbtn :global(.externalIcon) {
+  --glyph-size: var(--type-body-size);
+
+  transition: transform var(--motion-move);
+}
+
+.tablePartExpbtn[aria-expanded='true'] :global(.externalIcon) {
+  transform: rotate(180deg);
+}
+
+.tablePartPin {
+  composes: tablepartpin from '../../styles/shared/data/table.module.css';
+}
+
+.tablePartPinVariantLeft {
+  composes: tablepartpinvariantleft from '../../styles/shared/data/table.module.css';
+}
+
+.tablePartExp {
+  composes: tablepartexp from '../../styles/shared/data/table.module.css';
+}
+
+.row {
+  composes: row from '../../styles/shared/data/tableRow.module.css';
+}

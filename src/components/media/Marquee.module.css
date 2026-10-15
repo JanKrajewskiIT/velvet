@@ -1,0 +1,33 @@
+.marquee {
+  overflow: hidden;
+  width: 100%;
+}
+
+.marqueeVariantFade {
+  mask-image: linear-gradient(90deg, transparent, var(--black) 8%, var(--black) 92%, transparent);
+}
+
+.marqueePartTrack {
+  display: flex;
+  width: max-content;
+  animation: vui-marquee linear infinite;
+}
+
+.marqueeVariantPause:hover .marqueePartTrack {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marqueePartTrack {
+    animation: none;
+    flex-wrap: wrap;
+  }
+}
+
+.marquee:focus-within .marqueePartTrack {
+  animation-play-state: paused;
+}
+
+.marqueePartGroup {
+  composes: marqueepartgroup from '../../styles/shared/media/marquee.module.css';
+}

@@ -5,7 +5,10 @@ import { createRecordKeys } from '../../hooks/createRecordKeys';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import type { RowKey } from '../data/rowData';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { percentOf, seriesColor } from './chartScale';
+import styles from './DonutChart.module.css';
 
 const MAX_GAP = 3;
 
@@ -103,10 +106,16 @@ export const DonutChart = (props: DonutChartProps) => {
     });
 
   return (
-    <div class={cx('vui-donut', merged.class)}>
-      <div class="vui-donut__ring" style={{ width: `${merged.size}px`, height: `${merged.size}px` }}>
+    <div class={cx(styles.donut, merged.class)}>
+      <div class={styles.donutPartRing} style={{ width: `${merged.size}px`, height: `${merged.size}px` }}>
         <svg viewBox={`0 0 ${merged.size} ${merged.size}`} role="img" aria-label={`${label()}: ${summary()}`}>
-          <circle cx={centre()} cy={centre()} r={radius()} class="vui-donut__track" stroke-width={merged.thickness} />
+          <circle
+            cx={centre()}
+            cy={centre()}
+            r={radius()}
+            class={styles.donutPartTrack}
+            stroke-width={merged.thickness}
+          />
           <For each={segments()}>
             {(s) => (
               <circle
@@ -114,7 +123,7 @@ export const DonutChart = (props: DonutChartProps) => {
                 cy={centre()}
                 r={radius()}
                 stroke-width={merged.thickness}
-                class={cx('vui-donut__seg', hover() !== null && hover() !== s.key && 'vui-donut__seg--dim')}
+                class={cx(styles.donutPartSeg, hover() !== null && hover() !== s.key && styles.donutPartSegVariantDim)}
                 style={{
                   stroke: s.color,
                   'stroke-dasharray': `${s.dash} ${circumference()}`,
@@ -126,20 +135,20 @@ export const DonutChart = (props: DonutChartProps) => {
             )}
           </For>
         </svg>
-        <div class="vui-donut__center" aria-hidden="true">
-          <span class="vui-donut__value">
+        <div class={styles.donutPartCenter} aria-hidden="true">
+          <span class={styles.donutPartValue}>
             <Show when={hovered()} fallback={format(total())}>
               {(d) => `${percentOf(d().value, total())}%`}
             </Show>
           </span>
-          <span class="vui-donut__label">
+          <Text as="span" variant="caption" tone="tertiary" class={styles.donutPartLabel}>
             <Show when={hovered()} fallback={centerLabel()}>
               {(d) => d().label}
             </Show>
-          </span>
+          </Text>
         </div>
       </div>
-      <ul class="vui-donut__legend">
+      <ul class={styles.donutPartLegend}>
         <For each={items()}>
           {(d) => {
             const on = () => !excluded().includes(d.key);
@@ -148,7 +157,7 @@ export const DonutChart = (props: DonutChartProps) => {
                 <button
                   type="button"
                   aria-pressed={on()}
-                  class={cx('vui-donut__item', !on() && 'vui-donut__item--off')}
+                  class={cx(typographyClass('body-sm'), styles.donutPartItem, !on() && styles.donutPartItemVariantOff)}
                   onMouseEnter={() => on() && setHover(d.key)}
                   onMouseLeave={() => setHover(null)}
                   onFocus={() => on() && setHover(d.key)}
@@ -156,9 +165,15 @@ export const DonutChart = (props: DonutChartProps) => {
                   onClick={() => toggle(d.key)}
                 >
                   <i style={{ background: d.color }} />
-                  <span class="vui-donut__name">{d.label}</span>
-                  <span class="vui-donut__num">{format(d.value)}</span>
-                  <span class="vui-donut__pct">{on() && total() ? `${percentOf(d.value, total())}%` : '—'}</span>
+                  <Text as="span" variant="caption" tone="inherit" class={styles.donutPartName}>
+                    {d.label}
+                  </Text>
+                  <Text as="span" variant="body-sm" tone="secondary" tabular class="vui-donut__num">
+                    {format(d.value)}
+                  </Text>
+                  <Text as="span" variant="kbd" tone="inherit" class={styles.donutPartPct}>
+                    {on() && total() ? `${percentOf(d.value, total())}%` : '—'}
+                  </Text>
                 </button>
               </li>
             );

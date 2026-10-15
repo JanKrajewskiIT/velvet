@@ -1,0 +1,81 @@
+.ratesum {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4) var(--space-8);
+}
+
+.ratesumPartScore {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1-5);
+  flex: none;
+}
+
+.ratesumPartCount {
+  color: var(--fg-tertiary);
+}
+
+.ratesumPartRows {
+  flex: 1 1 220px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-0-5);
+}
+
+.ratesumPartRow {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) 36px;
+  align-items: center;
+  gap: var(--space-2-5);
+  height: var(--control-height-inner-sm);
+  padding: 0 var(--space-1-5);
+  margin: 0 calc(-1 * var(--space-1-5));
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--fg-secondary);
+  text-align: left;
+}
+
+button.ratesumPartRow {
+  cursor: pointer;
+  transition: background-color var(--motion-fast);
+}
+
+button.ratesumPartRow:not(.ratesumPartRowVariantActive):hover {
+  background: var(--bg-hover);
+}
+
+button.ratesumPartRow:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.ratesumPartRowVariantActive,
+.ratesumPartRowVariantActive:hover {
+  background: var(--bg-selected);
+  color: var(--fg-primary);
+}
+
+.ratesumPartStar {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-0-5);
+  font-variant-numeric: tabular-nums;
+
+  --glyph-size: var(--type-caption-size);
+  --glyph-color: var(--rating-fill);
+}
+
+.ratesumPartN {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-tertiary);
+}
+
+.ratesumPartAvg {
+  font-variant-numeric: tabular-nums;
+}

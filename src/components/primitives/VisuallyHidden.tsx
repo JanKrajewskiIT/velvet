@@ -2,6 +2,7 @@ import { mergeProps, splitProps } from 'solid-js';
 
 import { cx } from '../../utils/cx';
 import { type ElementTag, type HtmlProps, Polymorphic } from '../../utils/polymorphic';
+import styles from './VisuallyHidden.module.css';
 
 export interface VisuallyHiddenProps extends HtmlProps<HTMLElement> {
   /** @default 'span' */
@@ -17,7 +18,7 @@ export const VisuallyHidden = (props: VisuallyHiddenProps) => {
   return (
     <Polymorphic
       tag={local.as}
-      class={cx('vui-sr-only', local.focusable && 'vui-sr-only--focusable', local.class)}
+      class={cx(styles.srOnly, local.focusable && styles.srOnlyVariantFocusable, local.class)}
       {...rest}
     />
   );

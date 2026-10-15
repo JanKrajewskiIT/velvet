@@ -11,6 +11,8 @@ import { Glyph } from '../primitives/Glyph';
 import { IconTile } from '../primitives/IconTile';
 import { ListItem } from '../primitives/ListItem';
 import { SectionLabel } from '../primitives/SectionLabel';
+import { Text } from '../primitives/Text';
+import styles from './ImportSourcesDialog.module.css';
 
 export interface ImportSource {
   id: string;
@@ -144,7 +146,9 @@ export const ImportSourcesDialog = (props: ImportSourcesDialogProps) => {
       size="md"
       footer={
         <>
-          <span class="vui-imports__sum">{summary()}</span>
+          <Text as="span" variant="body-sm" tone="secondary" class={styles.importsPartSum}>
+            {summary()}
+          </Text>
           <Button variant="secondary" onClick={() => props.onClose?.()} disabled={!!busy()}>
             {translate('velvet.common.cancel')}
           </Button>
@@ -160,17 +164,24 @@ export const ImportSourcesDialog = (props: ImportSourcesDialogProps) => {
     >
       <Show when={error()}>
         {(message) => (
-          <div class="vui-confirm__err" role="alert" style={{ 'margin-bottom': '12px' }}>
+          <Text
+            as="div"
+            variant="body-sm"
+            tone="danger"
+            class={styles.confirmPartErr}
+            role="alert"
+            style={{ 'margin-bottom': '12px' }}
+          >
             <Glyph name="alert-circle" />
             {message()}
-          </div>
+          </Text>
         )}
       </Show>
-      <div class="vui-imports">
+      <div class={styles.imports}>
         <For each={groups()}>
           {(group) => (
             <div class="vui-imports__group">
-              <SectionLabel class="vui-imports__h">{group.label}</SectionLabel>
+              <SectionLabel class={styles.importsPartH}>{group.label}</SectionLabel>
               <ul>
                 <For each={group.sources}>
                   {(source) => {
@@ -180,11 +191,11 @@ export const ImportSourcesDialog = (props: ImportSourcesDialogProps) => {
                       <li>
                         <ListItem
                           as="label"
-                          class={cx('vui-imports__row', !connected() && 'vui-imports__row--off')}
+                          class={cx(styles.importsPartRow, !connected() && styles.importsPartRowVariantOff)}
                           selected={on()}
                           leading={
                             <>
-                              <Show when={connected()} fallback={<span class="vui-imports__spacer" />}>
+                              <Show when={connected()} fallback={<span class={styles.importsPartSpacer} />}>
                                 <Checkbox
                                   checked={on()}
                                   disabled={operation.busy()}
@@ -197,9 +208,9 @@ export const ImportSourcesDialog = (props: ImportSourcesDialogProps) => {
                           title={source.name}
                           description={
                             source.status === 'error' ? (
-                              <span class="vui-imports__err">
+                              <Text as="span" variant="caption" tone="inherit" class={styles.importsPartErr}>
                                 {source.error ?? translate('velvet.patterns.importSourcesDialog.connectionExpired')}
-                              </span>
+                              </Text>
                             ) : (
                               source.description
                             )
@@ -207,7 +218,9 @@ export const ImportSourcesDialog = (props: ImportSourcesDialogProps) => {
                           trailing={
                             <>
                               <Show when={source.count != null && connected()}>
-                                <span class="vui-imports__count">{source.count?.toLocaleString()}</span>
+                                <Text as="span" variant="kbd" tone="inherit" class={styles.importsPartCount}>
+                                  {source.count?.toLocaleString()}
+                                </Text>
                               </Show>
                               <Show when={!connected() && props.onConnect}>
                                 <Button
@@ -229,6 +242,8 @@ export const ImportSourcesDialog = (props: ImportSourcesDialogProps) => {
                               </Show>
                             </>
                           }
+                          titleVariant="label"
+                          descriptionClass={styles.itemDescriptionPart}
                         />
                       </li>
                     );

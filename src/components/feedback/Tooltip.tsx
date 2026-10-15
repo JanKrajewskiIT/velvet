@@ -11,8 +11,18 @@ import {
 
 import { createFloating } from '../../hooks/createFloating';
 import { createLayer } from '../../hooks/createLayer';
-import { cx, modifier } from '../../utils/cx';
+import { variantClass } from '../../utils/cssModule';
+import { cx } from '../../utils/cx';
 import { Kbd } from '../primitives/Kbd';
+import { Text } from '../primitives/Text';
+import styles from './Tooltip.module.css';
+
+const TOOLTIP_CLASSES = {
+  bottom: styles.tooltipVariantBottom,
+  right: styles.tooltipVariantRight,
+  left: styles.tooltipVariantLeft,
+  open: styles.tooltipVariantOpen,
+} as const;
 
 /** Pause (ms) before hiding, so the pointer can cross the gap between trigger and tooltip. */
 const HIDE_DELAY = 120;
@@ -75,7 +85,7 @@ export const Tooltip = (props: TooltipProps) => {
   return (
     <span
       ref={setWrap}
-      class={cx('vui-tooltip-wrap', p.class)}
+      class={cx(styles.tooltipWrap, p.class)}
       onPointerEnter={enter}
       onPointerLeave={leave}
       onFocusIn={() => setFocused(true)}
@@ -85,11 +95,18 @@ export const Tooltip = (props: TooltipProps) => {
       }}
     >
       {trigger()}
-      <span
+      <Text
+        as="span"
+        variant="caption"
+        tone="inherit"
         ref={floating.ref}
         id={id}
         role="tooltip"
-        class={cx('vui-tooltip', modifier('vui-tooltip', floating.side(), 'top'), visible() && 'vui-tooltip--open')}
+        class={cx(
+          styles.tooltip,
+          variantClass(TOOLTIP_CLASSES, floating.side(), 'top'),
+          visible() && styles.tooltipVariantOpen,
+        )}
         style={{
           ...floating.style(),
           opacity: visible() ? undefined : '0',
@@ -99,12 +116,12 @@ export const Tooltip = (props: TooltipProps) => {
         {p.content}
         <Show when={p.shortcut}>
           {(shortcut) => (
-            <Kbd plain class="vui-tooltip__kbd">
+            <Kbd plain class={styles.tooltipPartKbd}>
               {shortcut()}
             </Kbd>
           )}
         </Show>
-      </span>
+      </Text>
     </span>
   );
 };

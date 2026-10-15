@@ -1,0 +1,119 @@
+:import('../../styles/shared/forms/checkbox.module.css') {
+  externalCheck: check;
+  externalCheckVariantSm: checkvariantsm;
+}
+
+:global(.externalCheck):hover .checkbox:not(:disabled, :checked, :indeterminate) {
+  border-color: var(--fg-tertiary);
+}
+
+.checkbox {
+  appearance: none;
+  margin: var(--space-px) 0 0;
+  flex: none;
+  width: var(--check-size);
+  height: var(--check-size);
+  border: var(--border-width) solid var(--check-border);
+  background: var(--control-bg);
+  display: grid;
+  place-content: center;
+  cursor: inherit;
+  transition:
+    background-color var(--motion-fast),
+    border-color var(--motion-fast),
+    box-shadow var(--motion-fast);
+  border-radius: var(--check-radius);
+  transition-property: background-color, border-color, box-shadow, transform;
+}
+
+.checkbox:hover {
+  border-color: var(--fg-tertiary);
+}
+
+.checkbox:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.checkbox:focus-visible:not(:checked, :indeterminate) {
+  border-color: var(--check-border-focus);
+}
+
+.checkbox[aria-invalid='true']:focus-visible {
+  border-color: var(--control-border-invalid);
+  box-shadow: var(--focus-ring-danger);
+}
+
+.checkbox:checked,
+.checkbox:indeterminate {
+  background: var(--check-on);
+  border-color: var(--check-on);
+}
+
+.checkbox:active:not(:disabled) {
+  transform: scale(0.9);
+}
+
+.checkbox:checked:hover:not(:disabled),
+.checkbox:indeterminate:hover:not(:disabled) {
+  background: var(--check-on-hover);
+  border-color: var(--check-on-hover);
+}
+
+.checkbox:active:not(:disabled, :checked, :indeterminate) {
+  border-color: var(--check-border-focus);
+  background: var(--check-press-bg);
+  box-shadow: 0 0 0 var(--halo-sm) var(--check-press-halo);
+}
+
+.checkbox:checked:active:not(:disabled),
+.checkbox:indeterminate:active:not(:disabled) {
+  background: var(--check-on-active);
+  border-color: var(--check-on-active);
+  box-shadow: 0 0 0 var(--halo-sm) var(--check-press-halo);
+}
+
+:global(.externalCheckVariantSm) .checkbox {
+  width: var(--size-check-sm);
+  height: var(--size-check-sm);
+}
+
+:global(.externalCheckVariantSm) .checkbox:checked::after {
+  width: var(--check-tick-w-sm);
+  height: var(--check-tick-h-sm);
+}
+
+.checkbox:checked::after {
+  content: '';
+  width: var(--check-tick-w);
+  height: var(--check-tick-h);
+  border: solid var(--check-mark);
+  border-width: 0 var(--border-width-thick) var(--border-width-thick) 0;
+  transform: translateY(-1px) rotate(45deg);
+  animation: vui-check-in var(--motion-spring);
+}
+
+.checkbox:indeterminate::after {
+  content: '';
+  width: var(--check-dash-w);
+  height: var(--border-width-thick);
+  border-radius: var(--radius-2xs);
+  background: var(--check-mark);
+  animation: vui-dash-in var(--motion-base);
+}
+
+.check {
+  composes: check from '../../styles/shared/forms/checkbox.module.css';
+}
+
+.checkVariantSm {
+  composes: checkvariantsm from '../../styles/shared/forms/checkbox.module.css';
+}
+
+.checkVariantDisabled {
+  composes: checkvariantdisabled from '../../styles/shared/forms/checkbox.module.css';
+}
+
+.checkPartDesc {
+  composes: checkpartdesc from '../../styles/shared/forms/checkbox.module.css';
+}

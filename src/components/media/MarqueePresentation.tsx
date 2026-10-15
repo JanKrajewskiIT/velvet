@@ -1,5 +1,6 @@
 import { createUniqueId, type JSX, onCleanup, onMount } from 'solid-js';
 
+import styles from './MarqueePresentation.module.css';
 import { disablePresentationControl, presentationAttribute } from './presentationAttributes';
 
 export interface MarqueePresentationProps {
@@ -38,7 +39,7 @@ export const MarqueePresentation = (props: MarqueePresentationProps) => {
       ref={(element) => {
         lane = element;
       }}
-      class="vui-marquee__group"
+      class={styles.marqueePartGroup}
       style={{ gap: `${props.gap}px` }}
       aria-hidden="true"
       inert

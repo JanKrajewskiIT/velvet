@@ -1,0 +1,19 @@
+.timePartInput {
+  font-variant-numeric: tabular-nums;
+}
+
+.field {
+  composes: field from '../../styles/shared/primitives/field.module.css';
+}
+
+.select {
+  composes: select from '../../styles/shared/forms/select.module.css';
+}
+
+.hint {
+  composes: hint from '../../styles/shared/primitives/field.module.css';
+}
+
+.hintVariantError {
+  composes: hintvarianterror from '../../styles/shared/primitives/field.module.css';
+}

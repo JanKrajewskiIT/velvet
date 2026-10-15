@@ -1,0 +1,27 @@
+.tagPartRemove {
+  display: inline-grid;
+  place-items: center;
+  width: var(--size-icon-md);
+  height: var(--size-icon-md);
+  margin: var(--tag-remove-margin, 0 calc(-1 * var(--space-1)) 0 0);
+  padding: 0;
+  border: 0;
+  border-radius: var(--tag-remove-radius, var(--radius-xs));
+  background: none;
+  color: var(--tag-remove-fg, var(--fg-tertiary));
+
+  --glyph-color: inherit;
+  --glyph-size: var(--tag-remove-glyph-size, var(--type-caption-size));
+
+  transition: var(--transition-colors);
+  cursor: pointer;
+}
+
+.tagPartRemove:hover {
+  background: var(--tag-remove-hover-bg, var(--bg-pressed));
+  color: var(--tag-remove-hover-fg, var(--fg-primary));
+}
+
+.controlPartBtn {
+  composes: controlpartbtn from '../../styles/shared/primitives/control.module.css';
+}

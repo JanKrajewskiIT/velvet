@@ -1,0 +1,24 @@
+.diffPartSkip {
+  display: block;
+  width: 100%;
+  padding: var(--space-1) var(--space-4) var(--space-1) var(--diff-skip-padding, 110px);
+  border: 0;
+  border-block: var(--border-width) solid var(--code-line);
+  background: var(--code-hover);
+  color: var(--code-muted);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    color var(--motion-fast),
+    background-color var(--motion-fast);
+}
+
+.diffPartSkip:hover {
+  background: var(--code-active);
+  color: var(--on-color-fg);
+}
+
+.diffPartSkip:focus-visible {
+  outline: var(--border-width-thick) solid var(--code-accent);
+  outline-offset: calc(-1 * var(--space-0-5));
+}

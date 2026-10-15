@@ -1,0 +1,45 @@
+.bBody {
+  composes: part from '../../styles/shared/feedback/loader-bike-part.module.css';
+}
+
+.bFront {
+  composes: part from '../../styles/shared/feedback/loader-bike-part.module.css';
+  animation-name: vui-bike-front;
+}
+
+.bBars {
+  composes: part from '../../styles/shared/feedback/loader-bike-part.module.css';
+  animation-name: vui-bike-bars;
+}
+
+.bPed {
+  composes: part from '../../styles/shared/feedback/loader-bike-part.module.css';
+  animation-name: vui-bike-ped;
+}
+
+.bPedspin {
+  composes: part from '../../styles/shared/feedback/loader-bike-part.module.css';
+  animation-name: vui-bike-pedspin;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.bSeat {
+  composes: part from '../../styles/shared/feedback/loader-bike-part.module.css';
+  animation-name: vui-bike-seat;
+}
+
+.root {
+  display: block;
+  width: 150px;
+  height: auto;
+}
+
+.bBody,
+.bFront,
+.bBars,
+.bPed,
+.bPedspin,
+.bSeat {
+  stroke: var(--ld-c);
+}

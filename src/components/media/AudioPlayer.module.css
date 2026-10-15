@@ -1,0 +1,176 @@
+:import('../../styles/shared/primitives/glyph.module.css') {
+  externalIcon: icon;
+}
+
+.audioPartTools {
+  --player-button-hover-bg: var(--bg-hover);
+  --player-button-hover-fg: var(--fg-primary);
+  --player-button-selected-bg: var(--bg-selected);
+  --player-button-selected-fg: var(--fg-brand);
+  --player-button-focus-shadow: var(--focus-ring);
+  --player-button-focus-outline: 0;
+
+  flex: none;
+  display: flex;
+  gap: var(--space-0-5);
+  color: var(--fg-secondary);
+}
+
+.audio:not(.audioVariantPlaying) .audioPartPlay :global(.externalIcon) {
+  margin-left: var(--space-0-5);
+}
+
+.audio {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+  padding: var(--space-3);
+  border: var(--border-width) solid var(--surface-border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-raised);
+  box-shadow: var(--elevation-card);
+  color: var(--fg-primary);
+}
+
+.audioPartCover {
+  flex: none;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  background: var(--media-bg);
+}
+
+.audioPartPlay {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--action-primary);
+  color: var(--action-primary-fg);
+  font-size: var(--font-size-lg);
+  cursor: pointer;
+  transition:
+    background-color var(--motion-fast),
+    transform var(--motion-spring);
+}
+
+.audioPartPlay:hover {
+  background: var(--action-primary-hover);
+}
+
+.audioPartPlay:active {
+  transform: scale(0.95);
+}
+
+.audioPartPlay:focus-visible {
+  outline: 0;
+  box-shadow: var(--focus-ring);
+}
+
+.audioPartMain {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.audioPartHead {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.audioPartTitle,
+.audioPartArtist {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.audioPartTrack {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.audioPartWave {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-0-5);
+  height: 32px;
+  cursor: pointer;
+  outline: 0;
+  border-radius: var(--radius-xs);
+  touch-action: none;
+}
+
+.audioPartWave:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+.audioPartWave i {
+  flex: 1;
+  min-width: 1px;
+  border-radius: 1px;
+  background: var(--border-strong);
+  transition: background-color var(--motion-fast);
+}
+
+.audioPartWave i.audioPartBarVariantOn {
+  background: var(--fg-brand);
+}
+
+.audioPartWave:hover i:not(.audioPartBarVariantOn) {
+  background: color-mix(in oklab, var(--border-strong) 70%, var(--fg-brand));
+}
+
+.audioPartTime {
+  flex: none;
+}
+
+.audioVariantSm {
+  gap: var(--space-2-5);
+  padding: var(--space-2) var(--space-2-5);
+  border-radius: var(--radius-full);
+}
+
+.audioVariantSm .audioPartPlay {
+  width: 36px;
+  height: 36px;
+  font-size: var(--font-size-md);
+}
+
+.audioVariantSm .audioPartWave {
+  height: 24px;
+}
+
+.audioVariantSm .audioPartCover {
+  display: none;
+}
+
+@media (width <= 639px) {
+  /* Keep this same-selector override scoped to the mobile breakpoint. */
+  /* stylelint-disable-next-line no-duplicate-selectors -- Responsive display changes only at this breakpoint. */
+  .audioPartTools {
+    --player-text-display: none;
+  }
+}
+
+.playerPartBtnVariantTxt {
+  composes: playerpartbtnvarianttxt from '../../styles/shared/media/player.module.css';
+}
+
+.playerPartBtnVariantMuted {
+  composes: playerpartbtnvariantmuted from '../../styles/shared/media/player.module.css';
+}

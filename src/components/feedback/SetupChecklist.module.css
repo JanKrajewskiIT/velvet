@@ -1,0 +1,57 @@
+:import('../../styles/shared/actions/button.module.css') {
+  externalBtn: btn;
+}
+
+.checklist {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border: var(--border-width) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--bg-raised);
+  box-shadow: var(--elevation-card);
+  color: var(--fg-primary);
+}
+
+.checklistPartHead {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.checklistPartIntro {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.checklistPartTitle {
+  margin: 0;
+}
+
+.checklistPartLede {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.checklistPartList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.checklistVariantGrid .checklistPartList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-3);
+}
+
+.checklistPartHead :global(.externalBtn) {
+  margin: calc(-1 * var(--space-1)) calc(-1 * var(--space-1)) 0 0;
+}

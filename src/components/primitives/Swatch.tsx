@@ -1,9 +1,19 @@
 import { mergeProps, Show, splitProps } from 'solid-js';
 
-import { cx, modifier } from '../../utils/cx';
+import { variantClass } from '../../utils/cssModule';
+import { cx } from '../../utils/cx';
 import { type HtmlProps, Polymorphic } from '../../utils/polymorphic';
 import type { Tone } from '../../utils/tone';
 import { Glyph } from './Glyph';
+import styles from './Swatch.module.css';
+
+const SWATCH_CLASSES = {
+  sm: styles.swatchVariantSm,
+  lg: styles.swatchVariantLg,
+  fill: styles.swatchVariantFill,
+  round: styles.swatchVariantRound,
+  selected: styles.swatchVariantSelected,
+} as const;
 
 export interface SwatchProps extends HtmlProps<HTMLElement, 'onClick'> {
   /** Any CSS colour; wins over `tone`. */
@@ -39,9 +49,9 @@ export const Swatch = (props: SwatchProps) => {
       tag={clickable() ? 'button' : 'span'}
       type={clickable() ? 'button' : undefined}
       class={cx(
-        'vui-swatch',
-        modifier('vui-swatch', local.size, 'md'),
-        local.round && 'vui-swatch--round',
+        styles.swatch,
+        variantClass(SWATCH_CLASSES, local.size, 'md'),
+        local.round && styles.swatchVariantRound,
         local.class,
       )}
       data-tone={local.tone}

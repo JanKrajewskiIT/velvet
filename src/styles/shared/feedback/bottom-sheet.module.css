@@ -1,0 +1,14 @@
+.sheet {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: var(--sheet-max-w);
+  max-height: 88vh;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  border-bottom: 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  outline: 0;
+  animation: vui-sheet-in var(--motion-enter);
+  transition: transform var(--motion-move);
+}

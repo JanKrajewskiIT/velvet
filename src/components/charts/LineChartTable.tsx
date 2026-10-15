@@ -2,7 +2,11 @@ import { useI18n } from '@jankrajewskiit/i18n';
 import { createMemo, For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { cx } from '../../utils/cx';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { type ChartDatum, type ChartSeries, chartValueText } from './chartSeries';
+import styles from './LineChartTable.module.css';
 import { periodDelta } from './periodDelta';
 
 export interface LineChartTableProps {
@@ -36,14 +40,30 @@ export const LineChartTable = (props: LineChartTableProps) => {
   };
 
   return (
-    <div class="vui-chart__table">
-      <table class="vui-table">
+    <div class={styles.chartPartTable}>
+      <table class={cx(styles.table, typographyClass('body'))}>
         <thead>
           <tr>
-            <th>{translate('velvet.charts.lineChart.periodHeader')}</th>
-            <For each={props.series}>{(s) => <th class="vui-table__num">{s.label}</th>}</For>
+            <th>
+              <Text as="span" variant="label-sm" tone="inherit">
+                {translate('velvet.charts.lineChart.periodHeader')}
+              </Text>
+            </th>
+            <For each={props.series}>
+              {(s) => (
+                <th class={styles.tablePartNum}>
+                  <Text as="span" variant="label-sm" tone="inherit">
+                    {s.label}
+                  </Text>
+                </th>
+              )}
+            </For>
             <Show when={singleSeriesKey()}>
-              <th class="vui-table__num">Δ</th>
+              <th class={styles.tablePartNum}>
+                <Text as="span" variant="label-sm" tone="inherit">
+                  Δ
+                </Text>
+              </th>
             </Show>
           </tr>
         </thead>
@@ -51,18 +71,26 @@ export const LineChartTable = (props: LineChartTableProps) => {
           <For each={props.data}>
             {(d, i) => (
               <tr>
-                <td>{d.label}</td>
+                <td>
+                  <Text as="span" variant="body" tone="inherit">
+                    {d.label}
+                  </Text>
+                </td>
                 <For each={props.series}>
                   {(s) => (
-                    <td class="vui-table__num">
-                      {chartValueText(d, s.key, props.format, translate('velvet.charts.chartSeries.noValue'))}
+                    <td class={styles.tablePartNum}>
+                      <Text as="span" variant="body" tone="inherit" tabular>
+                        {chartValueText(d, s.key, props.format, translate('velvet.charts.chartSeries.noValue'))}
+                      </Text>
                     </td>
                   )}
                 </For>
                 <Show when={singleSeriesKey()}>
                   {(key) => (
-                    <td class="vui-table__num" style={{ color: deltaColor(i(), key()) }}>
-                      {deltaText(i(), key())}
+                    <td class={styles.tablePartNum} style={{ color: deltaColor(i(), key()) }}>
+                      <Text as="span" variant="body" tone="inherit" tabular>
+                        {deltaText(i(), key())}
+                      </Text>
                     </td>
                   )}
                 </Show>

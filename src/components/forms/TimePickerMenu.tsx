@@ -1,8 +1,11 @@
 import { For, type JSX, Show } from 'solid-js';
 
+import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
 import { ComboboxOption } from './ComboboxOption';
 import { formatTime } from './time';
+import styles from './TimePickerMenu.module.css';
 
 export interface TimePickerMenuProps {
   id: string;
@@ -27,7 +30,7 @@ export const TimePickerMenu = (props: TimePickerMenuProps) => (
     role="listbox"
     aria-label={props.label}
     aria-labelledby={props.labelledBy}
-    class="vui-select__menu vui-time__menu"
+    class={cx(styles.selectPartMenu, styles.timePartMenu)}
   >
     <For each={props.options}>
       {(option, index) => (
@@ -38,11 +41,11 @@ export const TimePickerMenu = (props: TimePickerMenuProps) => (
           onHover={() => props.onHover(index())}
           onPick={() => props.onSelect(option)}
         >
-          <span class="vui-select__label" style={{ 'font-variant-numeric': 'tabular-nums' }}>
+          <Text as="span" variant="body" tone="inherit" class={styles.selectPartLabel} tabular>
             {formatTime(option, props.hour12, props.locale)}
-          </span>
+          </Text>
           <Show when={option === props.value}>
-            <Glyph name="check" class="vui-select__check" />
+            <Glyph name="check" class={styles.selectPartCheck} />
           </Show>
         </ComboboxOption>
       )}

@@ -1,8 +1,16 @@
 import { type JSX, mergeProps, splitProps } from 'solid-js';
 
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { type HtmlProps, Polymorphic } from '../../utils/polymorphic';
 import { cssLength } from '../data/cssLength';
+import styles from './FormLayout.module.css';
+
+const FORM_VARIANT_CLASSES = {
+  sm: styles.formVariantGapSm,
+  md: styles.formVariantGapMd,
+  lg: styles.formVariantGapLg,
+} as const;
 
 export type FormGap = 'sm' | 'md' | 'lg';
 
@@ -30,7 +38,7 @@ export const FormLayout = (props: FormLayoutProps) => {
     <Polymorphic
       {...rest}
       tag={local.as}
-      class={cx('vui-form', `vui-form--gap-${local.gap}`, local.class)}
+      class={cx(styles.form, variantClass(FORM_VARIANT_CLASSES, local.gap), local.class)}
       style={style()}
       noValidate={local.as === 'form' || undefined}
       onSubmit={local.as === 'form' ? submit : undefined}

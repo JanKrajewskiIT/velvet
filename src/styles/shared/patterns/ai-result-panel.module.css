@@ -1,0 +1,57 @@
+:import('../actions/button.module.css') {
+  externalBtn: btn;
+}
+
+.aiPartSecH {
+  --glyph-size: var(--type-body-sm-size);
+
+  margin: 0 0 var(--space-2-5);
+}
+
+.aiPartFb :global(.externalBtn)[aria-pressed='true'] {
+  background: var(--bg-selected);
+  color: var(--fg-brand);
+}
+
+.aiPartProv {
+  margin-left: auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--fg-tertiary);
+}
+
+.aiPartSecs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-5) var(--space-7);
+}
+
+.aiPartDisclaimer {
+  margin: 0;
+  color: var(--fg-tertiary);
+}
+
+.aiPartFoot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1-5) var(--space-0-5);
+  min-height: var(--row-height);
+  padding: var(--space-1-5) var(--space-3);
+  border-top: var(--border-width) solid var(--border-subtle);
+}
+
+.aiPartFb {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-0-5);
+  margin-left: var(--space-1-5);
+  padding-left: var(--space-2-5);
+  border-left: var(--border-width) solid var(--border-subtle);
+}
+
+.aiPartFb > span {
+  margin-right: var(--space-1);
+}

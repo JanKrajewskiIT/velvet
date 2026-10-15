@@ -1,0 +1,99 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  font-family: var(--font-display);
+  font-weight: var(--type-heavy-weight);
+  font-size: var(--type-h4-size);
+  letter-spacing: var(--type-kpi-tracking);
+  line-height: 1;
+  color: var(--fg-primary);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.logoPartWord {
+  display: inline-flex;
+  align-items: baseline;
+}
+
+.logoPartAccent,
+.logoVariantVelvet .logoPartWord {
+  color: var(--fg-brand);
+}
+
+.logoVariantVelvet .logoPartAccent {
+  color: inherit;
+  opacity: 0.55;
+}
+
+.logoPartMark {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 1.5em;
+  height: 1.5em;
+  border-radius: 0.32em;
+  background: var(--action-primary);
+  color: var(--on-color-fg);
+  box-shadow: var(--elevation-brand);
+}
+
+.logoPartMark > span {
+  font-size: 0.92em;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  transform: translateY(0.02em);
+}
+
+.logoVariantPlain .logoPartMark {
+  box-shadow: none;
+}
+
+.logoVariantInverse,
+.logoVariantInverse .logoPartWord,
+.logoVariantInverse .logoPartAccent {
+  color: var(--on-color-fg);
+}
+
+.logoVariantInverse .logoPartMark {
+  background: var(--on-color-fg);
+  color: var(--action-primary);
+  box-shadow: none;
+}
+
+.logoVariantSm {
+  font-size: var(--type-body-lg-size);
+}
+
+.logoVariantMd {
+  font-size: var(--type-h4-size);
+}
+
+.logoVariantLg {
+  font-size: 28px;
+}
+
+.logoVariantXl {
+  font-size: 44px;
+}
+
+.logoR {
+  display: inline-block;
+  width: auto;
+  flex: none;
+  vertical-align: middle;
+}
+
+.logoRPartMark {
+  fill: var(--action-primary);
+}
+
+.logoRPartWord {
+  fill: var(--fg-primary);
+}
+
+.logoRVariantInverse .logoRPartMark,
+.logoRVariantInverse .logoRPartWord {
+  fill: var(--on-color-fg);
+}

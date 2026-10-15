@@ -1,0 +1,58 @@
+.multiPartCaret {
+  display: grid;
+  place-items: center;
+  align-self: center;
+  margin-left: auto;
+  padding: 0 var(--space-1);
+  color: var(--fg-tertiary);
+  cursor: pointer;
+}
+
+.multiPartMenu {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  max-height: var(--overlay-max-h-sm);
+}
+
+.multiPartList {
+  flex: 1;
+  overflow-y: auto;
+  margin: 0;
+  padding: var(--space-1);
+  list-style: none;
+}
+
+.multiPartOption[aria-selected='true'] {
+  color: var(--fg-primary);
+  font-weight: var(--type-body-weight);
+}
+
+.select {
+  composes: select from '../../styles/shared/forms/select.module.css';
+}
+
+.taginput {
+  composes: taginput from '../../styles/shared/forms/tag-input.module.css';
+}
+
+.taginputVariantSm {
+  composes: taginputvariantsm from '../../styles/shared/forms/tag-input.module.css';
+}
+
+.taginputPartTag {
+  composes: taginputparttag from '../../styles/shared/forms/tag-input.module.css';
+}
+
+.taginputPartInput {
+  composes: taginputpartinput from '../../styles/shared/forms/tag-input.module.css';
+}
+
+.selectPartMenu {
+  composes: selectpartmenu from '../../styles/shared/forms/select.module.css';
+}
+
+.selectPartMenuVariantUp {
+  composes: selectpartmenuvariantup from '../../styles/shared/forms/select.module.css';
+}

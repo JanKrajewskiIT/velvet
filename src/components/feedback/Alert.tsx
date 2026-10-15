@@ -1,12 +1,28 @@
 import { children, type JSX, mergeProps, Show, splitProps } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
 import type { StatusTone } from '../../utils/tone';
 import { CloseButton } from '../primitives/CloseButton';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './Alert.module.css';
 import { resolveAlertIcon } from './alertIcon';
+
+const ALERT_CLASSES = {
+  soft: styles.alertVariantSoft,
+  info: styles.alertVariantInfo,
+  success: styles.alertVariantSuccess,
+  warning: styles.alertVariantWarning,
+  danger: styles.alertVariantDanger,
+  brand: styles.alertVariantBrand,
+  neutral: styles.alertVariantNeutral,
+  outline: styles.alertVariantOutline,
+  solid: styles.alertVariantSolid,
+} as const;
 
 export interface AlertProps extends HtmlProps<HTMLDivElement, 'title' | 'onClose'> {
   /** @default 'info' */
@@ -45,23 +61,33 @@ export const Alert = (props: AlertProps) => {
     <div
       {...rest}
       role={local.tone === 'danger' || local.tone === 'warning' ? 'alert' : 'status'}
-      class={cx('vui-alert', `vui-alert--${local.tone}`, `vui-alert--${local.variant}`, local.class)}
+      class={cx(
+        typographyClass('body-sm'),
+        styles.alert,
+        variantClass(ALERT_CLASSES, local.tone),
+        variantClass(ALERT_CLASSES, local.variant),
+        local.class,
+      )}
     >
-      <Show when={glyph()}>{(name) => <Glyph name={name()} class="vui-alert__icon" />}</Show>
-      <div class="vui-alert__body">
+      <Show when={glyph()}>{(name) => <Glyph name={name()} class={styles.alertPartIcon} />}</Show>
+      <div class={styles.alertPartBody}>
         <Show when={title()}>
-          <div class="vui-alert__title">{title()}</div>
+          <Text as="div" variant="label" tone="inherit" class={styles.alertPartTitle}>
+            {title()}
+          </Text>
         </Show>
         <Show when={text()}>
-          <div class="vui-alert__text">{text()}</div>
+          <Text as="div" variant="body-sm" tone="secondary" class={styles.alertPartText}>
+            {text()}
+          </Text>
         </Show>
         <Show when={action()}>
-          <div class="vui-alert__actions">{action()}</div>
+          <div class={styles.alertPartActions}>{action()}</div>
         </Show>
       </div>
       <Show when={local.onClose}>
         <CloseButton
-          class="vui-alert__close"
+          class={styles.alertPartClose}
           label={translate('velvet.common.dismiss')}
           onClick={() => local.onClose?.()}
         />

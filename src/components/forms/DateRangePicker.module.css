@@ -1,0 +1,67 @@
+:import('../../styles/shared/feedback/popover.module.css') {
+  externalPopover: popover;
+}
+
+@media (width <= 639px) {
+  :global(.externalPopover).rangepop {
+    width: auto;
+    position: fixed;
+
+    --floating-left: var(--space-2);
+    --floating-right: var(--space-2);
+    --floating-top: auto;
+    --floating-bottom: var(--space-2);
+
+    max-width: none;
+  }
+}
+
+.rangepopPartBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2-5);
+}
+
+.field {
+  composes: field from '../../styles/shared/primitives/field.module.css';
+}
+
+.popoverWrap {
+  composes: popoverwrap from '../../styles/shared/feedback/popover.module.css';
+}
+
+.datepicker {
+  composes: datepicker from '../../styles/shared/forms/date-picker.module.css';
+}
+
+.popover {
+  composes: popover from '../../styles/shared/feedback/popover.module.css';
+}
+
+.datepop {
+  composes: datepop from '../../styles/shared/forms/date-picker.module.css';
+}
+
+.popoverVariantEnd {
+  composes: popovervariantend from '../../styles/shared/feedback/popover.module.css';
+}
+
+.datepopPartFoot {
+  composes: datepoppartfoot from '../../styles/shared/forms/date-picker.module.css';
+}
+
+.rangepopPartFoot {
+  composes: rangepoppartfoot from '../../styles/shared/forms/date-range-picker.module.css';
+}
+
+.rangepopPartSum {
+  composes: rangepoppartsum from '../../styles/shared/forms/date-range-picker.module.css';
+}
+
+.hint {
+  composes: hint from '../../styles/shared/primitives/field.module.css';
+}
+
+.hintVariantError {
+  composes: hintvarianterror from '../../styles/shared/primitives/field.module.css';
+}

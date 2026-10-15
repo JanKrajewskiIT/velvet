@@ -1,0 +1,4 @@
+.part {
+  animation: vui-bike-body 3s ease-in-out infinite;
+  transition: stroke var(--motion-base);
+}

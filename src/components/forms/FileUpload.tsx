@@ -5,7 +5,9 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { EmptyText } from '../primitives/EmptyText';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
 import { partitionFiles, type RejectedFile } from './fileAcceptance';
+import styles from './FileUpload.module.css';
 import { FileUploadRow, type UploadFile } from './FileUploadRow';
 import { formatBytes } from './formatBytes';
 
@@ -74,12 +76,16 @@ export const FileUpload = (props: FileUploadProps) => {
   };
 
   return (
-    <div class={cx('vui-upload', p.class)}>
+    <div class={cx(styles.upload, p.class)}>
       <div
         role="button"
         tabIndex={canPick() ? 0 : -1}
         aria-disabled={!canPick() || undefined}
-        class={cx('vui-upload__zone', over() && 'vui-upload__zone--over', !canPick() && 'vui-upload__zone--disabled')}
+        class={cx(
+          styles.uploadPartZone,
+          over() && styles.uploadPartZoneVariantOver,
+          !canPick() && styles.uploadPartZoneVariantDisabled,
+        )}
         onClick={browse}
         onKeyDown={(e) => {
           if (!canPick() || (e.key !== 'Enter' && e.key !== ' ')) return;
@@ -104,18 +110,20 @@ export const FileUpload = (props: FileUploadProps) => {
           if (canPick()) take(e.dataTransfer?.files);
         }}
       >
-        <span class="vui-upload__icon">
+        <span class={styles.uploadPartIcon}>
           <Glyph name="upload" />
         </span>
-        <span class="vui-upload__title">
+        <Text as="span" variant="label" tone="inherit" class={styles.uploadPartTitle}>
           {over()
             ? translate('velvet.forms.fileUpload.releaseToUpload')
             : p.title === undefined
               ? translate('velvet.forms.fileUpload.title')
               : p.title}
-        </span>
+        </Text>
         <Show when={p.hint}>
-          <span class="vui-upload__hint">{p.hint}</span>
+          <Text as="span" variant="caption" tone="inherit" class={styles.uploadPartHint}>
+            {p.hint}
+          </Text>
         </Show>
         <input
           ref={(element) => {
@@ -133,19 +141,19 @@ export const FileUpload = (props: FileUploadProps) => {
         />
       </div>
       <Show when={rejected()}>
-        <span class="vui-hint vui-hint--error" role="alert">
+        <Text as="span" variant="caption" tone="inherit" class={cx(styles.hint, styles.hintVariantError)} role="alert">
           {rejected()}
-        </span>
+        </Text>
       </Show>
       <Show
         when={p.files.length > 0}
         fallback={
           <Show when={p.emptyText}>
-            <EmptyText class="vui-upload__empty">{p.emptyText}</EmptyText>
+            <EmptyText class={styles.uploadPartEmpty}>{p.emptyText}</EmptyText>
           </Show>
         }
       >
-        <ul class="vui-upload__list">
+        <ul class={styles.uploadPartList}>
           <For each={p.files}>
             {(file) => <FileUploadRow file={file} disabled={p.disabled} onRemove={p.onRemove} onRetry={p.onRetry} />}
           </For>

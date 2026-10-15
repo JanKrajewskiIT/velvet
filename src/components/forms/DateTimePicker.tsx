@@ -8,11 +8,14 @@ import { fmtDate, minutesOfDay, startOfDay } from '../../utils/date';
 import { Button } from '../actions/Button';
 import { Field } from '../primitives/Field';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { Calendar } from './Calendar';
 import { callbackAlias } from './callbackAlias';
 import { createFormValidation } from './createFormValidation';
 import { createPickerPopover } from './createPickerPopover';
 import { DateField } from './DateField';
+import styles from './DateTimePicker.module.css';
 import { DateTimeSlots } from './DateTimeSlots';
 import type { FormControlProps } from './formControl';
 import { formDateTime } from './formDate';
@@ -174,7 +177,7 @@ export const DateTimePicker = (props: DateTimePickerProps) => {
   return (
     <Field label={p.label} hint={p.hint} error={p.error} optional={p.optional} required={p.required} id={p.id}>
       {(control) => (
-        <span ref={popover.setWrap} class="vui-popover-wrap vui-datepicker">
+        <span ref={popover.setWrap} class={cx(styles.popoverWrap, styles.datepicker)}>
           <DateField
             ref={(element) => {
               trigger = element;
@@ -211,11 +214,17 @@ export const DateTimePicker = (props: DateTimePickerProps) => {
             <div
               ref={popover.floating.ref}
               style={popover.floating.style()}
-              class={cx('vui-popover', 'vui-datepop', 'vui-dtpop', p.align === 'end' && 'vui-popover--end')}
+              class={cx(
+                typographyClass('body'),
+                styles.popover,
+                styles.datepop,
+                'vui-dtpop',
+                p.align === 'end' && styles.popoverVariantEnd,
+              )}
               role="dialog"
               aria-label={translate('velvet.forms.dateTimePicker.dialogLabel')}
             >
-              <div class="vui-dtpop__body">
+              <div class={styles.dtpopPartBody}>
                 <Calendar
                   value={draft()}
                   onValueChange={setDay}
@@ -224,11 +233,11 @@ export const DateTimePicker = (props: DateTimePickerProps) => {
                   locale={locale()}
                   weekStartsOn={p.weekStartsOn}
                 />
-                <div class="vui-dtpop__times">
-                  <div class="vui-dtpop__head">
+                <div class={styles.dtpopPartTimes}>
+                  <Text as="div" variant="label" tone="inherit" class={styles.dtpopPartHead}>
                     <Glyph name="clock" />
                     {translate('velvet.forms.dateTimePicker.timeLabel')}
-                  </div>
+                  </Text>
                   <DateTimeSlots
                     ref={(element) => {
                       list = element;
@@ -244,10 +253,16 @@ export const DateTimePicker = (props: DateTimePickerProps) => {
                   />
                 </div>
               </div>
-              <div class="vui-datepop__foot vui-rangepop__foot">
-                <span class="vui-rangepop__sum" style={{ 'font-variant-numeric': 'tabular-nums' }}>
+              <div class={cx(styles.datepopPartFoot, styles.rangepopPartFoot)}>
+                <Text
+                  as="span"
+                  variant="body-sm"
+                  tone="inherit"
+                  class={styles.rangepopPartSum}
+                  style={{ 'font-variant-numeric': 'tabular-nums' }}
+                >
                   {summary()}
-                </span>
+                </Text>
                 <Button variant="ghost" size="sm" onClick={() => setDraft(roundedNow(step()))}>
                   {translate('velvet.forms.dateTimePicker.now')}
                 </Button>

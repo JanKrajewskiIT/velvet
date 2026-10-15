@@ -1,0 +1,52 @@
+.tstepPartCol {
+  --time-stepper-cell: calc(var(--control-height-lg) + var(--space-1));
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.tstepPartArrow {
+  display: grid;
+  place-items: center;
+  width: var(--time-arrow-width, var(--time-stepper-cell));
+  height: var(--time-arrow-height, var(--control-height-inner));
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--fg-tertiary);
+  font-size: var(--type-body-lg-size);
+  cursor: pointer;
+  transition:
+    background-color var(--motion-fast),
+    color var(--motion-fast);
+}
+
+.tstepPartArrow:hover {
+  background: var(--bg-hover);
+  color: var(--fg-primary);
+}
+
+.tstepPartArrow:active {
+  background: var(--bg-pressed);
+}
+
+.tstepPartVal {
+  display: grid;
+  place-items: center;
+  width: var(--time-value-width, var(--time-stepper-cell));
+  height: var(--time-value-height, var(--time-stepper-cell));
+  border-radius: var(--radius-md);
+  background: var(--bg-sunken);
+  outline: 0;
+  user-select: none;
+  font: var(--type-title-weight) var(--time-value-size, var(--type-h3-size))/1 var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-primary);
+}
+
+.tstepPartVal:focus-visible {
+  box-shadow: var(--focus-ring);
+}

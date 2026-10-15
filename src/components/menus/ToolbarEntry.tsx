@@ -3,6 +3,8 @@ import { Match, Show, Switch } from 'solid-js';
 import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
 import { Separator } from '../primitives/Separator';
+import { typographyClass } from '../primitives/typography';
+import styles from './ToolbarEntry.module.css';
 import { isIconOnly, type ToolbarItem } from './toolbarItem';
 
 export interface ToolbarEntryProps {
@@ -20,7 +22,11 @@ export const ToolbarEntry = (props: ToolbarEntryProps) => (
         type="button"
         data-tb={props.index}
         tabIndex={props.tabIndex}
-        class={cx('vui-toolbar__btn', !isIconOnly(props.item) && 'vui-toolbar__btn--label')}
+        class={cx(
+          typographyClass('label'),
+          styles.toolbarPartBtn,
+          !isIconOnly(props.item) && styles.toolbarPartBtnVariantLabel,
+        )}
         disabled={props.item.disabled}
         aria-pressed={props.item.active}
         aria-label={isIconOnly(props.item) ? props.item.label : undefined}
@@ -37,10 +43,10 @@ export const ToolbarEntry = (props: ToolbarEntryProps) => (
     }
   >
     <Match when={props.item.divider}>
-      <Separator semantic class="vui-toolbar__sep" />
+      <Separator semantic class={styles.toolbarPartSep} />
     </Match>
     <Match when={props.item.spacer}>
-      <span class="vui-toolbar__spacer" />
+      <span class={styles.toolbarPartSpacer} />
     </Match>
   </Switch>
 );

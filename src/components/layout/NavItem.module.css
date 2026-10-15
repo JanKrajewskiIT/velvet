@@ -1,0 +1,207 @@
+:import('../../styles/shared/primitives/glyph.module.css') {
+  externalIcon: icon;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navSub,
+  .navItemPartCaret {
+    transition: none;
+  }
+}
+
+.navItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: var(--nav-item-height);
+  box-sizing: border-box;
+  flex: none;
+  padding: var(--space-2) var(--space-2-5);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: none;
+  color: var(--fg-secondary);
+  text-align: left;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--motion-fast),
+    color var(--motion-fast);
+}
+
+.navItem:hover {
+  background: var(--nav-item-bg-hover);
+  color: var(--fg-primary);
+}
+
+.navItem:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.navItem[aria-current='page'],
+.navItemVariantActive {
+  background: var(--nav-item-bg-active);
+  color: var(--nav-item-fg-active);
+}
+
+.navItem[aria-current='page']:hover,
+.navItemVariantActive:hover {
+  color: var(--fg-brand);
+}
+
+.navItemPartLabel {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.navItemPartEnd {
+  margin-left: auto;
+  flex: none;
+}
+
+.navItemPartCount {
+  flex: none;
+  padding: 0 var(--space-2);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-full);
+  background: var(--bg-subtle);
+  color: var(--fg-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.navItem[aria-current='page'] .navItemPartCount,
+.navItemVariantActive .navItemPartCount {
+  background: var(--action-primary);
+  border-color: transparent;
+  color: var(--action-primary-fg);
+}
+
+.navItem .navItemPartCaret {
+  font-size: var(--size-icon-md);
+  color: var(--fg-tertiary);
+  transition: transform var(--motion-fast);
+}
+
+.navItemVariantOpen .navItemPartCaret {
+  transform: rotate(90deg);
+}
+
+.navSub {
+  display: grid;
+  grid-template-rows: 0fr;
+  margin-left: var(--space-5);
+  padding-left: var(--space-5);
+  border-left: var(--border-width) solid var(--border-subtle);
+  transition:
+    grid-template-rows var(--motion-move),
+    margin var(--motion-move);
+}
+
+.navSubVariantOpen {
+  grid-template-rows: 1fr;
+  margin-top: var(--space-px);
+  margin-bottom: var(--space-1);
+}
+
+.navSubPartInner {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-px);
+}
+
+.navSubPartLink {
+  display: block;
+  width: 100%;
+  padding: var(--space-2) var(--space-2-5);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--fg-tertiary);
+  text-align: left;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--motion-fast),
+    color var(--motion-fast);
+}
+
+.navSubPartLink:hover {
+  background: var(--bg-hover);
+  color: var(--fg-primary);
+}
+
+.navSubPartLink:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.navSubPartLink[aria-current='page'] {
+  color: var(--fg-brand);
+  font-weight: var(--type-label-weight);
+}
+
+.navItem :global(.externalIcon) {
+  --glyph-size: var(--type-title-lg-size);
+
+  flex: none;
+}
+
+.navItemVariantHasCount {
+}
+
+.navItem[data-collapsed='true'] {
+  justify-content: center;
+  gap: 0;
+  padding: var(--space-3) 0;
+}
+
+.navItemPartLabel[data-collapsed='true'],
+.navItemPartCount[data-collapsed='true'],
+.navItemPartCaret[data-collapsed='true'],
+.navSub[data-collapsed='true'] {
+  display: none;
+}
+
+.navItemPartEnd[data-collapsed='true'] {
+  position: absolute;
+  top: var(--space-0-5);
+  right: var(--space-0-5);
+  margin: 0;
+  transform: scale(0.8);
+  transform-origin: top right;
+}
+
+.navItemVariantHasCount[data-collapsed='true']::before {
+  content: '';
+  position: absolute;
+  top: 7px;
+  right: 13px;
+  width: var(--size-dot);
+  height: var(--size-dot);
+  border-radius: 50%;
+  background: var(--action-primary);
+  border: var(--border-width-medium) solid var(--bg-raised);
+}
+
+.navItem[data-collapsed='true'][data-tip]:hover::after {
+  content: attr(data-tip);
+  position: fixed;
+  margin-left: var(--space-12);
+  padding: var(--space-1-5) var(--space-2-5);
+  border-radius: var(--radius-sm);
+  background: var(--bg-inverse);
+  color: var(--fg-inverse);
+  font: var(--type-label-sm);
+  white-space: nowrap;
+  box-shadow: var(--elevation-popover);
+  z-index: var(--z-tooltip);
+  pointer-events: none;
+}

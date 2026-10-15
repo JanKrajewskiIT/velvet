@@ -1,0 +1,17 @@
+.formValue {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hint {
+  composes: hint from '../../styles/shared/primitives/field.module.css';
+}
+
+.hintVariantError {
+  composes: hintvarianterror from '../../styles/shared/primitives/field.module.css';
+}

@@ -1,0 +1,85 @@
+:import('../../styles/shared/patterns/filter-bar.module.css') {
+  externalTselectPartTrigger: tselectparttrigger;
+  externalFchipPartFoot: fchippartfoot;
+}
+
+.tselect {
+  position: relative;
+  width: 100%;
+}
+
+.tselectPartControlVariantTags :global(.externalTselectPartTrigger) {
+  padding-left: var(--space-1);
+}
+
+.tselectPartMenu {
+  left: 0;
+  right: 0;
+  padding: var(--panel-pad);
+  max-height: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  overflow: hidden;
+}
+
+.tselectPartSearch {
+  margin: var(--space-1) var(--space-1) 0;
+  box-shadow: none;
+}
+
+.tselectPartTree {
+  max-height: var(--overlay-max-h-sm);
+  overflow-y: auto;
+  outline: 0;
+  scrollbar-width: thin;
+}
+
+.tselectPartSum {
+  margin-right: auto;
+  align-self: center;
+  padding-left: var(--space-2);
+  color: var(--fg-tertiary);
+}
+
+.tselect :global(.externalFchipPartFoot) {
+  justify-content: space-between;
+}
+
+.tselectPartControlVariantTags {
+  flex-wrap: wrap;
+}
+
+.tselectPartControlVariantTags > :global(.externalTselectPartTrigger) {
+  flex: 1;
+  width: auto;
+  min-width: var(--space-8);
+}
+
+.tselectPartTrigger {
+  composes: tselectparttrigger from '../../styles/shared/patterns/filter-bar.module.css';
+}
+
+.select {
+  composes: select from '../../styles/shared/forms/select.module.css';
+}
+
+.srOnly {
+  composes: sronly from '../../styles/shared/navigation/link.module.css';
+}
+
+.controlPartChevron {
+  composes: controlpartchevron from '../../styles/shared/primitives/control.module.css';
+}
+
+.selectPartMenu {
+  composes: selectpartmenu from '../../styles/shared/forms/select.module.css';
+}
+
+.tselectPartEmpty {
+  composes: tselectpartempty from '../../styles/shared/patterns/filter-bar.module.css';
+}
+
+.fchipPartFoot {
+  composes: fchippartfoot from '../../styles/shared/patterns/filter-bar.module.css';
+}

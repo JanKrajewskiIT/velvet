@@ -1,8 +1,1 @@
-@import url('../components/media/carousel.css');
-@import url('../components/media/lightbox.css');
-@import url('../components/media/image-grid.css');
-@import url('../components/media/marquee.css');
-@import url('../components/media/media-frame.css');
-@import url('../components/media/player.css');
-@import url('../components/media/image-cropper.css');
-@import url('../extensions/media.css');
+/* Component modules are packaged from their component directories. */

@@ -1,0 +1,3 @@
+.root {
+  composes: btn from '../styles/shared/actions/button.module.css';
+}

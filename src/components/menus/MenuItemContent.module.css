@@ -1,0 +1,25 @@
+:import('../../styles/shared/primitives/glyph.module.css') {
+  externalIcon: icon;
+}
+
+.menuPartDesc {
+  color: var(--fg-tertiary);
+}
+
+.menuPartKbd {
+  flex: none;
+  color: var(--fg-tertiary);
+}
+
+.menuPartKbd + :global(.externalIcon) {
+  flex: none;
+
+  --glyph-size: var(--size-icon-md);
+
+  color: var(--option-icon);
+  margin-left: var(--space-3);
+}
+
+.menuPartLabel {
+  composes: menupartlabel from '../../styles/shared/menus/menu.module.css';
+}

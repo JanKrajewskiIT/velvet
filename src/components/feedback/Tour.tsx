@@ -13,6 +13,8 @@ import { Portal } from 'solid-js/web';
 
 import { isTopLayer } from '../../hooks/createLayer';
 import { createModal } from '../../hooks/createModal';
+import { classSelector } from '../../utils/cssModule';
+import styles from './Tour.module.css';
 import { TourCard } from './TourCard';
 import type { TourProps, TourStep } from './tourTypes';
 
@@ -34,7 +36,10 @@ export const Tour = (props: TourProps) => {
     const step = p.steps[index()];
     return step && { index: index(), step };
   });
-  createModal(() => p.open && !!current(), root, { onEscape: () => p.onClose?.(), initialFocus: '.vui-tour__card' });
+  createModal(() => p.open && !!current(), root, {
+    onEscape: () => p.onClose?.(),
+    initialFocus: classSelector(styles.tourPartCard),
+  });
 
   createEffect(
     on(
@@ -100,16 +105,16 @@ export const Tour = (props: TourProps) => {
             setRoot(element);
             onCleanup(() => setRoot(undefined));
           }}
-          class="vui-tour"
+          class={styles.tour}
           data-vui-modal
           aria-labelledby={titleId}
           aria-describedby={current()?.step.body ? bodyId : undefined}
         >
-          <Show when={hole()} fallback={<div class="vui-tour__veil" />}>
-            {(style) => <div class="vui-tour__hole" style={style()} />}
+          <Show when={hole()} fallback={<div class={styles.tourPartVeil} />}>
+            {(style) => <div class={styles.tourPartHole} style={style()} />}
           </Show>
           {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions -- pointer-only shield that keeps focus on the step card; keyboard control is on the window and createModal */}
-          <div class="vui-tour__block" onMouseDown={(e) => e.preventDefault()} />
+          <div class={styles.tourPartBlock} onMouseDown={(e) => e.preventDefault()} />
           <Show when={current()} keyed>
             {(active) => (
               <TourCard

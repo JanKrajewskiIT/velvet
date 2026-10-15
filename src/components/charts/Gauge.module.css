@@ -1,0 +1,72 @@
+.gauge {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--fg-primary);
+}
+
+.gaugePartDial {
+  position: relative;
+}
+
+.gauge svg {
+  display: block;
+  overflow: visible;
+}
+
+.gaugePartTrack {
+  fill: none;
+  stroke: var(--meter-track);
+  stroke-linecap: round;
+}
+
+.gaugePartFill {
+  fill: none;
+  stroke-linecap: round;
+  transition:
+    stroke-dasharray var(--motion-progress),
+    stroke var(--motion-base);
+}
+
+.gaugePartTick {
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.gaugePartValue {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: var(--space-0-5);
+}
+
+.gaugePartValue b {
+  font-variant-numeric: tabular-nums;
+}
+
+.gaugePartValue span {
+  color: var(--fg-secondary);
+}
+
+.gaugePartBounds {
+  display: flex;
+  justify-content: space-between;
+  color: var(--fg-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.gaugePartText {
+  margin-top: var(--space-1);
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gaugePartFill {
+    transition: none;
+  }
+}

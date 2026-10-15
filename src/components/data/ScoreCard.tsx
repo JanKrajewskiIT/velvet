@@ -7,6 +7,8 @@ import { Badge } from '../display/Badge';
 import { Card, type CardProps } from '../display/Card';
 import { Progress, type ProgressTone } from '../feedback/Progress';
 import { ProgressRing } from '../feedback/ProgressRing';
+import { Text } from '../primitives/Text';
+import styles from './ScoreCard.module.css';
 
 const SUCCESS_FROM = 75;
 const WARNING_FROM = 50;
@@ -49,8 +51,8 @@ export const ScoreCard = (props: ScoreCardProps) => {
   const translate = useTranslate();
   const tone = () => toneOf(local.score, local.tone);
   return (
-    <Card {...rest} tone={tone()} class={cx('vui-score', local.class)}>
-      <div class="vui-score__top">
+    <Card {...rest} tone={tone()} class={cx(styles.score, local.class)} bodyClass={styles.cardBody}>
+      <div class={styles.scorePartTop}>
         <ProgressRing
           value={local.score}
           size={72}
@@ -58,8 +60,10 @@ export const ScoreCard = (props: ScoreCardProps) => {
           tone={tone()}
           label={typeof local.label === 'string' ? local.label : translate('velvet.data.scoreCard.label')}
         />
-        <div class="vui-score__meta">
-          <div class="vui-score__label">{local.label}</div>
+        <div class={styles.scorePartMeta}>
+          <Text as="div" variant="body-sm" tone="secondary" class="vui-score__label">
+            {local.label}
+          </Text>
           <Show when={local.verdict}>
             {(verdict) => (
               <Badge tone={tone()} size="sm">
@@ -67,11 +71,17 @@ export const ScoreCard = (props: ScoreCardProps) => {
               </Badge>
             )}
           </Show>
-          <Show when={local.hint}>{(hint) => <div class="vui-score__hint">{hint()}</div>}</Show>
+          <Show when={local.hint}>
+            {(hint) => (
+              <Text as="div" variant="caption" tone="tertiary" class="vui-score__hint">
+                {hint()}
+              </Text>
+            )}
+          </Show>
         </div>
       </div>
       <Show when={local.criteria?.length}>
-        <div class="vui-score__criteria">
+        <div class={styles.scorePartCriteria}>
           <For each={local.criteria}>
             {(criterion) => (
               <Progress

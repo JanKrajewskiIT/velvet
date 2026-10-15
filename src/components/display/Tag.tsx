@@ -1,11 +1,24 @@
 import { type JSX, mergeProps, Show, splitProps } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
-import { cx, modifier } from '../../utils/cx';
+import { variantClass } from '../../utils/cssModule';
+import { cx } from '../../utils/cx';
 import { type HtmlProps, Polymorphic } from '../../utils/polymorphic';
 import type { Tone } from '../../utils/tone';
 import { CloseButton } from '../primitives/CloseButton';
 import { renderIcon } from '../primitives/Glyph';
+import { typographyClass } from '../primitives/typography';
+import styles from './Tag.module.css';
+
+const TAG_CLASSES = {
+  sm: styles.tagVariantSm,
+  selectable: styles.tagVariantSelectable,
+  selected: styles.tagVariantSelected,
+  disabled: styles.tagVariantDisabled,
+  pill: styles.tagVariantPill,
+  soft: styles.tagVariantSoft,
+  dashed: styles.tagVariantDashed,
+} as const;
 
 export type TagVariant = 'outline' | 'soft' | 'dashed';
 
@@ -67,13 +80,14 @@ export const Tag = (props: TagProps) => {
       aria-pressed={selectable() ? !!local.selected : undefined}
       data-tone={local.tone}
       class={cx(
-        'vui-tag',
-        local.size === 'sm' && 'vui-tag--sm',
-        modifier('vui-tag', local.variant, 'outline'),
-        local.shape === 'pill' && 'vui-tag--pill',
-        selectable() && 'vui-tag--selectable',
-        local.selected && 'vui-tag--selected',
-        local.disabled && 'vui-tag--disabled',
+        typographyClass(local.size === 'sm' ? 'label-sm' : 'button-sm'),
+        styles.tag,
+        local.size === 'sm' && styles.tagVariantSm,
+        variantClass(TAG_CLASSES, local.variant, 'outline'),
+        local.shape === 'pill' && styles.tagVariantPill,
+        selectable() && styles.tagVariantSelectable,
+        local.selected && styles.tagVariantSelected,
+        local.disabled && styles.tagVariantDisabled,
         local.class,
       )}
       disabled={selectable() ? local.disabled : undefined}

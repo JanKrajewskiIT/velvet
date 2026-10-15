@@ -1,0 +1,7 @@
+.icon {
+  width: var(--theme-icon-size, var(--size-icon-lg));
+  height: var(--theme-icon-size, var(--size-icon-lg));
+  display: block;
+  fill: currentcolor;
+  pointer-events: none;
+}

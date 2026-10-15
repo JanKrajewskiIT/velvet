@@ -1,9 +1,13 @@
 import { Index, type JSX, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { cx } from '../../utils/cx';
 import { Button } from '../actions/Button';
 import { Skeleton } from '../feedback/Skeleton';
 import { EmptyText } from '../primitives/EmptyText';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './OptionListStatus.module.css';
 
 const SKELETON_WIDTHS = [70, 55, 62] as const;
 
@@ -29,17 +33,19 @@ export const OptionListStatus = (props: OptionListStatusProps) => {
   return (
     <div role="status" aria-live="polite" aria-atomic="true">
       <Show when={props.loading && props.empty}>
-        <span class="vui-sr-only">{translate('velvet.common.loading')}</span>
+        <Text as="span" variant="caption" tone="inherit" class={styles.srOnly}>
+          {translate('velvet.common.loading')}
+        </Text>
         <Index each={SKELETON_WIDTHS}>
           {(width) => (
-            <div class="vui-select__option" aria-hidden="true">
+            <div class={cx(styles.selectPartOption, typographyClass('body'))} aria-hidden="true">
               <Skeleton width={`${width()}%`} />
             </div>
           )}
         </Index>
       </Show>
       <Show when={props.failed}>
-        <EmptyText align="start" class="vui-select__empty vui-select__error">
+        <EmptyText align="start" class={cx(styles.selectPartEmpty, styles.selectPartError)}>
           {errorText()}{' '}
           <Button variant="link" size="sm" onMouseDown={(e) => e.preventDefault()} onClick={() => props.onRetry()}>
             {retryLabel()}
@@ -47,7 +53,7 @@ export const OptionListStatus = (props: OptionListStatusProps) => {
         </EmptyText>
       </Show>
       <Show when={props.empty && !props.loading && !props.failed && props.emptyText}>
-        <EmptyText align="start" class="vui-select__empty">
+        <EmptyText align="start" class={styles.selectPartEmpty}>
           {props.emptyText}
         </EmptyText>
       </Show>

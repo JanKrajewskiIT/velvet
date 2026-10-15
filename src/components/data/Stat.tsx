@@ -7,6 +7,8 @@ import type { Tone } from '../../utils/tone';
 import { Sparkline } from '../charts/Sparkline';
 import { Badge } from '../display/Badge';
 import { Card, type CardProps } from '../display/Card';
+import { Text } from '../primitives/Text';
+import styles from './Stat.module.css';
 
 const DELTA_COLOR = {
   success: 'var(--status-success-fg)',
@@ -60,11 +62,16 @@ export const Stat = (props: StatProps) => {
       padding={local.padding}
       tone={local.accent}
       accent={!!local.accent}
-      class={cx('vui-stat', local.class)}
+      class={cx(styles.stat, local.class)}
+      bodyClass={styles.cardBody}
     >
-      <div class="vui-stat__label">{local.label}</div>
-      <div class="vui-stat__row">
-        <span class="vui-stat__value">{local.value}</span>
+      <Text as="div" variant="body-sm" tone="secondary" class="vui-stat__label">
+        {local.label}
+      </Text>
+      <div class={styles.statPartRow}>
+        <Text as="span" variant="h2" tabular class="vui-stat__value">
+          {local.value}
+        </Text>
         <Show when={local.delta}>
           {(delta) => (
             <Badge size="sm" tone={local.tone} style={{ color: DELTA_COLOR[local.tone] }}>
@@ -80,11 +87,17 @@ export const Stat = (props: StatProps) => {
             height={SPARK_HEIGHT}
             color={local.accent ? 'var(--tone)' : 'var(--dv-1)'}
             label={typeof local.label === 'string' ? local.label : translate('velvet.data.stat.trendLabel')}
-            class="vui-stat__spark"
+            class={styles.statPartSpark}
           />
         )}
       </Show>
-      <Show when={local.hint}>{(hint) => <div class="vui-stat__hint">{hint()}</div>}</Show>
+      <Show when={local.hint}>
+        {(hint) => (
+          <Text as="div" variant="caption" tone="tertiary" class="vui-stat__hint">
+            {hint()}
+          </Text>
+        )}
+      </Show>
     </Card>
   );
 };

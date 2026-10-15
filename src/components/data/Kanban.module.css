@@ -1,0 +1,117 @@
+.kanban {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(200px, 1fr);
+  gap: var(--space-3);
+  overflow-x: auto;
+  padding-bottom: var(--space-1);
+  align-items: start;
+}
+
+.kanbanPartCol {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-height: 120px;
+  padding: var(--space-2-5);
+  border-radius: var(--radius-lg);
+  background: var(--bg-sunken);
+  transition:
+    background-color var(--motion-fast),
+    box-shadow var(--motion-fast);
+}
+
+.kanbanPartColVariantOver {
+  background: var(--bg-selected);
+  box-shadow: inset 0 0 0 var(--border-width-medium) var(--border-brand);
+}
+
+.kanbanPartHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--control-height-inner);
+  padding: 0 var(--space-1);
+}
+
+.kanbanPartCount {
+  background: var(--bg-raised);
+  color: var(--fg-secondary);
+  font-family: var(--font-mono);
+  font-weight: var(--type-label-weight);
+}
+
+.kanbanPartCountVariantOver {
+  background: var(--status-warning-bg);
+  color: var(--status-warning-fg);
+}
+
+.kanbanPartList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-height: 40px;
+}
+
+.kanbanPartCard {
+  background: var(--surface-bg);
+  border: var(--border-width) solid var(--surface-border);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border-radius: var(--surface-radius);
+  box-shadow: var(--elevation-control);
+  color: var(--fg-primary);
+  cursor: grab;
+  outline: 0;
+  transition:
+    box-shadow var(--motion-fast),
+    transform var(--motion-bounce),
+    opacity var(--motion-fast);
+}
+
+.kanbanPartCard:hover {
+  box-shadow: var(--elevation-card-hover);
+  border-color: var(--border-default);
+}
+
+.kanbanPartCard:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+.kanbanPartCard:active {
+  cursor: grabbing;
+}
+
+.kanbanPartCardVariantDrag {
+  opacity: 0.4;
+  transform: rotate(1.5deg);
+}
+
+.kanbanPartGhost {
+  height: 44px;
+  border: var(--border-width-medium) dashed var(--border-brand);
+  border-radius: var(--radius-md);
+  background: color-mix(in oklab, var(--bg-selected) 60%, transparent);
+  animation: vui-fade-in var(--motion-fast);
+}
+
+.kanbanPartEmpty {
+  height: 64px;
+  padding: 0;
+  border-width: var(--border-width-medium);
+}
+
+.srOnly {
+  composes: sronly from '../../styles/shared/navigation/link.module.css';
+}
+
+.hint {
+  composes: hint from '../../styles/shared/primitives/field.module.css';
+}
+
+.hintVariantError {
+  composes: hintvarianterror from '../../styles/shared/primitives/field.module.css';
+}

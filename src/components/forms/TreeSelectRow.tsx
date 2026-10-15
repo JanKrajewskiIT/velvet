@@ -2,6 +2,9 @@ import { Show } from 'solid-js';
 
 import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './TreeSelectRow.module.css';
 import type { SelectionState, TreeRow } from './treeSelectRows';
 
 export interface TreeSelectRowProps {
@@ -30,14 +33,19 @@ export const TreeSelectRow = (props: TreeSelectRowProps) => (
     aria-expanded={props.row.hasChildren ? props.expanded : undefined}
     aria-selected={props.multiple ? undefined : props.state === 'on'}
     aria-checked={props.multiple ? (props.state === 'mixed' ? 'mixed' : props.state === 'on') : undefined}
-    class={cx('vui-option', 'vui-tselect__row', props.active && 'vui-option--active')}
+    class={cx(
+      typographyClass('body'),
+      styles.option,
+      styles.tselectPartRow,
+      props.active && styles.optionVariantActive,
+    )}
     style={{ 'padding-left': `calc(var(--option-px) + ${(props.row.level - 1) * INDENT_PX}px)` }}
     onMouseEnter={() => props.onHover()}
     onMouseDown={(e) => e.preventDefault()}
     onClick={() => props.onPick()}
   >
     <span
-      class={cx('vui-tselect__twist', !props.row.hasChildren && 'vui-tselect__twist--leaf')}
+      class={cx(styles.tselectPartTwist, !props.row.hasChildren && styles.tselectPartTwistVariantLeaf)}
       aria-hidden="true"
       onClick={(e) => {
         if (!props.row.hasChildren) return;
@@ -50,22 +58,32 @@ export const TreeSelectRow = (props: TreeSelectRowProps) => (
       </Show>
     </span>
     <Show when={props.multiple}>
-      <span class={cx('vui-fchip__box', props.state !== 'off' && 'vui-fchip__box--on')} aria-hidden="true">
+      <Text
+        as="span"
+        variant="caption"
+        tone="inherit"
+        class={cx(styles.fchipPartBox, props.state !== 'off' && styles.fchipPartBoxVariantOn)}
+        aria-hidden="true"
+      >
         <Show when={props.state === 'on'}>
           <Glyph name="check" />
         </Show>
         <Show when={props.state === 'mixed'}>
           <Glyph name="minus" />
         </Show>
-      </span>
+      </Text>
     </Show>
     <Show when={props.row.node.icon}>{(icon) => <Glyph name={icon()} />}</Show>
-    <span class="vui-option__label">{props.row.node.label}</span>
+    <Text as="span" variant="body" tone="inherit" class={styles.optionPartLabel}>
+      {props.row.node.label}
+    </Text>
     <Show when={props.row.node.meta != null}>
-      <span class="vui-option__kbd">{props.row.node.meta}</span>
+      <Text as="span" variant="kbd" tone="inherit" class={styles.optionPartKbd}>
+        {props.row.node.meta}
+      </Text>
     </Show>
     <Show when={!props.multiple && props.state === 'on'}>
-      <Glyph name="check" class="vui-select__check" />
+      <Glyph name="check" class={styles.selectPartCheck} />
     </Show>
   </div>
 );

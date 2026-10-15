@@ -1,0 +1,23 @@
+:import('../../styles/shared/primitives/glyph.module.css') {
+  externalIcon: icon;
+}
+
+.rtePartSpacer {
+  flex: 1;
+}
+
+.rtePartFlip :global(.externalIcon) {
+  transform: scaleX(-1);
+}
+
+.rtePartBar {
+  composes: rtepartbar from '../../styles/shared/forms/rich-text-editor.module.css';
+}
+
+.toolbarPartSep {
+  composes: toolbarpartsep from '../../styles/shared/menus/toolbar.module.css';
+}
+
+.toolbarPartBtn {
+  composes: toolbarpartbtn from '../../styles/shared/menus/toolbar.module.css';
+}

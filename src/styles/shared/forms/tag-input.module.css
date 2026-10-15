@@ -1,0 +1,31 @@
+.taginput {
+  height: auto;
+  min-height: var(--control-height-md);
+  flex-wrap: wrap;
+  gap: var(--space-1-5);
+  padding: var(--space-1-5) var(--space-2);
+  cursor: text;
+}
+
+.taginputVariantSm {
+  min-height: var(--control-height-sm);
+  padding: var(--space-1) var(--space-1-5);
+}
+
+.taginputPartInput {
+  flex: 1;
+  min-width: var(--control-height-lg);
+  height: var(--control-height-inner-sm);
+  padding: 0 var(--space-1);
+  border: 0;
+  outline: 0;
+  background: none;
+  color: var(--fg-primary);
+}
+
+.taginputPartInput::placeholder {
+  color: var(--fg-tertiary);
+}
+
+.taginputPartTag {
+}

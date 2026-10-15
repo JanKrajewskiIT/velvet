@@ -1,0 +1,35 @@
+.field {
+  composes: field from '../../styles/shared/primitives/field.module.css';
+}
+
+.popoverWrap {
+  composes: popoverwrap from '../../styles/shared/feedback/popover.module.css';
+}
+
+.datepicker {
+  composes: datepicker from '../../styles/shared/forms/date-picker.module.css';
+}
+
+.popover {
+  composes: popover from '../../styles/shared/feedback/popover.module.css';
+}
+
+.datepop {
+  composes: datepop from '../../styles/shared/forms/date-picker.module.css';
+}
+
+.popoverVariantEnd {
+  composes: popovervariantend from '../../styles/shared/feedback/popover.module.css';
+}
+
+.datepopPartFoot {
+  composes: datepoppartfoot from '../../styles/shared/forms/date-picker.module.css';
+}
+
+.hint {
+  composes: hint from '../../styles/shared/primitives/field.module.css';
+}
+
+.hintVariantError {
+  composes: hintvarianterror from '../../styles/shared/primitives/field.module.css';
+}

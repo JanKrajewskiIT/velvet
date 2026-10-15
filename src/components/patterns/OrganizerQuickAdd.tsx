@@ -3,6 +3,8 @@ import { createSignal } from 'solid-js';
 import { useTranslate } from '../../i18n/useTranslate';
 import { Button } from '../actions/Button';
 import { Control } from '../primitives/Control';
+import { ControlInput } from '../primitives/ControlInput';
+import styles from './OrganizerQuickAdd.module.css';
 
 export interface OrganizerQuickAddProps {
   onAdd: (title: string, time: string) => void;
@@ -23,10 +25,9 @@ export const OrganizerQuickAdd = (props: OrganizerQuickAddProps) => {
   };
 
   return (
-    <div class="vui-organizer__add">
+    <div class={styles.organizerPartAdd}>
       <Control size="sm">
-        <input
-          class="vui-control__input"
+        <ControlInput
           placeholder={translate('velvet.patterns.calendarOrganizer.newEventPlaceholder')}
           value={title()}
           onInput={(e) => setTitle(e.currentTarget.value)}
@@ -34,10 +35,9 @@ export const OrganizerQuickAdd = (props: OrganizerQuickAddProps) => {
           aria-label={translate('velvet.patterns.calendarOrganizer.newEventLabel')}
         />
       </Control>
-      <div class="vui-organizer__addrow">
+      <div class={styles.organizerPartAddrow}>
         <Control size="sm" style={{ width: '6rem' }}>
-          <input
-            class="vui-control__input"
+          <ControlInput
             placeholder="09:30"
             value={time()}
             onInput={(e) => setTime(e.currentTarget.value)}

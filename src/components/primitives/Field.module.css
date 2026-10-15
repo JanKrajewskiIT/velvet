@@ -1,0 +1,23 @@
+.field {
+  composes: field from '../../styles/shared/primitives/field.module.css';
+}
+
+.fieldPartFoot {
+  composes: fieldpartfoot from '../../styles/shared/primitives/field.module.css';
+}
+
+.hintVariantLane {
+  composes: hintvariantlane from '../../styles/shared/primitives/field.module.css';
+}
+
+.hint {
+  composes: hint from '../../styles/shared/primitives/field.module.css';
+}
+
+.fieldPartCount {
+  composes: fieldpartcount from '../../styles/shared/primitives/field.module.css';
+}
+
+.fieldPartCountVariantMax {
+  composes: fieldpartcountvariantmax from '../../styles/shared/primitives/field.module.css';
+}

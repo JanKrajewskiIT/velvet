@@ -1,0 +1,129 @@
+.funnel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  color: var(--fg-primary);
+}
+
+.funnelPartRow,
+.funnelPartConv {
+  display: grid;
+  grid-template-columns: minmax(72px, 150px) minmax(0, 1fr) 84px;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.funnelPartRow {
+  min-height: 44px;
+  padding: 0 var(--space-1);
+  border-radius: var(--radius-md);
+  outline: 0;
+  transition: opacity var(--motion-fast);
+}
+
+.funnelPartRow:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+.funnelPartRowVariantDim {
+  opacity: 0.4;
+}
+
+.funnelPartLabel {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.funnelPartTrack {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  height: 36px;
+}
+
+.funnelPartGhost {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  box-sizing: border-box;
+  border: var(--border-width) dashed var(--border-default);
+  border-radius: var(--radius-sm);
+  background: repeating-linear-gradient(135deg, var(--bg-subtle) 0 5px, transparent 5px 10px);
+}
+
+.funnelPartBar {
+  position: relative;
+  height: 100%;
+  border-radius: var(--radius-sm);
+  animation: vui-funnel-in var(--motion-slide) backwards;
+}
+
+.funnelPartVal {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  line-height: 1.25;
+}
+
+.funnelPartVal b {
+  font-variant-numeric: tabular-nums;
+}
+
+.funnelPartVal small {
+  color: var(--fg-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.funnelPartConv {
+  min-height: 26px;
+  padding: 0 var(--space-1);
+}
+
+.funnelPartConv > span {
+  grid-column: 2;
+  justify-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--type-caption-size);
+  color: var(--fg-tertiary);
+}
+
+.funnelPartConv b {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  height: 20px;
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-full);
+  background: var(--bg-subtle);
+  color: var(--fg-primary);
+  font-weight: var(--font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (width <= 639px) {
+  .funnelPartRow,
+  .funnelPartConv {
+    grid-template-columns: minmax(0, 1fr) 64px;
+    gap: var(--space-1) var(--space-3);
+  }
+
+  .funnelPartLabel {
+    grid-column: 1/-1;
+  }
+
+  .funnelPartConv > span {
+    grid-column: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .funnelPartBar {
+    animation: none;
+  }
+}

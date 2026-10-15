@@ -1,0 +1,4 @@
+.icon {
+  font-size: var(--glyph-size, 1.15em);
+  color: var(--glyph-color, inherit);
+}

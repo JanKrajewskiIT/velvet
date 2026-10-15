@@ -1,0 +1,184 @@
+:import('../../styles/shared/primitives/glyph.module.css') {
+  externalIcon: icon;
+}
+
+.cmpdlgPartBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  min-width: 0;
+}
+
+.cmpdlgPartCols {
+  display: grid;
+  grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.cmpdlgPartCol {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2-5);
+  min-width: 0;
+  padding: var(--space-2-5) var(--space-3);
+  border-radius: var(--radius-lg);
+  background: color-mix(in oklab, var(--c) 8%, var(--bg-raised));
+  box-shadow:
+    inset 0 var(--border-width-accent) 0 var(--c),
+    inset 0 0 0 var(--border-width) var(--border-subtle);
+}
+
+.cmpdlgPartCt {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-0-5);
+}
+
+.cmpdlgPartCt b {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cmpdlgPartCt small {
+  color: var(--fg-tertiary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cmpdlgPartScore {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.cmpdlgPartRadar {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-1) 0;
+}
+
+.cmpdlgPartTablewrap {
+  overflow-x: auto;
+  border: var(--border-width) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+}
+
+.cmpdlgPartTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--type-body-sm-size);
+}
+
+.cmpdlgPartTable th,
+.cmpdlgPartTable td {
+  padding: var(--space-2-5) var(--space-3-5);
+  border-bottom: var(--border-width) solid var(--border-subtle);
+  text-align: left;
+  vertical-align: top;
+}
+
+.cmpdlgPartTable tr:last-child > * {
+  border-bottom: 0;
+}
+
+.cmpdlgPartTable thead th {
+  background: var(--bg-subtle);
+  font-weight: var(--type-title-weight);
+  font-size: var(--type-caption-size);
+  color: var(--fg-secondary);
+  box-shadow: inset 0 calc(-1 * var(--border-width-thick)) 0 var(--c, transparent);
+}
+
+.cmpdlgPartTable tbody th {
+  position: sticky;
+  left: 0;
+  background: var(--bg-raised);
+  font-weight: var(--type-label-weight);
+  color: var(--fg-primary);
+  min-width: 140px;
+}
+
+.cmpdlgPartTable tbody th small {
+  display: block;
+  margin-top: var(--space-0-5);
+  color: var(--fg-tertiary);
+}
+
+.cmpdlgPartTable td {
+  color: var(--comparison-cell-color, var(--fg-secondary));
+  font-variant-numeric: tabular-nums;
+}
+
+.cmpdlgPartBest {
+  --comparison-cell-color: var(--fg-primary);
+
+  font-weight: var(--type-title-weight);
+  background: var(--status-success-bg);
+}
+
+.cmpdlgPartIns {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2-5);
+  padding: var(--space-3-5) var(--space-4);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, var(--bg-brand-subtle), var(--bg-subtle));
+}
+
+.cmpdlgPartIns h4 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  margin: 0;
+}
+
+.cmpdlgPartInsload {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.cmpdlgPartInsempty {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.cmpdlgPartState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-12) var(--space-4);
+  text-align: center;
+}
+
+@media (width <= 639px) {
+  .cmpdlgPartCols {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.dialogBody.dialogBody {
+  min-width: 0;
+}
+
+.cmpdlgPartBest :global(.externalIcon) {
+  margin-left: var(--space-1-5);
+
+  --glyph-size: var(--type-caption-size);
+
+  color: var(--status-success-fg);
+  vertical-align: -1px;
+}
+
+.cmpdlgPartStateVariantErr > :global(.externalIcon) {
+  --glyph-size: 28px;
+
+  color: var(--status-danger-fg);
+}

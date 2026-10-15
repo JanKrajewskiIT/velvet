@@ -1,8 +1,10 @@
 import { For, type JSX, Show } from 'solid-js';
 
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
 import { ComboboxOption } from './ComboboxOption';
 import type { PhoneCountry } from './phoneCountries';
+import styles from './PhoneCountryList.module.css';
 
 interface PhoneCountryListProps {
   id: string;
@@ -24,7 +26,7 @@ export const PhoneCountryList = (props: PhoneCountryListProps) => (
     id={props.id}
     role="listbox"
     aria-label={props.label}
-    class="vui-select__menu"
+    class={styles.selectPartMenu}
   >
     <For each={props.countries}>
       {(item, index) => (
@@ -35,9 +37,15 @@ export const PhoneCountryList = (props: PhoneCountryListProps) => (
           onHover={() => props.onHover(index())}
           onPick={() => props.onPick(item)}
         >
-          <span class="vui-phone__code">{item.code}</span>
-          <span class="vui-select__label">{props.countryName(item)}</span>
-          <span class="vui-phone__dial">+{item.dial}</span>
+          <Text as="span" variant="kbd" tone="inherit" class={styles.phonePartCode}>
+            {item.code}
+          </Text>
+          <Text as="span" variant="body" tone="inherit" class={styles.selectPartLabel}>
+            {props.countryName(item)}
+          </Text>
+          <Text as="span" variant="body-sm" tone="inherit" class={styles.phonePartDial}>
+            +{item.dial}
+          </Text>
           <Show when={item.code === props.selected}>
             <Glyph name="check" />
           </Show>

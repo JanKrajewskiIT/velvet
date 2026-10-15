@@ -5,6 +5,7 @@ import { clipDayInterval } from '../../utils/calendarInterval';
 import { cx } from '../../utils/cx';
 import { fmtDate, minutesOfDay, sameDay } from '../../utils/date';
 import { createSchedulerSlots } from './createSchedulerSlots';
+import styles from './SchedulerColumn.module.css';
 import type { SchedulerController } from './schedulerController';
 import { SchedulerEventBlock } from './SchedulerEventBlock';
 import { isWeekend, layoutEvents, WEEKDAY_LONG } from './schedulerLayout';
@@ -33,9 +34,9 @@ export const SchedulerColumn = (props: SchedulerColumnProps) => {
   return (
     <div
       class={cx(
-        'vui-sched__col',
-        isWeekend(props.day) && 'vui-sched__col--weekend',
-        config().onSlotClick && 'vui-sched__col--click',
+        styles.schedPartCol,
+        isWeekend(props.day) && styles.schedPartColVariantWeekend,
+        config().onSlotClick && styles.schedPartColVariantClick,
       )}
       style={{ height: `${props.scheduler.gridHeight()}px`, 'background-size': `100% ${config().hourHeight}px` }}
       role={config().onSlotClick ? 'group' : undefined}
@@ -59,7 +60,7 @@ export const SchedulerColumn = (props: SchedulerColumnProps) => {
       <Show when={config().onSlotClick}>
         <button
           type="button"
-          class="vui-sched__slot"
+          class={styles.schedPartSlot}
           style={{
             top: `${(slots.minutes(props.day) - config().startHour * 60) * props.scheduler.pxPerMinute()}px`,
             height: `${config().slotMinutes * props.scheduler.pxPerMinute()}px`,
@@ -88,7 +89,7 @@ export const SchedulerColumn = (props: SchedulerColumnProps) => {
       </For>
       <Show when={showNow()}>
         <span
-          class="vui-sched__now"
+          class={styles.schedPartNow}
           style={{ top: `${nowMinutes() * props.scheduler.pxPerMinute()}px` }}
           aria-hidden="true"
         />

@@ -1,0 +1,17 @@
+.aiPartScoreRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.aiPartHeadline {
+  margin: 0;
+}
+
+.aiPartSubline {
+  margin-top: var(--space-1);
+}
+
+.ringPartValue {
+  composes: ringpartvalue from '../../styles/shared/feedback/progress.module.css';
+}

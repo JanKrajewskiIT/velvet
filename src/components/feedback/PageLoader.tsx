@@ -4,6 +4,7 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
 import { Loader, type LoaderVariant } from './Loader';
+import styles from './PageLoader.module.css';
 
 export interface PageLoaderProps extends HtmlProps<HTMLDivElement> {
   /** Fixed over the whole viewport; otherwise absolute inside its positioned parent. @default true */
@@ -26,7 +27,7 @@ export const PageLoader = (props: PageLoaderProps) => {
       aria-busy="true"
       aria-live="polite"
       aria-label={local.label ?? translate('velvet.common.loading')}
-      class={cx('vui-page-loader', local.fullScreen && 'vui-page-loader--full', local.class)}
+      class={cx(styles.pageLoader, local.fullScreen && styles.pageLoaderVariantFull, local.class)}
     >
       <Loader variant={local.variant} decorative />
     </div>

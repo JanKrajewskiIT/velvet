@@ -3,12 +3,25 @@ import { createMemo, createSignal, For, Match, mergeProps, Switch } from 'solid-
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { diffLines } from './diffLines';
 import { DiffSkip } from './DiffSkip';
 import { DiffSplitCell } from './DiffSplitCell';
 import { DiffText } from './DiffText';
 import { DIFF_SIGN, foldUnchanged, toSplitRows } from './diffView';
+import styles from './DiffViewer.module.css';
+
+const DIFF_VARIANT_CLASSES = {
+  split: styles.diffVariantSplit,
+} as const;
+
+const DIFF_PART_C_CLASSES = {
+  add: styles.diffPartCVariantAdd,
+  del: styles.diffPartCVariantDel,
+} as const;
 
 const DIFF_MODES = ['unified', 'split'] as const;
 
@@ -55,22 +68,39 @@ export const DiffViewer = (props: DiffViewerProps) => {
   const expand = (key: number) => setExpanded((previous) => new Set(previous).add(key));
 
   return (
-    <div class={cx('vui-code', 'vui-diff', `vui-diff--${mode()}`, merged.class)}>
-      <div class="vui-code__bar">
-        <span class="vui-code__title">{merged.filename}</span>
-        <span
-          class="vui-diff__stats"
+    <div
+      class={cx(
+        typographyClass('body-sm'),
+        styles.code,
+        'vui-diff',
+        variantClass(DIFF_VARIANT_CLASSES, mode()),
+        merged.class,
+      )}
+    >
+      <div class={styles.codePartBar}>
+        <Text as="span" variant="kbd" tone="inherit" class={styles.codePartTitle}>
+          {merged.filename}
+        </Text>
+        <Text
+          as="span"
+          variant="kbd"
+          tone="inherit"
+          class={styles.diffPartStats}
           aria-label={translate('velvet.data.diffViewer.statsLabel', { added: added(), removed: removed() })}
         >
-          <span class="vui-diff__plus">+{added()}</span>
-          <span class="vui-diff__minus">−{removed()}</span>
-        </span>
-        <div class="vui-diff__modes" role="group" aria-label={translate('velvet.data.diffViewer.viewLabel')}>
+          <Text as="span" variant="caption" tone="inherit" class={styles.diffPartPlus}>
+            +{added()}
+          </Text>
+          <Text as="span" variant="caption" tone="inherit" class={styles.diffPartMinus}>
+            −{removed()}
+          </Text>
+        </Text>
+        <div class={styles.diffPartModes} role="group" aria-label={translate('velvet.data.diffViewer.viewLabel')}>
           <For each={DIFF_MODES}>
             {(option) => (
               <button
                 type="button"
-                class={cx('vui-code__tab', mode() === option && 'vui-code__tab--on')}
+                class={cx(typographyClass('kbd'), styles.codePartTab, mode() === option && styles.codePartTabVariantOn)}
                 aria-pressed={mode() === option}
                 onClick={() => setMode(option)}
               >
@@ -81,7 +111,7 @@ export const DiffViewer = (props: DiffViewerProps) => {
         </div>
       </div>
       <div
-        class="vui-diff__body"
+        class={cx(styles.diffPartBody, typographyClass('code'))}
         role="table"
         aria-label={
           merged.filename
@@ -99,19 +129,19 @@ export const DiffViewer = (props: DiffViewerProps) => {
                   </Match>
                   <Match when={entry.kind === 'eq' ? entry.row : undefined}>
                     {(row) => (
-                      <div class="vui-diff__row">
-                        <span class="vui-diff__ln">{row().o}</span>
-                        <span class="vui-diff__sign" />
-                        <DiffText row={row()} />
-                        <span class="vui-diff__ln">{row().n}</span>
-                        <span class="vui-diff__sign" />
-                        <DiffText row={row()} />
+                      <div class={styles.diffPartRow}>
+                        <span class={styles.diffPartLn}>{row().o}</span>
+                        <span class={styles.diffPartSign} />
+                        <DiffText row={row()} class={styles.lineText} />
+                        <span class={styles.diffPartLn}>{row().n}</span>
+                        <span class={styles.diffPartSign} />
+                        <DiffText row={row()} class={styles.lineText} />
                       </div>
                     )}
                   </Match>
                   <Match when={entry.kind === 'pair' ? entry : undefined}>
                     {(pair) => (
-                      <div class="vui-diff__row">
+                      <div class={styles.diffPartRow}>
                         <DiffSplitCell side="del" row={pair().del} />
                         <DiffSplitCell side="add" row={pair().add} />
                       </div>
@@ -130,11 +160,13 @@ export const DiffViewer = (props: DiffViewerProps) => {
                   </Match>
                   <Match when={entry.t === 'skip' ? undefined : entry}>
                     {(row) => (
-                      <div class={cx('vui-diff__row', row().t !== 'eq' && `vui-diff__c--${row().t}`)}>
-                        <span class="vui-diff__ln">{row().o}</span>
-                        <span class="vui-diff__ln">{row().n}</span>
-                        <span class="vui-diff__sign">{DIFF_SIGN[row().t]}</span>
-                        <span class="vui-diff__code">
+                      <div
+                        class={cx(styles.diffPartRow, row().t !== 'eq' && variantClass(DIFF_PART_C_CLASSES, row().t))}
+                      >
+                        <span class={styles.diffPartLn}>{row().o}</span>
+                        <span class={styles.diffPartLn}>{row().n}</span>
+                        <span class={styles.diffPartSign}>{DIFF_SIGN[row().t]}</span>
+                        <span class={styles.diffPartCode}>
                           <DiffText row={row()} />
                         </span>
                       </div>

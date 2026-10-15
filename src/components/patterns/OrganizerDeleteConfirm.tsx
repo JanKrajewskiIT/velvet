@@ -2,6 +2,7 @@ import { type JSX, onMount } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { Button } from '../actions/Button';
+import styles from './OrganizerDeleteConfirm.module.css';
 
 export interface OrganizerDeleteConfirmProps {
   title: string;
@@ -22,7 +23,7 @@ export const OrganizerDeleteConfirm = (props: OrganizerDeleteConfirmProps) => {
   };
   return (
     <div
-      class="vui-organizer__confirm"
+      class={styles.organizerPartConfirm}
       role="group"
       aria-label={translate('velvet.patterns.calendarOrganizer.deleteMessage', { title: props.title })}
     >

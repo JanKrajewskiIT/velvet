@@ -51,12 +51,12 @@ export const createCollectionRows = (options: CollectionRowsOptions) => {
     if (options.weighted) fresh.weight = DEFAULT_WEIGHT;
     setItems([...items(), fresh]);
     requestAnimationFrame(() =>
-      [...(root?.querySelectorAll<HTMLElement>('.vui-editcol__input') ?? [])].at(-1)?.focus(),
+      [...(root?.querySelectorAll<HTMLElement>('[data-vui-collection-input]') ?? [])].at(-1)?.focus(),
     );
   };
 
   const focusGrip = (index: number) =>
-    requestAnimationFrame(() => root?.querySelectorAll<HTMLElement>('.vui-editcol__grip')[index]?.focus());
+    requestAnimationFrame(() => root?.querySelectorAll<HTMLElement>('[data-vui-collection-grip]')[index]?.focus());
 
   const onGripKeyDown = (event: KeyboardEvent, index: number) => {
     const target = event.key === 'ArrowUp' ? index - 1 : event.key === 'ArrowDown' ? index + 1 : undefined;

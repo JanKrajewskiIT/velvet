@@ -1,0 +1,105 @@
+.carousel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.carouselPartViewport {
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  touch-action: pan-y;
+  cursor: grab;
+}
+
+.carouselPartViewport:active {
+  cursor: grabbing;
+}
+
+.carouselPartTrack {
+  display: flex;
+  transition: transform var(--motion-slide);
+  will-change: transform;
+}
+
+.carouselPartTrackVariantDrag {
+  transition: none;
+}
+
+.carouselPartSlide {
+  min-width: 0;
+  user-select: none;
+}
+
+.carouselPartSlide img {
+  display: block;
+  width: 100%;
+  pointer-events: none;
+}
+
+.carouselPartArrow {
+  position: absolute;
+  top: calc(50% - var(--space-6));
+  z-index: 2;
+  transform: translateY(-50%);
+  transition:
+    opacity var(--motion-fast),
+    transform var(--motion-bounce);
+}
+
+.carouselPartArrowVariantPrev {
+  left: var(--space-3);
+}
+
+.carouselPartArrowVariantNext {
+  right: var(--space-3);
+}
+
+.carouselPartArrow:hover:not(:disabled) {
+  transform: translateY(-50%) scale(1.06);
+}
+
+.carouselPartArrow:disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.carouselPartDots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1-5);
+}
+
+.carouselPartDot {
+  width: var(--size-dot-lg);
+  height: var(--size-dot-lg);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: var(--border-strong);
+  cursor: pointer;
+  transition:
+    width var(--motion-move),
+    background-color var(--motion-base);
+}
+
+.carouselPartDotVariantOn {
+  width: 24px;
+  background: var(--action-primary);
+}
+
+.carouselPartDot:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.carouselPartPlay {
+  margin-left: var(--space-1-5);
+}
+
+@media (pointer: coarse) {
+  .carouselPartArrow {
+    display: none;
+  }
+}

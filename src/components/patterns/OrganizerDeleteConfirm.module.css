@@ -1,0 +1,7 @@
+.organizerPartConfirm {
+  display: flex;
+  gap: var(--space-1);
+  flex: none;
+  padding-right: var(--space-1);
+  animation: vui-fade-in var(--motion-fast);
+}

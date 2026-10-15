@@ -1,0 +1,25 @@
+:import('../styles/shared/actions/button.module.css') {
+  externalBtnVariantPrimary: btnvariantprimary;
+}
+
+.authPartIcon {
+  display: inline-flex;
+  animation: vui-auth-in var(--motion-pop);
+}
+
+.authVariantError {
+  border-color: var(--status-danger-fg);
+  box-shadow: inset 0 0 0 var(--border-width) var(--status-danger-fg);
+}
+
+.authVariantError .authPartIcon {
+  color: var(--status-danger-fg);
+}
+
+:global(.externalBtnVariantPrimary).authVariantError .authPartIcon {
+  color: inherit;
+}
+
+.srOnly {
+  composes: sronly from '../styles/shared/navigation/link.module.css';
+}

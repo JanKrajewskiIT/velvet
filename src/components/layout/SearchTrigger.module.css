@@ -1,0 +1,57 @@
+.searchTrigger {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: var(--search-trigger-width, min(320px, 100%));
+  height: var(--search-trigger-height, var(--control-height-md));
+  padding: var(--search-trigger-padding, 0 var(--space-2) 0 var(--control-pad-x));
+  border: var(--border-width) solid var(--search-trigger-border, var(--control-border));
+  border-radius: var(--radius-md);
+  background: var(--search-trigger-bg, var(--control-bg));
+  color: var(--search-trigger-fg, var(--control-placeholder));
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color var(--motion-fast),
+    box-shadow var(--motion-fast);
+  min-width: var(--search-trigger-min-width, 0);
+  justify-content: var(--search-trigger-justify, flex-start);
+}
+
+.searchTrigger:hover {
+  background: var(--search-trigger-bg-hover, var(--search-trigger-bg, var(--control-bg)));
+  border-color: var(--search-trigger-border-hover, var(--control-border-hover));
+  color: var(--search-trigger-hover-fg, var(--control-fg));
+}
+
+.searchTrigger:focus-visible {
+  outline: var(--search-trigger-focus-outline, none);
+  border-color: var(--search-trigger-border-focus, var(--control-border-focus));
+  box-shadow: var(--search-trigger-focus-shadow, var(--focus-ring));
+}
+
+.searchTriggerPartText {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: var(--search-trigger-text-display, block);
+}
+
+@media (width <= 639px) {
+  .searchTrigger {
+    width: var(--search-trigger-width, var(--control-height-md));
+    padding: 0;
+    justify-content: center;
+  }
+
+  .searchTriggerPartText,
+  .shortcut {
+    display: none;
+  }
+}
+
+.shortcut {
+  --kbd-display: var(--search-shortcut-display, inline-flex);
+}

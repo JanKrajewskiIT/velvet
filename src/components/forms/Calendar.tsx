@@ -1,6 +1,7 @@
 import { For, mergeProps } from 'solid-js';
 
 import { cx } from '../../utils/cx';
+import styles from './Calendar.module.css';
 import { CalendarMonth } from './CalendarMonth';
 import type { CalendarConfig, CalendarModelProps, CalendarProps } from './calendarTypes';
 import { createCalendar } from './createCalendar';
@@ -16,7 +17,7 @@ export const Calendar = (props: CalendarProps) => {
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions -- keyboard events bubble from the focusable day buttons; mouseleave only clears the range hover preview
     <div
       ref={calendar.setRoot}
-      class={cx('vui-cal', calendar.months() > 1 && 'vui-cal--multi', p.class)}
+      class={cx(styles.cal, calendar.months() > 1 && 'vui-cal--multi', p.class)}
       onKeyDown={calendar.onKeyDown}
       onMouseLeave={() => calendar.setHover(null)}
     >

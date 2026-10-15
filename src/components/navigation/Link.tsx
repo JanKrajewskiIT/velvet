@@ -1,9 +1,18 @@
 import { type JSX, mergeProps, Show, splitProps } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
-import { cx, modifier } from '../../utils/cx';
+import { variantClass } from '../../utils/cssModule';
+import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
 import { VisuallyHidden } from '../primitives/VisuallyHidden';
+import styles from './Link.module.css';
+
+const LINK_CLASSES = {
+  plain: styles.linkVariantPlain,
+  quiet: styles.linkVariantQuiet,
+  standalone: styles.linkVariantStandalone,
+  disabled: styles.linkVariantDisabled,
+} as const;
 
 export type LinkVariant = 'default' | 'plain' | 'quiet';
 
@@ -47,20 +56,20 @@ export const Link = (props: LinkProps) => {
       aria-disabled={local.disabled || undefined}
       tabIndex={local.disabled ? -1 : rest.tabIndex}
       class={cx(
-        'vui-link',
-        modifier('vui-link', local.variant, 'default'),
-        local.standalone && 'vui-link--standalone',
-        local.disabled && 'vui-link--disabled',
+        styles.link,
+        variantClass(LINK_CLASSES, local.variant, 'default'),
+        local.standalone && styles.linkVariantStandalone,
+        local.disabled && styles.linkVariantDisabled,
         local.class,
       )}
     >
       {local.children}
       <Show when={local.external}>
-        <Glyph name="external-link" class="vui-link__icon" />
+        <Glyph name="external-link" class={styles.linkPartIcon} />
         <VisuallyHidden> {local.externalLabel ?? translate('velvet.navigation.link.externalLabel')}</VisuallyHidden>
       </Show>
       <Show when={local.standalone && !local.external}>
-        <Glyph name="arrow-right" class="vui-link__icon vui-link__arrow" />
+        <Glyph name="arrow-right" class={cx(styles.linkPartIcon, styles.linkPartArrow)} />
       </Show>
     </a>
   );

@@ -1,0 +1,56 @@
+.tselectPartTrigger {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0 var(--space-8) 0 var(--control-pad-x);
+  border: 0;
+  background: none;
+  color: var(--control-fg);
+  text-align: left;
+  cursor: pointer;
+  outline: 0;
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+.tselectPartPh {
+  color: var(--control-placeholder);
+}
+
+.tselectPartVal {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tselectPartEmpty {
+  padding: var(--space-4);
+}
+
+.fchipPartBox {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 16px;
+  height: 16px;
+  border: var(--border-width) solid var(--check-border);
+  border-radius: var(--radius-xs);
+  background: var(--control-bg);
+  color: var(--check-mark);
+}
+
+.fchipPartBoxVariantOn {
+  background: var(--check-on);
+  border-color: var(--check-on);
+}
+
+.fchipPartFoot {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--space-1);
+  padding-top: var(--space-1);
+  border-top: var(--border-width) solid var(--border-subtle);
+}

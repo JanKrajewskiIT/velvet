@@ -1,0 +1,12 @@
+.skill {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1-5);
+}
+
+.skillPartHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-3);
+}

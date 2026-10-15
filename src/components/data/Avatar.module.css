@@ -1,0 +1,37 @@
+.avatarWrap {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+}
+
+.avatarVariantXs {
+  composes: avatarvariantxs from '../../styles/shared/data/avatar.module.css';
+}
+
+.avatarVariantSm {
+  composes: avatarvariantsm from '../../styles/shared/data/avatar.module.css';
+}
+
+.avatarVariantLg {
+  composes: avatarvariantlg from '../../styles/shared/data/avatar.module.css';
+}
+
+.avatarVariantXl {
+  composes: avatarvariantxl from '../../styles/shared/data/avatar.module.css';
+}
+
+.avatarVariantNeutral {
+  composes: avatarvariantneutral from '../../styles/shared/data/avatar.module.css';
+}
+
+.avatarVariantSolid {
+  composes: avatarvariantsolid from '../../styles/shared/data/avatar.module.css';
+}
+
+.avatar {
+  composes: avatar from '../../styles/shared/data/avatar.module.css';
+}
+
+.avatarPartStatus {
+  composes: avatarpartstatus from '../../styles/shared/data/avatar.module.css';
+}

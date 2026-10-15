@@ -1,0 +1,27 @@
+.chevron {
+  flex: none;
+  transition: transform var(--motion-base);
+}
+
+.chevronVariantDown.chevronVariantOpen,
+.chevronVariantUp.chevronVariantOpen {
+  transform: rotate(180deg);
+}
+
+.chevronVariantRight.chevronVariantOpen {
+  transform: rotate(90deg);
+}
+
+.chevronVariantLeft.chevronVariantOpen {
+  transform: rotate(-90deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chevron {
+    transition: none;
+  }
+}
+
+.icon {
+  composes: icon from '../../styles/shared/primitives/glyph.module.css';
+}

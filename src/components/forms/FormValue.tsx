@@ -1,7 +1,10 @@
 import { createEffect, createMemo, createSignal, For, on, onCleanup, Show, untrack } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { cx } from '../../utils/cx';
+import { Text } from '../primitives/Text';
 import type { FormValidation } from './createFormValidation';
+import styles from './FormValue.module.css';
 
 export interface FormValueProps {
   name?: string;
@@ -52,7 +55,7 @@ export const FormValue = (props: FormValueProps) => {
     <>
       <input
         ref={setProxy}
-        class="vui-form-value"
+        class={styles.formValue}
         type="text"
         tabIndex={-1}
         aria-hidden="true"
@@ -82,9 +85,16 @@ export const FormValue = (props: FormValueProps) => {
         )}
       </For>
       <Show when={props.validation.invalid()}>
-        <span id={props.validation.messageId} class="vui-hint vui-hint--error" role="alert">
+        <Text
+          as="span"
+          variant="caption"
+          tone="inherit"
+          id={props.validation.messageId}
+          class={cx(styles.hint, styles.hintVariantError)}
+          role="alert"
+        >
           {props.invalidMessage ?? translate('velvet.forms.formValue.required')}
-        </span>
+        </Text>
       </Show>
     </>
   );

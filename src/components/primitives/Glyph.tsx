@@ -1,7 +1,17 @@
 import { type JSX, splitProps } from 'solid-js';
 
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import styles from './Glyph.module.css';
+
+const ICON_CLASSES = {
+  xs: styles.iconVariantXs,
+  sm: styles.iconVariantSm,
+  md: styles.iconVariantMd,
+  lg: styles.iconVariantLg,
+  xl: styles.iconVariantXl,
+} as const;
 
 export type GlyphSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
@@ -18,13 +28,14 @@ export interface GlyphProps extends HtmlProps<HTMLElement, 'children'> {
 export const Glyph = (props: GlyphProps) => {
   const [local, rest] = splitProps(props, ['name', 'size', 'label', 'class', 'style']);
   const style = (): JSX.CSSProperties | undefined =>
-    typeof local.size === 'number' ? { 'font-size': `${local.size}px`, ...local.style } : local.style;
+    typeof local.size === 'number' ? { '--glyph-size': `${local.size}px`, ...local.style } : local.style;
   return (
     <i
       class={cx(
-        'vui-icon',
+        styles.foundation,
+        styles.icon,
         `icon-${local.name}`,
-        typeof local.size === 'string' && `vui-icon--${local.size}`,
+        typeof local.size === 'string' && variantClass(ICON_CLASSES, local.size),
         local.class,
       )}
       style={style()}

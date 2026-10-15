@@ -1,0 +1,14 @@
+.stack {
+  display: flex;
+  min-width: 0;
+}
+
+.stackVariantDivided > * + * {
+  border-top: var(--border-width) solid var(--border-subtle);
+  padding-top: inherit;
+}
+
+.stackVariantDivided[style*='row'] > * + * {
+  border-top: 0;
+  border-left: var(--border-width) solid var(--border-subtle);
+}

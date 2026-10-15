@@ -1,7 +1,15 @@
 import { mergeProps, splitProps } from 'solid-js';
 
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { type ElementTag, type HtmlProps, Polymorphic } from '../../utils/polymorphic';
+import styles from './RailItem.module.css';
+
+const RAIL_PART_ITEM_CLASSES = {
+  done: styles.railPartItemVariantDone,
+  active: styles.railPartItemVariantActive,
+  dashed: styles.railPartItemVariantDashed,
+} as const;
 
 export interface RailItemProps extends HtmlProps<HTMLElement> {
   /** @default 'li' */
@@ -16,7 +24,7 @@ export const RailItem = (props: RailItemProps) => {
   return (
     <Polymorphic
       tag={local.as}
-      class={cx('vui-rail__item', local.state && `vui-rail__item--${local.state}`, local.class)}
+      class={cx(styles.railPartItem, local.state && variantClass(RAIL_PART_ITEM_CLASSES, local.state), local.class)}
       {...rest}
     />
   );

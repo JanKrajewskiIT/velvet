@@ -4,10 +4,13 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { type Aspect, aspectRatioValue } from './aspect';
 import { createVideoControls, type VideoTrack } from './createVideoControls';
 import { safeMediaUrl } from './safeUrl';
 import { VideoControlsBar } from './VideoControlsBar';
+import styles from './VideoPlayer.module.css';
 
 export type { VideoTrack };
 
@@ -56,9 +59,10 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
     <div
       ref={controls.bindWrap}
       class={cx(
-        'vui-player',
-        controls.state().playing && controls.idle() && 'vui-player--idle',
-        controls.fullscreen() && 'vui-player--fs',
+        typographyClass('body'),
+        styles.player,
+        controls.state().playing && controls.idle() && styles.playerVariantIdle,
+        controls.fullscreen() && styles.playerVariantFs,
         p.class,
       )}
       style={{ 'aspect-ratio': aspectRatioValue(p.ratio) }}
@@ -77,7 +81,7 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
       {/* eslint-disable-next-line jsx-a11y/media-has-caption -- captions are provided by the media source; the player cannot know them */}
       <video
         ref={controls.bindVideo}
-        class="vui-player__media"
+        class={styles.playerPartMedia}
         src={safeMediaUrl(p.src)}
         poster={safeMediaUrl(p.poster)}
         autoplay={p.autoPlay}
@@ -102,11 +106,17 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
           )}
         </For>
       </video>
-      <Show when={p.title}>{(title) => <div class="vui-player__title">{title()}</div>}</Show>
+      <Show when={p.title}>
+        {(title) => (
+          <Text as="div" variant="title" class={styles.playerPartTitle}>
+            {title()}
+          </Text>
+        )}
+      </Show>
       <Show when={!controls.state().playing}>
         <button
           type="button"
-          class="vui-player__big"
+          class={styles.playerPartBig}
           aria-label={translate('velvet.media.player.play')}
           onClick={controls.toggle}
         >

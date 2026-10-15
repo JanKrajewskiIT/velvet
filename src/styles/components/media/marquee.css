@@ -1,9 +1,0 @@
-/* Marquee */
-.vui-marquee{overflow:hidden;width:100%}
-.vui-marquee--fade{-webkit-mask-image:linear-gradient(90deg,transparent,var(--black) 8%,var(--black) 92%,transparent);mask-image:linear-gradient(90deg,transparent,var(--black) 8%,var(--black) 92%,transparent)}
-.vui-marquee__track{display:flex;width:max-content;animation:vui-marquee linear infinite}
-.vui-marquee--pause:hover .vui-marquee__track{animation-play-state:paused}
-.vui-marquee__group{display:flex;align-items:center;flex:none}
-@media (prefers-reduced-motion:reduce){.vui-marquee__track{animation:none;flex-wrap:wrap}
-.vui-marquee__group[aria-hidden]{display:none}}
-@keyframes vui-marquee{to{transform:translateX(-50%)}}

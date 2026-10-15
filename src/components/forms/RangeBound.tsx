@@ -2,6 +2,8 @@ import { createEffect, createMemo, createSignal, type JSX, on } from 'solid-js';
 
 import { parseDecimal } from '../../utils/decimalValue';
 import { Control } from '../primitives/Control';
+import { ControlInput } from '../primitives/ControlInput';
+import styles from './RangeBound.module.css';
 import { isBoundSet, parseBound } from './rangeValue';
 
 export interface RangeBoundProps {
@@ -58,12 +60,11 @@ export const RangeBound = (props: RangeBoundProps) => {
       invalid={props.invalid}
       prefix={props.prefix}
       suffix={props.suffix}
-      class="vui-range__bound"
+      class={styles.rangePartBound}
     >
-      <input
+      <ControlInput
         ref={props.ref}
         id={props.id}
-        class="vui-control__input"
         inputMode="decimal"
         value={shown()}
         placeholder={props.placeholder}

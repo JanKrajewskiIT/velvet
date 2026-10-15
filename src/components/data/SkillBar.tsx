@@ -4,6 +4,8 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { clamp } from '../../utils/math';
 import { Meter } from '../primitives/Meter';
+import { Text } from '../primitives/Text';
+import styles from './SkillBar.module.css';
 
 export interface SkillBarProps {
   label: JSX.Element;
@@ -34,10 +36,18 @@ export const SkillBar = (props: SkillBarProps) => {
       ? translate('velvet.data.skillBar.valueTextWithLevel', { level: merged.level, percent: percent() })
       : `${percent()}%`;
   return (
-    <div class={cx('vui-skill', `vui-skill--${merged.tone}`, merged.class)}>
-      <div class="vui-skill__head">
-        <span class="vui-skill__label">{merged.label}</span>
-        <Show when={merged.level}>{(level) => <span class="vui-skill__level">{level()}</span>}</Show>
+    <div class={cx(styles.skill, `vui-skill--${merged.tone}`, merged.class)}>
+      <div class={styles.skillPartHead}>
+        <Text as="span" variant="body-sm" tone="primary" class="vui-skill__label">
+          {merged.label}
+        </Text>
+        <Show when={merged.level}>
+          {(level) => (
+            <Text as="span" variant="caption" tone="tertiary" class="vui-skill__level">
+              {level()}
+            </Text>
+          )}
+        </Show>
       </div>
       <Meter
         size="lg"

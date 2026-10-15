@@ -4,8 +4,11 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { EmptyText } from '../primitives/EmptyText';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { createCollectionDrag } from './createCollectionDrag';
 import { createCollectionRows } from './createCollectionRows';
+import styles from './EditableCollection.module.css';
 import { EditableCollectionRow } from './EditableCollectionRow';
 import type { EditableItem, EditableItemId, EditableReorder } from './editableItem';
 
@@ -75,28 +78,30 @@ export const EditableCollection = (props: EditableCollectionProps) => {
   const showCount = () => p.showCount ?? !!p.title;
 
   return (
-    <div ref={rows.bindRoot} class={cx('vui-editcol', p.class)}>
+    <div ref={rows.bindRoot} class={cx(styles.editcol, p.class)}>
       <Show when={p.title || showCount()}>
-        <div class="vui-editcol__head">
+        <div class={styles.editcolPartHead}>
           <Show when={p.title}>
-            <span class="vui-editcol__title">{p.title}</span>
+            <Text as="span" variant="title" tone="inherit" class={styles.editcolPartTitle}>
+              {p.title}
+            </Text>
           </Show>
           <Show when={showCount()}>
-            <span class="vui-editcol__count" aria-live="polite">
+            <Text as="span" variant="caption" tone="inherit" class={styles.editcolPartCount} aria-live="polite">
               {countLabel(items().length)}
-            </span>
+            </Text>
           </Show>
         </div>
       </Show>
       <Show
         when={items().length > 0}
         fallback={
-          <EmptyText dashed class="vui-editcol__empty">
+          <EmptyText dashed class={styles.editcolPartEmpty}>
             {p.emptyText === undefined ? translate('velvet.forms.editableCollection.emptyText') : p.emptyText}
           </EmptyText>
         }
       >
-        <ol class="vui-editcol__list" aria-label={p.label ?? translate('velvet.forms.editableCollection.label')}>
+        <ol class={styles.editcolPartList} aria-label={p.label ?? translate('velvet.forms.editableCollection.label')}>
           <Index each={items()}>
             {(item, index) => (
               <EditableCollectionRow
@@ -118,7 +123,7 @@ export const EditableCollection = (props: EditableCollectionProps) => {
         </ol>
       </Show>
       <Show when={rows.canAdd()}>
-        <button type="button" class="vui-editcol__add" onClick={rows.addItem}>
+        <button type="button" class={cx(styles.editcolPartAdd, typographyClass('label-sm'))} onClick={rows.addItem}>
           <Glyph name="plus" />
           {p.addLabel ?? translate('velvet.forms.editableCollection.addLabel')}
         </button>

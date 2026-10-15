@@ -1,8 +1,10 @@
 import { createUniqueId, type JSX, Show } from 'solid-js';
 
 import { cx } from '../../utils/cx';
+import styles from './Field.module.css';
 import { FieldHint } from './FieldHint';
 import { FieldLabel } from './FieldLabel';
+import { Text } from './Text';
 
 /** Ids and state a Field hands to its control — spread onto the input. */
 export interface FieldControlProps {
@@ -57,7 +59,7 @@ export const Field = (props: FieldProps) => {
   const content = () => (typeof props.children === 'function' ? undefined : props.children);
 
   return (
-    <div class={cx('vui-field', props.class)}>
+    <div class={cx(styles.field, props.class)}>
       <Show when={props.label}>
         <FieldLabel
           id={`${id()}-label`}
@@ -73,20 +75,23 @@ export const Field = (props: FieldProps) => {
         {(render) => render(control)}
       </Show>
       <Show when={hasMessage() || lane()}>
-        <div class={cx('vui-field__foot', lane() && 'vui-hint--lane')}>
+        <div class={cx(styles.fieldPartFoot, lane() && styles.hintVariantLane)}>
           <FieldHint id={hintId()} error={!!props.error} lane={lane()}>
             {props.error || props.hint}
           </FieldHint>
           <Show when={hasCounter()}>
-            <span
+            <Text
+              as="span"
+              variant="kbd"
+              tone="inherit"
               class={cx(
-                'vui-hint',
-                'vui-field__count',
-                (props.count ?? 0) >= (props.maxCount ?? 0) && 'vui-field__count--max',
+                styles.hint,
+                styles.fieldPartCount,
+                (props.count ?? 0) >= (props.maxCount ?? 0) && styles.fieldPartCountVariantMax,
               )}
             >
               {props.count ?? 0}/{props.maxCount}
-            </span>
+            </Text>
           </Show>
         </div>
       </Show>

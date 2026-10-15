@@ -1,0 +1,56 @@
+.xfer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2-5);
+  width: 100%;
+  min-width: 0;
+}
+
+.xferPartGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: var(--space-2-5);
+  align-items: stretch;
+}
+
+.xferPartCtrl {
+  display: grid;
+  place-items: center;
+  width: var(--control-height-inner);
+  color: var(--fg-disabled);
+  font-size: var(--type-title-lg-size);
+}
+
+.xferPartLimit {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2-5);
+  color: var(--fg-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.xferPartLimitVariantFull {
+  color: var(--status-warning-fg);
+}
+
+.xferPartErr {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--status-danger-bg);
+  color: var(--status-danger-fg);
+}
+
+@media (width <= 639px) {
+  .xferPartGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .xferPartCtrl {
+    width: auto;
+    height: 20px;
+    transform: rotate(90deg);
+  }
+}

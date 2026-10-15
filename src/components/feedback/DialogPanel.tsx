@@ -1,10 +1,26 @@
 import { children as resolveChildren, createUniqueId, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
-import { cx, modifier } from '../../utils/cx';
+import { variantClass } from '../../utils/cssModule';
+import { cx } from '../../utils/cx';
 import { CloseButton } from '../primitives/CloseButton';
+import { Heading } from '../primitives/Heading';
+import { Text } from '../primitives/Text';
+import styles from './DialogPanel.module.css';
 import type { ResolvedDialogProps } from './dialogTypes';
 import { ModalBackdrop } from './ModalBackdrop';
+
+const DIALOG_BACKDROP_CLASSES = {
+  right: styles.dialogBackdropVariantRight,
+  left: styles.dialogBackdropVariantLeft,
+  top: styles.dialogBackdropVariantTop,
+} as const;
+
+const DIALOG_CLASSES = {
+  sm: styles.dialogVariantSm,
+  lg: styles.dialogVariantLg,
+  drawer: styles.dialogVariantDrawer,
+} as const;
 interface DialogPanelProps {
   dialog: ResolvedDialogProps;
   ref: (element: HTMLDialogElement) => void;
@@ -25,7 +41,7 @@ export const DialogPanel = (props: DialogPanelProps) => {
   return (
     <ModalBackdrop
       ref={props.ref}
-      class={cx('vui-dialog-backdrop', drawer() && `vui-dialog-backdrop--${props.dialog.placement}`)}
+      class={cx(styles.dialogBackdrop, drawer() && variantClass(DIALOG_BACKDROP_CLASSES, props.dialog.placement))}
       onDismiss={props.dialog.dismissible ? close : undefined}
       aria-labelledby={title() ? titleId : undefined}
       aria-label={title() ? undefined : (props.dialog.label ?? translate('velvet.feedback.dialog.label'))}
@@ -35,35 +51,35 @@ export const DialogPanel = (props: DialogPanelProps) => {
         tabIndex={-1}
         data-vui-focus-fallback
         class={cx(
-          'vui-dialog',
-          drawer() && 'vui-dialog--drawer',
-          modifier('vui-dialog', props.dialog.size, 'md'),
+          styles.dialog,
+          drawer() && styles.dialogVariantDrawer,
+          variantClass(DIALOG_CLASSES, props.dialog.size, 'md'),
           props.dialog.class,
         )}
         style={{ outline: 'none' }}
       >
         <Show when={props.dialog.dismissible}>
-          <CloseButton class="vui-dialog__close" label={props.dialog.closeLabel} onClick={close} />
+          <CloseButton class={styles.dialogPartClose} label={props.dialog.closeLabel} onClick={close} />
         </Show>
         <Show when={title() || description()}>
-          <div class="vui-dialog__header">
+          <div class={styles.dialogPartHeader}>
             <Show when={title()}>
-              <h2 id={titleId} class="vui-dialog__title">
+              <Heading level={2} variant="title-lg" id={titleId} class="vui-dialog__title">
                 {title()}
-              </h2>
+              </Heading>
             </Show>
             <Show when={description()}>
-              <p id={descriptionId} class="vui-dialog__desc">
+              <Text as="p" variant="body" tone="secondary" id={descriptionId} class={styles.dialogPartDesc}>
                 {description()}
-              </p>
+              </Text>
             </Show>
           </div>
         </Show>
         <Show when={body.toArray().length > 0} fallback={<div style={{ height: 'var(--space-6)' }} />}>
-          <div class="vui-dialog__body">{body()}</div>
+          <div class={cx(styles.dialogPartBody, props.dialog.bodyClass)}>{body()}</div>
         </Show>
         <Show when={footer()}>
-          <div class="vui-dialog__footer">{footer()}</div>
+          <div class={cx(styles.dialogPartFooter, props.dialog.footerClass)}>{footer()}</div>
         </Show>
       </div>
     </ModalBackdrop>

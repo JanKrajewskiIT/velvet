@@ -75,6 +75,7 @@ export const IconCategories = {
     'image',
     'bar-chart',
     'globe',
+    'robot',
     'monitor',
     'settings',
     'lock',

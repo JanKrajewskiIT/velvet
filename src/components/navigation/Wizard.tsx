@@ -5,7 +5,9 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Button } from '../actions/Button';
+import { Text } from '../primitives/Text';
 import { Stepper } from './Stepper';
+import styles from './Wizard.module.css';
 
 export interface WizardStep {
   label: JSX.Element;
@@ -95,7 +97,7 @@ export const Wizard = (props: WizardProps) => {
   };
 
   return (
-    <div class={cx('vui-wizard', p.class)}>
+    <div class={cx(styles.wizard, p.class)}>
       <Stepper steps={steps()} current={index()} errorAt={error() ? index() : undefined} onStepClick={goTo} />
       <Show when={step()} keyed>
         {(current) => (
@@ -104,25 +106,34 @@ export const Wizard = (props: WizardProps) => {
               panel = element;
             }}
             tabIndex={-1}
-            class="vui-wizard__panel"
+            class={styles.wizardPartPanel}
             role="group"
             aria-label={typeof current.label === 'string' ? current.label : undefined}
           >
             <Show when={current.title !== false}>
-              <div class="vui-wizard__title">{current.label}</div>
+              <Text as="div" variant="title" tone="inherit" class={styles.wizardPartTitle}>
+                {current.label}
+              </Text>
             </Show>
             {current.content}
             <Show when={error()}>
               {(message) => (
-                <div class="vui-hint vui-hint--error" role="alert" style={{ 'margin-top': '12px' }}>
+                <Text
+                  as="div"
+                  variant="caption"
+                  tone="inherit"
+                  class={cx(styles.hint, styles.hintVariantError)}
+                  role="alert"
+                  style={{ 'margin-top': '12px' }}
+                >
                   {message()}
-                </div>
+                </Text>
               )}
             </Show>
           </div>
         )}
       </Show>
-      <div class="vui-wizard__foot">
+      <div class={styles.wizardPartFoot}>
         <Show
           when={p.onCancel && index() === 0}
           fallback={
@@ -146,7 +157,9 @@ export const Wizard = (props: WizardProps) => {
             {labels().cancel}
           </Button>
         </Show>
-        <span class="vui-wizard__count">{labels().step(index() + 1, steps().length)}</span>
+        <Text as="span" variant="caption" tone="inherit" class={styles.wizardPartCount}>
+          {labels().step(index() + 1, steps().length)}
+        </Text>
         <Button
           loading={busy()}
           disabled={!step()}

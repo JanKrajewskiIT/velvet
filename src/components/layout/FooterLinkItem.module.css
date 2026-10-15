@@ -1,0 +1,36 @@
+.footerPartLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  color: var(--footer-link);
+  text-decoration: none;
+  border-radius: var(--radius-xs);
+  transition: color var(--motion-fast);
+}
+
+.footerPartLink:hover {
+  color: var(--footer-link-hover);
+}
+
+.footerPartLink:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.footerPartLink[aria-current='page'] {
+  color: var(--fg-brand);
+  font-weight: var(--type-label-weight);
+}
+
+.footerPartLinkVariantSm {
+  color: var(--fg-tertiary);
+}
+
+.footerPartLinkVariantSm:hover {
+  color: var(--fg-secondary);
+}
+
+.footerPartExt {
+  font-size: var(--size-icon-xs);
+  color: var(--fg-tertiary);
+}

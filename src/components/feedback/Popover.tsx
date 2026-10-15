@@ -14,6 +14,9 @@ import { createFloating } from '../../hooks/createFloating';
 import { createTrigger } from '../../hooks/createTrigger';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './Popover.module.css';
 
 /** Attributes and handler a custom trigger must spread onto its element. */
 export interface PopoverTriggerProps {
@@ -113,7 +116,7 @@ export const Popover = (props: PopoverProps) => {
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions -- delegates events from the supplied native trigger, which owns keyboard semantics
     <span
       ref={setWrap}
-      class={cx('vui-popover-wrap', hover() && 'vui-popover-wrap--hover', p.class)}
+      class={cx(styles.popoverWrap, hover() && styles.popoverWrapVariantHover, p.class)}
       onClick={trigger.onClick}
       onKeyDown={trigger.onKeyDown}
       onMouseEnter={() => hover() && later(true, p.openDelay)}
@@ -132,18 +135,21 @@ export const Popover = (props: PopoverProps) => {
           aria-labelledby={title() ? titleId : undefined}
           aria-label={title() ? undefined : (p.label ?? translate('velvet.feedback.dialog.label'))}
           class={cx(
-            'vui-popover',
-            floating.side() === 'top' && 'vui-popover--top',
-            p.align === 'end' && 'vui-popover--end',
+            typographyClass('body'),
+            styles.popover,
+            floating.side() === 'top' && styles.popoverVariantTop,
+            p.align === 'end' && styles.popoverVariantEnd,
           )}
           style={floating.style()}
         >
           <Show when={title()}>
-            <div id={titleId} class="vui-popover__title">
+            <Text as="div" variant="title" tone="inherit" id={titleId} class={styles.popoverPartTitle}>
               {title()}
-            </div>
+            </Text>
           </Show>
-          <div class="vui-popover__body">{p.children}</div>
+          <Text as="div" variant="body-sm" tone="secondary" class="vui-popover__body">
+            {p.children}
+          </Text>
         </div>
       </Show>
     </span>

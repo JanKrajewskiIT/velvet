@@ -1,0 +1,13 @@
+.label {
+  color: var(--field-label-fg);
+}
+
+.labelPartOpt {
+  color: var(--field-hint-fg);
+  margin-left: var(--space-1);
+}
+
+.labelPartReq {
+  color: var(--field-error-fg);
+  margin-left: var(--space-0-5);
+}

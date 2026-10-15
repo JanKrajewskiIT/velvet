@@ -6,8 +6,11 @@ import { Button } from '../actions/Button';
 import { Avatar } from '../data/Avatar';
 import { CloseButton } from '../primitives/CloseButton';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { seriesColor } from './chartScale';
 import type { ComparisonItem } from './comparison';
+import styles from './ComparisonBar.module.css';
 
 export interface ComparisonBarProps {
   items: ComparisonItem[];
@@ -57,24 +60,32 @@ export const ComparisonBar = (props: ComparisonBarProps) => {
 
   return (
     <div
-      class={cx('vui-cmpbar', merged.floating && 'vui-cmpbar--floating', shown() && 'vui-cmpbar--shown', merged.class)}
+      class={cx(
+        typographyClass('body'),
+        styles.cmpbar,
+        merged.floating && styles.cmpbarVariantFloating,
+        shown() && styles.cmpbarVariantShown,
+        merged.class,
+      )}
       role="region"
       aria-label={translate('velvet.charts.comparisonBar.regionLabel')}
       aria-hidden={shown() ? undefined : true}
     >
-      <div class="vui-cmpbar__items">
+      <div class={styles.cmpbarPartItems}>
         <For each={merged.items}>
           {(item, i) => (
-            <span class="vui-cmpbar__chip" style={{ '--c': item.color ?? seriesColor(i()) }}>
+            <span class={styles.cmpbarPartChip} style={{ '--c': item.color ?? seriesColor(i()) }}>
               <Avatar size="sm" name={item.label} color="var(--c)" class="vui-cmpbar__av" aria-hidden="true">
                 {item.avatar}
               </Avatar>
-              <span class="vui-cmpbar__lbl">{item.label}</span>
+              <Text as="span" variant="label" tone="inherit" class={styles.cmpbarPartLbl}>
+                {item.label}
+              </Text>
               <Show when={merged.onRemove}>
                 {(remove) => (
                   <CloseButton
                     variant="bare"
-                    class="vui-cmpbar__x"
+                    class={styles.cmpbarPartX}
                     label={translate('velvet.charts.comparisonBar.removeLabel', { label: item.label })}
                     tabIndex={tabIndex()}
                     onClick={() => remove()(item.id)}
@@ -86,16 +97,22 @@ export const ComparisonBar = (props: ComparisonBarProps) => {
         </For>
         <For each={emptySlots()}>
           {() => (
-            <span class="vui-cmpbar__slot" aria-hidden="true">
+            <Text as="span" variant="body-sm" tone="inherit" class={styles.cmpbarPartSlot} aria-hidden="true">
               <Glyph name="plus" />
-            </span>
+            </Text>
           )}
         </For>
       </div>
-      <span class={cx('vui-cmpbar__hint', over() && 'vui-cmpbar__hint--over')} aria-live="polite">
+      <Text
+        as="span"
+        variant="caption"
+        tone="tertiary"
+        class={cx(styles.cmpbarPartHint, over() && styles.cmpbarPartHintVariantOver)}
+        aria-live="polite"
+      >
         {hint()}
-      </span>
-      <div class="vui-cmpbar__acts">
+      </Text>
+      <div class={styles.cmpbarPartActs}>
         <Show when={merged.onClear}>
           {(clear) => (
             <Button variant="ghost" size="sm" tabIndex={tabIndex()} onClick={() => clear()()}>

@@ -1,0 +1,59 @@
+:import('../../styles/shared/menus/menu.module.css') {
+  externalMenuPartLabel: menupartlabel;
+}
+
+:import('../../styles/shared/primitives/glyph.module.css') {
+  externalIcon: icon;
+}
+
+:import('../../styles/shared/primitives/option.module.css') {
+  externalMenuPartItemVariantActive: menupartitemvariantactive;
+}
+
+.menuPartItemVariantDanger > :global(.externalMenuPartLabel) + :global(.externalIcon),
+.menuPartItemVariantDanger > :global(.externalIcon) {
+  color: var(--option-danger-fg);
+}
+
+.menuPartCheck {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 16px;
+  color: var(--option-check);
+  font-size: var(--size-icon-md);
+}
+
+.menuPartSep {
+  height: var(--border-width);
+  margin: var(--space-1) calc(-1 * var(--space-1));
+  background: var(--border-subtle);
+}
+
+.menuPartSection {
+  padding: var(--space-2) var(--space-2-5) var(--space-1);
+}
+
+.menuPartItemVariantDanger {
+  color: var(--option-danger-fg);
+}
+
+.menuPartItemVariantDanger:global(.externalMenuPartItemVariantActive) {
+  background: var(--option-danger-bg-active);
+}
+
+.menuPartLabel {
+  composes: menupartlabel from '../../styles/shared/menus/menu.module.css';
+}
+
+.menu {
+  composes: menu from '../../styles/shared/menus/menu.module.css';
+}
+
+.menuPartItem {
+  composes: menupartitem from '../../styles/shared/primitives/option.module.css';
+}
+
+.menuPartItemVariantActive {
+  composes: menupartitemvariantactive from '../../styles/shared/primitives/option.module.css';
+}

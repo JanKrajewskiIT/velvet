@@ -1,0 +1,90 @@
+.flip {
+  position: relative;
+  display: block;
+  width: 100%;
+  perspective: 1200px;
+  cursor: pointer;
+  border-radius: var(--surface-radius);
+  color: inherit;
+  text-align: inherit;
+}
+
+.flip:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.flipPartInner {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transition: transform var(--motion-slide);
+}
+
+.flipVariantOn .flipPartInner {
+  transform: rotateY(180deg);
+}
+
+.flip .flipPartFace {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.flip .flipPartFaceVariantBack {
+  transform: rotateY(180deg);
+}
+
+.flipVariantHover:hover .flipPartInner {
+  transform: rotateY(180deg);
+}
+
+.flipVariantHover.flipVariantOn:hover .flipPartInner {
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flipPartInner {
+    transition: none;
+  }
+
+  .flipVariantOn .flipPartInner {
+    transform: none;
+  }
+
+  .flipPartFace {
+    transition: opacity var(--motion-base);
+  }
+
+  .flipPartFaceVariantBack {
+    transform: none;
+    opacity: 0;
+  }
+
+  .flipVariantOn .flipPartFaceVariantBack {
+    opacity: 1;
+  }
+
+  .flipVariantOn .flipPartFaceVariantFront {
+    opacity: 0;
+  }
+}
+
+.flipPartFace > .cardBody {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  text-align: center;
+  flex: 1;
+  min-height: 0;
+}
+
+.flipVariantStart .flipPartFace > .cardBody {
+  align-items: stretch;
+  justify-content: space-between;
+  text-align: left;
+}

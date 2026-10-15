@@ -1,0 +1,23 @@
+.bSpk {
+  composes: part from '../../styles/shared/feedback/loader-bike-part.module.css';
+  animation-name: vui-bike-spk;
+}
+
+.bTire {
+  composes: part from '../../styles/shared/feedback/loader-bike-part.module.css';
+  animation-name: vui-bike-tire;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.bSpkspin {
+  composes: part from '../../styles/shared/feedback/loader-bike-part.module.css';
+  animation-name: vui-bike-spkspin;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.bSpk,
+.bTire {
+  stroke: currentcolor;
+}

@@ -4,6 +4,8 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { Button } from '../actions/Button';
 import { Progress } from '../feedback/Progress';
+import { Text } from '../primitives/Text';
+import styles from './LoadMore.module.css';
 
 export interface LoadMoreProps {
   /** Items currently rendered. @default 0 */
@@ -45,21 +47,25 @@ export const LoadMore = (props: LoadMoreProps) => {
 
   return (
     <Show when={p.total > 0}>
-      <div class={cx('vui-loadmore', p.class)}>
+      <div class={cx(styles.loadmore, p.class)}>
         <Progress
           value={visibleCount()}
           max={p.total}
           size="sm"
           tone="neutral"
-          label={<span class="vui-loadmore__count">{countText(visibleCount(), p.total)}</span>}
-          class="vui-loadmore__bar"
+          label={
+            <Text as="span" variant="caption" tone="inherit" class={styles.loadmorePartCount}>
+              {countText(visibleCount(), p.total)}
+            </Text>
+          }
+          class={styles.loadmorePartBar}
         />
         <Show
           when={remaining() > 0}
           fallback={
-            <span class="vui-loadmore__done" role="status">
+            <Text as="span" variant="caption" tone="inherit" class={styles.loadmorePartDone} role="status">
               {p.doneLabel || translate('velvet.navigation.loadMore.doneLabel', { total: p.total })}
-            </span>
+            </Text>
           }
         >
           <Button

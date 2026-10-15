@@ -1,0 +1,44 @@
+:import('../../styles/shared/feedback/popover.module.css') {
+  externalPopover: popover;
+  externalPopoverVariantEnd: popovervariantend;
+}
+
+.popoverWrapVariantHover > :global(.externalPopover)::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -10px;
+  height: 10px;
+}
+
+.popoverWrapVariantHover > .popoverVariantTop::before {
+  top: auto;
+  bottom: -10px;
+}
+
+.popoverVariantTop {
+  top: auto;
+  bottom: calc(100% + var(--overlay-offset));
+  transform-origin: bottom left;
+}
+
+.popoverVariantTop:global(.externalPopoverVariantEnd) {
+  transform-origin: bottom right;
+}
+
+.popoverPartTitle {
+  margin-bottom: var(--space-1);
+}
+
+.popoverWrap {
+  composes: popoverwrap from '../../styles/shared/feedback/popover.module.css';
+}
+
+.popover {
+  composes: popover from '../../styles/shared/feedback/popover.module.css';
+}
+
+.popoverVariantEnd {
+  composes: popovervariantend from '../../styles/shared/feedback/popover.module.css';
+}

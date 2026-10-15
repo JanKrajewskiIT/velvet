@@ -5,6 +5,10 @@ import { cx } from '../../utils/cx';
 import { Menu } from '../menus/Menu';
 import type { MenuItem } from '../menus/menuItem';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './Breadcrumb.module.css';
+import { BreadcrumbContent } from './BreadcrumbContent';
 
 export interface BreadcrumbItem {
   label: JSX.Element;
@@ -56,13 +60,6 @@ const menuItemFor = (item: BreadcrumbItem): MenuItem => ({
       : undefined,
 });
 
-const CrumbContent = (props: { item: BreadcrumbItem }) => (
-  <>
-    <Show when={props.item.icon}>{(icon) => <Glyph name={icon()} />}</Show>
-    {props.item.label}
-  </>
-);
-
 /** Location trail. Last item is the current page (not a link). Beyond maxItems the middle collapses into a "…" menu. */
 export const Breadcrumb = (props: BreadcrumbProps) => {
   const p = mergeProps({ maxItems: 4 } satisfies Partial<BreadcrumbProps>, props);
@@ -74,11 +71,11 @@ export const Breadcrumb = (props: BreadcrumbProps) => {
   const crumbs = () => visibleCrumbs(p.items, p.maxItems);
 
   return (
-    <nav aria-label={labels().navigation} class={cx('vui-crumbs', p.class)}>
+    <nav aria-label={labels().navigation} class={cx(styles.crumbs, p.class)}>
       <ol>
         <For each={crumbs()}>
           {(crumb) => (
-            <li class="vui-crumbs__item">
+            <li class={styles.crumbsPartItem}>
               <Switch>
                 <Match when={crumb.kind === 'more' && crumb}>
                   {(more) => (
@@ -87,7 +84,7 @@ export const Breadcrumb = (props: BreadcrumbProps) => {
                       trigger={
                         <button
                           type="button"
-                          class="vui-crumbs__link vui-crumbs__more"
+                          class={cx(styles.crumbsPartLink, styles.crumbsPartMore, typographyClass('label'))}
                           aria-label={labels().more(more().hidden.length)}
                         >
                           <Glyph name="more-horizontal" />
@@ -98,28 +95,36 @@ export const Breadcrumb = (props: BreadcrumbProps) => {
                 </Match>
                 <Match when={crumb.kind === 'item' && crumb.last && crumb}>
                   {(current) => (
-                    <span class="vui-crumbs__current" aria-current="page">
-                      <CrumbContent item={current().item} />
-                    </span>
+                    <Text as="span" variant="label" tone="inherit" class={styles.crumbsPartCurrent} aria-current="page">
+                      <BreadcrumbContent icon={current().item.icon}>{current().item.label}</BreadcrumbContent>
+                    </Text>
                   )}
                 </Match>
                 <Match when={crumb.kind === 'item' && !!crumb.item.href && crumb}>
                   {(link) => (
-                    <a class="vui-crumbs__link" href={link().item.href} onClick={(e) => link().item.onClick?.(e)}>
-                      <CrumbContent item={link().item} />
+                    <a
+                      class={cx(styles.crumbsPartLink, typographyClass('label'))}
+                      href={link().item.href}
+                      onClick={(e) => link().item.onClick?.(e)}
+                    >
+                      <BreadcrumbContent icon={link().item.icon}>{link().item.label}</BreadcrumbContent>
                     </a>
                   )}
                 </Match>
                 <Match when={crumb.kind === 'item' && crumb}>
                   {(action) => (
-                    <button type="button" class="vui-crumbs__link" onClick={(e) => action().item.onClick?.(e)}>
-                      <CrumbContent item={action().item} />
+                    <button
+                      type="button"
+                      class={cx(styles.crumbsPartLink, typographyClass('label'))}
+                      onClick={(e) => action().item.onClick?.(e)}
+                    >
+                      <BreadcrumbContent icon={action().item.icon}>{action().item.label}</BreadcrumbContent>
                     </button>
                   )}
                 </Match>
               </Switch>
               <Show when={!crumb.last}>
-                <Glyph name="chevron-right" class="vui-crumbs__sep" />
+                <Glyph name="chevron-right" class={styles.crumbsPartSep} />
               </Show>
             </li>
           )}

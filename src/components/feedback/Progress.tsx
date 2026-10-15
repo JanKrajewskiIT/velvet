@@ -1,10 +1,21 @@
 import { children, createMemo, type JSX, mergeProps, Show, splitProps } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { percentOf } from '../../utils/math';
 import type { HtmlProps } from '../../utils/polymorphic';
 import { Meter } from '../primitives/Meter';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './Progress.module.css';
+
+const PROGRESS_CLASSES = {
+  success: styles.progressVariantSuccess,
+  warning: styles.progressVariantWarning,
+  danger: styles.progressVariantDanger,
+  neutral: styles.progressVariantNeutral,
+} as const;
 
 export type ProgressTone = 'brand' | 'success' | 'warning' | 'danger' | 'neutral';
 
@@ -54,20 +65,24 @@ export const Progress = (props: ProgressProps) => {
     <div
       {...rest}
       class={cx(
-        'vui-progress',
-        `vui-progress--${local.size}`,
-        `vui-progress--${local.tone}`,
+        styles.progress,
+        variantClass(PROGRESS_CLASSES, local.size),
+        variantClass(PROGRESS_CLASSES, local.tone),
         local.indeterminate && 'vui-progress--indeterminate',
         local.class,
       )}
     >
       <Show when={label() || local.showValue}>
-        <div class="vui-progress__head">
+        <div class={cx(styles.progressPartHead, typographyClass('body-sm'))}>
           <Show when={label()}>
-            <span class="vui-progress__label">{label()}</span>
+            <Text as="span" variant="label" tone="inherit" class="vui-progress__label">
+              {label()}
+            </Text>
           </Show>
           <Show when={local.showValue && !local.indeterminate}>
-            <span class="vui-progress__value">{valueText()}</span>
+            <Text as="span" variant="caption" mono tone="secondary" tabular class="vui-progress__value">
+              {valueText()}
+            </Text>
           </Show>
         </div>
       </Show>

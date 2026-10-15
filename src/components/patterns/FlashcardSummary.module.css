@@ -1,0 +1,58 @@
+.fcSummary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2-5);
+  padding: var(--space-7) var(--space-6);
+  max-width: 420px;
+  text-align: center;
+}
+
+.fcSummaryPartH {
+  margin-top: var(--space-1-5);
+}
+
+.fcSummaryPartP {
+  margin: 0;
+}
+
+.fcSummaryPartP b {
+  color: var(--fg-primary);
+}
+
+.fcSummaryPartStats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
+  width: 100%;
+  margin: var(--space-2) 0;
+}
+
+.fcSummaryPartStats div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-2-5);
+  border-radius: var(--radius-md);
+  background: var(--bg-subtle);
+}
+
+.fcSummaryPartStats b {
+  font-variant-numeric: tabular-nums;
+}
+
+.fcSummaryPartStats span {
+  color: var(--fg-tertiary);
+  text-transform: uppercase;
+}
+
+.fcSummaryPartActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+.surface {
+  composes: surface from '../../styles/shared/primitives/surface.module.css';
+}

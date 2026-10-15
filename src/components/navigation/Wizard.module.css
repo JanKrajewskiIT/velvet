@@ -1,0 +1,36 @@
+.wizard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.wizardPartPanel {
+  outline: 0;
+  animation: vui-wiz-in var(--motion-enter);
+}
+
+.wizardPartTitle {
+  margin-bottom: var(--space-3);
+}
+
+.wizardPartFoot {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  border-top: var(--border-width) solid var(--border-subtle);
+}
+
+.wizardPartCount {
+  margin: 0 auto;
+  color: var(--fg-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.hint {
+  composes: hint from '../../styles/shared/primitives/field.module.css';
+}
+
+.hintVariantError {
+  composes: hintvarianterror from '../../styles/shared/primitives/field.module.css';
+}

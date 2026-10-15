@@ -9,6 +9,7 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { Chevron } from '../primitives/Chevron';
 import { Glyph } from '../primitives/Glyph';
+import { typographyClass } from '../primitives/typography';
 import { buttonClass } from './buttonClass';
 import {
   buildGoogleCalendarUrl,
@@ -17,6 +18,7 @@ import {
   type CalendarEventDetails,
   isValidEvent,
 } from './calendarEvent';
+import styles from './CalendarEventButton.module.css';
 
 const OBJECT_URL_REVOKE_DELAY_MS = 1000;
 
@@ -116,10 +118,13 @@ export const CalendarEventButton = (props: CalendarEventButtonProps) => {
   };
 
   return (
-    <span ref={setRoot} class={cx('vui-calbtn', p.class)}>
+    <span ref={setRoot} class={cx(styles.calbtn, p.class)}>
       <button
         type="button"
-        class={cx(buttonClass({ variant: p.variant, size: p.size, icon: p.iconOnly }), done() && 'vui-calbtn--done')}
+        class={cx(
+          buttonClass({ variant: p.variant, size: p.size, icon: p.iconOnly }),
+          done() && styles.calbtnVariantDone,
+        )}
         disabled={p.disabled || !isValidEvent(p.event)}
         aria-haspopup={single() ? undefined : 'menu'}
         aria-expanded={single() ? undefined : open()}
@@ -142,7 +147,7 @@ export const CalendarEventButton = (props: CalendarEventButtonProps) => {
         <Show when={!p.iconOnly}>
           {text()}
           <Show when={!single()}>
-            <Chevron open={open()} class="vui-calbtn__chev" />
+            <Chevron open={open()} class={styles.calbtnPartChev} />
           </Show>
         </Show>
       </button>
@@ -153,7 +158,7 @@ export const CalendarEventButton = (props: CalendarEventButtonProps) => {
           style={floating.style()}
           id={menuId}
           role="menu"
-          class="vui-calbtn__menu"
+          class={styles.calbtnPartMenu}
           aria-label={label()}
           onKeyDown={menu.onKeyDown}
         >
@@ -164,13 +169,13 @@ export const CalendarEventButton = (props: CalendarEventButtonProps) => {
                 role="menuitem"
                 tabIndex={index() === menu.active() ? 0 : -1}
                 onFocus={() => menu.onFocus(index())}
-                class="vui-calbtn__item"
+                class={cx(styles.calbtnPartItem, typographyClass('button-sm'))}
                 onClick={() => pick(provider)}
               >
                 <Glyph name={PROVIDERS[provider].icon} />
                 {translate(PROVIDERS[provider].labelKey)}
                 <Show when={PROVIDERS[provider].external}>
-                  <Glyph name="external-link" class="vui-calbtn__ext" />
+                  <Glyph name="external-link" class={styles.calbtnPartExt} />
                 </Show>
               </button>
             )}

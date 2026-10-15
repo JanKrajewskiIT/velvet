@@ -4,8 +4,13 @@ import { createSignal, onMount, Show } from 'solid-js';
 import { createDismiss } from '../../hooks/createDismiss';
 import { createFloating } from '../../hooks/createFloating';
 import { createFrameFocus } from '../../hooks/createFrameFocus';
+import { classSelector } from '../../utils/cssModule';
+import { cx } from '../../utils/cx';
 import { Button } from '../actions/Button';
 import { Control } from '../primitives/Control';
+import { ControlInput } from '../primitives/ControlInput';
+import { Text } from '../primitives/Text';
+import styles from './RichTextLinkPopover.module.css';
 
 export interface RichTextLinkLabels {
   dialog: string;
@@ -45,10 +50,10 @@ export interface RichTextLinkPopoverProps {
 /** Inline link editor anchored under the toolbar. Esc closes it without leaving the editor. */
 export const RichTextLinkPopover = (props: RichTextLinkPopoverProps) => {
   const [root, setRoot] = createSignal<HTMLDivElement>();
-  const wrap = () => root()?.closest<HTMLElement>('.vui-rte') ?? root();
+  const wrap = () => root()?.closest<HTMLElement>(classSelector(styles.rte)) ?? root();
   const floating = createFloating(
     () => true,
-    () => wrap()?.querySelector('.vui-rte__bar') ?? wrap(),
+    () => wrap()?.querySelector(classSelector(styles.rtePartBar)) ?? wrap(),
     { matchWidth: true, offset: 0 },
   );
   createDismiss(
@@ -67,14 +72,13 @@ export const RichTextLinkPopover = (props: RichTextLinkPopoverProps) => {
         floating.ref(element);
       }}
       style={floating.style()}
-      class="vui-rte__link"
+      class={styles.rtePartLink}
       role="dialog"
       aria-label={props.labels.dialog}
     >
-      <div class="vui-rte__link-row">
+      <div class={styles.rtePartLinkRow}>
         <Control size="sm" invalid={!!props.error} style={{ flex: 1 }} iconLeft="link">
-          <input
-            class="vui-control__input"
+          <ControlInput
             value={props.href}
             placeholder={props.labels.placeholder}
             aria-label={props.labels.address}
@@ -93,12 +97,18 @@ export const RichTextLinkPopover = (props: RichTextLinkPopoverProps) => {
       </div>
       <Show when={props.error}>
         {(message) => (
-          <span class="vui-hint vui-hint--error" role="alert">
+          <Text
+            as="span"
+            variant="caption"
+            tone="inherit"
+            class={cx(styles.hint, styles.hintVariantError)}
+            role="alert"
+          >
             {message()}
-          </span>
+          </Text>
         )}
       </Show>
-      <div class="vui-rte__link-row vui-rte__link-foot">
+      <div class={cx(styles.rtePartLinkRow, styles.rtePartLinkFoot)}>
         <Show when={props.existing}>
           <Button variant="ghost" size="sm" iconLeft="trash-2" onClick={() => props.onRemove()}>
             {props.labels.remove}

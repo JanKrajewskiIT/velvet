@@ -1,0 +1,98 @@
+.featureVariantLift {
+  composes: tonal from '../../styles/shared/primitives/surface.module.css';
+}
+
+:import('../../styles/shared/primitives/glyph.module.css') {
+  externalIcon: icon;
+}
+
+.featurePartAction :global(.externalIcon) {
+  transition: transform var(--motion-spring);
+}
+
+.featurePartAction:hover :global(.externalIcon),
+a.feature:hover .featurePartAction :global(.externalIcon) {
+  transform: translateX(3px);
+}
+
+.feature.featureVariantLift {
+  transition:
+    border-color var(--motion-move) var(--motion-instant),
+    box-shadow var(--motion-enter) var(--motion-instant),
+    transform var(--motion-move) var(--motion-instant);
+}
+
+.feature.featureVariantLift:hover {
+  transform: translateY(var(--surface-lift-tonal));
+  border-color: color-mix(in oklab, var(--tone, var(--action-primary)) var(--surface-tonal-border-mix), transparent);
+  box-shadow: var(--surface-tonal-shadow);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feature.featureVariantLift:hover {
+    transform: translateY(var(--surface-lift-tonal));
+  }
+}
+
+.feature {
+  color: var(--fg-primary);
+  text-decoration: none;
+}
+
+.feature > .cardBody {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.featurePartIcon {
+  margin-bottom: var(--space-1-5);
+}
+
+.featurePartDesc {
+  text-wrap: pretty;
+}
+
+.featurePartAction {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-top: auto;
+  padding-top: var(--space-2);
+  color: var(--tone-fg);
+  text-decoration: none;
+  border-radius: var(--radius-xs);
+}
+
+.featurePartAction:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.featureVariantInline > .cardBody {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-0-5) var(--space-3-5);
+  align-items: start;
+}
+
+.featureVariantInline .featurePartIcon {
+  grid-row: 1 / span 3;
+  margin: 0;
+}
+
+.featureVariantInline .featurePartTitle,
+.featureVariantInline .featurePartDesc,
+.featureVariantInline .featurePartAction {
+  grid-column: 2;
+}
+
+.featureVariantInline .featurePartAction {
+  padding-top: var(--space-1);
+}
+
+.feature.feature:not(:hover) {
+  box-shadow: none;
+  border-color: var(--surface-border);
+}

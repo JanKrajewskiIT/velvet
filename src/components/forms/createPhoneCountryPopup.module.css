@@ -1,0 +1,3 @@
+.selectPartMenu {
+  composes: selectpartmenu from '../../styles/shared/forms/select.module.css';
+}

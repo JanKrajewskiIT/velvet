@@ -1,9 +1,29 @@
 import { type JSX, mergeProps, splitProps } from 'solid-js';
 
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
 import type { Tone } from '../../utils/tone';
 import { renderIcon } from './Glyph';
+import styles from './IconTile.module.css';
+
+const ICON_TILE_VARIANT_CLASSES = {
+  md: styles.iconTileVariantHaloMd,
+  lg: styles.iconTileVariantHaloLg,
+} as const;
+
+const ICON_TILE_CLASSES = {
+  xs: styles.iconTileVariantXs,
+  sm: styles.iconTileVariantSm,
+  lg: styles.iconTileVariantLg,
+  xl: styles.iconTileVariantXl,
+  circle: styles.iconTileVariantCircle,
+  outline: styles.iconTileVariantOutline,
+  '2xl': styles.iconTileVariant2xl,
+  '3xl': styles.iconTileVariant3xl,
+  'halo-md': styles.iconTileVariantHaloMd,
+  'halo-lg': styles.iconTileVariantHaloLg,
+} as const;
 
 export interface IconTileProps extends HtmlProps<HTMLSpanElement> {
   icon?: JSX.Element;
@@ -35,14 +55,15 @@ export const IconTile = (props: IconTileProps) => {
     'style',
     'children',
   ]);
-  const halo = () => (local.halo ? `vui-icon-tile--halo-${local.halo === true ? 'md' : local.halo}` : false);
+  const halo = () =>
+    local.halo ? variantClass(ICON_TILE_VARIANT_CLASSES, local.halo === true ? 'md' : local.halo) : false;
   return (
     <span
       class={cx(
-        'vui-icon-tile',
-        `vui-icon-tile--${local.size}`,
-        local.shape === 'circle' && 'vui-icon-tile--circle',
-        local.outline && 'vui-icon-tile--outline',
+        styles.iconTile,
+        variantClass(ICON_TILE_CLASSES, local.size),
+        local.shape === 'circle' && styles.iconTileVariantCircle,
+        local.outline && styles.iconTileVariantOutline,
         halo(),
         local.class,
       )}

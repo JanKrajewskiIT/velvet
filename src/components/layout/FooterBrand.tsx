@@ -1,6 +1,8 @@
 import { type JSX, Show } from 'solid-js';
 
 import { cx } from '../../utils/cx';
+import { Text } from '../primitives/Text';
+import styles from './FooterBrand.module.css';
 
 export interface FooterBrandProps {
   brand?: JSX.Element;
@@ -16,14 +18,16 @@ export const FooterBrand = (props: FooterBrandProps) => {
   const mark = () => (props.mark === undefined ? firstLetter(props.brand) : props.mark);
   return (
     <Show when={props.brand || mark() != null}>
-      <span class={cx('vui-footer__brand', props.compact && 'vui-footer__brand--sm')}>
+      <span class={cx(styles.footerPartBrand, props.compact && styles.footerPartBrandVariantSm)}>
         <Show when={mark() != null}>
-          <span class="vui-footer__mark" aria-hidden="true">
+          <span class={styles.footerPartMark} aria-hidden="true">
             {mark()}
           </span>
         </Show>
         <Show when={props.brand}>
-          <span class="vui-footer__name">{props.brand}</span>
+          <Text as="span" variant={props.compact ? 'label' : 'title-lg'} class={styles.footerPartName}>
+            {props.brand}
+          </Text>
         </Show>
       </span>
     </Show>

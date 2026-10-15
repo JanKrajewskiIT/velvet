@@ -1,0 +1,11 @@
+.dialogFooter.dialogFooter {
+  align-items: center;
+}
+
+.clsPartSearch {
+  margin-bottom: var(--space-3);
+}
+
+.confirmPartErr {
+  composes: confirmparterr from '../../styles/shared/feedback/confirm-dialog.module.css';
+}

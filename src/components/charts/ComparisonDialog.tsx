@@ -7,9 +7,11 @@ import { Avatar } from '../data/Avatar';
 import { Dialog, type DialogProps } from '../feedback/Dialog';
 import { Spinner } from '../feedback/Spinner';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
 import { VisuallyHidden } from '../primitives/VisuallyHidden';
 import { seriesColor } from './chartScale';
 import { bestIndexes, type ComparisonItem, type ComparisonRow } from './comparison';
+import styles from './ComparisonDialog.module.css';
 import { type RadarAxis, RadarChart, type RadarSeries } from './RadarChart';
 
 const MIN_RADAR_AXES = 3;
@@ -71,7 +73,7 @@ export const ComparisonDialog = (props: ComparisonDialogProps) => {
       title={title()}
       description={merged.description}
       size={merged.size}
-      class="vui-cmpdlg"
+      bodyClass={styles.dialogBody}
       footer={
         merged.footer ?? (
           <Button variant="secondary" onClick={() => merged.onClose?.()}>
@@ -82,15 +84,25 @@ export const ComparisonDialog = (props: ComparisonDialogProps) => {
     >
       <Switch>
         <Match when={merged.status === 'loading'}>
-          <div class="vui-cmpdlg__state" aria-busy="true">
+          <Text as="div" variant="body-sm" tone="secondary" class={styles.cmpdlgPartState} aria-busy="true">
             <Spinner size="lg" label={translate('velvet.charts.comparisonDialog.comparingLabel')} />
-            <span>{translate('velvet.charts.comparisonDialog.comparing', { count: merged.items.length })}</span>
-          </div>
+            <Text as="span" variant="body-sm" tone="inherit">
+              {translate('velvet.charts.comparisonDialog.comparing', { count: merged.items.length })}
+            </Text>
+          </Text>
         </Match>
         <Match when={merged.status === 'error'}>
-          <div class="vui-cmpdlg__state vui-cmpdlg__state--err" role="alert">
+          <Text
+            as="div"
+            variant="body-sm"
+            tone="secondary"
+            class={cx(styles.cmpdlgPartState, styles.cmpdlgPartStateVariantErr)}
+            role="alert"
+          >
             <Glyph name="alert-circle" />
-            <span>{error()}</span>
+            <Text as="span" variant="body-sm" tone="inherit">
+              {error()}
+            </Text>
             <Show when={merged.onRetry}>
               {(retry) => (
                 <Button variant="secondary" size="sm" iconLeft="refresh" onClick={() => retry()()}>
@@ -98,30 +110,40 @@ export const ComparisonDialog = (props: ComparisonDialogProps) => {
                 </Button>
               )}
             </Show>
-          </div>
+          </Text>
         </Match>
         <Match when={merged.status === 'done'}>
-          <div class="vui-cmpdlg__body">
-            <div class="vui-cmpdlg__cols" style={{ '--n': merged.items.length }}>
+          <div class={styles.cmpdlgPartBody}>
+            <div class={styles.cmpdlgPartCols} style={{ '--n': merged.items.length }}>
               <For each={merged.items}>
                 {(item, i) => (
-                  <div class="vui-cmpdlg__col" style={{ '--c': colorAt(item, i()) }}>
+                  <div class={styles.cmpdlgPartCol} style={{ '--c': colorAt(item, i()) }}>
                     <Avatar name={item.label} color="var(--c)" class="vui-cmpdlg__av" aria-hidden="true">
                       {item.avatar}
                     </Avatar>
-                    <span class="vui-cmpdlg__ct">
-                      <b>{item.label}</b>
-                      <Show when={item.description}>{(description) => <small>{description()}</small>}</Show>
+                    <span class={styles.cmpdlgPartCt}>
+                      <Text as="b" variant="label" tone="inherit">
+                        {item.label}
+                      </Text>
+                      <Show when={item.description}>
+                        {(description) => (
+                          <Text as="small" variant="caption" tone="inherit">
+                            {description()}
+                          </Text>
+                        )}
+                      </Show>
                     </span>
                     <Show when={item.score !== undefined}>
-                      <span class="vui-cmpdlg__score">{item.score}</span>
+                      <Text as="span" variant="title-lg" tone="inherit" class={styles.cmpdlgPartScore}>
+                        {item.score}
+                      </Text>
                     </Show>
                   </div>
                 )}
               </For>
             </div>
             <Show when={hasRadar()}>
-              <div class="vui-cmpdlg__radar">
+              <div class={styles.cmpdlgPartRadar}>
                 <RadarChart
                   axes={merged.axes}
                   series={radarSeries()}
@@ -132,8 +154,8 @@ export const ComparisonDialog = (props: ComparisonDialogProps) => {
               </div>
             </Show>
             <Show when={merged.rows.length > 0}>
-              <div class="vui-cmpdlg__tablewrap">
-                <table class="vui-cmpdlg__table">
+              <div class={styles.cmpdlgPartTablewrap}>
+                <table class={styles.cmpdlgPartTable}>
                   <thead>
                     <tr>
                       <th scope="col">
@@ -142,7 +164,9 @@ export const ComparisonDialog = (props: ComparisonDialogProps) => {
                       <For each={merged.items}>
                         {(item, i) => (
                           <th scope="col" style={{ '--c': colorAt(item, i()) }}>
-                            <span class="vui-cmpdlg__th">{item.label}</span>
+                            <Text as="span" variant="label-sm" tone="inherit" class="vui-cmpdlg__th">
+                              {item.label}
+                            </Text>
                           </th>
                         )}
                       </For>
@@ -155,13 +179,28 @@ export const ComparisonDialog = (props: ComparisonDialogProps) => {
                         return (
                           <tr>
                             <th scope="row">
-                              {row.label}
-                              <Show when={row.hint}>{(hint) => <small>{hint()}</small>}</Show>
+                              <Text as="span" variant="label" tone="inherit">
+                                {row.label}
+                              </Text>
+                              <Show when={row.hint}>
+                                {(hint) => (
+                                  <Text as="small" variant="caption" tone="inherit">
+                                    {hint()}
+                                  </Text>
+                                )}
+                              </Show>
                             </th>
                             <Index each={row.values}>
                               {(value, i) => (
-                                <td class={cx(best().includes(i) && 'vui-cmpdlg__best')}>
-                                  {row.format ? row.format(value()) : (value() ?? '—')}
+                                <td class={cx(best().includes(i) && styles.cmpdlgPartBest)}>
+                                  <Text
+                                    as="span"
+                                    variant={best().includes(i) ? 'label' : 'body-sm'}
+                                    tone="inherit"
+                                    tabular
+                                  >
+                                    {row.format ? row.format(value()) : (value() ?? '—')}
+                                  </Text>
                                   <Show when={best().includes(i)}>
                                     <Glyph
                                       name="star-filled"
@@ -180,29 +219,33 @@ export const ComparisonDialog = (props: ComparisonDialogProps) => {
               </div>
             </Show>
             <Show when={insights() || merged.onGenerateInsights}>
-              <section class="vui-cmpdlg__ins" aria-live="polite">
-                <h4>
+              <section class={styles.cmpdlgPartIns} aria-live="polite">
+                <Text as="h4" variant="section" tone="brand">
                   <Glyph name="sparkles" />
                   {translate('velvet.charts.comparisonDialog.insights')}
-                </h4>
+                </Text>
                 <Switch>
                   <Match when={insights()}>
-                    <div class="vui-cmpdlg__instext">{insights()}</div>
+                    <Text as="div" variant="body-sm" tone="primary">
+                      {insights()}
+                    </Text>
                   </Match>
                   <Match when={merged.insightsStatus === 'loading'}>
-                    <div class="vui-cmpdlg__insload">
+                    <Text as="div" variant="body-sm" tone="brand" class={styles.cmpdlgPartInsload}>
                       <span class="vui-ai__pulse" aria-hidden="true" />
                       {translate('velvet.charts.comparisonDialog.writingInsights')}
-                    </div>
+                    </Text>
                   </Match>
                   <Match when={merged.onGenerateInsights}>
                     {(generate) => (
-                      <div class="vui-cmpdlg__insempty">
-                        <span>{translate('velvet.charts.comparisonDialog.insightsPrompt')}</span>
+                      <Text as="div" variant="body-sm" tone="secondary" class={styles.cmpdlgPartInsempty}>
+                        <Text as="span" variant="body-sm" tone="inherit">
+                          {translate('velvet.charts.comparisonDialog.insightsPrompt')}
+                        </Text>
                         <Button variant="soft" size="sm" iconLeft="sparkles" onClick={() => generate()()}>
                           {insightsLabel()}
                         </Button>
-                      </div>
+                      </Text>
                     )}
                   </Match>
                 </Switch>

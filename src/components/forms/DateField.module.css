@@ -1,0 +1,31 @@
+.datefieldPartText {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.datefieldPartTextVariantEmpty {
+  color: var(--fg-tertiary);
+}
+
+.datefield {
+  --glyph-color: var(--fg-tertiary);
+  --glyph-size: var(--type-body-lg-size);
+
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0 var(--control-pad-x);
+  border: 0;
+  background: none;
+  color: var(--fg-primary);
+  text-align: left;
+  cursor: pointer;
+  outline: 0;
+  border-radius: inherit;
+}

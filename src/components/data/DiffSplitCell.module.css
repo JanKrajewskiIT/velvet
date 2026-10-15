@@ -1,0 +1,28 @@
+.diffPartEmpty {
+  grid-column: span 3;
+  background: repeating-linear-gradient(135deg, transparent 0 6px, var(--code-line) 6px 7px);
+}
+
+.diffPartEmpty[data-side='del'] {
+  border-right: var(--border-width) solid var(--code-line);
+}
+
+.diffPartCVariantAdd {
+  composes: diffpartcvariantadd from '../../styles/shared/data/diff-viewer.module.css';
+}
+
+.diffPartCVariantDel {
+  composes: diffpartcvariantdel from '../../styles/shared/data/diff-viewer.module.css';
+}
+
+.diffPartLn {
+  composes: diffpartln from '../../styles/shared/data/diff-viewer.module.css';
+}
+
+.diffPartSign {
+  composes: diffpartsign from '../../styles/shared/data/diff-viewer.module.css';
+}
+
+.diffPartCode {
+  composes: diffpartcode from '../../styles/shared/data/diff-viewer.module.css';
+}

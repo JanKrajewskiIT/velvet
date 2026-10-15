@@ -1,9 +1,0 @@
-/* Atom · Rail — vertical connector line between stacked markers. Timeline renders it; items mark done (solid) / upcoming (dashed). Line starts below the marker: set --rail-marker to the marker diameter (Rail does this from its size prop). */
-.vui-rail{position:relative;margin:0;padding:0;list-style:none}
-[data-rail="sm"]{--rail-marker:var(--marker-size-sm)}[data-rail="md"]{--rail-marker:var(--marker-size)}[data-rail="lg"]{--rail-marker:var(--marker-size-lg)}
-.vui-rail__item{position:relative}
-.vui-rail__item:not(:last-child)::before{content:"";position:absolute;left:calc(var(--rail-marker) / 2 - var(--rail-w) / 2);top:calc(var(--rail-marker) + var(--rail-gap));bottom:var(--rail-gap);width:var(--rail-w);border-radius:var(--radius-2xs);background:var(--rail-color)}
-.vui-rail__item--done:not(:last-child)::before{background:var(--rail-done)}
-.vui-rail__item--active:not(:last-child)::before{background:var(--rail-active)}
-.vui-rail__item--dashed:not(:last-child)::before{width:0;background:none;border-left:var(--rail-w) dashed var(--border-default)}
-.vui-rail--none .vui-rail__item::before{display:none}

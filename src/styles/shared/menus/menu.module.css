@@ -1,0 +1,49 @@
+:import('../primitives/glyph.module.css') {
+  externalIcon: icon;
+}
+
+.menuPartLabel + :global(.externalIcon) {
+  flex: none;
+
+  --glyph-size: var(--size-icon-md);
+
+  color: var(--option-icon);
+  margin-left: var(--space-3);
+}
+
+.menuWrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.menu {
+  text-align: left;
+  z-index: var(--z-dropdown);
+  min-width: var(--overlay-min-w);
+  max-width: var(--overlay-w);
+  max-height: calc(100vh - 96px);
+  overflow-y: auto;
+  padding: var(--panel-pad);
+  outline: 0;
+  transform-origin: top left;
+  animation: vui-select-in var(--motion-reveal);
+  background: var(--panel-bg);
+  border: var(--border-width) solid var(--panel-border);
+  border-radius: var(--panel-radius);
+  box-shadow: var(--panel-shadow);
+  color: var(--fg-primary);
+}
+
+.menuVariantPop {
+  position: absolute;
+  top: calc(100% + var(--panel-offset));
+  left: 0;
+}
+
+.menuPartLabel {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-0-5);
+}

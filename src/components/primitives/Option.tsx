@@ -3,6 +3,9 @@ import { type JSX, mergeProps, Show, splitProps } from 'solid-js';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
 import { Glyph, renderIcon } from './Glyph';
+import styles from './Option.module.css';
+import { Text } from './Text';
+import { typographyClass } from './typography';
 
 export interface OptionProps extends HtmlProps<HTMLDivElement> {
   /** Glyph name or node. */
@@ -46,25 +49,37 @@ export const Option = (props: OptionProps) => {
       aria-selected={local.role === 'option' ? !!local.selected : undefined}
       aria-checked={checkable() ? !!local.selected : undefined}
       aria-disabled={local.disabled || undefined}
-      class={cx('vui-option', local.active && 'vui-option--active', local.danger && 'vui-option--danger', local.class)}
+      class={cx(
+        typographyClass('body'),
+        styles.option,
+        local.active && styles.optionVariantActive,
+        local.danger && styles.optionVariantDanger,
+        local.class,
+      )}
       {...rest}
     >
       <Show when={local.showCheck}>
-        <span class="vui-option__check">
+        <span class={styles.optionPartCheck}>
           <Show when={local.selected}>
             <Glyph name="check" />
           </Show>
         </span>
       </Show>
       {renderIcon(local.icon)}
-      <span class="vui-option__label">
-        <span>{local.label ?? local.children}</span>
+      <span class={styles.optionPartLabel}>
+        <Text as="span" variant="body" tone="inherit">
+          {local.label ?? local.children}
+        </Text>
         <Show when={local.description}>
-          <span class="vui-option__desc">{local.description}</span>
+          <Text as="span" variant="caption" tone="inherit" class={styles.optionPartDesc}>
+            {local.description}
+          </Text>
         </Show>
       </span>
       <Show when={local.shortcut}>
-        <span class="vui-option__kbd">{local.shortcut}</span>
+        <Text as="span" variant="kbd" tone="inherit" class={styles.optionPartKbd}>
+          {local.shortcut}
+        </Text>
       </Show>
     </div>
   );

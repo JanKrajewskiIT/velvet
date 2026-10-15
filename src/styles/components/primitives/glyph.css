@@ -1,2 +1,0 @@
-/* Atom · Glyph — size steps on top of .vui-icon (tokens/icons.css). Unsized icons follow the surrounding text. */
-.vui-icon--xs{font-size:var(--size-icon-xs)}.vui-icon--sm{font-size:var(--size-icon-sm)}.vui-icon--md{font-size:var(--size-icon-md)}.vui-icon--lg{font-size:var(--size-icon-lg)}.vui-icon--xl{font-size:var(--size-icon-xl,20px)}

@@ -3,13 +3,18 @@ import { createMemo, createSignal, createUniqueId, type JSX, mergeProps, Show, s
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
+import { cx } from '../../utils/cx';
 import { Control } from '../primitives/Control';
+import { ControlInput } from '../primitives/ControlInput';
 import { Field } from '../primitives/Field';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { callHandler } from './callHandler';
 import { createPhoneCountryPopup } from './createPhoneCountryPopup';
 import { formatNational, nationalLength, onlyDigits, PHONE_COUNTRIES, type PhoneCountry } from './phoneCountries';
 import { PhoneCountryList } from './PhoneCountryList';
+import styles from './PhoneInput.module.css';
 
 /** Digits tolerated beyond the national length, so a pasted prefix stays visible instead of being cut off silently. */
 const EXTRA_DIGITS = 2;
@@ -164,11 +169,11 @@ export const PhoneInput = (props: PhoneInputProps) => {
       id={id()}
     >
       {(control) => (
-        <div ref={setRoot} class="vui-select vui-phone">
+        <div ref={setRoot} class={cx(styles.select, styles.phone)}>
           <Control size={local.size} invalid={control.invalid} disabled={local.disabled} class={local.class}>
             <button
               type="button"
-              class="vui-phone__country"
+              class={cx(styles.phonePartCountry, typographyClass('body'))}
               role="combobox"
               disabled={local.disabled}
               aria-label={`${countryLabel()}: ${countryName(country())} +${country().dial}`}
@@ -179,11 +184,15 @@ export const PhoneInput = (props: PhoneInputProps) => {
               onClick={() => (open() ? setOpen(false) : openList())}
               onKeyDown={onKeyDown}
             >
-              <span class="vui-phone__code">{country().code}</span>
-              <span class="vui-phone__dial">+{country().dial}</span>
+              <Text as="span" variant="kbd" tone="inherit" class={styles.phonePartCode}>
+                {country().code}
+              </Text>
+              <Text as="span" variant="body" tone="inherit" class={styles.phonePartDial}>
+                +{country().dial}
+              </Text>
               <Glyph name="chevron-down" />
             </button>
-            <input
+            <ControlInput
               {...rest}
               ref={(element) => {
                 input = element;
@@ -192,7 +201,6 @@ export const PhoneInput = (props: PhoneInputProps) => {
               type="tel"
               inputMode="tel"
               autocomplete="tel-national"
-              class="vui-control__input"
               disabled={local.disabled}
               placeholder={country().mask.replace(/#/gu, '0')}
               value={formatNational(digitState(), country().mask)}

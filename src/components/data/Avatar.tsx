@@ -2,9 +2,20 @@ import type { I18nKey } from '@jankrajewskiit/i18n';
 import { children, createSignal, type JSX, mergeProps, Show, splitProps } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
 import { Dot } from '../primitives/Dot';
+import styles from './Avatar.module.css';
+
+const AVATAR_CLASSES = {
+  xs: styles.avatarVariantXs,
+  sm: styles.avatarVariantSm,
+  lg: styles.avatarVariantLg,
+  xl: styles.avatarVariantXl,
+  neutral: styles.avatarVariantNeutral,
+  solid: styles.avatarVariantSolid,
+} as const;
 
 const STATUS_TONE = { online: 'success', away: 'warning', busy: 'danger', offline: 'neutral' } as const;
 const SERIES_COLORS = 8;
@@ -84,10 +95,10 @@ export const Avatar = (props: AvatarProps) => {
     <span
       {...faceAttributes()}
       class={cx(
-        'vui-avatar',
-        local.size !== 'md' && `vui-avatar--${local.size}`,
-        local.tone === 'neutral' && 'vui-avatar--neutral',
-        color() && 'vui-avatar--solid',
+        styles.avatar,
+        local.size !== 'md' && variantClass(AVATAR_CLASSES, local.size),
+        local.tone === 'neutral' && styles.avatarVariantNeutral,
+        color() && styles.avatarVariantSolid,
         !local.status && local.class,
       )}
       style={style()}
@@ -109,13 +120,13 @@ export const Avatar = (props: AvatarProps) => {
   return (
     <Show when={local.status} fallback={face()}>
       {(status) => (
-        <span {...rest} class={cx('vui-avatar-wrap', local.class)}>
+        <span {...rest} class={cx(styles.avatarWrap, local.class)}>
           {face()}
           <Dot
             tone={STATUS_TONE[status()]}
             ring
             label={translate(STATUS_LABEL_KEY[status()])}
-            class="vui-avatar__status"
+            class={styles.avatarPartStatus}
           />
         </span>
       )}

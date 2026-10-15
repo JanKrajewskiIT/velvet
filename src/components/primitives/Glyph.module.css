@@ -1,0 +1,27 @@
+.iconVariantXs {
+  --glyph-size: var(--size-icon-xs);
+}
+
+.iconVariantSm {
+  --glyph-size: var(--size-icon-sm);
+}
+
+.iconVariantMd {
+  --glyph-size: var(--size-icon-md);
+}
+
+.iconVariantLg {
+  --glyph-size: var(--size-icon-lg);
+}
+
+.iconVariantXl {
+  --glyph-size: var(--size-icon-xl, 20px);
+}
+
+.icon {
+  composes: icon from '../../styles/shared/primitives/glyph.module.css';
+}
+
+.foundation {
+  composes: vui-icon from global;
+}

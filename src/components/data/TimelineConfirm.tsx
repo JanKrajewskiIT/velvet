@@ -1,7 +1,11 @@
 import { onCleanup, onMount, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { cx } from '../../utils/cx';
 import { Button } from '../actions/Button';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './TimelineConfirm.module.css';
 import type { TimelineAction } from './timelineTypes';
 
 export interface TimelineConfirmProps {
@@ -31,15 +35,21 @@ export const TimelineConfirm = (props: TimelineConfirmProps) => {
       ref={(element) => {
         root = element;
       }}
-      class="vui-timeline__confirm"
+      class={cx(styles.timelinePartConfirm, typographyClass('body-sm'))}
       role="alert"
     >
-      <span>
+      <Text as="span" variant="body-sm" tone="inherit">
         {typeof props.action.confirm === 'string'
           ? props.action.confirm
           : translate('velvet.data.timelineConfirm.question', { action: props.action.label })}
-      </span>
-      <Show when={props.error}>{(error) => <span class="vui-timeline__err">{error()}</span>}</Show>
+      </Text>
+      <Show when={props.error}>
+        {(error) => (
+          <Text as="span" variant="caption" tone="danger" class={styles.timelinePartErr}>
+            {error()}
+          </Text>
+        )}
+      </Show>
       <Button variant="ghost" size="sm" disabled={props.busy} onClick={() => props.onCancel()}>
         {translate('velvet.common.cancel')}
       </Button>

@@ -1,0 +1,63 @@
+.tooltipWrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.tooltip {
+  position: absolute;
+  z-index: var(--z-tooltip);
+  left: 50%;
+  bottom: calc(100% + var(--tooltip-offset));
+  transform: translate(-50%, 4px);
+  padding: var(--space-1-5) var(--space-2-5);
+  border-radius: var(--tooltip-radius);
+  background: var(--tooltip-bg);
+  color: var(--tooltip-fg);
+  white-space: nowrap;
+  max-width: var(--tooltip-max-w);
+  pointer-events: none;
+  opacity: 0;
+  box-shadow: var(--elevation-card-hover);
+  transition:
+    opacity var(--motion-fast),
+    transform var(--motion-fast);
+}
+
+.tooltipVariantBottom {
+  bottom: auto;
+  top: calc(100% + var(--tooltip-offset));
+  transform: translate(-50%, -4px);
+}
+
+.tooltipVariantRight {
+  left: calc(100% + var(--tooltip-offset));
+  bottom: auto;
+  top: 50%;
+  transform: translate(-4px, -50%);
+}
+
+.tooltipVariantLeft {
+  inset: 50% calc(100% + var(--tooltip-offset)) auto auto;
+  transform: translate(4px, -50%);
+}
+
+.tooltipWrap:hover .tooltip,
+.tooltipWrap:focus-within .tooltip,
+.tooltipVariantOpen {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.tooltipWrap:hover .tooltipVariantRight,
+.tooltipWrap:hover .tooltipVariantLeft,
+.tooltipWrap:focus-within .tooltipVariantRight,
+.tooltipWrap:focus-within .tooltipVariantLeft,
+.tooltipVariantRight.tooltipVariantOpen,
+.tooltipVariantLeft.tooltipVariantOpen {
+  transform: translate(0, -50%);
+}
+
+.tooltipPartKbd {
+  margin-left: var(--space-2);
+  opacity: var(--opacity-muted);
+}

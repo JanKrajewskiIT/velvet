@@ -1,0 +1,135 @@
+.slider {
+  gap: var(--space-2);
+}
+
+.sliderPartHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.sliderPartValue {
+  color: var(--fg-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.sliderPartTrack {
+  position: relative;
+  height: var(--size-icon-xl);
+  margin: 0 calc(var(--slider-thumb) / 2);
+  cursor: pointer;
+  touch-action: none;
+}
+
+.sliderPartTrack::before {
+  content: '';
+  position: absolute;
+  left: calc(var(--slider-thumb) / -2);
+  right: calc(var(--slider-thumb) / -2);
+  top: 50%;
+  height: var(--slider-track-h);
+  transform: translateY(-50%);
+  border-radius: var(--radius-full);
+  background: var(--bg-sunken);
+}
+
+.sliderPartFill {
+  position: absolute;
+  top: 50%;
+  height: var(--slider-track-h);
+  transform: translateY(-50%);
+  border-radius: var(--radius-full);
+  background: var(--action-primary);
+}
+
+.sliderPartThumb {
+  position: absolute;
+  top: 50%;
+  width: var(--slider-thumb);
+  height: var(--slider-thumb);
+  border-radius: var(--radius-full);
+  background: var(--thumb-bg);
+  border: var(--border-width-thick) solid var(--action-primary);
+  box-shadow: var(--elevation-card);
+  transform: translate(-50%, -50%);
+  transition:
+    box-shadow var(--motion-fast),
+    transform var(--motion-bounce);
+  outline: 0;
+  z-index: 1;
+}
+
+.sliderPartThumb:hover {
+  box-shadow:
+    var(--elevation-card),
+    0 0 0 calc(var(--halo-sm) + var(--border-width-thick)) var(--bg-hover);
+}
+
+.sliderPartThumb:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+.sliderPartTrack:active .sliderPartThumb:focus {
+  transform: translate(-50%, -50%) scale(1.12);
+}
+
+.sliderPartBounds {
+  display: flex;
+  justify-content: space-between;
+  color: var(--fg-tertiary);
+}
+
+.sliderVariantDisabled {
+  opacity: var(--opacity-disabled);
+  pointer-events: none;
+}
+
+.sliderPartMark {
+  position: absolute;
+  top: 50%;
+  width: var(--size-dot);
+  height: var(--size-dot);
+  border-radius: var(--radius-full);
+  background: var(--border-strong);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition: background-color var(--motion-fast);
+}
+
+.sliderPartMarkVariantIn {
+  background: var(--action-primary-fg);
+}
+
+.sliderPartMarkLabel {
+  position: absolute;
+  top: var(--space-4);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  transition: color var(--motion-fast);
+  color: var(--fg-tertiary);
+}
+
+.sliderPartMarkVariantOn .sliderPartMarkLabel {
+  color: var(--fg-primary);
+  font-weight: var(--type-title-weight);
+}
+
+.sliderVariantLabelled .sliderPartTrack {
+  margin-bottom: var(--space-5);
+}
+
+@media (pointer: coarse) {
+  .slider {
+    --sl-thumb: var(--control-height-xs);
+  }
+}
+
+.field {
+  composes: field from '../../styles/shared/primitives/field.module.css';
+}
+
+.srOnly {
+  composes: sronly from '../../styles/shared/navigation/link.module.css';
+}

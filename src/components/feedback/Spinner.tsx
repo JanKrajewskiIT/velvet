@@ -1,7 +1,20 @@
 import { Index, mergeProps } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import styles from './Spinner.module.css';
+
+const LOADER_CLASSES = {
+  sm: styles.loaderVariantSm,
+  lg: styles.loaderVariantLg,
+  inline: styles.loaderVariantInline,
+  current: styles.loaderVariantCurrent,
+  ring: styles.loaderVariantRing,
+  dots: styles.loaderVariantDots,
+  bars: styles.loaderVariantBars,
+  pulse: styles.loaderVariantPulse,
+} as const;
 
 export type SpinnerVariant = 'ring' | 'dots' | 'bars' | 'pulse';
 
@@ -29,10 +42,10 @@ export const Spinner = (props: SpinnerProps) => {
       role="status"
       aria-label={p.label ?? translate('velvet.common.loading')}
       class={cx(
-        'vui-loader',
-        `vui-loader--${p.variant}`,
-        `vui-loader--${p.size}`,
-        p.tone === 'current' && 'vui-loader--current',
+        styles.loader,
+        variantClass(LOADER_CLASSES, p.variant),
+        variantClass(LOADER_CLASSES, p.size),
+        p.tone === 'current' && styles.loaderVariantCurrent,
         p.class,
       )}
     >

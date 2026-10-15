@@ -1,0 +1,82 @@
+.checkmark {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: var(--check-size);
+  height: var(--check-size);
+  box-sizing: border-box;
+  border: var(--border-width) solid var(--check-border);
+  border-radius: var(--check-radius);
+  background: var(--control-bg);
+  transition:
+    background-color var(--motion-fast),
+    border-color var(--motion-fast),
+    box-shadow var(--motion-fast);
+}
+
+.checkmarkVariantSm {
+  width: var(--size-check-sm);
+  height: var(--size-check-sm);
+}
+
+.checkmarkVariantRadio,
+.checkmarkVariantRound {
+  border-radius: 50%;
+}
+
+.checkmarkVariantOn,
+.checkmarkVariantMixed {
+  background: var(--check-on);
+  border-color: var(--check-on);
+}
+
+.checkmarkVariantOn::after {
+  content: '';
+  width: var(--check-tick-w);
+  height: var(--check-tick-h);
+  border: solid var(--check-mark);
+  border-width: 0 var(--border-width-thick) var(--border-width-thick) 0;
+  transform: translateY(-1px) rotate(45deg);
+  animation: vui-check-in var(--motion-spring);
+}
+
+.checkmarkVariantSm.checkmarkVariantOn::after {
+  width: var(--check-tick-w-sm);
+  height: var(--check-tick-h-sm);
+}
+
+.checkmarkVariantMixed::after {
+  content: '';
+  width: var(--check-dash-w);
+  height: var(--border-width-thick);
+  border-radius: var(--radius-2xs);
+  background: var(--check-mark);
+  animation: vui-dash-in var(--motion-base);
+}
+
+.checkmarkVariantRadio.checkmarkVariantOn::after {
+  width: var(--check-dot);
+  height: var(--check-dot);
+  border: 0;
+  border-radius: 50%;
+  background: var(--check-mark);
+  transform: none;
+  animation: vui-pop-in var(--motion-pop);
+}
+
+:hover > .checkmark:not(.checkmarkVariantOn, .checkmarkVariantMixed, [aria-disabled='true']),
+.checkmark:hover:not(.checkmarkVariantOn, .checkmarkVariantMixed, [aria-disabled='true']) {
+  border-color: var(--fg-tertiary);
+}
+
+.checkmark[aria-disabled='true'],
+.checkmarkVariantDisabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+
+.checkmark:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}

@@ -1,0 +1,17 @@
+.organizerPartHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.organizerPartSub {
+  margin-top: var(--space-1);
+}
+
+.organizerPartNav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}

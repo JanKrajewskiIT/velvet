@@ -3,6 +3,7 @@ import { createEffect, createMemo, createSignal, For, type JSX, mergeProps, Show
 import { createControllable } from '../../hooks/createControllable';
 import { createDismiss } from '../../hooks/createDismiss';
 import { useTranslate } from '../../i18n/useTranslate';
+import { classSelector } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { Tag } from '../display/Tag';
 import { Spinner } from '../feedback/Spinner';
@@ -11,6 +12,7 @@ import { Chevron } from '../primitives/Chevron';
 import { Control } from '../primitives/Control';
 import { Field } from '../primitives/Field';
 import { Glyph } from '../primitives/Glyph';
+import { typographyClass } from '../primitives/typography';
 import { callbackAlias } from './callbackAlias';
 import { ComboboxOption } from './ComboboxOption';
 import { ComboboxOptionText } from './ComboboxOptionText';
@@ -18,6 +20,7 @@ import { createComboboxOptions } from './createComboboxOptions';
 import { createComboboxPopup } from './createComboboxPopup';
 import { createFormValidation } from './createFormValidation';
 import { FormValue } from './FormValue';
+import styles from './MultiSelect.module.css';
 import { MultiSelectFooter } from './MultiSelectFooter';
 import type { MultiSelectProps } from './multiSelectTypes';
 import { OptionListStatus } from './OptionListStatus';
@@ -138,16 +141,16 @@ export const MultiSelect = (props: MultiSelectProps) => {
   return (
     <Field label={p.label} hint={p.hint} error={p.error} optional={p.optional} required={p.required} id={id()}>
       {(control) => (
-        <div ref={popup.setRoot} class="vui-select">
+        <div ref={popup.setRoot} class={styles.select}>
           <Control
             invalid={control.invalid || validation.invalid()}
             disabled={p.disabled}
-            class={cx('vui-taginput', p.size === 'sm' && 'vui-taginput--sm', p.class)}
+            class={cx(styles.taginput, p.size === 'sm' && styles.taginputVariantSm, p.class)}
             onMouseDown={(e) => {
               if (p.disabled) return;
               if (
                 e.target === e.currentTarget ||
-                (e.target instanceof Element && e.target.closest('.vui-multi__caret'))
+                (e.target instanceof Element && e.target.closest(classSelector(styles.multiPartCaret)))
               ) {
                 e.preventDefault();
                 input.focus();
@@ -159,7 +162,7 @@ export const MultiSelect = (props: MultiSelectProps) => {
               {(value) => (
                 <Tag
                   size="sm"
-                  class="vui-taginput__tag"
+                  class={styles.taginputPartTag}
                   disabled={p.disabled}
                   removeLabel={removeLabel(labelOf(value))}
                   onRemove={() => !p.disabled && setSelected(selected().filter((item) => item !== value))}
@@ -183,7 +186,7 @@ export const MultiSelect = (props: MultiSelectProps) => {
               aria-required={p.required || undefined}
               aria-invalid={control.invalid || validation.invalid() || undefined}
               aria-describedby={validation.describedBy(control.describedBy)}
-              class="vui-taginput__input"
+              class={cx(styles.taginputPartInput, typographyClass('body'))}
               value={query()}
               placeholder={
                 selected().length ? '' : (p.placeholder ?? translate('velvet.forms.multiSelect.placeholder'))
@@ -194,7 +197,7 @@ export const MultiSelect = (props: MultiSelectProps) => {
               onFocus={() => !p.disabled && setOpen(true)}
               onKeyDown={onKeyDown}
             />
-            <span class="vui-multi__caret" aria-hidden="true">
+            <span class={styles.multiPartCaret} aria-hidden="true">
               <Show when={remote.loading()} fallback={<Chevron open={open()} />}>
                 <Spinner size="inline" tone="current" />
               </Show>
@@ -216,7 +219,11 @@ export const MultiSelect = (props: MultiSelectProps) => {
           <Show when={open()}>
             <div
               ref={floating.ref}
-              class={cx('vui-select__menu vui-multi__menu', floating.side() === 'top' && 'vui-select__menu--up')}
+              class={cx(
+                styles.selectPartMenu,
+                styles.multiPartMenu,
+                floating.side() === 'top' && styles.selectPartMenuVariantUp,
+              )}
               style={floating.style()}
             >
               <ul
@@ -226,7 +233,7 @@ export const MultiSelect = (props: MultiSelectProps) => {
                 aria-busy={remote.loading() || undefined}
                 aria-label={p['aria-label']}
                 aria-labelledby={p['aria-labelledby'] ?? (p.label ? `${id()}-label` : undefined)}
-                class="vui-multi__list"
+                class={styles.multiPartList}
               >
                 <For each={list()}>
                   {(option, index) => {
@@ -238,7 +245,7 @@ export const MultiSelect = (props: MultiSelectProps) => {
                         selected={on()}
                         active={index() === active()}
                         disabled={blocked()}
-                        class="vui-multi__option"
+                        class={styles.multiPartOption}
                         onHover={() => !blocked() && setActive(index())}
                         onPick={() => !blocked() && toggle(option)}
                       >

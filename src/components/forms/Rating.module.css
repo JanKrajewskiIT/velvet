@@ -1,0 +1,67 @@
+.rating {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-0-5);
+}
+
+.ratingPartStar {
+  display: grid;
+  place-items: center;
+  width: var(--control-height-inner);
+  height: var(--control-height-inner);
+  padding: var(--space-0-5);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--border-strong);
+  cursor: pointer;
+  transition:
+    transform var(--motion-bounce),
+    color var(--motion-fast);
+}
+
+.ratingPartStarVariantOn {
+  color: var(--rating-fill);
+
+  --rating-star-fill: currentcolor;
+}
+
+.ratingPartStarVariantPreview {
+  transform: scale(1.12);
+}
+
+.ratingPartStar:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.ratingPartStar:active {
+  transform: scale(0.9);
+}
+
+.ratingVariantReadonly .ratingPartStar {
+  cursor: default;
+  transform: none;
+}
+
+.ratingVariantSm .ratingPartStar {
+  width: var(--size-icon-lg);
+  height: var(--size-icon-lg);
+  padding: var(--space-px);
+}
+
+.ratingVariantLg .ratingPartStar {
+  width: var(--control-height-inner-lg);
+  height: var(--control-height-inner-lg);
+}
+
+.ratingPartValue {
+  margin-left: var(--space-2);
+  color: var(--fg-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.ratingPartValue span {
+  color: var(--fg-tertiary);
+  font-weight: var(--type-body-weight);
+}

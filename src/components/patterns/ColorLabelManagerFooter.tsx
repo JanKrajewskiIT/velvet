@@ -3,6 +3,7 @@ import { Show } from 'solid-js';
 import { useTranslate } from '../../i18n/useTranslate';
 import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Button } from '../actions/Button';
+import styles from './ColorLabelManagerFooter.module.css';
 import type { ColorLabelManagerController } from './createColorLabelManager';
 
 export interface ColorLabelManagerFooterProps {
@@ -16,7 +17,7 @@ export const ColorLabelManagerFooter = (props: ColorLabelManagerFooterProps) => 
     <Show
       when={props.manager.draft()}
       fallback={
-        <Button variant="secondary" iconLeft="plus" class="vui-clm__add" onClick={props.manager.startAdd}>
+        <Button variant="secondary" iconLeft="plus" class={styles.clmPartAdd} onClick={props.manager.startAdd}>
           {translate('velvet.patterns.colorLabelManager.addLabel')}
         </Button>
       }

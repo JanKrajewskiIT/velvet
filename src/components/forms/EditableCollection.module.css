@@ -1,0 +1,65 @@
+.editcol {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.editcolPartHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.editcolPartCount {
+  color: var(--fg-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.editcolPartList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.editcolPartEmpty {
+  padding: var(--space-6);
+}
+
+.editcolPartAdd {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  height: var(--control-height-md);
+  padding: 0 var(--space-3);
+  border: var(--border-width) dashed var(--border-strong);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--fg-secondary);
+  cursor: pointer;
+  transition:
+    border-color var(--motion-fast),
+    color var(--motion-fast),
+    background-color var(--motion-fast);
+}
+
+.editcolPartAdd:hover {
+  border-color: var(--action-primary);
+  color: var(--fg-brand);
+  background: var(--bg-selected);
+}
+
+.editcolPartAdd:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.editcolPartTitle {
+  color: var(--fg-primary);
+}

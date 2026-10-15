@@ -6,8 +6,12 @@ import { cx } from '../../utils/cx';
 import { ModalBackdrop } from '../feedback/ModalBackdrop';
 import { EmptyText } from '../primitives/EmptyText';
 import { Glyph, renderIcon } from '../primitives/Glyph';
+import { Kbd } from '../primitives/Kbd';
 import { highlightMatch } from '../primitives/Mark';
 import { SectionLabel } from '../primitives/SectionLabel';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './CommandPaletteDialog.module.css';
 import { type CommandGroup, type CommandItem, type CommandPaletteLabels, filterCommandGroups } from './commandSearch';
 import { MenuItemContent } from './MenuItemContent';
 
@@ -86,14 +90,15 @@ export const CommandPaletteDialog = (props: CommandPaletteDialogProps) => {
   return (
     <ModalBackdrop
       ref={setRoot}
-      class="vui-dialog-backdrop vui-dialog-backdrop--top"
+      class={cx(styles.dialogBackdrop, styles.dialogBackdropVariantTop)}
       onDismiss={props.onClose}
       aria-label={labels().dialog}
     >
-      <div class={cx('vui-cmdk', props.class)}>
-        <div class="vui-cmdk__search">
+      <div class={cx(styles.cmdk, props.class)}>
+        <div class={styles.cmdkPartSearch}>
           <Glyph name="search" />
           <input
+            class={typographyClass('body-lg')}
             role="combobox"
             aria-label={translate('velvet.common.search')}
             aria-expanded="true"
@@ -108,9 +113,9 @@ export const CommandPaletteDialog = (props: CommandPaletteDialogProps) => {
             }}
             onKeyDown={onKeyDown}
           />
-          <kbd class="vui-cmdk__key" aria-hidden="true">
+          <Kbd class={styles.cmdkPartKey} aria-hidden="true">
             Esc
-          </kbd>
+          </Kbd>
         </div>
         <div
           ref={(element) => {
@@ -118,12 +123,12 @@ export const CommandPaletteDialog = (props: CommandPaletteDialogProps) => {
           }}
           id={id}
           role="listbox"
-          class="vui-cmdk__list"
+          class={styles.cmdkPartList}
         >
           <For each={groups()}>
             {(group) => (
               <div role="group" aria-label={group.label}>
-                <SectionLabel class="vui-cmdk__group">{group.label}</SectionLabel>
+                <SectionLabel class={styles.cmdkPartGroup}>{group.label}</SectionLabel>
                 <For each={group.results}>
                   {(result) => (
                     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/interactive-supports-focus -- option rows are driven by aria-activedescendant on the combobox input, which owns keyboard handling and focus
@@ -132,9 +137,10 @@ export const CommandPaletteDialog = (props: CommandPaletteDialogProps) => {
                       role="option"
                       aria-selected={result.index === active()}
                       class={cx(
-                        'vui-menu__item',
-                        'vui-cmdk__item',
-                        result.index === active() && 'vui-menu__item--active',
+                        typographyClass('body'),
+                        styles.menuPartItem,
+                        styles.cmdkPartItem,
+                        result.index === active() && styles.menuPartItemVariantActive,
                       )}
                       onMouseMove={() => active() !== result.index && setActive(result.index)}
                       onClick={() => run(result.item)}
@@ -146,7 +152,7 @@ export const CommandPaletteDialog = (props: CommandPaletteDialogProps) => {
                         shortcut={result.item.shortcut}
                         trailing={
                           <Show when={result.index === active()}>
-                            <Glyph name="arrow-right" class="vui-cmdk__go" />
+                            <Glyph name="arrow-right" class={styles.cmdkPartGo} />
                           </Show>
                         }
                       />
@@ -157,23 +163,25 @@ export const CommandPaletteDialog = (props: CommandPaletteDialogProps) => {
             )}
           </For>
           <Show when={!flat().length}>
-            <EmptyText class="vui-cmdk__empty">{emptyText()}</EmptyText>
+            <EmptyText class={styles.cmdkPartEmpty}>{emptyText()}</EmptyText>
           </Show>
         </div>
-        <div class="vui-cmdk__foot" aria-hidden="true">
-          <span>
-            <kbd class="vui-cmdk__key">↑↓</kbd>
+        <div class={cx(styles.cmdkPartFoot, typographyClass('caption'))} aria-hidden="true">
+          <Text as="span" variant="caption" tone="inherit">
+            <Kbd class={styles.cmdkPartKey}>↑↓</Kbd>
             {labels().navigate}
-          </span>
-          <span>
-            <kbd class="vui-cmdk__key">↵</kbd>
+          </Text>
+          <Text as="span" variant="caption" tone="inherit">
+            <Kbd class={styles.cmdkPartKey}>↵</Kbd>
             {labels().open}
-          </span>
-          <span>
-            <kbd class="vui-cmdk__key">Esc</kbd>
+          </Text>
+          <Text as="span" variant="caption" tone="inherit">
+            <Kbd class={styles.cmdkPartKey}>Esc</Kbd>
             {labels().close}
-          </span>
-          <span class="vui-cmdk__count">{resultCount()}</span>
+          </Text>
+          <Text as="span" variant="caption" tone="inherit" class={styles.cmdkPartCount}>
+            {resultCount()}
+          </Text>
         </div>
       </div>
     </ModalBackdrop>

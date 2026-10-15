@@ -1,0 +1,40 @@
+.handle {
+  flex: none;
+  width: 20px;
+  height: var(--control-height-inner);
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--fg-tertiary);
+  cursor: grab;
+  touch-action: none;
+
+  --glyph-size: var(--type-body-lg-size);
+}
+
+.handle:hover {
+  color: var(--fg-primary);
+  background: var(--bg-hover);
+}
+
+.handle:active {
+  cursor: grabbing;
+}
+
+.handle:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.handleVariantDecorative {
+  width: auto;
+  height: auto;
+}
+
+.handleVariantDecorative:hover {
+  background: none;
+  color: inherit;
+}

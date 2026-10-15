@@ -2,9 +2,17 @@ import { createEffect, createSignal, type JSX, mergeProps, on, onCleanup, onMoun
 
 import { assignRef } from '../../utils/assignRef';
 import { callHandler } from '../../utils/callHandler';
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import styles from './ScrollArea.module.css';
 import { lengthValue } from './space';
+
+const SCROLL_CLASSES = {
+  y: styles.scrollVariantY,
+  x: styles.scrollVariantX,
+  both: styles.scrollVariantBoth,
+} as const;
 
 const EDGE_THRESHOLD_PX = 1;
 const FADE_SIZE = '28px';
@@ -105,11 +113,11 @@ export const ScrollArea = (props: ScrollAreaProps) => {
       tabIndex={local.tabIndex ?? 0}
       role={local.label ? 'region' : undefined}
       aria-label={local.label}
-      class={cx('vui-scroll', `vui-scroll--${AXIS[local.orientation]}`, local.class)}
+      class={cx(styles.scroll, variantClass(SCROLL_CLASSES, AXIS[local.orientation]), local.class)}
       style={style()}
     >
       <Show when={horizontal()} fallback={local.children}>
-        <div class="vui-scroll__track">{local.children}</div>
+        <div class={styles.scrollPartTrack}>{local.children}</div>
       </Show>
     </div>
   );

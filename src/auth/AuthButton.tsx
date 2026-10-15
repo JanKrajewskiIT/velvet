@@ -5,9 +5,11 @@ import type { ButtonVariant } from '../components/actions/Button';
 import { buttonClass, type ButtonSize } from '../components/actions/buttonClass';
 import { Spinner } from '../components/feedback/Spinner';
 import { Glyph } from '../components/primitives/Glyph';
+import { Text } from '../components/primitives/Text';
 import { useTranslate } from '../i18n/useTranslate';
 import { cx } from '../utils/cx';
 import { reportAsyncError } from '../utils/reportAsyncError';
+import styles from './AuthButton.module.css';
 import { createAuthAction } from './createAuthAction';
 
 export interface AuthButtonProps extends Omit<JSX.ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
@@ -74,7 +76,7 @@ export const AuthButton = (props: AuthButtonProps) => {
             icon: local.iconOnly,
           }),
           'vui-auth',
-          action.failed() && !busy() && 'vui-auth--error',
+          action.failed() && !busy() && styles.authVariantError,
           local.class,
         )}
         disabled={local.disabled || busy()}
@@ -91,19 +93,25 @@ export const AuthButton = (props: AuthButtonProps) => {
         data-state={auth.isAuthenticated() ? 'authenticated' : 'anonymous'}
       >
         <Show when={!busy()} fallback={<Spinner size="inline" tone="current" />}>
-          <span class="vui-auth__icon" aria-hidden="true">
+          <span class={styles.authPartIcon} aria-hidden="true">
             <Show when={action.failed()} fallback={<Glyph name={auth.isAuthenticated() ? 'log-out' : 'log-in'} />}>
               <Glyph name="alert-circle" />
             </Show>
           </span>
         </Show>
         <Show when={!local.iconOnly}>
-          <span>{label()}</span>
+          <Text
+            as="span"
+            variant={local.size === 'lg' ? 'button-lg' : local.size === 'md' ? 'button' : 'button-sm'}
+            tone="inherit"
+          >
+            {label()}
+          </Text>
         </Show>
       </button>
-      <span id={errorId} class="vui-sr-only" role="status">
+      <Text as="span" variant="caption" tone="inherit" id={errorId} class={styles.srOnly} role="status">
         <Show when={action.failed()}>{translate('velvet.actions.authButton.failed')}</Show>
-      </span>
+      </Text>
     </>
   );
 };

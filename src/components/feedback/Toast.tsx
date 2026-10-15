@@ -3,11 +3,23 @@ import { createSignal, type JSX, mergeProps, Show, splitProps } from 'solid-js';
 import { createAutoDismiss, dismissDuration } from '../../hooks/createAutoDismiss';
 import { useTranslate } from '../../i18n/useTranslate';
 import { callHandler } from '../../utils/callHandler';
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { type StatusTone, toneIcon } from '../../utils/tone';
 import { Button } from '../actions/Button';
 import { CloseButton } from '../primitives/CloseButton';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import styles from './Toast.module.css';
+
+const TOAST_CLASSES = {
+  success: styles.toastVariantSuccess,
+  warning: styles.toastVariantWarning,
+  danger: styles.toastVariantDanger,
+  info: styles.toastVariantInfo,
+  brand: styles.toastVariantBrand,
+  neutral: styles.toastVariantNeutral,
+} as const;
 
 export interface ToastProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'title' | 'style' | 'children'> {
   /** @default 'neutral' */
@@ -64,7 +76,7 @@ export const Toast = (props: ToastProps) => {
     <div
       {...rest}
       role="status"
-      class={cx('vui-toast', `vui-toast--${local.tone}`, local.class)}
+      class={cx(styles.toast, variantClass(TOAST_CLASSES, local.tone), local.class)}
       onMouseEnter={(event) => {
         setHovered(true);
         callHandler(local.onMouseEnter, event);
@@ -82,16 +94,20 @@ export const Toast = (props: ToastProps) => {
         callHandler(local.onFocusOut, event);
       }}
     >
-      <Show when={glyph()}>{(name) => <Glyph name={name()} class="vui-toast__icon" />}</Show>
-      <div class="vui-toast__content">
+      <Show when={glyph()}>{(name) => <Glyph name={name()} class={styles.toastPartIcon} />}</Show>
+      <div class={styles.toastPartContent}>
         <Show when={local.title}>
-          <div class="vui-toast__title">{local.title}</div>
+          <Text as="div" variant="title" tone="inherit" class={'vui-toast__title'}>
+            {local.title}
+          </Text>
         </Show>
         <Show when={local.description}>
-          <div class="vui-toast__desc">{local.description}</div>
+          <Text as="div" variant="body-sm" tone="secondary" class={styles.toastPartDesc}>
+            {local.description}
+          </Text>
         </Show>
         <Show when={local.action || local.onUndo}>
-          <div class="vui-toast__action">
+          <div class={styles.toastPartAction}>
             <Show when={local.onUndo}>
               {(undo) => (
                 <Button variant="soft" size="sm" iconLeft="refresh" onClick={() => undo()()}>
@@ -111,7 +127,11 @@ export const Toast = (props: ToastProps) => {
       <Show when={duration()}>
         {(duration) => (
           <Show when={duration() > 0}>
-            <span class="vui-toast__progress" style={{ 'animation-duration': `${duration()}ms` }} aria-hidden="true" />
+            <span
+              class={styles.toastPartProgress}
+              style={{ 'animation-duration': `${duration()}ms` }}
+              aria-hidden="true"
+            />
           </Show>
         )}
       </Show>

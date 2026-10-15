@@ -1,0 +1,102 @@
+.pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-4);
+}
+
+.pagerPartInfo {
+  color: var(--fg-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.pagerPartSize {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--fg-secondary);
+}
+
+.pagerPartSelect {
+  width: 84px;
+}
+
+.pagerPartPages {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-left: auto;
+}
+
+.pagerPartBtn {
+  display: grid;
+  place-items: center;
+  min-width: var(--control-height-inner-lg);
+  height: var(--control-height-inner-lg);
+  padding: 0 var(--space-2);
+  border: var(--border-width) solid transparent;
+  border-radius: var(--radius-md);
+  background: none;
+  color: var(--fg-secondary);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition:
+    background-color var(--motion-fast),
+    color var(--motion-fast);
+}
+
+.pagerPartBtn:hover:not(:disabled) {
+  background: var(--bg-hover);
+  color: var(--fg-primary);
+}
+
+.pagerPartBtn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.pagerPartBtn:disabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+
+.pagerPartBtnVariantOn,
+.pagerPartBtnVariantOn:hover:not(:disabled) {
+  background: var(--action-primary);
+  color: var(--action-primary-fg);
+}
+
+.pagerPartBtn:first-child,
+.pagerPartBtn:last-child {
+  border-color: var(--border-default);
+}
+
+.pagerPartGap {
+  min-width: 24px;
+  text-align: center;
+  color: var(--fg-tertiary);
+}
+
+.pagerPartCompact {
+  padding: 0 var(--space-2-5);
+  color: var(--fg-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.pagerPartCompact b {
+  color: var(--fg-primary);
+  font-weight: var(--type-title-weight);
+}
+
+@media (width <= 639px) {
+  .pagerVariantFull .pagerPartBtn:not(:first-child, :last-child, .pagerPartBtnVariantOn),
+  .pagerVariantFull .pagerPartGap {
+    display: none;
+  }
+
+  .pagerPartPages {
+    margin-left: 0;
+    width: 100%;
+    justify-content: space-between;
+  }
+}

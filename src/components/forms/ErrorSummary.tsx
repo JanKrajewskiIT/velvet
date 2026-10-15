@@ -4,6 +4,9 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { scrollBehavior } from '../../utils/motion';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './ErrorSummary.module.css';
 
 /** Keeps the target field clear of sticky headers after the jump. */
 const SCROLL_OFFSET_PX = 120;
@@ -57,15 +60,15 @@ export const ErrorSummary = (props: ErrorSummaryProps) => {
         tabIndex={-1}
         role="alert"
         aria-labelledby={titleId}
-        class={cx('vui-errsum', p.class)}
+        class={cx(styles.errsum, p.class)}
       >
-        <div class="vui-errsum__head">
+        <div class={cx(styles.errsumPartHead, typographyClass('label-sm'))}>
           <Glyph name="circle-x" />
-          <span id={titleId}>
+          <Text as="span" variant="label" tone="inherit" id={titleId}>
             {p.title ?? translate('velvet.forms.errorSummary.title', { count: p.errors.length })}
-          </span>
+          </Text>
         </div>
-        <ul class="vui-errsum__list">
+        <ul class={cx(styles.errsumPartList, typographyClass('body-sm'))}>
           <For each={p.errors}>
             {(error) => (
               <li>

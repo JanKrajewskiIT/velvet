@@ -3,11 +3,18 @@ import { mergeProps, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
-import { cx, modifier } from '../../utils/cx';
+import { variantClass } from '../../utils/cssModule';
+import { cx } from '../../utils/cx';
 import { pad } from '../../utils/date';
 import { callbackAlias } from './callbackAlias';
 import { meridiemOf, timeOf } from './time';
+import styles from './TimeStepper.module.css';
 import { TimeStepperColumn } from './TimeStepperColumn';
+
+const TSTEP_CLASSES = {
+  sm: styles.tstepVariantSm,
+  disabled: styles.tstepVariantDisabled,
+} as const;
 
 export interface TimeStepperProps {
   /** "HH:MM" 24h. */
@@ -69,7 +76,12 @@ export const TimeStepper = (props: TimeStepperProps) => {
     <div
       role="group"
       aria-label={p.label ?? translate('velvet.forms.timeStepper.label')}
-      class={cx('vui-tstep', modifier('vui-tstep', p.size, 'md'), p.disabled && 'vui-tstep--disabled', p.class)}
+      class={cx(
+        styles.tstep,
+        variantClass(TSTEP_CLASSES, p.size, 'md'),
+        p.disabled && styles.tstepVariantDisabled,
+        p.class,
+      )}
     >
       <TimeStepperColumn
         name={translate('velvet.forms.timeStepper.hours')}
@@ -81,7 +93,7 @@ export const TimeStepper = (props: TimeStepperProps) => {
         disabled={p.disabled}
         onStep={stepHours}
       />
-      <span class="vui-tstep__sep" aria-hidden="true">
+      <span class={styles.tstepPartSep} aria-hidden="true">
         :
       </span>
       <TimeStepperColumn
@@ -97,7 +109,7 @@ export const TimeStepper = (props: TimeStepperProps) => {
       <Show when={p.hour12}>
         <button
           type="button"
-          class="vui-tstep__ap"
+          class={styles.tstepPartAp}
           aria-label={translate('velvet.forms.timeStepper.switchTo', {
             period: meridiemOf(pm() ? 0 : HALF_DAY, i18n.locale()),
           })}

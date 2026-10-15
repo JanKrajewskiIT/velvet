@@ -2,8 +2,10 @@ import { mergeProps, Show } from 'solid-js';
 
 import { cx } from '../../utils/cx';
 import { Control } from '../primitives/Control';
+import { ControlInput } from '../primitives/ControlInput';
 import { FieldLabel } from '../primitives/FieldLabel';
 import { CopyButton } from './CopyButton';
+import styles from './CopyField.module.css';
 
 export interface CopyFieldProps {
   value: string;
@@ -17,13 +19,13 @@ export interface CopyFieldProps {
 export const CopyField = (props: CopyFieldProps) => {
   const p = mergeProps({ mono: true } satisfies Partial<CopyFieldProps>, props);
   return (
-    <div class={cx('vui-field', p.class)}>
+    <div class={cx(styles.field, p.class)}>
       <Show when={p.label}>
         <FieldLabel>{p.label}</FieldLabel>
       </Show>
-      <Control readOnly class="vui-copyfield">
-        <input
-          class={cx('vui-control__input', p.mono && 'vui-copyfield__mono')}
+      <Control readOnly class={styles.copyfield}>
+        <ControlInput
+          textVariant={p.mono ? 'code' : 'body'}
           value={p.value}
           readOnly
           aria-label={p.label}

@@ -2,6 +2,8 @@ import { type JSX, Show } from 'solid-js';
 
 import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
+import { typographyClass } from '../primitives/typography';
+import styles from './PlayerButton.module.css';
 
 export interface PlayerButtonProps {
   /** Glyph name; without it `children` is the face. */
@@ -19,7 +21,7 @@ export const PlayerButton = (props: PlayerButtonProps) => {
   return (
     <button
       type="button"
-      class={cx('vui-player__btn', props.class)}
+      class={cx(typographyClass('label-sm'), styles.playerPartBtn, props.class)}
       aria-label={props.label}
       title={props.label}
       aria-pressed={props.pressed}

@@ -1,0 +1,60 @@
+.countdown {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.countdownPartUnit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1-5);
+}
+
+.countdownVariantBoxes .countdownPartNum {
+  background: var(--surface-bg);
+  border: var(--border-width) solid var(--surface-border);
+  display: grid;
+  place-items: center;
+  min-width: 64px;
+  height: 64px;
+  padding: 0 var(--space-2);
+  border-radius: var(--surface-radius);
+  box-shadow: var(--surface-shadow);
+  color: var(--fg-primary);
+  transition:
+    box-shadow var(--motion-base),
+    border-color var(--motion-base),
+    transform var(--motion-base);
+  font-variant-numeric: tabular-nums;
+  animation: vui-tick var(--motion-move);
+}
+
+.countdownVariantSm.countdownVariantBoxes .countdownPartNum {
+  min-width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+}
+
+.countdownVariantLg.countdownVariantBoxes .countdownPartNum {
+  min-width: 88px;
+  height: 88px;
+  border-radius: var(--radius-xl);
+}
+
+.countdownVariantInline {
+  align-items: baseline;
+  gap: var(--space-0-5);
+  font-variant-numeric: tabular-nums;
+}
+
+.countdownVariantInline .countdownPartNum {
+  display: inline-block;
+  animation: vui-tick var(--motion-move);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .countdownPartNum {
+    animation: none !important;
+  }
+}

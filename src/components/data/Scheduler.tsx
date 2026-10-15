@@ -3,11 +3,14 @@ import { createEffect, createMemo, For, type JSX, mergeProps } from 'solid-js';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { fmtDate, sameDay } from '../../utils/date';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { Weekday } from '../primitives/Weekday';
 import { createSchedulerCalendar } from './createSchedulerCalendar';
 import { createSchedulerFormat } from './createSchedulerFormat';
 import { createSchedulerNow } from './createSchedulerNow';
 import { cssLength } from './rowData';
+import styles from './Scheduler.module.css';
 import { SchedulerColumn } from './SchedulerColumn';
 import type { SchedulerController } from './schedulerController';
 import { schedulerOptions } from './schedulerOptions';
@@ -80,41 +83,49 @@ export const Scheduler = (props: SchedulerProps): JSX.Element => {
   });
 
   return (
-    <div class={cx('vui-sched', p.class)}>
+    <div class={cx(typographyClass('body'), styles.sched, p.class)}>
       <SchedulerToolbar scheduler={scheduler} />
       <div
         ref={(element) => {
           frame = element;
         }}
-        class="vui-sched__frame"
+        class={styles.schedPartFrame}
         style={{ 'max-height': cssLength(p.maxHeight) }}
         // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- scrollable schedule region must be focusable so keyboard users can scroll it
         tabIndex={0}
         aria-label={translate('velvet.data.scheduler.scheduleLabel')}
       >
         <div
-          class="vui-sched__grid"
+          class={styles.schedPartGrid}
           style={{
             'grid-template-columns': `${TIME_GUTTER_PX}px repeat(${calendar.days().length}, minmax(${MIN_DAY_COLUMN_PX[calendar.view()]}px, 1fr))`,
           }}
         >
-          <div class="vui-sched__corner" />
+          <div class={styles.schedPartCorner} />
           <For each={calendar.days()}>
             {(day) => (
-              <div class={cx('vui-sched__dayhead', sameDay(day, now()) && 'vui-sched__dayhead--today')}>
+              <div class={cx(styles.schedPartDayhead, sameDay(day, now()) && styles.schedPartDayheadVariantToday)}>
                 <Weekday today={sameDay(day, now())} class="vui-sched__wd">
                   {fmtDate(day, locale(), { weekday: 'short' })}
                 </Weekday>
-                <span class="vui-sched__dn">{day.getDate()}</span>
+                <Text as="span" variant="title" tabular class={styles.schedPartDn}>
+                  {day.getDate()}
+                </Text>
               </div>
             )}
           </For>
-          <div class="vui-sched__gutter" style={{ height: `${gridHeight()}px` }}>
+          <div class={styles.schedPartGutter} style={{ height: `${gridHeight()}px` }}>
             <For each={Array.from({ length: hours() }, (_, i) => i)}>
               {(i) => (
-                <span class="vui-sched__hour" style={{ top: `${i * p.hourHeight}px` }}>
+                <Text
+                  as="span"
+                  variant="overline"
+                  tone="inherit"
+                  class={styles.schedPartHour}
+                  style={{ top: `${i * p.hourHeight}px` }}
+                >
                   {i === 0 ? '' : formatTime(new Date(2000, 0, 1, p.startHour + i))}
-                </span>
+                </Text>
               )}
             </For>
           </div>

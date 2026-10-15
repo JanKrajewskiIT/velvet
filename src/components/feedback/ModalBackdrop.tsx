@@ -1,6 +1,8 @@
 import type { JSX } from 'solid-js';
 
 import { isTopLayer } from '../../hooks/createLayer';
+import { cx } from '../../utils/cx';
+import styles from './ModalBackdrop.module.css';
 
 export interface ModalBackdropProps extends Pick<
   JSX.HTMLAttributes<HTMLDialogElement>,
@@ -18,7 +20,7 @@ export const ModalBackdrop = (props: ModalBackdropProps) => (
   // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- backdrop dismissal supplements the modal's Escape and close controls
   <dialog
     ref={props.ref}
-    class={props.class}
+    class={cx(styles.root, props.class)}
     data-vui-modal
     aria-label={props['aria-label']}
     aria-labelledby={props['aria-labelledby']}

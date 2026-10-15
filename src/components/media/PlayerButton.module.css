@@ -1,0 +1,33 @@
+.playerPartBtn {
+  position: relative;
+  display: var(--player-button-display, grid);
+  place-items: center;
+  min-width: 32px;
+  height: 32px;
+  padding: 0 var(--space-1-5);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: inherit;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition: background-color var(--motion-fast);
+
+  --glyph-size: var(--size-icon-lg, 18px);
+}
+
+.playerPartBtn:hover {
+  background: var(--player-button-hover-bg, var(--on-color-hover));
+  color: var(--player-button-hover-fg, inherit);
+}
+
+.playerPartBtn:focus-visible {
+  outline: var(--player-button-focus-outline, var(--border-width-thick) solid currentColor);
+  box-shadow: var(--player-button-focus-shadow, none);
+  outline-offset: calc(-1 * var(--space-0-5));
+}
+
+.playerPartBtn[aria-pressed='true'] {
+  background: var(--player-button-selected-bg, var(--on-color-subtle));
+  color: var(--player-button-selected-fg, inherit);
+}

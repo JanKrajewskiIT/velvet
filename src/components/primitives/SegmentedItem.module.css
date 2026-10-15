@@ -1,0 +1,44 @@
+.segmentedPartItem {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1-5);
+  flex: var(--segmented-item-flex, 0 1 auto);
+  width: var(--segmented-item-width, auto);
+  height: var(--segmented-item-height, var(--segment-h));
+  padding: var(--segmented-item-padding, 0 var(--segment-px));
+  border: 0;
+  border-radius: var(--segmented-item-radius, var(--radius-nested));
+  background: none;
+  color: var(--segment-fg);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: var(--transition-colors);
+
+  --glyph-size: var(--size-icon-md);
+}
+
+.segmentedPartItem:hover:not(:disabled) {
+  color: var(--segment-fg-hover);
+}
+
+.segmentedPartItem:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.segmentedPartItem:disabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+
+.segmentedPartItem[aria-selected='true'],
+.segmentedPartItem[aria-checked='true'],
+.segmentedPartItem[aria-pressed='true'] {
+  background: var(--segment-on-bg);
+  color: var(--segment-on-fg);
+  box-shadow: var(--segment-on-shadow);
+
+  --glyph-color: var(--fg-brand);
+}

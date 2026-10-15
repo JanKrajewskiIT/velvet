@@ -5,7 +5,9 @@ import { cx } from '../../utils/cx';
 import { Polymorphic } from '../../utils/polymorphic';
 import { Glyph } from '../primitives/Glyph';
 import { IconTile } from '../primitives/IconTile';
+import { Text } from '../primitives/Text';
 import { VisuallyHidden } from '../primitives/VisuallyHidden';
+import styles from './SetupChecklistStep.module.css';
 
 export interface ChecklistStep {
   id?: string;
@@ -22,6 +24,7 @@ export interface ChecklistStep {
 
 export interface SetupChecklistStepProps {
   step: ChecklistStep;
+  layout?: 'list' | 'grid';
   /** Zero-based position. */
   index: number;
   /** The first open step. */
@@ -41,14 +44,15 @@ export const SetupChecklistStep = (props: SetupChecklistStepProps) => {
   return (
     <Polymorphic
       tag={tag()}
+      data-layout={props.layout}
       href={props.step.href}
       type={!props.step.href && props.step.onClick ? 'button' : undefined}
       onClick={props.step.onClick}
       class={cx(
-        'vui-checklist__step',
-        props.step.done && 'vui-checklist__step--done',
-        props.next && 'vui-checklist__step--next',
-        isAction() && 'vui-checklist__step--action',
+        styles.checklistPartStep,
+        props.step.done && styles.checklistPartStepVariantDone,
+        props.next && styles.checklistPartStepVariantNext,
+        isAction() && styles.checklistPartStepVariantAction,
       )}
       aria-current={props.next ? 'step' : undefined}
     >
@@ -65,22 +69,26 @@ export const SetupChecklistStep = (props: SetupChecklistStepProps) => {
         }
       >
         <IconTile size="sm" shape="circle" tone={markTone()} class="vui-checklist__mark">
-          <span class="vui-checklist__num">{props.index + 1}</span>
+          <Text as="span" variant="label-sm" tone="inherit" class={styles.checklistPartNum}>
+            {props.index + 1}
+          </Text>
         </IconTile>
       </Show>
-      <span class="vui-checklist__text">
-        <span class="vui-checklist__label">
+      <span class={styles.checklistPartText}>
+        <Text as="span" variant="label" class={styles.checklistPartLabel}>
           {label()}
           <Show when={props.step.done}>
             <VisuallyHidden> {translate('velvet.feedback.setupChecklist.stepDone')}</VisuallyHidden>
           </Show>
-        </span>
+        </Text>
         <Show when={description()}>
-          <span class="vui-checklist__desc">{description()}</span>
+          <Text as="span" variant="caption" tone="secondary" class={styles.checklistPartDesc}>
+            {description()}
+          </Text>
         </Show>
       </span>
       <Show when={isAction() && !props.step.done}>
-        <Glyph name="chevron-right" class="vui-checklist__go" />
+        <Glyph name="chevron-right" class={styles.checklistPartGo} />
       </Show>
     </Polymorphic>
   );

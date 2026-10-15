@@ -1,0 +1,104 @@
+:import('../../styles/shared/primitives/control.module.css') {
+  externalControlPartAdorn: controlpartadorn;
+}
+
+.selectPartTrigger {
+  width: 100%;
+  margin: 0;
+  padding: 0 var(--space-3) 0 0;
+  text-align: left;
+  cursor: pointer;
+  color: var(--fg-primary);
+  appearance: none;
+}
+
+.selectPartTrigger:focus-visible {
+  outline: none;
+  border-color: var(--control-border-focus);
+  box-shadow: var(--focus-ring);
+}
+
+.selectPartTrigger:disabled {
+  cursor: not-allowed;
+}
+
+.selectPartValue {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding-left: var(--space-3);
+}
+
+.selectPartValueVariantPlaceholder {
+  color: var(--fg-tertiary);
+}
+
+.selectPartChevron {
+  flex: none;
+  margin-left: var(--space-2);
+  color: var(--fg-tertiary);
+  transition: transform var(--motion-base);
+}
+
+.selectPartTriggerVariantOpen {
+  border-color: var(--control-border-focus);
+  box-shadow: var(--focus-ring);
+}
+
+.selectPartTriggerVariantOpen .selectPartChevron {
+  transform: rotate(180deg);
+}
+
+:global(.externalControlPartAdorn) + .selectPartValue {
+  padding-left: var(--space-2);
+}
+
+.select {
+  composes: select from '../../styles/shared/forms/select.module.css';
+}
+
+.control {
+  composes: control from '../../styles/shared/primitives/control.module.css';
+}
+
+.controlVariantSm {
+  composes: controlvariantsm from '../../styles/shared/primitives/control.module.css';
+}
+
+.controlVariantLg {
+  composes: controlvariantlg from '../../styles/shared/primitives/control.module.css';
+}
+
+.controlVariantInvalid {
+  composes: controlvariantinvalid from '../../styles/shared/primitives/control.module.css';
+}
+
+.controlVariantDisabled {
+  composes: controlvariantdisabled from '../../styles/shared/primitives/control.module.css';
+}
+
+.controlVariantReadonly {
+  composes: controlvariantreadonly from '../../styles/shared/primitives/control.module.css';
+}
+
+.controlVariantTextarea {
+  composes: controlvarianttextarea from '../../styles/shared/primitives/control.module.css';
+}
+
+.controlPartAdorn {
+  composes: controlpartadorn from '../../styles/shared/primitives/control.module.css';
+}
+
+.selectPartMenu {
+  composes: selectpartmenu from '../../styles/shared/forms/select.module.css';
+}
+
+.selectPartMenuVariantUp {
+  composes: selectpartmenuvariantup from '../../styles/shared/forms/select.module.css';
+}
+
+.selectPartCheck {
+  composes: selectpartcheck from '../../styles/shared/forms/select.module.css';
+}

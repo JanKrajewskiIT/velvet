@@ -1,0 +1,17 @@
+.gantt {
+  min-width: 0;
+  overflow: hidden;
+  border: var(--border-width) solid var(--table-border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-raised);
+  color: var(--fg-primary);
+}
+
+.ganttPartScroll {
+  overflow: auto;
+  scrollbar-width: thin;
+}
+
+.ganttPartBody {
+  display: flex;
+}

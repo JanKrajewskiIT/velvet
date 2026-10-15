@@ -1,0 +1,56 @@
+.chartPartBar {
+  transform-origin: bottom;
+  transform-box: fill-box;
+  animation: vui-bar-in var(--motion-slide) backwards;
+  transition: opacity var(--motion-fast);
+}
+
+.chartPartGroupVariantDim .chartPartBar {
+  opacity: 0.35;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chartPartBar {
+    animation: none;
+  }
+}
+
+.chart {
+  composes: chart from '../../styles/shared/charts/chart.module.css';
+}
+
+.chartPartLegend {
+  composes: chartpartlegend from '../../styles/shared/charts/chart.module.css';
+}
+
+.chartPartLg {
+  composes: chartpartlg from '../../styles/shared/charts/chart.module.css';
+}
+
+.chartPartPlot {
+  composes: chartpartplot from '../../styles/shared/charts/chart.module.css';
+}
+
+.chartPartGrid {
+  composes: chartpartgrid from '../../styles/shared/charts/chart.module.css';
+}
+
+.chartPartTick {
+  composes: chartparttick from '../../styles/shared/charts/chart.module.css';
+}
+
+.chartPartTickVariantOn {
+  composes: chartparttickvarianton from '../../styles/shared/charts/chart.module.css';
+}
+
+.chartPartTip {
+  composes: chartparttip from '../../styles/shared/charts/chart.module.css';
+}
+
+.chartPartTipT {
+  composes: chartparttipt from '../../styles/shared/charts/chart.module.css';
+}
+
+.chartPartTipR {
+  composes: chartparttipr from '../../styles/shared/charts/chart.module.css';
+}

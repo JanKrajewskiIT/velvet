@@ -1,0 +1,36 @@
+:import('../../styles/shared/actions/button.module.css') {
+  externalBtn: btn;
+}
+
+:import('../../styles/shared/menus/menu.module.css') {
+  externalMenuWrap: menuwrap;
+}
+
+.btnSplit {
+  display: inline-flex;
+}
+
+.btnSplit > :global(.externalBtn) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.btnSplit > :global(.externalMenuWrap) > :global(.externalBtn) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  width: calc(var(--control-height-md) - 4px);
+}
+
+.btnSplitVariantPrimary > :global(.externalMenuWrap) > :global(.externalBtn),
+.btnSplitVariantDanger > :global(.externalMenuWrap) > :global(.externalBtn) {
+  margin-left: var(--space-px);
+}
+
+.btnSplitVariantSecondary > :global(.externalMenuWrap) > :global(.externalBtn) {
+  margin-left: calc(-1 * var(--space-px));
+}
+
+.btnSplitVariantSoft > :global(.externalMenuWrap) > :global(.externalBtn),
+.btnSplitVariantGhost > :global(.externalMenuWrap) > :global(.externalBtn) {
+  margin-left: var(--space-px);
+}

@@ -1,0 +1,45 @@
+.emptyPartDetails {
+  width: 100%;
+  max-width: 480px;
+  max-height: 140px;
+  overflow: auto;
+  margin: 0;
+  padding: var(--space-2-5) var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--bg-sunken);
+  color: var(--fg-secondary);
+  text-align: left;
+  white-space: pre-wrap;
+}
+
+.empty {
+  composes: empty from '../../styles/shared/feedback/empty-state.module.css';
+}
+
+.toneVariantDanger {
+  composes: tonevariantdanger from '../../styles/shared/feedback/status-page.module.css';
+}
+
+.emptyVariantSm {
+  composes: emptyvariantsm from '../../styles/shared/feedback/empty-state.module.css';
+}
+
+.emptyVariantLg {
+  composes: emptyvariantlg from '../../styles/shared/feedback/empty-state.module.css';
+}
+
+.emptyPartText {
+  composes: emptyparttext from '../../styles/shared/feedback/empty-state.module.css';
+}
+
+.emptyPartTitle {
+  composes: emptyparttitle from '../../styles/shared/feedback/empty-state.module.css';
+}
+
+.emptyPartDesc {
+  composes: emptypartdesc from '../../styles/shared/feedback/empty-state.module.css';
+}
+
+.emptyPartActions {
+  composes: emptypartactions from '../../styles/shared/feedback/empty-state.module.css';
+}

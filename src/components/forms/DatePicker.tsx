@@ -8,12 +8,15 @@ import { cx } from '../../utils/cx';
 import { fmtDate } from '../../utils/date';
 import { Button } from '../actions/Button';
 import { FieldLabel } from '../primitives/FieldLabel';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { Calendar } from './Calendar';
 import { callbackAlias } from './callbackAlias';
 import { createFormValidation } from './createFormValidation';
 import { createPickerPopover } from './createPickerPopover';
 import { isDateAllowed } from './dateConstraints';
 import { DateField } from './DateField';
+import styles from './DatePicker.module.css';
 import type { FormControlProps } from './formControl';
 import { formDate } from './formDate';
 import { FormValue } from './FormValue';
@@ -101,9 +104,9 @@ export const DatePicker = (props: DatePickerProps) => {
   };
 
   return (
-    <div class="vui-field">
-      <span ref={popover.setWrap} class="vui-popover-wrap vui-datepicker">
-        <div class="vui-field" style={{ width: '100%' }}>
+    <div class={styles.field}>
+      <span ref={popover.setWrap} class={cx(styles.popoverWrap, styles.datepicker)}>
+        <div class={styles.field} style={{ width: '100%' }}>
           <Show when={p.label}>
             <FieldLabel htmlFor={id()} optional={p.optional} required={p.required}>
               {p.label}
@@ -144,7 +147,12 @@ export const DatePicker = (props: DatePickerProps) => {
           <div
             ref={popover.floating.ref}
             style={popover.floating.style()}
-            class={cx('vui-popover', 'vui-datepop', p.align === 'end' && 'vui-popover--end')}
+            class={cx(
+              typographyClass('body'),
+              styles.popover,
+              styles.datepop,
+              p.align === 'end' && styles.popoverVariantEnd,
+            )}
             role="dialog"
             aria-label={translate('velvet.forms.datePicker.dialogLabel')}
           >
@@ -157,7 +165,7 @@ export const DatePicker = (props: DatePickerProps) => {
               locale={locale()}
               weekStartsOn={p.weekStartsOn}
             />
-            <div class="vui-datepop__foot">
+            <div class={styles.datepopPartFoot}>
               <Button variant="ghost" size="sm" disabled={!isDateAllowed(today(), p)} onClick={() => choose(today())}>
                 {translate('velvet.common.today')}
               </Button>
@@ -171,9 +179,15 @@ export const DatePicker = (props: DatePickerProps) => {
         </Show>
       </span>
       <Show when={p.error || p.hint}>
-        <span id={hintId()} class={cx('vui-hint', !!p.error && 'vui-hint--error')}>
+        <Text
+          as="span"
+          variant="caption"
+          tone="inherit"
+          id={hintId()}
+          class={cx(styles.hint, !!p.error && styles.hintVariantError)}
+        >
           {p.error || p.hint}
-        </span>
+        </Text>
       </Show>
     </div>
   );

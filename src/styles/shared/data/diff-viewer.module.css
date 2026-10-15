@@ -1,0 +1,38 @@
+.diffPartCode {
+  min-width: 0;
+  padding-right: var(--space-4);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.diffPartLn {
+  padding-right: var(--space-2);
+  text-align: right;
+  color: var(--code-gutter);
+  user-select: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.diffPartSign {
+  text-align: center;
+  color: var(--code-muted);
+  user-select: none;
+}
+
+.diffPartCVariantAdd {
+  background: color-mix(in oklab, var(--code-added) 14%, transparent);
+}
+
+.diffPartCVariantDel {
+  background: color-mix(in oklab, var(--status-danger-solid) 18%, transparent);
+}
+
+.diffPartSign.diffPartCVariantAdd,
+.diffPartCVariantAdd > .diffPartSign {
+  color: var(--code-added);
+}
+
+.diffPartSign.diffPartCVariantDel,
+.diffPartCVariantDel > .diffPartSign {
+  color: color-mix(in oklab, var(--status-danger-solid) 55%, var(--white));
+}

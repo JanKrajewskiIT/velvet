@@ -1,7 +1,19 @@
 import { type JSX, mergeProps, Show, splitProps } from 'solid-js';
 
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { type HtmlProps, Polymorphic } from '../../utils/polymorphic';
+import styles from './ListItem.module.css';
+import { Text } from './Text';
+import type { TextVariant } from './typography';
+
+const LIST_ITEM_CLASSES = {
+  selected: styles.listItemVariantSelected,
+  sm: styles.listItemVariantSm,
+  top: styles.listItemVariantTop,
+  action: styles.listItemVariantAction,
+  disabled: styles.listItemVariantDisabled,
+} as const;
 
 export interface ListItemProps extends HtmlProps<HTMLElement, 'title' | 'onClick'> {
   /** Defaults to `a` (href), `button` (onClick) or `div`. `label` wraps a Checkbox so the whole row toggles it. */
@@ -9,6 +21,10 @@ export interface ListItemProps extends HtmlProps<HTMLElement, 'title' | 'onClick
   leading?: JSX.Element;
   title?: JSX.Element;
   description?: JSX.Element;
+  titleVariant?: TextVariant;
+  descriptionVariant?: TextVariant;
+  titleClass?: string;
+  descriptionClass?: string;
   /** Third line — timestamp, size, source. */
   meta?: JSX.Element;
   trailing?: JSX.Element;
@@ -34,6 +50,10 @@ export const ListItem = (props: ListItemProps) => {
     'leading',
     'title',
     'description',
+    'titleVariant',
+    'descriptionVariant',
+    'titleClass',
+    'descriptionClass',
     'meta',
     'trailing',
     'selected',
@@ -62,12 +82,12 @@ export const ListItem = (props: ListItemProps) => {
     <Polymorphic
       tag={tag()}
       class={cx(
-        'vui-list-item',
-        `vui-list-item--${local.size}`,
-        isAction() && 'vui-list-item--action',
-        local.selected && 'vui-list-item--selected',
-        local.align === 'start' && 'vui-list-item--top',
-        local.disabled && 'vui-list-item--disabled',
+        styles.listItem,
+        variantClass(LIST_ITEM_CLASSES, local.size),
+        isAction() && styles.listItemVariantAction,
+        local.selected && styles.listItemVariantSelected,
+        local.align === 'start' && styles.listItemVariantTop,
+        local.disabled && styles.listItemVariantDisabled,
         local.class,
       )}
       href={local.href}
@@ -82,27 +102,45 @@ export const ListItem = (props: ListItemProps) => {
       {...rest}
     >
       <Show when={isPresent(local.leading)}>
-        <span class="vui-list-item__leading">{local.leading}</span>
+        <span class={styles.listItemPartLeading}>{local.leading}</span>
       </Show>
-      <span class="vui-list-item__main">
+      <span class={styles.listItemPartMain}>
         <Show when={local.title != null}>
-          <span class="vui-list-item__title">{local.title}</span>
+          <Text
+            as="span"
+            variant={local.titleVariant ?? 'body-sm'}
+            tone="inherit"
+            class={cx(styles.listItemPartTitle, local.titleClass)}
+          >
+            {local.title}
+          </Text>
         </Show>
         <Show when={isPresent(local.description)}>
-          <span
-            class={cx('vui-list-item__desc', local.clamp > 1 && 'vui-list-item__desc--clamp')}
+          <Text
+            as="span"
+            variant={local.descriptionVariant ?? 'caption'}
+            tone="inherit"
+            class={cx(
+              styles.listItemPartDesc,
+              local.clamp > 1 && styles.listItemPartDescVariantClamp,
+              local.descriptionClass,
+            )}
             style={local.clamp > 1 ? { '-webkit-line-clamp': local.clamp } : undefined}
           >
             {local.description}
-          </span>
+          </Text>
         </Show>
         <Show when={isPresent(local.meta)}>
-          <span class="vui-list-item__meta">{local.meta}</span>
+          <Text as="span" variant="overline" tone="inherit" class={styles.listItemPartMeta}>
+            {local.meta}
+          </Text>
         </Show>
         {local.children}
       </span>
       <Show when={isPresent(local.trailing)}>
-        <span class="vui-list-item__trailing">{local.trailing}</span>
+        <Text as="span" variant="caption" tone="inherit" class={styles.listItemPartTrailing}>
+          {local.trailing}
+        </Text>
       </Show>
     </Polymorphic>
   );

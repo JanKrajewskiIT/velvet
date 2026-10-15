@@ -11,12 +11,28 @@ import {
 } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
-import { cx, modifier } from '../../utils/cx';
+import { variantClass } from '../../utils/cssModule';
+import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
 import { aspectLabel, aspectRatioValue } from './aspect';
+import styles from './MediaFrame.module.css';
 import { MediaFrameContent } from './MediaFrameContent';
 import type { FrameState, MediaFrameProps } from './mediaFrameTypes';
 import { safeEmbedUrl, safeMediaUrl } from './safeUrl';
+
+const MEDIA_CLASSES = {
+  rounded: styles.mediaVariantRounded,
+  bordered: styles.mediaVariantBordered,
+  sm: styles.mediaVariantSm,
+  lg: styles.mediaVariantLg,
+} as const;
+
+const MEDIA_PART_FRAME_CLASSES = {
+  empty: styles.mediaPartFrameVariantEmpty,
+  error: styles.mediaPartFrameVariantError,
+  loading: styles.mediaPartFrameVariantLoading,
+} as const;
 
 export type { MediaFrameProps } from './mediaFrameTypes';
 
@@ -92,15 +108,15 @@ export const MediaFrame = (props: MediaFrameProps) => {
   return (
     <figure
       class={cx(
-        'vui-media',
-        modifier('vui-media', p.size, 'md'),
-        p.rounded && 'vui-media--rounded',
-        p.bordered && 'vui-media--bordered',
+        styles.media,
+        variantClass(MEDIA_CLASSES, p.size, 'md'),
+        p.rounded && styles.mediaVariantRounded,
+        p.bordered && styles.mediaVariantBordered,
         p.class,
       )}
     >
       <div
-        class={cx('vui-media__frame', `vui-media__frame--${status()}`)}
+        class={cx(styles.mediaPartFrame, variantClass(MEDIA_PART_FRAME_CLASSES, status()))}
         style={{ 'aspect-ratio': aspectRatioValue(p.ratio) }}
         aria-busy={status() === 'loading' || undefined}
       >
@@ -123,15 +139,19 @@ export const MediaFrame = (props: MediaFrameProps) => {
           <Show
             when={custom.toArray().length > 0}
             fallback={
-              <div class="vui-media__fallback">
+              <Text as="div" variant="caption" tone="tertiary" class={styles.mediaPartFallback}>
                 <Show when={!p.showRatio || hasPlaceholder()}>
                   <Glyph name="image" />
                 </Show>
                 <Show when={p.showRatio}>
-                  <span class="vui-media__ratio">{ratioLabel()}</span>
+                  <Text as="span" variant="code" tone="inherit" class={styles.mediaPartRatio}>
+                    {ratioLabel()}
+                  </Text>
                 </Show>
-                <span>{fallbackText()}</span>
-              </div>
+                <Text as="span" variant="body-sm" tone="inherit">
+                  {fallbackText()}
+                </Text>
+              </Text>
             }
           >
             {custom()}
@@ -140,7 +160,7 @@ export const MediaFrame = (props: MediaFrameProps) => {
         <Show when={showPlay()}>
           <button
             type="button"
-            class="vui-media__play"
+            class={styles.mediaPartPlay}
             aria-label={
               p.title
                 ? translate('velvet.media.mediaFrame.playTitled', { title: p.title })
@@ -152,19 +172,27 @@ export const MediaFrame = (props: MediaFrameProps) => {
           </button>
         </Show>
         <Show when={settled() && badge.toArray().length > 0}>
-          <span class="vui-media__badge">{badge()}</span>
+          <Text as="span" variant="label-sm" tabular class={styles.mediaPartBadge}>
+            {badge()}
+          </Text>
         </Show>
         <Show when={settled() && overlay.toArray().length > 0}>
-          <div class="vui-media__overlay">{overlay()}</div>
+          <Text as="div" variant="label" class={styles.mediaPartOverlay}>
+            {overlay()}
+          </Text>
         </Show>
       </div>
       <Show when={caption.toArray().length > 0 || credit.toArray().length > 0}>
-        <figcaption class="vui-media__caption">
-          <span>{caption()}</span>
+        <Text as="figcaption" variant="caption" tone="secondary" class={styles.mediaPartCaption}>
+          <Text as="span" variant="caption" tone="inherit">
+            {caption()}
+          </Text>
           <Show when={credit.toArray().length > 0}>
-            <span class="vui-media__credit">{credit()}</span>
+            <Text as="span" variant="caption" tone="inherit" class={styles.mediaPartCredit}>
+              {credit()}
+            </Text>
           </Show>
-        </figcaption>
+        </Text>
       </Show>
     </figure>
   );

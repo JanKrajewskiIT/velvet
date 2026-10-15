@@ -1,0 +1,3 @@
+.cmtPartBody {
+  composes: cmtpartbody from '../../styles/shared/patterns/comment-thread.module.css';
+}

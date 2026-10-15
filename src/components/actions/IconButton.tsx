@@ -4,6 +4,7 @@ import { cx } from '../../utils/cx';
 import { renderIcon } from '../primitives/Glyph';
 import { buttonClass, type ButtonSize } from './buttonClass';
 import { useButtonGroupSize } from './ButtonGroup';
+import styles from './IconButton.module.css';
 
 export type IconButtonVariant = 'primary' | 'secondary' | 'soft' | 'ghost' | 'danger' | 'raised' | 'overlay';
 
@@ -33,6 +34,7 @@ export const IconButton = (props: IconButtonProps) => {
       aria-label={local.label}
       title={local.label}
       class={cx(
+        styles.root,
         buttonClass({
           variant: local.variant,
           size: local.size ?? groupSize,

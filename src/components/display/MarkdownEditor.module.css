@@ -1,0 +1,130 @@
+.mdePartPreview {
+  --prose-max-width: none;
+
+  min-width: 0;
+  overflow: auto;
+  padding: var(--space-3-5) var(--space-5);
+  background: var(--bg-raised);
+}
+
+.mdeField {
+  min-width: 0;
+}
+
+.mde {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border: var(--border-width) solid var(--control-border);
+  border-radius: var(--radius-md);
+  background: var(--bg-field);
+  overflow: hidden;
+  transition:
+    border-color var(--motion-fast),
+    box-shadow var(--motion-fast);
+}
+
+.mde:focus-within {
+  border-color: var(--control-border-focus);
+  box-shadow: var(--focus-ring);
+}
+
+.mdeVariantInvalid {
+  border-color: var(--status-danger-solid);
+}
+
+.mdeVariantDisabled {
+  opacity: var(--opacity-disabled);
+}
+
+.mdePartBar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  padding: var(--space-1-5) var(--space-2);
+  border-bottom: var(--border-width) solid var(--border-subtle);
+  background: var(--bg-subtle);
+}
+
+.mdePartPanes {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  height: var(--mde-h, 280px);
+  min-height: 0;
+}
+
+.mdeVariantSplit .mdePartPanes {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.mdePartInput {
+  display: block;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: var(--space-3-5) var(--space-4);
+  border: 0;
+  outline: none;
+  resize: none;
+  background: none;
+  color: var(--fg-primary);
+  tab-size: 2;
+}
+
+.mdePartInput::placeholder {
+  color: var(--fg-tertiary);
+}
+
+.mdeVariantSplit .mdePartPreview {
+  border-left: var(--border-width) solid var(--border-subtle);
+  background: var(--bg-subtle);
+}
+
+.mdePartPreview:focus-visible {
+  outline: none;
+  box-shadow: inset var(--focus-ring);
+}
+
+.mdePartEmpty {
+  font-style: italic;
+}
+
+.mdePartFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-1-5) var(--space-3);
+  border-top: var(--border-width) solid var(--border-subtle);
+}
+
+.mdePartMd {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1-5);
+}
+
+.mdePartMdmark {
+  padding: var(--space-px) var(--space-1);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-2xs);
+}
+
+@media (width <= 639px) {
+  .mdeVariantSplit .mdePartPanes {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: 1fr 1fr;
+    height: calc(var(--mde-h, 280px) * 1.4);
+  }
+
+  .mdeVariantSplit .mdePartPreview {
+    border-left: 0;
+    border-top: var(--border-width) solid var(--border-subtle);
+  }
+}
+
+.field {
+  composes: field from '../../styles/shared/primitives/field.module.css';
+}

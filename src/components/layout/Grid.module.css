@@ -1,0 +1,11 @@
+.gridLayout {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: var(--grid-columns-template);
+}
+
+@media (width <= 639px) {
+  .gridLayoutVariantFixed {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

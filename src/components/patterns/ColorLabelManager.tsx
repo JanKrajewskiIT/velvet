@@ -4,8 +4,10 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { Dialog } from '../feedback/Dialog';
 import { EmptyText } from '../primitives/EmptyText';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
 import { LABEL_COLORS } from './colorLabel';
 import { ColorLabelForm } from './ColorLabelForm';
+import styles from './ColorLabelManager.module.css';
 import { ColorLabelManagerFooter } from './ColorLabelManagerFooter';
 import type { ColorLabelManagerConfig, ColorLabelManagerProps } from './colorLabelManagerTypes';
 import { ColorLabelRow } from './ColorLabelRow';
@@ -34,12 +36,19 @@ export const ColorLabelManager = (props: ColorLabelManagerProps) => {
       footer={<ColorLabelManagerFooter manager={manager} />}
     >
       <Show when={manager.failed()}>
-        <div class="vui-confirm__err" role="alert" style={{ 'margin-bottom': 'var(--space-3)' }}>
+        <Text
+          as="div"
+          variant="body-sm"
+          tone="danger"
+          class={styles.confirmPartErr}
+          role="alert"
+          style={{ 'margin-bottom': 'var(--space-3)' }}
+        >
           <Glyph name="alert-circle" />
           {errorText()}
-        </div>
+        </Text>
       </Show>
-      <ul class="vui-clm__list">
+      <ul class={styles.clmPartList}>
         <For each={p.labels}>{(label) => <ColorLabelRow label={label} manager={manager} />}</For>
         <Show when={p.labels.length === 0}>
           <EmptyText as="li" class="vui-clm__empty">

@@ -1,0 +1,30 @@
+.cthread {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  color: var(--fg-primary);
+}
+
+.cthreadPartHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.cthreadPartTitle {
+  margin: 0;
+}
+
+.cthreadPartList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.cthreadPartEmpty {
+  margin: 0;
+  padding: var(--space-3) 0;
+}

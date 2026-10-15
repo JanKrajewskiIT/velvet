@@ -1,0 +1,16 @@
+.ringPartValue {
+  position: relative;
+  font-variant-numeric: tabular-nums;
+}
+
+.progressVariantSuccess {
+}
+
+.progressVariantWarning {
+}
+
+.progressVariantDanger {
+}
+
+.progressVariantNeutral {
+}

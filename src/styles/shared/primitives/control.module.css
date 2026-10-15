@@ -1,0 +1,174 @@
+.control {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: var(--control-height-md);
+  background: var(--control-bg);
+  border: var(--border-width) solid var(--control-border);
+  border-radius: var(--control-radius);
+  box-shadow: var(--control-shadow);
+  color: var(--control-fg);
+  transition:
+    border-color var(--motion-fast),
+    box-shadow var(--motion-fast);
+}
+
+.control:hover {
+  border-color: var(--control-border-hover);
+}
+
+.control:focus-within {
+  border-color: var(--control-border-focus);
+  box-shadow: var(--focus-ring);
+}
+
+.controlVariantSm {
+  height: var(--control-height-sm);
+  border-radius: var(--control-radius-sm);
+}
+
+.controlVariantLg {
+  height: var(--control-height-lg);
+}
+
+.controlVariantInvalid,
+.controlVariantInvalid:hover {
+  border-color: var(--control-border-invalid);
+}
+
+.controlVariantInvalid:focus-within {
+  box-shadow: var(--focus-ring-danger);
+}
+
+.controlVariantDisabled {
+  opacity: var(--opacity-disabled);
+  pointer-events: none;
+  background: var(--control-readonly-bg);
+}
+
+.controlVariantReadonly {
+  background: var(--control-readonly-bg);
+  border-style: dashed;
+  box-shadow: none;
+}
+
+.controlVariantReadonly:hover {
+  border-color: var(--control-border);
+}
+
+.controlVariantReadonly .controlPartInput {
+  color: var(--fg-secondary);
+}
+
+.controlVariantTextarea {
+  height: auto;
+}
+
+.controlPartInput {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  padding: var(--control-input-padding, 0 var(--control-pad-x));
+  color: var(--control-fg);
+  appearance: none;
+}
+
+.controlPartInput::placeholder {
+  color: var(--control-placeholder);
+}
+
+textarea.controlPartInput {
+  padding: var(--space-2) var(--space-3);
+  resize: vertical;
+  min-height: 88px;
+}
+
+.control select.controlPartInput {
+  padding-right: var(--space-8);
+  cursor: pointer;
+}
+
+.controlPartAdorn {
+  display: flex;
+  align-items: center;
+  color: var(--control-adorn);
+  padding-left: var(--space-3);
+  font-size: var(--type-body-size);
+}
+
+.controlPartAdorn + .controlPartInput {
+  padding-left: var(--space-2);
+}
+
+.controlPartAdornVariantEnd {
+  padding-left: 0;
+  padding-right: var(--space-3);
+}
+
+.controlPartChevron {
+  position: absolute;
+  right: var(--space-3);
+  pointer-events: none;
+  color: var(--control-adorn);
+}
+
+.controlPartAffix {
+  display: flex;
+  align-items: center;
+  padding-left: var(--control-pad-x);
+  color: var(--control-adorn);
+  white-space: nowrap;
+  user-select: none;
+  flex: none;
+}
+
+.controlPartAffix + .controlPartInput {
+  padding-left: var(--space-1);
+}
+
+.controlPartAffixVariantEnd {
+  padding-left: 0;
+  padding-right: var(--control-pad-x);
+}
+
+.controlPartInput:has(+ .controlPartAffixVariantEnd) {
+  padding-right: var(--space-1-5);
+}
+
+.controlPartBtn {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--control-height-inner);
+  height: var(--control-height-inner);
+  margin-right: var(--space-1-5);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--fg-tertiary);
+  cursor: pointer;
+  font-size: var(--type-body-size);
+  transition:
+    background-color var(--motion-fast),
+    color var(--motion-fast);
+}
+
+.controlPartBtn:hover {
+  background: var(--bg-hover);
+  color: var(--fg-primary);
+}
+
+.controlPartBtn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.controlVariantSm .controlPartBtn {
+  width: var(--control-height-xs);
+  height: var(--control-height-xs);
+  margin-right: var(--space-1);
+}

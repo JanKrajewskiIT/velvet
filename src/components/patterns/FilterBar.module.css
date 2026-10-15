@@ -1,0 +1,35 @@
+.filterbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.filterbarPartSearch {
+  width: 240px;
+  max-width: 100%;
+}
+
+.filterbarPartEnd {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-left: auto;
+}
+
+.filterbarPartCount {
+  white-space: nowrap;
+}
+
+@media (width <= 639px) {
+  .filterbarPartSearch {
+    width: 100%;
+  }
+
+  .filterbarPartEnd {
+    width: 100%;
+    justify-content: space-between;
+    margin-left: 0;
+  }
+}

@@ -1,6 +1,8 @@
 import { createEffect, createSignal, mergeProps, onCleanup } from 'solid-js';
 
 import { cx } from '../../utils/cx';
+import styles from './LiveRegion.module.css';
+import { Text } from './Text';
 
 const LIVE_REGION_DELAY_MS = 60;
 
@@ -36,13 +38,16 @@ export const LiveRegion = (props: LiveRegionProps) => {
   });
 
   return (
-    <div
+    <Text
+      as="div"
+      variant="body-sm"
+      tone="secondary"
       role={p.politeness === 'assertive' ? 'alert' : 'status'}
       aria-live={p.politeness}
       aria-atomic="true"
-      class={cx(p.visible ? 'vui-live' : 'vui-sr-only', p.class)}
+      class={cx(p.visible ? styles.live : styles.srOnly, p.class)}
     >
       {shown()}
-    </div>
+    </Text>
   );
 };

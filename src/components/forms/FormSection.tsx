@@ -1,11 +1,20 @@
 import { createUniqueId, type JSX, mergeProps, Show } from 'solid-js';
 
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { Heading } from '../primitives/Heading';
+import { Text } from '../primitives/Text';
+import styles from './FormSection.module.css';
+
+const FORMSEC_CLASSES = {
+  divider: styles.formsecVariantDivider,
+  aside: styles.formsecVariantAside,
+} as const;
 
 export interface FormSectionProps {
   title?: JSX.Element;
   description?: JSX.Element;
-  /** `aside` = settings-page style: title and description in a left column, fields on the right (stacks under 720px). @default 'stacked' */
+  /** `aside` = settings-page style: title and description in a left column, fields on the right (stacks under 768px). @default 'stacked' */
   layout?: 'stacked' | 'aside';
   /** Hairline above the section. */
   divider?: boolean;
@@ -21,19 +30,26 @@ export const FormSection = (props: FormSectionProps) => {
   const titleId = createUniqueId();
   return (
     <section
-      class={cx('vui-formsec', `vui-formsec--${p.layout}`, p.divider && 'vui-formsec--divider', p.class)}
+      class={cx(
+        styles.formsec,
+        variantClass(FORMSEC_CLASSES, p.layout),
+        p.divider && styles.formsecVariantDivider,
+        p.class,
+      )}
       aria-labelledby={p.title ? titleId : undefined}
     >
       <Show when={p.title || p.description || p.actions}>
-        <header class="vui-formsec__head">
-          <div class="vui-formsec__ht">
+        <header class={styles.formsecPartHead}>
+          <div class={styles.formsecPartHt}>
             <Show when={p.title}>
-              <h3 id={titleId} class="vui-formsec__title">
+              <Heading level={3} variant="title" id={titleId} class={styles.formsecPartTitle}>
                 {p.title}
-              </h3>
+              </Heading>
             </Show>
             <Show when={p.description}>
-              <p class="vui-formsec__desc">{p.description}</p>
+              <Text as="p" variant="body-sm" tone="inherit" class={styles.formsecPartDesc}>
+                {p.description}
+              </Text>
             </Show>
           </div>
           <Show when={p.actions}>
@@ -41,7 +57,7 @@ export const FormSection = (props: FormSectionProps) => {
           </Show>
         </header>
       </Show>
-      <div class="vui-formsec__body">{p.children}</div>
+      <div class={styles.formsecPartBody}>{p.children}</div>
     </section>
   );
 };

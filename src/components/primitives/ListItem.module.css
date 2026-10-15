@@ -1,0 +1,51 @@
+.listItemVariantSelected {
+  composes: listitemvariantselected from '../../styles/shared/primitives/list-item.module.css';
+}
+
+.listItemVariantSm {
+  composes: listitemvariantsm from '../../styles/shared/primitives/list-item.module.css';
+}
+
+.listItemVariantTop {
+  composes: listitemvarianttop from '../../styles/shared/primitives/list-item.module.css';
+}
+
+.listItemVariantAction {
+  composes: listitemvariantaction from '../../styles/shared/primitives/list-item.module.css';
+}
+
+.listItemVariantDisabled {
+  composes: listitemvariantdisabled from '../../styles/shared/primitives/list-item.module.css';
+}
+
+.listItem {
+  composes: listitem from '../../styles/shared/primitives/list-item.module.css';
+}
+
+.listItemPartLeading {
+  composes: listitempartleading from '../../styles/shared/primitives/list-item.module.css';
+}
+
+.listItemPartMain {
+  composes: listitempartmain from '../../styles/shared/primitives/list-item.module.css';
+}
+
+.listItemPartTitle {
+  composes: listitemparttitle from '../../styles/shared/primitives/list-item.module.css';
+}
+
+.listItemPartDesc {
+  composes: listitempartdesc from '../../styles/shared/primitives/list-item.module.css';
+}
+
+.listItemPartDescVariantClamp {
+  composes: listitempartdescvariantclamp from '../../styles/shared/primitives/list-item.module.css';
+}
+
+.listItemPartMeta {
+  composes: listitempartmeta from '../../styles/shared/primitives/list-item.module.css';
+}
+
+.listItemPartTrailing {
+  composes: listitemparttrailing from '../../styles/shared/primitives/list-item.module.css';
+}

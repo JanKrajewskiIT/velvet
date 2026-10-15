@@ -1,0 +1,119 @@
+.donut {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.donutPartRing {
+  position: relative;
+  flex: none;
+}
+
+.donutPartRing svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+  overflow: visible;
+}
+
+.donutPartTrack {
+  fill: none;
+  stroke: var(--bg-sunken);
+}
+
+.donutPartSeg {
+  fill: none;
+  transition:
+    stroke-dasharray var(--motion-enter),
+    stroke-dashoffset var(--motion-enter),
+    opacity var(--motion-fast);
+  cursor: pointer;
+}
+
+.donutPartSegVariantDim {
+  opacity: 0.3;
+}
+
+.donutPartCenter {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-0-5);
+  pointer-events: none;
+}
+
+.donutPartValue {
+  font-variant-numeric: tabular-nums;
+}
+
+.donutPartLabel {
+  max-width: 70%;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.donutPartLegend {
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-0-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.donutPartItem {
+  display: grid;
+  grid-template-columns: 10px 1fr auto 44px;
+  align-items: center;
+  gap: var(--space-2-5);
+  width: 100%;
+  height: var(--control-height-inner-lg);
+  padding: 0 var(--space-2);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: none;
+  color: var(--fg-primary);
+  text-align: left;
+  cursor: pointer;
+}
+
+.donutPartItem:hover {
+  background: var(--bg-hover);
+}
+
+.donutPartItem:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.donutPartItem i {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-2xs);
+  transition: opacity var(--motion-fast);
+}
+
+.donutPartPct {
+  text-align: right;
+  color: var(--fg-tertiary);
+}
+
+.donutPartItemVariantOff {
+  color: var(--fg-tertiary);
+}
+
+.donutPartItemVariantOff i {
+  opacity: 0.25;
+}
+
+.donutPartItemVariantOff .donutPartName {
+  text-decoration: line-through;
+}

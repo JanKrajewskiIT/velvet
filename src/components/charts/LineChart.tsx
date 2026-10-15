@@ -5,6 +5,7 @@ import { cx } from '../../utils/cx';
 import { clamp } from '../../utils/math';
 import { positiveNumber } from '../../utils/numericOption';
 import { Button } from '../actions/Button';
+import { typographyClass } from '../primitives/typography';
 import { VisuallyHidden } from '../primitives/VisuallyHidden';
 import { ChartLegend } from './ChartLegend';
 import { type ChartDatum, type ChartSeries, chartValueText, colorOf, defaultSeries, valueOf } from './chartSeries';
@@ -12,6 +13,7 @@ import { createChartFormat } from './createChartFormat';
 import { createLineCursor } from './createLineCursor';
 import { createLineGeometry, LINE_PAD } from './createLineGeometry';
 import { createWidth } from './createWidth';
+import styles from './LineChart.module.css';
 import { LineChartTable } from './LineChartTable';
 import { LineChartTooltip } from './LineChartTooltip';
 
@@ -67,8 +69,8 @@ export const LineChart = (props: LineChartProps) => {
       .join(', ')}`;
 
   return (
-    <div ref={ref} class={cx('vui-chart', merged.class)}>
-      <div class="vui-chart__bar-top">
+    <div ref={ref} class={cx(typographyClass('body'), styles.chart, merged.class)}>
+      <div class={styles.chartPartBarTop}>
         <Show when={series().length > 1} fallback={<span />}>
           <ChartLegend series={series()} />
         </Show>
@@ -83,7 +85,7 @@ export const LineChart = (props: LineChartProps) => {
         </Button>
       </div>
       <Show when={!table()} fallback={<LineChartTable data={merged.data} series={series()} format={format} />}>
-        <div class="vui-chart__plot" style={{ height: `${height()}px` }}>
+        <div class={styles.chartPartPlot} style={{ height: `${height()}px` }}>
           <svg
             width={width()}
             height={height()}
@@ -109,8 +111,8 @@ export const LineChart = (props: LineChartProps) => {
             <For each={geometry.ticks()}>
               {(t) => (
                 <g>
-                  <line x1={LINE_PAD.l} x2={width() - LINE_PAD.r} y1={y(t)} y2={y(t)} class="vui-chart__grid" />
-                  <text x={LINE_PAD.l - 8} y={y(t)} dy="0.32em" text-anchor="end" class="vui-chart__tick">
+                  <line x1={LINE_PAD.l} x2={width() - LINE_PAD.r} y1={y(t)} y2={y(t)} class={styles.chartPartGrid} />
+                  <text x={LINE_PAD.l - 8} y={y(t)} dy="0.32em" text-anchor="end" class={styles.chartPartTick}>
                     {format(t)}
                   </text>
                 </g>
@@ -123,7 +125,7 @@ export const LineChart = (props: LineChartProps) => {
                     x={x(i())}
                     y={height() - 8}
                     text-anchor="middle"
-                    class={cx('vui-chart__tick', hover() === i() && 'vui-chart__tick--on')}
+                    class={cx(styles.chartPartTick, hover() === i() && styles.chartPartTickVariantOn)}
                   >
                     {d.label}
                   </text>
@@ -134,9 +136,9 @@ export const LineChart = (props: LineChartProps) => {
               {(p) => (
                 <g>
                   <Show when={p.fill}>
-                    {(fill) => <path d={fill()} fill={`url(#${p.gradient})`} class="vui-chart__area" />}
+                    {(fill) => <path d={fill()} fill={`url(#${p.gradient})`} class={styles.chartPartArea} />}
                   </Show>
-                  <path d={p.line} class="vui-chart__line" style={{ stroke: p.color }} pathLength="1" />
+                  <path d={p.line} class={styles.chartPartLine} style={{ stroke: p.color }} pathLength="1" />
                 </g>
               )}
             </For>
@@ -148,7 +150,7 @@ export const LineChart = (props: LineChartProps) => {
                     x2={x(hover())}
                     y1={LINE_PAD.t}
                     y2={geometry.baseline()}
-                    class="vui-chart__cross"
+                    class={styles.chartPartCross}
                   />
                   <Index each={series()}>
                     {(s, k) => (
@@ -157,7 +159,7 @@ export const LineChart = (props: LineChartProps) => {
                           cx={x(hover())}
                           cy={y(valueOf(d(), s().key) ?? 0)}
                           r="4.5"
-                          class="vui-chart__pt"
+                          class={styles.chartPartPt}
                           style={{ stroke: colorOf(s(), k) }}
                         />
                       </Show>

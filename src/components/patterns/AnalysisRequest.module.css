@@ -1,0 +1,128 @@
+.areq {
+  display: flex;
+  flex-direction: column;
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-xl);
+  background: var(--bg-raised);
+  box-shadow: var(--elevation-control);
+  color: var(--fg-primary);
+  overflow: hidden;
+}
+
+.areqPartHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3-5) var(--space-5);
+  border-bottom: var(--border-width) solid var(--border-subtle);
+  background: linear-gradient(180deg, var(--bg-brand-subtle), transparent);
+}
+
+.areqPartSpark {
+  border-radius: var(--radius-md);
+  background: var(--bg-brand);
+  color: var(--on-color-fg);
+  font-size: var(--size-icon-lg);
+  box-shadow: 0 4px 14px color-mix(in oklab, var(--action-primary) 30%, transparent);
+}
+
+.areqPartHt {
+  flex: 1;
+  min-width: 0;
+}
+
+.areqPartTitle {
+  margin: 0;
+}
+
+.areqPartDesc {
+  margin: var(--space-0-5) 0 0;
+}
+
+.areqPartModel {
+  flex: none;
+  padding: var(--space-1) var(--space-2);
+  border: var(--border-width) solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  background: var(--bg-raised);
+}
+
+.areqPartBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-4) var(--space-5) var(--space-5);
+}
+
+.areqPartRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-4);
+  align-items: start;
+}
+
+.areqPartTa {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 62px;
+  padding: var(--space-2-5) var(--space-3);
+  border: var(--border-width) solid var(--control-border);
+  border-radius: var(--radius-md);
+  background: var(--bg-field);
+  color: var(--fg-primary);
+  resize: vertical;
+  outline: none;
+  transition:
+    border-color var(--motion-fast),
+    box-shadow var(--motion-fast);
+}
+
+.areqPartTa:focus {
+  border-color: var(--action-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.areqPartTa::placeholder {
+  color: var(--fg-tertiary);
+}
+
+.areqPartErr {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2-5) var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--status-danger-bg);
+}
+
+.areqPartFoot {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2-5);
+  padding: var(--space-3) var(--space-5);
+  border-top: var(--border-width) solid var(--border-subtle);
+  background: var(--bg-subtle);
+}
+
+.areqPartNote {
+  margin-right: auto;
+  min-width: 0;
+}
+
+@media (width <= 639px) {
+  .areqPartRow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.areqPartRun {
+  --glyph-size: var(--size-icon-md);
+}
+
+.areqPartSet {
+  composes: areqpartset from '../../styles/shared/patterns/analysis-request.module.css';
+}
+
+.areqPartLbl {
+  composes: areqpartlbl from '../../styles/shared/patterns/analysis-request.module.css';
+}

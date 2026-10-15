@@ -2,6 +2,7 @@ import { For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { Glyph } from '../primitives/Glyph';
+import styles from './MarkdownEditorToolbar.module.css';
 import { MARKDOWN_TOOLBAR, type MarkdownTool } from './markdownTools';
 
 export interface MarkdownEditorToolbarProps {
@@ -16,18 +17,21 @@ export const MarkdownEditorToolbar = (props: MarkdownEditorToolbarProps) => {
 
   return (
     <div
-      class="vui-mde__tools"
+      class={styles.mdePartTools}
       role="toolbar"
       aria-label={translate('velvet.display.markdownEditor.toolbarLabel')}
       aria-controls={props.fieldId}
     >
       <For each={MARKDOWN_TOOLBAR}>
         {(item) => (
-          <Show when={item.kind !== 'separator' && item} fallback={<span class="vui-mde__sep" aria-hidden="true" />}>
+          <Show
+            when={item.kind !== 'separator' && item}
+            fallback={<span class={styles.mdePartSep} aria-hidden="true" />}
+          >
             {(tool) => (
               <button
                 type="button"
-                class="vui-mde__tool"
+                class={styles.mdePartTool}
                 disabled={props.disabled}
                 title={
                   tool().shortcut
@@ -41,7 +45,7 @@ export const MarkdownEditorToolbar = (props: MarkdownEditorToolbarProps) => {
                 <Show
                   when={tool().icon}
                   fallback={
-                    <span class="vui-mde__glyph" aria-hidden="true">
+                    <span class={styles.mdePartGlyph} aria-hidden="true">
                       {tool().glyph}
                     </span>
                   }

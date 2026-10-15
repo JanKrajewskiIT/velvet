@@ -1,6 +1,0 @@
-/* Dot */
-.vui-dot{display:inline-block;flex:none;width:var(--size-dot);height:var(--size-dot);border-radius:50%;background:var(--tone,currentColor)}
-.vui-dot--sm{width:var(--size-dot-sm);height:var(--size-dot-sm)}.vui-dot--lg{width:var(--size-dot-lg);height:var(--size-dot-lg)}
-.vui-dot--ring{box-shadow:0 0 0 var(--border-width-thick) var(--bg-raised)}
-.vui-dot--pulse{animation:vui-dot-pulse 1.6s var(--ease-standard) infinite}
-@keyframes vui-dot-pulse{0%{box-shadow:0 0 0 0 color-mix(in oklab,var(--tone,currentColor) 45%,transparent)}70%,100%{box-shadow:0 0 0 6px transparent}}

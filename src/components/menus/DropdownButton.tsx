@@ -1,12 +1,22 @@
 import { type JSX, mergeProps, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { buttonClass, type ButtonSize } from '../actions/buttonClass';
 import { Spinner } from '../feedback/Spinner';
 import { Glyph, renderIcon } from '../primitives/Glyph';
+import styles from './DropdownButton.module.css';
 import { Menu, type MenuTriggerProps } from './Menu';
 import type { MenuItem } from './menuItem';
+
+const BTN_SPLIT_CLASSES = {
+  primary: styles.btnSplitVariantPrimary,
+  danger: styles.btnSplitVariantDanger,
+  secondary: styles.btnSplitVariantSecondary,
+  soft: styles.btnSplitVariantSoft,
+  ghost: styles.btnSplitVariantGhost,
+} as const;
 
 export type DropdownButtonVariant = 'primary' | 'secondary' | 'soft' | 'ghost';
 
@@ -51,7 +61,7 @@ export const DropdownButton = (props: DropdownButtonProps) => {
 
   return (
     <Show when={p.onClick} fallback={<Menu align="end" items={p.items} class={p.class} trigger={menuButton} />}>
-      <div class={cx('vui-btn-split', `vui-btn-split--${p.variant}`, p.class)} role="group">
+      <div class={cx(styles.btnSplit, variantClass(BTN_SPLIT_CLASSES, p.variant), p.class)} role="group">
         <button type="button" class={textSkin()} disabled={p.disabled || p.loading} onClick={() => p.onClick?.()}>
           <Show when={p.loading}>
             <Spinner size="inline" tone="current" />

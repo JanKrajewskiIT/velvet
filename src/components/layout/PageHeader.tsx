@@ -8,6 +8,10 @@ import { Badge } from '../display/Badge';
 import { Breadcrumb, type BreadcrumbItem } from '../navigation/Breadcrumb';
 import { type TabItem, Tabs } from '../navigation/Tabs';
 import { Glyph } from '../primitives/Glyph';
+import { Heading } from '../primitives/Heading';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './PageHeader.module.css';
 
 export interface PageHeaderMeta {
   icon?: string;
@@ -63,26 +67,32 @@ export const PageHeader = (p: PageHeaderProps) => {
   const hasTabs = () => (p.tabs?.length ?? 0) > 0;
 
   return (
-    <header class={cx('vui-page-header', 'vui-page-header--card', hasTabs() && 'vui-page-header--tabs', p.class)}>
+    <header
+      class={cx(styles.pageHeader, styles.pageHeaderVariantCard, hasTabs() && styles.pageHeaderVariantTabs, p.class)}
+    >
       <Show when={hasBreadcrumb()}>
         <Breadcrumb items={p.breadcrumb ?? []} class="vui-page-header__crumb" />
       </Show>
       <Show when={!p.breadcrumb && p.eyebrow}>
-        <div class="vui-page-header__eyebrow">{p.eyebrow}</div>
+        <Text as="div" variant="caption" tone="tertiary" class="vui-page-header__eyebrow">
+          {p.eyebrow}
+        </Text>
       </Show>
-      <div class="vui-page-header__main">
+      <div class={styles.pageHeaderPartMain}>
         <Show when={p.onBack}>
           <IconButton
             icon="arrow-left"
             label={backLabel()}
             variant="secondary"
-            class="vui-page-header__back"
+            class={styles.pageHeaderPartBack}
             onClick={() => p.onBack?.()}
           />
         </Show>
-        <div class="vui-page-header__titlewrap">
-          <div class="vui-page-header__titlerow">
-            <h1 class="vui-page-header__title">{p.title}</h1>
+        <div class={styles.pageHeaderPartTitlewrap}>
+          <div class={styles.pageHeaderPartTitlerow}>
+            <Heading level={1} variant="h2" tone="primary" class={styles.pageHeaderPartTitle}>
+              {p.title}
+            </Heading>
             <Show when={p.status != null}>
               <Switch fallback={statusNode()}>
                 <Match when={statusDescription()}>
@@ -103,15 +113,19 @@ export const PageHeader = (p: PageHeaderProps) => {
             </Show>
           </div>
           <Show when={p.description}>
-            <p class="vui-page-header__desc">{p.description}</p>
+            <Text as="p" variant="body" tone="secondary" class={styles.pageHeaderPartDesc}>
+              {p.description}
+            </Text>
           </Show>
           <Show when={p.meta?.length}>
-            <ul class="vui-page-header__meta">
+            <ul class={cx(styles.pageHeaderPartMeta, typographyClass('body-sm'))}>
               <For each={p.meta}>
                 {(item) => (
                   <li>
                     <Show when={item.icon}>{(icon) => <Glyph name={icon()} />}</Show>
-                    <span>{item.label}</span>
+                    <Text as="span" variant="caption" tone="inherit">
+                      {item.label}
+                    </Text>
                   </li>
                 )}
               </For>
@@ -119,12 +133,12 @@ export const PageHeader = (p: PageHeaderProps) => {
           </Show>
         </div>
         <Show when={p.actions}>
-          <div class="vui-page-header__actions">{p.actions}</div>
+          <div class={styles.pageHeaderPartActions}>{p.actions}</div>
         </Show>
       </div>
       <Show when={hasTabs()}>
         <Tabs
-          class="vui-page-header__tabs"
+          class={styles.pageHeaderPartTabs}
           items={p.tabs ?? []}
           value={p.activeTab}
           defaultValue={p.defaultTab ?? p.tabs?.[0]?.value}

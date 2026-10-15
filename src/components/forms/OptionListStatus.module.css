@@ -1,0 +1,18 @@
+.selectPartError {
+  color: var(--status-danger-fg);
+  display: flex;
+  align-items: center;
+  gap: var(--space-1-5);
+}
+
+.srOnly {
+  composes: sronly from '../../styles/shared/navigation/link.module.css';
+}
+
+.selectPartOption {
+  composes: selectpartoption from '../../styles/shared/primitives/option.module.css';
+}
+
+.selectPartEmpty {
+  composes: selectpartempty from '../../styles/shared/forms/select.module.css';
+}

@@ -1,13 +1,29 @@
 import { For, Show } from 'solid-js';
 
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { Badge } from '../display/Badge';
 import { Glyph } from '../primitives/Glyph';
 import { Marker, type MarkerProps } from '../primitives/Marker';
 import { RailItem } from '../primitives/RailItem';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { TimelineActions } from './TimelineActions';
 import { TimelineConfirm } from './TimelineConfirm';
+import styles from './TimelineEntry.module.css';
 import type { TimelineAction, TimelineItem } from './timelineTypes';
+
+const TIMELINE_PART_ITEM_CLASSES = {
+  actionable: styles.timelinePartItemVariantActionable,
+  confirming: styles.timelinePartItemVariantConfirming,
+  's-current': styles.timelinePartItemVariantSCurrent,
+  's-upcoming': styles.timelinePartItemVariantSUpcoming,
+} as const;
+
+const TIMELINE_PART_ITEM_VARIANT_CLASSES = {
+  current: styles.timelinePartItemVariantSCurrent,
+  upcoming: styles.timelinePartItemVariantSUpcoming,
+} as const;
 
 export interface TimelineEntryProps {
   item: TimelineItem;
@@ -48,11 +64,11 @@ export const TimelineEntry = (props: TimelineEntryProps) => {
     <RailItem
       state={railState()}
       class={cx(
-        'vui-timeline__item',
-        `vui-timeline__item--${props.item.tone ?? 'neutral'}`,
-        props.item.status && `vui-timeline__item--s-${props.item.status}`,
-        !!props.item.actions?.length && 'vui-timeline__item--actionable',
-        !!confirming() && 'vui-timeline__item--confirming',
+        styles.timelinePartItem,
+        variantClass(TIMELINE_PART_ITEM_CLASSES, props.item.tone ?? 'neutral'),
+        props.item.status && variantClass(TIMELINE_PART_ITEM_VARIANT_CLASSES, props.item.status),
+        !!props.item.actions?.length && styles.timelinePartItemVariantActionable,
+        !!confirming() && styles.timelinePartItemVariantConfirming,
       )}
     >
       <Marker
@@ -65,9 +81,16 @@ export const TimelineEntry = (props: TimelineEntryProps) => {
           {props.item.avatar}
         </Show>
       </Marker>
-      <div class="vui-timeline__body">
-        <div class="vui-timeline__head">
-          <span class="vui-timeline__title">{props.item.title}</span>
+      <div class={styles.timelinePartBody}>
+        <div class={styles.timelinePartHead}>
+          <Text
+            as="span"
+            variant={props.item.status === 'current' ? 'label' : 'body-sm'}
+            tone="primary"
+            class={styles.timelinePartTitle}
+          >
+            {props.item.title}
+          </Text>
           <Show when={props.item.badge}>
             {(badge) => (
               <Badge size="sm" tone={badge().tone ?? 'neutral'} icon={badge().icon} class="vui-timeline__badge">
@@ -77,29 +100,50 @@ export const TimelineEntry = (props: TimelineEntryProps) => {
           </Show>
           <Show when={props.item.time}>
             {(time) => (
-              <time class="vui-timeline__time" dateTime={props.item.datetime}>
+              <Text
+                as="time"
+                variant="caption"
+                tone="tertiary"
+                class={styles.timelinePartTime}
+                dateTime={props.item.datetime}
+              >
                 {time()}
-              </time>
+              </Text>
             )}
           </Show>
           <TimelineActions item={props.item} confirmingId={props.confirmingId} onActivate={props.onActivate} />
         </div>
         <Show when={props.item.description}>
-          {(description) => <div class="vui-timeline__desc">{description()}</div>}
+          {(description) => (
+            <Text
+              as="div"
+              variant={props.compact ? 'caption' : 'body-sm'}
+              tone={props.compact ? 'tertiary' : 'secondary'}
+              class={styles.timelinePartDesc}
+            >
+              {description()}
+            </Text>
+          )}
         </Show>
         <Show when={props.item.meta?.length}>
-          <ul class="vui-timeline__meta">
+          <ul class={cx(styles.timelinePartMeta, typographyClass('caption'))}>
             <For each={props.item.meta}>
               {(fact) => (
-                <li>
+                <Text as="li" variant="caption" tone="inherit">
                   <Show when={fact.icon}>{(icon) => <Glyph name={icon()} />}</Show>
                   {fact.label}
-                </li>
+                </Text>
               )}
             </For>
           </ul>
         </Show>
-        <Show when={props.item.content}>{(content) => <div class="vui-timeline__content">{content()}</div>}</Show>
+        <Show when={props.item.content}>
+          {(content) => (
+            <Text as="div" variant="body-sm" tone="secondary" class={styles.timelinePartContent}>
+              {content()}
+            </Text>
+          )}
+        </Show>
         <Show when={confirming()}>
           {(action) => (
             <TimelineConfirm

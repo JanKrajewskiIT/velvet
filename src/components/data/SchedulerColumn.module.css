@@ -1,0 +1,55 @@
+.schedPartCol {
+  position: relative;
+  border-left: var(--border-width) solid var(--border-subtle);
+  background-image: linear-gradient(to bottom, var(--border-subtle) 1px, transparent 1px);
+}
+
+.schedPartColVariantWeekend {
+  background-color: var(--bg-subtle);
+}
+
+.schedPartColVariantClick {
+  cursor: copy;
+}
+
+.schedPartNow {
+  position: absolute;
+  left: calc(-1 * var(--border-width));
+  right: 0;
+  z-index: 2;
+  height: var(--border-width-thick);
+  background: var(--status-danger-solid);
+  pointer-events: none;
+}
+
+.schedPartNow::before {
+  content: '';
+  position: absolute;
+  left: -4px;
+  top: -3px;
+  width: var(--size-dot-lg);
+  height: var(--size-dot-lg);
+  border-radius: 50%;
+  background: var(--status-danger-solid);
+}
+
+.schedPartColVariantClick:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring-inset);
+}
+
+.schedPartSlot {
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 100%;
+  border: 1px solid transparent;
+  background: transparent;
+  pointer-events: none;
+}
+
+.schedPartSlot:focus-visible {
+  border-color: var(--fg-brand);
+  background: var(--bg-hover);
+  z-index: 1;
+}

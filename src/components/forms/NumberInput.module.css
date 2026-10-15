@@ -1,0 +1,49 @@
+.number {
+  padding: 0 var(--track-pad);
+}
+
+.numberPartStep {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: calc(var(--control-height-md) - 8px);
+  height: calc(100% - 6px);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-nested);
+  background: var(--bg-subtle);
+  color: var(--fg-secondary);
+  cursor: pointer;
+  transition:
+    background-color var(--motion-fast),
+    color var(--motion-fast);
+}
+
+.numberPartStep:hover:not(:disabled) {
+  background: var(--bg-pressed);
+  color: var(--fg-primary);
+}
+
+.numberPartStep:active:not(:disabled) {
+  transform: scale(0.94);
+}
+
+.numberPartStep:disabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+
+.numberPartInput {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+
+  --control-input-padding: 0 var(--space-1);
+}
+
+.controlPartAffix {
+  composes: controlpartaffix from '../../styles/shared/primitives/control.module.css';
+}
+
+.controlPartAffixVariantEnd {
+  composes: controlpartaffixvariantend from '../../styles/shared/primitives/control.module.css';
+}

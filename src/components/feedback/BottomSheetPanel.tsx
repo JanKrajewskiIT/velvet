@@ -2,8 +2,12 @@ import { children as resolveChildren, createSignal, createUniqueId, Show } from 
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { Heading } from '../primitives/Heading';
+import { Text } from '../primitives/Text';
+import styles from './BottomSheetPanel.module.css';
 import type { BottomSheetProps } from './bottomSheetTypes';
 import { ModalBackdrop } from './ModalBackdrop';
+
 /** Drag distance (px) past which releasing the grabber dismisses the sheet. */
 const DISMISS_DISTANCE = 120;
 /** Release velocity (px/ms) past which a flick dismisses the sheet. */
@@ -50,7 +54,7 @@ export const BottomSheetPanel = (props: BottomSheetPanelProps) => {
   return (
     <ModalBackdrop
       ref={props.ref}
-      class="vui-sheet-backdrop"
+      class={cx(styles.sheetBackdrop)}
       onDismiss={() => props.sheet.onClose?.()}
       aria-labelledby={title() ? titleId : undefined}
       aria-label={title() ? undefined : (props.sheet.label ?? translate('velvet.feedback.bottomSheet.label'))}
@@ -58,11 +62,11 @@ export const BottomSheetPanel = (props: BottomSheetPanelProps) => {
     >
       <div
         tabIndex={-1}
-        class={cx('vui-sheet', dy() > 0 && 'vui-sheet--dragging', props.sheet.class)}
+        class={cx(styles.sheet, dy() > 0 && styles.sheetVariantDragging, props.sheet.class)}
         style={{ transform: dy() ? `translateY(${dy()}px)` : undefined }}
       >
         <div
-          class="vui-sheet__grab"
+          class={styles.sheetPartGrab}
           onPointerDown={down}
           onPointerMove={move}
           onPointerUp={up}
@@ -72,22 +76,22 @@ export const BottomSheetPanel = (props: BottomSheetPanelProps) => {
           <span />
         </div>
         <Show when={title() || description()}>
-          <div class="vui-sheet__head">
+          <div class={styles.sheetPartHead}>
             <Show when={title()}>
-              <h2 id={titleId} class="vui-sheet__title">
+              <Heading level={2} variant="title-lg" id={titleId} class={styles.sheetPartTitle}>
                 {title()}
-              </h2>
+              </Heading>
             </Show>
             <Show when={description()}>
-              <p id={descriptionId} class="vui-sheet__desc">
+              <Text as="p" variant="body-sm" tone="secondary" id={descriptionId} class={styles.sheetPartDesc}>
                 {description()}
-              </p>
+              </Text>
             </Show>
           </div>
         </Show>
-        <div class="vui-sheet__body">{body()}</div>
+        <div class={styles.sheetPartBody}>{body()}</div>
         <Show when={footer()}>
-          <div class="vui-sheet__foot">{footer()}</div>
+          <div class={styles.sheetPartFoot}>{footer()}</div>
         </Show>
       </div>
     </ModalBackdrop>

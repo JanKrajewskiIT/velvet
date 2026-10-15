@@ -4,6 +4,9 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
 import { Kbd } from '../primitives/Kbd';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './SearchTrigger.module.css';
 
 export interface SearchTriggerProps {
   /** @default localized "Search…" */
@@ -40,11 +43,13 @@ export const SearchTrigger = (props: SearchTriggerProps) => {
       onClick={() => p.onOpen?.()}
       aria-label={placeholder()}
       aria-keyshortcuts={p.hotkey ? 'Meta+K Control+K' : undefined}
-      class={cx('vui-search-trigger', p.class)}
+      class={cx(typographyClass('body-sm'), styles.searchTrigger, p.class)}
     >
       <Glyph name="search" />
-      <span class="vui-search-trigger__text">{placeholder()}</span>
-      <Show when={p.shortcut}>{(shortcut) => <Kbd>{shortcut()}</Kbd>}</Show>
+      <Text as="span" variant="label" tone="inherit" class={styles.searchTriggerPartText}>
+        {placeholder()}
+      </Text>
+      <Show when={p.shortcut}>{(shortcut) => <Kbd class={styles.shortcut}>{shortcut()}</Kbd>}</Show>
     </button>
   );
 };

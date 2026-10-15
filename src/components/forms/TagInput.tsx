@@ -6,9 +6,11 @@ import { cx } from '../../utils/cx';
 import { Tag } from '../display/Tag';
 import { Control } from '../primitives/Control';
 import { Field } from '../primitives/Field';
+import { typographyClass } from '../primitives/typography';
 import { createFormValidation } from './createFormValidation';
 import type { FormControlProps } from './formControl';
 import { FormValue } from './FormValue';
+import styles from './TagInput.module.css';
 
 const DUPLICATE_FLASH_MS = 600;
 const LIST_SEPARATOR = ',';
@@ -118,7 +120,7 @@ export const TagInput = (props: TagInputProps) => {
         <Control
           invalid={control.invalid || validation.invalid()}
           disabled={p.disabled}
-          class={cx('vui-taginput', p.size === 'sm' && 'vui-taginput--sm', p.class)}
+          class={cx(styles.taginput, p.size === 'sm' && styles.taginputVariantSm, p.class)}
           onMouseDown={(e) => {
             if (e.target === e.currentTarget) {
               e.preventDefault();
@@ -130,7 +132,7 @@ export const TagInput = (props: TagInputProps) => {
             {(tag, index) => (
               <Tag
                 size="sm"
-                class={cx('vui-taginput__tag', duplicate() === index() && 'vui-taginput__tag--dupe')}
+                class={cx(styles.taginputPartTag, duplicate() === index() && styles.taginputPartTagVariantDupe)}
                 disabled={p.disabled}
                 removeLabel={removeLabel(tag)}
                 onRemove={() => remove(index())}
@@ -144,7 +146,7 @@ export const TagInput = (props: TagInputProps) => {
               input = element;
             }}
             id={control.id}
-            class="vui-taginput__input"
+            class={cx(styles.taginputPartInput, typographyClass('body'))}
             value={text()}
             disabled={p.disabled}
             readOnly={isFull()}

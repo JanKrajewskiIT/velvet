@@ -1,35 +1,25 @@
-import { mergeProps, splitProps } from 'solid-js';
+import { type JSX, mergeProps, splitProps } from 'solid-js';
 
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { type ElementTag, type HtmlProps, Polymorphic } from '../../utils/polymorphic';
+import styles from './Text.module.css';
+import { TEXT_ROLES, textRoleClass, type TextVariant, typographyClass } from './typography';
 
-const VARIANT_TAG = {
-  'display-lg': 'h1',
-  'display-md': 'h1',
-  'display-sm': 'h2',
-  h1: 'h1',
-  h2: 'h2',
-  h3: 'h3',
-  h4: 'h4',
-  h5: 'h5',
-  title: 'h3',
-  kpi: 'span',
-  overline: 'span',
-  section: 'span',
-  caption: 'span',
-  label: 'span',
-  'body-lg': 'p',
-  body: 'p',
-  'body-sm': 'p',
-} as const satisfies Record<string, ElementTag>;
+const TEXT_TONE_CLASSES = {
+  primary: styles.textVariantPrimary,
+  secondary: styles.textVariantSecondary,
+  tertiary: styles.textVariantTertiary,
+  brand: styles.textVariantBrand,
+  danger: styles.textVariantDanger,
+  success: styles.textVariantSuccess,
+  warning: styles.textVariantWarning,
+  inherit: styles.textVariantInherit,
+} as const;
 
-export type TextVariant = keyof typeof VARIANT_TAG;
+export type { TextVariant } from './typography';
 
-const VARIANT_CLASS: Partial<Record<TextVariant, string>> = { label: 'vui-label-text', section: 'vui-section-label' };
-
-export interface TextProps extends HtmlProps<HTMLElement> {
-  /** Element override. Defaults by variant: headings → h1–h5, title → h3, body → p, label/caption/overline/kpi → span. */
-  as?: ElementTag;
+export interface TextOptions {
   /** @default 'body' */
   variant?: TextVariant;
   /** Text colour. Omit to inherit the role default. */
@@ -42,23 +32,35 @@ export interface TextProps extends HtmlProps<HTMLElement> {
   mono?: boolean;
 }
 
+export interface TextProps
+  extends
+    HtmlProps<HTMLElement>,
+    TextOptions,
+    Pick<JSX.LabelHTMLAttributes<HTMLLabelElement>, 'for'>,
+    Pick<JSX.TimeHTMLAttributes<HTMLTimeElement>, 'dateTime' | 'datetime'> {
+  /** Element override, independent of the visual variant. */
+  as?: ElementTag;
+}
+
 /** Applies one type role (`--type-*`) and an optional text colour. */
 export const Text = (props: TextProps) => {
-  const merged = mergeProps({ variant: 'body' } satisfies TextProps, props);
+  const merged = mergeProps({ variant: 'body' } satisfies TextOptions, props);
   const [local, rest] = splitProps(merged, ['as', 'variant', 'tone', 'truncate', 'tabular', 'mono', 'class']);
   return (
     <Polymorphic
-      tag={local.as ?? VARIANT_TAG[local.variant]}
+      {...rest}
+      tag={local.as ?? TEXT_ROLES[local.variant]}
+      data-vui-text-tone={local.tone}
       class={cx(
-        'vui-text',
-        VARIANT_CLASS[local.variant] ?? `vui-${local.variant}`,
-        local.tone && `vui-text--${local.tone}`,
-        local.truncate && 'vui-text--truncate',
-        local.tabular && 'vui-text--tabular',
-        local.mono && 'vui-text--mono',
+        styles.text,
+        typographyClass(local.variant),
+        textRoleClass(local.variant),
+        local.tone && variantClass(TEXT_TONE_CLASSES, local.tone),
+        local.truncate && styles.textVariantTruncate,
+        local.tabular && styles.textVariantTabular,
+        local.mono && styles.textVariantMono,
         local.class,
       )}
-      {...rest}
     />
   );
 };

@@ -1,6 +1,8 @@
 import { type JSX, Show } from 'solid-js';
 
 import { Badge } from '../display/Badge';
+import { Text } from '../primitives/Text';
+import styles from './KanbanCardBody.module.css';
 import type { KanbanCard } from './kanbanTypes';
 
 interface KanbanCardBodyProps {
@@ -19,10 +21,14 @@ export const KanbanCardBody = (props: KanbanCardBodyProps) => (
             {props.card.tag}
           </Badge>
         </Show>
-        <div class="vui-kanban__ctitle">{props.card.title}</div>
+        <Text as="div" variant="label" tone="primary" class="vui-kanban__ctitle">
+          {props.card.title}
+        </Text>
         <Show when={props.card.meta || props.card.assignee}>
-          <div class="vui-kanban__cfoot">
-            <span class="vui-kanban__meta">{props.card.meta}</span>
+          <div class={styles.kanbanPartCfoot}>
+            <Text as="span" variant="caption" tone="tertiary" class={styles.kanbanPartMeta}>
+              {props.card.meta}
+            </Text>
             {props.card.assignee}
           </div>
         </Show>

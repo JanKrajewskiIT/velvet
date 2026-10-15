@@ -1,8 +1,11 @@
 import { Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
+import { typographyClass } from '../primitives/typography';
 import type { TransferSide } from './transferItem';
+import styles from './TransferPanelFooter.module.css';
 
 export interface TransferPanelFooterProps {
   side: TransferSide;
@@ -19,10 +22,10 @@ export const TransferPanelFooter = (props: TransferPanelFooterProps) => {
   const translate = useTranslate();
 
   return (
-    <footer class="vui-xfer__foot">
+    <footer class={styles.xferPartFoot} data-side={props.side}>
       <button
         type="button"
-        class="vui-xfer__move"
+        class={cx(styles.xferPartMove, typographyClass('label'))}
         disabled={props.checkedCount === 0 || (props.side === 'left' && props.limitHit)}
         onClick={() => props.onMove()}
       >
@@ -36,7 +39,11 @@ export const TransferPanelFooter = (props: TransferPanelFooterProps) => {
         </Show>
       </button>
       <Show when={props.checkedCount > 0}>
-        <button type="button" class="vui-xfer__link" onClick={() => props.onDeselect()}>
+        <button
+          type="button"
+          class={cx(styles.xferPartLink, typographyClass('caption'))}
+          onClick={() => props.onDeselect()}
+        >
           {translate('velvet.forms.transferPanel.deselect')}
         </button>
       </Show>

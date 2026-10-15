@@ -5,6 +5,8 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { freezeRecords } from '../../utils/freezeRecords';
 import { Glyph } from '../primitives/Glyph';
+import { typographyClass } from '../primitives/typography';
+import styles from './LocaleSwitcher.module.css';
 
 export interface LocaleOption {
   value: string;
@@ -62,12 +64,12 @@ export const LocaleSwitcher = (props: LocaleSwitcherProps) => {
     <div
       role="radiogroup"
       aria-label={p.label ?? translate('velvet.actions.localeSwitcher.label')}
-      class={cx('vui-locale', p.size === 'md' && 'vui-locale--md', p.class)}
+      class={cx(styles.locale, p.size === 'md' && styles.localeVariantMd, p.class)}
       style={{ '--n': p.locales.length, '--i': index() }}
       onKeyDown={onKeyDown}
     >
-      <span class="vui-locale__thumb" aria-hidden="true" />
-      <Glyph name="languages" class="vui-locale__ic" />
+      <span class={styles.localePartThumb} aria-hidden="true" />
+      <Glyph name="languages" class={styles.localePartIc} />
       <For each={p.locales}>
         {(locale) => (
           <button
@@ -77,7 +79,11 @@ export const LocaleSwitcher = (props: LocaleSwitcherProps) => {
             aria-label={locale.name}
             lang={locale.value}
             tabIndex={locale.value === current() ? 0 : -1}
-            class={cx('vui-locale__opt', locale.value === current() && 'vui-locale__opt--on')}
+            class={cx(
+              typographyClass('label-sm'),
+              styles.localePartOpt,
+              locale.value === current() && styles.localePartOptVariantOn,
+            )}
             onClick={() => setCurrent(locale.value)}
           >
             {locale.label}

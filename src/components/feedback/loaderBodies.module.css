@@ -1,0 +1,196 @@
+.d {
+}
+
+.s {
+}
+
+.g {
+}
+
+.h {
+}
+
+.t {
+}
+
+:where([data-vui-loader='concentric-pulse']) .part {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--sz);
+  height: var(--sz);
+  border-radius: var(--radius-full);
+  background: var(--cs-surf);
+  transform: translate(-50%, -50%) scale(0);
+  animation: vui-conc1 2.5s infinite alternate;
+}
+
+:where([data-vui-loader='concentric-pulse']) .part:nth-child(1) {
+  z-index: 1;
+  animation-name: vui-conc1;
+}
+
+:where([data-vui-loader='concentric-pulse']) .part:nth-child(2) {
+  z-index: 2;
+  animation-name: vui-conc2;
+}
+
+:where([data-vui-loader='concentric-pulse']) .part:nth-child(3) {
+  z-index: 3;
+  animation-name: vui-conc3;
+}
+
+:where([data-vui-loader='equalizer']) .part {
+  width: 8px;
+  height: 48px;
+  border-radius: var(--radius-xs);
+  background: currentcolor;
+  transform-origin: center;
+  animation: vui-eq 0.3s linear infinite alternate;
+  animation-delay: var(--dl);
+}
+
+.filter {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+:where([data-vui-loader='orbit-squares']) .part {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 28px;
+  height: 28px;
+  margin: var(--space-0-5);
+  background: var(--ld-c);
+  animation: vui-orbit 10s ease-in-out infinite both;
+  animation-delay: var(--dl);
+}
+
+:where([data-vui-loader='pulse-ring']) .part {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  transform: rotate(var(--a));
+}
+
+:where([data-vui-loader='pulse-ring']) .part::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20%;
+  height: 20%;
+  border-radius: var(--radius-full);
+  background: var(--ld-c);
+  transform: scale(0);
+  opacity: 0.5;
+  box-shadow: 0 0 20px color-mix(in oklab, var(--ld-c) 30%, transparent);
+  animation: vui-pr calc(var(--prs) * 1.111) ease-in-out infinite;
+  animation-delay: calc(var(--prs) * var(--f));
+}
+
+:where([data-vui-loader='ripple-dots']) .part {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  background: var(--rr);
+  animation: vui-ripple 1.5s infinite ease-in-out;
+  animation-delay: var(--dl);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where([data-vui-loader='concentric-pulse']) .part {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+:where([data-vui-loader='bouncing-dots']) .d {
+  position: absolute;
+  left: var(--l);
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  background: var(--ld-c);
+  transform-origin: 50%;
+  animation: vui-bounce-dot 0.5s alternate infinite ease;
+  animation-delay: var(--dl);
+}
+
+:where([data-vui-loader='bouncing-dots']) .s {
+  position: absolute;
+  top: 62px;
+  left: var(--l);
+  width: 20px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--ld-shadow);
+  filter: blur(1px);
+  z-index: -1;
+  animation: vui-bounce-shadow 0.5s alternate infinite ease;
+  animation-delay: var(--dl);
+}
+
+:where([data-vui-loader='honeycomb']) .g {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 30px;
+  height: 30px;
+  margin-left: var(--x);
+  margin-top: var(--y);
+  animation: vui-hc-gel 2s infinite;
+  animation-delay: var(--dl);
+}
+
+:where([data-vui-loader='honeycomb']) .h {
+  position: absolute;
+  top: 5px;
+  width: 30px;
+  height: 17px;
+  background: var(--ld-c);
+  animation: vui-hc-fade 2s infinite;
+  animation-delay: var(--dl);
+  box-shadow: 0 0 8px color-mix(in oklab, var(--ld-c) 35%, transparent);
+}
+
+:where([data-vui-loader='honeycomb']) .h:nth-child(2) {
+  transform: rotate(60deg);
+}
+
+:where([data-vui-loader='honeycomb']) .h:nth-child(3) {
+  transform: rotate(-60deg);
+}
+
+:where([data-vui-loader='jelly-triangle']) .d,
+:where([data-vui-loader='jelly-triangle']) .t {
+  content: '';
+  position: absolute;
+  width: 33%;
+  height: 33%;
+  border-radius: var(--radius-full);
+  background: var(--ld-c);
+  box-shadow: 0 0 20px var(--jg);
+}
+
+:where([data-vui-loader='jelly-triangle']) .d {
+  top: 6%;
+  left: 30%;
+  animation: vui-jelly-grow var(--jsp) ease infinite;
+}
+
+:where([data-vui-loader='jelly-triangle']) .t {
+  top: 6%;
+  left: 30%;
+  animation: vui-jelly-tri var(--jsp) ease infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where([data-vui-loader='jelly-triangle']) .d,
+  :where([data-vui-loader='jelly-triangle']) .t {
+    transform: none;
+  }
+}

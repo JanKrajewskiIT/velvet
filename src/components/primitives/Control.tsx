@@ -1,8 +1,20 @@
 import { type JSX, mergeProps, Show, splitProps } from 'solid-js';
 
-import { cx, modifier } from '../../utils/cx';
+import { variantClass } from '../../utils/cssModule';
+import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import styles from './Control.module.css';
 import { renderIcon } from './Glyph';
+import { Text } from './Text';
+
+const CONTROL_CLASSES = {
+  sm: styles.controlVariantSm,
+  lg: styles.controlVariantLg,
+  invalid: styles.controlVariantInvalid,
+  disabled: styles.controlVariantDisabled,
+  readonly: styles.controlVariantReadonly,
+  textarea: styles.controlVariantTextarea,
+} as const;
 
 export interface ControlProps extends HtmlProps<HTMLDivElement, 'prefix'> {
   /** Height from `--control-height-*` (density- and pointer-aware). @default 'md' */
@@ -22,7 +34,7 @@ export interface ControlProps extends HtmlProps<HTMLDivElement, 'prefix'> {
   end?: JSX.Element;
 }
 
-/** The bordered field shell. Put a native element with class `vui-control__input` inside. */
+/** The bordered field shell used by the input components. */
 export const Control = (props: ControlProps) => {
   const merged = mergeProps({ size: 'md' } satisfies ControlProps, props);
   const [local, rest] = splitProps(merged, [
@@ -42,28 +54,39 @@ export const Control = (props: ControlProps) => {
   return (
     <div
       class={cx(
-        'vui-control',
-        modifier('vui-control', local.size, 'md'),
-        local.multiline && 'vui-control--textarea',
-        local.invalid && 'vui-control--invalid',
-        local.disabled && 'vui-control--disabled',
-        local.readOnly && 'vui-control--readonly',
+        styles.control,
+        variantClass(CONTROL_CLASSES, local.size, 'md'),
+        local.multiline && styles.controlVariantTextarea,
+        local.invalid && styles.controlVariantInvalid,
+        local.disabled && styles.controlVariantDisabled,
+        local.readOnly && styles.controlVariantReadonly,
         local.class,
       )}
       {...rest}
     >
       <Show when={local.iconLeft}>
-        <span class="vui-control__adorn">{renderIcon(local.iconLeft)}</span>
+        <span class={styles.controlPartAdorn}>{renderIcon(local.iconLeft)}</span>
       </Show>
       <Show when={local.prefix}>
-        <span class="vui-control__affix">{local.prefix}</span>
+        <Text as="span" variant="body" tone="inherit" class={styles.controlPartAffix}>
+          {local.prefix}
+        </Text>
       </Show>
       {local.children}
       <Show when={local.suffix}>
-        <span class="vui-control__affix vui-control__affix--end">{local.suffix}</span>
+        <Text
+          as="span"
+          variant="body"
+          tone="inherit"
+          class={cx(styles.controlPartAffix, styles.controlPartAffixVariantEnd)}
+        >
+          {local.suffix}
+        </Text>
       </Show>
       <Show when={local.iconRight}>
-        <span class="vui-control__adorn vui-control__adorn--end">{renderIcon(local.iconRight)}</span>
+        <span class={cx(styles.controlPartAdorn, styles.controlPartAdornVariantEnd)}>
+          {renderIcon(local.iconRight)}
+        </span>
       </Show>
       {local.end}
     </div>

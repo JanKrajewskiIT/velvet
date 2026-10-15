@@ -1,0 +1,88 @@
+.ganttPartHead {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  display: flex;
+  background: var(--table-header-bg);
+  border-bottom: var(--border-width) solid var(--table-border);
+}
+
+.ganttPartCorner {
+  position: sticky;
+  left: 0;
+  z-index: 5;
+  flex: none;
+  display: flex;
+  align-items: flex-end;
+  box-sizing: border-box;
+  width: var(--gantt-label);
+  padding: 0 var(--space-4) var(--space-2);
+  background: var(--table-header-bg);
+  border-right: var(--border-width) solid var(--table-border);
+  text-transform: uppercase;
+  color: var(--table-header-fg);
+}
+
+.ganttPartScale {
+  flex: none;
+}
+
+.ganttPartMonths,
+.ganttPartUnits {
+  position: relative;
+  height: 26px;
+}
+
+.ganttPartMonth {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 0 var(--space-2);
+  border-left: var(--border-width) solid var(--table-border);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.ganttPartUnits {
+  border-top: var(--border-width) solid var(--border-subtle);
+}
+
+.ganttPartUnit {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  border-left: var(--border-width) solid var(--border-subtle);
+  white-space: nowrap;
+  color: var(--fg-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.ganttPartUnitVariantWe {
+  color: var(--fg-disabled);
+}
+
+.ganttPartUnitVariantToday {
+  color: var(--fg-brand);
+  font-weight: var(--font-weight-bold);
+}
+
+@media (width <= 639px) {
+  .ganttPartCorner {
+    width: 140px;
+  }
+}
+
+.ganttPartHead[data-scale='month'] .ganttPartMonths {
+  height: 40px;
+}
+
+.ganttPartHead[data-scale='week'] .ganttPartUnit {
+  justify-content: start;
+  padding-left: var(--space-1-5);
+}

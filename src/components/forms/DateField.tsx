@@ -6,6 +6,9 @@ import { cx } from '../../utils/cx';
 import { CloseButton } from '../primitives/CloseButton';
 import { Control } from '../primitives/Control';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './DateField.module.css';
 
 export interface DateFieldProps {
   id: string;
@@ -40,7 +43,8 @@ export const DateField = (props: DateFieldProps) => {
         ref={(element) => assignRef(p.ref, element)}
         id={p.id}
         type="button"
-        class="vui-datefield"
+        data-vui-date-field
+        class={cx(styles.datefield, typographyClass('body'))}
         disabled={p.disabled}
         aria-haspopup="dialog"
         aria-expanded={p.open}
@@ -50,12 +54,15 @@ export const DateField = (props: DateFieldProps) => {
         onClick={() => p.onToggle()}
       >
         <Glyph name={p.icon} />
-        <span
-          class={cx('vui-datefield__text', !p.text && 'vui-datefield__text--empty')}
-          style={p.tabular ? { 'font-variant-numeric': 'tabular-nums' } : undefined}
+        <Text
+          as="span"
+          variant="body"
+          tone="inherit"
+          class={cx(styles.datefieldPartText, !p.text && styles.datefieldPartTextVariantEmpty)}
+          tabular={p.tabular}
         >
           {p.text || p.placeholder}
-        </span>
+        </Text>
       </button>
       <Show when={p.text && p.onClear && !p.disabled}>
         <CloseButton

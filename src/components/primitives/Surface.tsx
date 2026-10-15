@@ -1,8 +1,39 @@
 import { mergeProps, splitProps } from 'solid-js';
 
-import { cx, modifier } from '../../utils/cx';
+import { variantClass } from '../../utils/cssModule';
+import { cx } from '../../utils/cx';
 import { type ElementTag, type HtmlProps, Polymorphic } from '../../utils/polymorphic';
 import type { Tone } from '../../utils/tone';
+import styles from './Surface.module.css';
+
+const SURFACE_CLASSES = {
+  low: styles.surfaceVariantLow,
+  overlay: styles.surfaceVariantOverlay,
+  dialog: styles.surfaceVariantDialog,
+  'pad-sm': styles.surfaceVariantPadSm,
+  'pad-md': styles.surfaceVariantPadMd,
+  'pad-lg': styles.surfaceVariantPadLg,
+  flat: styles.surfaceVariantFlat,
+  raised: styles.surfaceVariantRaised,
+  subtle: styles.surfaceVariantSubtle,
+  sunken: styles.surfaceVariantSunken,
+  brand: styles.surfaceVariantBrand,
+  'brand-solid': styles.surfaceVariantBrandSolid,
+  inverse: styles.surfaceVariantInverse,
+  glass: styles.surfaceVariantGlass,
+  clip: styles.surfaceVariantClip,
+  hoverable: styles.surfaceVariantHoverable,
+  tonal: styles.surfaceVariantTonal,
+  interactive: styles.surfaceVariantInteractive,
+  accent: styles.surfaceVariantAccent,
+  selected: styles.surfaceVariantSelected,
+} as const;
+
+const SURFACE_VARIANT_CLASSES = {
+  sm: styles.surfaceVariantPadSm,
+  md: styles.surfaceVariantPadMd,
+  lg: styles.surfaceVariantPadLg,
+} as const;
 
 export type SurfaceVariant =
   | 'default'
@@ -69,18 +100,19 @@ export const Surface = (props: SurfaceProps) => {
     <Polymorphic
       tag={local.as}
       class={cx(
-        'vui-surface',
-        modifier('vui-surface', local.variant, 'default'),
-        local.padding !== 'none' && `vui-surface--pad-${local.padding}`,
-        local.accent && 'vui-surface--accent',
-        lifts() && 'vui-surface--hoverable',
-        local.interactive && 'vui-surface--interactive',
-        local.tonal && 'vui-surface--tonal',
-        revealed() && 'vui-reveal',
-        local.selected && 'vui-surface--selected',
-        local.clip && 'vui-surface--clip',
+        styles.surface,
+        variantClass(SURFACE_CLASSES, local.variant, 'default'),
+        local.padding !== 'none' && variantClass(SURFACE_VARIANT_CLASSES, local.padding),
+        local.accent && styles.surfaceVariantAccent,
+        lifts() && styles.surfaceVariantHoverable,
+        local.interactive && styles.surfaceVariantInteractive,
+        local.tonal && styles.surfaceVariantTonal,
+        revealed() && styles.reveal,
+        local.selected && styles.surfaceVariantSelected,
+        local.clip && styles.surfaceVariantClip,
         local.class,
       )}
+      data-vui-surface
       data-tone={local.tone}
       style={typeof local.reveal === 'number' ? { '--i': local.reveal, ...local.style } : local.style}
       tabIndex={local.interactive && local.as === 'div' ? 0 : undefined}

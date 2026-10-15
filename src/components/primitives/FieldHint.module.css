@@ -1,0 +1,11 @@
+.hint {
+  composes: hint from '../../styles/shared/primitives/field.module.css';
+}
+
+.hintVariantError {
+  composes: hintvarianterror from '../../styles/shared/primitives/field.module.css';
+}
+
+.hintVariantLane {
+  composes: hintvariantlane from '../../styles/shared/primitives/field.module.css';
+}

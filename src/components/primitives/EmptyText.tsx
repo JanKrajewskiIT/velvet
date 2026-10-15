@@ -1,8 +1,10 @@
 import { type JSX, mergeProps, splitProps } from 'solid-js';
 
 import { cx } from '../../utils/cx';
-import { type HtmlProps, Polymorphic } from '../../utils/polymorphic';
+import type { HtmlProps } from '../../utils/polymorphic';
+import styles from './EmptyText.module.css';
 import { renderIcon } from './Glyph';
+import { Text } from './Text';
 
 export interface EmptyTextProps extends HtmlProps<HTMLElement> {
   /** Glyph name or node above the text. */
@@ -20,18 +22,20 @@ export const EmptyText = (props: EmptyTextProps) => {
   const merged = mergeProps({ align: 'center', as: 'div' } satisfies EmptyTextProps, props);
   const [local, rest] = splitProps(merged, ['icon', 'align', 'dashed', 'as', 'class', 'children']);
   return (
-    <Polymorphic
-      tag={local.as}
+    <Text
+      {...rest}
+      as={local.as}
+      variant="body-sm"
+      tone="tertiary"
       class={cx(
-        'vui-empty-text',
-        local.align === 'start' && 'vui-empty-text--start',
-        local.dashed && 'vui-empty-text--dashed',
+        styles.emptyText,
+        local.align === 'start' && styles.emptyTextVariantStart,
+        local.dashed && styles.emptyTextVariantDashed,
         local.class,
       )}
-      {...rest}
     >
-      {renderIcon(local.icon, 'vui-empty-text__icon')}
+      {renderIcon(local.icon, styles.emptyTextPartIcon)}
       {local.children}
-    </Polymorphic>
+    </Text>
   );
 };

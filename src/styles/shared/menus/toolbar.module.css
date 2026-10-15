@@ -1,0 +1,46 @@
+.toolbarPartBtn {
+  --glyph-size: var(--size-icon-lg);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1-5);
+  flex: none;
+  width: var(--control-height-sm);
+  height: var(--control-height-sm);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--fg-secondary);
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--motion-fast),
+    color var(--motion-fast);
+}
+
+.toolbarPartBtn:hover:not(:disabled) {
+  background: var(--bg-hover);
+  color: var(--fg-primary);
+}
+
+.toolbarPartBtn[aria-pressed='true'] {
+  background: var(--bg-selected);
+  color: var(--fg-brand);
+}
+
+.toolbarPartBtn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.toolbarPartBtn:disabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+
+.toolbarPartSep {
+  height: 20px;
+  margin: 0 var(--space-1);
+}

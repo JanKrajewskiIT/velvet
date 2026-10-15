@@ -1,0 +1,24 @@
+.formgrid {
+  display: grid;
+  align-items: start;
+  min-width: 0;
+  grid-template-columns: var(--form-grid-columns);
+}
+
+.formgridVariantGapSm {
+  gap: var(--space-2-5) var(--space-3);
+}
+
+.formgridVariantGapMd {
+  gap: var(--space-4) var(--space-5);
+}
+
+.formgridVariantGapLg {
+  gap: var(--space-6) var(--space-8);
+}
+
+@media (width <= 639px) {
+  .formgridVariantFixed {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

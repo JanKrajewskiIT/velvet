@@ -1,0 +1,191 @@
+:import('../../styles/shared/display/markdown.module.css') {
+  externalProsePartTask: proseparttask;
+}
+
+.prose {
+  max-width: var(--prose-max-width, var(--container-prose));
+  font: var(--type-body);
+  color: var(--fg-primary);
+  overflow-wrap: break-word;
+}
+
+.prose > * + * {
+  margin-top: var(--space-3);
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
+  scroll-margin-top: var(--space-6);
+}
+
+.prose h1 {
+  font: var(--type-h2);
+  letter-spacing: var(--type-h2-tracking);
+}
+
+.prose h2 {
+  font: var(--type-h3);
+  letter-spacing: var(--type-h3-tracking);
+  margin-top: var(--space-8);
+}
+
+.prose h3 {
+  font: var(--type-h4);
+  letter-spacing: var(--type-h4-tracking);
+  margin-top: var(--space-6);
+}
+
+.prose h4,
+.prose h5,
+.prose h6 {
+  font: var(--type-title);
+  letter-spacing: var(--type-title-tracking);
+  margin-top: var(--space-5);
+}
+
+.prose > :first-child {
+  margin-top: 0;
+}
+
+.prose p,
+.prose li {
+  color: var(--fg-secondary);
+  text-wrap: pretty;
+}
+
+.prose strong {
+  color: var(--fg-primary);
+  font-weight: var(--type-title-weight);
+}
+
+.prose del {
+  color: var(--fg-tertiary);
+}
+
+.prose code {
+  padding: var(--space-px) var(--space-1-5);
+  border-radius: var(--radius-xs);
+  background: var(--bg-sunken);
+  font: var(--type-code);
+  font-size: 0.88em;
+  color: var(--fg-primary);
+}
+
+.prose pre {
+  position: relative;
+  margin-top: var(--space-4);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--code-bg);
+  color: var(--code-fg);
+  overflow-x: auto;
+  font: var(--type-code);
+}
+
+.prose pre code {
+  padding: 0;
+  background: none;
+  color: inherit;
+  font-size: inherit;
+}
+
+.prose pre[data-lang]:not([data-lang=''])::before {
+  content: attr(data-lang);
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-3);
+  font: var(--type-kbd);
+  text-transform: uppercase;
+  letter-spacing: var(--type-section-tracking);
+  color: var(--code-muted);
+}
+
+.prose ul,
+.prose ol {
+  padding-left: var(--space-5);
+}
+
+.prose li + li {
+  margin-top: var(--space-1);
+}
+
+.prose li::marker {
+  color: var(--fg-tertiary);
+}
+
+.prose ol li::marker {
+  font-variant-numeric: tabular-nums;
+}
+
+.prose blockquote {
+  margin: var(--space-4) 0 0;
+  padding: var(--space-1) 0 var(--space-1) var(--space-4);
+  box-shadow: inset var(--border-width-thick) 0 0 var(--border-strong);
+}
+
+.prose blockquote p {
+  color: var(--fg-primary);
+  font-style: italic;
+}
+
+.prose hr {
+  border: 0;
+  height: var(--border-width);
+  background: var(--border-subtle);
+  margin: var(--space-6) 0;
+}
+
+.prose img {
+  max-width: 100%;
+  border-radius: var(--radius-md);
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font: var(--type-body-sm);
+}
+
+.prose th {
+  background: var(--table-header-bg);
+  font-weight: var(--type-title-weight);
+  color: var(--fg-primary);
+}
+
+.prose th,
+.prose td {
+  padding: var(--space-2) var(--space-3);
+  border-bottom: var(--border-width) solid var(--table-border);
+  color: var(--fg-secondary);
+}
+
+.prose tr:last-child td {
+  border-bottom: 0;
+}
+
+.proseVariantSm {
+  font: var(--type-body-sm);
+}
+
+.proseVariantSm > * + * {
+  margin-top: var(--space-2);
+}
+
+.proseVariantLg {
+  font: var(--type-body-lg);
+}
+
+.proseVariantLg > * + * {
+  margin-top: var(--space-4);
+}
+
+.prose li > ul,
+.prose li > ol {
+  margin-top: var(--space-1);
+}
+
+.prose :global(.externalProsePartTask) {
+  display: block;
+}

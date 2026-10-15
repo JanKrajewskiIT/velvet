@@ -1,7 +1,16 @@
 import { children, type JSX, mergeProps, Show, splitProps } from 'solid-js';
 
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { Surface, type SurfaceProps } from '../primitives/Surface';
+import { Text } from '../primitives/Text';
+import styles from './StructuredCard.module.css';
+
+const SCARD_PART_FOOTER_CLASSES = {
+  between: styles.scardPartFooterVariantBetween,
+  end: styles.scardPartFooterVariantEnd,
+  start: styles.scardPartFooterVariantStart,
+} as const;
 
 export type StructuredCardFooterAlign = 'start' | 'end' | 'between';
 
@@ -53,39 +62,49 @@ export const StructuredCard = (props: StructuredCardProps) => {
   return (
     <Surface {...surface} clip class={cx('vui-scard', local.class)}>
       <Show when={local.media}>
-        <div class="vui-scard__media" style={local.mediaRatio ? { 'aspect-ratio': local.mediaRatio } : undefined}>
+        <div class={styles.scardPartMedia} style={local.mediaRatio ? { 'aspect-ratio': local.mediaRatio } : undefined}>
           {local.media}
           <Show when={showScrim()}>
-            <span class="vui-scard__scrim" aria-hidden="true" />
+            <span class={styles.scardPartScrim} aria-hidden="true" />
           </Show>
           <Show when={local.mediaTag}>
-            <span class="vui-scard__tag">{local.mediaTag}</span>
+            <span class={styles.scardPartTag}>{local.mediaTag}</span>
           </Show>
           <Show when={local.mediaMeta}>
-            <span class="vui-scard__mmeta">{local.mediaMeta}</span>
+            <Text as="span" variant="label-sm" class={styles.scardPartMmeta}>
+              {local.mediaMeta}
+            </Text>
           </Show>
         </div>
       </Show>
       <Show when={local.title || local.meta || local.badge}>
-        <div class="vui-scard__header">
-          <div class="vui-scard__heading">
+        <div class={styles.scardPartHeader}>
+          <div class={styles.scardPartHeading}>
             <Show when={local.title}>
-              <div class="vui-scard__title">{local.title}</div>
+              <Text as="div" variant="title" tone="primary" class="vui-scard__title">
+                {local.title}
+              </Text>
             </Show>
             <Show when={local.meta}>
-              <div class="vui-scard__meta">{local.meta}</div>
+              <Text as="div" variant="caption" tone="tertiary" class={styles.scardPartMeta}>
+                {local.meta}
+              </Text>
             </Show>
           </div>
           <Show when={local.badge}>
-            <div class="vui-scard__badge">{local.badge}</div>
+            <div class={styles.scardPartBadge}>{local.badge}</div>
           </Show>
         </div>
       </Show>
       <Show when={body() != null}>
-        <div class="vui-scard__body">{body()}</div>
+        <Text as="div" variant="body-sm" tone="secondary" class={styles.scardPartBody}>
+          {body()}
+        </Text>
       </Show>
       <Show when={local.footer}>
-        <div class={cx('vui-scard__footer', `vui-scard__footer--${local.footerAlign}`)}>{local.footer}</div>
+        <div class={cx(styles.scardPartFooter, variantClass(SCARD_PART_FOOTER_CLASSES, local.footerAlign))}>
+          {local.footer}
+        </div>
       </Show>
     </Surface>
   );

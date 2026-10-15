@@ -3,6 +3,7 @@ import { Show } from 'solid-js';
 import { useTranslate } from '../../i18n/useTranslate';
 import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Button } from '../actions/Button';
+import styles from './ColorLabelSelectionFooter.module.css';
 import type { ColorLabelSelection } from './createColorLabelSelection';
 
 export interface ColorLabelSelectionFooterProps {
@@ -23,7 +24,7 @@ export const ColorLabelSelectionFooter = (props: ColorLabelSelectionFooterProps)
           variant="ghost"
           size="sm"
           iconLeft="settings"
-          class="vui-cls__manage"
+          class={styles.clsPartManage}
           disabled={props.selection.busy()}
           onClick={() => props.onManage?.()}
         >

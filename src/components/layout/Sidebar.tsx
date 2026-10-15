@@ -1,9 +1,17 @@
 import { type JSX, mergeProps, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
+import styles from './Sidebar.module.css';
 import { SidebarContext } from './sidebarContext';
+
+const SIDEBAR_CLASSES = {
+  floating: styles.sidebarVariantFloating,
+  docked: styles.sidebarVariantDocked,
+  collapsed: styles.sidebarVariantCollapsed,
+} as const;
 
 export interface SidebarProps {
   /** Logo or wordmark — hidden in the rail when the toggle is shown. */
@@ -40,25 +48,32 @@ export const Sidebar = (props: SidebarProps) => {
         },
       }}
     >
-      <aside class={cx('vui-sidebar', `vui-sidebar--${p.variant}`, p.collapsed && 'vui-sidebar--collapsed', p.class)}>
+      <aside
+        class={cx(
+          styles.sidebar,
+          variantClass(SIDEBAR_CLASSES, p.variant),
+          p.collapsed && styles.sidebarVariantCollapsed,
+          p.class,
+        )}
+      >
         <Show when={showHead()}>
-          <div class="vui-sidebar__head">
+          <div class={styles.sidebarPartHead}>
             <Show
               when={p.collapsed}
               fallback={
                 <Show when={p.brand}>
-                  <div class="vui-sidebar__brand">{p.brand}</div>
+                  <div class={styles.sidebarPartBrand}>{p.brand}</div>
                 </Show>
               }
             >
               <Show when={showRailMark()}>
-                <div class="vui-sidebar__brand vui-sidebar__brand--mark">{p.brandCollapsed}</div>
+                <div class={cx(styles.sidebarPartBrand, styles.sidebarPartBrandVariantMark)}>{p.brandCollapsed}</div>
               </Show>
             </Show>
             <Show when={p.onCollapsedChange}>
               <button
                 type="button"
-                class="vui-sidebar__toggle"
+                class={styles.sidebarPartToggle}
                 aria-label={
                   p.collapsed ? translate('velvet.layout.sidebar.expand') : translate('velvet.layout.sidebar.collapse')
                 }
@@ -75,9 +90,9 @@ export const Sidebar = (props: SidebarProps) => {
             </Show>
           </div>
         </Show>
-        <nav class="vui-sidebar__nav">{p.children}</nav>
+        <nav class={styles.sidebarPartNav}>{p.children}</nav>
         <Show when={p.footer}>
-          <div class="vui-sidebar__footer">{p.footer}</div>
+          <div class={styles.sidebarPartFooter}>{p.footer}</div>
         </Show>
       </aside>
     </SidebarContext.Provider>

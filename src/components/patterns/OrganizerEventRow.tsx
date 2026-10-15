@@ -4,7 +4,9 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { fmtDate } from '../../utils/date';
 import { IconButton } from '../actions/IconButton';
+import { Text } from '../primitives/Text';
 import { OrganizerDeleteConfirm } from './OrganizerDeleteConfirm';
+import styles from './OrganizerEventRow.module.css';
 import { eventEnd, eventStart, type OrganizerEvent } from './organizerEvents';
 
 const RANGE_DAY: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric' };
@@ -40,21 +42,25 @@ export const OrganizerEventRow = (props: OrganizerEventRowProps) => {
   return (
     <li
       data-event-id={props.event.id}
-      class={cx('vui-organizer__ev', props.dragging && 'vui-organizer__ev--drag')}
+      class={cx(styles.organizerPartEv, props.dragging && styles.organizerPartEvVariantDrag)}
       style={{ '--ec': props.event.color ?? 'var(--dv-1)' }}
       draggable={props.draggable && !props.confirmingDelete}
       onDragStart={(e) => props.onDragStart(e.dataTransfer)}
       onDragEnd={() => props.onDragEnd()}
     >
-      <button type="button" class="vui-organizer__evb" onClick={() => props.onSelect()}>
-        <span class="vui-organizer__evt">{props.event.title}</span>
-        <span class="vui-organizer__evm">
+      <button type="button" class={styles.organizerPartEvb} onClick={() => props.onSelect()}>
+        <Text as="span" variant="label" tone="inherit" class={styles.organizerPartEvt}>
+          {props.event.title}
+        </Text>
+        <Text as="span" variant="caption" tone="tertiary" tabular class="vui-organizer__evm">
           {props.event.time || translate('velvet.patterns.calendarOrganizer.allDay')}
           {range() ? ` · ${range()}` : ''}
           {props.event.location ? ` · ${props.event.location}` : ''}
-        </span>
+        </Text>
         <Show when={props.event.description}>
-          <span class="vui-organizer__evd">{props.event.description}</span>
+          <Text as="span" variant="caption" tone="secondary" class={styles.organizerPartEvd}>
+            {props.event.description}
+          </Text>
         </Show>
       </button>
       <Show when={props.editable}>

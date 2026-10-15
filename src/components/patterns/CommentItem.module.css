@@ -1,0 +1,99 @@
+:import('../../styles/shared/patterns/comment-thread.module.css') {
+  externalCmtPartBody: cmtpartbody;
+}
+
+.cmtPartReplies {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3-5);
+}
+
+.cmt {
+  display: flex;
+  gap: var(--space-2-5);
+  align-items: flex-start;
+}
+
+.cmtPartMain {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.cmtPartMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-2);
+}
+
+.cmtVariantDeleted > .cmtPartMain > :global(.externalCmtPartBody) {
+  color: var(--fg-tertiary);
+  font-style: italic;
+}
+
+.cmtPartActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-0-5);
+  margin-left: calc(-1 * var(--space-2));
+}
+
+.cmtPartAct {
+  color: var(--fg-tertiary);
+}
+
+.cmtPartAct:hover:not(:disabled) {
+  color: var(--fg-primary);
+}
+
+.cmtPartActVariantOn,
+.cmtPartActVariantOn:hover:not(:disabled) {
+  background: none;
+  color: var(--fg-brand);
+}
+
+.cmtPartActVariantDanger:hover:not(:disabled) {
+  background: var(--status-danger-bg);
+  color: var(--status-danger-fg);
+}
+
+.cmtPartMore {
+  align-self: flex-start;
+}
+
+.cmtPartThread {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2-5);
+  margin-top: var(--space-2-5);
+  padding-left: var(--space-3-5);
+  border-left: var(--border-width-thick) solid var(--border-subtle);
+}
+
+.cmtPartConfirm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1-5) var(--space-2);
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-3);
+  border: var(--border-width) solid var(--status-danger-border);
+  border-radius: var(--radius-md);
+  background: var(--status-danger-bg);
+  color: var(--status-danger-fg);
+}
+
+.cmtPartConfirm span {
+  flex: 1;
+  min-width: 140px;
+}
+
+.cmtPartBody {
+  composes: cmtpartbody from '../../styles/shared/patterns/comment-thread.module.css';
+}

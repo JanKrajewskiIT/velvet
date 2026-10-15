@@ -4,6 +4,9 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { IconButton } from '../actions/IconButton';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './HierarchyNavigator.module.css';
 
 export interface HierarchyNode {
   id: string;
@@ -77,13 +80,18 @@ export const HierarchyNavigator = (props: HierarchyNavigatorProps) => {
 
   return (
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions -- keydown only bubbles up from the level buttons to drill out with ← / Backspace
-    <div class={cx('vui-hnav', props.class)} onKeyDown={onKeyDown}>
-      <div class="vui-hnav__head">
+    <div class={cx(styles.hnav, props.class)} onKeyDown={onKeyDown}>
+      <div class={styles.hnavPartHead}>
         <Show when={path().length > 0} fallback={<span style={{ width: '4px' }} />}>
           <IconButton icon="arrow-left" label={labels().back} size="sm" onClick={() => back()} />
         </Show>
-        <nav aria-label={labels().path} class="vui-hnav__path">
-          <button type="button" class="vui-hnav__crumb" disabled={path().length === 0} onClick={() => back(0)}>
+        <nav aria-label={labels().path} class={cx(styles.hnavPartPath, typographyClass('body-sm'))}>
+          <button
+            type="button"
+            class={cx(styles.hnavPartCrumb, typographyClass('label'))}
+            disabled={path().length === 0}
+            onClick={() => back(0)}
+          >
             {rootLabel()}
           </button>
           <For each={path()}>
@@ -92,7 +100,7 @@ export const HierarchyNavigator = (props: HierarchyNavigatorProps) => {
                 <Glyph name="chevron-right" />
                 <button
                   type="button"
-                  class="vui-hnav__crumb"
+                  class={cx(styles.hnavPartCrumb, typographyClass('label'))}
                   disabled={k() === path().length - 1}
                   onClick={() => back(k() + 1)}
                 >
@@ -109,14 +117,21 @@ export const HierarchyNavigator = (props: HierarchyNavigatorProps) => {
             ref={(element) => {
               list = element;
             }}
-            class={cx('vui-hnav__list', direction() > 0 ? 'vui-hnav__list--in' : 'vui-hnav__list--out')}
+            class={cx(
+              styles.hnavPartList,
+              direction() > 0 ? styles.hnavPartListVariantIn : styles.hnavPartListVariantOut,
+            )}
           >
             <Index each={level()}>
               {(node) => (
                 <li>
                   <button
                     type="button"
-                    class={cx('vui-hnav__item', props.value === node().id && 'vui-hnav__item--sel')}
+                    class={cx(
+                      typographyClass('body'),
+                      styles.hnavPartItem,
+                      props.value === node().id && styles.hnavPartItemVariantSel,
+                    )}
                     aria-current={props.value === node().id || undefined}
                     onClick={() =>
                       hasChildren(node()) ? into(node()) : props.onSelect?.(node().id, node(), [...path(), node()])
@@ -129,22 +144,26 @@ export const HierarchyNavigator = (props: HierarchyNavigatorProps) => {
                     }}
                   >
                     <Show when={node().icon}>{(icon) => <Glyph name={icon()} />}</Show>
-                    <span class="vui-hnav__label">
+                    <Text as="span" variant="label" tone="inherit" class={styles.hnavPartLabel}>
                       {node().label}
                       <Show when={node().description}>
-                        <span class="vui-hnav__desc">{node().description}</span>
+                        <Text as="span" variant="caption" tone="inherit" class={styles.hnavPartDesc}>
+                          {node().description}
+                        </Text>
                       </Show>
-                    </span>
+                    </Text>
                     <Show
                       when={node().children?.length}
                       fallback={
                         <Show when={props.value === node().id}>
-                          <Glyph name="check" class="vui-hnav__go" />
+                          <Glyph name="check" class={styles.hnavPartGo} />
                         </Show>
                       }
                     >
-                      <span class="vui-hnav__count">{node().children?.length}</span>
-                      <Glyph name="chevron-right" class="vui-hnav__go" />
+                      <Text as="span" variant="kbd" tone="inherit" class={styles.hnavPartCount}>
+                        {node().children?.length}
+                      </Text>
+                      <Glyph name="chevron-right" class={styles.hnavPartGo} />
                     </Show>
                   </button>
                 </li>

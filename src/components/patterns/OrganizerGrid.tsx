@@ -3,10 +3,12 @@ import { For, Show } from 'solid-js';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { fmtDate, sameDay, ymd } from '../../utils/date';
+import { Text } from '../primitives/Text';
 import { Weekday } from '../primitives/Weekday';
 import type { OrganizerCalendar } from './createOrganizerCalendar';
 import type { OrganizerDrag } from './createOrganizerDrag';
 import type { OrganizerEvent } from './organizerEvents';
+import styles from './OrganizerGrid.module.css';
 import { sameMonth } from './organizerMonth';
 
 export interface OrganizerGridProps {
@@ -22,7 +24,7 @@ export const OrganizerGrid = (props: OrganizerGridProps) => {
   const translate = useTranslate();
   return (
     <>
-      <div class="vui-organizer__wd" aria-hidden="true">
+      <div class={styles.organizerPartWd} aria-hidden="true">
         <For each={props.calendar.weekdays()}>{(name) => <Weekday>{name}</Weekday>}</For>
       </div>
       <div
@@ -30,7 +32,7 @@ export const OrganizerGrid = (props: OrganizerGridProps) => {
         role="grid"
         tabIndex={-1}
         aria-label={props.calendar.monthLabel()}
-        class="vui-organizer__grid"
+        class={styles.organizerPartGrid}
         onKeyDown={(e) => props.calendar.onGridKeyDown(e)}
       >
         <For each={props.calendar.days()}>
@@ -51,35 +53,45 @@ export const OrganizerGrid = (props: OrganizerGridProps) => {
                 aria-selected={on()}
                 aria-label={label()}
                 class={cx(
-                  'vui-organizer__day',
-                  !sameMonth(d, props.calendar.view()) && 'vui-organizer__day--out',
-                  on() && 'vui-organizer__day--sel',
-                  sameDay(d, props.calendar.today()) && 'vui-organizer__day--today',
-                  props.drag.dropKey() === ymd(d) && 'vui-organizer__day--drop',
+                  styles.organizerPartDay,
+                  !sameMonth(d, props.calendar.view()) && styles.organizerPartDayVariantOut,
+                  on() && styles.organizerPartDayVariantSel,
+                  sameDay(d, props.calendar.today()) && styles.organizerPartDayVariantToday,
+                  props.drag.dropKey() === ymd(d) && styles.organizerPartDayVariantDrop,
                 )}
                 onClick={() => props.calendar.pick(d)}
                 onDragOver={(e) => props.drag.dragOverDay(e, d)}
                 onDragLeave={() => props.drag.dragLeaveDay(d)}
                 onDrop={(e) => props.drag.dropOnDay(e, d)}
               >
-                <span class="vui-organizer__num">{d.getDate()}</span>
-                <span class="vui-organizer__chips">
+                <Text as="span" variant="label-sm" tone="inherit" class={styles.organizerPartNum}>
+                  {d.getDate()}
+                </Text>
+                <span class={styles.organizerPartChips}>
                   <For each={list().slice(0, props.maxChips)}>
                     {(event) => (
-                      <span class="vui-organizer__chip" style={{ '--ec': event.color ?? 'var(--dv-1)' }}>
+                      <Text
+                        as="span"
+                        variant="overline"
+                        tone="inherit"
+                        class={styles.organizerPartChip}
+                        style={{ '--ec': event.color ?? 'var(--dv-1)' }}
+                      >
                         <Show when={event.time}>
-                          <b>{event.time}</b>
+                          <Text as="b" variant="overline" tone="inherit">
+                            {event.time}
+                          </Text>
                         </Show>
                         {event.title}
-                      </span>
+                      </Text>
                     )}
                   </For>
                   <Show when={list().length > props.maxChips}>
-                    <span class="vui-organizer__more">
+                    <Text as="span" variant="overline" tone="inherit" class={styles.organizerPartMore}>
                       {translate('velvet.patterns.calendarOrganizer.more', {
                         count: list().length - props.maxChips,
                       })}
-                    </span>
+                    </Text>
                   </Show>
                 </span>
               </button>

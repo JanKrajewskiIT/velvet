@@ -3,6 +3,7 @@ import { type JSX, mergeProps, Show, splitProps } from 'solid-js';
 import { cx } from '../../utils/cx';
 import { Spinner } from '../feedback/Spinner';
 import { renderIcon } from '../primitives/Glyph';
+import styles from './Button.module.css';
 import { buttonClass, type ButtonSize } from './buttonClass';
 import { useButtonGroupSize } from './ButtonGroup';
 
@@ -41,6 +42,7 @@ export const Button = (props: ButtonProps) => {
     <button
       {...rest}
       class={cx(
+        styles.root,
         buttonClass({ variant: local.variant, size: local.size ?? groupSize, block: local.block }),
         local.class,
       )}

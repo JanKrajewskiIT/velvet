@@ -1,0 +1,24 @@
+.swatchVariantSm {
+  width: var(--space-5);
+  height: var(--space-5);
+}
+
+.swatchVariantRound {
+  border-radius: 50%;
+}
+
+.swatchVariantSelected {
+  box-shadow: var(--swatch-selected-ring);
+}
+
+.swatch {
+  composes: swatch from '../../styles/shared/primitives/swatch.module.css';
+}
+
+.swatchVariantLg {
+  composes: swatchvariantlg from '../../styles/shared/primitives/swatch.module.css';
+}
+
+.swatchVariantFill {
+  composes: swatchvariantfill from '../../styles/shared/primitives/swatch.module.css';
+}

@@ -1,7 +1,0 @@
-/* DropdownButton */
-.vui-btn-split{display:inline-flex}
-.vui-btn-split>.vui-btn{border-top-right-radius:0;border-bottom-right-radius:0}
-.vui-btn-split>.vui-menu-wrap>.vui-btn{border-top-left-radius:0;border-bottom-left-radius:0;width:calc(var(--control-height-md) - 4px)}
-.vui-btn-split--primary>.vui-menu-wrap>.vui-btn,.vui-btn-split--danger>.vui-menu-wrap>.vui-btn{margin-left:var(--space-px)}
-.vui-btn-split--secondary>.vui-menu-wrap>.vui-btn{margin-left:-1px}
-.vui-btn-split--soft>.vui-menu-wrap>.vui-btn,.vui-btn-split--ghost>.vui-menu-wrap>.vui-btn{margin-left:var(--space-px)}

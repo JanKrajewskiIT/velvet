@@ -4,17 +4,17 @@ import { For, mergeProps, Show } from 'solid-js';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { ymd } from '../../utils/date';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { createHeatmapCursor } from './createHeatmapCursor';
 import { createHeatmapGrid } from './createHeatmapGrid';
 import { createHeatmapLabels, MIN_MONTH_LABEL_GAP } from './createHeatmapLabels';
+import styles from './Heatmap.module.css';
 import { HEATMAP_COLORS } from './heatmapColors';
 import { HeatmapTooltip } from './HeatmapTooltip';
 import type { HeatmapConfig, HeatmapProps } from './heatmapTypes';
 
 export type { HeatmapCell, HeatmapPoint, HeatmapProps } from './heatmapTypes';
-
-const CELL_GAP = 3;
-const AXIS_GUTTER = 34;
 
 /** Calendar density grid — "how much, when". Weeks are columns, weekdays rows; level colours come from --dv-seq-*. Hover or arrow-key through days (←→ week, ↑↓ day, Home/End); each cell has a full spoken label with its value. */
 export const Heatmap = (props: HeatmapProps) => {
@@ -51,61 +51,83 @@ export const Heatmap = (props: HeatmapProps) => {
   };
 
   return (
-    <div class={cx('vui-chart', 'vui-heat-wrap', merged.class)} role="group" aria-label={label()}>
+    <div
+      class={cx(typographyClass('body'), styles.chart, styles.heatWrap, merged.class)}
+      role="group"
+      aria-label={label()}
+    >
       <Show when={merged.showTotal || merged.showLegend}>
-        <div class="vui-chart__bar-top">
+        <div class={styles.chartPartBarTop}>
           <Show when={merged.showTotal} fallback={<span />}>
-            <span class="vui-heat__total">
-              <b>{format(grid().total)}</b>
+            <Text as="span" variant="body-sm" tone="secondary" class={styles.heatPartTotal}>
+              <Text as="b" variant="label-sm" tone="inherit">
+                {format(grid().total)}
+              </Text>
               {unitSuffix()}
-              <span> · {label()}</span>
-            </span>
+              <Text as="span" variant="caption" tone="inherit">
+                {' '}
+                · {label()}
+              </Text>
+            </Text>
           </Show>
           <Show when={merged.showLegend}>
-            <span class="vui-heat__legend" aria-hidden="true">
-              <span>{translate('velvet.charts.heatmap.less')}</span>
+            <Text as="span" variant="caption" tone="tertiary" class={styles.heatPartLegend} aria-hidden="true">
+              <Text as="span" variant="caption" tone="inherit">
+                {translate('velvet.charts.heatmap.less')}
+              </Text>
               <For each={merged.colors}>{(c) => <i style={{ background: c }} />}</For>
-              <span>{translate('velvet.charts.heatmap.more')}</span>
-            </span>
+              <Text as="span" variant="caption" tone="inherit">
+                {translate('velvet.charts.heatmap.more')}
+              </Text>
+            </Text>
           </Show>
         </div>
       </Show>
       <div
-        class="vui-heat"
-        style={{ 'max-width': `calc(${merged.weeks} * ${merged.cellMax + CELL_GAP}px + ${AXIS_GUTTER}px)` }}
+        class={styles.heat}
+        style={{ '--heatmap-weeks': merged.weeks, '--heatmap-cell-max': `${merged.cellMax}px` }}
         onMouseLeave={() => setHover(-1)}
       >
-        <div class="vui-heat__months" style={columns()} aria-hidden="true">
+        <div class={styles.heatPartMonths} style={columns()} aria-hidden="true">
           <For each={monthLabels()}>
             {(m) => (
-              <span
+              <Text
+                as="span"
+                variant="overline"
+                tone="inherit"
                 style={{
                   'grid-column': `${m.week + 1} / span ${Math.min(MIN_MONTH_LABEL_GAP, merged.weeks - m.week)}`,
                 }}
               >
                 {m.label}
-              </span>
+              </Text>
             )}
           </For>
         </div>
-        <div class="vui-heat__days" aria-hidden="true">
-          <For each={weekdayLabels()}>{(name) => <span>{name}</span>}</For>
+        <div class={styles.heatPartDays} aria-hidden="true">
+          <For each={weekdayLabels()}>
+            {(name) => (
+              <Text as="span" variant="overline" tone="inherit">
+                {name}
+              </Text>
+            )}
+          </For>
         </div>
-        <div class="vui-heat__cells" style={columns()}>
+        <div class={styles.heatPartCells} style={columns()}>
           <For each={grid().cells}>
             {(c) => (
               <Show
                 when={c.index <= lastIndex()}
-                fallback={<span class="vui-heat__cell vui-heat__cell--future" aria-hidden="true" />}
+                fallback={<span class={cx(styles.heatPartCell, styles.heatPartCellVariantFuture)} aria-hidden="true" />}
               >
                 <button
                   ref={(el) => (cellRefs[c.index] = el)}
                   type="button"
                   tabindex={c.index === tabStop() ? 0 : -1}
                   class={cx(
-                    'vui-heat__cell',
-                    merged.onCellClick && 'vui-heat__cell--click',
-                    hover() === c.index && 'vui-heat__cell--on',
+                    styles.heatPartCell,
+                    merged.onCellClick && styles.heatPartCellVariantClick,
+                    hover() === c.index && styles.heatPartCellVariantOn,
                   )}
                   style={{ background: colorOf(c.value) }}
                   aria-label={say(c.date, c.value)}

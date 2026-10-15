@@ -1,10 +1,37 @@
 {
   "extends": "@jankrajewskiit/configs/stylelint/velvet",
-  "ignoreFiles": [
-    "velvet/**",
-    "src/styles/styles.css",
-    "src/styles/tokens/**",
-    "src/styles/fonts/**",
-    "src/styles/components/**"
+  "ignoreFiles": ["velvet/**", "src/styles/styles.css", "src/styles/tokens/**", "src/styles/fonts/**"],
+  "overrides": [
+    {
+      "files": ["**/*.module.css"],
+      "rules": {
+        "selector-class-pattern": [
+          "^[a-z][a-zA-Z0-9]*$",
+          {
+            "message": "Expected local class selector to be camelCase"
+          }
+        ],
+        "selector-pseudo-class-no-unknown": [
+          true,
+          {
+            "ignorePseudoClasses": ["global", "local", "export", "import"]
+          }
+        ],
+        "property-no-unknown": [
+          true,
+          {
+            "ignoreProperties": ["composes"],
+            "ignoreSelectors": [":export", "/^:import\\(/"]
+          }
+        ],
+        "block-no-empty": null
+      }
+    },
+    {
+      "files": ["src/styles/presets/*.css"],
+      "rules": {
+        "no-empty-source": null
+      }
+    }
   ]
 }

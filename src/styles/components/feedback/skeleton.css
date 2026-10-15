@@ -1,5 +1,0 @@
-/* Skeleton */
-.vui-skeleton{display:block;height:12px;border-radius:var(--radius-xs);background:var(--skeleton-base) linear-gradient(90deg,transparent 0%,var(--skeleton-shine) 50%,transparent 100%) no-repeat;background-size:50% 100%;animation:vui-shimmer 1.4s ease-in-out infinite}
-@media (prefers-reduced-motion:reduce){.vui-skeleton{animation:none}}
-@keyframes vui-shimmer{from{background-position:-100% 0}to{background-position:200% 0}}
-.vui-skeleton-text{display:flex;flex-direction:column;width:100%}

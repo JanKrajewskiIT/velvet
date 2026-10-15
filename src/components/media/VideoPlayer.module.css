@@ -1,0 +1,93 @@
+:import('../../styles/shared/primitives/glyph.module.css') {
+  externalIcon: icon;
+}
+
+.playerVariantIdle {
+  --player-bar-opacity: 0;
+  --player-bar-transform: translateY(4px);
+  --player-bar-pointer-events: none;
+
+  cursor: none;
+}
+
+.player:hover {
+  --player-thumb-transform: none;
+}
+
+.player {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  border-radius: var(--media-radius);
+  background: var(--black);
+  color: var(--white);
+  outline: 0;
+  isolation: isolate;
+}
+
+.player:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+.playerVariantFs {
+  border-radius: 0;
+}
+
+.playerPartMedia {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: var(--black);
+}
+
+.playerPartTitle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: var(--space-3) var(--space-4) var(--space-8);
+  background: linear-gradient(color-mix(in oklab, var(--black) 60%, transparent), transparent);
+  pointer-events: none;
+  transition: opacity var(--motion-base);
+}
+
+.playerPartBig {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  width: var(--media-play-size);
+  height: var(--media-play-size);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--media-play-bg);
+  color: var(--media-play-fg);
+  backdrop-filter: blur(var(--media-play-blur));
+  font-size: var(--font-size-xl);
+  cursor: pointer;
+  transition: transform var(--motion-spring);
+}
+
+.playerPartBig:hover {
+  transform: translate(-50%, -50%) scale(1.06);
+}
+
+.playerPartBig:focus-visible {
+  outline: var(--border-width-thick) solid var(--white);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.playerVariantIdle .playerPartTitle {
+  opacity: 0;
+  transform: translateY(4px);
+  pointer-events: none;
+}
+
+.playerPartBig :global(.externalIcon) {
+  margin-left: var(--space-0-5);
+}

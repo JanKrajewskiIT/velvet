@@ -6,8 +6,12 @@ import { cx } from '../../utils/cx';
 import { reportAsyncError } from '../../utils/reportAsyncError';
 import { IconButton } from '../actions/IconButton';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { createPromptSubmission } from './createPromptSubmission';
+import styles from './PromptInput.module.css';
 import type { PromptAttachment, PromptSubmissionProps } from './promptSubmissionTypes';
+
 export type { PromptAttachment, PromptSubmissionProps } from './promptSubmissionTypes';
 
 export interface PromptInputProps extends PromptSubmissionProps {
@@ -103,14 +107,14 @@ export const PromptInput = (props: PromptInputProps) => {
   const showSuggestions = () => (p.suggestions?.length ?? 0) > 0 && !text() && !p.attachments.length;
 
   return (
-    <div class={cx('vui-prompt', p.disabled && 'vui-prompt--disabled', p.class)}>
+    <div class={cx(typographyClass('body'), styles.prompt, p.disabled && styles.promptVariantDisabled, p.class)}>
       <Show when={showSuggestions()}>
-        <div class="vui-prompt__sugs">
+        <div class={styles.promptPartSugs}>
           <For each={p.suggestions}>
             {(suggestion) => (
               <button
                 type="button"
-                class="vui-prompt__sug"
+                class={cx(styles.promptPartSug, typographyClass('label'))}
                 disabled={p.disabled || p.loading || submission.pending()}
                 onClick={() => pickSuggestion(suggestion)}
               >
@@ -122,7 +126,7 @@ export const PromptInput = (props: PromptInputProps) => {
       </Show>
       {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions -- pointer-only focus forwarding to the textarea; the textarea is the keyboard target */}
       <div
-        class="vui-prompt__box"
+        class={styles.promptPartBox}
         onMouseDown={(e) => {
           if (e.target !== e.currentTarget) return;
           e.preventDefault();
@@ -130,19 +134,23 @@ export const PromptInput = (props: PromptInputProps) => {
         }}
       >
         <Show when={p.attachments.length > 0}>
-          <div class="vui-prompt__files">
+          <div class={styles.promptPartFiles}>
             <For each={p.attachments}>
               {(attachment) => (
-                <span class="vui-prompt__file">
+                <Text as="span" variant="caption" tone="primary" class={styles.promptPartFile}>
                   <Glyph name={attachment.icon ?? 'file-text'} />
-                  <span>{attachment.name}</span>
+                  <Text as="span" variant="label-sm" tone="inherit">
+                    {attachment.name}
+                  </Text>
                   <Show when={attachment.size}>
-                    <small>{attachment.size}</small>
+                    <Text as="small" variant="micro" tone="inherit">
+                      {attachment.size}
+                    </Text>
                   </Show>
                   <Show when={p.onRemoveAttachment}>
                     <button
                       type="button"
-                      class="vui-prompt__fx"
+                      class={styles.promptPartFx}
                       aria-label={translate('velvet.patterns.promptInput.remove', { name: attachment.name })}
                       disabled={p.disabled || p.loading || submission.pending()}
                       onClick={() => p.onRemoveAttachment?.(attachment)}
@@ -150,7 +158,7 @@ export const PromptInput = (props: PromptInputProps) => {
                       <Glyph name="x" />
                     </button>
                   </Show>
-                </span>
+                </Text>
               )}
             </For>
           </div>
@@ -160,7 +168,7 @@ export const PromptInput = (props: PromptInputProps) => {
             input = element;
           }}
           rows={1}
-          class="vui-prompt__input"
+          class={cx(styles.promptPartInput, typographyClass('body'))}
           value={text()}
           placeholder={p.placeholder ?? translate('velvet.patterns.promptInput.placeholder')}
           aria-label={p.label ?? translate('velvet.patterns.promptInput.label')}
@@ -168,7 +176,7 @@ export const PromptInput = (props: PromptInputProps) => {
           onInput={(e) => setText(e.currentTarget.value)}
           onKeyDown={onKeyDown}
         />
-        <div class="vui-prompt__bar">
+        <div class={styles.promptPartBar}>
           <Show when={p.onAttach}>
             <IconButton
               icon="paperclip"
@@ -180,17 +188,20 @@ export const PromptInput = (props: PromptInputProps) => {
             />
           </Show>
           {p.toolbar}
-          <span class="vui-prompt__hint">
+          <Text as="span" variant="overline" tone="inherit" class={styles.promptPartHint}>
             {p.hint ??
               translate(p.loading ? 'velvet.patterns.promptInput.hintStop' : 'velvet.patterns.promptInput.hintSend')}
-          </span>
+          </Text>
           <Show
             when={p.loading && p.onStop}
             fallback={
               <IconButton
                 icon={
                   submission.pending() ? (
-                    <span class="vui-loader vui-loader--ring vui-loader--sm" aria-hidden="true" />
+                    <span
+                      class={cx(styles.loader, styles.loaderVariantRing, styles.loaderVariantSm)}
+                      aria-hidden="true"
+                    />
                   ) : (
                     'arrow-up'
                   )
@@ -218,9 +229,9 @@ export const PromptInput = (props: PromptInputProps) => {
         </div>
       </div>
       <Show when={submission.failed()}>
-        <div class="vui-hint vui-hint--error" role="alert">
+        <Text as="div" variant="caption" tone="inherit" class={cx(styles.hint, styles.hintVariantError)} role="alert">
           {p.submitErrorText ?? translate('velvet.patterns.promptInput.submitError')}
-        </div>
+        </Text>
       </Show>
     </div>
   );

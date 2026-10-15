@@ -3,6 +3,7 @@ import { For } from 'solid-js';
 import { createControllable } from '../../hooks/createControllable';
 import { cx } from '../../utils/cx';
 import { Chip } from './Chip';
+import styles from './ChipGroup.module.css';
 import { type ChipOption, normalizeChipOption } from './chipOption';
 
 interface ChipGroupBaseProps {
@@ -54,7 +55,7 @@ export const ChipGroup = (props: ChipGroupProps) => {
     else setSelected(props.multiple === false ? [value] : [...selected(), value]);
   };
   return (
-    <div role="group" aria-label={props.label} class={cx('vui-chips', props.class)}>
+    <div role="group" aria-label={props.label} class={cx(styles.chips, props.class)}>
       <For each={options()}>
         {(option) => (
           <Chip

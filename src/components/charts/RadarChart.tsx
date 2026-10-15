@@ -3,7 +3,10 @@ import { createMemo, createSignal, For, Index, mergeProps, Show } from 'solid-js
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { seriesColor } from './chartScale';
+import styles from './RadarChart.module.css';
 
 const LABEL_PAD = 56;
 const AXIS_LABEL_OFFSET = 16;
@@ -115,14 +118,19 @@ export const RadarChart = (props: RadarChartProps) => {
   const hoverAxisLabel = (h: RadarHover) => merged.axes.find((a) => a.key === h.axis)?.label;
 
   return (
-    <div class={cx('vui-chart', 'vui-radar', merged.class)}>
+    <div class={cx(typographyClass('body'), styles.chart, styles.radar, merged.class)}>
       <Show when={merged.showLegend && items().length > 1}>
-        <div class="vui-chart__legend">
+        <div class={styles.chartPartLegend}>
           <For each={items()}>
             {(s) => (
               <button
                 type="button"
-                class={cx('vui-chart__lg', 'vui-radar__lg', excluded().includes(s.label) && 'vui-radar__lg--off')}
+                class={cx(
+                  typographyClass('caption'),
+                  styles.chartPartLg,
+                  styles.radarPartLg,
+                  excluded().includes(s.label) && styles.radarPartLgVariantOff,
+                )}
                 aria-pressed={!excluded().includes(s.label)}
                 onClick={() => toggle(s.label)}
               >
@@ -133,14 +141,14 @@ export const RadarChart = (props: RadarChartProps) => {
           </For>
         </div>
       </Show>
-      <div class="vui-chart__plot" style={{ width: `${merged.size}px`, 'max-width': '100%' }}>
+      <div class={styles.chartPartPlot} style={{ width: `${merged.size}px`, 'max-width': '100%' }}>
         <svg
           viewBox={`0 0 ${merged.size} ${merged.size}`}
           width="100%"
           role="img"
           aria-label={`${label()}. ${description()}`}
         >
-          <For each={rings()}>{(points) => <polygon points={points} class="vui-radar__ring" />}</For>
+          <For each={rings()}>{(points) => <polygon points={points} class={styles.radarPartRing} />}</For>
           <For each={merged.axes}>
             {(_, i) => (
               <line
@@ -148,7 +156,7 @@ export const RadarChart = (props: RadarChartProps) => {
                 y1={centre()}
                 x2={point(i(), radius())[0]}
                 y2={point(i(), radius())[1]}
-                class="vui-chart__grid"
+                class={styles.chartPartGrid}
               />
             )}
           </For>
@@ -157,7 +165,11 @@ export const RadarChart = (props: RadarChartProps) => {
               <text
                 x={point(i(), radius() + AXIS_LABEL_OFFSET)[0]}
                 y={point(i(), radius() + AXIS_LABEL_OFFSET)[1]}
-                class={cx('vui-chart__tick', 'vui-radar__axis', hover()?.axis === a.key && 'vui-chart__tick--on')}
+                class={cx(
+                  styles.chartPartTick,
+                  styles.radarPartAxis,
+                  hover()?.axis === a.key && styles.chartPartTickVariantOn,
+                )}
                 text-anchor={textAnchor(i())}
                 dominant-baseline="middle"
               >
@@ -169,14 +181,14 @@ export const RadarChart = (props: RadarChartProps) => {
             {(shape, si) => (
               <g
                 class={cx(
-                  'vui-radar__series',
-                  hover() && hover()?.series !== shape.series.label && 'vui-radar__series--dim',
+                  styles.radarPartSeries,
+                  hover() && hover()?.series !== shape.series.label && styles.radarPartSeriesVariantDim,
                 )}
                 style={{ '--c': shape.series.color, 'animation-delay': `${si() * 80}ms` }}
               >
                 <polygon
                   points={shape.points.map((p) => p.join(',')).join(' ')}
-                  class="vui-radar__area"
+                  class={styles.radarPartArea}
                   fill-opacity={merged.fill ? undefined : 0}
                 />
                 <Index each={shape.points}>
@@ -188,7 +200,7 @@ export const RadarChart = (props: RadarChartProps) => {
                         cx={p()[0]}
                         cy={p()[1]}
                         r={active() ? 5 : 3.5}
-                        class="vui-radar__pt"
+                        class={styles.radarPartPt}
                         onMouseEnter={() => {
                           const a = axis();
                           if (a)
@@ -213,18 +225,20 @@ export const RadarChart = (props: RadarChartProps) => {
         <Show when={hover()}>
           {(h) => (
             <div
-              class="vui-chart__tip vui-radar__tip"
+              class={cx(styles.chartPartTip, styles.radarPartTip, typographyClass('caption'))}
               style={{ left: `${(h().x / merged.size) * 100}%`, top: `${(h().y / merged.size) * 100}%` }}
               aria-hidden="true"
             >
-              <span class="vui-radar__tip-k">
+              <Text as="span" variant="label-sm" tone="inherit" class={styles.radarPartTipK}>
                 <i style={{ background: h().color }} />
                 {h().series}
-              </span>
-              <span>
+              </Text>
+              <Text as="span" variant="caption" tone="inherit">
                 {hoverAxisLabel(h())}
-                <strong>{format(h().value)}</strong>
-              </span>
+                <Text as="strong" variant="label-sm" tone="inherit">
+                  {format(h().value)}
+                </Text>
+              </Text>
             </div>
           )}
         </Show>

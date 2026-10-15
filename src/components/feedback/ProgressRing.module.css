@@ -1,0 +1,64 @@
+.ring.progressVariantSuccess .ringPartBar {
+  stroke: var(--status-success-solid);
+}
+
+.ring.progressVariantWarning .ringPartBar {
+  stroke: var(--status-warning-solid);
+}
+
+.ring.progressVariantDanger .ringPartBar {
+  stroke: var(--status-danger-solid);
+}
+
+.ring.progressVariantNeutral .ringPartBar {
+  stroke: var(--fg-secondary);
+}
+
+.ring {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+}
+
+.ring svg {
+  position: absolute;
+  inset: 0;
+  transform: rotate(-90deg);
+}
+
+.ringPartTrack {
+  fill: none;
+  stroke: var(--meter-track);
+}
+
+.ringPartBar {
+  fill: none;
+  stroke: var(--meter-fill);
+  stroke-linecap: round;
+  transition: stroke-dashoffset var(--motion-enter);
+}
+
+.progressVariantSuccess {
+  composes: progressvariantsuccess from '../../styles/shared/feedback/progress.module.css';
+}
+
+.progressVariantWarning {
+  composes: progressvariantwarning from '../../styles/shared/feedback/progress.module.css';
+}
+
+.progressVariantDanger {
+  composes: progressvariantdanger from '../../styles/shared/feedback/progress.module.css';
+}
+
+.progressVariantNeutral {
+  composes: progressvariantneutral from '../../styles/shared/feedback/progress.module.css';
+}
+
+.ringPartValue {
+  composes: ringpartvalue from '../../styles/shared/feedback/progress.module.css';
+}
+
+.ringPartValue.ringPartValue {
+  font-size: var(--ring-value-size, var(--type-label-sm-size));
+}

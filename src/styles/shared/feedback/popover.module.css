@@ -1,0 +1,27 @@
+.popoverWrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.popover {
+  position: absolute;
+  z-index: var(--z-dropdown);
+  top: calc(100% + var(--overlay-offset));
+  left: 0;
+  min-width: var(--overlay-min-w);
+  max-width: min(var(--overlay-w), calc(100vw - 2 * var(--viewport-margin)));
+  padding: var(--space-4);
+  transform-origin: top left;
+  animation: vui-select-in var(--motion-reveal);
+  background: var(--panel-bg);
+  border: var(--border-width) solid var(--panel-border);
+  border-radius: var(--panel-radius);
+  box-shadow: var(--panel-shadow);
+  color: var(--fg-primary);
+}
+
+.popoverVariantEnd {
+  left: auto;
+  right: 0;
+  transform-origin: top right;
+}

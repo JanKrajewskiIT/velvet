@@ -6,6 +6,7 @@ import { createFloating } from '../../hooks/createFloating';
 import { createTrigger } from '../../hooks/createTrigger';
 import { cx } from '../../utils/cx';
 import { Button } from '../actions/Button';
+import styles from './Menu.module.css';
 import type { MenuItem } from './menuItem';
 import { MenuPanel } from './MenuPanel';
 
@@ -83,7 +84,7 @@ export const Menu = (props: MenuProps) => {
 
   return (
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions -- delegates events from the supplied native trigger, which owns keyboard semantics
-    <span ref={setWrap} class={cx('vui-menu-wrap', p.class)} onClick={trigger.onClick} onKeyDown={trigger.onKeyDown}>
+    <span ref={setWrap} class={cx(styles.menuWrap, p.class)} onClick={trigger.onClick} onKeyDown={trigger.onKeyDown}>
       {trigger.content}
       <Show when={isOpen()}>
         <MenuPanel
@@ -92,9 +93,9 @@ export const Menu = (props: MenuProps) => {
           iconPosition={p.iconPosition}
           onClose={close}
           class={cx(
-            'vui-menu--pop',
-            p.align === 'end' && 'vui-menu--end',
-            floating.side() === 'top' && 'vui-menu--top',
+            styles.menuVariantPop,
+            p.align === 'end' && styles.menuVariantEnd,
+            floating.side() === 'top' && styles.menuVariantTop,
           )}
           style={{ ...floating.style(), ...(p.width ? { 'min-width': `${p.width}px` } : undefined) }}
         />

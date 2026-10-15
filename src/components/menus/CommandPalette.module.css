@@ -1,0 +1,3 @@
+.root {
+  composes: cmdk from '../../styles/shared/menus/command-palette.module.css';
+}

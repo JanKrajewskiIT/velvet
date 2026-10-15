@@ -1,0 +1,76 @@
+:import('../../styles/shared/data/table.module.css') {
+  externalTable: table;
+}
+
+:import('../../styles/shared/primitives/glyph.module.css') {
+  externalIcon: icon;
+}
+
+.tablePartCheck {
+  width: var(--control-height-md);
+}
+
+:global(.externalTable) th.tablePartSortable {
+  padding: 0;
+}
+
+.tablePartSort {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  width: 100%;
+  padding: var(--space-2-5) var(--cell-px);
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  text-align: inherit;
+  justify-content: var(--table-sort-justify, inherit);
+}
+
+.tablePartSort:hover {
+  color: var(--fg-primary);
+}
+
+.tablePartSort:focus-visible {
+  outline: none;
+  box-shadow: inset var(--focus-ring);
+}
+
+.tablePartSortable[aria-sort] .tablePartSort {
+  color: var(--fg-primary);
+}
+
+.tablePartSort :global(.externalIcon) {
+  --glyph-size: var(--type-caption-size);
+
+  opacity: 0;
+  transition:
+    opacity var(--motion-fast),
+    transform var(--motion-base);
+}
+
+.tablePartSort:hover :global(.externalIcon) {
+  opacity: 0.5;
+}
+
+.tablePartSortable[aria-sort] :global(.externalIcon) {
+  opacity: 1;
+}
+
+.tablePartSortable[aria-sort='descending'] :global(.externalIcon) {
+  transform: rotate(180deg);
+}
+
+.tablePartPin {
+  composes: tablepartpin from '../../styles/shared/data/table.module.css';
+}
+
+.tablePartPinVariantLeft {
+  composes: tablepartpinvariantleft from '../../styles/shared/data/table.module.css';
+}
+
+.tablePartExp {
+  composes: tablepartexp from '../../styles/shared/data/table.module.css';
+}

@@ -1,0 +1,52 @@
+.tourPartTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: calc(-1 * var(--space-1)) calc(-1 * var(--space-2)) var(--space-1) 0;
+}
+
+.tourPartBody {
+  margin-top: var(--space-1);
+}
+
+.tourPartFoot {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  margin-top: var(--space-3-5);
+}
+
+.tourPartDots {
+  display: flex;
+  gap: var(--space-1);
+  margin-right: auto;
+}
+
+.tourPartDots i {
+  width: var(--size-dot);
+  height: var(--size-dot);
+  border-radius: var(--radius-2xs);
+  background: var(--border-strong);
+  transition:
+    width var(--motion-move),
+    background-color var(--motion-base);
+}
+
+.tourPartDots i.on {
+  width: 16px;
+  background: var(--action-primary);
+}
+
+.tourPartMissing {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  margin-top: var(--space-2);
+  padding: var(--space-1-5) var(--space-2-5);
+  border-radius: var(--radius-sm);
+  background: var(--bg-subtle);
+}
+
+.tourPartCard {
+  composes: tourpartcard from '../../styles/shared/feedback/tour.module.css';
+}

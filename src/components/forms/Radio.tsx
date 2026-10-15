@@ -1,6 +1,9 @@
 import { type JSX, mergeProps, Show, splitProps } from 'solid-js';
 
 import { cx } from '../../utils/cx';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './Radio.module.css';
 
 export interface RadioProps extends Omit<JSX.InputHTMLAttributes<HTMLInputElement>, 'type' | 'size'> {
   /** sm = 16px circle for dense rows. @default 'md' */
@@ -17,20 +20,23 @@ export const Radio = (props: RadioProps) => {
   return (
     <label
       class={cx(
-        'vui-check',
-        local.size === 'sm' && 'vui-check--sm',
-        rest.disabled && 'vui-check--disabled',
+        typographyClass(local.size === 'sm' ? 'body-sm' : 'body'),
+        styles.check,
+        local.size === 'sm' && styles.checkVariantSm,
+        rest.disabled && styles.checkVariantDisabled,
         local.class,
       )}
     >
-      <input {...rest} type="radio" class="vui-radio" />
+      <input {...rest} type="radio" class={styles.radio} />
       <Show when={local.label || local.description}>
-        <span>
+        <Text as="span" variant="label" tone="inherit">
           {local.label}
           <Show when={local.description}>
-            <span class="vui-check__desc">{local.description}</span>
+            <Text as="span" variant="body-sm" tone="inherit" class={styles.checkPartDesc}>
+              {local.description}
+            </Text>
           </Show>
-        </span>
+        </Text>
       </Show>
     </label>
   );

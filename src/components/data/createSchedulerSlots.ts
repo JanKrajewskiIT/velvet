@@ -42,7 +42,7 @@ export const createSchedulerSlots = (controller: Accessor<SchedulerController>) 
 
   const onClick = (day: Date, e: MouseEvent & { currentTarget: HTMLElement }) => {
     const { config, pxPerMinute } = controller();
-    if (!config.onSlotClick || (e.target instanceof Element && e.target.closest('.vui-sched__evt'))) return;
+    if (!config.onSlotClick || (e.target instanceof Element && e.target.closest('[data-vui-scheduler-event]'))) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const offset = Math.floor((e.clientY - rect.top) / pxPerMinute() / config.slotMinutes) * config.slotMinutes;
     const requested = offset + config.startHour * 60;

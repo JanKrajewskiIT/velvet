@@ -1,6 +1,7 @@
 import { untrack } from 'solid-js';
 
 import { createMarqueeCopy } from './createMarqueeCopy';
+import styles from './MarqueeCopy.module.css';
 
 export interface MarqueeCopyProps {
   source: () => HTMLElement;
@@ -21,7 +22,7 @@ export const MarqueeCopy = (props: MarqueeCopyProps) => {
       ref={(element) => {
         copy = element;
       }}
-      class="vui-marquee__group"
+      class={styles.marqueePartGroup}
       style={{ gap: `${props.gap}px` }}
       aria-hidden="true"
       inert

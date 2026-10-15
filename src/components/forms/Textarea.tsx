@@ -1,10 +1,13 @@
 import { createEffect, type JSX, mergeProps, splitProps } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
+import { cx } from '../../utils/cx';
 import { Control } from '../primitives/Control';
 import { Field } from '../primitives/Field';
+import { typographyClass } from '../primitives/typography';
 import { callHandler } from './callHandler';
 import { createValidation, type Validator } from './createValidation';
+import styles from './Textarea.module.css';
 
 const FALLBACK_LINE_HEIGHT_PX = 20;
 
@@ -117,7 +120,7 @@ export const Textarea = (props: TextareaProps) => {
             }}
             id={control.id}
             rows={local.rows}
-            class="vui-control__input vui-textarea"
+            class={cx(styles.controlPartInput, 'vui-textarea', typographyClass('body'))}
             style={{ resize: resize(), 'min-height': 0, ...local.style }}
             disabled={local.disabled}
             readOnly={local.readOnly}

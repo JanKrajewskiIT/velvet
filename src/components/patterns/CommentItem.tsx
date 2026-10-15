@@ -5,8 +5,11 @@ import { cx } from '../../utils/cx';
 import { Button } from '../actions/Button';
 import { Avatar } from '../data/Avatar';
 import { Badge } from '../display/Badge';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { CommentBody } from './CommentBody';
 import { CommentComposer } from './CommentComposer';
+import styles from './CommentItem.module.css';
 import { authorName, authorSrc, type Comment, type CommentAuthor, type CommentId } from './commentTree';
 
 export interface ReplyTarget {
@@ -87,52 +90,58 @@ export const CommentItem = (props: CommentItemProps) => {
         };
 
         return (
-          <li class={cx('vui-cmt', !top() && 'vui-cmt--reply', comment().deleted && 'vui-cmt--deleted')}>
+          <li class={cx(styles.cmt, !top() && 'vui-cmt--reply', comment().deleted && styles.cmtVariantDeleted)}>
             <Show when={!comment().deleted} fallback={<Avatar initials="–" tone="neutral" size={avatarSize()} />}>
               <Avatar name={author()} src={authorSrc(comment().author)} size={avatarSize()} />
             </Show>
-            <div class="vui-cmt__main">
+            <div class={styles.cmtPartMain}>
               <Show
                 when={!comment().deleted}
-                fallback={<div class="vui-cmt__body">{translate('velvet.patterns.commentItem.deleted')}</div>}
+                fallback={
+                  <Text as="div" variant="body-sm" tone="inherit" class={styles.cmtPartBody}>
+                    {translate('velvet.patterns.commentItem.deleted')}
+                  </Text>
+                }
               >
-                <div class="vui-cmt__meta">
-                  <span class="vui-cmt__author">{author()}</span>
+                <div class={cx(styles.cmtPartMeta, typographyClass('body-sm'))}>
+                  <Text as="span" variant="label" tone="inherit">
+                    {author()}
+                  </Text>
                   <Show when={comment().role}>{(role) => <Badge size="sm">{role()}</Badge>}</Show>
-                  <time class="vui-cmt__time" datetime={comment().datetime}>
+                  <Text as="time" variant="caption" tone="tertiary" class="vui-cmt__time" datetime={comment().datetime}>
                     {comment().edited
                       ? translate('velvet.patterns.commentItem.timeEdited', { time: comment().time })
                       : comment().time}
-                  </time>
+                  </Text>
                 </div>
                 <Show
                   when={thread.editing === comment().id}
                   fallback={
                     <>
                       <CommentBody text={comment().body} />
-                      <div class="vui-cmt__actions">
+                      <div class={styles.cmtPartActions}>
                         <Button
                           variant="ghost"
                           size="xs"
                           iconLeft={comment().liked ? 'heart-filled' : 'heart'}
-                          class={cx('vui-cmt__act', comment().liked && 'vui-cmt__act--on')}
+                          class={cx(styles.cmtPartAct, comment().liked && styles.cmtPartActVariantOn)}
                           aria-pressed={!!comment().liked}
                           aria-label={likeLabel()}
                           onClick={() => thread.like(comment().id)}
                         >
                           {comment().likes || null}
                         </Button>
-                        <Button variant="ghost" size="xs" class="vui-cmt__act" onClick={startReply}>
+                        <Button variant="ghost" size="xs" class={styles.cmtPartAct} onClick={startReply}>
                           {translate('velvet.patterns.commentItem.reply')}
                         </Button>
                         <Show when={thread.isMine(comment())}>
-                          <Button variant="ghost" size="xs" class="vui-cmt__act" onClick={startEdit}>
+                          <Button variant="ghost" size="xs" class={styles.cmtPartAct} onClick={startEdit}>
                             {translate('velvet.common.edit')}
                           </Button>
                           <Button
                             variant="ghost"
                             size="xs"
-                            class="vui-cmt__act vui-cmt__act--danger"
+                            class={cx(styles.cmtPartAct, styles.cmtPartActVariantDanger)}
                             aria-expanded={confirming()}
                             onClick={() => thread.confirmDelete(confirming() ? null : comment().id)}
                           >
@@ -154,12 +163,12 @@ export const CommentItem = (props: CommentItemProps) => {
                   />
                 </Show>
                 <Show when={confirming()}>
-                  <div class="vui-cmt__confirm" role="alert">
-                    <span>
+                  <div class={cx(styles.cmtPartConfirm, typographyClass('body-sm'))} role="alert">
+                    <Text as="span" variant="body-sm" tone="inherit">
                       {top() && replies().length
                         ? translate('velvet.patterns.commentItem.deleteConfirmReplies')
                         : translate('velvet.patterns.commentItem.deleteConfirm')}
-                    </span>
+                    </Text>
                     <Button
                       ref={(el) => queueMicrotask(() => el.focus())}
                       variant="ghost"
@@ -175,9 +184,9 @@ export const CommentItem = (props: CommentItemProps) => {
                 </Show>
               </Show>
               <Show when={top() && (shown().length > 0 || replyHere())}>
-                <div class="vui-cmt__thread">
+                <div class={styles.cmtPartThread}>
                   <Show when={shown().length > 0}>
-                    <ol class="vui-cmt__replies">
+                    <ol class={styles.cmtPartReplies}>
                       <For each={shown().map((reply) => reply.id)}>
                         {(replyId) => <CommentItem id={replyId} parentId={comment().id} thread={thread} />}
                       </For>
@@ -188,7 +197,7 @@ export const CommentItem = (props: CommentItemProps) => {
                       variant="link"
                       size="xs"
                       iconLeft="chevron-down"
-                      class="vui-cmt__more"
+                      class={styles.cmtPartMore}
                       onClick={() => thread.setExpanded(comment().id, true)}
                     >
                       {translate('velvet.patterns.commentItem.showMore', { count: hidden() })}
@@ -199,7 +208,7 @@ export const CommentItem = (props: CommentItemProps) => {
                       variant="link"
                       size="xs"
                       iconLeft="chevron-up"
-                      class="vui-cmt__more"
+                      class={styles.cmtPartMore}
                       onClick={() => thread.setExpanded(comment().id, false)}
                     >
                       {translate('velvet.patterns.commentItem.hideReplies')}

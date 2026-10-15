@@ -10,8 +10,11 @@ import { Skeleton } from '../feedback/Skeleton';
 import { SkeletonText } from '../feedback/SkeletonText';
 import { Glyph } from '../primitives/Glyph';
 import { SectionLabel } from '../primitives/SectionLabel';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { AiResultFooter } from './AiResultFooter';
 import { aiResultPlainText, RING_SIZE } from './aiResultFormat';
+import styles from './AiResultPanel.module.css';
 import { AiResultScoreRow } from './AiResultScoreRow';
 import { AiResultSections } from './AiResultSections';
 import type { AiFeedback, AiScoreTone, AiSection, AiSource } from './aiResultTypes';
@@ -75,18 +78,27 @@ export const AiResultPanel = (props: AiResultPanelProps) => {
   const toggleVote = (value: 'up' | 'down') => setVote(vote() === value ? null : value);
 
   return (
-    <article class={cx('vui-ai', streaming() && 'vui-ai--streaming', p.class)} aria-busy={streaming() || undefined}>
-      <header class="vui-ai__head">
+    <article
+      class={cx(typographyClass('body'), styles.ai, streaming() && 'vui-ai--streaming', p.class)}
+      aria-busy={streaming() || undefined}
+    >
+      <header class={styles.aiPartHead}>
         <Badge tone="brand" class="vui-ai__chip" dot={streaming()} pulse icon="sparkles">
           {streaming() ? translate('velvet.patterns.aiResultPanel.analysing') : title()}
         </Badge>
         <Show when={p.model || p.elapsed}>
-          <span class="vui-ai__prov" title={translate('velvet.patterns.aiResultPanel.provenanceTitle')}>
+          <Text
+            as="span"
+            variant="kbd"
+            tone="inherit"
+            class={styles.aiPartProv}
+            title={translate('velvet.patterns.aiResultPanel.provenanceTitle')}
+          >
             {provenance()}
-          </span>
+          </Text>
         </Show>
       </header>
-      <div class="vui-ai__body" aria-live="polite">
+      <div class={styles.aiPartBody} aria-live="polite">
         <Switch
           fallback={
             <>
@@ -98,7 +110,9 @@ export const AiResultPanel = (props: AiResultPanelProps) => {
                 subline={p.subline}
               />
               <Show when={p.summary}>
-                <p class="vui-ai__summary">{p.summary}</p>
+                <Text as="p" variant="body-sm" tone="inherit" class={styles.aiPartSummary}>
+                  {p.summary}
+                </Text>
               </Show>
               <AiResultSections sections={sections()} />
               <Show when={streaming()}>
@@ -106,23 +120,27 @@ export const AiResultPanel = (props: AiResultPanelProps) => {
               </Show>
               <Show when={sources().length > 0}>
                 <div>
-                  <SectionLabel as="h4" class="vui-ai__sec-h">
+                  <SectionLabel as="h4" class={styles.aiPartSecH}>
                     {translate('velvet.patterns.aiResultPanel.sources')}
                   </SectionLabel>
-                  <ol class="vui-ai__sources">
+                  <ol class={styles.aiPartSources}>
                     <For each={sources()}>
                       {(source, index) => (
                         <li>
                           <Polymorphic
                             tag={source.href ? 'a' : 'span'}
-                            class="vui-ai__src"
+                            class={cx(styles.aiPartSrc, typographyClass('caption'))}
                             href={source.href}
                             target={source.href ? '_blank' : undefined}
                             rel={source.href ? 'noreferrer' : undefined}
                             title={source.detail || source.label}
                           >
-                            <b>{index() + 1}</b>
-                            <span>{source.label}</span>
+                            <Text as="b" variant="micro" tone="inherit">
+                              {index() + 1}
+                            </Text>
+                            <Text as="span" variant="caption" tone="inherit">
+                              {source.label}
+                            </Text>
                           </Polymorphic>
                         </li>
                       )}
@@ -131,31 +149,35 @@ export const AiResultPanel = (props: AiResultPanelProps) => {
                 </div>
               </Show>
               <Show when={disclaimer() && !streaming()}>
-                <p class="vui-ai__disclaimer">{disclaimer()}</p>
+                <Text as="p" variant="overline" tone="inherit" class={styles.aiPartDisclaimer}>
+                  {disclaimer()}
+                </Text>
               </Show>
             </>
           }
         >
           <Match when={p.status === 'error'}>
-            <div class="vui-ai__error" role="alert">
+            <Text as="div" variant="body-sm" tone="danger" class={styles.aiPartError} role="alert">
               <Glyph name="triangle-alert" />
-              <div>{error()}</div>
+              <Text as="div" variant="body-sm" tone="inherit">
+                {error()}
+              </Text>
               <Show when={p.onRegenerate}>
                 <Button variant="secondary" size="sm" onClick={() => p.onRegenerate?.()}>
                   {translate('velvet.common.retry')}
                 </Button>
               </Show>
-            </div>
+            </Text>
           </Match>
           <Match when={streaming() && empty()}>
-            <div class="vui-ai__skel">
+            <div class={styles.aiPartSkel}>
               <Skeleton circle height={RING_SIZE} />
               <div style={{ flex: 1, display: 'grid', gap: 'var(--space-2)' }}>
                 <Skeleton width="45%" height={14} />
                 <Skeleton width="65%" height={11} />
               </div>
             </div>
-            <div class="vui-ai__secs">
+            <div class={styles.aiPartSecs}>
               <SkeletonText lines={3} />
               <SkeletonText lines={3} />
             </div>

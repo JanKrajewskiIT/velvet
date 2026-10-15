@@ -1,0 +1,11 @@
+.atsPartSec {
+  composes: atspartsec from '../../styles/shared/patterns/ats-analysis.module.css';
+}
+
+.atsPartH {
+  composes: atsparth from '../../styles/shared/patterns/ats-analysis.module.css';
+}
+
+.srOnly {
+  composes: sronly from '../../styles/shared/navigation/link.module.css';
+}

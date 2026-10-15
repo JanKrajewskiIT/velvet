@@ -1,0 +1,58 @@
+.uploadPartFile {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2-5) var(--space-2-5) var(--space-2-5) var(--space-3);
+  border: var(--border-width) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-raised);
+  animation: vui-select-in var(--motion-move);
+}
+
+.uploadPartFileVariantError {
+  border-color: var(--status-danger-border);
+}
+
+.uploadPartThumb {
+  border-radius: var(--radius-sm);
+  background: var(--bg-sunken);
+}
+
+.uploadPartMeta {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1-5);
+}
+
+.uploadPartRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.uploadPartName {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.uploadPartStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex: none;
+  color: var(--fg-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.uploadPartFileVariantError .uploadPartStatus {
+  color: var(--status-danger-fg);
+}
+
+.uploadPartFileVariantDone .uploadPartStatus {
+  --glyph-color: var(--status-success-fg);
+}

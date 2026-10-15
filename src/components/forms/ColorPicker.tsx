@@ -7,8 +7,11 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { FieldLabel } from '../primitives/FieldLabel';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { callbackAlias } from './callbackAlias';
 import { ColorPanel } from './ColorPanel';
+import styles from './ColorPicker.module.css';
 
 export interface ColorPickerProps {
   label?: JSX.Element;
@@ -63,12 +66,12 @@ export const ColorPicker = (props: ColorPickerProps) => {
   return (
     <Switch>
       <Match when={p.variant === 'swatches'}>
-        <div class={cx('vui-cswatch', p.disabled && 'vui-cswatch--disabled', p.class)}>
+        <div class={cx(styles.cswatch, p.disabled && styles.cswatchVariantDisabled, p.class)}>
           <Show when={p.label}>
             <FieldLabel>{p.label}</FieldLabel>
           </Show>
-          <div class="vui-cswatch__row">
-            <div class="vui-cswatch__grid" role="radiogroup" aria-label={labelText()}>
+          <div class={styles.cswatchPartRow}>
+            <div class={styles.cswatchPartGrid} role="radiogroup" aria-label={labelText()}>
               <For each={p.swatches}>
                 {(swatch) => (
                   <button
@@ -77,7 +80,7 @@ export const ColorPicker = (props: ColorPickerProps) => {
                     aria-checked={isSelected(swatch)}
                     aria-label={swatch}
                     disabled={p.disabled}
-                    class="vui-swatch vui-swatch--lg"
+                    class={cx(styles.swatch, styles.swatchVariantLg)}
                     style={{ '--swatch': swatch }}
                     onClick={() => setCurrent(swatch.toLowerCase())}
                   >
@@ -89,11 +92,15 @@ export const ColorPicker = (props: ColorPickerProps) => {
               </For>
             </div>
             <Show when={p.showValue}>
-              <div class="vui-cswatch__val">
-                <span class="vui-swatch" style={{ '--swatch': current() }} />
+              <div class={styles.cswatchPartVal}>
+                <span class={styles.swatch} style={{ '--swatch': current() }} />
                 <div>
-                  <div class="vui-cswatch__k">{translate('velvet.forms.colorPicker.selected')}</div>
-                  <div class="vui-cswatch__hex">{current().toUpperCase()}</div>
+                  <Text as="div" variant="section" tone="inherit" class={styles.cswatchPartK}>
+                    {translate('velvet.forms.colorPicker.selected')}
+                  </Text>
+                  <Text as="div" variant="code" tone="inherit" class={styles.cswatchPartHex}>
+                    {current().toUpperCase()}
+                  </Text>
                 </div>
               </div>
             </Show>
@@ -111,29 +118,31 @@ export const ColorPicker = (props: ColorPickerProps) => {
         </div>
       </Match>
       <Match when={true}>
-        <div class={cx('vui-field', p.class)}>
+        <div class={cx(styles.field, p.class)}>
           <Show when={p.label}>
             <FieldLabel>{p.label}</FieldLabel>
           </Show>
-          <span ref={setWrap} class="vui-popover-wrap">
+          <span ref={setWrap} class={styles.popoverWrap}>
             <button
               type="button"
-              class="vui-control vui-color__trigger"
+              class={cx(styles.control, styles.colorPartTrigger)}
               disabled={p.disabled}
               aria-haspopup="dialog"
               aria-expanded={open()}
               aria-label={translate('velvet.forms.colorPicker.triggerLabel', { name: labelText(), value: current() })}
               onClick={() => setOpen(!open())}
             >
-              <span class="vui-swatch" style={{ '--swatch': current() }} />
-              <span class="vui-color__value">{current().toUpperCase()}</span>
+              <span class={styles.swatch} style={{ '--swatch': current() }} />
+              <Text as="span" variant="code" tone="inherit" class={styles.colorPartValue}>
+                {current().toUpperCase()}
+              </Text>
               <Glyph name="chevron-down" />
             </button>
             <Show when={open()}>
               <div
                 ref={floating.ref}
                 style={floating.style()}
-                class="vui-popover vui-color__pop"
+                class={cx(styles.popover, styles.colorPartPop, typographyClass('body'))}
                 role="dialog"
                 aria-label={translate('velvet.forms.colorPicker.dialogLabel')}
               >

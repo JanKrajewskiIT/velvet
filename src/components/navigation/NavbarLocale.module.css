@@ -1,0 +1,25 @@
+.navbarMbPartLocale {
+  display: var(--navbar-locale-display, inline-block);
+  height: var(--control-height-sm);
+  min-width: 65px;
+  padding: 0 var(--space-2-5);
+  border: var(--border-width) solid var(--on-color-border-strong);
+  border-radius: var(--radius-md);
+  background: var(--on-color-subtle);
+  color: var(--on-color-fg);
+  backdrop-filter: blur(var(--blur-md));
+  cursor: pointer;
+  transition:
+    background-color var(--motion-fast),
+    border-color var(--motion-fast);
+}
+
+.navbarMbPartLocale:hover {
+  background: var(--on-color-hover);
+  border-color: var(--on-color-border-strong);
+}
+
+.navbarMbPartLocale:focus-visible {
+  outline: var(--border-width-thick) solid var(--on-color-fg);
+  outline-offset: var(--focus-ring-offset);
+}

@@ -1,0 +1,3 @@
+.root {
+  composes: sheet from '../../styles/shared/feedback/bottom-sheet.module.css';
+}

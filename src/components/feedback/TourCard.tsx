@@ -5,6 +5,8 @@ import { cx } from '../../utils/cx';
 import { placeFloating } from '../../utils/floating';
 import { Button } from '../actions/Button';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import styles from './TourCard.module.css';
 import type { CardSide, ResolvedTourProps, TourStep } from './tourTypes';
 
 interface CardPosition {
@@ -75,32 +77,32 @@ export const TourCard = (props: TourCardProps) => {
     <div
       ref={setCard}
       tabIndex={-1}
-      class={cx('vui-tour__card', `vui-tour__card--${position().side}`)}
+      class={cx(styles.tourPartCard, `vui-tour__card--${position().side}`)}
       style={{ left: `${position().left}px`, top: `${position().top}px` }}
     >
-      <div class="vui-tour__top">
-        <span class="vui-tour__step">
+      <div class={styles.tourPartTop}>
+        <Text as="span" variant="kbd" tone="brand" class="vui-tour__step">
           {props.index + 1} / {props.tour.steps.length}
-        </span>
+        </Text>
         <Button variant="ghost" size="sm" onClick={() => props.tour.onClose?.()}>
           {props.tour.skipLabel ?? translate('velvet.common.skip')}
         </Button>
       </div>
-      <div id={props.titleId} class="vui-tour__title">
+      <Text as="div" variant="title" id={props.titleId} class="vui-tour__title">
         {props.step.title}
-      </div>
-      <div id={props.bodyId} class="vui-tour__body">
+      </Text>
+      <Text as="div" variant="body-sm" tone="secondary" id={props.bodyId} class={styles.tourPartBody}>
         {props.step.body}
-      </div>
+      </Text>
       <Show when={props.step.target && !props.rect}>
-        <div class="vui-tour__missing">
+        <Text as="div" variant="caption" tone="tertiary" class={styles.tourPartMissing}>
           <Glyph name="info" />
           {props.tour.missingLabel ?? translate('velvet.feedback.tour.missing')}
-        </div>
+        </Text>
       </Show>
-      <div class="vui-tour__foot">
-        <span class="vui-tour__dots" aria-hidden="true">
-          <For each={props.tour.steps}>{(_, k) => <i class={k() === props.index ? 'on' : ''} />}</For>
+      <div class={styles.tourPartFoot}>
+        <span class={styles.tourPartDots} aria-hidden="true">
+          <For each={props.tour.steps}>{(_, k) => <i class={k() === props.index ? styles.on : ''} />}</For>
         </span>
         <Show when={props.index > 0}>
           <Button variant="secondary" size="sm" onClick={props.onBack}>

@@ -3,8 +3,10 @@ import { For, Show } from 'solid-js';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { EmptyText } from '../primitives/EmptyText';
+import { typographyClass } from '../primitives/typography';
 import { CascaderPath } from './CascaderPath';
 import { type CascaderNode, lastOf } from './cascaderPaths';
+import styles from './CascaderSearchResults.module.css';
 
 export interface CascaderSearchResultsProps {
   hits: readonly CascaderNode[][];
@@ -23,9 +25,9 @@ export interface CascaderSearchResultsProps {
 export const CascaderSearchResults = (props: CascaderSearchResultsProps) => {
   const translate = useTranslate();
   return (
-    <div class="vui-casc__results" role="listbox">
+    <div class={styles.cascPartResults} role="listbox">
       <Show when={props.hits.length === 0}>
-        <EmptyText class="vui-tselect__empty">{translate('velvet.forms.cascader.noMatches')}</EmptyText>
+        <EmptyText class={styles.tselectPartEmpty}>{translate('velvet.forms.cascader.noMatches')}</EmptyText>
       </Show>
       <For each={props.hits}>
         {(path, index) => (
@@ -33,12 +35,16 @@ export const CascaderSearchResults = (props: CascaderSearchResultsProps) => {
           <div
             role="option"
             aria-selected={lastOf(path)?.id === props.selectedId}
-            class={cx('vui-option', index() === props.activeIndex && 'vui-option--active')}
+            class={cx(
+              typographyClass('body'),
+              styles.option,
+              index() === props.activeIndex && styles.optionVariantActive,
+            )}
             onMouseEnter={() => props.onHover(index())}
             onMouseDown={(e) => e.preventDefault()}
             onClick={() => props.onPick(path)}
           >
-            <span class="vui-option__label vui-casc__hit">
+            <span class={cx(styles.optionPartLabel, styles.cascPartHit)}>
               <CascaderPath path={path} separator={props.separator} query={props.query} />
             </span>
           </div>

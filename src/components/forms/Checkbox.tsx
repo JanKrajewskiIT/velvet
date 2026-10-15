@@ -1,6 +1,9 @@
 import { createEffect, type JSX, mergeProps, Show, splitProps } from 'solid-js';
 
 import { cx } from '../../utils/cx';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './Checkbox.module.css';
 
 export interface CheckboxProps extends Omit<JSX.InputHTMLAttributes<HTMLInputElement>, 'type' | 'size' | 'ref'> {
   label?: JSX.Element;
@@ -25,9 +28,10 @@ export const Checkbox = (props: CheckboxProps) => {
   return (
     <label
       class={cx(
-        'vui-check',
-        local.size === 'sm' && 'vui-check--sm',
-        rest.disabled && 'vui-check--disabled',
+        typographyClass(local.size === 'sm' ? 'body-sm' : 'body'),
+        styles.check,
+        local.size === 'sm' && styles.checkVariantSm,
+        rest.disabled && styles.checkVariantDisabled,
         local.class,
       )}
     >
@@ -38,15 +42,17 @@ export const Checkbox = (props: CheckboxProps) => {
           local.ref?.(element);
         }}
         type="checkbox"
-        class="vui-checkbox"
+        class={styles.checkbox}
       />
       <Show when={local.label || local.description}>
-        <span>
+        <Text as="span" variant="label" tone="inherit">
           {local.label}
           <Show when={local.description}>
-            <span class="vui-check__desc">{local.description}</span>
+            <Text as="span" variant="body-sm" tone="inherit" class={styles.checkPartDesc}>
+              {local.description}
+            </Text>
           </Show>
-        </span>
+        </Text>
       </Show>
     </label>
   );

@@ -1,0 +1,132 @@
+.lightbox {
+  composes: lightbox from '../../styles/shared/media/lightbox.module.css';
+}
+
+.lightboxPartBar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  height: 56px;
+  padding: 0 var(--space-3) 0 var(--space-5);
+  flex: none;
+}
+
+.lightboxPartCount {
+  opacity: 0.7;
+}
+
+.lightboxPartCap {
+  flex: 1;
+  min-width: 0;
+  opacity: 0.85;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lightboxPartStage {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding: var(--space-2) calc(var(--control-height-lg) + var(--space-6));
+  overflow: hidden;
+}
+
+.lightboxPartStage img {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: var(--radius-md);
+  box-shadow: var(--elevation-media);
+  cursor: zoom-in;
+  transition: transform var(--motion-enter);
+  animation: vui-select-in var(--motion-enter);
+}
+
+.lightboxPartStageVariantZoom {
+  overflow: auto;
+  place-items: start center;
+}
+
+.lightboxPartStageVariantZoom img {
+  max-width: none;
+  max-height: none;
+  cursor: zoom-out;
+}
+
+.lightboxPartNav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.lightboxPartNavVariantPrev {
+  left: var(--space-4);
+}
+
+.lightboxPartNavVariantNext {
+  right: var(--space-4);
+}
+
+.lightboxPartThumbs {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  flex: none;
+  overflow-x: auto;
+}
+
+.lightboxPartThumb {
+  flex: none;
+  width: 56px;
+  height: 40px;
+  padding: 0;
+  border: var(--border-width-thick) solid transparent;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: none;
+  opacity: 0.5;
+  cursor: pointer;
+  transition:
+    opacity var(--motion-fast),
+    border-color var(--motion-fast);
+}
+
+.lightboxPartThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.lightboxPartThumb:hover {
+  opacity: 0.85;
+}
+
+.lightboxPartThumbVariantOn {
+  opacity: 1;
+  border-color: var(--on-color-fg);
+}
+
+@media (width <= 639px) {
+  .lightboxPartStage {
+    padding: var(--space-2);
+  }
+
+  .lightboxPartNav {
+    top: auto;
+    bottom: 76px;
+    transform: none;
+  }
+}
+
+.lightbox[data-vui-modal] {
+  padding: 0;
+  color: var(--on-color-fg);
+}
+
+.modal {
+  composes: root from '../../styles/shared/feedback/modal-backdrop.module.css';
+}

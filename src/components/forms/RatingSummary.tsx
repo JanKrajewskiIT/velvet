@@ -6,7 +6,10 @@ import { cx } from '../../utils/cx';
 import { Polymorphic } from '../../utils/polymorphic';
 import { Glyph } from '../primitives/Glyph';
 import { Meter } from '../primitives/Meter';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { Rating } from './Rating';
+import styles from './RatingSummary.module.css';
 
 const DEFAULT_SCALE = 5;
 const PERCENT = 100;
@@ -68,9 +71,11 @@ export const RatingSummary = (props: RatingSummaryProps) => {
   };
 
   return (
-    <div class={cx('vui-ratesum', p.class)}>
-      <div class="vui-ratesum__score">
-        <span class="vui-ratesum__avg">{oneDecimal().format(average())}</span>
+    <div class={cx(styles.ratesum, p.class)}>
+      <div class={styles.ratesumPartScore}>
+        <Text as="span" variant="kpi" tone="inherit" class={styles.ratesumPartAvg}>
+          {oneDecimal().format(average())}
+        </Text>
         <Rating
           readOnly
           value={average()}
@@ -78,9 +83,15 @@ export const RatingSummary = (props: RatingSummaryProps) => {
           size="sm"
           label={p.averageLabel ?? translate('velvet.forms.ratingSummary.averageLabel')}
         />
-        <span class="vui-ratesum__count">{countText()}</span>
+        <Text as="span" variant="caption" tone="inherit" class={styles.ratesumPartCount}>
+          {countText()}
+        </Text>
       </div>
-      <div class="vui-ratesum__rows" role="group" aria-label={p.label ?? translate('velvet.forms.ratingSummary.label')}>
+      <div
+        class={styles.ratesumPartRows}
+        role="group"
+        aria-label={p.label ?? translate('velvet.forms.ratingSummary.label')}
+      >
         <For each={stars()}>
           {(star) => {
             const on = () => p.activeStar === star;
@@ -88,17 +99,23 @@ export const RatingSummary = (props: RatingSummaryProps) => {
               <Polymorphic
                 tag={p.onFilter ? 'button' : 'div'}
                 type={p.onFilter ? 'button' : undefined}
-                class={cx('vui-ratesum__row', on() && 'vui-ratesum__row--active')}
+                class={cx(
+                  typographyClass('caption'),
+                  styles.ratesumPartRow,
+                  on() && styles.ratesumPartRowVariantActive,
+                )}
                 aria-pressed={p.onFilter ? on() : undefined}
                 aria-label={rowLabel(star, countOf(star), percentOf(star))}
                 onClick={p.onFilter ? () => p.onFilter?.(on() ? null : star) : undefined}
               >
-                <span class="vui-ratesum__star">
+                <Text as="span" variant="caption" tone="inherit" class={styles.ratesumPartStar}>
                   {star}
                   <Glyph name="star" />
-                </span>
+                </Text>
                 <Meter rating value={countOf(star)} max={peak()} />
-                <span class="vui-ratesum__n">{percentOf(star)}%</span>
+                <Text as="span" variant="caption" tone="inherit" class={styles.ratesumPartN}>
+                  {percentOf(star)}%
+                </Text>
               </Polymorphic>
             );
           }}

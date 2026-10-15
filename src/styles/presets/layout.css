@@ -1,7 +1,1 @@
-@import url('../components/layout/search-trigger.css');
-@import url('../components/layout/page-header.css');
-@import url('../components/layout/split-pane.css');
-@import url('../components/layout/stack.css');
-@import url('../components/layout/sidebar.css');
-@import url('../components/layout/scroll-area.css');
-@import url('../components/layout/footer.css');
+/* Component modules are packaged from their component directories. */

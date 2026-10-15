@@ -2,8 +2,17 @@ import { children, createMemo, createSignal, type JSX, mergeProps } from 'solid-
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { clamp } from '../../utils/math';
+import styles from './SplitPane.module.css';
+
+const SPLIT_CLASSES = {
+  collapsed: styles.splitVariantCollapsed,
+  horizontal: styles.splitVariantHorizontal,
+  vertical: styles.splitVariantVertical,
+  drag: styles.splitVariantDrag,
+} as const;
 
 const KEY_STEP = 2;
 const KEY_STEP_SHIFT = 10;
@@ -147,15 +156,15 @@ export const SplitPane = (props: SplitPaneProps) => {
         box = element;
       }}
       class={cx(
-        'vui-split',
-        `vui-split--${p.direction}`,
-        dragging() && 'vui-split--drag',
-        collapsed() && 'vui-split--collapsed',
+        styles.split,
+        variantClass(SPLIT_CLASSES, p.direction),
+        dragging() && styles.splitVariantDrag,
+        collapsed() && styles.splitVariantCollapsed,
         p.class,
       )}
       style={{ ...layout(), ...p.style }}
     >
-      <div class="vui-split__pane">{pair()[0]}</div>
+      <div class={styles.splitPartPane}>{pair()[0]}</div>
       {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- focusable window-splitter separator handled with pointer and arrow keys */}
       <div
         role="separator"
@@ -166,7 +175,7 @@ export const SplitPane = (props: SplitPaneProps) => {
         aria-valuenow={Math.round(current())}
         aria-valuemin={p.collapsible ? 0 : p.min}
         aria-valuemax={p.max}
-        class="vui-split__handle"
+        class={styles.splitPartHandle}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={endDrag}
@@ -175,9 +184,9 @@ export const SplitPane = (props: SplitPaneProps) => {
         onDblClick={onDoubleClick}
         onKeyDown={onKeyDown}
       >
-        <span class="vui-split__grip" />
+        <span class={styles.splitPartGrip} />
       </div>
-      <div class="vui-split__pane">{pair()[1]}</div>
+      <div class={styles.splitPartPane}>{pair()[1]}</div>
     </div>
   );
 };

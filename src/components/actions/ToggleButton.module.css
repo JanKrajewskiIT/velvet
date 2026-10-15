@@ -1,0 +1,36 @@
+.toggleVariantNeutral[aria-pressed='true'] {
+  background: var(--bg-pressed);
+  border-color: var(--border-strong);
+  color: var(--fg-primary);
+}
+
+.toggleVariantSm {
+  --toggle-radius: var(--button-radius-sm);
+
+  height: var(--control-height-sm);
+  padding: 0 var(--button-px-sm);
+  border-radius: var(--button-radius-sm);
+  gap: var(--space-1-5);
+}
+
+.toggleVariantLg {
+  height: var(--control-height-lg);
+  padding: 0 var(--button-px-lg);
+}
+
+.toggleVariantIcon {
+  padding: 0;
+  width: var(--control-height-md);
+}
+
+.toggleVariantIcon.toggleVariantSm {
+  width: var(--control-height-sm);
+}
+
+.toggleVariantIcon.toggleVariantLg {
+  width: var(--control-height-lg);
+}
+
+.toggle {
+  composes: toggle from '../../styles/shared/actions/toggle.module.css';
+}

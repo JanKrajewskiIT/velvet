@@ -1,0 +1,56 @@
+:import('../../styles/shared/primitives/glyph.module.css') {
+  externalIcon: icon;
+}
+
+.navbarMbPartUser > .userAvatar {
+  width: calc(var(--control-height-sm) - 6px);
+  height: calc(var(--control-height-sm) - 6px);
+  font: var(--type-label);
+  letter-spacing: var(--type-label-tracking);
+}
+
+.navbarMbPartUser {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: var(--control-height-sm);
+  padding: 0 var(--space-2) 0 var(--space-0-5);
+  border: var(--border-width) solid var(--on-color-border);
+  border-radius: var(--radius-full);
+  background: var(--on-color-subtle);
+  color: var(--on-color-fg);
+  cursor: pointer;
+  transition:
+    background-color var(--motion-fast),
+    border-color var(--motion-fast);
+}
+
+.navbarMbPartUser:hover,
+.navbarMbPartUser[aria-expanded='true'] {
+  background: var(--on-color-hover);
+  border-color: var(--on-color-border-strong);
+}
+
+.navbarMbPartUser:focus-visible {
+  outline: var(--border-width-thick) solid var(--on-color-fg);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.navbarMbPartUserName {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (width <= 1023px) {
+  .navbarMbPartUserName {
+    display: none;
+  }
+}
+
+.navbarMbPartUser > :global(.externalIcon) {
+  color: var(--on-color-muted);
+
+  --glyph-size: var(--size-icon-sm, 14px);
+}

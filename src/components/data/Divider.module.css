@@ -1,0 +1,29 @@
+.divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: var(--border-width);
+  background: var(--border-default);
+}
+
+.dividerVariantPlain::after {
+  display: none;
+}
+
+.dividerVariantVertical {
+  flex-direction: column;
+  width: auto;
+  align-self: stretch;
+}
+
+.dividerVariantVertical::before {
+  width: var(--border-width);
+  height: auto;
+}

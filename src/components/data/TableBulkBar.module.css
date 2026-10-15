@@ -1,0 +1,33 @@
+:import('../../styles/shared/actions/button.module.css') {
+  externalBtn: btn;
+}
+
+.tablePartBulk {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--row-height);
+  padding: var(--space-2) var(--cell-px);
+  border-bottom: var(--border-width) solid var(--border-subtle);
+  background: var(--bg-selected);
+  animation: vui-rise-in var(--motion-move);
+}
+
+.tablePartBulkActions {
+  display: flex;
+  gap: var(--space-2);
+  margin-left: auto;
+}
+
+.tablePartBulk > span {
+  color: var(--action-soft-fg);
+  font-weight: var(--type-title-weight);
+}
+
+.tablePartBulk .tablePartBulkActions {
+  margin-left: var(--space-2);
+}
+
+.tablePartBulk > :global(.externalBtn):last-child {
+  margin-left: auto;
+}

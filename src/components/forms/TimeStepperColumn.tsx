@@ -1,4 +1,5 @@
 import { Glyph } from '../primitives/Glyph';
+import styles from './TimeStepperColumn.module.css';
 
 export interface TimeStepperColumnProps {
   /** Accessible name of the spinbutton, e.g. "Hours". */
@@ -34,11 +35,11 @@ export const TimeStepperColumn = (props: TimeStepperColumnProps) => {
     if (!props.disabled && document.activeElement === e.currentTarget) props.onStep(e.deltaY < 0 ? 1 : -1);
   };
   return (
-    <div class="vui-tstep__col">
+    <div class={styles.tstepPartCol}>
       <button
         type="button"
         tabIndex={-1}
-        class="vui-tstep__arrow"
+        class={styles.tstepPartArrow}
         aria-label={props.increaseLabel}
         disabled={props.disabled}
         onClick={() => props.onStep(1)}
@@ -53,7 +54,7 @@ export const TimeStepperColumn = (props: TimeStepperColumnProps) => {
         aria-valuemin={0}
         aria-valuemax={props.max}
         aria-valuetext={props.text}
-        class="vui-tstep__val"
+        class={styles.tstepPartVal}
         onKeyDown={onKeyDown}
         onWheel={onWheel}
       >
@@ -62,7 +63,7 @@ export const TimeStepperColumn = (props: TimeStepperColumnProps) => {
       <button
         type="button"
         tabIndex={-1}
-        class="vui-tstep__arrow"
+        class={styles.tstepPartArrow}
         aria-label={props.decreaseLabel}
         disabled={props.disabled}
         onClick={() => props.onStep(-1)}

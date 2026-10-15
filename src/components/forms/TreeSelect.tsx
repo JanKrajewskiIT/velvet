@@ -3,18 +3,23 @@ import { createEffect, createSignal, createUniqueId, For, mergeProps, Show } fro
 import { createDismiss } from '../../hooks/createDismiss';
 import { createFloating } from '../../hooks/createFloating';
 import { useTranslate } from '../../i18n/useTranslate';
+import { classSelector } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { Button } from '../actions/Button';
 import { Control } from '../primitives/Control';
+import { ControlInput } from '../primitives/ControlInput';
 import { EmptyText } from '../primitives/EmptyText';
 import { Field } from '../primitives/Field';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { createFormValidation } from './createFormValidation';
 import { createTreeSelectKeyboard } from './createTreeSelectKeyboard';
 import { createTreeSelectPopup } from './createTreeSelectPopup';
 import { createTreeSelectSelection } from './createTreeSelectSelection';
 import { createTreeSelectView } from './createTreeSelectView';
 import { FormValue } from './FormValue';
+import styles from './TreeSelect.module.css';
 import { TreeSelectRow } from './TreeSelectRow';
 import { selectionState, type TreeSelectNode } from './treeSelectRows';
 import type { TreeSelectModelProps, TreeSelectProps } from './treeSelectTypes';
@@ -60,7 +65,7 @@ export const TreeSelect = (props: TreeSelectProps) => {
     else {
       selection.setValue(node.id);
       setOpen(false);
-      root()?.querySelector<HTMLElement>('.vui-tselect__trigger')?.focus();
+      root()?.querySelector<HTMLElement>(classSelector(styles.tselectPartTrigger))?.focus();
     }
   };
   const onKeyDown = createTreeSelectKeyboard(view, pick);
@@ -72,12 +77,12 @@ export const TreeSelect = (props: TreeSelectProps) => {
   return (
     <Field label={p.label} hint={p.hint} error={p.error} optional={p.optional} required={p.required} id={p.id}>
       {(control) => (
-        <div ref={setRoot} class="vui-select vui-tselect">
+        <div ref={setRoot} class={cx(styles.select, styles.tselect)}>
           <Control
             size={p.size}
             invalid={control.invalid || validation.invalid()}
             disabled={p.disabled}
-            class={cx(p.multiple && selection.picked().length > 0 && 'vui-tselect__control--tags')}
+            class={cx(p.multiple && selection.picked().length > 0 && styles.tselectPartControlVariantTags)}
           >
             <Show when={p.multiple && selection.picked().length > 0}>
               <TreeSelectValue
@@ -91,7 +96,7 @@ export const TreeSelect = (props: TreeSelectProps) => {
             <button
               id={control.id}
               type="button"
-              class="vui-tselect__trigger"
+              class={cx(styles.tselectPartTrigger, typographyClass('body'))}
               role="combobox"
               disabled={p.disabled}
               aria-haspopup="tree"
@@ -112,10 +117,12 @@ export const TreeSelect = (props: TreeSelectProps) => {
                 />
               </Show>
               <Show when={p.multiple && selection.picked().length > 0}>
-                <span class="vui-sr-only">{translate('velvet.forms.treeSelect.placeholder')}</span>
+                <Text as="span" variant="caption" tone="inherit" class={styles.srOnly}>
+                  {translate('velvet.forms.treeSelect.placeholder')}
+                </Text>
               </Show>
             </button>
-            <Glyph name="chevron-down" class="vui-control__chevron" />
+            <Glyph name="chevron-down" class={styles.controlPartChevron} />
           </Control>
           <FormValue
             name={p.name}
@@ -124,7 +131,7 @@ export const TreeSelect = (props: TreeSelectProps) => {
             disabled={p.disabled}
             validation={validation}
             value={serialized()}
-            focusInvalid={() => root()?.querySelector<HTMLElement>('.vui-tselect__trigger')?.focus()}
+            focusInvalid={() => root()?.querySelector<HTMLElement>(classSelector(styles.tselectPartTrigger))?.focus()}
             onReset={() => {
               selection.reset();
               setOpen(false);
@@ -136,14 +143,13 @@ export const TreeSelect = (props: TreeSelectProps) => {
             <div
               ref={floating.ref}
               style={floating.style()}
-              class="vui-select__menu vui-tselect__menu"
+              class={cx(styles.selectPartMenu, styles.tselectPartMenu)}
               onKeyDown={onKeyDown}
             >
               <Show when={p.searchable}>
-                <Control size="sm" class="vui-tselect__search" iconLeft="search">
-                  <input
+                <Control size="sm" class={styles.tselectPartSearch} iconLeft="search">
+                  <ControlInput
                     ref={popup.setSearch}
-                    class="vui-control__input"
                     placeholder={translate('velvet.common.search')}
                     aria-label={translate('velvet.forms.treeSelect.searchLabel')}
                     aria-controls={listId}
@@ -160,13 +166,15 @@ export const TreeSelect = (props: TreeSelectProps) => {
                 aria-multiselectable={p.multiple || undefined}
                 aria-label={typeof p.label === 'string' ? p.label : translate('velvet.forms.treeSelect.treeLabel')}
                 tabIndex={p.searchable ? -1 : 0}
-                class="vui-tselect__tree"
+                class={styles.tselectPartTree}
                 aria-activedescendant={
                   !p.searchable && view.activeRow() ? rowId(view.activeRow()?.node.id ?? '') : undefined
                 }
               >
                 <Show when={view.rows().length === 0}>
-                  <EmptyText class="vui-tselect__empty">{translate('velvet.forms.treeSelect.noMatches')}</EmptyText>
+                  <EmptyText class={styles.tselectPartEmpty}>
+                    {translate('velvet.forms.treeSelect.noMatches')}
+                  </EmptyText>
                 </Show>
                 <For each={view.rows()}>
                   {(row, index) => (
@@ -185,10 +193,10 @@ export const TreeSelect = (props: TreeSelectProps) => {
                 </For>
               </div>
               <Show when={p.multiple && selection.picked().length > 0}>
-                <div class="vui-fchip__foot">
-                  <span class="vui-tselect__sum">
+                <div class={styles.fchipPartFoot}>
+                  <Text as="span" variant="caption" tone="inherit" class={styles.tselectPartSum}>
                     {translate('velvet.forms.treeSelect.selectedCount', { count: selection.picked().length })}
-                  </span>
+                  </Text>
                   <Button variant="ghost" size="sm" onClick={selection.clear}>
                     {translate('velvet.common.clear')}
                   </Button>

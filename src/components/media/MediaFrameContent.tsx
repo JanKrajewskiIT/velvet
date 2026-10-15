@@ -1,6 +1,7 @@
 import { type JSX, Match, Show, Switch } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import styles from './MediaFrameContent.module.css';
 import type { MediaFrameProps } from './mediaFrameTypes';
 
 const EMBED_PERMISSIONS = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
@@ -25,7 +26,7 @@ export const MediaFrameContent = (props: MediaFrameContentProps) => {
         <Show when={props.poster}>
           {(poster) => (
             <img
-              class="vui-media__el"
+              class={styles.mediaPartEl}
               src={poster()}
               alt=""
               onLoad={() => props.onReady()}
@@ -38,7 +39,7 @@ export const MediaFrameContent = (props: MediaFrameContentProps) => {
       <Match when={props.kind === 'video'}>
         {/* eslint-disable-next-line jsx-a11y/media-has-caption -- captions are provided by the media source; the player cannot know them */}
         <video
-          class="vui-media__el"
+          class={styles.mediaPartEl}
           src={props.src}
           controls
           autoplay
@@ -50,7 +51,7 @@ export const MediaFrameContent = (props: MediaFrameContentProps) => {
       </Match>
       <Match when={props.kind === 'embed'}>
         <iframe
-          class="vui-media__el"
+          class={styles.mediaPartEl}
           src={props.src}
           title={props.title || props.alt || translate('velvet.media.mediaFrame.embed')}
           loading="lazy"
@@ -60,7 +61,7 @@ export const MediaFrameContent = (props: MediaFrameContentProps) => {
       </Match>
       <Match when={true}>
         <img
-          class="vui-media__el"
+          class={styles.mediaPartEl}
           src={props.src}
           alt={props.alt}
           loading="lazy"

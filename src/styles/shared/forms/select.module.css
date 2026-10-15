@@ -1,0 +1,46 @@
+.select {
+  position: relative;
+  min-width: 0;
+}
+
+.selectPartMenu {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + var(--panel-offset));
+  z-index: var(--z-dropdown);
+  margin: 0;
+  padding: var(--panel-pad);
+  list-style: none;
+  max-height: var(--overlay-max-h-sm);
+  overflow-y: auto;
+  transform-origin: top;
+  animation: vui-select-in var(--motion-reveal);
+  background: var(--panel-bg);
+  border: var(--border-width) solid var(--panel-border);
+  border-radius: var(--panel-radius);
+  box-shadow: var(--panel-shadow);
+  color: var(--fg-primary);
+}
+
+.selectPartMenuVariantUp {
+  top: auto;
+  bottom: calc(100% + var(--overlay-offset));
+  transform-origin: bottom;
+}
+
+.selectPartLabel {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.selectPartCheck {
+  margin-left: auto;
+  color: var(--fg-brand);
+}
+
+.selectPartEmpty {
+  padding: var(--space-2-5);
+}

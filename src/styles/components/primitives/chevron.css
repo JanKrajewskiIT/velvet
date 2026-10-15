@@ -1,5 +1,0 @@
-/* Atom · Chevron — disclosure arrow. Hosts may re-time or re-colour via their own class; rotation lives here. */
-.vui-chevron{flex:none;transition:transform var(--motion-base)}
-.vui-chevron--down.vui-chevron--open,.vui-chevron--up.vui-chevron--open{transform:rotate(180deg)}
-.vui-chevron--right.vui-chevron--open{transform:rotate(90deg)}.vui-chevron--left.vui-chevron--open{transform:rotate(-90deg)}
-@media (prefers-reduced-motion:reduce){.vui-chevron{transition:none}}

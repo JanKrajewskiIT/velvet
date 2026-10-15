@@ -1,0 +1,90 @@
+:import('../../styles/shared/primitives/control.module.css') {
+  externalControl: control;
+}
+
+.inlineEdit {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  max-width: 100%;
+  margin: 0 calc(-1 * var(--space-2));
+  padding: var(--space-1) var(--space-2);
+  border: var(--border-width) solid transparent;
+  border-radius: var(--radius-md);
+  background: none;
+  color: var(--fg-primary);
+  text-align: left;
+  cursor: text;
+  transition:
+    background-color var(--motion-fast),
+    border-color var(--motion-fast);
+}
+
+.inlineEdit:hover {
+  background: var(--bg-hover);
+}
+
+.inlineEdit:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.inlineEditPartText {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.inlineEditPartIcon {
+  flex: none;
+  font-size: var(--type-body-size);
+  color: var(--fg-tertiary);
+  opacity: 0;
+  transition: opacity var(--motion-fast);
+}
+
+.inlineEdit:hover .inlineEditPartIcon,
+.inlineEdit:focus-visible .inlineEditPartIcon {
+  opacity: 1;
+}
+
+.inlineEditVariantEmpty .inlineEditPartText {
+  color: var(--fg-tertiary);
+}
+
+.inlineEditVariantSaved .inlineEditPartIcon {
+  opacity: 1;
+  color: var(--status-success-fg);
+}
+
+.inlineEditVariantSm {
+  padding: var(--space-0-5) var(--space-1-5);
+  margin: 0 calc(-1 * var(--space-1-5));
+}
+
+.inlineEditPartForm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1-5);
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.inlineEditPartForm.inlineEditVariantLg :global(.externalControl) {
+  height: var(--control-height-lg);
+}
+
+.inlineEditPartErr {
+  flex-basis: 100%;
+}
+
+.hint {
+  composes: hint from '../../styles/shared/primitives/field.module.css';
+}
+
+.hintVariantError {
+  composes: hintvarianterror from '../../styles/shared/primitives/field.module.css';
+}

@@ -1,0 +1,11 @@
+.select {
+  composes: select from '../../styles/shared/forms/select.module.css';
+}
+
+.controlPartAdorn {
+  composes: controlpartadorn from '../../styles/shared/primitives/control.module.css';
+}
+
+.controlPartAdornVariantEnd {
+  composes: controlpartadornvariantend from '../../styles/shared/primitives/control.module.css';
+}

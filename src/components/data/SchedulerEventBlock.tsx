@@ -1,7 +1,9 @@
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { Polymorphic } from '../../utils/polymorphic';
+import { Text } from '../primitives/Text';
 import type { SchedulerController } from './schedulerController';
+import styles from './SchedulerEventBlock.module.css';
 import { eventStyle } from './schedulerLayout';
 import type { SchedulerEvent } from './schedulerTypes';
 
@@ -27,8 +29,9 @@ export const SchedulerEventBlock = (props: SchedulerEventBlockProps) => {
     <Polymorphic
       tag={config().onEventClick ? 'button' : 'div'}
       type={config().onEventClick ? 'button' : undefined}
+      data-vui-scheduler-event
       data-tone={props.event.tone ?? 'brand'}
-      class={cx('vui-sched__evt', geometry().short && 'vui-sched__evt--short')}
+      class={cx(styles.schedPartEvt, geometry().short && styles.schedPartEvtVariantShort)}
       style={geometry().style}
       onClick={config().onEventClick ? () => config().onEventClick?.(props.originalEvent ?? props.event) : undefined}
       aria-label={translate('velvet.data.scheduler.eventLabel', {
@@ -37,11 +40,13 @@ export const SchedulerEventBlock = (props: SchedulerEventBlockProps) => {
         end: formatTime(props.event.end),
       })}
     >
-      <span class="vui-sched__et">{props.event.title}</span>
-      <span class="vui-sched__em">
+      <Text as="span" variant="label-sm" tone="inherit" class={styles.schedPartEt}>
+        {props.event.title}
+      </Text>
+      <Text as="span" variant="overline" tone="inherit" class={styles.schedPartEm}>
         {`${formatTime(props.event.start)} – ${formatTime(props.event.end)}`}
         {props.event.meta && !geometry().short ? ` · ${props.event.meta}` : ''}
-      </span>
+      </Text>
     </Polymorphic>
   );
 };

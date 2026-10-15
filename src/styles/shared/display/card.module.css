@@ -1,0 +1,80 @@
+.cardPartHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--card-header-gap);
+  padding: var(--card-pad) var(--card-pad) 0;
+}
+
+.cardPartHeading {
+  min-width: 0;
+}
+
+.cardPartActions {
+  display: flex;
+  gap: var(--space-1);
+  flex: none;
+}
+
+.cardPartDesc {
+  margin-top: var(--space-1);
+}
+
+.cardPartBody {
+  padding: var(--card-pad);
+  flex: 1;
+}
+
+.cardPartFooter {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--card-pad);
+  border-top: var(--border-width) solid var(--card-divider);
+  background: var(--card-footer-bg);
+  border-radius: 0 0 calc(var(--surface-radius) - var(--border-width)) calc(var(--surface-radius) - var(--border-width));
+}
+
+.cardVariantPNone > .cardPartHeader {
+  padding: var(--card-pad) var(--card-pad) var(--space-3);
+}
+
+.cardVariantPNone > .cardPartBody {
+  padding: 0;
+}
+
+.cardVariantPSm > .cardPartHeader {
+  padding: var(--card-pad-sm) var(--card-pad-sm) 0;
+}
+
+.cardVariantPSm > .cardPartBody {
+  padding: var(--card-pad-sm);
+}
+
+.cardVariantPSm > .cardPartFooter {
+  padding: var(--space-3) var(--card-pad-sm);
+}
+
+.cardVariantPLg > .cardPartHeader {
+  padding: var(--card-pad-lg) var(--card-pad-lg) 0;
+}
+
+.cardVariantPLg > .cardPartBody {
+  padding: var(--card-pad-lg);
+}
+
+.cardVariantPLg > .cardPartFooter {
+  padding: var(--space-4) var(--card-pad-lg);
+}
+
+.cardPartFooterVariantStart {
+  justify-content: flex-start;
+}
+
+.cardPartFooterVariantBetween {
+  justify-content: space-between;
+}
+
+.card {
+}

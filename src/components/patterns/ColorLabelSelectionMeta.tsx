@@ -2,6 +2,8 @@ import { Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { Button } from '../actions/Button';
+import { Text } from '../primitives/Text';
+import styles from './ColorLabelSelectionMeta.module.css';
 import type { ColorLabelSelection } from './createColorLabelSelection';
 
 export interface ColorLabelSelectionMetaProps {
@@ -26,13 +28,15 @@ export const ColorLabelSelectionMeta = (props: ColorLabelSelectionMetaProps) => 
   };
 
   return (
-    <div class="vui-cls__meta">
-      <span>{selectedCount()}</span>
+    <Text as="div" variant="caption" tone="tertiary" class={styles.clsPartMeta}>
+      <Text as="span" variant="caption" tone="inherit">
+        {selectedCount()}
+      </Text>
       <Show when={props.selection.selection().length > 0 && !props.selection.single()}>
         <Button variant="link" size="xs" disabled={props.selection.busy()} onClick={props.selection.clear}>
           {translate('velvet.common.clear')}
         </Button>
       </Show>
-    </div>
+    </Text>
   );
 };

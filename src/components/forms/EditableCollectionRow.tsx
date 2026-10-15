@@ -4,8 +4,11 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { IconButton } from '../actions/IconButton';
 import { Handle } from '../primitives/Handle';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import type { CollectionDrag } from './createCollectionDrag';
 import type { CollectionRows } from './createCollectionRows';
+import styles from './EditableCollectionRow.module.css';
 import type { EditableItem, EditableReorder } from './editableItem';
 import { Rating } from './Rating';
 import { Select } from './Select';
@@ -32,13 +35,13 @@ export const EditableCollectionRow = (props: EditableCollectionRowProps): JSX.El
   return (
     <li
       class={cx(
-        'vui-editcol__row',
-        props.drag.dragIndex() === props.index && 'vui-editcol__row--drag',
+        styles.editcolPartRow,
+        props.drag.dragIndex() === props.index && styles.editcolPartRowVariantDrag,
         props.drag.overIndex() === props.index &&
           props.drag.dragIndex() !== undefined &&
           props.drag.dragIndex() !== props.index &&
-          'vui-editcol__row--over',
-        invalid() && 'vui-editcol__row--invalid',
+          styles.editcolPartRowVariantOver,
+        invalid() && styles.editcolPartRowVariantInvalid,
       )}
       onDragOver={(event) => props.drag.onRowDragOver(event, props.index)}
       onDrop={(event) => props.drag.onRowDrop(event, props.index)}
@@ -46,13 +49,14 @@ export const EditableCollectionRow = (props: EditableCollectionRowProps): JSX.El
       <Show
         when={props.reorder === 'drag'}
         fallback={
-          <span class="vui-editcol__idx" aria-hidden="true">
+          <Text as="span" variant="kbd" tone="inherit" class={styles.editcolPartIdx} aria-hidden="true">
             {props.index + 1}
-          </span>
+          </Text>
         }
       >
         <Handle
           class="vui-editcol__grip"
+          data-vui-collection-grip
           draggable
           label={translate('velvet.forms.editableCollection.reorderItem', { index: props.index + 1 })}
           title={translate('velvet.forms.editableCollection.reorderHint')}
@@ -62,7 +66,8 @@ export const EditableCollectionRow = (props: EditableCollectionRowProps): JSX.El
         />
       </Show>
       <input
-        class="vui-editcol__input"
+        data-vui-collection-input
+        class={cx(styles.editcolPartInput, typographyClass('body'))}
         value={props.item.text}
         placeholder={props.placeholder ?? translate('velvet.forms.editableCollection.placeholder')}
         aria-label={translate('velvet.forms.editableCollection.itemLabel', { index: props.index + 1 })}
@@ -72,7 +77,7 @@ export const EditableCollectionRow = (props: EditableCollectionRowProps): JSX.El
       />
       <Show when={props.levels}>
         {(levels) => (
-          <div class="vui-editcol__level">
+          <div class={styles.editcolPartLevel}>
             <Select
               size="sm"
               aria-label={translate('velvet.forms.editableCollection.levelForItem', {
@@ -95,7 +100,7 @@ export const EditableCollectionRow = (props: EditableCollectionRowProps): JSX.El
           onValueChange={(weight) => props.rows.patch(props.item.id, { weight })}
         />
       </Show>
-      <span class="vui-editcol__tools">
+      <span class={styles.editcolPartTools}>
         <Show when={props.reorder === 'buttons'}>
           <IconButton
             icon="arrow-up"
@@ -113,7 +118,7 @@ export const EditableCollectionRow = (props: EditableCollectionRowProps): JSX.El
           />
         </Show>
         <IconButton
-          class="vui-editcol__del"
+          class={styles.editcolPartDel}
           icon="trash-2"
           label={translate('velvet.forms.editableCollection.removeItem', { index: props.index + 1 })}
           size="sm"
@@ -121,9 +126,9 @@ export const EditableCollectionRow = (props: EditableCollectionRowProps): JSX.El
         />
       </span>
       <Show when={invalid()}>
-        <div class="vui-editcol__err" role="alert">
+        <Text as="div" variant="overline" tone="inherit" class={styles.editcolPartErr} role="alert">
           {props.requiredText ?? translate('velvet.forms.editableCollection.requiredText')}
-        </div>
+        </Text>
       </Show>
     </li>
   );

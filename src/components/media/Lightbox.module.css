@@ -1,0 +1,3 @@
+.root {
+  composes: lightbox from '../../styles/shared/media/lightbox.module.css';
+}

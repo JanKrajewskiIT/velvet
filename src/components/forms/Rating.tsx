@@ -3,8 +3,17 @@ import { createMemo, createSignal, For, type JSX, mergeProps, Show } from 'solid
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { Text } from '../primitives/Text';
+import styles from './Rating.module.css';
 import { RatingStar } from './RatingStar';
+
+const RATING_CLASSES = {
+  readonly: styles.ratingVariantReadonly,
+  sm: styles.ratingVariantSm,
+  lg: styles.ratingVariantLg,
+} as const;
 
 export interface RatingProps {
   /** Controlled value. */
@@ -53,7 +62,7 @@ export const Rating = (props: RatingProps) => {
   const [hover, setHover] = createSignal(0);
   const shown = () => hover() || current();
   const stars = () => Array.from({ length: p.max }, (_, index) => index);
-  const sizeClass = () => `vui-rating--${p.size}`;
+  const sizeClass = () => variantClass(RATING_CLASSES, p.size);
   let root!: HTMLSpanElement;
 
   const commit = (next: number) => {
@@ -76,19 +85,21 @@ export const Rating = (props: RatingProps) => {
       when={!p.readOnly}
       fallback={
         <span
-          class={cx('vui-rating', sizeClass(), 'vui-rating--readonly', p.class)}
+          class={cx(styles.rating, sizeClass(), styles.ratingVariantReadonly, p.class)}
           role="img"
           aria-label={`${label()}: ${valueLabel(current(), p.max)}`}
         >
           <For each={stars()}>
             {(star) => (
-              <span class={cx('vui-rating__star', star < Math.round(current()) && 'vui-rating__star--on')}>
+              <span class={cx(styles.ratingPartStar, star < Math.round(current()) && styles.ratingPartStarVariantOn)}>
                 <RatingStar />
               </span>
             )}
           </For>
           <Show when={p.showValue}>
-            <span class="vui-rating__value">{oneDecimal().format(current())}</span>
+            <Text as="span" variant="code" tone="inherit" class={styles.ratingPartValue}>
+              {oneDecimal().format(current())}
+            </Text>
           </Show>
         </span>
       }
@@ -98,7 +109,7 @@ export const Rating = (props: RatingProps) => {
         ref={(element) => {
           root = element;
         }}
-        class={cx('vui-rating', sizeClass(), p.class)}
+        class={cx(styles.rating, sizeClass(), p.class)}
         role="radiogroup"
         aria-label={label()}
         onMouseLeave={() => setHover(0)}
@@ -113,9 +124,9 @@ export const Rating = (props: RatingProps) => {
               aria-label={starLabel(star + 1, p.max)}
               tabIndex={(current() || 1) === star + 1 ? 0 : -1}
               class={cx(
-                'vui-rating__star',
-                star < shown() && 'vui-rating__star--on',
-                hover() > 0 && star < hover() && 'vui-rating__star--preview',
+                styles.ratingPartStar,
+                star < shown() && styles.ratingPartStarVariantOn,
+                hover() > 0 && star < hover() && styles.ratingPartStarVariantPreview,
               )}
               onMouseEnter={() => setHover(star + 1)}
               onClick={() => commit(current() === star + 1 ? 0 : star + 1)}
@@ -125,9 +136,12 @@ export const Rating = (props: RatingProps) => {
           )}
         </For>
         <Show when={p.showValue}>
-          <span class="vui-rating__value">
-            {oneDecimal().format(shown())} <span>/ {p.max}</span>
-          </span>
+          <Text as="span" variant="code" tone="inherit" class={styles.ratingPartValue}>
+            {oneDecimal().format(shown())}{' '}
+            <Text as="span" variant="caption" tone="inherit">
+              / {p.max}
+            </Text>
+          </Text>
         </Show>
       </span>
     </Show>

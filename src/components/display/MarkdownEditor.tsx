@@ -1,16 +1,26 @@
 import { createUniqueId, type JSX, mergeProps, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { EmptyText } from '../primitives/EmptyText';
 import { FieldHint } from '../primitives/FieldHint';
 import { FieldLabel } from '../primitives/FieldLabel';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { createMarkdownEditor } from './createMarkdownEditor';
 import { createModifierLabel } from './createModifierLabel';
 import { Markdown } from './Markdown';
+import styles from './MarkdownEditor.module.css';
 import type { MarkdownEditorMode } from './markdownEditorModes';
 import { MarkdownEditorTabs } from './MarkdownEditorTabs';
 import { MarkdownEditorToolbar } from './MarkdownEditorToolbar';
+
+const MDE_CLASSES = {
+  invalid: styles.mdeVariantInvalid,
+  disabled: styles.mdeVariantDisabled,
+  split: styles.mdeVariantSplit,
+} as const;
 
 export type { MarkdownEditorMode };
 
@@ -68,20 +78,20 @@ export const MarkdownEditor = (props: MarkdownEditorProps) => {
   const hasMessage = () => !!(merged.error || merged.hint);
 
   return (
-    <div class={cx('vui-field', 'vui-mde-field', merged.class)}>
+    <div class={cx(styles.field, styles.mdeField, merged.class)}>
       <Show when={merged.label}>
         <FieldLabel htmlFor={fieldId()}>{merged.label}</FieldLabel>
       </Show>
       <div
         class={cx(
-          'vui-mde',
-          `vui-mde--${editor.mode()}`,
-          !!merged.error && 'vui-mde--invalid',
-          merged.disabled && 'vui-mde--disabled',
+          styles.mde,
+          variantClass(MDE_CLASSES, editor.mode()),
+          !!merged.error && styles.mdeVariantInvalid,
+          merged.disabled && styles.mdeVariantDisabled,
         )}
         style={{ '--mde-h': formatHeight(merged.height) }}
       >
-        <div class="vui-mde__bar">
+        <div class={styles.mdePartBar}>
           <MarkdownEditorTabs mode={editor.mode()} onModeChange={editor.setMode} />
           <Show when={merged.toolbar && editor.showWrite() && !merged.readOnly}>
             <MarkdownEditorToolbar
@@ -92,12 +102,12 @@ export const MarkdownEditor = (props: MarkdownEditorProps) => {
             />
           </Show>
         </div>
-        <div class="vui-mde__panes">
+        <div class={styles.mdePartPanes}>
           <Show when={editor.showWrite()}>
             <textarea
               ref={editor.bindTextarea}
               id={fieldId()}
-              class="vui-mde__input"
+              class={cx(styles.mdePartInput, typographyClass('code'))}
               value={editor.value()}
               placeholder={placeholder()}
               disabled={merged.disabled}
@@ -111,14 +121,14 @@ export const MarkdownEditor = (props: MarkdownEditorProps) => {
           </Show>
           <Show when={editor.showPreview()}>
             <div
-              class="vui-mde__preview"
+              class={styles.mdePartPreview}
               aria-label={translate('velvet.display.markdownEditor.previewLabel')}
               tabIndex={editor.mode() === 'preview' ? 0 : -1}
             >
               <Show
                 when={editor.previewSource().trim()}
                 fallback={
-                  <EmptyText as="p" align="start" class="vui-mde__empty">
+                  <EmptyText as="p" align="start" class={styles.mdePartEmpty}>
                     {previewEmpty()}
                   </EmptyText>
                 }
@@ -128,18 +138,18 @@ export const MarkdownEditor = (props: MarkdownEditorProps) => {
             </div>
           </Show>
         </div>
-        <div class="vui-mde__foot" id={footId()}>
-          <span class="vui-mde__md">
-            <span class="vui-mde__mdmark" aria-hidden="true">
+        <Text as="div" variant="caption" tone="tertiary" class={styles.mdePartFoot} id={footId()}>
+          <Text as="span" variant="micro" tone="inherit" class={styles.mdePartMd}>
+            <Text as="span" variant="micro" tone="secondary" class={styles.mdePartMdmark} aria-hidden="true">
               M↓
-            </span>
+            </Text>
             {translate('velvet.display.markdownEditor.markdownSupported')}
-          </span>
-          <span class="vui-mde__count">
+          </Text>
+          <Text as="span" variant="caption" tone="inherit" tabular class="vui-mde__count">
             {translate('velvet.display.markdownEditor.wordCount', { count: editor.words() })}
             <Show when={merged.maxLength}>{` · ${editor.value().length}/${merged.maxLength}`}</Show>
-          </span>
-        </div>
+          </Text>
+        </Text>
       </div>
       <Show when={hasMessage()}>
         <FieldHint error={!!merged.error} role={merged.error ? 'alert' : undefined}>

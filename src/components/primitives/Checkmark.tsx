@@ -1,7 +1,18 @@
 import { mergeProps, splitProps } from 'solid-js';
 
-import { cx, modifier } from '../../utils/cx';
+import { variantClass } from '../../utils/cssModule';
+import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import styles from './Checkmark.module.css';
+
+const CHECKMARK_CLASSES = {
+  sm: styles.checkmarkVariantSm,
+  radio: styles.checkmarkVariantRadio,
+  round: styles.checkmarkVariantRound,
+  on: styles.checkmarkVariantOn,
+  mixed: styles.checkmarkVariantMixed,
+  disabled: styles.checkmarkVariantDisabled,
+} as const;
 
 export interface CheckmarkProps extends HtmlProps<HTMLSpanElement> {
   checked?: boolean;
@@ -23,11 +34,11 @@ export const Checkmark = (props: CheckmarkProps) => {
   return (
     <span
       class={cx(
-        'vui-checkmark',
-        modifier('vui-checkmark', local.size, 'md'),
-        local.radio && 'vui-checkmark--radio',
-        local.round && 'vui-checkmark--round',
-        local.indeterminate ? 'vui-checkmark--mixed' : local.checked && 'vui-checkmark--on',
+        styles.checkmark,
+        variantClass(CHECKMARK_CLASSES, local.size, 'md'),
+        local.radio && styles.checkmarkVariantRadio,
+        local.round && styles.checkmarkVariantRound,
+        local.indeterminate ? styles.checkmarkVariantMixed : local.checked && styles.checkmarkVariantOn,
         local.class,
       )}
       aria-hidden={rest.role ? undefined : true}

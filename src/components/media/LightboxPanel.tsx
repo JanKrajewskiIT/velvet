@@ -4,10 +4,14 @@ import { isTopLayer } from '../../hooks/createLayer';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { IconButton } from '../actions/IconButton';
+import { Text } from '../primitives/Text';
 import { thumbUrl } from './lightboxImage';
+import styles from './LightboxPanel.module.css';
 import type { LightboxProps } from './lightboxTypes';
 import { safeMediaUrl } from './safeUrl';
+
 interface LightboxPanelProps {
+  class?: string;
   lightbox: LightboxProps;
   index: number;
   ref: (element: HTMLDialogElement) => void;
@@ -31,7 +35,7 @@ export const LightboxPanel = (props: LightboxPanelProps) => {
       ref={props.ref}
       data-vui-modal
       aria-label={translate('velvet.media.lightbox.label', { index: props.index + 1, count: count() })}
-      class="vui-lightbox"
+      class={cx(styles.modal, styles.lightbox, props.class)}
       style={{ outline: 'none' }}
       onMouseDown={(e) => {
         if (e.target === e.currentTarget && isTopLayer(e.currentTarget, e)) close();
@@ -43,11 +47,13 @@ export const LightboxPanel = (props: LightboxPanelProps) => {
         else if (e.key === 'ArrowLeft') go(props.index - 1);
       }}
     >
-      <div class="vui-lightbox__bar">
-        <span class="vui-lightbox__count">
+      <div class={styles.lightboxPartBar}>
+        <Text as="span" variant="code" tone="inherit" class={styles.lightboxPartCount}>
           {props.index + 1} / {count()}
-        </span>
-        <span class="vui-lightbox__cap">{image()?.caption || image()?.alt}</span>
+        </Text>
+        <Text as="span" variant="body-sm" class={styles.lightboxPartCap}>
+          {image()?.caption || image()?.alt}
+        </Text>
         <IconButton
           variant="overlay"
           shape="circle"
@@ -66,7 +72,7 @@ export const LightboxPanel = (props: LightboxPanelProps) => {
       </div>
       {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- stage backdrop click dismisses; Escape and the close button cover the keyboard */}
       <figure
-        class={cx('vui-lightbox__stage', zoom() && 'vui-lightbox__stage--zoom')}
+        class={cx(styles.lightboxPartStage, zoom() && styles.lightboxPartStageVariantZoom)}
         onMouseDown={(e) => {
           const dialog = e.currentTarget.closest('dialog');
           if (e.target === e.currentTarget && dialog && isTopLayer(dialog, e)) close();
@@ -86,7 +92,7 @@ export const LightboxPanel = (props: LightboxPanelProps) => {
           size="lg"
           icon="chevron-left"
           label={translate('velvet.media.lightbox.previous')}
-          class="vui-lightbox__nav vui-lightbox__nav--prev"
+          class={cx(styles.lightboxPartNav, styles.lightboxPartNavVariantPrev)}
           onClick={() => go(props.index - 1)}
         />
         <IconButton
@@ -95,17 +101,17 @@ export const LightboxPanel = (props: LightboxPanelProps) => {
           size="lg"
           icon="chevron-right"
           label={translate('velvet.media.lightbox.next')}
-          class="vui-lightbox__nav vui-lightbox__nav--next"
+          class={cx(styles.lightboxPartNav, styles.lightboxPartNavVariantNext)}
           onClick={() => go(props.index + 1)}
         />
-        <div class="vui-lightbox__thumbs">
+        <div class={styles.lightboxPartThumbs}>
           <For each={props.lightbox.images}>
             {(thumb, k) => (
               <button
                 type="button"
                 aria-label={translate('velvet.media.lightbox.thumb', { index: k() + 1 })}
                 aria-current={k() === props.index ? true : undefined}
-                class={cx('vui-lightbox__thumb', k() === props.index && 'vui-lightbox__thumb--on')}
+                class={cx(styles.lightboxPartThumb, k() === props.index && styles.lightboxPartThumbVariantOn)}
                 onClick={() => go(k())}
               >
                 <img src={thumbUrl(thumb)} alt="" />

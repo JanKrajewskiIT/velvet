@@ -1,0 +1,19 @@
+.menuVariantEnd {
+  left: auto;
+  right: 0;
+  transform-origin: top right;
+}
+
+.menuVariantTop {
+  top: auto;
+  bottom: calc(100% + var(--overlay-offset));
+  transform-origin: bottom left;
+}
+
+.menuWrap {
+  composes: menuwrap from '../../styles/shared/menus/menu.module.css';
+}
+
+.menuVariantPop {
+  composes: menuvariantpop from '../../styles/shared/menus/menu.module.css';
+}

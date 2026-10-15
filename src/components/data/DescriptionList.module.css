@@ -1,0 +1,63 @@
+.dl {
+  margin: 0;
+}
+
+.dlVariantRow .dlPartRow {
+  display: grid;
+  grid-template-columns: minmax(120px, 1fr) 2fr;
+  gap: var(--space-4);
+  padding: var(--space-3) 0;
+  border-bottom: var(--border-width) solid var(--border-subtle);
+}
+
+.dlVariantRow .dlPartRow:last-child {
+  border-bottom: 0;
+}
+
+.dlVariantGrid {
+  display: grid;
+  grid-template-columns: repeat(var(--dl-cols, 2), minmax(0, 1fr));
+  gap: var(--space-5) var(--space-6);
+}
+
+.dlVariantGrid .dlPartRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.dlPartTerm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-0-5);
+}
+
+.dlVariantGrid .dlPartTerm {
+  color: var(--fg-tertiary);
+  text-transform: uppercase;
+}
+
+.dlPartHint {
+  text-transform: none;
+}
+
+.dlPartDesc {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.dlPartEmpty {
+  color: var(--fg-disabled);
+}
+
+@media (width <= 639px) {
+  .dlVariantRow .dlPartRow {
+    grid-template-columns: 1fr;
+    gap: var(--space-1);
+  }
+
+  .dlVariantGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

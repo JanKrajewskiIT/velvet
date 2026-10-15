@@ -1,0 +1,91 @@
+.upload {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.uploadPartZone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1-5);
+  padding: var(--space-7) var(--space-5);
+  border: var(--border-width-medium) dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--bg-subtle);
+  text-align: center;
+  cursor: pointer;
+  transition:
+    border-color var(--motion-fast),
+    background-color var(--motion-fast),
+    transform var(--motion-spring);
+}
+
+.uploadPartZone:hover {
+  border-color: var(--border-brand);
+}
+
+.uploadPartZone:focus-visible {
+  outline: none;
+  border-color: var(--border-focus);
+  box-shadow: var(--focus-ring);
+}
+
+.uploadPartZoneVariantOver {
+  border-style: solid;
+  border-color: var(--border-focus);
+  background: var(--bg-selected);
+  transform: scale(1.01);
+}
+
+.uploadPartZoneVariantDisabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+
+.uploadPartIcon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin-bottom: var(--space-1);
+  border-radius: 50%;
+  background: var(--bg-raised);
+  box-shadow: var(--elevation-card);
+  color: var(--fg-brand);
+  font-size: var(--type-title-lg-size);
+  transition: transform var(--motion-spring);
+}
+
+.uploadPartZoneVariantOver .uploadPartIcon {
+  transform: translateY(-3px);
+}
+
+.uploadPartHint {
+  color: var(--fg-tertiary);
+}
+
+.uploadPartList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.uploadPartEmpty {
+  padding: var(--space-1-5);
+}
+
+.uploadPartTitle {
+  color: var(--fg-primary);
+}
+
+.hint {
+  composes: hint from '../../styles/shared/primitives/field.module.css';
+}
+
+.hintVariantError {
+  composes: hintvarianterror from '../../styles/shared/primitives/field.module.css';
+}

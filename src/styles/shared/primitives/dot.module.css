@@ -1,0 +1,94 @@
+.count {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  box-sizing: border-box;
+  min-width: var(--count-size);
+  height: var(--count-size);
+  padding: 0 var(--count-px);
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  background: var(--count-bg);
+  color: var(--count-fg);
+  box-shadow: var(--count-shadow);
+}
+
+.countVariantSm {
+  min-width: var(--count-size-sm);
+  height: var(--count-size-sm);
+  padding: 0 var(--space-1);
+}
+
+.countVariantLg {
+  min-width: var(--count-size-lg);
+  height: var(--count-size-lg);
+  padding: 0 var(--space-2);
+}
+
+.countVariantDanger {
+  background: var(--status-danger-solid);
+  color: var(--on-color-fg);
+}
+
+.countVariantSuccess {
+  background: var(--status-success-solid);
+  color: var(--on-color-fg);
+}
+
+.countVariantInverse {
+  background: var(--bg-inverse);
+  color: var(--fg-inverse);
+}
+
+.countVariantNeutral {
+  background: var(--bg-sunken);
+  color: var(--fg-secondary);
+  box-shadow: none;
+}
+
+.countVariantSoft {
+  background: var(--bg-brand-subtle);
+  color: var(--fg-brand);
+  box-shadow: none;
+}
+
+.countVariantPop {
+  animation: vui-count-pop var(--motion-spring);
+}
+
+.indicatorPartItem {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  top: 0;
+  right: 0;
+  transform: translate(50%, -50%);
+}
+
+.indicatorPartItem.count,
+.indicatorPartItem.dot {
+  box-shadow:
+    0 0 0 var(--border-width-thick) var(--count-ring),
+    var(--count-shadow);
+}
+
+.indicatorPartItem.countVariantNeutral,
+.indicatorPartItem.countVariantSoft {
+  box-shadow: 0 0 0 var(--border-width-thick) var(--count-ring);
+}
+
+.indicatorPartItem.dot {
+  width: var(--size-dot-lg);
+  height: var(--size-dot-lg);
+}
+
+.dot {
+  display: inline-block;
+  flex: none;
+  width: var(--size-dot);
+  height: var(--size-dot);
+  border-radius: 50%;
+  background: var(--tone, currentColor);
+}

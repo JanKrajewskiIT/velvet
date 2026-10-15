@@ -4,9 +4,11 @@ import { createSignal, createUniqueId, mergeProps, Show } from 'solid-js';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { clamp } from '../../utils/math';
+import { Text } from '../primitives/Text';
 import { VisuallyHidden } from '../primitives/VisuallyHidden';
 import { seriesColor } from './chartScale';
 import { createWidth } from './createWidth';
+import styles from './Sparkline.module.css';
 
 const DEFAULT_WIDTH = 160;
 const INSET = 2;
@@ -76,7 +78,7 @@ export const Sparkline = (props: SparklineProps) => {
   };
 
   return (
-    <div ref={ref} class={cx('vui-spark', merged.class)}>
+    <div ref={ref} class={cx(styles.spark, merged.class)}>
       <svg
         width={width()}
         height={merged.height}
@@ -109,7 +111,7 @@ export const Sparkline = (props: SparklineProps) => {
           stroke-linecap="round"
         />
         <Show when={index() >= 0}>
-          <line x1={x(index())} x2={x(index())} y1="0" y2={merged.height} class="vui-chart__cross" />
+          <line x1={x(index())} x2={x(index())} y1="0" y2={merged.height} class={styles.chartPartCross} />
         </Show>
         <Show when={marker()}>
           {(point) => (
@@ -125,10 +127,16 @@ export const Sparkline = (props: SparklineProps) => {
         </Show>
       </svg>
       <Show when={index() >= 0}>
-        <span class="vui-spark__val" aria-hidden="true">
-          <Show when={merged.labels?.[index()]}>{(caption) => <span>{caption()}</span>}</Show>
+        <Text as="span" variant="kbd" tone="inherit" class={styles.sparkPartVal} aria-hidden="true">
+          <Show when={merged.labels?.[index()]}>
+            {(caption) => (
+              <Text as="span" variant="caption" tone="inherit">
+                {caption()}
+              </Text>
+            )}
+          </Show>
           {valueText(index())}
-        </span>
+        </Text>
       </Show>
       <VisuallyHidden role="status">{index() >= 0 ? readout(index()) : ''}</VisuallyHidden>
     </div>

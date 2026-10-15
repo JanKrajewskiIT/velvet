@@ -2,6 +2,8 @@ import { type JSX, mergeProps, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { Text } from '../primitives/Text';
+import styles from './LoadingOverlay.module.css';
 import { Spinner } from './Spinner';
 
 export interface LoadingOverlayProps {
@@ -18,12 +20,14 @@ export const LoadingOverlay = (props: LoadingOverlayProps) => {
   const translate = useTranslate();
   const label = () => p.label ?? translate('velvet.feedback.loadingOverlay.label');
   return (
-    <div class={cx('vui-loading-overlay', p.class)} aria-busy={p.show || undefined}>
+    <div class={cx(styles.loadingOverlay, p.class)} aria-busy={p.show || undefined}>
       {p.children}
       <Show when={p.show}>
-        <div class="vui-loading-overlay__veil">
+        <div class={styles.loadingOverlayPartVeil}>
           <Spinner size="lg" label={label()} />
-          <span class="vui-loading-overlay__label">{label()}</span>
+          <Text as="span" variant="body-sm" tone="secondary" class={styles.loadingOverlayPartLabel}>
+            {label()}
+          </Text>
         </div>
       </Show>
     </div>

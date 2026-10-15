@@ -1,0 +1,61 @@
+.chip {
+  --glyph-size: var(--type-body-size);
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  white-space: nowrap;
+  flex: none;
+  height: var(--control-height-sm);
+  padding: 0 var(--space-3);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-full);
+  background: var(--bg-raised);
+  color: var(--fg-secondary);
+  cursor: pointer;
+  transition:
+    background-color var(--motion-fast),
+    border-color var(--motion-fast),
+    color var(--motion-fast);
+}
+
+.chip:hover {
+  border-color: var(--border-strong);
+  color: var(--fg-primary);
+}
+
+.chip:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.chip:active {
+  transform: scale(0.97);
+}
+
+.chip:disabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+
+.chipVariantOn {
+  background: var(--bg-selected);
+  border-color: var(--border-brand);
+  color: var(--fg-brand);
+}
+
+.chipVariantOn:hover {
+  border-color: var(--border-brand);
+  color: var(--fg-brand);
+}
+
+.chipVariantSm {
+  height: var(--control-height-inner);
+  padding: 0 var(--space-2-5);
+}
+
+@media (pointer: coarse) {
+  .chip {
+    height: var(--control-height-inner-lg);
+  }
+}

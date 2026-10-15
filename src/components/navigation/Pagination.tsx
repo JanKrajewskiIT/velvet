@@ -3,10 +3,18 @@ import { createMemo, Index, type JSX, mergeProps, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate, useTranslateRich } from '../../i18n/useTranslate';
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { Select } from '../forms/Select';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { PAGE_GAP, pageRange, type PageRangeItem } from './pageRange';
+import styles from './Pagination.module.css';
+
+const PAGER_VARIANT_CLASSES = {
+  full: styles.pagerVariantFull,
+} as const;
 
 export interface PaginationLabels {
   /** Landmark name. */
@@ -60,7 +68,15 @@ export const Pagination = (props: PaginationProps) => {
     compact:
       p.labels?.compact ??
       ((page, count) =>
-        translateRich('velvet.navigation.pagination.compact', { page, count, b: (children) => <b>{children}</b> })),
+        translateRich('velvet.navigation.pagination.compact', {
+          page,
+          count,
+          b: (children) => (
+            <Text as="b" variant="label-sm" tone="inherit">
+              {children}
+            </Text>
+          ),
+        })),
   });
   const numbers = createMemo(() => new Intl.NumberFormat(i18n.locale()));
   const [current, setCurrent] = createControllable({
@@ -84,16 +100,23 @@ export const Pagination = (props: PaginationProps) => {
   };
 
   return (
-    <nav aria-label={labels().navigation} class={cx('vui-pager', `vui-pager--${p.variant}`, p.class)}>
+    <nav
+      aria-label={labels().navigation}
+      class={cx(styles.pager, variantClass(PAGER_VARIANT_CLASSES, p.variant), p.class)}
+    >
       <Show when={range()}>
-        <span class="vui-pager__info">{range()}</span>
+        <Text as="span" variant="body-sm" tone="inherit" class={styles.pagerPartInfo}>
+          {range()}
+        </Text>
       </Show>
       <Show when={p.pageSizeOptions && p.onPageSizeChange}>
-        <div class="vui-pager__size">
-          <span>{labels().rows}</span>
+        <div class={cx(styles.pagerPartSize, typographyClass('body-sm'))}>
+          <Text as="span" variant="caption" tone="inherit">
+            {labels().rows}
+          </Text>
           <Select
             size="sm"
-            class="vui-pager__select"
+            class={styles.pagerPartSelect}
             aria-label={labels().rows}
             value={p.pageSize === undefined ? undefined : String(p.pageSize)}
             options={p.pageSizeOptions?.map(String)}
@@ -101,10 +124,10 @@ export const Pagination = (props: PaginationProps) => {
           />
         </div>
       </Show>
-      <div class="vui-pager__pages">
+      <div class={styles.pagerPartPages}>
         <button
           type="button"
-          class="vui-pager__btn"
+          class={cx(styles.pagerPartBtn, typographyClass('button-sm'))}
           aria-label={labels().previous}
           disabled={current() <= 1}
           onClick={() => go(current() - 1)}
@@ -114,9 +137,9 @@ export const Pagination = (props: PaginationProps) => {
         <Show
           when={p.variant !== 'compact'}
           fallback={
-            <span class="vui-pager__compact" aria-live="polite">
+            <Text as="span" variant="body-sm" tone="inherit" class={styles.pagerPartCompact} aria-live="polite">
               {labels().compact(current(), count())}
-            </span>
+            </Text>
           }
         >
           <Index each={pageRange(current(), count(), p.siblingCount)}>
@@ -124,15 +147,19 @@ export const Pagination = (props: PaginationProps) => {
               <Show
                 when={pageNumber(item())}
                 fallback={
-                  <span class="vui-pager__gap" aria-hidden="true">
+                  <Text as="span" variant="body-sm" tone="inherit" class={styles.pagerPartGap} aria-hidden="true">
                     {PAGE_GAP}
-                  </span>
+                  </Text>
                 }
               >
                 {(page) => (
                   <button
                     type="button"
-                    class={cx('vui-pager__btn', page() === current() && 'vui-pager__btn--on')}
+                    class={cx(
+                      typographyClass('button-sm'),
+                      styles.pagerPartBtn,
+                      page() === current() && styles.pagerPartBtnVariantOn,
+                    )}
                     aria-current={page() === current() ? 'page' : undefined}
                     aria-label={labels().page(page())}
                     onClick={() => go(page())}
@@ -146,7 +173,7 @@ export const Pagination = (props: PaginationProps) => {
         </Show>
         <button
           type="button"
-          class="vui-pager__btn"
+          class={cx(styles.pagerPartBtn, typographyClass('button-sm'))}
           aria-label={labels().next}
           disabled={current() >= count()}
           onClick={() => go(current() + 1)}

@@ -2,13 +2,22 @@ import { useI18n } from '@jankrajewskiit/i18n';
 import { createEffect, createMemo, createSignal, Index, mergeProps, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './AudioPlayer.module.css';
 import { nextRate, type PlaybackState, rateLabel, readPlayback, seekMedia, togglePlayback } from './playback';
 import { PlayerButton } from './PlayerButton';
 import { safeMediaUrl } from './safeUrl';
 import { fmtTime } from './time';
 import { decorativeWaveform, resamplePeaks } from './waveform';
+
+const AUDIO_CLASSES = {
+  playing: styles.audioVariantPlaying,
+  sm: styles.audioVariantSm,
+} as const;
 
 const DEFAULT_BARS = 72;
 const COMPACT_MAX_BARS = 48;
@@ -86,7 +95,15 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
   });
 
   return (
-    <div class={cx('vui-audio', `vui-audio--${p.size}`, state().playing && 'vui-audio--playing', p.class)}>
+    <div
+      class={cx(
+        typographyClass('body'),
+        styles.audio,
+        variantClass(AUDIO_CLASSES, p.size),
+        state().playing && styles.audioVariantPlaying,
+        p.class,
+      )}
+    >
       {/* eslint-disable-next-line jsx-a11y/media-has-caption -- captions are provided by the media source; the player cannot know them */}
       <audio
         ref={(element) => {
@@ -100,28 +117,40 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
         onLoadedMetadata={sync}
         onEnded={sync}
       />
-      <Show when={safeMediaUrl(p.cover)}>{(cover) => <img class="vui-audio__cover" src={cover()} alt="" />}</Show>
+      <Show when={safeMediaUrl(p.cover)}>{(cover) => <img class={styles.audioPartCover} src={cover()} alt="" />}</Show>
       <button
         type="button"
-        class="vui-audio__play"
+        class={styles.audioPartPlay}
         aria-label={state().playing ? translate('velvet.media.player.pause') : translate('velvet.media.player.play')}
         onClick={toggle}
       >
         <Glyph name={state().playing ? 'pause' : 'play'} />
       </button>
-      <div class="vui-audio__main">
+      <div class={styles.audioPartMain}>
         <Show when={p.title || p.artist}>
-          <div class="vui-audio__head">
-            <Show when={p.title}>{(title) => <span class="vui-audio__title">{title()}</span>}</Show>
-            <Show when={p.artist}>{(artist) => <span class="vui-audio__artist">{artist()}</span>}</Show>
+          <div class={styles.audioPartHead}>
+            <Show when={p.title}>
+              {(title) => (
+                <Text as="span" variant="label" tone="inherit" class={styles.audioPartTitle}>
+                  {title()}
+                </Text>
+              )}
+            </Show>
+            <Show when={p.artist}>
+              {(artist) => (
+                <Text as="span" variant="caption" tone="tertiary" class={styles.audioPartArtist}>
+                  {artist()}
+                </Text>
+              )}
+            </Show>
           </div>
         </Show>
-        <div class="vui-audio__track">
+        <div class={styles.audioPartTrack}>
           <div
             ref={(element) => {
               waveform = element;
             }}
-            class="vui-audio__wave"
+            class={styles.audioPartWave}
             role="slider"
             tabIndex={0}
             aria-label={
@@ -155,21 +184,21 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
             <Index each={bars()}>
               {(peak, i) => (
                 <i
-                  class={i / barCount() < progress() ? 'vui-audio__bar--on' : undefined}
+                  class={i / barCount() < progress() ? styles.audioPartBarVariantOn : undefined}
                   style={{ height: `${Math.max(MIN_BAR_HEIGHT_PERCENT, peak() * 100)}%` }}
                 />
               )}
             </Index>
           </div>
-          <span class="vui-audio__time">
+          <Text as="span" variant="caption" tone="secondary" tabular class={styles.audioPartTime}>
             {fmtTime(state().time)} / {fmtTime(state().duration)}
-          </span>
+          </Text>
         </div>
       </div>
-      <div class="vui-audio__tools">
+      <div class={styles.audioPartTools}>
         <PlayerButton
           label={translate('velvet.media.player.speed', { rate: speedLabel() })}
-          class="vui-player__btn--txt"
+          class={styles.playerPartBtnVariantTxt}
           onClick={() => setRate(nextRate(p.rates, rate()))}
         >
           {speedLabel()}
@@ -178,7 +207,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
           icon="volume"
           label={muted() ? translate('velvet.media.player.unmute') : translate('velvet.media.player.mute')}
           pressed={muted()}
-          class={muted() ? 'vui-player__btn--muted' : undefined}
+          class={muted() ? styles.playerPartBtnVariantMuted : undefined}
           onClick={() => setMuted(!muted())}
         />
       </div>

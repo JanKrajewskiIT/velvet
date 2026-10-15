@@ -1,0 +1,27 @@
+.surface {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--surface-bg);
+  border: var(--border-width) solid var(--surface-border);
+  border-radius: var(--surface-radius);
+  box-shadow: var(--surface-shadow);
+  color: var(--fg-primary);
+  transition:
+    box-shadow var(--motion-base),
+    border-color var(--motion-base),
+    transform var(--motion-base);
+}
+
+.tonal {
+  --surface-tonal-highlight: 0 0 0 transparent;
+  --surface-tonal-shadow:
+    0 18px 44px color-mix(in oklab, var(--tone, var(--action-primary)) var(--surface-tonal-glow-mix), transparent),
+    var(--surface-tonal-highlight), 0 8px 18px color-mix(in oklab, var(--fg-primary) 8%, transparent),
+    0 0 0 var(--border-width) color-mix(in oklab, var(--tone, var(--action-primary)) 10%, transparent);
+}
+
+[data-theme='dark'] .tonal {
+  --surface-tonal-highlight: inset 0 var(--border-width) 0 color-mix(in oklab, var(--white) 3%, transparent);
+}

@@ -1,0 +1,122 @@
+:import('../../styles/shared/primitives/glyph.module.css') {
+  externalIcon: icon;
+}
+
+:import('../../styles/shared/actions/button.module.css') {
+  externalBtn: btn;
+}
+
+.banner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: var(--hit-target-min);
+  padding: var(--space-2) var(--space-12);
+  color: var(--on-color-fg);
+}
+
+.bannerVariantSticky {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+}
+
+.bannerPartInner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2) var(--space-3);
+  flex: 1;
+  text-align: center;
+}
+
+.bannerPartText {
+  font-weight: var(--type-label-weight);
+}
+
+.bannerPartClose {
+  position: absolute;
+  right: var(--space-2-5);
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: var(--control-height-inner);
+  height: var(--control-height-inner);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: inherit;
+  opacity: 0.8;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.bannerPartClose:hover {
+  opacity: 1;
+  background: var(--on-color-hover);
+}
+
+.bannerPartClose:focus-visible {
+  outline: var(--border-width-thick) solid var(--on-color-fg);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.bannerVariantBrand {
+  background: var(--action-primary);
+}
+
+.bannerVariantInfo {
+  background: var(--status-info-solid);
+}
+
+.bannerVariantSuccess {
+  background: var(--status-success-solid);
+}
+
+.bannerVariantDanger {
+  background: var(--status-danger-solid);
+}
+
+.bannerVariantNeutral {
+  background: var(--status-neutral-solid);
+}
+
+.bannerVariantWarning {
+  background: var(--status-warning-bg);
+  color: var(--status-warning-fg);
+  border-bottom: var(--border-width) solid var(--status-warning-border);
+}
+
+@media (width <= 639px) {
+  .banner {
+    padding: var(--space-2-5) var(--space-12) var(--space-2-5) var(--space-4);
+  }
+
+  .bannerPartInner {
+    justify-content: flex-start;
+    text-align: left;
+  }
+}
+
+.bannerPartInner > :global(.externalIcon) {
+  --glyph-size: var(--type-body-lg-size);
+}
+
+.bannerPartAction :global(.externalBtn) {
+  height: var(--control-height-inner);
+  padding: 0 var(--space-3);
+  background: var(--on-color-subtle);
+  border-color: var(--on-color-border);
+  color: var(--on-color-fg);
+}
+
+.bannerPartAction :global(.externalBtn):hover {
+  background: var(--on-color-pressed);
+}
+
+.bannerVariantWarning .bannerPartAction :global(.externalBtn) {
+  background: var(--bg-raised);
+  border-color: var(--status-warning-border);
+  color: var(--status-warning-fg);
+}

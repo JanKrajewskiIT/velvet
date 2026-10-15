@@ -6,7 +6,9 @@ import { addDays, startOfDay } from '../../utils/date';
 import { Button } from '../actions/Button';
 import { ButtonGroup } from '../actions/ButtonGroup';
 import { IconButton } from '../actions/IconButton';
+import { Heading } from '../primitives/Heading';
 import type { SchedulerController } from './schedulerController';
+import styles from './SchedulerToolbar.module.css';
 import type { SchedulerView } from './schedulerTypes';
 
 const VIEWS: { value: SchedulerView; labelKey: I18nKey }[] = [
@@ -22,7 +24,7 @@ export const SchedulerToolbar = (props: SchedulerToolbarProps) => {
   const translate = useTranslate();
   const calendar = () => props.scheduler.calendar;
   return (
-    <div class="vui-sched__bar">
+    <div class={styles.schedPartBar}>
       <Button variant="secondary" size="sm" onClick={() => calendar().setDate(startOfDay(new Date()))}>
         {translate('velvet.common.today')}
       </Button>
@@ -46,9 +48,9 @@ export const SchedulerToolbar = (props: SchedulerToolbarProps) => {
           onClick={() => calendar().setDate(addDays(calendar().date(), calendar().step()))}
         />
       </ButtonGroup>
-      <h3 class="vui-sched__range" aria-live="polite">
+      <Heading level={3} variant="title" class={styles.schedPartRange} aria-live="polite">
         {calendar().range()}
-      </h3>
+      </Heading>
       <ButtonGroup label={translate('velvet.data.scheduler.viewLabel')}>
         <For each={VIEWS}>
           {(option) => (

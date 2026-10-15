@@ -1,0 +1,23 @@
+.prosePartCheckVariantOn {
+  composes: prosepartcheckvarianton from '../../styles/shared/display/markdown.module.css';
+}
+
+.prosePartDone {
+  composes: prosepartdone from '../../styles/shared/display/markdown.module.css';
+}
+
+.prosePartCheck {
+  composes: prosepartcheck from '../../styles/shared/display/markdown.module.css';
+}
+
+.prosePartTask {
+  composes: proseparttask from '../../styles/shared/display/markdown.module.css';
+}
+
+.prosePartRow {
+  composes: prosepartrow from '../../styles/shared/extensions/markdown.module.css';
+}
+
+.prosePartTable {
+  composes: proseparttable from '../../styles/shared/display/markdown.module.css';
+}

@@ -115,10 +115,10 @@ export const createFloating = (
     if (!placed) return undefined;
     return {
       position: 'fixed',
-      left: `${placed.x}px`,
-      top: `${placed.y}px`,
-      right: 'auto',
-      bottom: 'auto',
+      left: `var(--floating-left, ${placed.x}px)`,
+      top: `var(--floating-top, ${placed.y}px)`,
+      right: 'var(--floating-right, auto)',
+      bottom: 'var(--floating-bottom, auto)',
       transform: 'none',
       margin: '0',
       ...(matchWidth && { width: `${Math.round(placed.anchorWidth)}px` }),

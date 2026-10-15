@@ -1,8 +1,18 @@
 import { type JSX, mergeProps, Show, splitProps } from 'solid-js';
 
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { type ElementTag, type HtmlProps, Polymorphic } from '../../utils/polymorphic';
 import { renderIcon } from './Glyph';
+import styles from './SectionLabel.module.css';
+import { Text } from './Text';
+import { typographyClass } from './typography';
+
+const SECTION_LABEL_CLASSES = {
+  secondary: styles.sectionLabelVariantSecondary,
+  brand: styles.sectionLabelVariantBrand,
+  sticky: styles.sectionLabelVariantSticky,
+} as const;
 
 export interface SectionLabelProps extends HtmlProps<HTMLElement> {
   /** @default 'div' */
@@ -23,19 +33,24 @@ export const SectionLabel = (props: SectionLabelProps) => {
   const [local, rest] = splitProps(merged, ['as', 'icon', 'end', 'tone', 'sticky', 'class', 'children']);
   return (
     <Polymorphic
+      {...rest}
       tag={local.as}
       class={cx(
-        'vui-section-label',
-        local.tone && `vui-section-label--${local.tone}`,
-        local.sticky && 'vui-section-label--sticky',
+        typographyClass('section'),
+        styles.sectionLabel,
+        local.tone && variantClass(SECTION_LABEL_CLASSES, local.tone),
+        local.sticky && styles.sectionLabelVariantSticky,
         local.class,
       )}
-      {...rest}
     >
       {renderIcon(local.icon)}
-      <span class="vui-section-label__text">{local.children}</span>
+      <Text as="span" variant="section" tone="inherit" class={styles.sectionLabelPartText}>
+        {local.children}
+      </Text>
       <Show when={local.end != null}>
-        <span class="vui-section-label__end">{local.end}</span>
+        <Text as="span" variant="label-sm" tone="inherit" class={styles.sectionLabelPartEnd}>
+          {local.end}
+        </Text>
       </Show>
     </Polymorphic>
   );

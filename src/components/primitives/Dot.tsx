@@ -1,8 +1,17 @@
 import { mergeProps, splitProps } from 'solid-js';
 
-import { cx, modifier } from '../../utils/cx';
+import { variantClass } from '../../utils/cssModule';
+import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
 import type { Tone } from '../../utils/tone';
+import styles from './Dot.module.css';
+
+const DOT_CLASSES = {
+  sm: styles.dotVariantSm,
+  lg: styles.dotVariantLg,
+  ring: styles.dotVariantRing,
+  pulse: styles.dotVariantPulse,
+} as const;
 
 export interface DotProps extends HtmlProps<HTMLSpanElement> {
   /** @default 'neutral' */
@@ -24,10 +33,10 @@ export const Dot = (props: DotProps) => {
   return (
     <span
       class={cx(
-        'vui-dot',
-        modifier('vui-dot', local.size, 'md'),
-        local.pulse && 'vui-dot--pulse',
-        local.ring && 'vui-dot--ring',
+        styles.dot,
+        variantClass(DOT_CLASSES, local.size, 'md'),
+        local.pulse && styles.dotVariantPulse,
+        local.ring && styles.dotVariantRing,
         local.class,
       )}
       data-tone={local.tone}

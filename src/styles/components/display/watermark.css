@@ -1,3 +1,0 @@
-/* Watermark */
-.vui-watermark{position:relative;isolation:isolate}
-.vui-watermark__layer{position:absolute;inset:0;z-index:var(--z-raised);pointer-events:none;user-select:none;background:var(--fg-primary);-webkit-mask-repeat:repeat;mask-repeat:repeat}

@@ -1,0 +1,22 @@
+.navSection {
+  padding: var(--space-3) var(--space-2-5) var(--space-1-5);
+  white-space: nowrap;
+}
+
+.navSection:first-child {
+  padding-top: var(--space-1);
+}
+
+.navSection[data-collapsed='true'] {
+  width: 24px;
+  height: var(--border-width);
+  margin: var(--space-2) auto;
+  padding: 0;
+  overflow: hidden;
+  color: transparent;
+  background: var(--border-default);
+}
+
+.navSection[data-collapsed='true']:first-child {
+  margin-top: var(--space-0-5);
+}

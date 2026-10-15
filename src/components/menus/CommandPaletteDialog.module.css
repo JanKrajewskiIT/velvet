@@ -1,0 +1,119 @@
+:import('../../styles/shared/primitives/glyph.module.css') {
+  externalIcon: icon;
+}
+
+.cmdk {
+  composes: cmdk from '../../styles/shared/menus/command-palette.module.css';
+}
+
+.cmdkPartSearch {
+  flex: none;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2-5);
+  height: var(--row-height-lg);
+  min-height: var(--row-height-lg);
+  padding: 0 var(--space-4);
+  border-bottom: var(--border-width) solid var(--border-subtle);
+  color: var(--fg-tertiary);
+}
+
+.cmdkPartSearch input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  outline: 0;
+  background: none;
+  color: var(--fg-primary);
+}
+
+.cmdkPartSearch input::placeholder {
+  color: var(--fg-tertiary);
+}
+
+.cmdkPartList {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-1-5);
+  position: relative;
+}
+
+.cmdkPartGroup {
+  padding: var(--space-2-5) var(--space-2-5) var(--space-1-5);
+}
+
+.cmdkPartItem {
+  min-height: var(--control-height-md);
+}
+
+.cmdkPartGo {
+  --glyph-size: var(--type-body-size);
+  --glyph-color: var(--fg-tertiary);
+}
+
+.cmdkPartEmpty {
+  padding: var(--space-10) var(--space-4);
+}
+
+.cmdkPartKey {
+  --kbd-bg: var(--bg-sunken);
+  --kbd-fg: var(--fg-tertiary);
+}
+
+.cmdkPartFoot {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3-5);
+  padding: var(--space-3) var(--space-4);
+  border-top: var(--border-width) solid var(--border-subtle);
+  color: var(--fg-tertiary);
+}
+
+.cmdkPartFoot span {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1-5);
+}
+
+.cmdkPartFoot .cmdkPartKey {
+  --kbd-height: var(--kbd-height-sm);
+}
+
+.cmdkPartCount {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (width <= 639px) {
+  .cmdk {
+    max-height: calc(100vh - var(--viewport-margin));
+  }
+
+  .cmdkPartFoot {
+    display: none;
+  }
+}
+
+.cmdkPartSearch > :global(.externalIcon) {
+  --glyph-size: var(--type-h4-size);
+
+  flex: none;
+}
+
+.dialogBackdrop {
+  composes: dialogbackdrop from '../../styles/shared/feedback/dialog.module.css';
+}
+
+.dialogBackdropVariantTop {
+  composes: dialogbackdropvarianttop from '../../styles/shared/menus/command-palette.module.css';
+}
+
+.menuPartItem {
+  composes: menupartitem from '../../styles/shared/primitives/option.module.css';
+}
+
+.menuPartItemVariantActive {
+  composes: menupartitemvariantactive from '../../styles/shared/primitives/option.module.css';
+}

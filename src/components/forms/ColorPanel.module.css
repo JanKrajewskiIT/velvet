@@ -1,0 +1,113 @@
+.color {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 232px;
+}
+
+.colorPartArea {
+  position: relative;
+  height: 150px;
+  border-radius: var(--radius-md);
+  background-image:
+    linear-gradient(to top, var(--black), transparent), linear-gradient(to right, var(--white), transparent);
+  cursor: crosshair;
+  touch-action: none;
+  background-blend-mode: normal;
+}
+
+.colorPartArea::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(to right, var(--white), var(--on-color-subtle));
+}
+
+.colorPartArea::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(to top, var(--black), color-mix(in oklab, var(--black) 0%, transparent));
+  box-shadow: var(--swatch-ring);
+}
+
+.colorPartThumb,
+.colorPartHthumb {
+  position: absolute;
+  z-index: 1;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: var(--border-width-thick) solid var(--white);
+  box-shadow:
+    0 0 0 var(--border-width) color-mix(in oklab, var(--black) 25%, transparent),
+    var(--elevation-card);
+  transform: translate(-50%, -50%);
+  outline: 0;
+}
+
+.colorPartThumb:focus-visible,
+.colorPartHthumb:focus-visible {
+  box-shadow:
+    0 0 0 var(--border-width) color-mix(in oklab, var(--black) 25%, transparent),
+    var(--focus-ring);
+}
+
+.colorPartHue {
+  position: relative;
+  height: 12px;
+  margin: 0 var(--space-2);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  touch-action: none;
+}
+
+.colorPartHue::before {
+  content: '';
+  position: absolute;
+  inset: 0 -8px;
+  border-radius: inherit;
+  background: linear-gradient(to right, red, #ff0, lime, cyan, blue, #f0f, red);
+}
+
+.colorPartHthumb {
+  top: 50%;
+}
+
+.colorPartRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.colorPartPreview {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--swatch-ring);
+}
+
+.colorPartHex {
+  text-transform: uppercase;
+}
+
+.colorPartSwatches {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: var(--space-1-5);
+}
+
+.controlPartAffix {
+  composes: controlpartaffix from '../../styles/shared/primitives/control.module.css';
+}
+
+.swatch {
+  composes: swatch from '../../styles/shared/primitives/swatch.module.css';
+}
+
+.swatchVariantFill {
+  composes: swatchvariantfill from '../../styles/shared/primitives/swatch.module.css';
+}

@@ -2,11 +2,14 @@ import { For, Show } from 'solid-js';
 
 import { createFrameFocus } from '../../hooks/createFrameFocus';
 import { useTranslate } from '../../i18n/useTranslate';
+import { classSelector } from '../../utils/cssModule';
 import { fmtDate } from '../../utils/date';
 import { EmptyText } from '../primitives/EmptyText';
+import { Text } from '../primitives/Text';
 import type { OrganizerCalendar } from './createOrganizerCalendar';
 import type { OrganizerDrag } from './createOrganizerDrag';
 import type { OrganizerEditing } from './createOrganizerEditing';
+import styles from './OrganizerDayPanel.module.css';
 import { OrganizerEventForm } from './OrganizerEventForm';
 import { OrganizerEventRow } from './OrganizerEventRow';
 import type { OrganizerEvent } from './organizerEvents';
@@ -32,7 +35,7 @@ export const OrganizerDayPanel = (props: OrganizerDayPanelProps) => {
   const focusAfterRender = createFrameFocus(() => panel);
   const removeEvent = (event: OrganizerEvent) => {
     props.editing.deleteEvent(event);
-    focusAfterRender('.vui-organizer__evb, .vui-organizer__add input');
+    focusAfterRender(`${classSelector(styles.organizerPartEvb)}, ${classSelector(styles.organizerPartAdd)} input`);
   };
   const cancelDelete = (event: OrganizerEvent) => {
     props.editing.cancelDelete();
@@ -43,25 +46,29 @@ export const OrganizerDayPanel = (props: OrganizerDayPanelProps) => {
       ref={(element) => {
         panel = element;
       }}
-      class="vui-organizer__panel"
+      class={styles.organizerPartPanel}
       aria-live="polite"
     >
-      <div class="vui-organizer__pday">
+      <Text as="div" variant="section" tone="inherit" class={styles.organizerPartPday}>
         {fmtDate(props.calendar.selected(), props.calendar.locale(), { weekday: 'long' })}
-      </div>
-      <div class="vui-organizer__pdate">
+      </Text>
+      <Text as="div" variant="h3" class={styles.organizerPartPdate}>
         {fmtDate(props.calendar.selected(), props.calendar.locale(), { month: 'long', day: 'numeric' })}
-      </div>
+      </Text>
       <Show
         when={props.events.length > 0}
         fallback={
-          <EmptyText icon="sun" class="vui-organizer__empty">
-            <b>{translate('velvet.patterns.calendarOrganizer.emptyTitle')}</b>
-            <span>{translate('velvet.patterns.calendarOrganizer.emptyDescription')}</span>
+          <EmptyText icon="sun" class={styles.organizerPartEmpty}>
+            <Text as="b" variant="label" tone="inherit">
+              {translate('velvet.patterns.calendarOrganizer.emptyTitle')}
+            </Text>
+            <Text as="span" variant="body-sm" tone="inherit">
+              {translate('velvet.patterns.calendarOrganizer.emptyDescription')}
+            </Text>
           </EmptyText>
         }
       >
-        <ul class="vui-organizer__list">
+        <ul class={styles.organizerPartList}>
           <For each={props.events}>
             {(event) => (
               <Show

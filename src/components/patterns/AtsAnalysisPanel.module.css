@@ -1,0 +1,58 @@
+.atsPartHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2-5);
+  min-height: var(--hit-target-min);
+  padding: 0 var(--space-4);
+  border-bottom: var(--border-width) solid var(--border-subtle);
+  background: var(--bg-subtle);
+}
+
+.atsPartPair {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+
+  --glyph-size: var(--type-body-sm-size);
+  --glyph-color: var(--fg-tertiary);
+}
+
+.atsPartPair b {
+  color: var(--fg-primary);
+}
+
+.atsPartState {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3-5);
+  padding: var(--space-7) var(--space-5);
+}
+
+.atsPartState > div {
+  flex: 1;
+  min-width: 0;
+}
+
+.atsPartState p {
+  margin: var(--space-1) 0 0;
+  color: var(--fg-secondary);
+}
+
+.aiPartProv {
+  composes: aipartprov from '../../styles/shared/patterns/ai-result-panel.module.css';
+}
+
+.ats {
+  composes: ats from '../../styles/shared/patterns/ats-analysis.module.css';
+}
+
+.atsPartBody {
+  composes: atspartbody from '../../styles/shared/patterns/ats-analysis.module.css';
+}
+
+.atsPartHero {
+  composes: atsparthero from '../../styles/shared/patterns/ats-analysis.module.css';
+}

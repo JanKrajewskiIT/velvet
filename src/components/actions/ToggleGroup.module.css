@@ -1,0 +1,45 @@
+:import('../../styles/shared/actions/toggle.module.css') {
+  externalToggle: toggle;
+}
+
+.togglegroup {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.togglegroupVariantAttached {
+  gap: 0;
+  isolation: isolate;
+}
+
+.togglegroupVariantAttached > :global(.externalToggle) {
+  position: relative;
+  border-radius: 0;
+}
+
+.togglegroupVariantAttached > :global(.externalToggle) + :global(.externalToggle) {
+  margin-left: calc(var(--border-width) * -1);
+}
+
+.togglegroupVariantAttached > :global(.externalToggle):first-child {
+  border-start-start-radius: var(--toggle-radius, var(--button-radius));
+  border-end-start-radius: var(--toggle-radius, var(--button-radius));
+}
+
+.togglegroupVariantAttached > :global(.externalToggle):last-child {
+  border-start-end-radius: var(--toggle-radius, var(--button-radius));
+  border-end-end-radius: var(--toggle-radius, var(--button-radius));
+}
+
+.togglegroupVariantAttached > :global(.externalToggle):hover {
+  z-index: 1;
+}
+
+.togglegroupVariantAttached > :global(.externalToggle)[aria-pressed='true'] {
+  z-index: 2;
+}
+
+.toggle {
+  composes: toggle from '../../styles/shared/actions/toggle.module.css';
+}

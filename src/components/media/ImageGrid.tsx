@@ -1,10 +1,18 @@
 import { createMemo, createSignal, For, type JSX, mergeProps, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
-import { cx, modifier } from '../../utils/cx';
+import { variantClass } from '../../utils/cssModule';
+import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import styles from './ImageGrid.module.css';
 import { Lightbox } from './Lightbox';
 import { type LightboxImage, thumbUrl } from './lightboxImage';
+
+const IMGGRID_CLASSES = {
+  feature: styles.imggridVariantFeature,
+  masonry: styles.imggridVariantMasonry,
+} as const;
 
 const FEATURE_TILES = 3;
 const CLOSED = -1;
@@ -70,31 +78,37 @@ export const ImageGrid = (props: ImageGridProps) => {
 
   return (
     <>
-      <div class={cx('vui-imggrid', modifier('vui-imggrid', p.layout, 'uniform'), p.class)} style={gridStyle()}>
+      <div class={cx(styles.imggrid, variantClass(IMGGRID_CLASSES, p.layout, 'uniform'), p.class)} style={gridStyle()}>
         <For each={shown()}>
           {(image, k) => {
             const isLast = () => extra() > 0 && k() === shown().length - 1;
             return (
               <button
                 type="button"
-                class="vui-imggrid__item"
+                class={styles.imggridPartItem}
                 style={tileStyle(image)}
                 aria-label={tileLabel(image, k(), isLast())}
                 onClick={() => p.lightbox && setOpen(k())}
               >
                 <img src={thumbUrl(image)} alt={image.alt || ''} loading="lazy" />
-                <Show when={image.badge}>{(badge) => <span class="vui-imggrid__badge">{badge()}</span>}</Show>
+                <Show when={image.badge}>
+                  {(badge) => (
+                    <Text as="span" variant="label-sm" tone="primary" class={styles.imggridPartBadge}>
+                      {badge()}
+                    </Text>
+                  )}
+                </Show>
                 <Show
                   when={isLast()}
                   fallback={
-                    <span class="vui-imggrid__zoom" aria-hidden="true">
+                    <span class={styles.imggridPartZoom} aria-hidden="true">
                       <Glyph name="maximize" />
                     </span>
                   }
                 >
-                  <span class="vui-imggrid__more" aria-hidden="true">
+                  <Text as="span" variant="title-lg" class={styles.imggridPartMore} aria-hidden="true">
                     +{extra()}
-                  </span>
+                  </Text>
                 </Show>
               </button>
             );

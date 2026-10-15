@@ -1,6 +1,7 @@
 import type { JSX } from 'solid-js';
 
 import { cx } from '../../utils/cx';
+import styles from './ToastRegion.module.css';
 
 export interface ToastRegionProps {
   class?: string;
@@ -9,7 +10,7 @@ export interface ToastRegionProps {
 
 /** Fixed bottom-right stack (full-width bottom on mobile). A polite live region; new toasts spring in. */
 export const ToastRegion = (props: ToastRegionProps) => (
-  <div class={cx('vui-toast-region', props.class)} aria-live="polite">
+  <div class={cx(styles.toastRegion, props.class)} aria-live="polite">
     {props.children}
   </div>
 );

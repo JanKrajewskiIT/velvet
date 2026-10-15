@@ -1,0 +1,205 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--button-gap);
+  height: var(--control-height-md);
+  padding: 0 var(--button-px);
+  border: var(--border-width) solid transparent;
+  border-radius: var(--button-radius);
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+  transition:
+    var(--transition-colors),
+    transform var(--motion-instant);
+}
+
+.btn:focus-visible {
+  outline: var(--button-context-focus-outline, none);
+  box-shadow: var(--button-context-focus-shadow, var(--focus-ring));
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(var(--motion-nudge));
+}
+
+.btn:disabled,
+.btn[aria-disabled='true'] {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+
+.btnVariantSm {
+  height: var(--control-height-sm);
+  padding: 0 var(--button-px-sm);
+  border-radius: var(--button-radius-sm);
+  gap: var(--space-1-5);
+}
+
+.btnVariantLg {
+  height: var(--control-height-lg);
+  padding: 0 var(--button-px-lg);
+}
+
+.btnVariantBlock {
+  width: 100%;
+}
+
+.btnVariantPrimary {
+  background: var(--button-primary-bg);
+  color: var(--button-primary-fg);
+  box-shadow: var(--button-primary-shadow);
+}
+
+.btnVariantPrimary:hover:not(:disabled) {
+  background: var(--button-primary-bg-hover);
+}
+
+.btnVariantPrimary:active:not(:disabled) {
+  background: var(--button-primary-bg-active);
+}
+
+.btnVariantSecondary {
+  background: var(--button-secondary-bg);
+  color: var(--button-secondary-fg);
+  border-color: var(--button-secondary-border);
+  box-shadow: var(--elevation-control);
+}
+
+.btnVariantSecondary:hover:not(:disabled) {
+  background: var(--button-secondary-bg-hover);
+  border-color: var(--button-secondary-border-hover);
+}
+
+.btnVariantSoft {
+  background: var(--button-soft-bg);
+  color: var(--button-soft-fg);
+}
+
+.btnVariantSoft:hover:not(:disabled) {
+  background: var(--button-soft-bg-hover);
+}
+
+.btnVariantGhost {
+  background: transparent;
+  color: var(--button-context-ghost-fg, var(--button-ghost-fg));
+}
+
+.btnVariantGhost:hover:not(:disabled),
+.btnVariantGhost[aria-expanded='true'] {
+  background: var(--button-context-ghost-bg-hover, var(--button-ghost-bg-hover));
+}
+
+.btnVariantGhost:active:not(:disabled) {
+  background: var(--button-context-ghost-bg-active, var(--button-ghost-bg-active));
+}
+
+.btnVariantDanger {
+  background: var(--button-danger-bg);
+  color: var(--button-danger-fg);
+}
+
+.btnVariantDanger:hover:not(:disabled) {
+  background: var(--button-danger-bg-hover);
+}
+
+.btnVariantDashed {
+  background: transparent;
+  color: var(--fg-secondary);
+  border-style: dashed;
+  border-color: var(--border-strong);
+}
+
+.btnVariantDashed:hover:not(:disabled) {
+  color: var(--fg-brand);
+  border-color: var(--border-brand);
+  background: var(--bg-brand-subtle);
+}
+
+.btnVariantDashed:active:not(:disabled) {
+  background: var(--bg-selected);
+}
+
+.btnVariantDashed.btnVariantBlock {
+  justify-content: flex-start;
+}
+
+.btnVariantLink {
+  background: none;
+  height: auto;
+  padding: 0;
+  color: var(--fg-link);
+  border-radius: var(--radius-xs);
+}
+
+.btnVariantLink:hover:not(:disabled) {
+  color: var(--fg-link-hover);
+  text-decoration: underline;
+  text-underline-offset: var(--underline-offset);
+}
+
+.btnVariantIcon {
+  padding: 0;
+  width: var(--control-height-md);
+}
+
+.btnVariantIcon.btnVariantSm {
+  width: var(--control-height-sm);
+}
+
+.btnVariantXs {
+  height: var(--control-height-xs);
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-xs);
+  gap: var(--space-1);
+
+  --glyph-size: var(--size-icon-sm);
+}
+
+.btnVariantIcon.btnVariantXs {
+  width: var(--control-height-xs);
+}
+
+.btnVariantIcon.btnVariantLg {
+  width: var(--control-height-lg);
+}
+
+.btnVariantCircle {
+  border-radius: var(--radius-full);
+}
+
+.btnVariantRaised {
+  background: var(--bg-overlay);
+  color: var(--fg-primary);
+  border-color: var(--border-subtle);
+  box-shadow: var(--elevation-popover);
+}
+
+.btnVariantRaised:hover:not(:disabled) {
+  background: var(--bg-raised);
+  box-shadow: var(--elevation-raised);
+}
+
+.btnVariantOverlay {
+  background: var(--on-color-hover);
+  color: var(--on-color-fg);
+}
+
+.btnVariantOverlay:hover:not(:disabled) {
+  background: var(--on-color-pressed);
+}
+
+.btnVariantOverlay:focus-visible {
+  box-shadow: 0 0 0 var(--border-width-thick) var(--on-color-fg);
+}
+
+.btnVariantGhost[aria-pressed='true'] {
+  background: var(--bg-selected);
+  color: var(--fg-brand);
+}
+
+.btnVariantOverlay[aria-pressed='true'] {
+  background: var(--on-color-pressed);
+}

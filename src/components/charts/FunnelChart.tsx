@@ -4,8 +4,11 @@ import { createMemo, createSignal, For, mergeProps, Show } from 'solid-js';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { seriesColor } from './chartScale';
 import { createChartFormat } from './createChartFormat';
+import styles from './FunnelChart.module.css';
 
 const MAX_STEP_FADE = 14;
 const TOTAL_FADE = 56;
@@ -80,22 +83,22 @@ export const FunnelChart = (props: FunnelChartProps) => {
   };
 
   return (
-    <div class={cx('vui-funnel', merged.class)} role="list" aria-label={label()}>
+    <div class={cx(typographyClass('body'), styles.funnel, merged.class)} role="list" aria-label={label()}>
       <For each={steps()}>
         {(step) => (
           <>
             <Show when={merged.showConversion && step.index > 0}>
-              <div class="vui-funnel__conv" aria-hidden="true">
+              <div class={styles.funnelPartConv} aria-hidden="true">
                 <span>
-                  <b>
+                  <Text as="b" variant="label-sm" tone="inherit">
                     <Glyph name="arrow-down" />
                     {percent(step.conversion ?? 0)}
-                  </b>
-                  <small>
+                  </Text>
+                  <Text as="small" variant="caption" tone="inherit">
                     {translate('velvet.charts.funnelChart.dropOff', {
                       value: format(Math.max(0, (step.previousValue ?? 0) - step.value)),
                     })}
-                  </small>
+                  </Text>
                 </span>
               </div>
             </Show>
@@ -104,8 +107,8 @@ export const FunnelChart = (props: FunnelChartProps) => {
               // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- each step is focusable so keyboard users get the same highlight and spoken label as hover
               tabindex={0}
               class={cx(
-                'vui-funnel__row',
-                highlighted() >= 0 && highlighted() !== step.index && 'vui-funnel__row--dim',
+                styles.funnelPartRow,
+                highlighted() >= 0 && highlighted() !== step.index && styles.funnelPartRowVariantDim,
               )}
               aria-label={stepLabel(step)}
               onMouseEnter={() => setHighlighted(step.index)}
@@ -113,13 +116,18 @@ export const FunnelChart = (props: FunnelChartProps) => {
               onFocus={() => setHighlighted(step.index)}
               onBlur={() => setHighlighted(-1)}
             >
-              <span class="vui-funnel__label">{step.datum.label}</span>
-              <span class="vui-funnel__track">
+              <Text as="span" variant="label" class={styles.funnelPartLabel}>
+                {step.datum.label}
+              </Text>
+              <span class={styles.funnelPartTrack}>
                 <Show when={step.previousValue !== null}>
-                  <span class="vui-funnel__ghost" style={{ width: `${((step.previousValue ?? 0) / max()) * 100}%` }} />
+                  <span
+                    class={styles.funnelPartGhost}
+                    style={{ width: `${((step.previousValue ?? 0) / max()) * 100}%` }}
+                  />
                 </Show>
                 <span
-                  class="vui-funnel__bar"
+                  class={styles.funnelPartBar}
                   style={{
                     width: `${Math.max(0.5, (step.value / max()) * 100)}%`,
                     background: `color-mix(in oklab, ${step.datum.color ?? merged.color} ${100 - step.index * fade()}%, var(--bg-raised))`,
@@ -127,10 +135,14 @@ export const FunnelChart = (props: FunnelChartProps) => {
                   }}
                 />
               </span>
-              <span class="vui-funnel__val">
-                <b>{format(step.value)}</b>
-                <small>{step.index ? percent(step.ofFirst) : '100%'}</small>
-              </span>
+              <Text as="span" variant="body" class={styles.funnelPartVal}>
+                <Text as="b" variant="title" tone="inherit" tabular>
+                  {format(step.value)}
+                </Text>
+                <Text as="small" variant="caption" tone="inherit">
+                  {step.index ? percent(step.ofFirst) : '100%'}
+                </Text>
+              </Text>
             </div>
           </>
         )}

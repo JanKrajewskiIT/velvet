@@ -5,6 +5,7 @@ import { createRecordKeys } from '../../hooks/createRecordKeys';
 import { createRowIdentity } from '../../hooks/createRowIdentity';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { typographyClass } from '../primitives/typography';
 import { createTableExpansion } from './createTableExpansion';
 import { createTableKeyboard } from './createTableKeyboard';
 import { createTablePins } from './createTablePins';
@@ -12,6 +13,7 @@ import { createTableSelection } from './createTableSelection';
 import { createTableSort } from './createTableSort';
 import { createTableWidths } from './createTableWidths';
 import { cssLength, type RowKey } from './rowData';
+import styles from './Table.module.css';
 import { TableBulkBar } from './TableBulkBar';
 import type { TableController } from './tableController';
 import { TableHeaderRow } from './TableHeaderRow';
@@ -102,7 +104,7 @@ export const Table = <T extends object>(props: TableProps<T>): JSX.Element => {
     p.maxHeight ? { 'max-height': cssLength(p.maxHeight), 'overflow-y': 'auto' } : undefined;
 
   return (
-    <div class={cx('vui-table-wrap', p.class)}>
+    <div class={cx(styles.tableWrap, p.class)}>
       <TableToolbar table={table} />
       <TableBulkBar table={table} />
       <div
@@ -111,19 +113,20 @@ export const Table = <T extends object>(props: TableProps<T>): JSX.Element => {
         }}
         onScroll={pins.updateScrolled}
         class={cx(
-          'vui-table__scroll',
-          pins.scrolled().left && 'vui-table__scroll--l',
-          pins.scrolled().right && 'vui-table__scroll--r',
+          styles.tablePartScroll,
+          pins.scrolled().left && styles.tablePartScrollVariantL,
+          pins.scrolled().right && styles.tablePartScrollVariantR,
         )}
         style={scrollStyle()}
       >
         <table
           class={cx(
-            'vui-table',
-            sticky() && 'vui-table--sticky',
-            widths.anyWidth() && 'vui-table--fixed',
-            p.layout === 'fixed' && 'vui-table--layout-fixed',
-            pins.hasPins() && 'vui-table--pins',
+            typographyClass('body'),
+            styles.table,
+            sticky() && styles.tableVariantSticky,
+            widths.anyWidth() && styles.tableVariantFixed,
+            p.layout === 'fixed' && styles.tableVariantLayoutFixed,
+            pins.hasPins() && styles.tableVariantPins,
           )}
           aria-busy={p.loading || undefined}
         >
@@ -145,8 +148,8 @@ export const Table = <T extends object>(props: TableProps<T>): JSX.Element => {
             <Show when={!p.loading}>
               <For each={sort.sorted()}>{(row, i) => <TableRow table={table} row={row} index={i()} />}</For>
               <Show when={p.rows.length === 0}>
-                <tr>
-                  <td class="vui-table__empty" colSpan={span()}>
+                <tr class={styles.row}>
+                  <td class={styles.tablePartEmpty} colSpan={span()}>
                     {empty()}
                   </td>
                 </tr>

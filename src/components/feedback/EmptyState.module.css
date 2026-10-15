@@ -1,0 +1,47 @@
+.empty {
+  composes: empty from '../../styles/shared/feedback/empty-state.module.css';
+}
+
+.emptyVariantSm {
+  composes: emptyvariantsm from '../../styles/shared/feedback/empty-state.module.css';
+}
+
+.emptyVariantLg {
+  composes: emptyvariantlg from '../../styles/shared/feedback/empty-state.module.css';
+}
+
+.toneVariantWarning {
+  composes: tonevariantwarning from '../../styles/shared/feedback/status-page.module.css';
+}
+
+.toneVariantDanger {
+  composes: tonevariantdanger from '../../styles/shared/feedback/status-page.module.css';
+}
+
+.toneVariantInfo {
+  composes: tonevariantinfo from '../../styles/shared/feedback/status-page.module.css';
+}
+
+.toneVariantNeutral {
+  composes: tonevariantneutral from '../../styles/shared/feedback/status-page.module.css';
+}
+
+.emptyPartText {
+  composes: emptyparttext from '../../styles/shared/feedback/empty-state.module.css';
+}
+
+.emptyPartTitle {
+  composes: emptyparttitle from '../../styles/shared/feedback/empty-state.module.css';
+}
+
+.emptyPartDesc {
+  composes: emptypartdesc from '../../styles/shared/feedback/empty-state.module.css';
+}
+
+.emptyPartActions {
+  composes: emptypartactions from '../../styles/shared/feedback/empty-state.module.css';
+}
+
+.statusPagePartExtra {
+  composes: statuspagepartextra from '../../styles/shared/feedback/status-page.module.css';
+}

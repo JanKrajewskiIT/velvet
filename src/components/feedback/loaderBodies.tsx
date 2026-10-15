@@ -1,6 +1,9 @@
-import { Index, type JSX, Match, Switch } from 'solid-js';
+import { Index, type JSX } from 'solid-js';
 
 import { LoaderBike } from './LoaderBike';
+import styles from './loaderBodies.module.css';
+import { LoaderShapeTrail } from './LoaderShapeTrail';
+import { LoaderSpans } from './LoaderSpans';
 
 export type LoaderShape = 'circle' | 'triangle' | 'square';
 
@@ -64,21 +67,6 @@ const RIPPLE_DELAYS = ['-0.3s', '-0.1s', '0.1s', '0.3s', '0.5s'] as const;
 const FOUR = [0, 1, 2, 3] as const;
 const SHUFFLE_CELLS = Array.from({ length: 9 }, (_, i) => i);
 
-const Spans = (props: { count: readonly unknown[] }) => <Index each={props.count}>{() => <span />}</Index>;
-
-const ShapeTrail = (props: { shape: LoaderShape }) => (
-  <svg viewBox={props.shape === 'triangle' ? '0 0 86 80' : '0 0 80 80'} aria-hidden="true">
-    <Switch fallback={<circle cx="40" cy="40" r="32" />}>
-      <Match when={props.shape === 'triangle'}>
-        <polygon points="43 8 79 72 7 72" />
-      </Match>
-      <Match when={props.shape === 'square'}>
-        <rect x="8" y="8" width="64" height="64" />
-      </Match>
-    </Switch>
-  </svg>
-);
-
 /** Inner markup of each loader variant — the structure the loader stylesheet animates. */
 export const LOADER_BODIES = {
   bike: () => <LoaderBike />,
@@ -86,33 +74,37 @@ export const LOADER_BODIES = {
     <Index each={BOUNCE_DOTS}>
       {(dot) => (
         <>
-          <span class="d" style={{ '--l': dot()[0], '--dl': `${dot()[1]}s` }} />
-          <span class="s" style={{ '--l': dot()[0], '--dl': `${dot()[1]}s` }} />
+          <span class={styles.d} style={{ '--l': dot()[0], '--dl': `${dot()[1]}s` }} />
+          <span class={styles.s} style={{ '--l': dot()[0], '--dl': `${dot()[1]}s` }} />
         </>
       )}
     </Index>
   ),
-  'concentric-pulse': () => <Index each={CONCENTRIC_SIZES}>{(size) => <span style={{ '--sz': size() }} />}</Index>,
-  'corner-pulse': () => <Spans count={FOUR} />,
+  'concentric-pulse': () => (
+    <Index each={CONCENTRIC_SIZES}>{(size) => <span class={styles.part} style={{ '--sz': size() }} />}</Index>
+  ),
+  'corner-pulse': () => <LoaderSpans count={FOUR} />,
   'dual-plane': () => null,
-  ellipsis: () => <Spans count={FOUR} />,
-  equalizer: () => <Index each={EQUALIZER_DELAYS}>{(delay) => <span style={{ '--dl': delay() }} />}</Index>,
+  ellipsis: () => <LoaderSpans count={FOUR} />,
+  equalizer: () => (
+    <Index each={EQUALIZER_DELAYS}>{(delay) => <span class={styles.part} style={{ '--dl': delay() }} />}</Index>
+  ),
   honeycomb: () => (
     <Index each={HONEYCOMB}>
       {(cell) => (
-        <span class="g" style={{ '--x': `${cell()[0]}px`, '--y': `${cell()[1]}px`, '--dl': `${cell()[2]}s` }}>
-          <span class="h" />
-          <span class="h" />
-          <span class="h" />
+        <span class={styles.g} style={{ '--x': `${cell()[0]}px`, '--y': `${cell()[1]}px`, '--dl': `${cell()[2]}s` }}>
+          <span class={styles.h} />
+          <span class={styles.h} />
+          <span class={styles.h} />
         </span>
       )}
     </Index>
   ),
   'jelly-triangle': (context) => (
     <>
-      <span class="d" />
-      <span class="t" />
-      <svg width="0" height="0" aria-hidden="true">
+      <span class={styles.d} />
+      <span class={styles.t} />
+      <svg class={styles.filter} width="0" height="0" aria-hidden="true">
         <defs>
           <filter id={context.filterId}>
             <feGaussianBlur in="SourceGraphic" stdDeviation="7.3" result="blur" />
@@ -128,13 +120,19 @@ export const LOADER_BODIES = {
       </svg>
     </>
   ),
-  'orbit-squares': () => <Index each={ORBIT_DELAYS}>{(delay) => <span style={{ '--dl': `${delay()}s` }} />}</Index>,
-  'pulse-ring': () => (
-    <Index each={PULSE_RING_PHASES}>{(phase, i) => <span style={{ '--a': `${i * 45}deg`, '--f': phase() }} />}</Index>
+  'orbit-squares': () => (
+    <Index each={ORBIT_DELAYS}>{(delay) => <span class={styles.part} style={{ '--dl': `${delay()}s` }} />}</Index>
   ),
-  'ripple-dots': () => <Index each={RIPPLE_DELAYS}>{(delay) => <span style={{ '--dl': delay() }} />}</Index>,
-  'shape-trail': (context) => <ShapeTrail shape={context.shape} />,
-  'shuffle-grid': () => <Spans count={SHUFFLE_CELLS} />,
+  'pulse-ring': () => (
+    <Index each={PULSE_RING_PHASES}>
+      {(phase, i) => <span class={styles.part} style={{ '--a': `${i * 45}deg`, '--f': phase() }} />}
+    </Index>
+  ),
+  'ripple-dots': () => (
+    <Index each={RIPPLE_DELAYS}>{(delay) => <span class={styles.part} style={{ '--dl': delay() }} />}</Index>
+  ),
+  'shape-trail': (context) => <LoaderShapeTrail shape={context.shape} />,
+  'shuffle-grid': () => <LoaderSpans count={SHUFFLE_CELLS} />,
 } satisfies Record<string, (context: LoaderBodyContext) => JSX.Element>;
 
 /** Modifier class per variant (`vui-ld-<suffix>`). */

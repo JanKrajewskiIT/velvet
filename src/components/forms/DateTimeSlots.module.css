@@ -1,0 +1,56 @@
+.dtpopPartList {
+  flex: 1;
+  min-height: 0;
+  max-height: var(--overlay-max-h-sm);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-0-5);
+  padding-right: var(--space-0-5);
+  scrollbar-width: thin;
+}
+
+.dtpopPartSlot {
+  flex: none;
+  height: var(--control-height-sm);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--fg-primary);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition: var(--transition-colors);
+}
+
+.dtpopPartSlot:not(.dtpopPartSlotVariantOn):hover:not(:disabled) {
+  background: var(--bg-hover);
+}
+
+.dtpopPartSlot:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.dtpopPartSlotVariantOn,
+.dtpopPartSlotVariantOn:hover {
+  background: var(--action-primary);
+  color: var(--action-primary-fg);
+  font-weight: var(--type-title-weight);
+}
+
+.dtpopPartSlot:disabled {
+  color: var(--fg-disabled);
+  cursor: not-allowed;
+}
+
+@media (width <= 639px) {
+  .dtpopPartList {
+    flex-direction: row;
+    overflow-x: auto;
+    max-height: none;
+  }
+
+  .dtpopPartSlot {
+    padding: 0 var(--space-3);
+  }
+}

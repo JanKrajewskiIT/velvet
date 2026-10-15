@@ -1,15 +1,1 @@
-@import url('../components/patterns/dual-filter-bar.css');
-@import url('../components/patterns/import-sources.css');
-@import url('../components/patterns/file-url-import.css');
-@import url('../components/patterns/flashcards.css');
-@import url('../components/patterns/calendar-organizer.css');
-@import url('../components/patterns/color-label-manager.css');
-@import url('../components/patterns/comment-thread.css');
-@import url('../components/patterns/ai-result-panel.css');
-@import url('../components/patterns/pricing-table.css');
-@import url('../components/patterns/color-label-selection.css');
-@import url('../components/patterns/analysis-request.css');
-@import url('../components/patterns/ats-analysis.css');
-@import url('../components/patterns/filter-bar.css');
-@import url('../components/patterns/chat.css');
-@import url('../extensions/calendar-organizer.css');
+/* Component modules are packaged from their component directories. */

@@ -7,16 +7,29 @@ import { createFloating } from '../../hooks/createFloating';
 import { useTranslate } from '../../i18n/useTranslate';
 import { activeItemKey } from '../../utils/activeItem';
 import { createTypeahead } from '../../utils/createTypeahead';
-import { cx, modifier } from '../../utils/cx';
+import { variantClass } from '../../utils/cssModule';
+import { cx } from '../../utils/cx';
 import { Chevron } from '../primitives/Chevron';
 import { Field } from '../primitives/Field';
 import { Glyph, renderIcon } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { ComboboxOption } from './ComboboxOption';
 import { ComboboxOptionText } from './ComboboxOptionText';
 import { createFormValidation } from './createFormValidation';
 import type { FormControlProps } from './formControl';
 import { FormValue } from './FormValue';
+import styles from './Select.module.css';
 import { normalizeOption, type SelectOption } from './selectOption';
+
+const CONTROL_CLASSES = {
+  sm: styles.controlVariantSm,
+  lg: styles.controlVariantLg,
+  invalid: styles.controlVariantInvalid,
+  disabled: styles.controlVariantDisabled,
+  readonly: styles.controlVariantReadonly,
+  textarea: styles.controlVariantTextarea,
+} as const;
 
 const OPENING_KEYS = ['ArrowDown', 'ArrowUp', 'Enter', ' '];
 const NO_OPTIONS: ReadonlyArray<string | SelectOption> = [];
@@ -171,7 +184,7 @@ export const Select = (props: SelectProps) => {
   return (
     <Field label={p.label} hint={p.hint} error={p.error} optional={p.optional} required={p.required} id={id()}>
       {(control) => (
-        <div ref={setRoot} class="vui-select">
+        <div ref={setRoot} class={styles.select}>
           <button
             ref={(element) => {
               trigger = element;
@@ -190,24 +203,30 @@ export const Select = (props: SelectProps) => {
             aria-describedby={validation.describedBy(control.describedBy)}
             aria-invalid={control.invalid || validation.invalid() || undefined}
             class={cx(
-              'vui-control',
-              'vui-select__trigger',
-              modifier('vui-control', p.size, 'md'),
-              (control.invalid || validation.invalid()) && 'vui-control--invalid',
-              p.disabled && 'vui-control--disabled',
-              open() && 'vui-select__trigger--open',
+              typographyClass(p.size === 'sm' ? 'body-sm' : 'body'),
+              styles.control,
+              styles.selectPartTrigger,
+              variantClass(CONTROL_CLASSES, p.size, 'md'),
+              (control.invalid || validation.invalid()) && styles.controlVariantInvalid,
+              p.disabled && styles.controlVariantDisabled,
+              open() && styles.selectPartTriggerVariantOpen,
               p.class,
             )}
             onClick={() => (open() ? setOpen(false) : openList())}
             onKeyDown={onKeyDown}
           >
             <Show when={p.iconLeft}>
-              <span class="vui-control__adorn">{renderIcon(p.iconLeft)}</span>
+              <span class={styles.controlPartAdorn}>{renderIcon(p.iconLeft)}</span>
             </Show>
-            <span class={cx('vui-select__value', !selected() && 'vui-select__value--placeholder')}>
+            <Text
+              as="span"
+              variant="body"
+              tone="inherit"
+              class={cx(styles.selectPartValue, !selected() && styles.selectPartValueVariantPlaceholder)}
+            >
               {selected()?.label ?? p.placeholder ?? translate('velvet.forms.select.placeholder')}
-            </span>
-            <Chevron class="vui-select__chevron" />
+            </Text>
+            <Chevron class={styles.selectPartChevron} />
           </button>
           <FormValue
             validation={validation}
@@ -229,7 +248,7 @@ export const Select = (props: SelectProps) => {
               role="listbox"
               aria-label={p['aria-label']}
               aria-labelledby={p['aria-labelledby'] ?? (p.label ? `${id()}-label` : control.id)}
-              class={cx('vui-select__menu', floating.side() === 'top' && 'vui-select__menu--up')}
+              class={cx(styles.selectPartMenu, floating.side() === 'top' && styles.selectPartMenuVariantUp)}
               style={floating.style()}
             >
               <For each={options()}>
@@ -245,7 +264,7 @@ export const Select = (props: SelectProps) => {
                     {renderIcon(option.icon)}
                     <ComboboxOptionText label={option.label} description={option.description} />
                     <Show when={option.value === current()}>
-                      <Glyph name="check" class="vui-select__check" />
+                      <Glyph name="check" class={styles.selectPartCheck} />
                     </Show>
                   </ComboboxOption>
                 )}

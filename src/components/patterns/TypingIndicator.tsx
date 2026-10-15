@@ -1,5 +1,6 @@
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import styles from './TypingIndicator.module.css';
 
 export interface TypingIndicatorProps {
   /** @default localized "Assistant is typing" */
@@ -12,7 +13,7 @@ export const TypingIndicator = (props: TypingIndicatorProps) => {
   const translate = useTranslate();
   return (
     <span
-      class={cx('vui-chat-typing', props.class)}
+      class={cx(styles.chatTyping, props.class)}
       role="status"
       aria-label={props.label ?? translate('velvet.patterns.typingIndicator.label')}
     >

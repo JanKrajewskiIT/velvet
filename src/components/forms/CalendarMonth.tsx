@@ -4,8 +4,11 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { addMonths, fmtDate, sameDay } from '../../utils/date';
 import { IconButton } from '../actions/IconButton';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { Weekday } from '../primitives/Weekday';
 import { monthGrid } from './calendarGrid';
+import styles from './CalendarMonth.module.css';
 import type { CalendarController } from './createCalendar';
 
 export interface CalendarMonthProps {
@@ -23,9 +26,9 @@ export const CalendarMonth = (props: CalendarMonthProps) => {
   const title = () => fmtDate(first(), calendar().locale(), MONTH_TITLE);
 
   return (
-    <div class="vui-cal__month">
-      <div class="vui-cal__head">
-        <Show when={props.index === 0} fallback={<span class="vui-cal__nav-sp" />}>
+    <div class={styles.calPartMonth}>
+      <div class={styles.calPartHead}>
+        <Show when={props.index === 0} fallback={<span class={styles.calPartNavSp} />}>
           <IconButton
             size="sm"
             icon="chevron-left"
@@ -34,10 +37,10 @@ export const CalendarMonth = (props: CalendarMonthProps) => {
             onClick={() => calendar().setView(addMonths(calendar().view(), -1))}
           />
         </Show>
-        <span class="vui-cal__title" aria-live="polite">
+        <Text as="span" variant="title" tone="inherit" class="vui-cal__title" aria-live="polite">
           {title()}
-        </span>
-        <Show when={props.index === calendar().months() - 1} fallback={<span class="vui-cal__nav-sp" />}>
+        </Text>
+        <Show when={props.index === calendar().months() - 1} fallback={<span class={styles.calPartNavSp} />}>
           <IconButton
             size="sm"
             icon="chevron-right"
@@ -47,10 +50,10 @@ export const CalendarMonth = (props: CalendarMonthProps) => {
           />
         </Show>
       </div>
-      <div role="grid" class="vui-cal__grid" aria-label={title()}>
+      <div role="grid" class={styles.calPartGrid} aria-label={title()}>
         <Index each={calendar().weekdays()}>
           {(name) => (
-            <Weekday class="vui-cal__wd" role="columnheader">
+            <Weekday class={styles.calPartWd} role="columnheader">
               {name()}
             </Weekday>
           )}
@@ -74,6 +77,7 @@ export const CalendarMonth = (props: CalendarMonthProps) => {
                 <button
                   type="button"
                   role="gridcell"
+                  data-vui-calendar-day
                   data-day={day().toDateString()}
                   tabIndex={tabStop() ? 0 : -1}
                   disabled={calendar().isOff(day())}
@@ -81,21 +85,24 @@ export const CalendarMonth = (props: CalendarMonthProps) => {
                   aria-current={isToday() ? 'date' : undefined}
                   aria-label={calendar().dayLabel().format(day())}
                   class={cx(
-                    'vui-cal__day',
-                    outside() && 'vui-cal__day--out',
-                    isToday() && 'vui-cal__day--today',
-                    selected() && 'vui-cal__day--sel',
-                    inRange() && 'vui-cal__day--in',
-                    isStart() && !!calendar().rangeEnd() && 'vui-cal__day--start',
-                    isEnd() && !!calendar().rangeStart() && 'vui-cal__day--end',
+                    typographyClass('body-sm'),
+                    styles.calPartDay,
+                    outside() && styles.calPartDayVariantOut,
+                    isToday() && styles.calPartDayVariantToday,
+                    selected() && styles.calPartDayVariantSel,
+                    inRange() && styles.calPartDayVariantIn,
+                    isStart() && !!calendar().rangeEnd() && styles.calPartDayVariantStart,
+                    isEnd() && !!calendar().rangeStart() && styles.calPartDayVariantEnd,
                   )}
                   onClick={() => calendar().pick(day())}
                   onMouseEnter={() => calendar().isRange() && calendar().setHover(day())}
                   onFocus={() => calendar().setFocus(day())}
                 >
-                  <span>{day().getDate()}</span>
+                  <Text as="span" variant={selected() || isToday() ? 'label' : 'body-sm'} tone="inherit">
+                    {day().getDate()}
+                  </Text>
                   <Show when={calendar().isMarked(day())}>
-                    <i class="vui-cal__mark" aria-hidden="true" />
+                    <i class={styles.calPartMark} aria-hidden="true" />
                   </Show>
                 </button>
               </Show>

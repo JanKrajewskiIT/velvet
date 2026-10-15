@@ -1,0 +1,236 @@
+.ld {
+  --ld-c: var(--action-primary);
+
+  flex: none;
+}
+
+.ldBike {
+  color: color-mix(in oklab, var(--ld-c) 34%, var(--fg-primary));
+}
+
+.ldBounce {
+  --ld-shadow: color-mix(in oklab, var(--fg-primary) 90%, transparent);
+
+  position: relative;
+  z-index: 1;
+  width: 200px;
+  height: 60px;
+}
+
+.ldConcentric {
+  --cs-surf: color-mix(in oklab, var(--bg-raised) 92%, var(--bg-brand-subtle));
+  --cs-dark: color-mix(in oklab, var(--ld-c) 16%, color-mix(in oklab, var(--black) 12%, transparent));
+  --cs-light: var(--bg-raised);
+
+  position: relative;
+  width: 96px;
+  height: 96px;
+}
+
+.ldCorner {
+  position: relative;
+  width: 3rem;
+  height: 3rem;
+  animation: vui-corner 2s linear infinite;
+}
+
+.ldDualplane {
+  --dp: 80px;
+
+  position: relative;
+  width: var(--dp);
+  height: var(--dp);
+
+  --dp-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 266 297'%3E%3Cpath d='M171.507813 3.25000038C226.208183 12.8577111 297.112722 71.4912823 250.895599 108.410155C216.582024 135.82031 186.528405 97.0624964 156.800774 85.7734346C127.073143 74.4843721 76.8884632 84.2161462 60.1289065 108.410153C-15.9804685 218.281247 145.277344 296.667968 145.277344 296.667968C145.277344 296.667968 -25.4492187 257.242198 3.3984375 108.410155C16.3070661 41.8114174 84.7275829 -11.9922985 171.507813 3.25000038Z'/%3E%3C/svg%3E");
+}
+
+.ldDualplane::before,
+.ldDualplane::after {
+  box-sizing: border-box;
+  content: '';
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--dp);
+  height: var(--dp);
+  margin-top: calc(var(--dp) / -2);
+  margin-left: calc(var(--dp) / -2);
+  transform-style: preserve-3d;
+  transform-origin: 50%;
+  perspective-origin: 50% 50%;
+  perspective: 340px;
+  background-color: var(--ld-c);
+  mask-image: var(--dp-mask);
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+}
+
+.ldDualplane::before {
+  transform: rotateX(60deg) rotateY(45deg) rotateZ(45deg);
+  animation: vui-dp-a 750ms linear infinite reverse;
+}
+
+.ldDualplane::after {
+  transform: rotateX(240deg) rotateY(45deg) rotateZ(45deg);
+  animation: vui-dp-b 750ms linear infinite;
+}
+
+.ldEllipsis {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+.ldEqualizer {
+  width: 48px;
+  height: 48px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  color: var(--ld-c);
+}
+
+.ldHoneycomb {
+  --hc-dark: color-mix(in oklab, var(--ld-c) 72%, var(--fg-primary));
+  --hc-soft: color-mix(in oklab, var(--ld-c) 40%, var(--bg-page));
+
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+
+.ldJelly {
+  --js: 2.8rem;
+  --jsp: 1.75s;
+
+  /* @kind other */
+  --jg: color-mix(in oklab, var(--ld-c) 30%, transparent);
+
+  position: relative;
+  width: var(--js);
+  height: var(--js);
+  filter: var(--jf, none);
+}
+
+.ldJelly::before,
+.ldJelly::after {
+  content: '';
+  position: absolute;
+  width: 33%;
+  height: 33%;
+  border-radius: var(--radius-full);
+  background: var(--ld-c);
+  box-shadow: 0 0 20px var(--jg);
+}
+
+.ldJelly::before {
+  right: 0;
+  bottom: 6%;
+  animation: vui-jelly-grow var(--jsp) ease calc(var(--jsp) * -0.666) infinite;
+}
+
+.ldJelly::after {
+  left: 0;
+  bottom: 6%;
+  animation: vui-jelly-grow var(--jsp) ease calc(var(--jsp) * -0.333) infinite;
+}
+
+.ldOrbit {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  transform: rotate(45deg);
+}
+
+.ldPulsering {
+  --pr: 2.8rem;
+  --prs: 0.9s;
+
+  /* @kind other */
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: var(--pr);
+  height: var(--pr);
+}
+
+.ldRipple {
+  --rr: color-mix(in oklab, var(--ld-c) 28%, var(--bg-page));
+  --ra: color-mix(in oklab, var(--ld-c) 78%, white);
+  --rs: color-mix(in oklab, var(--ld-c) 26%, transparent);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2-5);
+}
+
+.ldTrail {
+  --tp: color-mix(in oklab, var(--ld-c) 45%, var(--fg-primary));
+  --td: 3s;
+
+  /* @kind other */
+  --te: cubic-bezier(0.785, 0.135, 0.15, 0.86);
+
+  /* @kind other */
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 44px;
+  color: var(--ld-c);
+}
+
+.ldTrail::before {
+  content: '';
+  position: absolute;
+  top: 37px;
+  left: 19px;
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--ld-c);
+  transform: translate(-18px, -18px);
+  animation: vui-trail-dot-rect var(--td) var(--te) infinite;
+  box-shadow: 0 0 12px color-mix(in oklab, var(--ld-c) 35%, transparent);
+}
+
+.ldTrailVariantTriangle {
+  width: 48px;
+}
+
+.ldTrailVariantTriangle::before {
+  left: 21px;
+  transform: translate(-10px, -18px);
+  animation-name: vui-trail-dot-tri;
+}
+
+.ldShuffle {
+  position: relative;
+  width: 72px;
+  height: 72px;
+}
+
+.ldShuffle span:nth-child(4)::before {
+  margin-left: 26px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ld *,
+  .ld,
+  .ld::before,
+  .ld::after,
+  .ld span::before {
+    animation: none !important;
+  }
+
+  .ldOrbit {
+    transform: rotate(45deg);
+  }
+}

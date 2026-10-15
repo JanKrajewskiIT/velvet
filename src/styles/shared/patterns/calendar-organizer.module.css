@@ -1,0 +1,33 @@
+.organizerPartEvb {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-0-5);
+  padding: var(--space-2) var(--space-2-5) var(--space-2) var(--space-3-5);
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  border-radius: inherit;
+}
+
+.organizerPartEvb:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.organizerPartAdd {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1-5);
+  margin-top: auto;
+  padding-top: var(--space-4);
+}
+
+.organizerPartAddrow {
+  display: flex;
+  gap: var(--space-1-5);
+}

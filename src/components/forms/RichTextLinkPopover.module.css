@@ -1,0 +1,43 @@
+.rtePartLink {
+  position: absolute;
+  z-index: 5;
+  left: var(--space-2);
+  top: 46px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: min(360px, calc(100% - 16px));
+  padding: var(--space-2-5);
+  animation: vui-select-in var(--motion-reveal);
+  background: var(--panel-bg);
+  border: var(--border-width) solid var(--panel-border);
+  border-radius: var(--panel-radius);
+  box-shadow: var(--panel-shadow);
+  color: var(--fg-primary);
+}
+
+.rtePartLinkRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1-5);
+}
+
+.rtePartLinkFoot {
+  margin: calc(-1 * var(--space-0-5)) calc(-1 * var(--space-1)) calc(-1 * var(--space-1));
+}
+
+.rte {
+  composes: rte from '../../styles/shared/forms/rich-text-editor.module.css';
+}
+
+.rtePartBar {
+  composes: rtepartbar from '../../styles/shared/forms/rich-text-editor.module.css';
+}
+
+.hint {
+  composes: hint from '../../styles/shared/primitives/field.module.css';
+}
+
+.hintVariantError {
+  composes: hintvarianterror from '../../styles/shared/primitives/field.module.css';
+}

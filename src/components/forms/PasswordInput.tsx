@@ -5,10 +5,12 @@ import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
 import type { Tone } from '../../utils/tone';
 import { Control } from '../primitives/Control';
+import { ControlInput } from '../primitives/ControlInput';
 import { Field } from '../primitives/Field';
 import { Glyph } from '../primitives/Glyph';
 import { Meter } from '../primitives/Meter';
 import { callHandler } from './callHandler';
+import styles from './PasswordInput.module.css';
 import { PASSWORD_MAX_SCORE, passwordScore } from './passwordScore';
 
 const STRENGTH_LABEL_KEYS: readonly I18nKey[] = [
@@ -119,7 +121,7 @@ export const PasswordInput = (props: PasswordInputProps) => {
             end={
               <button
                 type="button"
-                class="vui-control__btn"
+                class={styles.controlPartBtn}
                 aria-label={
                   revealed()
                     ? (local.hideLabel ?? translate('velvet.forms.passwordInput.hideLabel'))
@@ -133,11 +135,10 @@ export const PasswordInput = (props: PasswordInputProps) => {
               </button>
             }
           >
-            <input
+            <ControlInput
               {...rest}
               id={control.id}
               type={revealed() ? 'text' : 'password'}
-              class="vui-control__input"
               disabled={local.disabled}
               required={local.required}
               value={text()}

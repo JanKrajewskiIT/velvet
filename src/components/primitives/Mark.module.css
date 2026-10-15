@@ -1,0 +1,14 @@
+.markVariantText {
+  padding: 0;
+  background: none;
+  color: var(--fg-brand);
+  font-weight: var(--type-title-weight);
+}
+
+.mark {
+  composes: mark from '../../styles/shared/primitives/mark.module.css';
+}
+
+.markVariantMention {
+  composes: markvariantmention from '../../styles/shared/primitives/mark.module.css';
+}

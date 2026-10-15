@@ -1,0 +1,7 @@
+.copyfield {
+  padding-right: var(--space-1);
+}
+
+.field {
+  composes: field from '../../styles/shared/primitives/field.module.css';
+}

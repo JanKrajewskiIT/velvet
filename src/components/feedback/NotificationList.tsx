@@ -9,6 +9,7 @@ import { EmptyText } from '../primitives/EmptyText';
 import { IconTile } from '../primitives/IconTile';
 import { ListItem } from '../primitives/ListItem';
 import type { NotificationItem } from './NotificationItem';
+import styles from './NotificationList.module.css';
 
 export interface NotificationListProps extends HtmlProps<HTMLUListElement, 'onClick'> {
   items: readonly NotificationItem[];
@@ -30,7 +31,7 @@ const leadingOf = (item: NotificationItem): JSX.Element =>
 /** `ListItem` shows its trailing slot whenever it is not null, so a read item passes nothing. */
 const unreadMarker = (item: NotificationItem, label: string): JSX.Element => {
   if (!item.unread) return undefined;
-  return <Dot size="lg" tone="brand" label={label} class="vui-notif__dot" />;
+  return <Dot size="lg" tone="brand" label={label} class={styles.notifPartDot} />;
 };
 
 /** The bare notification list (for a full activity page). */
@@ -42,12 +43,12 @@ export const NotificationList = (props: NotificationListProps) => {
     <Show
       when={local.items.length > 0}
       fallback={
-        <EmptyText icon="circle-check" class="vui-notif__empty">
+        <EmptyText icon="circle-check" class={styles.notifPartEmpty}>
           {emptyText()}
         </EmptyText>
       }
     >
-      <ul {...rest} class={cx('vui-notif__list', local.class)}>
+      <ul {...rest} class={cx(styles.notifPartList, local.class)}>
         <For each={local.items}>
           {(item) => (
             <li>
@@ -55,13 +56,15 @@ export const NotificationList = (props: NotificationListProps) => {
                 as="button"
                 align="start"
                 clamp={2}
-                class={cx('vui-notif__item', item.unread && 'vui-notif__item--unread')}
+                class={cx(styles.notifPartItem, item.unread && styles.notifPartItemVariantUnread)}
                 onClick={() => local.onItemClick?.(item)}
                 leading={leadingOf(item)}
                 title={item.title}
                 description={item.body}
                 meta={item.time}
                 trailing={unreadMarker(item, translate('velvet.feedback.notificationList.unread'))}
+                titleVariant={item.unread ? 'label' : 'body-sm'}
+                descriptionClass={styles.itemDescriptionPart}
               />
             </li>
           )}

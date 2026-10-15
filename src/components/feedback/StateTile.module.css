@@ -1,0 +1,3 @@
+.emptyPartIcon.emptyPartIcon:not([data-tone]) {
+  background: var(--bg-sunken);
+}

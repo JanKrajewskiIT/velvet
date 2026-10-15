@@ -5,6 +5,7 @@ import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Spinner } from '../feedback/Spinner';
 import { Chip } from '../forms/Chip';
 import { EmptyText } from '../primitives/EmptyText';
+import styles from './ColorLabelChips.module.css';
 import type { ColorLabelSelection } from './createColorLabelSelection';
 
 export interface ColorLabelChipsProps {
@@ -23,7 +24,7 @@ export const ColorLabelChips = (props: ColorLabelChipsProps) => {
   };
 
   return (
-    <div class="vui-cls__chips" role="group" aria-label={props.label}>
+    <div class={styles.clsPartChips} role="group" aria-label={props.label}>
       <For each={props.selection.visible()}>
         {(label) => {
           const on = () => props.selection.selection().includes(label.id);
@@ -59,7 +60,7 @@ export const ColorLabelChips = (props: ColorLabelChipsProps) => {
         </Chip>
       </Show>
       <Show when={props.selection.visible().length === 0 && !props.selection.canCreate()}>
-        <EmptyText as="p" align="start" class="vui-cls__empty">
+        <EmptyText as="p" align="start" class={styles.clsPartEmpty}>
           {props.selection.query()
             ? translate('velvet.patterns.colorLabelSelectionDialog.noMatch', { query: props.selection.query() })
             : props.emptyText}

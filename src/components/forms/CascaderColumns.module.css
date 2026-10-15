@@ -1,0 +1,76 @@
+:import('../../styles/shared/primitives/glyph.module.css') {
+  externalIcon: icon;
+}
+
+.cascPartCols {
+  display: flex;
+  align-items: stretch;
+  overflow-x: auto;
+}
+
+.cascPartCol {
+  margin: 0;
+  padding: var(--panel-pad);
+  list-style: none;
+  min-width: 168px;
+  max-height: var(--overlay-max-h-sm);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  animation: vui-casc-in var(--motion-enter);
+}
+
+.cascPartCol:first-child {
+  animation: none;
+}
+
+.cascPartCol + .cascPartCol {
+  border-left: var(--border-width) solid var(--border-subtle);
+}
+
+.cascPartOpt {
+  gap: var(--space-2);
+}
+
+.cascPartOptVariantOn {
+  background: var(--bg-selected);
+  color: var(--fg-brand);
+  font-weight: var(--type-label-weight);
+}
+
+.cascPartArrow {
+  margin-left: auto;
+
+  --glyph-size: var(--size-icon-sm);
+
+  color: var(--fg-tertiary);
+}
+
+@media (width <= 639px) {
+  .cascPartCol {
+    min-width: 140px;
+  }
+}
+
+.cascPartOptVariantOn > :global(.externalIcon) {
+  color: var(--fg-brand);
+}
+
+.option {
+  composes: option from '../../styles/shared/primitives/option.module.css';
+}
+
+.optionVariantActive {
+  composes: optionvariantactive from '../../styles/shared/primitives/option.module.css';
+}
+
+.optionPartLabel {
+  composes: optionpartlabel from '../../styles/shared/primitives/option.module.css';
+}
+
+.optionPartKbd {
+  composes: optionpartkbd from '../../styles/shared/primitives/option.module.css';
+}
+
+.selectPartCheck {
+  composes: selectpartcheck from '../../styles/shared/forms/select.module.css';
+}

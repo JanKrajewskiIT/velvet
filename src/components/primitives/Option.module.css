@@ -1,0 +1,27 @@
+.option {
+  composes: option from '../../styles/shared/primitives/option.module.css';
+}
+
+.optionVariantActive {
+  composes: optionvariantactive from '../../styles/shared/primitives/option.module.css';
+}
+
+.optionVariantDanger {
+  composes: optionvariantdanger from '../../styles/shared/primitives/option.module.css';
+}
+
+.optionPartCheck {
+  composes: optionpartcheck from '../../styles/shared/primitives/option.module.css';
+}
+
+.optionPartLabel {
+  composes: optionpartlabel from '../../styles/shared/primitives/option.module.css';
+}
+
+.optionPartDesc {
+  composes: optionpartdesc from '../../styles/shared/primitives/option.module.css';
+}
+
+.optionPartKbd {
+  composes: optionpartkbd from '../../styles/shared/primitives/option.module.css';
+}

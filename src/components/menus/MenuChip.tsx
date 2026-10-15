@@ -5,7 +5,10 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { Chevron } from '../primitives/Chevron';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { Menu, type MenuTriggerProps } from './Menu';
+import styles from './MenuChip.module.css';
 import type { MenuItem } from './menuItem';
 
 export interface MenuChipOption {
@@ -58,14 +61,24 @@ export const MenuChip = (props: MenuChipProps) => {
   ]);
 
   const chip = (trigger: MenuTriggerProps) => (
-    <button {...trigger} type="button" class={cx('vui-chip', 'vui-chip--menu', selected() && 'vui-chip--on')}>
+    <button
+      {...trigger}
+      type="button"
+      class={cx(typographyClass('button-sm'), styles.chip, styles.chipVariantMenu, selected() && styles.chipVariantOn)}
+    >
       <Show when={p.icon}>{(icon) => <Glyph name={icon()} />}</Show>
-      <span class="vui-chip__key">
+      <Text as="span" variant="label" tone="inherit" class={styles.chipPartKey}>
         {p.label}
         {selected() ? ':' : ''}
-      </span>
-      <Show when={selected()}>{(option) => <span>{option().label}</span>}</Show>
-      <Chevron class="vui-chip__caret" />
+      </Text>
+      <Show when={selected()}>
+        {(option) => (
+          <Text as="span" variant="label" tone="inherit">
+            {option().label}
+          </Text>
+        )}
+      </Show>
+      <Chevron class={styles.chipPartCaret} />
     </button>
   );
 

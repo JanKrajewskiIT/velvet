@@ -1,0 +1,23 @@
+.tablePartPin {
+  composes: tablepartpin from '../../styles/shared/data/table.module.css';
+}
+
+.tablePartPinVariantEdge {
+  composes: tablepartpinvariantedge from '../../styles/shared/data/table.module.css';
+}
+
+.tablePartPinVariantLeft {
+  composes: tablepartpinvariantleft from '../../styles/shared/data/table.module.css';
+}
+
+.tablePartPinVariantRight {
+  composes: tablepartpinvariantright from '../../styles/shared/data/table.module.css';
+}
+
+.tablePartNum {
+  composes: tablepartnum from '../../styles/shared/data/table.module.css';
+}
+
+.hideSm {
+  composes: hidesm from '../../styles/shared/data/table.module.css';
+}

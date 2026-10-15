@@ -1,0 +1,72 @@
+:import('../../styles/shared/primitives/glyph.module.css') {
+  externalIcon: icon;
+}
+
+.calbtn {
+  position: relative;
+  display: inline-flex;
+}
+
+.calbtnPartChev {
+  font-size: 0.85em;
+  margin-left: calc(-1 * var(--space-0-5));
+  opacity: 0.7;
+}
+
+.calbtnPartMenu {
+  position: absolute;
+  top: calc(100% + var(--overlay-offset));
+  left: 0;
+  z-index: var(--z-dropdown);
+  display: flex;
+  flex-direction: column;
+  min-width: var(--overlay-min-w);
+  padding: var(--space-1);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-lg);
+  background: var(--bg-overlay);
+  box-shadow: var(--elevation-raised);
+  animation: vui-calbtn-in var(--motion-reveal);
+}
+
+.calbtnPartItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2-5);
+  height: var(--control-height-inner-lg);
+  padding: 0 var(--space-2-5);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: none;
+  color: var(--fg-primary);
+  text-align: left;
+  cursor: pointer;
+}
+
+.calbtnPartItem:hover,
+.calbtnPartItem:focus-visible {
+  outline: none;
+  background: var(--bg-hover);
+}
+
+.calbtnPartExt {
+  margin-left: auto;
+  font-size: var(--type-caption-size);
+  color: var(--fg-disabled);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .calbtnPartMenu {
+    animation: none;
+  }
+}
+
+.calbtnVariantDone :global(.externalIcon):first-child {
+  color: var(--status-success-fg);
+}
+
+.calbtnPartItem > :global(.externalIcon):first-child {
+  color: var(--fg-tertiary);
+
+  --glyph-size: var(--size-icon-md);
+}

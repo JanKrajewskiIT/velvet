@@ -17,11 +17,14 @@ import { cx } from '../../utils/cx';
 import { decimalPlaces, numberRange, parseDecimal } from '../../utils/decimalValue';
 import { clamp } from '../../utils/math';
 import { Control } from '../primitives/Control';
+import { ControlInput } from '../primitives/ControlInput';
 import { Field } from '../primitives/Field';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
 import { callHandler } from './callHandler';
 import { createFormValidation } from './createFormValidation';
 import { FormValue } from './FormValue';
+import styles from './NumberInput.module.css';
 
 const HOLD_DELAY_MS = 450;
 const HOLD_REPEAT_MS = 60;
@@ -186,19 +189,19 @@ export const NumberInput = (props: NumberInputProps) => {
           size={local.size}
           invalid={control.invalid}
           disabled={local.disabled}
-          class={cx('vui-number', local.class)}
+          class={cx(styles.number, local.class)}
         >
           <button
             type="button"
             tabIndex={-1}
-            class="vui-number__step"
+            class={styles.numberPartStep}
             aria-label={local.decreaseLabel ?? translate('velvet.forms.numberInput.decreaseLabel')}
             disabled={local.disabled || atMin()}
             {...stepHandlers(-1)}
           >
             <Glyph name="minus" />
           </button>
-          <input
+          <ControlInput
             {...rest}
             ref={(element) => {
               input = element;
@@ -213,7 +216,7 @@ export const NumberInput = (props: NumberInputProps) => {
             aria-valuemax={Number.isFinite(local.max) ? local.max : undefined}
             aria-invalid={control.invalid || validation.invalid() || undefined}
             aria-describedby={validation.describedBy(control.describedBy)}
-            class="vui-control__input vui-number__input"
+            class={styles.numberPartInput}
             value={draft() ?? String(current())}
             disabled={local.disabled}
             onInput={(e) => {
@@ -242,14 +245,20 @@ export const NumberInput = (props: NumberInputProps) => {
             }}
           />
           <Show when={local.suffix}>
-            <span class="vui-control__affix vui-control__affix--end" style={{ 'padding-left': 0 }}>
+            <Text
+              as="span"
+              variant="body"
+              tone="inherit"
+              class={cx(styles.controlPartAffix, styles.controlPartAffixVariantEnd)}
+              style={{ 'padding-left': 0 }}
+            >
               {local.suffix}
-            </span>
+            </Text>
           </Show>
           <button
             type="button"
             tabIndex={-1}
-            class="vui-number__step"
+            class={styles.numberPartStep}
             aria-label={local.increaseLabel ?? translate('velvet.forms.numberInput.increaseLabel')}
             disabled={local.disabled || atMax()}
             {...stepHandlers(1)}

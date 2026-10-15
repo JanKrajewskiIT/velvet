@@ -1,0 +1,11 @@
+.marqueePartGroup {
+  display: flex;
+  align-items: center;
+  flex: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marqueePartGroup[aria-hidden] {
+    display: none;
+  }
+}

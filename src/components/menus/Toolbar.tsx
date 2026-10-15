@@ -3,7 +3,9 @@ import { createEffect, createMemo, createSignal, For, Index, type JSX, onCleanup
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
+import { typographyClass } from '../primitives/typography';
 import { Menu, type MenuTriggerProps } from './Menu';
+import styles from './Toolbar.module.css';
 import { ToolbarEntry } from './ToolbarEntry';
 import { countFittingItems, isToolbarButton, overflowMenuItems, type ToolbarItem } from './toolbarItem';
 
@@ -93,7 +95,7 @@ export const Toolbar = (props: ToolbarProps) => {
       type="button"
       data-tb={OVERFLOW}
       tabIndex={tabStop() === OVERFLOW ? 0 : -1}
-      class="vui-toolbar__btn vui-toolbar__more"
+      class={cx(styles.toolbarPartBtn, 'vui-toolbar__more', typographyClass('label'))}
       aria-label={translate('velvet.menus.toolbar.overflowLabel', { label: moreLabel(), count: hiddenToolCount() })}
     >
       <Glyph name="more-horizontal" />
@@ -107,7 +109,7 @@ export const Toolbar = (props: ToolbarProps) => {
       }}
       role="toolbar"
       aria-label={props.label}
-      class={cx('vui-toolbar', props.class)}
+      class={cx(styles.toolbar, props.class)}
       onKeyDown={onKeyDown}
       onFocusIn={(e) => {
         const stop = stopOf(e.target);
@@ -118,7 +120,7 @@ export const Toolbar = (props: ToolbarProps) => {
         ref={(element) => {
           measure = element;
         }}
-        class="vui-toolbar__measure"
+        class={styles.toolbarPartMeasure}
         aria-hidden="true"
         inert
       >

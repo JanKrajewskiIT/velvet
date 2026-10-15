@@ -5,6 +5,7 @@ import { cx } from '../../utils/cx';
 import { createCropGestures } from './createCropGestures';
 import { createCropView } from './createCropView';
 import type { CropArea } from './cropGeometry';
+import styles from './ImageCropper.module.css';
 import { ImageCropperBar } from './ImageCropperBar';
 
 export type { CropArea } from './cropGeometry';
@@ -58,12 +59,12 @@ export const ImageCropper = (props: ImageCropperProps) => {
   const gestures = createCropGestures(view, { stage: () => stage, frame: () => frame });
 
   return (
-    <div class={cx('vui-crop', p.class)}>
+    <div class={cx(styles.crop, p.class)}>
       <div
         ref={(element) => {
           stage = element;
         }}
-        class={cx('vui-crop__stage', gestures.dragging() && 'vui-crop__stage--drag')}
+        class={cx(styles.cropPartStage, gestures.dragging() && styles.cropPartStageVariantDrag)}
         style={{ height: `${p.height}px` }}
         onPointerDown={gestures.onPointerDown}
         onPointerMove={gestures.onPointerMove}
@@ -76,7 +77,7 @@ export const ImageCropper = (props: ImageCropperProps) => {
               src={url()}
               alt={p.alt}
               draggable={false}
-              class="vui-crop__img"
+              class={styles.cropPartImg}
               onLoad={(e) =>
                 view.setNatural({ width: e.currentTarget.naturalWidth, height: e.currentTarget.naturalHeight })
               }
@@ -94,7 +95,7 @@ export const ImageCropper = (props: ImageCropperProps) => {
           ref={(element) => {
             frame = element;
           }}
-          class={cx('vui-crop__frame', p.shape === 'circle' && 'vui-crop__frame--circle')}
+          class={cx(styles.cropPartFrame, p.shape === 'circle' && styles.cropPartFrameVariantCircle)}
           style={{ width: `${view.frameSize().width}px`, height: `${view.frameSize().height}px` }}
           // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- the crop frame must take focus so arrow keys can adjust the crop
           tabIndex={0}
@@ -102,7 +103,7 @@ export const ImageCropper = (props: ImageCropperProps) => {
           aria-label={translate('velvet.media.imageCropper.area')}
           onKeyDown={gestures.onKeyDown}
         >
-          <span class="vui-crop__grid" />
+          <span class={styles.cropPartGrid} />
         </div>
       </div>
       <ImageCropperBar view={view} rotatable={p.rotatable} minZoom={p.minZoom} maxZoom={p.maxZoom} />

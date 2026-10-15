@@ -1,7 +1,9 @@
 import { type Accessor, createContext, type JSX, mergeProps, useContext } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
+import { classSelector } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import styles from './ToggleGroup.module.css';
 
 export type ToggleSize = 'sm' | 'md' | 'lg';
 
@@ -45,7 +47,7 @@ export type ToggleGroupProps = ToggleGroupBaseProps &
       }
   );
 
-const FOCUSABLE_TOGGLE = '.vui-toggle:not(:disabled)';
+const FOCUSABLE_TOGGLE = `${classSelector(styles.toggle)}:not(:disabled)`;
 
 /** Set of ToggleButtons that share state; ←→ move focus between buttons. */
 export const ToggleGroup = (props: ToggleGroupProps) => {
@@ -95,8 +97,8 @@ export const ToggleGroup = (props: ToggleGroupProps) => {
         aria-label={p.label}
         onKeyDown={onKeyDown}
         class={cx(
-          'vui-togglegroup',
-          p.attached && 'vui-togglegroup--attached',
+          styles.togglegroup,
+          p.attached && styles.togglegroupVariantAttached,
           !multiple() && 'vui-togglegroup--single',
           p.class,
         )}

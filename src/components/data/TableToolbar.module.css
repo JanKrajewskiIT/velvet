@@ -1,0 +1,27 @@
+.tablePartToolbar {
+  position: relative;
+  z-index: var(--z-raised, 5);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2-5);
+  min-height: var(--row-height-lg);
+  padding: var(--space-2-5) var(--cell-px);
+  border-bottom: var(--border-width) solid var(--border-subtle);
+}
+
+.tablePartCount {
+  color: var(--fg-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.tablePartTools {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-left: auto;
+}
+
+.tablePartTitle {
+  color: var(--fg-primary);
+}

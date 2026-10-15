@@ -1,12 +1,21 @@
 import { Index, Show } from 'solid-js';
 
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { Checkmark } from '../primitives/Checkmark';
 import { Chevron } from '../primitives/Chevron';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
 import type { TreeController } from './treeController';
 import { checkStateOf, isBranch, type NodeRow } from './treeData';
 import { canNestIn, type TreeMovePosition } from './treeMoves';
+import styles from './TreeNodeRow.module.css';
+
+const TREE_PART_ROW_VARIANT_CLASSES = {
+  inside: styles.treePartRowVariantDropInside,
+  before: styles.treePartRowVariantDropBefore,
+  after: styles.treePartRowVariantDropAfter,
+} as const;
 
 export interface TreeNodeRowProps {
   tree: TreeController;
@@ -44,10 +53,11 @@ export const TreeNodeRow = (props: TreeNodeRowProps) => {
       tabIndex={props.tree.focus.tabbableId() === props.row.id ? 0 : -1}
       draggable={props.tree.move.enabled()}
       class={cx(
-        'vui-tree__row',
-        props.tree.model.selected() === node().id && 'vui-tree__row--sel',
-        props.tree.move.sourceId() === node().id && 'vui-tree__row--dragging',
-        props.tree.move.targetId() === node().id && `vui-tree__row--drop-${props.tree.move.position()}`,
+        styles.treePartRow,
+        props.tree.model.selected() === node().id && styles.treePartRowVariantSel,
+        props.tree.move.sourceId() === node().id && styles.treePartRowVariantDragging,
+        props.tree.move.targetId() === node().id &&
+          variantClass(TREE_PART_ROW_VARIANT_CLASSES, props.tree.move.position()),
       )}
       style={{ '--lvl': props.row.level - 1 }}
       onClick={() => {
@@ -92,11 +102,15 @@ export const TreeNodeRow = (props: TreeNodeRowProps) => {
     >
       <Index each={Array.from({ length: props.row.level - 1 })}>
         {(_, k) => (
-          <span class="vui-tree__guide" style={{ left: `${GUIDE_BASE_PX + k * GUIDE_STEP_PX}px` }} aria-hidden="true" />
+          <span
+            class={styles.treePartGuide}
+            style={{ left: `${GUIDE_BASE_PX + k * GUIDE_STEP_PX}px` }}
+            aria-hidden="true"
+          />
         )}
       </Index>
       <span
-        class={cx('vui-tree__caret', isOpen() && 'vui-tree__caret--open', !branch() && 'vui-tree__caret--leaf')}
+        class={cx(styles.treePartCaret, isOpen() && 'vui-tree__caret--open', !branch() && 'vui-tree__caret--leaf')}
         aria-hidden="true"
       >
         <Show when={branch()}>
@@ -106,7 +120,7 @@ export const TreeNodeRow = (props: TreeNodeRowProps) => {
       <Show when={props.tree.config.checkable}>
         <Checkmark
           size="sm"
-          class="vui-tree__check"
+          class={styles.treePartCheck}
           checked={checkState() === 'on'}
           indeterminate={checkState() === 'mixed'}
           onClick={(e) => {
@@ -117,11 +131,15 @@ export const TreeNodeRow = (props: TreeNodeRowProps) => {
         />
       </Show>
       <Show when={!props.tree.config.checkable || node().icon}>
-        <Glyph name={node().icon ?? (branch() ? 'folder' : 'file')} class="vui-tree__icon" />
+        <Glyph name={node().icon ?? (branch() ? 'folder' : 'file')} class={styles.treePartIcon} />
       </Show>
-      <span class="vui-tree__label">{node().label}</span>
+      <Text as="span" variant="body-sm" tone="inherit" class={styles.treePartLabel}>
+        {node().label}
+      </Text>
       <Show when={node().meta != null}>
-        <span class="vui-tree__meta">{node().meta}</span>
+        <Text as="span" variant="kbd" tone="inherit" class={styles.treePartMeta}>
+          {node().meta}
+        </Text>
       </Show>
     </li>
   );

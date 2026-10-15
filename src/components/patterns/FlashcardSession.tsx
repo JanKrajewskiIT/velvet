@@ -1,13 +1,21 @@
 import { createMemo, createSignal, mergeProps, onCleanup, onMount, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { Button } from '../actions/Button';
 import { FlipCard } from '../data/FlipCard';
 import { CloseButton } from '../primitives/CloseButton';
 import { Kbd } from '../primitives/Kbd';
 import { Meter } from '../primitives/Meter';
+import { Text } from '../primitives/Text';
 import type { Flashcard, FlashResult } from './flashcard';
+import styles from './FlashcardSession.module.css';
+
+const FC_SESSION_PART_CARD_CLASSES = {
+  right: styles.fcSessionPartCardVariantRight,
+  left: styles.fcSessionPartCardVariantLeft,
+} as const;
 
 export interface FlashcardSessionProps {
   cards: Flashcard[];
@@ -32,6 +40,10 @@ export const FlashcardSession = (props: FlashcardSessionProps) => {
 
   const card = () => p.cards[index()];
   const known = createMemo(() => results().filter((result) => result.known).length);
+  const leavingClass = () => {
+    const direction = leaving();
+    return direction ? variantClass(FC_SESSION_PART_CARD_CLASSES, direction) : undefined;
+  };
 
   const answer = (isKnown: boolean) => {
     const current = card();
@@ -68,8 +80,8 @@ export const FlashcardSession = (props: FlashcardSessionProps) => {
   return (
     <Show when={card()}>
       {(current) => (
-        <div class={cx('vui-fc-session', p.class)}>
-          <div class="vui-fc-session__top">
+        <div class={cx(styles.fcSession, p.class)}>
+          <div class={styles.fcSessionPartTop}>
             <Show when={p.onExit}>
               <CloseButton
                 label={translate('velvet.patterns.flashcardSession.endSession')}
@@ -82,14 +94,14 @@ export const FlashcardSession = (props: FlashcardSessionProps) => {
               label={translate('velvet.patterns.flashcardSession.progress')}
               role="progressbar"
             />
-            <span class="vui-fc-session__count">
+            <Text as="span" variant="kbd" tone="inherit" class={styles.fcSessionPartCount}>
               {index() + 1} / {p.cards.length}
-            </span>
+            </Text>
           </div>
           {/* Keyed on the card position so each card remounts and replays its entrance. */}
           <Show when={index() + 1} keyed>
             {(position) => (
-              <div class={cx('vui-fc-session__card', leaving() && `vui-fc-session__card--${leaving()}`)}>
+              <div class={cx(styles.fcSessionPartCard, leavingClass())}>
                 <FlipCard
                   height={240}
                   flipped={flipped()}
@@ -97,30 +109,44 @@ export const FlashcardSession = (props: FlashcardSessionProps) => {
                   label={translate('velvet.patterns.flashcardSession.card', { position })}
                   front={
                     <>
-                      <span class="vui-fc-hint">
+                      <Text as="span" variant="overline" tone="inherit" class={styles.fcHint}>
                         {current().hint ||
                           translate(
                             p.reverse
                               ? 'velvet.patterns.flashcardSession.definition'
                               : 'velvet.patterns.flashcardSession.term',
                           )}
-                      </span>
-                      <span class="vui-fc-term">{p.reverse ? current().back : current().front}</span>
-                      <span class="vui-fc-tap">{translate('velvet.patterns.flashcardSession.flipHint')}</span>
+                      </Text>
+                      <Text as="span" variant="h2" tone="inherit" class="vui-fc-term">
+                        {p.reverse ? current().back : current().front}
+                      </Text>
+                      <Text as="span" variant="caption" tone="inherit" class={styles.fcTap}>
+                        {translate('velvet.patterns.flashcardSession.flipHint')}
+                      </Text>
                     </>
                   }
                   back={
                     <>
-                      <span class="vui-fc-hint" style={{ color: 'var(--on-color-muted)' }}>
+                      <Text
+                        as="span"
+                        variant="overline"
+                        tone="inherit"
+                        class={styles.fcHint}
+                        style={{ color: 'var(--on-color-muted)' }}
+                      >
                         {translate(
                           p.reverse
                             ? 'velvet.patterns.flashcardSession.term'
                             : 'velvet.patterns.flashcardSession.definition',
                         )}
-                      </span>
-                      <span class="vui-fc-term">{p.reverse ? current().front : current().back}</span>
+                      </Text>
+                      <Text as="span" variant="h2" tone="inherit" class="vui-fc-term">
+                        {p.reverse ? current().front : current().back}
+                      </Text>
                       <Show when={current().example}>
-                        <span class="vui-fc-ex">{current().example}</span>
+                        <Text as="span" variant="body-sm" tone="inherit" class={styles.fcEx}>
+                          {current().example}
+                        </Text>
                       </Show>
                     </>
                   }
@@ -128,29 +154,26 @@ export const FlashcardSession = (props: FlashcardSessionProps) => {
               </div>
             )}
           </Show>
-          <div class="vui-fc-session__actions">
-            <Button
-              variant="secondary"
-              size="lg"
-              iconLeft="x"
-              class="vui-fc-btn"
-              onClick={() => answer(false)}
-              disabled={!flipped()}
-            >
+          <div class={styles.fcSessionPartActions}>
+            <Button variant="secondary" size="lg" iconLeft="x" onClick={() => answer(false)} disabled={!flipped()}>
               {translate('velvet.patterns.flashcardSession.unknown')}
-              <Kbd size="sm">1</Kbd>
+              <Kbd size="sm" class={styles.shortcut}>
+                1
+              </Kbd>
             </Button>
-            <Button size="lg" iconLeft="check" class="vui-fc-btn" onClick={() => answer(true)} disabled={!flipped()}>
+            <Button size="lg" iconLeft="check" onClick={() => answer(true)} disabled={!flipped()}>
               {translate('velvet.patterns.flashcardSession.known')}
-              <Kbd size="sm">2</Kbd>
+              <Kbd size="sm" class={cx(styles.shortcut, styles.shortcutOnColor)}>
+                2
+              </Kbd>
             </Button>
           </div>
-          <div class="vui-fc-session__tally" aria-live="polite">
+          <Text as="div" variant="caption" tone="tertiary" class={styles.fcSessionPartTally} aria-live="polite">
             {translate('velvet.patterns.flashcardSession.tally', {
               known: known(),
               review: results().length - known(),
             })}
-          </div>
+          </Text>
         </div>
       )}
     </Show>

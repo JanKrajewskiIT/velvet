@@ -1,9 +1,19 @@
 import { children, createMemo, type JSX, mergeProps, Show, splitProps } from 'solid-js';
 
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { clamp } from '../../utils/math';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { Text } from '../primitives/Text';
 import type { ProgressTone } from './Progress';
+import styles from './ProgressRing.module.css';
+
+const PROGRESS_CLASSES = {
+  success: styles.progressVariantSuccess,
+  warning: styles.progressVariantWarning,
+  danger: styles.progressVariantDanger,
+  neutral: styles.progressVariantNeutral,
+} as const;
 
 export interface ProgressRingProps extends HtmlProps<HTMLSpanElement, 'role'> {
   value?: number;
@@ -64,7 +74,7 @@ export const ProgressRing = (props: ProgressRingProps) => {
   return (
     <span
       {...rest}
-      class={cx('vui-ring', `vui-progress--${local.tone}`, local.class)}
+      class={cx(styles.ring, variantClass(PROGRESS_CLASSES, local.tone), local.class)}
       style={{ ...local.style, width: `${local.size}px`, height: `${local.size}px` }}
       role={local.role}
       aria-valuemin={hasRange() ? 0 : undefined}
@@ -78,14 +88,14 @@ export const ProgressRing = (props: ProgressRingProps) => {
           cy={local.size / 2}
           r={radius()}
           stroke-width={local.stroke}
-          class="vui-ring__track"
+          class={styles.ringPartTrack}
         />
         <circle
           cx={local.size / 2}
           cy={local.size / 2}
           r={radius()}
           stroke-width={local.stroke}
-          class="vui-ring__bar"
+          class={styles.ringPartBar}
           style={{
             'stroke-dasharray': String(circumference()),
             'stroke-dashoffset': String(circumference() * (1 - fraction())),
@@ -96,13 +106,18 @@ export const ProgressRing = (props: ProgressRingProps) => {
         when={centre()}
         fallback={
           <Show when={local.showValue}>
-            <span
-              class="vui-ring__value"
-              style={{ 'font-size': `${Math.max(MIN_VALUE_FONT_PX, local.size * VALUE_FONT_RATIO)}px` }}
+            <Text
+              as="span"
+              variant="label-sm"
+              tone="inherit"
+              class={styles.ringPartValue}
+              style={{ '--ring-value-size': `${Math.max(MIN_VALUE_FONT_PX, local.size * VALUE_FONT_RATIO)}px` }}
             >
               {Math.round(fraction() * 100)}
-              <small>%</small>
-            </span>
+              <Text as="small" variant="micro" tone="inherit">
+                %
+              </Text>
+            </Text>
           </Show>
         }
       >

@@ -1,0 +1,42 @@
+.sectionLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  min-width: 0;
+  margin: 0;
+  text-transform: uppercase;
+  color: var(--fg-tertiary);
+
+  --glyph-size: var(--size-icon-xs);
+}
+
+.sectionLabelPartText {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sectionLabelPartEnd {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  text-transform: none;
+}
+
+.sectionLabelVariantSecondary {
+  color: var(--fg-secondary);
+}
+
+.sectionLabelVariantBrand {
+  color: var(--fg-brand);
+}
+
+.sectionLabelVariantSticky {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-raised);
+  background: var(--bg-glass);
+  backdrop-filter: blur(var(--blur-sm));
+}

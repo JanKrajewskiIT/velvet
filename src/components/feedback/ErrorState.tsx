@@ -1,10 +1,19 @@
 import { createSignal, type JSX, mergeProps, Show, splitProps } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
 import { Button } from '../actions/Button';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './ErrorState.module.css';
 import { type StateSize, StateTile } from './StateTile';
+
+const EMPTY_CLASSES = {
+  sm: styles.emptyVariantSm,
+  lg: styles.emptyVariantLg,
+} as const;
 
 export interface ErrorStateProps extends HtmlProps<HTMLDivElement, 'title'> {
   /** @default localized "Something went wrong" */
@@ -46,17 +55,27 @@ export const ErrorState = (props: ErrorStateProps) => {
     <div
       {...rest}
       role="alert"
-      class={cx('vui-empty', 'vui-empty--error', 'vui-tone--danger', `vui-empty--${local.size}`, local.class)}
+      class={cx(
+        styles.empty,
+        'vui-empty--error',
+        styles.toneVariantDanger,
+        variantClass(EMPTY_CLASSES, local.size),
+        local.class,
+      )}
     >
       <StateTile icon={local.icon} size={local.size} tone="danger" />
-      <div class="vui-empty__text">
-        <div class="vui-empty__title">{title()}</div>
+      <div class={styles.emptyPartText}>
+        <Text as="div" variant="title-lg" tone="primary" class={styles.emptyPartTitle}>
+          {title()}
+        </Text>
         <Show when={description()}>
-          <div class="vui-empty__desc">{description()}</div>
+          <Text as="div" variant="body-sm" tone="secondary" class={styles.emptyPartDesc}>
+            {description()}
+          </Text>
         </Show>
       </div>
       <Show when={local.onRetry || local.details}>
-        <div class="vui-empty__actions">
+        <div class={styles.emptyPartActions}>
           <Show when={local.onRetry}>
             <Button variant="secondary" size="sm" iconLeft="refresh" onClick={() => local.onRetry?.()}>
               {retryLabel()}
@@ -72,7 +91,7 @@ export const ErrorState = (props: ErrorStateProps) => {
         </div>
       </Show>
       <Show when={open() && local.details}>
-        <pre class="vui-empty__details">{local.details}</pre>
+        <pre class={cx(styles.emptyPartDetails, typographyClass('caption'))}>{local.details}</pre>
       </Show>
     </div>
   );

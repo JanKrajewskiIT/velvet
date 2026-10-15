@@ -21,7 +21,10 @@ import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
 import { reportAsyncError } from '../../utils/reportAsyncError';
 import { renderIcon } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { tabIds } from './tabIds';
+import styles from './Tabs.module.css';
 
 export interface TabItem {
   value: string;
@@ -157,16 +160,16 @@ export const Tabs = (props: TabsProps) => {
       aria-orientation={vertical() ? 'vertical' : 'horizontal'}
       onKeyDown={onKeyDown}
       class={cx(
-        'vui-tabs',
-        indicator() && 'vui-tabs--js',
-        local.variant === 'segmented' && 'vui-tabs--segmented',
-        vertical() && 'vui-tabs--vertical',
-        local.block && 'vui-tabs--block',
+        styles.tabs,
+        indicator() && styles.tabsVariantJs,
+        local.variant === 'segmented' && styles.tabsVariantSegmented,
+        vertical() && styles.tabsVariantVertical,
+        local.block && styles.tabsVariantBlock,
         local.class,
       )}
     >
       <Show when={indicator()}>
-        {(style) => <span class="vui-tabs__indicator" style={style()} aria-hidden="true" />}
+        {(style) => <span class={styles.tabsPartIndicator} style={style()} aria-hidden="true" />}
       </Show>
       <For each={local.items}>
         {(item) => (
@@ -179,14 +182,16 @@ export const Tabs = (props: TabsProps) => {
             aria-selected={current() === item.value}
             tabIndex={!item.disabled && tabStop() === item.value ? 0 : -1}
             disabled={item.disabled}
-            class="vui-tab"
+            class={cx(styles.tab, typographyClass(local.variant === 'segmented' ? 'button-sm' : 'button'))}
             onClick={() => !item.disabled && select(item.value)}
             onFocus={() => setFocused(item.value)}
           >
             {renderIcon(item.icon)}
             {item.label}
             <Show when={item.count != null}>
-              <span class="vui-tab__count">{item.count}</span>
+              <Text as="span" variant="kbd" tone="inherit" class={styles.tabPartCount}>
+                {item.count}
+              </Text>
             </Show>
           </button>
         )}

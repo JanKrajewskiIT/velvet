@@ -1,9 +1,15 @@
 import { For, type JSX, mergeProps, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { EmptyText } from '../primitives/EmptyText';
 import { ListItem as ListRow } from '../primitives/ListItem';
+import styles from './List.module.css';
+
+const LIST_VARIANT_CLASSES = {
+  divided: styles.listVariantDivided,
+} as const;
 
 export interface ListItemData {
   id: string | number;
@@ -55,15 +61,20 @@ export const List = (props: ListProps) => {
   return (
     <Show
       when={merged.items.length}
-      fallback={<EmptyText class={cx('vui-list__empty', merged.class)}>{empty()}</EmptyText>}
+      fallback={<EmptyText class={cx(styles.listPartEmpty, merged.class)}>{empty()}</EmptyText>}
     >
       <ul
-        class={cx('vui-list', `vui-list--${merged.size}`, merged.divided && 'vui-list--divided', merged.class)}
+        class={cx(
+          styles.list,
+          variantClass(LIST_VARIANT_CLASSES, merged.size),
+          merged.divided && styles.listVariantDivided,
+          merged.class,
+        )}
         aria-label={merged.label}
       >
         <For each={merged.items}>
           {(item) => (
-            <li class="vui-list__li">
+            <li class={styles.listPartLi}>
               <ListRow
                 size={merged.size}
                 leading={item.leading}

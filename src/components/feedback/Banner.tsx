@@ -1,12 +1,26 @@
 import { children, type JSX, mergeProps, Show, splitProps } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
 import type { StatusTone } from '../../utils/tone';
 import { CloseButton } from '../primitives/CloseButton';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { resolveAlertIcon } from './alertIcon';
+import styles from './Banner.module.css';
+
+const BANNER_CLASSES = {
+  sticky: styles.bannerVariantSticky,
+  brand: styles.bannerVariantBrand,
+  info: styles.bannerVariantInfo,
+  success: styles.bannerVariantSuccess,
+  danger: styles.bannerVariantDanger,
+  neutral: styles.bannerVariantNeutral,
+  warning: styles.bannerVariantWarning,
+} as const;
 
 export interface BannerProps extends HtmlProps<HTMLDivElement, 'onClose'> {
   /** @default 'brand' */
@@ -32,19 +46,27 @@ export const Banner = (props: BannerProps) => {
       {...rest}
       role="region"
       aria-label={translate('velvet.feedback.banner.label')}
-      class={cx('vui-banner', `vui-banner--${local.tone}`, local.sticky && 'vui-banner--sticky', local.class)}
+      class={cx(
+        typographyClass('body-sm'),
+        styles.banner,
+        variantClass(BANNER_CLASSES, local.tone),
+        local.sticky && styles.bannerVariantSticky,
+        local.class,
+      )}
     >
-      <div class="vui-banner__inner">
+      <div class={styles.bannerPartInner}>
         <Show when={glyph()}>{(name) => <Glyph name={name()} />}</Show>
-        <div class="vui-banner__text">{local.children}</div>
+        <Text as="div" variant="body-sm" tone="inherit" class={styles.bannerPartText}>
+          {local.children}
+        </Text>
         <Show when={action()}>
-          <div class="vui-banner__action">{action()}</div>
+          <div class={styles.bannerPartAction}>{action()}</div>
         </Show>
       </div>
       <Show when={local.onClose}>
         <CloseButton
           variant="bare"
-          class="vui-banner__close"
+          class={styles.bannerPartClose}
           label={translate('velvet.common.dismiss')}
           onClick={() => local.onClose?.()}
         />

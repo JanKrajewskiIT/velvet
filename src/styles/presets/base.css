@@ -12,30 +12,6 @@
 @import url('../tokens/mode-density.css');
 @import url('../tokens/comp.css');
 @import url('../tokens/base.css');
-@import url('../components/primitives/surface.css');
-@import url('../components/primitives/text.css');
-@import url('../components/primitives/section-label.css');
-@import url('../components/primitives/icon-tile.css');
-@import url('../components/primitives/list-item.css');
-@import url('../components/primitives/dot.css');
-@import url('../components/primitives/field.css');
-@import url('../components/primitives/control.css');
-@import url('../components/primitives/option.css');
-@import url('../components/primitives/count.css');
-@import url('../components/primitives/kbd.css');
-@import url('../components/primitives/mark.css');
-@import url('../components/primitives/checkmark.css');
-@import url('../components/primitives/meter.css');
-@import url('../components/primitives/segmented.css');
-@import url('../components/primitives/marker.css');
-@import url('../components/primitives/rail.css');
-@import url('../components/primitives/weekday.css');
-@import url('../components/primitives/col-resize.css');
-@import url('../components/primitives/swatch.css');
-@import url('../components/primitives/glyph.css');
-@import url('../components/primitives/chevron.css');
-@import url('../components/primitives/handle.css');
-@import url('../components/primitives/separator.css');
-@import url('../components/primitives/empty-text.css');
-@import url('../components/primitives/a11y.css');
-@import url('../extensions/accessibility.css');
+@import url('../system.css');
+
+/* Component modules are packaged from their component directories. */

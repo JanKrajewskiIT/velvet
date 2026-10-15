@@ -1,0 +1,3 @@
+.root {
+  composes: content from '../../styles/shared/primitives/inline-content.module.css';
+}

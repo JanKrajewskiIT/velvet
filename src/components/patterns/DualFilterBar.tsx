@@ -8,6 +8,9 @@ import { Chip } from '../forms/Chip';
 import { SearchInput } from '../forms/SearchInput';
 import { Glyph } from '../primitives/Glyph';
 import { SectionLabel } from '../primitives/SectionLabel';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './DualFilterBar.module.css';
 
 export interface DualFilterOption {
   value: string;
@@ -69,12 +72,12 @@ export const DualFilterBar = (props: DualFilterBarProps) => {
     <Show
       when={p.variant === 'simple'}
       fallback={
-        <div class={cx('vui-dfbar', p.class)}>
+        <div class={cx(styles.dfbar, p.class)}>
           <Show when={p.onSearchChange}>
             {(onSearchChange) => (
               <SearchInput
                 size="sm"
-                class="vui-dfbar__search"
+                class={styles.dfbarPartSearch}
                 placeholder={translate('velvet.patterns.dualFilterBar.search')}
                 value={p.search ?? ''}
                 onValueChange={onSearchChange()}
@@ -82,8 +85,8 @@ export const DualFilterBar = (props: DualFilterBarProps) => {
               />
             )}
           </Show>
-          <div class="vui-dfbar__group" role="group" aria-label={filterLabel()}>
-            <SectionLabel as="span" class="vui-dfbar__lbl" icon="filter">
+          <div class={styles.dfbarPartGroup} role="group" aria-label={filterLabel()}>
+            <SectionLabel as="span" class={styles.dfbarPartLbl} icon="filter">
               {filterLabel()}
             </SectionLabel>
             <For each={filterOptions()}>
@@ -104,9 +107,9 @@ export const DualFilterBar = (props: DualFilterBarProps) => {
               </Button>
             </Show>
           </div>
-          <span class="vui-dfbar__div" aria-hidden="true" />
-          <div class="vui-dfbar__group" role="radiogroup" aria-label={sortLabel()}>
-            <SectionLabel as="span" class="vui-dfbar__lbl" icon="sliders">
+          <span class={styles.dfbarPartDiv} aria-hidden="true" />
+          <div class={styles.dfbarPartGroup} role="radiogroup" aria-label={sortLabel()}>
+            <SectionLabel as="span" class={styles.dfbarPartLbl} icon="sliders">
               {sortLabel()}
             </SectionLabel>
             <For each={sortOptions()}>
@@ -116,10 +119,11 @@ export const DualFilterBar = (props: DualFilterBarProps) => {
                   role="radio"
                   aria-checked={sort() === option.value}
                   class={cx(
-                    'vui-chip',
-                    'vui-chip--sm',
+                    typographyClass('label-sm'),
+                    styles.chip,
+                    styles.chipVariantSm,
                     'vui-dfbar__sort',
-                    sort() === option.value && 'vui-dfbar__sort--on',
+                    sort() === option.value && styles.dfbarPartSortVariantOn,
                   )}
                   onClick={() => setSort(option.value)}
                 >
@@ -130,21 +134,25 @@ export const DualFilterBar = (props: DualFilterBarProps) => {
             </For>
           </div>
           <Show when={p.count != null}>
-            <span class="vui-dfbar__count" aria-live="polite">
+            <Text as="span" variant="caption" tone="tertiary" tabular class={styles.dfbarPartCount} aria-live="polite">
               {translate('velvet.patterns.dualFilterBar.resultCount', { count: p.count })}
-            </span>
+            </Text>
           </Show>
         </div>
       }
     >
-      <div class={cx('vui-dfbar-s', p.class)}>
-        <div class="vui-dfbar-s__group" role="group" aria-label={filterLabel()}>
+      <div class={cx(styles.dfbarS, p.class)}>
+        <div class={styles.dfbarSPartGroup} role="group" aria-label={filterLabel()}>
           <For each={filterOptions()}>
             {(option) => (
               <button
                 type="button"
                 aria-pressed={filters().includes(option.value)}
-                class={cx('vui-dfbar-s__chip', filters().includes(option.value) && 'vui-dfbar-s__chip--on')}
+                class={cx(
+                  typographyClass('button-sm'),
+                  styles.dfbarSPartChip,
+                  filters().includes(option.value) && styles.dfbarSPartChipVariantOn,
+                )}
                 onClick={() => toggle(option.value)}
               >
                 {option.label}
@@ -152,15 +160,19 @@ export const DualFilterBar = (props: DualFilterBarProps) => {
             )}
           </For>
         </div>
-        <span class="vui-dfbar-s__div" aria-hidden="true" />
-        <div class="vui-dfbar-s__group" role="radiogroup" aria-label={sortLabel()}>
+        <span class={styles.dfbarSPartDiv} aria-hidden="true" />
+        <div class={styles.dfbarSPartGroup} role="radiogroup" aria-label={sortLabel()}>
           <For each={sortOptions()}>
             {(option) => (
               <button
                 type="button"
                 role="radio"
                 aria-checked={sort() === option.value}
-                class={cx('vui-dfbar-s__chip', sort() === option.value && 'vui-dfbar-s__chip--on')}
+                class={cx(
+                  typographyClass('button-sm'),
+                  styles.dfbarSPartChip,
+                  sort() === option.value && styles.dfbarSPartChipVariantOn,
+                )}
                 onClick={() => setSort(option.value)}
               >
                 <Show when={option.icon}>{(icon) => <Glyph name={icon()} />}</Show>

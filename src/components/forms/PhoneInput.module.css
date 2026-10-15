@@ -1,0 +1,47 @@
+:import('../../styles/shared/primitives/control.module.css') {
+  externalControlPartInput: controlpartinput;
+}
+
+.phonePartCountry {
+  --glyph-size: var(--type-body-size);
+  --glyph-color: var(--fg-tertiary);
+
+  display: flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  height: 100%;
+  flex: none;
+  margin: 0;
+  padding: 0 var(--space-2-5) 0 var(--control-pad-x);
+  border: 0;
+  border-right: var(--border-width) solid var(--border-subtle);
+  border-radius: var(--radius-md) 0 0 var(--radius-md);
+  background: none;
+  color: var(--fg-primary);
+  cursor: pointer;
+}
+
+.phonePartCountry:hover {
+  background: var(--bg-hover);
+}
+
+.phonePartCountry:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring-inset);
+}
+
+.phone :global(.externalControlPartInput) {
+  font-variant-numeric: tabular-nums;
+}
+
+.select {
+  composes: select from '../../styles/shared/forms/select.module.css';
+}
+
+.phonePartCode {
+  composes: phonepartcode from '../../styles/shared/forms/phone-input.module.css';
+}
+
+.phonePartDial {
+  composes: phonepartdial from '../../styles/shared/forms/phone-input.module.css';
+}

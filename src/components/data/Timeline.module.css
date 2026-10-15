@@ -1,0 +1,41 @@
+.timeline {
+  position: relative;
+
+  --timeline-item-gap: var(--space-3-5);
+  --timeline-item-padding: 0 0 var(--space-5);
+  --timeline-head-wrap: wrap;
+  --timeline-title-flex: 0 1 auto;
+  --timeline-body-padding: var(--space-1-5);
+  --timeline-body-gap: var(--space-1);
+  --timeline-divider: 0;
+  --timeline-actions-opacity: initial;
+}
+
+.timelineVariantCompact {
+  --timeline-item-gap: var(--space-2-5);
+  --timeline-item-padding: var(--space-2) 0;
+  --timeline-head-wrap: nowrap;
+  --timeline-title-flex: 1;
+  --timeline-body-padding: var(--space-1);
+  --timeline-body-gap: var(--space-0-5);
+}
+
+.timelineVariantDivided {
+  --timeline-divider: var(--border-width) solid var(--border-subtle);
+}
+
+.timelineVariantCompact.timelineVariantDivided {
+  --timeline-item-padding: var(--space-2-5) 0;
+}
+
+.timelinePartAddbtn {
+  align-self: flex-start;
+}
+
+.timelinePartItem {
+  composes: timelinepartitem from '../../styles/shared/data/timeline.module.css';
+}
+
+.timelinePartBody {
+  composes: timelinepartbody from '../../styles/shared/data/timeline.module.css';
+}

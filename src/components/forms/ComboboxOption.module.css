@@ -1,0 +1,7 @@
+.selectPartOptionVariantActive {
+  background: var(--option-bg-active);
+}
+
+.selectPartOption {
+  composes: selectpartoption from '../../styles/shared/primitives/option.module.css';
+}

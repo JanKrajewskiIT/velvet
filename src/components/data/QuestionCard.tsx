@@ -11,6 +11,9 @@ import { Badge } from '../display/Badge';
 import { Card, type CardProps } from '../display/Card';
 import { Rating } from '../forms/Rating';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './QuestionCard.module.css';
 
 export interface QuestionCardProps extends HtmlProps<HTMLElement, 'title'> {
   question: JSX.Element;
@@ -95,10 +98,11 @@ export const QuestionCard = (props: QuestionCardProps) => {
       {...rest}
       as="article"
       padding={local.padding}
-      class={cx('vui-qcard', open() && 'vui-qcard--open', local.class)}
+      class={cx(styles.qcard, open() && styles.qcardVariantOpen, local.class)}
+      bodyClass={styles.cardBody}
     >
-      <div class="vui-qcard__top">
-        <div class="vui-qcard__badges">
+      <div class={styles.qcardPartTop}>
+        <div class={styles.qcardPartBadges}>
           <Show when={local.category}>
             {(category) => (
               <Badge tone={local.categoryTone} size="sm">
@@ -125,10 +129,17 @@ export const QuestionCard = (props: QuestionCardProps) => {
           />
         </Show>
       </div>
-      <Show when={local.answer} fallback={<h3 class="vui-qcard__q">{local.question}</h3>}>
+      <Show
+        when={local.answer}
+        fallback={
+          <Text as="h3" variant="label" tone="inherit" class={styles.qcardPartQ}>
+            {local.question}
+          </Text>
+        }
+      >
         <button
           type="button"
-          class="vui-qcard__q vui-qcard__q--btn"
+          class={cx(styles.qcardPartQ, styles.qcardPartQVariantBtn, typographyClass('label'))}
           aria-expanded={open()}
           aria-controls={answerId}
           onClick={toggle}
@@ -137,7 +148,7 @@ export const QuestionCard = (props: QuestionCardProps) => {
         </button>
       </Show>
       <Show when={hasMeta()}>
-        <div class="vui-qcard__meta">
+        <div class={styles.qcardPartMeta}>
           <Show when={local.difficulty}>
             {(difficulty) => (
               <Rating
@@ -150,10 +161,10 @@ export const QuestionCard = (props: QuestionCardProps) => {
           </Show>
           <Show when={local.time}>
             {(time) => (
-              <span class="vui-qcard__time">
+              <Text as="span" variant="caption" tone="tertiary" class={styles.qcardPartTime}>
                 <Glyph name="clock" />
                 {time()}
-              </span>
+              </Text>
             )}
           </Show>
           <For each={local.tags}>{(tag) => <Badge size="sm">{tag}</Badge>}</For>
@@ -161,23 +172,40 @@ export const QuestionCard = (props: QuestionCardProps) => {
       </Show>
       <Show when={local.answer}>
         {(answer) => (
-          <div id={answerId} class="vui-qcard__answer" role="region" hidden={!open()}>
+          <Text
+            as="div"
+            variant="body-sm"
+            tone="secondary"
+            id={answerId}
+            class={styles.qcardPartAnswer}
+            role="region"
+            hidden={!open()}
+          >
             {answer()}
-          </div>
+          </Text>
         )}
       </Show>
       <Show when={local.onVote || local.answer}>
-        <div class="vui-qcard__foot">
+        <div class={styles.qcardPartFoot}>
           <Show when={local.onVote}>
             <button
               type="button"
-              class={cx('vui-qcard__vote', local.voted && 'vui-qcard__vote--on')}
+              class={cx(
+                typographyClass('button-sm'),
+                styles.qcardPartVote,
+                local.voted && styles.qcardPartVoteVariantOn,
+              )}
               aria-pressed={local.voted}
               onClick={() => local.onVote?.()}
             >
               <Glyph name="arrow-up" />
               {local.votes ?? 0}
-              <span class="vui-qcard__sr">{` ${translate(local.voted ? 'velvet.data.questionCard.voted' : 'velvet.data.questionCard.vote')}`}</span>
+              <Text
+                as="span"
+                variant="caption"
+                tone="inherit"
+                class={styles.qcardPartSr}
+              >{` ${translate(local.voted ? 'velvet.data.questionCard.voted' : 'velvet.data.questionCard.vote')}`}</Text>
             </button>
           </Show>
           <Show when={local.answer}>

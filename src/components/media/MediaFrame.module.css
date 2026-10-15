@@ -1,0 +1,162 @@
+:import('../../styles/shared/primitives/glyph.module.css') {
+  externalIcon: icon;
+}
+
+.media {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--media-caption-gap);
+  min-width: 0;
+}
+
+.mediaPartFrame {
+  position: relative;
+  overflow: hidden;
+  background: var(--media-bg);
+  isolation: isolate;
+}
+
+.mediaVariantRounded .mediaPartFrame {
+  border-radius: var(--media-radius);
+}
+
+.mediaVariantBordered .mediaPartFrame {
+  box-shadow: inset 0 0 0 var(--border-width) var(--media-border);
+}
+
+.mediaPartFrameVariantEmpty,
+.mediaPartFrameVariantError {
+  background: repeating-linear-gradient(135deg, var(--media-bg) 0 9px, var(--media-stripe) 9px 18px);
+}
+
+.mediaPartFrameVariantLoading::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 30%, var(--skeleton-shine) 50%, transparent 70%);
+  background-size: 200% 100%;
+  animation: vui-media-shine 1.4s var(--ease-linear) infinite;
+}
+
+.mediaPartFallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  text-align: center;
+}
+
+.mediaPartRatio {
+  color: var(--fg-secondary);
+}
+
+.mediaPartPlay {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  z-index: 2;
+  width: var(--media-play-size);
+  height: var(--media-play-size);
+  border: 0;
+  border-radius: var(--radius-full);
+  display: grid;
+  place-items: center;
+  background: var(--media-play-bg);
+  color: var(--media-play-fg);
+  font-size: calc(var(--media-play-size) * 0.38);
+  cursor: pointer;
+  box-shadow: var(--elevation-card), var(--highlight-inset);
+  backdrop-filter: blur(var(--media-play-blur)) saturate(160%);
+  transition:
+    transform var(--motion-spring),
+    background-color var(--motion-fast),
+    color var(--motion-fast);
+}
+
+.mediaPartPlay:hover {
+  transform: scale(1.06);
+  background: var(--action-primary);
+  color: var(--action-primary-fg);
+}
+
+.mediaPartPlay:focus-visible {
+  outline: none;
+  box-shadow: var(--elevation-card), var(--focus-ring);
+}
+
+.mediaVariantSm .mediaPartPlay {
+  width: var(--control-height-md);
+  height: var(--control-height-md);
+  font-size: var(--size-icon-md);
+}
+
+.mediaVariantLg .mediaPartPlay {
+  width: 64px;
+  height: 64px;
+  font-size: var(--type-h3-size);
+}
+
+.mediaPartOverlay {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 1;
+  padding: var(--space-6) var(--space-4) var(--space-3);
+  background: linear-gradient(to top, var(--media-scrim), transparent);
+  color: var(--on-color-fg);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.mediaPartBadge {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  height: 22px;
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-full);
+  background: var(--media-scrim);
+  color: var(--on-color-fg);
+  backdrop-filter: blur(var(--blur-sm));
+}
+
+.mediaPartCaption {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-1) var(--space-3);
+}
+
+.mediaPartCredit {
+  color: var(--fg-tertiary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mediaPartFrameVariantLoading::after {
+    animation: none;
+  }
+}
+
+.mediaPartFrameVariantLoading {
+  --media-content-opacity: 0;
+}
+
+.mediaPartFallback :global(.externalIcon) {
+  --glyph-size: var(--size-icon-2xl);
+
+  margin-bottom: var(--space-1);
+}
+
+.mediaPartPlay :global(.externalIcon) {
+  margin-left: 8%;
+}

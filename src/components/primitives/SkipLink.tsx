@@ -2,6 +2,8 @@ import { type JSX, mergeProps } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import styles from './SkipLink.module.css';
+import { typographyClass } from './typography';
 
 export interface SkipLinkProps {
   /** Id of the main landmark. @default '#main' */
@@ -23,7 +25,7 @@ export const SkipLink = (props: SkipLinkProps) => {
     target.focus();
   };
   return (
-    <a href={p.href} class={cx('vui-skiplink', p.class)} onClick={go}>
+    <a href={p.href} class={cx(typographyClass('label'), styles.skiplink, p.class)} onClick={go}>
       {p.children ?? translate('velvet.primitives.skipLink.label')}
     </a>
   );

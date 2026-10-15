@@ -2,6 +2,8 @@ import { createUniqueId, For, Match, mergeProps, Switch } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { createTreeFocus } from './createTreeFocus';
 import { createTreeKeyboard } from './createTreeKeyboard';
 import { createTreeModel } from './createTreeModel';
@@ -10,6 +12,7 @@ import { createTreeViewLabels } from './createTreeViewLabels';
 import type { TreeController } from './treeController';
 import { TreeNodeRow } from './TreeNodeRow';
 import { TreeStatusRow } from './TreeStatusRow';
+import styles from './TreeView.module.css';
 import type { TreeViewLabels, TreeViewMoveLabels, TreeViewProps } from './treeViewTypes';
 
 export type { TreeViewLabels, TreeViewMoveLabels, TreeViewProps };
@@ -38,21 +41,21 @@ export const TreeView = (props: TreeViewProps) => {
 
   return (
     <>
-      <span class="vui-sr-only" id={instructionsId}>
+      <Text as="span" variant="caption" tone="inherit" class={styles.srOnly} id={instructionsId}>
         {p.onMovePosition && !p.labels?.moveInstructions
           ? translate('velvet.navigation.treeView.positionInstructions')
           : labels().moveInstructions}
-      </span>
-      <span class="vui-sr-only" aria-live="polite">
+      </Text>
+      <Text as="span" variant="caption" tone="inherit" class={styles.srOnly} aria-live="polite">
         {move.announcement()}
-      </span>
+      </Text>
       <ul
         ref={focus.setRoot}
         role="tree"
         aria-label={p.label}
         aria-describedby={move.enabled() ? instructionsId : undefined}
         aria-multiselectable={p.checkable || undefined}
-        class={cx('vui-tree', p.checkable && 'vui-tree--checkable', p.class)}
+        class={cx(typographyClass('body-sm'), styles.tree, p.checkable && styles.treeVariantCheckable, p.class)}
         onKeyDown={onKeyDown}
       >
         <For each={model.rows()}>

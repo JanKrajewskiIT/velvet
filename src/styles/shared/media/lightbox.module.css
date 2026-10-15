@@ -1,0 +1,11 @@
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: flex;
+  flex-direction: column;
+  background: var(--scrim-media);
+  color: var(--on-color-fg);
+  outline: 0;
+  animation: vui-fade-in var(--motion-base);
+}

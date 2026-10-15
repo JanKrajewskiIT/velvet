@@ -1,0 +1,3 @@
+.marqueePartGroup {
+  composes: marqueepartgroup from '../../styles/shared/media/marquee.module.css';
+}

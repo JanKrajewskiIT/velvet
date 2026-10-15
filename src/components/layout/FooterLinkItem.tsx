@@ -3,6 +3,8 @@ import { Show } from 'solid-js';
 import { cx } from '../../utils/cx';
 import { Badge } from '../display/Badge';
 import { Glyph } from '../primitives/Glyph';
+import { typographyClass } from '../primitives/typography';
+import styles from './FooterLinkItem.module.css';
 import type { FooterLink } from './footerTypes';
 
 export interface FooterLinkItemProps {
@@ -16,11 +18,15 @@ export const FooterLinkItem = (props: FooterLinkItemProps) => (
     target={props.link.external ? '_blank' : undefined}
     rel={props.link.external ? 'noreferrer' : undefined}
     aria-current={props.link.current ? 'page' : undefined}
-    class={cx('vui-footer__link', props.small && 'vui-footer__link--sm')}
+    class={cx(
+      typographyClass(props.small ? 'caption' : 'body-sm'),
+      styles.footerPartLink,
+      props.small && styles.footerPartLinkVariantSm,
+    )}
   >
     {props.link.label}
     <Show when={props.link.external}>
-      <Glyph name="external-link" class="vui-footer__ext" />
+      <Glyph name="external-link" class={styles.footerPartExt} />
     </Show>
     <Show when={props.link.badge}>
       {(badge) => (

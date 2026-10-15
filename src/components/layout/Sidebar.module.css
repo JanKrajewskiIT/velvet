@@ -1,0 +1,135 @@
+:import('../../styles/shared/primitives/glyph.module.css') {
+  externalIcon: icon;
+}
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  width: var(--sidebar-width);
+  flex: none;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-0-5);
+  padding: var(--space-2);
+  background: var(--bg-raised);
+  overflow: hidden auto;
+  scrollbar-width: thin;
+  transition:
+    width var(--motion-move),
+    padding var(--motion-move);
+}
+
+.sidebarVariantFloating {
+  max-height: 100%;
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--elevation-card);
+}
+
+.sidebarVariantDocked {
+  height: 100vh;
+  border-right: var(--border-width) solid var(--border-subtle);
+}
+
+.sidebarPartHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2-5);
+  padding: var(--space-1-5) var(--space-1-5) var(--space-2-5);
+  margin-bottom: var(--space-1-5);
+  border-bottom: var(--border-width) solid var(--border-subtle);
+}
+
+.sidebarPartBrand {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2-5);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.sidebarPartBrandVariantMark {
+  flex: none;
+  margin: 0 auto;
+}
+
+.sidebarPartToggle {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  margin-left: auto;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: none;
+  color: var(--fg-tertiary);
+  cursor: pointer;
+  transition:
+    background-color var(--motion-fast),
+    color var(--motion-fast);
+}
+
+.sidebarPartToggle:hover {
+  background: var(--bg-hover);
+  color: var(--fg-primary);
+}
+
+.sidebarPartToggle:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.sidebarPartNav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-0-5);
+}
+
+.sidebarPartFooter {
+  display: flex;
+  flex-direction: column;
+  margin-top: auto;
+  padding-top: var(--space-2);
+  border-top: var(--border-width) solid var(--border-subtle);
+}
+
+.sidebarVariantCollapsed {
+  width: var(--sidebar-width-collapsed);
+  padding: var(--space-1-5) var(--space-1);
+}
+
+.sidebarVariantCollapsed .sidebarPartHead {
+  justify-content: center;
+  gap: 0;
+  padding: var(--space-1) 0 var(--space-2-5);
+}
+
+.sidebarVariantCollapsed .sidebarPartToggle {
+  margin: 0 auto;
+}
+
+.sidebarVariantCollapsed .sidebarPartNav,
+.sidebarVariantCollapsed .sidebarPartFooter {
+  align-items: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar {
+    transition: none;
+  }
+}
+
+.sidebarPartToggle :global(.externalIcon) {
+  --glyph-size: var(--type-title-lg-size);
+
+  transition: transform var(--motion-move);
+}
+
+.sidebarVariantCollapsed .sidebarPartToggle :global(.externalIcon) {
+  transform: rotate(180deg);
+}

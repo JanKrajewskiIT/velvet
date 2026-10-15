@@ -1,0 +1,28 @@
+.loader {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.16em;
+  flex: none;
+  color: var(--action-primary);
+  font-size: var(--type-h3-size);
+  width: 1em;
+  height: 1em;
+}
+
+.loaderVariantSm {
+  font-size: var(--type-body-lg-size);
+}
+
+.loaderVariantRing {
+  border-radius: 50%;
+  border: 0.125em solid color-mix(in oklab, currentcolor 18%, transparent);
+  border-top-color: currentcolor;
+  animation: vui-spin 0.7s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loaderVariantRing {
+    animation-duration: 1.6s;
+  }
+}

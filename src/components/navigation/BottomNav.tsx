@@ -6,6 +6,9 @@ import { cx } from '../../utils/cx';
 import { Polymorphic } from '../../utils/polymorphic';
 import { Glyph } from '../primitives/Glyph';
 import { Indicator } from '../primitives/Indicator';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './BottomNav.module.css';
 import { glyphForState } from './filledGlyph';
 
 export interface BottomNavItem {
@@ -70,28 +73,30 @@ export const BottomNav = (props: BottomNavProps) => {
         href={item.href}
         type={item.href ? undefined : 'button'}
         aria-current={on() ? 'page' : undefined}
-        class={cx('vui-bottomnav__item', on() && 'vui-bottomnav__item--on')}
+        class={cx(typographyClass('body'), styles.bottomnavPartItem, on() && styles.bottomnavPartItemVariantOn)}
         onClick={(e: MouseEvent) => {
           setCurrent(item.value);
           (p.onValueChange ?? p.onChange)?.(item.value, e);
         }}
       >
-        <Indicator class="vui-bottomnav__icon" count={badge().count} dot={badge().dot}>
+        <Indicator class={styles.bottomnavPartIcon} count={badge().count} dot={badge().dot}>
           <Glyph name={glyphForState(item.icon, on())} />
         </Indicator>
-        <span class="vui-bottomnav__label">{item.label}</span>
+        <Text as="span" variant="overline" tone="inherit" class={styles.bottomnavPartLabel}>
+          {item.label}
+        </Text>
       </Polymorphic>
     );
   };
 
   return (
-    <nav aria-label={label()} class={cx('vui-bottomnav', p.fixed && 'vui-bottomnav--fixed', p.class)}>
+    <nav aria-label={label()} class={cx(styles.bottomnav, p.fixed && styles.bottomnavVariantFixed, p.class)}>
       <For each={before()}>{renderItem}</For>
       <Show when={p.action}>
         {(action) => (
           <button
             type="button"
-            class="vui-bottomnav__action"
+            class={styles.bottomnavPartAction}
             aria-label={action().label}
             onClick={() => action().onClick?.()}
           >

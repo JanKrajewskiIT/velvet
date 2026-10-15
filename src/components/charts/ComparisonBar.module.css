@@ -1,0 +1,135 @@
+.cmpbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3-5);
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-2-5);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-xl);
+  background: var(--bg-overlay);
+  box-shadow: var(--elevation-raised);
+  color: var(--fg-primary);
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.cmpbarVariantFloating {
+  position: fixed;
+  left: 50%;
+  bottom: var(--space-5);
+  z-index: var(--z-sticky);
+  width: max-content;
+  max-width: calc(100vw - 2 * var(--viewport-margin));
+  transform: translate(-50%, calc(100% + 40px));
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform var(--motion-enter),
+    opacity var(--motion-base);
+}
+
+.cmpbarVariantFloating.cmpbarVariantShown {
+  transform: translate(-50%, 0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.cmpbar:not(.cmpbarVariantFloating, .cmpbarVariantShown) {
+  opacity: 0.6;
+}
+
+.cmpbarPartItems {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.cmpbarPartChip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  flex: none;
+  height: var(--control-height-sm);
+  padding: 0 var(--space-1) 0 var(--space-1);
+  border-radius: var(--radius-full);
+  background: color-mix(in oklab, var(--c) 12%, var(--bg-raised));
+  box-shadow: inset 0 0 0 var(--border-width) color-mix(in oklab, var(--c) 35%, transparent);
+  animation: vui-cmp-pop var(--motion-spring);
+}
+
+.cmpbarPartLbl {
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cmpbarPartX {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--fg-tertiary);
+  cursor: pointer;
+  font-size: var(--type-caption-size);
+}
+
+.cmpbarPartX:hover {
+  background: var(--bg-hover);
+  color: var(--fg-primary);
+}
+
+.cmpbarPartX:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.cmpbarPartSlot {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--control-height-sm);
+  height: var(--control-height-sm);
+  border-radius: 50%;
+  border: var(--border-width-medium) dashed var(--border-default);
+  color: var(--fg-disabled);
+}
+
+.cmpbarPartHint {
+  flex: none;
+  white-space: nowrap;
+}
+
+.cmpbarPartHintVariantOver {
+  color: var(--status-warning-fg);
+}
+
+.cmpbarPartActs {
+  display: flex;
+  gap: var(--space-1);
+  margin-left: auto;
+  flex: none;
+}
+
+@media (width <= 639px) {
+  .cmpbar {
+    flex-wrap: wrap;
+  }
+
+  .cmpbarPartHint {
+    order: 3;
+    flex-basis: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cmpbarVariantFloating,
+  .cmpbarPartChip {
+    transition: opacity var(--motion-base);
+    animation: none;
+  }
+}

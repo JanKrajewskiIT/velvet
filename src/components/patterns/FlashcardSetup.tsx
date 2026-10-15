@@ -6,6 +6,8 @@ import { Button } from '../actions/Button';
 import { OptionSwitcher } from '../forms/OptionSwitcher';
 import { Slider } from '../forms/Slider';
 import { FieldLabel } from '../primitives/FieldLabel';
+import { Heading } from '../primitives/Heading';
+import { Text } from '../primitives/Text';
 import {
   FLASH_DIRECTION_LABEL_KEYS,
   FLASH_DIRECTIONS,
@@ -16,6 +18,7 @@ import {
   type FlashDirection,
   type FlashOrder,
 } from './flashcard';
+import styles from './FlashcardSetup.module.css';
 import { isOneOf } from './oneOf';
 
 export interface FlashcardSetupProps {
@@ -50,26 +53,36 @@ export const FlashcardSetup = (props: FlashcardSetupProps) => {
   };
 
   return (
-    <div class={cx('vui-surface', 'vui-fc-setup', p.class)}>
-      <div class="vui-fc-setup__h">{translate('velvet.patterns.flashcardSetup.title')}</div>
-      <div class="vui-fc-setup__decks" role="radiogroup" aria-label={translate('velvet.patterns.flashcardSetup.deck')}>
+    <div class={cx(styles.surface, styles.fcSetup, p.class)}>
+      <Heading level={3} variant="title-lg" class="vui-fc-setup__h">
+        {translate('velvet.patterns.flashcardSetup.title')}
+      </Heading>
+      <div
+        class={styles.fcSetupPartDecks}
+        role="radiogroup"
+        aria-label={translate('velvet.patterns.flashcardSetup.deck')}
+      >
         <For each={p.decks}>
           {(candidate) => (
             <button
               type="button"
               role="radio"
               aria-checked={deckId() === candidate.id}
-              class={cx('vui-fc-deck', deckId() === candidate.id && 'vui-fc-deck--on')}
+              class={cx(styles.fcDeck, deckId() === candidate.id && styles.fcDeckVariantOn)}
               onClick={() => setDeckId(candidate.id)}
             >
-              <span class="vui-fc-deck__name">{candidate.name}</span>
-              <span class="vui-fc-deck__meta">
+              <Text as="span" variant="label" tone="inherit">
+                {candidate.name}
+              </Text>
+              <Text as="span" variant="caption" tone="tertiary" class={styles.fcDeckPartMeta}>
                 {translate('velvet.patterns.flashcardSetup.cards', { count: candidate.total })}
                 {candidate.due ? ' · ' : ''}
                 <Show when={candidate.due}>
-                  <b>{translate('velvet.patterns.flashcardSetup.dueToday', { count: candidate.due })}</b>
+                  <Text as="b" variant="label-sm" tone="inherit">
+                    {translate('velvet.patterns.flashcardSetup.dueToday', { count: candidate.due })}
+                  </Text>
                 </Show>
-              </span>
+              </Text>
             </button>
           )}
         </For>
@@ -81,7 +94,7 @@ export const FlashcardSetup = (props: FlashcardSetupProps) => {
         value={count()}
         onValueChange={setWanted}
       />
-      <div class="vui-fc-setup__row">
+      <div class={styles.fcSetupPartRow}>
         <FieldLabel>{translate('velvet.patterns.flashcardSetup.order')}</FieldLabel>
         <OptionSwitcher
           size="sm"
@@ -93,7 +106,7 @@ export const FlashcardSetup = (props: FlashcardSetupProps) => {
           }}
         />
       </div>
-      <div class="vui-fc-setup__row">
+      <div class={styles.fcSetupPartRow}>
         <FieldLabel>{translate('velvet.patterns.flashcardSetup.direction')}</FieldLabel>
         <OptionSwitcher
           size="sm"

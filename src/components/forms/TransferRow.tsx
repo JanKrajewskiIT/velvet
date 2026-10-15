@@ -6,9 +6,11 @@ import { Glyph } from '../primitives/Glyph';
 import { Handle } from '../primitives/Handle';
 import { highlightMatch } from '../primitives/Mark';
 import { SectionLabel } from '../primitives/SectionLabel';
+import { Text } from '../primitives/Text';
 import type { TransferDrag } from './createTransferDrag';
 import type { TransferSelection } from './createTransferSelection';
 import type { TransferItem, TransferRowState } from './transferItem';
+import styles from './TransferRow.module.css';
 
 export interface TransferRowProps {
   item: TransferItem;
@@ -32,7 +34,7 @@ export const TransferRow = (props: TransferRowProps) => {
     <>
       <Show when={props.heading}>
         {(heading) => (
-          <SectionLabel as="li" role="presentation" class="vui-xfer__group">
+          <SectionLabel as="li" role="presentation" class={styles.xferPartGroup}>
             {heading()}
           </SectionLabel>
         )}
@@ -45,10 +47,10 @@ export const TransferRow = (props: TransferRowProps) => {
         aria-disabled={props.item.disabled || undefined}
         tabIndex={props.index === props.selection.focus() ? 0 : -1}
         class={cx(
-          'vui-xfer__item',
-          selected() && 'vui-xfer__item--on',
-          props.item.disabled && 'vui-xfer__item--disabled',
-          props.drag.dropsBefore(props.item.value) && 'vui-xfer__item--before',
+          styles.xferPartItem,
+          selected() && styles.xferPartItemVariantOn,
+          props.item.disabled && styles.xferPartItemVariantDisabled,
+          props.drag.dropsBefore(props.item.value) && styles.xferPartItemVariantBefore,
         )}
         draggable={!props.item.disabled}
         onDragStart={(e) => props.drag.onDragStart(e, props.item)}
@@ -64,24 +66,33 @@ export const TransferRow = (props: TransferRowProps) => {
           fallback={
             <>
               <Show when={props.item.avatar || props.item.icon}>
-                <span class={cx('vui-xfer__lead', props.item.icon && 'vui-xfer__lead--icon')} aria-hidden="true">
+                <span
+                  class={cx(styles.xferPartLead, props.item.icon && styles.xferPartLeadVariantIcon)}
+                  aria-hidden="true"
+                >
                   <Show when={props.item.icon} fallback={props.item.avatar}>
                     {(icon) => <Glyph name={icon()} />}
                   </Show>
                 </span>
               </Show>
-              <span class="vui-xfer__text">
-                <span class="vui-xfer__label">
+              <span class={styles.xferPartText}>
+                <Text as="span" variant="body-sm" tone="inherit" class={styles.xferPartLabel}>
                   {typeof props.item.label === 'string'
                     ? highlightMatch(props.item.label, props.query)
                     : props.item.label}
-                </span>
+                </Text>
                 <Show when={props.item.description}>
-                  {(description) => <span class="vui-xfer__desc">{highlightMatch(description(), props.query)}</span>}
+                  {(description) => (
+                    <Text as="span" variant="caption" tone="inherit" class={styles.xferPartDesc}>
+                      {highlightMatch(description(), props.query)}
+                    </Text>
+                  )}
                 </Show>
               </span>
               <Show when={props.item.meta}>
-                <span class="vui-xfer__meta">{props.item.meta}</span>
+                <Text as="span" variant="kbd" tone="inherit" class={styles.xferPartMeta}>
+                  {props.item.meta}
+                </Text>
               </Show>
             </>
           }
@@ -89,7 +100,7 @@ export const TransferRow = (props: TransferRowProps) => {
           {(render) => render()(props.item, { query: props.query, selected: selected() })}
         </Show>
         <Show when={props.orderable && !props.item.disabled}>
-          <Handle decorative class="vui-xfer__grip" />
+          <Handle decorative class={styles.xferPartGrip} />
         </Show>
       </li>
     </>

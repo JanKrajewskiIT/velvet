@@ -1,0 +1,28 @@
+.cascPartResults {
+  padding: var(--panel-pad);
+  max-height: var(--overlay-max-h-sm);
+  overflow-y: auto;
+  min-width: var(--overlay-w-sm);
+}
+
+.cascPartHit {
+  flex-flow: row wrap;
+  align-items: center;
+  gap: var(--space-1-5);
+}
+
+.tselectPartEmpty {
+  composes: tselectpartempty from '../../styles/shared/patterns/filter-bar.module.css';
+}
+
+.option {
+  composes: option from '../../styles/shared/primitives/option.module.css';
+}
+
+.optionVariantActive {
+  composes: optionvariantactive from '../../styles/shared/primitives/option.module.css';
+}
+
+.optionPartLabel {
+  composes: optionpartlabel from '../../styles/shared/primitives/option.module.css';
+}

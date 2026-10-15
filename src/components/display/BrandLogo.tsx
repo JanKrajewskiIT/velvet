@@ -1,7 +1,19 @@
 import { For, type JSX, mergeProps, Show } from 'solid-js';
 
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import styles from './BrandLogo.module.css';
 import { R_MARK, R_WORD } from './recronLogoPaths';
+
+const LOGO_CLASSES = {
+  velvet: styles.logoVariantVelvet,
+  plain: styles.logoVariantPlain,
+  inverse: styles.logoVariantInverse,
+  sm: styles.logoVariantSm,
+  md: styles.logoVariantMd,
+  lg: styles.logoVariantLg,
+  xl: styles.logoVariantXl,
+} as const;
 
 const VELVET = { name: 'Velvet UI', letter: 'v', word: 'velvet', accent: '/ui' } as const;
 const RECRON_NAME = 'Recron';
@@ -27,8 +39,6 @@ export interface BrandLogoProps {
   style?: JSX.CSSProperties;
 }
 
-const RecronPaths = (props: { paths: readonly string[] }) => <For each={props.paths}>{(d) => <path d={d} />}</For>;
-
 /** Brand mark: the Recron "R" signet + wordmark, or the type-only "velvet/ui" placeholder. */
 export const BrandLogo = (props: BrandLogoProps) => {
   const merged = mergeProps(
@@ -48,24 +58,24 @@ export const BrandLogo = (props: BrandLogoProps) => {
           role="img"
           aria-label={merged.label ?? VELVET.name}
           class={cx(
-            'vui-logo',
-            'vui-logo--velvet',
-            presetSize() && `vui-logo--${presetSize()}`,
-            inverse() && 'vui-logo--inverse',
-            !merged.glow && 'vui-logo--plain',
+            styles.logo,
+            styles.logoVariantVelvet,
+            presetSize() && variantClass(LOGO_CLASSES, presetSize()),
+            inverse() && styles.logoVariantInverse,
+            !merged.glow && styles.logoVariantPlain,
             merged.class,
           )}
           style={pixelSize() === undefined ? merged.style : { 'font-size': `${pixelSize()}px`, ...merged.style }}
         >
           <Show when={merged.variant !== 'wordmark'}>
-            <span class="vui-logo__mark" aria-hidden="true">
+            <span class={styles.logoPartMark} aria-hidden="true">
               <span>{VELVET.letter}</span>
             </span>
           </Show>
           <Show when={!markOnly()}>
-            <span class="vui-logo__word" aria-hidden="true">
+            <span class={styles.logoPartWord} aria-hidden="true">
               {VELVET.word}
-              <span class="vui-logo__accent">{VELVET.accent}</span>
+              <span class={styles.logoPartAccent}>{VELVET.accent}</span>
             </span>
           </Show>
         </span>
@@ -75,16 +85,16 @@ export const BrandLogo = (props: BrandLogoProps) => {
         role="img"
         aria-label={merged.label ?? RECRON_NAME}
         viewBox={markOnly() ? RECRON_VIEWBOX.mark : RECRON_VIEWBOX.lockup}
-        class={cx('vui-logo-r', inverse() && 'vui-logo-r--inverse', merged.class)}
+        class={cx(styles.logoR, inverse() && styles.logoRVariantInverse, merged.class)}
         style={{ height: `${recronHeight()}px`, ...merged.style }}
       >
         <g transform="translate(0,752) scale(0.1,-0.1)">
-          <g class="vui-logo-r__mark">
-            <RecronPaths paths={R_MARK} />
+          <g class={styles.logoRPartMark}>
+            <For each={R_MARK}>{(d) => <path d={d} />}</For>
           </g>
           <Show when={!markOnly()}>
-            <g class="vui-logo-r__word">
-              <RecronPaths paths={R_WORD} />
+            <g class={styles.logoRPartWord}>
+              <For each={R_WORD}>{(d) => <path d={d} />}</For>
             </g>
           </Show>
         </g>

@@ -1,0 +1,29 @@
+.railPartItem {
+  position: relative;
+}
+
+.railPartItem:not(:last-child)::before {
+  content: '';
+  display: var(--rail-connector-display, block);
+  position: absolute;
+  left: calc(var(--rail-marker) / 2 - var(--rail-w) / 2);
+  top: calc(var(--rail-marker) + var(--rail-gap));
+  bottom: var(--rail-gap);
+  width: var(--rail-w);
+  border-radius: var(--radius-2xs);
+  background: var(--rail-color);
+}
+
+.railPartItemVariantDone:not(:last-child)::before {
+  background: var(--rail-done);
+}
+
+.railPartItemVariantActive:not(:last-child)::before {
+  background: var(--rail-active);
+}
+
+.railPartItemVariantDashed:not(:last-child)::before {
+  width: 0;
+  background: none;
+  border-left: var(--rail-w) dashed var(--border-default);
+}

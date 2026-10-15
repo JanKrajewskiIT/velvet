@@ -5,9 +5,12 @@ import { useTranslate, useTranslateRich } from '../../i18n/useTranslate';
 import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Button } from '../actions/Button';
 import { Control } from '../primitives/Control';
+import { ControlInput } from '../primitives/ControlInput';
 import { Field } from '../primitives/Field';
 import { Glyph } from '../primitives/Glyph';
 import { IconTile } from '../primitives/IconTile';
+import { Text } from '../primitives/Text';
+import styles from './ConfirmDialog.module.css';
 import { Dialog } from './Dialog';
 
 export interface ConfirmDialogProps {
@@ -83,12 +86,12 @@ export const ConfirmDialog = (props: ConfirmDialogProps) => {
       size="sm"
       dismissible={!busy()}
       title={
-        <span class="vui-confirm__title">
+        <Text as="span" variant="title-lg" tone="inherit" class={styles.confirmPartTitle}>
           <Show when={danger()}>
             <IconTile icon="triangle-alert" tone="danger" shape="circle" size="sm" />
           </Show>
           {title()}
-        </span>
+        </Text>
       }
       description={p.description}
       footer={
@@ -110,24 +113,27 @@ export const ConfirmDialog = (props: ConfirmDialogProps) => {
     >
       {p.children}
       <Show when={failed()}>
-        <div class="vui-confirm__err" role="alert">
+        <Text as="div" variant="body-sm" tone="danger" class={styles.confirmPartErr} role="alert">
           <Glyph name="alert-circle" />
           {errorMessage()}
-        </div>
+        </Text>
       </Show>
       <Show when={p.requireText}>
         {(requireText) => (
           <Field
             label={translateRich('velvet.feedback.confirmDialog.typeToConfirm', {
               text: requireText(),
-              code: (children) => <b class="vui-confirm__code">{children}</b>,
+              code: (children) => (
+                <Text as="b" variant="label" tone="inherit" class={styles.confirmPartCode}>
+                  {children}
+                </Text>
+              ),
             })}
           >
             {(control) => (
               <Control>
-                <input
+                <ControlInput
                   id={control.id}
-                  class="vui-control__input"
                   value={typed()}
                   onInput={(e) => setTyped(e.currentTarget.value)}
                   onKeyDown={(e) => {

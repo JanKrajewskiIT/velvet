@@ -4,6 +4,8 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { Button } from '../actions/Button';
 import { Field } from '../primitives/Field';
+import { Text } from '../primitives/Text';
+import styles from './SignaturePad.module.css';
 import {
   MIN_POINT_DISTANCE_PX,
   paintSignature,
@@ -113,14 +115,18 @@ export const SignaturePad = (props: SignaturePadProps) => {
       class={cx('vui-sig', p.class)}
     >
       <div
-        class={cx('vui-sig__pad', !!p.error && 'vui-sig__pad--invalid', p.disabled && 'vui-sig__pad--disabled')}
+        class={cx(
+          styles.sigPartPad,
+          !!p.error && styles.sigPartPadVariantInvalid,
+          p.disabled && styles.sigPartPadVariantDisabled,
+        )}
         style={{ height: `${p.height}px` }}
       >
         <canvas
           ref={(element) => {
             canvas = element;
           }}
-          class="vui-sig__canvas"
+          class={styles.sigPartCanvas}
           role="img"
           aria-label={`${canvasLabel()} — ${signatureState()}`}
           onPointerDown={onPointerDown}
@@ -129,13 +135,13 @@ export const SignaturePad = (props: SignaturePadProps) => {
           onPointerCancel={endStroke}
         />
         <Show when={!strokes().length}>
-          <span class="vui-sig__ph" aria-hidden="true">
+          <Text as="span" variant="body-sm" tone="inherit" class={styles.sigPartPh} aria-hidden="true">
             {p.placeholder ?? translate('velvet.forms.signaturePad.placeholder')}
-          </span>
+          </Text>
         </Show>
-        <span class="vui-sig__line" aria-hidden="true" />
+        <span class={styles.sigPartLine} aria-hidden="true" />
         <Show when={strokes().length > 0 && !p.disabled}>
-          <div class="vui-sig__tools">
+          <div class={styles.sigPartTools}>
             <Button variant="ghost" size="xs" iconLeft="rotate-ccw" onClick={() => commit(strokes().slice(0, -1))}>
               {p.undoLabel ?? translate('velvet.common.undo')}
             </Button>

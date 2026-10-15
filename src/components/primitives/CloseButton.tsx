@@ -2,14 +2,16 @@ import { type JSX, mergeProps, splitProps } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { callHandler } from '../../utils/callHandler';
-import { cx, modifier } from '../../utils/cx';
+import { cx } from '../../utils/cx';
 import { type HtmlProps, Polymorphic } from '../../utils/polymorphic';
+import { buttonClass } from '../actions/buttonClass';
+import styles from './CloseButton.module.css';
 import { Glyph } from './Glyph';
 
 const BASE = {
-  button: 'vui-btn vui-btn--ghost vui-btn--icon',
-  field: 'vui-control__btn',
-  tag: 'vui-tag__remove',
+  button: undefined,
+  field: styles.controlPartBtn,
+  tag: styles.tagPartRemove,
   bare: undefined,
 } as const;
 
@@ -72,7 +74,12 @@ export const CloseButton = (props: CloseButtonProps) => {
       disabled={isSpan() ? undefined : local.disabled}
       aria-disabled={isSpan() && local.disabled ? true : undefined}
       aria-label={local.label ?? translate('velvet.common.close')}
-      class={cx(BASE[local.variant], local.variant === 'button' && modifier('vui-btn', local.size, 'md'), local.class)}
+      class={cx(
+        local.variant === 'button'
+          ? buttonClass({ variant: 'ghost', size: local.size, icon: true })
+          : BASE[local.variant],
+        local.class,
+      )}
       onClick={fire}
       onKeyDown={onKeyDown}
     >

@@ -2,6 +2,7 @@ import { mergeProps, splitProps } from 'solid-js';
 
 import { cx } from '../../utils/cx';
 import { type ElementTag, type HtmlProps, Polymorphic } from '../../utils/polymorphic';
+import styles from './Rail.module.css';
 
 export interface RailProps extends HtmlProps<HTMLElement> {
   /** @default 'ol' */
@@ -20,7 +21,7 @@ export const Rail = (props: RailProps) => {
     <Polymorphic
       tag={local.as}
       data-rail={local.size}
-      class={cx('vui-rail', !local.line && 'vui-rail--none', local.class)}
+      class={cx(styles.rail, !local.line && styles.railVariantNone, local.class)}
       {...rest}
     />
   );

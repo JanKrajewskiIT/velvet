@@ -12,10 +12,20 @@ import {
 } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { pad, toDate } from '../../utils/date';
 import type { HtmlProps } from '../../utils/polymorphic';
 import { Separator } from '../primitives/Separator';
+import { Text } from '../primitives/Text';
+import styles from './Countdown.module.css';
+
+const COUNTDOWN_CLASSES = {
+  boxes: styles.countdownVariantBoxes,
+  sm: styles.countdownVariantSm,
+  lg: styles.countdownVariantLg,
+  inline: styles.countdownVariantInline,
+} as const;
 
 const COUNTDOWN_UNITS = ['days', 'hours', 'minutes', 'seconds'] as const;
 
@@ -94,7 +104,12 @@ export const Countdown = (props: CountdownProps) => {
   return (
     <div
       {...rest}
-      class={cx('vui-countdown', `vui-countdown--${local.variant}`, `vui-countdown--${local.size}`, local.class)}
+      class={cx(
+        styles.countdown,
+        variantClass(COUNTDOWN_CLASSES, local.variant),
+        variantClass(COUNTDOWN_CLASSES, local.size),
+        local.class,
+      )}
       role="timer"
       aria-label={translate('velvet.feedback.countdown.remaining', { summary: summary() })}
     >
@@ -104,12 +119,33 @@ export const Countdown = (props: CountdownProps) => {
             <Show when={local.variant === 'inline' && i > 0}>
               <Separator variant="text">:</Separator>
             </Show>
-            <span class="vui-countdown__unit" aria-hidden="true">
+            <span class={styles.countdownPartUnit} aria-hidden="true">
               <Show when={textOf(unit())} keyed>
-                {(text) => <span class="vui-countdown__num">{text}</span>}
+                {(text) => (
+                  <Text
+                    as="span"
+                    variant={
+                      local.variant === 'inline'
+                        ? 'title-lg'
+                        : local.size === 'sm'
+                          ? 'h4'
+                          : local.size === 'lg'
+                            ? 'display-sm'
+                            : 'kpi'
+                    }
+                    mono={local.variant === 'inline'}
+                    tabular
+                    tone="inherit"
+                    class={styles.countdownPartNum}
+                  >
+                    {text}
+                  </Text>
+                )}
               </Show>
               <Show when={local.variant === 'boxes'}>
-                <span class="vui-countdown__label">{labelOf(unit())}</span>
+                <Text as="span" variant="overline" tone="tertiary" class="vui-countdown__label">
+                  {labelOf(unit())}
+                </Text>
               </Show>
             </span>
           </>

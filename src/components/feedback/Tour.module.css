@@ -1,0 +1,35 @@
+.tour {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+}
+
+.tourPartVeil {
+  position: absolute;
+  inset: 0;
+  background: var(--scrim-backdrop);
+}
+
+.tourPartHole {
+  position: absolute;
+  border-radius: var(--radius-lg);
+  box-shadow:
+    0 0 0 var(--border-width-thick) var(--border-focus),
+    0 0 0 9999px var(--scrim-backdrop);
+  transition: all var(--motion-enter);
+  pointer-events: none;
+}
+
+.tourPartBlock {
+  position: absolute;
+  inset: 0;
+}
+
+.tour[data-vui-modal] {
+  padding: 0;
+  background: transparent;
+}
+
+.tourPartCard {
+  composes: tourpartcard from '../../styles/shared/feedback/tour.module.css';
+}

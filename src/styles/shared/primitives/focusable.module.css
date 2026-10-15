@@ -1,0 +1,4 @@
+.focusable:focus-visible {
+  outline: var(--border-width-thick) solid var(--border-focus);
+  outline-offset: var(--focus-ring-offset);
+}

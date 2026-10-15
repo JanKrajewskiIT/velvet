@@ -1,0 +1,105 @@
+.heatWrap {
+  --heatmap-cell-gap: var(--space-0-5);
+
+  gap: var(--space-3);
+}
+
+.heat {
+  max-width: calc(var(--heatmap-weeks) * (var(--heatmap-cell-max) + var(--heatmap-cell-gap)) + 34px);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-1) var(--space-2);
+  width: 100%;
+}
+
+.heatPartMonths {
+  grid-column: 2;
+  display: grid;
+  gap: var(--heatmap-cell-gap);
+  height: 14px;
+  color: var(--dv-axis);
+}
+
+.heatPartMonths span {
+  white-space: nowrap;
+}
+
+.heatPartDays {
+  display: grid;
+  grid-template-rows: repeat(7, minmax(0, 1fr));
+  gap: var(--heatmap-cell-gap);
+  align-items: center;
+  color: var(--dv-axis);
+}
+
+.heatPartCells {
+  position: relative;
+  display: grid;
+  grid-template-rows: repeat(7, auto);
+  grid-auto-flow: column;
+  gap: var(--heatmap-cell-gap);
+}
+
+.heatPartCell {
+  display: block;
+  aspect-ratio: 1;
+  min-width: 0;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-2xs);
+  cursor: default;
+  outline: 0;
+  transition: box-shadow var(--motion-fast);
+}
+
+.heatPartCellVariantOn {
+  box-shadow: 0 0 0 var(--border-width-medium) var(--fg-primary);
+}
+
+.heatPartCell:focus-visible {
+  position: relative;
+  z-index: 1;
+  box-shadow: var(--focus-ring);
+}
+
+.heatPartCellVariantClick {
+  cursor: pointer;
+}
+
+.heatPartCellVariantFuture {
+  visibility: hidden;
+}
+
+.heatPartTotal b {
+  color: var(--fg-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.heatPartTotal span {
+  color: var(--fg-tertiary);
+}
+
+.heatPartLegend {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--heatmap-cell-gap);
+}
+
+.heatPartLegend i {
+  width: 11px;
+  height: 11px;
+  border-radius: var(--radius-2xs);
+}
+
+.heatPartLegend span {
+  margin: 0 var(--space-1);
+}
+
+.chart {
+  composes: chart from '../../styles/shared/charts/chart.module.css';
+}
+
+.chartPartBarTop {
+  composes: chartpartbartop from '../../styles/shared/charts/chart.module.css';
+}

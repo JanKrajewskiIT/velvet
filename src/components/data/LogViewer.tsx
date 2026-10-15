@@ -1,10 +1,28 @@
 import { createEffect, createMemo, createSignal, For, Index, mergeProps, Show, untrack } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { cssLength } from './cssLength';
 import { formatLogTimestamp, LOG_LEVELS, type LogLevel, type LogLine, splitByQuery, toLogRows } from './logLines';
+import styles from './LogViewer.module.css';
+
+const LOG_PART_LVL_CLASSES = {
+  debug: styles.logPartLvlVariantDebug,
+  info: styles.logPartLvlVariantInfo,
+  warn: styles.logPartLvlVariantWarn,
+  error: styles.logPartLvlVariantError,
+} as const;
+
+const LOG_PART_ROW_CLASSES = {
+  debug: styles.logPartRowVariantDebug,
+  info: styles.logPartRowVariantInfo,
+  warn: styles.logPartRowVariantWarn,
+  error: styles.logPartRowVariantError,
+} as const;
 
 /** Distance from the bottom, in px, within which the view still counts as following. */
 const FOLLOW_THRESHOLD_PX = 24;
@@ -87,34 +105,44 @@ export const LogViewer = (props: LogViewerProps) => {
   };
 
   return (
-    <div class={cx('vui-code', 'vui-log', merged.class)}>
-      <div class="vui-code__bar vui-log__bar">
-        <span class="vui-code__title">{title()}</span>
-        <div class="vui-log__levels" role="group" aria-label={translate('velvet.data.logViewer.levelsLabel')}>
+    <div class={cx(typographyClass('body-sm'), styles.code, styles.log, merged.class)}>
+      <div class={cx(styles.codePartBar, styles.logPartBar)}>
+        <Text as="span" variant="kbd" tone="inherit" class={styles.codePartTitle}>
+          {title()}
+        </Text>
+        <div class={styles.logPartLevels} role="group" aria-label={translate('velvet.data.logViewer.levelsLabel')}>
           <For each={LOG_LEVELS}>
             {(level) => (
               <button
                 type="button"
-                class={`vui-log__lvl vui-log__lvl--${level}`}
+                class={cx(typographyClass('kbd'), styles.logPartLvl, variantClass(LOG_PART_LVL_CLASSES, level))}
                 aria-pressed={visibleLevels().has(level)}
                 onClick={() => toggleLevel(level)}
               >
                 {level}
-                <span>{counts()[level]}</span>
+                <Text as="span" variant="micro" tone="inherit">
+                  {counts()[level]}
+                </Text>
               </button>
             )}
           </For>
         </div>
-        <label class="vui-log__search">
+        <label class={styles.logPartSearch}>
           <Glyph name="search" />
           <input
+            class={typographyClass('code')}
             value={query()}
             onInput={(event) => setQuery(event.currentTarget.value)}
             placeholder={translate('velvet.data.logViewer.filterPlaceholder')}
             aria-label={translate('velvet.data.logViewer.filterLabel')}
           />
         </label>
-        <button type="button" class="vui-code__copy" aria-pressed={wrap()} onClick={() => setWrap(!wrap())}>
+        <button
+          type="button"
+          class={cx(styles.codePartCopy, typographyClass('label-sm'))}
+          aria-pressed={wrap()}
+          onClick={() => setWrap(!wrap())}
+        >
           {translate(wrap() ? 'velvet.data.logViewer.noWrap' : 'velvet.data.logViewer.wrap')}
         </button>
       </div>
@@ -122,7 +150,7 @@ export const LogViewer = (props: LogViewerProps) => {
         ref={(element) => {
           body = element;
         }}
-        class={cx('vui-log__body', wrap() && 'vui-log__body--wrap')}
+        class={cx(typographyClass('code'), styles.logPartBody, wrap() && styles.logPartBodyVariantWrap)}
         style={{ height: cssLength(merged.height) }}
         // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- scrollable log region must be focusable so keyboard users can scroll it
         tabIndex={0}
@@ -133,20 +161,29 @@ export const LogViewer = (props: LogViewerProps) => {
       >
         <Show
           when={shown().length}
-          fallback={<div class="vui-log__empty">{translate('velvet.data.logViewer.noMatches')}</div>}
+          fallback={
+            <Text as="div" variant="caption" tone="inherit" class={styles.logPartEmpty}>
+              {translate('velvet.data.logViewer.noMatches')}
+            </Text>
+          }
         >
           <Index each={shown()}>
             {(row) => (
-              <div class={`vui-log__row vui-log__row--${row().level}`}>
+              <Text
+                as="div"
+                variant="code"
+                tone="inherit"
+                class={cx(styles.logPartRow, variantClass(LOG_PART_ROW_CLASSES, row().level))}
+              >
                 <Show when={merged.lineNumbers}>
-                  <span class="vui-log__ln">{row().index + 1}</span>
+                  <span class={styles.logPartLn}>{row().index + 1}</span>
                 </Show>
                 <Show when={merged.showTimestamps && row().ts != null ? row().ts : undefined}>
-                  {(ts) => <span class="vui-log__ts">{formatLogTimestamp(ts())}</span>}
+                  {(ts) => <span class={styles.logPartTs}>{formatLogTimestamp(ts())}</span>}
                 </Show>
-                <span class="vui-log__lv">{row().level.toUpperCase()}</span>
-                <Show when={row().source}>{(source) => <span class="vui-log__src">{source()}</span>}</Show>
-                <span class="vui-log__msg">
+                <span class={styles.logPartLv}>{row().level.toUpperCase()}</span>
+                <Show when={row().source}>{(source) => <span class={styles.logPartSrc}>{source()}</span>}</Show>
+                <span class={styles.logPartMsg}>
                   <For each={splitByQuery(row().message, needle())}>
                     {(part) => (
                       <Show when={part.match} fallback={part.text}>
@@ -155,13 +192,17 @@ export const LogViewer = (props: LogViewerProps) => {
                     )}
                   </For>
                 </span>
-              </div>
+              </Text>
             )}
           </Index>
         </Show>
       </div>
       <Show when={!follow()}>
-        <button type="button" class="vui-log__jump" onClick={() => setFollow(true)}>
+        <button
+          type="button"
+          class={cx(styles.logPartJump, typographyClass('label-sm'))}
+          onClick={() => setFollow(true)}
+        >
           <Glyph name="arrow-down" />
           {unseen()
             ? translate('velvet.data.logViewer.newLines', { count: unseen() })

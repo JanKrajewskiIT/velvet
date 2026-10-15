@@ -1,0 +1,133 @@
+:import('../../styles/shared/primitives/glyph.module.css') {
+  externalIcon: icon;
+}
+
+.hnav {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-lg);
+  background: var(--bg-raised);
+}
+
+.hnavPartHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-height: var(--hit-target-min);
+  padding: var(--space-1) var(--space-2);
+  border-bottom: var(--border-width) solid var(--border-subtle);
+  background: var(--bg-subtle);
+}
+
+.hnavPartPath {
+  display: flex;
+  align-items: center;
+  gap: var(--space-0-5);
+  min-width: 0;
+  overflow: hidden;
+}
+
+.hnavPartCrumb {
+  padding: var(--space-1) var(--space-1-5);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--fg-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.hnavPartCrumb:hover:not(:disabled) {
+  background: var(--bg-hover);
+  color: var(--fg-primary);
+}
+
+.hnavPartCrumb:disabled {
+  color: var(--fg-primary);
+  font-weight: var(--type-title-weight);
+  cursor: default;
+}
+
+.hnavPartList {
+  margin: 0;
+  padding: var(--space-1);
+  list-style: none;
+  overflow-y: auto;
+}
+
+.hnavPartListVariantIn {
+  animation: vui-hnav-in var(--motion-move);
+}
+
+.hnavPartListVariantOut {
+  animation: vui-hnav-out var(--motion-move);
+}
+
+.hnavPartItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2-5);
+  width: 100%;
+  min-height: var(--hit-target-min);
+  padding: var(--space-1-5) var(--space-2-5);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: none;
+  color: var(--fg-primary);
+  text-align: left;
+  cursor: pointer;
+}
+
+.hnavPartItem:hover {
+  background: var(--bg-hover);
+}
+
+.hnavPartItem:focus-visible {
+  outline: none;
+  box-shadow: inset var(--focus-ring);
+}
+
+.hnavPartItemVariantSel {
+  color: var(--fg-brand);
+  font-weight: var(--type-label-weight);
+}
+
+.hnavPartLabel {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-0-5);
+}
+
+.hnavPartCount {
+  color: var(--fg-tertiary);
+}
+
+.hnavPartGo {
+  font-size: var(--size-icon-md);
+  color: var(--fg-tertiary);
+}
+
+.hnavPartItemVariantSel .hnavPartGo {
+  color: var(--fg-brand);
+}
+
+.hnavPartDesc {
+  color: var(--fg-tertiary);
+}
+
+.hnavPartPath :global(.externalIcon) {
+  --glyph-size: var(--type-caption-size);
+
+  color: var(--fg-disabled);
+  flex: none;
+}
+
+.hnavPartItem > :global(.externalIcon):first-child {
+  color: var(--fg-tertiary);
+
+  --glyph-size: var(--size-icon-lg);
+}

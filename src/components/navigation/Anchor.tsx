@@ -4,6 +4,9 @@ import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { scrollBehavior } from '../../utils/motion';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './Anchor.module.css';
 import { resolveScrollContainer, type ScrollContainer } from './scrollContainer';
 
 export interface AnchorItem {
@@ -106,20 +109,23 @@ export const Anchor = (props: AnchorProps) => {
   };
 
   return (
-    <nav class={cx('vui-anchor', p.class)} aria-label={label()}>
+    <nav class={cx(typographyClass('body'), styles.anchor, p.class)} aria-label={label()}>
       <Show when={p.title !== null}>
-        <div class="vui-anchor__title">{p.title || label()}</div>
+        <Text as="div" variant="section" tone="inherit" class={styles.anchorPartTitle}>
+          {p.title || label()}
+        </Text>
       </Show>
-      <ul class="vui-anchor__list">
+      <ul class={styles.anchorPartList}>
         <For each={p.items}>
           {(item) => (
             <li>
               <a
                 href={`#${item.id}`}
                 class={cx(
-                  'vui-anchor__link',
-                  (item.level ?? 1) > 1 && 'vui-anchor__link--sub',
-                  item.id === current() && 'vui-anchor__link--on',
+                  typographyClass((item.level ?? 1) > 1 ? 'caption' : 'body-sm'),
+                  styles.anchorPartLink,
+                  (item.level ?? 1) > 1 && styles.anchorPartLinkVariantSub,
+                  item.id === current() && styles.anchorPartLinkVariantOn,
                 )}
                 aria-current={item.id === current() ? 'location' : undefined}
                 onClick={(e) => goTo(e, item.id)}

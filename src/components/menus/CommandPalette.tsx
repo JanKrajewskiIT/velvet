@@ -1,6 +1,8 @@
 import { type JSX, Show } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
+import { cx } from '../../utils/cx';
+import styles from './CommandPalette.module.css';
 import { CommandPaletteDialog } from './CommandPaletteDialog';
 import type { CommandGroup, CommandPaletteLabels } from './commandSearch';
 
@@ -27,7 +29,7 @@ export const CommandPalette = (props: CommandPaletteProps): JSX.Element => (
         placeholder={props.placeholder}
         emptyText={props.emptyText}
         labels={props.labels}
-        class={props.class}
+        class={cx(styles.root, props.class)}
       />
     </Portal>
   </Show>

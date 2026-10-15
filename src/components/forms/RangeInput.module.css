@@ -1,0 +1,41 @@
+:import('../../styles/shared/primitives/field.module.css') {
+  externalField: field;
+}
+
+.rangePartRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.rangePartBounds {
+  flex: 1 1 240px;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.rangePartSep {
+  flex: none;
+  color: var(--fg-tertiary);
+}
+
+.rangePartSelect {
+  flex: 0 0 96px;
+  min-width: 0;
+}
+
+.rangePartSelectVariantWide {
+  flex-basis: 128px;
+}
+
+.rangePartSelect > :global(.externalField),
+.rangePartSelect:global(.externalField) {
+  gap: 0;
+}
+
+.field {
+  composes: field from '../../styles/shared/primitives/field.module.css';
+}

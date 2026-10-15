@@ -17,9 +17,12 @@ import { cx } from '../../utils/cx';
 import { numberRange } from '../../utils/decimalValue';
 import { clamp } from '../../utils/math';
 import { FieldLabel } from '../primitives/FieldLabel';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { createFormValidation } from './createFormValidation';
 import type { FormControlProps } from './formControl';
 import { FormValue } from './FormValue';
+import styles from './Slider.module.css';
 import { adjacentMark, nearestMark, resolveMarks, type SliderMarks, snapToStep } from './sliderMarks';
 
 const PERCENT = 100;
@@ -195,20 +198,22 @@ export const Slider = (props: SliderProps) => {
   return (
     <div
       class={cx(
-        'vui-field',
-        'vui-slider',
-        p.disabled && 'vui-slider--disabled',
-        labelled() && 'vui-slider--labelled',
+        styles.field,
+        styles.slider,
+        p.disabled && styles.sliderVariantDisabled,
+        labelled() && styles.sliderVariantLabelled,
         p.class,
       )}
     >
       <Show when={p.label || p.showValue}>
-        <div class="vui-slider__head">
+        <div class={styles.sliderPartHead}>
           <Show when={p.label}>
             <FieldLabel id={`${id()}-label`}>{p.label}</FieldLabel>
           </Show>
           <Show when={p.showValue}>
-            <span class="vui-slider__value">{valueText()}</span>
+            <Text as="span" variant="code" tone="inherit" class={styles.sliderPartValue}>
+              {valueText()}
+            </Text>
           </Show>
         </div>
       </Show>
@@ -216,14 +221,14 @@ export const Slider = (props: SliderProps) => {
         ref={(element) => {
           track = element;
         }}
-        class="vui-slider__track"
+        class={styles.sliderPartTrack}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={endDrag}
         onPointerCancel={endDrag}
         onLostPointerCapture={endDrag}
       >
-        <span class="vui-slider__fill" style={{ left: `${fillStart()}%`, width: `${fillEnd() - fillStart()}%` }} />
+        <span class={styles.sliderPartFill} style={{ left: `${fillStart()}%`, width: `${fillEnd() - fillStart()}%` }} />
         <For each={markList()}>
           {(mark) => {
             const at = () => percent(mark.value);
@@ -231,15 +236,17 @@ export const Slider = (props: SliderProps) => {
             return (
               <span
                 class={cx(
-                  'vui-slider__mark',
-                  inside() && 'vui-slider__mark--in',
-                  values().includes(mark.value) && 'vui-slider__mark--on',
+                  styles.sliderPartMark,
+                  inside() && styles.sliderPartMarkVariantIn,
+                  values().includes(mark.value) && styles.sliderPartMarkVariantOn,
                 )}
                 style={{ left: `${at()}%` }}
                 aria-hidden="true"
               >
                 <Show when={mark.label != null || p.marks === true}>
-                  <span class="vui-slider__mark-label">{mark.label ?? p.format(mark.value)}</span>
+                  <Text as="span" variant="kbd" tone="inherit" class={styles.sliderPartMarkLabel}>
+                    {mark.label ?? p.format(mark.value)}
+                  </Text>
                 </Show>
               </span>
             );
@@ -249,14 +256,20 @@ export const Slider = (props: SliderProps) => {
           {(value, index) => (
             <>
               <Show when={isRange()}>
-                <span id={`${id()}-thumb-${index}-label`} class="vui-sr-only">
+                <Text
+                  as="span"
+                  variant="caption"
+                  tone="inherit"
+                  id={`${id()}-thumb-${index}-label`}
+                  class={styles.srOnly}
+                >
                   {thumbLabel(index)}
-                </span>
+                </Text>
               </Show>
               <span
                 role="slider"
                 tabIndex={p.disabled ? -1 : 0}
-                class="vui-slider__thumb"
+                class={styles.sliderPartThumb}
                 style={{ left: `${percent(value())}%` }}
                 aria-labelledby={
                   isRange()
@@ -282,9 +295,13 @@ export const Slider = (props: SliderProps) => {
         </Index>
       </div>
       <Show when={p.showBounds}>
-        <div class="vui-slider__bounds">
-          <span>{p.format(p.min)}</span>
-          <span>{p.format(p.max)}</span>
+        <div class={cx(styles.sliderPartBounds, typographyClass('kbd'))}>
+          <Text as="span" variant="caption" tone="inherit">
+            {p.format(p.min)}
+          </Text>
+          <Text as="span" variant="caption" tone="inherit">
+            {p.format(p.max)}
+          </Text>
         </div>
       </Show>
       <FormValue

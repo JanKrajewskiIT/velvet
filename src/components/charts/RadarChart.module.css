@@ -1,0 +1,144 @@
+:import('../../styles/shared/charts/chart.module.css') {
+  externalChartPartLegend: chartpartlegend;
+}
+
+.radar {
+  align-items: center;
+}
+
+.radar :global(.externalChartPartLegend) {
+  justify-content: center;
+}
+
+.radarPartLg {
+  border: 0;
+  background: none;
+  padding: var(--space-0-5) var(--space-1);
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  transition: opacity var(--motion-fast);
+}
+
+.radarPartLg:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.radarPartLgVariantOff {
+  opacity: 0.45;
+}
+
+.radarPartLgVariantOff i {
+  background: var(--border-strong);
+}
+
+.radarPartRing {
+  fill: none;
+  stroke: var(--dv-grid);
+  stroke-width: 1;
+}
+
+.radarPartRing:last-of-type {
+  stroke: var(--border-default);
+}
+
+.radarPartAxis {
+  font-size: var(--type-overline-size);
+}
+
+.radarPartSeries {
+  transform-origin: center;
+  transform-box: view-box;
+  animation: vui-radar-in var(--motion-slide) backwards;
+  transition: opacity var(--motion-fast);
+}
+
+.radarPartSeriesVariantDim {
+  opacity: 0.25;
+}
+
+.radarPartArea {
+  fill: var(--c);
+  fill-opacity: 0.14;
+  stroke: var(--c);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.radarPartPt {
+  fill: var(--bg-raised);
+  stroke: var(--c);
+  stroke-width: 2;
+  cursor: pointer;
+  transition: r var(--motion-fast);
+}
+
+.radarPartTip {
+  position: absolute;
+  transform: translate(-50%, calc(-100% - 12px));
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-0-5);
+  padding: var(--space-1-5) var(--space-2-5);
+  white-space: nowrap;
+  z-index: 2;
+  color: var(--fg-secondary);
+}
+
+.radarPartTipK {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  color: var(--fg-primary);
+}
+
+.radarPartTipK i {
+  width: var(--size-dot-lg);
+  height: var(--size-dot-lg);
+  border-radius: var(--radius-2xs);
+}
+
+.radarPartTip strong {
+  margin-left: var(--space-2);
+  color: var(--fg-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .radarPartSeries {
+    animation: none;
+  }
+}
+
+.chart {
+  composes: chart from '../../styles/shared/charts/chart.module.css';
+}
+
+.chartPartLegend {
+  composes: chartpartlegend from '../../styles/shared/charts/chart.module.css';
+}
+
+.chartPartLg {
+  composes: chartpartlg from '../../styles/shared/charts/chart.module.css';
+}
+
+.chartPartPlot {
+  composes: chartpartplot from '../../styles/shared/charts/chart.module.css';
+}
+
+.chartPartGrid {
+  composes: chartpartgrid from '../../styles/shared/charts/chart.module.css';
+}
+
+.chartPartTick {
+  composes: chartparttick from '../../styles/shared/charts/chart.module.css';
+}
+
+.chartPartTickVariantOn {
+  composes: chartparttickvarianton from '../../styles/shared/charts/chart.module.css';
+}
+
+.chartPartTip {
+  composes: chartparttip from '../../styles/shared/charts/chart.module.css';
+}

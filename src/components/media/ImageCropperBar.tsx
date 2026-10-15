@@ -4,6 +4,7 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { IconButton } from '../actions/IconButton';
 import { Slider } from '../forms/Slider';
 import type { CropView } from './createCropView';
+import styles from './ImageCropperBar.module.css';
 
 const ZOOM_SLIDER_STEP = 0.01;
 
@@ -18,7 +19,7 @@ export interface ImageCropperBarProps {
 export const ImageCropperBar = (props: ImageCropperBarProps) => {
   const translate = useTranslate();
   return (
-    <div class="vui-crop__bar">
+    <div class={styles.cropPartBar}>
       <Show when={props.rotatable}>
         <IconButton
           icon="rotate-ccw"
@@ -29,7 +30,7 @@ export const ImageCropperBar = (props: ImageCropperBarProps) => {
         />
       </Show>
       <Slider
-        class="vui-crop__zoom"
+        class={styles.cropPartZoom}
         label={translate('velvet.media.imageCropper.zoom')}
         min={props.minZoom}
         max={props.maxZoom}

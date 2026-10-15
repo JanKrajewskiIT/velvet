@@ -1,7 +1,17 @@
 import { mergeProps, Show, splitProps } from 'solid-js';
 
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import styles from './Separator.module.css';
+
+const SEP_CLASSES = {
+  line: styles.sepVariantLine,
+  vertical: styles.sepVariantVertical,
+  horizontal: styles.sepVariantHorizontal,
+  dash: styles.sepVariantDash,
+  text: styles.sepVariantText,
+} as const;
 
 export interface SeparatorProps extends HtmlProps<HTMLSpanElement> {
   /** line = 1px rule · dash = short 10×2 bar · text = glyph in `--fg-tertiary`. @default 'line' */
@@ -19,9 +29,9 @@ export const Separator = (props: SeparatorProps) => {
   return (
     <span
       class={cx(
-        'vui-sep',
-        `vui-sep--${local.variant}`,
-        local.variant === 'line' && `vui-sep--${local.orientation}`,
+        styles.sep,
+        variantClass(SEP_CLASSES, local.variant),
+        local.variant === 'line' && variantClass(SEP_CLASSES, local.orientation),
         local.class,
       )}
       role={local.semantic ? 'separator' : undefined}

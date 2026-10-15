@@ -1,0 +1,79 @@
+.crop {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.cropPartStage {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--media-radius);
+  background: var(--neutral-950, var(--black));
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.cropPartStageVariantDrag {
+  cursor: grabbing;
+}
+
+.cropPartImg {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  max-width: none;
+  pointer-events: none;
+  user-select: none;
+}
+
+.cropPartFrame {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 0 9999px color-mix(in oklab, var(--black) 58%, transparent);
+  outline: var(--border-width) solid color-mix(in oklab, var(--white) 85%, transparent);
+  outline-offset: calc(-1 * var(--space-px));
+  transition: outline-color var(--motion-fast);
+}
+
+.cropPartFrame:focus-visible {
+  outline: var(--border-width-thick) solid var(--white);
+  outline-offset: calc(-1 * var(--space-0-5));
+}
+
+.cropPartFrameVariantCircle {
+  border-radius: 50%;
+}
+
+.cropPartGrid {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity var(--motion-base);
+  background:
+    linear-gradient(
+      90deg,
+      transparent calc(33.33% - 0.5px),
+      color-mix(in oklab, var(--white) 45%, transparent) calc(33.33% - 0.5px) calc(33.33% + 0.5px),
+      transparent calc(33.33% + 0.5px) calc(66.66% - 0.5px),
+      color-mix(in oklab, var(--white) 45%, transparent) calc(66.66% - 0.5px) calc(66.66% + 0.5px),
+      transparent calc(66.66% + 0.5px)
+    ),
+    linear-gradient(
+      180deg,
+      transparent calc(33.33% - 0.5px),
+      color-mix(in oklab, var(--white) 45%, transparent) calc(33.33% - 0.5px) calc(33.33% + 0.5px),
+      transparent calc(33.33% + 0.5px) calc(66.66% - 0.5px),
+      color-mix(in oklab, var(--white) 45%, transparent) calc(66.66% - 0.5px) calc(66.66% + 0.5px),
+      transparent calc(66.66% + 0.5px)
+    );
+}
+
+.cropPartStageVariantDrag .cropPartGrid,
+.cropPartFrame:focus-visible .cropPartGrid {
+  opacity: 1;
+}

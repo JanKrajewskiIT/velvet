@@ -1,7 +1,10 @@
 import { Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { cx } from '../../utils/cx';
 import { Dot } from '../primitives/Dot';
+import { typographyClass } from '../primitives/typography';
+import styles from './FooterStatus.module.css';
 import { FOOTER_STATUS, type FooterStatusDetail, type FooterStatusValue } from './footerTypes';
 
 export interface FooterStatusProps {
@@ -19,7 +22,7 @@ export const FooterStatus = (props: FooterStatusProps) => {
         const detail = () => toDetail(status());
         const preset = () => FOOTER_STATUS[detail().state];
         return (
-          <a class="vui-footer__status" href={detail().href || '#'}>
+          <a class={cx(styles.footerPartStatus, typographyClass('caption'))} href={detail().href || '#'}>
             <Dot tone={preset().tone} />
             {detail().label || translate(preset().labelKey)}
           </a>

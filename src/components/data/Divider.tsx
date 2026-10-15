@@ -1,7 +1,9 @@
-import { type JSX, mergeProps, splitProps } from 'solid-js';
+import { type JSX, mergeProps, Show, splitProps } from 'solid-js';
 
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { Text } from '../primitives/Text';
+import styles from './Divider.module.css';
 
 export interface DividerProps extends HtmlProps<HTMLDivElement, 'children'> {
   label?: JSX.Element;
@@ -19,13 +21,17 @@ export const Divider = (props: DividerProps) => {
       role="separator"
       aria-orientation={local.orientation}
       class={cx(
-        'vui-divider',
-        !local.label && local.orientation === 'horizontal' && 'vui-divider--plain',
-        local.orientation === 'vertical' && 'vui-divider--vertical',
+        styles.divider,
+        !local.label && local.orientation === 'horizontal' && styles.dividerVariantPlain,
+        local.orientation === 'vertical' && styles.dividerVariantVertical,
         local.class,
       )}
     >
-      {local.label}
+      <Show when={local.label !== undefined && local.label !== null && local.label !== false}>
+        <Text as="span" variant="caption" tone="tertiary">
+          {local.label}
+        </Text>
+      </Show>
     </div>
   );
 };

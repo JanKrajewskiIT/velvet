@@ -5,7 +5,9 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
 import { buttonClass } from './buttonClass';
+import styles from './CopyButton.module.css';
 
 const COPIED_FEEDBACK_MS = 1600;
 
@@ -71,7 +73,7 @@ export const CopyButton = (props: CopyButtonProps) => {
       class={cx(
         buttonClass({ variant: p.variant, size: p.size, icon: p.iconOnly }),
         'vui-copy',
-        status() === 'copied' && 'vui-copy--done',
+        status() === 'copied' && styles.copyVariantDone,
         p.class,
       )}
       onClick={() => void copy().catch(reportAsyncError)}
@@ -80,16 +82,22 @@ export const CopyButton = (props: CopyButtonProps) => {
       aria-label={p.iconOnly ? caption() : undefined}
       title={p.iconOnly ? label() : undefined}
     >
-      <span class="vui-copy__icons" aria-hidden="true">
-        <Glyph name="copy" class="vui-copy__a" />
-        <Glyph name="check" class="vui-copy__b" />
+      <span class={styles.copyPartIcons} aria-hidden="true">
+        <Glyph name="copy" class={styles.copyPartA} />
+        <Glyph name="check" class={styles.copyPartB} />
       </span>
       <Show when={!p.iconOnly}>
-        <span>{caption()}</span>
+        <Text
+          as="span"
+          variant={p.size === 'sm' ? 'button-sm' : p.size === 'lg' ? 'button-lg' : 'button'}
+          tone="inherit"
+        >
+          {caption()}
+        </Text>
       </Show>
-      <span class="vui-sr-only" aria-live="polite">
+      <Text as="span" variant="caption" tone="inherit" class={styles.srOnly} aria-live="polite">
         {feedback()}
-      </span>
+      </Text>
     </button>
   );
 };

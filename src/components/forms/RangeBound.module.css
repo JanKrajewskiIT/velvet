@@ -1,0 +1,12 @@
+:import('../../styles/shared/primitives/control.module.css') {
+  externalControlPartInput: controlpartinput;
+}
+
+.rangePartBound {
+  flex: 1;
+  min-width: 0;
+}
+
+.rangePartBound :global(.externalControlPartInput) {
+  font-variant-numeric: tabular-nums;
+}

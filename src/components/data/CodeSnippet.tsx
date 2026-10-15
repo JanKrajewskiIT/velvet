@@ -2,11 +2,24 @@ import type { I18nKey } from '@jankrajewskiit/i18n';
 import { createMemo, createSignal, createUniqueId, For, mergeProps, onCleanup, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './CodeSnippet.module.css';
 import { cssLength } from './cssLength';
 import { highlight } from './highlight';
+
+const TK_CLASSES = {
+  k: styles.tkK,
+  s: styles.tkS,
+  n: styles.tkN,
+  c: styles.tkC,
+  t: styles.tkT,
+  p: styles.tkP,
+} as const;
 
 const COPIED_FEEDBACK_MS = 1600;
 
@@ -105,14 +118,18 @@ export const CodeSnippet = (props: CodeSnippetProps) => {
   };
 
   return (
-    <div class={cx('vui-code', merged.class)}>
-      <div class="vui-code__bar">
+    <div class={cx(typographyClass('body-sm'), styles.code, merged.class)}>
+      <div class={styles.codePartBar}>
         <Show
           when={merged.tabs}
-          fallback={<span class="vui-code__title">{current().label || current().language}</span>}
+          fallback={
+            <Text as="span" variant="kbd" tone="inherit" class={styles.codePartTitle}>
+              {current().label || current().language}
+            </Text>
+          }
         >
           {(tabs) => (
-            <div role="tablist" class="vui-code__tabs">
+            <div role="tablist" class={styles.codePartTabs}>
               <For each={tabs()}>
                 {(tab, index) => (
                   <button
@@ -122,7 +139,11 @@ export const CodeSnippet = (props: CodeSnippetProps) => {
                     aria-selected={index() === tabIndex()}
                     aria-controls={`${baseId}-panel`}
                     tabIndex={index() === tabIndex() ? 0 : -1}
-                    class={cx('vui-code__tab', index() === tabIndex() && 'vui-code__tab--on')}
+                    class={cx(
+                      typographyClass('kbd'),
+                      styles.codePartTab,
+                      index() === tabIndex() && styles.codePartTabVariantOn,
+                    )}
                     onClick={() => setTabIndex(index())}
                     onKeyDown={(event) => onTabKeyDown(event, index())}
                   >
@@ -135,20 +156,29 @@ export const CodeSnippet = (props: CodeSnippetProps) => {
         </Show>
         <button
           type="button"
-          class={cx('vui-code__copy', copyStatus() === 'copied' && 'vui-code__copy--done')}
+          class={cx(
+            typographyClass('label-sm'),
+            styles.codePartCopy,
+            copyStatus() === 'copied' && styles.codePartCopyVariantDone,
+          )}
           onClick={() => void copy().catch(reportAsyncError)}
           aria-label={copyStatus() === 'idle' ? translate('velvet.data.codeSnippet.copyCode') : copyLabel()}
         >
           <Glyph name={copyStatus() === 'copied' ? 'check' : 'copy'} />
-          <span>{copyLabel()}</span>
+          <Text as="span" variant="button-sm" tone="inherit">
+            {copyLabel()}
+          </Text>
         </button>
-        <span class="vui-sr-only" aria-live="polite">
+        <Text as="span" variant="caption" tone="inherit" class={styles.srOnly} aria-live="polite">
           {copyAnnouncement()}
-        </span>
+        </Text>
       </div>
-      <pre
+      <Text
+        as="pre"
+        variant="code"
+        tone="inherit"
         id={`${baseId}-panel`}
-        class={cx('vui-code__pre', merged.wrap && 'vui-code__pre--wrap')}
+        class={cx(styles.codePartPre, merged.wrap && styles.codePartPreVariantWrap)}
         style={{ 'max-height': cssLength(merged.maxHeight) }}
         tabIndex={0}
         role={merged.tabs ? 'tabpanel' : undefined}
@@ -157,9 +187,9 @@ export const CodeSnippet = (props: CodeSnippetProps) => {
         <code>
           <For each={lines()}>
             {(line, index) => (
-              <span class="vui-code__line">
+              <span class={styles.codePartLine}>
                 <Show when={merged.showLineNumbers}>
-                  <span class="vui-code__ln" aria-hidden="true">
+                  <span class={styles.codePartLn} aria-hidden="true">
                     {index() + 1}
                   </span>
                 </Show>
@@ -167,7 +197,7 @@ export const CodeSnippet = (props: CodeSnippetProps) => {
                   <For each={highlight(line, current().language)} fallback=" ">
                     {(token) => (
                       <Show when={token.kind} fallback={token.text}>
-                        {(kind) => <span class={`tk-${kind()}`}>{token.text}</span>}
+                        {(kind) => <span class={variantClass(TK_CLASSES, kind())}>{token.text}</span>}
                       </Show>
                     )}
                   </For>
@@ -176,7 +206,7 @@ export const CodeSnippet = (props: CodeSnippetProps) => {
             )}
           </For>
         </code>
-      </pre>
+      </Text>
     </div>
   );
 };

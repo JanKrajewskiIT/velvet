@@ -1,5 +1,7 @@
 import { For } from 'solid-js';
 
+import { Text } from '../primitives/Text';
+import styles from './ChartLegend.module.css';
 import { type ChartSeries, colorOf } from './chartSeries';
 
 export interface ChartLegendProps {
@@ -7,13 +9,13 @@ export interface ChartLegendProps {
 }
 
 export const ChartLegend = (props: ChartLegendProps) => (
-  <div class="vui-chart__legend">
+  <div class={styles.chartPartLegend}>
     <For each={props.series}>
       {(s, k) => (
-        <span class="vui-chart__lg">
+        <Text as="span" variant="caption" tone="secondary" class={styles.chartPartLg}>
           <i style={{ background: colorOf(s, k()) }} />
           {s.label}
-        </span>
+        </Text>
       )}
     </For>
   </div>

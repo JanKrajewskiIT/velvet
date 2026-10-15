@@ -1,0 +1,59 @@
+:import('../../styles/shared/primitives/glyph.module.css') {
+  externalIcon: icon;
+}
+
+.organizerPartPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-5) var(--space-4);
+  border-left: var(--border-width) solid var(--border-subtle);
+  background: var(--bg-subtle);
+}
+
+.organizerPartPday {
+  text-transform: uppercase;
+  color: var(--fg-brand);
+}
+
+.organizerPartPdate {
+  margin-bottom: var(--space-3);
+}
+
+.organizerPartList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.organizerPartEmpty {
+  gap: var(--space-1);
+  padding: var(--space-6) var(--space-2);
+}
+
+.organizerPartEmpty b {
+  color: var(--fg-primary);
+}
+
+@media (width <= 1023px) {
+  .organizerPartPanel {
+    border-left: 0;
+    border-top: var(--border-width) solid var(--border-subtle);
+  }
+}
+
+.organizerPartEmpty :global(.externalIcon) {
+  color: var(--status-warning-fg);
+  margin-bottom: var(--space-1);
+}
+
+.organizerPartEvb {
+  composes: organizerpartevb from '../../styles/shared/patterns/calendar-organizer.module.css';
+}
+
+.organizerPartAdd {
+  composes: organizerpartadd from '../../styles/shared/patterns/calendar-organizer.module.css';
+}

@@ -1,0 +1,104 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  height: var(--badge-height);
+  padding: 0 var(--badge-px);
+  border-radius: var(--badge-radius);
+  white-space: nowrap;
+  border: var(--border-width) solid transparent;
+  font-variant-numeric: tabular-nums;
+
+  --glyph-size: 1.15em;
+}
+
+.badgeVariantSm {
+  height: var(--badge-height-sm);
+  padding: 0 var(--space-1-5);
+}
+
+.badgePartDot {
+  width: var(--size-dot);
+  height: var(--size-dot);
+  border-radius: 50%;
+  background: currentcolor;
+}
+
+.badgeVariantPulse .badgePartDot {
+  animation: vui-pulse 1.2s var(--ease-standard) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .badgeVariantPulse .badgePartDot {
+    animation: none;
+  }
+}
+
+.badgeVariantNeutral {
+  background: var(--bg-sunken);
+  color: var(--fg-secondary);
+}
+
+.badgeVariantBrand {
+  background: var(--bg-brand-subtle);
+  color: var(--fg-brand);
+}
+
+.badgeVariantSuccess {
+  background: var(--status-success-bg);
+  color: var(--status-success-fg);
+}
+
+.badgeVariantWarning {
+  background: var(--status-warning-bg);
+  color: var(--status-warning-fg);
+}
+
+.badgeVariantDanger {
+  background: var(--status-danger-bg);
+  color: var(--status-danger-fg);
+}
+
+.badgeVariantInfo {
+  background: var(--status-info-bg);
+  color: var(--status-info-fg);
+}
+
+.badgeVariantSolid.badgeVariantNeutral {
+  background: var(--bg-inverse);
+  color: var(--fg-inverse);
+}
+
+.badgeVariantSolid.badgeVariantBrand {
+  background: var(--action-primary);
+  color: var(--on-color-fg);
+}
+
+.badgeVariantSolid.badgeVariantSuccess {
+  background: var(--status-success-solid);
+  color: var(--on-color-fg);
+}
+
+.badgeVariantSolid.badgeVariantWarning {
+  background: var(--status-warning-solid);
+  color: var(--on-color-fg);
+}
+
+.badgeVariantSolid.badgeVariantDanger {
+  background: var(--status-danger-solid);
+  color: var(--on-color-fg);
+}
+
+.badgeVariantSolid.badgeVariantInfo {
+  background: var(--status-info-solid);
+  color: var(--on-color-fg);
+}
+
+.badgeVariantOutline {
+  background: transparent;
+  border-color: currentcolor;
+}
+
+.badgeVariantOutline.badgeVariantNeutral {
+  border-color: var(--border-strong);
+}

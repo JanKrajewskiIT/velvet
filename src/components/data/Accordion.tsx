@@ -1,9 +1,25 @@
 import { createUniqueId, For, mergeProps } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
+import { classSelector, variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import styles from './Accordion.module.css';
 import { AccordionSection } from './AccordionSection';
 import type { AccordionItem, AccordionVariant } from './accordionTypes';
+
+const ACCORDION_CLASSES = {
+  separated: styles.accordionVariantSeparated,
+  'gap-sm': styles.accordionVariantGapSm,
+  'gap-md': styles.accordionVariantGapMd,
+  'gap-lg': styles.accordionVariantGapLg,
+  elevated: styles.accordionVariantElevated,
+} as const;
+
+const ACCORDION_VARIANT_CLASSES = {
+  sm: styles.accordionVariantGapSm,
+  md: styles.accordionVariantGapMd,
+  lg: styles.accordionVariantGapLg,
+} as const;
 
 export interface AccordionProps {
   items: AccordionItem[];
@@ -21,7 +37,7 @@ export interface AccordionProps {
   class?: string;
 }
 
-const TRIGGER_SELECTOR = ':scope > .vui-accordion__item > .vui-accordion__h > .vui-accordion__trigger';
+const TRIGGER_SELECTOR = ':scope > [data-vui-accordion-section] > * > [data-vui-accordion-trigger]';
 
 const itemKey = (item: AccordionItem, index: number) => item.value ?? String(index);
 
@@ -56,17 +72,16 @@ export const Accordion = (props: AccordionProps) => {
               : undefined;
     if (target === undefined || !(event.currentTarget instanceof HTMLElement)) return;
     event.preventDefault();
-    const root = event.currentTarget.closest('.vui-accordion');
+    const root = event.currentTarget.closest(classSelector(styles.accordion));
     root?.querySelectorAll<HTMLButtonElement>(TRIGGER_SELECTOR)[target]?.focus();
   };
 
   return (
     <div
       class={cx(
-        'vui-accordion',
-        `vui-accordion--${merged.variant}`,
-        merged.gap && `vui-accordion--gap-${merged.gap}`,
-        animated() && 'vui-accordion--animated',
+        styles.accordion,
+        variantClass(ACCORDION_CLASSES, merged.variant),
+        merged.gap && variantClass(ACCORDION_VARIANT_CLASSES, merged.gap),
         merged.class,
       )}
     >

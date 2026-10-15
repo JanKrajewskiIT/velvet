@@ -1,0 +1,47 @@
+.mdePartTool:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.mdePartTools {
+  display: flex;
+  align-items: center;
+  gap: var(--space-px);
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+
+.mdePartTool {
+  display: grid;
+  place-items: center;
+  width: var(--control-height-inner);
+  height: var(--control-height-inner);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--fg-secondary);
+  cursor: pointer;
+  font-size: var(--size-icon-md);
+
+  --glyph-size: var(--type-body-lg-size);
+}
+
+.mdePartTool:hover:not(:disabled) {
+  background: var(--bg-hover);
+  color: var(--fg-primary);
+}
+
+.mdePartTool:active:not(:disabled) {
+  background: var(--bg-pressed);
+}
+
+.mdePartGlyph {
+  font: var(--type-heavy-weight) var(--type-body-sm-size)/1 var(--font-display);
+}
+
+.mdePartSep {
+  width: var(--border-width);
+  height: 16px;
+  margin: 0 var(--space-1);
+  background: var(--border-subtle);
+}

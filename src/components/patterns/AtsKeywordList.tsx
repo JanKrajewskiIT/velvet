@@ -3,6 +3,8 @@ import { For } from 'solid-js';
 import { useTranslate } from '../../i18n/useTranslate';
 import { Tag } from '../display/Tag';
 import { SectionLabel } from '../primitives/SectionLabel';
+import { Text } from '../primitives/Text';
+import styles from './AtsKeywordList.module.css';
 
 export interface AtsKeywordListProps {
   matched: string[];
@@ -15,14 +17,14 @@ export const AtsKeywordList = (props: AtsKeywordListProps) => {
   const translate = useTranslate();
   const total = () => props.matched.length + props.partial.length + props.missing.length;
   return (
-    <section class="vui-ats__sec">
+    <section class={styles.atsPartSec}>
       <SectionLabel
         as="h4"
-        class="vui-ats__h"
+        class={styles.atsPartH}
         end={
-          <span class="vui-ats__hc">
+          <Text as="span" variant="body" class="vui-ats__hc">
             {translate('velvet.patterns.atsKeywordList.found', { found: props.matched.length, total: total() })}
-          </span>
+          </Text>
         }
       >
         {translate('velvet.patterns.atsKeywordList.title')}
@@ -53,7 +55,10 @@ export const AtsKeywordList = (props: AtsKeywordListProps) => {
           {(keyword) => (
             <Tag size="sm" shape="pill" variant="dashed" icon="x">
               {keyword}
-              <span class="vui-sr-only"> {translate('velvet.patterns.atsKeywordList.missing')}</span>
+              <Text as="span" variant="caption" tone="inherit" class={styles.srOnly}>
+                {' '}
+                {translate('velvet.patterns.atsKeywordList.missing')}
+              </Text>
             </Tag>
           )}
         </For>

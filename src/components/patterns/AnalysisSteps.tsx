@@ -2,6 +2,8 @@ import { For, Show } from 'solid-js';
 
 import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import styles from './AnalysisSteps.module.css';
 
 export interface AnalysisStepsProps {
   steps: string[];
@@ -11,23 +13,26 @@ export interface AnalysisStepsProps {
 
 /** Progress list shown while an analysis runs — done · current · pending. */
 export const AnalysisSteps = (props: AnalysisStepsProps) => (
-  <ol class="vui-areq__steps" aria-live="polite">
+  <ol class={styles.areqPartSteps} aria-live="polite">
     <For each={props.steps}>
       {(label, index) => (
-        <li
+        <Text
+          as="li"
+          variant={index() === props.step ? 'label' : 'body-sm'}
+          tone="inherit"
           class={cx(
-            'vui-areq__step',
-            index() < props.step && 'vui-areq__step--done',
-            index() === props.step && 'vui-areq__step--now',
+            styles.areqPartStep,
+            index() < props.step && styles.areqPartStepVariantDone,
+            index() === props.step && styles.areqPartStepVariantNow,
           )}
         >
-          <span class="vui-areq__sdot" aria-hidden="true">
+          <span class={styles.areqPartSdot} aria-hidden="true">
             <Show when={index() < props.step}>
               <Glyph name="check" />
             </Show>
           </span>
           {label}
-        </li>
+        </Text>
       )}
     </For>
   </ol>

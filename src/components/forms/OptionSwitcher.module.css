@@ -1,0 +1,149 @@
+:import('../../styles/shared/primitives/glyph.module.css') {
+  externalIcon: icon;
+}
+
+.switcher {
+  display: inline-flex;
+  gap: var(--space-0-5);
+}
+
+.switcherPartOpt {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1-5);
+  height: var(--segment-h);
+  padding: 0 var(--segment-px);
+  border: 0;
+  border-radius: var(--radius-nested);
+  background: none;
+  color: var(--fg-secondary);
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--motion-fast),
+    color var(--motion-fast),
+    box-shadow var(--motion-fast);
+
+  --glyph-size: var(--type-body-lg-size);
+}
+
+.switcherPartOpt:hover {
+  color: var(--fg-primary);
+}
+
+.switcherPartOpt:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.switcherPartOpt:disabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+
+.switcherVariantChips {
+  gap: var(--space-1-5);
+  flex-wrap: wrap;
+}
+
+.switcherVariantChips .switcherPartOpt {
+  height: var(--control-height-sm);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-full);
+  background: var(--bg-raised);
+}
+
+.switcherVariantChips .switcherPartOpt:hover {
+  border-color: var(--border-strong);
+}
+
+.switcherVariantChips .switcherPartOptVariantOn,
+.switcherVariantChips .switcherPartOptVariantOn:hover {
+  background: var(--action-primary);
+  border-color: var(--action-primary);
+  color: var(--action-primary-fg);
+}
+
+.switcherVariantIcons .switcherPartOpt {
+  width: var(--segment-h);
+  padding: 0;
+}
+
+.switcherVariantTiles {
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.switcherVariantTiles .switcherPartOpt {
+  flex-direction: column;
+  gap: var(--space-2);
+  width: auto;
+  min-width: 76px;
+  height: 70px;
+  padding: 0 var(--space-3);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: var(--bg-raised);
+  transition:
+    background-color var(--motion-fast),
+    color var(--motion-fast),
+    border-color var(--motion-fast),
+    box-shadow var(--motion-fast);
+}
+
+.switcherVariantTiles .switcherPartOpt:hover {
+  border-color: var(--border-strong);
+  color: var(--fg-primary);
+}
+
+.switcherVariantTiles .switcherPartOptVariantOn,
+.switcherVariantTiles .switcherPartOptVariantOn:hover {
+  border-color: var(--action-primary);
+  background: var(--bg-selected);
+  color: var(--fg-brand);
+  box-shadow: var(--focus-ring);
+}
+
+.switcherVariantTiles.switcherVariantSm .switcherPartOpt {
+  min-width: 64px;
+  height: 58px;
+}
+
+.switcherVariantSm .switcherPartOpt {
+  height: var(--segment-h-sm);
+  padding: 0 var(--segment-px-sm);
+}
+
+.switcherVariantSm.switcherVariantIcons .switcherPartOpt {
+  width: var(--segment-h-sm);
+  padding: 0;
+}
+
+.switcherVariantSm.switcherVariantChips .switcherPartOpt {
+  height: var(--control-height-inner);
+}
+
+@media (pointer: coarse) {
+  .switcherPartOpt {
+    height: var(--control-height-inner-lg);
+  }
+
+  .switcherVariantIcons .switcherPartOpt {
+    width: var(--control-height-inner-lg);
+  }
+}
+
+.switcherVariantTiles .switcherPartOpt :global(.externalIcon) {
+  --glyph-size: var(--size-icon-2xl);
+
+  transition: transform var(--motion-spring);
+}
+
+.switcherVariantTiles .switcherPartOptVariantOn :global(.externalIcon) {
+  transform: scale(1.08);
+}
+
+.switcherVariantTiles.switcherVariantSm {
+  --glyph-size: var(--type-title-lg-size);
+}

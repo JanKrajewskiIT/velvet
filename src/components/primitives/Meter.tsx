@@ -1,9 +1,20 @@
 import { createMemo, For, mergeProps, Show, splitProps } from 'solid-js';
 
-import { cx, modifier } from '../../utils/cx';
+import { variantClass } from '../../utils/cssModule';
+import { cx } from '../../utils/cx';
 import { percentOf } from '../../utils/math';
 import type { HtmlProps } from '../../utils/polymorphic';
 import type { Tone } from '../../utils/tone';
+import styles from './Meter.module.css';
+
+const METER_CLASSES = {
+  sm: styles.meterVariantSm,
+  lg: styles.meterVariantLg,
+  rating: styles.meterVariantRating,
+  shimmer: styles.meterVariantShimmer,
+  segmented: styles.meterVariantSegmented,
+  indeterminate: styles.meterVariantIndeterminate,
+} as const;
 
 export interface MeterProps extends HtmlProps<HTMLSpanElement> {
   value?: number;
@@ -57,12 +68,12 @@ export const Meter = (props: MeterProps) => {
   return (
     <span
       class={cx(
-        'vui-meter',
-        modifier('vui-meter', local.size, 'md'),
-        !!local.steps && 'vui-meter--segmented',
-        local.shimmer && 'vui-meter--shimmer',
-        local.rating && 'vui-meter--rating',
-        local.indeterminate && 'vui-meter--indeterminate',
+        styles.meter,
+        variantClass(METER_CLASSES, local.size, 'md'),
+        !!local.steps && styles.meterVariantSegmented,
+        local.shimmer && styles.meterVariantShimmer,
+        local.rating && styles.meterVariantRating,
+        local.indeterminate && styles.meterVariantIndeterminate,
         local.class,
       )}
       data-tone={local.tone}
@@ -71,10 +82,12 @@ export const Meter = (props: MeterProps) => {
     >
       <Show
         when={local.steps}
-        fallback={<span class="vui-meter__fill" style={local.indeterminate ? undefined : { width: `${percent()}%` }} />}
+        fallback={
+          <span class={styles.meterPartFill} style={local.indeterminate ? undefined : { width: `${percent()}%` }} />
+        }
       >
         <For each={segments()}>
-          {(i) => <span class={cx('vui-meter__seg', i < litSegments() && 'vui-meter__seg--on')} />}
+          {(i) => <span class={cx(styles.meterPartSeg, i < litSegments() && styles.meterPartSegVariantOn)} />}
         </For>
       </Show>
     </span>

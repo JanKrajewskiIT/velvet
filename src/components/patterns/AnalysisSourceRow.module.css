@@ -1,0 +1,115 @@
+.areqPartSrcbtn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.areqPartSrc {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  min-width: 0;
+  border: var(--border-width) dashed var(--border-default);
+  border-radius: var(--radius-lg);
+  background: var(--bg-subtle);
+  transition:
+    border-color var(--motion-fast),
+    background var(--motion-fast);
+}
+
+.areqPartSrcVariantReady {
+  border-style: solid;
+  border-color: var(--border-subtle);
+  background: var(--bg-raised);
+}
+
+.areqPartSrcVariantOn {
+  border-color: color-mix(in oklab, var(--action-primary) 45%, var(--border-subtle));
+  background: color-mix(in oklab, var(--bg-selected) 60%, var(--bg-raised));
+}
+
+.areqPartSrcVariantError {
+  border-style: solid;
+  border-color: var(--status-danger-border);
+  background: var(--status-danger-bg);
+}
+
+.areqPartSrcbtn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2-5);
+  flex: 1;
+  min-width: 0;
+  padding: var(--space-2-5) var(--space-3);
+  border: 0;
+  border-radius: inherit;
+  background: none;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.areqPartSrcbtn:disabled {
+  cursor: default;
+}
+
+.areqPartSicon {
+  background: var(--bg-sunken);
+  color: var(--fg-secondary);
+  font-size: var(--type-body-lg-size);
+}
+
+.areqPartSrcVariantOn .areqPartSicon {
+  background: var(--bg-brand-subtle);
+  color: var(--fg-brand);
+}
+
+.areqPartSrcVariantMissing .areqPartSicon {
+  background: none;
+  border: var(--border-width) dashed var(--border-default);
+  color: var(--fg-tertiary);
+}
+
+.areqPartSrcVariantError .areqPartSicon {
+  color: var(--status-danger-fg);
+  background: none;
+}
+
+.areqPartSt {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-0-5);
+}
+
+.areqPartSname {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.areqPartSdet {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.areqPartSrcVariantError .areqPartSdet {
+  color: var(--status-danger-fg);
+}
+
+.areqPartReq {
+  padding: var(--space-px) var(--space-1-5);
+  border-radius: var(--radius-full);
+  background: var(--bg-brand-subtle);
+  color: var(--fg-brand);
+}
+
+.areqPartAttach {
+  flex: none;
+  margin-right: var(--space-2);
+}

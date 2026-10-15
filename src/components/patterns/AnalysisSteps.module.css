@@ -1,0 +1,55 @@
+.areqPartSteps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-3) var(--space-3-5);
+  list-style: none;
+  border-radius: var(--radius-lg);
+  background: var(--bg-subtle);
+}
+
+.areqPartStep {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2-5);
+  color: var(--fg-tertiary);
+}
+
+.areqPartSdot {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--size-check);
+  height: var(--size-check);
+  border-radius: 50%;
+  border: var(--border-width-medium) solid var(--border-default);
+
+  --glyph-size: var(--type-overline-size);
+}
+
+.areqPartStepVariantDone {
+  color: var(--fg-secondary);
+}
+
+.areqPartStepVariantDone .areqPartSdot {
+  border-color: var(--status-success-solid);
+  background: var(--status-success-solid);
+  color: var(--on-color-fg);
+}
+
+.areqPartStepVariantNow {
+  color: var(--fg-primary);
+}
+
+.areqPartStepVariantNow .areqPartSdot {
+  border-color: var(--action-primary);
+  border-top-color: transparent;
+  animation: vui-spin 0.8s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .areqPartStepVariantNow .areqPartSdot {
+    animation: none;
+  }
+}

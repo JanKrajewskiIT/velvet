@@ -1,7 +1,0 @@
-/* Wizard */
-.vui-wizard{display:flex;flex-direction:column;gap:var(--space-5)}
-.vui-wizard__panel{outline:0;animation:vui-wiz-in var(--motion-enter)}
-.vui-wizard__title{margin-bottom:var(--space-3);font:var(--type-title-weight) var(--type-title-lg-size)/1.3 var(--font-display);letter-spacing:var(--type-title-tracking)}
-.vui-wizard__foot{display:flex;align-items:center;gap:var(--space-3);padding-top:var(--space-4);border-top:var(--border-width) solid var(--border-subtle)}
-.vui-wizard__count{margin:0 auto;font-size:var(--type-caption-size);color:var(--fg-tertiary);font-variant-numeric:tabular-nums}
-@keyframes vui-wiz-in{from{opacity:0;transform:translateX(12px)}}

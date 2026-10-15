@@ -4,6 +4,8 @@ import { createFrameFocus } from '../../hooks/createFrameFocus';
 import { activeItemKey } from '../../utils/activeItem';
 import { createTypeahead } from '../../utils/createTypeahead';
 import { cx } from '../../utils/cx';
+import { typographyClass } from '../primitives/typography';
+import styles from './DateTimeSlots.module.css';
 import { formatMinutes } from './time';
 
 export interface DateTimeSlotsProps {
@@ -68,7 +70,7 @@ export const DateTimeSlots = (props: DateTimeSlotsProps) => {
         root = element;
         props.ref(element);
       }}
-      class="vui-dtpop__list"
+      class={styles.dtpopPartList}
       role="listbox"
       aria-label={props.label}
       onKeyDown={onKeyDown}
@@ -85,7 +87,11 @@ export const DateTimeSlots = (props: DateTimeSlotsProps) => {
               props.value !== null && minutes <= props.value && props.value < minutes + props.step ? 'true' : undefined
             }
             disabled={props.isDisabled(minutes)}
-            class={cx('vui-dtpop__slot', minutes === props.value && 'vui-dtpop__slot--on')}
+            class={cx(
+              typographyClass('body-sm'),
+              styles.dtpopPartSlot,
+              minutes === props.value && styles.dtpopPartSlotVariantOn,
+            )}
             onFocus={() => setFocused(minutes)}
             onClick={() => !props.isDisabled(minutes) && props.onSelect(minutes)}
           >

@@ -1,0 +1,9 @@
+.skeletonText {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.skeleton {
+  composes: skeleton from '../../styles/shared/feedback/skeleton.module.css';
+}

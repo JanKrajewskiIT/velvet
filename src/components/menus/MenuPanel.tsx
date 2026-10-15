@@ -15,11 +15,14 @@ import {
 import { createFrameFocus } from '../../hooks/createFrameFocus';
 import { ownsLayerEvent } from '../../hooks/createLayer';
 import { createTypeahead } from '../../utils/createTypeahead';
+import { classSelector } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { Glyph, renderIcon } from '../primitives/Glyph';
 import { SectionLabel } from '../primitives/SectionLabel';
+import { typographyClass } from '../primitives/typography';
 import { isActionable, type MenuItem, menuItemKind } from './menuItem';
 import { MenuItemContent } from './MenuItemContent';
+import styles from './MenuPanel.module.css';
 
 const SCROLL_PADDING_PX = 8;
 
@@ -86,7 +89,10 @@ export const MenuPanel = (props: MenuPanelProps) => {
   };
 
   const labelOf = (index: number) =>
-    document.getElementById(itemId(index))?.querySelector('.vui-menu__label')?.textContent.toLowerCase() ?? '';
+    document
+      .getElementById(itemId(index))
+      ?.querySelector(classSelector(styles.menuPartLabel))
+      ?.textContent.toLowerCase() ?? '';
 
   const typeahead = (key: string) => {
     const list = actionable();
@@ -142,7 +148,7 @@ export const MenuPanel = (props: MenuPanelProps) => {
       role="menu"
       tabIndex={-1}
       aria-activedescendant={active() >= 0 ? itemId(active()) : undefined}
-      class={cx('vui-menu', p.class)}
+      class={cx(styles.menu, p.class)}
       style={p.style}
       onKeyDown={onKeyDown}
     >
@@ -150,10 +156,10 @@ export const MenuPanel = (props: MenuPanelProps) => {
         {(item, index) => (
           <Switch>
             <Match when={menuItemKind(item()) === 'divider'}>
-              <div role="separator" class="vui-menu__sep" />
+              <div role="separator" class={styles.menuPartSep} />
             </Match>
             <Match when={menuItemKind(item()) === 'section'}>
-              <SectionLabel role="presentation" class="vui-menu__section">
+              <SectionLabel role="presentation" class={styles.menuPartSection}>
                 {item().section}
               </SectionLabel>
             </Match>
@@ -165,9 +171,10 @@ export const MenuPanel = (props: MenuPanelProps) => {
                 aria-checked={item().checked !== undefined ? !!item().checked : undefined}
                 aria-disabled={item().disabled || undefined}
                 class={cx(
-                  'vui-menu__item',
-                  index === active() && 'vui-menu__item--active',
-                  item().danger && 'vui-menu__item--danger',
+                  typographyClass('body'),
+                  styles.menuPartItem,
+                  index === active() && styles.menuPartItemVariantActive,
+                  item().danger && styles.menuPartItemVariantDanger,
                 )}
                 onMouseEnter={() => !item().disabled && setActive(index)}
                 onMouseDown={(e) => e.preventDefault()}
@@ -179,7 +186,7 @@ export const MenuPanel = (props: MenuPanelProps) => {
                       when={item().checked !== undefined}
                       fallback={<Show when={p.iconPosition === 'start'}>{renderIcon(item().icon)}</Show>}
                     >
-                      <span class="vui-menu__check">
+                      <span class={styles.menuPartCheck}>
                         <Show when={item().checked}>
                           <Glyph name="check" />
                         </Show>

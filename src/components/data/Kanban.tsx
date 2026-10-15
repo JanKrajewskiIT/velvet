@@ -8,7 +8,9 @@ import { IconButton } from '../actions/IconButton';
 import { Count } from '../primitives/Count';
 import { Dot } from '../primitives/Dot';
 import { EmptyText } from '../primitives/EmptyText';
+import { Text } from '../primitives/Text';
 import { createKanbanMove } from './createKanbanMove';
+import styles from './Kanban.module.css';
 import { KanbanCardBody } from './KanbanCardBody';
 import type { KanbanCard, KanbanProps } from './kanbanTypes';
 
@@ -99,16 +101,16 @@ export const Kanban = (props: KanbanProps): JSX.Element => {
       ref={(element) => {
         board = element;
       }}
-      class={cx('vui-kanban', props.class)}
+      class={cx(styles.kanban, props.class)}
       aria-busy={movement.pending() || undefined}
     >
-      <span class="vui-sr-only" aria-live="assertive">
+      <Text as="span" variant="caption" tone="inherit" class={styles.srOnly} aria-live="assertive">
         {announcement()}
-      </span>
+      </Text>
       <Show when={movement.failed()}>
-        <div class="vui-hint vui-hint--error" role="alert">
+        <Text as="div" variant="caption" tone="inherit" class={cx(styles.hint, styles.hintVariantError)} role="alert">
           {props.moveErrorText ?? translate('velvet.data.kanban.moveError')}
-        </div>
+        </Text>
       </Show>
       <For each={props.columns}>
         {(col) => {
@@ -119,7 +121,7 @@ export const Kanban = (props: KanbanProps): JSX.Element => {
           const remaining = () => list().filter((c) => c.id !== dragId()).length;
           return (
             <section
-              class={cx('vui-kanban__col', isOver() && 'vui-kanban__col--over')}
+              class={cx(styles.kanbanPartCol, isOver() && styles.kanbanPartColVariantOver)}
               aria-label={col.title}
               onDragOver={(e) => {
                 if (dragId() == null) return;
@@ -138,14 +140,16 @@ export const Kanban = (props: KanbanProps): JSX.Element => {
                 endDrag();
               }}
             >
-              <header class="vui-kanban__head">
+              <header class={styles.kanbanPartHead}>
                 <Dot size="lg" class="vui-kanban__dot" style={{ '--tone': col.color ?? DEFAULT_DOT_COLOR }} />
-                <span class="vui-kanban__title">{col.title}</span>
+                <Text as="span" variant="label" tone="inherit" class="vui-kanban__title">
+                  {col.title}
+                </Text>
                 <Count
                   tone="neutral"
                   showZero
                   value={col.limit != null ? `${list().length}/${col.limit}` : list().length}
-                  class={cx('vui-kanban__count', overLimit() && 'vui-kanban__count--over')}
+                  class={cx(styles.kanbanPartCount, overLimit() && styles.kanbanPartCountVariantOver)}
                 />
                 <Show when={props.onAddCard}>
                   {(onAdd) => (
@@ -161,7 +165,7 @@ export const Kanban = (props: KanbanProps): JSX.Element => {
                 </Show>
               </header>
               <div
-                class="vui-kanban__list"
+                class={styles.kanbanPartList}
                 role="list"
                 aria-label={translate('velvet.data.kanban.listLabel', { title: col.title, count: list().length })}
               >
@@ -169,7 +173,7 @@ export const Kanban = (props: KanbanProps): JSX.Element => {
                   {(card, i) => (
                     <>
                       <Show when={isOver() && overIndex() === i()}>
-                        <div class="vui-kanban__ghost" />
+                        <div class={styles.kanbanPartGhost} />
                       </Show>
                       {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- draggable card is a focusable item; keyboard moves and Enter are handled by onKeyDown */}
                       <article
@@ -178,7 +182,7 @@ export const Kanban = (props: KanbanProps): JSX.Element => {
                         // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- each card is a keyboard-operable item (arrows move focus, modifiers move the card)
                         tabIndex={0}
                         draggable={movement.movable()}
-                        class={cx('vui-kanban__card', dragId() === card.id && 'vui-kanban__card--drag')}
+                        class={cx(styles.kanbanPartCard, dragId() === card.id && styles.kanbanPartCardVariantDrag)}
                         aria-roledescription={translate('velvet.data.kanban.cardRoleDescription')}
                         aria-describedby={helpId}
                         onDragStart={(e) => {
@@ -204,10 +208,10 @@ export const Kanban = (props: KanbanProps): JSX.Element => {
                   )}
                 </For>
                 <Show when={isOver() && overIndex() >= remaining()}>
-                  <div class="vui-kanban__ghost" />
+                  <div class={styles.kanbanPartGhost} />
                 </Show>
                 <Show when={list().length === 0 && !isOver()}>
-                  <EmptyText dashed class="vui-kanban__empty">
+                  <EmptyText dashed class={styles.kanbanPartEmpty}>
                     {translate('velvet.data.kanban.dropHere')}
                   </EmptyText>
                 </Show>
@@ -216,9 +220,9 @@ export const Kanban = (props: KanbanProps): JSX.Element => {
           );
         }}
       </For>
-      <span id={helpId} class="vui-sr-only">
+      <Text as="span" variant="caption" tone="inherit" id={helpId} class={styles.srOnly}>
         {translate('velvet.data.kanban.help')}
-      </span>
+      </Text>
     </div>
   );
 };

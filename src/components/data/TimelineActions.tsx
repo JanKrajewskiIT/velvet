@@ -3,6 +3,8 @@ import { For, Show } from 'solid-js';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
+import { typographyClass } from '../primitives/typography';
+import styles from './TimelineActions.module.css';
 import type { TimelineAction, TimelineItem } from './timelineTypes';
 
 export interface TimelineActionsProps {
@@ -18,7 +20,7 @@ export const TimelineActions = (props: TimelineActionsProps) => {
   return (
     <Show when={props.item.actions?.length}>
       <span
-        class="vui-timeline__actions"
+        class={styles.timelinePartActions}
         role="group"
         aria-label={translate('velvet.data.timelineActions.actionsLabel')}
       >
@@ -26,7 +28,11 @@ export const TimelineActions = (props: TimelineActionsProps) => {
           {(action) => (
             <button
               type="button"
-              class={cx('vui-timeline__act', action.tone === 'danger' && 'vui-timeline__act--danger')}
+              class={cx(
+                typographyClass('label-sm'),
+                styles.timelinePartAct,
+                action.tone === 'danger' && styles.timelinePartActVariantDanger,
+              )}
               title={action.label}
               aria-label={
                 typeof props.item.title === 'string'

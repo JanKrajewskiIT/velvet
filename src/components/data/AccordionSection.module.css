@@ -1,0 +1,212 @@
+:import('../../styles/shared/primitives/glyph.module.css') {
+  externalIcon: icon;
+}
+
+.accordionPartItem {
+  background: var(--bg-raised);
+}
+
+.accordionPartH {
+  margin: 0;
+  font: inherit;
+}
+
+.accordionPartTrigger {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: var(--row-height-lg);
+  padding: var(--space-3) var(--space-4);
+  border: 0;
+  border-radius: inherit;
+  background: none;
+  color: var(--fg-primary);
+  text-align: left;
+  cursor: pointer;
+}
+
+.accordionPartTrigger:hover .accordionPartChev {
+  color: var(--fg-primary);
+}
+
+.accordionPartTrigger:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.accordionPartTrigger:disabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+
+.accordionPartTitle {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-0-5);
+}
+
+.accordionPartMeta {
+  color: var(--fg-tertiary);
+}
+
+.accordionPartChev {
+  flex: none;
+  color: var(--fg-tertiary);
+  transition:
+    transform var(--motion-enter),
+    color var(--motion-fast);
+}
+
+.accordionPartItemVariantOpen .accordionPartChev {
+  transform: rotate(180deg);
+}
+
+.accordionPartPanel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--motion-enter);
+}
+
+.accordionPartItemVariantOpen .accordionPartPanel {
+  grid-template-rows: 1fr;
+}
+
+.accordionPartInner {
+  overflow: hidden;
+  visibility: hidden;
+  transition: visibility 0s linear var(--motion-enter);
+}
+
+.accordionPartItemVariantOpen .accordionPartInner {
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.accordionPartContent {
+  padding: 0 var(--space-4) var(--space-4);
+}
+
+.accordionPartSep {
+  height: var(--border-width);
+  margin: 0 0 var(--space-4);
+  background: linear-gradient(to right, transparent, var(--border-default), transparent);
+}
+
+.accordionPartItemVariantDisabled {
+  opacity: var(--opacity-disabled);
+}
+
+.accordionPartSub {
+  color: var(--fg-tertiary);
+}
+
+.accordionPartTrigger > :global(.externalIcon):first-child {
+  color: var(--fg-tertiary);
+
+  --glyph-size: var(--type-title-lg-size);
+}
+
+.accordionPartItemVariantToned {
+}
+
+.accordionPartItem[data-variant='separated'] {
+  border: var(--border-width) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--elevation-control);
+  transition:
+    box-shadow var(--motion-base),
+    border-color var(--motion-base);
+}
+
+.accordionPartItemVariantOpen[data-variant='separated'] {
+  border-color: var(--border-default);
+  box-shadow: var(--elevation-card);
+}
+
+.accordionPartItem[data-variant='flush'] {
+  border-bottom: var(--border-width) solid var(--border-subtle);
+  background: none;
+}
+
+.accordionPartItem[data-variant='flush'] .accordionPartTrigger {
+  padding: var(--space-3) var(--space-1);
+}
+
+.accordionPartItem[data-variant='flush'] .accordionPartContent {
+  padding: 0 var(--space-1) var(--space-4);
+}
+
+.accordionPartItem[data-variant='elevated'] {
+  position: relative;
+  overflow: hidden;
+  border: var(--border-width) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--elevation-control);
+  transition:
+    box-shadow var(--motion-base),
+    transform var(--motion-base),
+    border-color var(--motion-base);
+}
+
+.accordionPartItem[data-variant='elevated']:not(.accordionPartItemVariantDisabled):hover {
+  transform: translateY(-2px);
+  box-shadow: var(--elevation-card-hover);
+}
+
+.accordionPartItemVariantToned[data-variant='elevated'] {
+  border-left: var(--border-width-accent) solid var(--tone, var(--action-primary));
+}
+
+.accordionPartItemVariantOpen[data-variant='elevated']:not(.accordionPartItemVariantToned) {
+  border-color: var(--tone, var(--action-primary));
+}
+
+.accordionPartItemVariantOpen[data-variant='elevated'] {
+  box-shadow: 0 4px 24px color-mix(in oklab, var(--tone, var(--action-primary)) 12%, transparent);
+}
+
+.accordionPartItem[data-variant='elevated'] .accordionPartTrigger {
+  min-height: var(--row-height-lg);
+  padding: var(--space-4) var(--space-5);
+}
+
+.accordionPartItem[data-variant='elevated'] .accordionPartTitle {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.accordionPartItem[data-variant='elevated'] .accordionPartChev {
+  transition:
+    transform var(--motion-spring),
+    color var(--motion-base);
+}
+
+.accordionPartItemVariantOpen[data-variant='elevated'] .accordionPartChev {
+  color: var(--tone-fg, var(--fg-brand));
+}
+
+.accordionPartItem[data-variant='elevated'] .accordionPartContent {
+  padding: 0 var(--space-5) var(--space-5);
+}
+
+.accordionPartItem[data-animated='true'] {
+  animation: vui-acc-in var(--motion-move) backwards;
+  animation-delay: calc(var(--acc-i, 0) * var(--motion-stagger));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .accordionPartItem[data-animated='true'] {
+    animation: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .accordionPartItem[data-variant='elevated']:hover {
+    transform: none;
+  }
+}

@@ -3,9 +3,12 @@ import { Show } from 'solid-js';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { clamp } from '../../utils/math';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import type { GanttFormat } from './createGanttFormat';
 import type { GanttTimeline } from './createGanttTimeline';
 import { daysBetween, type GanttTask, type PlacedTask } from './ganttLayout';
+import styles from './GanttTaskButton.module.css';
 
 const BAR_HEIGHT = 24;
 const OUTSIDE_NAME_MAX_PX = 160;
@@ -33,7 +36,7 @@ export const GanttTaskButton = (props: GanttTaskButtonProps) => {
       fallback={
         <button
           type="button"
-          class={cx('vui-gantt__bar', nameOutside() && 'vui-gantt__bar--out')}
+          class={cx(typographyClass('label-sm'), styles.ganttPartBar, nameOutside() && styles.ganttPartBarVariantOut)}
           style={{
             left: `${props.timeline.x(props.placed.start) + 1}px`,
             width: `${barWidth() - 2}px`,
@@ -45,15 +48,17 @@ export const GanttTaskButton = (props: GanttTaskButtonProps) => {
           onClick={() => props.onClick?.(props.placed.task)}
         >
           <Show when={props.placed.task.progress}>
-            {(progress) => <span class="vui-gantt__prog" style={{ width: `${clamp(progress(), 0, 100)}%` }} />}
+            {(progress) => <span class={styles.ganttPartProg} style={{ width: `${clamp(progress(), 0, 100)}%` }} />}
           </Show>
-          <span class="vui-gantt__name">{props.placed.task.name}</span>
+          <Text as="span" variant="label-sm" tone="inherit" class={styles.ganttPartName}>
+            {props.placed.task.name}
+          </Text>
         </button>
       }
     >
       <button
         type="button"
-        class="vui-gantt__ms"
+        class={styles.ganttPartMs}
         style={{
           left: `${props.timeline.x(props.placed.start) + props.timeline.px() / 2}px`,
           top: `${rowTop() + props.timeline.rowHeight() / 2}px`,
@@ -63,7 +68,9 @@ export const GanttTaskButton = (props: GanttTaskButtonProps) => {
         title={spoken()}
         onClick={() => props.onClick?.(props.placed.task)}
       >
-        <span>{props.placed.task.name}</span>
+        <Text as="span" variant="label-sm" tone="inherit">
+          {props.placed.task.name}
+        </Text>
       </button>
     </Show>
   );

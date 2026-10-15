@@ -2,6 +2,9 @@ import { type JSX, mergeProps, Show, splitProps } from 'solid-js';
 
 import { cx } from '../../utils/cx';
 import { Glyph, renderIcon } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './Chip.module.css';
 
 const CHECKABLE_ROLES: readonly (string | undefined)[] = ['radio', 'checkbox', 'option'];
 
@@ -55,11 +58,12 @@ export const Chip = (props: ChipProps) => {
       {...rest}
       {...selectionState()}
       class={cx(
-        'vui-chip',
-        local.size === 'sm' && 'vui-chip--sm',
-        on() && 'vui-chip--on',
-        local.color && 'vui-chip--color',
-        local.dashed && 'vui-chip--dashed',
+        typographyClass(local.size === 'sm' ? 'label-sm' : 'button-sm'),
+        styles.chip,
+        local.size === 'sm' && styles.chipVariantSm,
+        on() && styles.chipVariantOn,
+        local.color && styles.chipVariantColor,
+        local.dashed && styles.chipVariantDashed,
         local.class,
       )}
       style={local.color ? { ...local.style, '--chip-c': local.color } : local.style}
@@ -68,13 +72,13 @@ export const Chip = (props: ChipProps) => {
         when={local.color}
         fallback={
           <Show when={local.check}>
-            <span class="vui-chip__check" aria-hidden="true">
+            <span class={styles.chipPartCheck} aria-hidden="true">
               <Glyph name="check" />
             </span>
           </Show>
         }
       >
-        <span class="vui-chip__swatch" aria-hidden="true">
+        <span class={styles.chipPartSwatch} aria-hidden="true">
           <Show when={on()}>
             <Glyph name="check" />
           </Show>
@@ -83,7 +87,9 @@ export const Chip = (props: ChipProps) => {
       <Show when={!showsCheck()}>{renderIcon(local.icon)}</Show>
       {local.children}
       <Show when={local.count != null}>
-        <span class="vui-chip__count">{local.count}</span>
+        <Text as="span" variant="kbd" tone="inherit" class={styles.chipPartCount}>
+          {local.count}
+        </Text>
       </Show>
     </button>
   );

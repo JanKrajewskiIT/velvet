@@ -1,0 +1,67 @@
+.scroll {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  outline: 0;
+  border-radius: inherit;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+  overscroll-behavior: contain;
+}
+
+.scroll:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+.scrollVariantY {
+  overflow: hidden auto;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    black var(--_fs, 0),
+    black calc(100% - var(--_fe, 0px)),
+    transparent 100%
+  );
+}
+
+.scrollVariantX {
+  overflow: auto hidden;
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    black var(--_fs, 0),
+    black calc(100% - var(--_fe, 0px)),
+    transparent 100%
+  );
+}
+
+.scrollVariantBoth {
+  overflow: auto;
+}
+
+.scrollPartTrack {
+  display: flex;
+  gap: var(--space-2);
+  width: max-content;
+  padding-bottom: var(--space-1);
+}
+
+.scroll::-webkit-scrollbar {
+  width: var(--space-2-5);
+  height: var(--space-2-5);
+}
+
+.scroll::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: var(--radius-full);
+  border: var(--border-width-accent) solid transparent;
+  background-clip: content-box;
+}
+
+.scroll::-webkit-scrollbar-thumb:hover {
+  background-color: var(--fg-tertiary);
+}
+
+.scroll::-webkit-scrollbar-track {
+  background: transparent;
+}

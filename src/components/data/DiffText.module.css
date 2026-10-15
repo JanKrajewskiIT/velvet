@@ -1,0 +1,15 @@
+.diffPartW {
+  border-radius: 2px;
+  color: inherit;
+}
+
+.diffPartWVariantAdd {
+  background: color-mix(in oklab, var(--code-added) 36%, transparent);
+}
+
+.diffPartWVariantDel {
+  background: color-mix(in oklab, var(--status-danger-solid) 42%, transparent);
+}
+
+.diffPartTxt {
+}

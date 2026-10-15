@@ -1,0 +1,83 @@
+.meter {
+  position: relative;
+  display: block;
+  flex: 1 1 auto;
+  min-width: 0;
+  height: var(--size-track);
+  border-radius: var(--meter-radius);
+  background: var(--meter-track);
+  overflow: hidden;
+}
+
+.meterVariantSm {
+  height: var(--size-track-sm);
+}
+
+.meterVariantLg {
+  height: var(--size-track-lg);
+}
+
+.meterPartFill,
+.meterPartSeg.meterPartSegVariantOn {
+  background: var(--meter-fill);
+}
+
+.meter[data-tone] .meterPartFill,
+.meter[data-tone] .meterPartSeg.meterPartSegVariantOn {
+  background: var(--tone);
+}
+
+.meterVariantRating .meterPartFill {
+  background: var(--rating-fill);
+}
+
+.meterPartFill {
+  position: relative;
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  transition: width var(--motion-slide);
+  overflow: hidden;
+}
+
+.meterVariantShimmer .meterPartFill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 30%, var(--skeleton-shine) 50%, transparent 70%);
+  transform: translateX(-100%);
+  animation: vui-meter-sweep var(--motion-progress) 1 forwards;
+}
+
+.meterVariantSegmented {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: var(--space-1);
+  background: none;
+  border-radius: 0;
+  overflow: visible;
+}
+
+.meterPartSeg {
+  height: 100%;
+  border-radius: var(--meter-radius);
+  background: var(--meter-track);
+  transition: background-color var(--motion-base);
+}
+
+.meterVariantIndeterminate .meterPartFill {
+  position: absolute;
+  width: 40%;
+  animation: vui-meter-indet 1.3s var(--ease-standard) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .meterPartFill {
+    transition: none;
+  }
+
+  .meterVariantShimmer .meterPartFill::after {
+    display: none;
+  }
+}

@@ -2,8 +2,10 @@ import { mergeProps, onMount } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { typographyClass } from '../primitives/typography';
 import { createGanttFormat } from './createGanttFormat';
 import { createGanttTimeline } from './createGanttTimeline';
+import styles from './Gantt.module.css';
 import { GanttCanvas } from './GanttCanvas';
 import { GanttHeader } from './GanttHeader';
 import { GanttLabels } from './GanttLabels';
@@ -63,7 +65,7 @@ export const Gantt = (props: GanttProps) => {
 
   return (
     <div
-      class={cx('vui-gantt', `vui-gantt--${merged.scale}`, merged.class)}
+      class={cx(typographyClass('body'), styles.gantt, merged.class)}
       style={{ '--gantt-label': `${merged.labelWidth}px`, '--row': `${merged.rowHeight}px` }}
       role="group"
       aria-label={label()}
@@ -72,12 +74,12 @@ export const Gantt = (props: GanttProps) => {
         ref={(element) => {
           scroller = element;
         }}
-        class="vui-gantt__scroll"
+        class={styles.ganttPartScroll}
         style={{ 'max-height': typeof merged.height === 'number' ? `${merged.height}px` : merged.height }}
       >
         <div style={{ width: `${merged.labelWidth + timeline.canvasWidth()}px` }}>
           <GanttHeader timeline={timeline} format={format} />
-          <div class="vui-gantt__body">
+          <div class={styles.ganttPartBody}>
             <GanttLabels timeline={timeline} />
             <GanttCanvas
               timeline={timeline}

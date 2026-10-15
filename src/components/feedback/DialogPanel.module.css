@@ -1,0 +1,148 @@
+:import('../../styles/shared/actions/button.module.css') {
+  externalBtn: btn;
+}
+
+.dialog {
+  composes: dialog from '../../styles/shared/feedback/dialog.module.css';
+  background: var(--dialog-bg);
+  border: var(--border-width) solid var(--panel-border);
+  border-radius: var(--dialog-radius);
+  box-shadow: var(--dialog-shadow);
+  color: var(--fg-primary);
+}
+
+.dialogVariantSm {
+  max-width: var(--dialog-w-sm);
+}
+
+.dialogVariantLg {
+  max-width: var(--dialog-w-lg);
+}
+
+.dialogPartHeader {
+  padding: var(--dialog-pad) var(--dialog-pad) 0;
+  padding-right: var(--space-12);
+}
+
+.dialogPartDesc {
+  margin-top: var(--space-1-5);
+}
+
+.dialogPartBody {
+  padding: var(--space-5) var(--dialog-pad);
+  overflow: auto;
+}
+
+.dialogPartFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  padding: 0 var(--dialog-pad) var(--dialog-pad);
+}
+
+.dialogPartClose {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+}
+
+@media (width <= 639px) {
+  .dialog {
+    max-width: none;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    animation-name: vui-sheet-in;
+  }
+
+  .dialogPartFooter {
+    flex-direction: column-reverse;
+  }
+}
+
+.dialogBackdropVariantRight {
+  place-items: stretch end;
+  padding: 0;
+
+  --drawer-animation: vui-drawer-r;
+}
+
+.dialogBackdropVariantLeft {
+  place-items: stretch start;
+  padding: 0;
+
+  --drawer-animation: vui-drawer-l;
+}
+
+.dialogVariantDrawer {
+  height: 100%;
+  max-height: none;
+  max-width: var(--drawer-w);
+  border-radius: 0;
+  border-width: 0 0 0 var(--border-width);
+  animation: var(--drawer-animation, vui-drawer-r) var(--motion-enter);
+}
+
+.dialogBackdropVariantRight .dialogVariantDrawer {
+  box-shadow: var(--elevation-drawer-right);
+}
+
+.dialogBackdropVariantLeft .dialogVariantDrawer {
+  border-width: 0 var(--border-width) 0 0;
+  box-shadow: var(--elevation-drawer-left);
+}
+
+.dialogVariantDrawer.dialogVariantSm {
+  max-width: var(--overlay-w-md);
+}
+
+.dialogVariantDrawer.dialogVariantLg {
+  max-width: var(--dialog-w-lg);
+}
+
+.dialogVariantDrawer .dialogPartBody {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.dialogVariantDrawer .dialogPartFooter {
+  padding-top: var(--space-4);
+  border-top: var(--border-width) solid var(--border-subtle);
+}
+
+@media (width <= 639px) {
+  .dialogBackdropVariantRight,
+  .dialogBackdropVariantLeft {
+    place-items: stretch end;
+  }
+
+  .dialogVariantDrawer {
+    max-width: none;
+    width: min(100%, var(--drawer-w));
+    border-radius: 0;
+
+    --drawer-animation: vui-drawer-r;
+  }
+
+  .dialogVariantDrawer .dialogPartFooter {
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+}
+
+@media (width <= 639px) {
+  .dialogPartFooter :global(.externalBtn) {
+    width: 100%;
+  }
+
+  .dialogVariantDrawer .dialogPartFooter :global(.externalBtn) {
+    width: auto;
+  }
+}
+
+.dialogBackdrop {
+  composes: dialogbackdrop from '../../styles/shared/feedback/dialog.module.css';
+}
+
+.dialogBackdropVariantTop {
+  composes: dialogbackdropvarianttop from '../../styles/shared/menus/command-palette.module.css';
+}

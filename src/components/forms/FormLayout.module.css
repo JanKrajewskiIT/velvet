@@ -1,0 +1,19 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0;
+  min-width: 0;
+}
+
+.formVariantGapSm {
+  gap: var(--space-3);
+}
+
+.formVariantGapMd {
+  gap: var(--space-5);
+}
+
+.formVariantGapLg {
+  gap: var(--space-8);
+}

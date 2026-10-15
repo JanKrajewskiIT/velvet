@@ -5,8 +5,11 @@ import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Button } from '../actions/Button';
 import { Spinner } from '../feedback/Spinner';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import type { TreeController } from './treeController';
 import type { StatusRow } from './treeData';
+import styles from './TreeStatusRow.module.css';
 
 export interface TreeStatusRowProps {
   tree: TreeController;
@@ -22,26 +25,35 @@ export const TreeStatusRow = (props: TreeStatusRowProps) => (
     aria-selected={false}
     aria-disabled={props.row.status.kind === 'loading' || undefined}
     tabIndex={props.tree.focus.tabbableId() === props.row.id ? 0 : -1}
-    class={cx('vui-tree__row', 'vui-tree__row--status', props.row.status.kind === 'error' && 'vui-tree__row--error')}
+    class={cx(
+      typographyClass('body-sm'),
+      styles.treePartRow,
+      styles.treePartRowVariantStatus,
+      props.row.status.kind === 'error' && styles.treePartRowVariantError,
+    )}
     style={{ '--lvl': props.row.level - 1 }}
     onFocusIn={() => props.tree.focus.setFocusId(props.row.id)}
   >
-    <span class="vui-tree__caret vui-tree__caret--leaf" aria-hidden="true" />
+    <span class={cx(styles.treePartCaret, 'vui-tree__caret--leaf')} aria-hidden="true" />
     <Show
       when={props.row.status.kind === 'error'}
       fallback={
         <>
           <Spinner size="sm" label={props.tree.labels().loading} />
-          <span class="vui-tree__label">{props.tree.labels().loading}</span>
+          <Text as="span" variant="body-sm" tone="inherit" class={styles.treePartLabel}>
+            {props.tree.labels().loading}
+          </Text>
         </>
       }
     >
-      <Glyph name="alert-circle" class="vui-tree__icon" />
-      <span class="vui-tree__label">{props.tree.labels().loadFailed}</span>
+      <Glyph name="alert-circle" class={styles.treePartIcon} />
+      <Text as="span" variant="body-sm" tone="inherit" class={styles.treePartLabel}>
+        {props.tree.labels().loadFailed}
+      </Text>
       <Button
         variant="ghost"
         size="sm"
-        class="vui-tree__retry"
+        class={styles.treePartRetry}
         tabIndex={-1}
         onClick={(e) => {
           e.stopPropagation();

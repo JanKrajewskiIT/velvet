@@ -6,10 +6,12 @@ import { cx } from '../../utils/cx';
 import { numberRange } from '../../utils/decimalValue';
 import { FieldHint } from '../primitives/FieldHint';
 import { FieldLabel } from '../primitives/FieldLabel';
+import { Text } from '../primitives/Text';
 import { createFormValidation } from './createFormValidation';
 import type { FormControlProps } from './formControl';
 import { FormValue } from './FormValue';
 import { RangeBound } from './RangeBound';
+import styles from './RangeInput.module.css';
 import { isInverted, type RangeBoundKey, type RangeValue } from './rangeValue';
 import { Select } from './Select';
 import type { SelectOption } from './selectOption';
@@ -121,19 +123,19 @@ export const RangeInput = (props: RangeInputProps) => {
   });
 
   return (
-    <div class={cx('vui-field', 'vui-range', p.class)}>
+    <div class={cx(styles.field, 'vui-range', p.class)}>
       <Show when={p.label}>
         <FieldLabel id={`${id()}-label`} htmlFor={`${id()}-min`} optional={p.optional} required={p.required}>
           {p.label}
         </FieldLabel>
       </Show>
       <div
-        class="vui-range__row"
+        class={styles.rangePartRow}
         role="group"
         aria-label={p['aria-label'] ?? groupLabel()}
         aria-labelledby={p['aria-labelledby'] ?? (p.label ? `${id()}-label` : undefined)}
       >
-        <div class="vui-range__bounds">
+        <div class={styles.rangePartBounds}>
           <RangeBound
             {...shared()}
             ref={(element) => {
@@ -146,9 +148,9 @@ export const RangeInput = (props: RangeInputProps) => {
             placeholder={fromLabel()}
             ariaLabel={p.label ? undefined : fromLabel()}
           />
-          <span class="vui-range__sep" aria-hidden="true">
+          <Text as="span" variant="body" tone="inherit" class={styles.rangePartSep} aria-hidden="true">
             –
-          </span>
+          </Text>
           <RangeBound
             {...shared()}
             onValidityChange={(invalid) => setInvalidBounds((current) => ({ ...current, max: invalid }))}
@@ -161,7 +163,7 @@ export const RangeInput = (props: RangeInputProps) => {
         <Show when={p.unitOptions}>
           {(options) => (
             <Select
-              class="vui-range__select"
+              class={styles.rangePartSelect}
               name={p.unitName}
               form={p.form}
               size={p.size}
@@ -177,7 +179,7 @@ export const RangeInput = (props: RangeInputProps) => {
         <Show when={p.periodOptions}>
           {(options) => (
             <Select
-              class="vui-range__select vui-range__select--wide"
+              class={cx(styles.rangePartSelect, styles.rangePartSelectVariantWide)}
               name={p.periodName}
               form={p.form}
               size={p.size}

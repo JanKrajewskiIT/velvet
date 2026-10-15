@@ -1,0 +1,12 @@
+.schedPartBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.schedPartRange {
+  flex: 1;
+  min-width: 0;
+  margin: 0 0 0 var(--space-2);
+}

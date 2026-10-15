@@ -17,6 +17,7 @@ export { PageLoader, type PageLoaderProps } from './PageLoader';
 export { Popover, type PopoverProps, type PopoverTriggerProps } from './Popover';
 export { Progress, type ProgressProps, type ProgressTone } from './Progress';
 export { ProgressRing, type ProgressRingProps } from './ProgressRing';
+export { RobotProcessingIndicator, type RobotProcessingIndicatorProps } from './RobotProcessingIndicator';
 export { SetupChecklist, type SetupChecklistProps } from './SetupChecklist';
 export type { ChecklistStep } from './SetupChecklistStep';
 export { Skeleton, type SkeletonProps } from './Skeleton';

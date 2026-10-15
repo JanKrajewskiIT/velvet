@@ -1,0 +1,95 @@
+.editcolPartRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-2-5);
+  padding: var(--space-2);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: var(--bg-page);
+  transition:
+    border-color var(--motion-fast),
+    opacity var(--motion-fast),
+    box-shadow var(--motion-fast);
+}
+
+.editcolPartRowVariantDrag {
+  opacity: 0.5;
+}
+
+.editcolPartRowVariantOver {
+  border-color: var(--action-primary);
+  box-shadow: 0 -2px 0 var(--action-primary);
+}
+
+.editcolPartRowVariantInvalid {
+  border-color: var(--status-danger-border);
+}
+
+.editcolPartIdx {
+  flex: none;
+  width: 20px;
+  text-align: center;
+  color: var(--fg-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.editcolPartInput {
+  flex: 1 1 160px;
+  min-width: 0;
+  height: var(--control-height-inner-lg);
+  box-sizing: border-box;
+  padding: 0 var(--space-2-5);
+  border: var(--border-width) solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--fg-primary);
+  transition:
+    border-color var(--motion-fast),
+    background-color var(--motion-fast),
+    box-shadow var(--motion-fast);
+}
+
+.editcolPartInput:hover {
+  border-color: var(--border-default);
+}
+
+.editcolPartInput:focus {
+  outline: 0;
+  border-color: var(--control-border-focus);
+  background: var(--bg-raised);
+  box-shadow: var(--focus-ring);
+}
+
+.editcolPartRowVariantInvalid .editcolPartInput {
+  border-color: var(--status-danger-border);
+}
+
+.editcolPartLevel {
+  flex: none;
+  width: 150px;
+}
+
+.editcolPartTools {
+  display: flex;
+  flex: none;
+  gap: var(--space-0-5);
+}
+
+.editcolPartDel:hover {
+  color: var(--status-danger-fg);
+  background: var(--status-danger-bg);
+}
+
+.editcolPartErr {
+  flex-basis: 100%;
+  margin: calc(-1 * var(--space-1)) 0 0 var(--space-8);
+  color: var(--status-danger-fg);
+}
+
+@media (width <= 639px) {
+  .editcolPartLevel {
+    flex: 1 1 120px;
+    width: auto;
+  }
+}

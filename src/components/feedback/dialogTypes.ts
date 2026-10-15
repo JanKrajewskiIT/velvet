@@ -21,6 +21,8 @@ export interface DialogProps {
   /** Logical fallback when the element that opened the dialog no longer exists. */
   restoreFocus?: () => HTMLElement | undefined;
   class?: string;
+  bodyClass?: string;
+  footerClass?: string;
   children?: JSX.Element;
 }
 

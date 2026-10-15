@@ -2,6 +2,7 @@ import { mergeProps, splitProps } from 'solid-js';
 
 import { cx } from '../../utils/cx';
 import { type ElementTag, type HtmlProps, Polymorphic } from '../../utils/polymorphic';
+import styles from './Grid.module.css';
 import { lengthValue, spaceValue } from './space';
 
 export interface GridProps extends HtmlProps<HTMLElement> {
@@ -27,8 +28,8 @@ export const Grid = (props: GridProps) => {
     <Polymorphic
       tag={local.as}
       {...rest}
-      class={cx('vui-grid-layout', !local.min && 'vui-grid-layout--fixed', local.class)}
-      style={{ 'grid-template-columns': template(), gap: spaceValue(local.gap), ...local.style }}
+      class={cx(styles.gridLayout, !local.min && styles.gridLayoutVariantFixed, local.class)}
+      style={{ '--grid-columns-template': template(), gap: spaceValue(local.gap), ...local.style }}
     />
   );
 };

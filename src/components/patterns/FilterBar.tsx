@@ -6,6 +6,8 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { Button } from '../actions/Button';
 import { SearchInput } from '../forms/SearchInput';
+import { Text } from '../primitives/Text';
+import styles from './FilterBar.module.css';
 import { FilterChip } from './FilterChip';
 import type { FilterDef, FilterValue } from './filterDefs';
 
@@ -74,11 +76,11 @@ export const FilterBar = (props: FilterBarProps) => {
   };
 
   return (
-    <div class={cx('vui-filterbar', p.class)} role="search">
+    <div class={cx(styles.filterbar, p.class)} role="search">
       <Show when={p.search}>
         <SearchInput
           size="sm"
-          class="vui-filterbar__search"
+          class={styles.filterbarPartSearch}
           aria-label={searchPlaceholder().replace('…', '')}
           placeholder={searchPlaceholder()}
           value={query()}
@@ -99,11 +101,18 @@ export const FilterBar = (props: FilterBarProps) => {
           {translate('velvet.patterns.filterBar.clearAll')}
         </Button>
       </Show>
-      <div class="vui-filterbar__end">
+      <div class={styles.filterbarPartEnd}>
         <Show when={p.resultCount != null}>
-          <span class="vui-filterbar__count" aria-live="polite">
+          <Text
+            as="span"
+            variant="caption"
+            tone="tertiary"
+            tabular
+            class={styles.filterbarPartCount}
+            aria-live="polite"
+          >
             {resultText(p.resultCount ?? 0)}
-          </span>
+          </Text>
         </Show>
         {p.actions}
       </div>

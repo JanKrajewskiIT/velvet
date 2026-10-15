@@ -1,0 +1,38 @@
+.indicator {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  vertical-align: middle;
+}
+
+.indicatorVariantCircle > .indicatorPartItem {
+  top: 14%;
+  right: 14%;
+}
+
+.indicatorVariantBottom > .indicatorPartItem {
+  top: auto;
+  bottom: 0;
+  transform: translate(50%, 50%);
+}
+
+.indicatorVariantCircle.indicatorVariantBottom > .indicatorPartItem {
+  top: auto;
+  bottom: 14%;
+}
+
+.indicatorVariantStart > .indicatorPartItem {
+  right: auto;
+  left: 0;
+  transform: translate(-50%, -50%);
+}
+
+.indicatorVariantInset > .indicatorPartItem {
+  transform: none;
+  top: var(--space-0-5);
+  right: var(--space-0-5);
+}
+
+.indicatorPartItem {
+  composes: indicatorpartitem from '../../styles/shared/primitives/dot.module.css';
+}

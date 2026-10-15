@@ -1,0 +1,10 @@
+.cropPartBar {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-3);
+}
+
+.cropPartZoom {
+  flex: 1;
+  min-width: 0;
+}

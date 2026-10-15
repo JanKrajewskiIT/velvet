@@ -1,0 +1,25 @@
+.segmented {
+  composes: segmented from '../../styles/shared/primitives/segmented.module.css';
+}
+
+.segmentedVariantBlock {
+  display: flex;
+
+  --segmented-item-flex: 1;
+}
+
+.segmentedVariantRound {
+  border-radius: var(--radius-full);
+
+  --segmented-item-radius: var(--radius-full);
+}
+
+.segmentedVariantSm {
+  --segmented-item-height: var(--segment-h-sm);
+  --segmented-item-padding: 0 var(--segment-px-sm);
+}
+
+.segmentedVariantIcon {
+  --segmented-item-width: var(--segmented-item-height);
+  --segmented-item-padding: 0;
+}

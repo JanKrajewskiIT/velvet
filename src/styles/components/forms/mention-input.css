@@ -1,9 +1,0 @@
-/* MentionInput */
-.vui-mention{position:relative}
-.vui-mention .vui-control{height:auto;align-items:stretch}
-.vui-mention__wrap{position:relative;flex:1;min-width:0;display:flex}
-.vui-mention__input{position:relative;z-index:1;display:block;flex:1;width:100%;min-height:0;background:transparent;resize:none}
-.vui-mention__hl{position:absolute;inset:0;overflow:hidden;margin:0;box-sizing:border-box;white-space:pre-wrap;overflow-wrap:break-word;word-break:normal;color:transparent;pointer-events:none}
-.vui-mention__meas{visibility:hidden}
-.vui-mention__tok{border-radius:3px;background:var(--mark-mention-bg);color:transparent;box-shadow:0 0 0 2px var(--mark-mention-bg)}
-.vui-mention__pop{position:absolute;z-index:var(--z-dropdown);width:min(248px,100%);max-height:280px;overflow:auto;padding:var(--panel-pad);animation:vui-fade-in var(--motion-fast)}

@@ -5,7 +5,9 @@ import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Button } from '../actions/Button';
 import { Dialog } from '../feedback/Dialog';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
 import { createModifierLabel } from './createModifierLabel';
+import styles from './MarkdownEditDialog.module.css';
 import { MarkdownEditor, type MarkdownEditorMode } from './MarkdownEditor';
 
 /**
@@ -110,21 +112,21 @@ export const MarkdownEditDialog = (props: MarkdownEditDialogProps) => {
       title={title()}
       description={merged.description}
       size={merged.size}
-      class="vui-mde-dlg"
+      footerClass={styles.dialogFooter}
       footer={
         <Show
           when={asking()}
           fallback={
             <>
               <Show when={failed()}>
-                <span class="vui-mde-dlg__err" role="alert">
+                <Text as="span" variant="body-sm" tone="danger" class={styles.mdeDlgPartErr} role="alert">
                   <Glyph name="alert-circle" />
                   {translate('velvet.display.markdownEditDialog.saveError')}
-                </span>
+                </Text>
               </Show>
-              <span class="vui-mde-dlg__kbd">
+              <Text as="span" variant="caption" tone="tertiary" class={styles.mdeDlgPartKbd}>
                 {translate('velvet.display.markdownEditDialog.saveShortcut', { modifier: modifierLabel() })}
-              </span>
+              </Text>
               <Button variant="secondary" onClick={close} disabled={busy()}>
                 {cancelLabel()}
               </Button>
@@ -134,15 +136,17 @@ export const MarkdownEditDialog = (props: MarkdownEditDialogProps) => {
             </>
           }
         >
-          <div class="vui-mde-dlg__ask" role="alert">
-            <span>{translate('velvet.display.markdownEditDialog.discardPrompt')}</span>
+          <Text as="div" variant="body-sm" tone="primary" class={styles.mdeDlgPartAsk} role="alert">
+            <Text as="span" variant="body-sm" tone="inherit">
+              {translate('velvet.display.markdownEditDialog.discardPrompt')}
+            </Text>
             <Button variant="ghost" size="sm" ref={focusOnMount} onClick={() => setAsking(false)}>
               {translate('velvet.display.markdownEditDialog.keepEditing')}
             </Button>
             <Button variant="danger" size="sm" onClick={() => merged.onClose?.()}>
               {translate('velvet.display.markdownEditDialog.discard')}
             </Button>
-          </div>
+          </Text>
         </Show>
       }
     >

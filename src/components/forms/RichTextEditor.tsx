@@ -3,10 +3,13 @@ import { createMemo, createUniqueId, type JSX, mergeProps, onMount, Show } from 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { FieldLabel } from '../primitives/FieldLabel';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { createRichTextCommands } from './createRichTextCommands';
 import { createRichTextHistory } from './createRichTextHistory';
 import { createRichTextInput } from './createRichTextInput';
 import { createRichTextState } from './createRichTextState';
+import styles from './RichTextEditor.module.css';
 import { resolveLinkLabels, type RichTextLinkLabels, RichTextLinkPopover } from './RichTextLinkPopover';
 import { createRichTextFragment } from './richTextModel';
 import { RichTextToolbar } from './RichTextToolbar';
@@ -91,11 +94,11 @@ export const RichTextEditor = (props: RichTextEditorProps) => {
   const input = createRichTextInput({ editor: () => editor, state, history, commands });
 
   return (
-    <div class={cx('vui-field', p.class)}>
+    <div class={cx(styles.field, p.class)}>
       <Show when={p.label}>
         <FieldLabel id={`${id}-label`}>{p.label}</FieldLabel>
       </Show>
-      <div class={cx('vui-rte', p.disabled && 'vui-rte--disabled', !!p.error && 'vui-rte--invalid')}>
+      <div class={cx(styles.rte, p.disabled && styles.rteVariantDisabled, !!p.error && styles.rteVariantInvalid)}>
         <Show when={p.toolbar && !p.readOnly ? p.toolbar : undefined}>
           {(toolbar) => (
             <RichTextToolbar
@@ -131,7 +134,7 @@ export const RichTextEditor = (props: RichTextEditorProps) => {
             editor = element;
           }}
           id={`${id}-editor`}
-          class="vui-rte__area"
+          class={cx(styles.rtePartArea, typographyClass('body'))}
           contentEditable={editable()}
           spellcheck
           role="textbox"
@@ -157,18 +160,31 @@ export const RichTextEditor = (props: RichTextEditorProps) => {
         />
       </div>
       <Show when={p.hint || p.error || p.maxLength}>
-        <div class="vui-field__foot">
-          <span id={`${id}-hint`} class={cx('vui-hint', !!p.error && 'vui-hint--error')}>
+        <div class={styles.fieldPartFoot}>
+          <Text
+            as="span"
+            variant="caption"
+            tone="inherit"
+            id={`${id}-hint`}
+            class={cx(styles.hint, !!p.error && styles.hintVariantError)}
+          >
             {p.error || p.hint}
-          </span>
+          </Text>
           <Show when={p.maxLength}>
             {(max) => (
-              <span
-                class={cx('vui-hint', 'vui-field__count', state.textLength() > max() && 'vui-field__count--max')}
+              <Text
+                as="span"
+                variant="kbd"
+                tone="inherit"
+                class={cx(
+                  styles.hint,
+                  styles.fieldPartCount,
+                  state.textLength() > max() && styles.fieldPartCountVariantMax,
+                )}
                 aria-live="polite"
               >
                 {state.textLength()}/{max()}
-              </span>
+              </Text>
             )}
           </Show>
         </div>

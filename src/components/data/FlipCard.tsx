@@ -5,6 +5,7 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { Card, type CardProps } from '../display/Card';
 import { cssLength } from './cssLength';
+import styles from './FlipCard.module.css';
 
 export interface FlipCardProps {
   front: JSX.Element;
@@ -58,10 +59,10 @@ export const FlipCard = (props: FlipCardProps) => {
       role="button"
       tabIndex={0}
       class={cx(
-        'vui-flip',
-        on() && 'vui-flip--on',
-        merged.align === 'start' && 'vui-flip--start',
-        merged.flipOnHover && 'vui-flip--hover',
+        styles.flip,
+        on() && styles.flipVariantOn,
+        merged.align === 'start' && styles.flipVariantStart,
+        merged.flipOnHover && styles.flipVariantHover,
         merged.class,
       )}
       style={{ height: cssLength(merged.height), width: cssLength(merged.width) }}
@@ -72,17 +73,23 @@ export const FlipCard = (props: FlipCardProps) => {
       onClick={() => setOn(!on())}
       onKeyDown={onKeyDown}
     >
-      <div class="vui-flip__inner">
+      <div class={styles.flipPartInner}>
         <Card
           variant={merged.variant}
           tone={merged.tone}
           accent={merged.accent}
-          class="vui-flip__face vui-flip__face--front"
+          class={cx(styles.flipPartFace, styles.flipPartFaceVariantFront)}
           aria-hidden={on()}
+          bodyClass={styles.cardBody}
         >
           {merged.front}
         </Card>
-        <Card variant={merged.backVariant} class="vui-flip__face vui-flip__face--back" aria-hidden={!on()}>
+        <Card
+          variant={merged.backVariant}
+          class={cx(styles.flipPartFace, styles.flipPartFaceVariantBack)}
+          aria-hidden={!on()}
+          bodyClass={styles.cardBody}
+        >
           {merged.back}
         </Card>
       </div>

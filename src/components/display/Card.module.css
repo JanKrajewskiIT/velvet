@@ -1,0 +1,47 @@
+.card {
+  composes: card from '../../styles/shared/display/card.module.css';
+}
+
+.cardVariantPNone {
+  composes: cardvariantpnone from '../../styles/shared/display/card.module.css';
+}
+
+.cardVariantPSm {
+  composes: cardvariantpsm from '../../styles/shared/display/card.module.css';
+}
+
+.cardVariantPLg {
+  composes: cardvariantplg from '../../styles/shared/display/card.module.css';
+}
+
+.cardPartHeader {
+  composes: cardpartheader from '../../styles/shared/display/card.module.css';
+}
+
+.cardPartHeading {
+  composes: cardpartheading from '../../styles/shared/display/card.module.css';
+}
+
+.cardPartDesc {
+  composes: cardpartdesc from '../../styles/shared/display/card.module.css';
+}
+
+.cardPartActions {
+  composes: cardpartactions from '../../styles/shared/display/card.module.css';
+}
+
+.cardPartBody {
+  composes: cardpartbody from '../../styles/shared/display/card.module.css';
+}
+
+.cardPartFooter {
+  composes: cardpartfooter from '../../styles/shared/display/card.module.css';
+}
+
+.cardPartFooterVariantStart {
+  composes: cardpartfootervariantstart from '../../styles/shared/display/card.module.css';
+}
+
+.cardPartFooterVariantBetween {
+  composes: cardpartfootervariantbetween from '../../styles/shared/display/card.module.css';
+}

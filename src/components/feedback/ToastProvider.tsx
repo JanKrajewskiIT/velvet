@@ -1,7 +1,9 @@
 import { createContext, createEffect, createSignal, For, type JSX, mergeProps, splitProps, useContext } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
+import { cx } from '../../utils/cx';
 import { Toast, type ToastProps } from './Toast';
+import styles from './ToastProvider.module.css';
 import { ToastRegion } from './ToastRegion';
 
 export interface ToastOptions extends ToastProps {
@@ -72,7 +74,7 @@ export const ToastProvider = (props: ToastProviderProps) => {
     <ToastContext.Provider value={{ show, dismiss, clear }}>
       {props.children}
       <Portal>
-        <ToastRegion class={p.regionClass}>
+        <ToastRegion class={cx(styles.root, p.regionClass)}>
           <For each={entries()}>
             {(entry) => {
               const [local, rest] = splitProps(entry.options, ['id', 'onClose', 'duration']);

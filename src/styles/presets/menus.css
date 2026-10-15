@@ -1,5 +1,1 @@
-@import url('../components/menus/menu.css');
-@import url('../components/menus/dropdown-button.css');
-@import url('../components/menus/menu-chip.css');
-@import url('../components/menus/command-palette.css');
-@import url('../components/menus/toolbar.css');
+/* Component modules are packaged from their component directories. */

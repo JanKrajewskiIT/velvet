@@ -1,0 +1,47 @@
+.notifPartList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: var(--overlay-max-h);
+  overflow-y: auto;
+  background: var(--bg-raised);
+}
+
+.notifPartItem {
+  min-height: 0;
+  padding: var(--space-3) var(--space-4);
+  border-radius: 0;
+}
+
+.notifPartItem:focus-visible {
+  box-shadow: inset var(--focus-ring);
+}
+
+.notifPartItemVariantUnread {
+  background: color-mix(in oklch, var(--action-primary) 6%, var(--bg-raised));
+}
+
+.notifPartItemVariantUnread:hover {
+  background: color-mix(in oklch, var(--action-primary) 10%, var(--bg-raised));
+}
+
+.notifPartDot {
+  align-self: center;
+  background: var(--action-primary);
+}
+
+.notifPartEmpty {
+  gap: var(--space-2);
+  padding: var(--space-8) var(--space-4);
+
+  --glyph-color: var(--status-success-fg);
+}
+
+.notifPartItem + .notifPartItem,
+.notifPartList > li + li {
+  border-top: var(--border-width) solid var(--border-subtle);
+}
+
+.notifPartItem .itemDescriptionPart {
+  color: var(--fg-tertiary);
+}

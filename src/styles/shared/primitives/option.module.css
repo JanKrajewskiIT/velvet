@@ -1,0 +1,109 @@
+.selectPartOption {
+  --glyph-color: var(--fg-tertiary);
+  --glyph-size: var(--type-body-lg-size);
+}
+
+.selectPartOption[aria-selected='true'] {
+  --glyph-color: var(--fg-brand);
+
+  color: var(--fg-brand);
+  font-weight: var(--type-label-weight);
+}
+
+.option,
+.menuPartItem {
+  --glyph-size: var(--size-icon-md);
+  --glyph-color: var(--option-icon);
+}
+
+.optionVariantActive,
+.menuPartItemVariantActive {
+  --glyph-color: var(--fg-primary);
+}
+
+.optionVariantDanger {
+  --glyph-color: var(--option-danger-fg);
+
+  color: var(--option-danger-fg);
+}
+
+.selectPartOption[aria-disabled] {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+
+.option,
+.menuPartItem,
+.selectPartOption {
+  display: flex;
+  align-items: center;
+  gap: var(--option-gap);
+  min-height: var(--option-height);
+  padding: var(--space-1-5) var(--option-px);
+  border-radius: var(--option-radius);
+  color: var(--option-fg);
+  cursor: pointer;
+  user-select: none;
+  scroll-margin: var(--panel-pad);
+  outline: 0;
+}
+
+.menuPartItem {
+  --option-height: var(--control-height-inner-lg);
+}
+
+.optionVariantActive,
+.option:hover:not([aria-disabled]),
+.menuPartItemVariantActive {
+  background: var(--option-bg-active);
+}
+
+.optionVariantDanger.optionVariantActive {
+  background: var(--option-danger-bg-active);
+}
+
+.option[aria-disabled],
+.menuPartItem[aria-disabled] {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+
+.optionPartLabel {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-0-5);
+}
+
+.optionPartDesc {
+  color: var(--fg-tertiary);
+}
+
+.optionPartKbd {
+  flex: none;
+  color: var(--fg-tertiary);
+}
+
+.optionPartCheck {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--size-icon-md);
+  color: var(--option-check);
+  font-size: var(--size-icon-md);
+}
+
+@media (pointer: coarse) {
+  .option {
+    min-height: var(--hit-target-min);
+  }
+
+  .menuPartItem {
+    --option-height: var(--hit-target-min);
+  }
+
+  .selectPartOption {
+    min-height: var(--hit-target-min);
+  }
+}

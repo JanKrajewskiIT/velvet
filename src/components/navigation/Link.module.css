@@ -1,0 +1,79 @@
+.link {
+  color: var(--fg-link);
+  font-weight: var(--type-label-weight);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: color-mix(in oklab, currentcolor 35%, transparent);
+  text-underline-offset: var(--underline-offset);
+  border-radius: var(--radius-xs);
+  transition:
+    color var(--motion-fast),
+    text-decoration-color var(--motion-fast);
+}
+
+.link:hover {
+  color: var(--fg-link-hover);
+  text-decoration-color: currentcolor;
+}
+
+.link:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.linkVariantPlain {
+  text-decoration-color: transparent;
+}
+
+.linkVariantPlain:hover {
+  text-decoration-color: currentcolor;
+}
+
+.linkVariantQuiet {
+  color: var(--fg-secondary);
+  text-decoration-color: transparent;
+}
+
+.linkVariantQuiet:hover {
+  color: var(--fg-primary);
+  text-decoration-color: currentcolor;
+}
+
+.linkVariantStandalone {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  font-weight: var(--type-title-weight);
+  text-decoration: none;
+}
+
+.linkPartIcon {
+  font-size: 0.95em;
+  margin-left: 0.2em;
+  vertical-align: -0.12em;
+}
+
+.linkVariantStandalone .linkPartIcon {
+  margin-left: 0;
+}
+
+.linkPartArrow {
+  transition: transform var(--motion-fast);
+}
+
+.link:hover .linkPartArrow {
+  transform: translateX(3px);
+}
+
+.linkVariantDisabled {
+  color: var(--fg-disabled);
+  text-decoration: none;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link:hover .linkPartArrow {
+    transform: none;
+  }
+}

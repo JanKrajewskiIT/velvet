@@ -4,6 +4,7 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { Button } from '../actions/Button';
 import { cssLength } from '../data/cssLength';
+import styles from './ChatThread.module.css';
 
 export interface ChatThreadProps {
   children?: JSX.Element;
@@ -65,7 +66,7 @@ export const ChatThread = (props: ChatThreadProps) => {
         aria-label={props.label ?? translate('velvet.patterns.chatThread.label')}
         // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a scrollable log region must be focusable so keyboard users can scroll it
         tabIndex={0}
-        class={cx('vui-chatthread', props.class)}
+        class={cx(styles.chatthread, props.class)}
         style={{ height: cssLength(props.height), ...props.style }}
         onScroll={() => {
           setFollowing(thread.scrollHeight - thread.scrollTop - thread.clientHeight < STICK_THRESHOLD);

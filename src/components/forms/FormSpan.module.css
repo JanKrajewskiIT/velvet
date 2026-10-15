@@ -1,0 +1,10 @@
+.formspan {
+  min-width: 0;
+  grid-column: var(--form-column-span, 1 / -1);
+}
+
+@media (width <= 639px) {
+  .formspan {
+    grid-column: 1 / -1;
+  }
+}

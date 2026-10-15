@@ -1,0 +1,14 @@
+.segmented {
+  --segmented-item-flex: 0 1 auto;
+  --segmented-item-radius: var(--radius-nested);
+  --segmented-item-height: var(--segment-h);
+  --segmented-item-width: auto;
+  --segmented-item-padding: 0 var(--segment-px);
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--segment-gap);
+  padding: var(--segment-pad);
+  border-radius: var(--segment-radius);
+  background: var(--segment-bg);
+}

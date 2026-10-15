@@ -2,7 +2,9 @@ import { For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { Tag } from '../display/Tag';
+import { Text } from '../primitives/Text';
 import type { TreeSelectNode } from './treeSelectRows';
+import styles from './TreeSelectValue.module.css';
 
 export interface TreeSelectValueProps {
   picked: readonly TreeSelectNode[];
@@ -20,21 +22,27 @@ export const TreeSelectValue = (props: TreeSelectValueProps) => {
   return (
     <>
       <Show when={props.picked.length === 0}>
-        <span class="vui-tselect__ph">{props.placeholder ?? translate('velvet.forms.treeSelect.placeholder')}</span>
+        <Text as="span" variant="body" tone="inherit" class={styles.tselectPartPh}>
+          {props.placeholder ?? translate('velvet.forms.treeSelect.placeholder')}
+        </Text>
       </Show>
       <Show when={!props.multiple && props.picked[0]}>
-        {(node) => <span class="vui-tselect__val">{node().label}</span>}
+        {(node) => (
+          <Text as="span" variant="body" tone="inherit" class={styles.tselectPartVal}>
+            {node().label}
+          </Text>
+        )}
       </Show>
       <Show when={props.multiple}>
         <For each={props.picked.slice(0, props.maxTags)}>
           {(node) => (
-            <Tag size="sm" disabled={props.disabled} onRemove={() => props.onRemove(node.id)}>
+            <Tag class={styles.tag} size="sm" disabled={props.disabled} onRemove={() => props.onRemove(node.id)}>
               {node.label}
             </Tag>
           )}
         </For>
         <Show when={props.picked.length > props.maxTags}>
-          <Tag size="sm">{`+${props.picked.length - props.maxTags}`}</Tag>
+          <Tag class={styles.tag} size="sm">{`+${props.picked.length - props.maxTags}`}</Tag>
         </Show>
       </Show>
     </>

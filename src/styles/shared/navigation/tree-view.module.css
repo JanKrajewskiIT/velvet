@@ -1,0 +1,49 @@
+.treePartCaret {
+  --glyph-size: var(--type-body-sm-size);
+
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--size-icon-lg);
+  height: var(--size-icon-lg);
+  color: var(--fg-tertiary);
+}
+
+.treePartRow {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  height: var(--control-height-sm);
+  padding: 0 var(--space-2) 0 calc(var(--space-2) + var(--lvl) * var(--space-5));
+  border-radius: var(--radius-md);
+  color: var(--fg-secondary);
+  cursor: pointer;
+  outline: 0;
+}
+
+.treePartRow:hover {
+  background: var(--bg-hover);
+  color: var(--fg-primary);
+}
+
+.treePartRow:focus-visible {
+  box-shadow: inset var(--focus-ring);
+}
+
+.treePartIcon {
+  font-size: var(--type-body-lg-size);
+  color: var(--fg-tertiary);
+}
+
+.treePartLabel {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.treePartRow[draggable='true'] {
+  cursor: grab;
+}

@@ -1,0 +1,5 @@
+.cascPartMark {
+  background: none;
+  color: var(--fg-brand);
+  font-weight: var(--type-title-weight);
+}

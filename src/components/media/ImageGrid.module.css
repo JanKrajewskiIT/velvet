@@ -1,0 +1,104 @@
+.imggrid {
+  display: grid;
+  grid-auto-flow: dense;
+}
+
+.imggridVariantFeature {
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+.imggridVariantFeature > .imggridPartItem:first-child {
+  grid-row: 1 / 3;
+}
+
+.imggridVariantFeature > .imggridPartItem {
+  height: 100%;
+}
+
+.imggridVariantMasonry {
+  display: block;
+}
+
+.imggridVariantMasonry > .imggridPartItem {
+  width: 100%;
+  margin-bottom: var(--imggrid-gap, var(--space-2));
+  break-inside: avoid;
+}
+
+.imggridVariantMasonry > .imggridPartItem img {
+  height: auto;
+}
+
+.imggridVariantMasonry > .imggridPartItem[style*='aspect-ratio'] img {
+  height: 100%;
+}
+
+.imggridPartMore {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--scrim-image);
+  color: var(--on-color-fg);
+}
+
+.imggridPartBadge {
+  position: absolute;
+  left: var(--space-2);
+  top: var(--space-2);
+  padding: var(--space-0-5) var(--space-2);
+  border-radius: var(--radius-full);
+  background: var(--bg-glass);
+  backdrop-filter: blur(var(--blur-md));
+  border: var(--border-width) solid var(--border-subtle);
+}
+
+.imggridPartItem {
+  position: relative;
+  display: block;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--bg-sunken);
+  cursor: zoom-in;
+}
+
+.imggridPartItem img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform var(--motion-enter);
+}
+
+.imggridPartItem:hover img {
+  transform: scale(1.04);
+}
+
+.imggridPartItem:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.imggridPartZoom {
+  position: absolute;
+  right: var(--space-2);
+  top: var(--space-2);
+  display: grid;
+  place-items: center;
+  width: var(--control-height-inner);
+  height: var(--control-height-inner);
+  border-radius: 50%;
+  background: var(--scrim-image);
+  color: var(--on-color-fg);
+  font-size: var(--type-body-sm-size);
+  opacity: 0;
+  transition: opacity var(--motion-fast);
+}
+
+.imggridPartItem:hover .imggridPartZoom,
+.imggridPartItem:focus-visible .imggridPartZoom {
+  opacity: 1;
+}

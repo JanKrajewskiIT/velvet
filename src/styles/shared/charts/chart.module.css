@@ -1,0 +1,116 @@
+.chart {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2-5);
+  width: 100%;
+  min-width: 0;
+}
+
+.chartPartBarTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: 28px;
+}
+
+.chartPartLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3-5);
+}
+
+.chartPartLg {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  color: var(--fg-secondary);
+}
+
+.chartPartLg i {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-2xs);
+}
+
+.chartPartPlot {
+  position: relative;
+}
+
+.chartPartPlot svg {
+  display: block;
+  overflow: visible;
+  outline: 0;
+  border-radius: var(--radius-sm);
+}
+
+.chartPartPlot svg:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+.chartPartGrid {
+  stroke: var(--dv-grid);
+  stroke-width: 1;
+  shape-rendering: crispedges;
+}
+
+.chartPartTick {
+  fill: var(--dv-axis);
+  font: var(--type-overline);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--type-overline-tracking);
+}
+
+.chartPartTickVariantOn {
+  fill: var(--fg-primary);
+  font-weight: var(--type-title-weight);
+}
+
+.chartPartCross {
+  stroke: var(--border-strong);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+  pointer-events: none;
+}
+
+.chartPartTip {
+  background: var(--panel-bg);
+  border: var(--border-width) solid var(--panel-border);
+  position: absolute;
+  z-index: 2;
+  transform: translate(-50%, calc(-100% - 8px));
+  min-width: 120px;
+  padding: var(--space-2) var(--space-2-5);
+  border-radius: var(--panel-radius);
+  box-shadow: var(--panel-shadow);
+  color: var(--fg-primary);
+  pointer-events: none;
+  white-space: nowrap;
+  transition: left var(--motion-fast);
+}
+
+.chartPartTipT {
+  margin-bottom: var(--space-1);
+  color: var(--fg-primary);
+}
+
+.chartPartTipR {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  color: var(--fg-secondary);
+}
+
+.chartPartTipR i {
+  width: var(--size-dot-lg);
+  height: var(--size-dot-lg);
+  border-radius: var(--radius-2xs);
+}
+
+.chartPartTipR b {
+  margin-left: auto;
+  padding-left: var(--space-3);
+  color: var(--fg-primary);
+  font-variant-numeric: tabular-nums;
+}

@@ -1,6 +1,8 @@
 import { type JSX, Show } from 'solid-js';
 
 import { Kbd } from '../primitives/Kbd';
+import { Text } from '../primitives/Text';
+import styles from './MenuItemContent.module.css';
 
 export interface MenuItemContentProps {
   leading?: JSX.Element;
@@ -13,14 +15,16 @@ export interface MenuItemContentProps {
 export const MenuItemContent = (props: MenuItemContentProps) => (
   <>
     {props.leading}
-    <span class="vui-menu__label">
+    <Text as="span" variant="body" tone="inherit" class={styles.menuPartLabel}>
       {props.label}
       <Show when={props.description}>
-        <span class="vui-menu__desc">{props.description}</span>
+        <Text as="span" variant="caption" tone="inherit" class={styles.menuPartDesc}>
+          {props.description}
+        </Text>
       </Show>
-    </span>
+    </Text>
     <Show when={props.shortcut}>
-      <Kbd plain class="vui-menu__kbd">
+      <Kbd plain class={styles.menuPartKbd}>
         {props.shortcut}
       </Kbd>
     </Show>

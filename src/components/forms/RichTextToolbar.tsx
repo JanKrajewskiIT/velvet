@@ -2,7 +2,10 @@ import { createMemo, createSignal, For, type JSX, Show } from 'solid-js';
 
 import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import type { MarkName } from './richTextModel';
+import styles from './RichTextToolbar.module.css';
 import {
   ariaShortcut,
   formatShortcut,
@@ -86,7 +89,7 @@ export const RichTextToolbar = (props: RichTextToolbarProps) => {
       role="toolbar"
       aria-label={props.label}
       aria-controls={props.controls}
-      class="vui-rte__bar"
+      class={styles.rtePartBar}
       onKeyDown={onKeyDown}
     >
       <For each={props.entries}>
@@ -95,7 +98,7 @@ export const RichTextToolbar = (props: RichTextToolbarProps) => {
             when={entry.kind === 'button' ? entry : undefined}
             fallback={
               <span
-                class={entry.kind === 'spacer' ? 'vui-rte__spacer' : 'vui-toolbar__sep'}
+                class={entry.kind === 'spacer' ? styles.rtePartSpacer : styles.toolbarPartSep}
                 role={entry.kind === 'separator' ? 'separator' : undefined}
               />
             }
@@ -104,7 +107,7 @@ export const RichTextToolbar = (props: RichTextToolbarProps) => {
               <button
                 type="button"
                 tabIndex={buttons().indexOf(tool()) === roving() ? 0 : -1}
-                class={cx('vui-toolbar__btn', tool().flip && 'vui-rte__flip')}
+                class={cx(typographyClass('label'), styles.toolbarPartBtn, tool().flip && styles.rtePartFlip)}
                 aria-label={props.toolLabel(tool().id)}
                 title={`${props.toolLabel(tool().id)} (${formatShortcut(tool().keys)})`}
                 aria-pressed={
@@ -119,9 +122,9 @@ export const RichTextToolbar = (props: RichTextToolbarProps) => {
                 <Show
                   when={tool().icon}
                   fallback={
-                    <span class="vui-rte__tt" aria-hidden="true">
+                    <Text as="span" variant="label-sm" tone="inherit" class="vui-rte__tt" aria-hidden="true">
                       {tool().text}
-                    </span>
+                    </Text>
                   }
                 >
                   {(icon) => <Glyph name={icon()} />}

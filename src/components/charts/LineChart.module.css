@@ -1,0 +1,54 @@
+.chartPartLine {
+  fill: none;
+  stroke-width: 2.25;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  animation: vui-draw var(--motion-slide) backwards;
+}
+
+.chartPartArea {
+  animation: vui-fade-in var(--motion-enter) backwards;
+}
+
+.chartPartPt {
+  fill: var(--bg-raised);
+  stroke-width: 2.5;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chartPartLine,
+  .chartPartArea {
+    animation: none;
+  }
+}
+
+.chart {
+  composes: chart from '../../styles/shared/charts/chart.module.css';
+}
+
+.chartPartBarTop {
+  composes: chartpartbartop from '../../styles/shared/charts/chart.module.css';
+}
+
+.chartPartPlot {
+  composes: chartpartplot from '../../styles/shared/charts/chart.module.css';
+}
+
+.chartPartGrid {
+  composes: chartpartgrid from '../../styles/shared/charts/chart.module.css';
+}
+
+.chartPartTick {
+  composes: chartparttick from '../../styles/shared/charts/chart.module.css';
+}
+
+.chartPartTickVariantOn {
+  composes: chartparttickvarianton from '../../styles/shared/charts/chart.module.css';
+}
+
+.chartPartCross {
+  composes: chartpartcross from '../../styles/shared/charts/chart.module.css';
+}

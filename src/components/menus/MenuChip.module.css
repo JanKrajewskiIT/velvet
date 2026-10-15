@@ -1,0 +1,30 @@
+:import('../../styles/shared/forms/chip-group.module.css') {
+  externalChipVariantOn: chipvarianton;
+}
+
+.chipVariantMenu {
+  padding-right: var(--space-2);
+}
+
+.chipPartKey {
+  color: inherit;
+}
+
+:global(.externalChipVariantOn) .chipPartKey {
+  color: var(--fg-secondary);
+  font-weight: var(--type-body-weight);
+}
+
+.chipPartCaret {
+  --glyph-size: var(--type-body-sm-size);
+
+  opacity: 0.7;
+}
+
+.chip {
+  composes: chip from '../../styles/shared/forms/chip-group.module.css';
+}
+
+.chipVariantOn {
+  composes: chipvarianton from '../../styles/shared/forms/chip-group.module.css';
+}

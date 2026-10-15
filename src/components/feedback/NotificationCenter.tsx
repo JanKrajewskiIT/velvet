@@ -11,6 +11,9 @@ import { buttonClass } from '../actions/buttonClass';
 import { Badge } from '../display/Badge';
 import { Count } from '../primitives/Count';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './NotificationCenter.module.css';
 import type { NotificationItem } from './NotificationItem';
 import { NotificationList } from './NotificationList';
 
@@ -62,10 +65,10 @@ export const NotificationCenter = (props: NotificationCenterProps) => {
   const floating = createFloating(isOpen, wrap, { align: () => local.align });
 
   return (
-    <span {...rest} ref={setWrap} class={cx('vui-popover-wrap', local.class)}>
+    <span {...rest} ref={setWrap} class={cx(styles.popoverWrap, local.class)}>
       <button
         type="button"
-        class={cx(buttonClass({ variant: 'ghost', icon: true }), 'vui-notif__bell')}
+        class={cx(buttonClass({ variant: 'ghost', icon: true }), styles.notifPartBell)}
         aria-label={
           unread() > 0
             ? translate('velvet.feedback.notificationCenter.unreadLabel', { title: title(), count: unread() })
@@ -76,7 +79,7 @@ export const NotificationCenter = (props: NotificationCenterProps) => {
         onClick={() => setOpen(!isOpen())}
       >
         <Glyph name="bell" />
-        <Count value={unread()} max={MAX_BADGE_COUNT} size="sm" class="vui-indicator__item" aria-hidden="true" />
+        <Count value={unread()} max={MAX_BADGE_COUNT} size="sm" class={styles.indicatorPartItem} aria-hidden="true" />
       </button>
       <Show when={isOpen()}>
         <div
@@ -84,17 +87,22 @@ export const NotificationCenter = (props: NotificationCenterProps) => {
           style={floating.style()}
           role="dialog"
           aria-label={title()}
-          class={cx('vui-popover', 'vui-notif', local.align === 'end' && 'vui-popover--end')}
+          class={cx(
+            typographyClass('body'),
+            styles.popover,
+            styles.notif,
+            local.align === 'end' && styles.popoverVariantEnd,
+          )}
         >
-          <div class="vui-notif__head">
-            <span class="vui-notif__heading">
+          <div class={styles.notifPartHead}>
+            <Text as="span" variant="title" tone="inherit" class={styles.notifPartHeading}>
               {title()}
               <Show when={unread() > 0}>
                 <Badge size="sm" tone="brand">
                   {translate('velvet.feedback.notificationCenter.newCount', { count: unread() })}
                 </Badge>
               </Show>
-            </span>
+            </Text>
             <Show when={local.onMarkAllRead && unread() > 0}>
               <Button variant="link" size="sm" onClick={() => local.onMarkAllRead?.()}>
                 {translate('velvet.feedback.notificationCenter.markAllRead')}
@@ -103,7 +111,11 @@ export const NotificationCenter = (props: NotificationCenterProps) => {
           </div>
           <NotificationList items={local.items} onItemClick={local.onItemClick} />
           <Show when={local.onViewAll}>
-            <button type="button" class="vui-notif__foot" onClick={() => local.onViewAll?.()}>
+            <button
+              type="button"
+              class={cx(styles.notifPartFoot, typographyClass('caption'))}
+              onClick={() => local.onViewAll?.()}
+            >
               {translate('velvet.feedback.notificationCenter.viewAll')}
               <Glyph name="arrow-right" />
             </button>

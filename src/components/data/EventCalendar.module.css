@@ -1,0 +1,95 @@
+.evcal {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  width: min-content;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.evcalVariantSplit {
+  display: grid;
+  grid-template-columns: auto minmax(220px, 300px);
+  gap: var(--space-6);
+  width: max-content;
+  align-items: start;
+}
+
+.evcalVariantSplit .evcalPartAgenda {
+  padding: 0 0 0 var(--space-6);
+  border-top: 0;
+  border-left: var(--border-width) solid var(--border-subtle);
+  align-self: stretch;
+}
+
+@media (width <= 639px) {
+  .evcalVariantSplit {
+    display: inline-flex;
+    flex-direction: column;
+    width: min-content;
+  }
+
+  .evcalVariantSplit .evcalPartAgenda {
+    padding: var(--space-4) 0 0;
+    border-left: 0;
+    border-top: var(--border-width) solid var(--border-subtle);
+  }
+}
+
+.evcalPartAgenda {
+  align-self: stretch;
+  padding-top: var(--space-4);
+  border-top: var(--border-width) solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.evcalPartList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.evcalPartEv {
+  display: grid;
+  grid-template-columns: 52px 8px minmax(0, 1fr);
+  gap: var(--space-2-5);
+  align-items: start;
+}
+
+.evcalPartEvVariantSuccess .evcalPartDot {
+  background: var(--status-success-solid);
+}
+
+.evcalPartEvVariantWarning .evcalPartDot {
+  background: var(--status-warning-solid);
+}
+
+.evcalPartEvVariantDanger .evcalPartDot {
+  background: var(--status-danger-solid);
+}
+
+.evcalPartEvVariantInfo .evcalPartDot {
+  background: var(--status-info-solid);
+}
+
+.evcalPartDot {
+  margin-top: var(--space-1-5);
+  background: var(--action-primary);
+}
+
+.evcalPartBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-0-5);
+  min-width: 0;
+}
+
+.evcalPartEmpty {
+  padding: 0;
+}

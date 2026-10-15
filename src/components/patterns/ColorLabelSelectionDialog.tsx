@@ -4,8 +4,10 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { Dialog } from '../feedback/Dialog';
 import { SearchInput } from '../forms/SearchInput';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
 import { type ColorLabel, LABEL_COLORS } from './colorLabel';
 import { ColorLabelChips } from './ColorLabelChips';
+import styles from './ColorLabelSelectionDialog.module.css';
 import { ColorLabelSelectionFooter } from './ColorLabelSelectionFooter';
 import { ColorLabelSelectionMeta } from './ColorLabelSelectionMeta';
 import { createColorLabelSelection } from './createColorLabelSelection';
@@ -67,7 +69,7 @@ export const ColorLabelSelectionDialog = (props: ColorLabelSelectionDialogProps)
       title={title()}
       description={p.description}
       size="sm"
-      class="vui-cls"
+      footerClass={styles.dialogFooter}
       footer={
         <ColorLabelSelectionFooter
           selection={selection}
@@ -79,7 +81,7 @@ export const ColorLabelSelectionDialog = (props: ColorLabelSelectionDialogProps)
       }
     >
       <Show when={selection.showSearch()}>
-        <div class="vui-cls__search">
+        <div class={styles.clsPartSearch}>
           <SearchInput
             size="sm"
             inputRef={selection.searchRef}
@@ -103,10 +105,10 @@ export const ColorLabelSelectionDialog = (props: ColorLabelSelectionDialogProps)
         emptyText={emptyText()}
       />
       <Show when={selection.error()}>
-        <div class="vui-confirm__err" role="alert">
+        <Text as="div" variant="body-sm" tone="danger" class={styles.confirmPartErr} role="alert">
           <Glyph name="alert-circle" />
           {selection.error()}
-        </div>
+        </Text>
       </Show>
     </Dialog>
   );

@@ -1,0 +1,27 @@
+.controlPartInputVariantSearch::-webkit-search-cancel-button {
+  display: none;
+}
+
+.controlPartInputVariantSearch {
+  composes: controlpartinput from '../../styles/shared/primitives/control.module.css';
+}
+
+.field {
+  composes: field from '../../styles/shared/primitives/field.module.css';
+}
+
+.select {
+  composes: select from '../../styles/shared/forms/select.module.css';
+}
+
+.controlPartAdorn {
+  composes: controlpartadorn from '../../styles/shared/primitives/control.module.css';
+}
+
+.selectPartMenu {
+  composes: selectpartmenu from '../../styles/shared/forms/select.module.css';
+}
+
+.selectPartEmpty {
+  composes: selectpartempty from '../../styles/shared/forms/select.module.css';
+}

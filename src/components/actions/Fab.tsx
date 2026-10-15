@@ -3,8 +3,12 @@ import { createSignal, createUniqueId, For, mergeProps, Show } from 'solid-js';
 import { createDismiss } from '../../hooks/createDismiss';
 import { createFloating } from '../../hooks/createFloating';
 import { createMenuNavigation } from '../../hooks/createMenuNavigation';
+import { classSelector } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './Fab.module.css';
 
 const DIAL_STAGGER_MS = 30;
 
@@ -37,7 +41,7 @@ export const Fab = (props: FabProps) => {
   const menuId = createUniqueId();
   const close = (refocus: boolean) => {
     setOpen(false);
-    if (refocus) wrap()?.querySelector<HTMLElement>('.vui-fab')?.focus({ preventScroll: true });
+    if (refocus) wrap()?.querySelector<HTMLElement>(classSelector(styles.fab))?.focus({ preventScroll: true });
   };
   const menu = createMenuNavigation(wrap, () => p.actions?.length ?? 0, close);
   const openMenu = (last = false) => {
@@ -45,13 +49,17 @@ export const Fab = (props: FabProps) => {
     menu.focus(last ? (p.actions?.length ?? 1) - 1 : 0);
   };
 
-  createDismiss(open, () => setOpen(false), wrap, { refocus: '.vui-fab' });
+  createDismiss(open, () => setOpen(false), wrap, { refocus: classSelector(styles.fab) });
 
-  const floating = createFloating(open, () => wrap()?.querySelector<HTMLButtonElement>('.vui-fab') ?? undefined, {
-    side: () => 'top',
-    align: () => 'end',
-    offset: 12,
-  });
+  const floating = createFloating(
+    open,
+    () => wrap()?.querySelector<HTMLButtonElement>(classSelector(styles.fab)) ?? undefined,
+    {
+      side: () => 'top',
+      align: () => 'end',
+      offset: 12,
+    },
+  );
   const choose = (action: FabAction) => {
     close(true);
     action.onClick?.();
@@ -61,9 +69,9 @@ export const Fab = (props: FabProps) => {
     <div
       ref={setWrap}
       class={cx(
-        'vui-fab-wrap',
-        p.position === 'fixed' && 'vui-fab-wrap--fixed',
-        open() && 'vui-fab-wrap--open',
+        styles.fabWrap,
+        p.position === 'fixed' && styles.fabWrapVariantFixed,
+        open() && styles.fabWrapVariantOpen,
         p.class,
       )}
     >
@@ -73,7 +81,7 @@ export const Fab = (props: FabProps) => {
           ref={floating.ref}
           style={floating.style()}
           id={menuId}
-          class="vui-fab__dial"
+          class={styles.fabPartDial}
           role="menu"
           aria-label={p.label}
           aria-hidden={!open()}
@@ -87,14 +95,14 @@ export const Fab = (props: FabProps) => {
                   'transition-delay': open() ? `${((p.actions?.length ?? 1) - 1 - i()) * DIAL_STAGGER_MS}ms` : '0ms',
                 }}
               >
-                <span class="vui-fab__tag" aria-hidden="true">
+                <Text as="span" variant="label" tone="inherit" class={styles.fabPartTag} aria-hidden="true">
                   {action.label}
-                </span>
+                </Text>
                 <button
                   type="button"
                   role="menuitem"
                   tabIndex={open() && i() === menu.active() ? 0 : -1}
-                  class="vui-fab__mini"
+                  class={styles.fabPartMini}
                   aria-label={action.label}
                   onClick={() => choose(action)}
                   onFocus={() => menu.onFocus(i())}
@@ -108,7 +116,7 @@ export const Fab = (props: FabProps) => {
       </Show>
       <button
         type="button"
-        class={cx('vui-fab', p.extended && 'vui-fab--extended')}
+        class={cx(typographyClass('button'), styles.fab, p.extended && styles.fabVariantExtended)}
         aria-label={p.extended ? undefined : p.label}
         aria-haspopup={dial() ? 'menu' : undefined}
         aria-expanded={dial() ? open() : undefined}
@@ -124,9 +132,11 @@ export const Fab = (props: FabProps) => {
           openMenu(event.key === 'ArrowUp');
         }}
       >
-        <Glyph name={p.icon} class="vui-fab__icon" />
+        <Glyph name={p.icon} class={styles.fabPartIcon} />
         <Show when={p.extended}>
-          <span>{p.label}</span>
+          <Text as="span" variant="button-lg" tone="inherit">
+            {p.label}
+          </Text>
         </Show>
       </button>
     </div>

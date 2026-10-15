@@ -1,0 +1,54 @@
+.xferPartPanel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-lg);
+  background: var(--bg-raised);
+  box-shadow: var(--elevation-control);
+  overflow: hidden;
+  transition:
+    border-color var(--motion-fast),
+    box-shadow var(--motion-fast);
+}
+
+.xferPartPanelVariantDrop {
+  border-color: var(--action-primary);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--action-primary) 18%, transparent);
+}
+
+.xferPartSearch {
+  margin: var(--space-2) var(--space-2) 0;
+}
+
+.xferPartList {
+  list-style: none;
+  margin: 0;
+  padding: var(--space-1-5);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-0-5);
+  outline: none;
+}
+
+.xferPartDropline {
+  content: '';
+  height: var(--border-width-thick);
+  border-radius: var(--radius-2xs);
+  background: var(--action-primary);
+  position: relative;
+  left: 0;
+  right: 0;
+  top: 0;
+  margin: var(--space-0-5) var(--space-2);
+}
+
+.xferPartEmpty {
+  margin: auto;
+  padding: var(--space-6) var(--space-3);
+}
+
+.xferPartLink {
+  composes: xferpartlink from '../../styles/shared/forms/transfer-list.module.css';
+}

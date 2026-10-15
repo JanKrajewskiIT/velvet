@@ -3,6 +3,9 @@ import { createSignal, For, type JSX, mergeProps, Show } from 'solid-js';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './Navbar.module.css';
 import { navbarHref, type NavbarItem } from './navbarItem';
 import { NavbarMenuBar } from './NavbarMenuBar';
 
@@ -47,7 +50,7 @@ export interface NavbarProps {
 /**
  * Top app bar. `links` (default): brand · text links · actions; `tone="brand"` paints it brand-coloured.
  * `menubar`: brand-filled 3-column bar — logo (+ current-page label) · centred icon menu with a sliding indicator · actions.
- * Both collapse to a burger under 720px, or always with `condensed`. Leave ~14px of space below a menubar navbar for the indicator.
+ * Both collapse to a burger under 768px, or always with `condensed`. Leave ~14px of space below a menubar navbar for the indicator.
  */
 export const Navbar = (props: NavbarProps) => {
   const p = mergeProps(
@@ -76,7 +79,7 @@ export const Navbar = (props: NavbarProps) => {
   const burger = () => (
     <button
       type="button"
-      class="vui-navbar__burger"
+      class={styles.navbarPartBurger}
       aria-expanded={open()}
       aria-label={open() ? labels().closeMenu : labels().openMenu}
       onClick={() => setOpen(!open())}
@@ -86,7 +89,12 @@ export const Navbar = (props: NavbarProps) => {
   );
 
   const link = (item: NavbarItem) => (
-    <a href={navbarHref(item)} class="vui-navbar__link" aria-current={current(item)} onClick={(e) => go(e, item)}>
+    <a
+      href={navbarHref(item)}
+      class={cx(styles.navbarPartLink, typographyClass('button'))}
+      aria-current={current(item)}
+      onClick={(e) => go(e, item)}
+    >
       <Show when={item.icon}>{(icon) => <Glyph name={icon()} />}</Show>
       {item.label}
     </a>
@@ -100,26 +108,27 @@ export const Navbar = (props: NavbarProps) => {
       fallback={
         <header
           class={cx(
-            'vui-navbar',
-            p.tone === 'brand' && 'vui-navbar--brand',
-            p.sticky && 'vui-navbar--sticky',
-            p.condensed && 'vui-navbar--condensed',
+            typographyClass('body'),
+            styles.navbar,
+            p.tone === 'brand' && styles.navbarVariantBrand,
+            p.sticky && styles.navbarVariantSticky,
+            p.condensed && styles.navbarVariantCondensed,
             open() && 'vui-navbar--open',
             p.class,
           )}
         >
-          <div class="vui-navbar__bar">
+          <div class={styles.navbarPartBar}>
             <Show when={p.brand}>
-              <div class="vui-navbar__brand">{p.brand}</div>
+              <div class={styles.navbarPartBrand}>{p.brand}</div>
             </Show>
-            <nav class="vui-navbar__nav" aria-label={label()}>
+            <nav class={styles.navbarPartNav} aria-label={label()}>
               <For each={p.items}>{link}</For>
             </nav>
-            <div class="vui-navbar__actions">{p.actions}</div>
+            <div class={styles.navbarPartActions}>{p.actions}</div>
             {burger()}
           </div>
           <Show when={open()}>
-            <nav class="vui-navbar__panel" aria-label={mobileLabel()}>
+            <nav class={styles.navbarPartPanel} aria-label={mobileLabel()}>
               <For each={p.items}>{link}</For>
             </nav>
           </Show>
@@ -128,20 +137,21 @@ export const Navbar = (props: NavbarProps) => {
     >
       <div
         class={cx(
-          'vui-navbar-mb',
-          p.condensed && 'vui-navbar-mb--condensed',
-          p.sticky && 'vui-navbar--sticky',
+          typographyClass('body'),
+          styles.navbarMb,
+          p.condensed && styles.navbarMbVariantCondensed,
+          p.sticky && styles.navbarVariantSticky,
           p.class,
         )}
       >
-        <header class="vui-navbar-mb__bar">
-          <div class="vui-navbar-mb__brand">
+        <header class={styles.navbarMbPartBar}>
+          <div class={styles.navbarMbPartBrand}>
             <Show when={p.logo != null}>
-              <Show when={p.logoHref} fallback={<span class="vui-navbar-mb__logo">{p.logo}</span>}>
+              <Show when={p.logoHref} fallback={<span class={styles.navbarMbPartLogo}>{p.logo}</span>}>
                 {(href) => (
                   <a
                     href={href()}
-                    class="vui-navbar-mb__logo"
+                    class={styles.navbarMbPartLogo}
                     onClick={(e) => {
                       if (!p.onLogoClick) return;
                       e.preventDefault();
@@ -155,27 +165,37 @@ export const Navbar = (props: NavbarProps) => {
             </Show>
             {p.brand}
             <Show when={p.showActiveLabel && activeLabel()}>
-              <span class="vui-navbar-mb__label">{activeLabel()}</span>
+              <Text as="span" variant="button" tone="inherit" class={styles.navbarMbPartLabel}>
+                {activeLabel()}
+              </Text>
             </Show>
           </div>
-          <NavbarMenuBar items={p.items} active={p.active} label={label()} onNavigate={go} />
-          <div class="vui-navbar-mb__actions">
+          <NavbarMenuBar
+            class={p.condensed ? styles.menuBarHidden : undefined}
+            items={p.items}
+            active={p.active}
+            label={label()}
+            onNavigate={go}
+          />
+          <div class={styles.navbarMbPartActions}>
             {p.actions}
             {burger()}
           </div>
         </header>
         <Show when={open()}>
-          <nav class="vui-navbar-mb__overlay" aria-label={mobileLabel()}>
+          <nav class={styles.navbarMbPartOverlay} aria-label={mobileLabel()}>
             <For each={p.items}>
               {(item) => (
                 <a
                   href={navbarHref(item)}
-                  class="vui-navbar-mb__olink"
+                  class={cx(styles.navbarMbPartOlink, typographyClass('button'))}
                   aria-current={current(item)}
                   onClick={(e) => go(e, item)}
                 >
                   <Show when={item.icon}>{(icon) => <Glyph name={icon()} />}</Show>
-                  <span>{item.label}</span>
+                  <Text as="span" variant="label" tone="inherit">
+                    {item.label}
+                  </Text>
                 </a>
               )}
             </For>

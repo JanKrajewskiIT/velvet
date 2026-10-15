@@ -1,0 +1,78 @@
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  height: var(--tag-height);
+  padding: 0 var(--tag-px);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--tag-radius);
+  background: var(--bg-raised);
+  color: var(--fg-primary);
+  white-space: nowrap;
+  transition:
+    background-color var(--motion-fast),
+    border-color var(--motion-fast);
+
+  --glyph-color: var(--fg-tertiary);
+}
+
+.tagVariantSm {
+  height: var(--tag-height-sm);
+  padding: 0 var(--space-2);
+}
+
+.tagVariantSelectable {
+  cursor: pointer;
+}
+
+.tagVariantSelectable:hover {
+  background: var(--bg-subtle);
+  border-color: var(--border-strong);
+}
+
+.tagVariantSelected {
+  background: var(--bg-selected);
+  border-color: var(--border-brand);
+  color: var(--fg-brand);
+}
+
+.tagVariantSelected:hover {
+  background: var(--bg-selected);
+  border-color: var(--border-brand);
+}
+
+.tagVariantDisabled {
+  opacity: var(--opacity-disabled);
+  pointer-events: none;
+}
+
+.tagVariantPill {
+  border-radius: var(--radius-full);
+}
+
+.tag[data-tone] {
+  border-color: color-mix(in oklab, var(--tone) 35%, transparent);
+  color: var(--tone-fg, var(--tone));
+}
+
+.tagVariantSoft {
+  background: var(--bg-subtle);
+  border-color: transparent;
+}
+
+.tagVariantSoft[data-tone] {
+  background: var(--tone-bg);
+  border-color: color-mix(in oklab, var(--tone) 28%, transparent);
+}
+
+.tagVariantDashed {
+  border-style: dashed;
+  border-color: var(--border-strong);
+  background: none;
+  color: var(--fg-secondary);
+}
+
+.tagVariantSelected,
+.tag[data-tone] {
+  --glyph-color: inherit;
+}

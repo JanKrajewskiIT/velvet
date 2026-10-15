@@ -3,6 +3,8 @@ import { type Accessor, createEffect, createSignal, type JSX } from 'solid-js';
 import { createDismiss } from '../../hooks/createDismiss';
 import { createFloating } from '../../hooks/createFloating';
 import { createTypeahead } from '../../utils/createTypeahead';
+import { classSelector } from '../../utils/cssModule';
+import styles from './createPhoneCountryPopup.module.css';
 import type { PhoneCountry } from './phoneCountries';
 
 interface PhoneCountryPopupOptions {
@@ -42,7 +44,7 @@ export const createPhoneCountryPopup = (options: PhoneCountryPopupOptions) => {
 
   createEffect(() => {
     if (!open()) return;
-    const list = options.root()?.querySelector('.vui-select__menu');
+    const list = options.root()?.querySelector(classSelector(styles.selectPartMenu));
     const row = list?.children[active()];
     if (!list || !(row instanceof HTMLElement)) return;
     if (row.offsetTop < list.scrollTop) list.scrollTop = row.offsetTop;

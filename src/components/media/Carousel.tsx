@@ -1,11 +1,13 @@
 import { createEffect, createMemo, createSignal, For, type JSX, mergeProps, onCleanup, onMount, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { classSelector } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { clamp } from '../../utils/math';
 import { REDUCED_MOTION_QUERY } from '../../utils/motion';
 import { nonNegativeNumber, positiveInteger } from '../../utils/numericOption';
 import { IconButton } from '../actions/IconButton';
+import styles from './Carousel.module.css';
 
 const DRAG_THRESHOLD_PX = 4;
 const SWIPE_DISTANCE_PX = 50;
@@ -15,7 +17,7 @@ const DEFAULT_AUTOPLAY_MS = 0;
 const MAX_TIMER_MS = 2147483647;
 const INDEPENDENT_CONTROL =
   'input,textarea,select,button,a[href],[contenteditable]:not([contenteditable="false"]),[role="slider"],[role="combobox"],[role="spinbutton"],[role="tab"],[role="menuitem"],[role="option"],[role="gridcell"],[role="treeitem"],[tabindex]:not([tabindex="-1"])';
-const CAROUSEL_CONTROL = '.vui-carousel__arrow,.vui-carousel__dot,.vui-carousel__play';
+const CAROUSEL_CONTROL = `${classSelector(styles.carouselPartArrow)},${classSelector(styles.carouselPartDot)},${classSelector(styles.carouselPartPlay)}`;
 
 export interface CarouselProps {
   slides: JSX.Element[];
@@ -103,7 +105,7 @@ export const Carousel = (props: CarouselProps) => {
   return (
     // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- region handles arrow keys bubbling from the focusable slide controls it contains
     <section
-      class={cx('vui-carousel', p.class)}
+      class={cx(styles.carousel, p.class)}
       aria-roledescription={translate('velvet.media.carousel.roleDescription')}
       aria-label={p.label ?? translate('velvet.media.carousel.label')}
       onMouseEnter={() => setHovered(true)}
@@ -122,13 +124,13 @@ export const Carousel = (props: CarouselProps) => {
         ref={(element) => {
           viewport = element;
         }}
-        class="vui-carousel__viewport"
+        class={styles.carouselPartViewport}
         onPointerDown={(e) => {
           if (
             e.defaultPrevented ||
             (e.target instanceof Element &&
               (e.target.closest(INDEPENDENT_CONTROL) ||
-                e.target.closest('.vui-carousel__viewport') !== e.currentTarget))
+                e.target.closest(classSelector(styles.carouselPartViewport)) !== e.currentTarget))
           )
             return;
           if (e.pointerType === 'mouse' && e.button !== 0) return;
@@ -152,7 +154,7 @@ export const Carousel = (props: CarouselProps) => {
         onLostPointerCapture={endDrag}
       >
         <div
-          class={cx('vui-carousel__track', dragOffset() !== 0 && 'vui-carousel__track--drag')}
+          class={cx(styles.carouselPartTrack, dragOffset() !== 0 && styles.carouselPartTrackVariantDrag)}
           style={{ gap: `${gap()}px`, transform: `translateX(${offset()}px)` }}
           aria-live={rotating() ? 'off' : 'polite'}
         >
@@ -164,7 +166,7 @@ export const Carousel = (props: CarouselProps) => {
                 aria-label={translate('velvet.media.carousel.slide', { index: k() + 1, count: slides().length })}
                 aria-hidden={visible(k()) ? undefined : true}
                 inert={visible(k()) ? undefined : true}
-                class="vui-carousel__slide"
+                class={styles.carouselPartSlide}
                 style={{ flex: `0 0 ${slideWidth()}px` }}
               >
                 {slide}
@@ -179,7 +181,7 @@ export const Carousel = (props: CarouselProps) => {
           shape="circle"
           icon="chevron-left"
           label={translate('velvet.media.carousel.previous')}
-          class="vui-carousel__arrow vui-carousel__arrow--prev"
+          class={cx(styles.carouselPartArrow, styles.carouselPartArrowVariantPrev)}
           disabled={!p.loop && index() === 0}
           onClick={() => go(index() - 1)}
         />
@@ -188,13 +190,13 @@ export const Carousel = (props: CarouselProps) => {
           shape="circle"
           icon="chevron-right"
           label={translate('velvet.media.carousel.next')}
-          class="vui-carousel__arrow vui-carousel__arrow--next"
+          class={cx(styles.carouselPartArrow, styles.carouselPartArrowVariantNext)}
           disabled={!p.loop && index() >= max()}
           onClick={() => go(index() + 1)}
         />
       </Show>
       <Show when={(p.showDots && max() > 0) || autoplay() > 0}>
-        <div class="vui-carousel__dots">
+        <div class={styles.carouselPartDots}>
           <Show when={p.showDots && max() > 0}>
             <For each={dots()}>
               {(k) => (
@@ -202,7 +204,7 @@ export const Carousel = (props: CarouselProps) => {
                   type="button"
                   aria-label={translate('velvet.media.carousel.goTo', { index: k + 1 })}
                   aria-current={k === index() ? true : undefined}
-                  class={cx('vui-carousel__dot', k === index() && 'vui-carousel__dot--on')}
+                  class={cx(styles.carouselPartDot, k === index() && styles.carouselPartDotVariantOn)}
                   onClick={() => setPosition(k)}
                 />
               )}
@@ -219,7 +221,7 @@ export const Carousel = (props: CarouselProps) => {
                   ? translate('velvet.media.carousel.resumeAutoplay')
                   : translate('velvet.media.carousel.pauseAutoplay')
               }
-              class="vui-carousel__play"
+              class={styles.carouselPartPlay}
               onClick={() => setUserPaused(!userPaused())}
             />
           </Show>

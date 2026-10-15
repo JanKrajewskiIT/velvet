@@ -1,0 +1,25 @@
+.emptyText {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1-5);
+  padding: var(--space-6) var(--space-4);
+  text-align: center;
+  text-wrap: pretty;
+}
+
+.emptyTextVariantStart {
+  align-items: flex-start;
+  padding-inline: 0;
+  text-align: left;
+}
+
+.emptyTextVariantDashed {
+  border: var(--border-width) dashed var(--border-default);
+  border-radius: var(--radius-md);
+}
+
+.emptyTextPartIcon {
+  font-size: var(--size-icon-2xl);
+}

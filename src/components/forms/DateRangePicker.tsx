@@ -8,6 +8,8 @@ import { cx } from '../../utils/cx';
 import { addMonths, DAY_MS, fmtDate, sameDay } from '../../utils/date';
 import { Button } from '../actions/Button';
 import { FieldLabel } from '../primitives/FieldLabel';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { Calendar } from './Calendar';
 import { startOfMonth } from './calendarGrid';
 import type { DateRange } from './calendarTypes';
@@ -16,6 +18,7 @@ import { createFormValidation } from './createFormValidation';
 import { createPickerPopover } from './createPickerPopover';
 import { isDateRangeAllowed } from './dateConstraints';
 import { DateField } from './DateField';
+import styles from './DateRangePicker.module.css';
 import { DateRangePresets } from './DateRangePresets';
 import type { FormControlProps } from './formControl';
 import { formDate } from './formDate';
@@ -54,7 +57,7 @@ export interface DateRangePickerProps extends FormControlProps {
   id?: string;
 }
 
-const NARROW_QUERY = '(max-width: 599px)';
+const NARROW_QUERY = '(max-width: 639px)';
 
 const emptyRange = (): DateRange => ({ start: null, end: null });
 type ResolvedDateRangePickerProps = DateRangePickerProps &
@@ -160,9 +163,9 @@ export const DateRangePicker = (props: DateRangePickerProps) => {
   };
 
   return (
-    <div class="vui-field">
-      <span ref={popover.setWrap} class="vui-popover-wrap vui-datepicker">
-        <div class="vui-field" style={{ width: '100%' }}>
+    <div class={styles.field}>
+      <span ref={popover.setWrap} class={cx(styles.popoverWrap, styles.datepicker)}>
+        <div class={styles.field} style={{ width: '100%' }}>
           <Show when={p.label}>
             <FieldLabel htmlFor={id()} optional={p.optional} required={p.required}>
               {p.label}
@@ -203,11 +206,17 @@ export const DateRangePicker = (props: DateRangePickerProps) => {
           <div
             ref={popover.floating.ref}
             style={popover.floating.style()}
-            class={cx('vui-popover', 'vui-datepop', 'vui-rangepop', p.align === 'end' && 'vui-popover--end')}
+            class={cx(
+              typographyClass('body'),
+              styles.popover,
+              styles.datepop,
+              styles.rangepop,
+              p.align === 'end' && styles.popoverVariantEnd,
+            )}
             role="dialog"
             aria-label={translate('velvet.forms.dateRangePicker.dialogLabel')}
           >
-            <div class="vui-rangepop__body">
+            <div class={styles.rangepopPartBody}>
               <Show when={p.presets.length > 0}>
                 <DateRangePresets
                   choices={presetChoices()}
@@ -232,8 +241,10 @@ export const DateRangePicker = (props: DateRangePickerProps) => {
                 weekStartsOn={p.weekStartsOn}
               />
             </div>
-            <div class="vui-datepop__foot vui-rangepop__foot">
-              <span class="vui-rangepop__sum">{summary()}</span>
+            <div class={cx(styles.datepopPartFoot, styles.rangepopPartFoot)}>
+              <Text as="span" variant="body-sm" tone="inherit" class={styles.rangepopPartSum}>
+                {summary()}
+              </Text>
               <Button variant="ghost" size="sm" onClick={popover.closeToField}>
                 {translate('velvet.common.cancel')}
               </Button>
@@ -245,9 +256,15 @@ export const DateRangePicker = (props: DateRangePickerProps) => {
         </Show>
       </span>
       <Show when={p.error || p.hint}>
-        <span id={hintId()} class={cx('vui-hint', !!p.error && 'vui-hint--error')}>
+        <Text
+          as="span"
+          variant="caption"
+          tone="inherit"
+          id={hintId()}
+          class={cx(styles.hint, !!p.error && styles.hintVariantError)}
+        >
           {p.error || p.hint}
-        </span>
+        </Text>
       </Show>
     </div>
   );

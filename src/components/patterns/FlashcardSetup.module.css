@@ -1,0 +1,61 @@
+.fcSetup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3-5);
+  padding: var(--space-5);
+  max-width: 420px;
+}
+
+.fcSetupPartDecks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1-5);
+}
+
+.fcDeck {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+  padding: var(--space-2-5) var(--space-3);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: var(--bg-raised);
+  color: var(--fg-primary);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color var(--motion-fast),
+    background-color var(--motion-fast);
+}
+
+.fcDeck:hover {
+  border-color: var(--border-strong);
+}
+
+.fcDeck:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.fcDeckVariantOn {
+  border-color: var(--border-brand);
+  background: var(--bg-selected);
+  box-shadow: inset 0 0 0 var(--border-width) var(--border-brand);
+}
+
+.fcDeckPartMeta b {
+  color: var(--fg-brand);
+}
+
+.fcSetupPartRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.surface {
+  composes: surface from '../../styles/shared/primitives/surface.module.css';
+}

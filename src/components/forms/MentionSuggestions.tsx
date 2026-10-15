@@ -5,6 +5,7 @@ import { Avatar } from '../data/Avatar';
 import { Option } from '../primitives/Option';
 import { Surface } from '../primitives/Surface';
 import type { MentionOption } from './mentionModel';
+import styles from './MentionSuggestions.module.css';
 
 export interface MentionSuggestionsProps {
   ref?: (element: HTMLElement) => void;
@@ -26,7 +27,7 @@ export const MentionSuggestions = (props: MentionSuggestionsProps) => {
     <Surface
       ref={props.ref}
       variant="overlay"
-      class="vui-mention__pop"
+      class={styles.mentionPartPop}
       role="listbox"
       id={props.id}
       aria-label={props.label ?? translate('velvet.forms.mentionInput.listLabel')}

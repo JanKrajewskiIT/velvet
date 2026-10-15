@@ -1,0 +1,63 @@
+.btn {
+  composes: btn from '../../styles/shared/actions/button.module.css';
+}
+
+.btnVariantPrimary {
+  composes: btnvariantprimary from '../../styles/shared/actions/button.module.css';
+}
+
+.btnVariantSm {
+  composes: btnvariantsm from '../../styles/shared/actions/button.module.css';
+}
+
+.btnVariantDanger {
+  composes: btnvariantdanger from '../../styles/shared/actions/button.module.css';
+}
+
+.btnVariantGhost {
+  composes: btnvariantghost from '../../styles/shared/actions/button.module.css';
+}
+
+.btnVariantSoft {
+  composes: btnvariantsoft from '../../styles/shared/actions/button.module.css';
+}
+
+.btnVariantLg {
+  composes: btnvariantlg from '../../styles/shared/actions/button.module.css';
+}
+
+.btnVariantBlock {
+  composes: btnvariantblock from '../../styles/shared/actions/button.module.css';
+}
+
+.btnVariantSecondary {
+  composes: btnvariantsecondary from '../../styles/shared/actions/button.module.css';
+}
+
+.btnVariantDashed {
+  composes: btnvariantdashed from '../../styles/shared/actions/button.module.css';
+}
+
+.btnVariantLink {
+  composes: btnvariantlink from '../../styles/shared/actions/button.module.css';
+}
+
+.btnVariantIcon {
+  composes: btnvarianticon from '../../styles/shared/actions/button.module.css';
+}
+
+.btnVariantXs {
+  composes: btnvariantxs from '../../styles/shared/actions/button.module.css';
+}
+
+.btnVariantCircle {
+  composes: btnvariantcircle from '../../styles/shared/actions/button.module.css';
+}
+
+.btnVariantRaised {
+  composes: btnvariantraised from '../../styles/shared/actions/button.module.css';
+}
+
+.btnVariantOverlay {
+  composes: btnvariantoverlay from '../../styles/shared/actions/button.module.css';
+}

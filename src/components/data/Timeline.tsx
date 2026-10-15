@@ -8,6 +8,7 @@ import { Glyph } from '../primitives/Glyph';
 import { Marker } from '../primitives/Marker';
 import { Rail } from '../primitives/Rail';
 import { RailItem } from '../primitives/RailItem';
+import styles from './Timeline.module.css';
 import { TimelineEntry } from './TimelineEntry';
 import type { TimelineAction, TimelineItem } from './timelineTypes';
 
@@ -83,9 +84,9 @@ export const Timeline = (props: TimelineProps) => {
       size={compact() ? 'sm' : 'lg'}
       line={!compact()}
       class={cx(
-        'vui-timeline',
-        compact() && 'vui-timeline--compact',
-        merged.divided && 'vui-timeline--divided',
+        styles.timeline,
+        compact() && styles.timelineVariantCompact,
+        merged.divided && styles.timelineVariantDivided,
         merged.class,
       )}
     >
@@ -108,7 +109,7 @@ export const Timeline = (props: TimelineProps) => {
         }}
       </For>
       <Show when={merged.onAdd}>
-        <RailItem class="vui-timeline__item vui-timeline__item--add">
+        <RailItem class={cx(styles.timelinePartItem, 'vui-timeline__item--add')}>
           <Marker
             class="vui-timeline__marker"
             appearance="outline"
@@ -118,8 +119,8 @@ export const Timeline = (props: TimelineProps) => {
           >
             <Glyph name="plus" />
           </Marker>
-          <div class="vui-timeline__body">
-            <Button variant="dashed" size="sm" class="vui-timeline__addbtn" onClick={() => merged.onAdd?.()}>
+          <div class={styles.timelinePartBody}>
+            <Button variant="dashed" size="sm" class={styles.timelinePartAddbtn} onClick={() => merged.onAdd?.()}>
               {addLabel()}
             </Button>
           </div>

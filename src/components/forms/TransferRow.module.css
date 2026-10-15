@@ -1,0 +1,125 @@
+.xferPartGroup {
+  position: sticky;
+  top: -6px;
+  z-index: 1;
+  margin: var(--space-1-5) calc(-1 * var(--space-1-5)) var(--space-0-5);
+  padding: var(--space-1-5) var(--space-3-5) var(--space-1);
+  background: color-mix(in oklab, var(--bg-raised) 92%, transparent);
+  backdrop-filter: blur(var(--blur-sm));
+}
+
+.xferPartGroup:first-child {
+  margin-top: calc(-1 * var(--space-1-5));
+}
+
+.xferPartItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2-5);
+  min-height: var(--row-height-sm);
+  padding: var(--space-1-5) var(--space-2);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  user-select: none;
+  transition: background-color var(--motion-fast);
+}
+
+.xferPartItem:hover {
+  background: var(--bg-hover);
+}
+
+.xferPartItem:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 var(--border-width-thick) var(--action-primary);
+}
+
+.xferPartItemVariantOn {
+  background: var(--bg-selected);
+}
+
+.xferPartItemVariantOn:hover {
+  background: color-mix(in oklab, var(--bg-selected) 80%, var(--action-primary) 8%);
+}
+
+.xferPartItemVariantDisabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+
+.xferPartItemVariantBefore::before {
+  content: '';
+  position: absolute;
+  left: var(--space-2);
+  right: var(--space-2);
+  top: -2px;
+  height: var(--border-width-thick);
+  border-radius: var(--radius-2xs);
+  background: var(--action-primary);
+}
+
+.xferPartLead {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--size-icon-tile-xs);
+  height: var(--size-icon-tile-xs);
+  border-radius: 50%;
+  background: var(--bg-brand-subtle);
+  overflow: hidden;
+  color: var(--fg-brand);
+  font: var(--type-title-weight) var(--type-overline-size)/1 var(--font-sans);
+}
+
+.xferPartLead img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.xferPartLeadVariantIcon {
+  border-radius: var(--radius-sm);
+  background: var(--bg-sunken);
+  color: var(--fg-secondary);
+  font-size: var(--size-icon-md);
+}
+
+.xferPartText {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-px);
+}
+
+.xferPartLabel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--fg-primary);
+}
+
+.xferPartDesc {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--fg-tertiary);
+}
+
+.xferPartMeta {
+  flex: none;
+  color: var(--fg-tertiary);
+}
+
+.xferPartGrip {
+  flex: none;
+  color: var(--fg-disabled);
+  opacity: 0;
+  cursor: grab;
+  transition: opacity var(--motion-fast);
+}
+
+.xferPartItem:hover .xferPartGrip,
+.xferPartItem:focus-visible .xferPartGrip {
+  opacity: 1;
+}

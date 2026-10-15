@@ -1,0 +1,29 @@
+.dialogBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  background: var(--dialog-backdrop);
+  backdrop-filter: blur(var(--dialog-backdrop-blur));
+  animation: vui-fade-in var(--motion-base);
+}
+
+@media (width <= 639px) {
+  .dialogBackdrop {
+    place-items: end stretch;
+    padding: 0;
+  }
+}
+
+.dialog {
+  position: relative;
+  width: 100%;
+  max-width: var(--dialog-w);
+  max-height: calc(100vh - 2 * var(--viewport-margin));
+  display: flex;
+  flex-direction: column;
+  background: var(--dialog-bg);
+  animation: vui-pop var(--motion-enter);
+}

@@ -3,6 +3,7 @@ import { mergeProps, splitProps } from 'solid-js';
 import { cssLength } from '../../utils/cssLength';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import styles from './Skeleton.module.css';
 
 export interface SkeletonProps extends HtmlProps<HTMLSpanElement> {
   width?: number | string;
@@ -20,7 +21,7 @@ export const Skeleton = (props: SkeletonProps) => {
   return (
     <span
       {...rest}
-      class={cx('vui-skeleton', local.class)}
+      class={cx(styles.skeleton, local.class)}
       style={{
         width: cssLength(local.circle ? local.height : local.width),
         height: cssLength(local.height),

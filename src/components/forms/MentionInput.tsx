@@ -6,8 +6,10 @@ import { createFloating } from '../../hooks/createFloating';
 import { cx } from '../../utils/cx';
 import { Control } from '../primitives/Control';
 import { Field } from '../primitives/Field';
+import { typographyClass } from '../primitives/typography';
 import { CARET_LEFT_OFFSET_PX, createMentionLayout } from './createMentionLayout';
 import { createMentionSearch } from './createMentionSearch';
+import styles from './MentionInput.module.css';
 import type { MentionOption, MentionSources } from './mentionModel';
 import { MentionSuggestions } from './MentionSuggestions';
 
@@ -118,20 +120,20 @@ export const MentionInput = (props: MentionInputProps) => {
       id={p.id ?? autoId}
     >
       {(control) => (
-        <div ref={setRoot} class={cx('vui-mention', p.class)}>
+        <div ref={setRoot} class={cx(styles.mention, p.class)}>
           <Control multiline invalid={control.invalid} disabled={p.disabled}>
-            <div class="vui-mention__wrap">
+            <div class={styles.mentionPartWrap}>
               <div
                 ref={(element) => {
                   highlight = element;
                 }}
-                class="vui-mention__hl"
+                class={styles.mentionPartHl}
                 aria-hidden="true"
               >
                 <Index each={search.parts()}>
                   {(part, index) => (
                     <Show when={index % 2 === 1} fallback={part()}>
-                      <mark class="vui-mention__tok">{part()}</mark>
+                      <mark class={styles.mentionPartTok}>{part()}</mark>
                     </Show>
                   )}
                 </Index>
@@ -141,7 +143,7 @@ export const MentionInput = (props: MentionInputProps) => {
                 ref={(element) => {
                   measure = element;
                 }}
-                class="vui-mention__hl vui-mention__meas"
+                class={cx(styles.mentionPartHl, styles.mentionPartMeas)}
                 aria-hidden="true"
               >
                 {search.textBeforeTrigger()}
@@ -151,7 +153,7 @@ export const MentionInput = (props: MentionInputProps) => {
                 ref={setTextarea}
                 id={control.id}
                 rows={p.rows}
-                class="vui-control__input vui-mention__input"
+                class={cx(styles.controlPartInput, styles.mentionPartInput, typographyClass('body'))}
                 value={value()}
                 placeholder={p.placeholder}
                 disabled={p.disabled}

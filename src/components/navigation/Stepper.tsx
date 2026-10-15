@@ -1,10 +1,25 @@
 import { createEffect, createSignal, For, type JSX, Match, mergeProps, on, onCleanup, Show, Switch } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { classSelector, variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { Polymorphic } from '../../utils/polymorphic';
 import { Glyph } from '../primitives/Glyph';
 import { Marker } from '../primitives/Marker';
+import { Text } from '../primitives/Text';
+import styles from './Stepper.module.css';
+
+const STEPPER_CLASSES = {
+  horizontal: styles.stepperVariantHorizontal,
+  vertical: styles.stepperVariantVertical,
+} as const;
+
+const STEP_CLASSES = {
+  current: styles.stepVariantCurrent,
+  done: styles.stepVariantDone,
+  error: styles.stepVariantError,
+  pop: styles.stepVariantPop,
+} as const;
 
 export interface StepItem {
   label: JSX.Element;
@@ -86,7 +101,7 @@ export const Stepper = (props: StepperProps) => {
   const onKeyDown: JSX.EventHandler<HTMLOListElement, KeyboardEvent> = (e) => {
     const step = p.onStepClick ? FOCUS_STEP[p.orientation][e.key] : undefined;
     if (!step) return;
-    const buttons = [...root.querySelectorAll<HTMLElement>('.vui-step__inner')];
+    const buttons = [...root.querySelectorAll<HTMLElement>(classSelector(styles.stepPartInner))];
     const at = buttons.findIndex((button) => button === document.activeElement);
     if (at < 0) return;
     e.preventDefault();
@@ -99,7 +114,7 @@ export const Stepper = (props: StepperProps) => {
       ref={(element) => {
         root = element;
       }}
-      class={cx('vui-stepper', `vui-stepper--${p.orientation}`, p.class)}
+      class={cx(styles.stepper, variantClass(STEPPER_CLASSES, p.orientation), p.class)}
       aria-label={labels().navigation}
       onKeyDown={onKeyDown}
     >
@@ -109,18 +124,22 @@ export const Stepper = (props: StepperProps) => {
           const interactive = () => !!p.onStepClick;
           return (
             <li
-              class={cx('vui-step', `vui-step--${status()}`, popping().includes(i()) && 'vui-step--pop')}
+              class={cx(
+                styles.step,
+                variantClass(STEP_CLASSES, status()),
+                popping().includes(i()) && styles.stepVariantPop,
+              )}
               aria-current={status() === 'current' ? 'step' : undefined}
             >
               <Polymorphic
                 tag={interactive() ? 'button' : 'div'}
                 type={interactive() ? 'button' : undefined}
                 disabled={interactive() && !canClick(i()) && i() !== p.current ? true : undefined}
-                class="vui-step__inner"
+                class={styles.stepPartInner}
                 onClick={() => canClick(i()) && p.onStepClick?.(i())}
               >
                 <Marker
-                  class="vui-step__dot"
+                  class={styles.stepPartDot}
                   appearance={status() === 'done' || status() === 'error' ? 'solid' : 'outline'}
                   tone={status() === 'error' ? 'danger' : status() === 'todo' ? undefined : 'brand'}
                   ring={status() === 'current'}
@@ -134,18 +153,22 @@ export const Stepper = (props: StepperProps) => {
                     </Match>
                   </Switch>
                 </Marker>
-                <span class="vui-step__text">
-                  <span class="vui-step__label">
+                <span class={styles.stepPartText}>
+                  <Text as="span" variant="label" tone="inherit" class={styles.stepPartLabel}>
                     {step.label}
-                    <span class="vui-sr-only">{statusSuffix(status())}</span>
-                  </span>
+                    <Text as="span" variant="caption" tone="inherit" class={styles.srOnly}>
+                      {statusSuffix(status())}
+                    </Text>
+                  </Text>
                   <Show when={step.description}>
-                    <span class="vui-step__desc">{step.description}</span>
+                    <Text as="span" variant="caption" tone="inherit" class={styles.stepPartDesc}>
+                      {step.description}
+                    </Text>
                   </Show>
                 </span>
               </Polymorphic>
               <Show when={i() < p.steps.length - 1}>
-                <span class="vui-step__line" aria-hidden="true" />
+                <span class={styles.stepPartLine} aria-hidden="true" />
               </Show>
             </li>
           );

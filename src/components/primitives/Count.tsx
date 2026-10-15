@@ -1,9 +1,32 @@
 import { mergeProps, Show, splitProps } from 'solid-js';
 
-import { cx, modifier } from '../../utils/cx';
+import { variantClass } from '../../utils/cssModule';
+import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import styles from './Count.module.css';
+import { Text } from './Text';
+import type { TextVariant } from './typography';
 
-export type CountTone = 'brand' | 'danger' | 'success' | 'inverse' | 'neutral' | 'soft';
+const COUNT_CLASSES = {
+  sm: styles.countVariantSm,
+  lg: styles.countVariantLg,
+  danger: styles.countVariantDanger,
+  success: styles.countVariantSuccess,
+  inverse: styles.countVariantInverse,
+  neutral: styles.countVariantNeutral,
+  soft: styles.countVariantSoft,
+  pop: styles.countVariantPop,
+} as const;
+
+export const COUNT_TYPOGRAPHY = {
+  sm: 'micro',
+  md: 'kbd',
+  lg: 'label-sm',
+} as const satisfies Record<NonNullable<CountProps['size']>, TextVariant>;
+
+export const COUNT_TONES = Object.freeze(['brand', 'danger', 'success', 'inverse', 'neutral', 'soft'] as const);
+
+export type CountTone = (typeof COUNT_TONES)[number];
 
 export interface CountProps extends HtmlProps<HTMLSpanElement, 'children'> {
   value?: number | string;
@@ -31,19 +54,22 @@ export const Count = (props: CountProps) => {
   const visible = () => local.showZero || (local.value !== 0 && local.value != null);
   return (
     <Show when={visible()}>
-      <span
+      <Text
+        as="span"
+        variant={COUNT_TYPOGRAPHY[local.size]}
+        tone="inherit"
         class={cx(
-          'vui-count',
-          modifier('vui-count', local.size, 'md'),
-          modifier('vui-count', local.tone, 'brand'),
-          local.pop && 'vui-count--pop',
+          styles.count,
+          variantClass(COUNT_CLASSES, local.size, 'md'),
+          variantClass(COUNT_CLASSES, local.tone, 'brand'),
+          local.pop && styles.countVariantPop,
           local.class,
         )}
         aria-label={local.label}
         {...rest}
       >
         {formatCount(local.value, local.max)}
-      </span>
+      </Text>
     </Show>
   );
 };

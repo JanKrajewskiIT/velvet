@@ -2,6 +2,7 @@ import { mergeProps } from 'solid-js';
 
 import type { StatusTone } from '../../utils/tone';
 import { IconTile } from '../primitives/IconTile';
+import styles from './StateTile.module.css';
 
 export type StateTone = StatusTone;
 export type StateSize = 'sm' | 'md' | 'lg';
@@ -25,7 +26,7 @@ export const StateTile = (props: StateTileProps) => {
       shape="circle"
       tone={p.tone === 'neutral' ? undefined : p.tone}
       halo={TILE_HALO[p.size]}
-      class="vui-empty__icon"
+      class={styles.emptyPartIcon}
     />
   );
 };

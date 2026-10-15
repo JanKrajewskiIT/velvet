@@ -6,7 +6,9 @@ import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Button } from '../actions/Button';
 import { IconButton } from '../actions/IconButton';
 import { ListItem } from '../primitives/ListItem';
+import { Text } from '../primitives/Text';
 import type { ColorLabel } from './colorLabel';
+import styles from './ColorLabelRow.module.css';
 import type { ColorLabelManagerController } from './createColorLabelManager';
 
 export interface ColorLabelRowProps {
@@ -21,13 +23,15 @@ export const ColorLabelRow = (props: ColorLabelRowProps) => {
     <li class="vui-clm__item">
       <ListItem
         size="sm"
-        class={cx('vui-clm__row', props.manager.draft()?.id === props.label.id && 'vui-clm__row--editing')}
-        leading={<span class="vui-clm__dot" style={{ background: props.label.color }} aria-hidden="true" />}
+        class={cx(styles.clmPartRow, props.manager.draft()?.id === props.label.id && styles.clmPartRowVariantEditing)}
+        leading={<span class={styles.clmPartDot} style={{ background: props.label.color }} aria-hidden="true" />}
         title={props.label.name}
         trailing={
           <>
             <Show when={props.label.count != null}>
-              <span class="vui-clm__count">{props.label.count}</span>
+              <Text as="span" variant="caption" tone="tertiary" tabular class={styles.clmPartCount}>
+                {props.label.count}
+              </Text>
             </Show>
             <IconButton
               icon="pencil"
@@ -39,23 +43,24 @@ export const ColorLabelRow = (props: ColorLabelRowProps) => {
               icon="trash-2"
               label={translate('velvet.patterns.colorLabelManager.delete', { name: props.label.name })}
               size="xs"
-              class="vui-clm__del"
+              class={styles.clmPartDel}
               aria-expanded={props.manager.confirming() === props.label.id}
               onClick={() => props.manager.toggleConfirm(props.label)}
             />
           </>
         }
+        titleVariant="label"
       />
       <Show when={props.manager.confirming() === props.label.id}>
-        <div class="vui-clm__confirm" role="alert">
-          <span class="vui-clm__q">
+        <div class={styles.clmPartConfirm} role="alert">
+          <Text as="span" variant="body-sm" tone="primary" class={styles.clmPartQ}>
             {props.label.count
               ? translate('velvet.patterns.colorLabelManager.deleteQuestionUsed', {
                   name: props.label.name,
                   count: props.label.count,
                 })
               : translate('velvet.patterns.colorLabelManager.deleteQuestion', { name: props.label.name })}
-          </span>
+          </Text>
           <Button
             variant="ghost"
             size="xs"

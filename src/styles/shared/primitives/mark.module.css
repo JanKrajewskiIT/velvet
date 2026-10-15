@@ -1,0 +1,14 @@
+.mark {
+  padding: 0 var(--space-px);
+  border-radius: var(--radius-2xs);
+  background: var(--mark-bg);
+  color: inherit;
+}
+
+.markVariantMention {
+  padding: 0 var(--space-0-5);
+  border-radius: var(--radius-xs);
+  background: var(--mark-mention-bg);
+  color: var(--mark-mention-fg);
+  font-weight: var(--type-label-weight);
+}

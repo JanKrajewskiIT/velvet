@@ -1,0 +1,52 @@
+.ganttPartCanvas {
+  position: relative;
+  flex: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0 calc(var(--row) - 1px),
+    var(--border-subtle) calc(var(--row) - 1px) var(--row)
+  );
+}
+
+.ganttPartGrp {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: var(--bg-subtle);
+}
+
+.ganttPartWe {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: color-mix(in oklab, var(--bg-subtle) 75%, transparent);
+}
+
+.ganttPartMline {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--border-width);
+  background: var(--table-border);
+}
+
+.ganttPartToday {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  margin-left: calc(-1 * var(--space-px));
+  background: var(--fg-brand);
+}
+
+.ganttPartToday::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--fg-brand);
+}

@@ -1,0 +1,189 @@
+:import('../../styles/shared/primitives/glyph.module.css') {
+  externalIcon: icon;
+}
+
+.stepper {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stepperVariantHorizontal .step {
+  flex-direction: column;
+}
+
+.stepperVariantVertical .stepPartLine::after {
+  transform: scaleY(0);
+  transform-origin: top;
+}
+
+.stepperVariantHorizontal .stepPartInner {
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.stepperVariantHorizontal .stepPartText {
+  padding: 0 var(--space-3) 0 0;
+}
+
+.stepperVariantHorizontal .stepPartLine {
+  top: calc(var(--marker-size) / 2);
+  left: calc(var(--marker-size) + var(--space-2));
+  right: var(--space-2);
+  height: var(--rail-w);
+  border-radius: var(--radius-2xs);
+}
+
+.stepperVariantVertical {
+  flex-direction: column;
+}
+
+.stepperVariantVertical .step {
+  padding-bottom: var(--space-5);
+}
+
+.stepperVariantVertical .step:last-child {
+  padding-bottom: 0;
+}
+
+.stepperVariantVertical .stepPartLine {
+  left: calc(var(--marker-size) / 2 - var(--border-width));
+  top: calc(var(--marker-size) + var(--space-1-5));
+  bottom: var(--space-1);
+  width: var(--rail-w);
+  border-radius: var(--radius-2xs);
+}
+
+@media (width <= 639px) {
+  .stepperVariantHorizontal .stepPartDesc {
+    display: none;
+  }
+
+  .stepperVariantHorizontal .step:not(.stepVariantCurrent) .stepPartLabel {
+    position: absolute;
+    width: var(--border-width);
+    height: var(--border-width);
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .stepperVariantHorizontal .step:not(.stepVariantCurrent) {
+    flex: 0 0 calc(2 * var(--marker-size));
+  }
+}
+
+.step {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-width: 0;
+}
+
+.stepPartInner {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2-5);
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  border-radius: var(--radius-md);
+}
+
+button.stepPartInner {
+  cursor: pointer;
+}
+
+button.stepPartInner:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+button.stepPartInner:not(:disabled):hover .stepPartLabel {
+  color: var(--fg-brand);
+}
+
+button.stepPartInner:disabled {
+  cursor: default;
+}
+
+.stepPartText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-0-5);
+  padding-top: var(--space-1-5);
+  min-width: 0;
+}
+
+.stepPartDesc {
+  color: var(--fg-tertiary);
+}
+
+.stepVariantCurrent .stepPartLabel {
+  color: var(--fg-primary);
+  font-weight: var(--type-title-weight);
+}
+
+.stepVariantDone .stepPartLabel {
+  color: var(--fg-primary);
+}
+
+.stepVariantError .stepPartLabel {
+  color: var(--status-danger-fg);
+}
+
+.stepPartLine {
+  position: absolute;
+  background: var(--border-default);
+  overflow: hidden;
+}
+
+.stepPartLine::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--rail-active);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--motion-slide);
+}
+
+.stepVariantDone .stepPartLine::after {
+  transform: none;
+}
+
+.stepVariantCurrent .stepPartDot {
+  transform: scale(1.1);
+}
+
+.stepVariantPop .stepPartDot {
+  animation: vui-step-pop var(--motion-pop);
+}
+
+.stepPartLabel {
+  transition: color var(--motion-fast);
+  color: var(--fg-secondary);
+}
+
+button.stepPartInner:not(:disabled):hover .stepPartDot {
+  border-color: var(--action-primary);
+}
+
+.stepperVariantHorizontal .step:last-child {
+  flex: 0 0 auto;
+}
+
+.stepPartDot {
+  --glyph-size: var(--size-icon-sm);
+}
+
+.stepVariantPop .stepPartDot :global(.externalIcon) {
+  animation: vui-step-check var(--motion-pop);
+}
+
+.srOnly {
+  composes: sronly from '../../styles/shared/navigation/link.module.css';
+}

@@ -2,6 +2,7 @@ import { Index, mergeProps, splitProps } from 'solid-js';
 
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import styles from './SkeletonText.module.css';
 
 export interface SkeletonTextProps extends HtmlProps<HTMLSpanElement> {
   /** @default 3 */
@@ -21,11 +22,11 @@ export const SkeletonText = (props: SkeletonTextProps) => {
   return (
     <span
       {...rest}
-      class={cx('vui-skeleton-text', local.class)}
+      class={cx(styles.skeletonText, local.class)}
       style={{ gap: `${local.gap}px`, ...local.style }}
       aria-hidden="true"
     >
-      <Index each={lines()}>{(line) => <span class="vui-skeleton" style={{ width: widthOf(line()) }} />}</Index>
+      <Index each={lines()}>{(line) => <span class={styles.skeleton} style={{ width: widthOf(line()) }} />}</Index>
     </span>
   );
 };

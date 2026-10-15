@@ -4,7 +4,10 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { clamp } from '../../utils/math';
 import { positiveNumber } from '../../utils/numericOption';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { VisuallyHidden } from '../primitives/VisuallyHidden';
+import styles from './BarChart.module.css';
 import { type ChartDatum, type ChartSeries, chartValueText, colorOf, defaultSeries, valueOf } from './chartSeries';
 import { createChartFormat } from './createChartFormat';
 import { createWidth } from './createWidth';
@@ -110,20 +113,20 @@ export const BarChart = (props: BarChartProps) => {
       .join(', ')}`;
 
   return (
-    <div ref={ref} class={cx('vui-chart', merged.class)}>
+    <div ref={ref} class={cx(typographyClass('body'), styles.chart, merged.class)}>
       <Show when={merged.showLegend ?? series().length > 1}>
-        <div class="vui-chart__legend">
+        <div class={styles.chartPartLegend}>
           <For each={series()}>
             {(s, k) => (
-              <span class="vui-chart__lg">
+              <Text as="span" variant="caption" tone="secondary" class={styles.chartPartLg}>
                 <i style={{ background: colorOf(s, k()) }} />
                 {s.label}
-              </span>
+              </Text>
             )}
           </For>
         </div>
       </Show>
-      <div class="vui-chart__plot" style={{ height: `${height()}px` }}>
+      <div class={styles.chartPartPlot} style={{ height: `${height()}px` }}>
         <svg
           width={width()}
           height={height()}
@@ -138,8 +141,8 @@ export const BarChart = (props: BarChartProps) => {
           <For each={ticks()}>
             {(t) => (
               <g>
-                <line x1={PAD.l} x2={width() - PAD.r} y1={y(t)} y2={y(t)} class="vui-chart__grid" />
-                <text x={PAD.l - 8} y={y(t)} dy="0.32em" text-anchor="end" class="vui-chart__tick">
+                <line x1={PAD.l} x2={width() - PAD.r} y1={y(t)} y2={y(t)} class={styles.chartPartGrid} />
+                <text x={PAD.l - 8} y={y(t)} dy="0.32em" text-anchor="end" class={styles.chartPartTick}>
                   {format(t)}
                 </text>
               </g>
@@ -149,7 +152,7 @@ export const BarChart = (props: BarChartProps) => {
             {(d, i) => (
               <g
                 onMouseEnter={() => setHover(i())}
-                class={cx('vui-chart__group', hover() >= 0 && hover() !== i() && 'vui-chart__group--dim')}
+                class={cx('vui-chart__group', hover() >= 0 && hover() !== i() && styles.chartPartGroupVariantDim)}
               >
                 <rect x={PAD.l + band() * i()} y={PAD.t} width={band()} height={innerHeight()} fill="transparent" />
                 <For each={bars(d, i())}>
@@ -160,7 +163,7 @@ export const BarChart = (props: BarChartProps) => {
                       width={bar.width}
                       height={bar.height}
                       rx={bar.radius}
-                      class="vui-chart__bar"
+                      class={styles.chartPartBar}
                       style={{ fill: bar.color, 'animation-delay': `${i() * 30}ms` }}
                     />
                   )}
@@ -169,7 +172,7 @@ export const BarChart = (props: BarChartProps) => {
                   x={bandCentre(i())}
                   y={height() - 8}
                   text-anchor="middle"
-                  class={cx('vui-chart__tick', hover() === i() && 'vui-chart__tick--on')}
+                  class={cx(styles.chartPartTick, hover() === i() && styles.chartPartTickVariantOn)}
                 >
                   {d.label}
                 </text>
@@ -180,21 +183,25 @@ export const BarChart = (props: BarChartProps) => {
         <Show when={hovered()}>
           {(d) => (
             <div
-              class="vui-chart__tip"
+              class={cx(styles.chartPartTip, typographyClass('caption'))}
               style={{
                 left: `${clamp(bandCentre(hover()), TIP_MARGIN, width() - TIP_MARGIN)}px`,
                 top: `${PAD.t}px`,
               }}
               aria-hidden="true"
             >
-              <div class="vui-chart__tip-t">{d().label}</div>
+              <Text as="div" variant="label-sm" tone="inherit" class={styles.chartPartTipT}>
+                {d().label}
+              </Text>
               <For each={series()}>
                 {(s, k) => (
-                  <div class="vui-chart__tip-r">
+                  <Text as="div" variant="caption" tone="inherit" class={styles.chartPartTipR}>
                     <i style={{ background: colorOf(s, k()) }} />
                     {s.label}
-                    <b>{chartValueText(d(), s.key, format, translate('velvet.charts.chartSeries.noValue'))}</b>
-                  </div>
+                    <Text as="b" variant="label-sm" tone="inherit">
+                      {chartValueText(d(), s.key, format, translate('velvet.charts.chartSeries.noValue'))}
+                    </Text>
+                  </Text>
                 )}
               </For>
             </div>

@@ -1,6 +1,7 @@
 import { type JSX, mergeProps } from 'solid-js';
 
 import { cx } from '../../utils/cx';
+import styles from './FormSpan.module.css';
 
 export interface FormSpanProps {
   /** Columns to span, or `'full'`. @default 'full' */
@@ -13,7 +14,10 @@ export interface FormSpanProps {
 export const FormSpan = (props: FormSpanProps) => {
   const p = mergeProps({ span: 'full' } satisfies Partial<FormSpanProps>, props);
   return (
-    <div class={cx('vui-formspan', p.class)} style={{ 'grid-column': p.span === 'full' ? '1 / -1' : `span ${p.span}` }}>
+    <div
+      class={cx(styles.formspan, p.class)}
+      style={{ '--form-column-span': p.span === 'full' ? '1 / -1' : `span ${p.span}` }}
+    >
       {p.children}
     </div>
   );

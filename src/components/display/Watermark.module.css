@@ -1,0 +1,14 @@
+.watermark {
+  position: relative;
+  isolation: isolate;
+}
+
+.watermarkPartLayer {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-raised);
+  pointer-events: none;
+  user-select: none;
+  background: var(--fg-primary);
+  mask-repeat: repeat;
+}

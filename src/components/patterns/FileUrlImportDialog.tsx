@@ -9,6 +9,8 @@ import { Dialog } from '../feedback/Dialog';
 import { FileUpload, type UploadFile } from '../forms/FileUpload';
 import { Input } from '../forms/Input';
 import { Tabs } from '../navigation/Tabs';
+import { Text } from '../primitives/Text';
+import styles from './FileUrlImportDialog.module.css';
 
 export interface UrlImportSource {
   value: string;
@@ -162,7 +164,7 @@ export const FileUrlImportDialog = (props: FileUrlImportDialogProps) => {
     >
       <form
         id={formId}
-        class="vui-file-url-import__form"
+        class={styles.fileUrlImportPartForm}
         onSubmit={(event) => {
           void submit(event).catch(reportAsyncError);
         }}
@@ -170,7 +172,9 @@ export const FileUrlImportDialog = (props: FileUrlImportDialogProps) => {
         <Show
           when={props.sources.length > 0}
           fallback={
-            <p class="vui-file-url-import__empty">{translate('velvet.patterns.fileUrlImportDialog.emptySources')}</p>
+            <Text as="p" variant="body-sm" tone="inherit" class={styles.fileUrlImportPartEmpty}>
+              {translate('velvet.patterns.fileUrlImportDialog.emptySources')}
+            </Text>
           }
         >
           <Tabs
@@ -218,9 +222,9 @@ export const FileUrlImportDialog = (props: FileUrlImportDialogProps) => {
           </Show>
           <Show when={error()}>
             {(message) => (
-              <div class="vui-file-url-import__error" role="alert">
+              <Text as="div" variant="body-sm" tone="danger" class="vui-file-url-import__error" role="alert">
                 {message()}
-              </div>
+              </Text>
             )}
           </Show>
         </Show>

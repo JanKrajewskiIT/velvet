@@ -4,6 +4,7 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { Segmented } from '../primitives/Segmented';
 import { SegmentedItem } from '../primitives/SegmentedItem';
 import { MARKDOWN_EDITOR_MODES, type MarkdownEditorMode } from './markdownEditorModes';
+import styles from './MarkdownEditorTabs.module.css';
 
 export interface MarkdownEditorTabsProps {
   mode: MarkdownEditorMode;
@@ -32,7 +33,7 @@ export const MarkdownEditorTabs = (props: MarkdownEditorTabsProps) => {
   return (
     <Segmented
       size="sm"
-      class="vui-mde__tabs"
+      class={styles.root}
       role="tablist"
       aria-label={translate('velvet.display.markdownEditor.modesLabel')}
       onKeyDown={onTabsKeyDown}

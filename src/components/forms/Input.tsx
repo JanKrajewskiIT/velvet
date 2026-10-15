@@ -1,11 +1,14 @@
 import { type JSX, mergeProps, splitProps } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
+import { cx } from '../../utils/cx';
 import { Polymorphic } from '../../utils/polymorphic';
 import { Control } from '../primitives/Control';
 import { Field } from '../primitives/Field';
+import { typographyClass } from '../primitives/typography';
 import { callHandler } from './callHandler';
 import { createValidation, type Validator } from './createValidation';
+import styles from './Input.module.css';
 
 type TextField = HTMLInputElement | HTMLTextAreaElement;
 type InputFocusEvent = FocusEvent & { currentTarget: HTMLInputElement; target: HTMLInputElement };
@@ -112,7 +115,7 @@ export const Input = (props: InputProps) => {
             // eslint-disable-next-line @typescript-eslint/no-deprecated -- Input implements its own deprecated multiline prop
             tag={local.multiline ? 'textarea' : 'input'}
             id={control.id}
-            class="vui-control__input"
+            class={cx(styles.controlPartInput, typographyClass('body'))}
             // eslint-disable-next-line @typescript-eslint/no-deprecated -- Input implements its own deprecated multiline prop
             rows={local.multiline ? local.rows : undefined}
             disabled={local.disabled}

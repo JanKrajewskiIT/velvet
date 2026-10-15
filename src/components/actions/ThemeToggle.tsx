@@ -9,31 +9,25 @@ import {
   THEME_PREFERENCES,
   type ThemePreference,
 } from '../../theme/theme';
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
+import { ThemeMoonRings } from './ThemeMoonRings';
+import { ThemeSunRings } from './ThemeSunRings';
+import styles from './ThemeToggle.module.css';
 
-const SUN_RAY_ANGLES = [0, 45, 90, 135, 180, 225, 270, 315] as const;
+const TT_CLASSES = {
+  navbar: styles.ttVariantNavbar,
+  dark: styles.ttVariantDark,
+  sm: styles.ttVariantSm,
+  seg: styles.ttVariantSeg,
+} as const;
 
 const THEME_LABEL_KEYS = {
   light: 'velvet.actions.themeToggle.light',
   dark: 'velvet.actions.themeToggle.dark',
   system: 'velvet.actions.themeToggle.system',
 } as const satisfies Record<ThemePreference, I18nKey>;
-
-const SunRings = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <circle cx="12" cy="12" r="4.7" />
-    <For each={SUN_RAY_ANGLES}>
-      {(angle) => <rect x="11.1" y="1.3" width="1.8" height="3.4" rx="0.9" transform={`rotate(${angle} 12 12)`} />}
-    </For>
-  </svg>
-);
-
-const MoonRings = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M20.5 14.2A8.4 8.4 0 1 1 10 3.6a0.9 0.9 0 0 1 1.1 1.2 6.6 6.6 0 0 0 8.3 8.3 0.9 0.9 0 0 1 1.1 1.1z" />
-  </svg>
-);
 
 export interface ThemeToggleProps {
   /** Controlled theme. Omit to drive the document theme directly. */
@@ -109,7 +103,7 @@ export const ThemeToggle = (props: ThemeToggleProps) => {
   const icon = (t: ThemePreference): JSX.Element => {
     if (t === 'system') return <Glyph name="monitor" />;
     if (segmented()) return <Glyph name={t === 'light' ? 'sun' : 'moon'} />;
-    return t === 'light' ? <SunRings /> : <MoonRings />;
+    return t === 'light' ? <ThemeSunRings /> : <ThemeMoonRings />;
   };
   const labelOf = (t: ThemePreference) =>
     ({ light: p.lightLabel, dark: p.darkLabel, system: p.systemLabel })[t] ?? translate(THEME_LABEL_KEYS[t]);
@@ -120,10 +114,10 @@ export const ThemeToggle = (props: ThemeToggleProps) => {
       role="radiogroup"
       aria-label={p.label ?? translate('velvet.actions.themeToggle.label')}
       class={cx(
-        'vui-tt',
-        `vui-tt--${p.variant}`,
-        segmented() && 'vui-tt--seg',
-        p.size === 'sm' && 'vui-tt--sm',
+        styles.tt,
+        variantClass(TT_CLASSES, p.variant),
+        segmented() && styles.ttVariantSeg,
+        p.size === 'sm' && styles.ttVariantSm,
         p.class,
       )}
       onKeyDown={onKeyDown}
@@ -134,7 +128,7 @@ export const ThemeToggle = (props: ThemeToggleProps) => {
             type="button"
             role="radio"
             data-set={t}
-            class="vui-tt__btn"
+            class={styles.ttPartBtn}
             aria-checked={theme() === t}
             aria-label={labelOf(t)}
             title={labelOf(t)}

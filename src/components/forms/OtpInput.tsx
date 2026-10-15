@@ -11,6 +11,7 @@ import { Separator } from '../primitives/Separator';
 import { createFormValidation } from './createFormValidation';
 import type { FormControlProps } from './formControl';
 import { FormValue } from './FormValue';
+import styles from './OtpInput.module.css';
 
 const BLANK = ' ';
 const NUMERIC_CHAR = /^[0-9]$/u;
@@ -132,7 +133,7 @@ export const OtpInput = (props: OtpInputProps) => {
 
   return (
     <div
-      class="vui-field"
+      class={styles.field}
       role="group"
       aria-label={p['aria-label']}
       aria-labelledby={p['aria-labelledby'] ?? (p.label ? `${id()}-label` : undefined)}
@@ -142,19 +143,19 @@ export const OtpInput = (props: OtpInputProps) => {
           {p.label}
         </FieldLabel>
       </Show>
-      <div class={cx('vui-otp', p.class)}>
+      <div class={cx(styles.otp, p.class)}>
         <Index each={slots()}>
           {(_, index) => (
             <>
               <Show when={split() > 0 && index === split()}>
-                <Separator variant="dash" class="vui-otp__sep" />
+                <Separator variant="dash" class={styles.otpPartSep} />
               </Show>
               <input
                 ref={(cell) => (cells[index] = cell)}
                 class={cx(
-                  'vui-otp__cell',
-                  !!p.error && 'vui-otp__cell--invalid',
-                  charAt(index) && 'vui-otp__cell--filled',
+                  styles.otpPartCell,
+                  !!p.error && styles.otpPartCellVariantInvalid,
+                  charAt(index) && styles.otpPartCellVariantFilled,
                 )}
                 value={charAt(index)}
                 inputMode={p.numeric ? 'numeric' : 'text'}

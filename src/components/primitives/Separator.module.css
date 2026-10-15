@@ -1,0 +1,31 @@
+.sep {
+  flex: none;
+  display: inline-block;
+}
+
+.sepVariantLine {
+  background: var(--border-default);
+}
+
+.sepVariantLine.sepVariantVertical {
+  width: var(--border-width);
+  height: 1.25em;
+  align-self: center;
+}
+
+.sepVariantLine.sepVariantHorizontal {
+  width: 100%;
+  height: var(--border-width);
+}
+
+.sepVariantDash {
+  width: 10px;
+  height: var(--border-width-thick);
+  align-self: center;
+  border-radius: var(--radius-2xs);
+  background: var(--border-strong);
+}
+
+.sepVariantText {
+  color: var(--fg-tertiary);
+}

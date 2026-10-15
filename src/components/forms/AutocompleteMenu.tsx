@@ -4,6 +4,7 @@ import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
 import { highlightMatch } from '../primitives/Mark';
 import { AutocompleteCustomOption } from './AutocompleteCustomOption';
+import styles from './AutocompleteMenu.module.css';
 import { ComboboxOption } from './ComboboxOption';
 import { ComboboxOptionText } from './ComboboxOptionText';
 import type { ComboboxPopup } from './createComboboxPopup';
@@ -25,7 +26,11 @@ export interface AutocompleteMenuProps {
 export const AutocompleteMenu = (props: AutocompleteMenuProps) => (
   <div
     ref={props.popup.floating.ref}
-    class={cx('vui-select__menu vui-combobox__menu', props.popup.floating.side() === 'top' && 'vui-select__menu--up')}
+    class={cx(
+      styles.selectPartMenu,
+      styles.comboboxPartMenu,
+      props.popup.floating.side() === 'top' && styles.selectPartMenuVariantUp,
+    )}
     style={props.popup.floating.style()}
   >
     <ul
@@ -34,7 +39,7 @@ export const AutocompleteMenu = (props: AutocompleteMenuProps) => (
       aria-busy={props.status.loading || undefined}
       aria-label={props.label}
       aria-labelledby={props.labelledBy}
-      class="vui-combobox__list"
+      class={styles.comboboxPartList}
     >
       <For each={props.options}>
         {(option, index) => (
@@ -49,7 +54,7 @@ export const AutocompleteMenu = (props: AutocompleteMenuProps) => (
             <Show when={option.icon}>{(icon) => <Glyph name={icon()} />}</Show>
             <ComboboxOptionText label={highlightMatch(option.label, props.query)} description={option.description} />
             <Show when={props.value === option.value}>
-              <Glyph name="check" class="vui-select__check" />
+              <Glyph name="check" class={styles.selectPartCheck} />
             </Show>
           </ComboboxOption>
         )}

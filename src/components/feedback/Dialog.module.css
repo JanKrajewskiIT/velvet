@@ -1,0 +1,3 @@
+.root {
+  composes: dialog from '../../styles/shared/feedback/dialog.module.css';
+}

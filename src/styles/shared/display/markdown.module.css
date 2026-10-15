@@ -1,0 +1,36 @@
+.prosePartTask {
+  list-style: none;
+  display: flex;
+  gap: var(--space-2);
+  margin-left: calc(var(--space-5) * -1);
+}
+
+.prosePartCheck {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  margin-top: var(--space-1);
+  border: var(--border-width) solid var(--check-border);
+  border-radius: var(--radius-xs);
+  background: var(--control-bg);
+}
+
+.prosePartCheckVariantOn {
+  background: var(--check-on);
+  border-color: var(--check-on);
+  mask: none;
+  box-shadow:
+    inset 0 0 0 3px var(--check-on),
+    inset 0 0 0 8px var(--check-mark);
+}
+
+.prosePartDone {
+  text-decoration: line-through;
+  color: var(--fg-tertiary);
+}
+
+.prosePartTable {
+  overflow-x: auto;
+  border: var(--border-width) solid var(--table-border);
+  border-radius: var(--radius-md);
+}

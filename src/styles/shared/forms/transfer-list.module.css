@@ -1,0 +1,17 @@
+.xferPartLink:focus-visible {
+  background: var(--bg-sunken);
+  color: var(--fg-primary);
+}
+
+.xferPartLink {
+  border: 0;
+  background: none;
+  padding: var(--space-0-5) var(--space-1);
+  border-radius: var(--radius-xs);
+  color: var(--fg-link);
+  cursor: pointer;
+}
+
+.xferPartLink:hover {
+  text-decoration: underline;
+}

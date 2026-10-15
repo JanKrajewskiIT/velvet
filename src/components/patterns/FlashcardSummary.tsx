@@ -6,7 +6,10 @@ import { cx } from '../../utils/cx';
 import { Button } from '../actions/Button';
 import type { ProgressTone } from '../feedback/Progress';
 import { ProgressRing } from '../feedback/ProgressRing';
+import { Heading } from '../primitives/Heading';
+import { Text } from '../primitives/Text';
 import { FLASH_SUCCESS_PERCENT, FLASH_WARNING_PERCENT, type FlashResult } from './flashcard';
+import styles from './FlashcardSummary.module.css';
 
 export interface FlashcardSummaryProps {
   results: FlashResult[];
@@ -42,32 +45,50 @@ export const FlashcardSummary = (props: FlashcardSummaryProps) => {
   const percent = () => Math.round((known() / total()) * 100);
 
   return (
-    <div class={cx('vui-surface', 'vui-fc-summary', p.class)}>
+    <div class={cx(styles.surface, styles.fcSummary, p.class)}>
       <ProgressRing value={known()} max={total()} size={112} stroke={9} tone={ringTone(percent())} />
-      <div class="vui-fc-summary__h">{translate('velvet.patterns.flashcardSummary.title')}</div>
-      <p class="vui-fc-summary__p">
+      <Heading level={3} variant="h4" class={styles.fcSummaryPartH}>
+        {translate('velvet.patterns.flashcardSummary.title')}
+      </Heading>
+      <Text as="p" variant="body-sm" tone="secondary" class={styles.fcSummaryPartP}>
         {translateRich('velvet.patterns.flashcardSummary.summary', {
           known: known(),
           total: p.results.length,
           verdict: translate(verdictKey(percent())),
-          b: (children) => <b>{children}</b>,
+          b: (children) => (
+            <Text as="b" variant="label" tone="inherit">
+              {children}
+            </Text>
+          ),
         })}
-      </p>
-      <div class="vui-fc-summary__stats">
+      </Text>
+      <div class={styles.fcSummaryPartStats}>
         <div>
-          <b>{known()}</b>
-          <span>{translate('velvet.patterns.flashcardSummary.known')}</span>
+          <Text as="b" variant="title-lg" tone="inherit" tabular>
+            {known()}
+          </Text>
+          <Text as="span" variant="overline" tone="tertiary">
+            {translate('velvet.patterns.flashcardSummary.known')}
+          </Text>
         </div>
         <div>
-          <b>{missed()}</b>
-          <span>{translate('velvet.patterns.flashcardSummary.toReview')}</span>
+          <Text as="b" variant="title-lg" tone="inherit" tabular>
+            {missed()}
+          </Text>
+          <Text as="span" variant="overline" tone="tertiary">
+            {translate('velvet.patterns.flashcardSummary.toReview')}
+          </Text>
         </div>
         <div>
-          <b>{percent()}%</b>
-          <span>{translate('velvet.patterns.flashcardSummary.accuracy')}</span>
+          <Text as="b" variant="title-lg" tone="inherit" tabular>
+            {percent()}%
+          </Text>
+          <Text as="span" variant="overline" tone="tertiary">
+            {translate('velvet.patterns.flashcardSummary.accuracy')}
+          </Text>
         </div>
       </div>
-      <div class="vui-fc-summary__actions">
+      <div class={styles.fcSummaryPartActions}>
         <Show when={p.onReviewMissed && missed() > 0}>
           <Button variant="secondary" onClick={() => p.onReviewMissed?.()}>
             {translate('velvet.patterns.flashcardSummary.reviewMissed', { count: missed() })}

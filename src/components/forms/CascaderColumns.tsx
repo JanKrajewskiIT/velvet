@@ -3,6 +3,9 @@ import { For, Index, Show } from 'solid-js';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './CascaderColumns.module.css';
 import { type CascaderNode, hasChildren } from './cascaderPaths';
 
 export type CascaderActivation = 'click' | 'hover';
@@ -23,11 +26,11 @@ export interface CascaderColumnsProps {
 export const CascaderColumns = (props: CascaderColumnsProps) => {
   const translate = useTranslate();
   return (
-    <div class="vui-casc__cols">
+    <div class={styles.cascPartCols}>
       <Index each={props.columns}>
         {(list, level) => (
           <ul
-            class="vui-casc__col"
+            class={styles.cascPartCol}
             role="listbox"
             aria-label={translate('velvet.forms.cascaderColumns.level', { level: level + 1 })}
           >
@@ -42,10 +45,11 @@ export const CascaderColumns = (props: CascaderColumnsProps) => {
                     aria-selected={highlighted()}
                     aria-disabled={node.disabled || undefined}
                     class={cx(
-                      'vui-option',
-                      'vui-casc__opt',
-                      highlighted() && 'vui-casc__opt--on',
-                      highlighted() && level === props.activeColumn && 'vui-option--active',
+                      typographyClass('body'),
+                      styles.option,
+                      styles.cascPartOpt,
+                      highlighted() && styles.cascPartOptVariantOn,
+                      highlighted() && level === props.activeColumn && styles.optionVariantActive,
                       picked() && 'vui-casc__opt--picked',
                     )}
                     onMouseDown={(e) => e.preventDefault()}
@@ -58,19 +62,23 @@ export const CascaderColumns = (props: CascaderColumnsProps) => {
                     }}
                   >
                     <Show when={node.icon}>{(icon) => <Glyph name={icon()} />}</Show>
-                    <span class="vui-option__label">{node.label}</span>
+                    <Text as="span" variant="body" tone="inherit" class={styles.optionPartLabel}>
+                      {node.label}
+                    </Text>
                     <Show when={node.meta != null}>
-                      <span class="vui-option__kbd">{node.meta}</span>
+                      <Text as="span" variant="kbd" tone="inherit" class={styles.optionPartKbd}>
+                        {node.meta}
+                      </Text>
                     </Show>
                     <Show
                       when={hasChildren(node)}
                       fallback={
                         <Show when={picked()}>
-                          <Glyph name="check" class="vui-select__check" />
+                          <Glyph name="check" class={styles.selectPartCheck} />
                         </Show>
                       }
                     >
-                      <Glyph name="chevron-right" class="vui-casc__arrow" />
+                      <Glyph name="chevron-right" class={styles.cascPartArrow} />
                     </Show>
                   </li>
                 );

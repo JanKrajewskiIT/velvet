@@ -3,6 +3,7 @@ import { createMemo, mergeProps, splitProps } from 'solid-js';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import styles from './Watermark.module.css';
 import { buildWatermarkTile } from './watermarkTile';
 
 export interface WatermarkProps extends HtmlProps<HTMLDivElement> {
@@ -54,10 +55,10 @@ export const Watermark = (props: WatermarkProps) => {
     }),
   );
   return (
-    <div {...rest} class={cx('vui-watermark', local.class)}>
+    <div {...rest} class={cx(styles.watermark, local.class)}>
       {local.children}
       <div
-        class="vui-watermark__layer"
+        class={styles.watermarkPartLayer}
         aria-hidden="true"
         style={{
           '-webkit-mask-image': tile().image,

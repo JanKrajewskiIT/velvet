@@ -5,11 +5,15 @@ import { createFloating } from '../../hooks/createFloating';
 import { createFrameFocus } from '../../hooks/createFrameFocus';
 import { useTranslate } from '../../i18n/useTranslate';
 import { createTypeahead } from '../../utils/createTypeahead';
+import { classSelector } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { Button } from '../actions/Button';
 import { Count } from '../primitives/Count';
 import { Dot } from '../primitives/Dot';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './FilterChip.module.css';
 import type { FilterDef } from './filterDefs';
 
 export interface FilterChipProps {
@@ -74,7 +78,7 @@ export const FilterChip = (props: FilterChipProps) => {
     if (next === undefined && e.key.length === 1 && !e.metaKey && !e.ctrlKey && !e.altKey) {
       const found = search(
         e.key,
-        options.map((option) => option.querySelector('.vui-option__label')?.textContent ?? ''),
+        options.map((option) => option.querySelector(classSelector(styles.optionPartLabel))?.textContent ?? ''),
         at,
       );
       if (found >= 0) next = found;
@@ -87,7 +91,7 @@ export const FilterChip = (props: FilterChipProps) => {
   return (
     <span
       ref={setRoot}
-      class="vui-menu-wrap"
+      class={styles.menuWrap}
       onFocusOut={(event) => {
         const next = event.relatedTarget;
         if (!(next instanceof Node) || !event.currentTarget.contains(next)) setOpen(false);
@@ -95,7 +99,7 @@ export const FilterChip = (props: FilterChipProps) => {
     >
       <button
         type="button"
-        class={cx('vui-fchip', picked().length > 0 && 'vui-fchip--on')}
+        class={cx(typographyClass('label'), styles.fchip, picked().length > 0 && styles.fchipVariantOn)}
         aria-haspopup="listbox"
         aria-expanded={open()}
         aria-controls={listId}
@@ -107,17 +111,27 @@ export const FilterChip = (props: FilterChipProps) => {
         }}
       >
         <Show when={props.filter.icon}>{(icon) => <Glyph name={icon()} />}</Show>
-        <span>
+        <Text as="span" variant="label" tone="inherit">
           {props.filter.label}
-          <Show when={summary()}>{(value) => <span class="vui-fchip__val">: {value()}</span>}</Show>
-        </span>
+          <Show when={summary()}>
+            {(value) => (
+              <Text as="span" variant="label" tone="inherit">
+                : {value()}
+              </Text>
+            )}
+          </Show>
+        </Text>
         <Show when={picked().length > 1}>
           <Count value={picked().length} tone="soft" size="sm" showZero />
         </Show>
-        <Glyph name="chevron-down" class="vui-fchip__chev" />
+        <Glyph name="chevron-down" class={styles.fchipPartChev} />
       </button>
       <Show when={open()}>
-        <div ref={floating.ref} style={floating.style()} class="vui-menu vui-menu--pop vui-fchip__menu">
+        <div
+          ref={floating.ref}
+          style={floating.style()}
+          class={cx(styles.menu, styles.menuVariantPop, styles.fchipPartMenu)}
+        >
           <div
             id={listId}
             role="listbox"
@@ -133,7 +147,7 @@ export const FilterChip = (props: FilterChipProps) => {
                     role="option"
                     aria-selected={on()}
                     tabIndex={index() === active() ? 0 : -1}
-                    class="vui-option"
+                    class={cx(styles.option, typographyClass('body'))}
                     onClick={() => toggle(option.value)}
                     onKeyDown={(e) => onOptionKeyDown(e, option.value)}
                     onFocus={() => setActiveValue(option.value)}
@@ -141,23 +155,33 @@ export const FilterChip = (props: FilterChipProps) => {
                     <Show
                       when={multiple()}
                       fallback={
-                        <span class="vui-option__check">
+                        <span class={styles.optionPartCheck}>
                           <Show when={on()}>
                             <Glyph name="check" />
                           </Show>
                         </span>
                       }
                     >
-                      <span class={cx('vui-fchip__box', on() && 'vui-fchip__box--on')} aria-hidden="true">
+                      <Text
+                        as="span"
+                        variant="caption"
+                        tone="inherit"
+                        class={cx(styles.fchipPartBox, on() && styles.fchipPartBoxVariantOn)}
+                        aria-hidden="true"
+                      >
                         <Show when={on()}>
                           <Glyph name="check" />
                         </Show>
-                      </span>
+                      </Text>
                     </Show>
                     <Show when={option.dot}>{(tone) => <Dot tone={tone()} />}</Show>
-                    <span class="vui-option__label">{option.label}</span>
+                    <Text as="span" variant="body" tone="inherit" class={styles.optionPartLabel}>
+                      {option.label}
+                    </Text>
                     <Show when={option.count != null}>
-                      <span class="vui-option__kbd">{option.count}</span>
+                      <Text as="span" variant="kbd" tone="tertiary" class={styles.optionPartKbd}>
+                        {option.count}
+                      </Text>
                     </Show>
                   </div>
                 );
@@ -165,7 +189,7 @@ export const FilterChip = (props: FilterChipProps) => {
             </For>
           </div>
           <Show when={picked().length > 0}>
-            <div class="vui-fchip__foot">
+            <div class={styles.fchipPartFoot}>
               <Button
                 variant="ghost"
                 size="sm"

@@ -9,12 +9,15 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { pad } from '../../utils/date';
 import { Control } from '../primitives/Control';
+import { ControlInput } from '../primitives/ControlInput';
 import { FieldLabel } from '../primitives/FieldLabel';
+import { Text } from '../primitives/Text';
 import { callbackAlias } from './callbackAlias';
 import { createFormValidation } from './createFormValidation';
 import type { FormControlProps } from './formControl';
 import { FormValue } from './FormValue';
 import { exampleTime, formatMinutes, formatTime, minutesOfTime, parseTime } from './time';
+import styles from './TimePicker.module.css';
 import { TimePickerMenu } from './TimePickerMenu';
 
 export interface TimePickerProps extends FormControlProps {
@@ -180,15 +183,15 @@ export const TimePicker = (props: TimePickerProps) => {
   };
 
   return (
-    <div class="vui-field">
+    <div class={styles.field}>
       <Show when={p.label}>
         <FieldLabel id={`${id()}-label`} htmlFor={id()} optional={p.optional} required={p.required}>
           {p.label}
         </FieldLabel>
       </Show>
-      <div ref={setWrap} class="vui-select">
+      <div ref={setWrap} class={styles.select}>
         <Control size={p.size} invalid={!!message() || validation.invalid()} disabled={p.disabled} iconLeft="clock">
-          <input
+          <ControlInput
             ref={(element) => {
               input = element;
             }}
@@ -202,7 +205,7 @@ export const TimePicker = (props: TimePickerProps) => {
             aria-label={p['aria-label']}
             aria-labelledby={p['aria-labelledby']}
             aria-required={p.required || undefined}
-            class="vui-control__input vui-time__input"
+            class={styles.timePartInput}
             value={text()}
             placeholder={p.placeholder ?? example()}
             disabled={p.disabled}
@@ -251,9 +254,15 @@ export const TimePicker = (props: TimePickerProps) => {
         </Show>
       </div>
       <Show when={message() || p.hint}>
-        <span id={hintId()} class={cx('vui-hint', !!message() && 'vui-hint--error')}>
+        <Text
+          as="span"
+          variant="caption"
+          tone="inherit"
+          id={hintId()}
+          class={cx(styles.hint, !!message() && styles.hintVariantError)}
+        >
           {message() || p.hint}
-        </span>
+        </Text>
       </Show>
     </div>
   );

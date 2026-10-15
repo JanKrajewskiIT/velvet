@@ -1,0 +1,14 @@
+.aiPartMeta {
+  margin-left: auto;
+  padding: 0 var(--space-1);
+  color: var(--fg-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.aiPartFoot {
+  composes: aipartfoot from '../../styles/shared/patterns/ai-result-panel.module.css';
+}
+
+.aiPartFb {
+  composes: aipartfb from '../../styles/shared/patterns/ai-result-panel.module.css';
+}

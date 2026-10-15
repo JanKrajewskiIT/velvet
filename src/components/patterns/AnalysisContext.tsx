@@ -1,6 +1,8 @@
 import { For } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { Text } from '../primitives/Text';
+import styles from './AnalysisContext.module.css';
 import { AnalysisSourceRow } from './AnalysisSourceRow';
 import type { AnalysisSource } from './analysisSources';
 import type { AnalysisSelection } from './createAnalysisSelection';
@@ -16,17 +18,17 @@ export interface AnalysisContextProps {
 export const AnalysisContext = (props: AnalysisContextProps) => {
   const translate = useTranslate();
   return (
-    <fieldset class="vui-areq__set" disabled={props.disabled}>
-      <legend class="vui-areq__lbl">
+    <fieldset class={styles.areqPartSet} disabled={props.disabled}>
+      <Text as="legend" variant="section" tone="tertiary" class={styles.areqPartLbl}>
         {translate('velvet.patterns.analysisRequest.context')}{' '}
-        <span class="vui-areq__lblc">
+        <Text as="span" variant="caption" tone="inherit" class={styles.areqPartLblc}>
           {translate('velvet.patterns.analysisRequest.contextCount', {
             included: props.selection.included().length,
             total: props.sources.length,
           })}
-        </span>
-      </legend>
-      <ul class="vui-areq__sources">
+        </Text>
+      </Text>
+      <ul class={styles.areqPartSources}>
         <For each={props.sources}>
           {(source) => (
             <AnalysisSourceRow

@@ -1,0 +1,39 @@
+.kbdCombo {
+  display: var(--kbd-display, inline-flex);
+  align-items: center;
+  gap: var(--space-0-5);
+}
+
+.kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-0-5);
+  height: var(--kbd-height);
+  min-width: var(--kbd-height);
+  padding: 0 var(--space-1-5);
+  border: var(--border-width) solid var(--kbd-context-border, var(--kbd-border));
+  border-bottom-width: var(--border-width-thick);
+  border-radius: var(--radius-xs);
+  background: var(--kbd-context-bg, var(--kbd-bg));
+  color: var(--kbd-context-fg, var(--kbd-fg));
+}
+
+.kbdVariantSm {
+  height: var(--kbd-height-sm);
+  min-width: var(--kbd-height-sm);
+  padding: 0 var(--space-1);
+}
+
+.kbdVariantPlain {
+  height: auto;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+}
+
+.kbdCombo:has(.kbdVariantPlain) {
+  gap: 0;
+}

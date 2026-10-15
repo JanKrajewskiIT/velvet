@@ -1,0 +1,42 @@
+.atsPartH {
+  --glyph-size: var(--type-body-size);
+
+  margin: 0;
+}
+
+.ats {
+  display: flex;
+  flex-direction: column;
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-xl);
+  background: var(--bg-raised);
+  box-shadow: var(--elevation-control);
+  overflow: hidden;
+  color: var(--fg-primary);
+}
+
+.atsPartBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-5);
+}
+
+.atsPartHero {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.atsPartSec {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+@media (width <= 639px) {
+  .atsPartHero {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

@@ -1,0 +1,9 @@
+.mentionPartPop {
+  position: absolute;
+  z-index: var(--z-dropdown);
+  width: min(248px, 100%);
+  max-height: 280px;
+  overflow: auto;
+  padding: var(--panel-pad);
+  animation: vui-fade-in var(--motion-fast);
+}

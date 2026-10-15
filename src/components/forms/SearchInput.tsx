@@ -8,6 +8,7 @@ import { cx } from '../../utils/cx';
 import { Spinner } from '../feedback/Spinner';
 import { CloseButton } from '../primitives/CloseButton';
 import { Control } from '../primitives/Control';
+import { ControlInput } from '../primitives/ControlInput';
 import { EmptyText } from '../primitives/EmptyText';
 import { FieldLabel } from '../primitives/FieldLabel';
 import { Glyph } from '../primitives/Glyph';
@@ -15,6 +16,7 @@ import { highlightMatch } from '../primitives/Mark';
 import { callHandler } from './callHandler';
 import { ComboboxOption } from './ComboboxOption';
 import { ComboboxOptionText } from './ComboboxOptionText';
+import styles from './SearchInput.module.css';
 import { type AutocompleteOption, filterOptions, normalizeOption } from './selectOption';
 
 export type SearchSuggestion = AutocompleteOption;
@@ -140,18 +142,18 @@ export const SearchInput = (props: SearchInputProps) => {
   };
 
   return (
-    <div class={cx('vui-field', local.class)}>
+    <div class={cx(styles.field, local.class)}>
       <Show when={local.label}>
         <FieldLabel htmlFor={id()}>{local.label}</FieldLabel>
       </Show>
-      <div ref={setRoot} class="vui-select">
+      <div ref={setRoot} class={styles.select}>
         <Control size={local.size} disabled={local.disabled}>
-          <span class="vui-control__adorn">
+          <span class={styles.controlPartAdorn}>
             <Show when={local.loading} fallback={<Glyph name="search" />}>
               <Spinner size="inline" tone="current" />
             </Show>
           </span>
-          <input
+          <ControlInput
             {...rest}
             ref={(element) => {
               input = element;
@@ -164,7 +166,7 @@ export const SearchInput = (props: SearchInputProps) => {
             aria-controls={local.suggestions ? listId() : undefined}
             aria-autocomplete={local.suggestions ? 'list' : undefined}
             aria-activedescendant={showList() && activeOption() ? optionId(active()) : undefined}
-            class="vui-control__input vui-control__input--search"
+            class={styles.controlPartInputVariantSearch}
             placeholder={local.placeholder ?? translate('velvet.forms.searchInput.placeholder')}
             value={query()}
             disabled={local.disabled}
@@ -192,7 +194,7 @@ export const SearchInput = (props: SearchInputProps) => {
           </Show>
         </Control>
         <Show when={showList()}>
-          <ul ref={floating.ref} style={floating.style()} id={listId()} role="listbox" class="vui-select__menu">
+          <ul ref={floating.ref} style={floating.style()} id={listId()} role="listbox" class={styles.selectPartMenu}>
             <For each={options()}>
               {(option, index) => (
                 <ComboboxOption
@@ -208,7 +210,7 @@ export const SearchInput = (props: SearchInputProps) => {
               )}
             </For>
             <Show when={options().length === 0}>
-              <EmptyText as="li" align="start" class="vui-select__empty">
+              <EmptyText as="li" align="start" class={styles.selectPartEmpty}>
                 {local.emptyText ?? translate('velvet.forms.searchInput.emptyText')}
               </EmptyText>
             </Show>

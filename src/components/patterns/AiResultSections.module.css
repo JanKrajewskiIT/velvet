@@ -1,0 +1,77 @@
+:import('../../styles/shared/patterns/ai-result-panel.module.css') {
+  externalAiPartSecH: aipartsech;
+}
+
+.aiPartItems {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.aiPartItems li {
+  position: relative;
+  padding-left: var(--space-3-5);
+  text-wrap: pretty;
+}
+
+.aiPartItems li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.5em;
+  width: var(--size-dot);
+  height: var(--size-dot);
+  border-radius: 50%;
+  background: var(--fg-tertiary);
+}
+
+.aiPartSecVariantBrand :global(.externalAiPartSecH) {
+  color: var(--fg-brand);
+}
+
+.aiPartSecVariantBrand .aiPartItems li::before {
+  background: var(--fg-brand);
+}
+
+.aiPartSecVariantSuccess :global(.externalAiPartSecH) {
+  color: var(--status-success-fg);
+}
+
+.aiPartSecVariantSuccess .aiPartItems li::before {
+  background: var(--status-success-fg);
+}
+
+.aiPartSecVariantWarning :global(.externalAiPartSecH) {
+  color: var(--status-warning-fg);
+}
+
+.aiPartSecVariantWarning .aiPartItems li::before {
+  background: var(--status-warning-fg);
+}
+
+.aiPartSecVariantDanger :global(.externalAiPartSecH) {
+  color: var(--status-danger-fg);
+}
+
+.aiPartSecVariantDanger .aiPartItems li::before {
+  background: var(--status-danger-fg);
+}
+
+.aiPartSecVariantInfo :global(.externalAiPartSecH) {
+  color: var(--status-info-fg);
+}
+
+.aiPartSecVariantInfo .aiPartItems li::before {
+  background: var(--status-info-fg);
+}
+
+.aiPartSecs {
+  composes: aipartsecs from '../../styles/shared/patterns/ai-result-panel.module.css';
+}
+
+.aiPartSecH {
+  composes: aipartsech from '../../styles/shared/patterns/ai-result-panel.module.css';
+}

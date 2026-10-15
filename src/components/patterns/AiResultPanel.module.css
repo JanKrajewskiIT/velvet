@@ -1,0 +1,124 @@
+.ai {
+  background: var(--surface-bg);
+  border: var(--border-width) solid var(--surface-border);
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--surface-radius);
+  box-shadow: var(--elevation-control);
+  color: var(--fg-primary);
+  overflow: hidden;
+}
+
+.aiPartHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2-5);
+  min-height: var(--hit-target-min);
+  padding: 0 var(--space-4);
+  border-bottom: var(--border-width) solid var(--border-subtle);
+  background: var(--bg-subtle);
+}
+
+.aiPartBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-5);
+}
+
+.aiPartSkel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.aiPartSummary {
+  margin: 0;
+  text-wrap: pretty;
+  color: var(--fg-secondary);
+}
+
+.aiPartSources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.aiPartSrc {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  max-width: 260px;
+  height: var(--control-height-inner-sm);
+  padding: 0 var(--space-2-5) 0 var(--space-1);
+  border: var(--border-width) solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  background: var(--bg-subtle);
+  color: var(--fg-secondary);
+  text-decoration: none;
+  transition:
+    border-color var(--motion-fast),
+    color var(--motion-fast);
+}
+
+.aiPartSrc b {
+  display: grid;
+  place-items: center;
+  flex: none;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--bg-raised);
+  color: var(--fg-primary);
+}
+
+.aiPartSrc span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+a.aiPartSrc:hover {
+  border-color: var(--border-strong);
+  color: var(--fg-primary);
+}
+
+a.aiPartSrc:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.aiPartError {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2-5);
+  padding: var(--space-3) var(--space-3) var(--space-3) var(--space-3-5);
+  border: var(--border-width) solid var(--status-danger-border);
+  border-radius: var(--radius-md);
+  background: var(--status-danger-bg);
+}
+
+.aiPartError > div {
+  flex: 1;
+  min-width: 160px;
+}
+
+.aiPartProv {
+  composes: aipartprov from '../../styles/shared/patterns/ai-result-panel.module.css';
+}
+
+.aiPartSecH {
+  composes: aipartsech from '../../styles/shared/patterns/ai-result-panel.module.css';
+}
+
+.aiPartDisclaimer {
+  composes: aipartdisclaimer from '../../styles/shared/patterns/ai-result-panel.module.css';
+}
+
+.aiPartSecs {
+  composes: aipartsecs from '../../styles/shared/patterns/ai-result-panel.module.css';
+}

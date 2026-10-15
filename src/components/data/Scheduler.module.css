@@ -1,0 +1,76 @@
+.sched {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+  color: var(--fg-primary);
+}
+
+.schedPartFrame {
+  overflow: auto;
+  border: var(--border-width) solid var(--table-border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-raised);
+  outline: 0;
+  scrollbar-width: thin;
+}
+
+.schedPartFrame:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+.schedPartGrid {
+  display: grid;
+  min-width: min-content;
+}
+
+.schedPartCorner,
+.schedPartDayhead {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: var(--bg-raised);
+  border-bottom: var(--border-width) solid var(--table-border);
+}
+
+.schedPartCorner {
+  left: 0;
+  z-index: 4;
+}
+
+.schedPartDayhead {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: var(--space-1-5);
+  height: var(--hit-target-min);
+  padding-top: var(--space-3);
+  border-left: var(--border-width) solid var(--border-subtle);
+}
+
+.schedPartDayheadVariantToday .schedPartDn {
+  display: inline-grid;
+  place-items: center;
+  min-width: var(--control-height-inner-sm);
+  height: var(--control-height-inner-sm);
+  margin-top: calc(-1 * var(--space-1));
+  padding: 0 var(--space-1);
+  border-radius: var(--radius-full);
+  background: var(--action-primary);
+  color: var(--action-primary-fg);
+}
+
+.schedPartGutter {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: var(--bg-raised);
+}
+
+.schedPartHour {
+  position: absolute;
+  right: var(--space-2);
+  transform: translateY(-50%);
+  color: var(--fg-tertiary);
+  font-variant-numeric: tabular-nums;
+}

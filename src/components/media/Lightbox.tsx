@@ -2,6 +2,7 @@ import { Show } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
 import { createModalRoot } from '../feedback/createModalRoot';
+import styles from './Lightbox.module.css';
 import { LightboxPanel } from './LightboxPanel';
 import type { LightboxProps } from './lightboxTypes';
 
@@ -17,7 +18,7 @@ export const Lightbox = (props: LightboxProps) => {
   return (
     <Show when={isOpen()}>
       <Portal>
-        <LightboxPanel lightbox={props} index={openIndex() ?? 0} ref={ref} />
+        <LightboxPanel class={styles.root} lightbox={props} index={openIndex() ?? 0} ref={ref} />
       </Portal>
     </Show>
   );

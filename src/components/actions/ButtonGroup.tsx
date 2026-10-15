@@ -3,6 +3,7 @@ import { type Accessor, createContext, createMemo, mergeProps, splitProps, useCo
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
 import type { ButtonSize } from './buttonClass';
+import styles from './ButtonGroup.module.css';
 
 const ButtonGroupSizeContext = createContext<Accessor<ButtonSize | undefined>>();
 
@@ -31,9 +32,9 @@ export const ButtonGroup = (props: ButtonGroupProps) => {
         role="group"
         aria-label={local.label}
         class={cx(
-          'vui-btngroup',
-          local.attached && 'vui-btngroup--attached',
-          local.orientation === 'vertical' && 'vui-btngroup--vertical',
+          styles.btngroup,
+          local.attached && styles.btngroupVariantAttached,
+          local.orientation === 'vertical' && styles.btngroupVariantVertical,
           local.class,
         )}
         {...rest}

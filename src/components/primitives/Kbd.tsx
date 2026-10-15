@@ -1,6 +1,15 @@
-import { For, type JSX, mergeProps, Show } from 'solid-js';
+import { For, type JSX, mergeProps, Show, splitProps } from 'solid-js';
 
-import { cx, modifier } from '../../utils/cx';
+import { variantClass } from '../../utils/cssModule';
+import { cx } from '../../utils/cx';
+import type { HtmlProps } from '../../utils/polymorphic';
+import styles from './Kbd.module.css';
+import { Text } from './Text';
+
+const KBD_CLASSES = {
+  sm: styles.kbdVariantSm,
+  plain: styles.kbdVariantPlain,
+} as const;
 
 const isApplePlatform = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/u.test(navigator.userAgent);
 
@@ -23,7 +32,7 @@ const KEY_LABELS: Record<string, string> = {
 
 const keyLabel = (key: string): string => KEY_LABELS[key.toLowerCase()] ?? key.toUpperCase();
 
-export interface KbdProps {
+export interface KbdProps extends HtmlProps<HTMLElement> {
   /** `"mod+k"` renders ⌘ K on Mac, Ctrl K elsewhere. Aliases: mod cmd ctrl alt shift enter esc up down left right tab backspace space. */
   keys?: string | string[];
   children?: JSX.Element;
@@ -36,17 +45,38 @@ export interface KbdProps {
 /** Keyboard key(s). */
 export const Kbd = (props: KbdProps) => {
   const p = mergeProps({ size: 'md', plain: false } satisfies KbdProps, props);
-  const list = () => (p.keys ? (Array.isArray(p.keys) ? p.keys : p.keys.split('+')) : undefined);
-  const capClass = () => cx('vui-kbd', modifier('vui-kbd', p.size, 'md'), p.plain && 'vui-kbd--plain');
+  const [local, rest] = splitProps(p, ['keys', 'children', 'size', 'plain', 'class']);
+  const list = () => (local.keys ? (Array.isArray(local.keys) ? local.keys : local.keys.split('+')) : undefined);
+  const capClass = () =>
+    cx(styles.kbd, variantClass(KBD_CLASSES, local.size, 'md'), local.plain && styles.kbdVariantPlain);
   return (
-    <Show when={list()} fallback={<kbd class={cx(capClass(), p.class)}>{p.children}</kbd>}>
+    <Show
+      when={list()}
+      fallback={
+        <Text
+          {...rest}
+          as="kbd"
+          variant={local.size === 'sm' ? 'micro' : 'kbd'}
+          tone="inherit"
+          class={cx(capClass(), local.class)}
+        >
+          {local.children}
+        </Text>
+      }
+    >
       {(keys) => (
-        <span class={cx('vui-kbd-combo', p.class)} aria-label={keys().join(' + ')}>
+        <span {...rest} class={cx(styles.kbdCombo, local.class)} aria-label={keys().join(' + ')}>
           <For each={keys()}>
             {(key) => (
-              <kbd class={capClass()} aria-hidden="true">
+              <Text
+                as="kbd"
+                variant={local.size === 'sm' ? 'micro' : 'kbd'}
+                tone="inherit"
+                class={capClass()}
+                aria-hidden="true"
+              >
                 {keyLabel(key)}
-              </kbd>
+              </Text>
             )}
           </For>
         </span>

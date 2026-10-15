@@ -2,6 +2,8 @@ import { splitProps } from 'solid-js';
 
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import styles from './FieldHint.module.css';
+import { Text } from './Text';
 
 export interface FieldHintProps extends HtmlProps<HTMLSpanElement> {
   error?: boolean;
@@ -12,12 +14,15 @@ export interface FieldHintProps extends HtmlProps<HTMLSpanElement> {
 export const FieldHint = (props: FieldHintProps) => {
   const [local, rest] = splitProps(props, ['error', 'lane', 'class', 'children']);
   return (
-    <span
-      class={cx('vui-hint', local.error && 'vui-hint--error', local.lane && 'vui-hint--lane', local.class)}
+    <Text
+      as="span"
+      variant="caption"
+      tone="inherit"
+      class={cx(styles.hint, local.error && styles.hintVariantError, local.lane && styles.hintVariantLane, local.class)}
       aria-live={local.lane ? 'polite' : undefined}
       {...rest}
     >
       {local.children}
-    </span>
+    </Text>
   );
 };

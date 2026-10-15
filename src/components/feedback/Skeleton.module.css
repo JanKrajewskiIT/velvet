@@ -1,0 +1,3 @@
+.skeleton {
+  composes: skeleton from '../../styles/shared/feedback/skeleton.module.css';
+}

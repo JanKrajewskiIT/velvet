@@ -2,7 +2,9 @@ import { createEffect, createMemo, createSignal, type JSX, onCleanup, Show, untr
 import { Portal } from 'solid-js/web';
 
 import { createDismiss } from '../../hooks/createDismiss';
+import { cx } from '../../utils/cx';
 import { clamp } from '../../utils/math';
+import styles from './ContextMenu.module.css';
 import type { MenuItem } from './menuItem';
 import { MenuPanel } from './MenuPanel';
 
@@ -91,7 +93,7 @@ export const ContextMenu = (props: ContextMenuProps) => {
       ref={(element) => {
         zone = element;
       }}
-      class={props.class}
+      class={cx(styles.root, props.class)}
       style={props.style}
       // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- the zone must be focusable so Shift+F10 / ContextMenu open the menu from the keyboard
       tabIndex={0}

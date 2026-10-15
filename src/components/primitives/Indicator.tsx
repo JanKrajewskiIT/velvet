@@ -1,8 +1,10 @@
 import { mergeProps, Show, splitProps } from 'solid-js';
 
-import { cx, modifier } from '../../utils/cx';
+import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
-import { formatCount } from './Count';
+import { Count, COUNT_TONES } from './Count';
+import { Dot } from './Dot';
+import styles from './Indicator.module.css';
 
 export type IndicatorPlacement = 'top-end' | 'top-start' | 'bottom-end' | 'bottom-start';
 
@@ -55,11 +57,11 @@ export const Indicator = (props: IndicatorProps) => {
   return (
     <span
       class={cx(
-        'vui-indicator',
-        local.overlap === 'circle' && 'vui-indicator--circle',
-        local.placement.startsWith('bottom') && 'vui-indicator--bottom',
-        local.placement.endsWith('start') && 'vui-indicator--start',
-        local.inset && 'vui-indicator--inset',
+        styles.indicator,
+        local.overlap === 'circle' && styles.indicatorVariantCircle,
+        local.placement.startsWith('bottom') && styles.indicatorVariantBottom,
+        local.placement.endsWith('start') && styles.indicatorVariantStart,
+        local.inset && styles.indicatorVariantInset,
         local.class,
       )}
       {...rest}
@@ -69,21 +71,18 @@ export const Indicator = (props: IndicatorProps) => {
         when={hasCount()}
         fallback={
           <Show when={local.dot}>
-            <span class="vui-dot vui-indicator__item" data-tone={local.tone ?? 'brand'} {...announce()} />
+            <Dot class={styles.indicatorPartItem} data-tone={local.tone ?? 'brand'} {...announce()} />
           </Show>
         }
       >
-        <span
-          class={cx(
-            'vui-count',
-            'vui-indicator__item',
-            modifier('vui-count', local.size, 'md'),
-            local.tone !== 'brand' && modifier('vui-count', local.tone),
-          )}
+        <Count
+          value={local.count ?? undefined}
+          max={local.max}
+          size={local.size}
+          tone={COUNT_TONES.find((tone) => tone === local.tone)}
+          class={styles.indicatorPartItem}
           {...announce()}
-        >
-          {formatCount(local.count ?? undefined, local.max)}
-        </span>
+        />
       </Show>
     </span>
   );

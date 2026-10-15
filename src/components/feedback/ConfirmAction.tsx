@@ -2,6 +2,7 @@ import { createSignal, type JSX, mergeProps, onCleanup } from 'solid-js';
 
 import { createTrigger } from '../../hooks/createTrigger';
 import { Button } from '../actions/Button';
+import styles from './ConfirmAction.module.css';
 import { ConfirmDialog, type ConfirmDialogProps } from './ConfirmDialog';
 
 export interface ConfirmActionProps extends Omit<ConfirmDialogProps, 'open' | 'onCancel'> {
@@ -49,7 +50,7 @@ export const ConfirmAction = (props: ConfirmActionProps) => {
   return (
     <>
       {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events -- delegates activation from the supplied native trigger without nesting buttons */}
-      <span class="vui-confirm-action" onClick={trigger.onClick}>
+      <span class={styles.confirmAction} onClick={trigger.onClick}>
         {trigger.content}
       </span>
       <ConfirmDialog {...rest} />

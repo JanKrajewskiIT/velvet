@@ -1,7 +1,21 @@
 import { children, type JSX, mergeProps, Show, splitProps } from 'solid-js';
 
-import { cx, modifier } from '../../utils/cx';
+import { variantClass } from '../../utils/cssModule';
+import { cx } from '../../utils/cx';
 import { Surface, type SurfaceProps } from '../primitives/Surface';
+import { Text } from '../primitives/Text';
+import styles from './Card.module.css';
+
+const CARD_VARIANT_CLASSES = {
+  none: styles.cardVariantPNone,
+  sm: styles.cardVariantPSm,
+  lg: styles.cardVariantPLg,
+} as const;
+
+const CARD_PART_FOOTER_CLASSES = {
+  start: styles.cardPartFooterVariantStart,
+  between: styles.cardPartFooterVariantBetween,
+} as const;
 
 export type CardPadding = 'none' | 'sm' | 'md' | 'lg';
 export type CardFooterAlign = 'start' | 'end' | 'between';
@@ -16,6 +30,7 @@ export interface CardProps extends Omit<SurfaceProps, 'title' | 'padding'> {
   description?: JSX.Element;
   /** Top-right slot — usually IconButtons. */
   actions?: JSX.Element;
+  bodyClass?: string;
   /** Tinted footer bar — usually Buttons. */
   footer?: JSX.Element;
   /** @default 'end' */
@@ -33,32 +48,42 @@ export const Card = (props: CardProps) => {
     'footer',
     'footerAlign',
     'padding',
+    'bodyClass',
     'class',
     'children',
   ]);
   const body = children(() => local.children);
   return (
-    <Surface {...surface} class={cx('vui-card', local.padding !== 'md' && `vui-card--p-${local.padding}`, local.class)}>
+    <Surface
+      {...surface}
+      class={cx(styles.card, local.padding !== 'md' && variantClass(CARD_VARIANT_CLASSES, local.padding), local.class)}
+    >
       <Show when={local.title || local.actions}>
-        <div class="vui-card__header">
-          <div class="vui-card__heading">
+        <div class={styles.cardPartHeader}>
+          <div class={styles.cardPartHeading}>
             <Show when={local.title}>
-              <div class="vui-card__title">{local.title}</div>
+              <Text as="div" variant="title" class="vui-card__title">
+                {local.title}
+              </Text>
             </Show>
             <Show when={local.description}>
-              <div class="vui-card__desc">{local.description}</div>
+              <Text as="div" variant="body-sm" tone="secondary" class={styles.cardPartDesc}>
+                {local.description}
+              </Text>
             </Show>
           </div>
           <Show when={local.actions}>
-            <div class="vui-card__actions">{local.actions}</div>
+            <div class={styles.cardPartActions}>{local.actions}</div>
           </Show>
         </div>
       </Show>
       <Show when={body() != null}>
-        <div class="vui-card__body">{body()}</div>
+        <div class={cx(styles.cardPartBody, local.bodyClass)}>{body()}</div>
       </Show>
       <Show when={local.footer}>
-        <div class={cx('vui-card__footer', modifier('vui-card__footer', local.footerAlign, 'end'))}>{local.footer}</div>
+        <div class={cx(styles.cardPartFooter, variantClass(CARD_PART_FOOTER_CLASSES, local.footerAlign, 'end'))}>
+          {local.footer}
+        </div>
       </Show>
     </Surface>
   );

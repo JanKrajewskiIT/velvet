@@ -1,0 +1,58 @@
+:import('../primitives/glyph.module.css') {
+  externalIcon: icon;
+}
+
+.toggle :global(.externalIcon) {
+  --glyph-size: var(--size-icon-md);
+
+  transition: transform var(--motion-spring);
+}
+
+.toggle[aria-pressed='true'] :global(.externalIcon) {
+  transform: scale(1.08);
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--button-gap);
+  height: var(--control-height-md);
+  padding: 0 var(--button-px);
+  border: var(--border-width) solid var(--button-secondary-border);
+  border-radius: var(--button-radius);
+  background: var(--button-secondary-bg);
+  color: var(--fg-secondary);
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    var(--transition-colors),
+    transform var(--motion-spring);
+}
+
+.toggle:hover:not(:disabled) {
+  border-color: var(--button-secondary-border-hover);
+  color: var(--fg-primary);
+}
+
+.toggle:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  z-index: 3;
+}
+
+.toggle:active:not(:disabled) {
+  transform: translateY(var(--motion-nudge));
+}
+
+.toggle[aria-pressed='true'] {
+  background: var(--bg-selected);
+  border-color: var(--border-brand);
+  color: var(--fg-brand);
+}
+
+.toggle:disabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}

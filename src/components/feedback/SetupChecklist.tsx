@@ -1,11 +1,20 @@
 import { children, createMemo, For, type JSX, mergeProps, Show, splitProps } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
 import { IconButton } from '../actions/IconButton';
+import { Heading } from '../primitives/Heading';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { Progress } from './Progress';
+import styles from './SetupChecklist.module.css';
 import { type ChecklistStep, SetupChecklistStep } from './SetupChecklistStep';
+
+const CHECKLIST_VARIANT_CLASSES = {
+  grid: styles.checklistVariantGrid,
+} as const;
 
 export interface SetupChecklistProps extends HtmlProps<HTMLElement, 'title'> {
   /** @default localized "Get started" */
@@ -59,14 +68,23 @@ export const SetupChecklist = (props: SetupChecklistProps) => {
     <Show when={!(local.hideWhenComplete && complete())}>
       <section
         {...rest}
-        class={cx('vui-checklist', `vui-checklist--${local.layout}`, local.class)}
+        class={cx(
+          typographyClass('body'),
+          styles.checklist,
+          variantClass(CHECKLIST_VARIANT_CLASSES, local.layout),
+          local.class,
+        )}
         aria-label={ariaLabel()}
       >
-        <header class="vui-checklist__head">
-          <div class="vui-checklist__intro">
-            <h3 class="vui-checklist__title">{title()}</h3>
+        <header class={styles.checklistPartHead}>
+          <div class={styles.checklistPartIntro}>
+            <Heading level={3} variant="title-lg" class={styles.checklistPartTitle}>
+              {title()}
+            </Heading>
             <Show when={description()}>
-              <p class="vui-checklist__lede">{description()}</p>
+              <Text as="p" variant="body-sm" tone="secondary" class={styles.checklistPartLede}>
+                {description()}
+              </Text>
             </Show>
           </div>
           <Show when={local.onDismiss}>
@@ -87,11 +105,11 @@ export const SetupChecklist = (props: SetupChecklistProps) => {
           tone={doneCount() === local.steps.length ? 'success' : 'brand'}
           class="vui-checklist__progress"
         />
-        <ol class="vui-checklist__list">
+        <ol class={styles.checklistPartList}>
           <For each={local.steps}>
             {(step, i) => (
               <li>
-                <SetupChecklistStep step={step} index={i()} next={i() === nextIndex()} />
+                <SetupChecklistStep layout={local.layout} step={step} index={i()} next={i() === nextIndex()} />
               </li>
             )}
           </For>

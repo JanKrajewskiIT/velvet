@@ -3,6 +3,8 @@ import { Show } from 'solid-js';
 import { useTranslate } from '../../i18n/useTranslate';
 import { Button } from '../actions/Button';
 import { CopyButton } from '../actions/CopyButton';
+import { Text } from '../primitives/Text';
+import styles from './AiResultFooter.module.css';
 import type { AiFeedback } from './aiResultTypes';
 
 export interface AiResultFooterProps {
@@ -29,13 +31,13 @@ export const AiResultFooter = (props: AiResultFooterProps) => {
       .join(' · ');
 
   return (
-    <footer class="vui-ai__foot">
+    <footer class={styles.aiPartFoot}>
       <Show
         when={!props.streaming}
         fallback={
-          <span class="vui-ai__meta" style={{ 'margin-left': 0 }}>
+          <Text as="span" variant="kbd" tone="inherit" class={styles.aiPartMeta} style={{ 'margin-left': 0 }}>
             {translate('velvet.patterns.aiResultPanel.writing')}
-          </span>
+          </Text>
         }
       >
         <CopyButton value={props.plain} variant="ghost" size="sm" onCopy={props.onCopy} />
@@ -45,8 +47,17 @@ export const AiResultFooter = (props: AiResultFooterProps) => {
           </Button>
         </Show>
         <Show when={props.feedbackEnabled}>
-          <span class="vui-ai__fb" role="group" aria-label={translate('velvet.patterns.aiResultPanel.feedbackLabel')}>
-            <span>{translate('velvet.patterns.aiResultPanel.helpful')}</span>
+          <Text
+            as="span"
+            variant="caption"
+            tone="tertiary"
+            class={styles.aiPartFb}
+            role="group"
+            aria-label={translate('velvet.patterns.aiResultPanel.feedbackLabel')}
+          >
+            <Text as="span" variant="button-sm" tone="inherit">
+              {translate('velvet.patterns.aiResultPanel.helpful')}
+            </Text>
             <Button
               variant="ghost"
               size="sm"
@@ -63,10 +74,12 @@ export const AiResultFooter = (props: AiResultFooterProps) => {
             >
               {translate('velvet.common.no')}
             </Button>
-          </span>
+          </Text>
         </Show>
         <Show when={meta()}>
-          <span class="vui-ai__meta">{meta()}</span>
+          <Text as="span" variant="kbd" tone="inherit" class={styles.aiPartMeta}>
+            {meta()}
+          </Text>
         </Show>
       </Show>
     </footer>

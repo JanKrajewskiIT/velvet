@@ -1,10 +1,21 @@
 import { createMemo, For, type JSX, mergeProps, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
 import { Segmented } from '../primitives/Segmented';
 import { SegmentedItem } from '../primitives/SegmentedItem';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './OptionSwitcher.module.css';
+
+const SWITCHER_CLASSES = {
+  chips: styles.switcherVariantChips,
+  icons: styles.switcherVariantIcons,
+  tiles: styles.switcherVariantTiles,
+  sm: styles.switcherVariantSm,
+} as const;
 
 export interface SwitcherOption {
   value: string;
@@ -74,7 +85,7 @@ export const OptionSwitcher = (props: OptionSwitcherProps) => {
           onKeyDown={onKeyDown}
           size={p.size}
           iconOnly={p.iconOnly}
-          class={cx('vui-switcher', p.class)}
+          class={cx(styles.switcher, p.class)}
         >
           <For each={options()}>
             {(option) => (
@@ -101,10 +112,10 @@ export const OptionSwitcher = (props: OptionSwitcherProps) => {
         aria-label={p.label}
         onKeyDown={onKeyDown}
         class={cx(
-          'vui-switcher',
-          `vui-switcher--${p.variant}`,
-          p.size === 'sm' && 'vui-switcher--sm',
-          p.iconOnly && 'vui-switcher--icons',
+          styles.switcher,
+          variantClass(SWITCHER_CLASSES, p.variant),
+          p.size === 'sm' && styles.switcherVariantSm,
+          p.iconOnly && styles.switcherVariantIcons,
           p.class,
         )}
       >
@@ -118,13 +129,19 @@ export const OptionSwitcher = (props: OptionSwitcherProps) => {
               disabled={option.disabled}
               aria-label={p.iconOnly ? stringLabel(option) : undefined}
               title={p.iconOnly ? stringLabel(option) : undefined}
-              class={cx('vui-switcher__opt', current() === option.value && 'vui-switcher__opt--on')}
+              class={cx(
+                typographyClass(p.size === 'sm' ? 'label-sm' : 'button-sm'),
+                styles.switcherPartOpt,
+                current() === option.value && styles.switcherPartOptVariantOn,
+              )}
               onClick={() => setCurrent(option.value)}
             >
               <Show when={option.icon}>{(icon) => <Glyph name={icon()} />}</Show>
               <Show when={!p.iconOnly}>
                 <Show when={p.variant === 'tiles'} fallback={option.label}>
-                  <span class="vui-switcher__tlabel">{option.label}</span>
+                  <Text as="span" variant="label-sm" tone="inherit" class="vui-switcher__tlabel">
+                    {option.label}
+                  </Text>
                 </Show>
               </Show>
             </button>

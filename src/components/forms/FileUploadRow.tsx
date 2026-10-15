@@ -2,13 +2,21 @@ import { useI18n } from '@jankrajewskiit/i18n';
 import { Match, Show, Switch } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { Button } from '../actions/Button';
 import { IconButton } from '../actions/IconButton';
 import { Glyph } from '../primitives/Glyph';
 import { IconTile } from '../primitives/IconTile';
 import { Meter } from '../primitives/Meter';
+import { Text } from '../primitives/Text';
+import styles from './FileUploadRow.module.css';
 import { formatBytes } from './formatBytes';
+
+const UPLOAD_PART_FILE_CLASSES = {
+  error: styles.uploadPartFileVariantError,
+  done: styles.uploadPartFileVariantDone,
+} as const;
 
 export interface UploadFile {
   id: string | number;
@@ -39,12 +47,14 @@ export const FileUploadRow = (props: FileUploadRowProps) => {
   const status = () => props.file.status ?? 'done';
   const progress = () => Math.round(props.file.progress ?? 0);
   return (
-    <li class={cx('vui-upload__file', `vui-upload__file--${status()}`)}>
-      <IconTile icon={IMAGE_NAME.test(props.file.name) ? 'image' : 'file'} class="vui-upload__thumb" />
-      <div class="vui-upload__meta">
-        <div class="vui-upload__row">
-          <span class="vui-upload__name">{props.file.name}</span>
-          <span class="vui-upload__status">
+    <li class={cx(styles.uploadPartFile, variantClass(UPLOAD_PART_FILE_CLASSES, status()))}>
+      <IconTile icon={IMAGE_NAME.test(props.file.name) ? 'image' : 'file'} class={styles.uploadPartThumb} />
+      <div class={styles.uploadPartMeta}>
+        <div class={styles.uploadPartRow}>
+          <Text as="span" variant="label" tone="inherit" class={styles.uploadPartName}>
+            {props.file.name}
+          </Text>
+          <Text as="span" variant="caption" tone="inherit" class={styles.uploadPartStatus}>
             <Switch>
               <Match when={status() === 'uploading'}>{`${progress()}%`}</Match>
               <Match when={status() === 'done'}>
@@ -58,7 +68,7 @@ export const FileUploadRow = (props: FileUploadRowProps) => {
                 {props.file.error || translate('velvet.forms.fileUploadRow.uploadFailed')}
               </Match>
             </Switch>
-          </span>
+          </Text>
         </div>
         <Show when={status() === 'uploading'}>
           <Meter

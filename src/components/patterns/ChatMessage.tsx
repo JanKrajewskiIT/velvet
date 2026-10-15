@@ -2,12 +2,22 @@ import type { I18nKey } from '@jankrajewskiit/i18n';
 import { children as resolveChildren, createSignal, For, type JSX, mergeProps, onCleanup, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { reportAsyncError } from '../../utils/reportAsyncError';
 import { IconButton } from '../actions/IconButton';
 import { Avatar } from '../data/Avatar';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './ChatMessage.module.css';
 import { TypingIndicator } from './TypingIndicator';
+
+const CHATMSG_CLASSES = {
+  assistant: styles.chatmsgVariantAssistant,
+  user: styles.chatmsgVariantUser,
+  system: styles.chatmsgVariantSystem,
+} as const;
 
 export type ChatRole = 'user' | 'assistant' | 'system';
 
@@ -93,17 +103,29 @@ export const ChatMessage = (props: ChatMessageProps) => {
     <Show
       when={p.role !== 'system'}
       fallback={
-        <div class={cx('vui-chatmsg', 'vui-chatmsg--system', p.class)} role="note">
-          <span>{content()}</span>
+        <div class={cx(typographyClass('caption'), styles.chatmsg, styles.chatmsgVariantSystem, p.class)} role="note">
+          <Text as="span" variant="body" tone="inherit">
+            {content()}
+          </Text>
           <Show when={p.time}>
-            <time class="vui-chatmsg__time">{p.time}</time>
+            <Text as="time" variant="caption" tone="tertiary" class="vui-chatmsg__time">
+              {p.time}
+            </Text>
           </Show>
         </div>
       }
     >
-      <div class={cx('vui-chatmsg', `vui-chatmsg--${p.role}`, !!p.error && 'vui-chatmsg--error', p.class)}>
+      <div
+        class={cx(
+          typographyClass('body'),
+          styles.chatmsg,
+          variantClass(CHATMSG_CLASSES, p.role),
+          !!p.error && 'vui-chatmsg--error',
+          p.class,
+        )}
+      >
         <Show when={!isUser()}>
-          <span class="vui-chatmsg__avatar">
+          <span class={styles.chatmsgPartAvatar}>
             <Show
               when={p.avatar}
               fallback={
@@ -116,14 +138,18 @@ export const ChatMessage = (props: ChatMessageProps) => {
             </Show>
           </span>
         </Show>
-        <div class="vui-chatmsg__main">
+        <div class={styles.chatmsgPartMain}>
           <Show when={p.author || p.time}>
-            <div class="vui-chatmsg__meta">
+            <div class={cx(styles.chatmsgPartMeta, typographyClass('body-sm'))}>
               <Show when={p.author}>
-                <span class="vui-chatmsg__author">{p.author}</span>
+                <Text as="span" variant="label" tone="inherit">
+                  {p.author}
+                </Text>
               </Show>
               <Show when={p.time}>
-                <time class="vui-chatmsg__time">{p.time}</time>
+                <Text as="time" variant="caption" tone="tertiary" class="vui-chatmsg__time">
+                  {p.time}
+                </Text>
               </Show>
             </div>
           </Show>
@@ -139,41 +165,57 @@ export const ChatMessage = (props: ChatMessageProps) => {
               ref={(element) => {
                 body = element;
               }}
-              class="vui-chatmsg__body"
+              class={cx(styles.chatmsgPartBody, typographyClass('body'))}
             >
               {content()}
               <Show when={p.streaming}>
-                <span class="vui-chatmsg__caret" aria-hidden="true" />
+                <span class={styles.chatmsgPartCaret} aria-hidden="true" />
               </Show>
             </div>
           </Show>
           <Show when={p.error}>
-            <div class="vui-chatmsg__error" role="alert">
+            <Text as="div" variant="body-sm" tone="danger" class={styles.chatmsgPartError} role="alert">
               <Glyph name="alert-circle" />
-              <span>{errorText()}</span>
+              <Text as="span" variant="body-sm" tone="inherit">
+                {errorText()}
+              </Text>
               <Show when={p.onRetry}>
-                <button type="button" class="vui-chatmsg__retry" onClick={() => p.onRetry?.()}>
+                <button
+                  type="button"
+                  class={cx(styles.chatmsgPartRetry, typographyClass('label'))}
+                  onClick={() => p.onRetry?.()}
+                >
                   {translate('velvet.common.retry')}
                 </button>
               </Show>
-            </div>
+            </Text>
           </Show>
           <Show when={(p.sources?.length ?? 0) > 0 && !p.streaming}>
-            <div class="vui-chatmsg__sources">
+            <div class={styles.chatmsgPartSources}>
               <For each={p.sources}>
                 {(source, index) => (
-                  <a href={source.href} target="_blank" rel="noreferrer" class="vui-chatmsg__src" title={source.title}>
-                    <b>{index() + 1}</b>
-                    <span>{source.title}</span>
+                  <a
+                    href={source.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    class={cx(styles.chatmsgPartSrc, typographyClass('caption'))}
+                    title={source.title}
+                  >
+                    <Text as="b" variant="micro" tone="inherit">
+                      {index() + 1}
+                    </Text>
+                    <Text as="span" variant="caption" tone="inherit">
+                      {source.title}
+                    </Text>
                   </a>
                 )}
               </For>
             </div>
           </Show>
           <Show when={showTools()}>
-            <div class="vui-chatmsg__tools">
+            <div class={styles.chatmsgPartTools}>
               <IconButton
-                class={cx('vui-chatmsg__tool', copyStatus() === 'copied' && 'vui-chatmsg__tool--on')}
+                class={cx(styles.chatmsgPartTool, copyStatus() === 'copied' && styles.chatmsgPartToolVariantOn)}
                 icon={copyStatus() === 'copied' ? 'check' : 'copy'}
                 label={copyLabel()}
                 size="xs"
@@ -182,7 +224,7 @@ export const ChatMessage = (props: ChatMessageProps) => {
               />
               <Show when={p.onRetry}>
                 <IconButton
-                  class="vui-chatmsg__tool"
+                  class={styles.chatmsgPartTool}
                   icon="refresh"
                   label={translate('velvet.patterns.chatMessage.regenerate')}
                   size="xs"
@@ -192,7 +234,7 @@ export const ChatMessage = (props: ChatMessageProps) => {
               </Show>
               <Show when={p.onFeedback}>
                 <IconButton
-                  class={cx('vui-chatmsg__tool', p.feedback === 'up' && 'vui-chatmsg__tool--on')}
+                  class={cx(styles.chatmsgPartTool, p.feedback === 'up' && styles.chatmsgPartToolVariantOn)}
                   icon="thumbs-up"
                   label={translate('velvet.patterns.chatMessage.goodResponse')}
                   aria-pressed={p.feedback === 'up'}
@@ -202,9 +244,9 @@ export const ChatMessage = (props: ChatMessageProps) => {
                 />
                 <IconButton
                   class={cx(
-                    'vui-chatmsg__tool',
-                    'vui-chatmsg__tool--down',
-                    p.feedback === 'down' && 'vui-chatmsg__tool--on',
+                    styles.chatmsgPartTool,
+                    styles.chatmsgPartToolVariantDown,
+                    p.feedback === 'down' && styles.chatmsgPartToolVariantOn,
                   )}
                   icon="thumbs-up"
                   label={translate('velvet.patterns.chatMessage.badResponse')}

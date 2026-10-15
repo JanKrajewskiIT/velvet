@@ -1,0 +1,114 @@
+:import('../../styles/shared/data/code-snippet.module.css') {
+  externalCode: code;
+}
+
+.codePartTabs {
+  flex: 1;
+  display: flex;
+  gap: var(--space-0-5);
+  margin-left: calc(-1 * var(--space-2));
+}
+
+.codePartPre:focus-visible {
+  outline: var(--border-width-thick) solid var(--code-accent);
+  outline-offset: calc(-1 * var(--space-0-5));
+}
+
+.codePartCopyVariantDone {
+  color: var(--code-added);
+}
+
+.codePartPre {
+  margin: 0;
+  padding: var(--space-3) 0;
+  overflow: auto;
+  tab-size: 2;
+}
+
+.codePartPre code {
+  display: block;
+  min-width: max-content;
+  font: inherit;
+}
+
+.codePartPreVariantWrap code {
+  min-width: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.codePartLine {
+  display: block;
+  padding: 0 var(--space-4) 0 0;
+}
+
+.codePartLine:hover {
+  background: var(--code-hover);
+}
+
+.codePartLn {
+  display: inline-block;
+  width: 44px;
+  padding-right: var(--space-4);
+  text-align: right;
+  color: var(--code-gutter);
+  user-select: none;
+}
+
+:global(.externalCode):not(:has(.codePartLn)) .codePartLine {
+  padding-left: var(--space-4);
+}
+
+.tkK {
+  color: var(--code-keyword);
+}
+
+.tkS {
+  color: var(--code-string);
+}
+
+.tkN {
+  color: var(--code-number);
+}
+
+.tkC {
+  color: var(--code-comment);
+  font-style: italic;
+}
+
+.tkT {
+  color: var(--code-function);
+}
+
+.tkP {
+  color: var(--code-comment);
+  user-select: none;
+}
+
+.code {
+  composes: code from '../../styles/shared/data/code-snippet.module.css';
+}
+
+.codePartBar {
+  composes: codepartbar from '../../styles/shared/data/code-snippet.module.css';
+}
+
+.codePartTitle {
+  composes: codeparttitle from '../../styles/shared/data/code-snippet.module.css';
+}
+
+.codePartTab {
+  composes: codeparttab from '../../styles/shared/data/code-snippet.module.css';
+}
+
+.codePartTabVariantOn {
+  composes: codeparttabvarianton from '../../styles/shared/data/code-snippet.module.css';
+}
+
+.codePartCopy {
+  composes: codepartcopy from '../../styles/shared/data/code-snippet.module.css';
+}
+
+.srOnly {
+  composes: sronly from '../../styles/shared/navigation/link.module.css';
+}

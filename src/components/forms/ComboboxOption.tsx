@@ -1,6 +1,8 @@
 import type { JSX } from 'solid-js';
 
 import { cx } from '../../utils/cx';
+import { typographyClass } from '../primitives/typography';
+import styles from './ComboboxOption.module.css';
 
 export interface ComboboxOptionProps {
   id: string;
@@ -21,7 +23,12 @@ export const ComboboxOption = (props: ComboboxOptionProps) => (
     role="option"
     aria-selected={props.selected}
     aria-disabled={props.disabled || undefined}
-    class={cx('vui-select__option', props.class, props.active && 'vui-select__option--active')}
+    class={cx(
+      typographyClass('body'),
+      styles.selectPartOption,
+      props.class,
+      props.active && styles.selectPartOptionVariantActive,
+    )}
     onMouseEnter={() => props.onHover?.()}
     onMouseDown={(e) => e.preventDefault()}
     onClick={() => props.onPick()}

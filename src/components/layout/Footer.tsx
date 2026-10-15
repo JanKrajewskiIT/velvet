@@ -1,13 +1,23 @@
 import { For, type JSX, mergeProps, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './Footer.module.css';
 import { FooterBrand } from './FooterBrand';
 import { FooterLegal } from './FooterLegal';
 import { FooterLinkItem } from './FooterLinkItem';
 import { FooterStatus } from './FooterStatus';
 import type { FooterColumn, FooterLink, FooterSocialLink, FooterStatusValue } from './footerTypes';
+
+const FOOTER_CLASSES = {
+  card: styles.footerVariantCard,
+  page: styles.footerVariantPage,
+  compact: styles.footerVariantCompact,
+} as const;
 
 const HTTP_URL = /^https?:/u;
 
@@ -51,44 +61,58 @@ export const Footer = (props: FooterProps) => {
   const translate = useTranslate();
 
   const compact = () => (
-    <footer class={cx('vui-footer', 'vui-footer--compact', `vui-footer--${p.surface}`, p.class)}>
-      <div class="vui-footer__left">
+    <footer
+      class={cx(
+        typographyClass('body'),
+        styles.footer,
+        styles.footerVariantCompact,
+        variantClass(FOOTER_CLASSES, p.surface),
+        p.class,
+      )}
+    >
+      <div class={styles.footerPartLeft}>
         <FooterBrand brand={p.brand} mark={p.mark} compact />
         <Show when={p.copyright}>
-          <span class="vui-footer__copy">{p.copyright}</span>
+          <Text as="span" variant="caption" tone="tertiary" class={styles.footerPartCopy}>
+            {p.copyright}
+          </Text>
         </Show>
         <Show when={p.meta}>
-          <span class="vui-footer__meta">{p.meta}</span>
+          <Text as="span" variant="caption" tone="inherit" class={styles.footerPartMeta}>
+            {p.meta}
+          </Text>
         </Show>
       </div>
       <FooterStatus status={p.status} />
       <FooterLegal links={p.legal} label={translate('velvet.layout.footer.navigation')} />
       <Show when={p.end}>
-        <div class="vui-footer__end">{p.end}</div>
+        <div class={styles.footerPartEnd}>{p.end}</div>
       </Show>
     </footer>
   );
 
   return (
     <Show when={p.variant !== 'compact'} fallback={compact()}>
-      <footer class={cx('vui-footer', `vui-footer--${p.surface}`, p.class)}>
-        <div class="vui-footer__main" style={{ '--cols': p.columns.length }}>
-          <div class="vui-footer__intro">
+      <footer class={cx(typographyClass('body'), styles.footer, variantClass(FOOTER_CLASSES, p.surface), p.class)}>
+        <div class={styles.footerPartMain} style={{ '--cols': p.columns.length }}>
+          <div class={styles.footerPartIntro}>
             <FooterBrand brand={p.brand} mark={p.mark} />
             <Show when={p.description}>
-              <p class="vui-footer__desc">{p.description}</p>
+              <Text as="p" variant="body-sm" tone="secondary" class={styles.footerPartDesc}>
+                {p.description}
+              </Text>
             </Show>
             <Show when={p.cta}>
-              <div class="vui-footer__cta">{p.cta}</div>
+              <div class={styles.footerPartCta}>{p.cta}</div>
             </Show>
             <Show when={p.social.length > 0}>
-              <ul class="vui-footer__social" aria-label={translate('velvet.layout.footer.social')}>
+              <ul class={styles.footerPartSocial} aria-label={translate('velvet.layout.footer.social')}>
                 <For each={p.social}>
                   {(item) => (
                     <li>
                       <a
                         href={item.href || '#'}
-                        class="vui-footer__soc"
+                        class={styles.footerPartSoc}
                         aria-label={item.label}
                         title={item.label}
                         target={item.href && HTTP_URL.test(item.href) ? '_blank' : undefined}
@@ -104,12 +128,12 @@ export const Footer = (props: FooterProps) => {
           </div>
           <For each={p.columns}>
             {(column) => (
-              <nav class="vui-footer__col" aria-label={column.title}>
-                <details class="vui-footer__group" open>
-                  <summary class="vui-footer__heading">
+              <nav class={styles.footerPartCol} aria-label={column.title}>
+                <details class={styles.footerPartGroup} open>
+                  <Text as="summary" variant="label" tone="primary" class={styles.footerPartHeading}>
                     {column.title}
                     <Glyph name="chevron-down" />
-                  </summary>
+                  </Text>
                   <ul>
                     <For each={column.links}>
                       {(link) => (
@@ -124,12 +148,14 @@ export const Footer = (props: FooterProps) => {
             )}
           </For>
         </div>
-        <div class="vui-footer__bar">
+        <div class={styles.footerPartBar}>
           <Show when={p.copyright}>
-            <span class="vui-footer__copy">{p.copyright}</span>
+            <Text as="span" variant="caption" tone="tertiary" class={styles.footerPartCopy}>
+              {p.copyright}
+            </Text>
           </Show>
           <FooterLegal links={p.legal} label={translate('velvet.layout.footer.legal')} />
-          <div class="vui-footer__end">
+          <div class={styles.footerPartEnd}>
             <FooterStatus status={p.status} />
             {p.end}
           </div>

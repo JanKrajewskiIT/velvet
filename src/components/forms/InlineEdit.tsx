@@ -3,14 +3,32 @@ import { batch, createSignal, type JSX, mergeProps, onCleanup, Show } from 'soli
 import { createControllable } from '../../hooks/createControllable';
 import { createOperation } from '../../hooks/createOperation';
 import { useTranslate } from '../../i18n/useTranslate';
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { reportAsyncError } from '../../utils/reportAsyncError';
 import { IconButton } from '../actions/IconButton';
 import { Control } from '../primitives/Control';
+import { ControlInput } from '../primitives/ControlInput';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { type TextVariant, typographyClass } from '../primitives/typography';
 import type { Validator } from './createValidation';
+import styles from './InlineEdit.module.css';
+
+const INLINE_EDIT_CLASSES = {
+  empty: styles.inlineEditVariantEmpty,
+  saved: styles.inlineEditVariantSaved,
+  sm: styles.inlineEditVariantSm,
+  lg: styles.inlineEditVariantLg,
+} as const;
 
 const SAVED_FLASH_MS = 1200;
+
+const INLINE_EDIT_TYPOGRAPHY = {
+  sm: { trigger: 'body-sm', input: 'body-sm' },
+  md: { trigger: 'body', input: 'body' },
+  lg: { trigger: 'h3', input: 'h4' },
+} as const satisfies Record<NonNullable<InlineEditProps['size']>, Record<'trigger' | 'input', TextVariant>>;
 
 export interface InlineEditProps {
   /** Controlled value. */
@@ -136,10 +154,11 @@ export const InlineEdit = (props: InlineEditProps) => {
           }}
           type="button"
           class={cx(
-            'vui-inline-edit',
-            `vui-inline-edit--${p.size}`,
-            !current() && 'vui-inline-edit--empty',
-            saved() && 'vui-inline-edit--saved',
+            typographyClass(INLINE_EDIT_TYPOGRAPHY[p.size].trigger),
+            styles.inlineEdit,
+            variantClass(INLINE_EDIT_CLASSES, p.size),
+            !current() && styles.inlineEditVariantEmpty,
+            saved() && styles.inlineEditVariantSaved,
             p.class,
           )}
           onClick={start}
@@ -148,16 +167,23 @@ export const InlineEdit = (props: InlineEditProps) => {
           aria-busy={busy() || undefined}
           aria-label={p.label ? `${p.label}: ${current() || placeholder()}` : undefined}
         >
-          <span class="vui-inline-edit__text">{current() || placeholder()}</span>
-          <Glyph name={saved() ? 'check' : 'pencil'} class="vui-inline-edit__icon" />
+          <Text
+            as="span"
+            variant={INLINE_EDIT_TYPOGRAPHY[p.size].trigger}
+            tone="inherit"
+            class={styles.inlineEditPartText}
+          >
+            {current() || placeholder()}
+          </Text>
+          <Glyph name={saved() ? 'check' : 'pencil'} class={styles.inlineEditPartIcon} />
         </button>
       }
     >
-      <div class={cx('vui-inline-edit__form', `vui-inline-edit--${p.size}`, p.class)}>
+      <div class={cx(styles.inlineEditPartForm, variantClass(INLINE_EDIT_CLASSES, p.size), p.class)}>
         <Control size={p.size === 'sm' ? 'sm' : 'md'} invalid={!!error()} style={{ flex: 1 }}>
-          <input
+          <ControlInput
+            textVariant={INLINE_EDIT_TYPOGRAPHY[p.size].input}
             ref={focusAndSelect}
-            class="vui-control__input"
             value={draft()}
             aria-label={p.label}
             aria-invalid={!!error() || undefined}
@@ -194,9 +220,15 @@ export const InlineEdit = (props: InlineEditProps) => {
         />
         <Show when={error()}>
           {(message) => (
-            <span class="vui-hint vui-hint--error vui-inline-edit__err" role="alert">
+            <Text
+              as="span"
+              variant="caption"
+              tone="inherit"
+              class={cx(styles.hint, styles.hintVariantError, styles.inlineEditPartErr)}
+              role="alert"
+            >
               {message()}
-            </span>
+            </Text>
           )}
         </Show>
       </div>

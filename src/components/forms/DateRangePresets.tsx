@@ -1,7 +1,9 @@
 import { For } from 'solid-js';
 
 import { cx } from '../../utils/cx';
+import { typographyClass } from '../primitives/typography';
 import type { DateRange } from './calendarTypes';
+import styles from './DateRangePresets.module.css';
 
 interface RangePresetChoice {
   label: string;
@@ -17,14 +19,18 @@ export interface DateRangePresetsProps {
 }
 
 export const DateRangePresets = (props: DateRangePresetsProps) => (
-  <div class="vui-rangepop__presets" role="group" aria-label={props.label}>
+  <div class={styles.rangepopPartPresets} role="group" aria-label={props.label}>
     <For each={props.choices}>
       {(choice, index) => (
         <button
           type="button"
           disabled={choice.disabled}
           aria-pressed={index() === props.active}
-          class={cx('vui-rangepop__preset', index() === props.active && 'vui-rangepop__preset--on')}
+          class={cx(
+            typographyClass('button-sm'),
+            styles.rangepopPartPreset,
+            index() === props.active && styles.rangepopPartPresetVariantOn,
+          )}
           onClick={() => !choice.disabled && props.onSelect(choice.range)}
         >
           {choice.label}

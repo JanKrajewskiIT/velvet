@@ -4,6 +4,7 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { scrollBehavior } from '../../utils/motion';
 import { Glyph } from '../primitives/Glyph';
+import styles from './BackToTop.module.css';
 import { resolveScrollContainer, type ScrollContainer } from './scrollContainer';
 
 export interface BackToTopProps {
@@ -57,9 +58,9 @@ export const BackToTop = (props: BackToTopProps) => {
       aria-label={label()}
       title={label()}
       class={cx(
-        'vui-backtop',
-        p.position === 'fixed' && 'vui-backtop--fixed',
-        visible() && 'vui-backtop--show',
+        styles.backtop,
+        p.position === 'fixed' && styles.backtopVariantFixed,
+        visible() && styles.backtopVariantShow,
         p.class,
       )}
       tabIndex={visible() ? 0 : -1}
@@ -67,12 +68,12 @@ export const BackToTop = (props: BackToTopProps) => {
       onClick={scrollToTop}
     >
       <svg viewBox="0 0 48 48" aria-hidden="true">
-        <circle cx="24" cy="24" r={RING_RADIUS} class="vui-backtop__track" />
+        <circle cx="24" cy="24" r={RING_RADIUS} class={styles.backtopPartTrack} />
         <circle
           cx="24"
           cy="24"
           r={RING_RADIUS}
-          class="vui-backtop__ring"
+          class={styles.backtopPartRing}
           style={{ 'stroke-dasharray': RING_CIRCUMFERENCE, 'stroke-dashoffset': RING_CIRCUMFERENCE * (1 - progress()) }}
         />
       </svg>

@@ -8,8 +8,12 @@ import { Button } from '../actions/Button';
 import { Badge } from '../display/Badge';
 import { OptionSwitcher } from '../forms/OptionSwitcher';
 import { Glyph } from '../primitives/Glyph';
+import { Heading } from '../primitives/Heading';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { VisuallyHidden } from '../primitives/VisuallyHidden';
 import { isOneOf } from './oneOf';
+import styles from './PricingTable.module.css';
 
 export const BILLINGS = Object.freeze(['monthly', 'yearly'] as const);
 export type Billing = (typeof BILLINGS)[number];
@@ -100,9 +104,9 @@ export const PricingTable = (props: PricingTableProps) => {
   const billingOptions = createMemo(() => BILLINGS.map((value) => ({ value, label: billingLabel(value) })));
 
   return (
-    <section class={cx('vui-pricing', p.class)}>
+    <section class={cx(typographyClass('body'), styles.pricing, p.class)}>
       <Show when={hasBilling()}>
-        <div class="vui-pricing__bar">
+        <div class={styles.pricingPartBar}>
           <OptionSwitcher
             label={translate('velvet.patterns.pricingTable.billingPeriod')}
             options={billingOptions()}
@@ -118,7 +122,7 @@ export const PricingTable = (props: PricingTableProps) => {
           </Show>
         </div>
       </Show>
-      <ul class="vui-pricing__grid">
+      <ul class={styles.pricingPartGrid}>
         <For each={p.tiers}>
           {(tier) => {
             const isCurrent = () => p.current != null && p.current === (tier.id ?? tier.name);
@@ -132,34 +136,46 @@ export const PricingTable = (props: PricingTableProps) => {
             return (
               <li
                 class={cx(
-                  'vui-pricing__tier',
-                  tier.featured && 'vui-pricing__tier--featured',
+                  styles.pricingPartTier,
+                  tier.featured && styles.pricingPartTierVariantFeatured,
                   isCurrent() && 'vui-pricing__tier--current',
                 )}
               >
                 <Show when={tier.featured}>
-                  <span class="vui-pricing__flag">{tier.badge || featuredLabel()}</span>
+                  <Text as="span" variant="overline" tone="inherit" class={styles.pricingPartFlag}>
+                    {tier.badge || featuredLabel()}
+                  </Text>
                 </Show>
-                <div class="vui-pricing__head">
-                  <h3 class="vui-pricing__name">{tier.name}</h3>
+                <div class={styles.pricingPartHead}>
+                  <Heading level={3} variant="title-lg" class={styles.pricingPartName}>
+                    {tier.name}
+                  </Heading>
                   <Show when={isCurrent()}>
                     <Badge size="sm">{translate('velvet.patterns.pricingTable.current')}</Badge>
                   </Show>
                 </div>
                 <Show when={tier.blurb}>
-                  <p class="vui-pricing__blurb">{tier.blurb}</p>
+                  <Text as="p" variant="body-sm" tone="secondary" class={styles.pricingPartBlurb}>
+                    {tier.blurb}
+                  </Text>
                 </Show>
-                <div class="vui-pricing__price">
+                <div class={styles.pricingPartPrice}>
                   {/* Keyed on the billing period so the amount remounts and replays its fade. */}
                   <Show when={billing()} keyed>
-                    <span class={cx('vui-pricing__amount', !numeric() && 'vui-pricing__amount--text')}>{price()}</span>
+                    <Text as="span" variant={numeric() ? 'h1' : 'h3'} tone="inherit" class={styles.pricingPartAmount}>
+                      {price()}
+                    </Text>
                   </Show>
                   <Show when={numeric() && period()}>
-                    <span class="vui-pricing__period">{period()}</span>
+                    <Text as="span" variant="body-sm" tone="tertiary" class="vui-pricing__period">
+                      {period()}
+                    </Text>
                   </Show>
                 </div>
                 <Show when={hasBilling()}>
-                  <div class="vui-pricing__note">{note() || ' '}</div>
+                  <Text as="div" variant="caption" tone="tertiary" class={styles.pricingPartNote}>
+                    {note() || ' '}
+                  </Text>
                 </Show>
                 <Button
                   block
@@ -172,19 +188,21 @@ export const PricingTable = (props: PricingTableProps) => {
                     : tier.cta || translate('velvet.patterns.pricingTable.choose', { name: tier.name })}
                 </Button>
                 <Show when={(tier.features ?? []).length > 0}>
-                  <div class="vui-pricing__list">
+                  <div class={styles.pricingPartList}>
                     <Show when={tier.includes}>
-                      <div class="vui-pricing__inc">{tier.includes}</div>
+                      <Text as="div" variant="label-sm" tone="inherit" class={styles.pricingPartInc}>
+                        {tier.includes}
+                      </Text>
                     </Show>
-                    <ul class="vui-pricing__features">
+                    <ul class={styles.pricingPartFeatures}>
                       <For each={tier.features}>
                         {(entry) => {
                           const feature: PricingFeature = isFeature(entry) ? entry : { label: entry };
                           const excluded = feature.included === false;
                           return (
-                            <li class={excluded ? 'vui-pricing__off' : undefined}>
+                            <li class={excluded ? styles.pricingPartOff : undefined}>
                               <Glyph name={excluded ? 'minus' : 'check'} />
-                              <span>
+                              <Text as="span" variant="body-sm" tone="inherit">
                                 {feature.label}
                                 <Show when={excluded}>
                                   <VisuallyHidden>
@@ -192,7 +210,7 @@ export const PricingTable = (props: PricingTableProps) => {
                                     {translate('velvet.patterns.pricingTable.notIncluded')}
                                   </VisuallyHidden>
                                 </Show>
-                              </span>
+                              </Text>
                             </li>
                           );
                         }}

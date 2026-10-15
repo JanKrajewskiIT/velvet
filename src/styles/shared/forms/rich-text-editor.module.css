@@ -1,0 +1,30 @@
+.rte {
+  position: relative;
+  overflow: hidden;
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: var(--bg-field);
+  box-shadow: var(--elevation-control);
+  transition:
+    border-color var(--motion-fast),
+    box-shadow var(--motion-fast);
+}
+
+.rte:hover {
+  border-color: var(--border-strong);
+}
+
+.rte:focus-within {
+  border-color: var(--border-focus);
+  box-shadow: var(--focus-ring);
+}
+
+.rtePartBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-0-5);
+  padding: var(--space-1);
+  border-bottom: var(--border-width) solid var(--border-subtle);
+  background: var(--bg-subtle);
+}

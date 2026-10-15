@@ -1,0 +1,7 @@
+.chartPartLegend {
+  composes: chartpartlegend from '../../styles/shared/charts/chart.module.css';
+}
+
+.chartPartLg {
+  composes: chartpartlg from '../../styles/shared/charts/chart.module.css';
+}

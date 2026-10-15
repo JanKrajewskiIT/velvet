@@ -1,0 +1,137 @@
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-3-5);
+  border: var(--border-width) solid transparent;
+  border-radius: var(--radius-lg);
+  color: var(--fg-primary);
+}
+
+.alertPartIcon {
+  flex: none;
+  margin-top: var(--space-px);
+  font-size: var(--type-title-lg-size);
+}
+
+.alertPartBody {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-top: var(--space-px);
+}
+
+.alertPartActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-1-5);
+}
+
+.alertPartClose {
+  margin: calc(-1 * var(--space-1)) calc(-1 * var(--space-1-5)) calc(-1 * var(--space-1)) 0;
+}
+
+.alertVariantSoft.alertVariantInfo {
+  background: var(--status-info-bg);
+  border-color: var(--status-info-border);
+}
+
+.alertVariantInfo .alertPartIcon {
+  color: var(--status-info-fg);
+}
+
+.alertVariantSoft.alertVariantSuccess {
+  background: var(--status-success-bg);
+  border-color: var(--status-success-border);
+}
+
+.alertVariantSuccess .alertPartIcon {
+  color: var(--status-success-fg);
+}
+
+.alertVariantSoft.alertVariantWarning {
+  background: var(--status-warning-bg);
+  border-color: var(--status-warning-border);
+}
+
+.alertVariantWarning .alertPartIcon {
+  color: var(--status-warning-fg);
+}
+
+.alertVariantSoft.alertVariantDanger {
+  background: var(--status-danger-bg);
+  border-color: var(--status-danger-border);
+}
+
+.alertVariantDanger .alertPartIcon {
+  color: var(--status-danger-fg);
+}
+
+.alertVariantSoft.alertVariantBrand {
+  background: var(--bg-selected);
+  border-color: var(--border-brand);
+}
+
+.alertVariantBrand .alertPartIcon {
+  color: var(--fg-brand);
+}
+
+.alertVariantSoft.alertVariantNeutral {
+  background: var(--bg-subtle);
+  border-color: var(--border-subtle);
+}
+
+.alertVariantNeutral .alertPartIcon {
+  color: var(--fg-secondary);
+}
+
+.alertVariantOutline {
+  background: var(--bg-raised);
+  border-color: var(--border-default);
+  box-shadow: var(--elevation-control);
+}
+
+.alertVariantSolid {
+  border: 0;
+}
+
+.alertVariantSolid,
+.alertVariantSolid .alertPartText,
+.alertVariantSolid .alertPartIcon {
+  color: var(--on-color-fg);
+}
+
+.alertVariantSolid.alertVariantInfo {
+  background: var(--status-info-solid);
+}
+
+.alertVariantSolid.alertVariantSuccess {
+  background: var(--status-success-solid);
+}
+
+.alertVariantSolid.alertVariantWarning {
+  background: var(--status-warning-fg);
+}
+
+.alertVariantSolid.alertVariantDanger {
+  background: var(--status-danger-solid);
+}
+
+.alertVariantSolid.alertVariantBrand {
+  background: var(--action-primary);
+}
+
+.alertVariantSolid.alertVariantNeutral {
+  background: var(--status-neutral-solid);
+}
+
+.alertVariantSolid .alertPartText {
+  opacity: 0.88;
+}
+
+.alertPartTitle {
+  font-weight: var(--type-title-weight);
+}

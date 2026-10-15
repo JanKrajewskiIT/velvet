@@ -1,10 +1,13 @@
 import { Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { cx } from '../../utils/cx';
 import { reportAsyncError } from '../../utils/reportAsyncError';
+import { Text } from '../primitives/Text';
 import type { VideoControls } from './createVideoControls';
 import { PlayerButton } from './PlayerButton';
 import { fmtTime } from './time';
+import styles from './VideoControlsBar.module.css';
 
 const VOLUME_STEP = 0.05;
 const SEEK_STEP = 0.1;
@@ -19,10 +22,10 @@ export const VideoControlsBar = (props: VideoControlsBarProps) => {
   const translate = useTranslate();
 
   return (
-    <div class="vui-player__bar">
+    <div class={styles.playerPartBar}>
       <input
         type="range"
-        class="vui-player__range vui-player__seek"
+        class={cx(styles.playerPartRange, styles.playerPartSeek)}
         min={0}
         max={props.controls.state().duration}
         step={SEEK_STEP}
@@ -38,7 +41,7 @@ export const VideoControlsBar = (props: VideoControlsBarProps) => {
           '--b': `${percent(props.controls.buffered(), props.controls.state().duration)}%`,
         }}
       />
-      <div class="vui-player__row">
+      <div class={styles.playerPartRow}>
         <PlayerButton
           icon={props.controls.state().playing ? 'pause' : 'play'}
           label={translate(
@@ -47,10 +50,10 @@ export const VideoControlsBar = (props: VideoControlsBarProps) => {
           )}
           onClick={props.controls.toggle}
         />
-        <div class="vui-player__vol">
+        <div class={styles.playerPartVol}>
           <PlayerButton
             icon="volume"
-            class={props.controls.level() === 0 ? 'vui-player__btn--muted' : undefined}
+            class={props.controls.level() === 0 ? styles.playerPartBtnVariantMuted : undefined}
             label={translate(
               props.controls.muted() ? 'velvet.media.videoPlayer.unmuteKey' : 'velvet.media.videoPlayer.muteKey',
               { key: 'm' },
@@ -59,7 +62,7 @@ export const VideoControlsBar = (props: VideoControlsBarProps) => {
           />
           <input
             type="range"
-            class="vui-player__range vui-player__volume"
+            class={cx(styles.playerPartRange, styles.playerPartVolume)}
             min={0}
             max={1}
             step={VOLUME_STEP}
@@ -70,16 +73,19 @@ export const VideoControlsBar = (props: VideoControlsBarProps) => {
             style={{ '--p': `${props.controls.level() * 100}%` }}
           />
         </div>
-        <span class="vui-player__time">
+        <Text as="span" variant="caption" tone="inherit" tabular class={styles.playerPartTime}>
           {fmtTime(props.controls.state().time)}
-          <span> / {fmtTime(props.controls.state().duration)}</span>
-        </span>
-        <span class="vui-player__sp" />
+          <Text as="span" variant="caption" tone="inherit">
+            {' '}
+            / {fmtTime(props.controls.state().duration)}
+          </Text>
+        </Text>
+        <span class={styles.playerPartSp} />
         <Show when={props.controls.tracks().length > 0}>
           <PlayerButton
             label={translate('velvet.media.videoPlayer.captionsKey', { key: 'c' })}
             pressed={props.controls.captions()}
-            class="vui-player__btn--txt"
+            class={styles.playerPartBtnVariantTxt}
             onClick={props.controls.toggleCaptions}
           >
             CC
@@ -87,7 +93,7 @@ export const VideoControlsBar = (props: VideoControlsBarProps) => {
         </Show>
         <PlayerButton
           label={translate('velvet.media.player.speed', { rate: props.controls.speedLabel() })}
-          class="vui-player__btn--txt"
+          class={styles.playerPartBtnVariantTxt}
           onClick={props.controls.cycleRate}
         >
           {props.controls.speedLabel()}

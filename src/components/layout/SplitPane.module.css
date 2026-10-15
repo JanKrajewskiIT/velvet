@@ -1,0 +1,117 @@
+.split {
+  --split-handle: 9px;
+
+  display: grid;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.splitPartPane {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.splitPartPane > * {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.splitVariantCollapsed > .splitPartPane:first-child {
+  overflow: hidden;
+  visibility: hidden;
+}
+
+.splitPartHandle {
+  position: relative;
+  display: grid;
+  place-items: center;
+  outline: 0;
+  touch-action: none;
+  z-index: 1;
+}
+
+.splitPartHandle::before {
+  content: '';
+  position: absolute;
+  background: var(--border-subtle);
+  transition: background-color var(--motion-fast);
+}
+
+.splitVariantHorizontal > .splitPartHandle {
+  cursor: col-resize;
+}
+
+.splitVariantHorizontal > .splitPartHandle::before {
+  top: 0;
+  bottom: 0;
+  left: var(--space-1);
+  width: var(--border-width);
+}
+
+.splitVariantVertical > .splitPartHandle {
+  cursor: row-resize;
+}
+
+.splitVariantVertical > .splitPartHandle::before {
+  left: 0;
+  right: 0;
+  top: var(--space-1);
+  height: var(--border-width);
+}
+
+.splitPartGrip {
+  position: relative;
+  display: block;
+  border-radius: var(--radius-full);
+  background: var(--border-strong);
+  transition:
+    background-color var(--motion-fast),
+    transform var(--motion-spring);
+}
+
+.splitVariantHorizontal > .splitPartHandle > .splitPartGrip {
+  width: 5px;
+  height: var(--control-height-sm);
+}
+
+.splitVariantVertical > .splitPartHandle > .splitPartGrip {
+  width: var(--control-height-sm);
+  height: 5px;
+}
+
+.splitPartHandle:hover::before,
+.splitVariantDrag > .splitPartHandle::before,
+.splitPartHandle:focus-visible::before {
+  background: var(--border-focus);
+}
+
+.splitPartHandle:hover > .splitPartGrip,
+.splitVariantDrag > .splitPartHandle > .splitPartGrip,
+.splitPartHandle:focus-visible > .splitPartGrip {
+  background: var(--action-primary);
+  transform: scale(1.12);
+}
+
+.splitPartHandle:focus-visible > .splitPartGrip {
+  box-shadow: var(--focus-ring);
+}
+
+.splitVariantDrag {
+  user-select: none;
+  cursor: col-resize;
+}
+
+.splitVariantVertical.splitVariantDrag {
+  cursor: row-resize;
+}
+
+.splitVariantDrag .splitPartPane {
+  pointer-events: none;
+}

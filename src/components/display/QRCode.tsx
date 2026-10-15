@@ -3,7 +3,9 @@ import { children, createMemo, type JSX, mergeProps, Show } from 'solid-js';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { renderIcon } from '../primitives/Glyph';
+import { typographyClass } from '../primitives/typography';
 import { DEFAULT_QR_LEVEL, encodeQR, type QRLevel } from './encodeQR';
+import styles from './QRCode.module.css';
 
 const LOGO_LEVEL: QRLevel = 'H';
 const LOGO_SIZE_RATIO = 0.22;
@@ -53,7 +55,7 @@ export const QRCode = (props: QRCodeProps) => {
       when={modules()}
       fallback={
         <div
-          class={cx('vui-qr', 'vui-qr--error', merged.class)}
+          class={cx(typographyClass('caption'), styles.qr, styles.qrVariantError, merged.class)}
           style={box()}
           role="img"
           aria-label={translate('velvet.display.qrCode.unavailable')}
@@ -67,7 +69,7 @@ export const QRCode = (props: QRCodeProps) => {
         const path = createMemo(() => modulesPath(matrix(), merged.margin));
         return (
           <div
-            class={cx('vui-qr', merged.class)}
+            class={cx(styles.qr, merged.class)}
             style={box()}
             role="img"
             aria-label={merged.label ?? translate('velvet.display.qrCode.label', { value: merged.value })}
@@ -79,12 +81,12 @@ export const QRCode = (props: QRCodeProps) => {
               shape-rendering="crispEdges"
               aria-hidden="true"
             >
-              <rect width={viewBox()} height={viewBox()} class="vui-qr__bg" />
-              <path d={path()} class="vui-qr__fg" />
+              <rect width={viewBox()} height={viewBox()} class={styles.qrPartBg} />
+              <path d={path()} class={styles.qrPartFg} />
             </svg>
             <Show when={logo()}>
               <span
-                class="vui-qr__logo"
+                class={styles.qrPartLogo}
                 style={{
                   width: `${logoSize()}px`,
                   height: `${logoSize()}px`,

@@ -6,6 +6,9 @@ import { type HtmlProps, Polymorphic } from '../../utils/polymorphic';
 import { Chevron } from '../primitives/Chevron';
 import { Count } from '../primitives/Count';
 import { renderIcon } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './NavItem.module.css';
 import { useSidebar } from './sidebarContext';
 
 export interface NavSubItem {
@@ -91,30 +94,52 @@ export const NavItem = (props: NavItemProps) => {
         aria-expanded={hasSub() ? isOpen() : undefined}
         aria-label={tip()}
         data-tip={tip()}
+        data-collapsed={sidebar.collapsed()}
         class={cx(
-          'vui-nav-item',
-          (local.active || (sidebar.collapsed() && childActive())) && 'vui-nav-item--active',
-          local.count != null && 'vui-nav-item--has-count',
-          isOpen() && 'vui-nav-item--open',
+          typographyClass('label'),
+          styles.navItem,
+          (local.active || (sidebar.collapsed() && childActive())) && styles.navItemVariantActive,
+          local.count != null && styles.navItemVariantHasCount,
+          isOpen() && styles.navItemVariantOpen,
           local.class,
         )}
         onClick={onClick}
       >
         {renderIcon(local.icon)}
-        <span class="vui-nav-item__label">{text()}</span>
+        <Text
+          as="span"
+          variant="label"
+          tone="inherit"
+          data-collapsed={sidebar.collapsed()}
+          class={styles.navItemPartLabel}
+        >
+          {text()}
+        </Text>
         <Show when={local.count != null}>
-          <Count value={local.count} tone="neutral" showZero class="vui-nav-item__count" />
+          <Count
+            value={local.count}
+            tone="neutral"
+            showZero
+            data-collapsed={sidebar.collapsed()}
+            class={styles.navItemPartCount}
+          />
         </Show>
         <Show when={local.end}>
-          <span class="vui-nav-item__end">{local.end}</span>
+          <span data-collapsed={sidebar.collapsed()} class={styles.navItemPartEnd}>
+            {local.end}
+          </span>
         </Show>
         <Show when={hasSub()}>
-          <Chevron direction="right" class="vui-nav-item__caret" />
+          <Chevron direction="right" data-collapsed={sidebar.collapsed()} class={styles.navItemPartCaret} />
         </Show>
       </Polymorphic>
       <Show when={hasSub()}>
-        <div class={cx('vui-nav-sub', isOpen() && 'vui-nav-sub--open')} aria-hidden={!isOpen() || undefined}>
-          <div class="vui-nav-sub__inner">
+        <div
+          data-collapsed={sidebar.collapsed()}
+          class={cx(styles.navSub, isOpen() && styles.navSubVariantOpen)}
+          aria-hidden={!isOpen() || undefined}
+        >
+          <div class={styles.navSubPartInner}>
             <For each={subItems()}>
               {(item) => (
                 <Polymorphic
@@ -123,7 +148,7 @@ export const NavItem = (props: NavItemProps) => {
                   type={item.href ? undefined : 'button'}
                   tabIndex={isOpen() ? undefined : -1}
                   aria-current={item.active ? 'page' : undefined}
-                  class="vui-nav-sub__link"
+                  class={cx(styles.navSubPartLink, typographyClass('body-sm'))}
                   onClick={() => item.onClick?.()}
                 >
                   {item.label}

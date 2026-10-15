@@ -1,0 +1,93 @@
+.colorPartTrigger {
+  width: 100%;
+  gap: var(--space-2-5);
+  padding: 0 var(--space-2-5) 0 var(--space-1-5);
+  cursor: pointer;
+  font: inherit;
+  color: var(--fg-primary);
+  text-align: left;
+
+  --glyph-color: var(--fg-tertiary);
+}
+
+.colorPartValue {
+  flex: 1;
+}
+
+.colorPartTrigger:focus-visible {
+  outline: none;
+  border-color: var(--border-focus);
+  box-shadow: var(--focus-ring);
+}
+
+.colorPartPop {
+  padding: var(--space-3);
+  min-width: 0;
+}
+
+.cswatch {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.cswatchPartRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.cswatchPartGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.cswatchPartVal {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2-5) var(--space-3-5);
+  border: var(--border-width) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-raised);
+}
+
+.cswatchPartK {
+  color: var(--fg-tertiary);
+  text-transform: uppercase;
+}
+
+.cswatchPartHex {
+  color: var(--fg-primary);
+}
+
+.cswatchVariantDisabled {
+  opacity: var(--opacity-disabled);
+  pointer-events: none;
+}
+
+.swatch {
+  composes: swatch from '../../styles/shared/primitives/swatch.module.css';
+}
+
+.swatchVariantLg {
+  composes: swatchvariantlg from '../../styles/shared/primitives/swatch.module.css';
+}
+
+.field {
+  composes: field from '../../styles/shared/primitives/field.module.css';
+}
+
+.popoverWrap {
+  composes: popoverwrap from '../../styles/shared/feedback/popover.module.css';
+}
+
+.control {
+  composes: control from '../../styles/shared/primitives/control.module.css';
+}
+
+.popover {
+  composes: popover from '../../styles/shared/feedback/popover.module.css';
+}

@@ -5,8 +5,11 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
 import { Meter } from '../primitives/Meter';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import { VisuallyHidden } from '../primitives/VisuallyHidden';
 import { type TransferItem, type TransferRowState, type TransferSide } from './transferItem';
+import styles from './TransferList.module.css';
 import { TransferPanel } from './TransferPanel';
 
 export interface TransferListProps {
@@ -145,17 +148,17 @@ export const TransferList = (props: TransferListProps) => {
 
   return (
     <div
-      class={cx('vui-xfer', p.class)}
+      class={cx(styles.xfer, p.class)}
       role="group"
       aria-label={p.label ?? translate('velvet.forms.transferList.label')}
     >
       <Show when={hasDuplicates()}>
-        <div class="vui-xfer__err" role="alert">
+        <Text as="div" variant="body-sm" tone="inherit" class={styles.xferPartErr} role="alert">
           <Glyph name="alert-circle" />
           {translate('velvet.forms.transferList.duplicateValues')}
-        </div>
+        </Text>
       </Show>
-      <div class="vui-xfer__grid">
+      <div class={styles.xferPartGrid}>
         <TransferPanel
           side="left"
           items={left()}
@@ -177,7 +180,7 @@ export const TransferList = (props: TransferListProps) => {
           limitHit={isFull()}
           renderItem={p.renderItem}
         />
-        <div class="vui-xfer__ctrl" aria-hidden="true">
+        <div class={styles.xferPartCtrl} aria-hidden="true">
           <Glyph name="chevrons-right" />
         </div>
         <TransferPanel
@@ -205,14 +208,16 @@ export const TransferList = (props: TransferListProps) => {
       </div>
       <Show when={p.max}>
         {(max) => (
-          <div class={cx('vui-xfer__limit', isFull() && 'vui-xfer__limit--full')}>
+          <div
+            class={cx(typographyClass('caption'), styles.xferPartLimit, isFull() && styles.xferPartLimitVariantFull)}
+          >
             <Meter size="sm" tone={isFull() ? 'warning' : undefined} value={right().length} max={max()} />
-            <span>
+            <Text as="span" variant="caption" tone="inherit">
               {translate(
                 isFull() ? 'velvet.forms.transferList.limitReached' : 'velvet.forms.transferList.limitProgress',
                 { count: right().length, max: max() },
               )}
-            </span>
+            </Text>
           </div>
         )}
       </Show>

@@ -1,0 +1,15 @@
+:import('../../styles/shared/data/avatar.module.css') {
+  externalAvatar: avatar;
+}
+
+.avatarGroup :global(.externalAvatar) {
+  box-shadow: 0 0 0 var(--border-width-thick) var(--bg-raised);
+}
+
+.avatarGroup :global(.externalAvatar) + :global(.externalAvatar) {
+  margin-left: calc(-1 * var(--space-2));
+}
+
+.avatarGroup {
+  display: inline-flex;
+}

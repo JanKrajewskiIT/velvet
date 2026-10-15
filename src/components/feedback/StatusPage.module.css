@@ -1,0 +1,120 @@
+.statusPagePartTag {
+  --glyph-size: var(--type-body-sm-size);
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  height: var(--control-height-inner-sm);
+  padding: 0 var(--space-2-5) 0 var(--space-2);
+  border: var(--border-width) solid color-mix(in oklab, currentcolor 28%, transparent);
+  border-radius: var(--radius-full);
+  background: color-mix(in oklab, currentcolor 7%, var(--bg-raised));
+}
+
+.statusPage {
+  position: relative;
+  overflow: hidden;
+}
+
+.statusPageVariantHero {
+  gap: var(--space-3-5);
+}
+
+.statusPagePartHero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2-5);
+  color: var(--fg-brand);
+}
+
+.statusPageVariantHero.toneVariantWarning .statusPagePartHero {
+  color: var(--status-warning-fg);
+}
+
+.statusPageVariantHero.toneVariantDanger .statusPagePartHero {
+  color: var(--status-danger-fg);
+}
+
+.statusPageVariantHero.toneVariantInfo .statusPagePartHero {
+  color: var(--status-info-fg);
+}
+
+.statusPageVariantHero.toneVariantNeutral .statusPagePartHero {
+  color: var(--fg-secondary);
+}
+
+.statusPagePartTagsub {
+  padding-left: var(--space-1-5);
+  margin-left: var(--space-0-5);
+  border-left: var(--border-width) solid color-mix(in oklab, currentcolor 30%, transparent);
+  color: var(--fg-secondary);
+}
+
+.statusPagePartNum {
+  display: flex;
+  gap: 0.02em;
+  user-select: none;
+  font-size: clamp(72px, 14vw, 128px);
+  font-variant-numeric: tabular-nums;
+}
+
+.statusPagePartNum span {
+  display: inline-block;
+  color: var(--fg-primary);
+  animation: vui-sp-digit var(--motion-enter) backwards;
+  animation-delay: calc(var(--d) * var(--motion-stagger));
+}
+
+.statusPagePartNum span:nth-child(2) {
+  color: inherit;
+}
+
+.statusPageVariantHero .emptyPartText {
+  margin-top: 0;
+}
+
+.statusPageVariantMd,
+.statusPageVariantSm {
+  min-height: 0;
+}
+
+.empty {
+  composes: empty from '../../styles/shared/feedback/empty-state.module.css';
+}
+
+.toneVariantWarning {
+  composes: tonevariantwarning from '../../styles/shared/feedback/status-page.module.css';
+}
+
+.toneVariantDanger {
+  composes: tonevariantdanger from '../../styles/shared/feedback/status-page.module.css';
+}
+
+.toneVariantInfo {
+  composes: tonevariantinfo from '../../styles/shared/feedback/status-page.module.css';
+}
+
+.toneVariantNeutral {
+  composes: tonevariantneutral from '../../styles/shared/feedback/status-page.module.css';
+}
+
+.emptyPartText {
+  composes: emptyparttext from '../../styles/shared/feedback/empty-state.module.css';
+}
+
+.emptyPartTitle {
+  composes: emptyparttitle from '../../styles/shared/feedback/empty-state.module.css';
+}
+
+.emptyPartDesc {
+  composes: emptypartdesc from '../../styles/shared/feedback/empty-state.module.css';
+}
+
+.emptyPartActions {
+  composes: emptypartactions from '../../styles/shared/feedback/empty-state.module.css';
+}
+
+.statusPagePartExtra {
+  composes: statuspagepartextra from '../../styles/shared/feedback/status-page.module.css';
+}

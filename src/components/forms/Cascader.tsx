@@ -17,7 +17,11 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { Chevron } from '../primitives/Chevron';
 import { Control, type ControlProps } from '../primitives/Control';
+import { ControlInput } from '../primitives/ControlInput';
 import { Field } from '../primitives/Field';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './Cascader.module.css';
 import { type CascaderActivation, CascaderColumns } from './CascaderColumns';
 import { CascaderPath } from './CascaderPath';
 import { type CascaderNode, lastOf, pathTo } from './cascaderPaths';
@@ -147,17 +151,17 @@ export const Cascader = (props: CascaderProps) => {
   return (
     <Field label={p.label} hint={p.hint} error={p.error} optional={p.optional} required={p.required} id={p.id}>
       {(control) => (
-        <div ref={setRoot} class="vui-casc">
+        <div ref={setRoot} class={styles.casc}>
           <Control
             size={p.size}
             invalid={control.invalid || validation.invalid()}
             disabled={p.disabled}
-            class={cx(open() && 'vui-casc__control--open')}
+            class={cx(open() && styles.cascPartControlVariantOpen)}
           >
             <button
               id={control.id}
               type="button"
-              class="vui-casc__trigger vui-tselect__trigger"
+              class={cx('vui-casc__trigger', styles.tselectPartTrigger, typographyClass('body'))}
               role="combobox"
               disabled={p.disabled}
               aria-haspopup="dialog"
@@ -171,22 +175,26 @@ export const Cascader = (props: CascaderProps) => {
               <Show
                 when={pickedPath().length > 0}
                 fallback={
-                  <span class="vui-tselect__ph">{p.placeholder ?? translate('velvet.forms.cascader.placeholder')}</span>
+                  <Text as="span" variant="body" tone="inherit" class={styles.tselectPartPh}>
+                    {p.placeholder ?? translate('velvet.forms.cascader.placeholder')}
+                  </Text>
                 }
               >
                 <Show
                   when={p.displayLast}
                   fallback={
-                    <span class="vui-casc__path">
+                    <span class={styles.cascPartPath}>
                       <CascaderPath path={pickedPath()} separator={p.separator} markLeaf />
                     </span>
                   }
                 >
-                  <span class="vui-tselect__val">{lastOf(pickedPath())?.label}</span>
+                  <Text as="span" variant="body" tone="inherit" class={styles.tselectPartVal}>
+                    {lastOf(pickedPath())?.label}
+                  </Text>
                 </Show>
               </Show>
             </button>
-            <Chevron open={open()} class="vui-control__chevron vui-casc__chev" />
+            <Chevron open={open()} class={cx(styles.controlPartChevron, 'vui-casc__chev')} />
           </Control>
           <FormValue
             name={p.name}
@@ -215,18 +223,17 @@ export const Cascader = (props: CascaderProps) => {
               style={floating.style()}
               id={listId}
               tabIndex={-1}
-              class="vui-select__menu vui-casc__menu"
+              class={cx(styles.selectPartMenu, styles.cascPartMenu)}
               role="dialog"
               aria-label={typeof p.label === 'string' ? p.label : translate('velvet.forms.cascader.dialogLabel')}
               onKeyDown={onMenuKeyDown}
             >
               <Show when={p.searchable}>
-                <Control size="sm" class="vui-casc__search" iconLeft="search">
-                  <input
+                <Control size="sm" class={styles.cascPartSearch} iconLeft="search">
+                  <ControlInput
                     ref={(element) => {
                       search = element;
                     }}
-                    class="vui-control__input"
                     placeholder={translate('velvet.common.search')}
                     aria-label={translate('velvet.forms.cascader.searchLabel')}
                     value={finder.query()}

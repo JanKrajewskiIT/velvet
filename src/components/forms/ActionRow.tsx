@@ -1,6 +1,18 @@
 import { type JSX, mergeProps, Show } from 'solid-js';
 
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { typographyClass } from '../primitives/typography';
+import styles from './ActionRow.module.css';
+
+const ACTIONROW_CLASSES = {
+  end: styles.actionrowVariantEnd,
+  start: styles.actionrowVariantStart,
+  center: styles.actionrowVariantCenter,
+  between: styles.actionrowVariantBetween,
+  divider: styles.actionrowVariantDivider,
+  sticky: styles.actionrowVariantSticky,
+} as const;
 
 export interface ActionRowProps {
   /** @default 'end' */
@@ -20,17 +32,17 @@ export const ActionRow = (props: ActionRowProps) => {
   return (
     <div
       class={cx(
-        'vui-actionrow',
-        `vui-actionrow--${p.align}`,
-        p.sticky && 'vui-actionrow--sticky',
-        p.divider && 'vui-actionrow--divider',
+        styles.actionrow,
+        variantClass(ACTIONROW_CLASSES, p.align),
+        p.sticky && styles.actionrowVariantSticky,
+        p.divider && styles.actionrowVariantDivider,
         p.class,
       )}
     >
       <Show when={p.start}>
-        <div class="vui-actionrow__start">{p.start}</div>
+        <div class={cx(styles.actionrowPartStart, typographyClass('body-sm'))}>{p.start}</div>
       </Show>
-      <div class="vui-actionrow__main">{p.children}</div>
+      <div class={styles.actionrowPartMain}>{p.children}</div>
     </div>
   );
 };

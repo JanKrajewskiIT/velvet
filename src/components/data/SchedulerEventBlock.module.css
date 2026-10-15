@@ -1,0 +1,53 @@
+.schedPartEt {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.schedPartEm {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--fg-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.schedPartEvtVariantShort {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-1-5);
+  padding-block: 0;
+}
+
+.schedPartEvt {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-px);
+  padding: var(--space-1) var(--space-1-5);
+  overflow: hidden;
+  border: var(--border-width) solid color-mix(in oklab, var(--tone) 30%, transparent);
+  border-radius: var(--radius-sm);
+  background: color-mix(in oklab, var(--tone) 12%, var(--bg-raised));
+  color: var(--tone-fg, var(--fg-primary));
+  text-align: left;
+  font: inherit;
+  cursor: default;
+  transition: box-shadow var(--motion-fast);
+}
+
+button.schedPartEvt {
+  cursor: pointer;
+}
+
+button.schedPartEvt:hover {
+  box-shadow: var(--elevation-card-hover);
+  z-index: 2;
+}
+
+.schedPartEvt:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  z-index: 2;
+}

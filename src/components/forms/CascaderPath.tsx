@@ -1,6 +1,8 @@
 import { Index, type JSX, Show } from 'solid-js';
 
 import { Separator } from '../primitives/Separator';
+import { Text } from '../primitives/Text';
+import styles from './CascaderPath.module.css';
 import type { CascaderNode } from './cascaderPaths';
 
 export interface CascaderPathProps {
@@ -19,7 +21,7 @@ const highlight = (label: JSX.Element, query: string | undefined): JSX.Element =
   return (
     <>
       {label.slice(0, at)}
-      <mark class="vui-casc__mark">{label.slice(at, at + query.length)}</mark>
+      <mark class={styles.cascPartMark}>{label.slice(at, at + query.length)}</mark>
       {label.slice(at + query.length)}
     </>
   );
@@ -33,9 +35,9 @@ export const CascaderPath = (props: CascaderPathProps) => (
         <Show when={index > 0}>
           <Separator variant="text">{props.separator}</Separator>
         </Show>
-        <span class={props.markLeaf && index === props.path.length - 1 ? 'vui-casc__leaf' : undefined}>
+        <Text as="span" variant={props.markLeaf && index === props.path.length - 1 ? 'label' : 'body'} tone="inherit">
           {highlight(node().label, props.query)}
-        </span>
+        </Text>
       </>
     )}
   </Index>

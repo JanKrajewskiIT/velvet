@@ -1,0 +1,99 @@
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-3) var(--space-3) var(--space-4);
+  animation: var(--toast-animation, vui-pop var(--motion-enter));
+  position: relative;
+  overflow: hidden;
+  background: var(--panel-bg);
+  border: var(--border-width) solid var(--panel-border);
+  border-radius: var(--panel-radius);
+  box-shadow: var(--panel-shadow);
+  color: var(--fg-primary);
+}
+
+.toastPartIcon {
+  margin-top: var(--space-0-5);
+  font-size: var(--type-body-lg-size);
+}
+
+.toastVariantSuccess .toastPartIcon {
+  color: var(--status-success-fg);
+}
+
+.toastVariantWarning .toastPartIcon {
+  color: var(--status-warning-fg);
+}
+
+.toastVariantDanger .toastPartIcon {
+  color: var(--status-danger-fg);
+}
+
+.toastVariantInfo .toastPartIcon {
+  color: var(--status-info-fg);
+}
+
+.toastVariantBrand .toastPartIcon {
+  color: var(--fg-brand);
+}
+
+.toastPartContent {
+  flex: 1;
+  min-width: 0;
+  padding-top: var(--space-px);
+}
+
+.toastPartDesc {
+  margin-top: var(--space-0-5);
+}
+
+.toastPartAction {
+  margin-top: var(--space-2);
+  display: flex;
+  gap: var(--space-2);
+}
+
+.toastPartProgress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--border-width-thick);
+  background: currentcolor;
+  opacity: 0.35;
+  transform-origin: left;
+  animation: vui-countdown linear forwards;
+}
+
+.toastVariantBrand .toastPartProgress,
+.toastVariantNeutral .toastPartProgress {
+  color: var(--fg-brand);
+}
+
+.toastVariantSuccess .toastPartProgress {
+  color: var(--status-success-fg);
+}
+
+.toastVariantWarning .toastPartProgress {
+  color: var(--status-warning-fg);
+}
+
+.toastVariantDanger .toastPartProgress {
+  color: var(--status-danger-fg);
+}
+
+.toastVariantInfo .toastPartProgress {
+  color: var(--status-info-fg);
+}
+
+.toast:hover .toastPartProgress,
+.toast:focus-within .toastPartProgress {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toastPartProgress {
+    display: none;
+  }
+}

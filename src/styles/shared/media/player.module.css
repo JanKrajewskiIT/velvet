@@ -1,0 +1,18 @@
+.playerPartBtnVariantTxt {
+  --player-button-display: var(--player-text-display, grid);
+
+  min-width: 40px;
+}
+
+.playerPartBtnVariantMuted::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2px;
+  height: 20px;
+  margin: calc(-1 * var(--space-2-5)) 0 0 calc(-1 * var(--space-px));
+  border-radius: 1px;
+  background: currentcolor;
+  transform: rotate(-45deg);
+}

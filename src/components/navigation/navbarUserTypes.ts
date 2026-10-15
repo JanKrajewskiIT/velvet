@@ -7,7 +7,7 @@ export interface NavbarUserProps {
   name?: string;
   src?: string;
   items: MenuItem[];
-  /** Name hides under 960px. @default true */
+  /** Name hides under 1024px. @default true */
   showName?: boolean;
   /** @default localized "Account menu" */
   label?: string;

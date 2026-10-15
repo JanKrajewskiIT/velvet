@@ -3,11 +3,13 @@ import { createUniqueId, For, type JSX, Show } from 'solid-js';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { EmptyText } from '../primitives/EmptyText';
+import { typographyClass } from '../primitives/typography';
 import { createTransferDrag } from './createTransferDrag';
 import { createTransferSelection } from './createTransferSelection';
 import { createTransferView } from './createTransferView';
 import { SearchInput } from './SearchInput';
 import { type TransferItem, type TransferRowState, type TransferSide } from './transferItem';
+import styles from './TransferPanel.module.css';
 import { TransferPanelFooter } from './TransferPanelFooter';
 import { TransferPanelHeader } from './TransferPanelHeader';
 import { TransferRow } from './TransferRow';
@@ -61,8 +63,8 @@ export const TransferPanel = (props: TransferPanelProps) => {
   return (
     <section
       class={cx(
-        'vui-xfer__panel',
-        drag.drop() && 'vui-xfer__panel--drop',
+        styles.xferPartPanel,
+        drag.drop() && styles.xferPartPanelVariantDrop,
         props.limitHit && props.side === 'right' && 'vui-xfer__panel--full',
       )}
       aria-labelledby={titleId}
@@ -78,7 +80,7 @@ export const TransferPanel = (props: TransferPanelProps) => {
         onToggleAll={selection.toggleAll}
       />
       <Show when={props.searchable}>
-        <div class="vui-xfer__search">
+        <div class={styles.xferPartSearch}>
           <SearchInput
             size="sm"
             value={props.query}
@@ -102,7 +104,7 @@ export const TransferPanel = (props: TransferPanelProps) => {
         ref={(element) => {
           list = element;
         }}
-        class="vui-xfer__list"
+        class={styles.xferPartList}
         role="listbox"
         aria-multiselectable="true"
         aria-labelledby={titleId}
@@ -126,17 +128,21 @@ export const TransferPanel = (props: TransferPanelProps) => {
           )}
         </For>
         <Show when={view.visible().length === 0}>
-          <EmptyText as="li" role="presentation" class="vui-xfer__empty">
+          <EmptyText as="li" role="presentation" class={styles.xferPartEmpty}>
             <Show when={props.query} fallback={props.labels.empty}>
               {translate('velvet.forms.transferPanel.noMatchesFor', { query: props.query })}
-              <button type="button" class="vui-xfer__link" onClick={() => props.onQueryChange('')}>
+              <button
+                type="button"
+                class={cx(styles.xferPartLink, typographyClass('caption'))}
+                onClick={() => props.onQueryChange('')}
+              >
                 {translate('velvet.forms.transferPanel.clearSearch')}
               </button>
             </Show>
           </EmptyText>
         </Show>
         <Show when={drag.drop() === 'end' && view.visible().length > 0}>
-          <li role="presentation" class="vui-xfer__dropline" />
+          <li role="presentation" class={styles.xferPartDropline} />
         </Show>
       </ul>
       <TransferPanelFooter

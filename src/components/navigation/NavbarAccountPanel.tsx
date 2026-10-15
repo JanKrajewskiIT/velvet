@@ -4,8 +4,13 @@ import { createDismiss } from '../../hooks/createDismiss';
 import { createFloating } from '../../hooks/createFloating';
 import { createFrameFocus } from '../../hooks/createFrameFocus';
 import { useTranslate } from '../../i18n/useTranslate';
+import { classSelector } from '../../utils/cssModule';
+import { cx } from '../../utils/cx';
 import { Avatar } from '../data/Avatar';
 import { renderIcon } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './NavbarAccountPanel.module.css';
 import { NavbarAccountTheme } from './NavbarAccountTheme';
 import type { NavbarUserProps } from './navbarUserTypes';
 
@@ -35,14 +40,14 @@ export const NavbarAccountPanel = (props: NavbarAccountPanelProps) => {
   return (
     <div
       ref={setRoot}
-      class="vui-acct"
+      class={styles.acct}
       onFocusOut={(event) => {
         if (open() && !event.currentTarget.contains(event.relatedTarget as Node | null)) setOpen(false);
       }}
     >
       <button
         type="button"
-        class="vui-acct__trigger"
+        class={styles.acctPartTrigger}
         aria-haspopup="dialog"
         aria-expanded={open()}
         aria-controls={id}
@@ -54,12 +59,12 @@ export const NavbarAccountPanel = (props: NavbarAccountPanelProps) => {
           if (next)
             focus(
               items().some((item) => !item.disabled) || props.onThemeChange || props.onSignOut
-                ? '.vui-acct__panel button:not(:disabled):not([tabindex="-1"])'
-                : '.vui-acct__panel',
+                ? `${classSelector(styles.acctPartPanel)} button:not(:disabled):not([tabindex="-1"])`
+                : classSelector(styles.acctPartPanel),
             );
         }}
       >
-        <Avatar name={props.name} src={props.src} size="sm" />
+        <Avatar class={styles.triggerAvatar} name={props.name} src={props.src} size="sm" />
       </button>
       <Show when={open()}>
         <div
@@ -68,36 +73,46 @@ export const NavbarAccountPanel = (props: NavbarAccountPanelProps) => {
           role="dialog"
           tabIndex={-1}
           aria-label={props.label}
-          class="vui-acct__panel"
+          class={cx(styles.acctPartPanel, typographyClass('body'))}
           style={floating.style()}
         >
-          <div class="vui-acct__head">
-            <Avatar name={props.name} src={props.src} size="lg" />
-            <div class="vui-acct__id">
-              <span class="vui-acct__name">{props.name}</span>
+          <div class={styles.acctPartHead}>
+            <Avatar class={styles.headerAvatar} name={props.name} src={props.src} size="lg" />
+            <div class={styles.acctPartId}>
+              <Text as="span" variant="title" tone="inherit" class="vui-acct__name">
+                {props.name}
+              </Text>
               <Show when={props.email}>
-                <span class="vui-acct__email">{props.email}</span>
+                <Text as="span" variant="caption" tone="secondary" class={styles.acctPartEmail}>
+                  {props.email}
+                </Text>
               </Show>
               <Show when={props.meta}>
-                <span class="vui-acct__meta">{props.meta}</span>
+                <Text as="span" variant="label-sm" tone="brand" class={styles.acctPartMeta}>
+                  {props.meta}
+                </Text>
               </Show>
             </div>
           </div>
           <Show when={items().length}>
-            <ul class="vui-acct__list">
+            <ul class={styles.acctPartList}>
               <For each={items()}>
                 {(item) => (
                   <li>
                     <button
                       type="button"
-                      class="vui-acct__item"
+                      class={cx(styles.acctPartItem, typographyClass('body-sm'))}
                       disabled={item.disabled}
                       onClick={() => run(item.onSelect)}
                     >
                       {renderIcon(item.icon)}
-                      <span>{item.label}</span>
+                      <Text as="span" variant="body-sm" tone="inherit">
+                        {item.label}
+                      </Text>
                       <Show when={item.shortcut}>
-                        <span class="vui-acct__hint">{item.shortcut}</span>
+                        <Text as="span" variant="caption" tone="inherit" class={styles.acctPartHint}>
+                          {item.shortcut}
+                        </Text>
                       </Show>
                     </button>
                   </li>
@@ -109,10 +124,16 @@ export const NavbarAccountPanel = (props: NavbarAccountPanelProps) => {
             <NavbarAccountTheme value={props.theme} onChange={(value) => props.onThemeChange?.(value)} />
           </Show>
           <Show when={props.onSignOut}>
-            <div class="vui-acct__foot">
-              <button type="button" class="vui-acct__item" onClick={() => run(props.onSignOut)}>
+            <div class={styles.acctPartFoot}>
+              <button
+                type="button"
+                class={cx(styles.acctPartItem, typographyClass('body-sm'))}
+                onClick={() => run(props.onSignOut)}
+              >
                 {renderIcon('log-out')}
-                <span>{translate('velvet.actions.authButton.signOut')}</span>
+                <Text as="span" variant="body-sm" tone="inherit">
+                  {translate('velvet.actions.authButton.signOut')}
+                </Text>
               </button>
             </div>
           </Show>

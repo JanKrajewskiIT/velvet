@@ -1,0 +1,9 @@
+.rangepopPartFoot {
+  align-items: center;
+}
+
+.rangepopPartSum {
+  margin-right: auto;
+  color: var(--fg-secondary);
+  font-variant-numeric: tabular-nums;
+}

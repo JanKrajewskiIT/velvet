@@ -1,9 +1,29 @@
 import { createUniqueId, type JSX, mergeProps, splitProps } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import styles from './Loader.module.css';
 import { LOADER_BODIES, LOADER_CLASS_SUFFIX, type LoaderShape } from './loaderBodies';
+
+const LD_CLASSES = {
+  bike: styles.ldBike,
+  bounce: styles.ldBounce,
+  concentric: styles.ldConcentric,
+  corner: styles.ldCorner,
+  dualplane: styles.ldDualplane,
+  ellipsis: styles.ldEllipsis,
+  equalizer: styles.ldEqualizer,
+  honeycomb: styles.ldHoneycomb,
+  jelly: styles.ldJelly,
+  orbit: styles.ldOrbit,
+  pulsering: styles.ldPulsering,
+  ripple: styles.ldRipple,
+  trail: styles.ldTrail,
+  'trail--triangle': styles.ldTrailVariantTriangle,
+  shuffle: styles.ldShuffle,
+} as const;
 
 export type LoaderVariant = keyof typeof LOADER_CLASS_SUFFIX;
 
@@ -55,13 +75,14 @@ export const Loader = (props: LoaderProps) => {
   return (
     <div
       {...rest}
+      data-vui-loader={local.variant}
       role={local.decorative ? undefined : 'status'}
       aria-label={local.decorative ? undefined : (local.label ?? translate('velvet.common.loading'))}
       aria-hidden={local.decorative || undefined}
       class={cx(
-        'vui-ld',
-        `vui-ld-${LOADER_CLASS_SUFFIX[local.variant]}`,
-        local.variant === 'shape-trail' && local.shape === 'triangle' && 'vui-ld-trail--triangle',
+        styles.ld,
+        variantClass(LD_CLASSES, LOADER_CLASS_SUFFIX[local.variant]),
+        local.variant === 'shape-trail' && local.shape === 'triangle' && styles.ldTrailVariantTriangle,
         local.class,
       )}
       style={style()}

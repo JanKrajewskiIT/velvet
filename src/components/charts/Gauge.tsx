@@ -3,6 +3,9 @@ import { children, createUniqueId, For, type JSX, mergeProps, Show } from 'solid
 
 import { cx } from '../../utils/cx';
 import { clamp } from '../../utils/math';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
+import styles from './Gauge.module.css';
 
 const GAUGE_TONE = {
   brand: 'var(--action-primary)',
@@ -90,7 +93,7 @@ export const Gauge = (props: GaugeProps) => {
 
   return (
     <div
-      class={cx('vui-gauge', `vui-gauge--${merged.size}`, merged.class)}
+      class={cx(typographyClass('body'), styles.gauge, merged.class)}
       role="meter"
       aria-valuemin={merged.min}
       aria-valuemax={merged.max}
@@ -98,42 +101,56 @@ export const Gauge = (props: GaugeProps) => {
       aria-valuetext={format(value()) + (merged.unit ? ` ${merged.unit}` : '')}
       aria-labelledby={label() ? labelId : undefined}
     >
-      <div class="vui-gauge__dial" style={{ width: `${width()}px`, height: `${height()}px` }}>
+      <div class={styles.gaugePartDial} style={{ width: `${width()}px`, height: `${height()}px` }}>
         <svg width={width()} height={height()} viewBox={`0 0 ${width()} ${height()}`} aria-hidden="true">
-          <path d={arc()} class="vui-gauge__track" stroke-width={stroke()} />
+          <path d={arc()} class={styles.gaugePartTrack} stroke-width={stroke()} />
           <path
             d={arc()}
-            class="vui-gauge__fill"
+            class={styles.gaugePartFill}
             stroke-width={stroke()}
             pathLength="100"
             style={{ stroke: arcColor(), 'stroke-dasharray': `${(progress() * 100).toFixed(2)} 100` }}
           />
           <For each={notches()}>
             {(n) => (
-              <line x1={n.x1} y1={n.y1} x2={n.x2} y2={n.y2} class="vui-gauge__tick" style={{ stroke: n.color }} />
+              <line x1={n.x1} y1={n.y1} x2={n.x2} y2={n.y2} class={styles.gaugePartTick} style={{ stroke: n.color }} />
             )}
           </For>
         </svg>
-        <div class="vui-gauge__value">
-          <b>{format(value())}</b>
-          <Show when={merged.unit}>{(unit) => <span>{unit()}</span>}</Show>
+        <div class={styles.gaugePartValue}>
+          <Text as="b" variant={merged.size === 'sm' ? 'h4' : merged.size === 'lg' ? 'kpi' : 'h3'} tone="inherit">
+            {format(value())}
+          </Text>
+          <Show when={merged.unit}>
+            {(unit) => (
+              <Text as="span" variant="label" tone="inherit">
+                {unit()}
+              </Text>
+            )}
+          </Show>
         </div>
       </div>
       <Show when={merged.showBounds}>
-        <div class="vui-gauge__bounds" style={{ width: `${width()}px` }}>
-          <span>{format(merged.min)}</span>
-          <span>{format(merged.max)}</span>
+        <div class={cx(styles.gaugePartBounds, typographyClass('overline'))} style={{ width: `${width()}px` }}>
+          <Text as="span" variant="caption" tone="inherit">
+            {format(merged.min)}
+          </Text>
+          <Text as="span" variant="caption" tone="inherit">
+            {format(merged.max)}
+          </Text>
         </div>
       </Show>
       <Show when={label() || caption()}>
-        <div class="vui-gauge__text">
+        <div class={styles.gaugePartText}>
           <Show when={label()}>
-            <div id={labelId} class="vui-gauge__label">
+            <Text as="div" variant="label" tone="inherit" id={labelId} class={'vui-gauge__label'}>
               {label()}
-            </div>
+            </Text>
           </Show>
           <Show when={caption()}>
-            <div class="vui-gauge__caption">{caption()}</div>
+            <Text as="div" variant="caption" tone="tertiary" class="vui-gauge__caption">
+              {caption()}
+            </Text>
           </Show>
         </div>
       </Show>

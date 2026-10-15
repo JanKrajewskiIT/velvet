@@ -5,6 +5,8 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { Button } from '../actions/Button';
 import { Textarea } from '../forms/Textarea';
 import { Control } from '../primitives/Control';
+import { ControlInput } from '../primitives/ControlInput';
+import styles from './OrganizerEventForm.module.css';
 import type { EventDraft } from './organizerEvents';
 
 export interface OrganizerEventFormProps {
@@ -27,30 +29,27 @@ export const OrganizerEventForm = (props: OrganizerEventFormProps) => {
   );
 
   return (
-    <li ref={setRoot} class="vui-organizer__form" style={{ '--ec': props.color ?? 'var(--dv-1)' }}>
+    <li ref={setRoot} class={styles.organizerPartForm} style={{ '--ec': props.color ?? 'var(--dv-1)' }}>
       <Control size="sm">
-        <input
-          class="vui-control__input"
+        <ControlInput
           value={props.draft.title}
           onInput={(e) => props.onChange({ title: e.currentTarget.value })}
           onKeyDown={(e) => e.key === 'Enter' && props.onSave()}
           aria-label={translate('velvet.patterns.calendarOrganizer.titleLabel')}
         />
       </Control>
-      <div class="vui-organizer__addrow">
+      <div class={styles.organizerPartAddrow}>
         <Control size="sm">
-          <input
+          <ControlInput
             type="date"
-            class="vui-control__input"
             value={props.draft.date}
             onInput={(e) => props.onChange({ date: e.currentTarget.value })}
             aria-label={translate('velvet.common.date')}
           />
         </Control>
         <Control size="sm">
-          <input
+          <ControlInput
             type="date"
-            class="vui-control__input"
             value={props.draft.endDate}
             min={props.draft.date}
             onInput={(e) => props.onChange({ endDate: e.currentTarget.value })}
@@ -59,8 +58,7 @@ export const OrganizerEventForm = (props: OrganizerEventFormProps) => {
         </Control>
       </div>
       <Control size="sm" style={{ width: '6rem' }}>
-        <input
-          class="vui-control__input"
+        <ControlInput
           placeholder="09:30"
           value={props.draft.time}
           onInput={(e) => props.onChange({ time: e.currentTarget.value })}
@@ -74,7 +72,7 @@ export const OrganizerEventForm = (props: OrganizerEventFormProps) => {
         onInput={(e) => props.onChange({ description: e.currentTarget.value })}
         aria-label={translate('velvet.patterns.calendarOrganizer.descriptionLabel')}
       />
-      <div class="vui-organizer__addrow">
+      <div class={styles.organizerPartAddrow}>
         <Button variant="secondary" size="sm" onClick={() => props.onCancel()}>
           {translate('velvet.common.cancel')}
         </Button>

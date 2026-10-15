@@ -1,0 +1,63 @@
+:import('./glyph.module.css') {
+  externalIcon: icon;
+}
+
+.swatch :global(.externalIcon) {
+  --glyph-size: var(--size-icon-md);
+
+  filter: drop-shadow(0 1px 1px color-mix(in oklab, var(--black) 30%, transparent));
+}
+
+.swatch {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: var(--size-swatch);
+  height: var(--size-swatch);
+  padding: 0;
+  border: 0;
+  border-radius: var(--swatch-radius);
+  background: var(--swatch, var(--tone, var(--action-primary)));
+  box-shadow: var(--swatch-ring);
+  color: var(--on-color-fg);
+}
+
+.swatchVariantLg {
+  width: var(--space-10);
+  height: var(--space-10);
+  border-radius: var(--radius-md);
+}
+
+.swatchVariantFill {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+}
+
+button.swatch {
+  cursor: pointer;
+  transition:
+    transform var(--motion-spring),
+    box-shadow var(--motion-fast);
+}
+
+button.swatch:hover:not(:disabled) {
+  transform: scale(1.08);
+}
+
+button.swatch:disabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+
+.swatch:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.swatch[aria-selected='true'],
+.swatch[aria-checked='true'],
+.swatch[aria-pressed='true'] {
+  box-shadow: var(--swatch-selected-ring);
+}

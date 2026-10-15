@@ -1,6 +1,9 @@
 import { mergeProps } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { cx } from '../../utils/cx';
+import { typographyClass } from '../primitives/typography';
+import styles from './NavbarLocale.module.css';
 
 export interface NavbarLocaleProps {
   /** @default 'PL' */
@@ -17,7 +20,7 @@ export const NavbarLocale = (props: NavbarLocaleProps) => {
   return (
     <button
       type="button"
-      class="vui-navbar-mb__locale"
+      class={cx(styles.navbarMbPartLocale, typographyClass('label'))}
       aria-label={p.label ?? translate('velvet.navigation.navbarLocale.label')}
       onClick={() => p.onClick?.()}
     >

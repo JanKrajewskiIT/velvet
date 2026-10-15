@@ -2,8 +2,10 @@ import { For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { Text } from '../primitives/Text';
 import type { GanttFormat } from './createGanttFormat';
 import type { GanttTimeline } from './createGanttTimeline';
+import styles from './GanttHeader.module.css';
 
 export interface GanttHeaderProps {
   timeline: GanttTimeline;
@@ -13,35 +15,43 @@ export interface GanttHeaderProps {
 export const GanttHeader = (props: GanttHeaderProps) => {
   const translate = useTranslate();
   return (
-    <div class="vui-gantt__head">
-      <div class="vui-gantt__corner">{translate('velvet.charts.gantt.taskHeader')}</div>
-      <div class="vui-gantt__scale" style={{ width: `${props.timeline.canvasWidth()}px` }}>
-        <div class="vui-gantt__months">
+    <div class={styles.ganttPartHead} data-scale={props.timeline.scale()}>
+      <Text as="div" variant="section" tone="inherit" class={styles.ganttPartCorner}>
+        {translate('velvet.charts.gantt.taskHeader')}
+      </Text>
+      <div class={styles.ganttPartScale} style={{ width: `${props.timeline.canvasWidth()}px` }}>
+        <div class={styles.ganttPartMonths}>
           <For each={props.timeline.monthSpans()}>
             {(m, i) => (
-              <span
-                class="vui-gantt__month"
+              <Text
+                as="span"
+                variant="label"
+                tone="inherit"
+                class={styles.ganttPartMonth}
                 style={{ left: `${m.index * props.timeline.px()}px`, width: `${m.width}px` }}
               >
                 {props.format.monthLabel(m.date, i())}
-              </span>
+              </Text>
             )}
           </For>
         </div>
         <Show when={props.timeline.scale() !== 'month'}>
-          <div class="vui-gantt__units">
+          <div class={styles.ganttPartUnits}>
             <For each={props.timeline.units()}>
               {(u) => (
-                <span
+                <Text
+                  as="span"
+                  variant="overline"
+                  tone="inherit"
                   class={cx(
-                    'vui-gantt__unit',
-                    props.timeline.scale() === 'day' && u.weekend && 'vui-gantt__unit--we',
-                    props.timeline.scale() === 'day' && u.today && 'vui-gantt__unit--today',
+                    styles.ganttPartUnit,
+                    props.timeline.scale() === 'day' && u.weekend && styles.ganttPartUnitVariantWe,
+                    props.timeline.scale() === 'day' && u.today && styles.ganttPartUnitVariantToday,
                   )}
                   style={{ left: `${u.k * props.timeline.px()}px`, width: `${u.width}px` }}
                 >
                   {props.timeline.scale() === 'week' ? props.format.dateLabel(u.date) : u.date.getDate()}
-                </span>
+                </Text>
               )}
             </For>
           </div>

@@ -1,0 +1,23 @@
+:import('../../styles/shared/patterns/calendar-organizer.module.css') {
+  externalOrganizerPartAddrow: organizerpartaddrow;
+}
+
+.organizerPartForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1-5);
+  padding: var(--space-2);
+  border: var(--border-width) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-raised);
+  box-shadow: inset var(--border-width-accent) 0 0 var(--ec);
+}
+
+.organizerPartForm :global(.externalOrganizerPartAddrow) > * {
+  flex: 1;
+  min-width: 0;
+}
+
+.organizerPartAddrow {
+  composes: organizerpartaddrow from '../../styles/shared/patterns/calendar-organizer.module.css';
+}

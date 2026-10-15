@@ -1,0 +1,42 @@
+:import('../../styles/shared/navigation/tree-view.module.css') {
+  externalTreePartIcon: treeparticon;
+}
+
+.treePartRowVariantStatus {
+  cursor: default;
+  color: var(--fg-tertiary);
+  gap: var(--space-2);
+}
+
+.treePartRowVariantStatus:hover {
+  background: none;
+}
+
+.treePartRowVariantError {
+  color: var(--status-danger-fg);
+}
+
+.treePartRowVariantError :global(.externalTreePartIcon) {
+  color: inherit;
+}
+
+.treePartRetry {
+  margin-left: auto;
+  height: var(--control-height-xs);
+}
+
+.treePartRow {
+  composes: treepartrow from '../../styles/shared/navigation/tree-view.module.css';
+}
+
+.treePartCaret {
+  composes: treepartcaret from '../../styles/shared/navigation/tree-view.module.css';
+}
+
+.treePartLabel {
+  composes: treepartlabel from '../../styles/shared/navigation/tree-view.module.css';
+}
+
+.treePartIcon {
+  composes: treeparticon from '../../styles/shared/navigation/tree-view.module.css';
+}

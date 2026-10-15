@@ -1,7 +1,9 @@
 import { mergeProps, Show } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
+import { cx } from '../../utils/cx';
 import { createModalRoot } from './createModalRoot';
+import styles from './Dialog.module.css';
 import { DialogPanel } from './DialogPanel';
 import type { DialogProps } from './dialogTypes';
 
@@ -18,10 +20,15 @@ export const Dialog = (props: DialogProps) => {
       return p.restoreFocus;
     },
   });
+  const dialog = mergeProps(p, {
+    get class() {
+      return cx(styles.root, p.class);
+    },
+  });
   return (
     <Show when={p.open}>
       <Portal>
-        <DialogPanel dialog={p} ref={ref} />
+        <DialogPanel dialog={dialog} ref={ref} />
       </Portal>
     </Show>
   );

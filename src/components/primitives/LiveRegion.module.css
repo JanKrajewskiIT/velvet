@@ -1,0 +1,7 @@
+.live {
+  min-height: 1.5em;
+}
+
+.srOnly {
+  composes: sronly from '../../styles/shared/navigation/link.module.css';
+}

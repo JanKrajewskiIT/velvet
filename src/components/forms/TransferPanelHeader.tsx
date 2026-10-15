@@ -2,7 +2,10 @@ import { Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { Checkmark } from '../primitives/Checkmark';
+import { Heading } from '../primitives/Heading';
+import { Text } from '../primitives/Text';
 import type { TransferView } from './createTransferView';
+import styles from './TransferPanelHeader.module.css';
 
 export interface TransferPanelHeaderProps {
   titleId: string;
@@ -17,7 +20,7 @@ export const TransferPanelHeader = (props: TransferPanelHeaderProps) => {
   const translate = useTranslate();
 
   return (
-    <header class="vui-xfer__head">
+    <header class={styles.xferPartHead}>
       <Checkmark
         role="checkbox"
         tabIndex={0}
@@ -34,15 +37,18 @@ export const TransferPanelHeader = (props: TransferPanelHeaderProps) => {
           }
         }}
       />
-      <h3 id={props.titleId} class="vui-xfer__title">
+      <Heading level={3} variant="title" id={props.titleId} class={styles.xferPartTitle}>
         {props.title}
-      </h3>
-      <span class="vui-xfer__count">
+      </Heading>
+      <Text as="span" variant="kbd" tone="inherit" class={styles.xferPartCount}>
         <Show when={props.view.checked().length}>
-          <b>{props.view.checked().length}</b> /{' '}
+          <Text as="b" variant="label-sm" tone="inherit">
+            {props.view.checked().length}
+          </Text>{' '}
+          /{' '}
         </Show>
         {props.total}
-      </span>
+      </Text>
     </header>
   );
 };

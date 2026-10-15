@@ -1,0 +1,45 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--field-gap);
+  min-width: 0;
+}
+
+.hint {
+  color: var(--field-hint-fg);
+}
+
+.hintVariantError {
+  color: var(--field-error-fg);
+}
+
+.hintVariantLane {
+  min-height: var(--field-hint-lane);
+}
+
+.hintVariantError::before {
+  content: '';
+  display: inline-block;
+  width: var(--size-dot);
+  height: var(--size-dot);
+  margin: 0 var(--space-1-5) var(--space-px) 0;
+  border-radius: 50%;
+  background: currentcolor;
+}
+
+.fieldPartFoot {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.fieldPartCount {
+  margin-left: auto;
+  flex: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.fieldPartCountVariantMax {
+  color: var(--status-warning-fg);
+}

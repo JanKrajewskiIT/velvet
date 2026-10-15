@@ -1,0 +1,152 @@
+.surfaceVariantLow {
+  background: var(--surface-bg);
+  border: var(--border-width) solid var(--surface-border);
+  border-radius: var(--surface-radius);
+  box-shadow: var(--elevation-control);
+  color: var(--fg-primary);
+}
+
+.surfaceVariantOverlay {
+  background: var(--panel-bg);
+  border: var(--border-width) solid var(--panel-border);
+  border-radius: var(--panel-radius);
+  box-shadow: var(--panel-shadow);
+  color: var(--fg-primary);
+}
+
+.surfaceVariantDialog {
+  background: var(--dialog-bg);
+  border: var(--border-width) solid var(--panel-border);
+  border-radius: var(--dialog-radius);
+  box-shadow: var(--dialog-shadow);
+  color: var(--fg-primary);
+}
+
+.surfaceVariantPadSm {
+  padding: var(--surface-pad-sm);
+}
+
+.surfaceVariantPadMd {
+  padding: var(--surface-pad-md);
+}
+
+.surfaceVariantPadLg {
+  padding: var(--surface-pad-lg);
+}
+
+.surfaceVariantFlat {
+  box-shadow: var(--elevation-flat);
+  border-color: var(--border-default);
+}
+
+.surfaceVariantRaised {
+  box-shadow: var(--elevation-raised);
+  border-color: transparent;
+}
+
+.surfaceVariantSubtle {
+  background: var(--bg-subtle);
+  box-shadow: var(--elevation-flat);
+}
+
+.surfaceVariantSunken {
+  background: var(--bg-sunken);
+  box-shadow: var(--elevation-flat);
+  border-color: transparent;
+}
+
+.surfaceVariantBrand {
+  background: var(--bg-brand-subtle);
+  border-color: color-mix(in oklab, var(--border-brand) 24%, transparent);
+  box-shadow: var(--elevation-flat);
+}
+
+.surfaceVariantBrandSolid {
+  background: var(--action-primary);
+  border-color: transparent;
+  color: var(--on-color-fg);
+}
+
+.surfaceVariantInverse {
+  background: var(--bg-inverse);
+  border-color: transparent;
+  color: var(--fg-inverse);
+}
+
+.surfaceVariantGlass {
+  background: var(--bg-glass);
+  backdrop-filter: blur(var(--blur-md)) saturate(160%);
+}
+
+.surfaceVariantClip {
+  overflow: hidden;
+}
+
+.surfaceVariantHoverable {
+  transition:
+    box-shadow var(--motion-lift),
+    border-color var(--motion-lift),
+    transform var(--motion-lift);
+}
+
+.surfaceVariantHoverable:hover {
+  box-shadow: var(--surface-shadow-hover);
+  transform: translateY(var(--surface-lift));
+}
+
+.surfaceVariantHoverable.surfaceVariantTonal:hover {
+  border-color: color-mix(in oklab, var(--tone, var(--action-primary)) var(--surface-tonal-border-mix), transparent);
+  box-shadow: var(--surface-tonal-shadow);
+  transform: translateY(var(--surface-lift-tonal));
+}
+
+.surfaceVariantInteractive {
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  text-decoration: none;
+  appearance: none;
+}
+
+.surfaceVariantInteractive:focus-visible {
+  outline: none;
+  box-shadow: var(--surface-shadow), var(--focus-ring);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .surfaceVariantHoverable:hover {
+    transform: none;
+  }
+}
+
+.reveal {
+  animation: vui-reveal var(--motion-enter) backwards;
+  animation-delay: calc(var(--i, 0) * var(--motion-stagger));
+}
+
+.surfaceVariantAccent {
+  overflow: hidden;
+}
+
+.surfaceVariantAccent::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: var(--border-width-accent);
+  z-index: 2;
+  background: var(--tone, var(--action-primary));
+}
+
+.surfaceVariantSelected {
+  background: var(--bg-selected);
+  border-color: var(--border-brand);
+}
+
+.surface {
+  composes: surface from '../../styles/shared/primitives/surface.module.css';
+}
+
+.surfaceVariantTonal {
+  composes: tonal from '../../styles/shared/primitives/surface.module.css';
+}

@@ -1,0 +1,14 @@
+.chartPartTable {
+  max-height: 280px;
+  overflow: auto;
+  border: var(--border-width) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.table {
+  composes: table from '../../styles/shared/data/table.module.css';
+}
+
+.tablePartNum {
+  composes: tablepartnum from '../../styles/shared/data/table.module.css';
+}

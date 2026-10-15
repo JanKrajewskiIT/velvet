@@ -4,8 +4,10 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { Checkbox } from '../forms/Checkbox';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
 import { cellText, rowValue } from './rowData';
 import type { TableController } from './tableController';
+import styles from './TableRow.module.css';
 
 export interface TableRowProps<T extends object> {
   table: TableController<T>;
@@ -24,12 +26,12 @@ export const TableRow = <T extends object>(props: TableRowProps<T>) => {
         tabIndex={0}
         aria-selected={props.table.config.selectable ? on() : undefined}
         aria-expanded={props.table.config.renderExpanded ? open() : undefined}
-        class={cx(open() && 'vui-table__row--open')}
+        class={cx(styles.row, open() && styles.tablePartRowVariantOpen)}
         onKeyDown={(e) => props.table.onRowKey(e, key())}
       >
         <Show when={props.table.config.selectable}>
           <td
-            class={props.table.pins.checkPinned() ? 'vui-table__pin vui-table__pin--left' : undefined}
+            class={props.table.pins.checkPinned() ? cx(styles.tablePartPin, styles.tablePartPinVariantLeft) : undefined}
             style={props.table.pins.checkPinned() ? { position: 'sticky', left: '0' } : undefined}
           >
             <Checkbox
@@ -43,16 +45,22 @@ export const TableRow = <T extends object>(props: TableRowProps<T>) => {
         <For each={props.table.config.columns}>
           {(c) => (
             <td class={props.table.pins.cellClass(c)} style={props.table.pins.pinStyle(c.key)}>
-              {c.render ? c.render(props.row) : cellText(rowValue(props.row, c.key))}
+              {c.render ? (
+                c.render(props.row)
+              ) : (
+                <Text as="span" variant="body" tone="inherit">
+                  {cellText(rowValue(props.row, c.key))}
+                </Text>
+              )}
             </td>
           )}
         </For>
         <Show when={props.table.config.renderExpanded}>
-          <td class="vui-table__exp">
+          <td class={styles.tablePartExp}>
             <button
               type="button"
               tabIndex={-1}
-              class="vui-table__expbtn"
+              class={styles.tablePartExpbtn}
               aria-label={translate(open() ? 'velvet.data.table.collapseRow' : 'velvet.data.table.expandRow')}
               aria-expanded={open()}
               onClick={() => props.table.expansion.toggleExpanded(key())}
@@ -63,9 +71,9 @@ export const TableRow = <T extends object>(props: TableRowProps<T>) => {
         </Show>
       </tr>
       <Show when={open()}>
-        <tr class="vui-table__detail">
+        <tr class={cx(styles.row, styles.tablePartDetail)}>
           <td colSpan={props.table.span()}>
-            <div class="vui-table__detail-in">{props.table.config.renderExpanded?.(props.row)}</div>
+            <div class={styles.tablePartDetailIn}>{props.table.config.renderExpanded?.(props.row)}</div>
           </td>
         </tr>
       </Show>

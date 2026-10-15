@@ -1,0 +1,86 @@
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--fg-primary);
+}
+
+.table th {
+  text-align: left;
+  padding: var(--space-2-5) var(--cell-px);
+  border-bottom: var(--border-width) solid var(--table-border);
+  background: var(--table-header-bg);
+  color: var(--table-header-fg);
+  font: var(--type-label-sm);
+  white-space: nowrap;
+  position: relative;
+}
+
+.table td {
+  height: var(--table-row-height);
+  padding: var(--table-cell-padding, var(--cell-py) var(--cell-px));
+  border-bottom: var(--border-width) solid var(--table-border);
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.table tbody tr:hover {
+  background: var(--table-row-hover);
+}
+
+.table tbody tr[aria-selected='true'] {
+  background: var(--table-row-selected);
+}
+
+@media (width <= 767px) {
+  .table .hideSm {
+    display: none;
+  }
+}
+
+.table tbody tr:focus-visible {
+  outline: none;
+  box-shadow: inset var(--border-width-accent) 0 0 var(--border-focus);
+  background: var(--bg-hover);
+}
+
+.tablePartExp {
+  width: var(--control-height-lg);
+  text-align: center;
+}
+
+.tablePartPin {
+  z-index: 1;
+  background: var(--bg-raised);
+}
+
+.table thead .tablePartPin {
+  z-index: 3;
+  background: var(--table-header-bg);
+}
+
+.table tbody tr:hover .tablePartPin {
+  background: color-mix(in oklab, var(--wash) 3%, var(--bg-raised));
+}
+
+.table tbody tr[aria-selected='true'] .tablePartPin {
+  background: var(--table-row-selected);
+}
+
+.tablePartPinVariantEdge.tablePartPinVariantLeft {
+  box-shadow: inset calc(-1 * var(--border-width)) 0 0 var(--border-subtle);
+}
+
+.tablePartPinVariantEdge.tablePartPinVariantRight {
+  box-shadow: inset var(--border-width) 0 0 var(--border-subtle);
+}
+
+.tablePartNum {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+
+  --table-sort-justify: flex-end;
+}

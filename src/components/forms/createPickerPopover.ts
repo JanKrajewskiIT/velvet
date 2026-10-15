@@ -5,8 +5,8 @@ import { createFloating, type Floating } from '../../hooks/createFloating';
 import { createFrameFocus } from '../../hooks/createFrameFocus';
 import type { FloatingAlign } from '../../utils/floating';
 
-const FIELD_SELECTOR = '.vui-datefield';
-const FOCUSABLE_DAY = '.vui-cal__day[tabindex="0"]';
+const FIELD_SELECTOR = '[data-vui-date-field]';
+const FOCUSABLE_DAY = '[data-vui-calendar-day][tabindex="0"]';
 
 export interface PickerPopover {
   floating: Floating;

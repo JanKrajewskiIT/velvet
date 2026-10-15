@@ -1,7 +1,15 @@
 import { For, type JSX, mergeProps, Show, splitProps } from 'solid-js';
 
+import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { Text } from '../primitives/Text';
+import styles from './DescriptionList.module.css';
+
+const DL_CLASSES = {
+  row: styles.dlVariantRow,
+  grid: styles.dlVariantGrid,
+} as const;
 
 export interface DescriptionItem {
   term: JSX.Element;
@@ -28,19 +36,42 @@ export const DescriptionList = (props: DescriptionListProps) => {
   const style = (): JSX.CSSProperties | undefined =>
     local.layout === 'grid' ? { '--dl-cols': local.columns, ...local.style } : local.style;
   return (
-    <dl {...rest} class={cx('vui-dl', `vui-dl--${local.layout}`, local.class)} style={style()}>
+    <dl {...rest} class={cx(styles.dl, variantClass(DL_CLASSES, local.layout), local.class)} style={style()}>
       <For each={local.items}>
         {(item) => (
-          <div class="vui-dl__row" style={item.span ? { 'grid-column': `span ${item.span}` } : undefined}>
-            <dt class="vui-dl__term">
+          <div class={styles.dlPartRow} style={item.span ? { 'grid-column': `span ${item.span}` } : undefined}>
+            <Text
+              as="dt"
+              variant={local.layout === 'grid' ? 'section' : 'body-sm'}
+              tone="secondary"
+              class={styles.dlPartTerm}
+            >
               {item.term}
-              <Show when={item.hint}>{(hint) => <span class="vui-dl__hint">{hint()}</span>}</Show>
-            </dt>
-            <dd class={cx('vui-dl__desc', item.mono && 'vui-dl__desc--mono')}>
-              <Show when={item.description ?? undefined} fallback={<span class="vui-dl__empty">—</span>}>
+              <Show when={item.hint}>
+                {(hint) => (
+                  <Text as="span" variant="caption" tone="tertiary" class={styles.dlPartHint}>
+                    {hint()}
+                  </Text>
+                )}
+              </Show>
+            </Text>
+            <Text
+              as="dd"
+              variant="body-sm"
+              tone="primary"
+              class={cx(styles.dlPartDesc, item.mono && 'vui-dl__desc--mono')}
+            >
+              <Show
+                when={item.description ?? undefined}
+                fallback={
+                  <Text as="span" variant="body-sm" tone="inherit" class={styles.dlPartEmpty}>
+                    —
+                  </Text>
+                }
+              >
                 {(description) => description()}
               </Show>
-            </dd>
+            </Text>
           </div>
         )}
       </For>

@@ -1,9 +1,13 @@
 import { createEffect, createSignal, For, on, Show, untrack } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { cx } from '../../utils/cx';
 import { clamp } from '../../utils/math';
 import { Control } from '../primitives/Control';
+import { ControlInput } from '../primitives/ControlInput';
+import { Text } from '../primitives/Text';
 import { hexToHsv, type Hsv, hsvToHex } from './colorMath';
+import styles from './ColorPanel.module.css';
 
 export interface ColorPanelProps {
   hex: string;
@@ -98,12 +102,12 @@ export const ColorPanel = (props: ColorPanelProps) => {
   };
 
   return (
-    <div class="vui-color">
+    <div class={styles.color}>
       <div
         ref={(element) => {
           area = element;
         }}
-        class="vui-color__area"
+        class={styles.colorPartArea}
         style={{ background: `hsl(${hsv().h} 100% 50%)` }}
         onPointerDown={(e) => startDrag(e, dragArea)}
         onPointerMove={(e) => e.buttons && dragArea(e)}
@@ -119,7 +123,7 @@ export const ColorPanel = (props: ColorPanelProps) => {
             saturation: Math.round(hsv().s * 100),
             brightness: Math.round(hsv().v * 100),
           })}
-          class="vui-color__thumb"
+          class={styles.colorPartThumb}
           style={{ left: `${hsv().s * 100}%`, top: `${(1 - hsv().v) * 100}%`, background: hsvToHex(hsv()) }}
           onKeyDown={onAreaKey}
         />
@@ -128,7 +132,7 @@ export const ColorPanel = (props: ColorPanelProps) => {
         ref={(element) => {
           hue = element;
         }}
-        class="vui-color__hue"
+        class={styles.colorPartHue}
         onPointerDown={(e) => startDrag(e, dragHue)}
         onPointerMove={(e) => e.buttons && dragHue(e)}
       >
@@ -139,17 +143,20 @@ export const ColorPanel = (props: ColorPanelProps) => {
           aria-valuemin={0}
           aria-valuemax={360}
           aria-valuenow={Math.round(hsv().h)}
-          class="vui-color__hthumb"
+          class={styles.colorPartHthumb}
           style={{ left: `${(hsv().h / 360) * 100}%`, background: `hsl(${hsv().h} 100% 50%)` }}
           onKeyDown={onHueKey}
         />
       </div>
-      <div class="vui-color__row">
-        <span class="vui-color__preview" style={{ background: props.hex }} />
+      <div class={styles.colorPartRow}>
+        <span class={styles.colorPartPreview} style={{ background: props.hex }} />
         <Control size="sm" style={{ flex: 1 }}>
-          <span class="vui-control__affix">#</span>
-          <input
-            class="vui-control__input vui-color__hex"
+          <Text as="span" variant="body" tone="inherit" class={styles.controlPartAffix}>
+            #
+          </Text>
+          <ControlInput
+            textVariant={'code'}
+            class={styles.colorPartHex}
             aria-label={translate('velvet.forms.colorPanel.hexLabel')}
             value={(typed() ?? props.hex).replace('#', '')}
             maxLength={6}
@@ -160,7 +167,11 @@ export const ColorPanel = (props: ColorPanelProps) => {
         </Control>
       </div>
       <Show when={props.swatches.length > 0}>
-        <div class="vui-color__swatches" role="listbox" aria-label={translate('velvet.forms.colorPanel.presetsLabel')}>
+        <div
+          class={styles.colorPartSwatches}
+          role="listbox"
+          aria-label={translate('velvet.forms.colorPanel.presetsLabel')}
+        >
           <For each={props.swatches}>
             {(swatch) => (
               <button
@@ -168,7 +179,7 @@ export const ColorPanel = (props: ColorPanelProps) => {
                 role="option"
                 aria-selected={swatch.toLowerCase() === props.hex.toLowerCase()}
                 aria-label={swatch}
-                class="vui-swatch vui-swatch--fill"
+                class={cx(styles.swatch, styles.swatchVariantFill)}
                 style={{ '--swatch': swatch }}
                 onClick={() => pickSwatch(swatch)}
               />

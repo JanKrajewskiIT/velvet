@@ -1,8 +1,10 @@
 import { useTranslate } from '../../i18n/useTranslate';
 import { Button } from '../actions/Button';
 import { IconButton } from '../actions/IconButton';
+import { Text } from '../primitives/Text';
 import type { OrganizerCalendar } from './createOrganizerCalendar';
 import { countInMonth, type OrganizerEvent } from './organizerEvents';
+import styles from './OrganizerHead.module.css';
 
 export interface OrganizerHeadProps {
   calendar: OrganizerCalendar;
@@ -13,16 +15,18 @@ export interface OrganizerHeadProps {
 export const OrganizerHead = (props: OrganizerHeadProps) => {
   const translate = useTranslate();
   return (
-    <div class="vui-organizer__head">
+    <div class={styles.organizerPartHead}>
       <div>
-        <div class="vui-organizer__month">{props.calendar.monthLabel()}</div>
-        <div class="vui-organizer__sub">
+        <Text as="div" variant="h4" class="vui-organizer__month">
+          {props.calendar.monthLabel()}
+        </Text>
+        <Text as="div" variant="caption" tone="tertiary" class={styles.organizerPartSub}>
           {translate('velvet.patterns.calendarOrganizer.monthEvents', {
             count: countInMonth(props.events, props.calendar.view()),
           })}
-        </div>
+        </Text>
       </div>
-      <div class="vui-organizer__nav">
+      <div class={styles.organizerPartNav}>
         <Button variant="secondary" size="sm" onClick={props.calendar.goToday}>
           {translate('velvet.common.today')}
         </Button>

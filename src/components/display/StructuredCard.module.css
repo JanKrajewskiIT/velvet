@@ -1,0 +1,99 @@
+.scardPartMedia {
+  position: relative;
+  overflow: hidden;
+  background: var(--media-bg);
+}
+
+.scardPartMedia > img,
+.scardPartMedia > video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.scardPartScrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 38%, var(--scrim-image));
+  pointer-events: none;
+}
+
+.scardPartTag {
+  position: absolute;
+  left: var(--space-3);
+  top: var(--space-3);
+  z-index: 1;
+  display: flex;
+}
+
+.scardPartMmeta {
+  position: absolute;
+  right: var(--space-3);
+  bottom: var(--space-3);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--on-color-fg);
+  text-shadow: 0 1px 3px var(--scrim-image);
+}
+
+.scardPartHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  border-bottom: var(--border-width) solid var(--surface-border);
+}
+
+.scardPartHeader:last-child {
+  border-bottom: 0;
+}
+
+.scardPartHeading {
+  min-width: 0;
+}
+
+.scardPartBadge {
+  flex: none;
+  display: flex;
+  gap: var(--space-1);
+}
+
+.scardPartMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-top: var(--space-0-5);
+}
+
+.scardPartBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-5);
+  flex: 1;
+  text-wrap: pretty;
+}
+
+.scardPartFooter {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  border-top: var(--border-width) solid var(--surface-border);
+}
+
+.scardPartFooterVariantBetween {
+  justify-content: space-between;
+}
+
+.scardPartFooterVariantEnd {
+  justify-content: flex-end;
+}
+
+.scardPartFooterVariantStart {
+  justify-content: flex-start;
+}

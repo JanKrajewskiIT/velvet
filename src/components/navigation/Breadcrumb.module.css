@@ -1,0 +1,69 @@
+.crumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.crumbsPartItem {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.crumbsPartLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  height: var(--control-height-inner);
+  padding: 0 var(--space-1-5);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--fg-secondary);
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.crumbsPartLink:hover {
+  background: var(--bg-hover);
+  color: var(--fg-primary);
+}
+
+.crumbsPartLink:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.crumbsPartCurrent {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  padding: 0 var(--space-1-5);
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--fg-primary);
+}
+
+.crumbsPartSep {
+  font-size: var(--type-body-sm-size);
+  color: var(--fg-disabled);
+}
+
+.crumbsPartMore {
+  width: var(--control-height-inner);
+  justify-content: center;
+  padding: 0;
+}
+
+.crumbsPartLink,
+.crumbsPartCurrent {
+  --glyph-size: var(--size-icon-md);
+}

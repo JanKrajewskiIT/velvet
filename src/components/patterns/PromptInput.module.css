@@ -1,0 +1,187 @@
+:import('../../styles/shared/primitives/glyph.module.css') {
+  externalIcon: icon;
+}
+
+.prompt {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.promptPartSugs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1-5);
+}
+
+.promptPartSug {
+  height: var(--control-height-sm);
+  padding: 0 var(--space-3);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-full);
+  background: var(--bg-raised);
+  color: var(--fg-secondary);
+  cursor: pointer;
+  transition:
+    background-color var(--motion-fast),
+    color var(--motion-fast),
+    border-color var(--motion-fast);
+}
+
+.promptPartSug:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-strong);
+  color: var(--fg-primary);
+}
+
+.promptPartSug:focus-visible {
+  outline: 0;
+  box-shadow: var(--focus-ring);
+}
+
+.promptPartBox {
+  display: flex;
+  flex-direction: column;
+  border: var(--border-width) solid var(--control-border);
+  border-radius: var(--radius-xl);
+  background: var(--control-bg);
+  box-shadow: var(--control-shadow);
+  cursor: text;
+  transition:
+    border-color var(--motion-fast),
+    box-shadow var(--motion-fast);
+}
+
+.promptPartBox:hover {
+  border-color: var(--control-border-hover);
+}
+
+.promptPartBox:focus-within {
+  border-color: var(--control-border-focus);
+  box-shadow: var(--focus-ring);
+}
+
+.promptVariantDisabled {
+  opacity: var(--opacity-disabled);
+  pointer-events: none;
+}
+
+.promptPartInput {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  padding: var(--space-3) var(--space-4) var(--space-1);
+  border: 0;
+  background: none;
+  resize: none;
+  outline: 0;
+  color: var(--fg-primary);
+}
+
+.promptPartInput::placeholder {
+  color: var(--control-placeholder);
+}
+
+.promptPartFiles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1-5);
+  padding: var(--space-2-5) var(--space-2-5) 0;
+}
+
+.promptPartFile {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  max-width: 240px;
+  height: 32px;
+  padding: 0 var(--space-1) 0 var(--space-2-5);
+  border: var(--border-width) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-subtle);
+  cursor: default;
+}
+
+.promptPartFile > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.promptPartFile small {
+  flex: none;
+  color: var(--fg-tertiary);
+}
+
+.promptPartFx {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--fg-tertiary);
+  cursor: pointer;
+}
+
+.promptPartFx:hover {
+  background: var(--bg-hover);
+  color: var(--fg-primary);
+}
+
+.promptPartFx:focus-visible {
+  outline: 0;
+  box-shadow: var(--focus-ring);
+}
+
+.promptPartBar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1-5) var(--space-2) var(--space-2);
+}
+
+.promptPartHint {
+  margin-left: auto;
+  margin-right: var(--space-2);
+  white-space: nowrap;
+  color: var(--fg-tertiary);
+}
+
+@media (width <= 639px) {
+  .promptPartHint {
+    display: none;
+  }
+
+  .promptPartBar > :last-child {
+    margin-left: auto;
+  }
+}
+
+.promptPartFile > :global(.externalIcon) {
+  flex: none;
+  color: var(--fg-secondary);
+}
+
+.loader {
+  composes: loader from '../../styles/shared/feedback/spinner.module.css';
+}
+
+.loaderVariantRing {
+  composes: loadervariantring from '../../styles/shared/feedback/spinner.module.css';
+}
+
+.loaderVariantSm {
+  composes: loadervariantsm from '../../styles/shared/feedback/spinner.module.css';
+}
+
+.hint {
+  composes: hint from '../../styles/shared/primitives/field.module.css';
+}
+
+.hintVariantError {
+  composes: hintvarianterror from '../../styles/shared/primitives/field.module.css';
+}

@@ -1,3 +1,6 @@
+import { cx } from '../../utils/cx';
+import styles from './renderMarkdown.module.css';
+
 // Markdown to HTML with a closed output vocabulary: every source character is HTML-escaped first, the renderer
 // only ever emits the tags below, and link/image URLs must match an allow-list of schemes. Raw HTML in the source
 // therefore never reaches the DOM, which makes the result safe to assign to innerHTML.
@@ -194,9 +197,9 @@ const renderListItem = (text: string, nested: string[], context: Context, depth:
   const blocks = parseBlocks(nested, context, depth + 1);
   if (!task) return `<li>${body}${blocks}</li>`;
   const done = task[1] !== ' ';
-  const check = `<span class="vui-prose__check${done ? ' vui-prose__check--on' : ''}" aria-hidden="true"></span>`;
-  const label = `<span${done ? ' class="vui-prose__done"' : ''}>${body}</span>`;
-  return `<li class="vui-prose__task"><span class="vui-prose__row">${check}${label}</span>${blocks}</li>`;
+  const check = `<span class="${cx(styles.prosePartCheck, done && styles.prosePartCheckVariantOn)}" aria-hidden="true"></span>`;
+  const label = `<span${done ? ` class="${styles.prosePartDone}"` : ''}>${body}</span>`;
+  return `<li class="${styles.prosePartTask}"><span class="${styles.prosePartRow}">${check}${label}</span>${blocks}</li>`;
 };
 
 /** Removes the indentation shared by all non-blank lines. */
@@ -300,7 +303,7 @@ const parseBlocks = (lines: string[], context: Context, depth: number): string =
       while (i < lines.length && TABLE_ROW.test(lines[i] ?? '')) rows.push(tableCells(lines[i++] ?? ''));
       const body = rows.map((cells) => renderTableRow('td', cells, alignments, context)).join('');
       out.push(
-        `<div class="vui-prose__table"><table><thead>${renderTableRow('th', head, alignments, context)}</thead><tbody>${body}</tbody></table></div>`,
+        `<div class="${styles.prosePartTable}"><table><thead>${renderTableRow('th', head, alignments, context)}</thead><tbody>${body}</tbody></table></div>`,
       );
       continue;
     }

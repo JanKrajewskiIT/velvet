@@ -1,0 +1,16 @@
+.tourPartCard {
+  position: absolute;
+  width: var(--overlay-w-sm);
+  max-width: calc(100vw - var(--viewport-margin));
+  padding: var(--space-3-5) var(--space-4);
+  outline: 0;
+  transition:
+    left var(--motion-enter),
+    top var(--motion-enter);
+  animation: vui-select-in var(--motion-move);
+  background: var(--panel-bg);
+  border: var(--border-width) solid var(--panel-border);
+  border-radius: var(--panel-radius);
+  box-shadow: var(--panel-shadow);
+  color: var(--fg-primary);
+}

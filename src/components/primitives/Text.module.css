@@ -1,0 +1,50 @@
+.text {
+  composes: text from '../../styles/shared/primitives/text.module.css';
+}
+
+.textVariantPrimary {
+  color: var(--fg-primary);
+}
+
+.textVariantSecondary {
+  color: var(--fg-secondary);
+}
+
+.textVariantTertiary {
+  color: var(--fg-tertiary);
+}
+
+.textVariantBrand {
+  color: var(--fg-brand);
+}
+
+.textVariantDanger {
+  color: var(--status-danger-fg);
+}
+
+.textVariantSuccess {
+  color: var(--status-success-fg);
+}
+
+.textVariantWarning {
+  color: var(--status-warning-fg);
+}
+
+.textVariantInherit {
+  color: inherit;
+}
+
+.textVariantTruncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.textVariantTabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.textVariantMono {
+  font-family: var(--font-mono);
+}

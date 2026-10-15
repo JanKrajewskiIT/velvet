@@ -2,6 +2,7 @@ import { createSignal, type JSX, mergeProps, onCleanup, onMount, Show } from 'so
 
 import { cx } from '../../utils/cx';
 import { nonNegativeNumber, positiveNumber } from '../../utils/numericOption';
+import styles from './Marquee.module.css';
 import { MarqueeCopy } from './MarqueeCopy';
 import { MarqueePresentation } from './MarqueePresentation';
 
@@ -65,12 +66,17 @@ export const Marquee = (props: MarqueeProps) => {
 
   return (
     <div
-      class={cx('vui-marquee', p.pauseOnHover && 'vui-marquee--pause', p.fade && 'vui-marquee--fade', p.class)}
+      class={cx(
+        styles.marquee,
+        p.pauseOnHover && styles.marqueeVariantPause,
+        p.fade && styles.marqueeVariantFade,
+        p.class,
+      )}
       role="region"
       aria-label={p.label}
     >
       <div
-        class="vui-marquee__track"
+        class={styles.marqueePartTrack}
         style={{
           'animation-duration': `${duration()}s`,
           'animation-direction': p.direction === 'right' ? 'reverse' : 'normal',
@@ -81,7 +87,7 @@ export const Marquee = (props: MarqueeProps) => {
           ref={(element) => {
             group = element;
           }}
-          class="vui-marquee__group"
+          class={styles.marqueePartGroup}
           style={{ gap: `${gap()}px` }}
         >
           {p.children}

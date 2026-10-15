@@ -1,9 +1,19 @@
 import { type JSX, mergeProps, Show, splitProps } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
-import { cx, modifier } from '../../utils/cx';
+import { variantClass } from '../../utils/cssModule';
+import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
+import { typographyClass } from '../primitives/typography';
+import styles from './ToggleButton.module.css';
 import { type ToggleSize, useToggleGroup } from './ToggleGroup';
+
+const TOGGLE_CLASSES = {
+  neutral: styles.toggleVariantNeutral,
+  sm: styles.toggleVariantSm,
+  lg: styles.toggleVariantLg,
+  icon: styles.toggleVariantIcon,
+} as const;
 
 /** Icons whose `-filled` twin replaces them while pressed. */
 const FILLED_TWINS: readonly string[] = [
@@ -74,10 +84,11 @@ export const ToggleButton = (props: ToggleButtonProps) => {
       title={iconOnly() ? local.label : undefined}
       disabled={local.disabled || group?.disabled()}
       class={cx(
-        'vui-toggle',
-        modifier('vui-toggle', size(), 'md'),
-        iconOnly() && 'vui-toggle--icon',
-        modifier('vui-toggle', local.tone, 'brand'),
+        typographyClass(size() === 'sm' ? 'button-sm' : 'button'),
+        styles.toggle,
+        variantClass(TOGGLE_CLASSES, size(), 'md'),
+        iconOnly() && styles.toggleVariantIcon,
+        variantClass(TOGGLE_CLASSES, local.tone, 'brand'),
         local.class,
       )}
       onClick={flip}

@@ -1,0 +1,26 @@
+.comboboxPartMenu {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.comboboxPartList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.selectPartMenu {
+  composes: selectpartmenu from '../../styles/shared/forms/select.module.css';
+}
+
+.selectPartMenuVariantUp {
+  composes: selectpartmenuvariantup from '../../styles/shared/forms/select.module.css';
+}
+
+.selectPartCheck {
+  composes: selectpartcheck from '../../styles/shared/forms/select.module.css';
+}

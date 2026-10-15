@@ -1,0 +1,40 @@
+:import('../../styles/shared/primitives/glyph.module.css') {
+  externalIcon: icon;
+}
+
+.copyPartIcons {
+  position: relative;
+  display: inline-grid;
+  width: 1.15em;
+  height: 1.15em;
+}
+
+.copyPartB {
+  opacity: 0;
+  transform: scale(0.4) rotate(-30deg);
+}
+
+.copyVariantDone .copyPartA {
+  opacity: 0;
+  transform: scale(0.4);
+}
+
+.copyVariantDone .copyPartB {
+  opacity: 1;
+  transform: none;
+  color: var(--status-success-fg);
+}
+
+.copyPartIcons :global(.externalIcon) {
+  grid-area: 1/1;
+
+  --glyph-size: 1em;
+
+  transition:
+    opacity var(--motion-fast),
+    transform var(--motion-spring);
+}
+
+.srOnly {
+  composes: sronly from '../../styles/shared/navigation/link.module.css';
+}

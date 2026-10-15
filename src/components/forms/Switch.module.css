@@ -1,0 +1,94 @@
+.switch:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.switch {
+  appearance: none;
+  margin: 0;
+  flex: none;
+  position: relative;
+  width: var(--switch-w);
+  height: var(--switch-h);
+  border-radius: var(--radius-full);
+  background: var(--switch-track);
+  cursor: inherit;
+  transition: background-color var(--motion-base);
+}
+
+.switch::before {
+  content: '';
+  position: absolute;
+  top: var(--space-0-5);
+  left: var(--space-0-5);
+  width: calc(var(--switch-h) - 2 * var(--space-0-5));
+  height: calc(var(--switch-h) - 2 * var(--space-0-5));
+  border-radius: var(--radius-full);
+  background: var(--switch-thumb);
+  box-shadow: var(--thumb-shadow);
+  transition:
+    transform var(--motion-spring),
+    width var(--motion-fast);
+}
+
+.switch:hover:not(:disabled, :checked) {
+  background: var(--switch-track-hover);
+}
+
+.switch:checked {
+  background: var(--switch-track-on);
+}
+
+.switch:checked:hover:not(:disabled) {
+  background: var(--check-on-hover);
+}
+
+.switch:checked::before {
+  transform: translateX(calc(var(--switch-w) - var(--switch-h)));
+}
+
+.switch:active:not(:disabled) {
+  box-shadow: 0 0 0 var(--halo-sm) var(--check-press-halo);
+}
+
+.switch:active:not(:disabled)::before {
+  width: calc(calc(var(--switch-h) - 2 * var(--space-0-5)) + var(--space-1));
+}
+
+.switch:checked:active:not(:disabled)::before {
+  transform: translateX(calc(var(--switch-w) - var(--switch-h) - var(--space-1)));
+}
+
+.switchVariantSm {
+  width: var(--switch-w-sm);
+  height: var(--switch-h-sm);
+}
+
+.switchVariantSm::before {
+  width: calc(var(--switch-h-sm) - 2 * var(--space-0-5));
+  height: calc(var(--switch-h-sm) - 2 * var(--space-0-5));
+}
+
+.switchVariantSm:checked::before {
+  transform: translateX(calc(var(--switch-w-sm) - var(--switch-h-sm)));
+}
+
+.switchVariantSm:active:not(:disabled)::before {
+  width: calc(calc(var(--switch-h-sm) - 2 * var(--space-0-5)) + var(--space-0-5));
+}
+
+.switchVariantSm:checked:active:not(:disabled)::before {
+  transform: translateX(calc(var(--switch-w-sm) - var(--switch-h-sm) - var(--space-0-5)));
+}
+
+.check {
+  composes: check from '../../styles/shared/forms/checkbox.module.css';
+}
+
+.checkVariantDisabled {
+  composes: checkvariantdisabled from '../../styles/shared/forms/checkbox.module.css';
+}
+
+.checkPartDesc {
+  composes: checkpartdesc from '../../styles/shared/forms/checkbox.module.css';
+}

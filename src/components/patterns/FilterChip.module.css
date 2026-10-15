@@ -1,0 +1,95 @@
+:import('../../styles/shared/primitives/glyph.module.css') {
+  externalIcon: icon;
+}
+
+.fchip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  height: var(--control-height-sm);
+  padding: 0 var(--space-2-5);
+  border: var(--border-width) dashed var(--border-strong);
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--fg-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--transition-colors);
+}
+
+.fchip:hover {
+  background: var(--bg-hover);
+  color: var(--fg-primary);
+}
+
+.fchip:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.fchipPartChev {
+  --glyph-size: var(--size-icon-xs);
+}
+
+.fchipVariantOn {
+  border-style: solid;
+  border-color: color-mix(in oklab, var(--border-brand) 40%, transparent);
+  background: var(--bg-brand-subtle);
+  color: var(--fg-brand);
+}
+
+.fchipPartMenu {
+  min-width: var(--overlay-min-w);
+  max-height: var(--overlay-max-h-sm);
+  overflow-y: auto;
+}
+
+.fchip > :global(.externalIcon) {
+  --glyph-size: var(--size-icon-sm);
+
+  color: var(--fg-tertiary);
+}
+
+.fchipVariantOn > :global(.externalIcon) {
+  color: currentcolor;
+}
+
+.optionPartLabel {
+  composes: optionpartlabel from '../../styles/shared/primitives/option.module.css';
+}
+
+.menuWrap {
+  composes: menuwrap from '../../styles/shared/menus/menu.module.css';
+}
+
+.menu {
+  composes: menu from '../../styles/shared/menus/menu.module.css';
+}
+
+.menuVariantPop {
+  composes: menuvariantpop from '../../styles/shared/menus/menu.module.css';
+}
+
+.option {
+  composes: option from '../../styles/shared/primitives/option.module.css';
+}
+
+.optionPartCheck {
+  composes: optionpartcheck from '../../styles/shared/primitives/option.module.css';
+}
+
+.fchipPartBox {
+  composes: fchippartbox from '../../styles/shared/patterns/filter-bar.module.css';
+}
+
+.fchipPartBoxVariantOn {
+  composes: fchippartboxvarianton from '../../styles/shared/patterns/filter-bar.module.css';
+}
+
+.optionPartKbd {
+  composes: optionpartkbd from '../../styles/shared/primitives/option.module.css';
+}
+
+.fchipPartFoot {
+  composes: fchippartfoot from '../../styles/shared/patterns/filter-bar.module.css';
+}

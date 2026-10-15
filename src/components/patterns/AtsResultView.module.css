@@ -1,0 +1,195 @@
+:import('../../styles/shared/patterns/ats-analysis.module.css') {
+  externalAtsPartH: atsparth;
+}
+
+.atsPartRing {
+  --meter-track: var(--bg-sunken);
+}
+
+.atsPartTchip {
+  --glyph-size: var(--type-body-sm-size);
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1-5);
+}
+
+.atsPartTchipVariantDanger {
+  --glyph-color: var(--status-danger-fg);
+}
+
+.atsPartTchipVariantWarning {
+  --glyph-color: var(--status-warning-fg);
+}
+
+.atsPartTchipVariantInfo {
+  --glyph-color: var(--fg-brand);
+}
+
+.atsPartBar {
+  flex: none;
+}
+
+.atsPartScore {
+  position: relative;
+  font-variant-numeric: tabular-nums;
+}
+
+.atsPartScore small {
+  color: var(--fg-tertiary);
+  margin-left: var(--space-px);
+}
+
+.atsPartVerdict {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1-5);
+}
+
+.atsPartVh {
+  margin: 0;
+  text-wrap: balance;
+}
+
+.atsPartSum {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.atsPartTally {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1-5);
+  margin-top: var(--space-1);
+}
+
+.atsPartTchip + .atsPartTchip::before {
+  content: '·';
+  margin-right: var(--space-1-5);
+  color: var(--fg-disabled);
+}
+
+.atsPartCats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-3-5) var(--space-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.atsPartCat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1-5);
+  min-width: 0;
+}
+
+.atsPartCath {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.atsPartCatl small {
+  margin-left: var(--space-1-5);
+  color: var(--fg-tertiary);
+}
+
+.atsPartCatv {
+  font-variant-numeric: tabular-nums;
+}
+
+.atsPartCatvVariantSuccess {
+  color: var(--status-success-fg);
+}
+
+.atsPartCatvVariantBrand {
+  color: var(--fg-brand);
+}
+
+.atsPartCatvVariantWarning {
+  color: var(--status-warning-fg);
+}
+
+.atsPartCatvVariantDanger {
+  color: var(--status-danger-fg);
+}
+
+.atsPartCatn {
+  color: var(--fg-tertiary);
+}
+
+.atsPartSg {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.atsPartSgcol {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2-5);
+  padding: var(--space-3-5) var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--bg-subtle);
+}
+
+.atsPartSgcolVariantPos :global(.externalAtsPartH) {
+  color: var(--status-success-fg);
+}
+
+.atsPartSgcolVariantNeg :global(.externalAtsPartH) {
+  color: var(--status-warning-fg);
+}
+
+.atsPartSgcol ul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1-5);
+  margin: 0;
+  padding-left: var(--space-5);
+  color: var(--fg-secondary);
+}
+
+@media (width <= 639px) {
+  .atsPartSg {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.ats {
+  composes: ats from '../../styles/shared/patterns/ats-analysis.module.css';
+}
+
+.atsPartBody {
+  composes: atspartbody from '../../styles/shared/patterns/ats-analysis.module.css';
+}
+
+.atsPartHero {
+  composes: atsparthero from '../../styles/shared/patterns/ats-analysis.module.css';
+}
+
+.atsPartSec {
+  composes: atspartsec from '../../styles/shared/patterns/ats-analysis.module.css';
+}
+
+.atsPartH {
+  composes: atsparth from '../../styles/shared/patterns/ats-analysis.module.css';
+}
+
+.aiPartDisclaimer {
+  composes: aipartdisclaimer from '../../styles/shared/patterns/ai-result-panel.module.css';
+}
+
+.aiPartFoot {
+  composes: aipartfoot from '../../styles/shared/patterns/ai-result-panel.module.css';
+}
+
+.aiPartFb {
+  composes: aipartfb from '../../styles/shared/patterns/ai-result-panel.module.css';
+}

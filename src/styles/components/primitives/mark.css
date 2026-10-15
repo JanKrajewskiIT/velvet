@@ -1,4 +1,0 @@
-/* Atom · Mark — highlighted run inside text. highlight (search hit) · text (emphasis without fill) · mention (@person). */
-.vui-mark{padding:0 1px;border-radius:var(--radius-2xs);background:var(--mark-bg);color:inherit}
-.vui-mark--text{padding:0;background:none;color:var(--fg-brand);font-weight:var(--type-title-weight)}
-.vui-mark--mention{padding:0 var(--space-0-5);border-radius:var(--radius-xs);background:var(--mark-mention-bg);color:var(--mark-mention-fg);font-weight:var(--type-label-weight)}

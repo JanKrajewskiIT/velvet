@@ -1,0 +1,27 @@
+.progress {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1-5);
+}
+
+.progressPartHead {
+  display: flex;
+  justify-content: var(--progress-head-justify, space-between);
+  gap: var(--space-3);
+}
+
+.progressVariantSuccess {
+  composes: progressvariantsuccess from '../../styles/shared/feedback/progress.module.css';
+}
+
+.progressVariantWarning {
+  composes: progressvariantwarning from '../../styles/shared/feedback/progress.module.css';
+}
+
+.progressVariantDanger {
+  composes: progressvariantdanger from '../../styles/shared/feedback/progress.module.css';
+}
+
+.progressVariantNeutral {
+  composes: progressvariantneutral from '../../styles/shared/feedback/progress.module.css';
+}

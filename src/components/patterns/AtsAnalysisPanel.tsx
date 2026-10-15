@@ -8,9 +8,12 @@ import { Skeleton } from '../feedback/Skeleton';
 import { SkeletonText } from '../feedback/SkeletonText';
 import { Glyph } from '../primitives/Glyph';
 import { IconTile } from '../primitives/IconTile';
+import { Text } from '../primitives/Text';
+import { typographyClass } from '../primitives/typography';
 import type { AiFeedback } from './AiResultPanel';
 import { AnalysisSteps } from './AnalysisSteps';
 import { type AtsResult, localizeScoreBands, type ScoreBand } from './atsAnalysis';
+import styles from './AtsAnalysisPanel.module.css';
 import { AtsResultView } from './AtsResultView';
 
 export interface AtsAnalysisPanelProps {
@@ -53,25 +56,31 @@ export const AtsAnalysisPanel = (props: AtsAnalysisPanelProps) => {
   const disclaimer = () => p.disclaimer ?? translate('velvet.patterns.atsAnalysisPanel.disclaimer');
 
   const header = () => (
-    <header class="vui-ats__head">
+    <header class={styles.atsPartHead}>
       <Badge tone="brand" class="vui-ai__chip" dot={p.status === 'loading'} pulse icon="sparkles">
         {p.status === 'loading' ? translate('velvet.patterns.atsAnalysisPanel.analysing') : title()}
       </Badge>
       <Show when={p.subject || p.target}>
-        <span class="vui-ats__pair">
+        <Text as="span" variant="body-sm" tone="secondary" class={styles.atsPartPair}>
           <Show when={p.subject}>
-            <b>{p.subject}</b>
+            <Text as="b" variant="label" tone="inherit">
+              {p.subject}
+            </Text>
           </Show>
           <Show when={p.subject && p.target}>
             <Glyph name="arrow-right" />
           </Show>
           <Show when={p.target}>
-            <span>{p.target}</span>
+            <Text as="span" variant="body-sm" tone="inherit">
+              {p.target}
+            </Text>
           </Show>
-        </span>
+        </Text>
       </Show>
       <Show when={p.model || p.generatedAt}>
-        <span class="vui-ai__prov">{[p.model, p.generatedAt].filter(Boolean).join(' · ')}</span>
+        <Text as="span" variant="kbd" tone="inherit" class={styles.aiPartProv}>
+          {[p.model, p.generatedAt].filter(Boolean).join(' · ')}
+        </Text>
       </Show>
     </header>
   );
@@ -79,13 +88,17 @@ export const AtsAnalysisPanel = (props: AtsAnalysisPanelProps) => {
   return (
     <Switch>
       <Match when={p.status === 'error'}>
-        <article class={cx('vui-ats', p.class)}>
+        <article class={cx(typographyClass('body'), styles.ats, p.class)}>
           {header()}
-          <div class="vui-ats__state" role="alert">
+          <div class={styles.atsPartState} role="alert">
             <IconTile size="xl" shape="circle" tone="danger" icon="alert-circle" />
             <div>
-              <b>{translate('velvet.patterns.atsAnalysisPanel.failed')}</b>
-              <p>{error()}</p>
+              <Text as="b" variant="label" tone="inherit">
+                {translate('velvet.patterns.atsAnalysisPanel.failed')}
+              </Text>
+              <Text as="p" variant="body-sm" tone="inherit">
+                {error()}
+              </Text>
             </div>
             <Show when={p.onRetry}>
               <Button variant="secondary" size="sm" iconLeft="refresh" onClick={() => p.onRetry?.()}>
@@ -96,10 +109,10 @@ export const AtsAnalysisPanel = (props: AtsAnalysisPanelProps) => {
         </article>
       </Match>
       <Match when={p.status === 'loading'}>
-        <article class={cx('vui-ats', p.class)} aria-busy="true">
+        <article class={cx(typographyClass('body'), styles.ats, p.class)} aria-busy="true">
           {header()}
-          <div class="vui-ats__body">
-            <div class="vui-ats__hero">
+          <div class={styles.atsPartBody}>
+            <div class={styles.atsPartHero}>
               <Skeleton circle height={HERO_SKELETON_SIZE} />
               <div style={{ flex: 1, display: 'grid', gap: 'var(--space-2)' }}>
                 <Skeleton width="40%" height={18} />
@@ -114,13 +127,17 @@ export const AtsAnalysisPanel = (props: AtsAnalysisPanelProps) => {
         </article>
       </Match>
       <Match when={p.status === 'empty' || !p.result}>
-        <article class={cx('vui-ats', p.class)}>
+        <article class={cx(typographyClass('body'), styles.ats, p.class)}>
           {header()}
-          <div class="vui-ats__state">
+          <div class={styles.atsPartState}>
             <IconTile size="xl" shape="circle" tone="brand" icon="target" />
             <div>
-              <b>{translate('velvet.patterns.atsAnalysisPanel.emptyTitle')}</b>
-              <p>{translate('velvet.patterns.atsAnalysisPanel.emptyDescription')}</p>
+              <Text as="b" variant="label" tone="inherit">
+                {translate('velvet.patterns.atsAnalysisPanel.emptyTitle')}
+              </Text>
+              <Text as="p" variant="body-sm" tone="inherit">
+                {translate('velvet.patterns.atsAnalysisPanel.emptyDescription')}
+              </Text>
             </div>
           </div>
         </article>
