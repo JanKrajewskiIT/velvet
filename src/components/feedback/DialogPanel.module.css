@@ -140,9 +140,9 @@
 }
 
 .dialogBackdrop {
-  composes: dialogbackdrop from '../../styles/shared/feedback/dialog.module.css';
+  composes: dialogBackdrop from '../../styles/shared/feedback/dialog.module.css';
 }
 
 .dialogBackdropVariantTop {
-  composes: dialogbackdropvarianttop from '../../styles/shared/menus/command-palette.module.css';
+  composes: dialogBackdropVariantTop from '../../styles/shared/menus/command-palette.module.css';
 }

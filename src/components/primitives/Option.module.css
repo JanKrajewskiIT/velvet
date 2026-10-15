@@ -3,25 +3,25 @@
 }
 
 .optionVariantActive {
-  composes: optionvariantactive from '../../styles/shared/primitives/option.module.css';
+  composes: optionVariantActive from '../../styles/shared/primitives/option.module.css';
 }
 
 .optionVariantDanger {
-  composes: optionvariantdanger from '../../styles/shared/primitives/option.module.css';
+  composes: optionVariantDanger from '../../styles/shared/primitives/option.module.css';
 }
 
 .optionPartCheck {
-  composes: optionpartcheck from '../../styles/shared/primitives/option.module.css';
+  composes: optionPartCheck from '../../styles/shared/primitives/option.module.css';
 }
 
 .optionPartLabel {
-  composes: optionpartlabel from '../../styles/shared/primitives/option.module.css';
+  composes: optionPartLabel from '../../styles/shared/primitives/option.module.css';
 }
 
 .optionPartDesc {
-  composes: optionpartdesc from '../../styles/shared/primitives/option.module.css';
+  composes: optionPartDesc from '../../styles/shared/primitives/option.module.css';
 }
 
 .optionPartKbd {
-  composes: optionpartkbd from '../../styles/shared/primitives/option.module.css';
+  composes: optionPartKbd from '../../styles/shared/primitives/option.module.css';
 }

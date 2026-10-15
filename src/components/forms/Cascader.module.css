@@ -41,21 +41,21 @@
 }
 
 .tselectPartTrigger {
-  composes: tselectparttrigger from '../../styles/shared/patterns/filter-bar.module.css';
+  composes: tselectPartTrigger from '../../styles/shared/patterns/filter-bar.module.css';
 }
 
 .tselectPartPh {
-  composes: tselectpartph from '../../styles/shared/patterns/filter-bar.module.css';
+  composes: tselectPartPh from '../../styles/shared/patterns/filter-bar.module.css';
 }
 
 .tselectPartVal {
-  composes: tselectpartval from '../../styles/shared/patterns/filter-bar.module.css';
+  composes: tselectPartVal from '../../styles/shared/patterns/filter-bar.module.css';
 }
 
 .controlPartChevron {
-  composes: controlpartchevron from '../../styles/shared/primitives/control.module.css';
+  composes: controlPartChevron from '../../styles/shared/primitives/control.module.css';
 }
 
 .selectPartMenu {
-  composes: selectpartmenu from '../../styles/shared/forms/select.module.css';
+  composes: selectPartMenu from '../../styles/shared/forms/select.module.css';
 }

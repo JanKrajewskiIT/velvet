@@ -1,5 +1,5 @@
 :import('../../styles/shared/primitives/dot.module.css') {
-  externalIndicatorPartItem: indicatorpartitem;
+  externalIndicatorPartItem: indicatorPartItem;
 }
 
 .bottomnav {

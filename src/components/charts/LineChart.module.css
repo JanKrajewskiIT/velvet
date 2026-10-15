@@ -30,25 +30,25 @@
 }
 
 .chartPartBarTop {
-  composes: chartpartbartop from '../../styles/shared/charts/chart.module.css';
+  composes: chartPartBarTop from '../../styles/shared/charts/chart.module.css';
 }
 
 .chartPartPlot {
-  composes: chartpartplot from '../../styles/shared/charts/chart.module.css';
+  composes: chartPartPlot from '../../styles/shared/charts/chart.module.css';
 }
 
 .chartPartGrid {
-  composes: chartpartgrid from '../../styles/shared/charts/chart.module.css';
+  composes: chartPartGrid from '../../styles/shared/charts/chart.module.css';
 }
 
 .chartPartTick {
-  composes: chartparttick from '../../styles/shared/charts/chart.module.css';
+  composes: chartPartTick from '../../styles/shared/charts/chart.module.css';
 }
 
 .chartPartTickVariantOn {
-  composes: chartparttickvarianton from '../../styles/shared/charts/chart.module.css';
+  composes: chartPartTickVariantOn from '../../styles/shared/charts/chart.module.css';
 }
 
 .chartPartCross {
-  composes: chartpartcross from '../../styles/shared/charts/chart.module.css';
+  composes: chartPartCross from '../../styles/shared/charts/chart.module.css';
 }

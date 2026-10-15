@@ -3,7 +3,7 @@
 }
 
 .controlPartInputVariantSearch {
-  composes: controlpartinput from '../../styles/shared/primitives/control.module.css';
+  composes: controlPartInput from '../../styles/shared/primitives/control.module.css';
 }
 
 .field {
@@ -15,13 +15,13 @@
 }
 
 .controlPartAdorn {
-  composes: controlpartadorn from '../../styles/shared/primitives/control.module.css';
+  composes: controlPartAdorn from '../../styles/shared/primitives/control.module.css';
 }
 
 .selectPartMenu {
-  composes: selectpartmenu from '../../styles/shared/forms/select.module.css';
+  composes: selectPartMenu from '../../styles/shared/forms/select.module.css';
 }
 
 .selectPartEmpty {
-  composes: selectpartempty from '../../styles/shared/forms/select.module.css';
+  composes: selectPartEmpty from '../../styles/shared/forms/select.module.css';
 }

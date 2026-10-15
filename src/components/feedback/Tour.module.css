@@ -31,5 +31,5 @@
 }
 
 .tourPartCard {
-  composes: tourpartcard from '../../styles/shared/feedback/tour.module.css';
+  composes: tourPartCard from '../../styles/shared/feedback/tour.module.css';
 }

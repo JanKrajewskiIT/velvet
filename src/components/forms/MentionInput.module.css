@@ -54,5 +54,5 @@
 }
 
 .controlPartInput {
-  composes: controlpartinput from '../../styles/shared/primitives/control.module.css';
+  composes: controlPartInput from '../../styles/shared/primitives/control.module.css';
 }

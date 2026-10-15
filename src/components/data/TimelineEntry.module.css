@@ -63,11 +63,11 @@
 }
 
 .timelinePartItem {
-  composes: timelinepartitem from '../../styles/shared/data/timeline.module.css';
+  composes: timelinePartItem from '../../styles/shared/data/timeline.module.css';
 }
 
 .timelinePartBody {
-  composes: timelinepartbody from '../../styles/shared/data/timeline.module.css';
+  composes: timelinePartBody from '../../styles/shared/data/timeline.module.css';
 }
 
 .timelinePartDesc {

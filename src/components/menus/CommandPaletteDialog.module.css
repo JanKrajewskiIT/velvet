@@ -103,17 +103,17 @@
 }
 
 .dialogBackdrop {
-  composes: dialogbackdrop from '../../styles/shared/feedback/dialog.module.css';
+  composes: dialogBackdrop from '../../styles/shared/feedback/dialog.module.css';
 }
 
 .dialogBackdropVariantTop {
-  composes: dialogbackdropvarianttop from '../../styles/shared/menus/command-palette.module.css';
+  composes: dialogBackdropVariantTop from '../../styles/shared/menus/command-palette.module.css';
 }
 
 .menuPartItem {
-  composes: menupartitem from '../../styles/shared/primitives/option.module.css';
+  composes: menuPartItem from '../../styles/shared/primitives/option.module.css';
 }
 
 .menuPartItemVariantActive {
-  composes: menupartitemvariantactive from '../../styles/shared/primitives/option.module.css';
+  composes: menuPartItemVariantActive from '../../styles/shared/primitives/option.module.css';
 }

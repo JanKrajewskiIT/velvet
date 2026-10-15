@@ -64,13 +64,13 @@
 }
 
 .tablePartPin {
-  composes: tablepartpin from '../../styles/shared/data/table.module.css';
+  composes: tablePartPin from '../../styles/shared/data/table.module.css';
 }
 
 .tablePartPinVariantLeft {
-  composes: tablepartpinvariantleft from '../../styles/shared/data/table.module.css';
+  composes: tablePartPinVariantLeft from '../../styles/shared/data/table.module.css';
 }
 
 .tablePartExp {
-  composes: tablepartexp from '../../styles/shared/data/table.module.css';
+  composes: tablePartExp from '../../styles/shared/data/table.module.css';
 }

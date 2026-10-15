@@ -1,5 +1,5 @@
 :import('../../styles/shared/charts/chart.module.css') {
-  externalChartPartLegend: chartpartlegend;
+  externalChartPartLegend: chartPartLegend;
 }
 
 .radar {
@@ -116,29 +116,29 @@
 }
 
 .chartPartLegend {
-  composes: chartpartlegend from '../../styles/shared/charts/chart.module.css';
+  composes: chartPartLegend from '../../styles/shared/charts/chart.module.css';
 }
 
 .chartPartLg {
-  composes: chartpartlg from '../../styles/shared/charts/chart.module.css';
+  composes: chartPartLg from '../../styles/shared/charts/chart.module.css';
 }
 
 .chartPartPlot {
-  composes: chartpartplot from '../../styles/shared/charts/chart.module.css';
+  composes: chartPartPlot from '../../styles/shared/charts/chart.module.css';
 }
 
 .chartPartGrid {
-  composes: chartpartgrid from '../../styles/shared/charts/chart.module.css';
+  composes: chartPartGrid from '../../styles/shared/charts/chart.module.css';
 }
 
 .chartPartTick {
-  composes: chartparttick from '../../styles/shared/charts/chart.module.css';
+  composes: chartPartTick from '../../styles/shared/charts/chart.module.css';
 }
 
 .chartPartTickVariantOn {
-  composes: chartparttickvarianton from '../../styles/shared/charts/chart.module.css';
+  composes: chartPartTickVariantOn from '../../styles/shared/charts/chart.module.css';
 }
 
 .chartPartTip {
-  composes: chartparttip from '../../styles/shared/charts/chart.module.css';
+  composes: chartPartTip from '../../styles/shared/charts/chart.module.css';
 }

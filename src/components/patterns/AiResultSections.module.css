@@ -1,5 +1,5 @@
 :import('../../styles/shared/patterns/ai-result-panel.module.css') {
-  externalAiPartSecH: aipartsech;
+  externalAiPartSecH: aiPartSecH;
 }
 
 .aiPartItems {
@@ -69,9 +69,9 @@
 }
 
 .aiPartSecs {
-  composes: aipartsecs from '../../styles/shared/patterns/ai-result-panel.module.css';
+  composes: aiPartSecs from '../../styles/shared/patterns/ai-result-panel.module.css';
 }
 
 .aiPartSecH {
-  composes: aipartsech from '../../styles/shared/patterns/ai-result-panel.module.css';
+  composes: aiPartSecH from '../../styles/shared/patterns/ai-result-panel.module.css';
 }

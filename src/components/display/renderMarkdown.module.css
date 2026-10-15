@@ -1,23 +1,23 @@
 .prosePartCheckVariantOn {
-  composes: prosepartcheckvarianton from '../../styles/shared/display/markdown.module.css';
+  composes: prosePartCheckVariantOn from '../../styles/shared/display/markdown.module.css';
 }
 
 .prosePartDone {
-  composes: prosepartdone from '../../styles/shared/display/markdown.module.css';
+  composes: prosePartDone from '../../styles/shared/display/markdown.module.css';
 }
 
 .prosePartCheck {
-  composes: prosepartcheck from '../../styles/shared/display/markdown.module.css';
+  composes: prosePartCheck from '../../styles/shared/display/markdown.module.css';
 }
 
 .prosePartTask {
-  composes: proseparttask from '../../styles/shared/display/markdown.module.css';
+  composes: prosePartTask from '../../styles/shared/display/markdown.module.css';
 }
 
 .prosePartRow {
-  composes: prosepartrow from '../../styles/shared/extensions/markdown.module.css';
+  composes: prosePartRow from '../../styles/shared/extensions/markdown.module.css';
 }
 
 .prosePartTable {
-  composes: proseparttable from '../../styles/shared/display/markdown.module.css';
+  composes: prosePartTable from '../../styles/shared/display/markdown.module.css';
 }

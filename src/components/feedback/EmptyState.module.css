@@ -3,45 +3,45 @@
 }
 
 .emptyVariantSm {
-  composes: emptyvariantsm from '../../styles/shared/feedback/empty-state.module.css';
+  composes: emptyVariantSm from '../../styles/shared/feedback/empty-state.module.css';
 }
 
 .emptyVariantLg {
-  composes: emptyvariantlg from '../../styles/shared/feedback/empty-state.module.css';
+  composes: emptyVariantLg from '../../styles/shared/feedback/empty-state.module.css';
 }
 
 .toneVariantWarning {
-  composes: tonevariantwarning from '../../styles/shared/feedback/status-page.module.css';
+  composes: toneVariantWarning from '../../styles/shared/feedback/status-page.module.css';
 }
 
 .toneVariantDanger {
-  composes: tonevariantdanger from '../../styles/shared/feedback/status-page.module.css';
+  composes: toneVariantDanger from '../../styles/shared/feedback/status-page.module.css';
 }
 
 .toneVariantInfo {
-  composes: tonevariantinfo from '../../styles/shared/feedback/status-page.module.css';
+  composes: toneVariantInfo from '../../styles/shared/feedback/status-page.module.css';
 }
 
 .toneVariantNeutral {
-  composes: tonevariantneutral from '../../styles/shared/feedback/status-page.module.css';
+  composes: toneVariantNeutral from '../../styles/shared/feedback/status-page.module.css';
 }
 
 .emptyPartText {
-  composes: emptyparttext from '../../styles/shared/feedback/empty-state.module.css';
+  composes: emptyPartText from '../../styles/shared/feedback/empty-state.module.css';
 }
 
 .emptyPartTitle {
-  composes: emptyparttitle from '../../styles/shared/feedback/empty-state.module.css';
+  composes: emptyPartTitle from '../../styles/shared/feedback/empty-state.module.css';
 }
 
 .emptyPartDesc {
-  composes: emptypartdesc from '../../styles/shared/feedback/empty-state.module.css';
+  composes: emptyPartDesc from '../../styles/shared/feedback/empty-state.module.css';
 }
 
 .emptyPartActions {
-  composes: emptypartactions from '../../styles/shared/feedback/empty-state.module.css';
+  composes: emptyPartActions from '../../styles/shared/feedback/empty-state.module.css';
 }
 
 .statusPagePartExtra {
-  composes: statuspagepartextra from '../../styles/shared/feedback/status-page.module.css';
+  composes: statusPagePartExtra from '../../styles/shared/feedback/status-page.module.css';
 }

@@ -105,7 +105,7 @@
 }
 
 .srOnly {
-  composes: sronly from '../../styles/shared/navigation/link.module.css';
+  composes: srOnly from '../../styles/shared/navigation/link.module.css';
 }
 
 .hint {
@@ -113,5 +113,5 @@
 }
 
 .hintVariantError {
-  composes: hintvarianterror from '../../styles/shared/primitives/field.module.css';
+  composes: hintVariantError from '../../styles/shared/primitives/field.module.css';
 }

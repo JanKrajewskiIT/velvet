@@ -1,5 +1,5 @@
 :import('../../styles/shared/forms/chip-group.module.css') {
-  externalChipVariantOn: chipvarianton;
+  externalChipVariantOn: chipVariantOn;
 }
 
 .chipPartCheck {
@@ -90,9 +90,9 @@
 }
 
 .chipVariantSm {
-  composes: chipvariantsm from '../../styles/shared/forms/chip-group.module.css';
+  composes: chipVariantSm from '../../styles/shared/forms/chip-group.module.css';
 }
 
 .chipVariantOn {
-  composes: chipvarianton from '../../styles/shared/forms/chip-group.module.css';
+  composes: chipVariantOn from '../../styles/shared/forms/chip-group.module.css';
 }

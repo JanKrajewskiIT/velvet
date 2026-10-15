@@ -42,7 +42,7 @@
 }
 
 .aiPartProv {
-  composes: aipartprov from '../../styles/shared/patterns/ai-result-panel.module.css';
+  composes: aiPartProv from '../../styles/shared/patterns/ai-result-panel.module.css';
 }
 
 .ats {
@@ -50,9 +50,9 @@
 }
 
 .atsPartBody {
-  composes: atspartbody from '../../styles/shared/patterns/ats-analysis.module.css';
+  composes: atsPartBody from '../../styles/shared/patterns/ats-analysis.module.css';
 }
 
 .atsPartHero {
-  composes: atsparthero from '../../styles/shared/patterns/ats-analysis.module.css';
+  composes: atsPartHero from '../../styles/shared/patterns/ats-analysis.module.css';
 }

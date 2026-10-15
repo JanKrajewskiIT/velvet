@@ -1,5 +1,5 @@
 .toastRegion {
-  composes: toastregion from '../../styles/shared/feedback/toast-region.module.css';
+  composes: toastRegion from '../../styles/shared/feedback/toast-region.module.css';
   position: fixed;
   right: var(--space-6);
   bottom: var(--space-6);

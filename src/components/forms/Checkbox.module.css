@@ -1,6 +1,6 @@
 :import('../../styles/shared/forms/checkbox.module.css') {
   externalCheck: check;
-  externalCheckVariantSm: checkvariantsm;
+  externalCheckVariantSm: checkVariantSm;
 }
 
 :global(.externalCheck):hover .checkbox:not(:disabled, :checked, :indeterminate) {
@@ -107,13 +107,13 @@
 }
 
 .checkVariantSm {
-  composes: checkvariantsm from '../../styles/shared/forms/checkbox.module.css';
+  composes: checkVariantSm from '../../styles/shared/forms/checkbox.module.css';
 }
 
 .checkVariantDisabled {
-  composes: checkvariantdisabled from '../../styles/shared/forms/checkbox.module.css';
+  composes: checkVariantDisabled from '../../styles/shared/forms/checkbox.module.css';
 }
 
 .checkPartDesc {
-  composes: checkpartdesc from '../../styles/shared/forms/checkbox.module.css';
+  composes: checkPartDesc from '../../styles/shared/forms/checkbox.module.css';
 }

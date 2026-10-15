@@ -101,5 +101,5 @@
 }
 
 .chartPartBarTop {
-  composes: chartpartbartop from '../../styles/shared/charts/chart.module.css';
+  composes: chartPartBarTop from '../../styles/shared/charts/chart.module.css';
 }

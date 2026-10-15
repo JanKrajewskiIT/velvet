@@ -1,16 +1,16 @@
 .selectPartMenu {
-  composes: selectpartmenu from '../../styles/shared/forms/select.module.css';
+  composes: selectPartMenu from '../../styles/shared/forms/select.module.css';
 }
 
 .phonePartCode {
-  composes: phonepartcode from '../../styles/shared/forms/phone-input.module.css';
+  composes: phonePartCode from '../../styles/shared/forms/phone-input.module.css';
 }
 
 .selectPartLabel {
-  composes: selectpartlabel from '../../styles/shared/forms/select.module.css';
+  composes: selectPartLabel from '../../styles/shared/forms/select.module.css';
 }
 
 .phonePartDial {
-  composes: phonepartdial from '../../styles/shared/forms/phone-input.module.css';
+  composes: phonePartDial from '../../styles/shared/forms/phone-input.module.css';
   margin-left: auto;
 }

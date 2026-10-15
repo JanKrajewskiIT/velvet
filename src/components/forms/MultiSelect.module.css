@@ -38,21 +38,21 @@
 }
 
 .taginputVariantSm {
-  composes: taginputvariantsm from '../../styles/shared/forms/tag-input.module.css';
+  composes: taginputVariantSm from '../../styles/shared/forms/tag-input.module.css';
 }
 
 .taginputPartTag {
-  composes: taginputparttag from '../../styles/shared/forms/tag-input.module.css';
+  composes: taginputPartTag from '../../styles/shared/forms/tag-input.module.css';
 }
 
 .taginputPartInput {
-  composes: taginputpartinput from '../../styles/shared/forms/tag-input.module.css';
+  composes: taginputPartInput from '../../styles/shared/forms/tag-input.module.css';
 }
 
 .selectPartMenu {
-  composes: selectpartmenu from '../../styles/shared/forms/select.module.css';
+  composes: selectPartMenu from '../../styles/shared/forms/select.module.css';
 }
 
 .selectPartMenuVariantUp {
-  composes: selectpartmenuvariantup from '../../styles/shared/forms/select.module.css';
+  composes: selectPartMenuVariantUp from '../../styles/shared/forms/select.module.css';
 }

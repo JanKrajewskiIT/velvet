@@ -63,11 +63,11 @@
 }
 
 .popoverWrap {
-  composes: popoverwrap from '../../styles/shared/feedback/popover.module.css';
+  composes: popoverWrap from '../../styles/shared/feedback/popover.module.css';
 }
 
 .indicatorPartItem {
-  composes: indicatorpartitem from '../../styles/shared/primitives/dot.module.css';
+  composes: indicatorPartItem from '../../styles/shared/primitives/dot.module.css';
 }
 
 .popover {
@@ -75,5 +75,5 @@
 }
 
 .popoverVariantEnd {
-  composes: popovervariantend from '../../styles/shared/feedback/popover.module.css';
+  composes: popoverVariantEnd from '../../styles/shared/feedback/popover.module.css';
 }

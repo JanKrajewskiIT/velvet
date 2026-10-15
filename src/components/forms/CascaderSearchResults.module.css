@@ -12,7 +12,7 @@
 }
 
 .tselectPartEmpty {
-  composes: tselectpartempty from '../../styles/shared/patterns/filter-bar.module.css';
+  composes: tselectPartEmpty from '../../styles/shared/patterns/filter-bar.module.css';
 }
 
 .option {
@@ -20,9 +20,9 @@
 }
 
 .optionVariantActive {
-  composes: optionvariantactive from '../../styles/shared/primitives/option.module.css';
+  composes: optionVariantActive from '../../styles/shared/primitives/option.module.css';
 }
 
 .optionPartLabel {
-  composes: optionpartlabel from '../../styles/shared/primitives/option.module.css';
+  composes: optionPartLabel from '../../styles/shared/primitives/option.module.css';
 }

@@ -8,5 +8,5 @@
 }
 
 .confirmPartErr {
-  composes: confirmparterr from '../../styles/shared/feedback/confirm-dialog.module.css';
+  composes: confirmPartErr from '../../styles/shared/feedback/confirm-dialog.module.css';
 }

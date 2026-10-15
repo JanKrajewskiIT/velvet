@@ -108,17 +108,17 @@ a.aiPartSrc:focus-visible {
 }
 
 .aiPartProv {
-  composes: aipartprov from '../../styles/shared/patterns/ai-result-panel.module.css';
+  composes: aiPartProv from '../../styles/shared/patterns/ai-result-panel.module.css';
 }
 
 .aiPartSecH {
-  composes: aipartsech from '../../styles/shared/patterns/ai-result-panel.module.css';
+  composes: aiPartSecH from '../../styles/shared/patterns/ai-result-panel.module.css';
 }
 
 .aiPartDisclaimer {
-  composes: aipartdisclaimer from '../../styles/shared/patterns/ai-result-panel.module.css';
+  composes: aiPartDisclaimer from '../../styles/shared/patterns/ai-result-panel.module.css';
 }
 
 .aiPartSecs {
-  composes: aipartsecs from '../../styles/shared/patterns/ai-result-panel.module.css';
+  composes: aiPartSecs from '../../styles/shared/patterns/ai-result-panel.module.css';
 }

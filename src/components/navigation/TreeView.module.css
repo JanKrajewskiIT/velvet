@@ -1,5 +1,5 @@
 :import('../../styles/shared/navigation/tree-view.module.css') {
-  externalTreePartRow: treepartrow;
+  externalTreePartRow: treePartRow;
 }
 
 .tree {
@@ -14,5 +14,5 @@
 }
 
 .srOnly {
-  composes: sronly from '../../styles/shared/navigation/link.module.css';
+  composes: srOnly from '../../styles/shared/navigation/link.module.css';
 }

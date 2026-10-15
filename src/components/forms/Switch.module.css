@@ -86,9 +86,9 @@
 }
 
 .checkVariantDisabled {
-  composes: checkvariantdisabled from '../../styles/shared/forms/checkbox.module.css';
+  composes: checkVariantDisabled from '../../styles/shared/forms/checkbox.module.css';
 }
 
 .checkPartDesc {
-  composes: checkpartdesc from '../../styles/shared/forms/checkbox.module.css';
+  composes: checkPartDesc from '../../styles/shared/forms/checkbox.module.css';
 }

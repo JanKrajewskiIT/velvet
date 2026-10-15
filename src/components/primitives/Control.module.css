@@ -3,41 +3,41 @@
 }
 
 .controlVariantSm {
-  composes: controlvariantsm from '../../styles/shared/primitives/control.module.css';
+  composes: controlVariantSm from '../../styles/shared/primitives/control.module.css';
 }
 
 .controlVariantLg {
-  composes: controlvariantlg from '../../styles/shared/primitives/control.module.css';
+  composes: controlVariantLg from '../../styles/shared/primitives/control.module.css';
 }
 
 .controlVariantInvalid {
-  composes: controlvariantinvalid from '../../styles/shared/primitives/control.module.css';
+  composes: controlVariantInvalid from '../../styles/shared/primitives/control.module.css';
 }
 
 .controlVariantDisabled {
-  composes: controlvariantdisabled from '../../styles/shared/primitives/control.module.css';
+  composes: controlVariantDisabled from '../../styles/shared/primitives/control.module.css';
 }
 
 .controlVariantReadonly {
-  composes: controlvariantreadonly from '../../styles/shared/primitives/control.module.css';
+  composes: controlVariantReadonly from '../../styles/shared/primitives/control.module.css';
 }
 
 .controlVariantTextarea {
-  composes: controlvarianttextarea from '../../styles/shared/primitives/control.module.css';
+  composes: controlVariantTextarea from '../../styles/shared/primitives/control.module.css';
 }
 
 .controlPartAdorn {
-  composes: controlpartadorn from '../../styles/shared/primitives/control.module.css';
+  composes: controlPartAdorn from '../../styles/shared/primitives/control.module.css';
 }
 
 .controlPartAffix {
-  composes: controlpartaffix from '../../styles/shared/primitives/control.module.css';
+  composes: controlPartAffix from '../../styles/shared/primitives/control.module.css';
 }
 
 .controlPartAffixVariantEnd {
-  composes: controlpartaffixvariantend from '../../styles/shared/primitives/control.module.css';
+  composes: controlPartAffixVariantEnd from '../../styles/shared/primitives/control.module.css';
 }
 
 .controlPartAdornVariantEnd {
-  composes: controlpartadornvariantend from '../../styles/shared/primitives/control.module.css';
+  composes: controlPartAdornVariantEnd from '../../styles/shared/primitives/control.module.css';
 }

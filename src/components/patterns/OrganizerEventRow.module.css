@@ -31,5 +31,5 @@
 }
 
 .organizerPartEvb {
-  composes: organizerpartevb from '../../styles/shared/patterns/calendar-organizer.module.css';
+  composes: organizerPartEvb from '../../styles/shared/patterns/calendar-organizer.module.css';
 }

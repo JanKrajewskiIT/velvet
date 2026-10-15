@@ -4,10 +4,10 @@
 
 :import('../../styles/shared/data/table.module.css') {
   externalTable: table;
-  externalTablePartPinVariantEdge: tablepartpinvariantedge;
-  externalTablePartPinVariantLeft: tablepartpinvariantleft;
-  externalTablePartPinVariantRight: tablepartpinvariantright;
-  externalTablePartPin: tablepartpin;
+  externalTablePartPinVariantEdge: tablePartPinVariantEdge;
+  externalTablePartPinVariantLeft: tablePartPinVariantLeft;
+  externalTablePartPinVariantRight: tablePartPinVariantRight;
+  externalTablePartPin: tablePartPin;
 }
 
 :global(.externalCard) .tableWrap {

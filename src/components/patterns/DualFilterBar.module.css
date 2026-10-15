@@ -121,5 +121,5 @@
 }
 
 .chipVariantSm {
-  composes: chipvariantsm from '../../styles/shared/forms/chip-group.module.css';
+  composes: chipVariantSm from '../../styles/shared/forms/chip-group.module.css';
 }

@@ -31,7 +31,7 @@
 }
 
 .rtePartBar {
-  composes: rtepartbar from '../../styles/shared/forms/rich-text-editor.module.css';
+  composes: rtePartBar from '../../styles/shared/forms/rich-text-editor.module.css';
 }
 
 .hint {
@@ -39,5 +39,5 @@
 }
 
 .hintVariantError {
-  composes: hintvarianterror from '../../styles/shared/primitives/field.module.css';
+  composes: hintVariantError from '../../styles/shared/primitives/field.module.css';
 }

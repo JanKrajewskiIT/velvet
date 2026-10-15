@@ -1,6 +1,6 @@
 :import('../../styles/shared/data/diff-viewer.module.css') {
-  externalDiffPartCVariantAdd: diffpartcvariantadd;
-  externalDiffPartCVariantDel: diffpartcvariantdel;
+  externalDiffPartCVariantAdd: diffPartCVariantAdd;
+  externalDiffPartCVariantDel: diffPartCVariantDel;
 }
 
 .diffVariantSplit {
@@ -8,7 +8,7 @@
 }
 
 .lineText {
-  composes: diffpartcode from '../../styles/shared/data/diff-viewer.module.css';
+  composes: diffPartCode from '../../styles/shared/data/diff-viewer.module.css';
 }
 
 .diffPartStats {
@@ -71,37 +71,37 @@
 }
 
 .codePartBar {
-  composes: codepartbar from '../../styles/shared/data/code-snippet.module.css';
+  composes: codePartBar from '../../styles/shared/data/code-snippet.module.css';
 }
 
 .codePartTitle {
-  composes: codeparttitle from '../../styles/shared/data/code-snippet.module.css';
+  composes: codePartTitle from '../../styles/shared/data/code-snippet.module.css';
 }
 
 .codePartTab {
-  composes: codeparttab from '../../styles/shared/data/code-snippet.module.css';
+  composes: codePartTab from '../../styles/shared/data/code-snippet.module.css';
 }
 
 .codePartTabVariantOn {
-  composes: codeparttabvarianton from '../../styles/shared/data/code-snippet.module.css';
+  composes: codePartTabVariantOn from '../../styles/shared/data/code-snippet.module.css';
 }
 
 .diffPartLn {
-  composes: diffpartln from '../../styles/shared/data/diff-viewer.module.css';
+  composes: diffPartLn from '../../styles/shared/data/diff-viewer.module.css';
 }
 
 .diffPartSign {
-  composes: diffpartsign from '../../styles/shared/data/diff-viewer.module.css';
+  composes: diffPartSign from '../../styles/shared/data/diff-viewer.module.css';
 }
 
 .diffPartCVariantAdd {
-  composes: diffpartcvariantadd from '../../styles/shared/data/diff-viewer.module.css';
+  composes: diffPartCVariantAdd from '../../styles/shared/data/diff-viewer.module.css';
 }
 
 .diffPartCVariantDel {
-  composes: diffpartcvariantdel from '../../styles/shared/data/diff-viewer.module.css';
+  composes: diffPartCVariantDel from '../../styles/shared/data/diff-viewer.module.css';
 }
 
 .diffPartCode {
-  composes: diffpartcode from '../../styles/shared/data/diff-viewer.module.css';
+  composes: diffPartCode from '../../styles/shared/data/diff-viewer.module.css';
 }

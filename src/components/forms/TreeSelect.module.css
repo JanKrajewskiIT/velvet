@@ -1,6 +1,6 @@
 :import('../../styles/shared/patterns/filter-bar.module.css') {
-  externalTselectPartTrigger: tselectparttrigger;
-  externalFchipPartFoot: fchippartfoot;
+  externalTselectPartTrigger: tselectPartTrigger;
+  externalFchipPartFoot: fchipPartFoot;
 }
 
 .tselect {
@@ -57,7 +57,7 @@
 }
 
 .tselectPartTrigger {
-  composes: tselectparttrigger from '../../styles/shared/patterns/filter-bar.module.css';
+  composes: tselectPartTrigger from '../../styles/shared/patterns/filter-bar.module.css';
 }
 
 .select {
@@ -65,21 +65,21 @@
 }
 
 .srOnly {
-  composes: sronly from '../../styles/shared/navigation/link.module.css';
+  composes: srOnly from '../../styles/shared/navigation/link.module.css';
 }
 
 .controlPartChevron {
-  composes: controlpartchevron from '../../styles/shared/primitives/control.module.css';
+  composes: controlPartChevron from '../../styles/shared/primitives/control.module.css';
 }
 
 .selectPartMenu {
-  composes: selectpartmenu from '../../styles/shared/forms/select.module.css';
+  composes: selectPartMenu from '../../styles/shared/forms/select.module.css';
 }
 
 .tselectPartEmpty {
-  composes: tselectpartempty from '../../styles/shared/patterns/filter-bar.module.css';
+  composes: tselectPartEmpty from '../../styles/shared/patterns/filter-bar.module.css';
 }
 
 .fchipPartFoot {
-  composes: fchippartfoot from '../../styles/shared/patterns/filter-bar.module.css';
+  composes: fchipPartFoot from '../../styles/shared/patterns/filter-bar.module.css';
 }

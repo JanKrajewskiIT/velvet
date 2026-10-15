@@ -23,5 +23,5 @@
 }
 
 .controlPartBtn {
-  composes: controlpartbtn from '../../styles/shared/primitives/control.module.css';
+  composes: controlPartBtn from '../../styles/shared/primitives/control.module.css';
 }

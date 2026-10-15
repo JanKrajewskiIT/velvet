@@ -5,27 +5,27 @@
 }
 
 .avatarVariantXs {
-  composes: avatarvariantxs from '../../styles/shared/data/avatar.module.css';
+  composes: avatarVariantXs from '../../styles/shared/data/avatar.module.css';
 }
 
 .avatarVariantSm {
-  composes: avatarvariantsm from '../../styles/shared/data/avatar.module.css';
+  composes: avatarVariantSm from '../../styles/shared/data/avatar.module.css';
 }
 
 .avatarVariantLg {
-  composes: avatarvariantlg from '../../styles/shared/data/avatar.module.css';
+  composes: avatarVariantLg from '../../styles/shared/data/avatar.module.css';
 }
 
 .avatarVariantXl {
-  composes: avatarvariantxl from '../../styles/shared/data/avatar.module.css';
+  composes: avatarVariantXl from '../../styles/shared/data/avatar.module.css';
 }
 
 .avatarVariantNeutral {
-  composes: avatarvariantneutral from '../../styles/shared/data/avatar.module.css';
+  composes: avatarVariantNeutral from '../../styles/shared/data/avatar.module.css';
 }
 
 .avatarVariantSolid {
-  composes: avatarvariantsolid from '../../styles/shared/data/avatar.module.css';
+  composes: avatarVariantSolid from '../../styles/shared/data/avatar.module.css';
 }
 
 .avatar {
@@ -33,5 +33,5 @@
 }
 
 .avatarPartStatus {
-  composes: avatarpartstatus from '../../styles/shared/data/avatar.module.css';
+  composes: avatarPartStatus from '../../styles/shared/data/avatar.module.css';
 }

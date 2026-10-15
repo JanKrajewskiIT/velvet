@@ -38,25 +38,25 @@
 }
 
 .optionVariantActive {
-  composes: optionvariantactive from '../../styles/shared/primitives/option.module.css';
+  composes: optionVariantActive from '../../styles/shared/primitives/option.module.css';
 }
 
 .fchipPartBox {
-  composes: fchippartbox from '../../styles/shared/patterns/filter-bar.module.css';
+  composes: fchipPartBox from '../../styles/shared/patterns/filter-bar.module.css';
 }
 
 .fchipPartBoxVariantOn {
-  composes: fchippartboxvarianton from '../../styles/shared/patterns/filter-bar.module.css';
+  composes: fchipPartBoxVariantOn from '../../styles/shared/patterns/filter-bar.module.css';
 }
 
 .optionPartLabel {
-  composes: optionpartlabel from '../../styles/shared/primitives/option.module.css';
+  composes: optionPartLabel from '../../styles/shared/primitives/option.module.css';
 }
 
 .optionPartKbd {
-  composes: optionpartkbd from '../../styles/shared/primitives/option.module.css';
+  composes: optionPartKbd from '../../styles/shared/primitives/option.module.css';
 }
 
 .selectPartCheck {
-  composes: selectpartcheck from '../../styles/shared/forms/select.module.css';
+  composes: selectPartCheck from '../../styles/shared/forms/select.module.css';
 }

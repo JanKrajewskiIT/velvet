@@ -6,13 +6,13 @@
 }
 
 .srOnly {
-  composes: sronly from '../../styles/shared/navigation/link.module.css';
+  composes: srOnly from '../../styles/shared/navigation/link.module.css';
 }
 
 .selectPartOption {
-  composes: selectpartoption from '../../styles/shared/primitives/option.module.css';
+  composes: selectPartOption from '../../styles/shared/primitives/option.module.css';
 }
 
 .selectPartEmpty {
-  composes: selectpartempty from '../../styles/shared/forms/select.module.css';
+  composes: selectPartEmpty from '../../styles/shared/forms/select.module.css';
 }

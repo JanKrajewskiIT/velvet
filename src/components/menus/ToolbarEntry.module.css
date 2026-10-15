@@ -8,9 +8,9 @@
 }
 
 .toolbarPartBtn {
-  composes: toolbarpartbtn from '../../styles/shared/menus/toolbar.module.css';
+  composes: toolbarPartBtn from '../../styles/shared/menus/toolbar.module.css';
 }
 
 .toolbarPartSep {
-  composes: toolbarpartsep from '../../styles/shared/menus/toolbar.module.css';
+  composes: toolbarPartSep from '../../styles/shared/menus/toolbar.module.css';
 }

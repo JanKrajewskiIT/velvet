@@ -122,9 +122,9 @@
 }
 
 .playerPartBtnVariantMuted {
-  composes: playerpartbtnvariantmuted from '../../styles/shared/media/player.module.css';
+  composes: playerPartBtnVariantMuted from '../../styles/shared/media/player.module.css';
 }
 
 .playerPartBtnVariantTxt {
-  composes: playerpartbtnvarianttxt from '../../styles/shared/media/player.module.css';
+  composes: playerPartBtnVariantTxt from '../../styles/shared/media/player.module.css';
 }

@@ -51,9 +51,9 @@
 }
 
 .organizerPartEvb {
-  composes: organizerpartevb from '../../styles/shared/patterns/calendar-organizer.module.css';
+  composes: organizerPartEvb from '../../styles/shared/patterns/calendar-organizer.module.css';
 }
 
 .organizerPartAdd {
-  composes: organizerpartadd from '../../styles/shared/patterns/calendar-organizer.module.css';
+  composes: organizerPartAdd from '../../styles/shared/patterns/calendar-organizer.module.css';
 }

@@ -10,5 +10,5 @@
 }
 
 .tablePartNum {
-  composes: tablepartnum from '../../styles/shared/data/table.module.css';
+  composes: tablePartNum from '../../styles/shared/data/table.module.css';
 }

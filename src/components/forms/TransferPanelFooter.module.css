@@ -44,7 +44,7 @@
 }
 
 .xferPartLink {
-  composes: xferpartlink from '../../styles/shared/forms/transfer-list.module.css';
+  composes: xferPartLink from '../../styles/shared/forms/transfer-list.module.css';
 }
 
 .xferPartFoot[data-side='right'] .xferPartMove:not(:disabled) {

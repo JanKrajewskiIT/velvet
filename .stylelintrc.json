@@ -24,6 +24,7 @@
             "ignoreSelectors": [":export", "/^:import\\(/"]
           }
         ],
+        "value-keyword-case": ["lower", { "ignoreProperties": ["composes", "/^external/"] }],
         "block-no-empty": null
       }
     },

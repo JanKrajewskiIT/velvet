@@ -1,5 +1,5 @@
 :import('../../styles/shared/menus/menu.module.css') {
-  externalMenuPartLabel: menupartlabel;
+  externalMenuPartLabel: menuPartLabel;
 }
 
 :import('../../styles/shared/primitives/glyph.module.css') {
@@ -7,7 +7,7 @@
 }
 
 :import('../../styles/shared/primitives/option.module.css') {
-  externalMenuPartItemVariantActive: menupartitemvariantactive;
+  externalMenuPartItemVariantActive: menuPartItemVariantActive;
 }
 
 .menuPartItemVariantDanger > :global(.externalMenuPartLabel) + :global(.externalIcon),
@@ -43,7 +43,7 @@
 }
 
 .menuPartLabel {
-  composes: menupartlabel from '../../styles/shared/menus/menu.module.css';
+  composes: menuPartLabel from '../../styles/shared/menus/menu.module.css';
 }
 
 .menu {
@@ -51,9 +51,9 @@
 }
 
 .menuPartItem {
-  composes: menupartitem from '../../styles/shared/primitives/option.module.css';
+  composes: menuPartItem from '../../styles/shared/primitives/option.module.css';
 }
 
 .menuPartItemVariantActive {
-  composes: menupartitemvariantactive from '../../styles/shared/primitives/option.module.css';
+  composes: menuPartItemVariantActive from '../../styles/shared/primitives/option.module.css';
 }

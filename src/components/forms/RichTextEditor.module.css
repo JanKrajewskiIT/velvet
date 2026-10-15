@@ -117,7 +117,7 @@
 }
 
 .fieldPartFoot {
-  composes: fieldpartfoot from '../../styles/shared/primitives/field.module.css';
+  composes: fieldPartFoot from '../../styles/shared/primitives/field.module.css';
 }
 
 .hint {
@@ -125,13 +125,13 @@
 }
 
 .hintVariantError {
-  composes: hintvarianterror from '../../styles/shared/primitives/field.module.css';
+  composes: hintVariantError from '../../styles/shared/primitives/field.module.css';
 }
 
 .fieldPartCount {
-  composes: fieldpartcount from '../../styles/shared/primitives/field.module.css';
+  composes: fieldPartCount from '../../styles/shared/primitives/field.module.css';
 }
 
 .fieldPartCountVariantMax {
-  composes: fieldpartcountvariantmax from '../../styles/shared/primitives/field.module.css';
+  composes: fieldPartCountVariantMax from '../../styles/shared/primitives/field.module.css';
 }

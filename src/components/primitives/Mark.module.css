@@ -10,5 +10,5 @@
 }
 
 .markVariantMention {
-  composes: markvariantmention from '../../styles/shared/primitives/mark.module.css';
+  composes: markVariantMention from '../../styles/shared/primitives/mark.module.css';
 }

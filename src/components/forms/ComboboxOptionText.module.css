@@ -3,5 +3,5 @@
 }
 
 .selectPartLabel {
-  composes: selectpartlabel from '../../styles/shared/forms/select.module.css';
+  composes: selectPartLabel from '../../styles/shared/forms/select.module.css';
 }

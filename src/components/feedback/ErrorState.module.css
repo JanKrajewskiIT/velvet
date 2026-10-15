@@ -17,29 +17,29 @@
 }
 
 .toneVariantDanger {
-  composes: tonevariantdanger from '../../styles/shared/feedback/status-page.module.css';
+  composes: toneVariantDanger from '../../styles/shared/feedback/status-page.module.css';
 }
 
 .emptyVariantSm {
-  composes: emptyvariantsm from '../../styles/shared/feedback/empty-state.module.css';
+  composes: emptyVariantSm from '../../styles/shared/feedback/empty-state.module.css';
 }
 
 .emptyVariantLg {
-  composes: emptyvariantlg from '../../styles/shared/feedback/empty-state.module.css';
+  composes: emptyVariantLg from '../../styles/shared/feedback/empty-state.module.css';
 }
 
 .emptyPartText {
-  composes: emptyparttext from '../../styles/shared/feedback/empty-state.module.css';
+  composes: emptyPartText from '../../styles/shared/feedback/empty-state.module.css';
 }
 
 .emptyPartTitle {
-  composes: emptyparttitle from '../../styles/shared/feedback/empty-state.module.css';
+  composes: emptyPartTitle from '../../styles/shared/feedback/empty-state.module.css';
 }
 
 .emptyPartDesc {
-  composes: emptypartdesc from '../../styles/shared/feedback/empty-state.module.css';
+  composes: emptyPartDesc from '../../styles/shared/feedback/empty-state.module.css';
 }
 
 .emptyPartActions {
-  composes: emptypartactions from '../../styles/shared/feedback/empty-state.module.css';
+  composes: emptyPartActions from '../../styles/shared/feedback/empty-state.module.css';
 }

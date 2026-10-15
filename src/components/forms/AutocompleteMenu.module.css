@@ -14,13 +14,13 @@
 }
 
 .selectPartMenu {
-  composes: selectpartmenu from '../../styles/shared/forms/select.module.css';
+  composes: selectPartMenu from '../../styles/shared/forms/select.module.css';
 }
 
 .selectPartMenuVariantUp {
-  composes: selectpartmenuvariantup from '../../styles/shared/forms/select.module.css';
+  composes: selectPartMenuVariantUp from '../../styles/shared/forms/select.module.css';
 }
 
 .selectPartCheck {
-  composes: selectpartcheck from '../../styles/shared/forms/select.module.css';
+  composes: selectPartCheck from '../../styles/shared/forms/select.module.css';
 }

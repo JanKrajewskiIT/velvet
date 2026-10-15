@@ -3,7 +3,7 @@
 }
 
 :import('../../styles/shared/menus/menu.module.css') {
-  externalMenuWrap: menuwrap;
+  externalMenuWrap: menuWrap;
 }
 
 .btnSplit {

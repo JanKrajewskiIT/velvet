@@ -3,5 +3,5 @@
 }
 
 .selectPartOption {
-  composes: selectpartoption from '../../styles/shared/primitives/option.module.css';
+  composes: selectPartOption from '../../styles/shared/primitives/option.module.css';
 }

@@ -40,23 +40,23 @@
 }
 
 .progressVariantSuccess {
-  composes: progressvariantsuccess from '../../styles/shared/feedback/progress.module.css';
+  composes: progressVariantSuccess from '../../styles/shared/feedback/progress.module.css';
 }
 
 .progressVariantWarning {
-  composes: progressvariantwarning from '../../styles/shared/feedback/progress.module.css';
+  composes: progressVariantWarning from '../../styles/shared/feedback/progress.module.css';
 }
 
 .progressVariantDanger {
-  composes: progressvariantdanger from '../../styles/shared/feedback/progress.module.css';
+  composes: progressVariantDanger from '../../styles/shared/feedback/progress.module.css';
 }
 
 .progressVariantNeutral {
-  composes: progressvariantneutral from '../../styles/shared/feedback/progress.module.css';
+  composes: progressVariantNeutral from '../../styles/shared/feedback/progress.module.css';
 }
 
 .ringPartValue {
-  composes: ringpartvalue from '../../styles/shared/feedback/progress.module.css';
+  composes: ringPartValue from '../../styles/shared/feedback/progress.module.css';
 }
 
 .ringPartValue.ringPartValue {

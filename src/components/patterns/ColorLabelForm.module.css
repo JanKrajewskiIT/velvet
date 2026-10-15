@@ -48,5 +48,5 @@
 }
 
 .hintVariantError {
-  composes: hintvarianterror from '../../styles/shared/primitives/field.module.css';
+  composes: hintVariantError from '../../styles/shared/primitives/field.module.css';
 }

@@ -21,5 +21,5 @@
 }
 
 .menuPartLabel {
-  composes: menupartlabel from '../../styles/shared/menus/menu.module.css';
+  composes: menuPartLabel from '../../styles/shared/menus/menu.module.css';
 }

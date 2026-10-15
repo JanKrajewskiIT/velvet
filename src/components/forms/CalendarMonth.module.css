@@ -28,6 +28,39 @@
   height: var(--control-height-inner);
 }
 
+.calPartDay {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--cal-cell);
+  height: var(--cal-cell);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: none;
+  color: var(--fg-primary);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition: background-color var(--motion-fast);
+}
+
+.calPartDay:hover:not(:disabled) {
+  background: var(--bg-hover);
+}
+
+.calPartDay:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  z-index: 1;
+}
+
+.calPartDay:disabled {
+  color: var(--fg-disabled);
+  cursor: not-allowed;
+  text-decoration: line-through;
+  text-decoration-color: var(--border-default);
+}
+
 .calPartDayVariantOut {
   color: var(--fg-disabled);
 }
@@ -110,42 +143,7 @@
   .calPartGrid {
     grid-template-columns: repeat(7, 1fr);
   }
-}
 
-.calPartDay {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: var(--cal-cell);
-  height: var(--cal-cell);
-  padding: 0;
-  border: 0;
-  border-radius: var(--radius-md);
-  background: none;
-  color: var(--fg-primary);
-  font-variant-numeric: tabular-nums;
-  cursor: pointer;
-  transition: background-color var(--motion-fast);
-}
-
-.calPartDay:hover:not(:disabled) {
-  background: var(--bg-hover);
-}
-
-.calPartDay:focus-visible {
-  outline: none;
-  box-shadow: var(--focus-ring);
-  z-index: 1;
-}
-
-.calPartDay:disabled {
-  color: var(--fg-disabled);
-  cursor: not-allowed;
-  text-decoration: line-through;
-  text-decoration-color: var(--border-default);
-}
-
-@media (width <= 639px) {
   .calPartDay {
     width: 100%;
   }

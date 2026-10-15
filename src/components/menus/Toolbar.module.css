@@ -1,5 +1,5 @@
 :import('../../styles/shared/menus/menu.module.css') {
-  externalMenuWrap: menuwrap;
+  externalMenuWrap: menuWrap;
 }
 
 .toolbar {
@@ -33,5 +33,5 @@
 }
 
 .toolbarPartBtn {
-  composes: toolbarpartbtn from '../../styles/shared/menus/toolbar.module.css';
+  composes: toolbarPartBtn from '../../styles/shared/menus/toolbar.module.css';
 }

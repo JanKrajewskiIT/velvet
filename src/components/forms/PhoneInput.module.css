@@ -1,5 +1,5 @@
 :import('../../styles/shared/primitives/control.module.css') {
-  externalControlPartInput: controlpartinput;
+  externalControlPartInput: controlPartInput;
 }
 
 .phonePartCountry {
@@ -39,9 +39,9 @@
 }
 
 .phonePartCode {
-  composes: phonepartcode from '../../styles/shared/forms/phone-input.module.css';
+  composes: phonePartCode from '../../styles/shared/forms/phone-input.module.css';
 }
 
 .phonePartDial {
-  composes: phonepartdial from '../../styles/shared/forms/phone-input.module.css';
+  composes: phonePartDial from '../../styles/shared/forms/phone-input.module.css';
 }

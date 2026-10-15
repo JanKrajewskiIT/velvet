@@ -3,7 +3,7 @@
 }
 
 .popoverWrap {
-  composes: popoverwrap from '../../styles/shared/feedback/popover.module.css';
+  composes: popoverWrap from '../../styles/shared/feedback/popover.module.css';
 }
 
 .datepicker {
@@ -19,11 +19,11 @@
 }
 
 .popoverVariantEnd {
-  composes: popovervariantend from '../../styles/shared/feedback/popover.module.css';
+  composes: popoverVariantEnd from '../../styles/shared/feedback/popover.module.css';
 }
 
 .datepopPartFoot {
-  composes: datepoppartfoot from '../../styles/shared/forms/date-picker.module.css';
+  composes: datepopPartFoot from '../../styles/shared/forms/date-picker.module.css';
 }
 
 .hint {
@@ -31,5 +31,5 @@
 }
 
 .hintVariantError {
-  composes: hintvarianterror from '../../styles/shared/primitives/field.module.css';
+  composes: hintVariantError from '../../styles/shared/primitives/field.module.css';
 }

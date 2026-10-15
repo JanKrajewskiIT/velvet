@@ -11,9 +11,9 @@
 }
 
 .menuWrap {
-  composes: menuwrap from '../../styles/shared/menus/menu.module.css';
+  composes: menuWrap from '../../styles/shared/menus/menu.module.css';
 }
 
 .menuVariantPop {
-  composes: menuvariantpop from '../../styles/shared/menus/menu.module.css';
+  composes: menuVariantPop from '../../styles/shared/menus/menu.module.css';
 }

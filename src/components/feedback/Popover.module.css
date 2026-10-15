@@ -1,6 +1,6 @@
 :import('../../styles/shared/feedback/popover.module.css') {
   externalPopover: popover;
-  externalPopoverVariantEnd: popovervariantend;
+  externalPopoverVariantEnd: popoverVariantEnd;
 }
 
 .popoverWrapVariantHover > :global(.externalPopover)::before {
@@ -32,7 +32,7 @@
 }
 
 .popoverWrap {
-  composes: popoverwrap from '../../styles/shared/feedback/popover.module.css';
+  composes: popoverWrap from '../../styles/shared/feedback/popover.module.css';
 }
 
 .popover {
@@ -40,5 +40,5 @@
 }
 
 .popoverVariantEnd {
-  composes: popovervariantend from '../../styles/shared/feedback/popover.module.css';
+  composes: popoverVariantEnd from '../../styles/shared/feedback/popover.module.css';
 }

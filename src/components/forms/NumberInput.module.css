@@ -41,9 +41,9 @@
 }
 
 .controlPartAffix {
-  composes: controlpartaffix from '../../styles/shared/primitives/control.module.css';
+  composes: controlPartAffix from '../../styles/shared/primitives/control.module.css';
 }
 
 .controlPartAffixVariantEnd {
-  composes: controlpartaffixvariantend from '../../styles/shared/primitives/control.module.css';
+  composes: controlPartAffixVariantEnd from '../../styles/shared/primitives/control.module.css';
 }

@@ -120,9 +120,9 @@
 }
 
 .areqPartSet {
-  composes: areqpartset from '../../styles/shared/patterns/analysis-request.module.css';
+  composes: areqPartSet from '../../styles/shared/patterns/analysis-request.module.css';
 }
 
 .areqPartLbl {
-  composes: areqpartlbl from '../../styles/shared/patterns/analysis-request.module.css';
+  composes: areqPartLbl from '../../styles/shared/patterns/analysis-request.module.css';
 }

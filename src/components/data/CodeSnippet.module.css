@@ -90,25 +90,25 @@
 }
 
 .codePartBar {
-  composes: codepartbar from '../../styles/shared/data/code-snippet.module.css';
+  composes: codePartBar from '../../styles/shared/data/code-snippet.module.css';
 }
 
 .codePartTitle {
-  composes: codeparttitle from '../../styles/shared/data/code-snippet.module.css';
+  composes: codePartTitle from '../../styles/shared/data/code-snippet.module.css';
 }
 
 .codePartTab {
-  composes: codeparttab from '../../styles/shared/data/code-snippet.module.css';
+  composes: codePartTab from '../../styles/shared/data/code-snippet.module.css';
 }
 
 .codePartTabVariantOn {
-  composes: codeparttabvarianton from '../../styles/shared/data/code-snippet.module.css';
+  composes: codePartTabVariantOn from '../../styles/shared/data/code-snippet.module.css';
 }
 
 .codePartCopy {
-  composes: codepartcopy from '../../styles/shared/data/code-snippet.module.css';
+  composes: codePartCopy from '../../styles/shared/data/code-snippet.module.css';
 }
 
 .srOnly {
-  composes: sronly from '../../styles/shared/navigation/link.module.css';
+  composes: srOnly from '../../styles/shared/navigation/link.module.css';
 }

@@ -3,13 +3,13 @@
 }
 
 .selectPartMenu {
-  composes: selectpartmenu from '../../styles/shared/forms/select.module.css';
+  composes: selectPartMenu from '../../styles/shared/forms/select.module.css';
 }
 
 .selectPartLabel {
-  composes: selectpartlabel from '../../styles/shared/forms/select.module.css';
+  composes: selectPartLabel from '../../styles/shared/forms/select.module.css';
 }
 
 .selectPartCheck {
-  composes: selectpartcheck from '../../styles/shared/forms/select.module.css';
+  composes: selectPartCheck from '../../styles/shared/forms/select.module.css';
 }

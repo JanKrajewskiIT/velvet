@@ -101,7 +101,7 @@
 }
 
 .controlPartAffix {
-  composes: controlpartaffix from '../../styles/shared/primitives/control.module.css';
+  composes: controlPartAffix from '../../styles/shared/primitives/control.module.css';
 }
 
 .swatch {
@@ -109,5 +109,5 @@
 }
 
 .swatchVariantFill {
-  composes: swatchvariantfill from '../../styles/shared/primitives/swatch.module.css';
+  composes: swatchVariantFill from '../../styles/shared/primitives/swatch.module.css';
 }

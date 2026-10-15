@@ -1,9 +1,9 @@
 :import('../../styles/shared/actions/button.module.css') {
-  externalBtnVariantSm: btnvariantsm;
-  externalBtnVariantPrimary: btnvariantprimary;
-  externalBtnVariantDanger: btnvariantdanger;
-  externalBtnVariantGhost: btnvariantghost;
-  externalBtnVariantSoft: btnvariantsoft;
+  externalBtnVariantSm: btnVariantSm;
+  externalBtnVariantPrimary: btnVariantPrimary;
+  externalBtnVariantDanger: btnVariantDanger;
+  externalBtnVariantGhost: btnVariantGhost;
+  externalBtnVariantSoft: btnVariantSoft;
 }
 
 .btngroup {

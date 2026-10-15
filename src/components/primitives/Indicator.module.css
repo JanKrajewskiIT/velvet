@@ -34,5 +34,5 @@
 }
 
 .indicatorPartItem {
-  composes: indicatorpartitem from '../../styles/shared/primitives/dot.module.css';
+  composes: indicatorPartItem from '../../styles/shared/primitives/dot.module.css';
 }

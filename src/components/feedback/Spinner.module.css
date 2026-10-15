@@ -89,9 +89,9 @@
 }
 
 .loaderVariantSm {
-  composes: loadervariantsm from '../../styles/shared/feedback/spinner.module.css';
+  composes: loaderVariantSm from '../../styles/shared/feedback/spinner.module.css';
 }
 
 .loaderVariantRing {
-  composes: loadervariantring from '../../styles/shared/feedback/spinner.module.css';
+  composes: loaderVariantRing from '../../styles/shared/feedback/spinner.module.css';
 }

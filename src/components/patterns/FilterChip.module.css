@@ -55,11 +55,11 @@
 }
 
 .optionPartLabel {
-  composes: optionpartlabel from '../../styles/shared/primitives/option.module.css';
+  composes: optionPartLabel from '../../styles/shared/primitives/option.module.css';
 }
 
 .menuWrap {
-  composes: menuwrap from '../../styles/shared/menus/menu.module.css';
+  composes: menuWrap from '../../styles/shared/menus/menu.module.css';
 }
 
 .menu {
@@ -67,7 +67,7 @@
 }
 
 .menuVariantPop {
-  composes: menuvariantpop from '../../styles/shared/menus/menu.module.css';
+  composes: menuVariantPop from '../../styles/shared/menus/menu.module.css';
 }
 
 .option {
@@ -75,21 +75,21 @@
 }
 
 .optionPartCheck {
-  composes: optionpartcheck from '../../styles/shared/primitives/option.module.css';
+  composes: optionPartCheck from '../../styles/shared/primitives/option.module.css';
 }
 
 .fchipPartBox {
-  composes: fchippartbox from '../../styles/shared/patterns/filter-bar.module.css';
+  composes: fchipPartBox from '../../styles/shared/patterns/filter-bar.module.css';
 }
 
 .fchipPartBoxVariantOn {
-  composes: fchippartboxvarianton from '../../styles/shared/patterns/filter-bar.module.css';
+  composes: fchipPartBoxVariantOn from '../../styles/shared/patterns/filter-bar.module.css';
 }
 
 .optionPartKbd {
-  composes: optionpartkbd from '../../styles/shared/primitives/option.module.css';
+  composes: optionPartKbd from '../../styles/shared/primitives/option.module.css';
 }
 
 .fchipPartFoot {
-  composes: fchippartfoot from '../../styles/shared/patterns/filter-bar.module.css';
+  composes: fchipPartFoot from '../../styles/shared/patterns/filter-bar.module.css';
 }

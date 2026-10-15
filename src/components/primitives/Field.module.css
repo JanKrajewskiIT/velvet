@@ -3,11 +3,11 @@
 }
 
 .fieldPartFoot {
-  composes: fieldpartfoot from '../../styles/shared/primitives/field.module.css';
+  composes: fieldPartFoot from '../../styles/shared/primitives/field.module.css';
 }
 
 .hintVariantLane {
-  composes: hintvariantlane from '../../styles/shared/primitives/field.module.css';
+  composes: hintVariantLane from '../../styles/shared/primitives/field.module.css';
 }
 
 .hint {
@@ -15,9 +15,9 @@
 }
 
 .fieldPartCount {
-  composes: fieldpartcount from '../../styles/shared/primitives/field.module.css';
+  composes: fieldPartCount from '../../styles/shared/primitives/field.module.css';
 }
 
 .fieldPartCountVariantMax {
-  composes: fieldpartcountvariantmax from '../../styles/shared/primitives/field.module.css';
+  composes: fieldPartCountVariantMax from '../../styles/shared/primitives/field.module.css';
 }

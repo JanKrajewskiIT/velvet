@@ -73,7 +73,7 @@
 }
 
 .swatchVariantLg {
-  composes: swatchvariantlg from '../../styles/shared/primitives/swatch.module.css';
+  composes: swatchVariantLg from '../../styles/shared/primitives/swatch.module.css';
 }
 
 .field {
@@ -81,7 +81,7 @@
 }
 
 .popoverWrap {
-  composes: popoverwrap from '../../styles/shared/feedback/popover.module.css';
+  composes: popoverWrap from '../../styles/shared/feedback/popover.module.css';
 }
 
 .control {

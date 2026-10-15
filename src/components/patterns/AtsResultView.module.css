@@ -1,5 +1,5 @@
 :import('../../styles/shared/patterns/ats-analysis.module.css') {
-  externalAtsPartH: atsparth;
+  externalAtsPartH: atsPartH;
 }
 
 .atsPartRing {
@@ -167,29 +167,29 @@
 }
 
 .atsPartBody {
-  composes: atspartbody from '../../styles/shared/patterns/ats-analysis.module.css';
+  composes: atsPartBody from '../../styles/shared/patterns/ats-analysis.module.css';
 }
 
 .atsPartHero {
-  composes: atsparthero from '../../styles/shared/patterns/ats-analysis.module.css';
+  composes: atsPartHero from '../../styles/shared/patterns/ats-analysis.module.css';
 }
 
 .atsPartSec {
-  composes: atspartsec from '../../styles/shared/patterns/ats-analysis.module.css';
+  composes: atsPartSec from '../../styles/shared/patterns/ats-analysis.module.css';
 }
 
 .atsPartH {
-  composes: atsparth from '../../styles/shared/patterns/ats-analysis.module.css';
+  composes: atsPartH from '../../styles/shared/patterns/ats-analysis.module.css';
 }
 
 .aiPartDisclaimer {
-  composes: aipartdisclaimer from '../../styles/shared/patterns/ai-result-panel.module.css';
+  composes: aiPartDisclaimer from '../../styles/shared/patterns/ai-result-panel.module.css';
 }
 
 .aiPartFoot {
-  composes: aipartfoot from '../../styles/shared/patterns/ai-result-panel.module.css';
+  composes: aiPartFoot from '../../styles/shared/patterns/ai-result-panel.module.css';
 }
 
 .aiPartFb {
-  composes: aipartfb from '../../styles/shared/patterns/ai-result-panel.module.css';
+  composes: aiPartFb from '../../styles/shared/patterns/ai-result-panel.module.css';
 }

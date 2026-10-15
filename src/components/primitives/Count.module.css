@@ -3,33 +3,33 @@
 }
 
 .countVariantSm {
-  composes: countvariantsm from '../../styles/shared/primitives/dot.module.css';
+  composes: countVariantSm from '../../styles/shared/primitives/dot.module.css';
 }
 
 .countVariantLg {
-  composes: countvariantlg from '../../styles/shared/primitives/dot.module.css';
+  composes: countVariantLg from '../../styles/shared/primitives/dot.module.css';
 }
 
 .countVariantDanger {
-  composes: countvariantdanger from '../../styles/shared/primitives/dot.module.css';
+  composes: countVariantDanger from '../../styles/shared/primitives/dot.module.css';
 }
 
 .countVariantSuccess {
-  composes: countvariantsuccess from '../../styles/shared/primitives/dot.module.css';
+  composes: countVariantSuccess from '../../styles/shared/primitives/dot.module.css';
 }
 
 .countVariantInverse {
-  composes: countvariantinverse from '../../styles/shared/primitives/dot.module.css';
+  composes: countVariantInverse from '../../styles/shared/primitives/dot.module.css';
 }
 
 .countVariantNeutral {
-  composes: countvariantneutral from '../../styles/shared/primitives/dot.module.css';
+  composes: countVariantNeutral from '../../styles/shared/primitives/dot.module.css';
 }
 
 .countVariantSoft {
-  composes: countvariantsoft from '../../styles/shared/primitives/dot.module.css';
+  composes: countVariantSoft from '../../styles/shared/primitives/dot.module.css';
 }
 
 .countVariantPop {
-  composes: countvariantpop from '../../styles/shared/primitives/dot.module.css';
+  composes: countVariantPop from '../../styles/shared/primitives/dot.module.css';
 }

@@ -1,5 +1,5 @@
 :import('../../styles/shared/primitives/list-item.module.css') {
-  externalListItemVariantSelected: listitemvariantselected;
+  externalListItemVariantSelected: listItemVariantSelected;
 }
 
 .imports {
@@ -63,5 +63,5 @@
 }
 
 .confirmPartErr {
-  composes: confirmparterr from '../../styles/shared/feedback/confirm-dialog.module.css';
+  composes: confirmPartErr from '../../styles/shared/feedback/confirm-dialog.module.css';
 }

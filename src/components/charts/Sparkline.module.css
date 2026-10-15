@@ -34,5 +34,5 @@
 }
 
 .chartPartCross {
-  composes: chartpartcross from '../../styles/shared/charts/chart.module.css';
+  composes: chartPartCross from '../../styles/shared/charts/chart.module.css';
 }

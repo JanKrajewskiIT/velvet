@@ -1,5 +1,5 @@
 :import('../../styles/shared/navigation/tree-view.module.css') {
-  externalTreePartIcon: treeparticon;
+  externalTreePartIcon: treePartIcon;
 }
 
 .treePartRowVariantSel,
@@ -64,17 +64,17 @@
 }
 
 .treePartRow {
-  composes: treepartrow from '../../styles/shared/navigation/tree-view.module.css';
+  composes: treePartRow from '../../styles/shared/navigation/tree-view.module.css';
 }
 
 .treePartCaret {
-  composes: treepartcaret from '../../styles/shared/navigation/tree-view.module.css';
+  composes: treePartCaret from '../../styles/shared/navigation/tree-view.module.css';
 }
 
 .treePartIcon {
-  composes: treeparticon from '../../styles/shared/navigation/tree-view.module.css';
+  composes: treePartIcon from '../../styles/shared/navigation/tree-view.module.css';
 }
 
 .treePartLabel {
-  composes: treepartlabel from '../../styles/shared/navigation/tree-view.module.css';
+  composes: treePartLabel from '../../styles/shared/navigation/tree-view.module.css';
 }

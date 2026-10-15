@@ -16,9 +16,9 @@
 }
 
 .swatchVariantLg {
-  composes: swatchvariantlg from '../../styles/shared/primitives/swatch.module.css';
+  composes: swatchVariantLg from '../../styles/shared/primitives/swatch.module.css';
 }
 
 .swatchVariantFill {
-  composes: swatchvariantfill from '../../styles/shared/primitives/swatch.module.css';
+  composes: swatchVariantFill from '../../styles/shared/primitives/swatch.module.css';
 }

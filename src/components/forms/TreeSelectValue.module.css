@@ -1,9 +1,9 @@
 .tselectPartPh {
-  composes: tselectpartph from '../../styles/shared/patterns/filter-bar.module.css';
+  composes: tselectPartPh from '../../styles/shared/patterns/filter-bar.module.css';
 }
 
 .tselectPartVal {
-  composes: tselectpartval from '../../styles/shared/patterns/filter-bar.module.css';
+  composes: tselectPartVal from '../../styles/shared/patterns/filter-bar.module.css';
 }
 
 .tag {

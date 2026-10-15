@@ -13,5 +13,5 @@
 }
 
 .ringPartValue {
-  composes: ringpartvalue from '../../styles/shared/feedback/progress.module.css';
+  composes: ringPartValue from '../../styles/shared/feedback/progress.module.css';
 }

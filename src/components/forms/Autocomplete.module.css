@@ -3,9 +3,9 @@
 }
 
 .controlPartAdorn {
-  composes: controlpartadorn from '../../styles/shared/primitives/control.module.css';
+  composes: controlPartAdorn from '../../styles/shared/primitives/control.module.css';
 }
 
 .controlPartAdornVariantEnd {
-  composes: controlpartadornvariantend from '../../styles/shared/primitives/control.module.css';
+  composes: controlPartAdornVariantEnd from '../../styles/shared/primitives/control.module.css';
 }

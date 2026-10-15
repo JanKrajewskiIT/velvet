@@ -1,5 +1,5 @@
 :import('../../styles/shared/patterns/comment-thread.module.css') {
-  externalCmtPartBody: cmtpartbody;
+  externalCmtPartBody: cmtPartBody;
 }
 
 .cmtPartReplies {
@@ -95,5 +95,5 @@
 }
 
 .cmtPartBody {
-  composes: cmtpartbody from '../../styles/shared/patterns/comment-thread.module.css';
+  composes: cmtPartBody from '../../styles/shared/patterns/comment-thread.module.css';
 }

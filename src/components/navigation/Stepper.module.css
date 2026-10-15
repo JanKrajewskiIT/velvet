@@ -185,5 +185,5 @@ button.stepPartInner:not(:disabled):hover .stepPartDot {
 }
 
 .srOnly {
-  composes: sronly from '../../styles/shared/navigation/link.module.css';
+  composes: srOnly from '../../styles/shared/navigation/link.module.css';
 }

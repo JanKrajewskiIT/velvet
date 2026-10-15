@@ -1,11 +1,11 @@
 .chartPartTip {
-  composes: chartparttip from '../../styles/shared/charts/chart.module.css';
+  composes: chartPartTip from '../../styles/shared/charts/chart.module.css';
 }
 
 .chartPartTipT {
-  composes: chartparttipt from '../../styles/shared/charts/chart.module.css';
+  composes: chartPartTipT from '../../styles/shared/charts/chart.module.css';
 }
 
 .chartPartTipR {
-  composes: chartparttipr from '../../styles/shared/charts/chart.module.css';
+  composes: chartPartTipR from '../../styles/shared/charts/chart.module.css';
 }

@@ -6,9 +6,9 @@
 }
 
 .aiPartFoot {
-  composes: aipartfoot from '../../styles/shared/patterns/ai-result-panel.module.css';
+  composes: aiPartFoot from '../../styles/shared/patterns/ai-result-panel.module.css';
 }
 
 .aiPartFb {
-  composes: aipartfb from '../../styles/shared/patterns/ai-result-panel.module.css';
+  composes: aiPartFb from '../../styles/shared/patterns/ai-result-panel.module.css';
 }

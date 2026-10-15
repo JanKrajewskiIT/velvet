@@ -1,7 +1,7 @@
 .organizerPartAdd {
-  composes: organizerpartadd from '../../styles/shared/patterns/calendar-organizer.module.css';
+  composes: organizerPartAdd from '../../styles/shared/patterns/calendar-organizer.module.css';
 }
 
 .organizerPartAddrow {
-  composes: organizerpartaddrow from '../../styles/shared/patterns/calendar-organizer.module.css';
+  composes: organizerPartAddrow from '../../styles/shared/patterns/calendar-organizer.module.css';
 }
