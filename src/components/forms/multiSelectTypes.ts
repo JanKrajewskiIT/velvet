@@ -36,6 +36,10 @@ export interface MultiSelectProps extends FormControlProps {
   removeLabel?: (label: string) => string;
   /** Cap on selections; unpicked rows disable at the cap. */
   max?: number;
+  /** Offer a free entry when the query does not match an existing or selected value. */
+  creatable?: boolean;
+  /** Verb used by the create row. @default localized "Add" */
+  createLabel?: string;
   /** @default 'md' */
   size?: 'sm' | 'md';
   disabled?: boolean;

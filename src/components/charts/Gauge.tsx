@@ -94,6 +94,7 @@ export const Gauge = (props: GaugeProps) => {
   return (
     <div
       class={cx(typographyClass('body'), styles.gauge, merged.class)}
+      data-size={merged.size}
       role="meter"
       aria-valuemin={merged.min}
       aria-valuemax={merged.max}
@@ -118,7 +119,7 @@ export const Gauge = (props: GaugeProps) => {
           </For>
         </svg>
         <div class={styles.gaugePartValue}>
-          <Text as="b" variant={merged.size === 'sm' ? 'h4' : merged.size === 'lg' ? 'kpi' : 'h3'} tone="inherit">
+          <Text as="b" variant="kpi" tone="inherit">
             {format(value())}
           </Text>
           <Show when={merged.unit}>
@@ -143,7 +144,7 @@ export const Gauge = (props: GaugeProps) => {
       <Show when={label() || caption()}>
         <div class={styles.gaugePartText}>
           <Show when={label()}>
-            <Text as="div" variant="label" tone="inherit" id={labelId} class={'vui-gauge__label'}>
+            <Text as="div" variant="label" tone="inherit" id={labelId} class={styles.gaugePartLabel}>
               {label()}
             </Text>
           </Show>

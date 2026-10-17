@@ -1,3 +1,7 @@
+:import('../../styles/shared/animations.module.css') {
+  vuiFadeIn: vuiFadeIn;
+}
+
 .ganttPartBar {
   position: absolute;
   z-index: 2;
@@ -13,7 +17,7 @@
   color: var(--fg-primary);
   text-align: left;
   cursor: pointer;
-  animation: vui-fade-in var(--motion-enter) backwards;
+  animation: vuiFadeIn var(--motion-enter) backwards;
   transition: box-shadow var(--motion-fast);
 }
 

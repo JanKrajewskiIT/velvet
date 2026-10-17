@@ -1,8 +1,10 @@
-import { createMemo, createSignal, mergeProps, onCleanup, onMount, Show } from 'solid-js';
+import { batch, createEffect, createMemo, createSignal, mergeProps, on, onCleanup, onMount, Show } from 'solid-js';
 
+import { ownsLayerEvent } from '../../hooks/createLayer';
 import { useTranslate } from '../../i18n/useTranslate';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { isInteractiveTarget } from '../../utils/interactiveTarget';
 import { Button } from '../actions/Button';
 import { FlipCard } from '../data/FlipCard';
 import { CloseButton } from '../primitives/CloseButton';
@@ -10,6 +12,8 @@ import { Kbd } from '../primitives/Kbd';
 import { Meter } from '../primitives/Meter';
 import { Text } from '../primitives/Text';
 import type { Flashcard, FlashResult } from './flashcard';
+import { FlashcardFace } from './FlashcardFace';
+import { flashcardHeight } from './flashcardPresentation';
 import styles from './FlashcardSession.module.css';
 
 const FC_SESSION_PART_CARD_CLASSES = {
@@ -27,6 +31,7 @@ export interface FlashcardSessionProps {
 }
 
 const LEAVE_MS = 220;
+const SESSION_SELECTOR = '[data-vui-flashcard-session]';
 
 /** One-card-at-a-time practice: flip (Space), then "Didn’t know" (1 / ←) or "Knew it" (2 / →); the card slides out, progress bar and tally update. */
 export const FlashcardSession = (props: FlashcardSessionProps) => {
@@ -37,13 +42,33 @@ export const FlashcardSession = (props: FlashcardSessionProps) => {
   const [results, setResults] = createSignal<FlashResult[]>([]);
   const [leaving, setLeaving] = createSignal<'left' | 'right' | null>(null);
   let leaveTimer: ReturnType<typeof setTimeout> | undefined;
+  let root: HTMLDivElement | undefined;
 
   const card = () => p.cards[index()];
+  const front = () => (p.reverse ? card()?.back : card()?.front);
+  const back = () => (p.reverse ? card()?.front : card()?.back);
   const known = createMemo(() => results().filter((result) => result.known).length);
   const leavingClass = () => {
     const direction = leaving();
     return direction ? variantClass(FC_SESSION_PART_CARD_CLASSES, direction) : undefined;
   };
+
+  createEffect(
+    on(
+      () => p.cards,
+      () => {
+        clearTimeout(leaveTimer);
+        leaveTimer = undefined;
+        batch(() => {
+          setIndex(0);
+          setFlipped(false);
+          setResults([]);
+          setLeaving(null);
+        });
+      },
+      { defer: true },
+    ),
+  );
 
   const answer = (isKnown: boolean) => {
     const current = card();
@@ -52,25 +77,46 @@ export const FlashcardSession = (props: FlashcardSessionProps) => {
       setFlipped(true);
       return;
     }
+    const cards = p.cards;
+    const position = index();
     setLeaving(isKnown ? 'right' : 'left');
     leaveTimer = setTimeout(() => {
-      const next = [...results(), { id: current.id ?? index(), known: isKnown }];
-      setResults(next);
-      setLeaving(null);
-      setFlipped(false);
-      if (index() + 1 >= p.cards.length) p.onFinish?.(next);
-      else setIndex(index() + 1);
+      leaveTimer = undefined;
+      if (p.cards !== cards || card() !== current || index() !== position) {
+        setLeaving(null);
+        return;
+      }
+      const next = [...results(), { id: current.id ?? position, known: isKnown }];
+      const finished = position + 1 >= cards.length;
+      batch(() => {
+        setResults(next);
+        setLeaving(null);
+        setFlipped(false);
+        setIndex(position + 1);
+      });
+      if (finished) p.onFinish?.(next);
     }, LEAVE_MS);
   };
 
   onMount(() => {
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.target instanceof Element && e.target.closest('input,textarea')) return;
+      if (e.defaultPrevented || e.repeat || e.altKey || e.ctrlKey || e.metaKey || leaving() || !card()) return;
+      if (!root || !ownsLayerEvent(root)) return;
+      const targetSession = e.target instanceof Element ? e.target.closest(SESSION_SELECTOR) : null;
+      if (targetSession && targetSession !== root) return;
+      if (!targetSession && root.ownerDocument.querySelectorAll(SESSION_SELECTOR).length !== 1) return;
+      if (e.target instanceof Element && e.target.closest('[data-vui-flip] [role="region"]')) return;
+      if (isInteractiveTarget(e.target) && e.target !== root.querySelector('[data-vui-flip]')) return;
       if (e.key === ' ') {
         e.preventDefault();
         setFlipped(!flipped());
-      } else if (e.key === '1' || e.key === 'ArrowLeft') answer(false);
-      else if (e.key === '2' || e.key === 'ArrowRight') answer(true);
+      } else if (e.key === '1' || e.key === 'ArrowLeft') {
+        e.preventDefault();
+        answer(false);
+      } else if (e.key === '2' || e.key === 'ArrowRight') {
+        e.preventDefault();
+        answer(true);
+      }
     };
     window.addEventListener('keydown', onKeyDown);
     onCleanup(() => window.removeEventListener('keydown', onKeyDown));
@@ -80,12 +126,23 @@ export const FlashcardSession = (props: FlashcardSessionProps) => {
   return (
     <Show when={card()}>
       {(current) => (
-        <div class={cx(styles.fcSession, p.class)}>
+        <div
+          ref={(element) => {
+            root = element;
+          }}
+          data-vui-flashcard-session
+          class={cx(styles.fcSession, p.class)}
+        >
           <div class={styles.fcSessionPartTop}>
             <Show when={p.onExit}>
               <CloseButton
                 label={translate('velvet.patterns.flashcardSession.endSession')}
-                onClick={() => p.onExit?.()}
+                onClick={() => {
+                  clearTimeout(leaveTimer);
+                  leaveTimer = undefined;
+                  setLeaving(null);
+                  p.onExit?.();
+                }}
               />
             </Show>
             <Meter
@@ -103,65 +160,57 @@ export const FlashcardSession = (props: FlashcardSessionProps) => {
             {(position) => (
               <div class={cx(styles.fcSessionPartCard, leavingClass())}>
                 <FlipCard
-                  height={240}
+                  height={flashcardHeight(front(), back())}
+                  bodyClass={styles.faceBody}
                   flipped={flipped()}
-                  onFlip={setFlipped}
+                  onFlip={(next) => {
+                    if (!leaving()) setFlipped(next);
+                  }}
                   label={translate('velvet.patterns.flashcardSession.card', { position })}
                   front={
-                    <>
-                      <Text as="span" variant="overline" tone="inherit" class={styles.fcHint}>
-                        {current().hint ||
-                          translate(
-                            p.reverse
-                              ? 'velvet.patterns.flashcardSession.definition'
-                              : 'velvet.patterns.flashcardSession.term',
-                          )}
-                      </Text>
-                      <Text as="span" variant="h2" tone="inherit" class="vui-fc-term">
-                        {p.reverse ? current().back : current().front}
-                      </Text>
-                      <Text as="span" variant="caption" tone="inherit" class={styles.fcTap}>
-                        {translate('velvet.patterns.flashcardSession.flipHint')}
-                      </Text>
-                    </>
+                    <FlashcardFace
+                      side="front"
+                      content={front()}
+                      hint={
+                        current().hint ||
+                        translate(
+                          p.reverse
+                            ? 'velvet.patterns.flashcardSession.definition'
+                            : 'velvet.patterns.flashcardSession.term',
+                        )
+                      }
+                    />
                   }
                   back={
-                    <>
-                      <Text
-                        as="span"
-                        variant="overline"
-                        tone="inherit"
-                        class={styles.fcHint}
-                        style={{ color: 'var(--on-color-muted)' }}
-                      >
-                        {translate(
-                          p.reverse
-                            ? 'velvet.patterns.flashcardSession.term'
-                            : 'velvet.patterns.flashcardSession.definition',
-                        )}
-                      </Text>
-                      <Text as="span" variant="h2" tone="inherit" class="vui-fc-term">
-                        {p.reverse ? current().front : current().back}
-                      </Text>
-                      <Show when={current().example}>
-                        <Text as="span" variant="body-sm" tone="inherit" class={styles.fcEx}>
-                          {current().example}
-                        </Text>
-                      </Show>
-                    </>
+                    <FlashcardFace
+                      side="back"
+                      content={back()}
+                      example={current().example}
+                      hint={translate(
+                        p.reverse
+                          ? 'velvet.patterns.flashcardSession.term'
+                          : 'velvet.patterns.flashcardSession.definition',
+                      )}
+                    />
                   }
                 />
               </div>
             )}
           </Show>
           <div class={styles.fcSessionPartActions}>
-            <Button variant="secondary" size="lg" iconLeft="x" onClick={() => answer(false)} disabled={!flipped()}>
+            <Button
+              variant="secondary"
+              size="lg"
+              iconLeft="x"
+              onClick={() => answer(false)}
+              disabled={!flipped() || !!leaving()}
+            >
               {translate('velvet.patterns.flashcardSession.unknown')}
               <Kbd size="sm" class={styles.shortcut}>
                 1
               </Kbd>
             </Button>
-            <Button size="lg" iconLeft="check" onClick={() => answer(true)} disabled={!flipped()}>
+            <Button size="lg" iconLeft="check" onClick={() => answer(true)} disabled={!flipped() || !!leaving()}>
               {translate('velvet.patterns.flashcardSession.known')}
               <Kbd size="sm" class={cx(styles.shortcut, styles.shortcutOnColor)}>
                 2

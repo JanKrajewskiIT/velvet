@@ -1,18 +1,18 @@
 .bSpk {
   composes: part from '../../styles/shared/feedback/loader-bike-part.module.css';
-  animation-name: vui-bike-spk;
+  animation-name: vuiBikeSpk;
 }
 
 .bTire {
   composes: part from '../../styles/shared/feedback/loader-bike-part.module.css';
-  animation-name: vui-bike-tire;
+  animation-name: vuiBikeTire;
   transform-origin: center;
   transform-box: fill-box;
 }
 
 .bSpkspin {
   composes: part from '../../styles/shared/feedback/loader-bike-part.module.css';
-  animation-name: vui-bike-spkspin;
+  animation-name: vuiBikeSpkspin;
   transform-origin: center;
   transform-box: fill-box;
 }
@@ -20,4 +20,55 @@
 .bSpk,
 .bTire {
   stroke: currentcolor;
+}
+
+@keyframes vuiBikeSpk {
+  0% {
+    animation-timing-function: ease-in;
+    stroke-dashoffset: -31.416;
+  }
+
+  33%,
+  67% {
+    animation-timing-function: ease-out;
+    stroke-dashoffset: -23.562;
+  }
+
+  100% {
+    stroke-dashoffset: -31.416;
+  }
+}
+
+@keyframes vuiBikeSpkspin {
+  from {
+    transform: rotate(0);
+  }
+
+  to {
+    transform: rotate(3turn);
+  }
+}
+
+@keyframes vuiBikeTire {
+  0% {
+    animation-timing-function: ease-in;
+    stroke-dashoffset: 56.549;
+    transform: rotate(0);
+  }
+
+  33% {
+    stroke-dashoffset: 0;
+    transform: rotate(0.33turn);
+  }
+
+  67% {
+    animation-timing-function: ease-out;
+    stroke-dashoffset: 0;
+    transform: rotate(0.67turn);
+  }
+
+  100% {
+    stroke-dashoffset: -56.549;
+    transform: rotate(1turn);
+  }
 }

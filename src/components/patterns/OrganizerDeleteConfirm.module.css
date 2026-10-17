@@ -1,7 +1,11 @@
+:import('../../styles/shared/animations.module.css') {
+  vuiFadeIn: vuiFadeIn;
+}
+
 .organizerPartConfirm {
   display: flex;
   gap: var(--space-1);
   flex: none;
   padding-right: var(--space-1);
-  animation: vui-fade-in var(--motion-fast);
+  animation: vuiFadeIn var(--motion-fast);
 }

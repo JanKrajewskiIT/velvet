@@ -1,3 +1,7 @@
+:import('../../styles/shared/animations.module.css') {
+  vuiSelectIn: vuiSelectIn;
+}
+
 .lightbox {
   composes: lightbox from '../../styles/shared/media/lightbox.module.css';
 }
@@ -41,7 +45,7 @@
   box-shadow: var(--elevation-media);
   cursor: zoom-in;
   transition: transform var(--motion-enter);
-  animation: vui-select-in var(--motion-enter);
+  animation: vuiSelectIn var(--motion-enter);
 }
 
 .lightboxPartStageVariantZoom {

@@ -12,6 +12,7 @@ import styles from './EditableCollectionRow.module.css';
 import type { EditableItem, EditableReorder } from './editableItem';
 import { Rating } from './Rating';
 import { Select } from './Select';
+import type { SelectOption } from './selectOption';
 
 export interface EditableCollectionRowProps {
   item: EditableItem;
@@ -22,7 +23,7 @@ export interface EditableCollectionRowProps {
   required: boolean;
   requiredText?: string;
   placeholder?: string;
-  levels?: ReadonlyArray<string>;
+  levels?: ReadonlyArray<string | SelectOption>;
   levelLabel?: string;
   weighted: boolean;
   maxWeight: number;

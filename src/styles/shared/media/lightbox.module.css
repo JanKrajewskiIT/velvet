@@ -1,3 +1,7 @@
+:import('../animations.module.css') {
+  vuiFadeIn: vuiFadeIn;
+}
+
 .lightbox {
   position: fixed;
   inset: 0;
@@ -7,5 +11,5 @@
   background: var(--scrim-media);
   color: var(--on-color-fg);
   outline: 0;
-  animation: vui-fade-in var(--motion-base);
+  animation: vuiFadeIn var(--motion-base);
 }

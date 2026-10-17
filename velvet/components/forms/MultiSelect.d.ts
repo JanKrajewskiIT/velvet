@@ -16,6 +16,10 @@ export interface MultiSelectProps {
   emptyText?: string;
   /** Cap on selections; unpicked rows disable at the cap */
   max?: number;
+  /** Allow free entries: typing a value not in options shows an “Add …” row (Enter adds it as a tag) */
+  creatable?: boolean;
+  /** Verb for the create row. Default 'Add' */
+  createLabel?: string;
   size?: 'sm' | 'md';
   disabled?: boolean;
   id?: string;

@@ -30,7 +30,7 @@ a.feature:hover .featurePartAction :global(.externalIcon) {
 
 @media (prefers-reduced-motion: reduce) {
   .feature.featureVariantLift:hover {
-    transform: translateY(var(--surface-lift-tonal));
+    transform: none;
   }
 }
 

@@ -195,7 +195,7 @@
 }
 
 .accordionPartItem[data-animated='true'] {
-  animation: vui-acc-in var(--motion-move) backwards;
+  animation: vuiAccIn var(--motion-move) backwards;
   animation-delay: calc(var(--acc-i, 0) * var(--motion-stagger));
 }
 
@@ -207,6 +207,18 @@
 
 @media (prefers-reduced-motion: reduce) {
   .accordionPartItem[data-variant='elevated']:hover {
+    transform: none;
+  }
+}
+
+@keyframes vuiAccIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
     transform: none;
   }
 }

@@ -79,12 +79,10 @@ export const Avatar = (props: AvatarProps) => {
     'style',
   ]);
   const custom = children(() => local.children);
-  const [failedSrc, setFailedSrc] = createSignal<string>();
 
   const seed = () => local.name || local.initials || '';
   const color = () => (local.color === 'auto' ? (seed() ? hashColor(seed()) : undefined) : local.color);
   const text = () => local.initials || (local.name ? initialsOf(local.name) : '');
-  const showImage = () => !!local.src && failedSrc() !== local.src;
   const style = (): JSX.CSSProperties | undefined => {
     const fill = color();
     return fill ? { '--avatar-c': fill, ...local.style } : local.style;
@@ -107,8 +105,15 @@ export const Avatar = (props: AvatarProps) => {
       <Show
         when={custom()}
         fallback={
-          <Show when={showImage()} fallback={text()}>
-            <img src={local.src} alt={local.name || ''} onError={() => setFailedSrc(local.src)} />
+          <Show when={local.src} keyed fallback={text()}>
+            {(src) => {
+              const [broken, setBroken] = createSignal(false);
+              return (
+                <Show when={!broken()} fallback={text()}>
+                  <img src={src} alt={local.name || ''} onError={() => setBroken(true)} />
+                </Show>
+              );
+            }}
           </Show>
         }
       >

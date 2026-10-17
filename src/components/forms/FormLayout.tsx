@@ -30,8 +30,9 @@ export const FormLayout = (props: FormLayoutProps) => {
   const merged = mergeProps({ as: 'form', gap: 'md' } satisfies Partial<FormLayoutProps>, props);
   const [local, rest] = splitProps(merged, ['as', 'gap', 'width', 'onSubmit', 'class', 'style']);
   const submit = (event: SubmitEvent) => {
+    if (!local.onSubmit) return;
     event.preventDefault();
-    local.onSubmit?.(event);
+    local.onSubmit(event);
   };
   const style = (): JSX.CSSProperties => ({ 'max-width': cssLength(local.width), ...local.style });
   return (

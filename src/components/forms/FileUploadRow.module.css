@@ -1,3 +1,7 @@
+:import('../../styles/shared/animations.module.css') {
+  vuiSelectIn: vuiSelectIn;
+}
+
 .uploadPartFile {
   display: flex;
   align-items: center;
@@ -6,7 +10,7 @@
   border: var(--border-width) solid var(--border-subtle);
   border-radius: var(--radius-md);
   background: var(--bg-raised);
-  animation: vui-select-in var(--motion-move);
+  animation: vuiSelectIn var(--motion-move);
 }
 
 .uploadPartFileVariantError {

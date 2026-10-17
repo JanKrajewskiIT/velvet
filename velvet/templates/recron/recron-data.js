@@ -5,9 +5,15 @@
     new: { label: 'New', tone: 'info', color: 'var(--dv-4)' },
     considering: { label: 'Considering', tone: 'warning', color: 'var(--dv-3)' },
     applied: { label: 'Applied', tone: 'brand', color: 'var(--dv-1)' },
+    offer: { label: 'Offer', tone: 'success', color: 'var(--dv-2)' },
+    accepted: { label: 'Accepted', tone: 'success', color: 'var(--dv-6)' },
     rejected: { label: 'Rejected', tone: 'neutral', color: 'var(--dv-8)' }
   };
-  const STATUS_ORDER = ['new', 'considering', 'applied', 'rejected'];
+  // 6 statuses, but only 5 are always visible: 'accepted' is terminal and shows up (board column, filter chip) only once an offer reaches it.
+  const STATUS_ORDER = ['new', 'considering', 'applied', 'offer', 'accepted', 'rejected'];
+  const STATUS_CORE = ['new', 'considering', 'applied', 'offer', 'rejected'];
+  const ACTIVE = ['new', 'considering', 'applied', 'offer'];
+  const CONTRACTS = { uop: { label: 'Employment (UoP)', short: 'UoP', form: 'uop' }, b2b: { label: 'B2B contract', short: 'B2B', form: 'ryczalt' }, either: { label: 'UoP or B2B', short: 'UoP / B2B', form: 'uop' }, mandate: { label: 'Mandate (UZ)', short: 'UZ', form: 'uop' } };
   const STAGES = ['Screening', 'Technical', 'HR', 'Offer', 'Onboarding'];
   const fmtNum = (n) => new Intl.NumberFormat('en-US').format(n);
   const salary = (o) => {
@@ -36,29 +42,35 @@
   const md = (role, company, stack) => `**${company}** is hiring a ${role} to join a product team of eight.\n\n### What you'll do\n- Build and own customer-facing features in ${stack.join(', ')}\n- Work with design on a shared component library\n- Review code and mentor two mid-level engineers\n- Take part in planning and technical discovery\n\n### What we expect\n- 4+ years of commercial frontend experience\n- Strong ${stack[0]} and TypeScript\n- Experience with testing (Jest, Playwright)\n- English at B2 or higher\n\n### Nice to have\n- Design-system work\n- GraphQL\n- Accessibility audits`;
 
   const offers = [
-    { id: 'o1', name: 'Senior Frontend Developer', company: 'Acme Software', city: 'Warsaw', status: 'applied', workMode: 'Remote', salaryMin: 18000, salaryMax: 24000, currency: 'PLN', period: 'month', source: 'LinkedIn', match: 82, tags: ['React', 'TypeScript'], added: '2026-09-22', aiParsed: true, reasons: ['Good salary', 'Fully remote'], link: 'https://example.com/acme' },
-    { id: 'o2', name: 'React Engineer', company: 'Globex', city: 'Kraków', status: 'applied', workMode: 'Hybrid', salaryMin: 16000, salaryMax: 21000, currency: 'PLN', period: 'month', source: 'JustJoin.it', intermediary: 'Hays IT', match: 71, tags: ['React'], added: '2026-09-25', aiParsed: true, reasons: ['Interesting product', 'Hybrid in Kraków'], link: 'https://example.com/globex' },
-    { id: 'o3', name: 'Frontend Engineer, Design Systems', company: 'Initech', city: 'Gdańsk', status: 'applied', workMode: 'Hybrid', salaryMin: 17000, salaryMax: 22000, currency: 'PLN', period: 'month', source: 'Referral', match: 88, tags: ['Design systems', 'React', 'Dream job'], added: '2026-09-18', reasons: ['Design-system role', 'Strong team'], link: 'https://example.com/initech' },
-    { id: 'o4', name: 'UI Engineer', company: 'Umbrella Health', city: 'Wrocław', status: 'considering', workMode: 'On-site', salaryMin: 14000, salaryMax: 18000, currency: 'PLN', period: 'month', source: 'Pracuj.pl', match: null, tags: ['Vue'], added: '2026-09-24', aiParsed: true, link: 'https://example.com/umbrella' },
-    { id: 'o5', name: 'Fullstack Developer (Node + React)', company: 'Hooli', city: 'Remote', status: 'applied', workMode: 'Remote', salaryMin: 20000, salaryMax: 26000, currency: 'PLN', period: 'month', source: 'LinkedIn', match: 64, tags: ['Node', 'React'], added: '2026-09-20', link: 'https://example.com/hooli' },
-    { id: 'o6', name: 'Frontend Developer', company: 'Stark Fintech', city: 'Warsaw', status: 'considering', workMode: 'Hybrid', salaryMin: 15000, salaryMax: 19000, currency: 'PLN', period: 'month', source: 'Company site', intermediary: 'Michael Page', match: 76, tags: ['Angular', 'Follow up'], added: '2026-09-27', link: 'https://example.com/stark' },
+    { id: 'o1', name: 'Senior Frontend Developer', company: 'Acme Software', city: 'Warsaw', status: 'applied', workMode: 'Remote', salaryMin: 18000, salaryMax: 24000, currency: 'PLN', period: 'month', source: 'LinkedIn', match: 82, tags: ['React', 'TypeScript'], added: '2026-09-22', aiParsed: true, reasons: ['Good salary', 'Fully remote'], link: 'https://example.com/acme', contractType: 'either', terms: { notice: '1 month', holidays: '26 days (UoP)', equipment: 'Laptop of choice' }, sent: [{ id: 's1', kind: 'cv', ref: 'cv-ds', at: '2026-09-22' }, { id: 's2', kind: 'letter', label: 'Cover letter · Formal', at: '2026-09-22' }] },
+    { id: 'o2', name: 'React Engineer', company: 'Globex', city: 'Kraków', status: 'applied', workMode: 'Hybrid', salaryMin: 16000, salaryMax: 21000, currency: 'PLN', period: 'month', source: 'JustJoin.it', intermediary: 'Hays IT', match: 71, tags: ['React'], added: '2026-09-25', aiParsed: true, reasons: ['Interesting product', 'Hybrid in Kraków'], link: 'https://example.com/globex', contractType: 'b2b', sent: [{ id: 's3', kind: 'cv', ref: 'cv-main', at: '2026-09-25' }] },
+    { id: 'o3', name: 'Frontend Engineer, Design Systems', company: 'Initech', city: 'Gdańsk', status: 'applied', workMode: 'Hybrid', salaryMin: 17000, salaryMax: 22000, currency: 'PLN', period: 'month', source: 'Referral', match: 88, tags: ['Design systems', 'React', 'Dream job'], added: '2026-09-18', reasons: ['Design-system role', 'Strong team'], link: 'https://example.com/initech', contractType: 'uop', terms: { notice: '3 months', holidays: '26 days', benefits: ['Medical care', 'Relocation package'] }, sent: [{ id: 's4', kind: 'cv', ref: 'cv-ds', at: '2026-09-18' }, { id: 's5', kind: 'link', label: 'Public CV link · tracked', at: '2026-09-18' }] },
+    { id: 'o4', name: 'UI Engineer', company: 'Umbrella Health', city: 'Wrocław', status: 'considering', workMode: 'On-site', salaryMin: 14000, salaryMax: 18000, currency: 'PLN', period: 'month', source: 'Pracuj.pl', match: null, tags: ['Vue'], added: '2026-09-24', aiParsed: true, link: 'https://example.com/umbrella', contractType: 'uop', applyBy: '2026-10-10' },
+    { id: 'o5', name: 'Fullstack Developer (Node + React)', company: 'Hooli', city: 'Remote', status: 'applied', workMode: 'Remote', salaryMin: 20000, salaryMax: 26000, currency: 'PLN', period: 'month', source: 'LinkedIn', match: 64, tags: ['Node', 'React'], added: '2026-09-20', link: 'https://example.com/hooli', contractType: 'b2b', sent: [{ id: 's6', kind: 'cv', ref: 'cv-main', at: '2026-09-20' }] },
+    { id: 'o6', name: 'Frontend Developer', company: 'Stark Fintech', city: 'Warsaw', status: 'considering', workMode: 'Hybrid', salaryMin: 15000, salaryMax: 19000, currency: 'PLN', period: 'month', source: 'Company site', intermediary: 'Michael Page', match: 76, tags: ['Angular', 'Follow up'], added: '2026-09-27', link: 'https://example.com/stark', contractType: 'uop', applyBy: '2026-10-12' },
     { id: 'o7', name: 'Senior React Developer', company: 'Wayne Logistics', city: 'Poznań', status: 'new', workMode: 'Remote', salaryMin: 60000, salaryMax: 75000, currency: 'EUR', period: 'year', source: 'Email', intermediary: 'Talent Hunters', match: null, tags: ['React'], added: '2026-10-05', link: 'https://example.com/wayne' },
     { id: 'o8', name: 'TypeScript Developer', company: 'Soylent', city: 'Remote', status: 'new', workMode: 'Remote', salaryMin: 140, salaryMax: 170, currency: 'PLN', period: 'hour', source: 'JustJoin.it', match: null, tags: ['TypeScript'], added: '2026-10-04', link: 'https://example.com/soylent' },
     { id: 'o9', name: 'Frontend Developer', company: 'Cyberdyne', city: 'Łódź', status: 'rejected', workMode: 'On-site', salaryMin: 12000, salaryMax: 15000, currency: 'PLN', period: 'month', source: 'NoFluffJobs', match: 58, tags: [], added: '2026-09-08', decidedBy: 'them', reasons: ['Failed technical', 'Wanted more backend'], link: 'https://example.com/cyberdyne' },
+    { id: 'o12', name: 'Frontend Platform Engineer', company: 'Pied Piper', city: 'Warsaw', status: 'offer', workMode: 'Hybrid', salaryMin: 25000, salaryMax: 26000, currency: 'PLN', period: 'month', source: 'Referral', match: 84, tags: ['React', 'Design systems'], added: '2026-09-10', reasons: ['Above expectations', 'Strong team'], link: 'https://example.com/piedpiper', contractType: 'b2b', responseBy: '2026-10-09', terms: { asked: 28000, start: '2026-11-03', notice: '1 month', holidays: '24 paid days off', equipment: 'MacBook Pro + 3,000 zł home office', benefits: ['Medical care', 'Multisport', 'Learning budget 4,000 zł / yr'] }, sent: [{ id: 's7', kind: 'cv', ref: 'cv-ds', at: '2026-09-10' }, { id: 's8', kind: 'portfolio', label: 'Portfolio · jankowalski.dev', at: '2026-09-10' }] },
+    { id: 'o11', name: 'Frontend Engineer', company: 'Massive Dynamic', city: 'Warsaw', status: 'applied', workMode: 'Hybrid', salaryMin: 19000, salaryMax: 23000, currency: 'PLN', period: 'month', source: 'LinkedIn', match: 69, tags: ['React', 'Follow up'], added: '2026-09-12', reasons: ['Good salary'], link: 'https://example.com/massive' },
     { id: 'o10', name: 'JavaScript Developer', company: 'Vandelay Industries', city: 'Remote', status: 'rejected', workMode: 'Remote', salaryMin: 13000, salaryMax: 16000, currency: 'PLN', period: 'month', source: 'LinkedIn', match: null, tags: [], added: '2026-09-02', decidedBy: 'me', reasons: ['Salary too low', 'On-site 5 days'], link: 'https://example.com/vandelay' }
-  ].map((o) => ({ reasons: [], intermediary: '', aiParsed: false, decidedBy: null, ...o, description: md(o.name, o.company, o.tags.length ? o.tags : ['React']) }));
+  ].map((o) => ({ reasons: [], intermediary: '', aiParsed: false, decidedBy: null, contractType: o.period === 'hour' ? 'b2b' : 'uop', terms: {}, sent: [], responseBy: null, applyBy: null, ...o, description: md(o.name, o.company, o.tags.length ? o.tags : ['React']) }));
 
   const interviews = [
-    { id: 'i1', offerId: 'o1', stage: 'Screening', status: 'done', outcomeNote: 'Moved to technical the same day.', at: '2026-09-30T11:00', duration: 30, location: 'Phone', notes: 'Recruiter: Kasia. Asked about notice period and salary range.' },
+    { id: 'i1', offerId: 'o1', stage: 'Screening', status: 'done', outcomeNote: 'Moved to technical the same day.', at: '2026-09-30T11:00', duration: 30, location: 'Phone', notes: 'Recruiter: Kasia. Asked about notice period and salary range.', interviewers: ['Kasia Zielińska'], asked: ['What notice period do you have?', 'What are your salary expectations?'], rating: 4 },
     { id: 'i2', offerId: 'o1', stage: 'Technical', status: 'scheduled', at: '2026-10-07T10:00', duration: 60, location: 'Google Meet', notes: 'Live coding in React. Review hooks and performance.' },
     { id: 'i3', offerId: 'o3', stage: 'Screening', status: 'done', at: '2026-09-26T09:30', duration: 30, location: 'Phone', notes: '' },
-    { id: 'i4', offerId: 'o3', stage: 'Technical', status: 'done', at: '2026-10-02T13:00', duration: 90, location: 'Teams', notes: 'Went well — design-token architecture question.' },
+    { id: 'i4', offerId: 'o3', stage: 'Technical', status: 'done', at: '2026-10-02T13:00', duration: 90, location: 'Teams', notes: 'Went well — design-token architecture question.', interviewers: ['Marta Nowak', 'Adam Wiśniewski'], asked: ['How would you version design tokens across three apps?', 'Walk us through a component API you regret'], rating: 4 },
     { id: 'i5', offerId: 'o3', stage: 'HR', status: 'scheduled', at: '2026-10-08T14:30', duration: 45, location: 'Initech office, Gdańsk', notes: '' },
     { id: 'i6', offerId: 'o2', stage: 'Screening', status: 'scheduled', at: '2026-10-09T09:00', duration: 30, location: 'Phone', notes: '' },
     { id: 'i8', offerId: 'o6', stage: 'Screening', status: 'scheduled', at: '2026-10-05T15:00', duration: 30, location: 'Phone', notes: 'Recruiter call via Michael Page.' },
     { id: 'i9', offerId: 'o9', stage: 'Screening', status: 'done', at: '2026-09-12T10:00', duration: 30, location: 'Phone', notes: '' },
     { id: 'i10', offerId: 'o9', stage: 'Technical', status: 'failed', at: '2026-09-17T12:00', duration: 90, location: 'Teams', notes: '', outcomeNote: 'Struggled with the Node.js part.' },
     { id: 'i11', offerId: 'o5', stage: 'Screening', status: 'cancelled', at: '2026-09-29T16:00', duration: 30, location: 'Zoom', notes: '', outcomeNote: 'Rescheduled by the recruiter.' },
+    { id: 'i12', offerId: 'o12', stage: 'Screening', status: 'done', at: '2026-09-15T10:00', duration: 30, location: 'Phone', notes: '' },
+    { id: 'i13', offerId: 'o12', stage: 'Technical', status: 'done', at: '2026-09-22T13:00', duration: 90, location: 'Google Meet', notes: 'Pairing on a Storybook addon.', interviewers: ['Tomasz Bielski'], asked: ['How do you keep a component library from becoming a bottleneck?'], rating: 5 },
+    { id: 'i14', offerId: 'o12', stage: 'HR', status: 'done', at: '2026-09-29T11:00', duration: 45, location: 'Pied Piper office, Warsaw', notes: '' },
+    { id: 'i15', offerId: 'o12', stage: 'Offer', status: 'done', at: '2026-10-03T16:00', duration: 30, location: 'Phone', notes: '', outcomeNote: '25–26k B2B, answer by 9 Oct.' },
     { id: 'i7', offerId: 'o5', stage: 'Technical', status: 'scheduled', at: '2026-10-13T11:00', duration: 90, location: 'Zoom', notes: 'System design: real-time notifications.' }
   ];
 
@@ -100,7 +112,8 @@
   const REASONS = {
     considering: ['Good salary', 'Interesting product', 'Tech stack fit', 'Fully remote', 'Growth', 'Strong team', 'Close to home'],
     applied: ['Good salary', 'Interesting product', 'Tech stack fit', 'Fully remote', 'Design-system role', 'Strong team', 'Referral'],
-    rejected: { me: ['Salary too low', 'Wrong tech stack', 'On-site 5 days', 'Company culture', 'Long process', 'Accepted another offer'], them: ['No reply', 'Failed screening', 'Failed technical', 'Wanted more backend', 'Too junior', 'Position closed'] }
+    offer: ['Above expectations', 'Matches my ask', 'Below my ask', 'Strong team', 'Good benefits', 'Fast decision needed'],
+    rejected: { me: ['Salary too low', 'Wrong tech stack', 'On-site 5 days', 'Company culture', 'Long process', 'Accepted another offer', 'Withdrew'], them: ['No reply', 'Failed screening', 'Failed technical', 'Wanted more backend', 'Too junior', 'Position closed'] }
   };
   const SUB = { q1: 'Event loop & async', q2: 'Hooks', q3: 'Rendering & reconciliation', q4: 'Types vs interfaces', q5: 'Conditional types', q6: 'Cascade & specificity', q7: 'Responsive & container queries', q8: 'Unit', q9: 'Real-time', q10: 'Design systems', q11: 'Conflict', q12: 'Motivation', q13: 'Closures & scope', q14: 'Server Components', q15: 'Functions', q16: 'Flaky tests', q17: 'Hooks', q18: 'State management', q19: 'Forms', q20: 'Core Web Vitals', q21: 'Keyboard & focus', q22: 'Storage', q23: 'Streams', q24: 'XSS', q25: 'Patterns', q26: 'Signals' };
   let qOrder = 0;
@@ -191,7 +204,103 @@
     return `${open}\n\n${body}\n\n${close}\nJan Kowalski`;
   };
 
-  window.RecronData = { TODAY, STATUS, STATUS_ORDER, STAGES, INTERVIEW, REASONS, roles, tags, catTree, offers, interviews, questions, categories, profile, cv, activity, sources: ['LinkedIn', 'JustJoin.it', 'NoFluffJobs', 'Pracuj.pl', 'Referral', 'Email', 'Company site', 'Other'], workModes: ['Remote', 'Hybrid', 'On-site'] };
+  // ── Plans & AI credits. 1 credit ≈ one standard AI action; heavier ones cost more. Every tool also has free tries.
+  const AI_COSTS = { parse: { label: 'Read offer from link', cost: 0, icon: 'link' }, match: { label: 'CV match', cost: 1, icon: 'target' }, letter: { label: 'Cover letter', cost: 1, icon: 'file-text' }, ats: { label: 'ATS check', cost: 2, icon: 'shield-check' }, answer: { label: 'AI answer', cost: 1, icon: 'message-square' }, negotiate: { label: 'Negotiation plan', cost: 2, icon: 'trending-up' }, followup: { label: 'Follow-up draft', cost: 1, icon: 'mail' } };
+  const FREE_TRIES = 3;
+  const plan = { id: 'free', credits: 6, monthly: 10, renews: '2026-11-01', trials: { match: 1, letter: 2, ats: 0, answer: 3, negotiate: 3, followup: 2 },
+    usage: [{ feature: 'match', n: 5 }, { feature: 'letter', n: 2 }, { feature: 'ats', n: 3 }, { feature: 'answer', n: 1 }, { feature: 'parse', n: 9 }],
+    history: [{ label: 'Jun', value: 8 }, { label: 'Jul', value: 10 }, { label: 'Aug', value: 10 }, { label: 'Sep', value: 10 }, { label: 'Oct', value: 4 }] };
+  const PLANS = [
+    { id: 'free', name: 'Free', price: '0 zł', period: '', blurb: 'Everything you need to run a search.', features: ['Unlimited offers & interviews', 'Question bank & flashcards', 'CV builder · 1 template', 'B2B vs UoP calculator', '10 AI credits / month', '3 free tries of every AI tool'], cta: 'Current plan' },
+    { id: 'pro', name: 'Pro', price: { monthly: '29 zł', yearly: '290 zł' }, note: { monthly: 'cancel anytime', yearly: '≈ 24 zł / month' }, blurb: 'For an active search — weeks, not months.', includes: 'Everything in Free, plus', features: ['300 AI credits / month', 'All CV templates', 'Public CV link with view stats', 'Salary benchmarks & negotiation plans', 'Follow-up drafts & reminders', 'Full search insights'], featured: true, cta: 'Upgrade to Pro' },
+    { id: 'sprint', name: 'Sprint pass', price: '59 zł', period: { monthly: '/ 30 days', yearly: '/ 30 days' }, note: 'one-off · no renewal', blurb: 'Pro for one focused month.', includes: 'Everything in Pro', features: ['No subscription', 'Extends if you buy again'], cta: 'Buy 30 days' }
+  ];
+  const PACKS = [{ id: 'p50', credits: 50, price: '19 zł' }, { id: 'p150', credits: 150, price: '49 zł', best: true }, { id: 'p400', credits: 400, price: '99 zł' }];
+
+  // ── Search insights (last 90 days)
+  const insights = {
+    funnel: [{ label: 'Saved', value: 46 }, { label: 'Applied', value: 31 }, { label: 'Got a reply', value: 14 }, { label: 'Interviewed', value: 9 }, { label: 'Offer', value: 2 }],
+    sources: [{ label: 'Referral', applied: 3, replied: 3 }, { label: 'LinkedIn', applied: 12, replied: 4 }, { label: 'JustJoin.it', applied: 8, replied: 3 }, { label: 'NoFluffJobs', applied: 4, replied: 2 }, { label: 'Pracuj.pl', applied: 2, replied: 1 }, { label: 'Agency', applied: 2, replied: 1 }],
+    replyDays: [9, 7, 8, 6, 5, 6, 4, 5], replyAvg: 5.2,
+    reasonsThem: [{ label: 'No reply', n: 9 }, { label: 'Failed technical', n: 2 }, { label: 'Wanted more backend', n: 2 }, { label: 'Position closed', n: 1 }],
+    reasonsMe: [{ label: 'Salary too low', n: 4 }, { label: 'On-site 5 days', n: 3 }, { label: 'Long process', n: 1 }],
+    stagePass: [{ label: 'Screening', pass: 86 }, { label: 'Technical', pass: 57 }, { label: 'HR', pass: 100 }]
+  };
+
+  // ── Follow-ups
+  const followUps = [
+    { id: 'f1', type: 'thanks', offerId: 'o3', title: 'Thank Initech for the technical interview', why: 'Technical on 2 Oct · nothing sent yet', due: '2026-10-03', contact: 'Marta Nowak', email: 'marta.nowak@initech.example' },
+    { id: 'f2', type: 'nudge', offerId: 'o11', title: 'Nudge Massive Dynamic', why: 'Applied 24 days ago · no reply', due: '2026-10-06', contact: 'Recruitment team', email: 'jobs@massive.example' },
+    { id: 'f3', type: 'checkin', offerId: 'o6', title: 'Ask Michael Page about next steps', why: 'Screening on 5 Oct · no news since', due: '2026-10-07', contact: 'Piotr Lis (Michael Page)', email: 'piotr.lis@michaelpage.example' },
+    { id: 'f4', type: 'nudge', offerId: 'o2', title: 'Confirm Thursday’s screening with Hays', why: 'Screening 9 Oct · not confirmed', due: '2026-10-08', contact: 'Ola Wrona (Hays IT)', email: 'ola.wrona@hays.example' }
+  ];
+  const FU_TYPES = { thanks: { label: 'Thank-you', icon: 'heart', tone: 'success' }, nudge: { label: 'Follow-up', icon: 'mail', tone: 'brand' }, checkin: { label: 'Check-in', icon: 'message-square', tone: 'info' } };
+  const fuDraft = (f, o, tone) => {
+    const hi = tone === 'Friendly' ? 'Hi ' + f.contact.split(' ')[0] + ',' : 'Dear ' + f.contact.split(' (')[0] + ',';
+    const bye = tone === 'Friendly' ? 'Thanks,\nJan' : 'Kind regards,\nJan Kowalski';
+    const body = {
+      thanks: `Thank you for the technical interview for the ${o.name} role. I enjoyed the design-token architecture discussion — it’s exactly the kind of problem I like working on.\n\nIf anything from our conversation needs a follow-up, I’m happy to send it over.`,
+      nudge: `I applied for the ${o.name} role at ${o.company} on ${fmtDate(o.added, { day: 'numeric', month: 'long' })} and wanted to check whether my application is still being considered.\n\nI’m still very interested — the role matches my React and design-system experience closely.`,
+      checkin: `Thanks again for the screening call about the ${o.name} role at ${o.company}. Could you share what the next steps look like and a rough timeline?`
+    }[f.type];
+    const subj = { thanks: 'Thank you — ' + o.name + ' interview', nudge: 'Application: ' + o.name, checkin: 'Next steps — ' + o.name }[f.type];
+    return { subject: subj, body: hi + '\n\n' + body + '\n\n' + bye };
+  };
+
+  // ── Polish net-pay calculator (2026 rates, simplified: no PPK, no joint filing, no reliefs beyond the listed ones)
+  const TAX = { zusFull: 1927, zusPref: 456, zusCap: 282600, healthMinLin: 432.54, healthRycz: [[60000, 498.35], [300000, 830.58], [Infinity, 1495.04]], linHealthDeductCap: 12900 };
+  const progressive = (base) => (base <= 30000 ? 0 : base <= 120000 ? base * 0.12 - 3600 : 10800 + (base - 120000) * 0.32);
+  const netPay = (monthlyAmount, form, opt) => {
+    opt = opt || {}; const A = monthlyAmount * 12; const costs = (opt.costs || 0) * 12;
+    if (form === 'uop') { const zus = Math.min(A, TAX.zusCap) * 0.1126 + A * 0.0245; const health = (A - zus) * 0.09; const kup = 3000 + Math.min(120000, (A - zus) * (opt.creative || 0) * 0.5); const ppkE = opt.ppk ? A * 0.015 : 0; const base = Math.max(0, A - zus - kup + ppkE); const tax = Math.max(0, progressive(base)); const ppk = opt.ppk ? A * 0.02 : 0; return { net: (A - zus - health - tax - ppk) / 12, zus: zus / 12, health: health / 12, tax: tax / 12, costs: 0, ppk: ppk / 12, saved: opt.ppk ? A * 0.035 / 12 : 0 }; }
+    const daysOff = opt.daysOff || 0; const R = A * (1 - daysOff / 252);
+    const social = (opt.zus === 'start' ? 0 : opt.zus === 'pref' ? TAX.zusPref : TAX.zusFull) * 12;
+    let health, tax;
+    if (form === 'ryczalt') { health = (TAX.healthRycz.find(([lim]) => R <= lim)[1]) * 12; tax = Math.max(0, (R - social - health / 2) * 0.12); }
+    else if (form === 'liniowy') { const inc = R - costs - social; health = Math.max(TAX.healthMinLin * 12, inc * 0.049); tax = Math.max(0, (inc - Math.min(health, TAX.linHealthDeductCap)) * 0.19); }
+    else { const inc = R - costs - social; health = Math.max(TAX.healthMinLin * 12, inc * 0.09); tax = Math.max(0, progressive(inc)); }
+    const c = form === 'ryczalt' ? costs : costs; return { net: (R - social - health - tax - c) / 12, zus: social / 12, health: health / 12, tax: tax / 12, costs: c / 12, lost: (A - R) / 12 };
+  };
+  const FORMS = [{ id: 'uop', label: 'Employment (UoP)', short: 'UoP' }, { id: 'ryczalt', label: 'B2B · lump-sum 12%', short: 'B2B ryczałt' }, { id: 'liniowy', label: 'B2B · flat 19%', short: 'B2B liniowy' }, { id: 'skala', label: 'B2B · tax scale', short: 'B2B skala' }];
+
+  // ── Salary expectations — one source of truth, set once on the Salary screen, reused by every offer.
+  // unit: what the amount means — 'net' take-home, 'uop' gross on UoP, or a B2B form id (invoice, net of VAT).
+  const expectations = { unit: 'net', target: 15000, floor: 13000, zus: 'full', costs: 300, paidDaysB2B: 0, sickDays: 8, creative: 0, ppk: false };
+  const HOLIDAYS = 26, WORKDAYS = 252, HOURS = 168;
+  // ── Salary benchmark (monthly, PLN) — community-reported offers, Q3 2026
+  const bench = { sample: 1240, period: 'Jul–Sep 2026', uop: { p10: 13500, p25: 16500, p50: 19500, p75: 23000, p90: 27000 }, b2b: { p10: 17000, p25: 20500, p50: 24000, p75: 28500, p90: 33000 }, trend: '+4% vs Q2' };
+
+  // ── Public CV link
+  const cvShare = { slug: 'jan-kowalski', url: 'recron.app/cv/jan-kowalski', views: [3, 5, 2, 8, 6, 4, 1, 2, 9, 12, 7, 5, 3, 6], unique: 31, downloads: 9, avgTime: '1 min 48 s',
+    tracked: [{ id: 'l1', offerId: 'o1', label: 'Acme Software', url: 'recron.app/cv/jan-kowalski?r=acme', views: 7, last: '2026-10-05' }, { id: 'l2', offerId: 'o3', label: 'Initech', url: 'recron.app/cv/jan-kowalski?r=initech', views: 11, last: '2026-10-06' }, { id: 'l3', offerId: 'o2', label: 'Globex', url: 'recron.app/cv/jan-kowalski?r=globex', views: 0, last: null }],
+    recent: [{ id: 'v1', who: 'Initech', where: 'Gdańsk', via: 'Tracked link', at: '2026-10-06T08:12', dur: '3 min 05 s', dl: true }, { id: 'v2', who: 'Acme Software', where: 'Warsaw', via: 'Tracked link', at: '2026-10-05T16:40', dur: '1 min 12 s', dl: false }, { id: 'v3', who: 'Unknown visitor', where: 'Kraków', via: 'LinkedIn', at: '2026-10-05T11:02', dur: '0 min 41 s', dl: false }, { id: 'v4', who: 'Initech', where: 'Gdańsk', via: 'Tracked link', at: '2026-10-04T09:30', dur: '2 min 20 s', dl: true }, { id: 'v5', who: 'Unknown visitor', where: 'Berlin', via: 'GitHub', at: '2026-10-03T19:15', dur: '1 min 03 s', dl: false }] };
+
+  // ── Moderation
+  const reports = [
+    { id: 'r1', kind: 'answer', target: 'q13', excerpt: 'A function that keeps access to variables from its defining scope…', reason: 'Incorrect', note: 'The loop example is wrong for `let` in old Safari.', by: 'piotr.z', at: '2026-10-05T14:10', count: 2 },
+    { id: 'r2', kind: 'question', target: 'q12', excerpt: 'Why are you leaving your current role?', reason: 'Duplicate', note: 'Same as “Why do you want to change jobs?”', by: 'kasia.m', at: '2026-10-04T09:02', count: 1 },
+    { id: 'r3', kind: 'answer', target: 'q9', excerpt: 'Clients keep a WebSocket/SSE connection to a gateway…', reason: 'Spam / self-promo', note: 'Links to a paid course in the edit history.', by: 'auto-filter', at: '2026-10-06T07:45', count: 4 }
+  ];
+  const modLog = [{ id: 'm1', action: 'approved', what: 'How do you debug a memory leak in a SPA?', who: 'you', at: '2026-10-05T18:20' }, { id: 'm2', action: 'rejected', what: 'Best IDE?', who: 'you', at: '2026-10-05T18:18', reason: 'Not an interview question' }, { id: 'm3', action: 'edited', what: 'Explain CSS specificity', who: 'ewa.k', at: '2026-10-04T12:00' }];
+
+  // ── People across processes (recruiters, agencies, hiring managers). An agency recruiter often runs several of your processes.
+  const contacts = [
+    { id: 'c1', name: 'Marta Nowak', role: 'Engineering Manager', org: 'Initech', email: 'marta.nowak@initech.example', offerIds: ['o3'], last: '2026-10-02' },
+    { id: 'c2', name: 'Ola Wrona', role: 'IT Recruiter', org: 'Hays IT', agency: true, email: 'ola.wrona@hays.example', phone: '+48 501 220 114', offerIds: ['o2'], last: '2026-09-30' },
+    { id: 'c3', name: 'Piotr Lis', role: 'Senior Consultant', org: 'Michael Page', agency: true, email: 'piotr.lis@michaelpage.example', offerIds: ['o6'], last: '2026-10-05' },
+    { id: 'c4', name: 'Kasia Zielińska', role: 'Talent Partner', org: 'Acme Software', email: 'kasia.z@acme.example', offerIds: ['o1'], last: '2026-09-30' },
+    { id: 'c5', name: 'Tomasz Bielski', role: 'Head of Frontend', org: 'Pied Piper', email: 'tomasz@piedpiper.example', linkedin: 'linkedin.com/in/tbielski', offerIds: ['o12'], last: '2026-10-03' }
+  ];
+  // ── Where you work now — the baseline every offer is compared against ("is it worth leaving?").
+  const current = { id: 'current', company: 'Brightloop', name: 'Frontend Developer', status: 'current', city: 'Warsaw', workMode: 'Hybrid', salaryMin: 17500, salaryMax: 17500, currency: 'PLN', period: 'month', contractType: 'uop', since: '2023-03-01', match: null, tags: [], terms: { notice: '3 months', holidays: '26 days', equipment: 'MacBook Pro', benefits: ['Medical care', 'Multisport'] } };
+  const GHOST_DAYS = 21; // no reply this long after applying → suggest closing as "No reply"
+  // ── CV versions — every application records which one went out.
+  const cvVersions = [{ id: 'cv-main', label: 'Main CV · EN', updated: '2026-10-03' }, { id: 'cv-ds', label: 'Design-systems focus · EN', updated: '2026-09-16' }, { id: 'cv-pl', label: 'CV · PL', updated: '2026-08-28' }];
+  const SENT_KINDS = { cv: { label: 'CV', icon: 'file-text' }, letter: { label: 'Cover letter', icon: 'mail' }, portfolio: { label: 'Portfolio', icon: 'globe' }, link: { label: 'CV link', icon: 'link' }, other: { label: 'Other', icon: 'paperclip' } };
+  // ── Billing (Polish VAT invoices — many users are B2B and expense the plan)
+  const billing = { company: false, nip: '', companyName: '', address: '', email: 'jan.kowalski@example.com', invoices: [{ id: 'FV/2026/09/1182', date: '2026-09-04', item: 'Credit pack · 50', amount: '19,00 zł' }, { id: 'FV/2026/07/0631', date: '2026-07-12', item: 'Sprint pass · 30 days', amount: '59,00 zł' }] };
+
+  window.RecronData = { expectations, HOLIDAYS, WORKDAYS, HOURS, current, GHOST_DAYS, STATUS_CORE, ACTIVE, CONTRACTS, contacts, cvVersions, SENT_KINDS, billing, AI_COSTS, FREE_TRIES, plan, PLANS, PACKS, insights, followUps, FU_TYPES, FORMS, bench, cvShare, reports, modLog, TODAY, STATUS, STATUS_ORDER, STAGES, INTERVIEW, REASONS, roles, tags, catTree, offers, interviews, questions, categories, profile, cv, activity, sources: ['LinkedIn', 'JustJoin.it', 'NoFluffJobs', 'Pracuj.pl', 'Referral', 'Email', 'Company site', 'Other'], workModes: ['Remote', 'Hybrid', 'On-site'] };
   // Lets a child view (RecronCv.dc.html etc.) render on its own: static data, navigation hands off to the full app.
   window.RecronStandalone = (cmp) => {
     const st = cmp.__sa || (cmp.__sa = { offers: offers, interviews: interviews });
@@ -205,9 +314,30 @@
       addInterview: (i) => { st.interviews = [...st.interviews, { ...i, id: 'i' + Date.now() }]; cmp.forceUpdate(); }, removeInterview: (id) => { st.interviews = st.interviews.filter((x) => x.id !== id); cmp.forceUpdate(); },
       updateInterview: (id, p) => { st.interviews = st.interviews.map((x) => (x.id === id ? { ...x, ...p } : x)); cmp.forceUpdate(); },
       roleId: st.roleId || 'frontend', setRole: (id) => { st.roleId = id; cmp.forceUpdate(); }, tags: st.tags || tags, setTags: (n) => { st.tags = n; cmp.forceUpdate(); },
-      decide: (id, status) => { st.offers = st.offers.map((o) => (o.id === id ? { ...o, status } : o)); cmp.forceUpdate(); }, decision: null, closeDecision: noop,
-      openAdd: () => open('pipeline'), closeAdd: noop, markDone: noop, dismissChecklist: noop, finishOnboarding: () => open('today'), toast: (t) => console.info('[toast]', t) };
+      decide: (id, status) => { st.offers = st.offers.map((o) => (o.id === id ? { ...o, status } : o)); cmp.forceUpdate(); }, decision: null, closeDecision: noop, expectations: st.expectations || expectations, setExpectations: (p) => { st.expectations = { ...(st.expectations || expectations), ...p }; cmp.forceUpdate(); }, current: st.current || current, setCurrent: (p) => { st.current = { ...(st.current || current), ...p }; cmp.forceUpdate(); }, closeAsGhost: noop, wonDone: {}, markWon: noop, accepting: null, closeAccept: noop, commitAccept: noop, searchClosed: null, reopenSearch: noop, contacts: st.contacts || contacts, setContacts: (n) => { st.contacts = n; cmp.forceUpdate(); }, addQuestions: noop, billing: st.billing || billing, setBilling: (p) => { st.billing = { ...(st.billing || billing), ...p }; cmp.forceUpdate(); },
+      openAdd: () => open('pipeline'), closeAdd: noop, markDone: noop, dismissChecklist: noop, finishOnboarding: () => open('today'), toast: (t) => console.info('[toast]', t), plan: st.plan || plan, spend: (f) => { const p = st.plan || plan; const c = AI_COSTS[f] || { cost: 1 }; if ((p.trials[f] || 0) > 0) { st.plan = { ...p, trials: { ...p.trials, [f]: p.trials[f] - 1 } }; return true; } if (p.credits >= c.cost) { st.plan = { ...p, credits: p.credits - c.cost }; return true; } return true; }, upgrade: () => { st.plan = { ...(st.plan || plan), id: 'pro', credits: (st.plan || plan).credits + 300, monthly: 300 }; cmp.forceUpdate(); }, buyPack: (n) => { st.plan = { ...(st.plan || plan), credits: (st.plan || plan).credits + n }; cmp.forceUpdate(); }, cancelPlan: noop, closeLimit: noop, limit: null };
   };
   const tagColor = (list, name) => { const x = (list || tags).find((t) => t.name === name); return x ? x.color : 'var(--fg-tertiary)'; };
-  window.RecronUtil = { tagColor, salary, monthly, fmtDate, fmtTime, relDay, daysAgo, matchFor, atsFor, letter, fmtNum };
+  const ics = (i, o) => { const st = new Date(i.at); const en = new Date(st.getTime() + (i.duration || 60) * 6e4); const z = (x) => x.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+    const body = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Recron//EN', 'BEGIN:VEVENT', 'UID:' + i.id + '@recron.app', 'DTSTAMP:' + z(new Date()), 'DTSTART:' + z(st), 'DTEND:' + z(en), 'SUMMARY:' + i.stage + ' interview · ' + o.company, 'LOCATION:' + (i.location || ''), 'DESCRIPTION:' + o.name + (i.notes ? '\\n' + i.notes : ''), 'BEGIN:VALARM', 'TRIGGER:-PT1H', 'ACTION:DISPLAY', 'DESCRIPTION:Interview in 1 hour', 'END:VALARM', 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([body], { type: 'text/calendar' })); a.download = (o.company + '-' + i.stage).toLowerCase().replace(/[^a-z0-9]+/g, '-') + '.ics'; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 0); };
+  const netOf = (o) => { const m = monthly(o); if (m == null) return null; const c = CONTRACTS[o.contractType] || CONTRACTS.uop; const pln = o.currency === 'EUR' ? m * 4.3 : o.currency === 'USD' ? m * 4 : m; return Math.round(netPay(pln, c.form, { zus: 'full' }).net); };
+  const daysLeft = (s) => { const a = new Date(TODAY); a.setHours(0, 0, 0, 0); const b = new Date(s); b.setHours(0, 0, 0, 0); return Math.round((b - a) / 864e5); };
+  const declineDraft = (o, chosen) => ({ subject: 'Re: ' + o.name + ' — my decision', body: 'Hi,\n\nThank you for your time during the ' + o.name + ' process at ' + o.company + '. I’ve decided to accept another offer' + (chosen ? ' that fits my plans a little better right now' : '') + ', so I’d like to withdraw my application.\n\nI enjoyed meeting the team and would be glad to stay in touch.\n\nBest regards,\nJan Kowalski' });
+  // Polish Labour Code: a notice counted in months ends on the last day of the month; in weeks — on a Saturday.
+  const noticeEnd = (notice, from) => { const m = /(\d+)\s*(month|week)/i.exec(notice || ''); if (!m) return null; const n = +m[1]; const f = new Date(from || TODAY);
+    if (/month/i.test(m[2])) return new Date(f.getFullYear(), f.getMonth() + n + 1, 0);
+    const d2 = new Date(f); d2.setDate(d2.getDate() + n * 7); d2.setDate(d2.getDate() + ((6 - d2.getDay() + 7) % 7)); return d2; };
+  const resignation = (cur, p) => p.first + ' ' + p.last + '\n' + p.location.split(',')[0] + ', ' + TODAY.toLocaleDateString('pl-PL') + '\n\n' + cur.company + '\n\nWYPOWIEDZENIE UMOWY O PRACĘ\n\nNiniejszym wypowiadam umowę o pracę zawartą w dniu ' + new Date(cur.since).toLocaleDateString('pl-PL') + ' z zachowaniem ' + (cur.terms.notice === '3 months' ? 'trzymiesięcznego' : cur.terms.notice === '1 month' ? 'jednomiesięcznego' : 'ustawowego') + ' okresu wypowiedzenia.\n\nJednocześnie proszę o rozważenie rozwiązania umowy za porozumieniem stron z dniem ……………… .\n\n\n……………………………\n' + p.first + ' ' + p.last;
+  // Options for netPay derived from expectations. UoP pays holiday and (80%) sick leave; on B2B every unpaid day is lost revenue.
+  const optsOf = (e, form) => form === 'uop' ? { creative: e.creative || 0, ppk: !!e.ppk } : { zus: e.zus, costs: e.costs, daysOff: Math.max(0, HOLIDAYS - (e.paidDaysB2B || 0)) + (e.sickDays || 0) };
+  // Inverse of netPay: the gross / invoice you need on `form` to take home `net` a month. Bisection — netPay is monotonic.
+  const grossFor = (net, form, e) => { const o = optsOf(e, form); let lo = 0, hi = Math.max(20000, net * 3); for (let k = 0; k < 48; k++) { const m = (lo + hi) / 2; if (netPay(m, form, o).net < net) lo = m; else hi = m; } return Math.ceil(hi / 100) * 100; };
+  const netFrom = (amount, unit, e) => (unit === 'net' ? amount : netPay(amount, unit, optsOf(e, unit)).net);
+  // Where an offer lands against your expectations, on its own contract type.
+  const vsExpect = (o, e) => { const m = monthly(o); if (m == null || !e) return null; const pln = o.currency === 'EUR' ? m * 4.3 : o.currency === 'USD' ? m * 4 : m; const c = CONTRACTS[o.contractType] || CONTRACTS.uop; const net = netPay(pln, c.form, optsOf(e, c.form)).net;
+    const tgt = netFrom(e.target, e.unit, e), flo = netFrom(e.floor, e.unit, e); const level = net < flo ? 'below' : net < tgt ? 'within' : 'above';
+    return { level, net, need: grossFor(tgt, c.form, e), min: grossFor(flo, c.form, e), form: c.form, label: { below: 'Below your minimum', within: 'Between min and target', above: 'Meets your target' }[level], tone: { below: 'danger', within: 'warning', above: 'success' }[level] }; };
+  const MASK = '••••••';
+  window.RecronUtil = { discreet: false, optsOf, grossFor, netFrom, vsExpect, noticeEnd, resignation, ics, netOf, daysLeft, declineDraft, netPay, fuDraft, pln: (n) => (window.RecronUtil.discreet ? MASK : fmtNum(Math.round(n))) + ' zł', tagColor, salary: (o) => (window.RecronUtil.discreet && (o.salaryMin != null || o.salaryMax != null) ? MASK + ' ' + (o.currency || 'PLN') : salary(o)), monthly, fmtDate, fmtTime, relDay, daysAgo, matchFor, atsFor, letter, fmtNum };
 })();

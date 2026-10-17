@@ -1,3 +1,7 @@
+:import('../../styles/shared/animations.module.css') {
+  vuiFadeIn: vuiFadeIn;
+}
+
 .log {
   position: relative;
 }
@@ -212,7 +216,7 @@
   color: var(--code-bg);
   cursor: pointer;
   box-shadow: 0 4px 14px color-mix(in oklab, var(--black) 40%, transparent);
-  animation: vui-fade-in var(--motion-fast);
+  animation: vuiFadeIn var(--motion-fast);
 }
 
 .logPartJump:focus-visible {

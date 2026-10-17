@@ -1,4 +1,5 @@
 .tour {
+  composes: root from '../../styles/shared/feedback/modal-backdrop.module.css';
   position: fixed;
   inset: 0;
   z-index: var(--z-modal);

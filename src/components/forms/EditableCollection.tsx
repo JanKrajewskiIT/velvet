@@ -11,6 +11,7 @@ import { createCollectionRows } from './createCollectionRows';
 import styles from './EditableCollection.module.css';
 import { EditableCollectionRow } from './EditableCollectionRow';
 import type { EditableItem, EditableItemId, EditableReorder } from './editableItem';
+import type { SelectOption } from './selectOption';
 
 export type { EditableItem, EditableItemId };
 
@@ -26,8 +27,8 @@ export interface EditableCollectionProps {
   showCount?: boolean;
   /** Count text. @default localized "N items" */
   countLabel?: (count: number) => JSX.Element;
-  /** Per-row select, e.g. Basic / Intermediate / Advanced / Expert. */
-  levels?: ReadonlyArray<string>;
+  /** Per-row options. Object options keep stored values independent of translated labels. */
+  levels?: ReadonlyArray<string | SelectOption>;
   /** @default localized "Level" */
   levelLabel?: string;
   /** Importance stars per row. @default false */

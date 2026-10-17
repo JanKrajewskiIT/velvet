@@ -10,7 +10,7 @@
 .marqueePartTrack {
   display: flex;
   width: max-content;
-  animation: vui-marquee linear infinite;
+  animation: vuiMarquee linear infinite;
 }
 
 .marqueeVariantPause:hover .marqueePartTrack {
@@ -30,4 +30,10 @@
 
 .marqueePartGroup {
   composes: marqueePartGroup from '../../styles/shared/media/marquee.module.css';
+}
+
+@keyframes vuiMarquee {
+  to {
+    transform: translateX(-50%);
+  }
 }

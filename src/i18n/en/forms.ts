@@ -94,6 +94,8 @@ export const formsEn = defineDictionary({
     listLabel: 'Suggestions',
   },
   multiSelect: {
+    createLabel: 'Add',
+    createOption: '{verb} “{label}”',
     placeholder: 'Select…',
     emptyText: 'No matches.',
     searchPrompt: 'Type to search.',

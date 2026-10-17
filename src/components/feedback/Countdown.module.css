@@ -27,7 +27,7 @@
     border-color var(--motion-base),
     transform var(--motion-base);
   font-variant-numeric: tabular-nums;
-  animation: vui-tick var(--motion-move);
+  animation: vuiTick var(--motion-move);
 }
 
 .countdownVariantSm.countdownVariantBoxes .countdownPartNum {
@@ -50,11 +50,18 @@
 
 .countdownVariantInline .countdownPartNum {
   display: inline-block;
-  animation: vui-tick var(--motion-move);
+  animation: vuiTick var(--motion-move);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .countdownPartNum {
     animation: none !important;
+  }
+}
+
+@keyframes vuiTick {
+  from {
+    opacity: 0.3;
+    transform: translateY(-4px);
   }
 }

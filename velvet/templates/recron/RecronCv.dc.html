@@ -25,7 +25,7 @@
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="From" size="sm" value="{{ e.start }}" on-change="{{ e.setStart }}" hint-size="100%,60px"></x-import>
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="To" size="sm" placeholder="Present" value="{{ e.end }}" on-change="{{ e.setEnd }}" hint-size="100%,60px"></x-import>
 </x-import>
-<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Tech stack" size="sm" placeholder="React, TypeScript…" value="{{ e.tech }}" on-change="{{ e.setTech }}" hint-size="100%,60px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.MultiSelect" label="Tech stack" size="sm" placeholder="Search or add…" options="{{ techOptions }}" value="{{ e.techList }}" on-value-change="{{ e.setTechList }}" creatable="{{ true }}" hint-size="100%,60px"></x-import>
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Textarea" label="What you did" size="sm" rows="{{ 2 }}" value="{{ e.desc }}" on-change="{{ e.setDesc }}" hint-size="100%,80px"></x-import>
 <div style="display:flex;justify-content:space-between;align-items:center;gap:var(--space-3)">
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Button" variant="ghost" size="sm" icon-left="sparkles" on-click="{{ e.improve }}" loading="{{ e.improving }}" hint-size="140px,32px">Improve with AI</x-import>
@@ -36,6 +36,22 @@
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Button" variant="dashed" block="{{ true }}" icon-left="plus" on-click="{{ addExp }}" hint-size="100%,40px">Add position</x-import>
 </div>
 </x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Education" description="Degree, school and years. Most recent first." hint-size="100%,240px">
+<div style="display:flex;flex-direction:column;gap:var(--space-5)">
+<sc-for list="{{ edu }}" as="ed" hint-placeholder-count="1">
+<div style="display:flex;flex-direction:column;gap:var(--space-3);padding-bottom:var(--space-5);border-bottom:var(--border-width) solid var(--border-subtle)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FormGrid" columns="{{ 2 }}" gap="sm" hint-size="100%,140px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="School" size="sm" value="{{ ed.school }}" on-change="{{ ed.setSchool }}" hint-size="100%,60px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Degree / field" size="sm" placeholder="BSc, Computer Science" value="{{ ed.degree }}" on-change="{{ ed.setDegree }}" hint-size="100%,60px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="From" size="sm" value="{{ ed.start }}" on-change="{{ ed.setStart }}" hint-size="100%,60px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="To" size="sm" placeholder="Present" value="{{ ed.end }}" on-change="{{ ed.setEnd }}" hint-size="100%,60px"></x-import>
+</x-import>
+<div style="display:flex;justify-content:flex-end"><x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.IconButton" icon="trash-2" label="Remove education" size="sm" on-click="{{ ed.remove }}" hint-size="32px,32px"></x-import></div>
+</div>
+</sc-for>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Button" variant="dashed" block="{{ true }}" icon-left="plus" on-click="{{ addEdu }}" hint-size="100%,40px">Add education</x-import>
+</div>
+</x-import>
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Projects" description="Side projects, open source, things you built. Link them." hint-size="100%,420px">
 <div style="display:flex;flex-direction:column;gap:var(--space-5)">
 <sc-for list="{{ projects }}" as="pr" hint-placeholder-count="2">
@@ -44,7 +60,7 @@
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Name" size="sm" value="{{ pr.name }}" on-change="{{ pr.setName }}" hint-size="100%,60px"></x-import>
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Link" size="sm" icon-left="link" value="{{ pr.link }}" on-change="{{ pr.setLink }}" hint-size="100%,60px"></x-import>
 </x-import>
-<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Tech" size="sm" placeholder="React, TypeScript…" value="{{ pr.tech }}" on-change="{{ pr.setTech }}" hint-size="100%,60px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.MultiSelect" label="Tech" size="sm" placeholder="Search or add…" options="{{ techOptions }}" value="{{ pr.techList }}" on-value-change="{{ pr.setTechList }}" creatable="{{ true }}" hint-size="100%,60px"></x-import>
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Textarea" label="What it does" size="sm" rows="{{ 2 }}" value="{{ pr.desc }}" on-change="{{ pr.setDesc }}" hint-size="100%,80px"></x-import>
 <div style="display:flex;justify-content:flex-end"><x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.IconButton" icon="trash-2" label="Remove project" size="sm" on-click="{{ pr.remove }}" hint-size="32px,32px"></x-import></div>
 </div>
@@ -109,8 +125,9 @@ class Component extends DCLogic {
     if (!this.paperRef) this.paperRef = (el) => { if (!el || el === this._pel) return; this._pel = el; if (this._ro) this._ro.disconnect(); const host = el.parentElement; const fit = () => { const z = host.clientWidth / 794; if (z > 0) el.style.zoom = z; }; this._ro = new ResizeObserver(fit); this._ro.observe(host); fit(); };
     const accent = style === 'minimal' ? '#1d1b1c' : 'var(--velvet-700)';
     return {
-      meta: [{ icon: 'check', label: s.saved }, { icon: 'file-text', label: cv.experience.length + ' positions · ' + (cv.projects || []).length + ' projects · ' + cv.skills.length + ' skills' }],
+      meta: [{ icon: 'check', label: s.saved }, { icon: 'file-text', label: cv.experience.length + ' positions · ' + (cv.education || []).length + ' education · ' + (cv.projects || []).length + ' projects · ' + cv.skills.length + ' skills' }],
       headerActions: h(React.Fragment, null,
+        h(NS.Button, { variant: 'secondary', iconLeft: 'link', onClick: () => app.go('cvshare') }, 'Share link'),
         h(NS.Button, { variant: 'secondary', iconLeft: 'upload', onClick: () => app.toast('Import from LinkedIn', 'info', 'Connect your account in Settings to import') }, 'Import'),
         h(NS.DropdownButton, { variant: 'primary', icon: 'download', items: [
           { label: 'PDF', icon: 'file-text', description: 'For applications', onSelect: () => app.toast('Downloaded', 'success', 'Jan-Kowalski-CV.pdf') },
@@ -119,13 +136,16 @@ class Component extends DCLogic {
         ] }, 'Download')),
       cv, p,
       setSummary: (e) => set({ summary: e.target.value }),
-      exp: cv.experience.map((x) => ({ ...x, period: x.start + ' – ' + (x.current || !x.end ? 'Present' : x.end), setRole: setExp(x.id, 'role'), setCompany: setExp(x.id, 'company'), setStart: setExp(x.id, 'start'), setEnd: setExp(x.id, 'end'), setDesc: setExp(x.id, 'desc'), setTech: setExp(x.id, 'tech'),
+      exp: cv.experience.map((x) => ({ ...x, period: x.start + ' – ' + (x.current || !x.end ? 'Present' : x.end), setRole: setExp(x.id, 'role'), setCompany: setExp(x.id, 'company'), setStart: setExp(x.id, 'start'), setEnd: setExp(x.id, 'end'), setDesc: setExp(x.id, 'desc'), setTech: setExp(x.id, 'tech'), setTechList: (arr) => set({ experience: cv.experience.map((y) => (y.id === x.id ? { ...y, tech: arr.join(', ') } : y)) }),
         periodLong: x.start + ' – ' + (x.current || !x.end ? 'Present' : x.end), placeSuffix: x.place ? ', ' + x.place : '', placeDot: x.place ? ' · ' + x.place : '', techList: split(x.tech),
         improving: s.improving === x.id,
         improve: () => { this.setState({ improving: x.id }); setTimeout(() => { this.setState({ improving: null }); set({ experience: this.state.cv ? this.state.cv.experience.map((y) => (y.id === x.id ? { ...y, desc: y.desc.replace(/\.$/, '') + ' — measured, shipped and adopted across teams.' } : y)) : cv.experience }); }, 1100); },
         remove: () => set({ experience: cv.experience.filter((y) => y.id !== x.id) }) })),
       addExp: () => set({ experience: [{ id: 'e' + Date.now(), role: '', company: '', start: '', end: '', current: false, desc: '' }, ...cv.experience] }),
-      projects: (cv.projects || []).map((x) => { const f = (k) => (e) => set({ projects: cv.projects.map((y) => (y.id === x.id ? { ...y, [k]: e.target.value } : y)) }); return { ...x, setName: f('name'), setLink: f('link'), setTech: f('tech'), setDesc: f('desc'), remove: () => set({ projects: cv.projects.filter((y) => y.id !== x.id) }) }; }),
+      projects: (cv.projects || []).map((x) => { const f = (k) => (e) => set({ projects: cv.projects.map((y) => (y.id === x.id ? { ...y, [k]: e.target.value } : y)) }); return { ...x, setName: f('name'), setLink: f('link'), setTech: f('tech'), techList: split(x.tech), setTechList: (arr) => set({ projects: cv.projects.map((y) => (y.id === x.id ? { ...y, tech: arr.join(', ') } : y)) }), setDesc: f('desc'), remove: () => set({ projects: cv.projects.filter((y) => y.id !== x.id) }) }; }),
+      edu: (cv.education || []).map((x) => { const f = (k) => (e) => set({ education: cv.education.map((y) => (y.id === x.id ? { ...y, [k]: e.target.value } : y)) }); return { ...x, setSchool: f('school'), setDegree: f('degree'), setStart: f('start'), setEnd: f('end'), remove: () => set({ education: cv.education.filter((y) => y.id !== x.id) }) }; }),
+      addEdu: () => set({ education: [{ id: 'ed' + Date.now(), school: '', degree: '', start: '', end: '' }, ...(cv.education || [])] }),
+      techOptions: Array.from(new Set(['React', 'TypeScript', 'JavaScript', 'Next.js', 'Vue', 'Angular', 'Svelte', 'SolidJS', 'Node.js', 'GraphQL', 'Redux', 'Tailwind CSS', 'CSS', 'Sass', 'Storybook', 'Jest', 'Vitest', 'Playwright', 'Cypress', 'D3', 'Webpack', 'Vite', 'Figma', 'Python', 'Go', 'PostgreSQL', 'Docker', 'AWS', 'Git'].concat(cv.experience.flatMap((y) => split(y.tech)), (cv.projects || []).flatMap((y) => split(y.tech))))),
       addProject: () => set({ projects: [...(cv.projects || []), { id: 'p' + Date.now(), name: '', link: '', tech: '', desc: '' }] }),
       certs: (cv.certifications || []).map((x) => { const f = (k) => (e) => set({ certifications: cv.certifications.map((y) => (y.id === x.id ? { ...y, [k]: e.target.value } : y)) }); return { ...x, setName: f('name'), setIssuer: f('issuer'), setYear: f('year'), remove: () => set({ certifications: cv.certifications.filter((y) => y.id !== x.id) }) }; }),
       addCert: () => set({ certifications: [...(cv.certifications || []), { id: 'c' + Date.now(), name: '', issuer: '', year: '' }] }),

@@ -7,7 +7,7 @@
 </head>
 <body>
 <x-dc>
-<!-- @template name="Recron" description="Job-search workspace — Today, Pipeline (table / board / compare), offer page with AI match · cover letter · ATS, Interviews, Prep (questions + practice), CV builder, Settings, Onboarding" -->
+<!-- @template name="Recron" description="Job-search workspace — Today (follow-ups + search insights), Pipeline (table / board / compare with take-home), offer page with terms · deadlines · people · sent documents · AI match · cover letter · ATS · salary (B2B vs UoP, benchmark, negotiation), Salary expectations (take-home ↔ UoP ↔ B2B, reused by every offer), accept-offer flow that closes the search, interview debriefs → Prep, Interviews, Prep, CV builder + public link stats, Plans & AI credits + VAT invoices, Moderation, Settings, Onboarding" -->
 <helmet><script src="./ds-base.js"></script><script src="./recron-data.js"></script><style>:root:root{overflow:auto!important;height:auto!important;background:var(--bg-page)!important}html body{margin:0!important;padding:0!important;background:var(--bg-page)!important}</style></helmet>
 <div style="min-height:100vh;background:var(--bg-page)">
 <sc-if value="{{ isOnboarding }}" hint-placeholder-val="{{ false }}">
@@ -32,7 +32,7 @@
 </sc-if>
 <sc-if value="{{ isApp }}" hint-placeholder-val="{{ true }}">
 <div style="display:flex;flex-direction:column;min-height:100vh;box-sizing:border-box;background:var(--bg-page);color:var(--fg-primary);font:var(--type-body)">
-<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Navbar" variant="menubar" sticky="{{ true }}" logo="{{ logo }}" show-active-label="{{ false }}" on-logo-click="{{ goHome }}" logo-href="#today" items="{{ navItems }}" active="{{ navActive }}" on-navigate="{{ navigate }}" actions="{{ navActions }}" label="Recron" hint-size="100%,64px"></x-import><dc-import name="RecronAddOffer" app="{{ app }}" hint-size="0,0"></dc-import><dc-import name="RecronDecision" app="{{ app }}" hint-size="0,0"></dc-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Navbar" variant="menubar" sticky="{{ true }}" logo="{{ logo }}" show-active-label="{{ false }}" on-logo-click="{{ goHome }}" logo-href="#today" items="{{ navItems }}" active="{{ navActive }}" on-navigate="{{ navigate }}" actions="{{ navActions }}" label="Recron" hint-size="100%,64px"></x-import><dc-import name="RecronAddOffer" app="{{ app }}" hint-size="0,0"></dc-import><dc-import name="RecronDecision" app="{{ app }}" hint-size="0,0"></dc-import><dc-import name="RecronAccept" app="{{ app }}" hint-size="0,0"></dc-import><dc-import name="RecronDebrief" app="{{ app }}" hint-size="0,0"></dc-import>
 {{ cmd }}{{ tagDialogs }}
 <main style="display:flex;flex-direction:column;gap:var(--space-4);width:100%;max-width:1360px;margin:0 auto;box-sizing:border-box;min-width:0;padding:var(--space-8) var(--space-6) var(--space-16)">
 <sc-if value="{{ r.today }}" hint-placeholder-val="{{ true }}"><dc-import name="RecronToday" app="{{ app }}" hint-size="100%,900px"></dc-import></sc-if>
@@ -41,6 +41,11 @@
 <sc-if value="{{ r.interviews }}" hint-placeholder-val="{{ false }}"><dc-import name="RecronInterviews" app="{{ app }}" hint-size="100%,800px"></dc-import></sc-if>
 <sc-if value="{{ r.prep }}" hint-placeholder-val="{{ false }}"><dc-import name="RecronPrep" app="{{ app }}" hint-size="100%,900px"></dc-import></sc-if>
 <sc-if value="{{ r.cv }}" hint-placeholder-val="{{ false }}"><dc-import name="RecronCv" app="{{ app }}" hint-size="100%,900px"></dc-import></sc-if>
+<sc-if value="{{ r.salary }}" hint-placeholder-val="{{ false }}"><dc-import name="RecronMoney" app="{{ app }}" hint-size="100%,1100px"></dc-import></sc-if>
+<sc-if value="{{ r.insights }}" hint-placeholder-val="{{ false }}"><dc-import name="RecronInsights" app="{{ app }}" hint-size="100%,1000px"></dc-import></sc-if>
+<sc-if value="{{ r.plans }}" hint-placeholder-val="{{ false }}"><dc-import name="RecronPlans" app="{{ app }}" hint-size="100%,1100px"></dc-import></sc-if>
+<sc-if value="{{ r.cvshare }}" hint-placeholder-val="{{ false }}"><dc-import name="RecronCvShare" app="{{ app }}" hint-size="100%,1000px"></dc-import></sc-if>
+<sc-if value="{{ r.moderation }}" hint-placeholder-val="{{ false }}"><dc-import name="RecronModeration" app="{{ app }}" hint-size="100%,900px"></dc-import></sc-if>
 <sc-if value="{{ r.settings }}" hint-placeholder-val="{{ false }}"><dc-import name="RecronSettings" app="{{ app }}" hint-size="100%,800px"></dc-import></sc-if>
 <sc-if value="{{ r.privacy }}" hint-placeholder-val="{{ false }}"><div style="padding-top:var(--space-4)"><dc-import name="RecronPrivacy" hint-size="100%,1400px"></dc-import></div></sc-if>
 </main>
@@ -53,7 +58,7 @@
 </x-import>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;startRoute&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;today&quot;,&quot;pipeline&quot;,&quot;offer&quot;,&quot;interviews&quot;,&quot;prep&quot;,&quot;cv&quot;,&quot;settings&quot;,&quot;onboarding&quot;,&quot;landing&quot;,&quot;privacy&quot;],&quot;default&quot;:&quot;today&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype&quot;},&quot;newUser&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Prototype&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;startRoute&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;today&quot;,&quot;pipeline&quot;,&quot;offer&quot;,&quot;interviews&quot;,&quot;prep&quot;,&quot;cv&quot;,&quot;settings&quot;,&quot;plans&quot;,&quot;cvshare&quot;,&quot;moderation&quot;,&quot;onboarding&quot;,&quot;landing&quot;,&quot;privacy&quot;],&quot;default&quot;:&quot;today&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype&quot;},&quot;newUser&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Prototype&quot;}}">
 class Component extends DCLogic {
   state = (() => {
     let saved = {};
@@ -91,6 +96,7 @@ class Component extends DCLogic {
     const NS = window.VelvetUIDesignSystem_ee2bd8 || {};
     if (!D || !NS.Sidebar) { clearTimeout(this._rt); this._rt = setTimeout(() => this.forceUpdate(), 60); return { isApp: false, isOnboarding: false, r: {}, toasts: [] }; }
     const h = React.createElement;
+    const U2 = window.RecronUtil;
     const newUser = !!this.props.newUser;
     const offers = this.state.offers ?? (newUser ? [] : D.offers);
     const interviews = this.state.interviews ?? (newUser ? [] : D.interviews);
@@ -101,8 +107,19 @@ class Component extends DCLogic {
     const setTags = (next) => { const ren = {}; tags.forEach((o) => { const n = next.find((x) => x.id === o.id); ren[o.name] = n ? n.name : null; }); this.setState({ tags: next, offers: offers.map((o) => ({ ...o, tags: o.tags.map((x) => (x in ren ? ren[x] : x)).filter(Boolean) })) }); };
     const labels = tags.map((x) => ({ ...x, count: offers.filter((o) => o.tags.includes(x.name)).length }));
     const selOffer = offers.find((o) => o.id === this.state.tagSel);
+    U2.discreet = !!this.state.discreet;
+    const plan = this.state.plan || D.plan;
+    const setPlan = (p) => this.setState({ plan: { ...plan, ...p } });
     const app = {
-      D, U: window.RecronUtil, NS, newUser, route, offers, interviews,
+      D, plan,
+      spend: (f) => { const c = D.AI_COSTS[f] || { cost: 1, label: 'AI' }; const tr = plan.trials[f] || 0;
+        if (tr > 0) { setPlan({ trials: { ...plan.trials, [f]: tr - 1 } }); this.toast('Free try used', 'info', c.label + ' · ' + (tr - 1 ? (tr - 1) + ' free ' + (tr - 1 === 1 ? 'try' : 'tries') + ' left' : 'next run uses ' + c.cost + ' credit' + (c.cost > 1 ? 's' : ''))); return true; }
+        if (plan.credits >= c.cost) { setPlan({ credits: plan.credits - c.cost }); if (plan.credits - c.cost <= 2) this.toast('Credits running low', 'warning', (plan.credits - c.cost) + ' left until ' + U2.fmtDate(plan.renews)); return true; }
+        this.toast('Out of AI credits', 'warning', c.label + ' needs ' + c.cost + ' credit' + (c.cost > 1 ? 's' : '') + ' — top up or upgrade'); this.persist({ route: 'plans', limit: f }); return false; },
+      limit: this.state.limit, closeLimit: () => this.setState({ limit: null }),
+      upgrade: (id) => { setPlan({ id: id || 'pro', credits: plan.credits + 300, monthly: 300 }); this.setState({ limit: null }); this.toast(id === 'sprint' ? 'Sprint pass active' : 'Welcome to Pro', 'success', '300 credits added · all Pro tools unlocked'); },
+      buyPack: (n) => { setPlan({ credits: plan.credits + n }); this.setState({ limit: null }); this.toast(n + ' credits added', 'success', 'They never expire'); },
+      cancelPlan: () => { setPlan({ id: 'free', monthly: 10 }); this.toast('Pro cancelled', 'neutral', 'You keep Pro until ' + U2.fmtDate(plan.renews)); }, U: window.RecronUtil, NS, newUser, route, offers, interviews,
       offerId: this.state.offerId, offerTab: this.state.offerTab, prepTab: this.state.prepTab,
       addOpen: this.state.addOpen, checklistDone: this.state.checklistDone, checklistDismissed: this.state.checklistDismissed,
       go,
@@ -120,8 +137,24 @@ class Component extends DCLogic {
       openTags: (id) => this.setState({ tagSel: id }), manageTags: () => this.setState({ tagMgr: true }),
       roleId: this.state.roleId, setRole: (id) => this.setState({ roleId: id }),
       decision: this.state.decision,
-      decide: (id, status, force) => { const o = offers.find((x) => x.id === id); if (!o || (o.status === status && !force)) return; if (status === 'new') { this.setState({ offers: offers.map((x) => (x.id === id ? { ...x, status, reasons: [], decidedBy: null } : x)) }); return; } this.setState({ decision: { id, status, from: o.status } }); },
+      decide: (id, status, force) => { const o = offers.find((x) => x.id === id); if (!o || (o.status === status && !force)) return; if (status === 'accepted') { this.setState({ accepting: id }); return; } if (status === 'new') { this.setState({ offers: offers.map((x) => (x.id === id ? { ...x, status, reasons: [], decidedBy: null } : x)) }); return; } this.setState({ decision: { id, status, from: o.status } }); },
       closeDecision: () => this.setState({ decision: null }),
+      accepting: this.state.accepting, closeAccept: () => this.setState({ accepting: null }),
+      commitAccept: ({ closeIds, start }) => { const id = this.state.accepting; const o = offers.find((x) => x.id === id); if (!o) return;
+        this.setState({ accepting: null, searchClosed: { offerId: id, at: D.TODAY.toISOString().slice(0, 10) },
+          offers: offers.map((x) => x.id === id ? { ...x, status: 'accepted', reasons: x.reasons, terms: { ...(x.terms || {}), start: start || (x.terms || {}).start } } : closeIds.includes(x.id) ? { ...x, status: 'rejected', decidedBy: 'me', reasons: ['Accepted another offer'] } : x),
+          interviews: interviews.map((i) => closeIds.includes(i.offerId) && i.status === 'scheduled' ? { ...i, status: 'cancelled', outcomeNote: 'Withdrew — accepted ' + o.company } : i) });
+        this.toast('Offer accepted — congratulations!', 'success', o.company + (closeIds.length ? ' · ' + closeIds.length + ' other process' + (closeIds.length > 1 ? 'es' : '') + ' closed' : '')); },
+      searchClosed: this.state.searchClosed, reopenSearch: () => { this.setState({ searchClosed: null }); this.toast('Search reopened', 'info', 'Your pipeline is active again'); },
+      expectations: this.state.expectations || D.expectations, setExpectations: (p) => this.setState({ expectations: { ...(this.state.expectations || D.expectations), ...p } }),
+      current: this.state.current || D.current, setCurrent: (p) => this.setState({ current: { ...(this.state.current || D.current), ...p, terms: { ...(this.state.current || D.current).terms, ...(p.terms || {}) } } }),
+      closeAsGhost: (id) => { const o = offers.find((x) => x.id === id); this.setState({ offers: offers.map((x) => (x.id === id ? { ...x, status: 'rejected', decidedBy: 'them', reasons: ['No reply'] } : x)) }); this.toast('Closed as no reply', 'neutral', o && (o.company + ' · counts toward your reply-rate insights')); },
+      wonDone: this.state.wonDone || {}, markWon: (k) => this.setState({ wonDone: { ...(this.state.wonDone || {}), [k]: !(this.state.wonDone || {})[k] } }),
+      discreet: !!this.state.discreet, toggleDiscreet: () => { const v = !this.state.discreet; this.setState({ discreet: v }); this.toast(v ? 'Salaries hidden' : 'Salaries visible', 'info', v ? 'Safe for screen sharing · toggle in the account menu' : ''); },
+      contacts: this.state.contacts || D.contacts, setContacts: (n) => this.setState({ contacts: n }),
+      debrief: this.state.debrief, openDebrief: (id) => this.setState({ debrief: id }), closeDebrief: () => this.setState({ debrief: null }),
+      addQuestions: (list) => { list.forEach((q, k) => D.questions.unshift({ id: 'u' + Date.now() + k, category: 'Behavioral', sub: null, answer: null, aiRole: null, level: 'Mid', difficulty: 3, votes: 0, voted: false, learning: true, mine: true, pending: false, order: -1, ...q })); },
+      billing: this.state.billing || D.billing, setBilling: (p) => this.setState({ billing: { ...(this.state.billing || D.billing), ...p } }),
       commitDecision: (patch) => { const d = this.state.decision; if (!d) return; const o = offers.find((x) => x.id === d.id); this.setState({ decision: null, offers: offers.map((x) => (x.id === d.id ? { ...x, status: d.status, ...patch } : x)) }); this.toast('Moved to ' + D.STATUS[d.status].label, d.status === 'rejected' ? 'neutral' : 'success', o && (o.name + ' · ' + o.company)); },
       openAdd: () => this.setState({ addOpen: true, editId: null }),
       editId: this.state.editId, editOffer: (id) => this.setState({ addOpen: true, editId: id }),
@@ -139,26 +172,28 @@ class Component extends DCLogic {
     const signedOut = this.state.signedOut || route === 'landing';
     const isPublic = route === 'landing' || (route === 'privacy' && signedOut);
     const r = {}; r[route] = true;
-    const navTo = { today: 'today', pipeline: 'pipeline', interviews: 'interviews', prep: 'prep', cv: 'cv' };
+    const navTo = { today: 'today', pipeline: 'pipeline', interviews: 'interviews', prep: 'prep', salary: 'salary', cv: 'cv', cvshare: 'cv' };
     return {
       isPublic: isPublic, isApp: !isPublic && route !== 'onboarding', isOnboarding: route === 'onboarding', r, app,
       goLanding: (e) => { e && e.preventDefault && e.preventDefault(); window.scrollTo(0, 0); go('landing'); }, goPrivacy: (e) => { e && e.preventDefault && e.preventDefault(); window.scrollTo(0, 0); go('privacy'); }, signIn: app.signIn,
       logo: NS.BrandLogo ? h(NS.BrandLogo, { brand: 'recron', tone: 'inverse', size: 28 }) : 'Recron',
-      navItems: [{ id: 'today', label: 'Today', icon: 'home' }, { id: 'pipeline', label: 'Pipeline', icon: 'briefcase' }, { id: 'interviews', label: 'Interviews', icon: 'calendar' }, { id: 'prep', label: 'Prep', icon: 'book-open' }, { id: 'cv', label: 'CV', icon: 'file-text' }],
+      navItems: [{ id: 'today', label: 'Today', icon: 'home' }, { id: 'pipeline', label: 'Pipeline', icon: 'briefcase' }, { id: 'interviews', label: 'Interviews', icon: 'calendar' }, { id: 'prep', label: 'Prep', icon: 'book-open' }, { id: 'salary', label: 'Salary', icon: 'dollar-sign' }, { id: 'cv', label: 'CV', icon: 'file-text' }],
       navActive: route === 'offer' ? 'pipeline' : navTo[route] || '',
       navigate: (id) => go(id),
       goHome: () => go('today'),
       navActions: h(React.Fragment, null,
+        h('button', { type: 'button', onClick: () => go('plans'), 'aria-label': plan.credits + ' AI credits — plan and usage', title: 'AI credits', style: { display: 'inline-flex', alignItems: 'center', gap: 6, height: 32, padding: '0 12px', border: '1px solid color-mix(in oklab, var(--on-color-fg, #fff) 28%, transparent)', borderRadius: 999, background: 'color-mix(in oklab, var(--on-color-fg, #fff) 12%, transparent)', color: 'var(--on-color-fg, #fff)', font: '600 13px/1 var(--font-sans)', fontVariantNumeric: 'tabular-nums', cursor: 'pointer', whiteSpace: 'nowrap' } }, h(NS.Glyph || 'span', { name: 'sparkles' }), plan.id === 'free' ? plan.credits + ' credits' : 'Pro · ' + plan.credits),
+        this.state.discreet ? h('button', { type: 'button', onClick: app.toggleDiscreet, title: 'Salaries hidden — click to show', 'aria-label': 'Salaries hidden — show salaries', style: { display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, border: 0, borderRadius: 999, background: 'color-mix(in oklab, var(--on-color-fg, #fff) 12%, transparent)', color: 'var(--on-color-fg, #fff)', cursor: 'pointer' } }, h(NS.Glyph || 'span', { name: 'eye-off' })) : null,
         h(NS.SearchTrigger, { placeholder: 'Search', onOpen: () => this.setState({ cmdOpen: true }) }),
         h(NS.NotificationCenter, { items: this.state.notifs || D.notifications || [{ id: 'n1', title: 'Interview tomorrow', body: 'Acme · Technical · 10:00', time: '1h', unread: true, tone: 'brand', icon: 'calendar' }, { id: 'n2', title: 'CV match ready', body: 'React Engineer · Globex — 72%', time: '3h', unread: true, tone: 'success', icon: 'sparkles' }, { id: 'n3', title: 'No reply for 14 days', body: 'UI Engineer · Initech — follow up?', time: '1d', tone: 'warning', icon: 'clock' }],
           onItemClick: () => go('interviews'), onMarkAllRead: () => this.setState((s) => ({ notifs: (s.notifs || []).length ? s.notifs.map((n) => ({ ...n, unread: false })) : [{ id: 'n1', title: 'Interview tomorrow', body: 'Acme · Technical · 10:00', time: '1h', tone: 'brand', icon: 'calendar' }, { id: 'n2', title: 'CV match ready', body: 'React Engineer · Globex — 72%', time: '3h', tone: 'success', icon: 'sparkles' }, { id: 'n3', title: 'No reply for 14 days', body: 'UI Engineer · Initech — follow up?', time: '1d', tone: 'warning', icon: 'clock' }] })) }),
         h(NS.NavbarUser || ((p) => h(NS.Menu, { align: 'end', width: 220, items: p.items, trigger: h('button', { type: 'button', className: 'vui-navbar-mb__user', 'aria-label': 'Account menu — ' + p.name }, h(NS.Avatar, { name: p.name, size: 'sm', tone: 'neutral' }), h('span', { className: 'vui-navbar-mb__user-name' }, p.name.split(' ')[0]), h(NS.Glyph || 'span', { name: 'chevron-down' })) })), { name: D.profile.name, email: D.profile.email, meta: (D.roles.find((x) => x.id === this.state.roleId) || D.roles[0]).name, compact: true,
-          items: [{ label: 'Settings', icon: 'settings', onSelect: () => go('settings') }, { label: 'Privacy policy', icon: 'shield', onSelect: () => go('privacy') }],
+          items: [{ label: this.state.discreet ? 'Show salaries' : 'Hide salaries', icon: this.state.discreet ? 'eye' : 'eye-off', onSelect: app.toggleDiscreet }, { label: 'Plan & credits', icon: 'sparkles', onSelect: () => go('plans') }, { label: 'Public CV link', icon: 'link', onSelect: () => go('cvshare') }, { label: 'Moderation', icon: 'shield-check', onSelect: () => go('moderation') }, { label: 'Settings', icon: 'settings', onSelect: () => go('settings') }, { label: 'Privacy policy', icon: 'shield', onSelect: () => go('privacy') }],
           theme: this.state.theme || 'light', onThemeChange: (t) => { this.setState({ theme: t }); const dark = t === 'dark' || (t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches); document.documentElement.dataset.theme = dark ? 'dark' : 'light'; },
           onSignOut: () => app.signOut() })
       ),
       cmd: h(NS.CommandPalette, { open: !!this.state.cmdOpen, onClose: () => this.setState({ cmdOpen: false }), placeholder: 'Search offers, go to…', groups: [
-        { label: 'Go to', items: [['today', 'Today', 'home'], ['pipeline', 'Pipeline', 'briefcase'], ['interviews', 'Interviews', 'calendar'], ['prep', 'Prep', 'book-open'], ['cv', 'CV', 'file-text'], ['settings', 'Settings', 'settings']].map(([id, l, ic]) => ({ id: 'go-' + id, label: l, icon: ic, onSelect: () => { this.setState({ cmdOpen: false }); go(id); } })) },
+        { label: 'Go to', items: [['today', 'Today', 'home'], ['pipeline', 'Pipeline', 'briefcase'], ['interviews', 'Interviews', 'calendar'], ['prep', 'Prep', 'book-open'], ['cv', 'CV', 'file-text'], ['cvshare', 'Public CV link', 'link'], ['plans', 'Plan & credits', 'sparkles'], ['moderation', 'Moderation', 'shield-check'], ['settings', 'Settings', 'settings']].map(([id, l, ic]) => ({ id: 'go-' + id, label: l, icon: ic, onSelect: () => { this.setState({ cmdOpen: false }); go(id); } })) },
         { label: 'Offers', items: offers.slice(0, 8).map((o) => ({ id: o.id, label: o.name, description: o.company, icon: 'briefcase', keywords: [o.company], onSelect: () => { this.setState({ cmdOpen: false }); go('offer', { offerId: o.id, offerTab: 'overview' }); } })) },
         { label: 'Actions', items: [{ id: 'add', label: 'Add offer', icon: 'plus', onSelect: () => this.setState({ cmdOpen: false, addOpen: true }) }] }
       ] }),

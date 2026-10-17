@@ -1,3 +1,8 @@
+:import('../animations.module.css') {
+  vuiFadeIn: vuiFadeIn;
+  vuiPop: vuiPop;
+}
+
 .dialogBackdrop {
   position: fixed;
   inset: 0;
@@ -7,7 +12,7 @@
   padding: var(--space-4);
   background: var(--dialog-backdrop);
   backdrop-filter: blur(var(--dialog-backdrop-blur));
-  animation: vui-fade-in var(--motion-base);
+  animation: vuiFadeIn var(--motion-base);
 }
 
 @media (width <= 639px) {
@@ -25,5 +30,5 @@
   display: flex;
   flex-direction: column;
   background: var(--dialog-bg);
-  animation: vui-pop var(--motion-enter);
+  animation: vuiPop var(--motion-enter);
 }

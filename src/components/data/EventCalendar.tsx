@@ -98,12 +98,12 @@ export const EventCalendar = (props: EventCalendarProps) => {
             <For each={agenda()}>
               {(event) => (
                 <li class={cx(styles.evcalPartEv, variantClass(EVCAL_PART_EV_CLASSES, event.tone ?? 'brand'))}>
-                  <Text as="span" variant="label-sm" mono tone="tertiary" tabular class="vui-evcal__time">
+                  <Text as="span" variant="label-sm" mono tone="tertiary" tabular class={styles.evcalPartTime}>
                     {event.time || translate('velvet.data.eventCalendar.allDay')}
                   </Text>
                   <Dot size="lg" class={styles.evcalPartDot} />
                   <span class={styles.evcalPartBody}>
-                    <Text as="span" variant="body-sm" tone="primary" class="vui-evcal__title">
+                    <Text as="span" variant="body-sm" tone="primary" class={styles.evcalPartTitle}>
                       {event.title}
                     </Text>
                     <Show when={event.description}>

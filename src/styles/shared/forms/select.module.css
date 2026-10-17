@@ -1,3 +1,7 @@
+:import('../animations.module.css') {
+  vuiSelectIn: vuiSelectIn;
+}
+
 .select {
   position: relative;
   min-width: 0;
@@ -15,7 +19,7 @@
   max-height: var(--overlay-max-h-sm);
   overflow-y: auto;
   transform-origin: top;
-  animation: vui-select-in var(--motion-reveal);
+  animation: vuiSelectIn var(--motion-reveal);
   background: var(--panel-bg);
   border: var(--border-width) solid var(--panel-border);
   border-radius: var(--panel-radius);

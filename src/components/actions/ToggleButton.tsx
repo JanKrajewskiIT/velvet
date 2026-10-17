@@ -1,6 +1,7 @@
 import { type JSX, mergeProps, Show, splitProps } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
+import { callHandler } from '../../utils/callHandler';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
@@ -61,6 +62,7 @@ export const ToggleButton = (props: ToggleButtonProps) => {
     'iconOnly',
     'label',
     'disabled',
+    'onClick',
     'class',
     'children',
   ]);
@@ -74,7 +76,12 @@ export const ToggleButton = (props: ToggleButtonProps) => {
   const on = () => (group ? group.isOn(local.value) : ownPressed());
   const size = () => group?.size() ?? local.size;
   const iconOnly = () => local.iconOnly ?? (!local.children && !!local.icon);
-  const flip = () => (group ? group.toggle(local.value) : setOwnPressed(!ownPressed()));
+  const flip: JSX.EventHandler<HTMLButtonElement, MouseEvent> = (event) => {
+    callHandler(local.onClick, event);
+    if (event.defaultPrevented || local.disabled || group?.disabled()) return;
+    if (group) group.toggle(local.value);
+    else setOwnPressed(!ownPressed());
+  };
 
   return (
     <button
@@ -91,8 +98,8 @@ export const ToggleButton = (props: ToggleButtonProps) => {
         variantClass(TOGGLE_CLASSES, local.tone, 'brand'),
         local.class,
       )}
-      onClick={flip}
       {...rest}
+      onClick={flip}
     >
       <Show when={typeof local.icon === 'string' ? local.icon : undefined} fallback={local.icon}>
         {(name) => <Glyph name={pressedIcon(name(), on())} />}

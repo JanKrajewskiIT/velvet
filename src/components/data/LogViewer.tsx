@@ -178,8 +178,8 @@ export const LogViewer = (props: LogViewerProps) => {
                 <Show when={merged.lineNumbers}>
                   <span class={styles.logPartLn}>{row().index + 1}</span>
                 </Show>
-                <Show when={merged.showTimestamps && row().ts != null ? row().ts : undefined}>
-                  {(ts) => <span class={styles.logPartTs}>{formatLogTimestamp(ts())}</span>}
+                <Show when={merged.showTimestamps && row().ts != null}>
+                  <span class={styles.logPartTs}>{formatLogTimestamp(row().ts ?? '')}</span>
                 </Show>
                 <span class={styles.logPartLv}>{row().level.toUpperCase()}</span>
                 <Show when={row().source}>{(source) => <span class={styles.logPartSrc}>{source()}</span>}</Show>

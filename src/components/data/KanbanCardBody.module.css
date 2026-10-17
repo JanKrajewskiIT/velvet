@@ -1,3 +1,7 @@
+.kanbanPartCtitle {
+  line-height: 1.4;
+}
+
 .kanbanPartCfoot {
   display: flex;
   align-items: center;

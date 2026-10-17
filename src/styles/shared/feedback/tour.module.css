@@ -1,3 +1,7 @@
+:import('../animations.module.css') {
+  vuiSelectIn: vuiSelectIn;
+}
+
 .tourPartCard {
   position: absolute;
   width: var(--overlay-w-sm);
@@ -7,7 +11,7 @@
   transition:
     left var(--motion-enter),
     top var(--motion-enter);
-  animation: vui-select-in var(--motion-move);
+  animation: vuiSelectIn var(--motion-move);
   background: var(--panel-bg);
   border: var(--border-width) solid var(--panel-border);
   border-radius: var(--panel-radius);

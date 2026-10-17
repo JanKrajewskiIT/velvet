@@ -1,3 +1,7 @@
+:import('../../styles/shared/animations.module.css') {
+  vuiJellyGrow: vuiJellyGrow;
+}
+
 .d {
 }
 
@@ -22,22 +26,22 @@
   border-radius: var(--radius-full);
   background: var(--cs-surf);
   transform: translate(-50%, -50%) scale(0);
-  animation: vui-conc1 2.5s infinite alternate;
+  animation: vuiConc1 2.5s infinite alternate;
 }
 
 :where([data-vui-loader='concentric-pulse']) .part:nth-child(1) {
   z-index: 1;
-  animation-name: vui-conc1;
+  animation-name: vuiConc1;
 }
 
 :where([data-vui-loader='concentric-pulse']) .part:nth-child(2) {
   z-index: 2;
-  animation-name: vui-conc2;
+  animation-name: vuiConc2;
 }
 
 :where([data-vui-loader='concentric-pulse']) .part:nth-child(3) {
   z-index: 3;
-  animation-name: vui-conc3;
+  animation-name: vuiConc3;
 }
 
 :where([data-vui-loader='equalizer']) .part {
@@ -46,7 +50,7 @@
   border-radius: var(--radius-xs);
   background: currentcolor;
   transform-origin: center;
-  animation: vui-eq 0.3s linear infinite alternate;
+  animation: vuiEq 0.3s linear infinite alternate;
   animation-delay: var(--dl);
 }
 
@@ -64,7 +68,7 @@
   height: 28px;
   margin: var(--space-0-5);
   background: var(--ld-c);
-  animation: vui-orbit 10s ease-in-out infinite both;
+  animation: vuiOrbit 10s ease-in-out infinite both;
   animation-delay: var(--dl);
 }
 
@@ -89,7 +93,7 @@
   transform: scale(0);
   opacity: 0.5;
   box-shadow: 0 0 20px color-mix(in oklab, var(--ld-c) 30%, transparent);
-  animation: vui-pr calc(var(--prs) * 1.111) ease-in-out infinite;
+  animation: vuiPr calc(var(--prs) * 1.111) ease-in-out infinite;
   animation-delay: calc(var(--prs) * var(--f));
 }
 
@@ -98,13 +102,17 @@
   height: 20px;
   border-radius: var(--radius-full);
   background: var(--rr);
-  animation: vui-ripple 1.5s infinite ease-in-out;
+  animation: vuiRipple 1.5s infinite ease-in-out;
   animation-delay: var(--dl);
 }
 
 @media (prefers-reduced-motion: reduce) {
   :where([data-vui-loader='concentric-pulse']) .part {
     transform: translate(-50%, -50%) scale(1);
+  }
+
+  :where([data-vui-loader='pulse-ring']) .part::before {
+    transform: scale(1);
   }
 }
 
@@ -116,7 +124,7 @@
   border-radius: var(--radius-full);
   background: var(--ld-c);
   transform-origin: 50%;
-  animation: vui-bounce-dot 0.5s alternate infinite ease;
+  animation: vuiBounceDot 0.5s alternate infinite ease;
   animation-delay: var(--dl);
 }
 
@@ -130,7 +138,7 @@
   background: var(--ld-shadow);
   filter: blur(1px);
   z-index: -1;
-  animation: vui-bounce-shadow 0.5s alternate infinite ease;
+  animation: vuiBounceShadow 0.5s alternate infinite ease;
   animation-delay: var(--dl);
 }
 
@@ -142,7 +150,7 @@
   height: 30px;
   margin-left: var(--x);
   margin-top: var(--y);
-  animation: vui-hc-gel 2s infinite;
+  animation: vuiHcGel 2s infinite;
   animation-delay: var(--dl);
 }
 
@@ -152,7 +160,7 @@
   width: 30px;
   height: 17px;
   background: var(--ld-c);
-  animation: vui-hc-fade 2s infinite;
+  animation: vuiHcFade 2s infinite;
   animation-delay: var(--dl);
   box-shadow: 0 0 8px color-mix(in oklab, var(--ld-c) 35%, transparent);
 }
@@ -179,18 +187,233 @@
 :where([data-vui-loader='jelly-triangle']) .d {
   top: 6%;
   left: 30%;
-  animation: vui-jelly-grow var(--jsp) ease infinite;
+  animation: vuiJellyGrow var(--jsp) ease infinite;
 }
 
 :where([data-vui-loader='jelly-triangle']) .t {
   top: 6%;
   left: 30%;
-  animation: vui-jelly-tri var(--jsp) ease infinite;
+  animation: vuiJellyTri var(--jsp) ease infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
   :where([data-vui-loader='jelly-triangle']) .d,
   :where([data-vui-loader='jelly-triangle']) .t {
     transform: none;
+  }
+}
+
+@keyframes vuiBounceDot {
+  0% {
+    top: 60px;
+    height: 5px;
+    border-radius: 50px 50px 25px 25px;
+    transform: scaleX(1.7);
+  }
+
+  40% {
+    height: 20px;
+    border-radius: var(--radius-full);
+    transform: scaleX(1);
+  }
+
+  100% {
+    top: 0;
+  }
+}
+
+@keyframes vuiBounceShadow {
+  0% {
+    transform: scaleX(1.5);
+  }
+
+  40% {
+    transform: scaleX(1);
+    opacity: 0.7;
+  }
+
+  100% {
+    transform: scaleX(0.2);
+    opacity: 0.4;
+  }
+}
+
+@keyframes vuiConc1 {
+  0%,
+  10% {
+    transform: translate(-50%, -50%) scale(0);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow:
+      8px 8px 14px var(--cs-dark),
+      -8px -8px 14px var(--cs-light);
+  }
+}
+
+@keyframes vuiConc2 {
+  0%,
+  40% {
+    transform: translate(-50%, -50%) scale(0);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow:
+      8px 8px 14px var(--cs-dark),
+      -8px -8px 14px var(--cs-light);
+  }
+}
+
+@keyframes vuiConc3 {
+  0%,
+  70% {
+    transform: translate(-50%, -50%) scale(0);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow:
+      8px 8px 14px var(--cs-dark),
+      -8px -8px 14px var(--cs-light);
+  }
+}
+
+@keyframes vuiEq {
+  0% {
+    transform: scaleY(1);
+  }
+
+  100% {
+    transform: scaleY(0.0833);
+  }
+}
+
+@keyframes vuiHcGel {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.01);
+  }
+}
+
+@keyframes vuiHcFade {
+  0% {
+    background: var(--hc-soft);
+  }
+
+  50% {
+    background: var(--ld-c);
+  }
+
+  100% {
+    background: var(--hc-dark);
+  }
+}
+
+@keyframes vuiJellyTri {
+  0%,
+  100% {
+    transform: none;
+  }
+
+  33.333% {
+    transform: translate(120%, 175%);
+  }
+
+  66.666% {
+    transform: translate(-95%, 175%);
+  }
+}
+
+@keyframes vuiOrbit {
+  0%,
+  10.5% {
+    left: 0;
+    top: 0;
+  }
+
+  12.5%,
+  23% {
+    left: 32px;
+    top: 0;
+  }
+
+  25%,
+  35.5% {
+    left: 64px;
+    top: 0;
+  }
+
+  37.5%,
+  48% {
+    left: 64px;
+    top: 32px;
+  }
+
+  50%,
+  60.5% {
+    left: 32px;
+    top: 32px;
+  }
+
+  62.5%,
+  73% {
+    left: 32px;
+    top: 64px;
+  }
+
+  75%,
+  85.5% {
+    left: 0;
+    top: 64px;
+  }
+
+  87.5%,
+  98% {
+    left: 0;
+    top: 32px;
+  }
+
+  100% {
+    left: 0;
+    top: 0;
+  }
+}
+
+@keyframes vuiPr {
+  0%,
+  100% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes vuiRipple {
+  0% {
+    transform: scale(0.8);
+    background: var(--rr);
+    box-shadow: 0 0 0 0 var(--rs);
+  }
+
+  50% {
+    transform: scale(1.2);
+    background: var(--ra);
+    box-shadow: 0 0 0 10px transparent;
+  }
+
+  100% {
+    transform: scale(0.8);
+    background: var(--rr);
+    box-shadow: 0 0 0 0 var(--rs);
   }
 }

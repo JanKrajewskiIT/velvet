@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script><script src="./recron-data.js"></script></helmet>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Follow-ups" description="Short emails that keep you on the recruiter’s radar" actions="{{ countBadge }}" footer="{{ footer }}" footer-align="between" hint-size="100%,360px">
+<sc-if value="{{ hasItems }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column">
+<sc-for list="{{ items }}" as="it" hint-placeholder-count="3">
+<div style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3) 0;border-top:var(--border-width) solid var(--border-subtle)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.IconTile" icon="{{ it.icon }}" tone="{{ it.tone }}" size="sm" hint-size="32px,32px"></x-import>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
+<span style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ it.title }}</span>
+<span style="display:flex;align-items:center;gap:var(--space-2);flex-wrap:wrap;font-size:var(--type-caption-size);color:var(--fg-secondary)"><x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Badge" size="sm" tone="{{ it.dueTone }}" hint-size="64px,18px">{{ it.due }}</x-import>{{ it.why }}</span>
+</div>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.IconButton" icon="clock" label="Snooze 3 days" variant="ghost" size="sm" on-click="{{ it.snooze }}" hint-size="32px,32px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Button" variant="soft" size="sm" on-click="{{ it.open }}" hint-size="70px,32px">Write</x-import>
+</div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ noItems }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.EmptyState" size="sm" icon="circle-check" tone="success" title="All caught up" description="Recron reminds you 10 days after applying and the day after each interview." hint-size="100%,200px"></x-import>
+</sc-if>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Dialog" open="{{ dlgOpen }}" on-close="{{ close }}" title="{{ dlg.title }}" description="{{ dlg.desc }}" footer="{{ dlgFooter }}" size="lg" hint-size="0,0">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:var(--space-3)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="To" value="{{ dlg.to }}" read-only="{{ true }}" icon-left="mail" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Subject" value="{{ dlg.subject }}" on-change="{{ setSubject }}" hint-size="100%,64px"></x-import>
+</div>
+<div style="display:flex;align-items:center;justify-content:space-between;gap:var(--space-3);flex-wrap:wrap">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.OptionSwitcher" label="Tone" variant="chips" size="sm" options="{{ tones }}" value="{{ tone }}" on-value-change="{{ setTone }}" hint-size="200px,32px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Button" variant="ghost" size="sm" icon-left="sparkles" loading="{{ rewriting }}" on-click="{{ rewrite }}" hint-size="170px,32px">Personalise with AI · 1 credit</x-import>
+</div>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Textarea" label="Message" value="{{ dlg.body }}" on-change="{{ setBody }}" rows="{{ 10 }}" max-rows="{{ 16 }}" hint-size="100%,260px"></x-import>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { done: [], snoozed: [], openId: null, tone: 'Formal', drafts: {}, rewriting: false };
+  componentWillUnmount() { clearTimeout(this._t); }
+  renderVals() {
+    const app = this.props.app || (window.RecronStandalone && window.VelvetUIDesignSystem_ee2bd8 && window.RecronStandalone(this));
+    if (!app) { clearTimeout(this._wt); this._wt = setTimeout(() => this.forceUpdate(), 80); return {}; }
+    const { D, U, NS, offers } = app;
+    const h = React.createElement;
+    const s = this.state;
+    const byId = Object.fromEntries(offers.map((o) => [o.id, o]));
+    const list = D.followUps.filter((f) => byId[f.offerId] && !s.done.includes(f.id) && !s.snoozed.includes(f.id));
+    const cur = list.find((f) => f.id === s.openId) || D.followUps.find((f) => f.id === s.openId);
+    const o = cur && byId[cur.offerId];
+    const base = cur && o ? U.fuDraft(cur, o, s.tone) : { subject: '', body: '' };
+    const draft = cur ? { ...base, ...(s.drafts[cur.id + s.tone] || {}) } : base;
+    const setDraft = (k) => (e) => this.setState({ drafts: { ...s.drafts, [cur.id + s.tone]: { ...draft, [k]: e.target.value } } });
+    const dueOf = (d) => { const n = Math.round((new Date(d) - new Date(D.TODAY.getFullYear(), D.TODAY.getMonth(), D.TODAY.getDate())) / 864e5); return n < 0 ? ['Overdue', 'danger'] : n === 0 ? ['Today', 'warning'] : [U.relDay(d), 'neutral']; };
+    const close = () => this.setState({ openId: null });
+    const sent = () => { this.setState({ openId: null, done: [...s.done, cur.id] }); app.toast('Marked as sent', 'success', 'We’ll remind you again in 7 days if there’s no reply'); };
+    return {
+      hasItems: list.length > 0, noItems: list.length === 0,
+      countBadge: list.length ? h(NS.Badge, { tone: 'warning', size: 'sm' }, list.length + ' due') : null,
+      footer: h(React.Fragment, null, h('span', { style: { fontSize: 'var(--type-caption-size)', color: 'var(--fg-tertiary)' } }, s.done.length ? s.done.length + ' sent this week' : 'Nudge after 10 days · thank-you within 24 h'), h(NS.Button, { variant: 'ghost', size: 'sm', iconLeft: 'settings', onClick: () => app.go('settings') }, 'Rules')),
+      items: list.map((f) => { const T = D.FU_TYPES[f.type]; const [due, dueTone] = dueOf(f.due); return {
+        icon: T.icon, tone: T.tone, title: f.title, why: byId[f.offerId].company + ' · ' + f.why, due, dueTone,
+        open: () => this.setState({ openId: f.id }),
+        snooze: () => { this.setState({ snoozed: [...s.snoozed, f.id] }); app.toast('Snoozed for 3 days', 'neutral', f.title); }
+      }; }),
+      dlgOpen: !!cur, close,
+      dlg: cur ? { title: D.FU_TYPES[cur.type].label + ' · ' + o.company, desc: cur.why, to: cur.contact + ' <' + cur.email + '>', subject: draft.subject, body: draft.body } : {},
+      setSubject: cur ? setDraft('subject') : () => {}, setBody: cur ? setDraft('body') : () => {},
+      tones: ['Formal', 'Friendly'], tone: s.tone, setTone: (v) => this.setState({ tone: v }),
+      rewriting: s.rewriting,
+      rewrite: () => { if (!cur || (app.spend && !app.spend('followup'))) return; this.setState({ rewriting: true }); clearTimeout(this._t); this._t = setTimeout(() => { const b = draft.body.replace(/\n\n(Kind regards|Thanks)/, '\n\nP.S. I recently shipped an accessibility linter for React (a11y-lint-react) — happy to show it if useful.\n\n$1'); this.setState({ rewriting: false, drafts: { ...this.state.drafts, [cur.id + s.tone]: { ...draft, body: b } } }); }, 1100); },
+      dlgFooter: cur ? h(React.Fragment, null,
+        h(NS.CopyButton, { value: draft.subject + '\n\n' + draft.body, variant: 'secondary', size: 'md' }),
+        h(NS.Button, { variant: 'secondary', iconLeft: 'external-link', onClick: () => window.open('mailto:' + cur.email + '?subject=' + encodeURIComponent(draft.subject) + '&body=' + encodeURIComponent(draft.body)) }, 'Open in email'),
+        h(NS.Button, { iconLeft: 'check', onClick: sent }, 'Mark as sent')) : null
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -9,21 +9,21 @@
 <x-dc>
 <helmet><script src="./ds-base.js"></script><script src="./recron-data.js"></script><style>:root:root{overflow:auto!important;height:auto!important;background:var(--bg-page)!important}html body{margin:0!important;padding:0!important;background:var(--bg-page)!important}</style></helmet>
 <div style="display:flex;flex-direction:column;gap:var(--space-4)">
-<section style="position:relative;overflow:hidden;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:var(--space-6);align-items:stretch;padding:var(--space-7);border-radius:var(--radius-2xl);background:var(--bg-brand);color:var(--white)">
-<div style="position:absolute;inset:auto -120px -180px auto;width:420px;height:420px;border-radius:50%;background:radial-gradient(closest-side,color-mix(in oklab,var(--white) 14%,transparent),transparent);pointer-events:none"></div>
+<section style="position:relative;overflow:hidden;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:var(--space-6);align-items:stretch;padding:var(--space-7);border:var(--border-width) solid var(--border-subtle);border-radius:var(--radius-2xl);background:var(--bg-raised);color:var(--fg-primary)">
+<div style="position:absolute;inset:-220px auto auto -160px;width:560px;height:560px;border-radius:50%;background:radial-gradient(closest-side,var(--bg-brand-subtle),transparent);pointer-events:none"></div>
 <div style="position:relative;display:flex;flex-direction:column;justify-content:space-between;gap:var(--space-6);min-width:0">
 <div style="display:flex;flex-direction:column;gap:var(--space-3)">
-<span style="font-size:var(--type-caption-size);font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.8">{{ dateLabel }}</span>
+<span style="font-size:var(--type-caption-size);font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--fg-brand)">{{ dateLabel }}</span>
 <h1 style="margin:0;font:var(--type-display-sm);letter-spacing:var(--type-display-sm-tracking);text-wrap:balance">{{ greeting }}</h1>
-<p style="margin:0;max-width:46ch;font-size:var(--type-body-lg-size, 17px);line-height:1.5;opacity:.88;text-wrap:pretty">{{ insight }}</p>
+<p style="margin:0;max-width:46ch;font-size:var(--type-body-lg-size, 17px);line-height:1.5;color:var(--fg-secondary);text-wrap:pretty">{{ insight }}</p>
 </div>
-<div style="display:flex;flex-wrap:wrap;gap:var(--space-6)">
+<div style="display:flex;flex-wrap:wrap;gap:var(--space-6) var(--space-8);padding-top:var(--space-5);border-top:var(--border-width) solid var(--border-subtle)">
 <sc-for list="{{ heroStats }}" as="hs" hint-placeholder-count="3">
-<div style="display:flex;flex-direction:column;gap:2px"><span style="font:var(--type-kpi);font-variant-numeric:tabular-nums">{{ hs.value }}</span><span style="font-size:var(--type-caption-size);opacity:.75">{{ hs.label }}</span></div>
+<div style="display:flex;flex-direction:column;gap:2px"><span style="font:var(--type-kpi);font-variant-numeric:tabular-nums;color:var(--fg-primary)">{{ hs.value }}</span><span style="font-size:var(--type-caption-size);color:var(--fg-tertiary)">{{ hs.label }}</span></div>
 </sc-for>
 </div>
 </div>
-<div style="position:relative;display:flex;flex-direction:column;gap:var(--space-4);padding:var(--space-5);border-radius:var(--radius-xl);background:var(--bg-raised);color:var(--fg-primary);box-shadow:var(--shadow-lg, 0 12px 32px rgba(0,0,0,.18))">
+<div style="position:relative;display:flex;flex-direction:column;gap:var(--space-4);padding:var(--space-5);border:var(--border-width) solid var(--border-subtle);border-radius:var(--radius-xl);background:var(--bg-subtle);color:var(--fg-primary)">
 <sc-if value="{{ hasNext }}" hint-placeholder-val="{{ true }}">
 <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--space-3)">
 <span style="font-size:var(--type-caption-size);font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--fg-brand)">Next interview</span>
@@ -35,7 +35,7 @@
 </div>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-2)">
 <sc-for list="{{ next.countdown }}" as="cd" hint-placeholder-count="3">
-<div style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:var(--space-3) var(--space-2);border-radius:var(--radius-md);background:var(--bg-subtle)"><span style="font:var(--type-kpi);font-variant-numeric:tabular-nums">{{ cd.value }}</span><span style="font-size:var(--type-caption-size);color:var(--fg-tertiary)">{{ cd.label }}</span></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:var(--space-3) var(--space-2);border-radius:var(--radius-md);background:var(--bg-raised);box-shadow:inset 0 0 0 var(--border-width) var(--border-subtle)"><span style="font:var(--type-kpi);font-variant-numeric:tabular-nums;color:var(--fg-brand)">{{ cd.value }}</span><span style="font-size:var(--type-caption-size);color:var(--fg-tertiary)">{{ cd.label }}</span></div>
 </sc-for>
 </div>
 <span style="font-size:var(--type-body-sm-size);color:var(--fg-secondary)">{{ next.when }}</span>
@@ -52,6 +52,10 @@
 </sc-if>
 </div>
 </section>
+<sc-if value="{{ hasWon }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Alert" tone="success" icon="party-popper" title="{{ wonTitle }}" action="{{ wonAction }}" hint-size="100%,72px">{{ wonBody }}</x-import>
+<dc-import name="RecronWon" app="{{ app }}" hint-size="100%,240px"></dc-import>
+</sc-if>
 <sc-if value="{{ showChecklist }}" hint-placeholder-val="{{ false }}">
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.SetupChecklist" layout="grid" title="Get set up" description="Four steps and Recron starts working for you — matching your CV, reminding you about interviews." steps="{{ checklist }}" on-dismiss="{{ dismiss }}" hint-size="100%,200px"></x-import>
 </sc-if>
@@ -76,13 +80,13 @@
 </div>
 <sc-if value="{{ hasOffers }}" hint-placeholder-val="{{ true }}">
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:var(--space-4);align-items:start">
+<dc-import name="RecronFollowUps" app="{{ app }}" hint-size="100%,360px"></dc-import>
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="In play" description="Active offers, best fit first" actions="{{ browseAction }}" hint-size="100%,320px">
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.List" items="{{ inPlay }}" hint-size="100%,260px"></x-import>
 </x-import>
-<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Your rhythm" description="Offers added or moved, per day" hint-size="100%,320px">
-<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Heatmap" data="{{ activity }}" weeks="{{ 20 }}" end="{{ today }}" label="this period" unit="actions" hint-size="100%,200px"></x-import>
-</x-import>
+
 </div>
+<dc-import name="RecronInsights" app="{{ app }}" hint-size="100%,1000px"></dc-import>
 </sc-if>
 </div>
 </x-dc>
@@ -95,17 +99,20 @@ class Component extends DCLogic {
     const h = React.createElement;
     const hr = D.TODAY.getHours();
     const greeting = (hr < 12 ? 'Good morning, ' : hr < 18 ? 'Good afternoon, ' : 'Good evening, ') + D.profile.first;
-    const active = offers.filter((o) => o.status === 'applied' || o.status === 'considering');
+    const active = offers.filter((o) => o.status === 'applied' || o.status === 'considering' || o.status === 'offer');
+    const pending = offers.filter((o) => o.status === 'offer');
+    const won = app.searchClosed && offers.find((o) => o.id === app.searchClosed.offerId);
     const applied = offers.filter((o) => o.status === 'applied');
     const byId = Object.fromEntries(offers.map((o) => [o.id, o]));
     const up = interviews.filter((i) => i.status === 'scheduled' && new Date(i.at) >= D.TODAY && byId[i.offerId]).sort((a, b) => new Date(a.at) - new Date(b.at));
     const withInterview = new Set(interviews.map((i) => i.offerId));
     const next = up[0];
     const insight = !offers.length ? 'Your search starts here — add the first offer you’re interested in.'
-      : (active.length + ' active applications') + (next ? ' · next interview ' + U.relDay(next.at).toLowerCase() + ' at ' + U.fmtTime(next.at) : '');
+      : won ? 'You accepted ' + won.company + '. Recron keeps your history — reopen the search any time.' : (active.length + ' active applications') + (pending.length ? ' · ' + pending.length + ' offer' + (pending.length > 1 ? 's' : '') + ' waiting for your answer' : '') + (next ? ' · next interview ' + U.relDay(next.at).toLowerCase() + ' at ' + U.fmtTime(next.at) : '');
     const attention = [];
+    offers.filter((o) => { const k = o.status === 'offer' ? o.responseBy : (o.status === 'new' || o.status === 'considering') ? o.applyBy : null; return k && U.daysLeft(k) >= 0 && U.daysLeft(k) <= 5; }).forEach((o) => { const off = o.status === 'offer'; const v = off ? o.responseBy : o.applyBy; attention.push({ o, icon: off ? 'gift' : 'clock', title: off ? 'Answer ' + o.company + '’s offer' : 'Apply to ' + o.name + ' before it closes', desc: o.company + ' · due ' + U.relDay(v).toLowerCase(), label: off ? 'Decide' : 'Open', tab: 'overview' }); });
+    offers.filter((o) => o.status === 'applied' && !interviews.some((i) => i.offerId === o.id) && U.daysAgo(o.added) >= D.GHOST_DAYS).forEach((o) => attention.push({ o, icon: 'clock', title: 'No reply from ' + o.company + ' in ' + U.daysAgo(o.added) + ' days', desc: 'Close it as “No reply” to keep the pipeline honest — you can reopen it', label: 'Close', run: () => app.closeAsGhost(o.id) }));
     offers.filter((o) => o.status === 'considering' && o.match == null).forEach((o) => attention.push({ o, icon: 'sparkles', title: 'Check your fit for ' + o.name, desc: o.company + ' · no CV match yet', label: 'Run match', tab: 'match' }));
-    offers.filter((o) => o.status === 'applied' && !withInterview.has(o.id) && U.daysAgo(o.added) > 10).forEach((o) => attention.push({ o, icon: 'mail', title: 'Follow up with ' + o.company, desc: 'Applied ' + U.daysAgo(o.added) + ' days ago, no reply', label: 'Open', tab: 'overview' }));
     up.filter((i) => !i.notes).slice(0, 2).forEach((i) => attention.push({ o: byId[i.offerId], icon: 'book-open', title: 'Prepare for ' + i.stage + ' at ' + byId[i.offerId].company, desc: U.relDay(i.at) + ' · no notes yet', label: 'Prepare', tab: 'interviews' }));
     offers.filter((o) => o.status === 'new').slice(0, 2).forEach((o) => attention.push({ o, icon: 'inbox', title: 'Review ' + o.name, desc: o.company + ' · added ' + U.relDay(o.added).toLowerCase(), label: 'Review', tab: 'overview' }));
     const done = app.checklistDone;
@@ -117,6 +124,10 @@ class Component extends DCLogic {
     ];
     const ints = interviews.length;
     return {
+      app,
+      hasWon: !!won, wonTitle: won ? 'Search closed — you’re joining ' + won.company : '',
+      wonBody: won ? (won.terms && won.terms.start ? 'You start on ' + U.fmtDate(won.terms.start, { weekday: 'long', day: 'numeric', month: 'long' }) + '. ' : '') + 'Other processes are closed; reminders and follow-ups are paused.' : '',
+      wonAction: won ? h(React.Fragment, null, h(NS.Button, { size: 'sm', variant: 'secondary', onClick: () => app.openOffer(won.id) }, 'Open offer'), h(NS.Button, { size: 'sm', variant: 'ghost', onClick: app.reopenSearch }, 'Reopen search')) : null,
       dateLabel: D.TODAY.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' }),
       greeting, insight,
       browse: () => app.go('pipeline'),
@@ -150,10 +161,10 @@ class Component extends DCLogic {
       attention: attention.slice(0, 5).map((a, k) => ({
         id: k, title: a.title, description: a.desc,
         leading: h(NS.IconTile, { icon: a.icon, size: 'sm', tone: a.icon === 'sparkles' ? 'brand' : undefined }),
-        trailing: h(NS.Button, { variant: 'soft', size: 'sm', onClick: () => app.openOffer(a.o.id, a.tab) }, a.label)
+        trailing: h(NS.Button, { variant: 'soft', size: 'sm', onClick: a.run || (() => app.openOffer(a.o.id, a.tab)) }, a.label)
       })),
       hasOffers: offers.length > 0,
-      activity: D.activity, today: D.TODAY
+      activity: D.activity, today: this._today || (this._today = new Date(D.TODAY))
     };
   }
 }

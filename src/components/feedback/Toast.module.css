@@ -1,9 +1,13 @@
+:import('../../styles/shared/animations.module.css') {
+  vuiPop: vuiPop;
+}
+
 .toast {
   display: flex;
   align-items: flex-start;
   gap: var(--space-3);
   padding: var(--space-3) var(--space-3) var(--space-3) var(--space-4);
-  animation: var(--toast-animation, vui-pop var(--motion-enter));
+  animation: var(--toast-animation, vuiPop var(--motion-enter));
   position: relative;
   overflow: hidden;
   background: var(--panel-bg);
@@ -63,7 +67,7 @@
   background: currentcolor;
   opacity: 0.35;
   transform-origin: left;
-  animation: vui-countdown linear forwards;
+  animation: vuiCountdown linear forwards;
 }
 
 .toastVariantBrand .toastPartProgress,
@@ -95,5 +99,11 @@
 @media (prefers-reduced-motion: reduce) {
   .toastPartProgress {
     display: none;
+  }
+}
+
+@keyframes vuiCountdown {
+  to {
+    transform: scaleX(0);
   }
 }

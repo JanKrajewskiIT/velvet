@@ -1,4 +1,4 @@
-import { createEffect, createMemo, createSignal, type JSX, onCleanup, Show, untrack } from 'solid-js';
+import { createEffect, createMemo, createSignal, type JSX, onCleanup, Show } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
 import { createDismiss } from '../../hooks/createDismiss';
@@ -36,6 +36,9 @@ export const ContextMenu = (props: ContextMenuProps) => {
   const isOpen = createMemo(() => pos() !== null);
 
   const close = () => setPos(null);
+  createEffect(() => {
+    if (props.disabled) close();
+  });
   createDismiss(
     isOpen,
     (reason) => {
@@ -59,27 +62,23 @@ export const ContextMenu = (props: ContextMenuProps) => {
     });
   });
 
-  /** Called once the portal host is attached, so the panel can be measured and kept inside the viewport. */
-  const placePanel = (el: Element) => {
-    if (!(el instanceof HTMLElement)) return;
-    setHost(el);
-    const at = untrack(pos);
-    const rect = el.firstElementChild?.getBoundingClientRect();
+  createEffect(() => {
+    const at = pos();
+    const rect = host()?.firstElementChild?.getBoundingClientRect();
     if (!at || !rect) return;
-    setPos({
-      x: fitInViewport(at.x, rect.width, window.innerWidth),
-      y: fitInViewport(at.y, rect.height, window.innerHeight),
-    });
-  };
+    const x = fitInViewport(at.x, rect.width, window.innerWidth);
+    const y = fitInViewport(at.y, rect.height, window.innerHeight);
+    if (x !== at.x || y !== at.y) setPos({ x, y });
+  });
 
   const onContextMenu: JSX.EventHandler<HTMLDivElement, MouseEvent> = (e) => {
-    if (props.disabled) return;
+    if (props.disabled || e.defaultPrevented) return;
     e.preventDefault();
     setPos({ x: e.clientX, y: e.clientY });
   };
 
   const onKeyDown: JSX.EventHandler<HTMLDivElement, KeyboardEvent> = (e) => {
-    if (props.disabled || e.target !== e.currentTarget) return;
+    if (props.disabled || e.defaultPrevented) return;
     if ((e.shiftKey && e.key === 'F10') || e.key === 'ContextMenu') {
       e.preventDefault();
       const rect = zone.getBoundingClientRect();
@@ -104,7 +103,12 @@ export const ContextMenu = (props: ContextMenuProps) => {
       {props.children}
       <Show when={pos()}>
         {(at) => (
-          <Portal ref={placePanel} mount={zone.closest('dialog[open]') ?? undefined}>
+          <Portal
+            ref={(element) => {
+              if (element instanceof HTMLElement) setHost(element);
+            }}
+            mount={zone.closest('dialog[open]') ?? undefined}
+          >
             <MenuPanel
               items={props.items}
               style={{ position: 'fixed', left: `${at().x}px`, top: `${at().y}px`, 'z-index': 'var(--z-dropdown)' }}

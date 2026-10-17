@@ -65,11 +65,21 @@ export const ErrorState = (props: ErrorStateProps) => {
     >
       <StateTile icon={local.icon} size={local.size} tone="danger" />
       <div class={styles.emptyPartText}>
-        <Text as="div" variant="title-lg" tone="primary" class={styles.emptyPartTitle}>
+        <Text
+          as="div"
+          variant={local.size === 'sm' ? 'label' : local.size === 'lg' ? 'h4' : 'title-lg'}
+          tone="primary"
+          class={styles.emptyPartTitle}
+        >
           {title()}
         </Text>
         <Show when={description()}>
-          <Text as="div" variant="body-sm" tone="secondary" class={styles.emptyPartDesc}>
+          <Text
+            as="div"
+            variant={local.size === 'sm' ? 'caption' : 'body-sm'}
+            tone="secondary"
+            class={styles.emptyPartDesc}
+          >
             {description()}
           </Text>
         </Show>

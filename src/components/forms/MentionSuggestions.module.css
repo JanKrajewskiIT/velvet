@@ -1,3 +1,7 @@
+:import('../../styles/shared/animations.module.css') {
+  vuiFadeIn: vuiFadeIn;
+}
+
 .mentionPartPop {
   position: absolute;
   z-index: var(--z-dropdown);
@@ -5,5 +9,5 @@
   max-height: 280px;
   overflow: auto;
   padding: var(--panel-pad);
-  animation: vui-fade-in var(--motion-fast);
+  animation: vuiFadeIn var(--motion-fast);
 }

@@ -13,9 +13,20 @@
 }
 
 .dotVariantPulse {
-  animation: vui-dot-pulse 1.6s var(--ease-standard) infinite;
+  animation: vuiDotPulse 1.6s var(--ease-standard) infinite;
 }
 
 .dot {
   composes: dot from '../../styles/shared/primitives/dot.module.css';
+}
+
+@keyframes vuiDotPulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--tone, currentColor) 45%, transparent);
+  }
+
+  70%,
+  100% {
+    box-shadow: 0 0 0 6px transparent;
+  }
 }

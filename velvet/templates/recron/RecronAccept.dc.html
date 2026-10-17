@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script></helmet>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Dialog" open="{{ open }}" on-close="{{ close }}" title="{{ title }}" description="Recron closes the rest of your search for you, so nobody is left waiting on an answer." footer="{{ footer }}" size="md" hint-size="0,0">
+<div style="display:flex;flex-direction:column;gap:var(--space-5)">
+<div style="display:flex;flex-direction:column;gap:var(--space-3);padding:var(--space-4);border-radius:var(--radius-lg);background:var(--bg-subtle)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.DescriptionList" items="{{ summary }}" hint-size="100%,140px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.DatePicker" label="Start date" optional="{{ true }}" value="{{ start }}" on-value-change="{{ setStart }}" min="{{ today }}" hint-size="100%,64px"></x-import>
+</div>
+<sc-if value="{{ hasOthers }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-3)">
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:var(--space-3)">
+<span style="font:var(--type-title);font-weight:var(--type-title-weight)">Close other processes</span>
+<span style="font-size:var(--type-caption-size);color:var(--fg-tertiary)">{{ closeSummary }}</span>
+</div>
+<div style="display:flex;flex-direction:column;gap:var(--space-2)">
+<sc-for list="{{ others }}" as="o" hint-placeholder-count="3">
+<div style="display:flex;align-items:flex-start;gap:var(--space-3);padding:var(--space-3);border:var(--border-width) solid var(--border-subtle);border-radius:var(--radius-md)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Checkbox" checked="{{ o.checked }}" on-change="{{ o.toggle }}" label="{{ o.label }}" description="{{ o.description }}" hint-size="100%,44px"></x-import>
+</div>
+</sc-for>
+</div>
+<span style="font-size:var(--type-caption-size);color:var(--fg-secondary);text-wrap:pretty">Selected offers move to Rejected with the reason “Accepted another offer”, and their scheduled interviews are cancelled. Use the message below to let them know.</span>
+</div>
+</sc-if>
+<sc-if value="{{ hasDraft }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-2)">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:var(--space-3)">
+<span style="font-size:var(--type-body-sm-size);font-weight:var(--type-label-weight)">Withdrawal message</span>
+{{ copyBtn }}
+</div>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Textarea" aria-label="Withdrawal message" value="{{ draft }}" read-only="{{ true }}" rows="{{ 7 }}" hint-size="100%,170px"></x-import>
+</div>
+</sc-if>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;app&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;object&quot;}}">
+class Component extends DCLogic {
+  state = { key: null, closeIds: [], start: null };
+  renderVals() {
+    const app = this.props.app;
+    const id = app && app.accepting;
+    if (!app || !id) return { open: false, others: [], summary: [] };
+    const { D, U, NS, offers, interviews } = app;
+    const h = React.createElement;
+    const o = offers.find((x) => x.id === id) || {};
+    const others = offers.filter((x) => x.id !== id && D.ACTIVE.includes(x.status));
+    if (this.state.key !== id) setTimeout(() => this.setState({ key: id, closeIds: others.map((x) => x.id), start: o.terms && o.terms.start ? new Date(o.terms.start) : null }), 0);
+    const sel = this.state.closeIds;
+    const upOf = (oid) => interviews.filter((i) => i.offerId === oid && i.status === 'scheduled');
+    const cancelN = sel.reduce((n, oid) => n + upOf(oid).length, 0);
+    const c = D.CONTRACTS[o.contractType] || D.CONTRACTS.uop;
+    const net = U.netOf(o);
+    const draft = U.declineDraft(others.find((x) => sel.includes(x.id)) || o, o);
+    const st = this.state.start;
+    return {
+      open: true, close: app.closeAccept,
+      title: 'Accept ' + o.company + '?',
+      summary: [{ term: 'Role', description: o.name }, { term: 'Salary', description: U.salary(o) }, { term: 'Contract', description: c.label }, { term: 'Take-home', description: net ? '≈ ' + U.pln(net) + ' / month' : '—' }],
+      start: st, setStart: (v) => this.setState({ start: v }), today: D.TODAY,
+      hasOthers: others.length > 0,
+      closeSummary: sel.length + ' of ' + others.length + ' selected' + (cancelN ? ' · ' + cancelN + ' interview' + (cancelN > 1 ? 's' : '') + ' to cancel' : ''),
+      others: others.map((x) => { const up = upOf(x.id)[0]; return { id: x.id, label: x.company + ' · ' + x.name, description: D.STATUS[x.status].label + (up ? ' · ' + up.stage + ' ' + U.relDay(up.at).toLowerCase() : ''), checked: sel.includes(x.id), toggle: () => this.setState({ closeIds: sel.includes(x.id) ? sel.filter((y) => y !== x.id) : [...sel, x.id] }) }; }),
+      hasDraft: sel.length > 0, draft: draft.body,
+      copyBtn: h(NS.CopyButton, { value: draft.body, variant: 'ghost', size: 'sm' }),
+      footer: h(React.Fragment, null,
+        h(NS.Button, { variant: 'secondary', onClick: app.closeAccept }, 'Not yet'),
+        h(NS.Button, { iconLeft: 'check', onClick: () => { const pad = (n) => String(n).padStart(2, '0'); app.commitAccept({ closeIds: sel, start: st ? st.getFullYear() + '-' + pad(st.getMonth() + 1) + '-' + pad(st.getDate()) : null }); } }, sel.length ? 'Accept & close ' + sel.length : 'Accept offer'))
+    };
+  }
+}
+</script>
+</body>
+</html>

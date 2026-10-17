@@ -1,6 +1,8 @@
 import { type Accessor, createEffect, createMemo, createSignal, type JSX, onCleanup } from 'solid-js';
 
 import { fixedOrigin, type FloatingAlign, type FloatingSide, placeFloating, type Placement } from '../utils/floating';
+import { isFloatingAnchorVisible } from '../utils/floatingAnchor';
+import { measureFloatingOffset } from '../utils/floatingOffset';
 
 const DEFAULT_OFFSET_PX = 6;
 const DEFAULT_PADDING_PX = 8;
@@ -16,8 +18,8 @@ export interface FloatingOptions {
   side?: Accessor<FloatingSide>;
   /** @default 'start' */
   align?: Accessor<FloatingAlign>;
-  /** Gap between anchor and panel, px. @default 6 */
-  offset?: number;
+  /** Gap between anchor and panel: px or a CSS length resolved in the panel's context. @default 6 */
+  offset?: number | string;
   /** Distance kept from the viewport edge, px. @default 8 */
   padding?: number;
   /** Give the panel the anchor's width. @default false */
@@ -29,7 +31,7 @@ export interface FloatingOptions {
 export interface Floating {
   /** Pass to the panel's `ref`. */
   ref: (element: HTMLElement) => void;
-  /** Inline style for the panel; `undefined` until the first measurement. */
+  /** Inline placement; hidden until measured and while the anchor is fully clipped. */
   style: Accessor<JSX.CSSProperties | undefined>;
   /** Side the panel ended up on after flipping, or the preferred one before measurement. */
   side: Accessor<FloatingSide>;
@@ -47,7 +49,7 @@ export const createFloating = (
   const { offset = DEFAULT_OFFSET_PX, padding = DEFAULT_PADDING_PX, matchWidth = false, minWidth = false } = options;
   const preferred = () => options.side?.() ?? 'bottom';
   const [panel, setPanel] = createSignal<HTMLElement>();
-  const [placement, setPlacement] = createSignal<Placement & { anchorWidth: number }>();
+  const [placement, setPlacement] = createSignal<Placement & { anchorWidth: number; visible: boolean }>();
   const ref = (element: HTMLElement) => {
     element.setAttribute('data-vui-floating', '');
     if (typeof element.showPopover === 'function') element.popover = 'manual';
@@ -73,18 +75,21 @@ export const createFloating = (
       if (dialog && !dialog.hasAttribute('open')) return;
       if (element.popover === 'manual' && !element.matches(':popover-open')) element.showPopover();
       const box = reference.getBoundingClientRect();
+      const context = reference instanceof Element ? reference : reference.contextElement;
       const origin = fixedOrigin(element);
+      const gap = measureFloatingOffset(element, offset);
       const placed = placeFloating(
         box,
         { width: matchWidth ? box.width : element.offsetWidth, height: element.offsetHeight },
         { width: document.documentElement.clientWidth, height: document.documentElement.clientHeight },
-        { side, align, offset, padding },
+        { side, align, offset: gap, padding },
       );
       setPlacement({
         side: placed.side,
         x: Math.round(placed.x - origin.x),
         y: Math.round(placed.y - origin.y),
         anchorWidth: box.width,
+        visible: isFloatingAnchorVisible(box, context),
       });
     };
     const schedule = () => {
@@ -98,21 +103,25 @@ export const createFloating = (
     window.addEventListener('scroll', schedule, true);
     window.addEventListener('resize', schedule);
     const observer = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(schedule);
+    const intersection = typeof IntersectionObserver === 'undefined' ? undefined : new IntersectionObserver(schedule);
     const reference = anchor();
     const watched = [openedPanel, reference instanceof Element ? reference : reference?.contextElement];
     for (const target of watched) if (target) observer?.observe(target);
+    const context = watched[1];
+    if (context) intersection?.observe(context);
     onCleanup(() => {
       cancelAnimationFrame(frame);
       window.removeEventListener('scroll', schedule, true);
       window.removeEventListener('resize', schedule);
       observer?.disconnect();
+      intersection?.disconnect();
       if (openedPanel.popover === 'manual' && openedPanel.matches(':popover-open')) openedPanel.hidePopover();
     });
   });
 
   const style = createMemo<JSX.CSSProperties | undefined>(() => {
     const placed = placement();
-    if (!placed) return undefined;
+    if (!placed) return { visibility: 'hidden', 'pointer-events': 'none' };
     return {
       position: 'fixed',
       left: `var(--floating-left, ${placed.x}px)`,
@@ -121,6 +130,7 @@ export const createFloating = (
       bottom: 'var(--floating-bottom, auto)',
       transform: 'none',
       margin: '0',
+      ...(!placed.visible && { visibility: 'hidden', 'pointer-events': 'none' }),
       ...(matchWidth && { width: `${Math.round(placed.anchorWidth)}px` }),
       ...((matchWidth || minWidth) && { 'min-width': `${Math.round(placed.anchorWidth)}px` }),
     };

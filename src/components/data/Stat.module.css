@@ -9,6 +9,11 @@
   margin-top: var(--space-1);
 }
 
+.statPartValue {
+  letter-spacing: var(--type-kpi-tracking);
+  line-height: 1.1;
+}
+
 .stat > .cardBody {
   display: flex;
   flex-direction: column;

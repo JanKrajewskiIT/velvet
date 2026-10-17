@@ -67,13 +67,20 @@ export const Autocomplete = (props: AutocompleteProps) => {
     open,
   );
 
+  createEffect(() => {
+    const current = value();
+    const known =
+      remote.items().find((option) => option.value === current) ?? local().find((option) => option.value === current);
+    setPicked((previous) => known ?? (previous?.value === current ? previous : undefined));
+  });
+
   const selectedLabel = () => {
     const current = value();
     if (current === null) return '';
     const known =
-      (picked()?.value === current ? picked() : undefined) ??
+      remote.items().find((o) => o.value === current) ??
       local().find((o) => o.value === current) ??
-      remote.items().find((o) => o.value === current);
+      (picked()?.value === current ? picked() : undefined);
     return known?.label ?? current;
   };
   const shownText = () => (typing() ? text() : selectedLabel());
@@ -156,7 +163,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
   );
 
   const onKeyDown: JSX.EventHandler<HTMLInputElement, KeyboardEvent> = (e) => {
-    if (p.disabled) return;
+    if (p.disabled || e.isComposing) return;
     if (popup.handleArrowKey(e)) return;
     switch (e.key) {
       case 'Enter': {
@@ -193,7 +200,15 @@ export const Autocomplete = (props: AutocompleteProps) => {
   return (
     <Field label={p.label} hint={p.hint} error={p.error} optional={p.optional} required={p.required} id={id()}>
       {(control) => (
-        <div ref={popup.setRoot} class={styles.select}>
+        <div
+          ref={popup.setRoot}
+          class={styles.select}
+          onFocusOut={(event) => {
+            if (event.relatedTarget instanceof Node && event.currentTarget.contains(event.relatedTarget)) return;
+            setOpen(false);
+            commitText();
+          }}
+        >
           <Control
             size={p.size}
             invalid={control.invalid || validation.invalid()}

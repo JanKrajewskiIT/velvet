@@ -57,19 +57,20 @@ export const DescriptionList = (props: DescriptionListProps) => {
             </Text>
             <Text
               as="dd"
-              variant="body-sm"
+              variant={item.mono ? 'caption' : 'body-sm'}
               tone="primary"
-              class={cx(styles.dlPartDesc, item.mono && 'vui-dl__desc--mono')}
+              mono={item.mono}
+              class={styles.dlPartDesc}
             >
               <Show
-                when={item.description ?? undefined}
+                when={item.description != null}
                 fallback={
                   <Text as="span" variant="body-sm" tone="inherit" class={styles.dlPartEmpty}>
                     —
                   </Text>
                 }
               >
-                {(description) => description()}
+                {item.description}
               </Show>
             </Text>
           </div>

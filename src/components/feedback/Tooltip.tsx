@@ -68,6 +68,7 @@ export const Tooltip = (props: TooltipProps) => {
   const floating = createFloating(visible, () => wrap()?.firstElementChild ?? wrap(), {
     side: () => p.side,
     align: () => 'center',
+    offset: 'var(--tooltip-offset)',
   });
 
   createEffect(() => {

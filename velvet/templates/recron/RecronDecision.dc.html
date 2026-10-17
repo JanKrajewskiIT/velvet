@@ -13,6 +13,9 @@
 <sc-if value="{{ isRejected }}" hint-placeholder-val="{{ false }}">
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.OptionSwitcher" label="Who closed it?" options="{{ whoOptions }}" value="{{ who }}" on-value-change="{{ setWho }}" hint-size="100%,60px"></x-import>
 </sc-if>
+<sc-if value="{{ isOffer }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.DatePicker" label="Answer by" hint="Recron reminds you two days before" optional="{{ true }}" clearable="{{ true }}" value="{{ due }}" on-value-change="{{ setDue }}" min="{{ today }}" hint-size="100%,72px"></x-import>
+</sc-if>
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.TagInput" label="Reasons" optional="{{ true }}" placeholder="Type your own and press Enter" value="{{ reasons }}" on-value-change="{{ setReasons }}" hint-size="100%,72px"></x-import>
 <div style="display:flex;flex-direction:column;gap:var(--space-2)">
 <span style="font-size:var(--type-caption-size);color:var(--fg-tertiary)">Suggestions · the number shows how often you used it before</span>
@@ -27,7 +30,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;app&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;object&quot;}}">
 class Component extends DCLogic {
-  state = { key: null, reasons: [], who: 'me' };
+  state = { key: null, reasons: [], who: 'me', due: null };
   renderVals() {
     const app = this.props.app;
     const d = app && app.decision;
@@ -36,20 +39,21 @@ class Component extends DCLogic {
     const h = React.createElement;
     const key = d.id + d.status;
     const o = app.offers.find((x) => x.id === d.id) || {};
-    if (this.state.key !== key) { const same = o.status === d.status; setTimeout(() => this.setState({ key, reasons: same ? (o.reasons || []) : [], who: same && o.decidedBy ? o.decidedBy : 'me' }), 0); }
+    if (this.state.key !== key) { const same = o.status === d.status; setTimeout(() => this.setState({ key, reasons: same ? (o.reasons || []) : [], who: same && o.decidedBy ? o.decidedBy : 'me', due: o.responseBy ? new Date(o.responseBy) : null }), 0); }
     const rej = d.status === 'rejected';
     const pool = rej ? D.REASONS.rejected[this.state.who] : D.REASONS[d.status] || [];
     const used = {};
     app.offers.forEach((x) => { if (x.id !== d.id && x.status === d.status) (x.reasons || []).forEach((r) => { used[r] = (used[r] || 0) + 1; }); });
     const sel = this.state.reasons;
     const all = [...pool, ...Object.keys(used).filter((r) => !pool.includes(r))];
-    const titles = { considering: 'What makes it worth considering?', applied: 'Why did you apply?', rejected: 'Why is it closed?' };
-    const commit = (reasons) => app.commitDecision({ reasons, decidedBy: rej ? this.state.who : null });
+    const titles = { considering: 'What makes it worth considering?', applied: 'Why did you apply?', offer: 'You got an offer!', rejected: 'Why is it closed?' };
+    const pad = (n) => String(n).padStart(2, '0'); const due = this.state.due;
+    const commit = (reasons) => app.commitDecision({ reasons, decidedBy: rej ? this.state.who : null, ...(d.status === 'offer' ? { responseBy: due ? due.getFullYear() + '-' + pad(due.getMonth() + 1) + '-' + pad(due.getDate()) : null } : {}) });
     return {
       open: true, close: app.closeDecision,
       title: titles[d.status] || 'Move offer',
       description: o.name + ' · ' + o.company + ' → ' + D.STATUS[d.status].label + '. A few words now help you spot patterns later.',
-      isRejected: rej,
+      isRejected: rej, isOffer: d.status === 'offer', due: this.state.due, setDue: (v) => this.setState({ due: v }), today: D.TODAY,
       whoOptions: [{ value: 'me', label: 'I passed', icon: 'user' }, { value: 'them', label: 'They passed', icon: 'building' }],
       who: this.state.who, setWho: (v) => this.setState({ who: v, reasons: [] }),
       reasons: sel, setReasons: (v) => this.setState({ reasons: v }),

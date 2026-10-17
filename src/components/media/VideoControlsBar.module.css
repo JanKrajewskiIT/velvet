@@ -41,6 +41,13 @@
 }
 
 .playerPartRange {
+  --player-range-track-background: linear-gradient(
+    to right,
+    var(--white) 0 var(--p),
+    color-mix(in oklab, var(--white) 45%, transparent) var(--p) var(--b, var(--p)),
+    color-mix(in oklab, var(--white) 24%, transparent) var(--b, var(--p))
+  );
+
   appearance: none;
   height: 16px;
   margin: 0;
@@ -52,16 +59,16 @@
   outline: 0;
 }
 
-.playerPartRange::-webkit-slider-runnable-track,
+.playerPartRange::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--player-range-track-background);
+}
+
 .playerPartRange::-moz-range-track {
   height: 4px;
   border-radius: 2px;
-  background: linear-gradient(
-    to right,
-    var(--white) 0 var(--p),
-    color-mix(in oklab, var(--white) 45%, transparent) var(--p) var(--b, var(--p)),
-    color-mix(in oklab, var(--white) 24%, transparent) var(--b, var(--p))
-  );
+  background: var(--player-range-track-background);
 }
 
 .playerPartRange::-webkit-slider-thumb {
@@ -87,13 +94,13 @@
   transition: transform var(--motion-fast);
 }
 
-.playerPartRange:focus-visible::-webkit-slider-thumb,
-.playerPartRange:focus-visible::-moz-range-thumb {
+.playerPartRange:focus-visible::-webkit-slider-thumb {
   transform: none;
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--white) 45%, transparent);
 }
 
-.playerPartRange:focus-visible::-webkit-slider-thumb {
-  box-shadow: 0 0 0 3px color-mix(in oklab, var(--white) 45%, transparent);
+.playerPartRange:focus-visible::-moz-range-thumb {
+  transform: none;
 }
 
 .playerPartSeek {

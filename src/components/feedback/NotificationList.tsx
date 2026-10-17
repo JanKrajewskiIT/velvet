@@ -64,6 +64,7 @@ export const NotificationList = (props: NotificationListProps) => {
                 meta={item.time}
                 trailing={unreadMarker(item, translate('velvet.feedback.notificationList.unread'))}
                 titleVariant={item.unread ? 'label' : 'body-sm'}
+                titleClass={styles.itemTitlePart}
                 descriptionClass={styles.itemDescriptionPart}
               />
             </li>

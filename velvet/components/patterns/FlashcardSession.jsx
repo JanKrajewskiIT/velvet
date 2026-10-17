@@ -1,6 +1,7 @@
 import React from 'react';
 import { OptionSwitcher } from '../forms/OptionSwitcher.jsx';
 import { Slider } from '../forms/Slider.jsx';
+import { SearchInput } from '../forms/SearchInput.jsx';
 import { FieldLabel } from '../primitives/Field.jsx';
 import { Kbd } from '../primitives/Kbd.jsx';
 import { Button } from '../actions/Button.jsx';
@@ -19,21 +20,34 @@ export function FlashcardSetup({ decks = [], onStart, maxCards = 50, className }
   const [dir, setDir] = React.useState('front');
   React.useEffect(() => setN((x) => Math.min(x, cap)), [cap]);
   const Seg = ({ v, set, opts, label }) => <OptionSwitcher size="sm" label={label} value={v} onValueChange={set} options={opts.map(([value, l]) => ({ value, label: l }))} />;
+  const [q, setQ] = React.useState('');
+  const pinned = decks.filter((x) => x.pinned), rest = decks.filter((x) => !x.pinned);
+  const shown = q ? rest.filter((x) => x.name.toLowerCase().includes(q.toLowerCase())) : rest;
+  const Deck = ({ x, big }) => (
+    <button type="button" role="radio" aria-checked={deck === x.id} className={cx('vui-fc-deck', big && 'vui-fc-deck--big', deck === x.id && 'vui-fc-deck--on')} onClick={() => setDeck(x.id)}>
+      <span className="vui-fc-deck__name">{x.name}</span>
+      <span className="vui-fc-deck__meta">{x.total} cards{x.due ? ' · ' : ''}{x.due ? <b>{x.due} due</b> : null}</span>
+    </button>
+  );
   return (
     <div className={cx('vui-surface', 'vui-fc-setup', className)}>
-      <div className="vui-fc-setup__h">Practice setup</div>
-      <div className="vui-fc-setup__decks" role="radiogroup" aria-label="Deck">
-        {decks.map((x) => (
-          <button key={x.id} type="button" role="radio" aria-checked={deck === x.id} className={cx('vui-fc-deck', deck === x.id && 'vui-fc-deck--on')} onClick={() => setDeck(x.id)}>
-            <span className="vui-fc-deck__name">{x.name}</span>
-            <span className="vui-fc-deck__meta">{x.total} cards{x.due ? ' · ' : ''}{x.due ? <b>{x.due} due today</b> : null}</span>
-          </button>
-        ))}
+      <div className="vui-fc-setup__pick" role="radiogroup" aria-label="Deck">
+        <div className="vui-fc-setup__h">Choose a deck</div>
+        {pinned.length > 0 && <div className="vui-fc-setup__pinned">{pinned.map((x) => <Deck key={x.id} x={x} big />)}</div>}
+        {rest.length > 0 && (
+          <div className="vui-fc-setup__cats">
+            <div className="vui-fc-setup__row"><FieldLabel>Categories</FieldLabel>{rest.length > 8 && <div className="vui-fc-setup__find"><SearchInput size="sm" placeholder="Filter…" value={q} onValueChange={setQ} aria-label="Filter categories" /></div>}</div>
+            <div className="vui-fc-setup__decks">{shown.map((x) => <Deck key={x.id} x={x} />)}{shown.length === 0 && <span className="vui-fc-deck__meta">No matching categories</span>}</div>
+          </div>
+        )}
       </div>
-      <Slider label="Cards" min={1} max={cap} value={n} onValueChange={setN} />
-      <div className="vui-fc-setup__row"><FieldLabel>Order</FieldLabel><Seg label="Order" v={order} set={setOrder} opts={[['due', 'Due first'], ['random', 'Shuffle'], ['new', 'New only']]} /></div>
-      <div className="vui-fc-setup__row"><FieldLabel>Show first</FieldLabel><Seg label="Show first" v={dir} set={setDir} opts={[['front', 'Term'], ['back', 'Definition']]} /></div>
-      <Button size="lg" block iconLeft="play" onClick={() => onStart && onStart({ deck, count: n, order, direction: dir })}>Start session</Button>
+      <div className="vui-fc-setup__opts">
+        <div className="vui-fc-setup__sel"><span className="vui-fc-deck__meta">Selected</span><span className="vui-fc-deck__name">{d.name || '—'}</span></div>
+        <Slider label="Cards" min={1} max={cap} value={n} onValueChange={setN} />
+        <div className="vui-fc-setup__field"><FieldLabel>Order</FieldLabel><Seg label="Order" v={order} set={setOrder} opts={[['due', 'Due first'], ['random', 'Shuffle'], ['new', 'New only']]} /></div>
+        <div className="vui-fc-setup__field"><FieldLabel>Show first</FieldLabel><Seg label="Show first" v={dir} set={setDir} opts={[['front', 'Term'], ['back', 'Definition']]} /></div>
+        <Button size="lg" block iconLeft="play" onClick={() => onStart && onStart({ deck, count: n, order, direction: dir })}>Start session</Button>
+      </div>
     </div>
   );
 }
@@ -57,6 +71,9 @@ export function FlashcardSession({ cards = [], onFinish, onExit, reverse = false
   });
   if (!c) return null;
   const known = res.filter((r) => r.known).length;
+  const len = (x) => (typeof x === 'string' ? x.length : 0);
+  const longBack = len(reverse ? c.front : c.back) > 140, longFront = len(reverse ? c.back : c.front) > 140;
+  const h = Math.max(longBack || longFront ? 360 : 240, Math.min(520, 200 + Math.max(len(c.back), len(c.front)) * 0.45));
   return (
     <div className={cx('vui-fc-session', className)}>
       <div className="vui-fc-session__top">
@@ -65,9 +82,9 @@ export function FlashcardSession({ cards = [], onFinish, onExit, reverse = false
         <span className="vui-fc-session__count">{i + 1} / {cards.length}</span>
       </div>
       <div className={cx('vui-fc-session__card', leaving && 'vui-fc-session__card--' + leaving)} key={i}>
-        <FlipCard height={240} flipped={flip} onFlip={setFlip} label={'Card ' + (i + 1)}
-          front={<><span className="vui-fc-hint">{c.hint || (reverse ? 'Definition' : 'Term')}</span><span className="vui-fc-term">{reverse ? c.back : c.front}</span><span className="vui-fc-tap">Tap or press Space to flip</span></>}
-          back={<><span className="vui-fc-hint" style={{ color: 'var(--on-color-muted)' }}>{reverse ? 'Term' : 'Definition'}</span><span className="vui-fc-term">{reverse ? c.front : c.back}</span>{c.example && <span className="vui-fc-ex">{c.example}</span>}</>} />
+        <FlipCard height={Math.round(h)} className="vui-fc-flip" flipped={flip} onFlip={setFlip} label={'Card ' + (i + 1)}
+          front={<><span className="vui-fc-hint">{c.hint || (reverse ? 'Definition' : 'Term')}</span><span className={cx('vui-fc-term', longFront && 'vui-fc-term--long')}>{reverse ? c.back : c.front}</span><span className="vui-fc-tap">Tap or press Space to flip</span></>}
+          back={<><span className="vui-fc-hint" style={{ color: 'var(--on-color-muted)' }}>{reverse ? 'Term' : 'Definition'}</span><span className={cx('vui-fc-term', longBack && 'vui-fc-term--long')}>{reverse ? c.front : c.back}</span>{c.example && <span className="vui-fc-ex">{c.example}</span>}</>} />
       </div>
       <div className="vui-fc-session__actions">
         <Button variant="secondary" size="lg" iconLeft="x" className="vui-fc-btn" onClick={() => answer(false)} disabled={!flip}>Didn’t know<Kbd size="sm">1</Kbd></Button>

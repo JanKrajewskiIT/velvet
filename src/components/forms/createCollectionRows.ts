@@ -2,6 +2,7 @@ import { createSignal, createUniqueId } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import type { EditableItem, EditableItemId } from './editableItem';
+import { normalizeOption, type SelectOption } from './selectOption';
 
 const DEFAULT_WEIGHT = 3;
 
@@ -9,7 +10,7 @@ export interface CollectionRowsOptions {
   items?: ReadonlyArray<EditableItem>;
   defaultItems: ReadonlyArray<EditableItem>;
   onItemsChange?: (items: ReadonlyArray<EditableItem>) => void;
-  levels?: ReadonlyArray<string>;
+  levels?: ReadonlyArray<string | SelectOption>;
   weighted: boolean;
   newItemText: string;
   maxItems?: number;
@@ -46,8 +47,9 @@ export const createCollectionRows = (options: CollectionRowsOptions) => {
 
   const addItem = () => {
     const fresh: EditableItem = { id: `${idPrefix}-new-${++newItemCount}`, text: options.newItemText };
-    const level = options.levels?.[Math.min(1, options.levels.length - 1)];
-    if (level !== undefined) fresh.level = level;
+    const levels = options.levels?.map(normalizeOption).filter((option) => !option.disabled);
+    const level = levels?.[Math.min(1, levels.length - 1)];
+    if (level !== undefined) fresh.level = level.value;
     if (options.weighted) fresh.weight = DEFAULT_WEIGHT;
     setItems([...items(), fresh]);
     requestAnimationFrame(() =>

@@ -6,6 +6,8 @@ export interface FlashDeck {
   name: string;
   total: number;
   due?: number;
+  /** Show this deck above the searchable category grid. */
+  pinned?: boolean;
 }
 
 export interface Flashcard {

@@ -6,6 +6,7 @@ import { Button } from '../actions/Button';
 import { Avatar } from '../data/Avatar';
 import { Dialog, type DialogProps } from '../feedback/Dialog';
 import { Spinner } from '../feedback/Spinner';
+import { Dot } from '../primitives/Dot';
 import { Glyph } from '../primitives/Glyph';
 import { Text } from '../primitives/Text';
 import { VisuallyHidden } from '../primitives/VisuallyHidden';
@@ -226,13 +227,13 @@ export const ComparisonDialog = (props: ComparisonDialogProps) => {
                 </Text>
                 <Switch>
                   <Match when={insights()}>
-                    <Text as="div" variant="body-sm" tone="primary">
+                    <Text as="div" variant="body-sm" tone="primary" class={styles.cmpdlgPartInstext}>
                       {insights()}
                     </Text>
                   </Match>
                   <Match when={merged.insightsStatus === 'loading'}>
                     <Text as="div" variant="body-sm" tone="brand" class={styles.cmpdlgPartInsload}>
-                      <span class="vui-ai__pulse" aria-hidden="true" />
+                      <Dot tone="brand" pulse />
                       {translate('velvet.charts.comparisonDialog.writingInsights')}
                     </Text>
                   </Match>

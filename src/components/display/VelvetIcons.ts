@@ -1,5 +1,14 @@
 /** Velvet Icons: original outline set on a 24px grid, 1.75 stroke, round caps and joins. Values are trusted static SVG inner markup. */
 export const VelvetIcons = {
+  gift: '<rect x="3.5" y="8" width="17" height="4.5" rx="1.5"/><path d="M5.5 12.5v6a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2v-6M12 8v12.5M12 8C11 5 7 3.5 6.5 5.5S10 8 12 8zM12 8c1-3 5-4.5 5.5-2.5S14 8 12 8z"/>',
+  'calendar-x':
+    '<rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4M10 13.5l4 4M14 13.5l-4 4"/>',
+  'party-popper':
+    '<path d="M4.5 19.5L9 8.5l6.5 6.5zM7 14.5l2.5 2.5"/><path d="M13.5 3.5v2M20.5 10.5h-2M18 6l1.5-1.5M12.5 8.5c1.5-1.5 1.5-3 0-4.5M15.5 11.5c1.5-1.5 3-1.5 4.5 0"/>',
+  'notebook-pen':
+    '<path d="M13 3.5H7A2.5 2.5 0 0 0 4.5 6v12A2.5 2.5 0 0 0 7 20.5h9.5a2.5 2.5 0 0 0 2.5-2.5v-4M3 8h3M3 12h3M3 16h3M20.5 4.5a1.77 1.77 0 0 1 0 2.5L14 13.5l-3 .75.75-3L18 4.5a1.77 1.77 0 0 1 2.5 0z"/>',
+  'file-signature':
+    '<path d="M13.5 3.5H7A2.5 2.5 0 0 0 4.5 6v12A2.5 2.5 0 0 0 7 20.5h10a2.5 2.5 0 0 0 2.5-2.5V9.5zM13.5 3.5v6h6M8 16.5c1-2 2-2 2.5-.5s1.5 1.5 2.5 0 1.5-1 2.5 0"/>',
   plus: '<path d="M12 5v14M5 12h14"/>',
   minus: '<path d="M5 12h14"/>',
   x: '<path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/>',

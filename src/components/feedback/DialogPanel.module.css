@@ -1,3 +1,9 @@
+:import('../../styles/shared/animations.module.css') {
+  vuiSheetIn: vuiSheetIn;
+  vuiDrawerR: vuiDrawerR;
+  vuiDrawerL: vuiDrawerL;
+}
+
 :import('../../styles/shared/actions/button.module.css') {
   externalBtn: btn;
 }
@@ -50,7 +56,7 @@
   .dialog {
     max-width: none;
     border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-    animation-name: vui-sheet-in;
+    animation-name: vuiSheetIn;
   }
 
   .dialogPartFooter {
@@ -62,14 +68,14 @@
   place-items: stretch end;
   padding: 0;
 
-  --drawer-animation: vui-drawer-r;
+  --drawer-animation: vuidrawerr;
 }
 
 .dialogBackdropVariantLeft {
   place-items: stretch start;
   padding: 0;
 
-  --drawer-animation: vui-drawer-l;
+  --drawer-animation: vuidrawerl;
 }
 
 .dialogVariantDrawer {
@@ -78,7 +84,7 @@
   max-width: var(--drawer-w);
   border-radius: 0;
   border-width: 0 0 0 var(--border-width);
-  animation: var(--drawer-animation, vui-drawer-r) var(--motion-enter);
+  animation: var(--drawer-animation, vuiDrawerR) var(--motion-enter);
 }
 
 .dialogBackdropVariantRight .dialogVariantDrawer {
@@ -120,7 +126,7 @@
     width: min(100%, var(--drawer-w));
     border-radius: 0;
 
-    --drawer-animation: vui-drawer-r;
+    --drawer-animation: vuidrawerr;
   }
 
   .dialogVariantDrawer .dialogPartFooter {

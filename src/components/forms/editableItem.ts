@@ -3,7 +3,7 @@ export type EditableItemId = string | number;
 export interface EditableItem {
   id: EditableItemId;
   text: string;
-  /** One of `levels`, when `levels` is set. */
+  /** A level option value; string options use their text as the value. */
   level?: string;
   /** 1–`maxWeight`, when `weighted`. */
   weight?: number;

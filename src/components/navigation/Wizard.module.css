@@ -6,7 +6,7 @@
 
 .wizardPartPanel {
   outline: 0;
-  animation: vui-wiz-in var(--motion-enter);
+  animation: vuiWizIn var(--motion-enter);
 }
 
 .wizardPartTitle {
@@ -33,4 +33,11 @@
 
 .hintVariantError {
   composes: hintVariantError from '../../styles/shared/primitives/field.module.css';
+}
+
+@keyframes vuiWizIn {
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
 }

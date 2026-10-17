@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script><script src="./recron-data.js"></script><style>:root:root{overflow:auto!important;height:auto!important;background:var(--bg-page)!important}html body{margin:0!important;padding:0!important;background:var(--bg-page)!important}</style></helmet>
+<div data-screen-label="Offer salary" style="display:flex;flex-direction:column;gap:var(--space-4)">
+<sc-if value="{{ hasExpect }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Alert" tone="{{ expTone }}" icon="target" title="{{ expTitle }}" action="{{ expAction }}" hint-size="100%,72px">{{ expBody }}</x-import></sc-if>
+<div style="display:flex;flex-wrap:wrap;gap:var(--space-4);align-items:flex-start">
+<div style="flex:1 1 340px;min-width:0;display:flex;flex-direction:column"><x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="B2B vs UoP — take-home" description="{{ calcDesc }}" hint-size="100%,560px">
+<div style="display:flex;flex-direction:column;gap:var(--space-5)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.NumberInput" label="Monthly amount" hint="{{ amountHint }}" value="{{ amount }}" on-value-change="{{ setAmount }}" min="{{ 3000 }}" max="{{ 100000 }}" step="{{ 500 }}" suffix="zł / mo" hint-size="100%,72px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.OptionSwitcher" label="ZUS on B2B" variant="chips" size="sm" options="{{ zusOptions }}" value="{{ zus }}" on-value-change="{{ setZus }}" hint-size="100%,36px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.NumberInput" label="Business costs on B2B" hint="Accounting, equipment, software" value="{{ costs }}" on-value-change="{{ setCosts }}" min="{{ 0 }}" max="{{ 10000 }}" step="{{ 100 }}" suffix="zł / mo" hint-size="100%,72px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Switch" label="Count unpaid days off on B2B" description="{{ daysDesc }}" checked="{{ daysOff }}" on-change="{{ toggleDays }}" hint-size="100%,44px"></x-import>
+</div>
+</x-import></div>
+<div style="flex:2 1 520px;min-width:0;display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="On your account each month" description="Same amount, four ways to be paid" hint-size="100%,420px">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<sc-for list="{{ rows }}" as="row" hint-placeholder-count="4">
+<div style="display:flex;flex-direction:column;gap:var(--space-2)">
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:var(--space-3);flex-wrap:wrap">
+<span style="display:flex;align-items:center;gap:var(--space-2);font-weight:600">{{ row.label }}<sc-if value="{{ row.best }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Badge" size="sm" tone="success" hint-size="70px,20px">Most net</x-import></sc-if></span>
+<span style="font:var(--type-title-lg);font-variant-numeric:tabular-nums">{{ row.net }}</span>
+</div>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Meter" value="{{ row.value }}" max="{{ row.max }}" tone="{{ row.tone }}" size="md" hint-size="100%,6px"></x-import>
+<span style="font-size:var(--type-caption-size);color:var(--fg-tertiary);font-variant-numeric:tabular-nums">{{ row.breakdown }}</span>
+</div>
+</sc-for>
+</div>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Alert" tone="brand" icon="bar-chart" title="{{ equivTitle }}" hint-size="100%,80px">{{ equivBody }}</x-import>
+<span style="font-size:var(--type-caption-size);color:var(--fg-tertiary);text-wrap:pretty">Simplified 2026 rates: no PPK, joint filing, IP Box or other reliefs. A rough guide for comparing offers — not tax advice.</span>
+</div>
+</div>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="{{ benchTitle }}" description="{{ benchDesc }}" actions="{{ benchActions }}" hint-size="100%,260px">
+<div style="display:flex;flex-direction:column;gap:var(--space-5);padding-top:var(--space-2)">
+{{ benchBar }}
+<div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:var(--space-2)">
+<sc-for list="{{ ticks }}" as="tk" hint-placeholder-count="5">
+<div style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:var(--type-caption-size);color:var(--fg-tertiary)">{{ tk.label }}</span><span style="font-weight:600;font-variant-numeric:tabular-nums">{{ tk.value }}</span></div>
+</sc-for>
+</div>
+<p style="margin:0;color:var(--fg-secondary);text-wrap:pretty">{{ benchVerdict }}</p>
+</div>
+</x-import>
+<dc-import name="RecronCurrentJob" app="{{ app }}" offer="{{ offerObj }}" hint-size="100%,220px"></dc-import>
+<sc-if value="{{ negIdle }}" hint-placeholder-val="{{ true }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" hint-size="100%,220px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.EmptyState" size="md" icon="trending-up" title="Negotiation plan" description="Recron combines the benchmark, your CV and this posting into a target number, a walk-away number and what to say on the call." actions="{{ negBtn }}" hint-size="100%,200px"></x-import>
+</x-import>
+</sc-if>
+<sc-if value="{{ negDone }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.AiResultPanel" title="Negotiation plan" model="Claude · EU" elapsed="5.1 s" headline="{{ neg.headline }}" summary="{{ neg.summary }}" sections="{{ neg.sections }}" cost="2 credits" on-regenerate="{{ runNeg }}" hint-size="100%,560px"></x-import>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1200,&quot;height&quot;:1400}}">
+class Component extends DCLogic {
+  state = { amount: null, zus: null, costs: null, daysOff: true, market: 'b2b', neg: {} };
+  componentWillUnmount() { clearTimeout(this._t); }
+  renderVals() {
+    const app = this.props.app || (window.RecronStandalone && window.VelvetUIDesignSystem_ee2bd8 && window.RecronStandalone(this));
+    if (!app) { clearTimeout(this._wt); this._wt = setTimeout(() => this.forceUpdate(), 80); return {}; }
+    const { D, U, NS } = app;
+    const h = React.createElement;
+    const s = this.state;
+    const offer = this.props.offer || app.offers.find((o) => o.id === app.offerId) || app.offers[0];
+    const fx = offer.currency === 'EUR' ? 4.25 : 1;
+    const fromOffer = Math.round(((U.monthly(offer) || 15000) * fx) / 100) * 100;
+    const amount = s.amount ?? fromOffer;
+    const E = app.expectations || D.expectations;
+    const zusV = s.zus ?? E.zus, costsV = s.costs ?? E.costs;
+    const unpaid = Math.max(0, D.HOLIDAYS - (E.paidDaysB2B || 0)) + (E.sickDays || 0);
+    const opt = { zus: zusV, costs: costsV, daysOff: s.daysOff ? unpaid : 0 };
+    const ve = U.vsExpect(offer, E);
+    const res = D.FORMS.map((f) => ({ f, r: U.netPay(amount, f.id, opt) }));
+    const max = Math.max(...res.map((x) => x.r.net));
+    const uop = res[0].r.net;
+    let lo = uop, hi = uop * 2.5;
+    for (let i = 0; i < 40; i++) { const mid = (lo + hi) / 2; if (U.netPay(mid, 'ryczalt', opt).net < uop) lo = mid; else hi = mid; }
+    const equiv = Math.round(hi / 100) * 100;
+    const B = D.bench[s.market];
+    const lo0 = B.p10 * 0.85, hi0 = B.p90 * 1.1, pos = (v) => Math.max(0, Math.min(100, ((v - lo0) / (hi0 - lo0)) * 100));
+    const offerTop = s.market === 'uop' ? amount : amount;
+    const pts = [[B.p10, 10], [B.p25, 25], [B.p50, 50], [B.p75, 75], [B.p90, 90]];
+    let pct = offerTop <= B.p10 ? 10 : offerTop >= B.p90 ? 90 : 50;
+    for (let i = 0; i < pts.length - 1; i++) if (offerTop >= pts[i][0] && offerTop <= pts[i + 1][0]) pct = Math.round(pts[i][1] + ((offerTop - pts[i][0]) / (pts[i + 1][0] - pts[i][0])) * (pts[i + 1][1] - pts[i][1]));
+    const vsMed = Math.round(((offerTop - B.p50) / B.p50) * 100);
+    const neg = s.neg[offer.id];
+    const target = Math.round(Math.max(offerTop * 1.07, B.p75) / 500) * 500, floor = Math.round(Math.max(offerTop, B.p50) / 500) * 500;
+    const runNeg = () => { if (app.spend && !app.spend('negotiate')) return; this.setState({ neg: { ...s.neg, [offer.id]: 'running' } }); clearTimeout(this._t); this._t = setTimeout(() => { this.setState({ neg: { ...this.state.neg, [offer.id]: 'done' } }); app.toast('Negotiation plan ready', 'success', offer.company); }, 1600); };
+    return {
+      offerObj: offer,
+      app, calcDesc: offer.company + ' · ' + U.salary(offer),
+      amount, setAmount: (v) => this.setState({ amount: v }),
+      amountHint: 'From the offer: top of the range' + (fx !== 1 ? ' (EUR × 4.25)' : '') + ' — ' + U.pln(fromOffer),
+      zusOptions: [{ value: 'full', label: 'Full ZUS' }, { value: 'pref', label: 'Preferential' }, { value: 'start', label: 'Start relief' }],
+      hasExpect: !!ve, expTone: ve ? ve.tone : 'neutral', expTitle: ve ? ve.label + ' — ≈ ' + U.pln(ve.net) + ' take-home on ' + (D.CONTRACTS[offer.contractType] || D.CONTRACTS.uop).short : '',
+      expBody: ve ? (ve.level === 'above' ? 'This covers your target. Your ask on this contract would be ' + U.pln(ve.need) + '.' : 'On this contract, ask for ' + U.pln(ve.need) + ' and don’t go below ' + U.pln(ve.min) + '.') : '',
+      expAction: h(NS.Button, { size: 'sm', variant: 'secondary', onClick: () => app.go('salary') }, 'Edit expectations'),
+      zus: zusV, setZus: (v) => this.setState({ zus: v }),
+      costs: costsV, setCosts: (v) => this.setState({ costs: v }),
+      daysDesc: unpaid + ' days a year you don’t invoice (holiday + sick, from your expectations) — UoP pays them', daysOff: s.daysOff, toggleDays: (e) => this.setState({ daysOff: e && e.target ? e.target.checked : !s.daysOff }),
+      rows: res.map(({ f, r }) => ({ label: f.label, net: U.pln(r.net), value: Math.round(r.net), max: Math.round(max), best: r.net === max, tone: r.net === max ? 'success' : 'brand',
+        breakdown: 'ZUS ' + U.pln(r.zus) + ' · health ' + U.pln(r.health) + ' · tax ' + U.pln(r.tax) + (r.costs ? ' · costs ' + U.pln(r.costs) : '') + (r.lost ? ' · days off −' + U.pln(r.lost) : '') })),
+      equivTitle: 'To match UoP, invoice at least ' + U.pln(equiv) + ' on B2B',
+      equivBody: amount + ' zł gross on UoP gives ' + U.pln(uop) + ' net. The same take-home on a lump-sum B2B needs ' + U.pln(equiv) + ' a month (' + (equiv >= amount ? '+' : '') + Math.round(((equiv - amount) / amount) * 100) + '%) — use it as your floor when a company offers B2B.',
+      benchTitle: 'Market for ' + offer.name.replace(/\s*\(.*\)/, '') + ' · ' + (offer.city === 'Remote' ? 'Poland, remote' : offer.city),
+      benchDesc: D.bench.sample.toLocaleString('en-US') + ' offers reported by Recron users · ' + D.bench.period + ' · ' + D.bench.trend,
+      benchActions: h('div', { style: { display: 'flex', alignItems: 'center', gap: 8 } }, h(NS.Badge, { size: 'sm', tone: 'brand', icon: 'sparkles' }, 'Pro'), h(NS.OptionSwitcher, { size: 'sm', options: [{ value: 'b2b', label: 'B2B' }, { value: 'uop', label: 'UoP' }], value: s.market, onValueChange: (v) => this.setState({ market: v }), label: 'Contract type' })),
+      benchBar: h('div', { style: { position: 'relative', height: 56 } },
+        h('div', { style: { position: 'absolute', left: 0, right: 0, top: 22, height: 12, borderRadius: 999, background: 'var(--bg-subtle)' } }),
+        h('div', { style: { position: 'absolute', top: 22, height: 12, borderRadius: 999, background: 'color-mix(in oklab,var(--action-primary) 22%,transparent)', left: pos(B.p10) + '%', width: (pos(B.p90) - pos(B.p10)) + '%' } }),
+        h('div', { style: { position: 'absolute', top: 22, height: 12, borderRadius: 999, background: 'var(--action-primary)', opacity: 0.55, left: pos(B.p25) + '%', width: (pos(B.p75) - pos(B.p25)) + '%' } }),
+        h('div', { style: { position: 'absolute', top: 16, width: 2, height: 24, background: 'var(--fg-primary)', left: pos(B.p50) + '%' } }),
+        h('div', { style: { position: 'absolute', top: 0, transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, left: pos(offerTop) + '%' } },
+          h('span', { style: { padding: '2px 8px', borderRadius: 999, background: 'var(--fg-primary)', color: 'var(--bg-page)', font: '600 11px/1.4 var(--font-sans)', whiteSpace: 'nowrap' } }, 'This offer'),
+          h('span', { style: { width: 14, height: 14, marginTop: 5, borderRadius: '50%', background: 'var(--bg-raised)', border: '3px solid var(--fg-primary)', boxSizing: 'border-box' } }))),
+      ticks: [['Bottom 10%', B.p10], ['25th', B.p25], ['Median', B.p50], ['75th', B.p75], ['Top 10%', B.p90]].map(([l, v]) => ({ label: l, value: U.pln(v) })),
+      benchVerdict: U.pln(offerTop) + ' sits around the ' + pct + 'th percentile for ' + s.market.toUpperCase() + ' — ' + (Math.abs(vsMed) < 2 ? 'right at' : vsMed > 0 ? vsMed + '% above' : -vsMed + '% below') + ' the median. ' + (pct >= 75 ? 'Strong offer: negotiate benefits and scope rather than base.' : pct >= 45 ? 'Fair offer with room to ask for the upper quartile.' : 'Below market — worth pushing back with data.'),
+      negIdle: neg !== 'done', negDone: neg === 'done', runNeg,
+      negBtn: h(NS.Button, { iconLeft: 'sparkles', loading: neg === 'running', onClick: runNeg }, 'Build my plan · 2 credits'),
+      neg: {
+        headline: 'Ask for ' + U.pln(target) + ' — don’t go below ' + U.pln(floor),
+        summary: 'You’re a strong fit (' + (offer.match || 74) + '% match) and the posting asks for design-system work you already lead. Open with the upper quartile and trade down on extras, not on base.',
+        sections: [
+          { title: 'Your leverage', icon: 'circle-check', tone: 'success', items: ['Design-system lead across 4 teams — rare for this band', 'Measured results: −38% bundle, a11y 100', (app.interviews.filter((i) => i.status === 'scheduled').length) + ' other processes running'] },
+          { title: 'What to say', icon: 'message-square', tone: 'brand', items: ['“Based on the scope and the market for this role, I’m looking at ' + U.pln(target) + ' on B2B.”', '“If base is fixed, can we talk about a review after 6 months and the training budget?”', 'Pause after the number. Let them answer first.'] },
+          { title: 'Ask about too', icon: 'list', tone: 'info', items: ['Paid days off on B2B (20–26)', 'Equipment and home-office budget', 'Notice period and rate-review date in the contract'] },
+          { title: 'Avoid', icon: 'triangle-alert', tone: 'warning', items: ['Giving your current salary first', 'Accepting on the call — ask for it in writing'] }
+        ]
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

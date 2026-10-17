@@ -37,7 +37,7 @@ const LIST_ITEM = /^(\s*)([-*+]|\d{1,9}[.)])\s+(.*)$/u;
 const QUOTE = /^ {0,3}>/u;
 const TABLE_ROW = /^\s*\|/u;
 const TABLE_SEPARATOR = /^\|?\s*:?-+/u;
-const REFERENCE_DEFINITION = /^ {0,3}\[([^\]]+)\]:\s*(\S+)(?:\s+(?:"([^"]*)"|'([^']*)'))?\s*$/u;
+const REFERENCE_DEFINITION = /^ {0,3}\[([^\]]+)\]:\s*(\S+)(?:\s+(?:"([^"]*)"|'([^']*)'|\((.*)\)))?\s*$/u;
 const TASK_ITEM = /^\[( |x)\]\s+(.*)/isu;
 const BLOCK_STARTS = [HEADING, FENCE, RULE, LIST_ITEM, QUOTE, TABLE_ROW];
 
@@ -351,8 +351,10 @@ const extractReferences = (lines: readonly string[]): { references: Map<string, 
       content.push(line);
       continue;
     }
-    const title = definition[3] ?? definition[4];
-    references.set(referenceKey(definition[1] ?? ''), { url: (definition[2] ?? '').replace(/^<(.*)>$/u, '$1'), title });
+    const key = referenceKey(definition[1] ?? '');
+    if (references.has(key)) continue;
+    const title = definition[3] ?? definition[4] ?? definition[5];
+    references.set(key, { url: (definition[2] ?? '').replace(/^<(.*)>$/u, '$1'), title });
   }
   return { references, content };
 };

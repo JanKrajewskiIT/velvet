@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script></helmet>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:var(--space-4);align-items:start">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Billing details" description="Invoices go to this address. Add your NIP to get a VAT invoice for your business." footer="{{ footer }}" hint-size="100%,360px">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Switch" label="I need a VAT invoice" description="For B2B contractors expensing the plan" checked="{{ d.company }}" on-change="{{ toggleCompany }}" hint-size="100%,44px"></x-import>
+<sc-if value="{{ d.company }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FormGrid" columns="{{ 2 }}" hint-size="100%,160px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="NIP" placeholder="10 digits" value="{{ d.nip }}" on-change="{{ setNip }}" error="{{ nipError }}" inputmode="numeric" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Company name" value="{{ d.companyName }}" on-change="{{ setName }}" hint-size="100%,64px"></x-import>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Address" placeholder="Street, postcode, city" value="{{ d.address }}" on-change="{{ setAddress }}" hint-size="100%,64px"></x-import>
+</sc-if>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Send invoices to" type="email" value="{{ d.email }}" on-change="{{ setEmail }}" hint-size="100%,64px"></x-import>
+</div>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Invoices" description="Every payment, as a PDF" hint-size="100%,240px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.List" items="{{ invoices }}" size="sm" empty="{{ empty }}" hint-size="100%,160px"></x-import>
+</x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;app&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;object&quot;}}">
+class Component extends DCLogic {
+  state = { d: null };
+  renderVals() {
+    const app = this.props.app;
+    if (!app) return { d: {}, invoices: [] };
+    const { U, NS } = app;
+    const h = React.createElement;
+    const b = app.billing || app.D.billing;
+    const d = this.state.d || b;
+    const set = (k) => (e) => this.setState({ d: { ...d, [k]: e && e.target ? e.target.value : e } });
+    const nip = (d.nip || '').replace(/\D/g, '');
+    const nipOk = nip.length === 10 && (() => { const w = [6, 5, 7, 2, 3, 4, 5, 6, 7]; const s = w.reduce((a, x, k) => a + x * +nip[k], 0) % 11; return s === +nip[9]; })();
+    const dirty = !!this.state.d;
+    return {
+      d, toggleCompany: () => this.setState({ d: { ...d, company: !d.company } }),
+      setNip: set('nip'), setName: set('companyName'), setAddress: set('address'), setEmail: set('email'),
+      nipError: d.company && nip.length >= 10 && !nipOk ? 'This NIP doesn’t look right — check the digits' : undefined,
+      footer: h(NS.Button, { size: 'sm', disabled: !dirty || (d.company && !nipOk), onClick: () => { app.setBilling(d); this.setState({ d: null }); app.toast('Billing details saved', 'success', d.company ? 'Next invoices will include NIP ' + nip : 'Invoices as a private person'); } }, 'Save details'),
+      invoices: b.invoices.map((x) => ({ id: x.id, title: x.item, description: x.id + ' · ' + U.fmtDate(x.date, { day: 'numeric', month: 'short', year: 'numeric' }), trailing: h('span', { style: { display: 'inline-flex', alignItems: 'center', gap: 'var(--space-2)' } }, h('span', { style: { fontVariantNumeric: 'tabular-nums', fontSize: 'var(--type-body-sm-size)' } }, x.amount), h(NS.IconButton, { icon: 'download', size: 'sm', label: 'Download ' + x.id, onClick: () => app.toast('Invoice downloaded', 'success', x.id.replace(/\//g, '-') + '.pdf') })) })),
+      empty: h('span', { style: { fontSize: 'var(--type-body-sm-size)', color: 'var(--fg-tertiary)' } }, 'No payments yet.')
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -41,6 +41,7 @@
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Details" actions="{{ editTagsBtn }}" hint-size="100%,300px">
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.DescriptionList" items="{{ details }}" hint-size="100%,260px"></x-import>
 </x-import>
+<dc-import name="RecronOfferTerms" app="{{ app }}" offer="{{ offer }}" hint-size="100%,760px"></dc-import>
 </div>
 </div>
 </sc-if>
@@ -81,6 +82,7 @@
 </div>
 </sc-if>
 </sc-if>
+<sc-if value="{{ t.salary }}" hint-placeholder-val="{{ false }}"><dc-import name="RecronSalary" app="{{ app }}" offer="{{ offer }}" hint-size="100%,1100px"></dc-import></sc-if>
 <sc-if value="{{ t.interviews }}" hint-placeholder-val="{{ false }}">
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:var(--space-4);align-items:start">
 <div style="grid-column:span 2;min-width:0">
@@ -124,18 +126,20 @@ class Component extends DCLogic {
     const mr = U.matchFor(offer);
     const matchDone = !!s.matchDone[offer.id] || offer.match != null && s.matchRun === 'idle' && s.matchDone[offer.id] !== false;
     const runMatch = () => {
+      if (app.spend && !app.spend('match')) return;
       this.setState({ matchRun: 'running', matchStep: 0 });
       [1, 2, 3].forEach((k) => this.later(() => this.setState({ matchStep: k }), k * 700));
       this.later(() => { this.setState({ matchRun: 'idle', matchDone: { ...s.matchDone, [offer.id]: true } }); if (offer.match == null) app.updateOffer(offer.id, { match: mr.score }); app.toast('CV match ready', 'success', mr.score + '% · ' + offer.company); }, 2900);
     };
     const atsStatus = s.atsStatus[offer.id] || 'empty';
     const runAts = () => {
+      if (app.spend && !app.spend('ats')) return;
       this.setState({ atsStatus: { ...s.atsStatus, [offer.id]: 'loading' }, atsStep: 0 });
       [1, 2, 3].forEach((k) => this.later(() => this.setState({ atsStep: k }), k * 650));
       this.later(() => this.setState({ atsStatus: { ...this.state.atsStatus, [offer.id]: 'done' } }), 2700);
     };
     const letter = s.letters[offer.id];
-    const genLetter = () => { this.setState({ letterLoading: true }); this.later(() => this.setState({ letterLoading: false, letters: { ...this.state.letters, [offer.id]: { text: U.letter(offer, this.state.tone), tone: this.state.tone } } }), 1300); };
+    const genLetter = () => { if (app.spend && !app.spend('letter')) return; this.setState({ letterLoading: true }); this.later(() => this.setState({ letterLoading: false, letters: { ...this.state.letters, [offer.id]: { text: U.letter(offer, this.state.tone), tone: this.state.tone } } }), 1300); };
     const setDraft = (k) => (v) => this.setState({ draft: { ...this.state.draft, [k]: v && v.target ? v.target.value : v } });
     const pad = (n) => String(n).padStart(2, '0');
     const saveInterview = () => {
@@ -145,9 +149,10 @@ class Component extends DCLogic {
       this.setState({ scheduleOpen: false, draft: { stage: 'HR', duration: '60', at: null, location: '' } });
       app.toast('Interview scheduled', 'success', d.stage + ' · ' + U.relDay(at) + ', ' + U.fmtTime(at));
     };
-    const related = D.questions.filter((q) => offer.tags.includes(q.category) || q.category === 'Behavioral' || q.category === 'JavaScript').slice(0, 4);
+    const askedHere = loopItems.flatMap((i) => (i.asked || []).map((q, k) => ({ id: i.id + '-' + k, question: q, category: 'Asked · ' + i.stage })));
+    const related = [...askedHere, ...D.questions.filter((q) => offer.tags.includes(q.category) || q.category === 'Behavioral' || q.category === 'JavaScript')].slice(0, 5);
     return {
-      offer, t, tab,
+      offer, t, tab, app,
       back: () => app.go('pipeline'),
       eyebrow: offer.company,
       title: offer.name,
@@ -155,8 +160,10 @@ class Component extends DCLogic {
       meta: [{ icon: 'map-pin', label: offer.city + ' · ' + offer.workMode }, { icon: 'dollar-sign', label: U.salary(offer) }, { icon: 'link', label: offer.source + (offer.intermediary ? ' via ' + offer.intermediary : '') + ' · added ' + U.relDay(offer.added).toLowerCase() }],
       headerActions: h(React.Fragment, null,
         h(NS.DropdownButton, { variant: 'secondary', items: D.STATUS_ORDER.map((k) => ({ label: D.STATUS[k].label, checked: offer.status === k, onSelect: () => app.decide(offer.id, k) })) }, 'Move to'),
-        offer.status === 'applied' ? h(NS.Button, { iconLeft: 'calendar-plus', onClick: () => { app.setOfferTab('interviews'); this.setState({ scheduleOpen: true }); } }, 'Schedule interview') : h(NS.Button, { iconLeft: 'send', onClick: () => app.decide(offer.id, 'applied') }, 'Mark as applied')),
-      tabs: [{ value: 'overview', label: 'Overview' }, { value: 'match', label: 'CV match', icon: 'sparkles' }, { value: 'letter', label: 'Cover letter' }, { value: 'ats', label: 'ATS check' }, { value: 'interviews', label: 'Interviews', count: loopItems.length || undefined }],
+        offer.status === 'offer' ? h(NS.Button, { iconLeft: 'check', onClick: () => app.decide(offer.id, 'accepted') }, 'Accept offer')
+          : offer.status === 'accepted' ? null
+          : offer.status === 'applied' ? h(NS.Button, { iconLeft: 'calendar-plus', onClick: () => { app.setOfferTab('interviews'); this.setState({ scheduleOpen: true }); } }, 'Schedule interview') : h(NS.Button, { iconLeft: 'send', onClick: () => app.decide(offer.id, 'applied') }, 'Mark as applied')),
+      tabs: [{ value: 'overview', label: 'Overview' }, { value: 'match', label: 'CV match', icon: 'sparkles' }, { value: 'letter', label: 'Cover letter' }, { value: 'ats', label: 'ATS check' }, { value: 'salary', label: 'Salary', icon: 'dollar-sign' }, { value: 'interviews', label: 'Interviews', count: loopItems.length || undefined }],
       setTab: app.setOfferTab,
       postingLink: h(NS.Button, { variant: 'ghost', size: 'sm', iconRight: 'external-link', onClick: () => window.open(offer.link, '_blank') }, 'Original posting'),
       hasMatch: offer.match != null, noMatch: offer.match == null,
@@ -170,9 +177,9 @@ class Component extends DCLogic {
       ],
       editTagsBtn: app.openTags ? h(NS.Button, { variant: 'ghost', size: 'sm', iconLeft: 'tag', onClick: () => app.openTags(offer.id) }, 'Tags') : null,
       hasDecision: offer.status !== 'new' && (offer.reasons || []).length > 0,
-      decisionTitle: offer.status === 'rejected' ? (offer.decidedBy === 'them' ? 'Why they passed' : 'Why you passed') : offer.status === 'applied' ? 'Why you applied' : 'Why it’s worth considering',
+      decisionTitle: offer.status === 'rejected' ? (offer.decidedBy === 'them' ? 'Why they passed' : 'Why you passed') : offer.status === 'applied' ? 'Why you applied' : offer.status === 'offer' || offer.status === 'accepted' ? 'About the offer' : 'Why it’s worth considering',
       decisionDesc: 'Your reasons, in your words',
-      reasonTone: offer.status === 'rejected' ? 'danger' : offer.status === 'applied' ? 'success' : 'warning',
+      reasonTone: offer.status === 'rejected' ? 'danger' : offer.status === 'considering' ? 'warning' : 'success',
       decisionEdit: h(NS.Button, { variant: 'ghost', size: 'sm', iconLeft: 'pencil', onClick: () => app.decide(offer.id, offer.status, true) }, 'Edit'),
       matchIdle: !matchDone, matchDone, mr,
       matchRun: s.matchRun, matchStep: s.matchStep, matchSteps: ['Reading your CV', 'Reading the posting', 'Matching requirements', 'Writing the summary'],
@@ -188,15 +195,16 @@ class Component extends DCLogic {
       atsStatus, ats: atsStatus === 'done' ? U.atsFor(offer) : null, atsEmpty: atsStatus === 'empty', runAts, atsStep: s.atsStep, atsSteps: ['Parsing CV layout', 'Extracting keywords', 'Scoring sections', 'Writing recommendations'],
       loopDesc: loopItems.length ? loopItems.filter((i) => i.status === 'done').length + ' passed · ' + loopItems.filter((i) => i.status === 'scheduled').length + ' ahead' + (firstUpcoming ? ' · next ' + U.relDay(firstUpcoming.at).toLowerCase() : '') : 'Nothing scheduled yet',
       loop: loopItems.map((i) => { const IS = D.INTERVIEW[i.status]; const past = i.status === 'scheduled' && new Date(i.at) < D.TODAY; const mark = (status, label) => () => { app.updateInterview(i.id, { status }); app.toast(i.stage + ': ' + label, status === 'failed' ? 'neutral' : 'success', offer.company); }; return {
-        id: i.id, title: i.stage, description: [i.notes, i.outcomeNote].filter(Boolean).join(' — ') || undefined,
+        id: i.id, title: i.stage, description: [i.notes, i.outcomeNote, (i.interviewers || []).length ? 'With ' + i.interviewers.join(', ') : '', (i.asked || []).length ? i.asked.length + ' question' + (i.asked.length > 1 ? 's' : '') + ' noted' : '', i.rating ? '★'.repeat(i.rating) + '☆'.repeat(5 - i.rating) : ''].filter(Boolean).join(' — ') || undefined,
         time: U.fmtDate(i.at, { weekday: 'short', day: 'numeric', month: 'short' }) + ', ' + U.fmtTime(i.at),
         status: i.status === 'done' ? 'done' : i === firstUpcoming ? 'current' : i.status === 'scheduled' ? 'upcoming' : undefined,
         icon: i.status === 'failed' ? 'x' : i.status === 'cancelled' ? 'x-circle' : undefined, tone: i.status === 'failed' ? 'danger' : i.status === 'cancelled' ? 'neutral' : undefined,
         badge: past ? { label: 'How did it go?', icon: 'help-circle', tone: 'warning' } : i.status !== 'scheduled' ? { label: IS.label, icon: IS.icon, tone: IS.tone } : i === firstUpcoming ? { label: U.relDay(i.at), tone: 'brand' } : undefined,
         meta: [{ icon: 'clock', label: i.duration + ' min' }, { icon: 'map-pin', label: i.location }],
         actions: past ? [{ id: 'pass', label: 'Passed', icon: 'check', onClick: mark('done', 'passed') }, { id: 'fail', label: 'Not passed', icon: 'x', onClick: mark('failed', 'not passed') }, { id: 'cxl', label: 'Didn’t happen', icon: 'x-circle', onClick: mark('cancelled', 'cancelled') }]
-          : i.status === 'scheduled' ? [{ id: 'cal', label: 'Add to calendar', icon: 'calendar-plus', onClick: () => app.toast('Added to Google Calendar', 'success', i.stage + ' · ' + offer.company) }, { id: 'cxl', label: 'Cancel interview', icon: 'x-circle', tone: 'danger', confirm: 'Mark this interview as cancelled?', onClick: mark('cancelled', 'cancelled') }]
-          : [{ id: 'undo', label: 'Change outcome', icon: 'rotate-ccw', onClick: () => app.updateInterview(i.id, { status: 'scheduled' }) }]
+          : i.status === 'scheduled' ? [{ id: 'cal', label: 'Add to calendar (.ics)', icon: 'calendar-plus', onClick: () => { U.ics(i, offer); app.toast('Calendar file downloaded', 'success', 'Opens in Google, Outlook or Apple Calendar · reminder 1 h before'); } }, { id: 'cxl', label: 'Cancel interview', icon: 'x-circle', tone: 'danger', confirm: 'Mark this interview as cancelled?', onClick: mark('cancelled', 'cancelled') }]
+          : i.status === 'cancelled' ? [{ id: 'undo', label: 'Change outcome', icon: 'rotate-ccw', onClick: () => app.updateInterview(i.id, { status: 'scheduled' }) }]
+          : [{ id: 'debrief', label: (i.asked || []).length || i.rating ? 'Edit debrief' : 'Add debrief', icon: 'notebook-pen', onClick: () => app.openDebrief && app.openDebrief(i.id) }, { id: 'undo', label: 'Change outcome', icon: 'rotate-ccw', onClick: () => app.updateInterview(i.id, { status: 'scheduled' }) }]
       }; }),
       openSchedule: () => this.setState({ scheduleOpen: true }),
       prepList: related.map((q) => ({ id: q.id, title: q.question, leading: h(NS.Badge, { size: 'sm', tone: 'brand' }, q.category) })),

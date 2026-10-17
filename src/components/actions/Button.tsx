@@ -43,7 +43,7 @@ export const Button = (props: ButtonProps) => {
       {...rest}
       class={cx(
         styles.root,
-        buttonClass({ variant: local.variant, size: local.size ?? groupSize, block: local.block }),
+        buttonClass({ variant: local.variant, size: local.size ?? groupSize(), block: local.block }),
         local.class,
       )}
       disabled={local.disabled || local.loading}

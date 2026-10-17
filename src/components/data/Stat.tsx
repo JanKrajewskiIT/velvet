@@ -69,7 +69,7 @@ export const Stat = (props: StatProps) => {
         {local.label}
       </Text>
       <div class={styles.statPartRow}>
-        <Text as="span" variant="h2" tabular class="vui-stat__value">
+        <Text as="span" variant="h2" tabular class={styles.statPartValue}>
           {local.value}
         </Text>
         <Show when={local.delta}>

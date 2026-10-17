@@ -1,3 +1,7 @@
+:import('../animations.module.css') {
+  vuiSelectIn: vuiSelectIn;
+}
+
 .taginput {
   height: auto;
   min-height: var(--control-height-md);
@@ -27,5 +31,20 @@
   color: var(--fg-tertiary);
 }
 
-.taginputPartTag {
+.taginputPartTag.taginputPartTag {
+  height: var(--control-height-inner-sm);
+  padding: 0 var(--space-1-5) 0 var(--space-3);
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--action-soft);
+  color: var(--action-soft-fg);
+  cursor: default;
+  animation: vuiSelectIn var(--motion-reveal);
+
+  --tag-remove-margin: 0;
+  --tag-remove-radius: var(--radius-full);
+  --tag-remove-fg: inherit;
+  --tag-remove-hover-bg: var(--action-primary);
+  --tag-remove-hover-fg: var(--action-primary-fg);
+  --tag-remove-glyph-size: var(--type-micro-size);
 }

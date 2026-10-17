@@ -132,7 +132,7 @@ export const MenuPanel = (props: MenuPanelProps) => {
         p.onClose?.(true);
         break;
       case 'Tab':
-        p.onClose?.(true);
+        p.onClose?.(false);
         break;
       default:
         if (e.key.length === 1 && !e.metaKey && !e.ctrlKey && !e.altKey) typeahead(e.key);

@@ -1,3 +1,7 @@
+:import('../animations.module.css') {
+  vuiSelectIn: vuiSelectIn;
+}
+
 .popoverWrap {
   position: relative;
   display: inline-flex;
@@ -12,7 +16,7 @@
   max-width: min(var(--overlay-w), calc(100vw - 2 * var(--viewport-margin)));
   padding: var(--space-4);
   transform-origin: top left;
-  animation: vui-select-in var(--motion-reveal);
+  animation: vuiSelectIn var(--motion-reveal);
   background: var(--panel-bg);
   border: var(--border-width) solid var(--panel-border);
   border-radius: var(--panel-radius);

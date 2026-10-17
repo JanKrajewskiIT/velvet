@@ -1,3 +1,7 @@
+:import('../animations.module.css') {
+  vuiSheetIn: vuiSheetIn;
+}
+
 .sheet {
   display: flex;
   flex-direction: column;
@@ -9,6 +13,6 @@
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
   outline: 0;
-  animation: vui-sheet-in var(--motion-enter);
+  animation: vuiSheetIn var(--motion-enter);
   transition: transform var(--motion-move);
 }

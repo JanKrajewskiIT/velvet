@@ -16,7 +16,7 @@
   max-height: var(--overlay-max-h-sm);
   overflow-y: auto;
   scrollbar-width: thin;
-  animation: vui-casc-in var(--motion-enter);
+  animation: vuiCascIn var(--motion-enter);
 }
 
 .cascPartCol:first-child {
@@ -73,4 +73,11 @@
 
 .selectPartCheck {
   composes: selectPartCheck from '../../styles/shared/forms/select.module.css';
+}
+
+@keyframes vuiCascIn {
+  from {
+    opacity: 0;
+    transform: translateX(-6px);
+  }
 }

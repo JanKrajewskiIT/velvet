@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script><script src="./recron-data.js"></script><style>:root:root{overflow:auto!important;height:auto!important;background:var(--bg-page)!important}html body{margin:0!important;padding:0!important;background:var(--bg-page)!important}</style></helmet>
+<div data-screen-label="Plans" style="display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.PageHeader" title="Plan & credits" description="Tracking, prep and the CV builder are free. You only pay for what AI does for you." status="{{ planStatus }}" meta="{{ meta }}" actions="{{ headerActions }}" hint-size="100%,150px"></x-import>
+<sc-if value="{{ hasLimit }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Alert" tone="warning" icon="sparkles" title="{{ limitTitle }}" action="{{ limitActions }}" on-close="{{ closeLimit }}" hint-size="100%,110px">{{ limitBody }}</x-import>
+</sc-if>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:var(--space-4);align-items:stretch">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Credits this month" description="{{ renewLine }}" hint-size="100%,300px">
+<div style="display:flex;flex-direction:column;gap:var(--space-5)">
+<div style="display:flex;align-items:baseline;gap:var(--space-2)"><span style="font:var(--type-kpi);font-size:44px;font-variant-numeric:tabular-nums">{{ credits }}</span><span style="color:var(--fg-secondary)">{{ ofLabel }}</span></div>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Progress" value="{{ credits }}" max="{{ monthly }}" tone="{{ meterTone }}" size="md" hint-size="100%,8px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.BarChart" data="{{ history }}" series="{{ histSeries }}" height="{{ 120 }}" label="Credits used per month" hint-size="100%,120px"></x-import>
+</div>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="What AI costs" description="Every tool starts with 3 free tries — test before you pay" padding="md" hint-size="100%,300px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.List" items="{{ costs }}" size="sm" hint-size="100%,280px"></x-import>
+</x-import>
+</div>
+<div style="display:flex;flex-direction:column;gap:var(--space-4);padding-top:var(--space-6)">
+<div style="display:flex;flex-direction:column;gap:var(--space-1);align-items:center;text-align:center"><h2 style="margin:0;font:var(--type-headline, 700 28px/1.2 var(--font-display));text-wrap:balance">Pick what fits your search</h2><span style="color:var(--fg-secondary)">Prices include VAT. Cancel anytime — you keep Pro until the end of the period.</span></div>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.PricingTable" tiers="{{ tiers }}" current="{{ planId }}" yearly-note="2 months free" billing-labels="{{ billingLabels }}" on-select="{{ pickTier }}" hint-size="100%,520px"></x-import>
+</div>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Credit packs" description="One-off top-ups for any plan. Pack credits never expire and are used after your monthly ones." hint-size="100%,200px">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:var(--space-3)">
+<sc-for list="{{ packs }}" as="pk" hint-placeholder-count="3">
+<div style="display:flex;flex-direction:column;gap:var(--space-3);padding:var(--space-4);border:var(--border-width) solid var(--border-subtle);border-radius:var(--radius-lg);background:var(--bg-subtle)">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:var(--space-2)"><span style="font:var(--type-title-lg)">{{ pk.title }}</span><sc-if value="{{ pk.best }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Badge" size="sm" tone="success" hint-size="80px,20px">Best value</x-import></sc-if></div>
+<span style="font-size:var(--type-caption-size);color:var(--fg-secondary)">{{ pk.unit }}</span>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Button" variant="secondary" block="{{ true }}" on-click="{{ pk.buy }}" hint-size="100%,36px">{{ pk.price }}</x-import>
+</div>
+</sc-for>
+</div>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="How credits work" hint-size="100%,200px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.DescriptionList" items="{{ rules }}" hint-size="100%,200px"></x-import>
+</x-import>
+<dc-import name="RecronBilling" app="{{ app }}" hint-size="100%,380px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1200,&quot;height&quot;:1600}}">
+class Component extends DCLogic {
+  renderVals() {
+    const app = this.props.app || (window.RecronStandalone && window.VelvetUIDesignSystem_ee2bd8 && window.RecronStandalone(this));
+    if (!app) { clearTimeout(this._wt); this._wt = setTimeout(() => this.forceUpdate(), 80); return {}; }
+    const { D, U, NS } = app;
+    const h = React.createElement;
+    const plan = app.plan || D.plan;
+    const pro = plan.id !== 'free';
+    const ratio = plan.credits / plan.monthly;
+    return {
+      app,
+      hasLimit: !!app.limit,
+      limitTitle: app.limit ? 'Not enough credits for ' + D.AI_COSTS[app.limit].label.toLowerCase() : '',
+      limitBody: app.limit ? 'It needs ' + D.AI_COSTS[app.limit].cost + ' credit' + (D.AI_COSTS[app.limit].cost > 1 ? 's' : '') + ' and you have ' + plan.credits + '. Free tries of this tool are used up. Top up once, go Pro, or wait until ' + U.fmtDate(plan.renews, { day: 'numeric', month: 'long' }) + '.' : '',
+      limitActions: h('div', { style: { display: 'flex', gap: 8, flexWrap: 'wrap' } }, h(NS.Button, { size: 'sm', onClick: () => app.upgrade('pro') }, 'Upgrade to Pro · 29 zł'), h(NS.Button, { size: 'sm', variant: 'secondary', onClick: () => app.buyPack(50) }, 'Buy 50 credits · 19 zł')),
+      closeLimit: app.closeLimit,
+      planId: plan.id,
+      planStatus: { label: pro ? 'Pro' : 'Free plan', tone: pro ? 'brand' : 'neutral' },
+      meta: [{ icon: 'sparkles', label: plan.credits + ' credits left' }, { icon: 'refresh', label: 'Renews ' + U.fmtDate(plan.renews, { day: 'numeric', month: 'long' }) }],
+      headerActions: pro ? h(NS.Button, { variant: 'ghost', onClick: app.cancelPlan }, 'Cancel Pro') : h(NS.Button, { iconLeft: 'sparkles', onClick: () => app.upgrade('pro') }, 'Upgrade to Pro'),
+      credits: String(plan.credits), monthly: plan.monthly, ofLabel: 'of ' + plan.monthly + ' monthly credits left',
+      renewLine: 'Back to ' + plan.monthly + ' on ' + U.fmtDate(plan.renews, { day: 'numeric', month: 'long' }) + ' · unused monthly credits don’t roll over',
+      meterTone: ratio <= 0.2 ? 'danger' : ratio <= 0.4 ? 'warning' : 'brand',
+      history: plan.history, histSeries: [{ key: 'value', label: 'Credits used', color: 'var(--action-primary)' }],
+      costs: Object.keys(D.AI_COSTS).map((k) => { const c = D.AI_COSTS[k]; const tr = plan.trials[k]; return {
+        id: k, title: c.label, description: c.cost === 0 ? 'Always free' : c.cost + ' credit' + (c.cost > 1 ? 's' : '') + ' per run',
+        leading: h(NS.IconTile, { icon: c.icon, size: 'sm', tone: c.cost === 0 ? 'success' : 'brand' }),
+        trailing: c.cost === 0 ? h(NS.Badge, { size: 'sm', tone: 'success' }, 'Free') : tr > 0 ? h(NS.Badge, { size: 'sm', tone: 'info' }, tr + ' free ' + (tr === 1 ? 'try' : 'tries') + ' left') : h(NS.Badge, { size: 'sm', variant: 'outline' }, 'Tries used') }; }),
+      tiers: D.PLANS, billingLabels: { monthly: 'Monthly', yearly: 'Yearly' },
+      pickTier: (t) => (t.id === 'free' ? null : app.upgrade(t.id)),
+      packs: D.PACKS.map((p) => ({ title: p.credits + ' credits', unit: (parseInt(p.price, 10) / p.credits).toFixed(2).replace('.', ',') + ' zł per credit · ≈ ' + Math.floor(p.credits / 2) + ' ATS checks', price: 'Buy · ' + p.price, best: !!p.best, buy: () => app.buyPack(p.credits) })),
+      rules: [
+        { term: 'Free tries first', description: 'Each AI tool starts with 3 free runs that don’t touch your credits.' },
+        { term: 'Then credits', description: 'Monthly credits are used first, pack credits after. A run that fails is refunded automatically.' },
+        { term: 'Always free', description: 'Reading an offer from a link, the B2B vs UoP calculator, tracking, prep and the CV builder.' },
+        { term: 'Fair use on Pro', description: '300 credits a month covers ~10 applications a week with match, letter and ATS check.' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

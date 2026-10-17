@@ -24,11 +24,6 @@
   list-style: none;
 }
 
-.multiPartOption[aria-selected='true'] {
-  color: var(--fg-primary);
-  font-weight: var(--type-body-weight);
-}
-
 .select {
   composes: select from '../../styles/shared/forms/select.module.css';
 }

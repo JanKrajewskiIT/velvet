@@ -1,3 +1,8 @@
+:import('../../styles/shared/animations.module.css') {
+  vuiCheckIn: vuiCheckIn;
+  vuiDashIn: vuiDashIn;
+}
+
 .checkmark {
   position: relative;
   display: inline-grid;
@@ -38,7 +43,7 @@
   border: solid var(--check-mark);
   border-width: 0 var(--border-width-thick) var(--border-width-thick) 0;
   transform: translateY(-1px) rotate(45deg);
-  animation: vui-check-in var(--motion-spring);
+  animation: vuiCheckIn var(--motion-spring);
 }
 
 .checkmarkVariantSm.checkmarkVariantOn::after {
@@ -52,7 +57,7 @@
   height: var(--border-width-thick);
   border-radius: var(--radius-2xs);
   background: var(--check-mark);
-  animation: vui-dash-in var(--motion-base);
+  animation: vuiDashIn var(--motion-base);
 }
 
 .checkmarkVariantRadio.checkmarkVariantOn::after {
@@ -62,7 +67,7 @@
   border-radius: 50%;
   background: var(--check-mark);
   transform: none;
-  animation: vui-pop-in var(--motion-pop);
+  animation: vuiPopIn var(--motion-pop);
 }
 
 :hover > .checkmark:not(.checkmarkVariantOn, .checkmarkVariantMixed, [aria-disabled='true']),
@@ -79,4 +84,11 @@
 .checkmark:focus-visible {
   outline: none;
   box-shadow: var(--focus-ring);
+}
+
+@keyframes vuiPopIn {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
 }

@@ -21,7 +21,7 @@ export const KanbanCardBody = (props: KanbanCardBodyProps) => (
             {props.card.tag}
           </Badge>
         </Show>
-        <Text as="div" variant="label" tone="primary" class="vui-kanban__ctitle">
+        <Text as="div" variant="label" tone="primary" class={styles.kanbanPartCtitle}>
           {props.card.title}
         </Text>
         <Show when={props.card.meta || props.card.assignee}>

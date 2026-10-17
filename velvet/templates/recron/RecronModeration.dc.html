@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script><script src="./recron-data.js"></script><style>:root:root{overflow:auto!important;height:auto!important;background:var(--bg-page)!important}html body{margin:0!important;padding:0!important;background:var(--bg-page)!important}</style></helmet>
+<div data-screen-label="Moderation" style="display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.PageHeader" title="Moderation" status="{{ roleBadge }}" description="Community questions and answers wait here before they go public. Keep it accurate, on-topic and free of self-promotion." tabs="{{ tabs }}" active-tab="{{ tab }}" on-tab-change="{{ setTab }}" hint-size="100%,170px"></x-import>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:var(--space-4)">
+<sc-for list="{{ stats }}" as="st" hint-placeholder-count="4">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Stat" label="{{ st.label }}" value="{{ st.value }}" hint="{{ st.hint }}" hint-size="100%,100px"></x-import>
+</sc-for>
+</div>
+<sc-if value="{{ t.queue }}" hint-placeholder-val="{{ true }}">
+<sc-if value="{{ queueEmpty }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" hint-size="100%,240px"><x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.EmptyState" icon="circle-check" tone="success" title="Queue is empty" description="New submissions show up here and in your notifications." hint-size="100%,200px"></x-import></x-import>
+</sc-if>
+<sc-for list="{{ queue }}" as="q" hint-placeholder-count="2">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" footer="{{ q.footer }}" footer-align="between" hint-size="100%,280px">
+<div style="display:flex;flex-direction:column;gap:var(--space-3)">
+<div style="display:flex;align-items:center;gap:var(--space-2);flex-wrap:wrap;font-size:var(--type-caption-size);color:var(--fg-secondary)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Avatar" name="{{ q.author }}" size="xs" color="auto" hint-size="20px,20px"></x-import>
+<span style="font-weight:600;color:var(--fg-primary)">{{ q.author }}</span><span>{{ q.authorMeta }}</span><span>·</span><span>{{ q.path }}</span>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Badge" size="sm" variant="outline" hint-size="50px,20px">{{ q.level }}</x-import>
+</div>
+<h3 style="margin:0;font:var(--type-title-lg);text-wrap:pretty">{{ q.question }}</h3>
+<sc-if value="{{ q.hasAnswer }}" hint-placeholder-val="{{ true }}"><p style="margin:0;padding:var(--space-3) var(--space-4);border-radius:var(--radius-md);background:var(--bg-subtle);color:var(--fg-secondary);line-height:1.55;text-wrap:pretty">{{ q.answer }}</p></sc-if>
+<sc-if value="{{ q.noAnswer }}" hint-placeholder-val="{{ false }}"><span style="font-size:var(--type-body-sm-size);color:var(--fg-tertiary)">Submitted without an answer — it will show “Ask AI” once public.</span></sc-if>
+<sc-if value="{{ q.hasSimilar }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Alert" tone="warning" icon="copy" title="{{ q.simTitle }}" hint-size="100%,64px">{{ q.simText }}</x-import>
+</sc-if>
+</div>
+</x-import>
+</sc-for>
+</sc-if>
+<sc-if value="{{ t.reports }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Reported content" description="Flagged by users or the automatic filter, most reported first" padding="md" hint-size="100%,360px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.List" items="{{ reports }}" empty="No open reports" hint-size="100%,300px"></x-import>
+</x-import>
+</sc-if>
+<sc-if value="{{ t.log }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" padding="none" hint-size="100%,300px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Table" title="Activity log" columns="{{ logCols }}" rows="{{ log }}" layout="fixed" hint-size="100%,260px"></x-import>
+</x-import>
+</sc-if>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Dialog" open="{{ editOpen }}" on-close="{{ closeEdit }}" title="Edit before approving" description="Fix wording, category or the answer. The author is notified of changes." footer="{{ editFooter }}" size="lg" hint-size="0,0">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Textarea" label="Question" value="{{ edit.question }}" on-change="{{ setEditQ }}" rows="{{ 2 }}" hint-size="100%,88px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Select" label="Category" options="{{ categories }}" value="{{ edit.category }}" on-value-change="{{ setEditCat }}" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Textarea" label="Answer" optional="{{ true }}" value="{{ edit.answer }}" on-change="{{ setEditA }}" rows="{{ 5 }}" hint-size="100%,140px"></x-import>
+</div>
+</x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1200,&quot;height&quot;:1200}}">
+class Component extends DCLogic {
+  state = { tab: 'queue', queue: null, reports: null, log: null, edit: null, approved: 12, rejected: 3 };
+  seedData(D) {
+    const extra = [
+      { id: 'pq3', category: 'React', sub: 'Server Components', question: 'What causes a hydration mismatch and how do you fix it?', answer: 'The server HTML differs from the first client render — dates, random ids, browser-only APIs. Render the same thing on both, move browser-only code into useEffect, or use useId for ids.', level: 'Mid', author: 'marek.d', authorMeta: '14 approved', ago: '5 h ago' },
+      { id: 'pq4', category: 'JavaScript', sub: 'Types & coercion', question: 'What is the difference between == and ===?', answer: null, level: 'Junior', author: 'nowy_user', authorMeta: 'first submission', ago: '1 d ago', similar: [{ q: 'Explain type coercion with examples', pct: 81 }] }
+    ];
+    const pend = D.questions.filter((q) => q.pending).map((q) => ({ ...q, authorMeta: q.author === 'anna.k' ? '3 approved' : '1 rejected', ago: '2 d ago', similar: q.id === 'q25' ? [{ q: 'How do you structure a large React component tree?', pct: 64 }] : [] }));
+    return { queue: [...pend, ...extra], reports: D.reports.slice(), log: D.modLog.slice() };
+  }
+  renderVals() {
+    const app = this.props.app || (window.RecronStandalone && window.VelvetUIDesignSystem_ee2bd8 && window.RecronStandalone(this));
+    if (!app) { clearTimeout(this._wt); this._wt = setTimeout(() => this.forceUpdate(), 80); return {}; }
+    const { D, U, NS } = app;
+    const h = React.createElement;
+    if (!this._seed) this._seed = this.seedData(D);
+    const s0 = this.state; const s = { ...s0, queue: s0.queue || this._seed.queue, reports: s0.reports || this._seed.reports, log: s0.log || this._seed.log };
+    const t = { [s.tab]: true };
+    const logIt = (action, what, reason) => [{ id: 'm' + Date.now(), action, what, who: 'you', at: '2026-10-06T09:30', reason }, ...s.log];
+    const approve = (q, patch) => { this.setState({ queue: s.queue.filter((x) => x.id !== q.id), log: logIt(patch ? 'edited & approved' : 'approved', (patch && patch.question) || q.question), approved: s.approved + 1, edit: null }); app.toast('Approved', 'success', 'Now public in the question bank'); };
+    const reject = (q, reason) => { this.setState({ queue: s.queue.filter((x) => x.id !== q.id), log: logIt('rejected', q.question, reason), rejected: s.rejected + 1 }); app.toast('Rejected · ' + reason, 'neutral', q.author + ' gets the reason by email'); };
+    const resolve = (r, what) => { this.setState({ reports: s.reports.filter((x) => x.id !== r.id), log: logIt(what, r.excerpt) }); app.toast(what === 'removed' ? 'Content removed' : 'Report dismissed', what === 'removed' ? 'warning' : 'neutral'); };
+    const e = s.edit;
+    const setE = (k) => (v) => this.setState({ edit: { ...e, [k]: v && v.target ? v.target.value : v } });
+    const ACT = { approved: 'success', 'edited & approved': 'success', rejected: 'danger', removed: 'warning', dismissed: 'neutral', edited: 'info' };
+    return {
+      roleBadge: { label: 'Moderator', tone: 'info' },
+      tabs: [{ value: 'queue', label: 'Queue', count: s.queue.length || undefined }, { value: 'reports', label: 'Reports', count: s.reports.length || undefined }, { value: 'log', label: 'Log' }],
+      tab: s.tab, setTab: (v) => this.setState({ tab: v }), t,
+      stats: [
+        { label: 'Waiting', value: String(s.queue.length + s.reports.length), hint: s.queue.length + ' submissions · ' + s.reports.length + ' reports' },
+        { label: 'Oldest in queue', value: '2 days', hint: 'Target: under 48 h' },
+        { label: 'Approved this week', value: String(s.approved), hint: s.rejected + ' rejected' },
+        { label: 'Approval rate', value: Math.round((s.approved / (s.approved + s.rejected)) * 100) + '%', hint: 'Last 30 days' }
+      ],
+      queueEmpty: !s.queue.length,
+      queue: s.queue.map((q) => ({ ...q, path: q.category + ' › ' + (q.sub || '—') + ' · ' + q.ago, hasAnswer: !!q.answer, noAnswer: !q.answer,
+        hasSimilar: !!(q.similar && q.similar.length), simTitle: q.similar && q.similar[0] ? 'Possible duplicate · ' + q.similar[0].pct + '% similar' : '', simText: q.similar && q.similar[0] ? '“' + q.similar[0].q + '” is already in the bank. Merge it or reject as duplicate.' : '',
+        footer: h(React.Fragment, null,
+          h(NS.DropdownButton, { variant: 'ghost', items: ['Duplicate', 'Not an interview question', 'Unclear or too broad', 'Wrong answer', 'Spam or self-promotion'].map((r) => ({ label: r, onSelect: () => reject(q, r) })) }, 'Reject'),
+          h('span', { style: { display: 'flex', gap: 8 } }, h(NS.Button, { variant: 'secondary', iconLeft: 'pencil', onClick: () => this.setState({ edit: { id: q.id, question: q.question, answer: q.answer || '', category: q.category } }) }, 'Edit'), h(NS.Button, { iconLeft: 'check', onClick: () => approve(q) }, 'Approve'))) })),
+      reports: s.reports.map((r) => ({ id: r.id, title: '“' + r.excerpt + '”', description: r.reason + ' · ' + r.note + ' — ' + r.by + ', ' + U.relDay(r.at).toLowerCase(),
+        leading: h(NS.IconTile, { icon: r.reason.startsWith('Spam') ? 'alert-circle' : r.reason === 'Duplicate' ? 'copy' : 'flag', size: 'sm', tone: r.count > 2 ? 'danger' : 'warning' }),
+        trailing: h('span', { style: { display: 'flex', alignItems: 'center', gap: 8 } }, h(NS.Badge, { size: 'sm', tone: r.count > 2 ? 'danger' : 'neutral' }, r.count + '×'), h(NS.Button, { size: 'sm', variant: 'ghost', onClick: () => resolve(r, 'dismissed') }, 'Dismiss'), h(NS.Button, { size: 'sm', variant: 'soft', onClick: () => resolve(r, 'removed') }, 'Remove')) })),
+      logCols: [
+        { key: 'action', label: 'Action', width: 160, render: (r) => h(NS.Badge, { size: 'sm', tone: ACT[r.action] || 'neutral' }, r.action) },
+        { key: 'what', label: 'Content', render: (r) => h('span', { style: { display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' } }, r.what + (r.reason ? ' — ' + r.reason : '')) },
+        { key: 'who', label: 'By', width: 100, hideOnMobile: true },
+        { key: 'at', label: 'When', width: 130, render: (r) => U.relDay(r.at) + ', ' + U.fmtTime(r.at) }
+      ],
+      log: s.log,
+      editOpen: !!e, closeEdit: () => this.setState({ edit: null }),
+      edit: e || {}, setEditQ: setE('question'), setEditA: setE('answer'), setEditCat: setE('category'), categories: D.categories,
+      editFooter: e ? h(React.Fragment, null, h(NS.Button, { variant: 'secondary', onClick: () => this.setState({ edit: null }) }, 'Cancel'), h(NS.Button, { iconLeft: 'check', onClick: () => approve(s.queue.find((x) => x.id === e.id), e) }, 'Save & approve')) : null
+    };
+  }
+}
+</script>
+</body>
+</html>

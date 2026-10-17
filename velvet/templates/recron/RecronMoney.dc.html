@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script><script src="./recron-data.js"></script></helmet>
+<section data-screen-label="Salary expectations" style="display:flex;flex-direction:column;gap:var(--space-4);padding-top:var(--space-4)">
+<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:var(--space-3);flex-wrap:wrap">
+<div style="display:flex;flex-direction:column;gap:2px;min-width:0"><h2 style="margin:0;font:var(--type-title-lg);font-size:22px">Salary expectations</h2><span style="color:var(--fg-secondary);font-size:var(--type-body-sm-size);text-wrap:pretty">Decide what you need once — Recron turns it into an ask for every contract type and checks each offer against it.</span></div>
+<div style="display:flex;align-items:center;gap:var(--space-2)">{{ resetBtn }}{{ saveBtn }}</div>
+</div>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Alert" tone="brand" icon="target" title="{{ headTitle }}" hint-size="100%,80px">{{ headBody }}</x-import>
+<div style="display:flex;flex-wrap:wrap;gap:var(--space-4);align-items:flex-start">
+<div style="flex:1 1 340px;min-width:0;display:flex;flex-direction:column"><x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="What you need" description="Enter it the way you think about money" hint-size="100%,760px">
+<div style="display:flex;flex-direction:column;gap:var(--space-5)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.OptionSwitcher" label="I think in" variant="chips" size="sm" options="{{ unitOptions }}" value="{{ d.unit }}" on-value-change="{{ setUnit }}" hint-size="100%,36px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FormGrid" columns="{{ 1 }}" hint-size="100%,190px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.NumberInput" label="{{ targetLabel }}" hint="What you’d be happy with" value="{{ d.target }}" on-value-change="{{ setTarget }}" min="{{ 3000 }}" max="{{ 150000 }}" step="{{ 500 }}" suffix="{{ unitSuffix }}" hint-size="100%,88px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.NumberInput" label="{{ floorLabel }}" hint="{{ floorHint }}" error="{{ floorError }}" value="{{ d.floor }}" on-value-change="{{ setFloor }}" min="{{ 3000 }}" max="{{ 150000 }}" step="{{ 500 }}" suffix="{{ unitSuffix }}" hint-size="100%,88px"></x-import>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Divider" label="B2B assumptions" hint-size="100%,20px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.OptionSwitcher" label="ZUS" variant="chips" size="sm" options="{{ zusOptions }}" value="{{ d.zus }}" on-value-change="{{ setZus }}" hint-size="100%,36px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.NumberInput" label="Business costs" hint="Accounting, equipment, software — deductible on flat 19% and tax scale, not on lump-sum" value="{{ d.costs }}" on-value-change="{{ setCosts }}" min="{{ 0 }}" max="{{ 10000 }}" step="{{ 100 }}" suffix="zł / mo" hint-size="100%,88px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FormGrid" columns="{{ 2 }}" hint-size="100%,88px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.NumberInput" label="Paid days off on B2B" hint="Days a year · often 20–26" value="{{ d.paidDaysB2B }}" on-value-change="{{ setPaid }}" min="{{ 0 }}" max="{{ 26 }}" step="{{ 1 }}" hint-size="100%,88px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.NumberInput" label="Sick days a year" hint="Unpaid on B2B" value="{{ d.sickDays }}" on-value-change="{{ setSick }}" min="{{ 0 }}" max="{{ 30 }}" step="{{ 1 }}" hint-size="100%,88px"></x-import>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Divider" label="UoP assumptions" hint-size="100%,20px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.OptionSwitcher" label="Creative work (50% tax-deductible costs)" variant="chips" size="sm" options="{{ creativeOptions }}" value="{{ creativeVal }}" on-value-change="{{ setCreative }}" hint-size="100%,36px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Switch" label="I save in PPK" description="2% from your pay now, 1.5% from the employer on top — counted as savings, not take-home" checked="{{ d.ppk }}" on-change="{{ togglePpk }}" hint-size="100%,44px"></x-import>
+</div>
+</x-import></div>
+<div style="flex:2 1 520px;min-width:0;display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="What to ask for" description="{{ askDesc }}" hint-size="100%,460px">
+<div style="display:flex;flex-direction:column">
+<div style="display:grid;grid-template-columns:minmax(0,1.4fr) repeat(2,minmax(0,1fr));gap:var(--space-3);padding:0 0 var(--space-2);border-bottom:var(--border-width) solid var(--border-subtle);font-size:var(--type-caption-size);color:var(--fg-tertiary)">
+<span>Contract</span><span style="text-align:right">Ask for</span><span style="text-align:right">Minimum</span>
+</div>
+<sc-for list="{{ rows }}" as="row" hint-placeholder-count="4">
+<div style="display:grid;grid-template-columns:minmax(0,1.4fr) repeat(2,minmax(0,1fr));gap:var(--space-3);align-items:start;padding:var(--space-3) 0;border-bottom:var(--border-width) solid var(--border-subtle)">
+<div style="display:flex;flex-direction:column;gap:2px;min-width:0">
+<span style="display:flex;align-items:center;gap:var(--space-2);flex-wrap:wrap;font-weight:600">{{ row.label }}<sc-if value="{{ row.best }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Badge" size="sm" tone="success" hint-size="90px,20px">Lowest invoice</x-import></sc-if></span>
+<span style="font-size:var(--type-caption-size);color:var(--fg-tertiary);font-variant-numeric:tabular-nums;text-wrap:pretty">{{ row.breakdown }}</span>
+</div>
+<div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px">
+<span style="font:var(--type-title);font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap">{{ row.need }}</span>
+<span style="font-size:var(--type-caption-size);color:var(--fg-secondary);font-variant-numeric:tabular-nums;white-space:nowrap">{{ row.needSub }}</span>
+</div>
+<div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px">
+<span style="font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--fg-secondary)">{{ row.min }}</span>
+<span style="font-size:var(--type-caption-size);color:var(--fg-tertiary);font-variant-numeric:tabular-nums;white-space:nowrap">{{ row.minSub }}</span>
+</div>
+</div>
+</sc-for>
+<span style="padding-top:var(--space-3);font-size:var(--type-caption-size);color:var(--fg-tertiary);text-wrap:pretty">UoP: monthly gross. B2B: monthly invoice net of VAT; hourly rate assumes 168 h. Both give you the same take-home after the assumptions on the left.</span>
+</div>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Your offers against it" description="{{ offersDesc }}" hint-size="100%,300px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.List" items="{{ offerRows }}" size="sm" empty="{{ offersEmpty }}" hint-size="100%,240px"></x-import>
+</x-import>
+</div>
+</div>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="What the money doesn’t show" description="Things the same take-home doesn’t buy you on B2B — and what B2B gives back" hint-size="100%,260px">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:var(--space-5)">
+<div style="display:flex;flex-direction:column;gap:var(--space-2);min-width:0">
+<span style="font-weight:600">UoP gives you, B2B doesn’t</span>
+<sc-for list="{{ uopPros }}" as="p" hint-placeholder-count="5">
+<div style="display:flex;gap:var(--space-2);align-items:baseline;font-size:var(--type-body-sm-size);color:var(--fg-secondary)"><span style="flex:none;color:var(--fg-tertiary)">–</span><span style="text-wrap:pretty">{{ p }}</span></div>
+</sc-for>
+</div>
+<div style="display:flex;flex-direction:column;gap:var(--space-2);min-width:0">
+<span style="font-weight:600">B2B gives you, UoP doesn’t</span>
+<sc-for list="{{ b2bPros }}" as="p" hint-placeholder-count="4">
+<div style="display:flex;gap:var(--space-2);align-items:baseline;font-size:var(--type-body-sm-size);color:var(--fg-secondary)"><span style="flex:none;color:var(--fg-tertiary)">–</span><span style="text-wrap:pretty">{{ p }}</span></div>
+</sc-for>
+</div>
+</div>
+</x-import>
+<span style="font-size:var(--type-caption-size);color:var(--fg-tertiary);text-wrap:pretty">Simplified 2026 rates. Not included: joint filing with a spouse, child and other reliefs, IP Box, the 30× ZUS cap mid-year, voluntary sickness insurance on B2B. A guide for setting your ask — not tax advice; check the final number with an accountant.</span>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;app&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;object&quot;}}">
+class Component extends DCLogic {
+  state = { d: null };
+  renderVals() {
+    const app = this.props.app || (window.RecronStandalone && window.VelvetUIDesignSystem_ee2bd8 && window.RecronStandalone(this));
+    if (!app) { clearTimeout(this._wt); this._wt = setTimeout(() => this.forceUpdate(), 80); return { d: {}, rows: [], offerRows: [], uopPros: [], b2bPros: [] }; }
+    const { D, U, NS } = app;
+    const h = React.createElement;
+    const saved = app.expectations || D.expectations;
+    const d = this.state.d || saved;
+    const dirty = !!this.state.d && JSON.stringify(this.state.d) !== JSON.stringify(saved);
+    const set = (k) => (v) => this.setState({ d: { ...d, [k]: v && v.target ? (v.target.type === 'checkbox' ? v.target.checked : v.target.value) : v } });
+    const formOf = (id) => D.FORMS.find((f) => f.id === id);
+    const unitLabel = d.unit === 'net' ? 'take-home' : d.unit === 'uop' ? 'gross on UoP' : 'invoice on ' + formOf(d.unit).short;
+    const tNet = U.netFrom(d.target, d.unit, d), fNet = U.netFrom(d.floor, d.unit, d);
+    const r = (n) => Math.round(n / 100) * 100;
+    const rows = D.FORMS.map((f) => { const need = U.grossFor(tNet, f.id, d), min = U.grossFor(fNet, f.id, d); const res = U.netPay(need, f.id, U.optsOf(d, f.id)); return { f, need, min, res }; });
+    const uop = rows[0].need;
+    const b2b = rows.slice(1); const bestB2B = b2b.reduce((a, x) => (x.need < a.need ? x : a), b2b[0]);
+    const unpaid = Math.max(0, D.HOLIDAYS - (d.paidDaysB2B || 0)) + (d.sickDays || 0);
+    const convert = (amt, from, to) => { const n = U.netFrom(amt, from, d); return to === 'net' ? r(n) : U.grossFor(n, to, d); };
+    const offers = app.offers.filter((o) => D.ACTIVE.includes(o.status) && U.monthly(o) != null).map((o) => ({ o, v: U.vsExpect(o, d) })).filter((x) => x.v).sort((a, b) => b.v.net - a.v.net);
+    const counts = { above: 0, within: 0, below: 0 }; offers.forEach((x) => counts[x.v.level]++);
+    return {
+      d,
+      resetBtn: dirty ? h(NS.Button, { variant: 'ghost', size: 'sm', onClick: () => this.setState({ d: null }) }, 'Discard') : null,
+      saveBtn: h(NS.Button, { size: 'sm', iconLeft: 'check', disabled: !dirty || d.floor > d.target, onClick: () => { app.setExpectations(d); this.setState({ d: null }); app.toast('Expectations saved', 'success', 'Every offer is now checked against ' + U.pln(tNet) + ' take-home'); } }, dirty ? 'Save expectations' : 'Saved'),
+      headTitle: 'You need ' + U.pln(tNet) + ' a month on your account',
+      headBody: 'That’s ' + U.pln(uop) + ' gross on UoP, or an invoice of ' + U.pln(bestB2B.need) + ' on ' + bestB2B.f.short + ' (' + U.pln(Math.ceil(bestB2B.need / D.HOURS)) + ' / h). Never go below ' + U.pln(fNet) + ' take-home.',
+      unitOptions: [{ value: 'net', label: 'Take-home' }, { value: 'uop', label: 'UoP gross' }, { value: 'ryczalt', label: 'B2B invoice' }],
+      setUnit: (u) => { if (u === d.unit) return; this.setState({ d: { ...d, unit: u, target: convert(d.target, d.unit, u), floor: convert(d.floor, d.unit, u) } }); },
+      unitSuffix: 'zł', targetLabel: 'Target · ' + unitLabel + ' / month', floorLabel: 'Walk-away minimum · ' + unitLabel,
+      setTarget: set('target'), setFloor: set('floor'),
+      floorHint: 'Below this you say no', floorError: d.floor > d.target ? 'Minimum is above your target' : undefined,
+      zusOptions: [{ value: 'full', label: 'Full' }, { value: 'pref', label: 'Preferential' }, { value: 'start', label: 'Start relief' }],
+      setZus: set('zus'), setCosts: set('costs'), setPaid: set('paidDaysB2B'), setSick: set('sickDays'),
+      creativeOptions: [{ value: '0', label: 'None' }, { value: '0.5', label: 'Half my work' }, { value: '0.8', label: 'Most' }, { value: '1', label: 'All' }],
+      creativeVal: String(d.creative || 0), setCreative: (v) => this.setState({ d: { ...d, creative: +v } }),
+      togglePpk: () => this.setState({ d: { ...d, ppk: !d.ppk } }),
+      askDesc: 'Same ' + U.pln(tNet) + ' take-home, four ways to be paid · B2B counts ' + unpaid + ' unpaid days a year',
+      rows: rows.map(({ f, need, min, res }) => {
+        const isB2B = f.id !== 'uop';
+        return { label: f.label, best: isB2B && f.id === bestB2B.f.id,
+          need: U.pln(need), needSub: isB2B ? U.pln(Math.ceil(need / D.HOURS)) + ' / h · ' + (need >= uop ? '+' : '−') + Math.abs(Math.round(((need - uop) / uop) * 100)) + '% vs UoP' : 'gross / month',
+          min: U.pln(min), minSub: isB2B ? U.pln(Math.ceil(min / D.HOURS)) + ' / h' : 'gross',
+          breakdown: (f.id === 'uop' ? 'ZUS ' + U.pln(res.zus) + ' · health ' + U.pln(res.health) + ' · tax ' + U.pln(res.tax) + (res.ppk ? ' · PPK ' + U.pln(res.ppk) + ' (+' + U.pln(res.saved) + ' saved)' : '') : 'ZUS ' + U.pln(res.zus) + ' · health ' + U.pln(res.health) + ' · tax ' + U.pln(res.tax) + (res.costs ? ' · costs ' + U.pln(res.costs) : '') + ' · unpaid days −' + U.pln(res.lost)) };
+      }),
+      offersDesc: offers.length ? counts.above + ' meet your target · ' + counts.within + ' in between · ' + counts.below + ' below your minimum' : 'Active offers with a salary appear here',
+      offerRows: offers.map(({ o, v }) => ({ id: o.id, title: o.company + ' · ' + o.name, description: U.salary(o) + ' · ' + (D.CONTRACTS[o.contractType] || D.CONTRACTS.uop).short + ' · ≈ ' + U.pln(v.net) + ' take-home' + (v.level !== 'above' ? ' · ask ' + U.pln(v.need) : ''),
+        trailing: h('span', { style: { display: 'inline-flex', alignItems: 'center', gap: 'var(--space-2)' } }, h(NS.Badge, { size: 'sm', tone: v.tone }, v.level === 'above' ? 'Meets target' : v.level === 'within' ? 'Between' : 'Below minimum'), h(NS.IconButton, { icon: 'chevron-right', size: 'sm', label: 'Open ' + o.company + ' salary', onClick: () => app.openOffer(o.id, 'salary') })) })),
+      offersEmpty: h('span', { style: { fontSize: 'var(--type-body-sm-size)', color: 'var(--fg-tertiary)' } }, 'No active offers with a salary yet.'),
+      uopPros: ['26 paid days off (20 in your first 10 years of work history)', '80% pay when you’re sick, from day one', 'Notice period that protects you — 1–3 months', 'Paid parental leave and full pension contributions', 'Employer pays its own ZUS on top of your gross'],
+      b2bPros: ['Lower tax at higher income — lump-sum 12% or flat 19%', 'Business costs (on flat 19% and tax scale) reduce your tax', 'Easier to negotiate rate rises and work for several clients', 'Short or no notice — leave quickly when something better comes']
+    };
+  }
+}
+</script>
+</body>
+</html>

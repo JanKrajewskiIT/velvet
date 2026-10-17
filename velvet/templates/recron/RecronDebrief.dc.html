@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script></helmet>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Dialog" open="{{ open }}" on-close="{{ close }}" title="{{ title }}" description="{{ description }}" footer="{{ footer }}" size="md" hint-size="0,0">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.TagInput" label="Who interviewed you?" optional="{{ true }}" placeholder="Name, then Enter" value="{{ interviewers }}" on-value-change="{{ setInterviewers }}" hint-size="100%,72px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Rating" label="How did it go?" value="{{ rating }}" on-value-change="{{ setRating }}" size="lg" hint-size="200px,56px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.TagInput" label="Questions they asked" optional="{{ true }}" hint="One question, then Enter" placeholder="e.g. How would you version design tokens?" separators="{{ seps }}" value="{{ asked }}" on-value-change="{{ setAsked }}" hint-size="100%,88px"></x-import>
+<sc-if value="{{ hasAsked }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Checkbox" checked="{{ toPrep }}" on-change="{{ toggleToPrep }}" label="Add new questions to Prep" description="They land in your bank marked “Learning” so you can practise them before the next round." hint-size="100%,44px"></x-import>
+</sc-if>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Textarea" label="Notes" optional="{{ true }}" rows="{{ 3 }}" placeholder="What went well, what to improve, what they said about next steps" value="{{ notes }}" on-change="{{ setNotes }}" hint-size="100%,96px"></x-import>
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;app&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;object&quot;}}">
+class Component extends DCLogic {
+  state = { key: null, interviewers: [], asked: [], rating: 0, notes: '', toPrep: true };
+  renderVals() {
+    const app = this.props.app;
+    const id = app && app.debrief;
+    if (!app || !id) return { open: false };
+    const { U, NS, offers, interviews } = app;
+    const h = React.createElement;
+    const i = interviews.find((x) => x.id === id) || {};
+    const o = offers.find((x) => x.id === i.offerId) || {};
+    if (this.state.key !== id) setTimeout(() => this.setState({ key: id, interviewers: i.interviewers || [], asked: i.asked || [], rating: i.rating || 0, notes: i.notes || '', toPrep: true }), 0);
+    const s = this.state;
+    const fresh = s.asked.filter((q) => !(i.asked || []).includes(q));
+    const save = () => {
+      app.updateInterview(i.id, { interviewers: s.interviewers, asked: s.asked, rating: s.rating || null, notes: s.notes });
+      if (s.toPrep && fresh.length) app.addQuestions(fresh.map((q) => ({ question: q, source: o.company + ' · ' + i.stage })));
+      app.closeDebrief();
+      app.toast('Debrief saved', 'success', s.toPrep && fresh.length ? fresh.length + ' question' + (fresh.length > 1 ? 's' : '') + ' added to Prep' : o.company + ' · ' + i.stage);
+    };
+    return {
+      open: true, close: app.closeDebrief,
+      title: i.stage + ' debrief',
+      description: o.name + ' · ' + o.company + ' · ' + (i.at ? U.fmtDate(i.at, { weekday: 'short', day: 'numeric', month: 'short' }) : ''),
+      interviewers: s.interviewers, setInterviewers: (v) => this.setState({ interviewers: v }),
+      rating: s.rating, setRating: (v) => this.setState({ rating: v }),
+      asked: s.asked, setAsked: (v) => this.setState({ asked: v }), seps: ['Enter'],
+      hasAsked: fresh.length > 0, toPrep: s.toPrep, toggleToPrep: () => this.setState({ toPrep: !s.toPrep }),
+      notes: s.notes, setNotes: (e) => this.setState({ notes: e.target.value }),
+      footer: h(React.Fragment, null, h(NS.Button, { variant: 'secondary', onClick: app.closeDebrief }, 'Cancel'), h(NS.Button, { iconLeft: 'check', onClick: save }, 'Save debrief'))
+    };
+  }
+}
+</script>
+</body>
+</html>

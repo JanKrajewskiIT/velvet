@@ -1,7 +1,7 @@
 .chartPartBar {
   transform-origin: bottom;
   transform-box: fill-box;
-  animation: vui-bar-in var(--motion-slide) backwards;
+  animation: vuiBarIn var(--motion-slide) backwards;
   transition: opacity var(--motion-fast);
 }
 
@@ -53,4 +53,10 @@
 
 .chartPartTipR {
   composes: chartPartTipR from '../../styles/shared/charts/chart.module.css';
+}
+
+@keyframes vuiBarIn {
+  from {
+    transform: scaleY(0);
+  }
 }

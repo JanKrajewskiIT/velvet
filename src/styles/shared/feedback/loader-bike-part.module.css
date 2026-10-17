@@ -1,4 +1,6 @@
 .part {
-  animation: vui-bike-body 3s ease-in-out infinite;
+  animation-duration: 3s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
   transition: stroke var(--motion-base);
 }

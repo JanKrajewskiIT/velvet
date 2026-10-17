@@ -55,7 +55,7 @@
 }
 
 .countVariantPop {
-  animation: vui-count-pop var(--motion-spring);
+  animation: vuiCountPop var(--motion-spring);
 }
 
 .indicatorPartItem {
@@ -91,4 +91,10 @@
   height: var(--size-dot);
   border-radius: 50%;
   background: var(--tone, currentColor);
+}
+
+@keyframes vuiCountPop {
+  from {
+    transform: scale(0.6);
+  }
 }

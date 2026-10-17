@@ -103,7 +103,7 @@ export const ProgressRing = (props: ProgressRingProps) => {
         />
       </svg>
       <Show
-        when={centre()}
+        when={centre() != null}
         fallback={
           <Show when={local.showValue}>
             <Text

@@ -162,7 +162,12 @@ export const PricingTable = (props: PricingTableProps) => {
                 <div class={styles.pricingPartPrice}>
                   {/* Keyed on the billing period so the amount remounts and replays its fade. */}
                   <Show when={billing()} keyed>
-                    <Text as="span" variant={numeric() ? 'h1' : 'h3'} tone="inherit" class={styles.pricingPartAmount}>
+                    <Text
+                      as="span"
+                      variant={numeric() ? 'h1' : 'h3'}
+                      tone="inherit"
+                      class={cx(styles.pricingPartAmount, !numeric() && styles.pricingPartAmountVariantText)}
+                    >
                       {price()}
                     </Text>
                   </Show>

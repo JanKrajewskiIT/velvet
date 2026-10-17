@@ -37,7 +37,7 @@ export const IconButton = (props: IconButtonProps) => {
         styles.root,
         buttonClass({
           variant: local.variant,
-          size: local.size ?? groupSize,
+          size: local.size ?? groupSize(),
           icon: true,
           circle: local.shape === 'circle',
         }),

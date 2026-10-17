@@ -1,4 +1,4 @@
-import { createEffect, createMemo, createSignal, For, type JSX, mergeProps, Show } from 'solid-js';
+import { createEffect, createSignal, For, type JSX, mergeProps, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { createDismiss } from '../../hooks/createDismiss';
@@ -7,24 +7,22 @@ import { classSelector } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { Tag } from '../display/Tag';
 import { Spinner } from '../feedback/Spinner';
-import { Checkmark } from '../primitives/Checkmark';
 import { Chevron } from '../primitives/Chevron';
 import { Control } from '../primitives/Control';
 import { Field } from '../primitives/Field';
-import { Glyph } from '../primitives/Glyph';
 import { typographyClass } from '../primitives/typography';
 import { callbackAlias } from './callbackAlias';
-import { ComboboxOption } from './ComboboxOption';
-import { ComboboxOptionText } from './ComboboxOptionText';
 import { createComboboxOptions } from './createComboboxOptions';
 import { createComboboxPopup } from './createComboboxPopup';
 import { createFormValidation } from './createFormValidation';
+import { createMultiSelectEntries, type MultiSelectEntry } from './createMultiSelectEntries';
 import { FormValue } from './FormValue';
 import styles from './MultiSelect.module.css';
 import { MultiSelectFooter } from './MultiSelectFooter';
+import { MultiSelectOptions } from './MultiSelectOptions';
 import type { MultiSelectProps } from './multiSelectTypes';
 import { OptionListStatus } from './OptionListStatus';
-import type { AutocompleteOption, SelectOption } from './selectOption';
+import type { AutocompleteOption } from './selectOption';
 
 export type { MultiSelectProps };
 
@@ -54,7 +52,7 @@ export const MultiSelect = (props: MultiSelectProps) => {
     () => p.id,
     () => available(),
   );
-  const { id, listId, optionId, open, setOpen, active, setActive, floating } = popup;
+  const { id, listId, open, setOpen, active, setActive, floating } = popup;
 
   const [selected, setSelected] = createControllable<string[]>({
     value: () => p.value,
@@ -65,47 +63,25 @@ export const MultiSelect = (props: MultiSelectProps) => {
     ),
   });
   const [query, setQuery] = createSignal('');
-  const [pickedLabels, setPickedLabels] = createSignal<ReadonlyMap<string, string>>(new Map());
-  createEffect(() => {
-    const keys = new Set(selected());
-    setPickedLabels((previous) =>
-      [...previous.keys()].every((key) => keys.has(key))
-        ? previous
-        : new Map([...previous].filter(([key]) => keys.has(key))),
-    );
-  });
   let input!: HTMLInputElement;
 
-  const { local, remote, list } = createComboboxOptions(
-    { options: () => p.options, loadOptions: () => p.loadOptions },
-    query,
-    open,
-  );
-  const isFull = () => p.max != null && selected().length >= p.max;
-  const available = createMemo(() =>
-    list().map((option) => ({
-      ...option,
-      disabled: !!option.disabled || (!selected().includes(option.value) && isFull()),
-    })),
-  );
-  const labelOf = (value: string) =>
-    pickedLabels().get(value) ??
-    local().find((o) => o.value === value)?.label ??
-    remote.items().find((o) => o.value === value)?.label ??
-    value;
+  const options = createComboboxOptions({ options: () => p.options, loadOptions: () => p.loadOptions }, query, open);
+  const { remote } = options;
+  const { available, isFull, labelOf, remember } = createMultiSelectEntries(p, options, selected, query);
 
   const close = () => {
     setOpen(false);
     setQuery('');
   };
-  const toggle = (option: SelectOption | undefined) => {
+  const toggle = (option: MultiSelectEntry | undefined) => {
     if (p.disabled || !open() || !option || option.disabled) return;
     if (selected().includes(option.value)) {
       setSelected(selected().filter((value) => value !== option.value));
     } else if (!isFull()) {
-      setPickedLabels((previous) => new Map(previous).set(option.value, option.label));
+      remember(option);
       setSelected([...selected(), option.value]);
     }
+    if (option.create) setQuery('');
   };
   const edit = (next: string) => {
     if (p.disabled) return;
@@ -120,12 +96,12 @@ export const MultiSelect = (props: MultiSelectProps) => {
   });
 
   const onKeyDown: JSX.EventHandler<HTMLInputElement, KeyboardEvent> = (e) => {
-    if (p.disabled) return;
+    if (p.disabled || e.isComposing) return;
     if (popup.handleArrowKey(e)) return;
     switch (e.key) {
       case 'Enter':
         e.preventDefault();
-        if (open()) toggle(list()[active()]);
+        if (open()) toggle(available()[active()]);
         else setOpen(true);
         break;
       case 'Backspace':
@@ -180,7 +156,7 @@ export const MultiSelect = (props: MultiSelectProps) => {
               aria-expanded={open()}
               aria-controls={listId()}
               aria-autocomplete="list"
-              aria-activedescendant={popup.activeDescendant(list())}
+              aria-activedescendant={popup.activeDescendant(available())}
               aria-label={p['aria-label']}
               aria-labelledby={p['aria-labelledby']}
               aria-required={p.required || undefined}
@@ -235,32 +211,18 @@ export const MultiSelect = (props: MultiSelectProps) => {
                 aria-labelledby={p['aria-labelledby'] ?? (p.label ? `${id()}-label` : undefined)}
                 class={styles.multiPartList}
               >
-                <For each={list()}>
-                  {(option, index) => {
-                    const on = () => selected().includes(option.value);
-                    const blocked = () => !!p.disabled || !!option.disabled || (!on() && isFull());
-                    return (
-                      <ComboboxOption
-                        id={optionId(index())}
-                        selected={on()}
-                        active={index() === active()}
-                        disabled={blocked()}
-                        class={styles.multiPartOption}
-                        onHover={() => !blocked() && setActive(index())}
-                        onPick={() => !blocked() && toggle(option)}
-                      >
-                        <Checkmark size="sm" checked={on()} />
-                        <Show when={option.icon}>{(icon) => <Glyph name={icon()} />}</Show>
-                        <ComboboxOptionText label={option.label} description={option.description} />
-                      </ComboboxOption>
-                    );
-                  }}
-                </For>
+                <MultiSelectOptions
+                  options={available()}
+                  selected={selected()}
+                  popup={popup}
+                  createLabel={p.createLabel}
+                  onToggle={toggle}
+                />
               </ul>
               <OptionListStatus
                 loading={remote.loading()}
                 failed={remote.failed()}
-                empty={list().length === 0}
+                empty={available().length === 0}
                 emptyText={
                   query()
                     ? (p.emptyText ?? translate('velvet.forms.multiSelect.emptyText'))

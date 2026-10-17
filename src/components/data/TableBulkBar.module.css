@@ -10,7 +10,7 @@
   padding: var(--space-2) var(--cell-px);
   border-bottom: var(--border-width) solid var(--border-subtle);
   background: var(--bg-selected);
-  animation: vui-rise-in var(--motion-move);
+  animation: vuiRiseIn var(--motion-move);
 }
 
 .tablePartBulkActions {
@@ -30,4 +30,11 @@
 
 .tablePartBulk > :global(.externalBtn):last-child {
   margin-left: auto;
+}
+
+@keyframes vuiRiseIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
 }

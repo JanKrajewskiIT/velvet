@@ -62,7 +62,7 @@
 .statusPagePartNum span {
   display: inline-block;
   color: var(--fg-primary);
-  animation: vui-sp-digit var(--motion-enter) backwards;
+  animation: vuiSpDigit var(--motion-enter) backwards;
   animation-delay: calc(var(--d) * var(--motion-stagger));
 }
 
@@ -117,4 +117,11 @@
 
 .statusPagePartExtra {
   composes: statusPagePartExtra from '../../styles/shared/feedback/status-page.module.css';
+}
+
+@keyframes vuiSpDigit {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
 }

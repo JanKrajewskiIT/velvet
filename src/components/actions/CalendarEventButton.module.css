@@ -26,7 +26,7 @@
   border-radius: var(--radius-lg);
   background: var(--bg-overlay);
   box-shadow: var(--elevation-raised);
-  animation: vui-calbtn-in var(--motion-reveal);
+  animation: vuiCalbtnIn var(--motion-reveal);
 }
 
 .calbtnPartItem {
@@ -69,4 +69,16 @@
   color: var(--fg-tertiary);
 
   --glyph-size: var(--size-icon-md);
+}
+
+@keyframes vuiCalbtnIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }

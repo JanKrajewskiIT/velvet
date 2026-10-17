@@ -46,7 +46,7 @@
   inset: 0;
   background: linear-gradient(100deg, transparent 30%, var(--skeleton-shine) 50%, transparent 70%);
   transform: translateX(-100%);
-  animation: vui-meter-sweep var(--motion-progress) 1 forwards;
+  animation: vuiMeterSweep var(--motion-progress) 1 forwards;
 }
 
 .meterVariantSegmented {
@@ -69,7 +69,7 @@
 .meterVariantIndeterminate .meterPartFill {
   position: absolute;
   width: 40%;
-  animation: vui-meter-indet 1.3s var(--ease-standard) infinite;
+  animation: vuiMeterIndet 1.3s var(--ease-standard) infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -79,5 +79,21 @@
 
   .meterVariantShimmer .meterPartFill::after {
     display: none;
+  }
+}
+
+@keyframes vuiMeterSweep {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes vuiMeterIndet {
+  from {
+    left: -40%;
+  }
+
+  to {
+    left: 100%;
   }
 }

@@ -49,6 +49,8 @@
 }
 
 .pricingPartFlag {
+  display: inline-flex;
+  align-items: center;
   position: absolute;
   top: 0;
   left: var(--space-6);
@@ -69,6 +71,7 @@
 
 .pricingPartName {
   margin: 0;
+  line-height: 1.2;
 }
 
 .pricingPartBlurb {
@@ -86,8 +89,15 @@
 }
 
 .pricingPartAmount {
-  animation: vui-pricing-in var(--motion-enter);
+  animation: vuiPricingIn var(--motion-enter);
   font-variant-numeric: tabular-nums;
+  font-weight: var(--type-heavy-weight);
+  line-height: 1;
+  letter-spacing: -0.025em;
+}
+
+.pricingPartAmountVariantText {
+  letter-spacing: -0.01em;
 }
 
 .pricingPartNote {
@@ -122,6 +132,10 @@
   align-items: flex-start;
 }
 
+.pricingPartFeatures li > span {
+  line-height: 1.4;
+}
+
 .pricingPartFeatures .pricingPartOff {
   color: var(--fg-tertiary);
 }
@@ -141,6 +155,13 @@
   color: var(--fg-brand);
 }
 
-.pricingPartOff {
-  --glyph-color: var(--fg-disabled);
+.pricingPartOff :global(.externalIcon) {
+  color: var(--fg-disabled);
+}
+
+@keyframes vuiPricingIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
 }

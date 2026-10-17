@@ -42,13 +42,18 @@ export const BottomSheetPanel = (props: BottomSheetPanelProps) => {
   const move = (e: PointerEvent) => {
     if (drag) setDy(Math.max(0, e.clientY - drag.y));
   };
-  const up = () => {
+  const up = (event: PointerEvent) => {
     if (!drag) return;
-    const velocity = dy() / Math.max(1, Date.now() - drag.time);
-    const dismiss = dy() > DISMISS_DISTANCE || velocity > DISMISS_VELOCITY;
+    const distance = Math.max(0, event.clientY - drag.y);
+    const velocity = distance / Math.max(1, Date.now() - drag.time);
+    const dismiss = distance > DISMISS_DISTANCE || velocity > DISMISS_VELOCITY;
     drag = undefined;
     setDy(0);
     if (dismiss) props.sheet.onClose?.();
+  };
+  const cancelDrag = () => {
+    drag = undefined;
+    setDy(0);
   };
 
   return (
@@ -62,6 +67,7 @@ export const BottomSheetPanel = (props: BottomSheetPanelProps) => {
     >
       <div
         tabIndex={-1}
+        data-vui-focus-fallback
         class={cx(styles.sheet, dy() > 0 && styles.sheetVariantDragging, props.sheet.class)}
         style={{ transform: dy() ? `translateY(${dy()}px)` : undefined }}
       >
@@ -70,7 +76,8 @@ export const BottomSheetPanel = (props: BottomSheetPanelProps) => {
           onPointerDown={down}
           onPointerMove={move}
           onPointerUp={up}
-          onPointerCancel={up}
+          onPointerCancel={cancelDrag}
+          onLostPointerCapture={cancelDrag}
           aria-hidden="true"
         >
           <span />

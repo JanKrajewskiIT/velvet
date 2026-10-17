@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script><script src="./recron-data.js"></script><style>:root:root{overflow:auto!important;height:auto!important;background:var(--bg-page)!important}html body{margin:0!important;padding:0!important;background:var(--bg-page)!important}</style></helmet>
+<div data-screen-label="Public CV" style="display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.PageHeader" on-back="{{ back }}" back-label="CV" title="Public CV link" status="{{ status }}" description="One link instead of attachments — always your latest CV, and you see who opened it." meta="{{ meta }}" actions="{{ headerActions }}" hint-size="100%,170px"></x-import>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:var(--space-4);align-items:start">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Your link" description="{{ linkDesc }}" hint-size="100%,420px">
+<div style="display:flex;flex-direction:column;gap:var(--space-5)">
+<div style="display:flex;gap:var(--space-4);align-items:center;flex-wrap:wrap">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.QRCode" value="{{ fullUrl }}" size="{{ 112 }}" hint-size="112px,112px"></x-import>
+<div style="flex:1;min-width:200px"><x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.CopyField" label="Link" value="{{ fullUrl }}" hint-size="100%,64px"></x-import></div>
+</div>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Select" label="Template" options="{{ templates }}" value="{{ template }}" on-value-change="{{ setTemplate }}" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Switch" label="Show email and phone" description="Off = visitors use a contact button that emails you" checked="{{ contact }}" on-change="{{ toggleContact }}" hint-size="100%,44px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Switch" label="Allow PDF download" checked="{{ pdf }}" on-change="{{ togglePdf }}" hint-size="100%,44px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Select" label="Link expires" options="{{ expiries }}" default-value="Never" hint-size="100%,64px"></x-import>
+</div>
+</x-import>
+<div style="grid-column:span 2;min-width:0;display:flex;flex-direction:column;gap:var(--space-4)">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:var(--space-4)">
+<sc-for list="{{ stats }}" as="st" hint-placeholder-count="4">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Stat" label="{{ st.label }}" value="{{ st.value }}" delta="{{ st.delta }}" tone="success" hint="{{ st.hint }}" spark="{{ st.spark }}" hint-size="100%,110px"></x-import>
+</sc-for>
+</div>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Views, last 14 days" actions="{{ proBadge }}" hint-size="100%,260px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.BarChart" data="{{ viewsByDay }}" series="{{ viewSeries }}" height="{{ 180 }}" label="CV views per day" hint-size="100%,180px"></x-import>
+</x-import>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:var(--space-4);align-items:start">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Tracked links" description="Send each company its own link — you’ll know exactly who opened your CV" actions="{{ newLinkBtn }}" padding="none" hint-size="100%,300px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Table" columns="{{ linkCols }}" rows="{{ links }}" layout="fixed" hint-size="100%,240px"></x-import>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Recent views" description="Company is known from tracked links; otherwise only city and referrer" padding="md" hint-size="100%,300px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.List" items="{{ recent }}" size="md" hint-size="100%,280px"></x-import>
+</x-import>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1200,&quot;height&quot;:1300}}">
+class Component extends DCLogic {
+  state = { live: true, contact: false, pdf: true, template: 'minimal', extra: [] };
+  renderVals() {
+    const app = this.props.app || (window.RecronStandalone && window.VelvetUIDesignSystem_ee2bd8 && window.RecronStandalone(this));
+    if (!app) { clearTimeout(this._wt); this._wt = setTimeout(() => this.forceUpdate(), 80); return {}; }
+    const { D, U, NS, offers } = app;
+    const h = React.createElement;
+    const s = this.state;
+    const C = D.cvShare;
+    const total = C.views.reduce((a, b) => a + b, 0);
+    const pro = (app.plan || D.plan).id !== 'free';
+    const days = C.views.map((v, i) => { const d = new Date(D.TODAY); d.setDate(d.getDate() - (C.views.length - 1 - i)); return { label: d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }), value: v }; });
+    const tracked = [...C.tracked, ...s.extra];
+    const chk = (k) => (e) => this.setState({ [k]: e && e.target ? e.target.checked : !s[k] });
+    const addLink = () => {
+      const used = new Set(tracked.map((t) => t.offerId));
+      const o = offers.find((x) => ['considering', 'applied', 'offer'].includes(x.status) && !used.has(x.id));
+      if (!o) { app.toast('Every active offer has a link', 'neutral'); return; }
+      const slug = o.company.toLowerCase().replace(/[^a-z]+/g, '-').replace(/-$/, '');
+      this.setState({ extra: [...s.extra, { id: 'x' + Date.now(), offerId: o.id, label: o.company, url: C.url + '?r=' + slug, views: 0, last: null }] });
+      app.toast('Tracked link created', 'success', o.company + ' · copied to clipboard');
+    };
+    return {
+      back: () => app.go('cv'),
+      status: s.live ? { label: 'Live', tone: 'success' } : { label: 'Off', tone: 'neutral' },
+      meta: [{ icon: 'link', label: C.url }, { icon: 'refresh', label: 'Updates when you save your CV' }],
+      headerActions: h(React.Fragment, null, h(NS.Button, { variant: 'secondary', iconLeft: 'external-link', onClick: () => app.toast('Preview opened', 'info', C.url) }, 'Preview'), h(NS.Button, { variant: s.live ? 'secondary' : 'primary', iconLeft: s.live ? 'eye-off' : 'globe', onClick: () => { this.setState({ live: !s.live }); app.toast(s.live ? 'Link turned off' : 'Link is live', s.live ? 'neutral' : 'success', s.live ? 'Visitors now see “This CV is private”' : C.url); } }, s.live ? 'Turn off' : 'Publish')),
+      linkDesc: s.live ? 'Anyone with the link can view. Not indexed by search engines.' : 'Link is off — visitors see “This CV is private”.',
+      fullUrl: 'https://' + C.url,
+      templates: [{ value: 'minimal', label: 'Minimal' }, { value: 'columns', label: 'Two-column' }, { value: 'burgundy', label: 'Burgundy' }],
+      template: s.template, setTemplate: (v) => this.setState({ template: v }),
+      contact: s.contact, toggleContact: chk('contact'), pdf: s.pdf, togglePdf: chk('pdf'),
+      expiries: ['Never', 'In 30 days', 'In 90 days', 'When I accept an offer'],
+      stats: [
+        { label: 'Views', value: String(total), delta: '+42%', hint: 'Last 14 days', spark: C.views },
+        { label: 'Unique viewers', value: String(C.unique), delta: '+9', hint: 'Counted once per device' },
+        { label: 'PDF downloads', value: String(C.downloads), delta: '+3', hint: 'Usually means a forward' },
+        { label: 'Avg. time on CV', value: C.avgTime, delta: '+12 s', hint: 'Above 1 min = read, not skimmed' }
+      ],
+      proBadge: pro ? null : h(NS.Badge, { size: 'sm', tone: 'brand', icon: 'sparkles' }, 'Pro'),
+      viewsByDay: days, viewSeries: [{ key: 'value', label: 'Views', color: 'var(--action-primary)' }],
+      newLinkBtn: h(NS.Button, { size: 'sm', variant: 'soft', iconLeft: 'plus', onClick: addLink }, 'New link'),
+      linkCols: [
+        { key: 'label', label: 'Company', render: (r) => h('span', { style: { display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 } }, h(NS.Avatar, { name: r.label, color: 'auto', size: 'xs' }), h('span', { style: { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' } }, r.label)) },
+        { key: 'views', label: 'Views', align: 'right', width: 72, render: (r) => r.views ? String(r.views) : h(NS.Badge, { size: 'sm', variant: 'outline' }, 'Not yet') },
+        { key: 'last', label: 'Last opened', width: 120, hideOnMobile: true, render: (r) => (r.last ? U.relDay(r.last) : '—') },
+        { key: 'copy', label: '', width: 56, align: 'right', render: (r) => h(NS.CopyButton, { value: 'https://' + r.url, iconOnly: true, variant: 'ghost', size: 'sm', label: 'Copy link for ' + r.label }) }
+      ],
+      links: tracked,
+      recent: C.recent.map((v) => ({ id: v.id, title: v.who, description: v.where + ' · via ' + v.via + ' · ' + v.dur,
+        leading: v.who === 'Unknown visitor' ? h(NS.IconTile, { icon: 'eye', size: 'sm' }) : h(NS.Avatar, { name: v.who, color: 'auto', size: 'sm' }),
+        trailing: h('span', { style: { display: 'flex', alignItems: 'center', gap: 8, fontSize: 'var(--type-caption-size)', color: 'var(--fg-tertiary)', whiteSpace: 'nowrap' } }, v.dl ? h(NS.Badge, { size: 'sm', tone: 'success', icon: 'download' }, 'PDF') : null, U.relDay(v.at) + ', ' + U.fmtTime(v.at)) }))
+    };
+  }
+}
+</script>
+</body>
+</html>

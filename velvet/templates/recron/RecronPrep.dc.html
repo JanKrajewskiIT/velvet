@@ -95,12 +95,13 @@
 </div>
 </sc-if>
 <sc-if value="{{ isPractice }}" hint-placeholder-val="{{ false }}">
-<div style="max-width:720px;width:100%;margin:0 auto">
 <sc-if value="{{ phase.setup }}" hint-placeholder-val="{{ true }}">
-<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Practice session" description="Flip each card, answer out loud, then mark how it went. Missed cards come back first next time." hint-size="100%,420px">
-<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FlashcardSetup" decks="{{ decks }}" max-cards="{{ 20 }}" on-start="{{ start }}" hint-size="100%,340px"></x-import>
-</x-import>
+<div style="display:flex;flex-direction:column;gap:var(--space-3);width:100%">
+<p style="margin:0;font-size:var(--type-body-sm-size);color:var(--fg-tertiary);text-wrap:pretty">Flip each card, answer out loud, then mark how it went. Missed cards come back first next time.</p>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FlashcardSetup" decks="{{ decks }}" max-cards="{{ 20 }}" on-start="{{ start }}" hint-size="100%,420px"></x-import>
+</div>
 </sc-if>
+<div style="max-width:720px;width:100%;margin:0 auto">
 <sc-if value="{{ phase.session }}" hint-placeholder-val="{{ false }}">
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FlashcardSession" cards="{{ cards }}" on-finish="{{ finish }}" on-exit="{{ exit }}" hint-size="100%,460px"></x-import>
 </sc-if>
@@ -162,7 +163,7 @@ class Component extends DCLogic {
       setQs(qs.map((x) => (x.id === q.id ? { ...x, order: other.order } : x.id === other.id ? { ...x, order: q.order } : x)));
       app.toast(dir < 0 ? 'Moved up' : 'Moved down', 'neutral', 'Recommended order updated for everyone');
     };
-    const askAi = (q) => {
+    const askAi = (q) => { if (app.spend && !app.spend('answer')) return;
       this.setState({ aiLoading: q.id, open: { ...s.open, [q.id]: true } });
       clearTimeout(this._ai);
       this._ai = setTimeout(() => {
@@ -252,7 +253,7 @@ class Component extends DCLogic {
       fmtMore: (a, b) => a + ' of ' + b + ' questions',
       proposeBtn,
       phase: { [s.phase]: true },
-      decks: [{ id: 'learning', name: 'My learning list', total: learning.length, due: learning.length }, { id: 'all', name: 'All questions', total: seen.length }, ...cats.map((c) => ({ id: c.name, name: c.name, total: cnt((q) => q.category === c.name) })).filter((d) => d.total)],
+      decks: [{ id: 'learning', name: 'My learning list', total: learning.length, due: learning.length, pinned: true }, { id: 'all', name: 'All questions', total: seen.length, pinned: true }, ...cats.map((c) => ({ id: c.name, name: c.name, total: cnt((q) => q.category === c.name) })).filter((d) => d.total)],
       start, cards: s.cards,
       finish: (r) => { this.setState({ phase: 'summary', results: r }); app.markDone('prep'); },
       exit: () => this.setState({ phase: 'setup' }),

@@ -1,3 +1,8 @@
+:import('../../styles/shared/animations.module.css') {
+  vuiCheckIn: vuiCheckIn;
+  vuiDashIn: vuiDashIn;
+}
+
 :import('../../styles/shared/forms/checkbox.module.css') {
   externalCheck: check;
   externalCheckVariantSm: checkVariantSm;
@@ -90,7 +95,7 @@
   border: solid var(--check-mark);
   border-width: 0 var(--border-width-thick) var(--border-width-thick) 0;
   transform: translateY(-1px) rotate(45deg);
-  animation: vui-check-in var(--motion-spring);
+  animation: vuiCheckIn var(--motion-spring);
 }
 
 .checkbox:indeterminate::after {
@@ -99,7 +104,7 @@
   height: var(--border-width-thick);
   border-radius: var(--radius-2xs);
   background: var(--check-mark);
-  animation: vui-dash-in var(--motion-base);
+  animation: vuiDashIn var(--motion-base);
 }
 
 .check {

@@ -45,3 +45,12 @@
 .notifPartItem .itemDescriptionPart {
   color: var(--fg-tertiary);
 }
+
+.notifPartItem .itemTitlePart {
+  white-space: normal;
+  color: var(--fg-secondary);
+}
+
+.notifPartItemVariantUnread .itemTitlePart {
+  color: var(--fg-primary);
+}

@@ -1,5 +1,5 @@
 import * as React from 'react';
-export interface FlashDeck { id: string; name: string; total: number; due?: number }
+export interface FlashDeck { id: string; name: string; total: number; due?: number; /** Show as a large tile above the category grid (e.g. "All", "My list"). */ pinned?: boolean }
 export interface Flashcard { id?: string | number; front: React.ReactNode; back: React.ReactNode; hint?: string; example?: React.ReactNode }
 export interface FlashResult { id: string | number; known: boolean }
 /** Study-session setup: deck picker (due counts), card count, order and direction. */

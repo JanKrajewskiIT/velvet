@@ -30,12 +30,12 @@
 <sc-if value="{{ compare }}" hint-placeholder-val="{{ false }}">
 <x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.ComparisonBar" items="{{ compareItems }}" min="{{ 2 }}" max="{{ 4 }}" noun="{{ noun }}" on-remove="{{ removeCompare }}" on-clear="{{ clearCompare }}" on-compare="{{ openCompare }}" hint-size="0,0"></x-import>
 </sc-if>
-<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.ComparisonDialog" open="{{ compareOpen }}" on-close="{{ closeCompare }}" title="Compare offers" description="Salary normalised to monthly PLN. Stars mark the best value in each row." items="{{ compareItems }}" axes="{{ axes }}" rows="{{ compareRows }}" insights="{{ insights }}" on-generate-insights="{{ genInsights }}" insights-status="{{ insightsStatus }}" hint-size="0,0"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.ComparisonDialog" open="{{ compareOpen }}" on-close="{{ closeCompare }}" title="Compare offers" description="Your current job is included as the baseline — remove it from the bar if you don’t need it. Salary normalised to monthly PLN; take-home estimated per contract type." items="{{ compareItems }}" axes="{{ axes }}" rows="{{ compareRows }}" insights="{{ insights }}" on-generate-insights="{{ genInsights }}" insights-status="{{ insightsStatus }}" hint-size="0,0"></x-import>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = { query: '', statuses: [], tagFilter: [], view: 'table', compare: false, selected: [], compareOpen: false, insights: null, insightsStatus: 'idle' };
+  state = { withCurrent: true, query: '', statuses: [], tagFilter: [], view: 'table', compare: false, selected: [], compareOpen: false, insights: null, insightsStatus: 'idle' };
   renderVals() {
     const app = this.props.app || (window.RecronStandalone && window.VelvetUIDesignSystem_ee2bd8 && window.RecronStandalone(this));
     if (!app) { clearTimeout(this._wt); this._wt = setTimeout(() => this.forceUpdate(), 80); return {}; }
@@ -43,6 +43,8 @@ class Component extends DCLogic {
     const h = React.createElement;
     const s = this.state;
     const counts = {}; offers.forEach((o) => { counts[o.status] = (counts[o.status] || 0) + 1; });
+    const vis = D.STATUS_ORDER.filter((st) => D.STATUS_CORE.includes(st) || counts[st]);
+    const dueOf = (o) => { const k = o.status === 'offer' ? 'responseBy' : D.ACTIVE.includes(o.status) && o.status !== 'applied' ? 'applyBy' : null; const v = k && o[k]; if (!v) { if (o.status === 'applied' && !interviews.some((i) => i.offerId === o.id) && U.daysAgo(o.added) >= D.GHOST_DAYS) return { label: 'No reply · ' + U.daysAgo(o.added) + ' d', urgent: false }; return null; } const n = U.daysLeft(v); if (n < 0) return null; return { label: (k === 'responseBy' ? 'Answer ' : 'Apply ') + (n === 0 ? 'today' : n === 1 ? 'by tomorrow' : 'by ' + U.relDay(v)), urgent: n <= 2 }; };
     const q = s.query.trim().toLowerCase();
     const rows = offers.filter((o) => (!s.statuses.length || s.statuses.includes(o.status)) && (!s.tagFilter.length || s.tagFilter.some((x) => o.tags.includes(x))) && (!q || (o.name + ' ' + o.company + ' ' + o.city).toLowerCase().includes(q)));
     const nextOf = (id) => interviews.filter((i) => i.offerId === id && i.status === 'scheduled' && new Date(i.at) >= D.TODAY).sort((a, b) => new Date(a.at) - new Date(b.at))[0];
@@ -68,18 +70,19 @@ class Component extends DCLogic {
       { divider: true },
       { label: 'Delete', icon: 'trash-2', danger: true, onSelect: () => app.removeOffer(o.id) }
     ] }));
-    const sel = offers.filter((o) => s.selected.includes(o.id));
+    const cur = app.current || D.current;
+    const sel = [...offers.filter((o) => s.selected.includes(o.id)), ...(s.withCurrent && s.selected.length ? [{ ...cur, company: cur.company + ' (now)' }] : [])];
     const maxSalary = Math.max(1, ...sel.map((o) => U.monthly(o) || 0));
     const stageIdx = (o) => { const l = lastStage(o.id); return l ? (D.STAGES.indexOf(l) + 1) * 20 : o.status === 'applied' ? 10 : 0; };
     const compareItems = sel.map((o) => ({ id: o.id, label: o.company, description: o.name, score: o.match != null ? o.match + '%' : undefined, scores: { pay: Math.round(((U.monthly(o) || 0) / maxSalary) * 100), match: o.match ?? 0, remote: o.workMode === 'Remote' ? 100 : o.workMode === 'Hybrid' ? 50 : 0, stage: stageIdx(o) } }));
-    const setSelected = (k) => this.setState({ selected: k.slice(0, 4) });
+    const setSelected = (k) => this.setState({ selected: k.slice(0, s.withCurrent ? 3 : 4) });
     return {
       headerActions: h(React.Fragment, null,
         h(NS.Button, { variant: s.compare ? 'soft' : 'secondary', iconLeft: 'layers', 'aria-pressed': s.compare, onClick: () => this.setState({ compare: !s.compare, selected: [], view: 'table' }) }, s.compare ? 'Done comparing' : 'Compare'),
         app.manageTags ? h(NS.Button, { variant: 'secondary', iconLeft: 'tag', onClick: app.manageTags }, 'Tags') : null,
         h(NS.Button, { iconLeft: 'plus', onClick: app.openAdd }, 'Add offer')),
       query: s.query, setQuery: (v) => this.setState({ query: v }),
-      statusOptions: D.STATUS_ORDER.map((st) => ({ value: st, label: D.STATUS[st].label, count: counts[st] || 0 })),
+      statusOptions: vis.map((st) => ({ value: st, label: D.STATUS[st].label, count: counts[st] || 0 })),
       statuses: s.statuses, setStatuses: (v) => this.setState({ statuses: v }),
       tagOptions: app.tags.filter((tg) => offers.some((o) => o.tags.includes(tg.name))).map((tg) => ({ value: tg.name, count: offers.filter((o) => o.tags.includes(tg.name)).length, label: h('span', { style: { display: 'inline-flex', alignItems: 'center', gap: 6 } }, h('span', { style: { width: 8, height: 8, borderRadius: '50%', background: tg.color } }), tg.name) })),
       tagFilter: s.tagFilter, setTagFilter: (v) => this.setState({ tagFilter: v }),
@@ -89,8 +92,8 @@ class Component extends DCLogic {
       defaultSort: { key: 'added', dir: 'desc' },
       columns: [
         { key: 'name', label: 'Role', render: roleCell, sortable: true, sortValue: (o) => o.name },
-        { key: 'status', label: 'Status', width: 150, render: (o) => (o.reasons || []).length && o.status !== 'new' ? h('span', { style: { display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 2 } }, statusBadge(o.status), h('span', { title: o.reasons.join(' · '), style: { fontSize: 'var(--type-caption-size)', color: 'var(--fg-tertiary)', display: 'block', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' } }, o.reasons[0] + (o.reasons.length > 1 ? ' +' + (o.reasons.length - 1) : ''))) : statusBadge(o.status), sortable: true, sortValue: (o) => D.STATUS_ORDER.indexOf(o.status) },
-        { key: 'salary', label: 'Salary', width: 132, render: (o) => { const s = U.salary(o); const k = s.lastIndexOf(' '); return k < 0 ? s : h('span', { style: { display: 'flex', flexDirection: 'column', whiteSpace: 'nowrap' } }, h('span', { style: { fontVariantNumeric: 'tabular-nums' } }, s.slice(0, k)), h('span', { style: { fontSize: 'var(--type-caption-size)', color: 'var(--fg-tertiary)' } }, s.slice(k + 1))); }, sortable: true, sortValue: (o) => U.monthly(o) || 0, hideOnMobile: true },
+        { key: 'status', label: 'Status', width: 150, render: (o) => dueOf(o) ? h('span', { style: { display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 2 } }, statusBadge(o.status), h('span', { style: { display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 'var(--type-caption-size)', fontWeight: dueOf(o).urgent ? 600 : 400, color: dueOf(o).urgent ? 'var(--status-danger-fg, var(--fg-primary))' : 'var(--fg-secondary)', whiteSpace: 'nowrap' } }, h(NS.Glyph || 'span', { name: 'clock' }), dueOf(o).label)) : (o.reasons || []).length && o.status !== 'new' ? h('span', { style: { display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 2 } }, statusBadge(o.status), h('span', { title: o.reasons.join(' · '), style: { fontSize: 'var(--type-caption-size)', color: 'var(--fg-tertiary)', display: 'block', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' } }, o.reasons[0] + (o.reasons.length > 1 ? ' +' + (o.reasons.length - 1) : ''))) : statusBadge(o.status), sortable: true, sortValue: (o) => D.STATUS_ORDER.indexOf(o.status) },
+        { key: 'salary', label: 'Salary', width: 132, render: (o) => { const s = U.salary(o); const k = s.lastIndexOf(' '); const v = D.ACTIVE.includes(o.status) ? U.vsExpect(o, app.expectations) : null; return k < 0 ? s : h('span', { style: { display: 'flex', flexDirection: 'column', whiteSpace: 'nowrap' } }, h('span', { style: { display: 'inline-flex', alignItems: 'center', gap: 6, fontVariantNumeric: 'tabular-nums' } }, s.slice(0, k), v ? h('span', { title: v.label + ' · ≈ ' + U.pln(v.net) + ' take-home', 'aria-label': v.label, style: { width: 8, height: 8, flex: 'none', borderRadius: '50%', background: v.level === 'above' ? 'var(--status-success-fg, var(--dv-2))' : v.level === 'within' ? 'var(--status-warning-fg, var(--dv-4))' : 'var(--status-danger-fg, var(--dv-5))' } }) : null), h('span', { style: { fontSize: 'var(--type-caption-size)', color: 'var(--fg-tertiary)' } }, s.slice(k + 1))); }, sortable: true, sortValue: (o) => U.monthly(o) || 0, hideOnMobile: true },
         { key: 'match', label: 'CV match', width: 120, render: matchCell, sortable: true, sortValue: (o) => o.match ?? -1, hideOnMobile: true },
         { key: 'added', label: 'Added', width: 104, render: (o) => h('span', { style: { whiteSpace: 'nowrap' } }, U.relDay(o.added)), sortable: true, sortValue: (o) => o.added, hideOnMobile: true },
         { key: 'menu', label: h('span', { className: 'vui-sr-only' }, 'Actions'), render: rowMenu, width: 56, align: 'right' }
@@ -98,23 +101,29 @@ class Component extends DCLogic {
       rows, compare: s.compare, selected: s.selected, setSelected,
       empty: offers.length ? h(NS.EmptyState, { size: 'sm', icon: 'search', title: 'No offers match', description: 'Try another status or search.', actions: h(NS.Button, { size: 'sm', variant: 'secondary', onClick: () => this.setState({ query: '', statuses: [], tagFilter: [] }) }, 'Clear filters') })
         : h(NS.EmptyState, { size: 'md', icon: 'briefcase', title: 'Track your first offer', description: 'Paste a link from LinkedIn, JustJoin.it or any job board — Recron reads it and fills in the details.', actions: h(NS.Button, { size: 'sm', iconLeft: 'plus', onClick: app.openAdd }, 'Add offer') }),
-      kanbanColumns: D.STATUS_ORDER.map((st) => ({ id: st, title: D.STATUS[st].label, color: D.STATUS[st].color })),
-      kanbanCards: rows.map((o) => ({ id: o.id, column: o.status, title: o.name, tag: o.workMode, tagTone: o.workMode === 'Remote' ? 'success' : 'neutral', meta: o.company + ' · ' + U.salary(o), assignee: h(NS.Avatar, { name: o.company, color: 'auto', size: 'xs' }) })),
+      kanbanColumns: vis.map((st) => ({ id: st, title: D.STATUS[st].label, color: D.STATUS[st].color })),
+      kanbanCards: rows.map((o) => ({ id: o.id, column: o.status, title: o.name, tag: dueOf(o) ? dueOf(o).label : o.workMode, tagTone: dueOf(o) ? (dueOf(o).urgent ? 'danger' : 'warning') : o.workMode === 'Remote' ? 'success' : 'neutral', meta: o.company + ' · ' + U.salary(o), assignee: h(NS.Avatar, { name: o.company, color: 'auto', size: 'xs' }) })),
       onCardsChange: (cards) => { const moved = cards.find((c) => { const o = offers.find((x) => x.id === c.id); return o && o.status !== c.column; }); if (moved) app.decide(moved.id, moved.column); },
       onCardClick: (c) => app.openOffer(c.id),
       onAddCard: app.openAdd,
       compareItems, noun: ['offer', 'offers'],
-      removeCompare: (id) => this.setState({ selected: s.selected.filter((x) => x !== id) }),
+      removeCompare: (id) => (id === 'current' ? this.setState({ withCurrent: false }) : this.setState({ selected: s.selected.filter((x) => x !== id) })),
       clearCompare: () => this.setState({ selected: [] }),
-      openCompare: () => this.setState({ compareOpen: true, insights: null, insightsStatus: 'idle' }),
+      openCompare: () => this.setState({ compareOpen: true, withCurrent: true, insights: null, insightsStatus: 'idle' }),
       compareOpen: s.compareOpen, closeCompare: () => this.setState({ compareOpen: false }),
       axes: [{ key: 'pay', label: 'Salary' }, { key: 'match', label: 'CV match' }, { key: 'remote', label: 'Remote' }, { key: 'stage', label: 'Progress' }],
       compareRows: [
         { label: 'Salary', hint: 'monthly, upper bound', values: sel.map((o) => U.monthly(o)), best: 'max', format: (v) => (v == null ? '—' : U.fmtNum(v) + ' PLN') },
+        { label: 'Take-home', hint: 'net monthly, estimate', values: sel.map((o) => U.netOf(o)), best: 'max', format: (v) => (v == null ? '—' : '≈ ' + U.pln(v)) },
+        { label: 'Contract', values: sel.map((o) => (D.CONTRACTS[o.contractType] || D.CONTRACTS.uop).short) },
+        { label: 'Vs your expectations', values: sel.map((o) => { const v = U.vsExpect(o, app.expectations); return v ? v.label : '—'; }) },
         { label: 'CV match', values: sel.map((o) => o.match), best: 'max', format: (v) => (v == null ? 'Not run' : v + '%') },
         { label: 'Work mode', values: sel.map((o) => o.workMode) },
         { label: 'Location', values: sel.map((o) => o.city) },
-        { label: 'Stage reached', values: sel.map((o) => lastStage(o.id) || D.STATUS[o.status].label) },
+        { label: 'Stage reached', values: sel.map((o) => (o.id === 'current' ? 'Current job' : lastStage(o.id) || D.STATUS[o.status].label)) },
+        { label: 'Paid days off', values: sel.map((o) => (o.terms && o.terms.holidays) || '—') },
+        { label: 'Start date', values: sel.map((o) => (o.terms && o.terms.start ? U.fmtDate(o.terms.start) : '—')) },
+        { label: 'Answer by', values: sel.map((o) => (o.responseBy ? U.relDay(o.responseBy) : '—')) },
         { label: 'Source', values: sel.map((o) => o.source) }
       ],
       insights: s.insights ? h(NS.Markdown, { size: 'sm', source: s.insights }) : null,

@@ -1,61 +1,98 @@
 .fcSetup {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3-5);
   padding: var(--space-5);
-  max-width: 420px;
+  width: 100%;
+  container-type: inline-size;
 }
 
-.fcSetupPartDecks {
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
+  gap: var(--space-6);
+}
+
+.pick {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1-5);
+  gap: var(--space-4);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
 }
 
-.fcDeck {
+.pinned {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: var(--space-2);
+}
+
+.categories {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-1);
-  padding: var(--space-2-5) var(--space-3);
-  border: var(--border-width) solid var(--border-default);
-  border-radius: var(--radius-md);
-  background: var(--bg-raised);
-  color: var(--fg-primary);
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-  transition:
-    border-color var(--motion-fast),
-    background-color var(--motion-fast);
+  gap: var(--space-2);
+  min-height: 0;
 }
 
-.fcDeck:hover {
-  border-color: var(--border-strong);
-}
-
-.fcDeck:focus-visible {
-  outline: none;
-  box-shadow: var(--focus-ring);
-}
-
-.fcDeckVariantOn {
-  border-color: var(--border-brand);
-  background: var(--bg-selected);
-  box-shadow: inset 0 0 0 var(--border-width) var(--border-brand);
-}
-
-.fcDeckPartMeta b {
-  color: var(--fg-brand);
-}
-
-.fcSetupPartRow {
+.row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-3);
 }
 
+.find {
+  flex: 0 1 200px;
+}
+
+.decks {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 160px), 1fr));
+  gap: var(--space-1-5);
+  max-height: 296px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 2px;
+  margin: -2px;
+  scrollbar-width: thin;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--bg-subtle);
+  align-self: start;
+  min-width: 0;
+}
+
+.selection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-0-5);
+  padding-bottom: var(--space-3);
+  border-bottom: var(--border-width) solid var(--border-subtle);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1-5);
+}
+
 .surface {
   composes: surface from '../../styles/shared/primitives/surface.module.css';
+}
+
+@container (width <= 640px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (width <= 760px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }

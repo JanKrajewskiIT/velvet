@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script></helmet>
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<sc-if value="{{ hasClash }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Alert" tone="warning" icon="calendar-x" title="{{ clashTitle }}" action="{{ clashAction }}" hint-size="100%,88px">{{ clashBody }}</x-import>
+</sc-if>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.SetupChecklist" layout="grid" title="Between offer and day one" description="{{ desc }}" steps="{{ steps }}" hint-size="100%,220px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Dialog" open="{{ letterOpen }}" on-close="{{ closeLetter }}" title="Resignation letter" description="Template in Polish, ready to print and sign. Includes a request to end by mutual agreement (porozumienie stron) — the usual way to shorten notice." footer="{{ letterFooter }}" size="md" hint-size="0,0">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Textarea" aria-label="Resignation letter" value="{{ letter }}" on-change="{{ editLetter }}" rows="{{ 16 }}" hint-size="100%,380px"></x-import>
+</x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;app&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;object&quot;}}">
+class Component extends DCLogic {
+  state = { letterOpen: false, letter: null };
+  renderVals() {
+    const app = this.props.app;
+    const won = app && app.searchClosed && app.offers.find((o) => o.id === app.searchClosed.offerId);
+    if (!won) return { steps: [] };
+    const { D, U, NS, offers } = app;
+    const h = React.createElement;
+    const cur = app.current || D.current;
+    const done = app.wonDone || {};
+    const end = U.noticeEnd(cur.terms && cur.terms.notice, D.TODAY);
+    const start = won.terms && won.terms.start ? new Date(won.terms.start) : null;
+    const clash = end && start && end > start;
+    const closed = offers.filter((o) => o.status === 'rejected' && (o.reasons || []).includes('Accepted another offer')).length;
+    const people = (app.contacts || D.contacts).length;
+    const fd = (d) => U.fmtDate(d, { day: 'numeric', month: 'long' });
+    const letter = this.state.letter ?? U.resignation(cur, D.profile);
+    const openLetter = () => this.setState({ letterOpen: true });
+    return {
+      desc: 'Joining ' + won.company + (start ? ' on ' + fd(start) : '') + '. Recron keeps your contacts and history for next time.',
+      hasClash: !!clash,
+      clashTitle: clash ? 'Your notice at ' + cur.company + ' ends ' + fd(end) + ' — ' + won.company + ' expects you on ' + fd(start) : '',
+      clashBody: 'A ' + (cur.terms.notice || '') + ' notice counted in months always ends on the last day of a month. Ask ' + cur.company + ' for an earlier end date by mutual agreement, or move your start date with ' + won.company + '.',
+      clashAction: h(React.Fragment, null, h(NS.Button, { size: 'sm', variant: 'secondary', onClick: openLetter }, 'Resignation letter'), h(NS.Button, { size: 'sm', variant: 'ghost', onClick: () => app.openOffer(won.id) }, 'Edit start date')),
+      steps: [
+        { id: 'sign', label: 'Sign the contract', description: 'Check notice, start date and paid days off match what you agreed', icon: 'file-signature', done: !!done.sign, onClick: () => app.markWon('sign') },
+        { id: 'notice', label: 'Hand in your notice', description: end ? 'At ' + cur.company + ' · ends ' + fd(end) : 'Add your notice period on the Salary tab', icon: 'log-out', done: !!done.notice, onClick: openLetter },
+        { id: 'others', label: 'Tell the other companies', description: closed ? closed + ' process' + (closed > 1 ? 'es' : '') + ' closed, withdrawal message ready' : 'Nothing else was open', icon: 'mail', done: true },
+        { id: 'cv', label: 'Update your CV and LinkedIn', description: 'Add the new role once you start', icon: 'file-text', done: !!done.cv, onClick: () => { app.markWon('cv'); app.go('cv'); } },
+        { id: 'people', label: 'Keep your contacts warm', description: people + ' recruiters and managers saved for your next search', icon: 'users', done: !!done.people, onClick: () => { app.markWon('people'); app.toast('Contacts kept', 'success', 'We’ll suggest a check-in in 6 months'); } }
+      ],
+      letterOpen: this.state.letterOpen, closeLetter: () => this.setState({ letterOpen: false }),
+      letter, editLetter: (e) => this.setState({ letter: e.target.value }),
+      letterFooter: h(React.Fragment, null, h(NS.CopyButton, { value: letter, variant: 'secondary', size: 'sm' }), h(NS.Button, { size: 'sm', iconLeft: 'check', onClick: () => { this.setState({ letterOpen: false }); if (!done.notice) app.markWon('notice'); app.toast('Marked as handed in', 'success', 'Notice ends ' + (end ? fd(end) : '—')); } }, 'I’ve handed it in'))
+    };
+  }
+}
+</script>
+</body>
+</html>

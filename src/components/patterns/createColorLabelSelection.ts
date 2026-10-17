@@ -12,7 +12,8 @@ export interface ColorLabelSelectionInput {
   colors: readonly string[];
   onClose?: () => void;
   onSubmit?: (ids: string[]) => void | Promise<void>;
-  onCreate?: (draft: { name: string; color: string }) => ColorLabel | undefined | Promise<ColorLabel | undefined>;
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type -- creation callbacks may intentionally return no label, synchronously or asynchronously
+  onCreate?: (draft: { name: string; color: string }) => ColorLabel | void | Promise<ColorLabel | void>;
   onError?: (error: unknown) => void;
 }
 

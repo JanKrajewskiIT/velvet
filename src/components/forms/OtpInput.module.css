@@ -34,7 +34,7 @@
 
 .otpPartCellVariantFilled {
   border-color: var(--border-strong);
-  animation: vui-otp-pop var(--motion-spring);
+  animation: vuiOtpPop var(--motion-spring);
 }
 
 .otpPartCellVariantInvalid,
@@ -65,4 +65,10 @@
 
 .field {
   composes: field from '../../styles/shared/primitives/field.module.css';
+}
+
+@keyframes vuiOtpPop {
+  50% {
+    transform: scale(1.06);
+  }
 }

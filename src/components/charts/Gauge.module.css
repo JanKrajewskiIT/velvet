@@ -25,7 +25,7 @@
   fill: none;
   stroke-linecap: round;
   transition:
-    stroke-dasharray var(--motion-progress),
+    stroke-dasharray 700ms var(--ease-emphasized),
     stroke var(--motion-base);
 }
 
@@ -43,10 +43,24 @@
   align-items: baseline;
   justify-content: center;
   gap: var(--space-0-5);
+  line-height: 1;
 }
 
 .gaugePartValue b {
+  font-size: var(--font-size-2xl);
   font-variant-numeric: tabular-nums;
+}
+
+.gauge[data-size='sm'] .gaugePartValue b {
+  font-size: var(--font-size-xl);
+}
+
+.gauge[data-size='lg'] .gaugePartValue b {
+  font-size: var(--font-size-3xl);
+}
+
+.gaugePartLabel {
+  font-weight: var(--type-title-weight);
 }
 
 .gaugePartValue span {
@@ -58,6 +72,10 @@
   justify-content: space-between;
   color: var(--fg-tertiary);
   font-variant-numeric: tabular-nums;
+}
+
+.gaugePartBounds span {
+  font-size: var(--type-overline-size);
 }
 
 .gaugePartText {

@@ -1,3 +1,7 @@
+:import('../animations.module.css') {
+  vuiSpin: vuiSpin;
+}
+
 .loader {
   display: inline-flex;
   align-items: center;
@@ -18,7 +22,7 @@
   border-radius: 50%;
   border: 0.125em solid color-mix(in oklab, currentcolor 18%, transparent);
   border-top-color: currentcolor;
-  animation: vui-spin 0.7s linear infinite;
+  animation: vuiSpin 0.7s linear infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {

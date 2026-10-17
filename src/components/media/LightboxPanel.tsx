@@ -78,10 +78,14 @@ export const LightboxPanel = (props: LightboxPanelProps) => {
           if (e.target === e.currentTarget && dialog && isTopLayer(dialog, e)) close();
         }}
       >
-        <Show when={safeMediaUrl(image()?.src)}>
-          {(src) => (
-            // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions -- click-to-zoom is a pointer shortcut; the zoom button in the toolbar is the keyboard path
-            <img src={src()} alt={image()?.alt ?? ''} onClick={() => setZoom(!zoom())} />
+        <Show when={props.index + 1} keyed>
+          {(_position) => (
+            <Show when={safeMediaUrl(image()?.src)}>
+              {(src) => (
+                // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions -- click-to-zoom is a pointer shortcut; the zoom button in the toolbar is the keyboard path
+                <img src={src()} alt={image()?.alt ?? ''} onClick={() => setZoom(!zoom())} />
+              )}
+            </Show>
           )}
         </Show>
       </figure>

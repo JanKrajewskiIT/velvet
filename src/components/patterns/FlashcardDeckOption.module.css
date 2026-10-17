@@ -1,0 +1,51 @@
+.deck {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+  min-width: 0;
+  text-align: left;
+  padding: var(--space-2) var(--space-3);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: var(--bg-raised);
+  color: inherit;
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--border-strong);
+  }
+
+  &:has(.input:focus-visible) {
+    outline: 2px solid var(--border-brand);
+    outline-offset: 2px;
+    box-shadow: var(--focus-ring);
+  }
+}
+
+.big {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+}
+
+.selected {
+  border-color: var(--border-brand);
+  background: var(--bg-selected);
+  box-shadow: inset 0 0 0 var(--border-width) var(--border-brand);
+}
+
+.name {
+  max-width: 100%;
+  font-weight: var(--type-title-weight);
+}
+
+.input {
+  composes: srOnly from '../../styles/shared/navigation/link.module.css';
+}
+
+@media (forced-colors: active) {
+  .deck:has(.input:focus-visible) {
+    outline-color: Highlight;
+  }
+}

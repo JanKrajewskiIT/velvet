@@ -27,10 +27,6 @@
   box-shadow: var(--focus-ring);
 }
 
-.fchipPartChev {
-  --glyph-size: var(--size-icon-xs);
-}
-
 .fchipVariantOn {
   border-style: solid;
   border-color: color-mix(in oklab, var(--border-brand) 40%, transparent);
@@ -48,6 +44,10 @@
   --glyph-size: var(--size-icon-sm);
 
   color: var(--fg-tertiary);
+}
+
+.fchip > .fchipPartChev {
+  --glyph-size: var(--size-icon-xs);
 }
 
 .fchipVariantOn > :global(.externalIcon) {

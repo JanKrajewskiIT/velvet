@@ -1,16 +1,27 @@
 /* Flashcards */
-.vui-fc-setup{display:flex;flex-direction:column;gap:var(--space-3-5);padding:var(--space-5);max-width:420px}
+.vui-fc-setup{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,320px);gap:var(--space-6);padding:var(--space-5);width:100%;container-type:inline-size}
+@container (max-width:640px){.vui-fc-setup{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:760px){.vui-fc-setup{grid-template-columns:minmax(0,1fr)}}
+.vui-fc-setup__pick{display:flex;flex-direction:column;gap:var(--space-4);min-width:0}
 .vui-fc-setup__h{font:var(--type-title-weight) var(--type-title-lg-size)/1.2 var(--font-display);letter-spacing:var(--type-title-tracking)}
-.vui-fc-setup__decks{display:flex;flex-direction:column;gap:var(--space-1-5)}
-.vui-fc-deck{display:flex;flex-direction:column;align-items:flex-start;gap:var(--space-1);padding:var(--space-2-5) var(--space-3);border:var(--border-width) solid var(--border-default);border-radius:var(--radius-md);background:var(--bg-raised);color:var(--fg-primary);font:inherit;text-align:left;cursor:pointer;transition:border-color var(--motion-fast),background-color var(--motion-fast)}
+.vui-fc-setup__pinned{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--space-2)}
+.vui-fc-setup__cats{display:flex;flex-direction:column;gap:var(--space-2)}
+.vui-fc-setup__find{flex:0 1 200px}
+.vui-fc-setup__decks{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:var(--space-1-5);max-height:296px;overflow-y:auto;overscroll-behavior:contain;padding:2px;margin:-2px;scrollbar-width:thin}
+.vui-fc-deck{display:flex;flex-direction:column;align-items:flex-start;gap:var(--space-1);min-width:0;text-align:left;padding:var(--space-2) var(--space-3);border:var(--border-width) solid var(--border-default);border-radius:var(--radius-md);background:var(--bg-raised);color:inherit;font:inherit;cursor:pointer}
+.vui-fc-deck--big{padding:var(--space-3) var(--space-4);border-radius:var(--radius-lg)}
+.vui-fc-deck--big .vui-fc-deck__name{font-size:var(--type-body-size)}
 .vui-fc-deck:hover{border-color:var(--border-strong)}
 .vui-fc-deck:focus-visible{outline:none;box-shadow:var(--focus-ring)}
 .vui-fc-deck--on{border-color:var(--border-brand);background:var(--bg-selected);box-shadow:inset 0 0 0 var(--border-width) var(--border-brand)}
-.vui-fc-deck__name{font-size:var(--type-body-sm-size);font-weight:var(--type-title-weight)}
+.vui-fc-deck__name{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:var(--type-body-sm-size);font-weight:var(--type-title-weight)}
 .vui-fc-deck__meta{font-size:var(--type-caption-size);color:var(--fg-tertiary)}
 .vui-fc-deck__meta b{color:var(--fg-brand);font-weight:var(--type-label-weight)}
 .vui-fc-setup__row{display:flex;align-items:center;justify-content:space-between;gap:var(--space-3)}
-.vui-fc-session{display:flex;flex-direction:column;gap:var(--space-4);max-width:520px}
+.vui-fc-setup__opts{display:flex;flex-direction:column;gap:var(--space-4);padding:var(--space-4);border-radius:var(--radius-lg);background:var(--bg-subtle);align-self:start;min-width:0}
+.vui-fc-setup__sel{display:flex;flex-direction:column;gap:2px;padding-bottom:var(--space-3);border-bottom:var(--border-width) solid var(--border-subtle)}
+.vui-fc-setup__field{display:flex;flex-direction:column;gap:var(--space-1-5)}
+.vui-fc-session{display:flex;flex-direction:column;gap:var(--space-4);width:100%;max-width:720px;margin-inline:auto}
 .vui-fc-session__top{display:flex;align-items:center;gap:var(--space-3)}
 .vui-fc-session__count{font:var(--type-label-weight) var(--type-caption-size)/1 var(--font-mono);color:var(--fg-secondary);font-variant-numeric:tabular-nums}
 .vui-fc-session__card{animation:vui-fc-in var(--motion-enter);transition:transform var(--motion-base),opacity var(--motion-base)}
@@ -18,17 +29,19 @@
 .vui-fc-session__card--left{transform:translateX(-60px) rotate(-4deg);opacity:0}
 .vui-fc-hint{color:var(--fg-tertiary);font:var(--type-overline);letter-spacing:var(--type-overline-tracking);text-transform:uppercase}
 .vui-fc-term{font:var(--type-h2);letter-spacing:-.02em}
+.vui-fc-term--long{max-width:64ch;font:var(--type-body-lg-size, 17px)/1.55 var(--font-sans);letter-spacing:0;text-align:left;white-space:pre-line;overflow-wrap:anywhere;text-wrap:pretty}
+.vui-fc-flip .vui-flip__face>.vui-card__body{justify-content:safe center;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
 .vui-fc-tap{font-size:var(--type-caption-size);color:var(--fg-tertiary)}
 .vui-fc-ex{max-width:80%;font-size:var(--type-body-sm-size);opacity:.85;font-style:italic}
 .vui-fc-session__actions{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-2-5)}
 .vui-fc-btn .vui-kbd{margin-left:var(--space-1);opacity:.7}
 .vui-fc-session__tally{text-align:center;font-size:var(--type-caption-size);color:var(--fg-tertiary)}
-.vui-fc-summary{display:flex;flex-direction:column;align-items:center;gap:var(--space-2-5);padding:var(--space-7) var(--space-6);max-width:420px;text-align:center}
+.vui-fc-summary{display:flex;flex-direction:column;align-items:center;gap:var(--space-2-5);padding:var(--space-8) var(--space-7);width:100%;max-width:640px;margin-inline:auto;text-align:center}
 .vui-fc-summary__h{margin-top:var(--space-1-5);font:var(--type-title-weight) var(--type-h4-size)/1.2 var(--font-display);letter-spacing:var(--type-title-tracking)}
 .vui-fc-summary__p{margin:0;font-size:var(--type-body-sm-size);color:var(--fg-secondary)}
 .vui-fc-summary__p b{color:var(--fg-primary)}
-.vui-fc-summary__stats{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-2);width:100%;margin:var(--space-2) 0}
-.vui-fc-summary__stats div{display:flex;flex-direction:column;gap:var(--space-1);padding:var(--space-2-5);border-radius:var(--radius-md);background:var(--bg-subtle)}
+.vui-fc-summary__stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-3);width:100%;max-width:480px;margin:var(--space-3) 0}
+.vui-fc-summary__stats div{display:flex;flex-direction:column;align-items:center;gap:var(--space-1);padding:var(--space-3-5) var(--space-2-5);border-radius:var(--radius-md);background:var(--bg-subtle)}
 .vui-fc-summary__stats b{font:var(--type-title-weight) var(--type-title-lg-size)/1 var(--font-display);font-variant-numeric:tabular-nums}
 .vui-fc-summary__stats span{color:var(--fg-tertiary);font:var(--type-overline);letter-spacing:var(--type-overline-tracking);text-transform:uppercase}
 .vui-fc-summary__actions{display:flex;flex-wrap:wrap;justify-content:center;gap:var(--space-2)}

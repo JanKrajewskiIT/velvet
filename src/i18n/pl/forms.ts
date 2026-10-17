@@ -97,6 +97,8 @@ export const formsPl: TranslationOf<typeof formsEn> = {
     listLabel: 'Sugestie',
   },
   multiSelect: {
+    createLabel: 'Dodaj',
+    createOption: '{verb} „{label}”',
     placeholder: 'Wybierz…',
     emptyText: 'Brak wyników.',
     searchPrompt: 'Zacznij pisać, aby wyszukać.',

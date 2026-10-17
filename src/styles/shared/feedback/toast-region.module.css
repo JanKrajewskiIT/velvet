@@ -1,3 +1,7 @@
+:import('../animations.module.css') {
+  vuiToastIn: vuiToastIn;
+}
+
 .toastRegion {
-  --toast-animation: vui-toast-in var(--motion-pop);
+  --toast-animation: vuitoastin var(--motion-pop);
 }

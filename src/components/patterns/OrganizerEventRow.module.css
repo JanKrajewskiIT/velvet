@@ -1,3 +1,7 @@
+:import('../../styles/shared/animations.module.css') {
+  vuiSelectIn: vuiSelectIn;
+}
+
 .organizerPartEv {
   display: flex;
   align-items: center;
@@ -7,7 +11,7 @@
   background: var(--bg-raised);
   border: var(--border-width) solid var(--border-subtle);
   box-shadow: inset var(--border-width-accent) 0 0 var(--ec);
-  animation: vui-select-in var(--motion-move);
+  animation: vuiSelectIn var(--motion-move);
 }
 
 .organizerPartEvt {

@@ -49,7 +49,7 @@
 .radarPartSeries {
   transform-origin: center;
   transform-box: view-box;
-  animation: vui-radar-in var(--motion-slide) backwards;
+  animation: vuiRadarIn var(--motion-slide) backwards;
   transition: opacity var(--motion-fast);
 }
 
@@ -141,4 +141,11 @@
 
 .chartPartTip {
   composes: chartPartTip from '../../styles/shared/charts/chart.module.css';
+}
+
+@keyframes vuiRadarIn {
+  from {
+    transform: scale(0.2);
+    opacity: 0;
+  }
 }

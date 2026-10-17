@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script></helmet>
+<div style="display:flex;flex-direction:column;gap:var(--space-4);min-width:0">
+<sc-if value="{{ hasDeadline }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Alert" tone="{{ deadlineTone }}" icon="clock" title="{{ deadlineTitle }}" action="{{ deadlineAction }}" hint-size="100%,72px">{{ deadlineBody }}</x-import>
+</sc-if>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Terms" description="Contract, dates and extras — what you compare offers on" actions="{{ editTermsBtn }}" hint-size="100%,300px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.DescriptionList" items="{{ terms }}" hint-size="100%,260px"></x-import>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="People" description="{{ peopleDesc }}" actions="{{ addPersonBtn }}" hint-size="100%,200px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.List" items="{{ people }}" size="sm" empty="{{ peopleEmpty }}" hint-size="100%,140px"></x-import>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="What you sent" description="So you know what they’ve seen before every call" actions="{{ logSentBtn }}" hint-size="100%,200px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.List" items="{{ sent }}" size="sm" empty="{{ sentEmpty }}" hint-size="100%,140px"></x-import>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Dialog" open="{{ termsOpen }}" on-close="{{ closeDialogs }}" title="Edit terms" description="{{ dialogDesc }}" footer="{{ termsFooter }}" size="md" hint-size="0,0">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FormGrid" columns="{{ 2 }}" hint-size="100%,360px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Select" label="Contract" options="{{ contractOptions }}" value="{{ d.contractType }}" on-value-change="{{ setContract }}" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.DatePicker" label="{{ deadlineLabel }}" optional="{{ true }}" clearable="{{ true }}" value="{{ d.deadline }}" on-value-change="{{ setDeadline }}" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.DatePicker" label="Start date" optional="{{ true }}" clearable="{{ true }}" value="{{ d.start }}" on-value-change="{{ setStart }}" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Notice period" optional="{{ true }}" placeholder="e.g. 1 month" value="{{ d.notice }}" on-change="{{ setNotice }}" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Paid days off" optional="{{ true }}" placeholder="e.g. 26 days, or 20 on B2B" value="{{ d.holidays }}" on-change="{{ setHolidays }}" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Equipment" optional="{{ true }}" placeholder="Laptop, home-office budget" value="{{ d.equipment }}" on-change="{{ setEquipment }}" hint-size="100%,64px"></x-import>
+</x-import>
+<sc-if value="{{ isOfferStage }}" hint-placeholder-val="{{ false }}"><div style="margin-top:var(--space-4)"><x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.NumberInput" label="What you asked for" hint="Monthly gross. Stays private — anonymised, it makes salary benchmarks better for everyone." optional="{{ true }}" value="{{ d.asked }}" on-value-change="{{ setAsked }}" min="{{ 0 }}" max="{{ 100000 }}" step="{{ 500 }}" suffix="zł / mo" hint-size="100%,88px"></x-import></div></sc-if>
+<div style="margin-top:var(--space-4)"><x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.TagInput" label="Benefits" optional="{{ true }}" placeholder="Medical care, Multisport…" value="{{ d.benefits }}" on-value-change="{{ setBenefits }}" hint-size="100%,72px"></x-import></div>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Dialog" open="{{ personOpen }}" on-close="{{ closeDialogs }}" title="Add person" description="{{ dialogDesc }}" footer="{{ personFooter }}" size="md" hint-size="0,0">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<sc-if value="{{ hasExisting }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Select" label="Someone you already know" hint="Agency recruiters often run several of your processes" placeholder="Pick a contact…" options="{{ existingOptions }}" value="{{ p.existing }}" on-value-change="{{ setExisting }}" hint-size="100%,72px"></x-import>
+</sc-if>
+<sc-if value="{{ isNewPerson }}" hint-placeholder-val="{{ true }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FormGrid" columns="{{ 2 }}" hint-size="100%,150px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Name" value="{{ p.name }}" on-change="{{ setPName }}" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Role" optional="{{ true }}" placeholder="Recruiter, hiring manager…" value="{{ p.role }}" on-change="{{ setPRole }}" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Company or agency" optional="{{ true }}" value="{{ p.org }}" on-change="{{ setPOrg }}" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Email" optional="{{ true }}" type="email" value="{{ p.email }}" on-change="{{ setPEmail }}" hint-size="100%,64px"></x-import>
+</x-import>
+</sc-if>
+</div>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Dialog" open="{{ sentOpen }}" on-close="{{ closeDialogs }}" title="Log what you sent" description="{{ dialogDesc }}" footer="{{ sentFooter }}" size="sm" hint-size="0,0">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Select" label="What" options="{{ kindOptions }}" value="{{ x.kind }}" on-value-change="{{ setKind }}" hint-size="100%,64px"></x-import>
+<sc-if value="{{ isCvKind }}" hint-placeholder-val="{{ true }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Select" label="Which CV version" options="{{ cvOptions }}" value="{{ x.ref }}" on-value-change="{{ setRef }}" hint-size="100%,64px"></x-import>
+</sc-if>
+<sc-if value="{{ isOtherKind }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Label" placeholder="e.g. Cover letter · Friendly" value="{{ x.label }}" on-change="{{ setLabel }}" hint-size="100%,64px"></x-import>
+</sc-if>
+</div>
+</x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;app&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;object&quot;},&quot;offer&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;object&quot;}}">
+class Component extends DCLogic {
+  state = { dlg: null, d: {}, p: {}, x: {} };
+  renderVals() {
+    const app = this.props.app, offer = this.props.offer;
+    if (!app || !offer) return { terms: [], people: [], sent: [] };
+    const { D, U, NS } = app;
+    const h = React.createElement;
+    const s = this.state;
+    const T = offer.terms || {};
+    const c = D.CONTRACTS[offer.contractType] || D.CONTRACTS.uop;
+    const net = U.netOf(offer);
+    const pad = (n) => String(n).padStart(2, '0');
+    const iso = (dt) => (dt ? dt.getFullYear() + '-' + pad(dt.getMonth() + 1) + '-' + pad(dt.getDate()) : null);
+    const isOffer = offer.status === 'offer' || offer.status === 'accepted';
+    const dlKey = isOffer ? 'responseBy' : 'applyBy';
+    const dl = offer[dlKey];
+    const left = dl ? U.daysLeft(dl) : null;
+    const leftLabel = left == null ? '' : left < 0 ? 'passed' : left === 0 ? 'today' : left === 1 ? 'tomorrow' : 'in ' + left + ' days';
+    const dash = h('span', { style: { color: 'var(--fg-tertiary)' } }, '—');
+    const contacts = app.contacts || D.contacts;
+    const mine = contacts.filter((p) => (p.offerIds || []).includes(offer.id));
+    const others = contacts.filter((p) => !(p.offerIds || []).includes(offer.id));
+    const close = () => this.setState({ dlg: null });
+    const setD = (k) => (v) => this.setState({ d: { ...this.state.d, [k]: v && v.target ? v.target.value : v } });
+    const setP = (k) => (v) => this.setState({ p: { ...this.state.p, [k]: v && v.target ? v.target.value : v } });
+    const setX = (k) => (v) => this.setState({ x: { ...this.state.x, [k]: v && v.target ? v.target.value : v } });
+    const openTerms = () => this.setState({ dlg: 'terms', d: { contractType: offer.contractType, deadline: dl ? new Date(dl) : null, start: T.start ? new Date(T.start) : null, notice: T.notice || '', holidays: T.holidays || '', equipment: T.equipment || '', benefits: T.benefits || [], asked: T.asked || null } });
+    const saveTerms = () => { const d = s.d; app.updateOffer(offer.id, { contractType: d.contractType, [dlKey]: iso(d.deadline), terms: { ...T, start: iso(d.start), notice: d.notice, holidays: d.holidays, equipment: d.equipment, benefits: d.benefits, asked: d.asked || null } }); close(); app.toast('Terms saved', 'success', offer.company); };
+    const savePerson = () => { const p = s.p; let next;
+      if (p.existing) next = contacts.map((x) => (x.id === p.existing ? { ...x, offerIds: [...(x.offerIds || []), offer.id] } : x));
+      else next = [...contacts, { id: 'c' + Date.now(), name: p.name, role: p.role, org: p.org || offer.company, email: p.email, offerIds: [offer.id], last: D.TODAY.toISOString().slice(0, 10) }];
+      app.setContacts(next); close(); app.toast('Person added', 'success', (p.existing ? contacts.find((x) => x.id === p.existing).name : p.name) + ' · ' + offer.company); };
+    const saveSent = () => { const x = s.x; const label = x.kind === 'cv' ? null : x.label || D.SENT_KINDS[x.kind].label; app.updateOffer(offer.id, { sent: [...(offer.sent || []), { id: 's' + Date.now(), kind: x.kind, ref: x.kind === 'cv' ? x.ref : undefined, label, at: D.TODAY.toISOString().slice(0, 10) }] }); close(); app.toast('Logged', 'success', 'Sent to ' + offer.company); };
+    const unlink = (pid) => app.setContacts(contacts.map((x) => (x.id === pid ? { ...x, offerIds: x.offerIds.filter((y) => y !== offer.id) } : x)));
+    return {
+      hasDeadline: left != null && left >= -1 && offer.status !== 'accepted' && offer.status !== 'rejected',
+      deadlineTone: left != null && left <= 2 ? 'danger' : 'warning',
+      deadlineTitle: (isOffer ? 'Answer due ' : 'Applications close ') + leftLabel,
+      deadlineBody: U.fmtDate(dl || D.TODAY, { weekday: 'long', day: 'numeric', month: 'long' }) + (isOffer ? '. Accept, negotiate or ask for more time before then.' : '. Apply before the posting closes.'),
+      deadlineAction: isOffer ? h(NS.Button, { size: 'sm', variant: 'secondary', onClick: () => app.setOfferTab('salary') }, 'Plan negotiation') : h(NS.Button, { size: 'sm', variant: 'secondary', onClick: () => app.decide(offer.id, 'applied') }, 'Mark as applied'),
+      editTermsBtn: h(NS.Button, { variant: 'ghost', size: 'sm', iconLeft: 'pencil', onClick: openTerms }, 'Edit'),
+      terms: [
+        { term: 'Contract', description: c.label },
+        { term: 'Take-home', description: net ? h('span', { title: 'Estimate from the upper salary bound · ' + c.short + ', full ZUS' }, '≈ ' + U.pln(net) + ' / mo') : dash },
+        { term: isOffer ? 'Answer by' : 'Apply by', description: dl ? h('span', { style: { display: 'inline-flex', alignItems: 'center', gap: 'var(--space-2)', flexWrap: 'wrap' } }, U.fmtDate(dl, { weekday: 'short', day: 'numeric', month: 'short' }), left >= 0 ? h(NS.Badge, { size: 'sm', tone: left <= 2 ? 'danger' : left <= 5 ? 'warning' : 'neutral' }, leftLabel) : null) : dash },
+        ...(isOffer ? [{ term: 'Negotiation', description: T.asked ? (() => { const got = offer.salaryMax ?? offer.salaryMin; const p = Math.round(((got - T.asked) / T.asked) * 100); return h('span', { style: { display: 'inline-flex', alignItems: 'center', gap: 'var(--space-2)', flexWrap: 'wrap' } }, 'Asked ' + U.pln(T.asked) + ' · got ' + U.pln(got), h(NS.Badge, { size: 'sm', tone: p >= 0 ? 'success' : 'warning' }, (p >= 0 ? '+' : '') + p + '%')); })() : h('button', { type: 'button', onClick: openTerms, style: { padding: 0, border: 0, background: 'none', font: 'inherit', color: 'var(--fg-link)', cursor: 'pointer' } }, 'Add what you asked for') }] : []),
+        { term: 'Start date', description: T.start ? U.fmtDate(T.start, { day: 'numeric', month: 'long' }) : dash },
+        { term: 'Notice period', description: T.notice || dash },
+        { term: 'Paid days off', description: T.holidays || dash },
+        { term: 'Equipment', description: T.equipment || dash },
+        { term: 'Benefits', description: (T.benefits || []).length ? h('span', { style: { display: 'flex', flexWrap: 'wrap', gap: 'var(--space-1)' } }, T.benefits.map((b) => h(NS.Tag, { key: b, size: 'sm', shape: 'pill' }, b))) : dash }
+      ],
+      peopleDesc: mine.length ? mine.length + (mine.length === 1 ? ' person' : ' people') + ' in this process' : 'Recruiters and interviewers for this role',
+      addPersonBtn: h(NS.Button, { variant: 'ghost', size: 'sm', iconLeft: 'user-plus', onClick: () => this.setState({ dlg: 'person', p: { existing: '', name: '', role: '', org: offer.intermediary || offer.company, email: '' } }) }, 'Add'),
+      people: mine.map((p) => { const n = (p.offerIds || []).length; return { id: p.id, title: p.name, description: [p.role, p.org].filter(Boolean).join(' · ') + (n > 1 ? ' · ' + n + ' of your processes' : ''),
+        leading: h(NS.Avatar, { name: p.name, size: 'sm' }),
+        trailing: h(NS.Menu, { align: 'end', width: 200, trigger: h(NS.IconButton, { icon: 'more-horizontal', size: 'sm', label: 'Actions for ' + p.name }), items: [
+          ...(p.email ? [{ label: 'Email', icon: 'mail', onSelect: () => { window.location.href = 'mailto:' + p.email; } }, { label: 'Copy email', icon: 'copy', onSelect: () => { navigator.clipboard && navigator.clipboard.writeText(p.email); app.toast('Email copied', 'success', p.email); } }] : []),
+          ...(p.phone ? [{ label: p.phone, icon: 'phone', onSelect: () => { window.location.href = 'tel:' + p.phone.replace(/\s/g, ''); } }] : []),
+          { divider: true }, { label: 'Remove from this offer', icon: 'x', onSelect: () => unlink(p.id) }] }) }; }),
+      peopleEmpty: h('span', { style: { fontSize: 'var(--type-body-sm-size)', color: 'var(--fg-tertiary)' } }, 'No one yet — add the recruiter so follow-ups know who to write to.'),
+      logSentBtn: h(NS.Button, { variant: 'ghost', size: 'sm', iconLeft: 'plus', onClick: () => this.setState({ dlg: 'sent', x: { kind: 'cv', ref: D.cvVersions[0].id, label: '' } }) }, 'Log'),
+      sent: (offer.sent || []).map((x) => { const k = D.SENT_KINDS[x.kind] || D.SENT_KINDS.other; const cv = x.ref && D.cvVersions.find((v) => v.id === x.ref); return { id: x.id, title: cv ? cv.label : x.label || k.label, description: k.label + ' · ' + U.fmtDate(x.at, { day: 'numeric', month: 'short' }), leading: h(NS.IconTile, { icon: k.icon, size: 'sm', tone: x.kind === 'cv' ? 'brand' : 'neutral' }), trailing: cv ? h(NS.Button, { variant: 'ghost', size: 'sm', onClick: () => app.go('cv') }, 'Open') : null }; }),
+      sentEmpty: h('span', { style: { fontSize: 'var(--type-body-sm-size)', color: 'var(--fg-tertiary)' } }, 'Nothing logged. Note which CV version you sent.'),
+      dialogDesc: offer.name + ' · ' + offer.company, closeDialogs: close,
+      termsOpen: s.dlg === 'terms', d: s.d, isOfferStage: isOffer, setAsked: setD('asked'), deadlineLabel: isOffer ? 'Answer by' : 'Apply by',
+      contractOptions: Object.keys(D.CONTRACTS).map((k) => ({ value: k, label: D.CONTRACTS[k].label })),
+      setContract: setD('contractType'), setDeadline: setD('deadline'), setStart: setD('start'), setNotice: setD('notice'), setHolidays: setD('holidays'), setEquipment: setD('equipment'), setBenefits: setD('benefits'),
+      termsFooter: h(React.Fragment, null, h(NS.Button, { variant: 'secondary', onClick: close }, 'Cancel'), h(NS.Button, { onClick: saveTerms }, 'Save terms')),
+      personOpen: s.dlg === 'person', p: s.p, hasExisting: others.length > 0, isNewPerson: !s.p.existing,
+      existingOptions: [{ value: '', label: 'Someone new' }, ...others.map((x) => ({ value: x.id, label: x.name, description: [x.role, x.org].filter(Boolean).join(' · ') }))],
+      setExisting: setP('existing'), setPName: setP('name'), setPRole: setP('role'), setPOrg: setP('org'), setPEmail: setP('email'),
+      personFooter: h(React.Fragment, null, h(NS.Button, { variant: 'secondary', onClick: close }, 'Cancel'), h(NS.Button, { disabled: !s.p.existing && !(s.p.name || '').trim(), onClick: savePerson }, 'Add person')),
+      sentOpen: s.dlg === 'sent', x: s.x, isCvKind: s.x.kind === 'cv', isOtherKind: s.x.kind && s.x.kind !== 'cv',
+      kindOptions: Object.keys(D.SENT_KINDS).map((k) => ({ value: k, label: D.SENT_KINDS[k].label, icon: D.SENT_KINDS[k].icon })),
+      cvOptions: D.cvVersions.map((v) => ({ value: v.id, label: v.label, description: 'Updated ' + U.fmtDate(v.updated) })),
+      setKind: setX('kind'), setRef: setX('ref'), setLabel: setX('label'),
+      sentFooter: h(React.Fragment, null, h(NS.Button, { variant: 'secondary', onClick: close }, 'Cancel'), h(NS.Button, { onClick: saveSent }, 'Log it'))
+    };
+  }
+}
+</script>
+</body>
+</html>

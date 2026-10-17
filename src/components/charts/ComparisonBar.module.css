@@ -55,7 +55,7 @@
   border-radius: var(--radius-full);
   background: color-mix(in oklab, var(--c) 12%, var(--bg-raised));
   box-shadow: inset 0 0 0 var(--border-width) color-mix(in oklab, var(--c) 35%, transparent);
-  animation: vui-cmp-pop var(--motion-spring);
+  animation: vuiCmpPop var(--motion-spring);
 }
 
 .cmpbarPartLbl {
@@ -131,5 +131,17 @@
   .cmpbarPartChip {
     transition: opacity var(--motion-base);
     animation: none;
+  }
+}
+
+@keyframes vuiCmpPop {
+  from {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+
+  to {
+    transform: none;
+    opacity: 1;
   }
 }

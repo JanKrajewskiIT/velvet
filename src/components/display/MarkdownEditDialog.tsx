@@ -1,5 +1,6 @@
 import { createEffect, createSignal, type JSX, mergeProps, on, Show, untrack } from 'solid-js';
 
+import { createOperation } from '../../hooks/createOperation';
 import { useTranslate } from '../../i18n/useTranslate';
 import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Button } from '../actions/Button';
@@ -60,7 +61,8 @@ export const MarkdownEditDialog = (props: MarkdownEditDialogProps) => {
   const cancelLabel = () => merged.cancelLabel ?? translate('velvet.common.cancel');
   const modifierLabel = createModifierLabel();
   const [draft, setDraft] = createSignal(untrack(() => merged.value));
-  const [busy, setBusy] = createSignal(false);
+  const operation = createOperation();
+  const busy = operation.busy;
   const [failed, setFailed] = createSignal(false);
   const [asking, setAsking] = createSignal(false);
   const dirty = () => draft() !== merged.value;
@@ -69,11 +71,11 @@ export const MarkdownEditDialog = (props: MarkdownEditDialogProps) => {
     on(
       () => merged.open,
       (open) => {
+        operation.invalidate();
         if (!open) return;
         setDraft(merged.value);
         setFailed(false);
         setAsking(false);
-        setBusy(false);
       },
     ),
   );
@@ -88,22 +90,30 @@ export const MarkdownEditDialog = (props: MarkdownEditDialogProps) => {
   };
 
   const save = async () => {
-    if (busy() || !dirty()) return;
-    setBusy(true);
+    if (!merged.open || !dirty()) return;
+    const run = operation.begin();
+    if (!run) return;
     setFailed(false);
     try {
       await merged.onSave?.(draft());
     } catch (error) {
-      setBusy(false);
+      if (!run.isCurrent()) return;
+      run.finish();
       setFailed(true);
       merged.onSaveError?.(error);
       return;
+    } finally {
+      if (!run.isCurrent()) run.finish();
     }
-    setBusy(false);
+    if (!run.isCurrent()) return;
+    run.finish();
     merged.onClose?.();
   };
 
-  const focusOnMount = (element: HTMLElement) => queueMicrotask(() => element.focus());
+  const focusOnMount = (element: HTMLElement) =>
+    queueMicrotask(() => {
+      if (untrack(() => merged.open) && element.isConnected) element.focus();
+    });
 
   return (
     <Dialog

@@ -144,6 +144,6 @@
   transform: scale(1.08);
 }
 
-.switcherVariantTiles.switcherVariantSm {
+.switcherVariantTiles.switcherVariantSm .switcherPartOpt :global(.externalIcon) {
   --glyph-size: var(--type-title-lg-size);
 }

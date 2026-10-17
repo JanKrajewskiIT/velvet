@@ -1,26 +1,8 @@
-.taginputPartTag.taginputPartTag {
-  height: var(--control-height-inner-sm);
-  padding: 0 var(--space-1-5) 0 var(--space-3);
-  border: 0;
-  border-radius: var(--radius-full);
-  background: var(--action-soft);
-  color: var(--action-soft-fg);
-  cursor: default;
-  animation: vui-select-in var(--motion-reveal);
-
-  --tag-remove-margin: 0;
-  --tag-remove-radius: var(--radius-full);
-  --tag-remove-fg: inherit;
-  --tag-remove-hover-bg: var(--action-primary);
-  --tag-remove-hover-fg: var(--action-primary-fg);
-  --tag-remove-glyph-size: var(--type-micro-size);
-}
-
-.taginputPartTagVariantDupe.taginputPartTagVariantDupe {
+.taginput .taginputPartTag.taginputPartTagVariantDupe {
   background: var(--status-warning-bg);
   color: var(--status-warning-fg);
   box-shadow: inset 0 0 0 var(--border-width) var(--status-warning-solid);
-  animation: vui-shake var(--motion-spring);
+  animation: vuiShake var(--motion-spring);
 }
 
 .taginput {
@@ -37,4 +19,14 @@
 
 .taginputPartInput {
   composes: taginputPartInput from '../../styles/shared/forms/tag-input.module.css';
+}
+
+@keyframes vuiShake {
+  25% {
+    transform: translateX(-3px);
+  }
+
+  75% {
+    transform: translateX(3px);
+  }
 }

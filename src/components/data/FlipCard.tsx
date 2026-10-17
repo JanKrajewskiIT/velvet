@@ -3,6 +3,7 @@ import { type JSX, mergeProps } from 'solid-js';
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { isInteractiveTarget } from '../../utils/interactiveTarget';
 import { Card, type CardProps } from '../display/Card';
 import { cssLength } from './cssLength';
 import styles from './FlipCard.module.css';
@@ -32,6 +33,8 @@ export interface FlipCardProps {
   /** Also flip on pointer hover (click still toggles). @default false */
   flipOnHover?: boolean;
   class?: string;
+  /** Class for the content of both faces. */
+  bodyClass?: string;
 }
 
 /** Two-sided card that flips in 3D on click / Enter / Space (fades under reduced motion). Each face is a Card. */
@@ -49,6 +52,7 @@ export const FlipCard = (props: FlipCardProps) => {
   });
 
   const onKeyDown: JSX.EventHandler<HTMLDivElement, KeyboardEvent> = (event) => {
+    if (event.target !== event.currentTarget) return;
     if (event.key !== 'Enter' && event.key !== ' ') return;
     event.preventDefault();
     setOn(!on());
@@ -56,6 +60,7 @@ export const FlipCard = (props: FlipCardProps) => {
 
   return (
     <div
+      data-vui-flip
       role="button"
       tabIndex={0}
       class={cx(
@@ -70,7 +75,9 @@ export const FlipCard = (props: FlipCardProps) => {
       aria-label={translate(on() ? 'velvet.data.flipCard.showingBack' : 'velvet.data.flipCard.showingFront', {
         label: label(),
       })}
-      onClick={() => setOn(!on())}
+      onClick={(event) => {
+        if (!isInteractiveTarget(event.target, event.currentTarget)) setOn(!on());
+      }}
       onKeyDown={onKeyDown}
     >
       <div class={styles.flipPartInner}>
@@ -80,7 +87,8 @@ export const FlipCard = (props: FlipCardProps) => {
           accent={merged.accent}
           class={cx(styles.flipPartFace, styles.flipPartFaceVariantFront)}
           aria-hidden={on()}
-          bodyClass={styles.cardBody}
+          inert={on()}
+          bodyClass={cx(styles.cardBody, merged.bodyClass)}
         >
           {merged.front}
         </Card>
@@ -88,7 +96,8 @@ export const FlipCard = (props: FlipCardProps) => {
           variant={merged.backVariant}
           class={cx(styles.flipPartFace, styles.flipPartFaceVariantBack)}
           aria-hidden={!on()}
-          bodyClass={styles.cardBody}
+          inert={!on()}
+          bodyClass={cx(styles.cardBody, merged.bodyClass)}
         >
           {merged.back}
         </Card>

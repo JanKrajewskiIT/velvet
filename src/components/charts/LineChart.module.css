@@ -1,3 +1,7 @@
+:import('../../styles/shared/animations.module.css') {
+  vuiFadeIn: vuiFadeIn;
+}
+
 .chartPartLine {
   fill: none;
   stroke-width: 2.25;
@@ -5,11 +9,11 @@
   stroke-linecap: round;
   stroke-dasharray: 1;
   stroke-dashoffset: 0;
-  animation: vui-draw var(--motion-slide) backwards;
+  animation: vuiDraw var(--motion-slide) backwards;
 }
 
 .chartPartArea {
-  animation: vui-fade-in var(--motion-enter) backwards;
+  animation: vuiFadeIn var(--motion-enter) backwards;
 }
 
 .chartPartPt {
@@ -51,4 +55,10 @@
 
 .chartPartCross {
   composes: chartPartCross from '../../styles/shared/charts/chart.module.css';
+}
+
+@keyframes vuiDraw {
+  from {
+    stroke-dashoffset: 1;
+  }
 }

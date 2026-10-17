@@ -21,7 +21,8 @@ export interface ColorLabelSelectionDialogProps {
   /** May return a Promise — the dialog locks while pending; on reject the selection is kept and `submitErrorText` shows inline. */
   onSubmit?: (ids: string[]) => void | Promise<void>;
   /** Enable inline creation. Return the new label (with id) to auto-select it. */
-  onCreate?: (draft: { name: string; color: string }) => ColorLabel | undefined | Promise<ColorLabel | undefined>;
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type -- creation callbacks may intentionally return no label, synchronously or asynchronously
+  onCreate?: (draft: { name: string; color: string }) => ColorLabel | void | Promise<ColorLabel | void>;
   /** Receives the error `onSubmit` or `onCreate` rejected with. */
   onError?: (error: unknown) => void;
   /** Shows a "Manage labels" footer button */

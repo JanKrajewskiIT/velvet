@@ -1,3 +1,7 @@
+:import('../../styles/shared/animations.module.css') {
+  vuiFadeIn: vuiFadeIn;
+}
+
 :import('../../styles/shared/actions/button.module.css') {
   externalBtn: btn;
 }
@@ -10,7 +14,7 @@
   align-items: flex-end;
   justify-content: center;
   background: var(--scrim-backdrop);
-  animation: vui-fade-in var(--motion-base);
+  animation: vuiFadeIn var(--motion-base);
 }
 
 .sheet {

@@ -587,8 +587,8 @@
         "message": "<FilterOption> doesn't accept that prop. Declared props: value, label, count, dot."
       },
       {
-        "selector": "JSXOpeningElement[name.name='FlashDeck'] > JSXAttribute > JSXIdentifier[name!=/^(?:id|name|total|due|key|ref|className|style|children)$/]",
-        "message": "<FlashDeck> doesn't accept that prop. Declared props: id, name, total, due."
+        "selector": "JSXOpeningElement[name.name='FlashDeck'] > JSXAttribute > JSXIdentifier[name!=/^(?:id|name|total|due|pinned|key|ref|className|style|children)$/]",
+        "message": "<FlashDeck> doesn't accept that prop. Declared props: id, name, total, due, pinned."
       },
       {
         "selector": "JSXOpeningElement[name.name='FlipCard'] > JSXAttribute > JSXIdentifier[name!=/^(?:front|back|flipped|defaultFlipped|onFlip|height|label|variant|backVariant|tone|accent|width|align|flipOnHover|className|key|ref|className|style|children)$/]",
@@ -899,8 +899,8 @@
         "message": "<Meter> size must be one of 'sm' | 'md' | 'lg'."
       },
       {
-        "selector": "JSXOpeningElement[name.name='MultiSelect'] > JSXAttribute > JSXIdentifier[name!=/^(?:label|hint|error|optional|options|value|defaultValue|onChange|onValueChange|loadOptions|placeholder|emptyText|max|size|disabled|id|className|key|ref|className|style|children)$/]",
-        "message": "<MultiSelect> doesn't accept that prop. Declared props: label, hint, error, optional, options, value, defaultValue, onChange, onValueChange, loadOptions, placeholder, emptyText, max, size, disabled, id, className."
+        "selector": "JSXOpeningElement[name.name='MultiSelect'] > JSXAttribute > JSXIdentifier[name!=/^(?:label|hint|error|optional|options|value|defaultValue|onChange|onValueChange|loadOptions|placeholder|emptyText|max|creatable|createLabel|size|disabled|id|className|key|ref|className|style|children)$/]",
+        "message": "<MultiSelect> doesn't accept that prop. Declared props: label, hint, error, optional, options, value, defaultValue, onChange, onValueChange, loadOptions, placeholder, emptyText, max, creatable, createLabel, size, disabled, id, className."
       },
       {
         "selector": "JSXOpeningElement[name.name='MultiSelect'] > JSXAttribute[name.name='size'] > Literal[value!=/^(?:sm|md)$/]",

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script><script src="./recron-data.js"></script><style>:root:root{overflow:auto!important;height:auto!important;background:var(--bg-page)!important}html body{margin:0!important;padding:0!important;background:var(--bg-page)!important}</style></helmet>
+<section data-screen-label="Insights" style="display:flex;flex-direction:column;gap:var(--space-4);padding-top:var(--space-4)">
+<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:var(--space-3);flex-wrap:wrap">
+<div style="display:flex;flex-direction:column;gap:2px"><h2 style="margin:0;font:var(--type-title-lg);font-size:22px">Your search in numbers</h2><span style="color:var(--fg-secondary);font-size:var(--type-body-sm-size)">What’s working, where you drop off, and why offers end</span></div>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.OptionSwitcher" label="Period" size="sm" options="{{ periods }}" value="{{ period }}" on-value-change="{{ setPeriod }}" hint-size="220px,32px"></x-import>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:var(--space-4)">
+<sc-for list="{{ stats }}" as="st" hint-placeholder-count="4">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Stat" label="{{ st.label }}" value="{{ st.value }}" delta="{{ st.delta }}" tone="{{ st.tone }}" hint="{{ st.hint }}" hint-size="100%,120px"></x-import>
+</sc-for>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:var(--space-4);align-items:start">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Funnel" description="From saved offer to signed contract" hint-size="100%,340px">
+<div style="display:flex;flex-direction:column;gap:var(--space-3)">
+<sc-for list="{{ funnel }}" as="fs" hint-placeholder-count="5">
+<div style="display:grid;grid-template-columns:96px minmax(0,1fr) 88px;align-items:center;gap:var(--space-3)">
+<span style="font-size:var(--type-body-sm-size);color:var(--fg-secondary)">{{ fs.label }}</span>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Meter" value="{{ fs.value }}" max="{{ fs.max }}" tone="brand" size="lg" hint-size="100%,8px"></x-import>
+<span style="display:flex;flex-direction:column;align-items:flex-end;line-height:1.2"><span style="font-weight:600;font-variant-numeric:tabular-nums">{{ fs.value }}</span><span style="font-size:var(--type-caption-size);color:var(--fg-tertiary)">{{ fs.conv }}</span></span>
+</div>
+</sc-for>
+</div>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Which sources answer" description="Reply rate per source" actions="{{ proBadge }}" hint-size="100%,340px">
+<div style="display:flex;flex-direction:column;gap:var(--space-3)">
+<sc-for list="{{ sources }}" as="so" hint-placeholder-count="6">
+<div style="display:grid;grid-template-columns:96px minmax(0,1fr) 88px;align-items:center;gap:var(--space-3)">
+<span style="font-size:var(--type-body-sm-size);color:var(--fg-secondary)">{{ so.label }}</span>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Meter" value="{{ so.rate }}" max="{{ 100 }}" tone="{{ so.tone }}" size="lg" hint-size="100%,8px"></x-import>
+<span style="display:flex;flex-direction:column;align-items:flex-end;line-height:1.2"><span style="font-weight:600;font-variant-numeric:tabular-nums">{{ so.rateLabel }}</span><span style="font-size:var(--type-caption-size);color:var(--fg-tertiary)">{{ so.of }}</span></span>
+</div>
+</sc-for>
+</div>
+</x-import>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:var(--space-4);align-items:start">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Why it ended" description="From the reasons you pick when closing an offer" actions="{{ proBadge }}" hint-size="100%,300px">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<sc-for list="{{ reasonGroups }}" as="rg" hint-placeholder-count="2">
+<div style="display:flex;flex-direction:column;gap:var(--space-2)">
+<span style="font-size:var(--type-caption-size);font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--fg-tertiary)">{{ rg.title }}</span>
+<sc-for list="{{ rg.items }}" as="ri" hint-placeholder-count="3">
+<div style="display:grid;grid-template-columns:minmax(0,1fr) 120px 24px;align-items:center;gap:var(--space-3);font-size:var(--type-body-sm-size)"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ ri.label }}</span><x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Meter" value="{{ ri.n }}" max="{{ rg.max }}" tone="{{ rg.tone }}" size="sm" hint-size="120px,4px"></x-import><span style="text-align:right;font-variant-numeric:tabular-nums;color:var(--fg-secondary)">{{ ri.n }}</span></div>
+</sc-for>
+</div>
+</sc-for>
+</div>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Interview pass rate" description="Share of interviews you passed, per stage" hint-size="100%,300px">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<sc-for list="{{ stages }}" as="sg" hint-placeholder-count="3">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Progress" label="{{ sg.label }}" value="{{ sg.pass }}" show-value="{{ true }}" tone="{{ sg.tone }}" hint-size="100%,40px"></x-import>
+</sc-for>
+</div>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="What to change" description="Read from your own numbers" padding="md" hint-size="100%,300px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.List" items="{{ tips }}" hint-size="100%,260px"></x-import>
+</x-import>
+</div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1200,&quot;height&quot;:1100}}">
+class Component extends DCLogic {
+  state = { period: '90' };
+  renderVals() {
+    const app = this.props.app || (window.RecronStandalone && window.VelvetUIDesignSystem_ee2bd8 && window.RecronStandalone(this));
+    if (!app) { clearTimeout(this._wt); this._wt = setTimeout(() => this.forceUpdate(), 80); return {}; }
+    const { D, NS } = app;
+    const h = React.createElement;
+    const I = D.insights;
+    const k = this.state.period === '30' ? 0.4 : this.state.period === 'all' ? 1.6 : 1;
+    const sc = (n) => Math.max(0, Math.round(n * k));
+    const f = I.funnel.map((x) => ({ ...x, value: Math.max(x.label === 'Offer' ? 1 : 0, sc(x.value)) }));
+    const reply = Math.round((I.funnel[2].value / I.funnel[1].value) * 100);
+    const pro = (app.plan || D.plan).id !== 'free';
+    const best = I.sources.slice().sort((a, b) => b.replied / b.applied - a.replied / a.applied)[0];
+    const li = I.sources.find((x) => x.label === 'LinkedIn');
+    const mx = (arr) => Math.max(...arr.map((x) => x.n));
+    return {
+      periods: [{ value: '30', label: '30 days' }, { value: '90', label: '90 days' }, { value: 'all', label: 'All time' }],
+      period: this.state.period, setPeriod: (v) => this.setState({ period: v }),
+      stats: [
+        { label: 'Reply rate', value: reply + '%', delta: '+6 pts', tone: 'success', hint: 'Applications that got any answer', spark: [31, 34, 38, 36, 41, 45] },
+        { label: 'First reply after', value: I.replyAvg.toLocaleString('en-GB') + ' days', delta: '−1.8 d', tone: 'success', hint: 'Median, from applying', spark: I.replyDays },
+        { label: 'Interview → offer', value: Math.round((I.funnel[4].value / I.funnel[3].value) * 100) + '%', delta: '+1 offer', tone: 'success', hint: I.funnel[4].value + ' offers from ' + I.funnel[3].value + ' interview loops' },
+        { label: 'Best source', value: best.label, delta: Math.round((best.replied / best.applied) * 100) + '% reply', tone: 'neutral', hint: 'LinkedIn: ' + Math.round((li.replied / li.applied) * 100) + '% reply' }
+      ],
+      funnel: f.map((x, i) => ({ ...x, max: f[0].value, conv: i === 0 ? '100%' : Math.round((x.value / Math.max(1, f[i - 1].value)) * 100) + '% of prev.' })),
+      proBadge: pro ? null : h(NS.Badge, { size: 'sm', tone: 'brand', icon: 'sparkles' }, 'Pro'),
+      sources: I.sources.map((x) => { const r = Math.round((x.replied / x.applied) * 100); return { label: x.label, rate: r, rateLabel: r + '%', of: sc(x.replied) + ' of ' + sc(x.applied), tone: r >= 60 ? 'success' : r >= 40 ? 'brand' : 'warning' }; }).sort((a, b) => b.rate - a.rate),
+      sourceSeries: [{ key: 'applied', label: 'Applied', color: 'var(--dv-8)' }, { key: 'replied', label: 'Replied', color: 'var(--action-primary)' }],
+      reasonGroups: [{ title: 'They passed', items: I.reasonsThem, max: mx(I.reasonsThem), tone: 'danger' }, { title: 'You passed', items: I.reasonsMe, max: mx(I.reasonsMe), tone: 'warning' }],
+      stages: I.stagePass.map((x) => ({ ...x, tone: x.pass >= 80 ? 'success' : x.pass >= 60 ? 'brand' : 'warning' })),
+      tips: [
+        { id: 't1', title: 'Referrals answer 3× more than LinkedIn', description: 'Ask two people from your network this week', leading: h(NS.IconTile, { icon: 'users', size: 'sm', tone: 'brand' }) },
+        { id: 't2', title: 'Technical is where you drop', description: '57% pass — practise System design and Node', leading: h(NS.IconTile, { icon: 'book-open', size: 'sm', tone: 'warning' }), trailing: h(NS.Button, { size: 'sm', variant: 'soft', onClick: () => app.go('prep') }, 'Practise') },
+        { id: 't3', title: '4 offers ended on salary', description: 'Check the B2B equivalent before applying', leading: h(NS.IconTile, { icon: 'dollar-sign', size: 'sm', tone: 'info' }), trailing: h(NS.Button, { size: 'sm', variant: 'soft', onClick: () => app.openOffer('o1', 'salary') }, 'Calculator') }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

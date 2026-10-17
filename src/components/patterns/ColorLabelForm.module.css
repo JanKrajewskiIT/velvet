@@ -1,3 +1,7 @@
+:import('../../styles/shared/animations.module.css') {
+  vuiFadeIn: vuiFadeIn;
+}
+
 .clmPartForm {
   display: flex;
   flex-direction: column;
@@ -5,7 +9,7 @@
   margin-top: var(--space-3);
   padding-top: var(--space-4);
   border-top: var(--border-width) solid var(--border-subtle);
-  animation: vui-fade-in var(--motion-fast);
+  animation: vuiFadeIn var(--motion-fast);
 }
 
 .clmPartSwatches {

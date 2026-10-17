@@ -1,3 +1,7 @@
+:import('../animations.module.css') {
+  vuiSelectIn: vuiSelectIn;
+}
+
 :import('../primitives/glyph.module.css') {
   externalIcon: icon;
 }
@@ -26,7 +30,7 @@
   padding: var(--panel-pad);
   outline: 0;
   transform-origin: top left;
-  animation: vui-select-in var(--motion-reveal);
+  animation: vuiSelectIn var(--motion-reveal);
   background: var(--panel-bg);
   border: var(--border-width) solid var(--panel-border);
   border-radius: var(--panel-radius);

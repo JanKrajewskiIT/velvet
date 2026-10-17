@@ -8,7 +8,8 @@ import styles from './ButtonGroup.module.css';
 const ButtonGroupSizeContext = createContext<Accessor<ButtonSize | undefined>>();
 
 /** Size set on the enclosing ButtonGroup, for children that do not set their own. */
-export const useButtonGroupSize = (): ButtonSize | undefined => useContext(ButtonGroupSizeContext)?.();
+export const useButtonGroupSize = (): Accessor<ButtonSize | undefined> =>
+  useContext(ButtonGroupSizeContext) ?? (() => undefined);
 
 export interface ButtonGroupProps extends HtmlProps<HTMLDivElement> {
   /** Join the buttons into one segmented control with shared borders. @default true */

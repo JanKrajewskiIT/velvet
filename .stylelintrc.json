@@ -5,6 +5,10 @@
     {
       "files": ["**/*.module.css"],
       "rules": {
+        "keyframes-name-pattern": [
+          "^[a-z][a-zA-Z0-9]*$",
+          { "message": "Expected local keyframe name to be camelCase" }
+        ],
         "selector-class-pattern": [
           "^[a-z][a-zA-Z0-9]*$",
           {
@@ -24,7 +28,7 @@
             "ignoreSelectors": [":export", "/^:import\\(/"]
           }
         ],
-        "value-keyword-case": ["lower", { "ignoreProperties": ["composes", "/^external/"] }],
+        "value-keyword-case": ["lower", { "ignoreProperties": ["composes", "/^external/", "/^vui[A-Z]/"] }],
         "block-no-empty": null
       }
     },

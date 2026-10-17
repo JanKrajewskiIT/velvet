@@ -68,7 +68,7 @@
   color: var(--fg-primary);
   text-align: left;
   transform-origin: top right;
-  animation: vui-acct-in var(--motion-reveal);
+  animation: vuiAcctIn var(--motion-reveal);
   max-width: calc(100vw - var(--space-6));
   max-height: calc(100vh - var(--space-6));
   overflow: auto;
@@ -169,4 +169,11 @@
   --glyph-size: var(--size-icon-md);
 
   color: var(--fg-tertiary);
+}
+
+@keyframes vuiAcctIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
 }

@@ -15,17 +15,67 @@
 .circle {
   stroke-dasharray: 150 50 150 50;
   stroke-dashoffset: 75;
-  animation: vui-trail-circle var(--td) var(--te) infinite;
+  animation: vuiTrailCircle var(--td) var(--te) infinite;
 }
 
 .triangle {
   stroke-dasharray: 145 76 145 76;
   stroke-dashoffset: 0;
-  animation: vui-trail-tri var(--td) var(--te) infinite;
+  animation: vuiTrailTri var(--td) var(--te) infinite;
 }
 
 .square {
   stroke-dasharray: 192 64 192 64;
   stroke-dashoffset: 0;
-  animation: vui-trail-rect var(--td) var(--te) infinite;
+  animation: vuiTrailRect var(--td) var(--te) infinite;
+}
+
+@keyframes vuiTrailTri {
+  33% {
+    stroke-dashoffset: 74;
+  }
+
+  66% {
+    stroke-dashoffset: 147;
+  }
+
+  100% {
+    stroke-dashoffset: 221;
+  }
+}
+
+@keyframes vuiTrailRect {
+  25% {
+    stroke-dashoffset: 64;
+  }
+
+  50% {
+    stroke-dashoffset: 128;
+  }
+
+  75% {
+    stroke-dashoffset: 192;
+  }
+
+  100% {
+    stroke-dashoffset: 256;
+  }
+}
+
+@keyframes vuiTrailCircle {
+  25% {
+    stroke-dashoffset: 125;
+  }
+
+  50% {
+    stroke-dashoffset: 175;
+  }
+
+  75% {
+    stroke-dashoffset: 225;
+  }
+
+  100% {
+    stroke-dashoffset: 275;
+  }
 }

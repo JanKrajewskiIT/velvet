@@ -1,32 +1,33 @@
 .bBody {
   composes: part from '../../styles/shared/feedback/loader-bike-part.module.css';
+  animation-name: vuiBikeBody;
 }
 
 .bFront {
   composes: part from '../../styles/shared/feedback/loader-bike-part.module.css';
-  animation-name: vui-bike-front;
+  animation-name: vuiBikeFront;
 }
 
 .bBars {
   composes: part from '../../styles/shared/feedback/loader-bike-part.module.css';
-  animation-name: vui-bike-bars;
+  animation-name: vuiBikeBars;
 }
 
 .bPed {
   composes: part from '../../styles/shared/feedback/loader-bike-part.module.css';
-  animation-name: vui-bike-ped;
+  animation-name: vuiBikePed;
 }
 
 .bPedspin {
   composes: part from '../../styles/shared/feedback/loader-bike-part.module.css';
-  animation-name: vui-bike-pedspin;
+  animation-name: vuiBikePedspin;
   transform-origin: center;
   transform-box: fill-box;
 }
 
 .bSeat {
   composes: part from '../../styles/shared/feedback/loader-bike-part.module.css';
-  animation-name: vui-bike-seat;
+  animation-name: vuiBikeSeat;
 }
 
 .root {
@@ -42,4 +43,91 @@
 .bPedspin,
 .bSeat {
   stroke: var(--ld-c);
+}
+
+@keyframes vuiBikeBody {
+  0% {
+    stroke-dashoffset: 79;
+  }
+
+  33%,
+  67% {
+    stroke-dashoffset: 0;
+  }
+
+  100% {
+    stroke-dashoffset: -79;
+  }
+}
+
+@keyframes vuiBikeFront {
+  0% {
+    stroke-dashoffset: 19;
+  }
+
+  33%,
+  67% {
+    stroke-dashoffset: 0;
+  }
+
+  100% {
+    stroke-dashoffset: -19;
+  }
+}
+
+@keyframes vuiBikeBars {
+  0% {
+    stroke-dashoffset: 10;
+  }
+
+  33%,
+  67% {
+    stroke-dashoffset: 0;
+  }
+
+  100% {
+    stroke-dashoffset: -10;
+  }
+}
+
+@keyframes vuiBikePed {
+  0% {
+    animation-timing-function: ease-in;
+    stroke-dashoffset: -25.133;
+  }
+
+  33%,
+  67% {
+    animation-timing-function: ease-out;
+    stroke-dashoffset: -21.991;
+  }
+
+  100% {
+    stroke-dashoffset: -25.133;
+  }
+}
+
+@keyframes vuiBikePedspin {
+  from {
+    transform: rotate(0.1875turn);
+  }
+
+  to {
+    transform: rotate(3.1875turn);
+  }
+}
+
+@keyframes vuiBikeSeat {
+  0% {
+    stroke-dashoffset: 5;
+  }
+
+  33%,
+  67% {
+    stroke-dashoffset: 0;
+  }
+
+  100% {
+    stroke-dashoffset: -5;
+  }
 }

@@ -5,7 +5,7 @@ import { cx } from '../../utils/cx';
 import { Glyph } from './Glyph';
 import styles from './Handle.module.css';
 
-export interface HandleProps extends JSX.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface HandleProps extends JSX.ButtonHTMLAttributes<HTMLElement> {
   /** Accessible name incl. the keyboard hint, e.g. "Reorder item 2 (↑↓)". @default localized "Drag to reorder" */
   label?: string;
   /** Visual-only grip (the whole row is the drag target). Renders a hidden span. */
@@ -24,16 +24,16 @@ export const Handle = (props: HandleProps) => {
       when={local.decorative}
       fallback={
         <button
-          type="button"
+          {...rest}
+          type={rest.type ?? 'button'}
           class={cx(styles.handle, local.class)}
           aria-label={local.label ?? translate('velvet.primitives.handle.label')}
-          {...rest}
         >
           <Glyph name={local.icon} />
         </button>
       }
     >
-      <span class={cx(styles.handle, styles.handleVariantDecorative, local.class)} aria-hidden="true">
+      <span {...rest} class={cx(styles.handle, styles.handleVariantDecorative, local.class)} aria-hidden="true">
         <Glyph name={local.icon} />
       </span>
     </Show>

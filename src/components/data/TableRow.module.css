@@ -1,3 +1,7 @@
+:import('../../styles/shared/animations.module.css') {
+  vuiFadeIn: vuiFadeIn;
+}
+
 :import('../../styles/shared/data/table.module.css') {
   externalTable: table;
 }
@@ -44,7 +48,7 @@
 
 .tablePartDetailIn {
   padding: var(--space-4) var(--cell-px) var(--space-5) calc(var(--cell-px) + var(--space-10));
-  animation: vui-fade-in var(--motion-fast);
+  animation: vuiFadeIn var(--motion-fast);
 }
 
 .tablePartExpbtn :global(.externalIcon) {

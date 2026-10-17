@@ -121,7 +121,7 @@
 }
 
 .reveal {
-  animation: vui-reveal var(--motion-enter) backwards;
+  animation: vuiReveal var(--motion-enter) backwards;
   animation-delay: calc(var(--i, 0) * var(--motion-stagger));
 }
 
@@ -149,4 +149,11 @@
 
 .surfaceVariantTonal {
   composes: tonal from '../../styles/shared/primitives/surface.module.css';
+}
+
+@keyframes vuiReveal {
+  from {
+    opacity: 0;
+    transform: translateY(var(--motion-rise));
+  }
 }

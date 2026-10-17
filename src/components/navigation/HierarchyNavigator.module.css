@@ -58,11 +58,11 @@
 }
 
 .hnavPartListVariantIn {
-  animation: vui-hnav-in var(--motion-move);
+  animation: vuiHnavIn var(--motion-move);
 }
 
 .hnavPartListVariantOut {
-  animation: vui-hnav-out var(--motion-move);
+  animation: vuiHnavOut var(--motion-move);
 }
 
 .hnavPartItem {
@@ -130,4 +130,18 @@
   color: var(--fg-tertiary);
 
   --glyph-size: var(--size-icon-lg);
+}
+
+@keyframes vuiHnavIn {
+  from {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+}
+
+@keyframes vuiHnavOut {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
 }

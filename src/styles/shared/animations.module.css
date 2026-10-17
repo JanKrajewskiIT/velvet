@@ -1,0 +1,92 @@
+@keyframes vuiFadeIn {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes vuiSheetIn {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes vuiSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes vuiPulse {
+  from {
+    transform: scale(0.4);
+    opacity: 0.6;
+  }
+
+  to {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+}
+
+@keyframes vuiPop {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+
+@keyframes vuiDrawerR {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes vuiDrawerL {
+  from {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes vuiJellyGrow {
+  0%,
+  100% {
+    transform: scale(1.5);
+  }
+
+  20%,
+  70% {
+    transform: none;
+  }
+}
+
+@keyframes vuiToastIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+}
+
+@keyframes vuiSelectIn {
+  from {
+    opacity: 0;
+    transform: scale(0.97) translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes vuiCheckIn {
+  from {
+    opacity: 0;
+    transform: translateY(-1px) rotate(45deg) scale(0.3);
+  }
+}
+
+@keyframes vuiDashIn {
+  from {
+    transform: scaleX(0);
+  }
+}

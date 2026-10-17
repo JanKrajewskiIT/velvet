@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script></helmet>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="{{ title }}" description="Your current job as the baseline — take-home, time off and notice" actions="{{ editBtn }}" hint-size="100%,220px">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:var(--space-4)">
+<div style="display:flex;flex-direction:column;gap:var(--space-1);padding:var(--space-4);border-radius:var(--radius-lg);background:var(--bg-subtle)">
+<span style="font-size:var(--type-caption-size);color:var(--fg-tertiary)">Take-home difference</span>
+<sc-if value="{{ isUp }}" hint-placeholder-val="{{ true }}"><span style="font:var(--type-kpi);font-variant-numeric:tabular-nums;color:var(--status-success-fg, var(--fg-primary))">{{ diff }}</span></sc-if><sc-if value="{{ isDown }}" hint-placeholder-val="{{ false }}"><span style="font:var(--type-kpi);font-variant-numeric:tabular-nums;color:var(--status-danger-fg, var(--fg-primary))">{{ diff }}</span></sc-if>
+<span style="font-size:var(--type-caption-size);color:var(--fg-secondary);font-variant-numeric:tabular-nums">{{ diffSub }}</span>
+</div>
+<div style="min-width:0;grid-column:span 2">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.DescriptionList" items="{{ rows }}" hint-size="100%,160px"></x-import>
+</div>
+</div>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Dialog" open="{{ open }}" on-close="{{ close }}" title="Your current job" description="Only you see this. It’s the baseline in Compare and on every Salary tab." footer="{{ footer }}" size="md" hint-size="0,0">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FormGrid" columns="{{ 2 }}" hint-size="100%,300px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Company" value="{{ d.company }}" on-change="{{ setCompany }}" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Role" value="{{ d.name }}" on-change="{{ setName }}" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.NumberInput" label="Monthly gross" value="{{ d.salary }}" on-value-change="{{ setSalary }}" min="{{ 0 }}" max="{{ 100000 }}" step="{{ 500 }}" suffix="zł" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Select" label="Contract" options="{{ contractOptions }}" value="{{ d.contractType }}" on-value-change="{{ setContract }}" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Notice period" placeholder="e.g. 3 months" value="{{ d.notice }}" on-change="{{ setNotice }}" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Paid days off" value="{{ d.holidays }}" on-change="{{ setHolidays }}" hint-size="100%,64px"></x-import>
+</x-import>
+<div style="margin-top:var(--space-4)"><x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.TagInput" label="Benefits" optional="{{ true }}" value="{{ d.benefits }}" on-value-change="{{ setBenefits }}" hint-size="100%,72px"></x-import></div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;app&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;object&quot;},&quot;offer&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;object&quot;}}">
+class Component extends DCLogic {
+  state = { open: false, d: {} };
+  renderVals() {
+    const app = this.props.app, offer = this.props.offer;
+    if (!app || !offer) return { rows: [] };
+    const { D, U, NS } = app;
+    const h = React.createElement;
+    const cur = app.current || D.current;
+    const T = cur.terms || {}, OT = offer.terms || {};
+    const nCur = U.netOf(cur), nOff = U.netOf(offer);
+    const dv = nCur != null && nOff != null ? nOff - nCur : null;
+    const pct = dv != null && nCur ? Math.round((dv / nCur) * 100) : null;
+    const lost = (T.benefits || []).filter((b) => !(OT.benefits || []).includes(b));
+    const end = U.noticeEnd(T.notice, D.TODAY);
+    const setD = (k) => (v) => this.setState({ d: { ...this.state.d, [k]: v && v.target ? v.target.value : v } });
+    const close = () => this.setState({ open: false });
+    const d = this.state.d;
+    return {
+      title: 'Worth leaving ' + cur.company + '?',
+      editBtn: h(NS.Button, { variant: 'ghost', size: 'sm', iconLeft: 'pencil', onClick: () => this.setState({ open: true, d: { company: cur.company, name: cur.name, salary: cur.salaryMax, contractType: cur.contractType, notice: T.notice || '', holidays: T.holidays || '', benefits: T.benefits || [] } }) }, 'Edit'),
+      diff: dv == null ? '—' : (dv >= 0 ? '+' : '−') + U.pln(Math.abs(dv)),
+      isUp: dv == null || dv >= 0, isDown: dv != null && dv < 0,
+      diffSub: dv == null ? 'Add salaries to compare' : 'per month' + (pct != null ? ' · ' + (pct >= 0 ? '+' : '') + pct + '%' : '') + ' · ' + U.pln(nCur) + ' → ' + U.pln(nOff),
+      rows: [
+        { term: 'Contract', description: (D.CONTRACTS[cur.contractType] || D.CONTRACTS.uop).short + ' → ' + (D.CONTRACTS[offer.contractType] || D.CONTRACTS.uop).short },
+        { term: 'Paid days off', description: (T.holidays || '—') + ' → ' + (OT.holidays || 'not stated') },
+        { term: 'Benefits you’d lose', description: lost.length ? lost.join(', ') : 'None' },
+        { term: 'Notice to serve', description: T.notice ? T.notice + (end ? ' · free from ' + U.fmtDate(new Date(end.getTime() + 864e5), { day: 'numeric', month: 'long' }) : '') : '—' }
+      ],
+      open: this.state.open, close, d,
+      contractOptions: Object.keys(D.CONTRACTS).map((k) => ({ value: k, label: D.CONTRACTS[k].label })),
+      setCompany: setD('company'), setName: setD('name'), setSalary: setD('salary'), setContract: setD('contractType'), setNotice: setD('notice'), setHolidays: setD('holidays'), setBenefits: setD('benefits'),
+      footer: h(React.Fragment, null, h(NS.Button, { variant: 'secondary', onClick: close }, 'Cancel'), h(NS.Button, { onClick: () => { app.setCurrent({ company: d.company, name: d.name, salaryMin: +d.salary, salaryMax: +d.salary, contractType: d.contractType, terms: { notice: d.notice, holidays: d.holidays, benefits: d.benefits } }); close(); app.toast('Current job saved', 'success', 'Used as the baseline everywhere'); } }, 'Save'))
+    };
+  }
+}
+</script>
+</body>
+</html>

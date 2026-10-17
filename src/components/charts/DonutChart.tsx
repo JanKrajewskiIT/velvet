@@ -165,7 +165,7 @@ export const DonutChart = (props: DonutChartProps) => {
                   onClick={() => toggle(d.key)}
                 >
                   <i style={{ background: d.color }} />
-                  <Text as="span" variant="caption" tone="inherit" class={styles.donutPartName}>
+                  <Text as="span" variant="body-sm" tone="inherit" class={styles.donutPartName}>
                     {d.label}
                   </Text>
                   <Text as="span" variant="body-sm" tone="secondary" tabular class="vui-donut__num">

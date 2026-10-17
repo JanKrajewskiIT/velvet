@@ -142,7 +142,7 @@ export const Kanban = (props: KanbanProps): JSX.Element => {
             >
               <header class={styles.kanbanPartHead}>
                 <Dot size="lg" class="vui-kanban__dot" style={{ '--tone': col.color ?? DEFAULT_DOT_COLOR }} />
-                <Text as="span" variant="label" tone="inherit" class="vui-kanban__title">
+                <Text as="span" variant="label" tone="inherit" class={styles.kanbanPartTitle}>
                   {col.title}
                 </Text>
                 <Count
