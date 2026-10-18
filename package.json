@@ -1,6 +1,6 @@
 {
   "name": "@jankrajewskiit/ui",
-  "version": "3.8.1",
+  "version": "3.12.0",
   "description": "SolidJS component library with theming and translations.",
   "keywords": [
     "solidjs",
