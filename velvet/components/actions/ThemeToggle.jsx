@@ -15,6 +15,7 @@ export function ThemeToggle({ value, onChange: onChangeProp, onValueChange, vari
   const withSys = showSystem ?? appearance === 'segmented';
   const read = () => (withSys && stored() === 'system' ? 'system' : current());
   const [own, setOwn] = React.useState(read);
+  const [pop, setPop] = React.useState(null);
   const controlled = value !== undefined;
   const theme = controlled ? value : own;
   const opts = withSys ? ['light', 'system', 'dark'] : ['light', 'dark'];
@@ -26,6 +27,7 @@ export function ThemeToggle({ value, onChange: onChangeProp, onValueChange, vari
   }, [controlled]);
   const pick = (t) => {
     if (t === theme) return;
+    setPop(t);
     if (!controlled) {
       if (window.vuiSetTheme) window.vuiSetTheme(t);
       else { const m = mq(); document.documentElement.dataset.theme = t === 'system' ? (m && m.matches ? 'dark' : 'light') : t; try { localStorage.setItem(KEY, t); } catch (e) {} }
@@ -35,7 +37,7 @@ export function ThemeToggle({ value, onChange: onChangeProp, onValueChange, vari
   };
   const keys = (e) => { if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) { e.preventDefault(); const d = e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 1; const t = opts[(opts.indexOf(theme) + d + opts.length) % opts.length]; pick(t); e.currentTarget.querySelector('[data-set="' + t + '"]').focus(); } };
   const btn = (t, icon, lbl) => (
-    <button type="button" role="radio" data-set={t} className="vui-tt__btn" aria-checked={theme === t} aria-label={lbl} title={lbl} tabIndex={theme === t ? 0 : -1} onClick={() => pick(t)}>{icon}</button>
+    <button type="button" role="radio" data-set={t} className={cx('vui-tt__btn', pop === t && 'vui-tt__btn--pop')} aria-checked={theme === t} aria-label={lbl} title={lbl} tabIndex={theme === t ? 0 : -1} onClick={() => pick(t)}>{icon}</button>
   );
   return (
     <div role="radiogroup" aria-label={label} className={cx('vui-tt', 'vui-tt--' + variant, appearance === 'segmented' && 'vui-tt--seg', size === 'sm' && 'vui-tt--sm', className)} onKeyDown={keys}>

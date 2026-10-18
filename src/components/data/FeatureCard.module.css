@@ -96,3 +96,26 @@ a.feature:hover .featurePartAction :global(.externalIcon) {
   box-shadow: none;
   border-color: var(--surface-border);
 }
+
+.feature.featureVariantLift:not(:hover) {
+  border-color: var(--border-strong, var(--border-default));
+  background: var(--bg-raised);
+  box-shadow: none;
+}
+
+.featureVariantHeader > .cardBody {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-3);
+  align-items: center;
+  align-content: start;
+}
+
+.featureVariantHeader .featurePartIcon {
+  margin: 0;
+}
+
+.featureVariantHeader .featurePartDesc,
+.featureVariantHeader .featurePartAction {
+  grid-column: 1 / -1;
+}

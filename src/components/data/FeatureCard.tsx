@@ -26,8 +26,8 @@ export interface FeatureCardProps extends HtmlProps<HTMLElement, 'title'> {
   interactive?: boolean;
   /** card = Card hover behaviour · lift = legacy VelvetUi tile: lifts 4px with tone border + layered tone glow. @default 'card' */
   look?: 'card' | 'lift';
-  /** stack = icon above text · inline = icon left, compact. @default 'stack' */
-  layout?: 'stack' | 'inline';
+  /** stack = icon above text · inline = icon left · header = icon and title above full-width copy. @default 'stack' */
+  layout?: 'stack' | 'inline' | 'header';
   /** Card pass-through. */
   padding?: CardProps['padding'];
   variant?: CardProps['variant'];
@@ -78,6 +78,7 @@ export const FeatureCard = (props: FeatureCardProps) => {
         styles.feature,
         local.look === 'lift' && styles.featureVariantLift,
         local.layout === 'inline' && styles.featureVariantInline,
+        local.layout === 'header' && styles.featureVariantHeader,
         local.class,
       )}
       bodyClass={styles.cardBody}

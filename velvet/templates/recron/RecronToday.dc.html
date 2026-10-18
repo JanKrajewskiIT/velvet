@@ -9,21 +9,20 @@
 <x-dc>
 <helmet><script src="./ds-base.js"></script><script src="./recron-data.js"></script><style>:root:root{overflow:auto!important;height:auto!important;background:var(--bg-page)!important}html body{margin:0!important;padding:0!important;background:var(--bg-page)!important}</style></helmet>
 <div style="display:flex;flex-direction:column;gap:var(--space-4)">
-<section style="position:relative;overflow:hidden;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:var(--space-6);align-items:stretch;padding:var(--space-7);border:var(--border-width) solid var(--border-subtle);border-radius:var(--radius-2xl);background:var(--bg-raised);color:var(--fg-primary)">
-<div style="position:absolute;inset:-220px auto auto -160px;width:560px;height:560px;border-radius:50%;background:radial-gradient(closest-side,var(--bg-brand-subtle),transparent);pointer-events:none"></div>
+<section style="position:relative;overflow:hidden;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:var(--space-6);align-items:stretch;padding:var(--space-7);border:var(--border-width) solid color-mix(in oklab,var(--fg-brand) 18%,transparent);border-radius:var(--radius-2xl);background:var(--bg-brand-subtle);color:var(--fg-primary)">
 <div style="position:relative;display:flex;flex-direction:column;justify-content:space-between;gap:var(--space-6);min-width:0">
 <div style="display:flex;flex-direction:column;gap:var(--space-3)">
 <span style="font-size:var(--type-caption-size);font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--fg-brand)">{{ dateLabel }}</span>
 <h1 style="margin:0;font:var(--type-display-sm);letter-spacing:var(--type-display-sm-tracking);text-wrap:balance">{{ greeting }}</h1>
 <p style="margin:0;max-width:46ch;font-size:var(--type-body-lg-size, 17px);line-height:1.5;color:var(--fg-secondary);text-wrap:pretty">{{ insight }}</p>
 </div>
-<div style="display:flex;flex-wrap:wrap;gap:var(--space-6) var(--space-8);padding-top:var(--space-5);border-top:var(--border-width) solid var(--border-subtle)">
+<div style="display:flex;flex-wrap:wrap;gap:var(--space-6) var(--space-8);padding-top:var(--space-5);border-top:var(--border-width) solid color-mix(in oklab,var(--fg-brand) 18%,transparent)">
 <sc-for list="{{ heroStats }}" as="hs" hint-placeholder-count="3">
 <div style="display:flex;flex-direction:column;gap:2px"><span style="font:var(--type-kpi);font-variant-numeric:tabular-nums;color:var(--fg-primary)">{{ hs.value }}</span><span style="font-size:var(--type-caption-size);color:var(--fg-tertiary)">{{ hs.label }}</span></div>
 </sc-for>
 </div>
 </div>
-<div style="position:relative;display:flex;flex-direction:column;gap:var(--space-4);padding:var(--space-5);border:var(--border-width) solid var(--border-subtle);border-radius:var(--radius-xl);background:var(--bg-subtle);color:var(--fg-primary)">
+<div style="position:relative;display:flex;flex-direction:column;gap:var(--space-4);padding:var(--space-5);border:var(--border-width) solid var(--border-subtle);border-radius:var(--radius-xl);background:var(--bg-raised);box-shadow:var(--elevation-card, 0 8px 24px -12px rgba(0,0,0,.15));color:var(--fg-primary)">
 <sc-if value="{{ hasNext }}" hint-placeholder-val="{{ true }}">
 <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--space-3)">
 <span style="font-size:var(--type-caption-size);font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--fg-brand)">Next interview</span>

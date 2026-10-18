@@ -1,8 +1,8 @@
 .vui-tt{display:inline-flex;align-items:center;gap:0;padding:var(--space-1)}
-.vui-tt__btn{position:relative;flex:none;display:inline-grid;place-items:center;width:var(--space-8);height:var(--space-8);padding:0;border:var(--border-width-thick) solid var(--action-primary);border-radius:var(--radius-full);background:transparent;color:var(--action-primary);opacity:.7;cursor:pointer;scale:1;transition:opacity var(--motion-fast),scale var(--motion-fast)}
+.vui-tt__btn{position:relative;flex:none;display:inline-grid;place-items:center;width:var(--space-8);height:var(--space-8);padding:0;border:var(--border-width-thick) solid var(--action-primary);border-radius:var(--radius-full);background:transparent;color:var(--action-primary);opacity:.7;cursor:pointer;scale:1;rotate:0deg;transition:opacity 320ms ease,scale 520ms cubic-bezier(.34,1.56,.64,1),rotate 520ms cubic-bezier(.34,1.56,.64,1),background-color 320ms ease,color 320ms ease}
 .vui-tt__btn+.vui-tt__btn{margin-left:calc(-1 * var(--space-0-5))}
-.vui-tt__btn:hover:not([aria-checked="true"]){opacity:.85;scale:1.1}
-.vui-tt__btn:active:not([aria-checked="true"]){opacity:1;scale:1.06}
+.vui-tt__btn:hover:not([aria-checked="true"]){opacity:.85;scale:1.1;rotate:-8deg}
+.vui-tt__btn:active:not([aria-checked="true"]){opacity:1;scale:1.02;rotate:-14deg}
 .vui-tt__btn:focus-visible{outline:none;box-shadow:var(--focus-ring)}
 .vui-tt__btn[aria-checked="true"]{z-index:1;opacity:1;scale:1.25;background:var(--action-primary);color:var(--action-primary-fg);cursor:default}
 .vui-tt__btn svg{width:var(--size-icon-lg);height:var(--size-icon-lg);display:block;fill:currentColor;pointer-events:none}
@@ -23,4 +23,17 @@
 .vui-tt--seg.vui-tt--navbar .vui-tt__btn,.vui-tt--seg.vui-tt--dark .vui-tt__btn{color:var(--on-color-muted)}
 .vui-tt--seg.vui-tt--navbar .vui-tt__btn:hover:not([aria-checked="true"]),.vui-tt--seg.vui-tt--dark .vui-tt__btn:hover:not([aria-checked="true"]){color:var(--on-color-fg)}
 .vui-tt--seg.vui-tt--navbar .vui-tt__btn[aria-checked="true"],.vui-tt--seg.vui-tt--dark .vui-tt__btn[aria-checked="true"]{background:var(--on-color-fg);color:var(--action-primary)}
-@media (prefers-reduced-motion:reduce){.vui-tt__btn{transition:none}}
+
+/* click: selected ring grows with a light spin (rings only) */
+@keyframes vuiTtPop{0%{scale:1;rotate:-24deg}55%{scale:1.38;rotate:12deg}100%{scale:1.25;rotate:0deg}}
+.vui-tt:not(.vui-tt--seg) .vui-tt__btn--pop[aria-checked="true"]{animation:vuiTtPop 620ms cubic-bezier(.34,1.3,.64,1) both}
+.vui-tt:not(.vui-tt--seg) .vui-tt__btn--pop[aria-checked="true"] svg{animation:vuiTtSpin 620ms cubic-bezier(.34,1.3,.64,1) both}
+@keyframes vuiTtSpin{from{rotate:-90deg}to{rotate:0deg}}
+/* left ring spins counter-clockwise */
+@keyframes vuiTtPopL{0%{scale:1;rotate:24deg}55%{scale:1.38;rotate:-12deg}100%{scale:1.25;rotate:0deg}}
+@keyframes vuiTtSpinL{from{rotate:90deg}to{rotate:0deg}}
+.vui-tt:not(.vui-tt--seg) .vui-tt__btn--pop[aria-checked="true"]:first-child{animation-name:vuiTtPopL}
+.vui-tt:not(.vui-tt--seg) .vui-tt__btn--pop[aria-checked="true"]:first-child svg{animation-name:vuiTtSpinL}
+.vui-tt__btn:first-child:hover:not([aria-checked="true"]){rotate:8deg}
+.vui-tt__btn:first-child:active:not([aria-checked="true"]){rotate:14deg}
+@media (prefers-reduced-motion:reduce){.vui-tt__btn{transition:none}.vui-tt__btn,.vui-tt__btn svg{animation:none!important}}

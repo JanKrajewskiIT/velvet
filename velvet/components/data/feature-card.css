@@ -20,3 +20,10 @@
 .vui-feature--inline .vui-feature__action{padding-top:var(--space-1)}
 .vui-surface.vui-feature:not(:hover){box-shadow:none;border-color:var(--border-subtle)}
 [data-theme="dark"] .vui-surface.vui-feature:not(:hover){border-color:var(--border-default)}
+/* look="lift" at rest: solid surface, neutral strong border, no glow (glow only on hover) */
+.vui-card.vui-feature--lift:not(:hover){border-color:var(--border-strong,var(--border-default));background:var(--bg-raised);box-shadow:none}
+/* layout="header" — icon + title in one row, description full-width below */
+.vui-feature--header>.vui-card__body{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:var(--space-3);row-gap:var(--space-3);align-items:center;align-content:start}
+.vui-feature--header .vui-feature__icon{margin:0}
+.vui-feature--header .vui-feature__desc,.vui-feature--header .vui-feature__action{grid-column:1 / -1}
+

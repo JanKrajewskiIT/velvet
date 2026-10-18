@@ -567,8 +567,8 @@
         "message": "<FeatureCard> look must be one of 'card' | 'lift'."
       },
       {
-        "selector": "JSXOpeningElement[name.name='FeatureCard'] > JSXAttribute[name.name='layout'] > Literal[value!=/^(?:stack|inline)$/]",
-        "message": "<FeatureCard> layout must be one of 'stack' | 'inline'."
+        "selector": "JSXOpeningElement[name.name='FeatureCard'] > JSXAttribute[name.name='layout'] > Literal[value!=/^(?:stack|inline|header)$/]",
+        "message": "<FeatureCard> layout must be one of 'stack' | 'inline' | 'header'."
       },
       {
         "selector": "JSXOpeningElement[name.name='FieldControl'] > JSXAttribute > JSXIdentifier[name!=/^(?:id|invalid|describedBy|required|key|ref|className|style|children)$/]",

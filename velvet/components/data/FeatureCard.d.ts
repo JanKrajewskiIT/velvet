@@ -16,10 +16,10 @@ export interface FeatureCardProps extends Omit<React.HTMLAttributes<HTMLElement>
   tonal?: boolean;
   /** Whole card becomes the link. @default false */
   interactive?: boolean;
-  /** card = Card hover behaviour · lift = legacy VelvetUi tile: lifts 4px with tone border + layered tone glow. @default 'card' */
+  /** card = Card hover behaviour · lift = legacy VelvetUi tile: solid bg + neutral strong border at rest; on hover lifts 4px with tone border + layered tone glow. @default 'card' */
   look?: 'card' | 'lift';
-  /** stack = icon above text · inline = icon left, compact. @default 'stack' */
-  layout?: 'stack' | 'inline';
+  /** stack = icon above text · inline = icon left, compact · header = icon + title in one row, description full-width below (shortest tile). @default 'stack' */
+  layout?: 'stack' | 'inline' | 'header';
   /** Card pass-through */
   padding?: CardProps['padding'];
   variant?: CardProps['variant'];

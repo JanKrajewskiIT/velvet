@@ -22,9 +22,19 @@
   opacity: 0.7;
   cursor: pointer;
   scale: 1;
+  rotate: 0deg;
   transition:
-    opacity var(--motion-fast),
-    scale var(--motion-fast);
+    opacity 320ms ease,
+    scale 520ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    rotate 520ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    background-color 320ms ease,
+    color 320ms ease;
+}
+
+.ttPartIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .ttPartBtn + .ttPartBtn {
@@ -34,11 +44,13 @@
 .ttPartBtn:hover:not([aria-checked='true']) {
   opacity: 0.85;
   scale: 1.1;
+  rotate: -8deg;
 }
 
 .ttPartBtn:active:not([aria-checked='true']) {
   opacity: 1;
-  scale: 1.06;
+  scale: 1.02;
+  rotate: -14deg;
 }
 
 .ttPartBtn:focus-visible {
@@ -166,12 +178,95 @@
   color: var(--action-primary);
 }
 
+.ttVariantSeg .ttPartBtn {
+  --glyph-size: var(--size-icon-md);
+}
+
+@keyframes themePop {
+  0% {
+    scale: 1;
+    rotate: -24deg;
+  }
+
+  55% {
+    scale: 1.38;
+    rotate: 12deg;
+  }
+
+  100% {
+    scale: 1.25;
+    rotate: 0deg;
+  }
+}
+
+@keyframes themeSpin {
+  from {
+    rotate: -90deg;
+  }
+
+  to {
+    rotate: 0deg;
+  }
+}
+
+@keyframes themePopLeft {
+  0% {
+    scale: 1;
+    rotate: 24deg;
+  }
+
+  55% {
+    scale: 1.38;
+    rotate: -12deg;
+  }
+
+  100% {
+    scale: 1.25;
+    rotate: 0deg;
+  }
+}
+
+@keyframes themeSpinLeft {
+  from {
+    rotate: 90deg;
+  }
+
+  to {
+    rotate: 0deg;
+  }
+}
+
+.tt:not(.ttVariantSeg) .ttPartBtnVariantPop[aria-checked='true'] {
+  animation: themePop 620ms cubic-bezier(0.34, 1.3, 0.64, 1) both;
+}
+
+.tt:not(.ttVariantSeg) .ttPartBtnVariantPop[aria-checked='true'] .ttPartIcon {
+  animation: themeSpin 620ms cubic-bezier(0.34, 1.3, 0.64, 1) both;
+}
+
+.tt:not(.ttVariantSeg) .ttPartBtnVariantPop[aria-checked='true']:first-child {
+  animation-name: themePopLeft;
+}
+
+.tt:not(.ttVariantSeg) .ttPartBtnVariantPop[aria-checked='true']:first-child .ttPartIcon {
+  animation-name: themeSpinLeft;
+}
+
+.ttPartBtn:first-child:hover:not([aria-checked='true']) {
+  rotate: 8deg;
+}
+
+.ttPartBtn:first-child:active:not([aria-checked='true']) {
+  rotate: 14deg;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .ttPartBtn {
     transition: none;
   }
-}
 
-.ttVariantSeg .ttPartBtn {
-  --glyph-size: var(--size-icon-md);
+  .ttPartBtn,
+  .ttPartIcon {
+    animation: none !important;
+  }
 }

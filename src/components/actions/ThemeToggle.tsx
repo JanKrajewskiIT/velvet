@@ -68,6 +68,7 @@ export const ThemeToggle = (props: ThemeToggleProps) => {
     withSystem() && readThemePreference() === 'system' ? 'system' : currentTheme();
 
   const [own, setOwn] = createSignal<ThemePreference>(readDocumentTheme());
+  const [popped, setPopped] = createSignal<ThemePreference | null>(null);
   const controlled = () => p.value !== undefined;
   const theme = () => p.value ?? own();
 
@@ -81,6 +82,7 @@ export const ThemeToggle = (props: ThemeToggleProps) => {
 
   const pick = (next: ThemePreference) => {
     if (next === theme()) return;
+    setPopped(next);
     if (!controlled()) {
       applyTheme(next);
       setOwn(next);
@@ -128,14 +130,14 @@ export const ThemeToggle = (props: ThemeToggleProps) => {
             type="button"
             role="radio"
             data-set={t}
-            class={styles.ttPartBtn}
+            class={cx(styles.ttPartBtn, popped() === t && styles.ttPartBtnVariantPop)}
             aria-checked={theme() === t}
             aria-label={labelOf(t)}
             title={labelOf(t)}
             tabIndex={theme() === t ? 0 : -1}
             onClick={() => pick(t)}
           >
-            {icon(t)}
+            <span class={styles.ttPartIcon}>{icon(t)}</span>
           </button>
         )}
       </For>
