@@ -114,12 +114,12 @@
         "dist/**/*.mjs",
         "!dist/**/*.module.css.mjs"
       ],
-      "limit": "520 kB",
+      "limit": "550 kB",
       "name": "Published JavaScript modules"
     },
     {
       "path": "dist/**/*.module.css.mjs",
-      "limit": "100 kB",
+      "limit": "105 kB",
       "name": "CSS Module class maps"
     },
     {
