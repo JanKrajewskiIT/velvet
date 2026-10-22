@@ -149,7 +149,7 @@ export const CodeEditor = (props: CodeEditorProps) => {
   };
   return (
     <div
-      class={cx(styles.root, local.error && styles.invalid, local.readOnly && styles.readOnly, local.class)}
+      class={cx(styles.root, !!local.error && styles.invalid, local.readOnly && styles.readOnly, local.class)}
       style={local.style}
     >
       <Show when={local.label}>
@@ -230,7 +230,7 @@ export const CodeEditor = (props: CodeEditorProps) => {
       </div>
       <VisuallyHidden id={`${id()}-keys`}>{translate('velvet.forms.codeEditor.keyboardHint')}</VisuallyHidden>
       <Show when={local.error || local.hint}>
-        <div id={`${id()}-hint`} class={cx(styles.hint, local.error && styles.error)}>
+        <div id={`${id()}-hint`} class={cx(styles.hint, !!local.error && styles.error)}>
           {local.error || local.hint}
         </div>
       </Show>
