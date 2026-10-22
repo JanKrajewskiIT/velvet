@@ -3,6 +3,15 @@ import type { TranslationOf } from '@jankrajewskiit/i18n';
 import type { feedbackEn } from '../en/feedback';
 
 export const feedbackPl: TranslationOf<typeof feedbackEn> = {
+  gateList: {
+    passed: 'Spełniono {passed} z {total} warunków',
+    blocks: 'Blokuje',
+    pass: 'Spełniony',
+    fail: 'Niespełniony',
+    warn: 'Ostrzeżenie',
+    pending: 'Oczekuje',
+    skip: 'Pominięty',
+  },
   banner: {
     label: 'Ogłoszenie',
   },

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script><script src="./qc-data.js"></script></helmet>
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<sc-if value="{{ showHeader }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.PageHeader" eyebrow="Portfolio & risk" title="ACC-PAPER-01 · Metals" description="Values from ledger v418 · observed 14:32:07 · USD. A snapshot is not an assurance of current readiness." meta="{{ meta }}" hint-size="100%,120px"></x-import></sc-if>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:var(--space-4)">
+<sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Stat" label="{{ s.label }}" value="{{ s.value }}" hint="{{ s.hint }}" delta="{{ s.delta }}" tone="{{ s.tone }}" hint-size="100%,110px"></x-import>
+</sc-for>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:var(--space-4);align-items:start">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Limit usage" description="RiskPolicy v12 · approved 14 Oct by M. Fox" hint-size="100%,360px">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<sc-for list="{{ limits }}" as="l" hint-placeholder-count="5">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.UsageMeter" label="{{ l.label }}" value="{{ l.used }}" max="{{ l.max }}" unit="{{ l.unit }}" hint-size="100%,40px"></x-import>
+</sc-for>
+</div>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Position size calculator" description="XAU/USD · preview only — does not place an order" hint-size="100%,360px">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-3)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Entry" value="{{ entry }}" on-change="{{ onEntry }}" inputmode="decimal" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Stop loss" value="{{ sl }}" on-change="{{ onSl }}" inputmode="decimal" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Risk" suffix="%" value="{{ risk }}" on-change="{{ onRisk }}" inputmode="decimal" hint-size="100%,64px"></x-import>
+</div>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.MetricGroup" items="{{ calc }}" variant="subtle" columns="{{ 2 }}" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Alert" tone="{{ calcTone }}" icon="{{ calcIcon }}" hint-size="100%,56px">{{ calcNote }}</x-import>
+</div>
+</x-import>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:var(--space-4);align-items:start">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Exposure by asset" description="% of equity · long-only" hint-size="100%,300px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.BarChart" data="{{ exposure }}" series="{{ expSeries }}" height="{{ 220 }}" show-legend="{{ false }}" label="Exposure" hint-size="100%,220px"></x-import>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Blocked proposals" description="With reason code · last 7 days" hint-size="100%,300px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.List" items="{{ blocked }}" hint-size="100%,220px"></x-import>
+</x-import>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { entry: '2436.8', sl: '2412.0', risk: '0.5' };
+  renderVals() {
+    const app = this.props.app || window.__qc;
+    const NS = window.VelvetUIDesignSystem_ee2bd8;
+    if (!app || !NS || !NS.UsageMeter || !NS.MetricGroup) { clearTimeout(this._w); this._w = setTimeout(() => this.forceUpdate(), 80); return { stats: [], limits: [], calc: [] }; }
+    const { D } = app; const h = React.createElement; const A = D.account; const m = app.money;
+    const n = (s) => parseFloat(String(s).replace(',', '.'));
+    const e = n(this.state.entry), sl = n(this.state.sl), rk = n(this.state.risk);
+    const dist = Math.abs(e - sl), loss = A.equity * rk / 100, qty = dist > 0 ? loss / dist : 0, ok = isFinite(qty) && qty > 0;
+    const over = ok && rk > 1;
+    return {
+      showHeader: !this.props.embedded,
+      meta: [{ icon: 'shield-check', label: 'RiskPolicy v12' }, { icon: 'database', label: 'Ledger v418' }, { icon: 'clock', label: '14:32:07' }],
+      stats: [
+        { label: 'Equity', value: m(D.fmt(A.equity, 0) + ' USD'), hint: 'cash ' + m(D.fmt(A.cash, 0)), delta: D.signed(A.pnlDayPct, 1) + '% today', tone: 'success' },
+        { label: 'Margin', value: m(D.fmt(A.margin, 0) + ' USD'), hint: 'free ' + m(D.fmt(A.equity - A.margin, 0)) },
+        { label: 'Drawdown', value: D.signed(A.drawdown, 1) + '%', hint: 'max ' + D.signed(A.maxDd, 1) + '% · 11 days' },
+        { label: 'Gross exposure', value: D.fmt(A.exposure, 1) + '%', hint: 'leverage ' + A.leverage + '×' }
+      ],
+      limits: D.limits.map((l) => { const p = l.used / l.max; return { ...l, text: l.used + l.unit + ' / ' + l.max + l.unit, tone: p >= 0.9 ? 'danger' : p >= 0.7 ? 'warning' : 'brand' }; }),
+      entry: this.state.entry, sl: this.state.sl, risk: this.state.risk,
+      onEntry: (ev) => this.setState({ entry: ev.target.value }), onSl: (ev) => this.setState({ sl: ev.target.value }), onRisk: (ev) => this.setState({ risk: ev.target.value }),
+      calc: [
+        { label: 'quantity (oz)', value: ok ? D.fmt(qty, 2) : '—' },
+        { label: 'planned loss USD', value: ok ? m(D.fmt(loss, 0)) : '—' },
+        { label: 'margin USD', value: ok ? m(D.fmt(qty * e * 0.05, 0)) : '—' },
+        { label: 'TP at R:R 2.0', value: ok ? D.fmt(e + (e - sl) * 2, 1) : '—' }
+      ],
+      calcTone: !ok ? 'neutral' : over ? 'danger' : 'info', calcIcon: over ? 'triangle-alert' : 'info',
+      calcNote: !ok ? 'Enter entry, stop loss and risk.' : over ? 'Risk exceeds the per-trade limit (1%) — this proposal would be blocked.' : 'Within limits. A real proposal still passes Portfolio, Risk, DataQuality and Kill Switch.',
+      exposure: [{ label: 'Gold', long: 4.8 }, { label: 'Silver', long: 2.6 }, { label: 'EUR', long: 0 }], expSeries: [{ key: 'long', label: 'Long', color: 'var(--dv-1)' }],
+      blocked: D.blocked.map((b) => ({ id: b.id, title: b.title, description: b.at,
+        leading: h(NS.IconTile, { icon: 'lock', size: 'sm', tone: 'danger' }),
+        trailing: h(NS.Badge, { size: 'sm', tone: 'danger', variant: 'outline' }, b.code) }))
+    };
+  }
+}
+</script>
+</body>
+</html>

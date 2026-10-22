@@ -1,0 +1,32 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--type-body-sm-size);
+  white-space: nowrap;
+}
+
+.from {
+  color: var(--fg-tertiary);
+}
+
+.arrow {
+  --glyph-size: 0.85em;
+
+  color: var(--fg-tertiary);
+}
+
+.to {
+  color: var(--fg-primary);
+  font-weight: 600;
+}
+
+.root[data-state='worse'] .to {
+  color: var(--status-danger-fg);
+}
+
+.root[data-state='better'] .to {
+  color: var(--status-success-fg);
+}

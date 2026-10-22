@@ -35,6 +35,7 @@ export const ColorLabelForm = (props: ColorLabelFormProps) => {
             id={props.manager.nameId}
             placeholder={translate('velvet.patterns.colorLabelManager.namePlaceholder')}
             value={props.draft.name}
+            readOnly={props.manager.busy()}
             onInput={(e) => props.manager.rename(e.currentTarget.value)}
             onKeyDown={(e) => {
               if (e.key === 'Enter') void props.manager.save().catch(reportAsyncError);
@@ -66,6 +67,7 @@ export const ColorLabelForm = (props: ColorLabelFormProps) => {
                 aria-checked={color === props.draft.color}
                 aria-label={translate('velvet.patterns.colorLabelManager.colorOption', { index: index() + 1 })}
                 class={styles.clmPartSw}
+                disabled={props.manager.busy()}
                 onClick={() => props.manager.patchDraft({ color })}
               />
             )}

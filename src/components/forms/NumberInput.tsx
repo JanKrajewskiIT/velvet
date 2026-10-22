@@ -15,6 +15,7 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { assignRef } from '../../utils/assignRef';
 import { cx } from '../../utils/cx';
 import { decimalPlaces, numberRange, parseDecimal } from '../../utils/decimalValue';
+import { joinIdRefs } from '../../utils/joinIdRefs';
 import { clamp } from '../../utils/math';
 import { Control } from '../primitives/Control';
 import { ControlInput } from '../primitives/ControlInput';
@@ -81,6 +82,7 @@ export const NumberInput = (props: NumberInputProps) => {
     'increaseLabel',
     'size',
     'disabled',
+    'readOnly',
     'id',
     'class',
     'onBlur',
@@ -89,6 +91,8 @@ export const NumberInput = (props: NumberInputProps) => {
     'name',
     'form',
     'required',
+    'aria-describedby',
+    'aria-invalid',
   ]);
   const translate = useTranslate();
   const autoId = createUniqueId();
@@ -113,7 +117,7 @@ export const NumberInput = (props: NumberInputProps) => {
   const atMax = () => current() >= local.max;
 
   const commit = (n: number) => {
-    if (local.disabled || !Number.isFinite(n)) return;
+    if (local.disabled || local.readOnly || !Number.isFinite(n)) return;
     setCurrent(clamp(places() <= 100 ? Number(n.toFixed(places())) : n, bounds().min, bounds().max));
     setDraft(undefined);
   };
@@ -132,11 +136,12 @@ export const NumberInput = (props: NumberInputProps) => {
   };
   onCleanup(stopHold);
   createEffect(() => {
-    if (local.disabled || atMin() || atMax()) stopHold();
+    if (local.disabled || local.readOnly) setDraft(undefined);
+    if (local.disabled || local.readOnly || atMin() || atMax()) stopHold();
   });
   const stepHandlers = (direction: 1 | -1) => ({
     onPointerDown: (e: PointerEvent) => {
-      if (e.button !== 0 || local.disabled) return;
+      if (e.button !== 0 || local.disabled || local.readOnly) return;
       e.preventDefault();
       stopHold();
       bump(direction);
@@ -148,7 +153,7 @@ export const NumberInput = (props: NumberInputProps) => {
     onPointerLeave: stopHold,
     onPointerCancel: stopHold,
     onKeyDown: (e: KeyboardEvent) => {
-      if (local.disabled || (e.key !== 'Enter' && e.key !== ' ')) return;
+      if (local.disabled || local.readOnly || (e.key !== 'Enter' && e.key !== ' ')) return;
       e.preventDefault();
       bump(direction);
     },
@@ -156,7 +161,7 @@ export const NumberInput = (props: NumberInputProps) => {
 
   const onKeyDown: JSX.EventHandler<HTMLInputElement, KeyboardEvent> = (e) => {
     callHandler(local.onKeyDown, e);
-    if (e.defaultPrevented || local.disabled) return;
+    if (e.defaultPrevented || local.disabled || local.readOnly) return;
     const multiplier = e.shiftKey ? SHIFT_MULTIPLIER : 1;
     if (e.key === 'ArrowUp') {
       e.preventDefault();
@@ -189,6 +194,7 @@ export const NumberInput = (props: NumberInputProps) => {
           size={local.size}
           invalid={control.invalid}
           disabled={local.disabled}
+          readOnly={local.readOnly}
           class={cx(styles.number, local.class)}
         >
           <button
@@ -196,7 +202,7 @@ export const NumberInput = (props: NumberInputProps) => {
             tabIndex={-1}
             class={styles.numberPartStep}
             aria-label={local.decreaseLabel ?? translate('velvet.forms.numberInput.decreaseLabel')}
-            disabled={local.disabled || atMin()}
+            disabled={local.disabled || local.readOnly || atMin()}
             {...stepHandlers(-1)}
           >
             <Glyph name="minus" />
@@ -214,12 +220,14 @@ export const NumberInput = (props: NumberInputProps) => {
             aria-valuenow={Number.isFinite(current()) ? current() : undefined}
             aria-valuemin={Number.isFinite(local.min) ? local.min : undefined}
             aria-valuemax={Number.isFinite(local.max) ? local.max : undefined}
-            aria-invalid={control.invalid || validation.invalid() || undefined}
-            aria-describedby={validation.describedBy(control.describedBy)}
+            aria-invalid={control.invalid || validation.invalid() || local['aria-invalid']}
+            aria-describedby={joinIdRefs(local['aria-describedby'], validation.describedBy(control.describedBy))}
             class={styles.numberPartInput}
             value={draft() ?? String(current())}
             disabled={local.disabled}
+            readOnly={local.readOnly}
             onInput={(e) => {
+              if (local.disabled || local.readOnly) return;
               setDraft(e.currentTarget.value);
               callHandler(local.onInput, e);
             }}
@@ -260,7 +268,7 @@ export const NumberInput = (props: NumberInputProps) => {
             tabIndex={-1}
             class={styles.numberPartStep}
             aria-label={local.increaseLabel ?? translate('velvet.forms.numberInput.increaseLabel')}
-            disabled={local.disabled || atMax()}
+            disabled={local.disabled || local.readOnly || atMax()}
             {...stepHandlers(1)}
           >
             <Glyph name="plus" />

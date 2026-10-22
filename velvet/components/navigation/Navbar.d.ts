@@ -1,5 +1,5 @@
 import * as React from 'react';
-export interface NavbarItem { id: string; label: string; /** Velvet icon name (required for variant="menubar") */ icon?: string; href?: string }
+export interface NavbarItem { id: string; label: string; /** Velvet icon name (required for variant="menubar") or a custom node (e.g. a filled SVG at 1em, fill="currentColor") — menubar only */ icon?: string | React.ReactNode; href?: string }
 /** Top app bar. variant="links" (default): brand · text links · actions; tone="brand" paints it brand-coloured. variant="menubar": brand-filled 3-column bar — full logo (+ optional current-page label) · centred ICON menu — sliding glass indicator (the active icon drops into a ring that hangs below the bar) · actions: NotificationCenter, SearchTrigger (→ CommandPalette), NavbarUser, NavbarLocale all restyle for the brand fill. Both collapse to a burger under 720px, or always with condensed. Leave ~14px of space below a menubar navbar for the indicator. */
 export interface NavbarProps {
   /** @default 'links' */

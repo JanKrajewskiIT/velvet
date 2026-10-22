@@ -1,0 +1,42 @@
+.root {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3em;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+.currency {
+  font-size: 0.78em;
+  font-weight: 500;
+  color: var(--fg-tertiary);
+  letter-spacing: 0.02em;
+}
+
+.root[data-size='sm'] {
+  font-size: var(--type-caption-size);
+}
+
+.root[data-size='lg'] {
+  font-size: var(--font-size-2xl, 24px);
+  font-weight: 600;
+}
+
+.strong {
+  font-weight: 600;
+}
+
+.root[data-dir='up'] {
+  color: var(--market-up-fg);
+}
+
+.root[data-dir='down'] {
+  color: var(--market-down-fg);
+}
+
+.hidden .amount {
+  letter-spacing: 0.12em;
+  color: var(--fg-tertiary);
+}

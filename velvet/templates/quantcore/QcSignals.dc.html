@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script><script src="./qc-data.js"></script></helmet>
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Latest signals" description="A signal is a proposal. It becomes an order only after every gate passes." padding="none" hint-size="100%,260px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Table" layout="fixed" columns="{{ cols }}" rows="{{ signals }}" row-key="id" hint-size="100%,220px"></x-import>
+</x-import>
+<div style="display:flex;flex-wrap:wrap;gap:var(--space-4);align-items:flex-start">
+<div style="flex:3 1 560px;min-width:0">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="{{ exTitle }}" description="{{ exDesc }}" hint-size="100%,380px">
+<div style="display:flex;flex-direction:column;gap:var(--space-3)">
+<span style="font-size:var(--type-caption-size);color:var(--fg-tertiary)">Contribution to confidence (points). Positive pushes towards LONG.</span>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.ContributionBar" items="{{ contrib }}" unit=" pt" max="{{ 30 }}" hint-size="100%,220px"></x-import>
+</div>
+</x-import>
+</div>
+<div style="flex:2 1 320px;min-width:0;display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Gates" description="Evaluated in order · first failure blocks" hint-size="100%,320px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.GateList" items="{{ gates }}" hint-size="100%,260px"></x-import>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Lineage" hint-size="100%,160px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.DescriptionList" items="{{ lineage }}" hint-size="100%,120px"></x-import>
+</x-import>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const app = this.props.app || window.__qc;
+    const NS = window.VelvetUIDesignSystem_ee2bd8;
+    if (!app || !NS || !NS.ContributionBar || !NS.GateList || !NS.DirectionBadge || !app.D.explain) { clearTimeout(this._w); this._w = setTimeout(() => this.forceUpdate(), 80); return { contrib: [] }; }
+    const { D } = app; const h = React.createElement; const E = D.explain; const mono = { fontFamily: 'var(--font-mono)', fontSize: 13 };
+    return {
+      signals: D.signals,
+      cols: [
+        { key: 'inst', label: 'Signal', render: (r) => h(NS.InstrumentLabel, { symbol: r.inst, name: r.tf + ' · ' + r.at, size: 'sm' }) },
+        { key: 'dir', label: 'Direction', render: (r) => h(NS.DirectionBadge, { direction: r.dir, size: 'sm' }) },
+        { key: 'conf', label: 'Conf.', align: 'right', render: (r) => h('span', { style: mono }, r.conf ? r.conf + '%' : '—') },
+        { key: 'strategy', label: 'Strategy', hideOnMobile: true },
+        { key: 'regime', label: 'Regime', hideOnMobile: true, render: (r) => h(NS.Badge, { size: 'sm', variant: 'outline' }, r.regime) },
+        { key: 'reason', label: 'Outcome', render: (r) => r.blocked ? h(NS.Badge, { size: 'sm', tone: 'danger', icon: 'lock' }, 'Blocked') : h('span', { style: { fontSize: 12, color: 'var(--fg-secondary)' } }, r.reason) }
+      ],
+      exTitle: 'Why ' + E.dir + ' · ' + E.signal, exDesc: E.strategy + ' · confidence ' + E.conf + ' · snapshot ' + E.snapshot,
+      contrib: E.contrib.map((c) => ({ label: c.label, value: c.v })),
+      gates: E.gates.map((g, k) => ({ id: String(k), label: g.g, detail: g.d, status: g.ok ? 'pass' : 'fail', code: g.ok ? undefined : 'RECON_LAG' })),
+      lineage: [{ term: 'Features', description: 'FS-H1 v4 · ' + E.snapshot, mono: true }, { term: 'AI input', description: 'Digest v14 sentiment · AvailableAt 07:00' }, { term: 'Validation', description: 'RUN-0931 B · OOS PASS', mono: true }]
+    };
+  }
+}
+</script>
+</body>
+</html>

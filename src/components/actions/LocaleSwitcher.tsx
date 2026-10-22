@@ -2,6 +2,7 @@ import { For, type JSX, mergeProps, untrack } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
+import { activeItemKey } from '../../utils/activeItem';
 import { cx } from '../../utils/cx';
 import { freezeRecords } from '../../utils/freezeRecords';
 import { Glyph } from '../primitives/Glyph';
@@ -42,6 +43,13 @@ export const LocaleSwitcher = (props: LocaleSwitcherProps) => {
     defaultValue: untrack(() => props.defaultValue ?? p.locales[0]?.value ?? ''),
     onChange: (locale) => p.onChange?.(locale),
   });
+  const tabStop = () =>
+    activeItemKey(
+      p.locales,
+      current(),
+      (locale) => locale.value,
+      () => true,
+    );
   const index = () =>
     Math.max(
       0,
@@ -50,13 +58,16 @@ export const LocaleSwitcher = (props: LocaleSwitcherProps) => {
 
   const onKeyDown: JSX.EventHandler<HTMLDivElement, KeyboardEvent> = (e) => {
     const step = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
-    if (!step) return;
+    if (!step || e.defaultPrevented) return;
     e.preventDefault();
-    const next = (index() + step + p.locales.length) % p.locales.length;
+    const buttons = [...e.currentTarget.querySelectorAll('button')];
+    const focused = buttons.findIndex((button) => button.contains(e.target));
+    const at = focused < 0 ? p.locales.findIndex((locale) => locale.value === tabStop()) : focused;
+    const next = (at + step + p.locales.length) % p.locales.length;
     const nextLocale = p.locales[next];
     if (!nextLocale) return;
     setCurrent(nextLocale.value);
-    e.currentTarget.querySelectorAll('button')[next]?.focus();
+    buttons[next]?.focus();
   };
 
   return (
@@ -78,7 +89,7 @@ export const LocaleSwitcher = (props: LocaleSwitcherProps) => {
             aria-checked={locale.value === current()}
             aria-label={locale.name}
             lang={locale.value}
-            tabIndex={locale.value === current() ? 0 : -1}
+            tabIndex={locale.value === tabStop() ? 0 : -1}
             class={cx(
               typographyClass('label-sm'),
               styles.localePartOpt,

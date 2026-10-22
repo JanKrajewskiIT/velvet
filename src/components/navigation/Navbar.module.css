@@ -78,6 +78,7 @@
   align-items: center;
   gap: var(--space-2);
   margin-left: auto;
+  flex: none;
 }
 
 .navbarPartBurger {
@@ -197,7 +198,7 @@
 .navbarMbPartBar {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 50%) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, auto) minmax(max-content, 1fr);
   column-gap: var(--space-2);
   align-items: center;
   height: var(--nb-h);

@@ -12,7 +12,7 @@ function MenuBar({ items, active, go, label }) {
         {items.map((it) => (
           <li key={it.id} className={cx('vui-navbar__mitem', active === it.id && 'vui-navbar__mitem--active')}>
             <a href={it.href || '#' + it.id} className="vui-navbar__mlink" aria-label={it.label} title={it.label} aria-current={active === it.id ? 'page' : undefined} onClick={(e) => go(e, it)}>
-              <Glyph name={fill(it.icon || 'circle', active === it.id)} className="vui-navbar__micon" />
+              {it.icon && typeof it.icon !== 'string' ? <span className="vui-icon vui-navbar__micon vui-navbar__micon--node" aria-hidden="true">{it.icon}</span> : <Glyph name={fill(it.icon || 'circle', active === it.id)} className="vui-navbar__micon" />}
             </a>
           </li>
         ))}

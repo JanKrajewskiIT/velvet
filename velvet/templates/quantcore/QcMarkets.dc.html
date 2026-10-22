@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script><script src="./qc-data.js"></script><script src="./tv-chart.js"></script></helmet>
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.PageHeader" eyebrow="Markets" title="Watchlists and instruments" description="Poland, US, global, FX & metals and crypto. Free or low-cost sources first. Each price shows its source and delay." actions="{{ headActions }}" tabs="{{ tabs }}" active-tab="{{ tab }}" on-tab-change="{{ setTab }}" hint-size="100%,160px"></x-import>
+<div style="display:flex;flex-wrap:wrap;gap:var(--space-4);align-items:flex-start">
+<div style="flex:1 1 360px;min-width:0">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="{{ listTitle }}" description="Click a symbol to open it" padding="none" hint-size="100%,420px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Table" layout="fixed" columns="{{ cols }}" rows="{{ rows }}" row-key="sym" hint-size="100%,380px"></x-import>
+</x-import>
+</div>
+<div style="flex:2 1 560px;min-width:0;display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="{{ selTitle }}" description="{{ selDesc }}" actions="{{ selActions }}" padding="sm" hint-size="100%,500px">
+<x-import component-from-global-scope="qc-tv-chart" symbol="{{ tv }}" interval="{{ interval }}" style="height:440px" hint-size="100%,440px"></x-import>
+</x-import>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:var(--space-4);align-items:start">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Key data" description="Fundamentals & computed stats" hint-size="100%,260px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.DescriptionList" items="{{ facts }}" hint-size="100%,220px"></x-import>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Related news" description="AI summary · sources linked" hint-size="100%,260px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.List" size="sm" items="{{ related }}" hint-size="100%,200px"></x-import>
+</x-import>
+</div>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { tab: 'pl', sym: null, interval: 'D' };
+  componentDidMount() { if (window.__qcSym) { const s = window.__qcSym; window.__qcSym = null; const D = window.QcData; const k = D && Object.keys(D.markets).find((g) => D.markets[g].some((x) => x.sym === s)); if (k) this.setState({ tab: k, sym: s }); } }
+  renderVals() {
+    const app = this.props.app || window.__qc;
+    const NS = window.VelvetUIDesignSystem_ee2bd8;
+    if (!app || !NS || !NS.InstrumentLabel || !NS.PriceChange || !NS.DataState || !app.D.markets) { clearTimeout(this._w); this._w = setTimeout(() => this.forceUpdate(), 80); return { rows: [] }; }
+    const { D } = app; const h = React.createElement; const mono = { fontFamily: 'var(--font-mono)', fontVariantNumeric: 'tabular-nums' };
+    const LABEL = { pl: 'Poland · GPW', us: 'United States', global: 'Global', fx: 'FX & metals', crypto: 'Crypto' };
+    const rows = D.markets[this.state.tab];
+    const sel = rows.find((r) => r.sym === this.state.sym) || rows[0];
+    const related = D.news.filter((n) => n.tags.includes(sel.sym));
+    return {
+      tab: this.state.tab, setTab: (t) => this.setState({ tab: t, sym: null }),
+      tabs: Object.keys(LABEL).map((k) => ({ value: k, label: LABEL[k], count: D.markets[k].length })),
+      headActions: h(React.Fragment, null, h(NS.Button, { size: 'sm', variant: 'secondary', iconLeft: 'bell', onClick: () => app.toast('Price alert created', 'success', sel.sym + ' · ±3% day move') }, 'Alert'), h(NS.Button, { size: 'sm', iconLeft: 'plus' }, 'Add symbol')),
+      listTitle: LABEL[this.state.tab], rows,
+      cols: [
+        { key: 'sym', label: 'Symbol', render: (r) => h(NS.InstrumentLabel, { symbol: r.sym, name: r.name, size: 'sm', selected: r.sym === sel.sym, onClick: () => this.setState({ sym: r.sym }) }) },
+        { key: 'spark', label: '1M', width: 90, hideOnMobile: true, render: (r) => h(NS.Sparkline, { data: r.spark, height: 24, color: r.chg >= 0 ? 'var(--market-up-solid)' : 'var(--market-down-solid)' }) },
+        { key: 'last', label: 'Last', align: 'right', sortable: true, render: (r) => h('span', { style: mono }, D.fmt(r.last, r.last < 10 ? 4 : 2)) },
+        { key: 'chg', label: 'Day', align: 'right', sortable: true, sortValue: (r) => r.chg, render: (r) => h(NS.PriceChange, { value: r.chg, label: 'Day change' }) }
+      ],
+      selTitle: sel.sym + ' · ' + sel.name, selDesc: D.fmt(sel.last, sel.last < 10 ? 4 : 2) + ' ' + sel.ccy + ' · ' + D.signed(sel.chg) + '% · ' + sel.src,
+      tv: sel.tv, interval: this.state.interval,
+      selActions: h(NS.Segmented, { size: 'sm' }, [['60', '1H'], ['240', '4H'], ['D', '1D'], ['W', '1W']].map(([v, l]) => h(NS.SegmentedItem, { key: v, selected: this.state.interval === v, onClick: () => this.setState({ interval: v }) }, l))),
+      facts: [
+        { term: 'P/E', description: sel.pe, mono: true }, { term: 'Dividend yield', description: sel.dy, mono: true }, { term: 'Market cap', description: sel.cap, mono: true },
+        { term: 'ATR(14) · 1D', description: (sel.last * 0.018).toFixed(sel.last < 10 ? 4 : 2) + ' · 1.8%', mono: true },
+        { term: 'Next event', description: sel.next },
+        { term: 'Data source', description: h(NS.DataState, { state: /live|IEX/.test(sel.src) ? 'fresh' : 'delayed', label: sel.src, asOf: /EOD/.test(sel.src) ? '21 Oct close' : '14:32:07' }) }
+      ],
+      related: related.length ? related.map((n) => ({ id: n.id, title: n.title, description: n.src + ' · ' + n.at + ' — ' + n.bullets[0], leading: h(NS.IconTile, { icon: 'file-text', size: 'sm' }) })) : [{ id: 'none', title: 'No relevant news in the last 7 days', description: 'All mapped sources checked · coverage complete', leading: h(NS.IconTile, { icon: 'check', size: 'sm' }) }]
+    };
+  }
+}
+</script>
+</body>
+</html>

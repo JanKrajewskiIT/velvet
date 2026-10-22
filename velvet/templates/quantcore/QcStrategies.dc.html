@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script><script src="./qc-data.js"></script></helmet>
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.PageHeader" eyebrow="Strategies" title="Automations" description="Rule-based, ML and AI-assisted strategies on any timeframe. Each one moves from Research to Replay to Paper to Demo to Live only through evidence gates." actions="{{ headActions }}" tabs="{{ tabs }}" active-tab="{{ tab }}" on-tab-change="{{ setTab }}" hint-size="100%,160px"></x-import>
+<sc-if value="{{ isAutos }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Stepper" steps="{{ stages }}" current="{{ 3 }}" hint-size="100%,56px"></x-import>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:var(--space-4)">
+<sc-for list="{{ autos }}" as="a" hint-placeholder-count="5">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="{{ a.name }}" description="{{ a.desc }}" actions="{{ a.badge }}" footer="{{ a.footer }}" hint-size="100%,240px">
+<div style="display:flex;flex-direction:column;gap:var(--space-3)">
+<div style="display:flex;flex-wrap:wrap;gap:var(--space-2)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Tag" size="sm" icon="{{ a.icon }}" hint-size="90px,24px">{{ a.approach }}</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Tag" size="sm" icon="clock" hint-size="60px,24px">{{ a.tf }}</x-import>
+</div>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Sparkline" data="{{ a.spark }}" height="{{ 44 }}" area="{{ true }}" color="var(--dv-1)" hint-size="100%,44px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.MetricGroup" items="{{ a.kpis }}" columns="{{ 4 }}" size="sm" hint-size="100%,44px"></x-import>
+</div>
+</x-import>
+</sc-for>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ isCompare }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Alert" tone="info" icon="info" title="Same capital, same costs, same period" hint-size="100%,64px">Each automation trades its own isolated 100,000 USD paper account with Costs-OANDA v3. Replay results are shown separately from live paper results and are never mixed.</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Paper equity · % since start" description="28 days · no real money" hint-size="100%,340px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.LineChart" data="{{ eq }}" series="{{ eqSeries }}" height="{{ 260 }}" curved="{{ true }}" label="Paper equity comparison" hint-size="100%,260px"></x-import>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Leaderboard" description="Promotion readiness = evidence for the next stage: sample size, OOS stability, drawdown vs. policy, slippage drift" padding="none" hint-size="100%,340px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Table" layout="fixed" columns="{{ lbCols }}" rows="{{ lb }}" row-key="id" default-sort="{{ lbSort }}" hint-size="100%,300px"></x-import>
+</x-import>
+</div>
+</sc-if>
+<sc-if value="{{ isSignals }}" hint-placeholder-val="{{ false }}"><dc-import name="QcSignals" app="{{ app }}" hint-size="100%,800px"></dc-import></sc-if>
+<sc-if value="{{ isHealth }}" hint-placeholder-val="{{ false }}"><dc-import name="QcDrift" app="{{ app }}" hint-size="100%,1000px"></dc-import></sc-if>
+<sc-if value="{{ isReport }}" hint-placeholder-val="{{ false }}"><dc-import name="QcResearch" app="{{ app }}" hint-size="100%,1200px"></dc-import></sc-if>
+<sc-if value="{{ isOrders }}" hint-placeholder-val="{{ false }}"><dc-import name="QcTrading" app="{{ app }}" embedded="{{ true }}" hint-size="100%,900px"></dc-import></sc-if>
+<sc-if value="{{ isRisk }}" hint-placeholder-val="{{ false }}"><dc-import name="QcRisk" app="{{ app }}" embedded="{{ true }}" hint-size="100%,900px"></dc-import></sc-if>
+{{ newDialog }}
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { tab: 'automations', open: false, approach: 'Rules', tfs: ['H1'], classes: ['FX & metals'], name: '', code: "entry:\n  when: close > ema(50) and rsi(14) crosses_above 40\n  confirm: tf(H4).trend == up\nexit:\n  stop: atr(14) * 2.0\n  take_profit: r_multiple(2.0)\nfilters:\n  - no_entry_within: 30m of event(importance: high)\n  - spread_max_bp: 8" };
+  componentDidMount() { const s = window.__qcSub; if (s) { window.__qcSub = null; if (s === 'new') this.setState({ open: true }); else this.setState({ tab: s }); } }
+  renderVals() {
+    const app = this.props.app || window.__qc;
+    const NS = window.VelvetUIDesignSystem_ee2bd8;
+    if (!app || !NS || !NS.MetricGroup || !NS.CodeEditor || !app.D.automations) { clearTimeout(this._w); this._w = setTimeout(() => this.forceUpdate(), 80); return { autos: [] }; }
+    const { D } = app; const h = React.createElement; const tab = this.state.tab; const mono = { fontFamily: 'var(--font-mono)', fontVariantNumeric: 'tabular-nums' };
+    const STG = { Research: 'neutral', Replay: 'warning', Paper: 'info', Demo: 'brand', Live: 'danger' };
+    const ICON = { Rules: 'code', ML: 'layers', 'AI-assisted': 'sparkles', Hybrid: 'zap' };
+    const pct = (v, d) => v == null ? '—' : D.signed(v, d ?? 1) + '%';
+    const set = (k) => (v) => this.setState({ [k]: v });
+    return {
+      app, tab, setTab: (t) => this.setState({ tab: t }),
+      isAutos: tab === 'automations', isCompare: tab === 'compare', isReport: tab === 'report', isOrders: tab === 'orders', isRisk: tab === 'risk', isHealth: tab === 'health', isSignals: tab === 'signals',
+      tabs: [{ value: 'automations', label: 'Automations', count: D.automations.length }, { value: 'signals', label: 'Signals' }, { value: 'compare', label: 'Paper comparison' }, { value: 'health', label: 'Health', count: 2 }, { value: 'report', label: 'Run report' }, { value: 'orders', label: 'Orders & journal' }, { value: 'risk', label: 'Risk' }],
+      headActions: h(React.Fragment, null, h(NS.Button, { size: 'sm', variant: 'secondary', iconLeft: 'play', onClick: () => app.toast('Backtest queued', 'info', 'JOB-5522 · all Research automations') }, 'Run backtests'), h(NS.Button, { size: 'sm', iconLeft: 'plus', onClick: () => this.setState({ open: true }) }, 'New automation')),
+      stages: [{ label: 'Research', description: 'Backtest · walk-forward' }, { label: 'Replay', description: 'Event-by-event' }, { label: 'Paper', description: 'Live data, no money' }, { label: 'Demo', description: 'Broker demo account' }, { label: 'Live', description: 'Real funds · approval' }],
+      autos: D.automations.map((a) => ({ ...a, icon: ICON[a.approach], desc: a.assets + (a.model ? ' · ' + a.model : ''),
+        badge: h(NS.Badge, { size: 'sm', tone: STG[a.stage], dot: true }, a.stage),
+        spark: a.ret == null ? [0, 0] : D.autoEquity.map((x) => x[a.key] ?? 0),
+        kpis: [{ label: 'return', value: pct(a.ret), dir: a.ret == null ? undefined : a.ret >= 0 ? 'up' : 'down' }, { label: 'max DD', value: pct(a.dd) }, { label: 'Sharpe', value: a.sharpe == null ? '—' : a.sharpe.toFixed(2) }, { label: 'trades', value: String(a.trades) }],
+        footer: h('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, width: '100%' } }, h('span', { style: { fontSize: 12, color: 'var(--fg-secondary)' } }, a.days ? a.days + ' days on paper' : a.stage === 'Replay' ? 'Replay 2024–2026' : 'Draft · not backtested'), h('div', { style: { display: 'flex', gap: 4 } }, h(NS.Button, { size: 'xs', variant: 'ghost', iconLeft: 'code', onClick: () => this.setState({ open: true, name: a.name, approach: a.approach }) }, 'Edit'), h(NS.Button, { size: 'xs', variant: 'soft', onClick: () => this.setState({ tab: a.stage === 'Research' ? 'automations' : 'report' }) }, a.stage === 'Research' ? 'Backtest' : 'Report'))) })),
+      eq: D.autoEquity, eqSeries: D.automations.filter((a) => a.stage === 'Paper' || a.stage === 'Replay').map((a, k) => ({ key: a.key, label: a.name + (a.stage === 'Replay' ? ' (replay)' : ''), color: 'var(--dv-' + (k + 1) + ')' })),
+      lb: D.automations, lbSort: { key: 'sharpe', dir: 'desc' },
+      lbCols: [
+        { key: 'name', label: 'Automation', render: (r) => h('div', { style: { display: 'flex', flexDirection: 'column' } }, h('span', { style: { fontWeight: 600 } }, r.name), h('span', { style: { fontSize: 12, color: 'var(--fg-secondary)' } }, r.approach + ' · ' + r.assets + ' · ' + r.tf)) },
+        { key: 'stage', label: 'Stage', render: (r) => h(NS.Badge, { size: 'sm', tone: STG[r.stage] }, r.stage) },
+        { key: 'ret', label: 'Return', align: 'right', sortable: true, sortValue: (r) => r.ret ?? -999, render: (r) => h('span', { style: mono }, pct(r.ret)) },
+        { key: 'dd', label: 'Max DD', align: 'right', sortable: true, sortValue: (r) => r.dd ?? -999, render: (r) => h('span', { style: mono }, pct(r.dd)) },
+        { key: 'sharpe', label: 'Sharpe', align: 'right', sortable: true, sortValue: (r) => r.sharpe ?? -999, render: (r) => h('span', { style: { ...mono, fontWeight: 600 } }, r.sharpe == null ? '—' : r.sharpe.toFixed(2)) },
+        { key: 'win', label: 'Win rate', align: 'right', hideOnMobile: true, render: (r) => h('span', { style: mono }, r.win == null ? '—' : r.win + '%') },
+        { key: 'trades', label: 'Trades', align: 'right', hideOnMobile: true, render: (r) => h('span', { style: mono }, r.trades) },
+        { key: 'ready', label: 'Promotion readiness', width: 180, sortable: true, render: (r) => h('div', { style: { display: 'flex', alignItems: 'center', gap: 8 } }, h('div', { style: { flex: 1 } }, h(NS.Meter, { value: r.ready, max: 100, size: 'sm', tone: r.ready >= 70 ? 'success' : r.ready >= 40 ? 'warning' : 'neutral', label: 'Readiness' })), h('span', { style: { ...mono, fontSize: 12, width: 32, textAlign: 'right' } }, r.ready + '%')) }
+      ],
+      newDialog: h(NS.Dialog, { open: this.state.open, onClose: () => this.setState({ open: false }), placement: 'right', size: 'lg', title: this.state.name ? 'Edit · ' + this.state.name : 'New automation', description: 'Starts in Research. A definition is versioned and hashed, and every run pins it.',
+        footer: h(React.Fragment, null, h(NS.Button, { variant: 'secondary', onClick: () => this.setState({ open: false }) }, 'Cancel'), h(NS.Button, { iconLeft: 'play', onClick: () => { this.setState({ open: false, name: '' }); app.toast('Automation saved · backtest queued', 'success', 'Research · walk-forward 2019–2026'); } }, 'Save & backtest')) },
+        h('div', { style: { display: 'flex', flexDirection: 'column', gap: 'var(--space-5)' } },
+          h(NS.Input, { label: 'Name', value: this.state.name, onChange: (e) => this.setState({ name: e.target.value }), placeholder: 'e.g. Gold London Breakout' }),
+          h(NS.ChipGroup, { label: 'Approach', options: ['Rules', 'ML', 'AI-assisted', 'Hybrid'], value: this.state.approach, onValueChange: set('approach') }),
+          h(NS.ChipGroup, { label: 'Asset classes', multiple: true, options: ['Stocks PL', 'Stocks US', 'ETF', 'FX & metals', 'Crypto', 'Indices / futures'], value: this.state.classes, onValueChange: set('classes') }),
+          h(NS.ChipGroup, { label: 'Candle timeframes', multiple: true, options: ['M1', 'M5', 'M15', 'H1', 'H4', 'D1', 'W1'], value: this.state.tfs, onValueChange: set('tfs') }),
+          this.state.approach === 'AI-assisted' || this.state.approach === 'Hybrid' ? h(NS.Alert, { tone: 'info', icon: 'sparkles', title: 'AI is an input, not the trigger' }, 'AI produces versioned features (news sentiment, regime, event surprise) with point-in-time cutoffs. Orders still go through rules, Risk and Kill Switch.') : null,
+          h(NS.CodeEditor, { label: 'Definition', language: 'DSL', rows: 12, value: this.state.code, onValueChange: (v) => this.setState({ code: v }), hint: 'DSL or Python plugin · indicators: ema, sma, rsi, atr, vwap, bbands, macd…' }),
+          h(NS.Select, { label: 'Risk profile', options: [{ value: 'c', label: 'Conservative · 0.25% per trade' }, { value: 'b', label: 'Balanced · 0.5% per trade' }, { value: 'a', label: 'Aggressive · 1% per trade (max)' }], value: 'b' }))) 
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+/* CodeEditor */
+.vui-ce{display:flex;flex-direction:column;gap:var(--space-1-5,6px);min-width:0}
+.vui-ce__label{display:flex;align-items:center;gap:var(--space-2);font-size:var(--type-body-sm-size);font-weight:var(--type-label-weight,600);color:var(--fg-primary)}
+.vui-ce__lang{font:600 10px/1 var(--font-mono);letter-spacing:.06em;text-transform:uppercase;padding:3px 5px;border-radius:var(--radius-xs);background:var(--bg-subtle);color:var(--fg-secondary)}
+.vui-ce__box{display:flex;min-height:120px;overflow:hidden;border:var(--border-width) solid var(--code-border);border-radius:var(--radius-md);background:var(--code-bg);color:var(--code-fg);font:13px/20px var(--font-mono)}
+.vui-ce__box:focus-within{border-color:var(--border-brand);box-shadow:0 0 0 3px color-mix(in oklab,var(--border-brand) 25%,transparent)}
+.vui-ce--invalid .vui-ce__box{border-color:var(--status-danger-solid)}
+.vui-ce__gutter{flex:none;overflow:hidden;padding:12px 10px 12px 12px;text-align:right;color:var(--code-gutter);border-right:var(--border-width) solid var(--code-line);user-select:none;font-variant-numeric:tabular-nums;min-width:2.5em}
+.vui-ce__area{position:relative;flex:1;min-width:0}
+.vui-ce__pre,.vui-ce__ta{position:absolute;inset:0;margin:0;padding:12px 14px;font:inherit;white-space:pre;overflow:auto;tab-size:2;letter-spacing:0;word-spacing:0}
+.vui-ce__pre{pointer-events:none;color:var(--code-fg);overflow:hidden}
+.vui-ce__ta{border:0;outline:none;resize:none;background:transparent;color:var(--code-fg);caret-color:var(--code-accent,var(--code-fg))}
+.vui-ce__ta--hl{color:transparent}
+.vui-ce__ta::selection{background:color-mix(in oklab,var(--code-accent,#8ab4ff) 35%,transparent);color:transparent}
+.vui-ce__ta::placeholder{color:var(--code-muted)}
+.vui-ce--ro .vui-ce__ta{cursor:default}
+.vui-ce__pre .tk-k{color:var(--code-function)}.vui-ce__pre .tk-w{color:var(--code-keyword)}.vui-ce__pre .tk-s{color:var(--code-string)}.vui-ce__pre .tk-n{color:var(--code-number)}.vui-ce__pre .tk-c{color:var(--code-comment);font-style:italic}.vui-ce__pre .tk-f{color:var(--code-accent)}
+.vui-ce__hint{font-size:var(--type-caption-size);color:var(--fg-secondary)}
+.vui-ce__hint--err{color:var(--status-danger-fg)}

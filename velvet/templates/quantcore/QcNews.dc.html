@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script><script src="./qc-data.js"></script></helmet>
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.PageHeader" eyebrow="News & calendar" title="What moves the markets" description="News from RSS, Alpaca, ESPI and the SEC, summarised by AI into bullet points with linked sources. Events feed the strategies' blackout rules." actions="{{ headActions }}" tabs="{{ tabs }}" active-tab="{{ tab }}" on-tab-change="{{ setTab }}" hint-size="100%,160px"></x-import>
+<sc-if value="{{ isDigest }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-wrap:wrap;gap:var(--space-4);align-items:flex-start">
+<div style="flex:2 1 560px;min-width:0;display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Alert" tone="warning" icon="triangle-alert" title="2 of 14 sources unavailable" hint-size="100%,64px">Parkiet RSS and Stooq news timed out at 06:55. Missing items from these sources are an ingestion gap, not "no news".</x-import>
+{{ digest }}
+</div>
+<div style="flex:1 1 320px;min-width:0">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Today" description="Thu 22 Oct" hint-size="100%,300px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.List" size="sm" items="{{ today }}" hint-size="100%,200px"></x-import>
+</x-import>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ isFeed }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FilterBar" search="{{ true }}" search-placeholder="Search news, tickers…" query="{{ q }}" on-query-change="{{ setQ }}" filters="{{ filters }}" value="{{ fv }}" on-value-change="{{ setFv }}" result-count="{{ count }}" result-label="articles" hint-size="100%,48px"></x-import>
+<div style="display:flex;flex-direction:column;gap:var(--space-3)">
+<sc-for list="{{ feed }}" as="n" hint-placeholder-count="5">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.NewsItem" title="{{ n.title }}" source="{{ n.src }}" time="{{ n.at }}" region="{{ n.region }}" impact="{{ n.impact }}" bullets="{{ n.bullets }}" tickers="{{ n.tags }}" on-ticker-click="{{ n.openTicker }}" hint-size="100%,150px"></x-import>
+</sc-for>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ isCal }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-wrap:wrap;gap:var(--space-4);align-items:flex-start">
+<div style="flex:0 1 auto;min-width:0">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Calendar" description="Macro · central banks · earnings · ESPI" hint-size="100%,480px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.EventCalendar" events="{{ calEvents }}" default-value="{{ today0 }}" week-starts-on="{{ 1 }}" locale="en-GB" hint-size="100%,420px"></x-import>
+</x-import>
+</div>
+<div style="flex:1 1 480px;min-width:0;display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.ChipGroup" multiple="{{ true }}" size="sm" options="{{ kindOpts }}" value="{{ kinds }}" on-value-change="{{ setKinds }}" hint-size="100%,32px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Next 14 days" description="Times in Europe/Warsaw · consensus where available" padding="none" hint-size="100%,520px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Table" layout="fixed" columns="{{ evCols }}" rows="{{ evRows }}" row-key="id" render-expanded="{{ evExpand }}" hint-size="100%,480px"></x-import>
+</x-import>
+</div>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { tab: 'digest', q: '', fv: {}, kinds: ['Macro', 'Central bank', 'Earnings', 'ESPI'] };
+  componentDidMount() { if (window.__qcSub === 'calendar') { window.__qcSub = null; this.setState({ tab: 'calendar' }); } }
+  renderVals() {
+    const app = this.props.app || window.__qc;
+    const NS = window.VelvetUIDesignSystem_ee2bd8;
+    if (!app || !NS || !NS.NewsItem || !app.D.news) { clearTimeout(this._w); this._w = setTimeout(() => this.forceUpdate(), 80); return { feed: [] }; }
+    const { D } = app; const h = React.createElement; const tab = this.state.tab; const mono = { fontFamily: 'var(--font-mono)', fontVariantNumeric: 'tabular-nums' };
+    const IMP = { High: 'danger', Medium: 'warning', Low: 'neutral' };
+    const fv = this.state.fv; const q = this.state.q.toLowerCase();
+    const feed = D.news.filter((n) => (!q || (n.title + n.tags.join(' ')).toLowerCase().includes(q)) && (!(fv.region || []).length || fv.region.includes(n.region)) && (!(fv.impact || []).length || fv.impact.includes(n.impact)));
+    const evs = D.events.filter((e) => this.state.kinds.includes(e.kind));
+    const fd = (d) => new Date(d).toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short' });
+    return {
+      tab, setTab: (t) => this.setState({ tab: t }), isDigest: tab === 'digest', isFeed: tab === 'feed', isCal: tab === 'calendar',
+      tabs: [{ value: 'digest', label: 'AI digest' }, { value: 'feed', label: 'News feed', count: D.news.length }, { value: 'calendar', label: 'Calendar', count: D.events.length }],
+      headActions: h(React.Fragment, null, h(NS.Button, { size: 'sm', variant: 'secondary', iconLeft: 'settings', onClick: () => app.toast('Sources', 'info', 'RSS feeds · Alpaca News · SEC · ESPI (manual)') }, 'Sources'), h(NS.Button, { size: 'sm', iconLeft: 'sparkles', onClick: () => app.toast('Digest regenerated', 'success', 'Portfolio + watchlist · 07:00 → now') }, 'Regenerate')),
+      digest: h(NS.AiResultPanel, { title: 'Daily digest · portfolio & watchlist', model: D.digest.model, elapsed: D.digest.generated, status: 'done', headline: D.digest.headline, subline: 'Subscription snapshot v14 · 37 documents · window 21 Oct 17:00 → 22 Oct 07:00', sections: D.digest.sections, sources: D.digest.links, tokens: 18420, cost: '$0.06', disclaimer: 'Each bullet links to the source documents. The digest is versioned, and a correction creates a new version.', onRegenerate: () => app.toast('Digest regenerated', 'success') }),
+      today: D.events.filter((e) => e.date === '2026-10-22').concat(D.events.filter((e) => e.date === '2026-10-23')).map((e) => ({ id: e.id, title: e.title, description: (e.date === '2026-10-22' ? 'Today ' : 'Tomorrow ') + e.time + (e.actual ? ' · actual ' + e.actual + ' vs ' + e.cons : e.cons !== '—' ? ' · cons. ' + e.cons : ''), leading: h(NS.Badge, { size: 'sm', variant: 'outline' }, e.region), trailing: h(NS.Badge, { size: 'sm', tone: IMP[e.imp], dot: true }, e.imp) })),
+      q: this.state.q, setQ: (v) => this.setState({ q: v }), fv, setFv: (v) => this.setState({ fv: v }), count: feed.length,
+      filters: [{ key: 'region', label: 'Region', icon: 'globe', multiple: true, options: [{ value: 'PL', label: 'Poland' }, { value: 'US', label: 'US' }, { value: 'Global', label: 'Global' }] }, { key: 'impact', label: 'Impact', icon: 'zap', multiple: true, options: [{ value: 'High', label: 'High' }, { value: 'Medium', label: 'Medium' }, { value: 'Low', label: 'Low' }] }],
+      feed: feed.map((n) => ({ ...n, openTicker: (t) => { window.__qcSym = t; app.go('markets'); }, meta: n.src + ' · ' + n.at + ' · ' + n.region, impactBadge: h(NS.Badge, { size: 'sm', tone: IMP[n.impact], dot: true }, n.impact + ' impact'), tagList: n.tags })),
+      today0: new Date(2026, 9, 22),
+      calEvents: D.events.map((e) => ({ id: e.id, date: e.date, title: e.title, time: e.time, tone: IMP[e.imp] === 'neutral' ? 'info' : IMP[e.imp] })),
+      kindOpts: ['Macro', 'Central bank', 'Earnings', 'ESPI'], kinds: this.state.kinds, setKinds: (v) => this.setState({ kinds: v }),
+      evRows: evs,
+      evCols: [
+        { key: 'date', label: 'When', width: 130, render: (r) => h('div', { style: { display: 'flex', flexDirection: 'column' } }, h('span', { style: { fontWeight: 600, fontSize: 13 } }, fd(r.date)), h('span', { style: { ...mono, fontSize: 12, color: 'var(--fg-secondary)' } }, r.time)) },
+        { key: 'title', label: 'Event', render: (r) => h('div', { style: { display: 'flex', flexDirection: 'column', gap: 4 } }, h('span', { style: { fontWeight: 600 } }, r.title), h('div', { style: { display: 'flex', gap: 4, flexWrap: 'wrap' } }, h(NS.Badge, { size: 'sm', variant: 'outline' }, r.region + ' · ' + r.kind), r.held ? h(NS.Badge, { size: 'sm', tone: 'brand' }, 'In portfolio') : null, r.blackout ? h(NS.Badge, { size: 'sm', tone: 'warning', icon: 'lock' }, 'Blackout') : null)) },
+        { key: 'imp', label: 'Impact', render: (r) => h(NS.Badge, { size: 'sm', tone: IMP[r.imp], dot: true }, r.imp) },
+        { key: 'cons', label: 'Prev · cons.', align: 'right', hideOnMobile: true, render: (r) => h('span', { style: { ...mono, fontSize: 13 } }, r.prev + ' · ' + r.cons) }
+      ],
+      evExpand: (r) => h('div', { style: { padding: '8px 16px 16px', display: 'flex', flexDirection: 'column', gap: 8, fontSize: 13 } },
+        r.blackout ? h(NS.Alert, { tone: 'warning', icon: 'lock', title: 'EventPolicy v3' }, r.blackout) : null,
+        h('span', { style: { color: 'var(--fg-secondary)' } }, r.kind === 'Earnings' ? 'AI preview will be generated 24 h before and post-results summary within 15 min of publication.' : 'Surprise (actual − consensus) is stored as a point-in-time feature available to strategies after release.'),
+        h('div', null, h(NS.Button, { size: 'sm', variant: 'secondary', iconLeft: 'bell', onClick: () => app.toast('Reminder set', 'success', r.title + ' · 30 min before') }, 'Remind me')))
+    };
+  }
+}
+</script>
+</body>
+</html>

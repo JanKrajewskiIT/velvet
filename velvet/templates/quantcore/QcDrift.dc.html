@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script><script src="./qc-data.js"></script></helmet>
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:var(--space-4)">
+<sc-for list="{{ cards }}" as="c" hint-placeholder-count="4">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" padding="sm" hoverable="{{ true }}" on-click="{{ c.pick }}" hint-size="100%,96px">
+<div style="display:flex;flex-direction:column;gap:var(--space-2)">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:var(--space-2)"><span style="font-weight:600;font-size:var(--type-body-sm-size)">{{ c.name }}</span><x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Badge" size="sm" tone="{{ c.tone }}" dot="{{ true }}" hint-size="80px,20px">{{ c.status }}</x-import></div>
+<span style="font:500 12px/1.4 var(--font-mono);color:var(--fg-secondary)">live path at P{{ c.pctl }} of expected</span>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Meter" value="{{ c.pctl }}" max="{{ 100 }}" size="sm" tone="{{ c.tone }}" label="Percentile" hint-size="100%,6px"></x-import>
+</div>
+</x-import>
+</sc-for>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:var(--space-4);align-items:flex-start">
+<div style="flex:2 1 560px;min-width:0">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="{{ chartTitle }}" description="Live paper equity vs the 5–95% band from 10,000 Monte Carlo resamples of backtest trades (block bootstrap) · % since start" hint-size="100%,360px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.RangeBandChart" data="{{ mc }}" lo-key="p5" hi-key="p95" mid-key="p50" value-key="live" band-label="P5–P95 expected" value-label="Live paper" height="{{ 280 }}" format="{{ fmtPct }}" label="Expected band vs live" hint-size="100%,320px"></x-import>
+</x-import>
+</div>
+<div style="flex:1 1 320px;min-width:0;display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Alert" tone="{{ selTone }}" icon="{{ selIcon }}" title="{{ selTitle }}" action="{{ selAction }}" hint-size="100%,96px">{{ selBody }}</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="DegradationPolicy v2" description="Versioned and approved through configuration workflow" hint-size="100%,220px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.List" size="sm" items="{{ policy }}" hint-size="100%,160px"></x-import>
+</x-import>
+</div>
+</div>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Drift metrics" description="Expected (backtest OOS) → live paper · last 28 days" padding="none" hint-size="100%,280px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Table" layout="fixed" columns="{{ cols }}" rows="{{ rows }}" row-key="id" hint-size="100%,240px"></x-import>
+</x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { sel: 'A-03' };
+  renderVals() {
+    const app = this.props.app || window.__qc;
+    const NS = window.VelvetUIDesignSystem_ee2bd8;
+    if (!app || !NS || !NS.ValueShift || !NS.RangeBandChart || !app.D.drift) { clearTimeout(this._w); this._w = setTimeout(() => this.forceUpdate(), 80); return { cards: [] }; }
+    const { D } = app; const h = React.createElement; const mono = { fontFamily: 'var(--font-mono)', fontVariantNumeric: 'tabular-nums', fontSize: 13 };
+    const TONE = { Within: 'success', Watch: 'warning', Degraded: 'danger' };
+    const sel = D.drift.find((d) => d.id === this.state.sel);
+    const scale = sel.status === 'Degraded' ? 1 : sel.status === 'Watch' ? 0.6 : 0.2;
+    const mc = D.mc.map((r, i) => ({ ...r, live: +(r.p50 - (r.p50 - r.live) * scale).toFixed(2) }));
+    const pair = (a, fmt, worse) => h(NS.ValueShift, { from: a[0], to: a[1], format: fmt, worse });
+    return {
+      cards: D.drift.map((d) => ({ ...d, tone: TONE[d.status], pick: () => this.setState({ sel: d.id }) })),
+      chartTitle: sel.name + ' · expected band vs live',
+      mc, fmtPct: (v) => v.toFixed(1) + '%', mcSeries: [{ key: 'p95', label: 'P95', color: 'var(--dv-3)' }, { key: 'p50', label: 'Median', color: 'var(--dv-2)' }, { key: 'p5', label: 'P5', color: 'var(--dv-3)' }, { key: 'live', label: 'Live paper', color: 'var(--dv-1)' }],
+      selTone: TONE[sel.status], selIcon: sel.status === 'Within' ? 'check' : 'triangle-alert',
+      selTitle: sel.name + ' · ' + sel.status,
+      selBody: sel.status === 'Degraded' ? 'Live path below P5 for 4 days. Slippage is 1.9× expected and avg R fell from 0.35 to 0.12. ' + sel.action + '.' : sel.status === 'Watch' ? 'Live path at P' + sel.pctl + '. ' + sel.action + '.' : 'Live results are consistent with the backtest distribution.',
+      selAction: sel.status === 'Within' ? null : h('div', { style: { display: 'flex', gap: 6 } }, h(NS.Button, { size: 'sm', variant: 'secondary', onClick: () => app.toast('Attribution opened', 'info', 'Signal vs timing vs costs') }, 'Diagnose'), h(NS.Button, { size: 'sm', variant: 'soft', onClick: () => app.toast('Sent back to Research', 'warning', sel.name + ' · paper capital released') }, 'Back to Research')),
+      policy: [
+        { id: 1, title: 'Below P20 for 3 days → notify', leading: h(NS.Dot, { tone: 'warning' }) },
+        { id: 2, title: 'Below P10 or slippage > 2× → halve size', leading: h(NS.Dot, { tone: 'warning' }) },
+        { id: 3, title: 'Below P5 for 3 days → pause new entries', leading: h(NS.Dot, { tone: 'danger' }) },
+        { id: 4, title: 'Open positions keep broker SL/TP. No forced close.', leading: h(NS.Dot, { tone: 'neutral' }) }
+      ],
+      rows: D.drift,
+      cols: [
+        { key: 'name', label: 'Automation', render: (r) => h('button', { type: 'button', onClick: () => this.setState({ sel: r.id }), style: { all: 'unset', cursor: 'pointer', fontWeight: 600 } }, r.name) },
+        { key: 'status', label: 'Status', render: (r) => h(NS.Badge, { size: 'sm', tone: TONE[r.status], dot: true }, r.status) },
+        { key: 'win', label: 'Win rate %', align: 'right', render: (r) => pair(r.win, (v) => v, (a, b) => b < a - 3) },
+        { key: 'avgR', label: 'Avg R', align: 'right', render: (r) => pair(r.avgR, (v) => v.toFixed(2), (a, b) => b < a * 0.6) },
+        { key: 'slip', label: 'Slippage bp', align: 'right', hideOnMobile: true, render: (r) => pair(r.slip, (v) => v.toFixed(1), (a, b) => b > a * 1.5) },
+        { key: 'freq', label: 'Trades / wk', align: 'right', hideOnMobile: true, render: (r) => pair(r.freq, (v) => v, (a, b) => b > a * 1.15) },
+        { key: 'action', label: 'Policy action', hideOnMobile: true, render: (r) => h('span', { style: { fontSize: 13, color: 'var(--fg-secondary)' } }, r.action) }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

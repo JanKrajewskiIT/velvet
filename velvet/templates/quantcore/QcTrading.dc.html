@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script><script src="./qc-data.js"></script></helmet>
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<sc-if value="{{ showHeader }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.PageHeader" eyebrow="Trading · Paper" title="Orders and journal" description="Every fill leads to the full audit chain. Commands go through the authorised, idempotent API — they never bypass the gates." actions="{{ headActions }}" hint-size="100%,120px"></x-import></sc-if>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:var(--space-4)">
+<sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Stat" label="{{ s.label }}" value="{{ s.value }}" hint="{{ s.hint }}" tone="{{ s.tone }}" delta="{{ s.delta }}" hint-size="100%,110px"></x-import>
+</sc-for>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:var(--space-4);align-items:flex-start">
+<div style="flex:2 1 600px;min-width:0">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Orders" description="Expand a row to see signal → fill → booking" padding="none" hint-size="100%,460px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Table" layout="fixed" columns="{{ cols }}" rows="{{ orders }}" row-key="id" render-expanded="{{ expanded }}" hint-size="100%,420px"></x-import>
+</x-import>
+</div>
+<div style="flex:1 1 340px;min-width:0">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Journal · ORD-7F21" description="Built from the audit chain · notes never change history" hint-size="100%,520px">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.DescriptionList" items="{{ journal }}" hint-size="100%,300px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.List" size="sm" items="{{ notes }}" hint-size="100%,60px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Add operator note" multiline="{{ true }}" rows="{{ 2 }}" value="{{ draft }}" on-change="{{ onDraft }}" placeholder="e.g. Entry per plan, spread elevated before data" hint-size="100%,90px"></x-import>
+<div style="display:flex;justify-content:flex-end"><x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Button" size="sm" icon-left="notebook-pen" on-click="{{ addNote }}" hint-size="110px,32px">Add note</x-import></div>
+</div>
+</x-import>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { draft: '', notes: [{ text: 'Entry on pullback to EMA 21, per setup. Spread normal.', meta: 'A. Novak · 22 Oct 05:04' }], cancelled: {} };
+  renderVals() {
+    const app = this.props.app || window.__qc;
+    const NS = window.VelvetUIDesignSystem_ee2bd8;
+    if (!app || !NS || !NS.CellStack || !NS.DirectionBadge || !NS.InstrumentLabel) { clearTimeout(this._w); this._w = setTimeout(() => this.forceUpdate(), 80); return { stats: [], notes: [] }; }
+    const { D } = app; const h = React.createElement; const mono = { fontFamily: 'var(--font-mono)', fontVariantNumeric: 'tabular-nums' };
+    const ST = { FILLED: 'success', WORKING: 'info', PARTIALLY_FILLED: 'warning', REJECTED: 'danger', CANCELLED: 'neutral' };
+    const orders = D.orders.map((o) => (this.state.cancelled[o.id] ? { ...o, state: 'CANCELLED' } : o));
+    const px = (v) => D.fmt(v, v < 10 ? 4 : 2);
+    return {
+      showHeader: !this.props.embedded,
+      headActions: h(React.Fragment, null, h(NS.Button, { variant: 'secondary', size: 'sm', iconLeft: 'refresh', onClick: () => app.toast('Reconciliation requested', 'info', 'brokers/reconciliations · Paper') }, 'Reconcile'), h(NS.Button, { variant: 'secondary', size: 'sm', iconLeft: 'download' }, 'Export')),
+      stats: [
+        { label: 'Fills today', value: '3', hint: '1 partial · 0 rejected' },
+        { label: 'Avg slippage', value: '4.0 bp', hint: 'expected vs fill', delta: '+1.2 bp', tone: 'warning' },
+        { label: 'Commission & financing', value: app.money('2.95 USD'), hint: 'today · from ledger' },
+        { label: 'Reconciliation lag', value: '6 min', hint: 'limit 5 min', delta: 'blocking', tone: 'danger' }
+      ],
+      orders,
+      cols: [
+        { key: 'id', label: 'Order', render: (r) => h(NS.CellStack, { primary: r.id, secondary: r.at, mono: true }) },
+        { key: 'inst', label: 'Instrument', render: (r) => h(NS.InstrumentLabel, { symbol: r.inst, size: 'sm' }) },
+        { key: 'side', label: 'Side', render: (r) => h(NS.DirectionBadge, { direction: r.side, suffix: r.type, size: 'sm' }) },
+        { key: 'qty', label: 'Qty', align: 'right', hideOnMobile: true, render: (r) => h('span', { style: mono }, r.qty) },
+        { key: 'fill', label: 'Expected / fill', align: 'right', render: (r) => h(NS.CellStack, { primary: px(r.expected), secondary: r.fill == null ? 'no execution' : px(r.fill) + ' · ' + r.slip + ' bp', mono: true, secondaryMono: true, strong: false, align: 'right' }) },
+        { key: 'state', label: 'State', render: (r) => h('div', { style: { display: 'flex', flexDirection: 'column', gap: 4, alignItems: 'flex-start' } }, h(NS.Badge, { size: 'sm', tone: ST[r.state], dot: true }, r.state), r.recon === 'PENDING' ? h('span', { style: { fontSize: 12, color: 'var(--status-warning-fg)' } }, 'Reconciliation pending') : null) },
+        { key: 'act', label: '', align: 'right', render: (r) => r.state === 'WORKING' || r.state === 'PARTIALLY_FILLED' ? h(NS.Button, { size: 'xs', variant: 'ghost', iconLeft: 'x', onClick: (e) => { e.stopPropagation(); this.setState({ cancelled: { ...this.state.cancelled, [r.id]: true } }); app.toast('Cancel sent', 'success', r.id + ' · Idempotency-Key cmd_' + r.id.slice(4).toLowerCase()); } }, 'Cancel') : null }
+      ],
+      expanded: (r) => r.note ? h('div', { style: { padding: '12px 16px', color: 'var(--status-danger-fg)', ...mono, fontSize: 13 } }, 'Rejected by Risk: ' + r.note)
+        : h('div', { style: { padding: '8px 16px 16px' } }, h(NS.Timeline, { variant: 'compact', items: D.chain.map((c, k) => ({ id: k, title: c.t, description: c.d, time: c.at, icon: c.icon, tone: c.tone, status: 'done' })) })),
+      journal: [
+        { term: 'Setup', description: 'Pullback to EMA 21 in H1 trend · regime: trend, low vol' },
+        { term: 'Entry', description: '2.00 oz @ 2421.4 · 22 Oct 05:00:14', mono: true },
+        { term: 'SL / TP', description: '2398.0 / 2468.0 · unchanged', mono: true },
+        { term: 'Costs', description: 'commission 1.20 USD · slippage 1.7 bp', mono: true },
+        { term: 'P&L', description: app.money('+30.80 USD') + ' unrealised · ledger v418', mono: true },
+        { term: 'MAE / MFE', description: 'Unavailable — no full price path for the range', hint: 'Not zero' },
+        { term: 'Versions', description: 'TrendPullback v3 · FS-H1 v4 · RiskPolicy v12', mono: true }
+      ],
+      notes: this.state.notes.map((n, k) => ({ id: k, title: n.text, description: n.meta, leading: h(NS.IconTile, { icon: 'notebook-pen', size: 'sm' }) })),
+      draft: this.state.draft,
+      onDraft: (e) => this.setState({ draft: e.target.value }),
+      addNote: () => { const t = this.state.draft.trim(); if (!t) return; this.setState({ draft: '', notes: [...this.state.notes, { text: t, meta: 'A. Novak · 22 Oct 14:33' }] }); app.toast('Note added to journal', 'success', 'ORD-7F21'); }
+    };
+  }
+}
+</script>
+</body>
+</html>

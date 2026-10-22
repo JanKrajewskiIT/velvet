@@ -1,4 +1,14 @@
-import { createMemo, createSignal, createUniqueId, For, type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import {
+  createEffect,
+  createMemo,
+  createSignal,
+  createUniqueId,
+  For,
+  type JSX,
+  mergeProps,
+  Show,
+  splitProps,
+} from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { createDismiss } from '../../hooks/createDismiss';
@@ -72,6 +82,7 @@ export const SearchInput = (props: SearchInputProps) => {
     'size',
     'inputRef',
     'disabled',
+    'readOnly',
     'id',
     'class',
     'onInput',
@@ -93,21 +104,24 @@ export const SearchInput = (props: SearchInputProps) => {
   const [highlighted, setActive] = createSignal(0);
   const [root, setRoot] = createSignal<HTMLElement>();
   let input!: HTMLInputElement;
+  const editable = () => !local.disabled && !local.readOnly;
 
   const options = createMemo(() => {
     const all = (local.suggestions ?? []).map(normalizeOption);
     return local.filter ? filterOptions(all, query()) : all;
   });
-  const showList = () => open() && !!local.suggestions && query().length > 0;
+  const showList = () => editable() && open() && !!local.suggestions && query().length > 0;
   const active = () => (options().length ? Math.min(Math.max(0, highlighted()), options().length - 1) : -1);
   const floating = createFloating(showList, root, { matchWidth: true });
   const activeOption = () => options()[active()];
 
   const change = (next: string) => {
+    if (!editable()) return;
     setQuery(next);
     setActive(0);
   };
   const pick = (option: SearchSuggestion) => {
+    if (!showList()) return;
     change(option.label);
     local.onSelect?.(option);
     setOpen(false);
@@ -115,10 +129,13 @@ export const SearchInput = (props: SearchInputProps) => {
   };
 
   createDismiss(showList, () => setOpen(false), root);
+  createEffect(() => {
+    if (!editable()) setOpen(false);
+  });
 
   const onKeyDown: JSX.EventHandler<HTMLInputElement, KeyboardEvent> = (e) => {
     callHandler(local.onKeyDown, e);
-    if (e.defaultPrevented) return;
+    if (e.defaultPrevented || !editable() || e.isComposing) return;
     if (e.key === 'ArrowDown') {
       e.preventDefault();
       const wasOpen = showList();
@@ -147,7 +164,7 @@ export const SearchInput = (props: SearchInputProps) => {
         <FieldLabel htmlFor={id()}>{local.label}</FieldLabel>
       </Show>
       <div ref={setRoot} class={styles.select}>
-        <Control size={local.size} disabled={local.disabled}>
+        <Control size={local.size} disabled={local.disabled} readOnly={local.readOnly}>
           <span class={styles.controlPartAdorn}>
             <Show when={local.loading} fallback={<Glyph name="search" />}>
               <Spinner size="inline" tone="current" />
@@ -170,19 +187,22 @@ export const SearchInput = (props: SearchInputProps) => {
             placeholder={local.placeholder ?? translate('velvet.forms.searchInput.placeholder')}
             value={query()}
             disabled={local.disabled}
+            readOnly={local.readOnly}
             autocomplete="off"
             onInput={(e) => {
+              if (!editable()) return;
               change(e.currentTarget.value);
               setOpen(true);
               callHandler(local.onInput, e);
             }}
             onFocus={(e) => {
-              setOpen(true);
+              if (local.disabled) return;
+              if (editable()) setOpen(true);
               callHandler(local.onFocus, e);
             }}
             onKeyDown={onKeyDown}
           />
-          <Show when={query() && !local.disabled}>
+          <Show when={query() && editable()}>
             <CloseButton
               variant="field"
               label={local.clearLabel ?? translate('velvet.forms.searchInput.clearLabel')}

@@ -3,6 +3,7 @@ import { createSignal, type JSX, mergeProps, Show, splitProps } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
+import { joinIdRefs } from '../../utils/joinIdRefs';
 import type { Tone } from '../../utils/tone';
 import { Control } from '../primitives/Control';
 import { ControlInput } from '../primitives/ControlInput';
@@ -83,6 +84,8 @@ export const PasswordInput = (props: PasswordInputProps) => {
     'value',
     'defaultValue',
     'onInput',
+    'aria-describedby',
+    'aria-invalid',
   ]);
   const translate = useTranslate();
   const [revealed, setRevealed] = createSignal(false);
@@ -142,8 +145,8 @@ export const PasswordInput = (props: PasswordInputProps) => {
               disabled={local.disabled}
               required={local.required}
               value={text()}
-              aria-invalid={control.invalid || undefined}
-              aria-describedby={control.describedBy}
+              aria-invalid={control.invalid || local['aria-invalid']}
+              aria-describedby={joinIdRefs(local['aria-describedby'], control.describedBy)}
               onInput={(e) => {
                 setText(e.currentTarget.value);
                 callHandler(local.onInput, e);

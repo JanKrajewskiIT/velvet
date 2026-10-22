@@ -1,0 +1,23 @@
+.bandSwatch {
+  display: inline-block;
+  width: 14px;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--market-band);
+  border: 1px dashed var(--market-band-edge);
+  vertical-align: middle;
+}
+
+.medianSwatch {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-2xs);
+  background: var(--market-median);
+}
+
+.valueSwatch {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-2xs);
+  background: var(--dv-1);
+}

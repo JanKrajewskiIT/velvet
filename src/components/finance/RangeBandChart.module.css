@@ -1,0 +1,92 @@
+.chart {
+  composes: chart from '../../styles/shared/charts/chart.module.css';
+}
+
+.barTop {
+  composes: chartPartBarTop from '../../styles/shared/charts/chart.module.css';
+}
+
+.legend {
+  composes: chartPartLegend from '../../styles/shared/charts/chart.module.css';
+}
+
+.legendItem {
+  composes: chartPartLg from '../../styles/shared/charts/chart.module.css';
+}
+
+.plot {
+  composes: chartPartPlot from '../../styles/shared/charts/chart.module.css';
+}
+
+.grid {
+  composes: chartPartGrid from '../../styles/shared/charts/chart.module.css';
+}
+
+.tick {
+  composes: chartPartTick from '../../styles/shared/charts/chart.module.css';
+}
+
+.tickOn {
+  composes: chartPartTickVariantOn from '../../styles/shared/charts/chart.module.css';
+}
+
+.cross {
+  composes: chartPartCross from '../../styles/shared/charts/chart.module.css';
+}
+
+.band {
+  fill: var(--market-band);
+  stroke: none;
+}
+
+.edge {
+  fill: none;
+  stroke: var(--market-band-edge);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+.median {
+  fill: none;
+  stroke: var(--market-median);
+  stroke-width: 1.5;
+  stroke-dasharray: 5 4;
+}
+
+.value {
+  fill: none;
+  stroke: var(--dv-1);
+  stroke-width: 2.25;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.zero {
+  stroke: var(--border-strong);
+  stroke-width: 1;
+}
+
+.outside {
+  fill: var(--market-down-solid);
+  stroke: var(--bg-raised);
+  stroke-width: 1.5;
+}
+
+.bandSwatch {
+  composes: bandSwatch from '../../styles/shared/charts/band.module.css';
+}
+
+.medianSwatch {
+  composes: medianSwatch from '../../styles/shared/charts/band.module.css';
+}
+
+.valueSwatch {
+  composes: valueSwatch from '../../styles/shared/charts/band.module.css';
+}
+
+.outsideSwatch {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-full);
+  background: var(--market-down-solid);
+}

@@ -3,6 +3,10 @@ import type { TranslationOf } from '@jankrajewskiit/i18n';
 import type { formsEn } from '../en/forms';
 
 export const formsPl: TranslationOf<typeof formsEn> = {
+  codeEditor: {
+    keyboardHint:
+      'Tab wstawia dwie spacje. Naciśnij Escape, a następnie Tab, aby opuścić edytor. Shift+Tab przechodzi do poprzedniej kontrolki.',
+  },
   autocomplete: {
     placeholder: 'Szukaj…',
     emptyText: 'Brak wyników.',

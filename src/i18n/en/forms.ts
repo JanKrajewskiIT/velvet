@@ -1,6 +1,10 @@
 import { defineDictionary } from '@jankrajewskiit/i18n';
 
 export const formsEn = defineDictionary({
+  codeEditor: {
+    keyboardHint:
+      'Tab inserts two spaces. Press Escape, then Tab to leave the editor. Shift+Tab moves to the previous control.',
+  },
   autocomplete: {
     placeholder: 'Search…',
     emptyText: 'No matches.',

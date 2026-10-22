@@ -1,0 +1,13 @@
+<!-- @dsCard group="29 Finance" viewport="960x110" name="Value shift" subtitle="Expected → actual, deterioration highlighted" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:16px;align-items:center}.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const { ValueShift } = window.VelvetUIDesignSystem_ee2bd8;
+const App=()=>(<div className="r"><ValueShift from={54} to={52}/><ValueShift from={0.35} to={0.12} format={v=>v.toFixed(2)} worse={(a,b)=>b<a*0.6}/><ValueShift from={1.5} to={5.8} format={v=>v.toFixed(1)+' bp'} worse={(a,b)=>b>a*1.5}/><ValueShift from={25} to={30} format={v=>v+'%'}/><ValueShift from={9.4} to={6.1} format={v=>v+'%'} better={(a,b)=>b<a}/></div>);
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

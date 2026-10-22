@@ -37,6 +37,7 @@ export const ColorLabelRow = (props: ColorLabelRowProps) => {
               icon="pencil"
               label={translate('velvet.patterns.colorLabelManager.edit', { name: props.label.name })}
               size="xs"
+              disabled={props.manager.busy()}
               onClick={() => props.manager.startEdit(props.label)}
             />
             <IconButton
@@ -44,6 +45,7 @@ export const ColorLabelRow = (props: ColorLabelRowProps) => {
               label={translate('velvet.patterns.colorLabelManager.delete', { name: props.label.name })}
               size="xs"
               class={styles.clmPartDel}
+              disabled={props.manager.busy()}
               aria-expanded={props.manager.confirming() === props.label.id}
               onClick={() => props.manager.toggleConfirm(props.label)}
             />
@@ -64,6 +66,7 @@ export const ColorLabelRow = (props: ColorLabelRowProps) => {
           <Button
             variant="ghost"
             size="xs"
+            disabled={props.manager.busy()}
             onClick={props.manager.cancelConfirm}
             ref={(el: HTMLButtonElement) => queueMicrotask(() => el.focus())}
           >

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script><script src="./qc-data.js"></script></helmet>
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<div style="display:flex;flex-wrap:wrap;gap:var(--space-4);align-items:flex-start">
+<div style="flex:2 1 600px;min-width:0;display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Change requests" description="Every policy, cost model, promotion and threshold change goes through propose → review → activate. Each step can be rolled back." padding="none" actions="{{ newAction }}" hint-size="100%,360px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Table" layout="fixed" columns="{{ cols }}" rows="{{ rows }}" row-key="id" hint-size="100%,320px"></x-import>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="{{ selTitle }}" description="{{ selDesc }}" actions="{{ selActions }}" hint-size="100%,420px">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Stepper" steps="{{ flow }}" current="{{ flowAt }}" hint-size="100%,56px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.DiffViewer" old-text="{{ before }}" new-text="{{ after }}" filename="risk-policy.yaml" hint-size="100%,180px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Alert" tone="warning" icon="lock" title="Four-eyes rule" hint-size="100%,64px">Approving a RiskPolicy needs a RiskOwner who is not the author, plus MFA. Your role is Operator: you can comment or request changes.</x-import>
+</div>
+</x-import>
+</div>
+<div style="flex:1 1 320px;min-width:0;display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Trading state" description="ACC-PAPER-01 · independent of process state and mode" hint-size="100%,300px">
+<div style="display:flex;flex-direction:column;gap:var(--space-3)">
+<sc-for list="{{ states }}" as="s" hint-placeholder-count="4">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Option" selected="{{ s.sel }}" show-check="{{ true }}" label="{{ s.id }}" description="{{ s.d }}" role="menuitemradio" on-click="{{ s.pick }}" hint-size="100%,56px"></x-import>
+</sc-for>
+</div>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Kill Switch history" description="Activation: any Operator · reset: RiskOwner + MFA + reason" hint-size="100%,240px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Timeline" variant="compact" items="{{ killHistory }}" hint-size="100%,180px"></x-import>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Roles & scopes" description="Anna Novak · token in tab memory only" hint-size="100%,200px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.DescriptionList" items="{{ roles }}" hint-size="100%,150px"></x-import>
+</x-import>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { sel: 'CR-214' };
+  renderVals() {
+    const app = this.props.app || window.__qc;
+    const NS = window.VelvetUIDesignSystem_ee2bd8;
+    if (!app || !NS || !app.D.changes) { clearTimeout(this._w); this._w = setTimeout(() => this.forceUpdate(), 80); return { states: [] }; }
+    const { D } = app; const h = React.createElement; const mono = { fontFamily: 'var(--font-mono)', fontSize: 13 };
+    const ST = { 'In review': 'info', Active: 'success', Draft: 'neutral', 'Rolled back': 'warning', Rejected: 'danger' };
+    const sel = D.changes.find((c) => c.id === this.state.sel);
+    const FLOW = { Draft: 0, 'In review': 1, Active: 3, 'Rolled back': 4 };
+    const TS = [['NORMAL', 'New entries allowed within policy'], ['SUSPENDED', 'No new entries · existing orders kept'], ['CLOSE_ONLY', 'Only reduce / close positions'], ['EMERGENCY_STOP', 'Kill Switch · new orders blocked, working orders cancelled']];
+    return {
+      newAction: h(NS.Button, { size: 'sm', iconLeft: 'plus', onClick: () => app.toast('Proposal form', 'info', 'Choose class: RiskPolicy · EventPolicy · CostModel · Promotion · Monitoring') }, 'Propose change'),
+      rows: D.changes,
+      cols: [
+        { key: 'id', label: 'Change', render: (r) => h('button', { type: 'button', onClick: () => this.setState({ sel: r.id }), style: { all: 'unset', cursor: 'pointer', display: 'flex', flexDirection: 'column' } }, h('span', { style: { ...mono, fontWeight: 600, color: r.id === sel.id ? 'var(--fg-brand)' : undefined } }, r.id), h('span', { style: { fontSize: 13 } }, r.title)) },
+        { key: 'cls', label: 'Class', hideOnMobile: true, render: (r) => h(NS.Badge, { size: 'sm', variant: 'outline' }, r.cls) },
+        { key: 'author', label: 'Author', hideOnMobile: true, render: (r) => h('span', { style: { fontSize: 13 } }, r.author + ' · ' + r.role) },
+        { key: 'state', label: 'State', render: (r) => h(NS.Badge, { size: 'sm', tone: ST[r.state], dot: true }, r.state) },
+        { key: 'reviewers', label: 'Review', hideOnMobile: true, render: (r) => h('span', { style: { fontSize: 12, color: 'var(--fg-secondary)' } }, r.reviewers) }
+      ],
+      selTitle: sel.id + ' · ' + sel.title, selDesc: sel.cls + ' · ' + sel.author + ' · ' + sel.created + ' · ' + sel.evidence + ' evidence files',
+      selActions: h('div', { style: { display: 'flex', gap: 6 } }, h(NS.Button, { size: 'sm', variant: 'secondary', onClick: () => app.toast('Changes requested', 'info', sel.id + ' · comment recorded') }, 'Request changes'), h(NS.Button, { size: 'sm', iconLeft: 'lock', disabled: true }, 'Approve')),
+      flow: [{ label: 'Proposed', description: 'with evidence' }, { label: 'In review', description: 'other person' }, { label: 'Approved', description: 'role + MFA' }, { label: 'Active', description: 'pointer switched' }, { label: 'Rollback', description: 'if needed' }],
+      flowAt: FLOW[sel.state] ?? 0,
+      before: sel.before || 'policy: unchanged\n', after: sel.after || 'policy: unchanged\n',
+      states: TS.map(([id, d]) => ({ id, d, sel: app.trading === id, pick: () => { if (id === 'EMERGENCY_STOP') app.openKill(); else if (app.trading !== id) app.toast('Transition requested: ' + app.trading + ' → ' + id, 'info', 'Needs reason + confirmation · audited'); } })),
+      killHistory: [
+        { id: 1, title: 'Reset → NORMAL', description: 'M. Fox (RiskOwner, MFA) · reason: broker outage resolved', time: '2 Oct 09:12', icon: 'refresh', status: 'done' },
+        { id: 2, title: 'EMERGENCY_STOP', description: 'A. Novak · broker heartbeat lost 90 s', time: '2 Oct 08:41', icon: 'stop', tone: 'danger', status: 'done' }
+      ],
+      roles: [{ term: 'Role', description: 'Operator' }, { term: 'Scopes', description: D.user.scopes.join(' · '), mono: true }, { term: 'MFA', description: 'Verified 08:02 · amr=mfa' }, { term: 'Can approve', description: 'EventPolicy, CostModel · not RiskPolicy' }]
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -11,6 +11,8 @@ export interface LineChartProps {
   area?: boolean;
   /** @default true */
   curved?: boolean;
+  /** Axis starts at 0 (default). false fits the axis to the data — use for equity / price levels. Negative values are always supported. @default true */
+  includeZero?: boolean;
   /** Start in table view */
   showTable?: boolean;
   label?: string;

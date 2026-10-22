@@ -5,6 +5,7 @@ import { createActiveOptionScroll } from '../../hooks/createActiveOptionScroll';
 import { createControllable } from '../../hooks/createControllable';
 import { createDismiss } from '../../hooks/createDismiss';
 import { createFloating } from '../../hooks/createFloating';
+import { ownsLayerEvent } from '../../hooks/createLayer';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { pad } from '../../utils/date';
@@ -78,11 +79,20 @@ export const TimePicker = (props: TimePickerProps) => {
   let input!: HTMLInputElement;
 
   const text = () => typed() ?? formatTime(current(), p.hour12, i18n.locale());
+  const invalidMessage = () => {
+    const value = typed() ?? current();
+    if (value == null || !value.trim()) return undefined;
+    const parsed = parseTime(value);
+    if (!parsed) return translate('velvet.forms.timePicker.invalidTime', { example: example() });
+    return isAllowed(parsed)
+      ? undefined
+      : translate('velvet.forms.timePicker.outsideRange', { min: p.min, max: p.max });
+  };
   const message = () => {
     if (p.error) return p.error;
-    if (invalidText() === 'range') return translate('velvet.forms.timePicker.outsideRange', { min: p.min, max: p.max });
-    return invalidText() ? translate('velvet.forms.timePicker.invalidTime', { example: example() }) : null;
+    return invalidText() || typed() === null || validation.invalid() ? invalidMessage() : undefined;
   };
+  const serialized = () => (typed() === null ? (current() ?? '') : (parseTime(typed() ?? '') ?? ''));
   const bounds = createMemo(() => ({ min: parseTime(p.min), max: parseTime(p.max) }));
   const isAllowed = (time: string) => {
     const { min, max } = bounds();
@@ -111,6 +121,7 @@ export const TimePicker = (props: TimePickerProps) => {
     setCurrent(time);
   };
   const commit = (input: string) => {
+    if (p.disabled) return;
     if (!input.trim()) {
       set(null);
       return;
@@ -124,13 +135,25 @@ export const TimePicker = (props: TimePickerProps) => {
     open,
     (reason) => {
       setOpen(false);
-      if (reason === 'outside') commit(text());
-      else setTyped(null);
+      if (reason === 'outside' && typed() !== null) commit(text());
+      else {
+        setTyped(null);
+        setInvalidText(undefined);
+      }
     },
     wrap,
     { refocus: false },
   );
-  createEffect(on(current, () => setTyped(null), { defer: true }));
+  createEffect(
+    on(
+      current,
+      () => {
+        setTyped(null);
+        setInvalidText(undefined);
+      },
+      { defer: true },
+    ),
+  );
   createEffect(() => {
     if (p.disabled) {
       setOpen(false);
@@ -147,9 +170,17 @@ export const TimePicker = (props: TimePickerProps) => {
   );
   createActiveOptionScroll(open, () => (active() >= 0 ? `${listId()}-${active()}` : undefined));
 
-  const onKeyDown = (e: KeyboardEvent) => {
-    if (p.disabled) return;
+  const onKeyDown: JSX.EventHandler<HTMLInputElement, KeyboardEvent> = (e) => {
+    if (e.defaultPrevented || p.disabled || e.isComposing) return;
     switch (e.key) {
+      case 'Escape':
+        if ((!open() && typed() === null) || !ownsLayerEvent(e.currentTarget)) return;
+        e.preventDefault();
+        e.stopPropagation();
+        setOpen(false);
+        setTyped(null);
+        setInvalidText(undefined);
+        break;
       case 'ArrowDown':
         e.preventDefault();
         if (!open()) setOpen(true);
@@ -215,6 +246,10 @@ export const TimePicker = (props: TimePickerProps) => {
             onFocus={() => !p.disabled && setOpen(true)}
             onClick={() => !p.disabled && setOpen(true)}
             onKeyDown={onKeyDown}
+            onBlur={(event) => {
+              if (typed() !== null) commit(event.currentTarget.value);
+              setOpen(false);
+            }}
           />
         </Control>
         <FormValue
@@ -223,7 +258,8 @@ export const TimePicker = (props: TimePickerProps) => {
           form={p.form}
           required={p.required}
           disabled={p.disabled}
-          value={current() ?? ''}
+          value={serialized()}
+          invalidMessage={invalidMessage()}
           focusInvalid={() => input.focus()}
           onReset={() => {
             setCurrent(p.defaultValue ?? null);

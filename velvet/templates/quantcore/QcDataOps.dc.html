@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script><script src="./qc-data.js"></script></helmet>
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Datasets" description="Immutable, versioned candle sets. Only certified datasets can back a promotion to Paper or beyond." padding="none" actions="{{ dsAction }}" hint-size="100%,340px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Table" layout="fixed" columns="{{ dsCols }}" rows="{{ datasets }}" row-key="id" render-expanded="{{ dsExpand }}" hint-size="100%,300px"></x-import>
+</x-import>
+<div style="display:flex;flex-wrap:wrap;gap:var(--space-4);align-items:flex-start">
+<div style="flex:3 1 560px;min-width:0">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Providers & usage rights" description="Free and low-cost sources first. Every feed records coverage, entitlement and redistribution rights." padding="none" hint-size="100%,340px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Table" layout="fixed" columns="{{ pvCols }}" rows="{{ providers }}" row-key="name" hint-size="100%,300px"></x-import>
+</x-import>
+</div>
+<div style="flex:2 1 320px;min-width:0;display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="AI usage · October" description="Budget, volume and measured reliability" hint-size="100%,380px">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.UsageMeter" label="Monthly budget" value="{{ aiSpent }}" max="{{ aiBudget }}" value-text="{{ aiSpend }}" hint-size="100%,40px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.DescriptionList" items="{{ aiItems }}" hint-size="100%,120px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.BarChart" data="{{ aiRel }}" series="{{ aiRelSeries }}" height="{{ 130 }}" show-legend="{{ false }}" label="AI directional hit rate" hint-size="100%,130px"></x-import>
+<span style="font-size:var(--type-caption-size);color:var(--fg-tertiary)">Directional hit rate of AI features, measured after the label horizon. Under 55% means the feature adds no value and gets reviewed.</span>
+</div>
+</x-import>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const app = this.props.app || window.__qc;
+    const NS = window.VelvetUIDesignSystem_ee2bd8;
+    if (!app || !NS || !NS.UsageMeter || !NS.DataState || !app.D.datasets) { clearTimeout(this._w); this._w = setTimeout(() => this.forceUpdate(), 80); return {}; }
+    const { D } = app; const h = React.createElement; const mono = { fontFamily: 'var(--font-mono)', fontSize: 13 };
+    const Q = { Certified: 'success', Uncertified: 'warning', Review: 'info' };
+    const PS = { ok: 'fresh', warn: 'partial', off: 'unavailable' };
+    return {
+      dsAction: h(NS.Button, { size: 'sm', iconLeft: 'download', onClick: () => app.toast('Backfill queued', 'info', 'Choose instrument, timeframe and range') }, 'Backfill'),
+      datasets: D.datasets,
+      dsCols: [
+        { key: 'id', label: 'Dataset', render: (r) => h('div', { style: { display: 'flex', flexDirection: 'column' } }, h('span', { style: { ...mono, fontWeight: 600 } }, r.id), h('span', { style: { fontSize: 12, color: 'var(--fg-secondary)' } }, r.inst + ' · ' + r.tf)) },
+        { key: 'src', label: 'Source', hideOnMobile: true },
+        { key: 'range', label: 'Range', hideOnMobile: true, render: (r) => h('span', { style: mono }, r.range) },
+        { key: 'gaps', label: 'Gaps', align: 'right', render: (r) => h('span', { style: { ...mono, color: r.gaps ? 'var(--status-warning-fg)' : undefined } }, r.gaps) },
+        { key: 'quality', label: 'Quality', render: (r) => h(NS.Badge, { size: 'sm', tone: Q[r.quality], dot: true }, r.quality) },
+        { key: 'used', label: 'Used by', align: 'right', hideOnMobile: true, render: (r) => h('span', { style: mono }, r.used + ' runs') }
+      ],
+      dsExpand: (r) => h('div', { style: { padding: '8px 16px 16px', display: 'flex', flexDirection: 'column', gap: 8 } }, r.note ? h(NS.Alert, { tone: 'warning', icon: 'triangle-alert', title: 'Why not certified' }, r.note) : null, h(NS.DescriptionList, { items: [{ term: 'Rows', description: r.rows, mono: true }, { term: 'Calendar', description: r.inst.includes('/') ? 'FX 24/5 · Sun 23:00 → Fri 22:00 UTC' : r.src === 'Stooq' ? 'GPW sessions · Europe/Warsaw' : 'Exchange sessions' }, { term: 'Adjustment', description: r.src === 'Stooq' ? 'Splits only · dividends pending' : 'Raw, splits applied' }, { term: 'Hash', description: 'sha256 ' + r.id.toLowerCase().replace(/-/g, '').slice(0, 10) + '…', mono: true }] })),
+      providers: D.providers,
+      pvCols: [
+        { key: 'name', label: 'Provider', render: (r) => h('div', { style: { display: 'flex', flexDirection: 'column' } }, h('span', { style: { fontWeight: 600 } }, r.name), h('span', { style: { fontSize: 12, color: 'var(--fg-secondary)' } }, r.scope)) },
+        { key: 'cost', label: 'Cost', hideOnMobile: true },
+        { key: 'rights', label: 'Rights', render: (r) => h('span', { style: { fontSize: 12, color: r.state === 'warn' ? 'var(--status-warning-fg)' : 'var(--fg-secondary)' } }, r.rights) },
+        { key: 'state', label: 'Status', render: (r) => h(NS.DataState, { state: PS[r.state], label: r.state === 'ok' ? 'Connected' : r.state === 'warn' ? 'Check licence' : 'Not connected' }) }
+      ],
+      aiSpent: D.ai.spent, aiBudget: D.ai.budget, aiSpend: '$' + D.ai.spent.toFixed(2) + ' / $' + D.ai.budget,
+      aiItems: [{ term: 'Runs', description: String(D.ai.runs), mono: true }, { term: 'Digests · analyses', description: D.ai.digests + ' · ' + D.ai.analyses, mono: true }, { term: 'Feature extractions', description: String(D.ai.features), mono: true }, { term: 'At budget', description: 'Pause scheduled AI · trading unaffected' }],
+      aiRel: D.ai.reliability, aiRelSeries: [{ key: 'hit', label: 'Hit rate %', color: 'var(--dv-2)' }]
+    };
+  }
+}
+</script>
+</body>
+</html>

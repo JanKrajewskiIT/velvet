@@ -1,4 +1,4 @@
-/* @ds-bundle: {"format":4,"namespace":"VelvetUIDesignSystem_ee2bd8","components":[{"name":"AuthButton","sourcePath":"components/actions/AuthButton.jsx"},{"name":"Button","sourcePath":"components/actions/Button.jsx"},{"name":"ButtonGroup","sourcePath":"components/actions/ButtonGroup.jsx"},{"name":"CalendarEventButton","sourcePath":"components/actions/CalendarEventButton.jsx"},{"name":"CopyButton","sourcePath":"components/actions/CopyButton.jsx"},{"name":"CopyField","sourcePath":"components/actions/CopyButton.jsx"},{"name":"Fab","sourcePath":"components/actions/Fab.jsx"},{"name":"IconButton","sourcePath":"components/actions/IconButton.jsx"},{"name":"LocaleSwitcher","sourcePath":"components/actions/LocaleSwitcher.jsx"},{"name":"ThemeToggle","sourcePath":"components/actions/ThemeToggle.jsx"},{"name":"ToggleButton","sourcePath":"components/actions/ToggleButton.jsx"},{"name":"ToggleGroup","sourcePath":"components/actions/ToggleGroup.jsx"},{"name":"BarChart","sourcePath":"components/charts/BarChart.jsx"},{"name":"ComparisonBar","sourcePath":"components/charts/ComparisonBar.jsx"},{"name":"ComparisonDialog","sourcePath":"components/charts/ComparisonBar.jsx"},{"name":"DonutChart","sourcePath":"components/charts/DonutChart.jsx"},{"name":"FunnelChart","sourcePath":"components/charts/FunnelChart.jsx"},{"name":"Gantt","sourcePath":"components/charts/Gantt.jsx"},{"name":"Gauge","sourcePath":"components/charts/Gauge.jsx"},{"name":"HEATMAP_COLORS","sourcePath":"components/charts/Heatmap.jsx"},{"name":"Heatmap","sourcePath":"components/charts/Heatmap.jsx"},{"name":"LineChart","sourcePath":"components/charts/LineChart.jsx"},{"name":"RadarChart","sourcePath":"components/charts/RadarChart.jsx"},{"name":"Sparkline","sourcePath":"components/charts/Sparkline.jsx"},{"name":"Accordion","sourcePath":"components/data/Accordion.jsx"},{"name":"Avatar","sourcePath":"components/data/Avatar.jsx"},{"name":"AvatarGroup","sourcePath":"components/data/Avatar.jsx"},{"name":"CodeSnippet","sourcePath":"components/data/CodeSnippet.jsx"},{"name":"ApplyColumns","sourcePath":"components/data/ColumnManager.jsx"},{"name":"ColumnManager","sourcePath":"components/data/ColumnManager.jsx"},{"name":"DataGrid","sourcePath":"components/data/DataGrid.jsx"},{"name":"DescriptionList","sourcePath":"components/data/DescriptionList.jsx"},{"name":"DiffViewer","sourcePath":"components/data/DiffViewer.jsx"},{"name":"Divider","sourcePath":"components/data/Divider.jsx"},{"name":"EventCalendar","sourcePath":"components/data/EventCalendar.jsx"},{"name":"FeatureCard","sourcePath":"components/data/FeatureCard.jsx"},{"name":"FlipCard","sourcePath":"components/data/FlipCard.jsx"},{"name":"Kanban","sourcePath":"components/data/Kanban.jsx"},{"name":"List","sourcePath":"components/data/List.jsx"},{"name":"LogViewer","sourcePath":"components/data/LogViewer.jsx"},{"name":"QuestionCard","sourcePath":"components/data/QuestionCard.jsx"},{"name":"Scheduler","sourcePath":"components/data/Scheduler.jsx"},{"name":"ScoreCard","sourcePath":"components/data/ScoreCard.jsx"},{"name":"SkillBar","sourcePath":"components/data/SkillBar.jsx"},{"name":"Stat","sourcePath":"components/data/Stat.jsx"},{"name":"Table","sourcePath":"components/data/Table.jsx"},{"name":"Timeline","sourcePath":"components/data/Timeline.jsx"},{"name":"VirtualList","sourcePath":"components/data/VirtualList.jsx"},{"name":"VirtualTable","sourcePath":"components/data/VirtualTable.jsx"},{"name":"Badge","sourcePath":"components/display/Badge.jsx"},{"name":"BrandLogo","sourcePath":"components/display/BrandLogo.jsx"},{"name":"Card","sourcePath":"components/display/Card.jsx"},{"name":"VelvetIcons","sourcePath":"components/display/Icon.jsx"},{"name":"IconCategories","sourcePath":"components/display/Icon.jsx"},{"name":"IconAliases","sourcePath":"components/display/Icon.jsx"},{"name":"IconFilled","sourcePath":"components/display/Icon.jsx"},{"name":"Icon","sourcePath":"components/display/Icon.jsx"},{"name":"Markdown","sourcePath":"components/display/Markdown.jsx"},{"name":"MarkdownEditor","sourcePath":"components/display/MarkdownEditor.jsx"},{"name":"MarkdownEditDialog","sourcePath":"components/display/MarkdownEditor.jsx"},{"name":"QRCode","sourcePath":"components/display/QRCode.jsx"},{"name":"StructuredCard","sourcePath":"components/display/StructuredCard.jsx"},{"name":"Tag","sourcePath":"components/display/Tag.jsx"},{"name":"Watermark","sourcePath":"components/display/Watermark.jsx"},{"name":"R_MARK","sourcePath":"components/display/recron-logo-paths.js"},{"name":"R_WORD","sourcePath":"components/display/recron-logo-paths.js"},{"name":"Alert","sourcePath":"components/feedback/Alert.jsx"},{"name":"Banner","sourcePath":"components/feedback/Alert.jsx"},{"name":"BottomSheet","sourcePath":"components/feedback/BottomSheet.jsx"},{"name":"ConfirmDialog","sourcePath":"components/feedback/ConfirmDialog.jsx"},{"name":"ConfirmAction","sourcePath":"components/feedback/ConfirmDialog.jsx"},{"name":"Countdown","sourcePath":"components/feedback/Countdown.jsx"},{"name":"Dialog","sourcePath":"components/feedback/Dialog.jsx"},{"name":"EmptyState","sourcePath":"components/feedback/EmptyState.jsx"},{"name":"ErrorState","sourcePath":"components/feedback/EmptyState.jsx"},{"name":"StatusPage","sourcePath":"components/feedback/EmptyState.jsx"},{"name":"LOADER_VARIANTS","sourcePath":"components/feedback/Loader.jsx"},{"name":"Loader","sourcePath":"components/feedback/Loader.jsx"},{"name":"PageLoader","sourcePath":"components/feedback/Loader.jsx"},{"name":"NotificationList","sourcePath":"components/feedback/NotificationCenter.jsx"},{"name":"NotificationCenter","sourcePath":"components/feedback/NotificationCenter.jsx"},{"name":"Popover","sourcePath":"components/feedback/Popover.jsx"},{"name":"Progress","sourcePath":"components/feedback/Progress.jsx"},{"name":"ProgressRing","sourcePath":"components/feedback/Progress.jsx"},{"name":"SetupChecklist","sourcePath":"components/feedback/SetupChecklist.jsx"},{"name":"Skeleton","sourcePath":"components/feedback/Skeleton.jsx"},{"name":"SkeletonText","sourcePath":"components/feedback/Skeleton.jsx"},{"name":"Spinner","sourcePath":"components/feedback/Spinner.jsx"},{"name":"LoadingOverlay","sourcePath":"components/feedback/Spinner.jsx"},{"name":"Toast","sourcePath":"components/feedback/Toast.jsx"},{"name":"ToastRegion","sourcePath":"components/feedback/Toast.jsx"},{"name":"Tooltip","sourcePath":"components/feedback/Tooltip.jsx"},{"name":"Tour","sourcePath":"components/feedback/Tour.jsx"},{"name":"Autocomplete","sourcePath":"components/forms/Autocomplete.jsx"},{"name":"Calendar","sourcePath":"components/forms/Calendar.jsx"},{"name":"Cascader","sourcePath":"components/forms/Cascader.jsx"},{"name":"Checkbox","sourcePath":"components/forms/Checkbox.jsx"},{"name":"Chip","sourcePath":"components/forms/Chip.jsx"},{"name":"ChipGroup","sourcePath":"components/forms/ChipGroup.jsx"},{"name":"ColorPicker","sourcePath":"components/forms/ColorPicker.jsx"},{"name":"DatePicker","sourcePath":"components/forms/DatePicker.jsx"},{"name":"DEFAULT_RANGE_PRESETS","sourcePath":"components/forms/DatePicker.jsx"},{"name":"DateRangePicker","sourcePath":"components/forms/DatePicker.jsx"},{"name":"TimePicker","sourcePath":"components/forms/DatePicker.jsx"},{"name":"DateTimePicker","sourcePath":"components/forms/DateTimePicker.jsx"},{"name":"EditableCollection","sourcePath":"components/forms/EditableCollection.jsx"},{"name":"ErrorSummary","sourcePath":"components/forms/ErrorSummary.jsx"},{"name":"FileUpload","sourcePath":"components/forms/FileUpload.jsx"},{"name":"FormLayout","sourcePath":"components/forms/FormLayout.jsx"},{"name":"FormSection","sourcePath":"components/forms/FormLayout.jsx"},{"name":"FormGrid","sourcePath":"components/forms/FormLayout.jsx"},{"name":"FormSpan","sourcePath":"components/forms/FormLayout.jsx"},{"name":"ActionRow","sourcePath":"components/forms/FormLayout.jsx"},{"name":"InlineEdit","sourcePath":"components/forms/InlineEdit.jsx"},{"name":"Input","sourcePath":"components/forms/Input.jsx"},{"name":"MentionInput","sourcePath":"components/forms/MentionInput.jsx"},{"name":"MultiSelect","sourcePath":"components/forms/MultiSelect.jsx"},{"name":"NumberInput","sourcePath":"components/forms/NumberInput.jsx"},{"name":"OptionSwitcher","sourcePath":"components/forms/OptionSwitcher.jsx"},{"name":"OtpInput","sourcePath":"components/forms/OtpInput.jsx"},{"name":"PasswordInput","sourcePath":"components/forms/PasswordInput.jsx"},{"name":"PHONE_COUNTRIES","sourcePath":"components/forms/PhoneInput.jsx"},{"name":"PhoneInput","sourcePath":"components/forms/PhoneInput.jsx"},{"name":"Radio","sourcePath":"components/forms/Radio.jsx"},{"name":"RangeInput","sourcePath":"components/forms/RangeInput.jsx"},{"name":"Rating","sourcePath":"components/forms/Rating.jsx"},{"name":"RatingSummary","sourcePath":"components/forms/RatingSummary.jsx"},{"name":"RichTextEditor","sourcePath":"components/forms/RichTextEditor.jsx"},{"name":"SearchInput","sourcePath":"components/forms/SearchInput.jsx"},{"name":"Select","sourcePath":"components/forms/Select.jsx"},{"name":"SignaturePad","sourcePath":"components/forms/SignaturePad.jsx"},{"name":"Slider","sourcePath":"components/forms/Slider.jsx"},{"name":"Switch","sourcePath":"components/forms/Switch.jsx"},{"name":"TagInput","sourcePath":"components/forms/TagInput.jsx"},{"name":"Textarea","sourcePath":"components/forms/Textarea.jsx"},{"name":"TimeStepper","sourcePath":"components/forms/TimeStepper.jsx"},{"name":"TransferList","sourcePath":"components/forms/TransferList.jsx"},{"name":"TreeSelect","sourcePath":"components/forms/TreeSelect.jsx"},{"name":"Footer","sourcePath":"components/layout/Footer.jsx"},{"name":"PageHeader","sourcePath":"components/layout/PageHeader.jsx"},{"name":"ScrollArea","sourcePath":"components/layout/ScrollArea.jsx"},{"name":"SearchTrigger","sourcePath":"components/layout/SearchTrigger.jsx"},{"name":"Sidebar","sourcePath":"components/layout/Sidebar.jsx"},{"name":"NavItem","sourcePath":"components/layout/Sidebar.jsx"},{"name":"NavSection","sourcePath":"components/layout/Sidebar.jsx"},{"name":"SplitPane","sourcePath":"components/layout/SplitPane.jsx"},{"name":"Stack","sourcePath":"components/layout/Stack.jsx"},{"name":"Grid","sourcePath":"components/layout/Stack.jsx"},{"name":"AudioPlayer","sourcePath":"components/media/AudioPlayer.jsx"},{"name":"Carousel","sourcePath":"components/media/Carousel.jsx"},{"name":"ImageCropper","sourcePath":"components/media/ImageCropper.jsx"},{"name":"Lightbox","sourcePath":"components/media/Lightbox.jsx"},{"name":"ImageGrid","sourcePath":"components/media/Lightbox.jsx"},{"name":"Marquee","sourcePath":"components/media/Marquee.jsx"},{"name":"MediaFrame","sourcePath":"components/media/MediaFrame.jsx"},{"name":"PlayerButton","sourcePath":"components/media/VideoPlayer.jsx"},{"name":"VideoPlayer","sourcePath":"components/media/VideoPlayer.jsx"},{"name":"CommandPalette","sourcePath":"components/menus/CommandPalette.jsx"},{"name":"ContextMenu","sourcePath":"components/menus/ContextMenu.jsx"},{"name":"DropdownButton","sourcePath":"components/menus/DropdownButton.jsx"},{"name":"MenuPanel","sourcePath":"components/menus/Menu.jsx"},{"name":"Menu","sourcePath":"components/menus/Menu.jsx"},{"name":"MenuChip","sourcePath":"components/menus/MenuChip.jsx"},{"name":"Toolbar","sourcePath":"components/menus/Toolbar.jsx"},{"name":"Anchor","sourcePath":"components/navigation/Anchor.jsx"},{"name":"BackToTop","sourcePath":"components/navigation/BackToTop.jsx"},{"name":"BottomNav","sourcePath":"components/navigation/BottomNav.jsx"},{"name":"Breadcrumb","sourcePath":"components/navigation/Breadcrumb.jsx"},{"name":"HierarchyNavigator","sourcePath":"components/navigation/HierarchyNavigator.jsx"},{"name":"Link","sourcePath":"components/navigation/Link.jsx"},{"name":"LoadMore","sourcePath":"components/navigation/LoadMore.jsx"},{"name":"Navbar","sourcePath":"components/navigation/Navbar.jsx"},{"name":"NavbarLocale","sourcePath":"components/navigation/Navbar.jsx"},{"name":"NavbarUser","sourcePath":"components/navigation/Navbar.jsx"},{"name":"Pagination","sourcePath":"components/navigation/Pagination.jsx"},{"name":"Stepper","sourcePath":"components/navigation/Stepper.jsx"},{"name":"Tabs","sourcePath":"components/navigation/Tabs.jsx"},{"name":"TreeView","sourcePath":"components/navigation/TreeView.jsx"},{"name":"Wizard","sourcePath":"components/navigation/Wizard.jsx"},{"name":"AiResultPanel","sourcePath":"components/patterns/AiResultPanel.jsx"},{"name":"AnalysisRequest","sourcePath":"components/patterns/AnalysisRequest.jsx"},{"name":"SCORE_BANDS","sourcePath":"components/patterns/AtsAnalysisPanel.jsx"},{"name":"AtsAnalysisPanel","sourcePath":"components/patterns/AtsAnalysisPanel.jsx"},{"name":"CalendarOrganizer","sourcePath":"components/patterns/CalendarOrganizer.jsx"},{"name":"TypingIndicator","sourcePath":"components/patterns/ChatMessage.jsx"},{"name":"ChatMessage","sourcePath":"components/patterns/ChatMessage.jsx"},{"name":"ChatThread","sourcePath":"components/patterns/ChatMessage.jsx"},{"name":"LABEL_COLORS","sourcePath":"components/patterns/ColorLabelManager.jsx"},{"name":"ColorLabelManager","sourcePath":"components/patterns/ColorLabelManager.jsx"},{"name":"ColorLabelSelectionDialog","sourcePath":"components/patterns/ColorLabelSelectionDialog.jsx"},{"name":"CommentThread","sourcePath":"components/patterns/CommentThread.jsx"},{"name":"DualFilterBar","sourcePath":"components/patterns/DualFilterBar.jsx"},{"name":"FilterBar","sourcePath":"components/patterns/FilterBar.jsx"},{"name":"FlashcardSetup","sourcePath":"components/patterns/FlashcardSession.jsx"},{"name":"FlashcardSession","sourcePath":"components/patterns/FlashcardSession.jsx"},{"name":"FlashcardSummary","sourcePath":"components/patterns/FlashcardSession.jsx"},{"name":"ImportSourcesDialog","sourcePath":"components/patterns/ImportSourcesDialog.jsx"},{"name":"PricingTable","sourcePath":"components/patterns/PricingTable.jsx"},{"name":"PromptInput","sourcePath":"components/patterns/PromptInput.jsx"},{"name":"QueryBuilder","sourcePath":"components/patterns/QueryBuilder.jsx"},{"name":"Checkmark","sourcePath":"components/primitives/Checkmark.jsx"},{"name":"Chevron","sourcePath":"components/primitives/Chevron.jsx"},{"name":"CloseButton","sourcePath":"components/primitives/CloseButton.jsx"},{"name":"ColumnResize","sourcePath":"components/primitives/ColumnResize.jsx"},{"name":"Control","sourcePath":"components/primitives/Control.jsx"},{"name":"Count","sourcePath":"components/primitives/Count.jsx"},{"name":"Dot","sourcePath":"components/primitives/Dot.jsx"},{"name":"EmptyText","sourcePath":"components/primitives/EmptyText.jsx"},{"name":"FieldLabel","sourcePath":"components/primitives/Field.jsx"},{"name":"FieldHint","sourcePath":"components/primitives/Field.jsx"},{"name":"Field","sourcePath":"components/primitives/Field.jsx"},{"name":"Glyph","sourcePath":"components/primitives/Glyph.jsx"},{"name":"Handle","sourcePath":"components/primitives/Handle.jsx"},{"name":"IconTile","sourcePath":"components/primitives/IconTile.jsx"},{"name":"Indicator","sourcePath":"components/primitives/Indicator.jsx"},{"name":"Kbd","sourcePath":"components/primitives/Kbd.jsx"},{"name":"ListItem","sourcePath":"components/primitives/ListItem.jsx"},{"name":"Mark","sourcePath":"components/primitives/Mark.jsx"},{"name":"Marker","sourcePath":"components/primitives/Marker.jsx"},{"name":"Meter","sourcePath":"components/primitives/Meter.jsx"},{"name":"Option","sourcePath":"components/primitives/Option.jsx"},{"name":"Rail","sourcePath":"components/primitives/Rail.jsx"},{"name":"RailItem","sourcePath":"components/primitives/Rail.jsx"},{"name":"SectionLabel","sourcePath":"components/primitives/SectionLabel.jsx"},{"name":"Segmented","sourcePath":"components/primitives/Segmented.jsx"},{"name":"SegmentedItem","sourcePath":"components/primitives/Segmented.jsx"},{"name":"Separator","sourcePath":"components/primitives/Separator.jsx"},{"name":"Surface","sourcePath":"components/primitives/Surface.jsx"},{"name":"Swatch","sourcePath":"components/primitives/Swatch.jsx"},{"name":"Text","sourcePath":"components/primitives/Text.jsx"},{"name":"VisuallyHidden","sourcePath":"components/primitives/VisuallyHidden.jsx"},{"name":"SkipLink","sourcePath":"components/primitives/VisuallyHidden.jsx"},{"name":"LiveRegion","sourcePath":"components/primitives/VisuallyHidden.jsx"},{"name":"Weekday","sourcePath":"components/primitives/Weekday.jsx"},{"name":"DAY_MS","sourcePath":"components/primitives/date.js"},{"name":"TONES","sourcePath":"components/primitives/tone.js"},{"name":"TONE_ICON","sourcePath":"components/primitives/tone.js"}],"sourceHashes":{"assets/theme-toggle.js":"e9ca04f68377","components/actions/AuthButton.jsx":"9b4650c55c79","components/actions/Button.jsx":"f30c8df9da73","components/actions/ButtonGroup.jsx":"d4f837263947","components/actions/CalendarEventButton.jsx":"ea610cb0c6fa","components/actions/CopyButton.jsx":"287de0770bc8","components/actions/Fab.jsx":"55f57a5affeb","components/actions/IconButton.jsx":"fa1701ff8a50","components/actions/LocaleSwitcher.jsx":"f7d7a1fd7b8e","components/actions/ThemeToggle.jsx":"045c98b5e184","components/actions/ToggleButton.jsx":"aefec88ee83a","components/actions/ToggleGroup.jsx":"79ecb96a400d","components/charts/BarChart.jsx":"93ec80049dd4","components/charts/ComparisonBar.jsx":"56b5a07e6566","components/charts/DonutChart.jsx":"fe363ce797f2","components/charts/FunnelChart.jsx":"859e1a231535","components/charts/Gantt.jsx":"39a878c8efc0","components/charts/Gauge.jsx":"28663ceb2c05","components/charts/Heatmap.jsx":"e33090b6acc0","components/charts/LineChart.jsx":"70b2e2061144","components/charts/RadarChart.jsx":"f3ce12a9238f","components/charts/Sparkline.jsx":"e8624e6824bc","components/charts/useSize.js":"bfee1d22d261","components/data/Accordion.jsx":"59ab393ccd34","components/data/Avatar.jsx":"fb2a401ecd84","components/data/CodeSnippet.jsx":"d4a0bc823140","components/data/ColumnManager.jsx":"d06e4ff5a370","components/data/DataGrid.jsx":"1ef14ba34bf0","components/data/DescriptionList.jsx":"d92c36bf6904","components/data/DiffViewer.jsx":"204e90b966bf","components/data/Divider.jsx":"0068dbd45afa","components/data/EventCalendar.jsx":"3baf627add1b","components/data/FeatureCard.jsx":"e1818755ddd0","components/data/FlipCard.jsx":"b4fd0508d9e3","components/data/Kanban.jsx":"f0aa23ca171a","components/data/List.jsx":"2acda982f50d","components/data/LogViewer.jsx":"056c1e2e593a","components/data/QuestionCard.jsx":"b7b6cecfb35c","components/data/Scheduler.jsx":"ba2b1ab1b3da","components/data/ScoreCard.jsx":"93542b74eee6","components/data/SkillBar.jsx":"376a720cbd87","components/data/Stat.jsx":"6e252b508ccd","components/data/Table.jsx":"065530d94b30","components/data/Timeline.jsx":"961ba667c892","components/data/VirtualList.jsx":"7bfa72d4438f","components/data/VirtualTable.jsx":"4b1f4eb94ad6","components/display/Badge.jsx":"add2d2d91fcd","components/display/BrandLogo.jsx":"2dd99ee7031b","components/display/Card.jsx":"9e0ac18c699a","components/display/Icon.jsx":"e8ddca5acda7","components/display/Markdown.jsx":"cc95abbee80b","components/display/MarkdownEditor.jsx":"33bd9f997187","components/display/QRCode.jsx":"e157ac29decb","components/display/StructuredCard.jsx":"066bfcb48133","components/display/Tag.jsx":"bd7dcd3fd745","components/display/Watermark.jsx":"db7529587631","components/display/recron-logo-paths.js":"ea9cd3ae6b10","components/feedback/Alert.jsx":"a8ffc5d29cea","components/feedback/BottomSheet.jsx":"7e104bc30372","components/feedback/ConfirmDialog.jsx":"133f963178d3","components/feedback/Countdown.jsx":"dc5bbad21cb1","components/feedback/Dialog.jsx":"66d34e8dd75c","components/feedback/EmptyState.jsx":"60c3508ae08d","components/feedback/Loader.jsx":"c3d9b87835f5","components/feedback/NotificationCenter.jsx":"5cc26cb3a8ac","components/feedback/Popover.jsx":"ae63e5598c2f","components/feedback/Progress.jsx":"e1aa90e87063","components/feedback/SetupChecklist.jsx":"5c64e0603894","components/feedback/Skeleton.jsx":"a9f6a224af87","components/feedback/Spinner.jsx":"09f1cb8b5c09","components/feedback/Toast.jsx":"aa2ce48f9eb6","components/feedback/Tooltip.jsx":"4fa1a2ed4e1b","components/feedback/Tour.jsx":"b8d37b5156d9","components/forms/Autocomplete.jsx":"b09aa856e47d","components/forms/Calendar.jsx":"5d7c8cbfb1fb","components/forms/Cascader.jsx":"c5b93fff8f77","components/forms/Checkbox.jsx":"38a0737c95c2","components/forms/Chip.jsx":"1a4e3d13d779","components/forms/ChipGroup.jsx":"6ad7d1f14e62","components/forms/ColorPicker.jsx":"94d63afd7db9","components/forms/DatePicker.jsx":"8558f71751c2","components/forms/DateTimePicker.jsx":"bdd0ef2fee83","components/forms/EditableCollection.jsx":"280b7e4ff77f","components/forms/ErrorSummary.jsx":"d69e68eeb926","components/forms/FileUpload.jsx":"7b723bf3fb0e","components/forms/FormLayout.jsx":"9fea34ba5e59","components/forms/InlineEdit.jsx":"732e316d6009","components/forms/Input.jsx":"9a2fe064b743","components/forms/MentionInput.jsx":"9385bfafadf3","components/forms/MultiSelect.jsx":"bb48e6d5f674","components/forms/NumberInput.jsx":"b10ec7253845","components/forms/OptionSwitcher.jsx":"27ee85eb7f14","components/forms/OtpInput.jsx":"79870a223aa8","components/forms/PasswordInput.jsx":"c5f49146f57a","components/forms/PhoneInput.jsx":"57e1b79a57a3","components/forms/Radio.jsx":"486c8b472ba2","components/forms/RangeInput.jsx":"833d5c08362a","components/forms/Rating.jsx":"b7a2f7cfb7c1","components/forms/RatingSummary.jsx":"824a8b6ace25","components/forms/RichTextEditor.jsx":"2d6e1a236576","components/forms/SearchInput.jsx":"f82465eff6f4","components/forms/Select.jsx":"0f287a310e23","components/forms/SignaturePad.jsx":"caf3b3cbe9f3","components/forms/Slider.jsx":"4d4cb8d320f1","components/forms/Switch.jsx":"98fedfdb000e","components/forms/TagInput.jsx":"221bbcf825d6","components/forms/Textarea.jsx":"91607c34cbae","components/forms/TimeStepper.jsx":"87e93c8d0658","components/forms/TransferList.jsx":"7a5353fbdd57","components/forms/TreeSelect.jsx":"76acd74e7a4c","components/layout/Footer.jsx":"e2a9558eb0d5","components/layout/PageHeader.jsx":"f28c6e13e56d","components/layout/ScrollArea.jsx":"8fc22128e3e3","components/layout/SearchTrigger.jsx":"bb8bea3167a8","components/layout/Sidebar.jsx":"b776b6d4786a","components/layout/SplitPane.jsx":"d089560145ea","components/layout/Stack.jsx":"5fa93e5f8dc3","components/media/AudioPlayer.jsx":"12ff1dd2c832","components/media/Carousel.jsx":"546d0706c61f","components/media/ImageCropper.jsx":"f47d5da4cb0e","components/media/Lightbox.jsx":"1d3e53ab665e","components/media/Marquee.jsx":"c547d193b50a","components/media/MediaFrame.jsx":"6af9a83e17b5","components/media/VideoPlayer.jsx":"6aefc6ca6215","components/media/time.js":"6cbfc6d74643","components/menus/CommandPalette.jsx":"a6f2b4e4552b","components/menus/ContextMenu.jsx":"28425e9faa8e","components/menus/DropdownButton.jsx":"ad7131854534","components/menus/Menu.jsx":"1314d60bcce5","components/menus/MenuChip.jsx":"7bbc2dae9656","components/menus/Toolbar.jsx":"5d87bb98dcc9","components/navigation/Anchor.jsx":"6b3d91dfc09e","components/navigation/BackToTop.jsx":"d1a2cb51a2a7","components/navigation/BottomNav.jsx":"5c8a1cf63047","components/navigation/Breadcrumb.jsx":"a3aa2a9b324e","components/navigation/HierarchyNavigator.jsx":"e08c5d99d398","components/navigation/Link.jsx":"3e8ece6b8588","components/navigation/LoadMore.jsx":"17b1e3cbb09d","components/navigation/Navbar.jsx":"33adaf574d81","components/navigation/Pagination.jsx":"c55069eda7a4","components/navigation/Stepper.jsx":"b8dc630b6f8c","components/navigation/Tabs.jsx":"c06f11296563","components/navigation/TreeView.jsx":"d185189380d3","components/navigation/Wizard.jsx":"749b224d2c4f","components/patterns/AiResultPanel.jsx":"c00c123530a5","components/patterns/AnalysisRequest.jsx":"518c2895224e","components/patterns/AtsAnalysisPanel.jsx":"2498349993a3","components/patterns/CalendarOrganizer.jsx":"8ece2ccb1bd9","components/patterns/ChatMessage.jsx":"0a752a990ae1","components/patterns/ColorLabelManager.jsx":"f0a23e6586a0","components/patterns/ColorLabelSelectionDialog.jsx":"48a55c174e28","components/patterns/CommentThread.jsx":"00663b7bdc5b","components/patterns/DualFilterBar.jsx":"579c6f7f2eca","components/patterns/FilterBar.jsx":"eca1bf33d4a0","components/patterns/FlashcardSession.jsx":"d95c78692f08","components/patterns/ImportSourcesDialog.jsx":"3fb8cc06a760","components/patterns/PricingTable.jsx":"6d323fef8e65","components/patterns/PromptInput.jsx":"8ec5b3e4e473","components/patterns/QueryBuilder.jsx":"c9a97f160fe8","components/primitives/Checkmark.jsx":"b5971ecb4dab","components/primitives/Chevron.jsx":"c8452dafb135","components/primitives/CloseButton.jsx":"e04946a9575e","components/primitives/ColumnResize.jsx":"7096cb3b65e5","components/primitives/Control.jsx":"ccb1a2d379c5","components/primitives/Count.jsx":"ca89f6ac6e25","components/primitives/Dot.jsx":"94492da759a3","components/primitives/EmptyText.jsx":"0803c7e4de8d","components/primitives/Field.jsx":"de8c5e4f2c30","components/primitives/Glyph.jsx":"555e59bb17ca","components/primitives/Handle.jsx":"7b7a1b407496","components/primitives/IconTile.jsx":"2b20b72c6cd0","components/primitives/Indicator.jsx":"56f0e12b0260","components/primitives/Kbd.jsx":"e1413c9d88a5","components/primitives/ListItem.jsx":"ecba551c8441","components/primitives/Mark.jsx":"43a29f3ac95d","components/primitives/Marker.jsx":"3df1880dd4f0","components/primitives/Meter.jsx":"ef9321a0e799","components/primitives/Option.jsx":"9dd9199950d7","components/primitives/Rail.jsx":"0188d8b2a963","components/primitives/SectionLabel.jsx":"35af4ccf5ceb","components/primitives/Segmented.jsx":"705a61a2688e","components/primitives/Separator.jsx":"5640a9df5349","components/primitives/Surface.jsx":"a44948a6c5a0","components/primitives/Swatch.jsx":"62c96c7324b8","components/primitives/Text.jsx":"2981dd22685a","components/primitives/VisuallyHidden.jsx":"641fa994d442","components/primitives/Weekday.jsx":"96868ee0a3ff","components/primitives/cx.js":"74d7f0acace2","components/primitives/date.js":"4f5f5d3dcf95","components/primitives/tone.js":"8bceac1a522b","components/primitives/useDismiss.js":"770b300e0e75","guidelines/card.js":"567e10500645"},"inlinedExternals":[],"unexposedExports":[{"name":"addDays","sourcePath":"components/primitives/date.js"},{"name":"addMonths","sourcePath":"components/primitives/date.js"},{"name":"applyColumns","sourcePath":"components/data/ColumnManager.jsx"},{"name":"buildGoogleCalendarUrl","sourcePath":"components/actions/CalendarEventButton.jsx"},{"name":"buildIcs","sourcePath":"components/actions/CalendarEventButton.jsx"},{"name":"buildOutlookCalendarUrl","sourcePath":"components/actions/CalendarEventButton.jsx"},{"name":"clearQuery","sourcePath":"components/patterns/QueryBuilder.jsx"},{"name":"compact","sourcePath":"components/charts/useSize.js"},{"name":"cx","sourcePath":"components/primitives/cx.js"},{"name":"defaultGridView","sourcePath":"components/data/DataGrid.jsx"},{"name":"describeQuery","sourcePath":"components/patterns/QueryBuilder.jsx"},{"name":"diffLines","sourcePath":"components/data/DiffViewer.jsx"},{"name":"emptyQuery","sourcePath":"components/patterns/QueryBuilder.jsx"},{"name":"encodeQR","sourcePath":"components/display/QRCode.jsx"},{"name":"filledIcon","sourcePath":"components/display/Icon.jsx"},{"name":"fmtDate","sourcePath":"components/primitives/date.js"},{"name":"fmtTime","sourcePath":"components/media/time.js"},{"name":"formatBytes","sourcePath":"components/forms/FileUpload.jsx"},{"name":"hexToHsv","sourcePath":"components/forms/ColorPicker.jsx"},{"name":"highlight","sourcePath":"components/data/CodeSnippet.jsx"},{"name":"highlightMatch","sourcePath":"components/primitives/Mark.jsx"},{"name":"hsvToHex","sourcePath":"components/forms/ColorPicker.jsx"},{"name":"minutesOfDay","sourcePath":"components/primitives/date.js"},{"name":"moveTreeNode","sourcePath":"components/navigation/TreeView.jsx"},{"name":"niceTicks","sourcePath":"components/charts/useSize.js"},{"name":"pad","sourcePath":"components/primitives/date.js"},{"name":"pageRange","sourcePath":"components/navigation/Pagination.jsx"},{"name":"parseTime","sourcePath":"components/forms/DatePicker.jsx"},{"name":"passwordScore","sourcePath":"components/forms/PasswordInput.jsx"},{"name":"reconcileGridView","sourcePath":"components/data/DataGrid.jsx"},{"name":"renderIcon","sourcePath":"components/primitives/Glyph.jsx"},{"name":"renderMarkdown","sourcePath":"components/display/Markdown.jsx"},{"name":"sameDay","sourcePath":"components/primitives/date.js"},{"name":"sanitizeRichText","sourcePath":"components/forms/RichTextEditor.jsx"},{"name":"scoreBand","sourcePath":"components/patterns/AtsAnalysisPanel.jsx"},{"name":"startOfDay","sourcePath":"components/primitives/date.js"},{"name":"toDate","sourcePath":"components/primitives/date.js"},{"name":"toggleCtx","sourcePath":"components/actions/ToggleButton.jsx"},{"name":"toneIcon","sourcePath":"components/primitives/tone.js"},{"name":"useAsyncOptions","sourcePath":"components/forms/Autocomplete.jsx"},{"name":"useDismiss","sourcePath":"components/primitives/useDismiss.js"},{"name":"useWidth","sourcePath":"components/charts/useSize.js"},{"name":"weekdayNames","sourcePath":"components/primitives/date.js"},{"name":"ymd","sourcePath":"components/primitives/date.js"}]} */
+/* @ds-bundle: {"format":4,"namespace":"VelvetUIDesignSystem_ee2bd8","components":[{"name":"AuthButton","sourcePath":"components/actions/AuthButton.jsx"},{"name":"Button","sourcePath":"components/actions/Button.jsx"},{"name":"ButtonGroup","sourcePath":"components/actions/ButtonGroup.jsx"},{"name":"CalendarEventButton","sourcePath":"components/actions/CalendarEventButton.jsx"},{"name":"CopyButton","sourcePath":"components/actions/CopyButton.jsx"},{"name":"CopyField","sourcePath":"components/actions/CopyButton.jsx"},{"name":"Fab","sourcePath":"components/actions/Fab.jsx"},{"name":"IconButton","sourcePath":"components/actions/IconButton.jsx"},{"name":"LocaleSwitcher","sourcePath":"components/actions/LocaleSwitcher.jsx"},{"name":"ThemeToggle","sourcePath":"components/actions/ThemeToggle.jsx"},{"name":"ToggleButton","sourcePath":"components/actions/ToggleButton.jsx"},{"name":"ToggleGroup","sourcePath":"components/actions/ToggleGroup.jsx"},{"name":"BarChart","sourcePath":"components/charts/BarChart.jsx"},{"name":"ComparisonBar","sourcePath":"components/charts/ComparisonBar.jsx"},{"name":"ComparisonDialog","sourcePath":"components/charts/ComparisonBar.jsx"},{"name":"DonutChart","sourcePath":"components/charts/DonutChart.jsx"},{"name":"FunnelChart","sourcePath":"components/charts/FunnelChart.jsx"},{"name":"Gantt","sourcePath":"components/charts/Gantt.jsx"},{"name":"Gauge","sourcePath":"components/charts/Gauge.jsx"},{"name":"HEATMAP_COLORS","sourcePath":"components/charts/Heatmap.jsx"},{"name":"Heatmap","sourcePath":"components/charts/Heatmap.jsx"},{"name":"LineChart","sourcePath":"components/charts/LineChart.jsx"},{"name":"RadarChart","sourcePath":"components/charts/RadarChart.jsx"},{"name":"Sparkline","sourcePath":"components/charts/Sparkline.jsx"},{"name":"Accordion","sourcePath":"components/data/Accordion.jsx"},{"name":"Avatar","sourcePath":"components/data/Avatar.jsx"},{"name":"AvatarGroup","sourcePath":"components/data/Avatar.jsx"},{"name":"CellStack","sourcePath":"components/data/CellStack.jsx"},{"name":"CodeSnippet","sourcePath":"components/data/CodeSnippet.jsx"},{"name":"ApplyColumns","sourcePath":"components/data/ColumnManager.jsx"},{"name":"ColumnManager","sourcePath":"components/data/ColumnManager.jsx"},{"name":"DataGrid","sourcePath":"components/data/DataGrid.jsx"},{"name":"DescriptionList","sourcePath":"components/data/DescriptionList.jsx"},{"name":"DiffViewer","sourcePath":"components/data/DiffViewer.jsx"},{"name":"Divider","sourcePath":"components/data/Divider.jsx"},{"name":"EventCalendar","sourcePath":"components/data/EventCalendar.jsx"},{"name":"FeatureCard","sourcePath":"components/data/FeatureCard.jsx"},{"name":"FlipCard","sourcePath":"components/data/FlipCard.jsx"},{"name":"Kanban","sourcePath":"components/data/Kanban.jsx"},{"name":"List","sourcePath":"components/data/List.jsx"},{"name":"LogViewer","sourcePath":"components/data/LogViewer.jsx"},{"name":"MetricGroup","sourcePath":"components/data/MetricGroup.jsx"},{"name":"QuestionCard","sourcePath":"components/data/QuestionCard.jsx"},{"name":"Scheduler","sourcePath":"components/data/Scheduler.jsx"},{"name":"ScoreCard","sourcePath":"components/data/ScoreCard.jsx"},{"name":"SkillBar","sourcePath":"components/data/SkillBar.jsx"},{"name":"Stat","sourcePath":"components/data/Stat.jsx"},{"name":"Table","sourcePath":"components/data/Table.jsx"},{"name":"Timeline","sourcePath":"components/data/Timeline.jsx"},{"name":"UsageMeter","sourcePath":"components/data/UsageMeter.jsx"},{"name":"VirtualList","sourcePath":"components/data/VirtualList.jsx"},{"name":"VirtualTable","sourcePath":"components/data/VirtualTable.jsx"},{"name":"Badge","sourcePath":"components/display/Badge.jsx"},{"name":"BrandLogo","sourcePath":"components/display/BrandLogo.jsx"},{"name":"Card","sourcePath":"components/display/Card.jsx"},{"name":"VelvetIcons","sourcePath":"components/display/Icon.jsx"},{"name":"IconCategories","sourcePath":"components/display/Icon.jsx"},{"name":"IconAliases","sourcePath":"components/display/Icon.jsx"},{"name":"IconFilled","sourcePath":"components/display/Icon.jsx"},{"name":"Icon","sourcePath":"components/display/Icon.jsx"},{"name":"Markdown","sourcePath":"components/display/Markdown.jsx"},{"name":"MarkdownEditor","sourcePath":"components/display/MarkdownEditor.jsx"},{"name":"MarkdownEditDialog","sourcePath":"components/display/MarkdownEditor.jsx"},{"name":"QRCode","sourcePath":"components/display/QRCode.jsx"},{"name":"StructuredCard","sourcePath":"components/display/StructuredCard.jsx"},{"name":"Tag","sourcePath":"components/display/Tag.jsx"},{"name":"Watermark","sourcePath":"components/display/Watermark.jsx"},{"name":"Q_MARK","sourcePath":"components/display/quantcore-logo-data.js"},{"name":"Q_WORD","sourcePath":"components/display/quantcore-logo-data.js"},{"name":"R_MARK","sourcePath":"components/display/recron-logo-paths.js"},{"name":"R_WORD","sourcePath":"components/display/recron-logo-paths.js"},{"name":"Alert","sourcePath":"components/feedback/Alert.jsx"},{"name":"Banner","sourcePath":"components/feedback/Alert.jsx"},{"name":"BottomSheet","sourcePath":"components/feedback/BottomSheet.jsx"},{"name":"ConfirmDialog","sourcePath":"components/feedback/ConfirmDialog.jsx"},{"name":"ConfirmAction","sourcePath":"components/feedback/ConfirmDialog.jsx"},{"name":"Countdown","sourcePath":"components/feedback/Countdown.jsx"},{"name":"Dialog","sourcePath":"components/feedback/Dialog.jsx"},{"name":"EmptyState","sourcePath":"components/feedback/EmptyState.jsx"},{"name":"ErrorState","sourcePath":"components/feedback/EmptyState.jsx"},{"name":"StatusPage","sourcePath":"components/feedback/EmptyState.jsx"},{"name":"GateList","sourcePath":"components/feedback/GateList.jsx"},{"name":"LOADER_VARIANTS","sourcePath":"components/feedback/Loader.jsx"},{"name":"Loader","sourcePath":"components/feedback/Loader.jsx"},{"name":"PageLoader","sourcePath":"components/feedback/Loader.jsx"},{"name":"NotificationList","sourcePath":"components/feedback/NotificationCenter.jsx"},{"name":"NotificationCenter","sourcePath":"components/feedback/NotificationCenter.jsx"},{"name":"Popover","sourcePath":"components/feedback/Popover.jsx"},{"name":"Progress","sourcePath":"components/feedback/Progress.jsx"},{"name":"ProgressRing","sourcePath":"components/feedback/Progress.jsx"},{"name":"SetupChecklist","sourcePath":"components/feedback/SetupChecklist.jsx"},{"name":"Skeleton","sourcePath":"components/feedback/Skeleton.jsx"},{"name":"SkeletonText","sourcePath":"components/feedback/Skeleton.jsx"},{"name":"Spinner","sourcePath":"components/feedback/Spinner.jsx"},{"name":"LoadingOverlay","sourcePath":"components/feedback/Spinner.jsx"},{"name":"Toast","sourcePath":"components/feedback/Toast.jsx"},{"name":"ToastRegion","sourcePath":"components/feedback/Toast.jsx"},{"name":"Tooltip","sourcePath":"components/feedback/Tooltip.jsx"},{"name":"Tour","sourcePath":"components/feedback/Tour.jsx"},{"name":"ContributionBar","sourcePath":"components/finance/ContributionBar.jsx"},{"name":"DataState","sourcePath":"components/finance/DataState.jsx"},{"name":"DirectionBadge","sourcePath":"components/finance/DirectionBadge.jsx"},{"name":"EnvironmentBar","sourcePath":"components/finance/EnvironmentBar.jsx"},{"name":"InstrumentLabel","sourcePath":"components/finance/InstrumentLabel.jsx"},{"name":"MoneyPrivacy","sourcePath":"components/finance/Money.jsx"},{"name":"Money","sourcePath":"components/finance/Money.jsx"},{"name":"NewsItem","sourcePath":"components/finance/NewsItem.jsx"},{"name":"PriceChange","sourcePath":"components/finance/PriceChange.jsx"},{"name":"RangeBandChart","sourcePath":"components/finance/RangeBandChart.jsx"},{"name":"ValueShift","sourcePath":"components/finance/ValueShift.jsx"},{"name":"Autocomplete","sourcePath":"components/forms/Autocomplete.jsx"},{"name":"Calendar","sourcePath":"components/forms/Calendar.jsx"},{"name":"Cascader","sourcePath":"components/forms/Cascader.jsx"},{"name":"Checkbox","sourcePath":"components/forms/Checkbox.jsx"},{"name":"Chip","sourcePath":"components/forms/Chip.jsx"},{"name":"ChipGroup","sourcePath":"components/forms/ChipGroup.jsx"},{"name":"CodeEditor","sourcePath":"components/forms/CodeEditor.jsx"},{"name":"ColorPicker","sourcePath":"components/forms/ColorPicker.jsx"},{"name":"DatePicker","sourcePath":"components/forms/DatePicker.jsx"},{"name":"DEFAULT_RANGE_PRESETS","sourcePath":"components/forms/DatePicker.jsx"},{"name":"DateRangePicker","sourcePath":"components/forms/DatePicker.jsx"},{"name":"TimePicker","sourcePath":"components/forms/DatePicker.jsx"},{"name":"DateTimePicker","sourcePath":"components/forms/DateTimePicker.jsx"},{"name":"EditableCollection","sourcePath":"components/forms/EditableCollection.jsx"},{"name":"ErrorSummary","sourcePath":"components/forms/ErrorSummary.jsx"},{"name":"FileUpload","sourcePath":"components/forms/FileUpload.jsx"},{"name":"FormLayout","sourcePath":"components/forms/FormLayout.jsx"},{"name":"FormSection","sourcePath":"components/forms/FormLayout.jsx"},{"name":"FormGrid","sourcePath":"components/forms/FormLayout.jsx"},{"name":"FormSpan","sourcePath":"components/forms/FormLayout.jsx"},{"name":"ActionRow","sourcePath":"components/forms/FormLayout.jsx"},{"name":"InlineEdit","sourcePath":"components/forms/InlineEdit.jsx"},{"name":"Input","sourcePath":"components/forms/Input.jsx"},{"name":"MentionInput","sourcePath":"components/forms/MentionInput.jsx"},{"name":"MultiSelect","sourcePath":"components/forms/MultiSelect.jsx"},{"name":"NumberInput","sourcePath":"components/forms/NumberInput.jsx"},{"name":"OptionSwitcher","sourcePath":"components/forms/OptionSwitcher.jsx"},{"name":"OtpInput","sourcePath":"components/forms/OtpInput.jsx"},{"name":"PasswordInput","sourcePath":"components/forms/PasswordInput.jsx"},{"name":"PHONE_COUNTRIES","sourcePath":"components/forms/PhoneInput.jsx"},{"name":"PhoneInput","sourcePath":"components/forms/PhoneInput.jsx"},{"name":"Radio","sourcePath":"components/forms/Radio.jsx"},{"name":"RangeInput","sourcePath":"components/forms/RangeInput.jsx"},{"name":"Rating","sourcePath":"components/forms/Rating.jsx"},{"name":"RatingSummary","sourcePath":"components/forms/RatingSummary.jsx"},{"name":"RichTextEditor","sourcePath":"components/forms/RichTextEditor.jsx"},{"name":"SearchInput","sourcePath":"components/forms/SearchInput.jsx"},{"name":"Select","sourcePath":"components/forms/Select.jsx"},{"name":"SignaturePad","sourcePath":"components/forms/SignaturePad.jsx"},{"name":"Slider","sourcePath":"components/forms/Slider.jsx"},{"name":"Switch","sourcePath":"components/forms/Switch.jsx"},{"name":"TagInput","sourcePath":"components/forms/TagInput.jsx"},{"name":"Textarea","sourcePath":"components/forms/Textarea.jsx"},{"name":"TimeStepper","sourcePath":"components/forms/TimeStepper.jsx"},{"name":"TransferList","sourcePath":"components/forms/TransferList.jsx"},{"name":"TreeSelect","sourcePath":"components/forms/TreeSelect.jsx"},{"name":"Footer","sourcePath":"components/layout/Footer.jsx"},{"name":"PageHeader","sourcePath":"components/layout/PageHeader.jsx"},{"name":"ScrollArea","sourcePath":"components/layout/ScrollArea.jsx"},{"name":"SearchTrigger","sourcePath":"components/layout/SearchTrigger.jsx"},{"name":"Sidebar","sourcePath":"components/layout/Sidebar.jsx"},{"name":"NavItem","sourcePath":"components/layout/Sidebar.jsx"},{"name":"NavSection","sourcePath":"components/layout/Sidebar.jsx"},{"name":"SplitPane","sourcePath":"components/layout/SplitPane.jsx"},{"name":"Stack","sourcePath":"components/layout/Stack.jsx"},{"name":"Grid","sourcePath":"components/layout/Stack.jsx"},{"name":"AudioPlayer","sourcePath":"components/media/AudioPlayer.jsx"},{"name":"Carousel","sourcePath":"components/media/Carousel.jsx"},{"name":"ImageCropper","sourcePath":"components/media/ImageCropper.jsx"},{"name":"Lightbox","sourcePath":"components/media/Lightbox.jsx"},{"name":"ImageGrid","sourcePath":"components/media/Lightbox.jsx"},{"name":"Marquee","sourcePath":"components/media/Marquee.jsx"},{"name":"MediaFrame","sourcePath":"components/media/MediaFrame.jsx"},{"name":"PlayerButton","sourcePath":"components/media/VideoPlayer.jsx"},{"name":"VideoPlayer","sourcePath":"components/media/VideoPlayer.jsx"},{"name":"CommandPalette","sourcePath":"components/menus/CommandPalette.jsx"},{"name":"ContextMenu","sourcePath":"components/menus/ContextMenu.jsx"},{"name":"DropdownButton","sourcePath":"components/menus/DropdownButton.jsx"},{"name":"MenuPanel","sourcePath":"components/menus/Menu.jsx"},{"name":"Menu","sourcePath":"components/menus/Menu.jsx"},{"name":"MenuChip","sourcePath":"components/menus/MenuChip.jsx"},{"name":"Toolbar","sourcePath":"components/menus/Toolbar.jsx"},{"name":"Anchor","sourcePath":"components/navigation/Anchor.jsx"},{"name":"BackToTop","sourcePath":"components/navigation/BackToTop.jsx"},{"name":"BottomNav","sourcePath":"components/navigation/BottomNav.jsx"},{"name":"Breadcrumb","sourcePath":"components/navigation/Breadcrumb.jsx"},{"name":"HierarchyNavigator","sourcePath":"components/navigation/HierarchyNavigator.jsx"},{"name":"Link","sourcePath":"components/navigation/Link.jsx"},{"name":"LoadMore","sourcePath":"components/navigation/LoadMore.jsx"},{"name":"Navbar","sourcePath":"components/navigation/Navbar.jsx"},{"name":"NavbarLocale","sourcePath":"components/navigation/Navbar.jsx"},{"name":"NavbarUser","sourcePath":"components/navigation/Navbar.jsx"},{"name":"NavbarChip","sourcePath":"components/navigation/NavbarChip.jsx"},{"name":"Pagination","sourcePath":"components/navigation/Pagination.jsx"},{"name":"Stepper","sourcePath":"components/navigation/Stepper.jsx"},{"name":"Tabs","sourcePath":"components/navigation/Tabs.jsx"},{"name":"TreeView","sourcePath":"components/navigation/TreeView.jsx"},{"name":"Wizard","sourcePath":"components/navigation/Wizard.jsx"},{"name":"AiResultPanel","sourcePath":"components/patterns/AiResultPanel.jsx"},{"name":"AnalysisRequest","sourcePath":"components/patterns/AnalysisRequest.jsx"},{"name":"SCORE_BANDS","sourcePath":"components/patterns/AtsAnalysisPanel.jsx"},{"name":"AtsAnalysisPanel","sourcePath":"components/patterns/AtsAnalysisPanel.jsx"},{"name":"CalendarOrganizer","sourcePath":"components/patterns/CalendarOrganizer.jsx"},{"name":"TypingIndicator","sourcePath":"components/patterns/ChatMessage.jsx"},{"name":"ChatMessage","sourcePath":"components/patterns/ChatMessage.jsx"},{"name":"ChatThread","sourcePath":"components/patterns/ChatMessage.jsx"},{"name":"LABEL_COLORS","sourcePath":"components/patterns/ColorLabelManager.jsx"},{"name":"ColorLabelManager","sourcePath":"components/patterns/ColorLabelManager.jsx"},{"name":"ColorLabelSelectionDialog","sourcePath":"components/patterns/ColorLabelSelectionDialog.jsx"},{"name":"CommentThread","sourcePath":"components/patterns/CommentThread.jsx"},{"name":"DualFilterBar","sourcePath":"components/patterns/DualFilterBar.jsx"},{"name":"FilterBar","sourcePath":"components/patterns/FilterBar.jsx"},{"name":"FlashcardSetup","sourcePath":"components/patterns/FlashcardSession.jsx"},{"name":"FlashcardSession","sourcePath":"components/patterns/FlashcardSession.jsx"},{"name":"FlashcardSummary","sourcePath":"components/patterns/FlashcardSession.jsx"},{"name":"ImportSourcesDialog","sourcePath":"components/patterns/ImportSourcesDialog.jsx"},{"name":"PricingTable","sourcePath":"components/patterns/PricingTable.jsx"},{"name":"PromptInput","sourcePath":"components/patterns/PromptInput.jsx"},{"name":"QueryBuilder","sourcePath":"components/patterns/QueryBuilder.jsx"},{"name":"Checkmark","sourcePath":"components/primitives/Checkmark.jsx"},{"name":"Chevron","sourcePath":"components/primitives/Chevron.jsx"},{"name":"CloseButton","sourcePath":"components/primitives/CloseButton.jsx"},{"name":"ColumnResize","sourcePath":"components/primitives/ColumnResize.jsx"},{"name":"Control","sourcePath":"components/primitives/Control.jsx"},{"name":"Count","sourcePath":"components/primitives/Count.jsx"},{"name":"Dot","sourcePath":"components/primitives/Dot.jsx"},{"name":"EmptyText","sourcePath":"components/primitives/EmptyText.jsx"},{"name":"FieldLabel","sourcePath":"components/primitives/Field.jsx"},{"name":"FieldHint","sourcePath":"components/primitives/Field.jsx"},{"name":"Field","sourcePath":"components/primitives/Field.jsx"},{"name":"Glyph","sourcePath":"components/primitives/Glyph.jsx"},{"name":"Handle","sourcePath":"components/primitives/Handle.jsx"},{"name":"IconTile","sourcePath":"components/primitives/IconTile.jsx"},{"name":"Indicator","sourcePath":"components/primitives/Indicator.jsx"},{"name":"Kbd","sourcePath":"components/primitives/Kbd.jsx"},{"name":"ListItem","sourcePath":"components/primitives/ListItem.jsx"},{"name":"Mark","sourcePath":"components/primitives/Mark.jsx"},{"name":"Marker","sourcePath":"components/primitives/Marker.jsx"},{"name":"Meter","sourcePath":"components/primitives/Meter.jsx"},{"name":"Option","sourcePath":"components/primitives/Option.jsx"},{"name":"Rail","sourcePath":"components/primitives/Rail.jsx"},{"name":"RailItem","sourcePath":"components/primitives/Rail.jsx"},{"name":"SectionLabel","sourcePath":"components/primitives/SectionLabel.jsx"},{"name":"Segmented","sourcePath":"components/primitives/Segmented.jsx"},{"name":"SegmentedItem","sourcePath":"components/primitives/Segmented.jsx"},{"name":"Separator","sourcePath":"components/primitives/Separator.jsx"},{"name":"Surface","sourcePath":"components/primitives/Surface.jsx"},{"name":"Swatch","sourcePath":"components/primitives/Swatch.jsx"},{"name":"Text","sourcePath":"components/primitives/Text.jsx"},{"name":"VisuallyHidden","sourcePath":"components/primitives/VisuallyHidden.jsx"},{"name":"SkipLink","sourcePath":"components/primitives/VisuallyHidden.jsx"},{"name":"LiveRegion","sourcePath":"components/primitives/VisuallyHidden.jsx"},{"name":"Weekday","sourcePath":"components/primitives/Weekday.jsx"},{"name":"DAY_MS","sourcePath":"components/primitives/date.js"},{"name":"TONES","sourcePath":"components/primitives/tone.js"},{"name":"TONE_ICON","sourcePath":"components/primitives/tone.js"}],"sourceHashes":{"assets/theme-toggle.js":"e9ca04f68377","components/actions/AuthButton.jsx":"9b4650c55c79","components/actions/Button.jsx":"f30c8df9da73","components/actions/ButtonGroup.jsx":"d4f837263947","components/actions/CalendarEventButton.jsx":"ea610cb0c6fa","components/actions/CopyButton.jsx":"287de0770bc8","components/actions/Fab.jsx":"55f57a5affeb","components/actions/IconButton.jsx":"fa1701ff8a50","components/actions/LocaleSwitcher.jsx":"f7d7a1fd7b8e","components/actions/ThemeToggle.jsx":"045c98b5e184","components/actions/ToggleButton.jsx":"aefec88ee83a","components/actions/ToggleGroup.jsx":"79ecb96a400d","components/charts/BarChart.jsx":"93ec80049dd4","components/charts/ComparisonBar.jsx":"56b5a07e6566","components/charts/DonutChart.jsx":"fe363ce797f2","components/charts/FunnelChart.jsx":"859e1a231535","components/charts/Gantt.jsx":"39a878c8efc0","components/charts/Gauge.jsx":"28663ceb2c05","components/charts/Heatmap.jsx":"e33090b6acc0","components/charts/LineChart.jsx":"fa383a11c672","components/charts/RadarChart.jsx":"f3ce12a9238f","components/charts/Sparkline.jsx":"e8624e6824bc","components/charts/useSize.js":"f52c3f687534","components/data/Accordion.jsx":"59ab393ccd34","components/data/Avatar.jsx":"fb2a401ecd84","components/data/CellStack.jsx":"18512060ac5c","components/data/CodeSnippet.jsx":"d4a0bc823140","components/data/ColumnManager.jsx":"d06e4ff5a370","components/data/DataGrid.jsx":"1ef14ba34bf0","components/data/DescriptionList.jsx":"d92c36bf6904","components/data/DiffViewer.jsx":"204e90b966bf","components/data/Divider.jsx":"0068dbd45afa","components/data/EventCalendar.jsx":"3baf627add1b","components/data/FeatureCard.jsx":"e1818755ddd0","components/data/FlipCard.jsx":"b4fd0508d9e3","components/data/Kanban.jsx":"f0aa23ca171a","components/data/List.jsx":"2acda982f50d","components/data/LogViewer.jsx":"056c1e2e593a","components/data/MetricGroup.jsx":"78d4f1532369","components/data/QuestionCard.jsx":"b7b6cecfb35c","components/data/Scheduler.jsx":"ba2b1ab1b3da","components/data/ScoreCard.jsx":"93542b74eee6","components/data/SkillBar.jsx":"376a720cbd87","components/data/Stat.jsx":"6e252b508ccd","components/data/Table.jsx":"065530d94b30","components/data/Timeline.jsx":"961ba667c892","components/data/UsageMeter.jsx":"4d520af557fc","components/data/VirtualList.jsx":"7bfa72d4438f","components/data/VirtualTable.jsx":"4b1f4eb94ad6","components/display/Badge.jsx":"add2d2d91fcd","components/display/BrandLogo.jsx":"b5967a272e07","components/display/Card.jsx":"9e0ac18c699a","components/display/Icon.jsx":"1326237fd6ad","components/display/Markdown.jsx":"cc95abbee80b","components/display/MarkdownEditor.jsx":"33bd9f997187","components/display/QRCode.jsx":"e157ac29decb","components/display/StructuredCard.jsx":"066bfcb48133","components/display/Tag.jsx":"bd7dcd3fd745","components/display/Watermark.jsx":"db7529587631","components/display/quantcore-logo-data.js":"f15e8a673753","components/display/recron-logo-paths.js":"ea9cd3ae6b10","components/feedback/Alert.jsx":"a8ffc5d29cea","components/feedback/BottomSheet.jsx":"7e104bc30372","components/feedback/ConfirmDialog.jsx":"133f963178d3","components/feedback/Countdown.jsx":"dc5bbad21cb1","components/feedback/Dialog.jsx":"66d34e8dd75c","components/feedback/EmptyState.jsx":"60c3508ae08d","components/feedback/GateList.jsx":"4c5c38065b5a","components/feedback/Loader.jsx":"c3d9b87835f5","components/feedback/NotificationCenter.jsx":"5cc26cb3a8ac","components/feedback/Popover.jsx":"ae63e5598c2f","components/feedback/Progress.jsx":"e1aa90e87063","components/feedback/SetupChecklist.jsx":"5c64e0603894","components/feedback/Skeleton.jsx":"a9f6a224af87","components/feedback/Spinner.jsx":"09f1cb8b5c09","components/feedback/Toast.jsx":"aa2ce48f9eb6","components/feedback/Tooltip.jsx":"4fa1a2ed4e1b","components/feedback/Tour.jsx":"b8d37b5156d9","components/finance/ContributionBar.jsx":"87013f7566b7","components/finance/DataState.jsx":"442f2c823df0","components/finance/DirectionBadge.jsx":"b483e1b8299d","components/finance/EnvironmentBar.jsx":"1ea8c9a5d841","components/finance/InstrumentLabel.jsx":"06760aca8a13","components/finance/Money.jsx":"1b1952be152e","components/finance/NewsItem.jsx":"749f19afc9ed","components/finance/PriceChange.jsx":"e790c3c4019d","components/finance/RangeBandChart.jsx":"c497d5327928","components/finance/ValueShift.jsx":"d58125de233a","components/forms/Autocomplete.jsx":"b09aa856e47d","components/forms/Calendar.jsx":"5d7c8cbfb1fb","components/forms/Cascader.jsx":"c5b93fff8f77","components/forms/Checkbox.jsx":"38a0737c95c2","components/forms/Chip.jsx":"1a4e3d13d779","components/forms/ChipGroup.jsx":"6ad7d1f14e62","components/forms/CodeEditor.jsx":"f28f941b10ad","components/forms/ColorPicker.jsx":"94d63afd7db9","components/forms/DatePicker.jsx":"8558f71751c2","components/forms/DateTimePicker.jsx":"bdd0ef2fee83","components/forms/EditableCollection.jsx":"280b7e4ff77f","components/forms/ErrorSummary.jsx":"d69e68eeb926","components/forms/FileUpload.jsx":"7b723bf3fb0e","components/forms/FormLayout.jsx":"9fea34ba5e59","components/forms/InlineEdit.jsx":"732e316d6009","components/forms/Input.jsx":"9a2fe064b743","components/forms/MentionInput.jsx":"9385bfafadf3","components/forms/MultiSelect.jsx":"bb48e6d5f674","components/forms/NumberInput.jsx":"b10ec7253845","components/forms/OptionSwitcher.jsx":"27ee85eb7f14","components/forms/OtpInput.jsx":"79870a223aa8","components/forms/PasswordInput.jsx":"c5f49146f57a","components/forms/PhoneInput.jsx":"57e1b79a57a3","components/forms/Radio.jsx":"486c8b472ba2","components/forms/RangeInput.jsx":"833d5c08362a","components/forms/Rating.jsx":"b7a2f7cfb7c1","components/forms/RatingSummary.jsx":"824a8b6ace25","components/forms/RichTextEditor.jsx":"2d6e1a236576","components/forms/SearchInput.jsx":"f82465eff6f4","components/forms/Select.jsx":"0f287a310e23","components/forms/SignaturePad.jsx":"caf3b3cbe9f3","components/forms/Slider.jsx":"4d4cb8d320f1","components/forms/Switch.jsx":"98fedfdb000e","components/forms/TagInput.jsx":"221bbcf825d6","components/forms/Textarea.jsx":"91607c34cbae","components/forms/TimeStepper.jsx":"87e93c8d0658","components/forms/TransferList.jsx":"7a5353fbdd57","components/forms/TreeSelect.jsx":"76acd74e7a4c","components/layout/Footer.jsx":"e2a9558eb0d5","components/layout/PageHeader.jsx":"f28c6e13e56d","components/layout/ScrollArea.jsx":"8fc22128e3e3","components/layout/SearchTrigger.jsx":"bb8bea3167a8","components/layout/Sidebar.jsx":"b776b6d4786a","components/layout/SplitPane.jsx":"d089560145ea","components/layout/Stack.jsx":"5fa93e5f8dc3","components/media/AudioPlayer.jsx":"12ff1dd2c832","components/media/Carousel.jsx":"546d0706c61f","components/media/ImageCropper.jsx":"f47d5da4cb0e","components/media/Lightbox.jsx":"1d3e53ab665e","components/media/Marquee.jsx":"c547d193b50a","components/media/MediaFrame.jsx":"6af9a83e17b5","components/media/VideoPlayer.jsx":"6aefc6ca6215","components/media/time.js":"6cbfc6d74643","components/menus/CommandPalette.jsx":"a6f2b4e4552b","components/menus/ContextMenu.jsx":"28425e9faa8e","components/menus/DropdownButton.jsx":"ad7131854534","components/menus/Menu.jsx":"1314d60bcce5","components/menus/MenuChip.jsx":"7bbc2dae9656","components/menus/Toolbar.jsx":"5d87bb98dcc9","components/navigation/Anchor.jsx":"6b3d91dfc09e","components/navigation/BackToTop.jsx":"d1a2cb51a2a7","components/navigation/BottomNav.jsx":"5c8a1cf63047","components/navigation/Breadcrumb.jsx":"a3aa2a9b324e","components/navigation/HierarchyNavigator.jsx":"e08c5d99d398","components/navigation/Link.jsx":"3e8ece6b8588","components/navigation/LoadMore.jsx":"17b1e3cbb09d","components/navigation/Navbar.jsx":"65350ac24a6a","components/navigation/NavbarChip.jsx":"33bb691d17e7","components/navigation/Pagination.jsx":"c55069eda7a4","components/navigation/Stepper.jsx":"b8dc630b6f8c","components/navigation/Tabs.jsx":"c06f11296563","components/navigation/TreeView.jsx":"d185189380d3","components/navigation/Wizard.jsx":"749b224d2c4f","components/patterns/AiResultPanel.jsx":"c00c123530a5","components/patterns/AnalysisRequest.jsx":"518c2895224e","components/patterns/AtsAnalysisPanel.jsx":"2498349993a3","components/patterns/CalendarOrganizer.jsx":"8ece2ccb1bd9","components/patterns/ChatMessage.jsx":"0a752a990ae1","components/patterns/ColorLabelManager.jsx":"f0a23e6586a0","components/patterns/ColorLabelSelectionDialog.jsx":"48a55c174e28","components/patterns/CommentThread.jsx":"00663b7bdc5b","components/patterns/DualFilterBar.jsx":"579c6f7f2eca","components/patterns/FilterBar.jsx":"eca1bf33d4a0","components/patterns/FlashcardSession.jsx":"d95c78692f08","components/patterns/ImportSourcesDialog.jsx":"3fb8cc06a760","components/patterns/PricingTable.jsx":"6d323fef8e65","components/patterns/PromptInput.jsx":"8ec5b3e4e473","components/patterns/QueryBuilder.jsx":"c9a97f160fe8","components/primitives/Checkmark.jsx":"b5971ecb4dab","components/primitives/Chevron.jsx":"c8452dafb135","components/primitives/CloseButton.jsx":"e04946a9575e","components/primitives/ColumnResize.jsx":"7096cb3b65e5","components/primitives/Control.jsx":"ccb1a2d379c5","components/primitives/Count.jsx":"ca89f6ac6e25","components/primitives/Dot.jsx":"94492da759a3","components/primitives/EmptyText.jsx":"0803c7e4de8d","components/primitives/Field.jsx":"de8c5e4f2c30","components/primitives/Glyph.jsx":"555e59bb17ca","components/primitives/Handle.jsx":"7b7a1b407496","components/primitives/IconTile.jsx":"2b20b72c6cd0","components/primitives/Indicator.jsx":"56f0e12b0260","components/primitives/Kbd.jsx":"e1413c9d88a5","components/primitives/ListItem.jsx":"ecba551c8441","components/primitives/Mark.jsx":"43a29f3ac95d","components/primitives/Marker.jsx":"3df1880dd4f0","components/primitives/Meter.jsx":"ef9321a0e799","components/primitives/Option.jsx":"9dd9199950d7","components/primitives/Rail.jsx":"0188d8b2a963","components/primitives/SectionLabel.jsx":"35af4ccf5ceb","components/primitives/Segmented.jsx":"705a61a2688e","components/primitives/Separator.jsx":"5640a9df5349","components/primitives/Surface.jsx":"a44948a6c5a0","components/primitives/Swatch.jsx":"62c96c7324b8","components/primitives/Text.jsx":"2981dd22685a","components/primitives/VisuallyHidden.jsx":"641fa994d442","components/primitives/Weekday.jsx":"96868ee0a3ff","components/primitives/cx.js":"74d7f0acace2","components/primitives/date.js":"4f5f5d3dcf95","components/primitives/tone.js":"8bceac1a522b","components/primitives/useDismiss.js":"770b300e0e75","guidelines/card.js":"567e10500645"},"inlinedExternals":[],"unexposedExports":[{"name":"addDays","sourcePath":"components/primitives/date.js"},{"name":"addMonths","sourcePath":"components/primitives/date.js"},{"name":"applyColumns","sourcePath":"components/data/ColumnManager.jsx"},{"name":"buildGoogleCalendarUrl","sourcePath":"components/actions/CalendarEventButton.jsx"},{"name":"buildIcs","sourcePath":"components/actions/CalendarEventButton.jsx"},{"name":"buildOutlookCalendarUrl","sourcePath":"components/actions/CalendarEventButton.jsx"},{"name":"clearQuery","sourcePath":"components/patterns/QueryBuilder.jsx"},{"name":"compact","sourcePath":"components/charts/useSize.js"},{"name":"cx","sourcePath":"components/primitives/cx.js"},{"name":"defaultGridView","sourcePath":"components/data/DataGrid.jsx"},{"name":"describeQuery","sourcePath":"components/patterns/QueryBuilder.jsx"},{"name":"diffLines","sourcePath":"components/data/DiffViewer.jsx"},{"name":"emptyQuery","sourcePath":"components/patterns/QueryBuilder.jsx"},{"name":"encodeQR","sourcePath":"components/display/QRCode.jsx"},{"name":"filledIcon","sourcePath":"components/display/Icon.jsx"},{"name":"fmtDate","sourcePath":"components/primitives/date.js"},{"name":"fmtTime","sourcePath":"components/media/time.js"},{"name":"formatBytes","sourcePath":"components/forms/FileUpload.jsx"},{"name":"hexToHsv","sourcePath":"components/forms/ColorPicker.jsx"},{"name":"highlight","sourcePath":"components/data/CodeSnippet.jsx"},{"name":"highlightCode","sourcePath":"components/forms/CodeEditor.jsx"},{"name":"highlightMatch","sourcePath":"components/primitives/Mark.jsx"},{"name":"hsvToHex","sourcePath":"components/forms/ColorPicker.jsx"},{"name":"minutesOfDay","sourcePath":"components/primitives/date.js"},{"name":"moveTreeNode","sourcePath":"components/navigation/TreeView.jsx"},{"name":"niceRange","sourcePath":"components/charts/useSize.js"},{"name":"niceTicks","sourcePath":"components/charts/useSize.js"},{"name":"pad","sourcePath":"components/primitives/date.js"},{"name":"pageRange","sourcePath":"components/navigation/Pagination.jsx"},{"name":"parseTime","sourcePath":"components/forms/DatePicker.jsx"},{"name":"passwordScore","sourcePath":"components/forms/PasswordInput.jsx"},{"name":"reconcileGridView","sourcePath":"components/data/DataGrid.jsx"},{"name":"renderIcon","sourcePath":"components/primitives/Glyph.jsx"},{"name":"renderMarkdown","sourcePath":"components/display/Markdown.jsx"},{"name":"sameDay","sourcePath":"components/primitives/date.js"},{"name":"sanitizeRichText","sourcePath":"components/forms/RichTextEditor.jsx"},{"name":"scoreBand","sourcePath":"components/patterns/AtsAnalysisPanel.jsx"},{"name":"startOfDay","sourcePath":"components/primitives/date.js"},{"name":"toDate","sourcePath":"components/primitives/date.js"},{"name":"toggleCtx","sourcePath":"components/actions/ToggleButton.jsx"},{"name":"toneIcon","sourcePath":"components/primitives/tone.js"},{"name":"useAsyncOptions","sourcePath":"components/forms/Autocomplete.jsx"},{"name":"useDismiss","sourcePath":"components/primitives/useDismiss.js"},{"name":"useMoneyHidden","sourcePath":"components/finance/Money.jsx"},{"name":"useWidth","sourcePath":"components/charts/useSize.js"},{"name":"weekdayNames","sourcePath":"components/primitives/date.js"},{"name":"ymd","sourcePath":"components/primitives/date.js"}]} */
 
 (() => {
 
@@ -77,8 +77,19 @@ function niceTicks(max, count = 4) {
     length: Math.round(top / step) + 1
   }, (_, i) => +(i * step).toFixed(10));
 }
+function niceRange(min, max, count = 4) {
+  const span = max - min || 1;
+  const raw = span / count;
+  const p = Math.pow(10, Math.floor(Math.log10(raw)));
+  const step = [1, 2, 2.5, 5, 10].map(m => m * p).find(s => s >= raw) || p * 10;
+  const lo = Math.floor(min / step) * step,
+    hi = Math.ceil(max / step) * step;
+  return Array.from({
+    length: Math.round((hi - lo) / step) + 1
+  }, (_, i) => +(lo + i * step).toFixed(10));
+}
 const compact = n => Math.abs(n) >= 1e6 ? +(n / 1e6).toFixed(1) + 'M' : Math.abs(n) >= 1e3 ? +(n / 1e3).toFixed(1) + 'k' : String(+n.toFixed(2));
-Object.assign(__ds_scope, { useWidth, niceTicks, compact });
+Object.assign(__ds_scope, { useWidth, niceTicks, niceRange, compact });
 })(); } catch (e) { __ds_ns.__errors.push({ path: "components/charts/useSize.js", error: String((e && e.message) || e) }); }
 
 // components/data/Divider.jsx
@@ -252,6 +263,10 @@ const VelvetIcons = {
   "volume": "<path d=\"M4 9.5v5h3.5l5 4.5V5l-5 4.5z\"/><path d=\"M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11\"/>",
   "stop": "<rect x=\"5.5\" y=\"5.5\" width=\"13\" height=\"13\" rx=\"2.5\"/>",
   "skip-forward": "<path d=\"M6 5.5v13l9-6.5z\"/><path d=\"M18 5v14\"/>",
+  "kanban-filled": "<path transform=\"scale(.09375)\" stroke=\"none\" fill=\"currentColor\" d=\"M160,56v96a8,8,0,0,1-8,8H112a8,8,0,0,1-8-8V56a8,8,0,0,1,8-8h40A8,8,0,0,1,160,56Zm64-8H184a8,8,0,0,0-8,8v52a4,4,0,0,0,4,4h48a4,4,0,0,0,4-4V56A8,8,0,0,0,224,48Zm4,80H180a4,4,0,0,0-4,4v44a16,16,0,0,0,16,16h24a16,16,0,0,0,16-16V132A4,4,0,0,0,228,128ZM80,48H40a8,8,0,0,0-8,8v52a4,4,0,0,0,4,4H84a4,4,0,0,0,4-4V56A8,8,0,0,0,80,48Zm4,80H36a4,4,0,0,0-4,4v76a16,16,0,0,0,16,16H72a16,16,0,0,0,16-16V132A4,4,0,0,0,84,128Z\"/>",
+  "calendar-filled": "<path transform=\"scale(.09375)\" stroke=\"none\" fill=\"currentColor\" d=\"M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM84,184a12,12,0,1,1,12-12A12,12,0,0,1,84,184Zm44,0a12,12,0,1,1,12-12A12,12,0,0,1,128,184Zm0-40a12,12,0,1,1,12-12A12,12,0,0,1,128,144Zm44,40a12,12,0,1,1,12-12A12,12,0,0,1,172,184Zm0-40a12,12,0,1,1,12-12A12,12,0,0,1,172,144Zm36-64H48V48H72v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24Z\"/>",
+  "book-open-filled": "<path transform=\"scale(.09375)\" stroke=\"none\" fill=\"currentColor\" d=\"M232,48H168a32,32,0,0,0-32,32v87.73a8.17,8.17,0,0,1-7.47,8.25,8,8,0,0,1-8.53-8V80A32,32,0,0,0,88,48H24a8,8,0,0,0-8,8V200a8,8,0,0,0,8,8H96a24,24,0,0,1,24,23.94,7.9,7.9,0,0,0,5.12,7.550A8,8,0,0,0,136,232a24,24,0,0,1,24-24h72a8,8,0,0,0,8-8V56A8,8,0,0,0,232,48ZM208,168H168.27a8.17,8.17,0,0,1-8.25-7.47,8,8,0,0,1,8-8.530h39.73a8.17,8.17,0,0,1,8.25,7.47A8,8,0,0,1,208,168Zm0-32H168.27a8.17,8.17,0,0,1-8.25-7.47,8,8,0,0,1,8-8.53h39.73a8.17,8.17,0,0,1,8.25,7.47A8,8,0,0,1,208,136Zm0-32H168.27A8.17,8.17,0,0,1,160,96.53,8,8,0,0,1,168,88h39.73A8.17,8.17,0,0,1,216,95.47,8,8,0,0,1,208,104Z\"/>",
+  "file-text-filled": "<path transform=\"scale(.09375)\" stroke=\"none\" fill=\"currentColor\" d=\"M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,176H96a8,8,0,0,1,0-16h64a8,8,0,0,1,0,16Zm0-32H96a8,8,0,0,1,0-16h64a8,8,0,0,1,0,16Zm-8-56V44l44,44Z\"/>",
   "home-filled": "<path d=\"M3.5 10.5L12 3.5l8.5 7\"/><path d=\"M5.5 9.2L12 4.2l6.5 5v9.3a2 2 0 0 1-2 2H14V15h-4v5.5H7.5a2 2 0 0 1-2-2z\" fill=\"currentColor\"/>",
   "bell-filled": "<path d=\"M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 2h-15z\" fill=\"currentColor\"/><path d=\"M10 21.25h4\"/>",
   "user-filled": "<circle cx=\"12\" cy=\"8\" r=\"4\" fill=\"currentColor\"/><path d=\"M4.5 20.5c.8-3.7 3.8-6 7.5-6s6.7 2.3 7.5 6z\" fill=\"currentColor\"/>",
@@ -282,7 +297,7 @@ const IconCategories = {
   "Text editing": ["bold", "italic", "underline", "strikethrough", "list-ordered", "align-left", "align-center", "align-right"],
   "Work & data": ["briefcase", "gift", "building", "graduation-cap", "handshake", "trending-up", "dollar-sign", "sitemap", "server", "git-branch", "git-merge"],
   "Media": ["play", "pause", "stop", "skip-forward", "volume", "mic", "video"],
-  "Filled · selected": ["home-filled", "bell-filled", "user-filled", "folder-filled", "bookmark-filled", "heart-filled", "message-square-filled", "star-filled", "briefcase-filled", "graduation-cap-filled", "person-filled", "desktop-filled"]
+  "Filled · selected": ["home-filled", "bell-filled", "user-filled", "folder-filled", "bookmark-filled", "heart-filled", "message-square-filled", "star-filled", "briefcase-filled", "graduation-cap-filled", "person-filled", "desktop-filled", "kanban-filled", "calendar-filled", "book-open-filled", "file-text-filled"]
 };
 /** Legacy alias → canonical Velvet name */
 const IconAliases = {
@@ -347,6 +362,14 @@ function Icon({
 }
 Object.assign(__ds_scope, { VelvetIcons, IconCategories, IconAliases, IconFilled, filledIcon, Icon });
 })(); } catch (e) { __ds_ns.__errors.push({ path: "components/display/Icon.jsx", error: String((e && e.message) || e) }); }
+
+// components/display/quantcore-logo-data.js
+try { (() => {
+// QuantCore logotype — "Q" signet (with inner dot) + "uantCore" wordmark. Supplied vector, viewBox units; fill-rule evenodd.
+const Q_MARK = "M 130.5 84.468 C 96.468 91.89 72 122.855 72 158.5 C 72 171.393 74.425 181.339 80.655 194 C 89.086 211.134 106.642 225.96 125 231.45 C 133.951 234.127 145.559 235.125 154.185 233.96 C 162.463 232.842 172.208 229.923 172.666 228.424 C 172.821 227.916 168.764 222.806 163.65 217.069 L 154.351 206.637 148.32 206.884 C 135.793 207.395 123.25 202.243 113.826 192.715 C 87.135 165.733 99.178 121.003 135.693 111.492 C 160.793 104.954 187.648 121.61 193.116 147.108 C 195.76 159.434 192.011 173.257 183.699 181.833 C 177.044 188.699 173.045 190.344 161.5 190.963 C 155.449 191.288 151.653 191.895 151.887 192.5 C 152.099 193.05 162.224 204.846 174.387 218.713 L 196.5 243.926 212.75 243.963 C 221.963 243.984 229 243.603 229 243.083 C 229 242.579 225.722 238.641 221.716 234.333 C 217.71 230.025 210.961 222.558 206.718 217.739 L 199.004 208.979 204.853 202.012 C 211.604 193.972 217.253 183.314 219.7 174 C 222.103 164.854 221.855 147.928 219.169 137.846 C 212.109 111.334 190.88 90.9 163.756 84.505 C 156.09 82.697 138.706 82.678 130.5 84.468 M 135.907 139.326 C 118.577 148.473 118.984 173.974 136.598 182.592 C 147.609 187.979 160.955 184.095 167.433 173.618 C 175.096 161.222 169.662 143.935 156.355 138.375 C 151.011 136.142 141.064 136.605 135.907 139.326";
+const Q_WORD = "M 618 106.332 C 577.695 118.291 560.264 165.635 583.642 199.654 C 595.739 217.257 620.665 227.962 642.723 225.027 C 657.404 223.073 670.667 216.991 679.196 208.3 L 683.396 204.021 675.162 195.919 L 666.929 187.818 661.715 192.195 C 654.486 198.262 652.142 199.612 645.469 201.552 C 628.257 206.556 609.109 198.1 601.205 182.007 C 598.736 176.981 598.502 175.495 598.519 165 C 598.536 154.346 598.752 153.059 601.459 147.5 C 604.669 140.909 612.15 132.968 617.846 130.107 C 627.606 125.204 641.251 124.845 651.056 129.232 C 654.264 130.668 658.784 133.924 661.751 136.939 C 665.382 140.628 667.305 141.917 668.302 141.33 C 669.078 140.874 673.266 137.202 677.607 133.171 L 685.5 125.842 679.489 120.17 C 672.377 113.46 661.787 107.633 652.897 105.537 C 643.175 103.246 627.175 103.61 618 106.332 M 525.409 114.375 C 525.119 115.132 525.039 135.044 525.231 158.625 C 525.627 207.194 525.709 207.761 533.474 215.526 C 538.602 220.655 545.088 223 554.141 223 C 560.54 223 571.98 219.914 572.013 218.178 C 572.02 217.805 571.008 213.798 569.763 209.274 L 567.5 201.049 562.329 201.653 C 549.788 203.118 549 201.515 549 174.55 L 549 154 559 154 L 569 154 569 144 L 569 134 559 134 L 549 134 549 123.5 L 549 113 537.469 113 C 528.605 113 525.815 113.318 525.409 114.375 M 357.5 134.347 C 341.251 138.588 327.716 152.253 324.061 168.112 C 322.577 174.546 322.784 184.749 324.533 191.465 C 326.757 200.002 330.62 206.433 337.168 212.495 C 344.931 219.682 351.677 222.265 364.028 222.778 C 375.344 223.248 382.625 221.187 389.471 215.577 L 393.752 212.07 394.41 217.035 L 395.069 222 406.534 222 L 418 222 418 178 L 418 134 406.5 134 L 395 134 395 139 C 395 141.75 394.734 144 394.409 144 C 394.084 144 392.107 142.537 390.017 140.75 C 382.57 134.383 368.203 131.554 357.5 134.347 M 471 134.543 C 465.528 136.07 459.542 139.399 455.25 143.302 L 453 145.349 453 139.674 L 453 134 441 134 L 429 134 429 178 L 429 222 440.426 222 L 451.853 222 452.176 195.75 C 452.48 171.123 452.633 169.253 454.653 165.5 C 460.109 155.362 470.748 151.402 480.5 155.881 C 490.096 160.287 491 163.752 491 196.126 L 491 222 503 222 L 515 222 514.98 196.25 C 514.958 167.398 514.095 158.832 510.46 151.358 C 507.523 145.32 500.6 138.595 494.58 135.932 C 488.567 133.272 477.823 132.639 471 134.543 M 721.402 134.486 C 703.777 138.32 689.741 152.363 686.105 169.799 C 680.952 194.511 696.138 217.752 720.799 222.895 C 738.583 226.603 758.799 220.553 770.189 208.113 C 779.587 197.848 783.333 185.27 781.159 171.282 C 777.029 144.72 750.225 128.215 721.402 134.486 M 828.882 134.381 C 823.863 136.174 818.392 139.686 816.122 142.571 C 815.072 143.907 813.939 145 813.606 145 C 813.273 145 813 142.525 813 139.5 L 813 134 801 134 L 789 134 789 178 L 789 222 800.5 222 L 812 222 812 199.659 C 812 175.491 812.663 171.129 817.436 163.917 C 821.068 158.43 828.195 155 835.967 155 L 842 155 842 144 L 842 133 837.25 133.044 C 834.638 133.068 830.872 133.67 828.882 134.381 M 878.398 134.889 C 865.256 138.652 855.177 147.234 849.199 159.753 C 845.569 167.354 845.5 167.725 845.5 179.5 C 845.5 190.914 845.655 191.828 848.685 198.223 C 853.04 207.417 859.668 214.239 868.409 218.525 C 887.541 227.907 910.909 225.061 925.665 211.553 L 930.5 207.126 923.816 200.388 L 917.132 193.651 912.606 197.36 C 910.116 199.4 906.599 201.686 904.79 202.439 C 891.894 207.811 876.438 203.34 870.272 192.453 C 865.77 184.504 863.531 185 903.933 185 C 945.337 185 941.605 186.155 940.041 173.826 C 937.939 157.241 929.393 144.735 915.3 137.616 C 906.232 133.037 889.253 131.782 878.398 134.889 M 229.931 141.25 C 229.594 176.33 230.188 192.397 232.041 198.399 C 235.71 210.275 242.97 217.987 253.824 221.537 C 264.724 225.103 280.208 221.887 288.055 214.428 C 289.46 213.093 290.922 212 291.305 212 C 291.687 212 292 214.25 292 217 L 292 222 303.75 222 L 315.5 222 315.369 179.75 C 315.297 156.512 315.185 136.713 315.119 135.75 C 315.013 134.192 313.744 134 303.575 134 L 292.149 134 291.825 159.75 C 291.505 185.087 291.46 185.571 289 189.911 C 285.015 196.941 280.087 200.294 272.982 200.808 C 269.472 201.062 265.753 200.726 263.993 199.997 C 259.944 198.32 255.341 192.888 254.06 188.277 C 253.456 186.103 253.009 173.783 253.006 159.25 L 253 134 241.5 134 L 230 134 229.931 141.25 M 886.5 151.935 C 882.404 152.932 878.025 155.311 874.835 158.273 C 872.218 160.703 868 167.915 868 169.96 C 868 170.652 876.241 171 892.608 171 L 917.217 171 916.548 168.25 C 913.709 156.585 899.373 148.801 886.5 151.935 M 359.248 154.525 C 349.491 159.459 344.424 168.758 345.181 180.341 C 346.12 194.693 355.813 204.031 369.718 203.978 C 380.019 203.939 388.092 198.408 392.773 188.185 C 396.283 180.518 395.745 170.357 391.462 163.429 C 387.007 156.223 380.621 152.612 371.597 152.196 C 365.511 151.916 363.752 152.247 359.248 154.525 M 723.435 153.89 C 713.285 158.5 707.687 167.464 707.754 179 C 707.842 194.109 718.303 204.589 733.102 204.395 C 747.339 204.208 757.93 192.786 757.978 177.566 C 758.005 169.076 755.741 163.859 749.555 158.157 C 742.762 151.896 731.777 150.101 723.435 153.89";
+Object.assign(__ds_scope, { Q_MARK, Q_WORD });
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/display/quantcore-logo-data.js", error: String((e && e.message) || e) }); }
 
 // components/display/recron-logo-paths.js
 try { (() => {
@@ -1257,6 +1280,38 @@ function Sparkline({
 Object.assign(__ds_scope, { Sparkline });
 })(); } catch (e) { __ds_ns.__errors.push({ path: "components/charts/Sparkline.jsx", error: String((e && e.message) || e) }); }
 
+// components/data/CellStack.jsx
+try { (() => {
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
+function CellStack({
+  primary,
+  secondary,
+  mono = false,
+  secondaryMono = false,
+  leading,
+  trailing,
+  align = 'left',
+  strong = true,
+  className,
+  ...rest
+}) {
+  return /*#__PURE__*/React.createElement("span", _extends({
+    className: __ds_scope.cx('vui-cellstack', align === 'right' && 'vui-cellstack--end', className)
+  }, rest), leading && /*#__PURE__*/React.createElement("span", {
+    className: "vui-cellstack__lead"
+  }, leading), /*#__PURE__*/React.createElement("span", {
+    className: "vui-cellstack__txt"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: __ds_scope.cx('vui-cellstack__p', mono && 'vui-cellstack--mono', strong && 'vui-cellstack__p--strong')
+  }, primary), secondary != null && secondary !== '' && /*#__PURE__*/React.createElement("span", {
+    className: __ds_scope.cx('vui-cellstack__s', secondaryMono && 'vui-cellstack--mono')
+  }, secondary)), trailing && /*#__PURE__*/React.createElement("span", {
+    className: "vui-cellstack__trail"
+  }, trailing));
+}
+Object.assign(__ds_scope, { CellStack });
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/CellStack.jsx", error: String((e && e.message) || e) }); }
+
 // components/data/DescriptionList.jsx
 try { (() => {
 function DescriptionList({
@@ -1557,6 +1612,39 @@ function DiffViewer({
 Object.assign(__ds_scope, { diffLines, DiffViewer });
 })(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/DiffViewer.jsx", error: String((e && e.message) || e) }); }
 
+// components/data/MetricGroup.jsx
+try { (() => {
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
+function MetricGroup({
+  items = [],
+  columns,
+  minWidth = 120,
+  size = 'md',
+  variant = 'plain',
+  className,
+  ...rest
+}) {
+  const style = columns ? {
+    gridTemplateColumns: 'repeat(' + columns + ', minmax(0, 1fr))'
+  } : {
+    gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, ' + minWidth + 'px), 1fr))'
+  };
+  return /*#__PURE__*/React.createElement("dl", _extends({
+    className: __ds_scope.cx('vui-metrics', 'vui-metrics--' + size, variant === 'subtle' && 'vui-metrics--subtle', className),
+    style: style
+  }, rest), items.map((it, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    className: "vui-metrics__it"
+  }, /*#__PURE__*/React.createElement("dd", {
+    className: "vui-metrics__v",
+    "data-dir": it.dir
+  }, it.value), /*#__PURE__*/React.createElement("dt", {
+    className: "vui-metrics__l"
+  }, it.label))));
+}
+Object.assign(__ds_scope, { MetricGroup });
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/MetricGroup.jsx", error: String((e && e.message) || e) }); }
+
 // components/data/VirtualTable.jsx
 try { (() => {
 function VirtualTable({
@@ -1718,6 +1806,28 @@ function BrandLogo({
     }, recronPaths(__ds_scope.R_MARK)), markOnly ? null : /*#__PURE__*/React.createElement("g", {
       className: "vui-logo-r__word"
     }, recronPaths(__ds_scope.R_WORD))));
+  }
+  if (brand === 'quantcore') {
+    const h = px ? size : R_SIZES[size] || 32;
+    const markOnly = variant === 'mark';
+    return /*#__PURE__*/React.createElement("svg", {
+      role: "img",
+      "aria-label": label || 'QuantCore',
+      viewBox: markOnly ? '64 76 172 176' : '64 76 884 176',
+      className: __ds_scope.cx('vui-logo-r', tone === 'inverse' && 'vui-logo-r--inverse', className),
+      style: {
+        height: h,
+        ...style
+      }
+    }, /*#__PURE__*/React.createElement("path", {
+      className: "vui-logo-r__mark",
+      fillRule: "evenodd",
+      d: __ds_scope.Q_MARK
+    }), markOnly ? null : /*#__PURE__*/React.createElement("path", {
+      className: "vui-logo-r__word",
+      fillRule: "evenodd",
+      d: __ds_scope.Q_WORD
+    }));
   }
   const b = VELVET;
   return /*#__PURE__*/React.createElement("span", {
@@ -2523,6 +2633,350 @@ function LoadingOverlay({
 Object.assign(__ds_scope, { Spinner, LoadingOverlay });
 })(); } catch (e) { __ds_ns.__errors.push({ path: "components/feedback/Spinner.jsx", error: String((e && e.message) || e) }); }
 
+// components/finance/ContributionBar.jsx
+try { (() => {
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
+function ContributionBar({
+  items = [],
+  max,
+  unit = '',
+  digits = 0,
+  sort = false,
+  labelWidth = 180,
+  className,
+  ...rest
+}) {
+  const rows = sort ? [...items].sort((a, b) => Math.abs(b.value) - Math.abs(a.value)) : items;
+  const m = max || Math.max(1, ...rows.map(r => Math.abs(+r.value || 0)));
+  const fmt = v => (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(digits) + unit;
+  return /*#__PURE__*/React.createElement("div", _extends({
+    className: __ds_scope.cx('vui-contrib', className),
+    role: "list",
+    style: {
+      '--contrib-label': typeof labelWidth === 'number' ? labelWidth + 'px' : labelWidth
+    }
+  }, rest), rows.map((r, i) => {
+    const v = +r.value || 0;
+    const w = Math.min(50, Math.abs(v) / m * 50);
+    return /*#__PURE__*/React.createElement("div", {
+      key: i,
+      className: "vui-contrib__row",
+      role: "listitem",
+      "aria-label": r.label + ' ' + fmt(v)
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "vui-contrib__l"
+    }, r.label), /*#__PURE__*/React.createElement("span", {
+      className: "vui-contrib__track",
+      "aria-hidden": "true"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "vui-contrib__axis"
+    }), /*#__PURE__*/React.createElement("span", {
+      className: "vui-contrib__bar",
+      "data-dir": v >= 0 ? 'up' : 'down',
+      style: v >= 0 ? {
+        left: '50%',
+        width: w + '%'
+      } : {
+        right: '50%',
+        width: w + '%'
+      }
+    })), /*#__PURE__*/React.createElement("span", {
+      className: "vui-contrib__v",
+      "data-dir": v > 0 ? 'up' : v < 0 ? 'down' : 'flat'
+    }, fmt(v)));
+  }));
+}
+Object.assign(__ds_scope, { ContributionBar });
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/finance/ContributionBar.jsx", error: String((e && e.message) || e) }); }
+
+// components/finance/InstrumentLabel.jsx
+try { (() => {
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
+function InstrumentLabel({
+  symbol,
+  name,
+  exchange,
+  mark,
+  showMark = false,
+  size = 'md',
+  selected = false,
+  onClick,
+  meta,
+  className,
+  ...rest
+}) {
+  const El = onClick ? 'button' : 'span';
+  const initials = String(mark || symbol || '').replace(/[^A-Za-z0-9]/g, '').slice(0, 3).toUpperCase();
+  return /*#__PURE__*/React.createElement(El, _extends({
+    type: onClick ? 'button' : undefined,
+    onClick: onClick,
+    "aria-pressed": onClick ? !!selected : undefined,
+    className: __ds_scope.cx('vui-inst', size !== 'md' && 'vui-inst--' + size, selected && 'vui-inst--selected', className)
+  }, rest), showMark && /*#__PURE__*/React.createElement("span", {
+    className: "vui-inst__mark",
+    "aria-hidden": "true"
+  }, typeof mark === 'object' ? mark : initials), /*#__PURE__*/React.createElement("span", {
+    className: "vui-inst__txt"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "vui-inst__row"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "vui-inst__sym"
+  }, symbol), exchange && /*#__PURE__*/React.createElement("span", {
+    className: "vui-inst__ex"
+  }, exchange)), (name || meta) && /*#__PURE__*/React.createElement("span", {
+    className: "vui-inst__name"
+  }, name, name && meta ? ' · ' : '', meta)));
+}
+Object.assign(__ds_scope, { InstrumentLabel });
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/finance/InstrumentLabel.jsx", error: String((e && e.message) || e) }); }
+
+// components/finance/Money.jsx
+try { (() => {
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
+const PrivacyCtx = React.createContext(false);
+function MoneyPrivacy({
+  hidden = false,
+  children
+}) {
+  return /*#__PURE__*/React.createElement(PrivacyCtx.Provider, {
+    value: !!hidden
+  }, children);
+}
+function useMoneyHidden() {
+  return React.useContext(PrivacyCtx);
+}
+function Money({
+  amount,
+  currency,
+  digits = 2,
+  signed = false,
+  colored = false,
+  compact = false,
+  hidden,
+  size = 'md',
+  strong = false,
+  currencyDisplay = 'code',
+  className,
+  ...rest
+}) {
+  const ctxHidden = React.useContext(PrivacyCtx);
+  const isHidden = hidden ?? ctxHidden;
+  if (amount == null || Number.isNaN(+amount)) return /*#__PURE__*/React.createElement("span", _extends({
+    className: __ds_scope.cx('vui-money', className)
+  }, rest), /*#__PURE__*/React.createElement("span", {
+    className: "vui-money__amt"
+  }, "\u2014"), currency && /*#__PURE__*/React.createElement("span", {
+    className: "vui-money__ccy"
+  }, currency));
+  const v = +amount;
+  const dir = v > 0 ? 'up' : v < 0 ? 'down' : 'flat';
+  let txt;
+  if (compact) {
+    const a = Math.abs(v);
+    txt = a >= 1e9 ? (a / 1e9).toFixed(2) + ' bn' : a >= 1e6 ? (a / 1e6).toFixed(2) + ' m' : a >= 1e4 ? (a / 1e3).toFixed(1) + 'k' : a.toLocaleString('en-US', {
+      minimumFractionDigits: digits,
+      maximumFractionDigits: digits
+    });
+  } else txt = Math.abs(v).toLocaleString('en-US', {
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits
+  });
+  const sign = v < 0 ? '−' : signed && v > 0 ? '+' : '';
+  const sym = currencyDisplay === 'symbol' ? {
+    USD: '$',
+    EUR: '€',
+    GBP: '£',
+    PLN: 'zł',
+    JPY: '¥'
+  }[currency] : null;
+  return /*#__PURE__*/React.createElement("span", _extends({
+    className: __ds_scope.cx('vui-money', size !== 'md' && 'vui-money--' + size, strong && 'vui-money--strong', isHidden && 'vui-money--hidden', className),
+    "data-dir": colored && !isHidden ? dir : undefined,
+    "aria-label": isHidden ? 'Amount hidden' : undefined
+  }, rest), /*#__PURE__*/React.createElement("span", {
+    className: "vui-money__amt"
+  }, isHidden ? '•••••' : sym && currency !== 'PLN' ? sign + sym + txt : sign + txt), currency && !(sym && currency !== 'PLN') && /*#__PURE__*/React.createElement("span", {
+    className: "vui-money__ccy"
+  }, sym || currency));
+}
+Object.assign(__ds_scope, { MoneyPrivacy, useMoneyHidden, Money });
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/finance/Money.jsx", error: String((e && e.message) || e) }); }
+
+// components/finance/RangeBandChart.jsx
+try { (() => {
+function RangeBandChart({
+  data = [],
+  loKey = 'lo',
+  hiKey = 'hi',
+  midKey = 'mid',
+  valueKey = 'value',
+  bandLabel = 'Expected range',
+  midLabel = 'Median',
+  valueLabel = 'Actual',
+  height = 260,
+  format = __ds_scope.compact,
+  label = 'Range band chart',
+  className
+}) {
+  const [ref, W] = __ds_scope.useWidth();
+  const [hover, setHover] = React.useState(-1);
+  const pad = {
+    l: 44,
+    r: 12,
+    t: 12,
+    b: 28
+  };
+  const iw = Math.max(10, W - pad.l - pad.r),
+    ih = height - pad.t - pad.b;
+  const vals = data.flatMap(d => [d[loKey], d[hiKey], d[midKey], d[valueKey]]).filter(v => v != null && !Number.isNaN(+v)).map(Number);
+  const ticks = __ds_scope.niceRange(Math.min(0, ...vals), Math.max(0, ...vals));
+  const lo = ticks[0],
+    hi = ticks[ticks.length - 1];
+  const x = i => pad.l + (data.length < 2 ? iw / 2 : i / (data.length - 1) * iw);
+  const y = v => pad.t + ih - (v - lo) / (hi - lo || 1) * ih;
+  const line = k => data.map((d, i) => d[k] == null ? null : [x(i), y(+d[k])]).filter(Boolean).map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join('');
+  const band = data.length > 1 ? data.map((d, i) => (i ? 'L' : 'M') + x(i).toFixed(1) + ',' + y(+d[hiKey]).toFixed(1)).join('') + data.slice().reverse().map((d, j) => 'L' + x(data.length - 1 - j).toFixed(1) + ',' + y(+d[loKey]).toFixed(1)).join('') + 'Z' : '';
+  const every = Math.ceil(data.length / Math.max(2, Math.floor(iw / 64)));
+  const outs = data.map((d, i) => d[valueKey] != null && (+d[valueKey] < +d[loKey] || +d[valueKey] > +d[hiKey]) ? i : -1).filter(i => i >= 0);
+  const onMove = e => {
+    const r = e.currentTarget.getBoundingClientRect();
+    const i = Math.round((e.clientX - r.left - pad.l) / iw * (data.length - 1));
+    setHover(Math.max(0, Math.min(data.length - 1, i)));
+  };
+  const onKey = e => {
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      setHover(h => Math.min(data.length - 1, h + 1));
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      setHover(h => Math.max(0, h - 1));
+    } else if (e.key === 'Escape') setHover(-1);
+  };
+  const tip = hover >= 0 && data[hover];
+  return /*#__PURE__*/React.createElement("div", {
+    ref: ref,
+    className: __ds_scope.cx('vui-chart', 'vui-band', className)
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "vui-chart__bar-top"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "vui-chart__legend"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "vui-chart__lg"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "vui-band__sw"
+  }), bandLabel), /*#__PURE__*/React.createElement("span", {
+    className: "vui-chart__lg"
+  }, /*#__PURE__*/React.createElement("i", {
+    style: {
+      background: 'var(--market-median)'
+    }
+  }), midLabel), /*#__PURE__*/React.createElement("span", {
+    className: "vui-chart__lg"
+  }, /*#__PURE__*/React.createElement("i", {
+    style: {
+      background: 'var(--dv-1)'
+    }
+  }), valueLabel), outs.length > 0 && /*#__PURE__*/React.createElement("span", {
+    className: "vui-chart__lg"
+  }, /*#__PURE__*/React.createElement("i", {
+    style: {
+      background: 'var(--market-down-solid)',
+      borderRadius: 99
+    }
+  }), outs.length, " outside range")), /*#__PURE__*/React.createElement("span", null)), /*#__PURE__*/React.createElement("div", {
+    className: "vui-chart__plot",
+    style: {
+      height
+    }
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: W,
+    height: height,
+    role: "img",
+    "aria-label": label + '. ' + outs.length + ' points outside the expected range. Use arrow keys to read values.',
+    tabIndex: 0,
+    onMouseMove: onMove,
+    onMouseLeave: () => setHover(-1),
+    onKeyDown: onKey,
+    onFocus: () => hover < 0 && setHover(data.length - 1),
+    onBlur: () => setHover(-1)
+  }, ticks.map(t => /*#__PURE__*/React.createElement("g", {
+    key: t
+  }, /*#__PURE__*/React.createElement("line", {
+    x1: pad.l,
+    x2: W - pad.r,
+    y1: y(t),
+    y2: y(t),
+    className: t === 0 ? 'vui-band__zero' : 'vui-chart__grid'
+  }), /*#__PURE__*/React.createElement("text", {
+    x: pad.l - 8,
+    y: y(t),
+    dy: "0.32em",
+    textAnchor: "end",
+    className: "vui-chart__tick"
+  }, format(t)))), data.map((d, i) => i % every === 0 && /*#__PURE__*/React.createElement("text", {
+    key: i,
+    x: x(i),
+    y: height - 8,
+    textAnchor: "middle",
+    className: __ds_scope.cx('vui-chart__tick', hover === i && 'vui-chart__tick--on')
+  }, d.label)), /*#__PURE__*/React.createElement("path", {
+    d: band,
+    className: "vui-band__band"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: line(hiKey),
+    className: "vui-band__edge"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: line(loKey),
+    className: "vui-band__edge"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: line(midKey),
+    className: "vui-band__mid"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: line(valueKey),
+    className: "vui-band__val"
+  }), outs.map(i => /*#__PURE__*/React.createElement("circle", {
+    key: i,
+    cx: x(i),
+    cy: y(+data[i][valueKey]),
+    r: "3.5",
+    className: "vui-band__out"
+  })), hover >= 0 && /*#__PURE__*/React.createElement("line", {
+    x1: x(hover),
+    x2: x(hover),
+    y1: pad.t,
+    y2: pad.t + ih,
+    className: "vui-chart__cross"
+  })), tip && /*#__PURE__*/React.createElement("div", {
+    className: "vui-chart__tip",
+    style: {
+      left: Math.max(80, Math.min(W - 80, x(hover))),
+      top: pad.t
+    },
+    role: "status",
+    "aria-live": "polite"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "vui-chart__tip-t"
+  }, tip.label), /*#__PURE__*/React.createElement("div", {
+    className: "vui-chart__tip-r"
+  }, /*#__PURE__*/React.createElement("i", {
+    style: {
+      background: 'var(--dv-1)'
+    }
+  }), valueLabel, /*#__PURE__*/React.createElement("b", null, tip[valueKey] == null ? '—' : format(+tip[valueKey]))), /*#__PURE__*/React.createElement("div", {
+    className: "vui-chart__tip-r"
+  }, /*#__PURE__*/React.createElement("i", {
+    style: {
+      background: 'var(--market-median)'
+    }
+  }), midLabel, /*#__PURE__*/React.createElement("b", null, format(+tip[midKey]))), /*#__PURE__*/React.createElement("div", {
+    className: "vui-chart__tip-r"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "vui-band__sw"
+  }), bandLabel, /*#__PURE__*/React.createElement("b", null, format(+tip[loKey]) + ' … ' + format(+tip[hiKey]))))));
+}
+Object.assign(__ds_scope, { RangeBandChart });
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/finance/RangeBandChart.jsx", error: String((e && e.message) || e) }); }
+
 // components/forms/Checkbox.jsx
 try { (() => {
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
@@ -2552,6 +3006,135 @@ function Checkbox({
 }
 Object.assign(__ds_scope, { Checkbox });
 })(); } catch (e) { __ds_ns.__errors.push({ path: "components/forms/Checkbox.jsx", error: String((e && e.message) || e) }); }
+
+// components/forms/CodeEditor.jsx
+try { (() => {
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
+const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const KW = /\b(and|or|not|if|else|elif|when|then|def|return|import|from|in|is|true|false|True|False|None|null|for|while|let|const)\b/g;
+function highlightCode(src) {
+  return esc(src).split('\n').map(line => {
+    const ci = line.search(/(^|\s)(#|\/\/)/);
+    let code = ci >= 0 ? line.slice(0, ci) : line;
+    const com = ci >= 0 ? line.slice(ci) : '';
+    const parts = code.split(/("[^"]*"|'[^']*')/);
+    code = parts.map((p, i) => i % 2 ? '<span class="tk-s">' + p + '</span>' : p.replace(/^(\s*-?\s*)([A-Za-z_][\w.]*)(\s*:)(?!\S)/, '$1<span class="tk-k">$2</span>$3').replace(/^(\s*-?\s*)([A-Za-z_][\w.]*)(\s*:\s)/, '$1<span class="tk-k">$2</span>$3').replace(KW, '<span class="tk-w">$1</span>').replace(/\b([a-z_][\w]*)(?=\()/g, '<span class="tk-f">$1</span>').replace(/(^|[^\w#])(-?\d+(?:\.\d+)?)(?![\w])/g, '$1<span class="tk-n">$2</span>')).join('');
+    return code + (com ? '<span class="tk-c">' + com + '</span>' : '');
+  }).join('\n');
+}
+function CodeEditor({
+  value,
+  defaultValue = '',
+  onChange,
+  onValueChange,
+  label,
+  hint,
+  error,
+  language = 'text',
+  rows = 12,
+  maxHeight,
+  readOnly = false,
+  lineNumbers = true,
+  highlight = true,
+  placeholder,
+  id,
+  className,
+  ...rest
+}) {
+  const [inner, setInner] = React.useState(defaultValue);
+  const v = value != null ? value : inner;
+  const taRef = React.useRef(null);
+  const preRef = React.useRef(null);
+  const gutRef = React.useRef(null);
+  const autoId = React.useId();
+  const fid = id || 'ce' + autoId.replace(/:/g, '');
+  const lines = v.split('\n').length;
+  const sync = () => {
+    const t = taRef.current;
+    if (!t) return;
+    if (preRef.current) {
+      preRef.current.scrollTop = t.scrollTop;
+      preRef.current.scrollLeft = t.scrollLeft;
+    }
+    if (gutRef.current) gutRef.current.scrollTop = t.scrollTop;
+  };
+  const change = e => {
+    if (value == null) setInner(e.target.value);
+    onChange && onChange(e);
+    onValueChange && onValueChange(e.target.value);
+  };
+  const onKeyDown = e => {
+    if (e.key === 'Tab' && !e.shiftKey && !readOnly) {
+      e.preventDefault();
+      const t = e.target;
+      const s = t.selectionStart,
+        en = t.selectionEnd;
+      const nv = v.slice(0, s) + '  ' + v.slice(en);
+      if (value == null) setInner(nv);
+      onValueChange && onValueChange(nv);
+      onChange && onChange({
+        target: {
+          value: nv
+        }
+      });
+      requestAnimationFrame(() => {
+        t.selectionStart = t.selectionEnd = s + 2;
+      });
+    }
+  };
+  const h = maxHeight ? undefined : rows * 20 + 24;
+  return /*#__PURE__*/React.createElement("div", {
+    className: __ds_scope.cx('vui-ce', error && 'vui-ce--invalid', readOnly && 'vui-ce--ro', className)
+  }, label && /*#__PURE__*/React.createElement("label", {
+    htmlFor: fid,
+    className: "vui-ce__label"
+  }, label, /*#__PURE__*/React.createElement("span", {
+    className: "vui-ce__lang"
+  }, language)), /*#__PURE__*/React.createElement("div", {
+    className: "vui-ce__box",
+    style: {
+      height: h,
+      maxHeight
+    }
+  }, lineNumbers && /*#__PURE__*/React.createElement("div", {
+    ref: gutRef,
+    className: "vui-ce__gutter",
+    "aria-hidden": "true"
+  }, Array.from({
+    length: lines
+  }, (_, i) => /*#__PURE__*/React.createElement("div", {
+    key: i
+  }, i + 1))), /*#__PURE__*/React.createElement("div", {
+    className: "vui-ce__area"
+  }, highlight && /*#__PURE__*/React.createElement("pre", {
+    ref: preRef,
+    className: "vui-ce__pre",
+    "aria-hidden": "true",
+    dangerouslySetInnerHTML: {
+      __html: highlightCode(v) + '\n'
+    }
+  }), /*#__PURE__*/React.createElement("textarea", _extends({
+    ref: taRef,
+    id: fid,
+    className: __ds_scope.cx('vui-ce__ta', highlight && 'vui-ce__ta--hl'),
+    value: v,
+    onChange: change,
+    onScroll: sync,
+    onKeyDown: onKeyDown,
+    readOnly: readOnly,
+    spellCheck: false,
+    autoCapitalize: "off",
+    autoCorrect: "off",
+    placeholder: placeholder,
+    "aria-invalid": !!error,
+    "aria-describedby": hint || error ? fid + '-h' : undefined
+  }, rest)))), (error || hint) && /*#__PURE__*/React.createElement("div", {
+    id: fid + '-h',
+    className: __ds_scope.cx('vui-ce__hint', error && 'vui-ce__hint--err')
+  }, error || hint));
+}
+Object.assign(__ds_scope, { highlightCode, CodeEditor });
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/forms/CodeEditor.jsx", error: String((e && e.message) || e) }); }
 
 // components/forms/FormLayout.jsx
 try { (() => {
@@ -4193,6 +4776,7 @@ function LineChart({
   area = true,
   curved = true,
   showTable = false,
+  includeZero = true,
   label = 'Line chart',
   className
 }) {
@@ -4212,11 +4796,17 @@ function LineChart({
   };
   const iw = W - pad.l - pad.r,
     ih = height - pad.t - pad.b;
-  const max = Math.max(1, ...data.flatMap(d => ser.map(s => +d[s.key] || 0)));
-  const ticks = __ds_scope.niceTicks(max);
-  const top = ticks[ticks.length - 1];
+  const all = data.flatMap(d => ser.map(s => +d[s.key] || 0));
+  if (!all.length) all.push(0);
+  const dMin = Math.min(...all),
+    dMax = Math.max(...all);
+  const padv = (dMax - dMin) * 0.08 || Math.abs(dMax) * 0.02 || 1;
+  const ticks = includeZero ? __ds_scope.niceRange(Math.min(0, dMin), Math.max(dMin < 0 ? 0 : 1, dMax)) : __ds_scope.niceRange(dMin - padv, dMax + padv);
+  const bot = ticks[0],
+    top = ticks[ticks.length - 1];
   const x = i => pad.l + (data.length < 2 ? iw / 2 : i / (data.length - 1) * iw);
-  const y = v => pad.t + ih - v / top * ih;
+  const y = v => pad.t + ih - (v - bot) / (top - bot || 1) * ih;
+  const base = y(bot < 0 && top > 0 ? 0 : bot);
   const every = Math.ceil(data.length / Math.max(2, Math.floor(iw / 64)));
   const onMove = e => {
     const r = e.currentTarget.getBoundingClientRect();
@@ -4322,7 +4912,7 @@ function LineChart({
     return /*#__PURE__*/React.createElement("g", {
       key: s.key
     }, area && k === 0 && pts.length > 1 && /*#__PURE__*/React.createElement("path", {
-      d: line + 'L' + pts[pts.length - 1][0] + ',' + (pad.t + ih) + 'L' + pts[0][0] + ',' + (pad.t + ih) + 'Z',
+      d: line + 'L' + pts[pts.length - 1][0] + ',' + base + 'L' + pts[0][0] + ',' + base + 'Z',
       fill: 'url(#' + gid + k + ')',
       className: "vui-chart__area"
     }), /*#__PURE__*/React.createElement("path", {
@@ -5364,6 +5954,60 @@ function QRCode({
 Object.assign(__ds_scope, { encodeQR, QRCode });
 })(); } catch (e) { __ds_ns.__errors.push({ path: "components/display/QRCode.jsx", error: String((e && e.message) || e) }); }
 
+// components/feedback/GateList.jsx
+try { (() => {
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
+const ICON = {
+  pass: 'circle-check',
+  fail: 'circle-x',
+  warn: 'triangle-alert',
+  pending: 'clock',
+  skip: 'minus'
+};
+function GateList({
+  items = [],
+  ordered = true,
+  stopAtFirstFail = true,
+  size = 'md',
+  className,
+  ...rest
+}) {
+  const firstFail = items.findIndex(g => g.status === 'fail');
+  const passed = items.filter(g => g.status === 'pass').length;
+  const List = ordered ? 'ol' : 'ul';
+  return /*#__PURE__*/React.createElement("div", _extends({
+    className: __ds_scope.cx('vui-gates', size === 'sm' && 'vui-gates--sm', className)
+  }, rest), /*#__PURE__*/React.createElement(List, {
+    className: "vui-gates__list",
+    "aria-label": passed + ' of ' + items.length + ' gates passed'
+  }, items.map((g, i) => {
+    const blocking = stopAtFirstFail && i === firstFail;
+    const after = stopAtFirstFail && firstFail >= 0 && i > firstFail && g.status !== 'fail';
+    return /*#__PURE__*/React.createElement("li", {
+      key: g.id || i,
+      className: __ds_scope.cx('vui-gates__it', blocking && 'vui-gates__it--block', after && 'vui-gates__it--after'),
+      "data-status": g.status
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "vui-gates__ic"
+    }, /*#__PURE__*/React.createElement(__ds_scope.Glyph, {
+      name: ICON[g.status] || 'minus',
+      label: g.status
+    })), /*#__PURE__*/React.createElement("span", {
+      className: "vui-gates__txt"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "vui-gates__t"
+    }, g.label), g.detail && /*#__PURE__*/React.createElement("span", {
+      className: "vui-gates__d"
+    }, g.detail)), blocking ? /*#__PURE__*/React.createElement("span", {
+      className: "vui-gates__tag"
+    }, "Blocks") : g.code ? /*#__PURE__*/React.createElement("span", {
+      className: "vui-gates__code"
+    }, g.code) : null);
+  })));
+}
+Object.assign(__ds_scope, { GateList });
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/feedback/GateList.jsx", error: String((e && e.message) || e) }); }
+
 // components/feedback/Tour.jsx
 try { (() => {
 function Tour({
@@ -5511,6 +6155,270 @@ function Tour({
 }
 Object.assign(__ds_scope, { Tour });
 })(); } catch (e) { __ds_ns.__errors.push({ path: "components/feedback/Tour.jsx", error: String((e && e.message) || e) }); }
+
+// components/finance/DataState.jsx
+try { (() => {
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
+const META = {
+  fresh: {
+    tone: 'success',
+    icon: 'check',
+    title: 'Fresh'
+  },
+  delayed: {
+    tone: 'info',
+    icon: 'clock',
+    title: 'Delayed'
+  },
+  stale: {
+    tone: 'warning',
+    icon: 'clock',
+    title: 'Stale'
+  },
+  partial: {
+    tone: 'warning',
+    icon: 'triangle-alert',
+    title: 'Partial coverage'
+  },
+  unavailable: {
+    tone: 'danger',
+    icon: 'triangle-alert',
+    title: 'Unavailable'
+  },
+  empty: {
+    tone: 'neutral',
+    icon: 'check',
+    title: 'Nothing found'
+  }
+};
+function DataState({
+  state = 'fresh',
+  label,
+  detail,
+  source,
+  asOf,
+  variant = 'inline',
+  action,
+  className,
+  ...rest
+}) {
+  const m = META[state] || META.fresh;
+  if (variant === 'block') return /*#__PURE__*/React.createElement("div", _extends({
+    role: "status",
+    className: __ds_scope.cx('vui-dstate', 'vui-dstate--block', className),
+    "data-tone": m.tone
+  }, rest), /*#__PURE__*/React.createElement("span", {
+    className: "vui-dstate__icon"
+  }, /*#__PURE__*/React.createElement(__ds_scope.Glyph, {
+    name: m.icon
+  })), /*#__PURE__*/React.createElement("span", {
+    className: "vui-dstate__title"
+  }, label || m.title), detail && /*#__PURE__*/React.createElement("span", {
+    className: "vui-dstate__detail"
+  }, detail), (source || asOf) && /*#__PURE__*/React.createElement("span", {
+    className: "vui-dstate__src"
+  }, [source, asOf].filter(Boolean).join(' · ')), action);
+  return /*#__PURE__*/React.createElement("span", _extends({
+    role: "status",
+    className: __ds_scope.cx('vui-dstate', className)
+  }, rest), /*#__PURE__*/React.createElement(__ds_scope.Dot, {
+    tone: m.tone,
+    pulse: state === 'fresh'
+  }), /*#__PURE__*/React.createElement("span", null, label || m.title), (source || asOf) && /*#__PURE__*/React.createElement("span", {
+    className: "vui-dstate__src"
+  }, [source, asOf].filter(Boolean).join(' · ')));
+}
+Object.assign(__ds_scope, { DataState });
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/finance/DataState.jsx", error: String((e && e.message) || e) }); }
+
+// components/finance/DirectionBadge.jsx
+try { (() => {
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
+const MAP = {
+  LONG: ['up', 'arrow-up'],
+  BUY: ['up', 'arrow-up'],
+  ADD: ['up', 'plus'],
+  SHORT: ['down', 'arrow-down'],
+  SELL: ['down', 'arrow-down'],
+  TRIM: ['down', 'minus'],
+  WAIT: ['flat', 'clock'],
+  HOLD: ['flat', 'pause'],
+  NO_TRADE: ['off', 'x'],
+  SKIP: ['off', 'x']
+};
+function DirectionBadge({
+  direction,
+  suffix,
+  icon = false,
+  variant = 'solid',
+  size = 'md',
+  className,
+  ...rest
+}) {
+  const key = String(direction || '').toUpperCase();
+  const [dir, ic] = MAP[key] || ['flat', null];
+  return /*#__PURE__*/React.createElement("span", _extends({
+    className: __ds_scope.cx('vui-dirb', 'vui-dirb--' + variant, size === 'sm' && 'vui-dirb--sm', className),
+    "data-dir": dir
+  }, rest), icon && ic && /*#__PURE__*/React.createElement(__ds_scope.Glyph, {
+    name: ic
+  }), key.replace('_', ' '), suffix != null && /*#__PURE__*/React.createElement("span", {
+    className: "vui-dirb__sfx"
+  }, suffix));
+}
+Object.assign(__ds_scope, { DirectionBadge });
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/finance/DirectionBadge.jsx", error: String((e && e.message) || e) }); }
+
+// components/finance/EnvironmentBar.jsx
+try { (() => {
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
+const LABEL = {
+  research: 'RESEARCH',
+  replay: 'REPLAY',
+  paper: 'PAPER',
+  demo: 'DEMO',
+  shadow: 'SHADOW',
+  live: 'LIVE · REAL FUNDS'
+};
+function EnvironmentBar({
+  environment = 'paper',
+  label,
+  items = [],
+  connection,
+  onKill,
+  killLabel = 'Kill Switch',
+  killDisabled = false,
+  sticky = false,
+  top = 0,
+  maxWidth = 1360,
+  actions,
+  className,
+  ...rest
+}) {
+  const conn = connection || null;
+  const tone = conn ? {
+    live: 'success',
+    stale: 'warning',
+    offline: 'danger'
+  }[conn.state] || 'neutral' : null;
+  return /*#__PURE__*/React.createElement("div", _extends({
+    role: "region",
+    "aria-label": 'Environment: ' + (label || LABEL[environment]),
+    "data-env": environment,
+    className: __ds_scope.cx('vui-envbar', sticky && 'vui-envbar--sticky', className),
+    style: sticky ? {
+      top
+    } : undefined
+  }, rest), /*#__PURE__*/React.createElement("div", {
+    className: "vui-envbar__in",
+    style: {
+      maxWidth
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "vui-envbar__chip"
+  }, label || LABEL[environment]), /*#__PURE__*/React.createElement("div", {
+    className: "vui-envbar__items"
+  }, items.map((it, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    className: "vui-envbar__it"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "vui-envbar__k"
+  }, it.label), /*#__PURE__*/React.createElement("span", {
+    className: "vui-envbar__v"
+  }, it.value)))), /*#__PURE__*/React.createElement("div", {
+    className: "vui-envbar__end"
+  }, conn && /*#__PURE__*/React.createElement("span", {
+    className: "vui-envbar__conn",
+    role: "status"
+  }, /*#__PURE__*/React.createElement(__ds_scope.Dot, {
+    tone: tone,
+    pulse: conn.state === 'live'
+  }), conn.label), actions, onKill && /*#__PURE__*/React.createElement(__ds_scope.Button, {
+    variant: "danger",
+    size: "sm",
+    iconLeft: "stop",
+    onClick: onKill,
+    disabled: killDisabled
+  }, killLabel))));
+}
+Object.assign(__ds_scope, { EnvironmentBar });
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/finance/EnvironmentBar.jsx", error: String((e && e.message) || e) }); }
+
+// components/finance/PriceChange.jsx
+try { (() => {
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
+function PriceChange({
+  value,
+  format = 'percent',
+  digits = 2,
+  unit,
+  arrow = true,
+  variant = 'text',
+  size = 'md',
+  flatThreshold = 0,
+  label,
+  className,
+  ...rest
+}) {
+  if (value == null || Number.isNaN(+value)) return /*#__PURE__*/React.createElement("span", _extends({
+    className: __ds_scope.cx('vui-pc', size !== 'md' && 'vui-pc--' + size, className),
+    "data-dir": "none"
+  }, rest), "\u2014");
+  const v = +value;
+  const dir = Math.abs(v) <= flatThreshold ? 'flat' : v > 0 ? 'up' : 'down';
+  const abs = Math.abs(v).toLocaleString('en-US', {
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits
+  });
+  const sign = dir === 'up' ? '+' : dir === 'down' ? '−' : '';
+  const suffix = unit != null ? unit : format === 'percent' ? '%' : format === 'bp' ? ' bp' : format === 'pp' ? ' pp' : '';
+  const word = dir === 'up' ? 'up' : dir === 'down' ? 'down' : 'unchanged';
+  return /*#__PURE__*/React.createElement("span", _extends({
+    className: __ds_scope.cx('vui-pc', size !== 'md' && 'vui-pc--' + size, variant !== 'text' && 'vui-pc--' + variant, className),
+    "data-dir": dir,
+    "aria-label": (label ? label + ' ' : '') + word + ' ' + abs + suffix
+  }, rest), arrow && dir !== 'flat' && /*#__PURE__*/React.createElement(__ds_scope.Glyph, {
+    name: dir === 'up' ? 'arrow-up' : 'arrow-down'
+  }), /*#__PURE__*/React.createElement("span", {
+    "aria-hidden": "true"
+  }, sign, abs, suffix));
+}
+Object.assign(__ds_scope, { PriceChange });
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/finance/PriceChange.jsx", error: String((e && e.message) || e) }); }
+
+// components/finance/ValueShift.jsx
+try { (() => {
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
+function ValueShift({
+  from,
+  to,
+  format,
+  worse,
+  better,
+  label,
+  className,
+  ...rest
+}) {
+  const f = format || (v => v == null ? '—' : String(v));
+  const bad = worse ? !!worse(from, to) : false;
+  const good = !bad && better ? !!better(from, to) : false;
+  return /*#__PURE__*/React.createElement("span", _extends({
+    className: __ds_scope.cx('vui-shift', className),
+    "data-state": bad ? 'worse' : good ? 'better' : 'same',
+    "aria-label": (label ? label + ': ' : '') + 'expected ' + f(from) + ', actual ' + f(to) + (bad ? ', worse' : good ? ', better' : '')
+  }, rest), /*#__PURE__*/React.createElement("span", {
+    className: "vui-shift__from",
+    "aria-hidden": "true"
+  }, f(from)), /*#__PURE__*/React.createElement(__ds_scope.Glyph, {
+    name: "arrow-right",
+    className: "vui-shift__arrow"
+  }), /*#__PURE__*/React.createElement("span", {
+    className: "vui-shift__to",
+    "aria-hidden": "true"
+  }, f(to)));
+}
+Object.assign(__ds_scope, { ValueShift });
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/finance/ValueShift.jsx", error: String((e && e.message) || e) }); }
 
 // components/forms/Chip.jsx
 try { (() => {
@@ -7457,6 +8365,39 @@ function Link({
 Object.assign(__ds_scope, { Link });
 })(); } catch (e) { __ds_ns.__errors.push({ path: "components/navigation/Link.jsx", error: String((e && e.message) || e) }); }
 
+// components/navigation/NavbarChip.jsx
+try { (() => {
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
+function NavbarChip({
+  icon,
+  children,
+  onClick,
+  href,
+  tone = 'on-color',
+  iconOnly = false,
+  collapse = false,
+  label,
+  pressed,
+  className,
+  ...rest
+}) {
+  const El = href ? 'a' : 'button';
+  return /*#__PURE__*/React.createElement(El, _extends({
+    href: href,
+    type: href ? undefined : 'button',
+    onClick: onClick,
+    "aria-label": label,
+    title: label,
+    "aria-pressed": pressed,
+    "data-tone": tone,
+    className: __ds_scope.cx('vui-navchip', iconOnly && 'vui-navchip--icon', collapse && 'vui-navchip--collapse', className)
+  }, rest), __ds_scope.renderIcon(icon), !iconOnly && /*#__PURE__*/React.createElement("span", {
+    className: "vui-navchip__txt"
+  }, children));
+}
+Object.assign(__ds_scope, { NavbarChip });
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/navigation/NavbarChip.jsx", error: String((e && e.message) || e) }); }
+
 // components/navigation/Pagination.jsx
 try { (() => {
 function pageRange(page, count, sib = 1) {
@@ -8752,6 +9693,66 @@ function ComparisonDialog({
 }
 Object.assign(__ds_scope, { ComparisonBar, ComparisonDialog });
 })(); } catch (e) { __ds_ns.__errors.push({ path: "components/charts/ComparisonBar.jsx", error: String((e && e.message) || e) }); }
+
+// components/finance/NewsItem.jsx
+try { (() => {
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
+const IMP = {
+  high: 'danger',
+  medium: 'warning',
+  low: 'neutral'
+};
+function NewsItem({
+  title,
+  href,
+  source,
+  time,
+  region,
+  impact,
+  bullets = [],
+  tickers = [],
+  onTickerClick,
+  aiLabel = 'AI summary',
+  actions,
+  className,
+  ...rest
+}) {
+  const imp = impact ? String(impact).toLowerCase() : null;
+  return /*#__PURE__*/React.createElement("article", _extends({
+    className: __ds_scope.cx('vui-news', className)
+  }, rest), /*#__PURE__*/React.createElement("header", {
+    className: "vui-news__head"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "vui-news__meta"
+  }, [source, time, region].filter(Boolean).join(' · ')), imp && /*#__PURE__*/React.createElement("span", {
+    className: "vui-news__imp"
+  }, /*#__PURE__*/React.createElement(__ds_scope.Dot, {
+    tone: IMP[imp] || 'neutral'
+  }), impact, " impact")), /*#__PURE__*/React.createElement("h3", {
+    className: "vui-news__title"
+  }, href ? /*#__PURE__*/React.createElement("a", {
+    href: href,
+    target: "_blank",
+    rel: "noopener noreferrer"
+  }, title) : title), bullets.length > 0 && /*#__PURE__*/React.createElement("div", {
+    className: "vui-news__sum"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "vui-news__ai"
+  }, aiLabel), /*#__PURE__*/React.createElement("ul", null, bullets.map((b, i) => /*#__PURE__*/React.createElement("li", {
+    key: i
+  }, b)))), (tickers.length > 0 || actions) && /*#__PURE__*/React.createElement("footer", {
+    className: "vui-news__foot"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "vui-news__tickers"
+  }, tickers.map(t => /*#__PURE__*/React.createElement(__ds_scope.Tag, {
+    key: t,
+    size: "sm",
+    variant: "soft",
+    onClick: onTickerClick ? () => onTickerClick(t) : undefined
+  }, t))), actions));
+}
+Object.assign(__ds_scope, { NewsItem });
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/finance/NewsItem.jsx", error: String((e && e.message) || e) }); }
 
 // components/primitives/Control.jsx
 try { (() => {
@@ -14607,6 +15608,48 @@ function SkillBar({
 Object.assign(__ds_scope, { SkillBar });
 })(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/SkillBar.jsx", error: String((e && e.message) || e) }); }
 
+// components/data/UsageMeter.jsx
+try { (() => {
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
+function UsageMeter({
+  label,
+  value,
+  max = 100,
+  unit = '',
+  valueText,
+  hint,
+  tone,
+  thresholds = [0.7, 0.9],
+  size = 'md',
+  format,
+  className,
+  ...rest
+}) {
+  const p = max ? value / max : 0;
+  const auto = p >= thresholds[1] ? 'danger' : p >= thresholds[0] ? 'warning' : 'brand';
+  const f = format || (v => v == null ? '—' : String(v));
+  const txt = valueText != null ? valueText : f(value) + unit + ' / ' + f(max) + unit;
+  return /*#__PURE__*/React.createElement("div", _extends({
+    className: __ds_scope.cx('vui-usage', size === 'sm' && 'vui-usage--sm', className)
+  }, rest), /*#__PURE__*/React.createElement("div", {
+    className: "vui-usage__top"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "vui-usage__label"
+  }, label), /*#__PURE__*/React.createElement("span", {
+    className: "vui-usage__val"
+  }, txt)), /*#__PURE__*/React.createElement(__ds_scope.Meter, {
+    value: value ?? 0,
+    max: max,
+    tone: tone || auto,
+    size: size === 'sm' ? 'sm' : 'md',
+    label: typeof label === 'string' ? label : undefined
+  }), hint && /*#__PURE__*/React.createElement("span", {
+    className: "vui-usage__hint"
+  }, hint));
+}
+Object.assign(__ds_scope, { UsageMeter });
+})(); } catch (e) { __ds_ns.__errors.push({ path: "components/data/UsageMeter.jsx", error: String((e && e.message) || e) }); }
+
 // components/feedback/Progress.jsx
 try { (() => {
 function Progress({
@@ -16875,7 +17918,10 @@ function MenuBar({
     title: it.label,
     "aria-current": active === it.id ? 'page' : undefined,
     onClick: e => go(e, it)
-  }, /*#__PURE__*/React.createElement(__ds_scope.Glyph, {
+  }, it.icon && typeof it.icon !== 'string' ? /*#__PURE__*/React.createElement("span", {
+    className: "vui-icon vui-navbar__micon vui-navbar__micon--node",
+    "aria-hidden": "true"
+  }, it.icon) : /*#__PURE__*/React.createElement(__ds_scope.Glyph, {
     name: fill(it.icon || 'circle', active === it.id),
     className: "vui-navbar__micon"
   })))), found >= 0 && /*#__PURE__*/React.createElement("li", {
@@ -24087,6 +25133,8 @@ __ds_ns.Avatar = __ds_scope.Avatar;
 
 __ds_ns.AvatarGroup = __ds_scope.AvatarGroup;
 
+__ds_ns.CellStack = __ds_scope.CellStack;
+
 __ds_ns.CodeSnippet = __ds_scope.CodeSnippet;
 
 __ds_ns.ApplyColumns = __ds_scope.ApplyColumns;
@@ -24113,6 +25161,8 @@ __ds_ns.List = __ds_scope.List;
 
 __ds_ns.LogViewer = __ds_scope.LogViewer;
 
+__ds_ns.MetricGroup = __ds_scope.MetricGroup;
+
 __ds_ns.QuestionCard = __ds_scope.QuestionCard;
 
 __ds_ns.Scheduler = __ds_scope.Scheduler;
@@ -24126,6 +25176,8 @@ __ds_ns.Stat = __ds_scope.Stat;
 __ds_ns.Table = __ds_scope.Table;
 
 __ds_ns.Timeline = __ds_scope.Timeline;
+
+__ds_ns.UsageMeter = __ds_scope.UsageMeter;
 
 __ds_ns.VirtualList = __ds_scope.VirtualList;
 
@@ -24161,6 +25213,10 @@ __ds_ns.Tag = __ds_scope.Tag;
 
 __ds_ns.Watermark = __ds_scope.Watermark;
 
+__ds_ns.Q_MARK = __ds_scope.Q_MARK;
+
+__ds_ns.Q_WORD = __ds_scope.Q_WORD;
+
 __ds_ns.R_MARK = __ds_scope.R_MARK;
 
 __ds_ns.R_WORD = __ds_scope.R_WORD;
@@ -24184,6 +25240,8 @@ __ds_ns.EmptyState = __ds_scope.EmptyState;
 __ds_ns.ErrorState = __ds_scope.ErrorState;
 
 __ds_ns.StatusPage = __ds_scope.StatusPage;
+
+__ds_ns.GateList = __ds_scope.GateList;
 
 __ds_ns.LOADER_VARIANTS = __ds_scope.LOADER_VARIANTS;
 
@@ -24219,6 +25277,28 @@ __ds_ns.Tooltip = __ds_scope.Tooltip;
 
 __ds_ns.Tour = __ds_scope.Tour;
 
+__ds_ns.ContributionBar = __ds_scope.ContributionBar;
+
+__ds_ns.DataState = __ds_scope.DataState;
+
+__ds_ns.DirectionBadge = __ds_scope.DirectionBadge;
+
+__ds_ns.EnvironmentBar = __ds_scope.EnvironmentBar;
+
+__ds_ns.InstrumentLabel = __ds_scope.InstrumentLabel;
+
+__ds_ns.MoneyPrivacy = __ds_scope.MoneyPrivacy;
+
+__ds_ns.Money = __ds_scope.Money;
+
+__ds_ns.NewsItem = __ds_scope.NewsItem;
+
+__ds_ns.PriceChange = __ds_scope.PriceChange;
+
+__ds_ns.RangeBandChart = __ds_scope.RangeBandChart;
+
+__ds_ns.ValueShift = __ds_scope.ValueShift;
+
 __ds_ns.Autocomplete = __ds_scope.Autocomplete;
 
 __ds_ns.Calendar = __ds_scope.Calendar;
@@ -24230,6 +25310,8 @@ __ds_ns.Checkbox = __ds_scope.Checkbox;
 __ds_ns.Chip = __ds_scope.Chip;
 
 __ds_ns.ChipGroup = __ds_scope.ChipGroup;
+
+__ds_ns.CodeEditor = __ds_scope.CodeEditor;
 
 __ds_ns.ColorPicker = __ds_scope.ColorPicker;
 
@@ -24380,6 +25462,8 @@ __ds_ns.Navbar = __ds_scope.Navbar;
 __ds_ns.NavbarLocale = __ds_scope.NavbarLocale;
 
 __ds_ns.NavbarUser = __ds_scope.NavbarUser;
+
+__ds_ns.NavbarChip = __ds_scope.NavbarChip;
 
 __ds_ns.Pagination = __ds_scope.Pagination;
 

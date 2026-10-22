@@ -3,21 +3,27 @@ import { createSignal } from 'solid-js';
 import { clamp } from '../../utils/math';
 import { LINE_PAD, type LineGeometry } from './createLineGeometry';
 
-export const createLineCursor = (geometry: Pick<LineGeometry, 'innerWidth' | 'lastIndex'>) => {
-  const [hover, setHover] = createSignal(-1);
+export const createLineCursor = (
+  geometry: Pick<LineGeometry, 'innerWidth' | 'lastIndex'>,
+  left: number = LINE_PAD.l,
+) => {
+  const [rawHover, setHover] = createSignal(-1);
+  const hover = () => Math.min(rawHover(), geometry.lastIndex());
 
   const move = (e: MouseEvent & { currentTarget: SVGSVGElement }) => {
+    if (geometry.lastIndex() < 0 || geometry.innerWidth() <= 0) return;
     const rect = e.currentTarget.getBoundingClientRect();
-    const i = Math.round(((e.clientX - rect.left - LINE_PAD.l) / geometry.innerWidth()) * geometry.lastIndex());
+    const i = Math.round(((e.clientX - rect.left - left) / geometry.innerWidth()) * geometry.lastIndex());
     setHover(clamp(i, 0, geometry.lastIndex()));
   };
   const onKeyDown = (e: KeyboardEvent) => {
+    if (geometry.lastIndex() < 0) return;
     if (e.key === 'ArrowRight') {
       e.preventDefault();
-      setHover((h) => Math.min(geometry.lastIndex(), h + 1));
+      setHover(Math.min(geometry.lastIndex(), hover() + 1));
     } else if (e.key === 'ArrowLeft') {
       e.preventDefault();
-      setHover((h) => Math.max(0, h - 1));
+      setHover(Math.max(0, hover() - 1));
     } else if (e.key === 'Home') {
       e.preventDefault();
       setHover(0);

@@ -1,5 +1,6 @@
-import { createEffect, createMemo, createSignal, createUniqueId, on } from 'solid-js';
+import { createEffect, createMemo, createSignal, createUniqueId, on, untrack } from 'solid-js';
 
+import { createOperation } from '../../hooks/createOperation';
 import { useTranslate } from '../../i18n/useTranslate';
 import { createId } from '../../utils/id';
 import { type ColorLabel, nextLabelColor, normalizeLabelText } from './colorLabel';
@@ -11,7 +12,8 @@ export const createColorLabelManager = (p: ColorLabelManagerConfig) => {
   const [confirming, setConfirming] = createSignal<string | null>(null);
   const [nameError, setNameError] = createSignal<string | null>(null);
   const [failed, setFailed] = createSignal(false);
-  const [busy, setBusy] = createSignal(false);
+  const operation = createOperation({ concurrency: 'single-flight' });
+  const busy = operation.busy;
   const nameId = createUniqueId();
   const colorId = `${nameId}-color`;
   let nameInput: HTMLInputElement | undefined;
@@ -30,6 +32,7 @@ export const createColorLabelManager = (p: ColorLabelManagerConfig) => {
     on(
       () => p.open,
       (open) => {
+        operation.invalidate();
         if (open) return;
         setDraft(null);
         setConfirming(null);
@@ -42,38 +45,47 @@ export const createColorLabelManager = (p: ColorLabelManagerConfig) => {
   const nameTaken = (name: string, ownId: string | undefined) =>
     p.labels.some((label) => label.id !== ownId && normalizeLabelText(label.name) === normalizeLabelText(name));
 
-  const commit = async (next: ColorLabel[]): Promise<boolean> => {
-    if (busy()) return false;
-    setBusy(true);
+  const isOpen = () => p.open;
+  const commit = async (next: ColorLabel[], onCommitted: () => void): Promise<void> => {
+    if (!isOpen()) return;
+    const run = operation.begin();
+    if (!run) return;
     setFailed(false);
     try {
       await p.onChange?.(next);
-      return true;
+      if (run.isCurrent() && isOpen()) onCommitted();
     } catch (error) {
+      if (!run.isCurrent() || !isOpen()) return;
       setFailed(true);
       p.onError?.(error);
-      return false;
     } finally {
-      setBusy(false);
+      run.finish();
     }
   };
 
   const startAdd = () => {
+    if (!p.open || busy()) return;
     setConfirming(null);
     setNameError(null);
     setDraft({ id: undefined, name: '', color: nextLabelColor(p.colors, p.labels.length) });
   };
   const startEdit = (label: ColorLabel) => {
+    if (!p.open || busy()) return;
     setConfirming(null);
     setNameError(null);
     setDraft({ id: label.id, name: label.name, color: label.color });
   };
-  const cancelDraft = () => {
+  const clearDraft = () => {
     setDraft(null);
     setNameError(null);
   };
-  const patchDraft = (patch: Partial<LabelDraft>) =>
+  const cancelDraft = () => {
+    if (!busy()) clearDraft();
+  };
+  const patchDraft = (patch: Partial<LabelDraft>) => {
+    if (busy()) return;
     setDraft((current) => (current ? { ...current, ...patch } : current));
+  };
   const rename = (name: string) => {
     patchDraft({ name });
     setNameError(null);
@@ -82,7 +94,7 @@ export const createColorLabelManager = (p: ColorLabelManagerConfig) => {
   const save = async () => {
     const current = draft();
     const name = current?.name.trim();
-    if (!current || !name || busy()) return;
+    if (!p.open || !current || !name || busy()) return;
     if (nameTaken(name, current.id)) {
       setNameError(translate('velvet.patterns.colorLabelManager.nameExists', { name }));
       return;
@@ -90,18 +102,26 @@ export const createColorLabelManager = (p: ColorLabelManagerConfig) => {
     const next = current.id
       ? p.labels.map((label) => (label.id === current.id ? { ...label, name, color: current.color } : label))
       : [...p.labels, { id: createId('l'), name, color: current.color }];
-    if (await commit(next)) cancelDraft();
+    await commit(next, () => {
+      if (untrack(draft) === current) clearDraft();
+    });
   };
 
   const remove = async (label: ColorLabel) => {
-    if (await commit(p.labels.filter((other) => other.id !== label.id))) setConfirming(null);
+    await commit(
+      p.labels.filter((other) => other.id !== label.id),
+      () => setConfirming(null),
+    );
   };
 
   const toggleConfirm = (label: ColorLabel) => {
+    if (!p.open || busy()) return;
     setDraft(null);
     setConfirming(confirming() === label.id ? null : label.id);
   };
-  const cancelConfirm = () => setConfirming(null);
+  const cancelConfirm = () => {
+    if (!busy()) setConfirming(null);
+  };
 
   return {
     draft,

@@ -3,6 +3,7 @@ import { For, type JSX, mergeProps, Show } from 'solid-js';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import styles from './BrandLogo.module.css';
+import { Q_MARK, Q_WORD } from './quantcoreLogoPaths';
 import { R_MARK, R_WORD } from './recronLogoPaths';
 
 const LOGO_CLASSES = {
@@ -24,12 +25,12 @@ export type BrandLogoSize = keyof typeof RECRON_HEIGHTS | number;
 
 export interface BrandLogoProps {
   /** @default 'velvet' */
-  brand?: 'velvet' | 'recron';
+  brand?: 'velvet' | 'recron' | 'quantcore';
   /** `lockup` = signet + wordmark. `wordmark` applies to velvet only. @default 'lockup' */
   variant?: 'lockup' | 'wordmark' | 'mark';
   /** `inverse` = all `--on-color-fg`, for brand fills. @default 'default' */
   tone?: 'default' | 'inverse';
-  /** Preset or px. Recron: logo height (sm 24 · md 32 · lg 48 · xl 64). Velvet: wordmark font size. @default 'md' */
+  /** Preset or px. Recron/QuantCore: height (sm 24 · md 32 · lg 48 · xl 64). Velvet: font size. @default 'md' */
   size?: BrandLogoSize;
   /** Velvet only: soft brand elevation under the mark. @default true */
   glow?: boolean;
@@ -39,7 +40,7 @@ export interface BrandLogoProps {
   style?: JSX.CSSProperties;
 }
 
-/** Brand mark: the Recron "R" signet + wordmark, or the type-only "velvet/ui" placeholder. */
+/** Brand signet and wordmark for Recron, QuantCore or Velvet UI. */
 export const BrandLogo = (props: BrandLogoProps) => {
   const merged = mergeProps(
     { brand: 'velvet', variant: 'lockup', tone: 'default', size: 'md', glow: true } satisfies BrandLogoProps,
@@ -52,7 +53,7 @@ export const BrandLogo = (props: BrandLogoProps) => {
   const inverse = () => merged.tone === 'inverse';
   return (
     <Show
-      when={merged.brand === 'recron'}
+      when={merged.brand !== 'velvet'}
       fallback={
         <span
           role="img"
@@ -83,21 +84,39 @@ export const BrandLogo = (props: BrandLogoProps) => {
     >
       <svg
         role="img"
-        aria-label={merged.label ?? RECRON_NAME}
-        viewBox={markOnly() ? RECRON_VIEWBOX.mark : RECRON_VIEWBOX.lockup}
+        aria-label={merged.label ?? (merged.brand === 'quantcore' ? 'QuantCore' : RECRON_NAME)}
+        viewBox={
+          merged.brand === 'quantcore'
+            ? markOnly()
+              ? '64 76 172 176'
+              : '64 76 884 176'
+            : markOnly()
+              ? RECRON_VIEWBOX.mark
+              : RECRON_VIEWBOX.lockup
+        }
         class={cx(styles.logoR, inverse() && styles.logoRVariantInverse, merged.class)}
         style={{ height: `${recronHeight()}px`, ...merged.style }}
       >
-        <g transform="translate(0,752) scale(0.1,-0.1)">
-          <g class={styles.logoRPartMark}>
-            <For each={R_MARK}>{(d) => <path d={d} />}</For>
-          </g>
-          <Show when={!markOnly()}>
-            <g class={styles.logoRPartWord}>
-              <For each={R_WORD}>{(d) => <path d={d} />}</For>
+        <Show
+          when={merged.brand === 'quantcore'}
+          fallback={
+            <g transform="translate(0,752) scale(0.1,-0.1)">
+              <g class={styles.logoRPartMark}>
+                <For each={R_MARK}>{(d) => <path d={d} />}</For>
+              </g>
+              <Show when={!markOnly()}>
+                <g class={styles.logoRPartWord}>
+                  <For each={R_WORD}>{(d) => <path d={d} />}</For>
+                </g>
+              </Show>
             </g>
+          }
+        >
+          <path class={styles.logoRPartMark} fill-rule="evenodd" d={Q_MARK} />
+          <Show when={!markOnly()}>
+            <path class={styles.logoRPartWord} fill-rule="evenodd" d={Q_WORD} />
           </Show>
-        </g>
+        </Show>
       </svg>
     </Show>
   );

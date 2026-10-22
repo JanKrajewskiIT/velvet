@@ -22,6 +22,7 @@
               "components/data/**",
               "components/display/**",
               "components/feedback/**",
+              "components/finance/**",
               "components/forms/**",
               "components/layout/**",
               "components/media/**",
@@ -175,8 +176,8 @@
         "message": "<BrandLogo> doesn't accept that prop. Declared props: brand, variant, tone, size, glow, label, className, style."
       },
       {
-        "selector": "JSXOpeningElement[name.name='BrandLogo'] > JSXAttribute[name.name='brand'] > Literal[value!=/^(?:velvet|recron)$/]",
-        "message": "<BrandLogo> brand must be one of 'velvet' | 'recron'."
+        "selector": "JSXOpeningElement[name.name='BrandLogo'] > JSXAttribute[name.name='brand'] > Literal[value!=/^(?:velvet|recron|quantcore)$/]",
+        "message": "<BrandLogo> brand must be one of 'velvet' | 'recron' | 'quantcore'."
       },
       {
         "selector": "JSXOpeningElement[name.name='BrandLogo'] > JSXAttribute[name.name='variant'] > Literal[value!=/^(?:lockup|wordmark|mark)$/]",
@@ -247,6 +248,14 @@
         "message": "<CascaderNode> doesn't accept that prop. Declared props: id, label, icon, meta, disabled, children."
       },
       {
+        "selector": "JSXOpeningElement[name.name='CellStack'] > JSXAttribute > JSXIdentifier[name!=/^(?:primary|secondary|mono|secondaryMono|strong|align|leading|trailing|key|ref|className|style|children)$/]",
+        "message": "<CellStack> doesn't accept that prop. Declared props: primary, secondary, mono, secondaryMono, strong, align, leading, trailing."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='CellStack'] > JSXAttribute[name.name='align'] > Literal[value!=/^(?:left|right)$/]",
+        "message": "<CellStack> align must be one of 'left' | 'right'."
+      },
+      {
         "selector": "JSXOpeningElement[name.name='ChatMessage'] > JSXAttribute > JSXIdentifier[name!=/^(?:role|author|avatar|time|content|children|streaming|error|onRetry|onCopy|feedback|onFeedback|sources|actions|className|key|ref|className|style|children)$/]",
         "message": "<ChatMessage> doesn't accept that prop. Declared props: role, author, avatar, time, content, children, streaming, error, onRetry, onCopy, feedback, onFeedback, sources, actions, className."
       },
@@ -311,6 +320,10 @@
         "message": "<CloseButton> as must be one of 'button' | 'span'."
       },
       {
+        "selector": "JSXOpeningElement[name.name='CodeEditor'] > JSXAttribute > JSXIdentifier[name!=/^(?:value|defaultValue|onValueChange|label|hint|error|language|rows|maxHeight|readOnly|lineNumbers|highlight|key|ref|className|style|children)$/]",
+        "message": "<CodeEditor> doesn't accept that prop. Declared props: value, defaultValue, onValueChange, label, hint, error, language, rows, maxHeight, readOnly, lineNumbers, highlight."
+      },
+      {
         "selector": "JSXOpeningElement[name.name='CodeSnippet'] > JSXAttribute > JSXIdentifier[name!=/^(?:code|language|title|tabs|showLineNumbers|maxHeight|wrap|className|key|ref|className|style|children)$/]",
         "message": "<CodeSnippet> doesn't accept that prop. Declared props: code, language, title, tabs, showLineNumbers, maxHeight, wrap, className."
       },
@@ -365,6 +378,10 @@
       {
         "selector": "JSXOpeningElement[name.name='ContextMenu'] > JSXAttribute > JSXIdentifier[name!=/^(?:items|disabled|className|style|children|key|ref|className|style|children)$/]",
         "message": "<ContextMenu> doesn't accept that prop. Declared props: items, disabled, className, style, children."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ContributionItem'] > JSXAttribute > JSXIdentifier[name!=/^(?:label|value|key|ref|className|style|children)$/]",
+        "message": "<ContributionItem> doesn't accept that prop. Declared props: label, value."
       },
       {
         "selector": "JSXOpeningElement[name.name='Control'] > JSXAttribute > JSXIdentifier[name!=/^(?:size|invalid|disabled|readOnly|multiline|iconLeft|iconRight|prefix|suffix|end|children|key|ref|className|style|children)$/]",
@@ -423,6 +440,18 @@
         "message": "<GridColumn> pin must be one of 'left'."
       },
       {
+        "selector": "JSXOpeningElement[name.name='DataState'] > JSXAttribute > JSXIdentifier[name!=/^(?:state|label|detail|source|asOf|variant|action|key|ref|className|style|children)$/]",
+        "message": "<DataState> doesn't accept that prop. Declared props: state, label, detail, source, asOf, variant, action."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='DataState'] > JSXAttribute[name.name='state'] > Literal[value!=/^(?:fresh|delayed|stale|partial|unavailable|empty)$/]",
+        "message": "<DataState> state must be one of 'fresh' | 'delayed' | 'stale' | 'partial' | 'unavailable' | 'empty'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='DataState'] > JSXAttribute[name.name='variant'] > Literal[value!=/^(?:inline|block)$/]",
+        "message": "<DataState> variant must be one of 'inline' | 'block'."
+      },
+      {
         "selector": "JSXOpeningElement[name.name='DatePicker'] > JSXAttribute > JSXIdentifier[name!=/^(?:label|hint|error|optional|value|defaultValue|onChange|onValueChange|placeholder|min|max|isDisabled|locale|weekStartsOn|format|clearable|align|size|disabled|defaultOpen|id|key|ref|className|style|children)$/]",
         "message": "<DatePicker> doesn't accept that prop. Declared props: label, hint, error, optional, value, defaultValue, onChange, onValueChange, placeholder, min, max, isDisabled, locale, weekStartsOn, format, clearable, align, size, disabled, defaultOpen, id."
       },
@@ -473,6 +502,18 @@
       {
         "selector": "JSXOpeningElement[name.name='DiffViewer'] > JSXAttribute[name.name='defaultMode'] > Literal[value!=/^(?:unified|split)$/]",
         "message": "<DiffViewer> defaultMode must be one of 'unified' | 'split'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='DirectionBadge'] > JSXAttribute > JSXIdentifier[name!=/^(?:direction|suffix|icon|variant|size|key|ref|className|style|children)$/]",
+        "message": "<DirectionBadge> doesn't accept that prop. Declared props: direction, suffix, icon, variant, size."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='DirectionBadge'] > JSXAttribute[name.name='variant'] > Literal[value!=/^(?:solid|soft|outline)$/]",
+        "message": "<DirectionBadge> variant must be one of 'solid' | 'soft' | 'outline'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='DirectionBadge'] > JSXAttribute[name.name='size'] > Literal[value!=/^(?:sm|md)$/]",
+        "message": "<DirectionBadge> size must be one of 'sm' | 'md'."
       },
       {
         "selector": "JSXOpeningElement[name.name='Divider'] > JSXAttribute > JSXIdentifier[name!=/^(?:label|orientation|className|key|ref|className|style|children)$/]",
@@ -537,6 +578,10 @@
       {
         "selector": "JSXOpeningElement[name.name='EmptyText'] > JSXAttribute[name.name='as'] > Literal[value!=/^(?:div|li|p|span)$/]",
         "message": "<EmptyText> as must be one of 'div' | 'li' | 'p' | 'span'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='EnvironmentBarItem'] > JSXAttribute > JSXIdentifier[name!=/^(?:label|value|key|ref|className|style|children)$/]",
+        "message": "<EnvironmentBarItem> doesn't accept that prop. Declared props: label, value."
       },
       {
         "selector": "JSXOpeningElement[name.name='ErrorSummary'] > JSXAttribute > JSXIdentifier[name!=/^(?:errors|title|focusOnShow|className|key|ref|className|style|children)$/]",
@@ -627,6 +672,14 @@
         "message": "<GanttTask> doesn't accept that prop. Declared props: id, name, start, end, progress, group, color, milestone, dependsOn."
       },
       {
+        "selector": "JSXOpeningElement[name.name='GateItem'] > JSXAttribute > JSXIdentifier[name!=/^(?:id|label|detail|status|code|key|ref|className|style|children)$/]",
+        "message": "<GateItem> doesn't accept that prop. Declared props: id, label, detail, status, code."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='GateItem'] > JSXAttribute[name.name='status'] > Literal[value!=/^(?:pass|fail|warn|pending|skip)$/]",
+        "message": "<GateItem> status must be one of 'pass' | 'fail' | 'warn' | 'pending' | 'skip'."
+      },
+      {
         "selector": "JSXOpeningElement[name.name='Gauge'] > JSXAttribute > JSXIdentifier[name!=/^(?:value|min|max|label|caption|format|unit|thresholds|tone|size|showBounds|className|key|ref|className|style|children)$/]",
         "message": "<Gauge> doesn't accept that prop. Declared props: value, min, max, label, caption, format, unit, thresholds, tone, size, showBounds, className."
       },
@@ -659,8 +712,8 @@
         "message": "<Icon> doesn't accept that prop. Declared props: name, size, color, strokeWidth, label."
       },
       {
-        "selector": "JSXOpeningElement[name.name='Icon'] > JSXAttribute[name.name='name'] > Literal[value!=/^(?:plus|minus|x|check|chevron-down|chevron-up|chevron-left|chevron-right|arrow-right|arrow-left|arrow-up|arrow-down|external-link|menu|more-horizontal|more-vertical|search|settings|sliders|filter|home|layout-dashboard|layout-grid|list|kanban|folder|file|inbox|mail|bell|calendar|clock|user|users|shield|lock|log-out|eye|eye-off|pencil|trash-2|copy|link|download|upload|refresh|tag|image|bar-chart|globe|monitor|sun|moon|heart|star|sparkles|play|info|circle-check|circle-x|triangle-alert|grip-vertical|command|code|maximize|pause|send|bold|italic|underline|strikethrough|list-ordered|align-left|align-center|align-right|chevrons-left|chevrons-right|circle-help|zoom-in|languages|map-pin|pin|message-square|palette|database|rotate-ccw|log-in|chevrons-up-down|caret-up|caret-down|swap-vertical|check-double|clipboard|cloud-upload|share|git-branch|git-merge|save|alert-circle|unlock|zap|target|shield-check|file-text|book-open|briefcase|calendar-plus|phone|star-filled|user-circle|handshake|trending-up|dollar-sign|wand|sitemap|server|building|graduation-cap|thumbs-up|close|trash|edit|alert-triangle|check-circle|x-circle|help-circle|grid|user-plus|key|paperclip|bookmark|flag|folder-open|arrow-up-right|at-sign|layers|megaphone|id-card|compass|video|mic|volume|stop|skip-forward|home-filled|bell-filled|user-filled|folder-filled|briefcase-filled|person-filled|desktop-filled|graduation-cap-filled|bookmark-filled|heart-filled|message-square-filled|attach|badge|chat|message|warning|success|error|help|logout|expand)$/]",
-        "message": "<Icon> name must be one of 'plus' | 'minus' | 'x' | 'check' | 'chevron-down' | 'chevron-up' | 'chevron-left' | 'chevron-right' | 'arrow-right' | 'arrow-left' | 'arrow-up' | 'arrow-down' | 'external-link' | 'menu' | 'more-horizontal' | 'more-vertical' | 'search' | 'settings' | 'sliders' | 'filter' | 'home' | 'layout-dashboard' | 'layout-grid' | 'list' | 'kanban' | 'folder' | 'file' | 'inbox' | 'mail' | 'bell' | 'calendar' | 'clock' | 'user' | 'users' | 'shield' | 'lock' | 'log-out' | 'eye' | 'eye-off' | 'pencil' | 'trash-2' | 'copy' | 'link' | 'download' | 'upload' | 'refresh' | 'tag' | 'image' | 'bar-chart' | 'globe' | 'monitor' | 'sun' | 'moon' | 'heart' | 'star' | 'sparkles' | 'play' | 'info' | 'circle-check' | 'circle-x' | 'triangle-alert' | 'grip-vertical' | 'command' | 'code' | 'maximize' | 'pause' | 'send' | 'bold' | 'italic' | 'underline' | 'strikethrough' | 'list-ordered' | 'align-left' | 'align-center' | 'align-right' | 'chevrons-left' | 'chevrons-right' | 'circle-help' | 'zoom-in' | 'languages' | 'map-pin' | 'pin' | 'message-square' | 'palette' | 'database' | 'rotate-ccw' | 'log-in' | 'chevrons-up-down' | 'caret-up' | 'caret-down' | 'swap-vertical' | 'check-double' | 'clipboard' | 'cloud-upload' | 'share' | 'git-branch' | 'git-merge' | 'save' | 'alert-circle' | 'unlock' | 'zap' | 'target' | 'shield-check' | 'file-text' | 'book-open' | 'briefcase' | 'calendar-plus' | 'phone' | 'star-filled' | 'user-circle' | 'handshake' | 'trending-up' | 'dollar-sign' | 'wand' | 'sitemap' | 'server' | 'building' | 'graduation-cap' | 'thumbs-up' | 'close' | 'trash' | 'edit' | 'alert-triangle' | 'check-circle' | 'x-circle' | 'help-circle' | 'grid' | 'user-plus' | 'key' | 'paperclip' | 'bookmark' | 'flag' | 'folder-open' | 'arrow-up-right' | 'at-sign' | 'layers' | 'megaphone' | 'id-card' | 'compass' | 'video' | 'mic' | 'volume' | 'stop' | 'skip-forward' | 'home-filled' | 'bell-filled' | 'user-filled' | 'folder-filled' | 'briefcase-filled' | 'person-filled' | 'desktop-filled' | 'graduation-cap-filled' | 'bookmark-filled' | 'heart-filled' | 'message-square-filled' | 'attach' | 'badge' | 'chat' | 'message' | 'warning' | 'success' | 'error' | 'help' | 'logout' | 'expand'."
+        "selector": "JSXOpeningElement[name.name='Icon'] > JSXAttribute[name.name='name'] > Literal[value!=/^(?:plus|minus|x|check|chevron-down|chevron-up|chevron-left|chevron-right|arrow-right|arrow-left|arrow-up|arrow-down|external-link|menu|more-horizontal|more-vertical|search|settings|sliders|filter|home|layout-dashboard|layout-grid|list|kanban|folder|file|inbox|mail|bell|calendar|clock|user|users|shield|lock|log-out|eye|eye-off|pencil|trash-2|copy|link|download|upload|refresh|tag|image|bar-chart|globe|monitor|sun|moon|heart|star|sparkles|play|info|circle-check|circle-x|triangle-alert|grip-vertical|command|code|maximize|pause|send|bold|italic|underline|strikethrough|list-ordered|align-left|align-center|align-right|chevrons-left|chevrons-right|circle-help|zoom-in|languages|map-pin|pin|message-square|palette|database|rotate-ccw|log-in|chevrons-up-down|caret-up|caret-down|swap-vertical|check-double|clipboard|cloud-upload|share|git-branch|git-merge|save|alert-circle|unlock|zap|target|shield-check|file-text|book-open|briefcase|calendar-plus|phone|star-filled|user-circle|handshake|trending-up|dollar-sign|wand|sitemap|server|building|graduation-cap|thumbs-up|close|trash|edit|alert-triangle|check-circle|x-circle|help-circle|grid|user-plus|key|paperclip|bookmark|flag|folder-open|arrow-up-right|at-sign|layers|megaphone|id-card|compass|video|mic|volume|stop|skip-forward|home-filled|bell-filled|user-filled|folder-filled|briefcase-filled|person-filled|desktop-filled|graduation-cap-filled|bookmark-filled|heart-filled|message-square-filled|kanban-filled|calendar-filled|book-open-filled|file-text-filled|attach|badge|chat|message|warning|success|error|help|logout|expand)$/]",
+        "message": "<Icon> name must be one of 'plus' | 'minus' | 'x' | 'check' | 'chevron-down' | 'chevron-up' | 'chevron-left' | 'chevron-right' | 'arrow-right' | 'arrow-left' | 'arrow-up' | 'arrow-down' | 'external-link' | 'menu' | 'more-horizontal' | 'more-vertical' | 'search' | 'settings' | 'sliders' | 'filter' | 'home' | 'layout-dashboard' | 'layout-grid' | 'list' | 'kanban' | 'folder' | 'file' | 'inbox' | 'mail' | 'bell' | 'calendar' | 'clock' | 'user' | 'users' | 'shield' | 'lock' | 'log-out' | 'eye' | 'eye-off' | 'pencil' | 'trash-2' | 'copy' | 'link' | 'download' | 'upload' | 'refresh' | 'tag' | 'image' | 'bar-chart' | 'globe' | 'monitor' | 'sun' | 'moon' | 'heart' | 'star' | 'sparkles' | 'play' | 'info' | 'circle-check' | 'circle-x' | 'triangle-alert' | 'grip-vertical' | 'command' | 'code' | 'maximize' | 'pause' | 'send' | 'bold' | 'italic' | 'underline' | 'strikethrough' | 'list-ordered' | 'align-left' | 'align-center' | 'align-right' | 'chevrons-left' | 'chevrons-right' | 'circle-help' | 'zoom-in' | 'languages' | 'map-pin' | 'pin' | 'message-square' | 'palette' | 'database' | 'rotate-ccw' | 'log-in' | 'chevrons-up-down' | 'caret-up' | 'caret-down' | 'swap-vertical' | 'check-double' | 'clipboard' | 'cloud-upload' | 'share' | 'git-branch' | 'git-merge' | 'save' | 'alert-circle' | 'unlock' | 'zap' | 'target' | 'shield-check' | 'file-text' | 'book-open' | 'briefcase' | 'calendar-plus' | 'phone' | 'star-filled' | 'user-circle' | 'handshake' | 'trending-up' | 'dollar-sign' | 'wand' | 'sitemap' | 'server' | 'building' | 'graduation-cap' | 'thumbs-up' | 'close' | 'trash' | 'edit' | 'alert-triangle' | 'check-circle' | 'x-circle' | 'help-circle' | 'grid' | 'user-plus' | 'key' | 'paperclip' | 'bookmark' | 'flag' | 'folder-open' | 'arrow-up-right' | 'at-sign' | 'layers' | 'megaphone' | 'id-card' | 'compass' | 'video' | 'mic' | 'volume' | 'stop' | 'skip-forward' | 'home-filled' | 'bell-filled' | 'user-filled' | 'folder-filled' | 'briefcase-filled' | 'person-filled' | 'desktop-filled' | 'graduation-cap-filled' | 'bookmark-filled' | 'heart-filled' | 'message-square-filled' | 'kanban-filled' | 'calendar-filled' | 'book-open-filled' | 'file-text-filled' | 'attach' | 'badge' | 'chat' | 'message' | 'warning' | 'success' | 'error' | 'help' | 'logout' | 'expand'."
       },
       {
         "selector": "JSXOpeningElement[name.name='IconButton'] > JSXAttribute > JSXIdentifier[name!=/^(?:icon|label|variant|shape|size|key|ref|className|style|children)$/]",
@@ -735,6 +788,14 @@
         "message": "<Input> size must be one of 'sm' | 'md' | 'lg'."
       },
       {
+        "selector": "JSXOpeningElement[name.name='InstrumentLabel'] > JSXAttribute > JSXIdentifier[name!=/^(?:symbol|name|exchange|mark|showMark|meta|size|selected|onClick|key|ref|className|style|children)$/]",
+        "message": "<InstrumentLabel> doesn't accept that prop. Declared props: symbol, name, exchange, mark, showMark, meta, size, selected, onClick."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='InstrumentLabel'] > JSXAttribute[name.name='size'] > Literal[value!=/^(?:sm|md)$/]",
+        "message": "<InstrumentLabel> size must be one of 'sm' | 'md'."
+      },
+      {
         "selector": "JSXOpeningElement[name.name='KanbanColumn'] > JSXAttribute > JSXIdentifier[name!=/^(?:id|title|color|limit|key|ref|className|style|children)$/]",
         "message": "<KanbanColumn> doesn't accept that prop. Declared props: id, title, color, limit."
       },
@@ -751,8 +812,8 @@
         "message": "<LightboxImage> doesn't accept that prop. Declared props: src, thumb, alt, caption, span, ratio, badge."
       },
       {
-        "selector": "JSXOpeningElement[name.name='LineChart'] > JSXAttribute > JSXIdentifier[name!=/^(?:data|series|height|format|area|curved|showTable|label|className|key|ref|className|style|children)$/]",
-        "message": "<LineChart> doesn't accept that prop. Declared props: data, series, height, format, area, curved, showTable, label, className."
+        "selector": "JSXOpeningElement[name.name='LineChart'] > JSXAttribute > JSXIdentifier[name!=/^(?:data|series|height|format|area|curved|includeZero|showTable|label|className|key|ref|className|style|children)$/]",
+        "message": "<LineChart> doesn't accept that prop. Declared props: data, series, height, format, area, curved, includeZero, showTable, label, className."
       },
       {
         "selector": "JSXOpeningElement[name.name='Link'] > JSXAttribute > JSXIdentifier[name!=/^(?:href|variant|standalone|external|disabled|children|key|ref|className|style|children)$/]",
@@ -899,6 +960,26 @@
         "message": "<Meter> size must be one of 'sm' | 'md' | 'lg'."
       },
       {
+        "selector": "JSXOpeningElement[name.name='MetricItem'] > JSXAttribute > JSXIdentifier[name!=/^(?:label|value|dir|key|ref|className|style|children)$/]",
+        "message": "<MetricItem> doesn't accept that prop. Declared props: label, value, dir."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MetricItem'] > JSXAttribute[name.name='dir'] > Literal[value!=/^(?:up|down|flat)$/]",
+        "message": "<MetricItem> dir must be one of 'up' | 'down' | 'flat'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='Money'] > JSXAttribute > JSXIdentifier[name!=/^(?:amount|currency|digits|signed|colored|compact|hidden|size|strong|currencyDisplay|key|ref|className|style|children)$/]",
+        "message": "<Money> doesn't accept that prop. Declared props: amount, currency, digits, signed, colored, compact, hidden, size, strong, currencyDisplay."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='Money'] > JSXAttribute[name.name='size'] > Literal[value!=/^(?:sm|md|lg)$/]",
+        "message": "<Money> size must be one of 'sm' | 'md' | 'lg'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='Money'] > JSXAttribute[name.name='currencyDisplay'] > Literal[value!=/^(?:code|symbol)$/]",
+        "message": "<Money> currencyDisplay must be one of 'code' | 'symbol'."
+      },
+      {
         "selector": "JSXOpeningElement[name.name='MultiSelect'] > JSXAttribute > JSXIdentifier[name!=/^(?:label|hint|error|optional|options|value|defaultValue|onChange|onValueChange|loadOptions|placeholder|emptyText|max|creatable|createLabel|size|disabled|id|className|key|ref|className|style|children)$/]",
         "message": "<MultiSelect> doesn't accept that prop. Declared props: label, hint, error, optional, options, value, defaultValue, onChange, onValueChange, loadOptions, placeholder, emptyText, max, creatable, createLabel, size, disabled, id, className."
       },
@@ -909,6 +990,18 @@
       {
         "selector": "JSXOpeningElement[name.name='NavbarItem'] > JSXAttribute > JSXIdentifier[name!=/^(?:id|label|icon|href|key|ref|className|style|children)$/]",
         "message": "<NavbarItem> doesn't accept that prop. Declared props: id, label, icon, href."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='NavbarChip'] > JSXAttribute > JSXIdentifier[name!=/^(?:icon|children|onClick|href|tone|iconOnly|collapse|label|pressed|key|ref|className|style|children)$/]",
+        "message": "<NavbarChip> doesn't accept that prop. Declared props: icon, children, onClick, href, tone, iconOnly, collapse, label, pressed."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='NavbarChip'] > JSXAttribute[name.name='tone'] > Literal[value!=/^(?:on-color|surface)$/]",
+        "message": "<NavbarChip> tone must be one of 'on-color' | 'surface'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='NewsItem'] > JSXAttribute > JSXIdentifier[name!=/^(?:title|href|source|time|region|impact|bullets|tickers|onTickerClick|aiLabel|actions|key|ref|className|style|children)$/]",
+        "message": "<NewsItem> doesn't accept that prop. Declared props: title, href, source, time, region, impact, bullets, tickers, onTickerClick, aiLabel, actions."
       },
       {
         "selector": "JSXOpeningElement[name.name='NotificationItem'] > JSXAttribute > JSXIdentifier[name!=/^(?:id|title|body|time|unread|tone|icon|avatar|key|ref|className|style|children)$/]",
@@ -983,6 +1076,22 @@
         "message": "<Popover> openOn must be one of 'click' | 'hover'."
       },
       {
+        "selector": "JSXOpeningElement[name.name='PriceChange'] > JSXAttribute > JSXIdentifier[name!=/^(?:value|format|digits|unit|arrow|variant|size|flatThreshold|label|key|ref|className|style|children)$/]",
+        "message": "<PriceChange> doesn't accept that prop. Declared props: value, format, digits, unit, arrow, variant, size, flatThreshold, label."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='PriceChange'] > JSXAttribute[name.name='format'] > Literal[value!=/^(?:percent|number|bp|pp)$/]",
+        "message": "<PriceChange> format must be one of 'percent' | 'number' | 'bp' | 'pp'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='PriceChange'] > JSXAttribute[name.name='variant'] > Literal[value!=/^(?:text|pill|solid)$/]",
+        "message": "<PriceChange> variant must be one of 'text' | 'pill' | 'solid'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='PriceChange'] > JSXAttribute[name.name='size'] > Literal[value!=/^(?:sm|md|lg)$/]",
+        "message": "<PriceChange> size must be one of 'sm' | 'md' | 'lg'."
+      },
+      {
         "selector": "JSXOpeningElement[name.name='PricingFeature'] > JSXAttribute > JSXIdentifier[name!=/^(?:label|included|key|ref|className|style|children)$/]",
         "message": "<PricingFeature> doesn't accept that prop. Declared props: label, included."
       },
@@ -1045,6 +1154,10 @@
       {
         "selector": "JSXOpeningElement[name.name='Rail'] > JSXAttribute[name.name='size'] > Literal[value!=/^(?:sm|md|lg)$/]",
         "message": "<Rail> size must be one of 'sm' | 'md' | 'lg'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='RangeBandChart'] > JSXAttribute > JSXIdentifier[name!=/^(?:data|loKey|hiKey|midKey|valueKey|bandLabel|midLabel|valueLabel|height|format|label|className|key|ref|className|style|children)$/]",
+        "message": "<RangeBandChart> doesn't accept that prop. Declared props: data, loKey, hiKey, midKey, valueKey, bandLabel, midLabel, valueLabel, height, format, label, className."
       },
       {
         "selector": "JSXOpeningElement[name.name='RangeValue'] > JSXAttribute > JSXIdentifier[name!=/^(?:min|max|key|ref|className|style|children)$/]",
@@ -1403,6 +1516,22 @@
         "message": "<TreeNode> doesn't accept that prop. Declared props: id, label, icon, meta, children, lazy."
       },
       {
+        "selector": "JSXOpeningElement[name.name='UsageMeter'] > JSXAttribute > JSXIdentifier[name!=/^(?:label|value|max|unit|valueText|hint|tone|thresholds|size|format|key|ref|className|style|children)$/]",
+        "message": "<UsageMeter> doesn't accept that prop. Declared props: label, value, max, unit, valueText, hint, tone, thresholds, size, format."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='UsageMeter'] > JSXAttribute[name.name='tone'] > Literal[value!=/^(?:brand|success|warning|danger|info|neutral)$/]",
+        "message": "<UsageMeter> tone must be one of 'brand' | 'success' | 'warning' | 'danger' | 'info' | 'neutral'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='UsageMeter'] > JSXAttribute[name.name='size'] > Literal[value!=/^(?:sm|md)$/]",
+        "message": "<UsageMeter> size must be one of 'sm' | 'md'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ValueShift'] > JSXAttribute > JSXIdentifier[name!=/^(?:from|to|format|worse|better|label|key|ref|className|style|children)$/]",
+        "message": "<ValueShift> doesn't accept that prop. Declared props: from, to, format, worse, better, label."
+      },
+      {
         "selector": "JSXOpeningElement[name.name='VideoPlayer'] > JSXAttribute > JSXIdentifier[name!=/^(?:src|poster|title|tracks|autoPlay|muted|loop|ratio|rates|onEnded|className|key|ref|className|style|children)$/]",
         "message": "<VideoPlayer> doesn't accept that prop. Declared props: src, poster, title, tracks, autoPlay, muted, loop, ratio, rates, onEnded, className."
       },
@@ -1527,6 +1656,9 @@
       "CascaderNode": {
         "replaces": []
       },
+      "CellStack": {
+        "replaces": []
+      },
       "ChatMessage": {
         "replaces": []
       },
@@ -1546,6 +1678,9 @@
         "replaces": []
       },
       "CloseButton": {
+        "replaces": []
+      },
+      "CodeEditor": {
         "replaces": []
       },
       "CodeSnippet": {
@@ -1581,6 +1716,9 @@
       "ContextMenu": {
         "replaces": []
       },
+      "ContributionItem": {
+        "replaces": []
+      },
       "Control": {
         "replaces": []
       },
@@ -1596,6 +1734,9 @@
       "GridColumn": {
         "replaces": []
       },
+      "DataState": {
+        "replaces": []
+      },
       "DatePicker": {
         "replaces": []
       },
@@ -1609,6 +1750,9 @@
         "replaces": []
       },
       "DiffViewer": {
+        "replaces": []
+      },
+      "DirectionBadge": {
         "replaces": []
       },
       "Divider": {
@@ -1633,6 +1777,9 @@
         "replaces": []
       },
       "EmptyText": {
+        "replaces": []
+      },
+      "EnvironmentBarItem": {
         "replaces": []
       },
       "ErrorSummary": {
@@ -1674,6 +1821,9 @@
       "GanttTask": {
         "replaces": []
       },
+      "GateItem": {
+        "replaces": []
+      },
       "Gauge": {
         "replaces": []
       },
@@ -1711,6 +1861,9 @@
         "replaces": []
       },
       "Input": {
+        "replaces": []
+      },
+      "InstrumentLabel": {
         "replaces": []
       },
       "KanbanColumn": {
@@ -1773,10 +1926,22 @@
       "Meter": {
         "replaces": []
       },
+      "MetricItem": {
+        "replaces": []
+      },
+      "Money": {
+        "replaces": []
+      },
       "MultiSelect": {
         "replaces": []
       },
       "NavbarItem": {
+        "replaces": []
+      },
+      "NavbarChip": {
+        "replaces": []
+      },
+      "NewsItem": {
         "replaces": []
       },
       "NotificationItem": {
@@ -1809,6 +1974,9 @@
       "Popover": {
         "replaces": []
       },
+      "PriceChange": {
+        "replaces": []
+      },
       "PricingFeature": {
         "replaces": []
       },
@@ -1834,6 +2002,9 @@
         "replaces": []
       },
       "Rail": {
+        "replaces": []
+      },
+      "RangeBandChart": {
         "replaces": []
       },
       "RangeValue": {
@@ -1975,6 +2146,12 @@
         "replaces": []
       },
       "TreeNode": {
+        "replaces": []
+      },
+      "UsageMeter": {
+        "replaces": []
+      },
+      "ValueShift": {
         "replaces": []
       },
       "VideoPlayer": {
@@ -2157,6 +2334,9 @@
       "--cs-dark",
       "--cs-light",
       "--cs-surf",
+      "--d-bg",
+      "--d-fg",
+      "--d-solid",
       "--danger-100",
       "--danger-200",
       "--danger-300",
@@ -2217,6 +2397,31 @@
       "--elevation-media",
       "--elevation-popover",
       "--elevation-raised",
+      "--env-bg",
+      "--env-border",
+      "--env-chip-bg",
+      "--env-chip-fg",
+      "--env-demo-bg",
+      "--env-demo-border",
+      "--env-demo-chip-bg",
+      "--env-demo-chip-fg",
+      "--env-demo-fg",
+      "--env-fg",
+      "--env-live-bg",
+      "--env-live-border",
+      "--env-live-chip-bg",
+      "--env-live-chip-fg",
+      "--env-live-fg",
+      "--env-paper-bg",
+      "--env-paper-border",
+      "--env-paper-chip-bg",
+      "--env-paper-chip-fg",
+      "--env-paper-fg",
+      "--env-research-bg",
+      "--env-research-border",
+      "--env-research-chip-bg",
+      "--env-research-chip-fg",
+      "--env-research-fg",
       "--fab-radius",
       "--fab-size",
       "--fg-brand",
@@ -2355,6 +2560,18 @@
       "--marker-size-lg",
       "--marker-size-sm",
       "--marker-soft-bg",
+      "--market-band",
+      "--market-band-edge",
+      "--market-down-bg",
+      "--market-down-fg",
+      "--market-down-solid",
+      "--market-flat-bg",
+      "--market-flat-fg",
+      "--market-flat-solid",
+      "--market-median",
+      "--market-up-bg",
+      "--market-up-fg",
+      "--market-up-solid",
       "--media-bg",
       "--media-border",
       "--media-caption-gap",
@@ -2368,6 +2585,12 @@
       "--meter-fill",
       "--meter-radius",
       "--meter-track",
+      "--mkt-gain-bg",
+      "--mkt-gain-fg",
+      "--mkt-gain-solid",
+      "--mkt-loss-bg",
+      "--mkt-loss-fg",
+      "--mkt-loss-solid",
       "--motion-base",
       "--motion-bounce",
       "--motion-enter",
@@ -3233,6 +3456,44 @@
       "--code-number": "color",
       "--code-function": "color",
       "--code-added": "color",
+      "--mkt-gain-fg": "color",
+      "--mkt-gain-solid": "color",
+      "--mkt-gain-bg": "color",
+      "--mkt-loss-fg": "color",
+      "--mkt-loss-solid": "color",
+      "--mkt-loss-bg": "color",
+      "--market-up-fg": "color",
+      "--market-up-solid": "color",
+      "--market-up-bg": "color",
+      "--market-down-fg": "color",
+      "--market-down-solid": "color",
+      "--market-down-bg": "color",
+      "--market-flat-fg": "color",
+      "--market-flat-solid": "color",
+      "--market-flat-bg": "color",
+      "--market-band": "color",
+      "--market-band-edge": "color",
+      "--market-median": "color",
+      "--env-research-bg": "color",
+      "--env-research-fg": "color",
+      "--env-research-border": "color",
+      "--env-research-chip-bg": "color",
+      "--env-research-chip-fg": "color",
+      "--env-paper-bg": "color",
+      "--env-paper-fg": "color",
+      "--env-paper-border": "color",
+      "--env-paper-chip-bg": "color",
+      "--env-paper-chip-fg": "color",
+      "--env-demo-bg": "color",
+      "--env-demo-fg": "color",
+      "--env-demo-border": "color",
+      "--env-demo-chip-bg": "color",
+      "--env-demo-chip-fg": "color",
+      "--env-live-bg": "color",
+      "--env-live-fg": "color",
+      "--env-live-border": "color",
+      "--env-live-chip-bg": "color",
+      "--env-live-chip-fg": "color",
       "--shadow-xs": "shadow",
       "--shadow-sm": "shadow",
       "--shadow-md": "shadow",
@@ -3659,6 +3920,14 @@
       "--tone-bg": "color",
       "--rail-marker": "color",
       "--sl-thumb": "color",
+      "--env-bg": "color",
+      "--env-fg": "color",
+      "--env-border": "color",
+      "--env-chip-bg": "color",
+      "--env-chip-fg": "color",
+      "--d-solid": "color",
+      "--d-fg": "color",
+      "--d-bg": "color",
       "--nb-h": "color",
       "--ld-c": "color",
       "--ld-shadow": "shadow",

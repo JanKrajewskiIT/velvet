@@ -1,0 +1,14 @@
+<!-- @dsCard group="29 Finance" viewport="960x380" name="Range band chart" subtitle="Actual vs expected band (Monte Carlo P5–P95) · negatives supported" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:16px;align-items:center}.lbl{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);width:96px;flex:none}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const { RangeBandChart } = window.VelvetUIDesignSystem_ee2bd8;
+const data=Array.from({length:29},(_,i)=>{const mu=i*0.16,sd=Math.sqrt(i)*0.55;return{label:'D'+i,lo:+(mu-1.64*sd).toFixed(2),mid:+mu.toFixed(2),hi:+(mu+1.64*sd).toFixed(2),value:+(i*0.13-(i>14?(i-14)*0.21:0)+Math.sin(i/2)*0.25).toFixed(2)};});
+const App=()=>(<RangeBandChart data={data} height={290} bandLabel="P5–P95 expected" valueLabel="Live paper" format={v=>v.toFixed(1)+'%'} label="Live equity vs Monte Carlo band"/>);
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

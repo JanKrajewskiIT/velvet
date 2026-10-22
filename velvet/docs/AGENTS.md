@@ -45,7 +45,7 @@ PORTING.md                      ← progress checklist (you maintain it)
 ## 3. Setup (once, before any component)
 1. Vite + `vite-plugin-solid`, TypeScript strict, `eslint-plugin-solid`, Playwright.
 2. `src/styles.ts` imports `velvet/styles.css`. Do not copy or split the CSS.
-3. Port the helpers first (see `docs/solid-porting.md` §Helpers): `primitives/cx.js`, `date.js`, `tone.js`, `useDismiss.js`, `charts/useSize.js`, `media/time.js`, `display/recron-logo-paths.js`.
+3. Port the helpers first (see `docs/solid-porting.md` §Helpers): `primitives/cx.js`, `date.js`, `tone.js`, `useDismiss.js`, `charts/useSize.js`, `media/time.js`, `display/recron-logo-paths.js`, `display/quantcore-logo-data.js`.
 4. Write `createControllable` (controlled/uncontrolled value + `onChange`/`onValueChange` alias) as described in `docs/solid-porting.md`. Almost every input uses it.
 5. Set up the verification harness (§5).
 6. Generate `PORTING.md` from `docs/components.md`: one checkbox line per component, grouped by folder, in the order from §4.

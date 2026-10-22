@@ -1,11 +1,11 @@
 import React from 'react';
 import { Button } from '../actions/Button.jsx';
 import { Glyph } from '../primitives/Glyph.jsx';
-import { useWidth, niceTicks, compact } from './useSize.js';
+import { useWidth, niceRange, compact } from './useSize.js';
 import { cx } from '../primitives/cx.js';
 const path = (pts) => pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join('');
 const smooth = (pts) => { if (pts.length < 3) return path(pts); let d = 'M' + pts[0][0] + ',' + pts[0][1]; for (let i = 0; i < pts.length - 1; i++) { const [x0, y0] = pts[i], [x1, y1] = pts[i + 1]; const mx = (x0 + x1) / 2; d += 'C' + mx + ',' + y0 + ' ' + mx + ',' + y1 + ' ' + x1 + ',' + y1; } return d; };
-export function LineChart({ data = [], series, height = 240, format = compact, area = true, curved = true, showTable = false, label = 'Line chart', className }) {
+export function LineChart({ data = [], series, height = 240, format = compact, area = true, curved = true, showTable = false, includeZero = true, label = 'Line chart', className }) {
   const [ref, W] = useWidth();
   const ser = series || [{ key: 'value', label: 'Value' }];
   const [hover, setHover] = React.useState(-1);
@@ -13,10 +13,15 @@ export function LineChart({ data = [], series, height = 240, format = compact, a
   const gid = React.useId().replace(/:/g, '');
   const pad = { l: 40, r: 12, t: 12, b: 28 };
   const iw = W - pad.l - pad.r, ih = height - pad.t - pad.b;
-  const max = Math.max(1, ...data.flatMap((d) => ser.map((s) => +d[s.key] || 0)));
-  const ticks = niceTicks(max); const top = ticks[ticks.length - 1];
+  const all = data.flatMap((d) => ser.map((s) => +d[s.key] || 0));
+  if (!all.length) all.push(0);
+  const dMin = Math.min(...all), dMax = Math.max(...all);
+  const padv = (dMax - dMin) * 0.08 || Math.abs(dMax) * 0.02 || 1;
+  const ticks = includeZero ? niceRange(Math.min(0, dMin), Math.max(dMin < 0 ? 0 : 1, dMax)) : niceRange(dMin - padv, dMax + padv);
+  const bot = ticks[0], top = ticks[ticks.length - 1];
   const x = (i) => pad.l + (data.length < 2 ? iw / 2 : (i / (data.length - 1)) * iw);
-  const y = (v) => pad.t + ih - (v / top) * ih;
+  const y = (v) => pad.t + ih - ((v - bot) / (top - bot || 1)) * ih;
+  const base = y(bot < 0 && top > 0 ? 0 : bot);
   const every = Math.ceil(data.length / Math.max(2, Math.floor(iw / 64)));
   const onMove = (e) => { const r = e.currentTarget.getBoundingClientRect(); const px = e.clientX - r.left; const i = Math.round(((px - pad.l) / iw) * (data.length - 1)); setHover(Math.max(0, Math.min(data.length - 1, i))); };
   const onKey = (e) => { if (e.key === 'ArrowRight') { e.preventDefault(); setHover((h) => Math.min(data.length - 1, h + 1)); } else if (e.key === 'ArrowLeft') { e.preventDefault(); setHover((h) => Math.max(0, h - 1)); } else if (e.key === 'Home') { e.preventDefault(); setHover(0); } else if (e.key === 'End') { e.preventDefault(); setHover(data.length - 1); } else if (e.key === 'Escape') setHover(-1); };
@@ -39,7 +44,7 @@ export function LineChart({ data = [], series, height = 240, format = compact, a
               const line = curved ? smooth(pts) : path(pts);
               return (
                 <g key={s.key}>
-                  {area && k === 0 && pts.length > 1 && <path d={line + 'L' + pts[pts.length - 1][0] + ',' + (pad.t + ih) + 'L' + pts[0][0] + ',' + (pad.t + ih) + 'Z'} fill={'url(#' + gid + k + ')'} className="vui-chart__area" />}
+                  {area && k === 0 && pts.length > 1 && <path d={line + 'L' + pts[pts.length - 1][0] + ',' + base + 'L' + pts[0][0] + ',' + base + 'Z'} fill={'url(#' + gid + k + ')'} className="vui-chart__area" />}
                   <path d={line} className="vui-chart__line" style={{ stroke: col(k) }} pathLength="1" />
                 </g>
               );

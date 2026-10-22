@@ -6,6 +6,7 @@ import { commonEn } from './common';
 import { dataEn } from './data';
 import { displayEn } from './display';
 import { feedbackEn } from './feedback';
+import { financeEn } from './finance';
 import { formsEn } from './forms';
 import { layoutEn } from './layout';
 import { mediaEn } from './media';
@@ -22,6 +23,7 @@ export const velvetEn = defineDictionary({
     data: dataEn,
     display: displayEn,
     feedback: feedbackEn,
+    finance: financeEn,
     forms: formsEn,
     layout: layoutEn,
     media: mediaEn,

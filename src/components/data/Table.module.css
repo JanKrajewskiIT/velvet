@@ -65,7 +65,9 @@
   overflow: visible;
 }
 
-.tableVariantLayoutFixed td {
+.tableVariantLayoutFixed td,
+.tableVariantLayoutFixed th {
+  white-space: normal;
   overflow-wrap: anywhere;
 }
 

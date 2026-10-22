@@ -11,6 +11,7 @@ export {
 export { Link, type LinkProps, type LinkVariant } from './Link';
 export { LoadMore, type LoadMoreProps } from './LoadMore';
 export { Navbar, type NavbarLabels, type NavbarProps } from './Navbar';
+export { NavbarChip, type NavbarChipProps } from './NavbarChip';
 export { type NavbarItem } from './navbarItem';
 export { NavbarLocale, type NavbarLocaleProps } from './NavbarLocale';
 export { NavbarUser, type NavbarUserProps } from './NavbarUser';

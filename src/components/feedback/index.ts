@@ -7,6 +7,7 @@ export { Countdown, type CountdownProps, type CountdownUnit } from './Countdown'
 export { Dialog, type DialogProps } from './Dialog';
 export { EmptyState, type EmptyStateProps } from './EmptyState';
 export { ErrorState, type ErrorStateProps } from './ErrorState';
+export { type GateItem, GateList, type GateListProps } from './GateList';
 export { Loader, LOADER_VARIANTS, type LoaderProps, type LoaderVariant } from './Loader';
 export type { LoaderShape } from './loaderTypes';
 export { LoadingOverlay, type LoadingOverlayProps } from './LoadingOverlay';

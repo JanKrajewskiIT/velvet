@@ -2,6 +2,7 @@ export { Accordion, type AccordionProps } from './Accordion';
 export { type AccordionItem, type AccordionVariant } from './accordionTypes';
 export { Avatar, type AvatarProps, type AvatarStatus } from './Avatar';
 export { AvatarGroup, type AvatarGroupProps } from './AvatarGroup';
+export { CellStack, type CellStackProps } from './CellStack';
 export { CodeSnippet, type CodeSnippetProps, type CodeSnippetTab } from './CodeSnippet';
 export { type DescriptionItem, DescriptionList, type DescriptionListProps } from './DescriptionList';
 export { diffLines, type DiffRow } from './diffLines';
@@ -14,6 +15,7 @@ export { Kanban, type KanbanCard, type KanbanColumn, type KanbanMove, type Kanba
 export { List, type ListItemData, type ListProps } from './List';
 export { type LogLevel, type LogLine } from './logLines';
 export { LogViewer, type LogViewerProps } from './LogViewer';
+export { MetricGroup, type MetricGroupProps, type MetricItem } from './MetricGroup';
 export { QuestionCard, type QuestionCardProps } from './QuestionCard';
 export { type RowKey, type RowSort } from './rowData';
 export { Scheduler, type SchedulerEvent, type SchedulerProps, type SchedulerView } from './Scheduler';
@@ -30,3 +32,4 @@ export {
   type TimelineMeta,
   type TimelineStatus,
 } from './timelineTypes';
+export { UsageMeter, type UsageMeterProps } from './UsageMeter';

@@ -1,14 +1,4 @@
-const FILLED_GLYPHS: ReadonlySet<string> = new Set([
-  'home',
-  'bell',
-  'user',
-  'folder',
-  'bookmark',
-  'heart',
-  'message-square',
-  'star',
-]);
+import { filledIcon } from '../display/IconFilled';
 
 /** Active navigation icons switch to their `-filled` twin when one exists. */
-export const glyphForState = (name: string, active: boolean): string =>
-  active && FILLED_GLYPHS.has(name) ? `${name}-filled` : name;
+export const glyphForState = (name: string, active: boolean): string => filledIcon(name, active);

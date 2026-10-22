@@ -59,6 +59,7 @@ The reference components (`components/**/<Name>.jsx`) are React. Output is idiom
 | `charts/useSize.js` `useWidth(initial)` | `createWidth(initial)` → `[setRef, width]` with a `ResizeObserver` disconnected in `onCleanup`. `niceTicks`, `compact` are pure: copy them. |
 | `media/time.js` | pure, copy |
 | `display/recron-logo-paths.js` | data, copy |
+| `display/quantcore-logo-data.js` | data, copy |
 
 ## Patterns that need care
 - **Trigger cloning** (`Menu`, `Popover`, `ConfirmAction`): React does `cloneElement(trigger, { onClick, onKeyDown, 'aria-expanded', … })`. Inject **every** prop the reference injects (e.g. `Menu` also opens on ArrowDown/ArrowUp). Solid elements are real DOM nodes, so resolve the trigger and wire it imperatively:

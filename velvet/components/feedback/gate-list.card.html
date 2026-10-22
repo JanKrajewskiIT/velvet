@@ -1,0 +1,13 @@
+<!-- @dsCard group="14 Feedback" viewport="960x330" name="Gate list" subtitle="Ordered checks — first failure blocks, later ones dimmed" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:16px;align-items:center}.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const { GateList } = window.VelvetUIDesignSystem_ee2bd8;
+const App=()=>(<div className="g"><GateList items={[{label:'Data quality',detail:'Fresh 4 s · no gaps',status:'pass'},{label:'Regime',detail:'Trend · low vol',status:'pass'},{label:'Event blackout',detail:'FOMC in 6 d',status:'pass'},{label:'Reconciliation',detail:'Lag 6 min > 5 min',status:'fail',code:'RECON_LAG'},{label:'Risk',detail:'0.48% of equity',status:'pass'}]}/><GateList size="sm" stopAtFirstFail={false} items={[{label:'Risk policy',status:'pass'},{label:'Configuration',detail:'CR-214 in review',status:'warn',code:'REVIEW'},{label:'Recovery',status:'pending'},{label:'Kill Switch',status:'pass'}]}/></div>);
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

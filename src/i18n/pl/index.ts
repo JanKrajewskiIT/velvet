@@ -7,6 +7,7 @@ import { commonPl } from './common';
 import { dataPl } from './data';
 import { displayPl } from './display';
 import { feedbackPl } from './feedback';
+import { financePl } from './finance';
 import { formsPl } from './forms';
 import { layoutPl } from './layout';
 import { mediaPl } from './media';
@@ -23,6 +24,7 @@ export const velvetPl: TranslationOf<typeof velvetEn> = {
     data: dataPl,
     display: displayPl,
     feedback: feedbackPl,
+    finance: financePl,
     forms: formsPl,
     layout: layoutPl,
     media: mediaPl,

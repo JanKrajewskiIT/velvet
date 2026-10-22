@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script><script src="./qc-data.js"></script></helmet>
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.PageHeader" eyebrow="Portfolio" title="My investments" description="Long-term holdings across brokers. Imported history is for analysis only. It never gets the right to place orders." actions="{{ headActions }}" tabs="{{ tabs }}" active-tab="{{ tab }}" on-tab-change="{{ setTab }}" hint-size="100%,160px"></x-import>
+<sc-if value="{{ isHoldings }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:var(--space-4)">
+<sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Stat" label="{{ s.label }}" value="{{ s.value }}" delta="{{ s.delta }}" tone="{{ s.tone }}" hint="{{ s.hint }}" hint-size="100%,110px"></x-import>
+</sc-for>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:var(--space-4);align-items:flex-start">
+<div style="flex:3 1 600px;min-width:0">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Holdings" description="Valued in PLN · NBP FX rates · ledger v212" padding="none" hint-size="100%,460px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Table" layout="fixed" columns="{{ holdCols }}" rows="{{ holdings }}" row-key="sym" hint-size="100%,420px"></x-import>
+</x-import>
+</div>
+<div style="flex:1 1 300px;min-width:0;display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="By asset class" hint-size="100%,300px">
+<div style="display:flex;justify-content:center"><x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.DonutChart" data="{{ byClass }}" size="{{ 170 }}" center-label="{{ classCenter }}" format="{{ fmtPct }}" label="By asset class" hint-size="170px,240px"></x-import></div>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Currency exposure" hint-size="100%,200px">
+<div style="display:flex;flex-direction:column;gap:var(--space-3)">
+<sc-for list="{{ byCcy }}" as="c" hint-placeholder-count="3">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.UsageMeter" size="sm" label="{{ c.label }}" value="{{ c.value }}" max="{{ 100 }}" value-text="{{ c.text }}" tone="brand" hint-size="100%,36px"></x-import>
+</sc-for>
+</div>
+</x-import>
+</div>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ isTx }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Transactions" description="Append-only. Corrections create a new entry instead of editing the old one." padding="none" hint-size="100%,420px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Table" layout="fixed" columns="{{ txCols }}" rows="{{ tx }}" row-key="id" add-row="{{ addTx }}" hint-size="100%,380px"></x-import>
+</x-import>
+</sc-if>
+<sc-if value="{{ isPerf }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-wrap:wrap;gap:var(--space-4);align-items:flex-start">
+<div style="flex:2 1 560px;min-width:0">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Cumulative return vs benchmarks" description="TWR, so deposits and withdrawals don't count as return · last 12 months · %" actions="{{ benchControl }}" hint-size="100%,360px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.LineChart" data="{{ perf }}" series="{{ perfSeries }}" height="{{ 280 }}" curved="{{ true }}" label="Return vs benchmark" hint-size="100%,280px"></x-import>
+</x-import>
+</div>
+<div style="flex:1 1 300px;min-width:0">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Measures · YTD" description="PerformancePolicy v1 · PLN" hint-size="100%,360px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.DescriptionList" items="{{ measures }}" hint-size="100%,300px"></x-import>
+</x-import>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ isImport }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Import statement" description="Preview first, then approve. Nothing is booked until you approve." hint-size="100%,620px">
+<div style="display:flex;flex-direction:column;gap:var(--space-5)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Stepper" steps="{{ steps }}" current="{{ step }}" hint-size="100%,56px"></x-import>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Select" label="Target account" options="{{ accts }}" value="xtb" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Select" label="Format mapping" options="{{ mappings }}" value="xtb1" hint-size="100%,64px"></x-import>
+</div>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.FileUpload" files="{{ files }}" on-files="{{ onFiles }}" accept=".csv,.xlsx" title="Drop a broker statement" hint="CSV or XLSX · up to 64 MB / 100,000 rows · XTB, mBank, IBKR, Revolut, Binance" hint-size="100%,140px"></x-import>
+<sc-if value="{{ hasPreview }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-3)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Alert" tone="warning" icon="triangle-alert" title="2 rows need a decision" hint-size="100%,64px">1 duplicate of an existing trade (same source ID) and 1 symbol that isn't mapped yet. Resolve or exclude them before approving.</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Table" layout="fixed" columns="{{ impCols }}" rows="{{ impRows }}" row-key="row" hint-size="100%,260px"></x-import>
+<div style="display:flex;justify-content:flex-end;gap:var(--space-2)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Button" variant="secondary" on-click="{{ rejectImport }}" hint-size="90px,36px">Reject</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Button" icon-left="check" on-click="{{ approveImport }}" hint-size="160px,36px">Approve 3 rows</x-import>
+</div>
+</div>
+</sc-if>
+</div>
+</x-import>
+</sc-if>
+<sc-if value="{{ isDec }}" hint-placeholder-val="{{ false }}"><dc-import name="QcDecisions" app="{{ app }}" hint-size="100%,900px"></dc-import></sc-if>
+<sc-if value="{{ isTax }}" hint-placeholder-val="{{ false }}"><dc-import name="QcTax" app="{{ app }}" hint-size="100%,900px"></dc-import></sc-if>
+<sc-if value="{{ isAi }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-wrap:wrap;gap:var(--space-4);align-items:flex-start">
+<div style="flex:2 1 560px;min-width:0">{{ aiPanel }}</div>
+<div style="flex:1 1 300px;min-width:0;display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.ScoreCard" label="Diversification" score="{{ 62 }}" verdict="Moderate" tone="warning" criteria="{{ criteria }}" hint="Computed from holdings, then explained by AI" hint-size="100%,300px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Ask about your portfolio" hint-size="100%,180px">
+<div style="display:flex;flex-direction:column;gap:var(--space-3)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Textarea" rows="{{ 3 }}" placeholder="e.g. How exposed am I to a stronger zloty?" hint-size="100%,90px"></x-import>
+<div style="display:flex;justify-content:flex-end"><x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Button" size="sm" icon-left="sparkles" on-click="{{ ask }}" hint-size="90px,32px">Analyse</x-import></div>
+</div>
+</x-import>
+</div>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { tab: 'holdings', portfolio: 'all', bench: 'both', files: [], step: 0 };
+  componentDidMount() { const s = window.__qcSub; if (s === 'import' || s === 'decisions' || s === 'tax') { window.__qcSub = null; this.setState({ tab: s }); } }
+  renderVals() {
+    const app = this.props.app || window.__qc;
+    const NS = window.VelvetUIDesignSystem_ee2bd8;
+    if (!app || !NS || !NS.UsageMeter || !NS.InstrumentLabel || !NS.PriceChange || !app.D.holdings) { clearTimeout(this._w); this._w = setTimeout(() => this.forceUpdate(), 80); return { stats: [] }; }
+    const { D } = app; const h = React.createElement; const m = app.money; const P = D.portfolioTotal; const tab = this.state.tab;
+    const mono = { fontFamily: 'var(--font-mono)', fontVariantNumeric: 'tabular-nums' };
+    const pf = D.portfolios.find((p) => p.value === this.state.portfolio);
+    const hold = this.state.portfolio === 'all' ? D.holdings : D.holdings.filter((x) => x.acct === pf.label);
+    const cls = {}; D.holdings.forEach((x) => { cls[x.cls] = (cls[x.cls] || 0) + x.weight; });
+    const TT = { BUY: 'success', SELL: 'danger', DIV: 'brand', FEE: 'neutral', CASH: 'info' };
+    const ST = { New: 'success', Duplicate: 'warning', 'Unmapped symbol': 'danger' };
+    const bench = this.state.bench;
+    return {
+      tab, setTab: (t) => this.setState({ tab: t }),
+      isHoldings: tab === 'holdings', isTx: tab === 'tx', isPerf: tab === 'perf', isImport: tab === 'import', isAi: tab === 'ai', isDec: tab === 'decisions', isTax: tab === 'tax', app,
+      tabs: [{ value: 'holdings', label: 'Holdings', count: D.holdings.length }, { value: 'tx', label: 'Transactions' }, { value: 'perf', label: 'Performance' }, { value: 'decisions', label: 'Decisions', count: 1 }, { value: 'tax', label: 'Tax' }, { value: 'import', label: 'Import' }, { value: 'ai', label: 'AI analysis' }],
+      headActions: h(React.Fragment, null, h(NS.Select, { size: 'sm', 'aria-label': 'Portfolio', options: D.portfolios, value: this.state.portfolio, onValueChange: (v) => this.setState({ portfolio: v }) }), h(NS.Button, { size: 'sm', variant: 'secondary', iconLeft: 'upload', onClick: () => this.setState({ tab: 'import' }) }, 'Import'), h(NS.Button, { size: 'sm', iconLeft: 'plus', onClick: () => this.setState({ tab: 'tx' }) }, 'Add transaction')),
+      stats: [
+        { label: 'Value', value: m(D.fmt(P.value, 0) + ' PLN'), delta: D.signed(P.dayPct, 2) + '% today', tone: 'success', hint: '4 accounts · 3 currencies' },
+        { label: 'Unrealised P&L', value: m(D.signed(P.unreal, 0) + ' PLN'), delta: '+17.7%', tone: 'success', hint: 'FIFO cost basis' },
+        { label: 'Dividends · YTD', value: m(D.fmt(P.divYtd, 0) + ' PLN'), hint: 'net of withholding tax' },
+        { label: 'TWR · YTD', value: D.signed(P.twrYtd, 1) + '%', delta: '+5.5 pp vs WIG', tone: 'success', hint: 'MWR ' + D.signed(P.mwrYtd, 1) + '%' }
+      ],
+      holdings: hold,
+      holdCols: [
+        { key: 'sym', label: 'Asset', render: (r) => h(NS.InstrumentLabel, { symbol: r.sym, name: r.name, meta: r.acct, size: 'sm' }) },
+        { key: 'cls', label: 'Class', hideOnMobile: true, render: (r) => h(NS.Badge, { size: 'sm', variant: 'outline' }, r.cls) },
+        { key: 'qty', label: 'Qty · avg', align: 'right', hideOnMobile: true, render: (r) => h('span', { style: mono }, r.qty == null ? '—' : r.qty + ' @ ' + D.fmt(r.avg) + ' ' + r.ccy) },
+        { key: 'value', label: 'Value PLN', align: 'right', sortable: true, render: (r) => h('span', { style: { ...mono, fontWeight: 600 } }, m(D.fmt(r.value, 0))) },
+        { key: 'pnl', label: 'P&L', align: 'right', sortable: true, render: (r) => h(NS.PriceChange, { value: r.pnl, digits: 1, arrow: false }) },
+        { key: 'weight', label: 'Weight', width: 120, render: (r) => h('div', { style: { display: 'flex', alignItems: 'center', gap: 8 } }, h('div', { style: { flex: 1 } }, h(NS.Meter, { value: r.weight, max: 30, size: 'sm', tone: r.weight > 25 ? 'warning' : 'brand', label: 'Weight' })), h('span', { style: { ...mono, fontSize: 12, width: 40, textAlign: 'right' } }, r.weight + '%')) }
+      ],
+      byClass: Object.entries(cls).map(([label, value], k) => ({ label, value: +value.toFixed(1), color: 'var(--dv-' + (k + 1) + ')' })), classCenter: 'Stocks 62%', fmtPct: (v) => v + '%',
+      byCcy: [{ label: 'USD', value: 48.6, text: '48.6%' }, { label: 'PLN', value: 35.4, text: '35.4%' }, { label: 'USDT (crypto)', value: 15.4, text: '15.4%' }],
+      tx: D.transactions,
+      txCols: [
+        { key: 'date', label: 'Date', render: (r) => h('span', { style: mono }, r.date) },
+        { key: 'type', label: 'Type', render: (r) => h(NS.Badge, { size: 'sm', tone: TT[r.type], variant: 'solid' }, r.type) },
+        { key: 'sym', label: 'Asset', render: (r) => h('span', { style: { ...mono, fontWeight: 600 } }, r.sym) },
+        { key: 'qty', label: 'Qty · price', align: 'right', hideOnMobile: true, render: (r) => h('span', { style: mono }, r.qty === '—' ? '—' : r.qty + ' @ ' + r.price) },
+        { key: 'amount', label: 'Amount', align: 'right', render: (r) => h('span', { style: { ...mono, fontWeight: 600 } }, m(r.amount)) },
+        { key: 'acct', label: 'Account', hideOnMobile: true },
+        { key: 'src', label: 'Source', hideOnMobile: true, render: (r) => h(NS.Badge, { size: 'sm', variant: 'outline', icon: r.src === 'Manual' ? 'pencil' : 'upload' }, r.src) }
+      ],
+      addTx: { label: 'Add transaction', onAdd: () => app.toast('Manual entry form', 'info', 'BUY · SELL · DIV · FEE · CASH · SPLIT') },
+      perf: D.perf,
+      perfSeries: [{ key: 'portfolio', label: 'Portfolio TWR', color: 'var(--dv-1)' }].concat(bench !== 'spx' ? [{ key: 'wig', label: 'WIG', color: 'var(--dv-2)' }] : []).concat(bench !== 'wig' ? [{ key: 'spx', label: 'S&P 500 (PLN)', color: 'var(--dv-3)' }] : []),
+      benchControl: h(NS.Segmented, { size: 'sm' }, [['both', 'Both'], ['wig', 'WIG'], ['spx', 'S&P 500']].map(([v, l]) => h(NS.SegmentedItem, { key: v, selected: bench === v, onClick: () => this.setState({ bench: v }) }, l))),
+      measures: [
+        { term: 'TWR', description: D.signed(P.twrYtd, 1) + '%', mono: true, hint: 'strategy quality' },
+        { term: 'MWR', description: D.signed(P.mwrYtd, 1) + '%', mono: true, hint: 'your actual result, timing of deposits included' },
+        { term: 'XIRR (since start)', description: D.signed(P.xirr, 1) + '% p.a.', mono: true },
+        { term: 'Volatility (ann.)', description: '14.2%', mono: true },
+        { term: 'Max drawdown', description: '−8.9% · Apr 2026', mono: true },
+        { term: 'Sharpe (rf = WIBOR 3M)', description: '0.71', mono: true },
+        { term: 'Beta vs WIG', description: '0.58', mono: true },
+        { term: 'External flows', description: '+18,000 PLN deposits · excluded from TWR' }
+      ],
+      steps: [{ label: 'Source', description: 'Account & format' }, { label: 'Preview', description: 'Mapping & duplicates' }, { label: 'Resolve', description: 'Conflicts' }, { label: 'Approve', description: 'Book to ledger' }],
+      step: this.state.step,
+      accts: D.portfolios.slice(1),
+      mappings: [{ value: 'xtb1', label: 'XTB · cash operations (mapping v1)' }, { value: 'mb2', label: 'mBank eMakler · history (mapping v2)' }, { value: 'ibkr', label: 'IBKR · Flex query (mapping v1)' }, { value: 'gen', label: 'Generic CSV · map columns…' }],
+      files: this.state.files,
+      onFiles: (fs) => { const f = fs[0]; this.setState({ files: [{ id: 1, name: f ? f.name : 'xtb_2026-10.csv', size: f ? f.size : 48213, status: 'done' }], step: 2 }); app.toast('Preview ready', 'info', '5 rows · 3 new · 1 duplicate · 1 unmapped'); },
+      hasPreview: this.state.files.length > 0,
+      impRows: D.importRows,
+      impCols: [
+        { key: 'row', label: '#', width: 48, render: (r) => h('span', { style: mono }, r.row) },
+        { key: 'date', label: 'Date', render: (r) => h('span', { style: mono }, r.date) },
+        { key: 'kind', label: 'Event', render: (r) => h(NS.Badge, { size: 'sm', tone: TT[r.kind], variant: 'solid' }, r.kind) },
+        { key: 'sym', label: 'Asset', render: (r) => h('span', { style: { ...mono, fontWeight: 600 } }, r.sym) },
+        { key: 'amount', label: 'Amount', align: 'right', render: (r) => h('span', { style: mono }, r.amount) },
+        { key: 'status', label: 'Status', render: (r) => h(NS.Badge, { size: 'sm', tone: ST[r.status], dot: true }, r.status) },
+        { key: 'act', label: '', align: 'right', render: (r) => r.status === 'Duplicate' ? h(NS.Button, { size: 'xs', variant: 'ghost' }, 'Exclude') : r.status === 'Unmapped symbol' ? h(NS.Button, { size: 'xs', variant: 'soft' }, 'Map to ASML') : null }
+      ],
+      approveImport: () => { this.setState({ step: 4, files: [] }); app.toast('Import booked', 'success', '3 rows · ledger v213 · batch IMP-0087'); },
+      rejectImport: () => { this.setState({ step: 0, files: [] }); app.toast('Import rejected', 'neutral', 'Staging discarded'); },
+      aiPanel: h(NS.AiResultPanel, { title: 'Portfolio analysis', model: 'Claude Sonnet', elapsed: '22 Oct · 08:10', status: 'done', score: 62, scoreMax: 100, scoreTone: 'warning',
+        headline: 'Growth-tilted and USD-heavy. The main risk is concentration in US mega-cap tech.',
+        summary: 'Computed from 8 holdings and 12 months of returns. AI explains the numbers but does not change them.',
+        sections: [
+          { title: 'Concentration', icon: 'target', tone: 'warning', items: ['AAPL + NVDA = 39% of value, and both report within 4 weeks.', 'Top 3 positions = 56%. Your policy target is ≤ 45%.'] },
+          { title: 'Currency & macro', icon: 'globe', tone: 'info', items: ['64% in USD. A 5% stronger zloty would cost about 6,700 PLN.', 'Orlen and KGHM add commodity beta, which partly hedges inflation.'] },
+          { title: 'Income', icon: 'trending-up', tone: 'success', items: ['Dividend yield 1.6%. PKN and PKO cover 74% of expected income.'] },
+          { title: 'Ideas to check', icon: 'sparkles', tone: 'brand', items: ['Rebalance the excess tech into CSPX to keep US exposure with less single-name risk.', 'Consider a PLN bond ETF (IKE) to lower volatility. Compare with WIBOR 3M.'] }
+        ],
+        sources: [{ label: 'Holdings · ledger v212' }, { label: 'Prices · Stooq/Alpaca EOD 21 Oct' }, { label: 'FX · NBP table 204/A' }],
+        disclaimer: 'Educational analysis, not investment advice. Figures come from your ledger; AI text is versioned and auditable.',
+        onRegenerate: () => app.toast('Analysis regenerated', 'success', 'New version · same inputs pinned') }),
+      criteria: [{ label: 'Single-name concentration', value: 45, tone: 'warning' }, { label: 'Sector spread', value: 58, tone: 'warning' }, { label: 'Geography', value: 72, tone: 'success' }, { label: 'Currency', value: 50, tone: 'warning' }, { label: 'Asset classes', value: 80, tone: 'success' }],
+      ask: () => app.toast('Analysis queued', 'info', 'Uses only your ledger and pinned market data')
+    };
+  }
+}
+</script>
+</body>
+</html>

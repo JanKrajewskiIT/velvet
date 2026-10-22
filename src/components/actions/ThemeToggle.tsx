@@ -9,6 +9,7 @@ import {
   THEME_PREFERENCES,
   type ThemePreference,
 } from '../../theme/theme';
+import { activeItemKey } from '../../utils/activeItem';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
@@ -71,6 +72,13 @@ export const ThemeToggle = (props: ThemeToggleProps) => {
   const [popped, setPopped] = createSignal<ThemePreference | null>(null);
   const controlled = () => p.value !== undefined;
   const theme = () => p.value ?? own();
+  const tabStop = () =>
+    activeItemKey(
+      options(),
+      theme(),
+      (option) => option,
+      () => true,
+    );
 
   onMount(() => {
     const observer = new MutationObserver(() => {
@@ -92,10 +100,13 @@ export const ThemeToggle = (props: ThemeToggleProps) => {
 
   const onKeyDown: JSX.EventHandler<HTMLDivElement, KeyboardEvent> = (e) => {
     const step = { ArrowLeft: -1, ArrowUp: -1, ArrowRight: 1, ArrowDown: 1 }[e.key];
-    if (!step) return;
+    if (!step || e.defaultPrevented) return;
     e.preventDefault();
     const list = options();
-    const next = list[(list.indexOf(theme()) + step + list.length) % list.length];
+    const buttons = [...e.currentTarget.querySelectorAll('button')];
+    const focused = buttons.findIndex((button) => button.contains(e.target));
+    const at = focused < 0 ? list.findIndex((option) => option === tabStop()) : focused;
+    const next = list[(at + step + list.length) % list.length];
     if (!next) return;
     pick(next);
     e.currentTarget.querySelector<HTMLElement>(`[data-set="${next}"]`)?.focus();
@@ -134,7 +145,7 @@ export const ThemeToggle = (props: ThemeToggleProps) => {
             aria-checked={theme() === t}
             aria-label={labelOf(t)}
             title={labelOf(t)}
-            tabIndex={theme() === t ? 0 : -1}
+            tabIndex={tabStop() === t ? 0 : -1}
             onClick={() => pick(t)}
           >
             <span class={styles.ttPartIcon}>{icon(t)}</span>

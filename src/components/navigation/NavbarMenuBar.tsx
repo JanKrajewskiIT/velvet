@@ -33,7 +33,19 @@ export const NavbarMenuBar = (props: NavbarMenuBarProps) => {
                   aria-current={on() ? 'page' : undefined}
                   onClick={(e) => props.onNavigate(e, item)}
                 >
-                  <Glyph name={glyphForState(item.icon ?? 'circle', on())} class={styles.navbarPartMicon} />
+                  <Show
+                    when={item.icon != null && typeof item.icon !== 'string'}
+                    fallback={
+                      <Glyph
+                        name={glyphForState(typeof item.icon === 'string' ? item.icon : 'circle', on())}
+                        class={styles.navbarPartMicon}
+                      />
+                    }
+                  >
+                    <span class={cx(styles.navbarPartMicon, styles.nodeIcon)} aria-hidden="true">
+                      {item.icon}
+                    </span>
+                  </Show>
                 </a>
               </li>
             );

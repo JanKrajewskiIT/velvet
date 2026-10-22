@@ -30,6 +30,8 @@ export interface LineChartProps {
   area?: boolean;
   /** @default true */
   curved?: boolean;
+  /** Include zero on the axis; false fits price/equity levels to the data. @default true */
+  includeZero?: boolean;
   /** Start in table view. */
   showTable?: boolean;
   /** Accessible name. @default localized "Line chart" */
@@ -39,7 +41,10 @@ export interface LineChartProps {
 
 /** Line / area chart with crosshair. Mouse, or focus + ←→ Home End, moves the crosshair and the value is announced. The "Table" toggle shows the same data as an accessible table with period-over-period Δ. */
 export const LineChart = (props: LineChartProps) => {
-  const merged = mergeProps({ height: 240, area: true, curved: true } satisfies Partial<LineChartProps>, props);
+  const merged = mergeProps(
+    { height: 240, area: true, curved: true, includeZero: true } satisfies Partial<LineChartProps>,
+    props,
+  );
   const translate = useTranslate();
   const format = createChartFormat(() => merged.format);
   const { ref, width } = createWidth();
@@ -56,6 +61,7 @@ export const LineChart = (props: LineChartProps) => {
     height,
     curved: () => merged.curved,
     area: () => merged.area,
+    includeZero: () => merged.includeZero,
     gradientId,
   });
   const { x, y } = geometry;

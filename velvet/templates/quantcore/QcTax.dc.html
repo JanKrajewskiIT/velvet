@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script><script src="./qc-data.js"></script></helmet>
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Alert" tone="neutral" icon="info" title="Estimate, not a tax return" hint-size="100%,64px">FIFO per account, converted to PLN at the NBP rate from the business day before each transaction. Accounts outside IKE/IKZE only. Check the figures before filing PIT-38.</x-import>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:var(--space-4)">
+<sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Stat" label="{{ s.label }}" value="{{ s.value }}" delta="{{ s.delta }}" tone="{{ s.tone }}" hint="{{ s.hint }}" hint-size="100%,110px"></x-import>
+</sc-for>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:var(--space-4);align-items:flex-start">
+<div style="flex:2 1 600px;min-width:0;display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Tax-loss harvesting" description="Unrealised losses you could realise before 31 Dec to offset gains · 70 days left" padding="none" hint-size="100%,300px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Table" layout="fixed" columns="{{ hCols }}" rows="{{ harvest }}" row-key="sym" render-expanded="{{ hExpand }}" hint-size="100%,260px"></x-import>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Sale simulator" description="What happens to your tax if you sell now" hint-size="100%,240px">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:var(--space-3)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Select" label="Position" options="{{ posOpts }}" value="{{ pos }}" on-value-change="{{ setPos }}" hint-size="100%,64px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Input" label="Quantity" value="{{ qty }}" on-change="{{ onQty }}" inputmode="decimal" hint-size="100%,64px"></x-import>
+</div>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.MetricGroup" items="{{ sim }}" variant="subtle" hint-size="100%,64px"></x-import>
+</div>
+</x-import>
+</div>
+<div style="flex:1 1 320px;min-width:0;display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="IKE / IKZE · 2026" description="Contribution limits · deadline 31 Dec" hint-size="100%,260px">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<sc-for list="{{ wrappers }}" as="w" hint-placeholder-count="2">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.UsageMeter" label="{{ w.label }}" value="{{ w.used }}" max="{{ w.limit }}" value-text="{{ w.text }}" hint="{{ w.hint }}" tone="brand" hint-size="100%,56px"></x-import>
+</sc-for>
+</div>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="PIT-38 worksheet" description="Tax year 2026 · draft" hint-size="100%,300px">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.DescriptionList" items="{{ pit }}" hint-size="100%,200px"></x-import>
+<div style="display:flex;gap:var(--space-2);flex-wrap:wrap">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Button" size="sm" variant="secondary" icon-left="download" on-click="{{ exportCsv }}" hint-size="100px,32px">CSV</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Button" size="sm" variant="secondary" icon-left="file-text" on-click="{{ exportPdf }}" hint-size="140px,32px">PIT-38 + PIT/ZG</x-import>
+</div>
+</div>
+</x-import>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { pos: 'AAPL', qty: '20' };
+  renderVals() {
+    const app = this.props.app || window.__qc;
+    const NS = window.VelvetUIDesignSystem_ee2bd8;
+    if (!app || !NS || !NS.UsageMeter || !NS.MetricGroup || !app.D.tax) { clearTimeout(this._w); this._w = setTimeout(() => this.forceUpdate(), 80); return { stats: [], sim: [], wrappers: [] }; }
+    const { D } = app; const h = React.createElement; const m = app.money; const T = D.tax; const mono = { fontFamily: 'var(--font-mono)', fontVariantNumeric: 'tabular-nums' };
+    const taxable = D.holdings.filter((x) => x.acct === 'XTB · Global' || x.acct === 'Binance · Crypto');
+    const hp = taxable.find((x) => x.sym === this.state.pos) || taxable[0];
+    const q = parseFloat(this.state.qty) || 0; const fx = hp.ccy === 'PLN' ? 1 : 3.98;
+    const gain = (hp.last - hp.avg) * q * fx; const tax = Math.max(0, gain) * 0.19;
+    const pln = (v) => m(D.fmt(v, 0) + ' PLN');
+    return {
+      stats: [
+        { label: 'Realised gains · 2026', value: pln(T.gains), hint: 'losses ' + m(D.fmt(T.losses, 0)) + ' PLN' },
+        { label: 'Net taxable income', value: pln(T.net), hint: 'securities · PIT-38 section C' },
+        { label: 'Estimated tax due', value: pln(T.due + T.dueDiv), delta: 'due 30 Apr 2027', tone: 'warning', hint: '19% · incl. dividends after WHT credit' },
+        { label: 'Harvesting potential', value: m('−641 PLN'), delta: '3 positions', tone: 'success', hint: 'tax saving if realised before 31 Dec' }
+      ],
+      harvest: D.harvest,
+      hCols: [
+        { key: 'sym', label: 'Position', render: (r) => h('div', { style: { display: 'flex', flexDirection: 'column' } }, h('span', { style: { ...mono, fontWeight: 600 } }, r.sym), h('span', { style: { fontSize: 12, color: 'var(--fg-secondary)' } }, r.acct)) },
+        { key: 'unreal', label: 'Unrealised', align: 'right', render: (r) => h('span', { style: { ...mono, color: 'var(--status-danger-fg)' } }, m(D.signed(r.unreal, 0) + ' PLN')) },
+        { key: 'saving', label: 'Tax saving', align: 'right', render: (r) => h('span', { style: { ...mono, fontWeight: 600, color: 'var(--status-success-fg)' } }, m(D.fmt(r.saving, 0) + ' PLN')) },
+        { key: 'replacement', label: 'Keep exposure via', hideOnMobile: true, render: (r) => h('span', { style: { fontSize: 13 } }, r.replacement) },
+        { key: 'act', label: '', align: 'right', render: (r) => h(NS.Button, { size: 'xs', variant: 'soft', onClick: () => app.toast('Added to rebalancing plan', 'success', r.sym + ' · manual execution') }, 'Plan') }
+      ],
+      hExpand: (r) => h('div', { style: { padding: '8px 16px 16px', fontSize: 13, color: 'var(--fg-secondary)' } }, r.wash),
+      posOpts: taxable.map((x) => ({ value: x.sym, label: x.sym + ' · ' + x.acct })), pos: hp.sym, setPos: (v) => this.setState({ pos: v }),
+      qty: this.state.qty, onQty: (e) => this.setState({ qty: e.target.value }),
+      sim: [
+        { label: 'proceeds PLN', value: m(D.fmt(hp.last * q * fx, 0)) },
+        { label: 'gain / loss PLN', value: m(D.signed(gain, 0)) },
+        { label: 'additional tax', value: m(D.fmt(tax, 0) + ' PLN') },
+        { label: 'tax due after sale', value: m(D.fmt(T.due + T.dueDiv + tax, 0) + ' PLN') }
+      ],
+      wrappers: [
+        { label: 'IKE', used: T.ike.used, limit: T.ike.limit, text: m(D.fmt(T.ike.used, 0)) + ' / ' + D.fmt(T.ike.limit, 0) + ' PLN', hint: m(D.fmt(T.ike.limit - T.ike.used, 0)) + ' PLN left · no capital gains tax after 60' },
+        { label: 'IKZE', used: T.ikze.used, limit: T.ikze.limit, text: m(D.fmt(T.ikze.used, 0)) + ' / ' + D.fmt(T.ikze.limit, 0) + ' PLN', hint: 'Full limit could save about 1,450 PLN in income tax (12% bracket) · 10% flat tax on withdrawal' }
+      ],
+      pit: [
+        { term: 'Proceeds (przychód)', description: m('142,880 PLN'), mono: true },
+        { term: 'Costs (koszty)', description: m('127,670 PLN'), mono: true },
+        { term: 'Income (dochód)', description: m(D.fmt(T.net, 0) + ' PLN'), mono: true },
+        { term: 'Foreign dividends · WHT credit', description: m(D.fmt(T.dividends, 0) + ' · ' + D.fmt(T.whtCredit, 0) + ' PLN'), mono: true },
+        { term: 'Crypto (section E)', description: m('0 PLN · no disposals'), mono: true }
+      ],
+      exportCsv: () => app.toast('Worksheet exported', 'success', 'pit38_2026_draft.csv'),
+      exportPdf: () => app.toast('PDF generated', 'success', 'PIT-38 + PIT/ZG (US) draft')
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,12 +1,12 @@
 # Components
 
-183 components, source of truth = the files themselves. This file is a map: where things are, what to port first, which specimen to verify against. For props read `<Name>.d.ts`; for behaviour read `<Name>.jsx`.
+199 components, source of truth = the files themselves. This file is a map: where things are, what to port first, which specimen to verify against. For props read `<Name>.d.ts`; for behaviour read `<Name>.jsx`.
 
 **Paths.** Everything for a component lives in `components/<folder>/`: `<Name>.jsx` (React reference: markup, classes, a11y, keyboard), `<Name>.d.ts` (props contract, JSDoc defaults), CSS file (global, already imported by `styles.css`), `*.card.html` (visual specimen = acceptance test), `<Name>.prompt.md` (usage notes, when present). A CSS path starting with `../` is relative to the folder. "shared (deps)" = the component has no CSS of its own; its look comes from the components it renders.
 
 **Folder vs DS section.** Code is organised by **folder** (left headings below). The design-system documentation tab is organised by **DS section** (numbered, from each specimen's `@dsCard group`). They differ on purpose — e.g. `forms/` spreads over 16 Inputs · 17 Selection · 18 Pickers · 19 Forms. Keep the folder structure for code, use DS sections for docs/Storybook navigation.
 
-**Helpers** (plain JS, port before components that import them): `primitives/cx.js`, `primitives/date.js`, `primitives/tone.js`, `primitives/useDismiss.js`, `display/recron-logo-paths.js`, `charts/useSize.js`, `media/time.js`. `cx.js` is imported by nearly every component and omitted from the Deps column.
+**Helpers** (plain JS, port before components that import them): `primitives/cx.js`, `primitives/date.js`, `primitives/tone.js`, `primitives/useDismiss.js`, `display/recron-logo-paths.js`, `display/quantcore-logo-data.js`, `charts/useSize.js`, `media/time.js`. `cx.js` is imported by nearly every component and omitted from the Deps column.
 
 ## DS sections → components
 Foundation sections 01–10 (Overview, Brand, Color, Type, Icons, Shape, Space & Layout, Depth, Motion, State) are token cards in `guidelines/` and `components/display` — not components.
@@ -16,21 +16,22 @@ Foundation sections 01–10 (Overview, Brand, Color, Type, Icons, Shape, Space &
 - **11 Atoms** — Checkmark, Chevron, CloseButton, Control, Count, Dot, EmptyText, Field, Glyph, Handle, Indicator, Mark, Marker, Meter, Option, Rail, Segmented, Separator, Surface, Swatch, Text, VisuallyHidden, Weekday
 - **12 Layout** — Divider, ScrollArea, SplitPane, Stack
 - **13 Display** — IconTile, Kbd, ListItem, SectionLabel, Rating, RatingSummary, Badge, Markdown, QRCode, Tag, Watermark, Countdown, Accordion, Avatar, CodeSnippet
-- **14 Feedback** — Alert, Loader, NotificationCenter, Progress, SetupChecklist, Skeleton, Spinner, Toast
+- **14 Feedback** — Alert, Loader, NotificationCenter, Progress, SetupChecklist, Skeleton, Spinner, Toast, GateList
 - **15 Actions** — AuthButton, Button, ButtonGroup, CalendarEventButton, CopyButton, Fab, IconButton, ThemeToggle, ToggleButton, ToggleGroup, Toolbar
-- **16 Inputs** — CopyButton, FileUpload, InlineEdit, Input, MentionInput, NumberInput, OtpInput, PasswordInput, PhoneInput, RangeInput, RichTextEditor, SearchInput, SignaturePad, TagInput, Textarea, Markdown, MarkdownEditor
+- **16 Inputs** — CopyButton, FileUpload, InlineEdit, Input, MentionInput, NumberInput, OtpInput, PasswordInput, PhoneInput, RangeInput, RichTextEditor, SearchInput, SignaturePad, TagInput, Textarea, Markdown, MarkdownEditor, CodeEditor
 - **17 Selection** — Autocomplete, Cascader, Checkbox, Chip, ChipGroup, MultiSelect, OptionSwitcher, Radio, Rating, Select, Slider, Switch, TransferList, TreeSelect
 - **18 Pickers** — Calendar, ColorPicker, DatePicker, DateTimePicker, TimeStepper
 - **19 Forms** — EditableCollection, ErrorSummary, FormLayout, Wizard
 - **20 Overlays** — BottomSheet, ConfirmDialog, Dialog, Popover, Tooltip, Tour
 - **21 Menus** — LocaleSwitcher, CommandPalette, ContextMenu, DropdownButton, Menu, MenuChip
-- **22 Navigation** — Anchor, BackToTop, BottomNav, Breadcrumb, HierarchyNavigator, Link, LoadMore, Navbar, Pagination, Stepper, Tabs, TreeView, Footer, PageHeader, SearchTrigger, Sidebar
+- **22 Navigation** — Anchor, BackToTop, BottomNav, Breadcrumb, HierarchyNavigator, Link, LoadMore, Navbar, Pagination, Stepper, Tabs, TreeView, Footer, PageHeader, SearchTrigger, Sidebar, NavbarChip
 - **23 Cards** — Card, StructuredCard, FeatureCard, FlipCard, QuestionCard, ScoreCard
 - **24 Media** — AudioPlayer, Carousel, ImageCropper, Lightbox, Marquee, MediaFrame, VideoPlayer
-- **25 Data viz** — SkillBar, Stat, BarChart, ComparisonBar, DonutChart, FunnelChart, Gantt, Gauge, Heatmap, LineChart, RadarChart, Sparkline
-- **26 Data** — ColumnManager, DataGrid, DescriptionList, DiffViewer, List, LogViewer, Table, Timeline, VirtualList, VirtualTable
+- **25 Data viz** — SkillBar, Stat, BarChart, ComparisonBar, DonutChart, FunnelChart, Gantt, Gauge, Heatmap, LineChart, RadarChart, Sparkline, UsageMeter, MetricGroup
+- **26 Data** — ColumnManager, DataGrid, DescriptionList, DiffViewer, List, LogViewer, Table, Timeline, VirtualList, VirtualTable, CellStack
 - **27 Planning** — EventCalendar, Kanban, Scheduler, Timeline
 - **28 Patterns** — EmptyState, AiResultPanel, AnalysisRequest, AtsAnalysisPanel, CalendarOrganizer, ChatMessage, ColorLabelManager, ColorLabelSelectionDialog, CommentThread, DualFilterBar, FilterBar, FlashcardSession, ImportSourcesDialog, PricingTable, PromptInput, QueryBuilder
+- **29 Finance** — PriceChange, Money (+ MoneyPrivacy), InstrumentLabel, EnvironmentBar, DataState, RangeBandChart, DirectionBadge, ContributionBar, ValueShift, NewsItem
 
 ## primitives
 
@@ -128,7 +129,7 @@ Foundation sections 01–10 (Overview, Brand, Color, Type, Icons, Shape, Space &
 | Component | DS section | Deps (port first) | CSS | Specimens | Description |
 |---|---|---|---|---|---|
 | **Badge** · `prompt.md` | 13 Display | Glyph | `badge.css` | `badge.card.html` | Small non-interactive status or count label. |
-| **BrandLogo** | 02 Brand | `display/recron-logo-paths.js` | `brand-logo.css` | `brand-logo.card.html` | Brand mark. brand="recron" = Recron "R" signet (circuit-node stem) + "ecron" wordmark, ported from Recron's brand-logo spec and recoloured with Velvet tokens: signet --action-primary, wordmark --fg-primary (both theme-aware); tone="inverse" = all --on-color-fg for brand fills (Navbar tone="brand"). Recron clear-space: 0.5× logo height each side; min digital height 32px. brand="velvet" = type-only placeholder "velvet/ui". |
+| **BrandLogo** | 02 Brand | `display/recron-logo-paths.js`, `display/quantcore-logo-data.js` | `brand-logo.css` | `brand-logo.card.html`, `quantcore-logo.card.html` | Brand mark. brand="recron" = Recron "R" signet (circuit-node stem) + "ecron" wordmark, ported from Recron's brand-logo spec and recoloured with Velvet tokens: signet --action-primary, wordmark --fg-primary (both theme-aware); tone="inverse" = all --on-color-fg for brand fills (Navbar tone="brand"). Recron clear-space: 0.5× logo height each side; min digital height 32px. brand="velvet" = type-only placeholder "velvet/ui". |
 | **Card** · `prompt.md` | 23 Cards | Surface | `card.css` | `card.card.html` | Content container = Surface + regions (header · body · footer) and their padding. Nothing else. Paint, hue, behaviour and state are Surface props passed straight through — see Surface for their meaning. Media, scrim and hairline-divided regions → StructuredCard. Built on Card: FeatureCard · FlipCard · Stat · ScoreCard · QuestionCard. |
 | **Icon** (+VelvetIcons, IconCategories, IconAliases, IconFilled, filledIcon) · `prompt.md` | 05 Icons | — | `../primitives/glyph.css` | `icon.card.html` | Velvet Icons glyph as inline SVG. Inherits currentColor; 24px grid, 1.75 stroke. For plain HTML use <i class="vui-icon icon-NAME">. |
 | **Markdown** (+renderMarkdown) | 16 Inputs, 13 Display | — | `markdown.css` | `markdown-editor.card.html` `markdown.card.html` | Renders a Markdown string as Velvet-styled prose: ATX and setext headings (unique ids for Anchor: repeats get -1, -2…), paragraphs, bold/italic (* and _)/strike, inline code, hard line breaks (two trailing spaces or \), links — inline, reference ([t][id], [t][], [id]) and autolinks (<url>, bare http(s)/www) — external ones open in a new tab, images, nested lists (ordered start kept), task lists (inline formatting kept), blockquotes, fenced code, tables, rules. HTML in the source is escaped and only http(s)/mailto/relative URLs are kept — safe for user or AI content. The .vui-prose class can also wrap hand-written HTML. |
@@ -274,3 +275,24 @@ Foundation sections 01–10 (Overview, Brand, Color, Type, Icons, Shape, Space &
 | **PricingTable** · `prompt.md` | 28 Patterns | Badge, Button, Glyph, OptionSwitcher | `pricing-table.css` | `pricing-table.card.html` | — |
 | **PromptInput** | 28 Patterns | IconButton, Glyph | `chat.css` | `prompt-input.card.html` `chat.card.html` | — |
 | **QueryBuilder** (+emptyQuery, clearQuery, describeQuery) | 28 Patterns | SectionLabel, Input, Select, Button, IconButton, CloseButton | `query-builder.css` | `query-builder.card.html` | Visual condition builder for segments, automations and advanced search: "Where Status is Active AND (Plan is Pro OR Seats > 10)". Operators follow the field type (narrow per field with `operators`); the combinator toggles on the second row of each group. Groups nest up to maxDepth. For quick faceted filtering use FilterBar; QueryBuilder is for saved, precise rules. |
+
+### finance
+Added 2026-10 for the QuantCore template. CSS: `finance/finance.css`; tokens: `tokens/sys-market.css` (port with sys-color — direction tokens `--market-up/down/flat-{fg,solid,bg}`, environment tokens `--env-{research,paper,demo,live}-*`, `data-market-colors` scope: standard | inverted | cvd).
+
+| Component | Deps | Specimen | Notes |
+|---|---|---|---|
+| PriceChange | Glyph | price-change.card.html | null → "—", never 0; formats percent/bp/pp/number; text · pill · solid |
+| Money | — | price-change.card.html | `MoneyPrivacy` context masks all amounts (screen sharing); compact; signed/colored |
+| InstrumentLabel | — | instrument-label.card.html | button when onClick; exchange chip; optional initials mark |
+| EnvironmentBar | Button, Dot | environment-bar.card.html | research/replay/shadow neutral · paper info · demo warning · live solid danger; Kill Switch opens a ConfirmDialog in the app |
+| DataState | Dot, Glyph | data-state.card.html | fresh · delayed · stale · partial · unavailable · empty — "unavailable" is not "empty" |
+| RangeBandChart | useSize (niceRange) | range-band-chart.card.html | band + median + actual, marks points outside band; negatives |
+
+| DirectionBadge | Glyph | direction-badge.card.html | LONG/BUY/ADD up · SHORT/SELL/TRIM down · WAIT/HOLD flat · NO_TRADE/SKIP muted; market tokens |
+| ContributionBar | — | contribution-bar.card.html | diverging from zero, keeps sign |
+| ValueShift | Glyph | value-shift.card.html | expected → actual; worse/better predicates |
+| NewsItem | Tag, Dot | news-item.card.html | AI bullets labelled, tickers clickable |
+
+Other folders (same release): `data/CellStack` (cell-stack.css · two-line cell), `data/UsageMeter` (→ Meter · auto tone 70/90%), `data/MetricGroup` (KPI grid, data-dir colours), `navigation/NavbarChip` (on-color / surface pill), `feedback/GateList` (ordered checks, first fail blocks), `forms/CodeEditor` (overlay highlighter, exports `highlightCode`).
+
+LineChart change (charts/): negative values supported, new `includeZero` prop (default true; false fits axis to data). `useSize.js` exports `niceRange(min, max)`.

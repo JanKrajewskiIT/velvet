@@ -177,7 +177,7 @@ class Component extends DCLogic {
       isPublic: isPublic, isApp: !isPublic && route !== 'onboarding', isOnboarding: route === 'onboarding', r, app,
       goLanding: (e) => { e && e.preventDefault && e.preventDefault(); window.scrollTo(0, 0); go('landing'); }, goPrivacy: (e) => { e && e.preventDefault && e.preventDefault(); window.scrollTo(0, 0); go('privacy'); }, signIn: app.signIn,
       logo: NS.BrandLogo ? h(NS.BrandLogo, { brand: 'recron', tone: 'inverse', size: 28 }) : 'Recron',
-      navItems: [{ id: 'today', label: 'Today', icon: 'home' }, { id: 'pipeline', label: 'Pipeline', icon: 'briefcase' }, { id: 'interviews', label: 'Interviews', icon: 'calendar' }, { id: 'prep', label: 'Prep', icon: 'book-open' }, { id: 'salary', label: 'Salary', icon: 'dollar-sign' }, { id: 'cv', label: 'CV', icon: 'file-text' }],
+      navItems: [{ id: 'today', label: 'Today', icon: 'home-filled' }, { id: 'pipeline', label: 'Pipeline', icon: 'kanban-filled' }, { id: 'interviews', label: 'Interviews', icon: 'calendar-filled' }, { id: 'prep', label: 'Prep', icon: 'book-open-filled' }, { id: 'salary', label: 'Salary', icon: 'dollar-sign' }, { id: 'cv', label: 'CV', icon: 'file-text-filled' }],
       navActive: route === 'offer' ? 'pipeline' : navTo[route] || '',
       navigate: (id) => go(id),
       goHome: () => go('today'),

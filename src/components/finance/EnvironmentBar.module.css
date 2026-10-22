@@ -1,0 +1,116 @@
+.root {
+  --env-bg: var(--env-paper-bg);
+  --env-fg: var(--env-paper-fg);
+  --env-border: var(--env-paper-border);
+  --env-chip-bg: var(--env-paper-chip-bg);
+  --env-chip-fg: var(--env-paper-chip-fg);
+
+  background: var(--env-bg);
+  color: var(--env-fg);
+  border-bottom: var(--border-width) solid var(--env-border);
+}
+
+.root[data-env='research'],
+.root[data-env='replay'],
+.root[data-env='shadow'] {
+  --env-bg: var(--env-research-bg);
+  --env-fg: var(--env-research-fg);
+  --env-border: var(--env-research-border);
+  --env-chip-bg: var(--env-research-chip-bg);
+  --env-chip-fg: var(--env-research-chip-fg);
+}
+
+.root[data-env='demo'] {
+  --env-bg: var(--env-demo-bg);
+  --env-fg: var(--env-demo-fg);
+  --env-border: var(--env-demo-border);
+  --env-chip-bg: var(--env-demo-chip-bg);
+  --env-chip-fg: var(--env-demo-chip-fg);
+}
+
+.root[data-env='live'] {
+  --env-bg: var(--env-live-bg);
+  --env-fg: var(--env-live-fg);
+  --env-border: var(--env-live-border);
+  --env-chip-bg: var(--env-live-chip-bg);
+  --env-chip-fg: var(--env-live-chip-fg);
+}
+
+.sticky {
+  position: sticky;
+  z-index: calc(var(--z-sticky) - 1);
+}
+
+.inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-6);
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: var(--space-2) var(--space-6);
+}
+
+.chip {
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--env-chip-bg);
+  color: var(--env-chip-fg);
+  font: 700 12px/1.2 var(--font-mono);
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+}
+
+.items {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-6);
+  flex: 1;
+  min-width: 0;
+}
+
+.item {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.key {
+  font-size: var(--type-caption-size);
+  opacity: 0.8;
+}
+
+.value {
+  font: 600 13px/1.2 var(--font-mono);
+  letter-spacing: 0.02em;
+}
+
+.end {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-left: auto;
+}
+
+.connection {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--type-caption-size);
+  white-space: nowrap;
+}
+
+.root[data-env='live'] .kill {
+  box-shadow: 0 0 0 2px var(--on-color-fg);
+}
+
+@media (width <= 640px) {
+  .inner {
+    padding: var(--space-2) var(--space-4);
+  }
+
+  .items {
+    gap: var(--space-1) var(--space-4);
+  }
+}

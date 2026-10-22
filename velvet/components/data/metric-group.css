@@ -1,0 +1,9 @@
+/* MetricGroup */
+.vui-metrics{display:grid;gap:var(--space-3) var(--space-4);margin:0}
+.vui-metrics--subtle{padding:var(--space-4);border-radius:var(--radius-lg);background:var(--bg-subtle)}
+.vui-metrics__it{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vui-metrics__v{margin:0;font:600 18px/1.2 var(--font-mono);font-variant-numeric:tabular-nums;color:var(--fg-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vui-metrics--sm .vui-metrics__v{font-size:15px}.vui-metrics--lg .vui-metrics__v{font-size:var(--font-size-2xl,24px)}
+.vui-metrics__v[data-dir="up"]{color:var(--market-up-fg)}.vui-metrics__v[data-dir="down"]{color:var(--market-down-fg)}
+.vui-metrics__l{font-size:var(--type-caption-size);color:var(--fg-tertiary)}
+.vui-metrics--sm .vui-metrics__l{font-size:11px}

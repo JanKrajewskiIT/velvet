@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script><script src="./qc-data.js"></script></helmet>
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.PageHeader" eyebrow="Operations" title="Operations" description="Process state (RUNNING/PAUSED/STOPPED) is independent of the trading state. A missing heartbeat never closes positions without a separate approved policy." status="{{ procStatus }}" tabs="{{ tabs }}" active-tab="{{ tab }}" on-tab-change="{{ setTab }}" hint-size="100%,160px"></x-import>
+<sc-if value="{{ isHealth }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Operating mode" description="Moving to a more autonomous mode needs permission, confirmation and passed readiness" hint-size="100%,140px">
+<div style="display:flex;flex-direction:column;gap:var(--space-3)">
+<div style="overflow-x:auto">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Segmented" hint-size="100%,36px">
+<sc-for list="{{ modes }}" as="m" hint-placeholder-count="6">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.SegmentedItem" selected="{{ m.sel }}" disabled="{{ m.locked }}" icon="{{ m.icon }}" on-click="{{ m.pick }}" hint-size="120px,32px">{{ m.id }}</x-import>
+</sc-for>
+</x-import>
+</div>
+<span style="font-size:var(--type-caption-size);color:var(--fg-secondary)">AUTO_WITH_CONFIRMATION and FULL_AUTO are locked: RECON_LAG. Every change is audited with a reason and correlation ID.</span>
+</div>
+</x-import>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:var(--space-3)">
+<sc-for list="{{ health }}" as="c" hint-placeholder-count="8">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" padding="sm" hint-size="100%,68px">
+<div style="display:flex;align-items:center;gap:var(--space-3)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Dot" tone="{{ c.tone }}" size="md" pulse="{{ c.pulse }}" hint-size="10px,10px"></x-import>
+<div style="display:flex;flex-direction:column;min-width:0"><span style="font-weight:600;font-size:var(--type-body-sm-size)">{{ c.label }}</span><span style="font:500 12px/1.4 var(--font-mono);color:var(--fg-secondary)">{{ c.metric }}</span></div>
+</div>
+</x-import>
+</sc-for>
+</div>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Alerts" description="Severity · dedup key · first/last seen · owner · runbook" padding="none" hint-size="100%,280px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Table" layout="fixed" columns="{{ alertCols }}" rows="{{ alerts }}" row-key="id" hint-size="100%,240px"></x-import>
+</x-import>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:var(--space-4);align-items:start">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Jobs" description="Backfill · features · backtest · walk-forward" hint-size="100%,340px">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<sc-for list="{{ jobs }}" as="j" hint-placeholder-count="4">
+<div style="display:flex;flex-direction:column;gap:var(--space-2)">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:var(--space-3)"><span style="font:600 13px/1.2 var(--font-mono)">{{ j.id }} · {{ j.kind }}</span><x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Badge" size="sm" tone="{{ j.tone }}" hint-size="80px,20px">{{ j.state }}</x-import></div>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.UsageMeter" size="sm" label="{{ j.target }}" value="{{ j.progress }}" max="{{ 100 }}" value-text="{{ j.pct }}" hint="{{ j.at }}" tone="{{ j.tone }}" hint-size="100%,48px"></x-import>
+<sc-if value="{{ j.note }}" hint-placeholder-val="{{ false }}"><span style="font-size:var(--type-caption-size);color:var(--status-danger-fg)">{{ j.note }}</span></sc-if>
+</div>
+</sc-for>
+</div>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Audit" description="Recent actions · identity, reason, correlation" hint-size="100%,340px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Timeline" variant="compact" items="{{ audit }}" hint-size="100%,280px"></x-import>
+</x-import>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ isChanges }}" hint-placeholder-val="{{ false }}"><dc-import name="QcGovernance" app="{{ app }}" hint-size="100%,900px"></dc-import></sc-if>
+<sc-if value="{{ isData }}" hint-placeholder-val="{{ false }}"><dc-import name="QcDataOps" app="{{ app }}" hint-size="100%,900px"></dc-import></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { acked: {}, tab: 'health' };
+  componentDidMount() { const t = window.__qcSub; if (t === 'changes' || t === 'data') { window.__qcSub = null; this.setState({ tab: t }); } }
+  renderVals() {
+    const app = this.props.app || window.__qc;
+    const NS = window.VelvetUIDesignSystem_ee2bd8;
+    if (!app || !NS || !NS.UsageMeter) { clearTimeout(this._w); this._w = setTimeout(() => this.forceUpdate(), 80); return { modes: [], health: [], jobs: [] }; }
+    const { D } = app; const h = React.createElement; const mono = { fontFamily: 'var(--font-mono)', fontSize: 12 };
+    const HT = { ok: 'success', warn: 'warning', down: 'danger', off: 'neutral' };
+    const JT = { RUNNING: 'info', SUCCEEDED: 'success', FAILED: 'danger' };
+    const locked = { AUTO_WITH_CONFIRMATION: true, FULL_AUTO: true };
+    const tab = this.state.tab;
+    return {
+      app, tab, setTab: (t) => this.setState({ tab: t }), isHealth: tab === 'health', isChanges: tab === 'changes', isData: tab === 'data',
+      tabs: [{ value: 'health', label: 'Health & alerts' }, { value: 'changes', label: 'Changes & control', count: 1 }, { value: 'data', label: 'Data, providers & AI' }],
+      procStatus: { label: 'RUNNING', tone: 'success' },
+      modes: ['DRY_RUN', 'SHADOW', 'ADVISORY', 'SEMI_AUTO', 'AUTO_WITH_CONFIRMATION', 'FULL_AUTO'].map((m) => ({ id: m, sel: app.mode === m, locked: !!locked[m], icon: locked[m] ? 'lock' : undefined, pick: () => { if (!locked[m] && app.mode !== m) app.setMode(m); } })),
+      health: D.health.map((c) => ({ ...c, tone: HT[c.state], pulse: c.state === 'warn' })),
+      alerts: D.alerts.map((a) => (this.state.acked[a.id] ? { ...a, state: 'Acknowledged', owner: 'A. Novak' } : a)),
+      alertCols: [
+        { key: 'sev', label: 'Severity', width: 110, render: (r) => h(NS.Badge, { size: 'sm', tone: r.sev, variant: 'solid' }, r.sev === 'danger' ? 'Critical' : r.sev === 'warning' ? 'Warning' : 'Info') },
+        { key: 'title', label: 'Alert', render: (r) => h('div', { style: { display: 'flex', flexDirection: 'column' } }, h('span', { style: { fontWeight: 600 } }, r.title), h('span', { style: { ...mono, color: 'var(--fg-secondary)' } }, r.key)) },
+        { key: 'seen', label: 'First / last', hideOnMobile: true, render: (r) => h('span', { style: mono }, r.first + ' → ' + r.last + ' · ' + r.count + '×') },
+        { key: 'owner', label: 'Owner', hideOnMobile: true },
+        { key: 'act', label: '', align: 'right', render: (r) => h('div', { style: { display: 'flex', gap: 4, justifyContent: 'flex-end' } }, h(NS.Button, { size: 'xs', variant: 'ghost', iconLeft: 'book-open' }, 'Runbook'), r.state === 'Open' ? h(NS.Button, { size: 'xs', variant: 'soft', onClick: () => { this.setState({ acked: { ...this.state.acked, [r.id]: true } }); app.toast('Alert acknowledged', 'success', r.key); } }, 'Take over') : h(NS.Badge, { size: 'sm', variant: 'outline' }, r.state)) }
+      ],
+      jobs: D.jobs.map((j) => ({ ...j, tone: JT[j.state], note: j.note || '', pct: j.progress + '%' })),
+      audit: D.audit.map((a, k) => ({ id: k, title: a.t, description: a.d, time: a.at, icon: 'file-signature', status: 'done' }))
+    };
+  }
+}
+</script>
+</body>
+</html>

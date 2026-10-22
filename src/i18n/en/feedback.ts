@@ -1,6 +1,15 @@
 import { defineDictionary } from '@jankrajewskiit/i18n';
 
 export const feedbackEn = defineDictionary({
+  gateList: {
+    passed: '{passed} of {total} gates passed',
+    blocks: 'Blocks',
+    pass: 'Passed',
+    fail: 'Failed',
+    warn: 'Warning',
+    pending: 'Pending',
+    skip: 'Skipped',
+  },
   banner: {
     label: 'Announcement',
   },

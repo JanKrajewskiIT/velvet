@@ -1,6 +1,7 @@
 import { createMemo, For, type JSX, mergeProps, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
+import { activeItemKey } from '../../utils/activeItem';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
@@ -29,7 +30,7 @@ export interface OptionSwitcherProps {
   options: ReadonlyArray<string | SwitcherOption>;
   /** Controlled value. */
   value?: string;
-  /** @default the first option */
+  /** @default the first enabled option */
   defaultValue?: string;
   onValueChange?: (value: string) => void;
   /** @default 'track' */
@@ -58,21 +59,30 @@ export const OptionSwitcher = (props: OptionSwitcherProps) => {
   const options = createMemo(() => p.options.map(normalizeSwitcherOption));
   const [current, setCurrent] = createControllable({
     value: () => p.value,
-    defaultValue: p.defaultValue ?? options()[0]?.value ?? '',
+    defaultValue: p.defaultValue ?? options().find((option) => !option.disabled)?.value ?? '',
     onChange: (value) => p.onValueChange?.(value),
   });
+  const tabStop = () =>
+    activeItemKey(
+      options(),
+      current(),
+      (option) => option.value,
+      (option) => !option.disabled,
+    );
 
   const onKeyDown: JSX.EventHandler<HTMLDivElement, KeyboardEvent> = (event) => {
     const step = STEP_BY_KEY[event.key];
-    if (step === undefined) return;
+    if (step === undefined || event.defaultPrevented) return;
     const enabled = options().filter((option) => !option.disabled);
-    const nextIndex =
-      (enabled.findIndex((option) => option.value === current()) + step + enabled.length) % enabled.length;
+    const buttons = [...event.currentTarget.querySelectorAll<HTMLElement>(ENABLED_RADIOS)];
+    const focused = buttons.findIndex((button) => button.contains(event.target));
+    const at = focused < 0 ? enabled.findIndex((option) => option.value === tabStop()) : focused;
+    const nextIndex = (at + step + enabled.length) % enabled.length;
     const next = enabled[nextIndex];
     if (!next) return;
     event.preventDefault();
     setCurrent(next.value);
-    event.currentTarget.querySelectorAll<HTMLElement>(ENABLED_RADIOS)[nextIndex]?.focus();
+    buttons[nextIndex]?.focus();
   };
 
   return (
@@ -92,7 +102,7 @@ export const OptionSwitcher = (props: OptionSwitcherProps) => {
               <SegmentedItem
                 role="radio"
                 selected={current() === option.value}
-                tabIndex={current() === option.value ? 0 : -1}
+                tabIndex={tabStop() === option.value ? 0 : -1}
                 disabled={option.disabled}
                 icon={option.icon}
                 aria-label={p.iconOnly ? stringLabel(option) : undefined}
@@ -125,7 +135,7 @@ export const OptionSwitcher = (props: OptionSwitcherProps) => {
               type="button"
               role="radio"
               aria-checked={current() === option.value}
-              tabIndex={current() === option.value ? 0 : -1}
+              tabIndex={tabStop() === option.value ? 0 : -1}
               disabled={option.disabled}
               aria-label={p.iconOnly ? stringLabel(option) : undefined}
               title={p.iconOnly ? stringLabel(option) : undefined}

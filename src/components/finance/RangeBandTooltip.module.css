@@ -1,0 +1,23 @@
+.tip {
+  composes: chartPartTip from '../../styles/shared/charts/chart.module.css';
+}
+
+.title {
+  composes: chartPartTipT from '../../styles/shared/charts/chart.module.css';
+}
+
+.row {
+  composes: chartPartTipR from '../../styles/shared/charts/chart.module.css';
+}
+
+.bandSwatch {
+  composes: bandSwatch from '../../styles/shared/charts/band.module.css';
+}
+
+.medianSwatch {
+  composes: medianSwatch from '../../styles/shared/charts/band.module.css';
+}
+
+.valueSwatch {
+  composes: valueSwatch from '../../styles/shared/charts/band.module.css';
+}

@@ -17,14 +17,20 @@ export const ColorLabelManagerFooter = (props: ColorLabelManagerFooterProps) => 
     <Show
       when={props.manager.draft()}
       fallback={
-        <Button variant="secondary" iconLeft="plus" class={styles.clmPartAdd} onClick={props.manager.startAdd}>
+        <Button
+          variant="secondary"
+          iconLeft="plus"
+          class={styles.clmPartAdd}
+          disabled={props.manager.busy()}
+          onClick={props.manager.startAdd}
+        >
           {translate('velvet.patterns.colorLabelManager.addLabel')}
         </Button>
       }
     >
       {(current) => (
         <>
-          <Button variant="secondary" onClick={props.manager.cancelDraft}>
+          <Button variant="secondary" disabled={props.manager.busy()} onClick={props.manager.cancelDraft}>
             {translate('velvet.common.cancel')}
           </Button>
           <Button

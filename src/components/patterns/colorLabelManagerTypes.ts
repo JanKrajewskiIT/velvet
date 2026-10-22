@@ -4,7 +4,7 @@ export interface ColorLabelManagerProps {
   open: boolean;
   onClose?: () => void;
   labels: ColorLabel[];
-  /** May return a Promise — Save / Delete lock while pending; on reject the form stays open and `errorText` shows inline. */
+  /** Editing locks while pending. Rejections keep the current session open with errorText; stale completions are ignored. */
   onChange?: (labels: ColorLabel[]) => void | Promise<void>;
   /** Receives the error `onChange` rejected with. */
   onError?: (error: unknown) => void;

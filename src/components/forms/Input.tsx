@@ -2,6 +2,7 @@ import { type JSX, mergeProps, splitProps } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { cx } from '../../utils/cx';
+import { joinIdRefs } from '../../utils/joinIdRefs';
 import { Polymorphic } from '../../utils/polymorphic';
 import { Control } from '../primitives/Control';
 import { Field } from '../primitives/Field';
@@ -79,9 +80,11 @@ export const Input = (props: InputProps) => {
     'defaultValue',
     'onBlur',
     'onInput',
+    'aria-describedby',
+    'aria-invalid',
   ]);
   const [text, setText] = createControllable({ value: () => local.value, defaultValue: local.defaultValue });
-  const validation = createValidation(() => local.validate);
+  const validation = createValidation(() => local.validate, text);
   const counterMax = () => (local.showCount && local.maxLength ? Number(local.maxLength) : undefined);
 
   return (
@@ -123,15 +126,14 @@ export const Input = (props: InputProps) => {
             required={local.required}
             maxLength={local.maxLength}
             value={text()}
-            aria-invalid={control.invalid || undefined}
-            aria-describedby={control.describedBy}
+            aria-invalid={control.invalid || local['aria-invalid']}
+            aria-describedby={joinIdRefs(local['aria-describedby'], control.describedBy)}
             onBlur={(e: FocusEvent) => {
-              validation.blur(fieldValue(e));
+              validation.blur();
               callHandler(local.onBlur, e as InputFocusEvent);
             }}
             onInput={(e: InputEvent) => {
               setText(fieldValue(e));
-              validation.input(fieldValue(e));
               callHandler(local.onInput, e as InputInputEvent);
             }}
           />

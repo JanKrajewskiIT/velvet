@@ -24,6 +24,7 @@ export interface SwatchProps extends HtmlProps<HTMLElement, 'onClick'> {
   round?: boolean;
   selected?: boolean;
   label?: string;
+  disabled?: boolean;
   /** Makes the swatch a button with a selected ring + check. */
   onClick?: (e: MouseEvent) => void;
 }
@@ -38,6 +39,7 @@ export const Swatch = (props: SwatchProps) => {
     'round',
     'selected',
     'label',
+    'disabled',
     'onClick',
     'class',
     'style',
@@ -48,6 +50,8 @@ export const Swatch = (props: SwatchProps) => {
     <Polymorphic
       tag={clickable() ? 'button' : 'span'}
       type={clickable() ? 'button' : undefined}
+      disabled={clickable() ? local.disabled : undefined}
+      aria-disabled={!clickable() && local.disabled ? true : undefined}
       class={cx(
         styles.swatch,
         variantClass(SWATCH_CLASSES, local.size, 'md'),
@@ -59,7 +63,9 @@ export const Swatch = (props: SwatchProps) => {
       aria-pressed={clickable() && local.selected != null ? local.selected : undefined}
       aria-label={local.label}
       role={!clickable() && local.label ? 'img' : undefined}
-      onClick={local.onClick}
+      onClick={(event: MouseEvent) => {
+        if (!local.disabled) local.onClick?.(event);
+      }}
       {...rest}
     >
       <Show when={local.selected && clickable()} fallback={local.children}>

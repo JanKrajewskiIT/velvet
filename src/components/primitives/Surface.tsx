@@ -1,5 +1,6 @@
-import { mergeProps, splitProps } from 'solid-js';
+import { type JSX, mergeProps, splitProps } from 'solid-js';
 
+import { callHandler } from '../../utils/callHandler';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { type ElementTag, type HtmlProps, Polymorphic } from '../../utils/polymorphic';
@@ -64,7 +65,7 @@ export interface SurfaceProps extends HtmlProps<HTMLElement> {
   accent?: boolean;
   /** Visual feedback only — neutral lift on hover. Does not make the box clickable. */
   hoverable?: boolean;
-  /** The whole box is one action: pointer, focus ring. Implies hoverable. A `div` gets `tabIndex=0`. */
+  /** One action: pointer, focus ring and Enter/Space on a div. Use hoverable with independent child controls. */
   interactive?: boolean;
   /** Tinted hover — lift, border and glow track `--tone`. Implies hoverable. */
   tonal?: boolean;
@@ -93,11 +94,38 @@ export const Surface = (props: SurfaceProps) => {
     'clip',
     'style',
     'class',
+    'onKeyDown',
+    'onClick',
+    'role',
+    'tabIndex',
   ]);
   const lifts = () => local.hoverable || local.interactive || local.tonal;
   const revealed = () => local.reveal != null && local.reveal !== false;
+  const buttonRole = () => local.interactive && local.as === 'div' && (!local.role || local.role === 'button');
+  const disabled = () => rest['aria-disabled'] === true || rest['aria-disabled'] === 'true';
+  const onKeyDown: JSX.EventHandler<HTMLElement, KeyboardEvent> = (event) => {
+    callHandler(local.onKeyDown, event);
+    if (
+      event.defaultPrevented ||
+      !buttonRole() ||
+      event.target !== event.currentTarget ||
+      (event.key !== 'Enter' && event.key !== ' ')
+    )
+      return;
+    event.preventDefault();
+    if (!disabled() && !event.repeat) event.currentTarget.click();
+  };
+  const onClick: JSX.EventHandler<HTMLElement, MouseEvent> = (event) => {
+    if (local.interactive && disabled()) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
+    callHandler(local.onClick, event);
+  };
   return (
     <Polymorphic
+      {...rest}
       tag={local.as}
       class={cx(
         styles.surface,
@@ -115,8 +143,10 @@ export const Surface = (props: SurfaceProps) => {
       data-vui-surface
       data-tone={local.tone}
       style={typeof local.reveal === 'number' ? { '--i': local.reveal, ...local.style } : local.style}
-      tabIndex={local.interactive && local.as === 'div' ? 0 : undefined}
-      {...rest}
+      role={local.role ?? (buttonRole() ? 'button' : undefined)}
+      tabIndex={buttonRole() && disabled() ? -1 : (local.tabIndex ?? (buttonRole() ? 0 : undefined))}
+      onKeyDown={onKeyDown}
+      onClick={onClick}
     />
   );
 };

@@ -18,4 +18,10 @@ export function niceTicks(max, count = 4) {
   const top = Math.ceil(max / step) * step;
   return Array.from({ length: Math.round(top / step) + 1 }, (_, i) => +(i * step).toFixed(10));
 }
+export function niceRange(min, max, count = 4) {
+  const span = max - min || 1; const raw = span / count; const p = Math.pow(10, Math.floor(Math.log10(raw)));
+  const step = [1, 2, 2.5, 5, 10].map((m) => m * p).find((s) => s >= raw) || p * 10;
+  const lo = Math.floor(min / step) * step, hi = Math.ceil(max / step) * step;
+  return Array.from({ length: Math.round((hi - lo) / step) + 1 }, (_, i) => +(lo + i * step).toFixed(10));
+}
 export const compact = (n) => (Math.abs(n) >= 1e6 ? +(n / 1e6).toFixed(1) + 'M' : Math.abs(n) >= 1e3 ? +(n / 1e3).toFixed(1) + 'k' : String(+n.toFixed(2)));

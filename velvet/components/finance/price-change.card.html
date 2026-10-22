@@ -1,0 +1,17 @@
+<!-- @dsCard group="29 Finance" viewport="960x250" name="Price change & money" subtitle="Direction colours, privacy masking, null is never zero" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:16px;align-items:center}.lbl{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);width:96px;flex:none}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const { PriceChange, Money, MoneyPrivacy, Switch } = window.VelvetUIDesignSystem_ee2bd8;
+const App=()=>{const[h,setH]=React.useState(false);const[mc,setMc]=React.useState('standard');React.useEffect(()=>{document.documentElement.dataset.marketColors=mc;},[mc]);return(<div className="pane">
+<div className="r"><span className="lbl">PriceChange</span><PriceChange value={1.84}/><PriceChange value={-0.62}/><PriceChange value={0}/><PriceChange value={null}/><PriceChange value={3.12} variant="pill"/><PriceChange value={-2.11} variant="solid"/><PriceChange value={12} format="bp" size="sm"/><PriceChange value={5.5} format="pp" arrow={false}/></div>
+<MoneyPrivacy hidden={h}><div className="r"><span className="lbl">Money</span><Money amount={208774} currency="PLN" digits={0} size="lg"/><Money amount={612.4} currency="USD" signed colored/><Money amount={-1840} currency="PLN" signed colored/><Money amount={3.4e12} currency="USD" compact/><Money amount={1299} currency="USD" currencyDisplay="symbol"/><Money amount={null} currency="EUR"/></div></MoneyPrivacy>
+<div className="r"><span className="lbl">Options</span><label style={{display:'inline-flex',gap:8,alignItems:'center',fontSize:13}}><input type="checkbox" checked={h} onChange={e=>setH(e.target.checked)}/>Hide balances (MoneyPrivacy)</label>{['standard','inverted','cvd'].map(v=><label key={v} style={{display:'inline-flex',gap:6,alignItems:'center',fontSize:13}}><input type="radio" name="mc" checked={mc===v} onChange={()=>setMc(v)}/>data-market-colors="{v}"</label>)}</div>
+</div>);};
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

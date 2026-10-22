@@ -1,5 +1,6 @@
 import { type JSX, mergeProps, Show, splitProps } from 'solid-js';
 
+import { callHandler } from '../../utils/callHandler';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { type HtmlProps, Polymorphic } from '../../utils/polymorphic';
@@ -63,6 +64,8 @@ export const ListItem = (props: ListItemProps) => {
     'clamp',
     'href',
     'onClick',
+    'onKeyDown',
+    'tabIndex',
     'class',
     'children',
   ]);
@@ -73,13 +76,23 @@ export const ListItem = (props: ListItemProps) => {
   const isAction = () => ['button', 'a', 'label'].includes(tag()) || nested();
 
   const onKeyDown: JSX.EventHandler<HTMLElement, KeyboardEvent> = (e) => {
-    if (e.target !== e.currentTarget || (e.key !== 'Enter' && e.key !== ' ')) return;
+    callHandler(local.onKeyDown, e);
+    if (e.defaultPrevented || !nested() || e.target !== e.currentTarget || (e.key !== 'Enter' && e.key !== ' ')) return;
     e.preventDefault();
-    e.currentTarget.click();
+    if (!local.disabled && !e.repeat) e.currentTarget.click();
+  };
+  const onClick: JSX.EventHandler<HTMLElement, MouseEvent> = (event) => {
+    if (local.disabled) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
+    callHandler(local.onClick, event);
   };
 
   return (
     <Polymorphic
+      {...rest}
       tag={tag()}
       class={cx(
         styles.listItem,
@@ -90,16 +103,15 @@ export const ListItem = (props: ListItemProps) => {
         local.disabled && styles.listItemVariantDisabled,
         local.class,
       )}
-      href={local.href}
+      href={local.disabled ? undefined : local.href}
       type={tag() === 'button' ? 'button' : undefined}
       disabled={tag() === 'button' ? local.disabled : undefined}
-      aria-disabled={tag() !== 'button' && local.disabled ? true : undefined}
-      aria-current={local.selected && tag() !== 'label' ? 'true' : undefined}
-      role={nested() ? 'button' : undefined}
-      tabIndex={nested() ? (local.disabled ? -1 : 0) : undefined}
-      onKeyDown={nested() ? onKeyDown : undefined}
-      onClick={local.onClick}
-      {...rest}
+      aria-disabled={tag() !== 'button' && local.disabled ? true : rest['aria-disabled']}
+      aria-current={local.selected && tag() !== 'label' ? 'true' : rest['aria-current']}
+      role={rest.role ?? (nested() ? 'button' : undefined)}
+      tabIndex={local.disabled && isAction() ? -1 : (local.tabIndex ?? (nested() ? 0 : undefined))}
+      onKeyDown={onKeyDown}
+      onClick={onClick}
     >
       <Show when={isPresent(local.leading)}>
         <span class={styles.listItemPartLeading}>{local.leading}</span>

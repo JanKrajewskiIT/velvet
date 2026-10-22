@@ -58,6 +58,21 @@
     color var(--motion-fast);
 }
 
+.nodeIcon {
+  display: inline-grid;
+  place-items: center;
+  width: 1em;
+  height: 1em;
+  font-size: var(--type-h3-size);
+  line-height: 0;
+}
+
+.nodeIcon svg {
+  display: block;
+  width: 1.1em;
+  height: 1.1em;
+}
+
 .navbarPartIndicator {
   position: absolute;
   top: var(--space-3);

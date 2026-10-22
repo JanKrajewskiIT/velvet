@@ -2,7 +2,7 @@ import { createSignal, For, type JSX, mergeProps, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
-import { Glyph } from '../primitives/Glyph';
+import { Glyph, renderIcon } from '../primitives/Glyph';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
 import styles from './Navbar.module.css';
@@ -95,7 +95,7 @@ export const Navbar = (props: NavbarProps) => {
       aria-current={current(item)}
       onClick={(e) => go(e, item)}
     >
-      <Show when={item.icon}>{(icon) => <Glyph name={icon()} />}</Show>
+      {renderIcon(item.icon)}
       {item.label}
     </a>
   );
@@ -192,7 +192,7 @@ export const Navbar = (props: NavbarProps) => {
                   aria-current={current(item)}
                   onClick={(e) => go(e, item)}
                 >
-                  <Show when={item.icon}>{(icon) => <Glyph name={icon()} />}</Show>
+                  {renderIcon(item.icon)}
                   <Text as="span" variant="label" tone="inherit">
                     {item.label}
                   </Text>

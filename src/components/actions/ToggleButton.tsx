@@ -4,6 +4,7 @@ import { createControllable } from '../../hooks/createControllable';
 import { callHandler } from '../../utils/callHandler';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { filledIcon } from '../display/IconFilled';
 import { Glyph } from '../primitives/Glyph';
 import { typographyClass } from '../primitives/typography';
 import styles from './ToggleButton.module.css';
@@ -15,21 +16,6 @@ const TOGGLE_CLASSES = {
   lg: styles.toggleVariantLg,
   icon: styles.toggleVariantIcon,
 } as const;
-
-/** Icons whose `-filled` twin replaces them while pressed. */
-const FILLED_TWINS: readonly string[] = [
-  'home',
-  'bell',
-  'user',
-  'folder',
-  'bookmark',
-  'heart',
-  'message-square',
-  'star',
-];
-
-const pressedIcon = (name: string, pressed: boolean): string =>
-  pressed && FILLED_TWINS.includes(name) ? `${name}-filled` : name;
 
 export interface ToggleButtonProps extends Omit<JSX.ButtonHTMLAttributes<HTMLButtonElement>, 'value'> {
   pressed?: boolean;
@@ -102,7 +88,7 @@ export const ToggleButton = (props: ToggleButtonProps) => {
       onClick={flip}
     >
       <Show when={typeof local.icon === 'string' ? local.icon : undefined} fallback={local.icon}>
-        {(name) => <Glyph name={pressedIcon(name(), on())} />}
+        {(name) => <Glyph name={filledIcon(name(), on())} />}
       </Show>
       {local.children}
     </button>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="QuantCore" description="Personal investing & trading platform — Recron-style navbar, environment bar with Kill Switch, Overview, Markets (GPW/US/global/FX/crypto + TradingView), Portfolio (holdings, import, TWR/MWR, decision journal, PIT-38/IKE tax, AI analysis), Strategies (automations, paper comparison, health/drift, run report, orders, risk), News & calendar, Operations" -->
+<helmet><script src="./ds-base.js"></script><script src="./qc-data.js"></script><style>:root:root{overflow:auto!important;height:auto!important;background:var(--bg-page)!important}html body{margin:0!important;padding:0!important;background:var(--bg-page)!important}</style></helmet>
+<div style="display:flex;flex-direction:column;min-height:100vh;box-sizing:border-box;background:var(--bg-page);color:var(--fg-primary);font:var(--type-body)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Navbar" variant="menubar" sticky="{{ true }}" logo="{{ logo }}" show-active-label="{{ false }}" on-logo-click="{{ goHome }}" logo-href="#overview" items="{{ navItems }}" active="{{ route }}" on-navigate="{{ navigate }}" actions="{{ navActions }}" label="QuantCore" hint-size="100%,64px"></x-import>
+{{ cmd }}{{ killDialog }}
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.EnvironmentBar" environment="{{ env }}" items="{{ envItems }}" connection="{{ conn }}" on-kill="{{ openKill }}" kill-disabled="{{ emergency }}" sticky="{{ true }}" top="var(--topbar-h)" hint-size="100%,48px"></x-import>
+<main style="display:flex;flex-direction:column;gap:var(--space-4);width:100%;max-width:1360px;margin:0 auto;box-sizing:border-box;min-width:0;padding:var(--space-8) var(--space-6) var(--space-16)">
+<sc-if value="{{ stale }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Alert" tone="warning" icon="refresh" title="View is stale — connection lost" action="{{ refetchAction }}" hint-size="100%,72px">Last snapshot 14:32:07. Losing the connection does not change the trading state or broker-side protections.</x-import>
+</sc-if>
+<sc-if value="{{ emergency }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Alert" tone="danger" variant="solid" icon="stop" title="EMERGENCY_STOP active" hint-size="100%,72px">New orders are blocked on ACC-PAPER-01. Reset requires the RiskOwner role per policy.</x-import>
+</sc-if>
+<sc-if value="{{ r.overview }}" hint-placeholder-val="{{ true }}"><dc-import name="QcOverview" app="{{ app }}" hint-size="100%,1300px"></dc-import></sc-if>
+<sc-if value="{{ r.markets }}" hint-placeholder-val="{{ false }}"><dc-import name="QcMarkets" app="{{ app }}" hint-size="100%,1000px"></dc-import></sc-if>
+<sc-if value="{{ r.portfolio }}" hint-placeholder-val="{{ false }}"><dc-import name="QcPortfolio" app="{{ app }}" hint-size="100%,1000px"></dc-import></sc-if>
+<sc-if value="{{ r.strategies }}" hint-placeholder-val="{{ false }}"><dc-import name="QcStrategies" app="{{ app }}" hint-size="100%,1000px"></dc-import></sc-if>
+<sc-if value="{{ r.news }}" hint-placeholder-val="{{ false }}"><dc-import name="QcNews" app="{{ app }}" hint-size="100%,1000px"></dc-import></sc-if>
+<sc-if value="{{ r.operations }}" hint-placeholder-val="{{ false }}"><dc-import name="QcOperations" app="{{ app }}" hint-size="100%,1000px"></dc-import></sc-if>
+</main>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.ToastRegion" hint-size="0,0">
+<sc-for list="{{ toasts }}" as="t" hint-placeholder-count="0">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Toast" tone="{{ t.tone }}" title="{{ t.title }}" description="{{ t.description }}" duration="{{ 4000 }}" on-close="{{ t.close }}" hint-size="320px,64px"></x-import>
+</sc-for>
+</x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;env&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;paper&quot;,&quot;demo&quot;,&quot;live&quot;],&quot;default&quot;:&quot;paper&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype&quot;},&quot;tradingState&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;NORMAL&quot;,&quot;SUSPENDED&quot;,&quot;CLOSE_ONLY&quot;,&quot;EMERGENCY_STOP&quot;],&quot;default&quot;:&quot;NORMAL&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype&quot;},&quot;stale&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Prototype&quot;},&quot;startRoute&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;overview&quot;,&quot;research&quot;,&quot;trading&quot;,&quot;risk&quot;,&quot;operations&quot;],&quot;default&quot;:&quot;overview&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype&quot;}}">
+class Component extends DCLogic {
+  state = (() => { let s = {}; try { s = JSON.parse(localStorage.getItem('qc-proto') || '{}'); } catch (e) {} return { route: ['overview', 'markets', 'portfolio', 'strategies', 'news', 'operations'].includes(s.route) ? s.route : null, toasts: [], killOpen: false, trading: null, mode: null, refetched: false, discreet: false, cmdOpen: false }; })();
+  componentDidMount() { this._t = setInterval(() => { if (window.QcData && window.VelvetUIDesignSystem_ee2bd8 && window.VelvetUIDesignSystem_ee2bd8.Navbar && window.VelvetUIDesignSystem_ee2bd8.EnvironmentBar && window.VelvetUIDesignSystem_ee2bd8.ConfirmDialog) { clearInterval(this._t); this.forceUpdate(); } }, 40); }
+  componentWillUnmount() { clearInterval(this._t); }
+  componentDidUpdate() { const s = !!this.props.stale; if (this._s !== undefined && this._s !== s) this.setState({ refetched: false }); this._s = s; }
+  go(route) { this.setState({ route, cmdOpen: false }, () => { try { localStorage.setItem('qc-proto', JSON.stringify({ route })); } catch (e) {} window.scrollTo(0, 0); }); }
+  toast(title, tone, description) { const id = Date.now() + Math.random(); this.setState((s) => ({ toasts: [...s.toasts, { id, title, tone: tone || 'success', description }] })); }
+  renderVals() {
+    const D = window.QcData, NS = window.VelvetUIDesignSystem_ee2bd8 || {};
+    if (!D || !NS.Navbar || !NS.EnvironmentBar || !NS.ConfirmDialog) return { r: {}, toasts: [] };
+    const h = React.createElement;
+    const env = this.props.env || 'paper';
+    const route = this.state.route || this.props.startRoute || 'overview';
+    const trading = this.state.trading || this.props.tradingState || 'NORMAL';
+    const mode = this.state.mode || 'SEMI_AUTO';
+    const stale = !!this.props.stale && !this.state.refetched;
+    const discreet = this.state.discreet;
+    const r = {}; r[route] = true;
+    const toggleDiscreet = () => { const v = !discreet; this.setState({ discreet: v }); this.toast(v ? 'Balances hidden' : 'Balances visible', 'info', v ? 'Safe for screen sharing · toggle in the account menu' : ''); };
+    const app = {
+      D, NS, env, mode, trading, stale, route, discreet,
+      money: (s) => (discreet ? '•••••' : s),
+      go: (x, sub) => { if (sub) window.__qcSub = sub; this.go(x); },
+      toast: (t, tone, d) => this.toast(t, tone, d),
+      openKill: () => this.setState({ killOpen: true }),
+      setMode: (m) => { this.setState({ mode: m }); this.toast('Mode changed to ' + m, 'success', 'Recorded in audit · correlation ' + Math.random().toString(16).slice(2, 8)); }
+    };
+    window.__qc = app;
+    const ENV = { paper: 'PAPER', demo: 'DEMO', live: 'LIVE' }[env];
+    const goItems = [['overview', 'Overview', 'home-filled'], ['markets', 'Markets', 'trending-up'], ['portfolio', 'Portfolio', 'briefcase'], ['strategies', 'Strategies', 'zap'], ['news', 'News & calendar', 'file-text'], ['operations', 'Operations', 'server']];
+    return {
+      app, r, route, stale, env, emergency: trading === 'EMERGENCY_STOP',
+      envItems: [{ label: 'Mode', value: mode }, { label: 'Trading', value: trading }, { label: 'Process', value: 'RUNNING' }, { label: 'Account', value: D.account.id }],
+      conn: { state: stale ? 'stale' : 'live', label: stale ? 'Stale · 14:32:07' : 'Live · ' + D.account.observedAt },
+      openKill: app.openKill,
+      killDialog: h(NS.ConfirmDialog, { open: this.state.killOpen, tone: 'danger', title: 'Activate Kill Switch?', confirmLabel: 'Activate EMERGENCY_STOP', cancelLabel: 'Cancel', requireText: 'STOP',
+        description: 'Scope: account ' + D.account.id + ' · environment ' + ENV + '. New orders will be blocked and working orders cancelled. Broker-side SL/TP protection stays in place. Reset requires the RiskOwner role.',
+        onCancel: () => this.setState({ killOpen: false }),
+        onConfirm: () => { this.setState({ killOpen: false, trading: 'EMERGENCY_STOP' }); this.toast('EMERGENCY_STOP active', 'danger', D.account.id + ' · recorded in audit'); } }),
+      refetchAction: h(NS.Button, { size: 'sm', variant: 'secondary', iconLeft: 'refresh', onClick: () => { this.setState({ refetched: true }); this.toast('Fresh snapshot loaded', 'success', 'Ledger v' + D.account.ledgerVersion); } }, 'Fetch again'),
+      logo: NS.BrandLogo ? h(NS.BrandLogo, { brand: 'quantcore', tone: 'inverse', size: 28 }) : 'QuantCore',
+      navItems: goItems.map(([id, label, icon]) => ({ id, label: id === 'news' ? 'News' : label, icon })),
+      navigate: (id) => this.go(id), goHome: () => this.go('overview'),
+      navActions: h(React.Fragment, null,
+        NS.NavbarChip && h(NS.NavbarChip, { icon: 'briefcase', collapse: true, label: 'Account ' + D.account.id + ' — environment ' + ENV, onClick: () => this.go('portfolio') }, ENV + ' · ' + (discreet ? '•••••' : D.fmt(D.account.equity, 0) + ' USD')),
+        discreet && NS.NavbarChip ? h(NS.NavbarChip, { icon: 'eye-off', iconOnly: true, pressed: true, label: 'Balances hidden — show balances', onClick: toggleDiscreet }) : null,
+        h(NS.SearchTrigger, { placeholder: 'Search', onOpen: () => this.setState({ cmdOpen: true }) }),
+        h(NS.NotificationCenter, { items: D.alerts.map((a) => ({ id: a.id, title: a.title, body: a.key, time: a.last, unread: a.state === 'Open', tone: a.sev, icon: a.sev === 'danger' ? 'triangle-alert' : a.sev === 'warning' ? 'clock' : 'info' })), onItemClick: () => this.go('operations') }),
+        h(NS.NavbarUser, { name: D.user.name, email: D.user.email, meta: D.user.role + ' · MFA', compact: true,
+          items: [{ label: discreet ? 'Show balances' : 'Hide balances', icon: discreet ? 'eye' : 'eye-off', onSelect: toggleDiscreet }, { label: 'Access token & scopes', icon: 'key', onSelect: () => this.toast('Scopes: ' + D.user.scopes.join(', '), 'info', 'Token lives only in this tab’s memory') }, { label: 'Audit log', icon: 'file-signature', onSelect: () => this.go('operations') }, { label: 'Settings', icon: 'settings' }],
+          theme: this.state.theme || 'light', onThemeChange: (t) => { this.setState({ theme: t }); const dark = t === 'dark' || (t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches); document.documentElement.dataset.theme = dark ? 'dark' : 'light'; },
+          onSignOut: () => this.toast('Token cleared from tab memory', 'neutral') })),
+      cmd: h(NS.CommandPalette, { open: this.state.cmdOpen, onClose: () => this.setState({ cmdOpen: false }), placeholder: 'Search instruments, automations, orders…', groups: [
+        { label: 'Go to', items: goItems.map(([id, l, ic]) => ({ id: 'go-' + id, label: l, icon: ic, onSelect: () => this.go(id) })) },
+        { label: 'Instruments', items: Object.values(D.markets).flat().map((x) => ({ id: 'i-' + x.sym, label: x.sym, description: x.name + ' · ' + x.src, icon: 'trending-up', keywords: [x.name], onSelect: () => { window.__qcSym = x.sym; this.go('markets'); } })) },
+        { label: 'Automations', items: D.automations.map((a) => ({ id: a.id, label: a.name, description: a.approach + ' · ' + a.tf + ' · ' + a.stage, icon: 'zap', onSelect: () => { window.__qcSub = 'automations'; this.go('strategies'); } })) },
+        { label: 'Orders', items: D.orders.map((o) => ({ id: o.id, label: o.id, description: o.inst + ' · ' + o.side + ' · ' + o.state, icon: 'swap-vertical', keywords: [o.inst], onSelect: () => { window.__qcSub = 'orders'; this.go('strategies'); } })) },
+        { label: 'Actions', items: [{ id: 'cr', label: 'Change requests', icon: 'file-signature', onSelect: () => { window.__qcSub = 'changes'; this.go('operations'); } }, { id: 'ds', label: 'Datasets & providers', icon: 'database', onSelect: () => { window.__qcSub = 'data'; this.go('operations'); } }, { id: 'kill', label: 'Kill Switch…', icon: 'stop', onSelect: () => this.setState({ cmdOpen: false, killOpen: true }) }] }
+      ] }),
+      toasts: this.state.toasts.map((t) => ({ ...t, close: () => this.setState((s) => ({ toasts: s.toasts.filter((x) => x.id !== t.id) })) }))
+    };
+  }
+}
+</script>
+</body>
+</html>

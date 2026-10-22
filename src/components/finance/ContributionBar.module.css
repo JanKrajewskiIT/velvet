@@ -1,0 +1,74 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2-5, 10px);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, var(--contrib-label, 180px)) minmax(0, 1fr) 56px;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.label {
+  font-size: var(--type-body-sm-size);
+  color: var(--fg-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.track {
+  position: relative;
+  height: 10px;
+  border-radius: var(--radius-xs);
+  background: var(--bg-subtle);
+}
+
+.axis {
+  position: absolute;
+  left: 50%;
+  top: -3px;
+  bottom: -3px;
+  width: 1px;
+  background: var(--border-strong);
+}
+
+.bar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: var(--radius-xs);
+  background: var(--market-up-solid);
+}
+
+.bar[data-dir='down'] {
+  background: var(--market-down-solid);
+}
+
+.value {
+  font: 600 var(--type-caption-size)/1 var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  color: var(--market-flat-fg);
+}
+
+.value[data-dir='up'] {
+  color: var(--market-up-fg);
+}
+
+.value[data-dir='down'] {
+  color: var(--market-down-fg);
+}
+
+@media (width <= 520px) {
+  .row {
+    grid-template-columns: minmax(0, 1fr) 56px;
+  }
+
+  .track {
+    grid-column: 1/-1;
+    grid-row: 2;
+  }
+}

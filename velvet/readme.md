@@ -122,6 +122,7 @@ Voice: **calm, precise, quietly confident.** Velvet is premium without being pre
 ## Brand mark
 **No logo was provided.** Wherever a mark is needed, the name is set in type as a placeholder wordmark: `velvet/ui` in Space Grotesk Bold (−4% tracking, “/ui” at 55% opacity), velvet on light surfaces or white on velvet. Replace with a real logo in `assets/` when available.
 **Recron mark (additional option).** Ported from Recron and rebuilt on Velvet foundations: `<BrandLogo brand="recron" />` — the Recron vector logotype: “R” signet with circuit-node stem + wordmark. Signet fills with `--action-primary`, wordmark with `--fg-primary` (both follow the theme); `tone="inverse"` turns both `--on-color-fg` on brand fills. Clear space 0.5× height; min 32px tall.
+**QuantCore mark (additional option).** `<BrandLogo brand="quantcore" />` — the QuantCore vector logotype: “Q” signet (with inner dot) in `--action-primary` + “uantcore” wordmark in `--fg-primary`; `tone="inverse"` on brand fills; `variant="mark"` = signet only. Same clear-space / min-size rules as Recron. Paths in `components/display/quantcore-logo-data.js`.
 ## Fonts
 Space Grotesk, Hanken Grotesk (incl. italic) and JetBrains Mono are self-hosted as variable woff2 in `fonts/` (latin + latin-ext subsets — covers Polish), declared in `tokens/fonts.css`. No external requests. Tokens: `--font-display`, `--font-sans`, `--font-mono`.
 
@@ -161,7 +162,7 @@ Generated from imports — what each component is built from. Atoms live in `com
 - **VirtualList** → EmptyText
 
 ### display
-- **BrandLogo** → R_MARK, R_WORD
+- **BrandLogo** → R_MARK, R_WORD, Q_MARK, Q_WORD
 - **Card** → Surface
 - **MarkdownEditor** → EmptyText, FieldLabel, Button, Glyph, Markdown, Dialog, Segmented, SegmentedItem
 - **StructuredCard** → Surface
@@ -266,6 +267,7 @@ Generated from imports — what each component is built from. Atoms live in `com
 - **media/** — `VideoPlayer` + `PlayerButton` (→ Glyph), `AudioPlayer` (→ PlayerButton, Glyph), `ImageCropper` (→ IconButton, Slider)
 - **charts/** — `Gauge`, `FunnelChart` (→ Glyph), `Gantt`
 - **display/** — `QRCode` (`encodeQR`), `Watermark`
+- **finance/** (added 2026-10 for QuantCore) — `PriceChange` (→ Glyph), `Money` + `MoneyPrivacy` context, `InstrumentLabel`, `EnvironmentBar` (→ Button, Dot), `DataState` (→ Dot, Glyph), `RangeBandChart` (chart.css + useSize `niceRange`), `DirectionBadge` (→ Glyph), `ContributionBar`, `ValueShift` (→ Glyph), `NewsItem` (→ Tag, Dot). Also added for QuantCore: **data/** `CellStack`, `UsageMeter` (→ Meter), `MetricGroup`; **navigation/** `NavbarChip`; **feedback/** `GateList` (→ Glyph); **forms/** `CodeEditor` (`highlightCode`, --code-* tokens). Tokens: `tokens/sys-market.css` — `--market-up-*` / `--market-down-*` / `--market-flat-*` (direction never reuses status names), `--env-{research,paper,demo,live}-*`, `--market-band*`; `data-market-colors="standard|inverted|cvd"` on any subtree. `LineChart` now supports negative values and `includeZero={false}`.
 - **data/** — `DiffViewer` (`diffLines`), `LogViewer` (→ Glyph) — both on the `.vui-code` surface
 
 Not added (already covered): HoverCard = `Popover openOn="hover"` · RangeSlider = `Slider value={[lo,hi]}` · Result page = `StatusPage` · Image = `MediaFrame` · Drawer = `Dialog placement` · SortableList = `EditableCollection` / `Kanban` · Combobox = `Autocomplete` · AreaChart = `LineChart area` / `BarChart stacked`.

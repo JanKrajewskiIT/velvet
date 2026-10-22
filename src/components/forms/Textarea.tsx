@@ -2,6 +2,7 @@ import { createEffect, type JSX, mergeProps, splitProps } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { cx } from '../../utils/cx';
+import { joinIdRefs } from '../../utils/joinIdRefs';
 import { Control } from '../primitives/Control';
 import { Field } from '../primitives/Field';
 import { typographyClass } from '../primitives/typography';
@@ -71,9 +72,11 @@ export const Textarea = (props: TextareaProps) => {
     'defaultValue',
     'onBlur',
     'onInput',
+    'aria-describedby',
+    'aria-invalid',
   ]);
   const [text, setText] = createControllable({ value: () => local.value, defaultValue: local.defaultValue });
-  const validation = createValidation(() => local.validate);
+  const validation = createValidation(() => local.validate, text);
   const counterMax = () => (local.showCount && local.maxLength ? Number(local.maxLength) : undefined);
   const resize = () => local.resize ?? (local.autoResize ? 'none' : 'vertical');
   let area!: HTMLTextAreaElement;
@@ -127,15 +130,14 @@ export const Textarea = (props: TextareaProps) => {
             required={local.required}
             maxLength={local.maxLength}
             value={text()}
-            aria-invalid={control.invalid || undefined}
-            aria-describedby={control.describedBy}
+            aria-invalid={control.invalid || local['aria-invalid']}
+            aria-describedby={joinIdRefs(local['aria-describedby'], control.describedBy)}
             onBlur={(e) => {
-              validation.blur(e.currentTarget.value);
+              validation.blur();
               callHandler(local.onBlur, e);
             }}
             onInput={(e) => {
               setText(e.currentTarget.value);
-              validation.input(e.currentTarget.value);
               callHandler(local.onInput, e);
             }}
           />

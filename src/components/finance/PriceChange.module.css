@@ -1,0 +1,63 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  font-size: inherit;
+  line-height: 1.2;
+  white-space: nowrap;
+  color: var(--market-flat-fg);
+}
+
+.root[data-dir='up'] {
+  color: var(--market-up-fg);
+}
+
+.root[data-dir='down'] {
+  color: var(--market-down-fg);
+}
+
+.icon {
+  --glyph-size: 0.9em;
+}
+
+.root[data-size='sm'] {
+  font-size: var(--type-caption-size);
+}
+
+.root[data-size='lg'] {
+  font-size: var(--font-size-xl, 20px);
+}
+
+.root[data-variant='pill'] {
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-full);
+  background: var(--market-flat-bg);
+}
+
+.root[data-variant='pill'][data-dir='up'] {
+  background: var(--market-up-bg);
+}
+
+.root[data-variant='pill'][data-dir='down'] {
+  background: var(--market-down-bg);
+}
+
+.root[data-variant='solid'] {
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  color: var(--on-color-fg);
+  background: var(--market-flat-solid);
+}
+
+.root[data-variant='solid'][data-dir='up'] {
+  color: var(--on-color-fg);
+  background: var(--market-up-solid);
+}
+
+.root[data-variant='solid'][data-dir='down'] {
+  color: var(--on-color-fg);
+  background: var(--market-down-solid);
+}

@@ -1,9 +1,19 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { createMemo, createSignal, createUniqueId, type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import {
+  createEffect,
+  createMemo,
+  createSignal,
+  createUniqueId,
+  type JSX,
+  mergeProps,
+  Show,
+  splitProps,
+} from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { joinIdRefs } from '../../utils/joinIdRefs';
 import { Control } from '../primitives/Control';
 import { ControlInput } from '../primitives/ControlInput';
 import { Field } from '../primitives/Field';
@@ -11,7 +21,9 @@ import { Glyph } from '../primitives/Glyph';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
 import { callHandler } from './callHandler';
+import { createFormValidation } from './createFormValidation';
 import { createPhoneCountryPopup } from './createPhoneCountryPopup';
+import { FormValue } from './FormValue';
 import { formatNational, nationalLength, onlyDigits, PHONE_COUNTRIES, type PhoneCountry } from './phoneCountries';
 import { PhoneCountryList } from './PhoneCountryList';
 import styles from './PhoneInput.module.css';
@@ -90,15 +102,21 @@ export const PhoneInput = (props: PhoneInputProps) => {
     'countryLabel',
     'size',
     'disabled',
+    'readOnly',
     'id',
     'name',
+    'form',
+    'required',
     'class',
     'onBlur',
     'onInput',
+    'aria-describedby',
+    'aria-invalid',
   ]);
   const autoId = createUniqueId();
   const i18n = useI18n();
   const translate = useTranslate();
+  const validation = createFormValidation();
   const regionNames = createMemo(() => new Intl.DisplayNames(i18n.locale(), { type: 'region' }));
   const countryName = (item: PhoneCountry) =>
     local.countries === PHONE_COUNTRIES ? (regionNames().of(item.code) ?? item.name) : item.name;
@@ -128,6 +146,7 @@ export const PhoneInput = (props: PhoneInputProps) => {
   const [touched, setTouched] = createSignal(false);
   const [root, setRoot] = createSignal<HTMLElement>();
   let input!: HTMLInputElement;
+  const editable = () => !local.disabled && !local.readOnly;
 
   const e164 = (digits: string, target: PhoneCountry) => (digits ? `+${target.dial}${digits}` : '');
   const emit = (digits: string, target: PhoneCountry) =>
@@ -137,11 +156,13 @@ export const PhoneInput = (props: PhoneInputProps) => {
       valid: digits.length === nationalLength(target),
     });
   const setDigits = (raw: string) => {
+    if (!editable()) return;
     const digits = raw.slice(0, nationalLength(country()) + EXTRA_DIGITS);
     setDigitState(digits);
     emit(digits, country());
   };
   const pickCountry = (next: PhoneCountry) => {
+    if (!editable() || !open()) return;
     setCountryCode(next.code);
     emit(digitState(), next);
     setOpen(false);
@@ -160,29 +181,45 @@ export const PhoneInput = (props: PhoneInputProps) => {
     root,
     onPick: pickCountry,
   });
+  createEffect(() => {
+    if (!editable()) setOpen(false);
+  });
   return (
     <Field
       label={local.label ?? translate('velvet.forms.phoneInput.label')}
       hint={local.hint}
       error={local.error || lengthError()}
       optional={local.optional}
+      required={local.required}
       id={id()}
     >
       {(control) => (
         <div ref={setRoot} class={cx(styles.select, styles.phone)}>
-          <Control size={local.size} invalid={control.invalid} disabled={local.disabled} class={local.class}>
+          <Control
+            size={local.size}
+            invalid={control.invalid || validation.invalid()}
+            disabled={local.disabled}
+            readOnly={local.readOnly}
+            class={local.class}
+          >
             <button
               type="button"
               class={cx(styles.phonePartCountry, typographyClass('body'))}
               role="combobox"
-              disabled={local.disabled}
+              disabled={!editable()}
               aria-label={`${countryLabel()}: ${countryName(country())} +${country().dial}`}
               aria-haspopup="listbox"
               aria-expanded={open()}
               aria-controls={listId()}
               aria-activedescendant={open() && active() >= 0 ? optionId(active()) : undefined}
-              onClick={() => (open() ? setOpen(false) : openList())}
-              onKeyDown={onKeyDown}
+              onClick={() => {
+                if (!editable()) return;
+                if (open()) setOpen(false);
+                else openList();
+              }}
+              onKeyDown={(event) => {
+                if (editable()) onKeyDown(event);
+              }}
             >
               <Text as="span" variant="kbd" tone="inherit" class={styles.phonePartCode}>
                 {country().code}
@@ -199,14 +236,18 @@ export const PhoneInput = (props: PhoneInputProps) => {
               }}
               id={control.id}
               type="tel"
+              form={local.form}
               inputMode="tel"
               autocomplete="tel-national"
               disabled={local.disabled}
+              readOnly={local.readOnly}
               placeholder={country().mask.replace(/#/gu, '0')}
               value={formatNational(digitState(), country().mask)}
-              aria-invalid={control.invalid || undefined}
-              aria-describedby={control.describedBy}
+              aria-required={local.required || undefined}
+              aria-invalid={control.invalid || validation.invalid() || local['aria-invalid']}
+              aria-describedby={joinIdRefs(local['aria-describedby'], validation.describedBy(control.describedBy))}
               onInput={(e) => {
+                if (!editable()) return;
                 setDigits(onlyDigits(e.currentTarget.value));
                 e.currentTarget.value = formatNational(digitState(), country().mask);
                 callHandler(local.onInput, e);
@@ -217,9 +258,23 @@ export const PhoneInput = (props: PhoneInputProps) => {
               }}
             />
           </Control>
-          <Show when={local.name}>
-            <input type="hidden" name={local.name} value={e164(digitState(), country())} />
-          </Show>
+          <FormValue
+            name={local.name}
+            form={local.form}
+            required={local.required}
+            disabled={local.disabled}
+            value={e164(digitState(), country())}
+            validation={validation}
+            focusInvalid={() => input.focus()}
+            onReset={() => {
+              setCountryCode(local.defaultCountry);
+              setDigitState(onlyDigits(local.defaultValue));
+              setTouched(false);
+              setOpen(false);
+              input.value = formatNational(digitState(), country().mask);
+              emit(digitState(), country());
+            }}
+          />
           <Show when={open()}>
             <PhoneCountryList
               ref={floating.ref}

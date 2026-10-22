@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script><script src="./qc-data.js"></script><script src="./tv-chart.js"></script></helmet>
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.PageHeader" eyebrow="Strategies · Run report" title="RUN-0931 · variant B — ATR stop 2.5" status="{{ status }}" description="TrendPullback v3 on XAU/USD H1. Shows the fetched page only — no hidden aggregation of the run, no gap interpolation." meta="{{ meta }}" actions="{{ headActions }}" tabs="{{ tabs }}" active-tab="{{ tab }}" on-tab-change="{{ setTab }}" hint-size="100%,180px"></x-import>
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-3);padding:var(--space-3) var(--space-4);border-radius:var(--radius-lg);background:var(--bg-subtle);font-size:var(--type-body-sm-size);color:var(--fg-secondary)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.IconTile" icon="layers" size="sm" hint-size="28px,28px"></x-import>
+<span>Page <b style="color:var(--fg-primary)">{{ page }}</b> · 100 rows · cursor <span style="font-family:var(--font-mono);color:var(--fg-primary)">{{ cursor }}</span> · pinned ledger v417</span>
+<div style="display:flex;gap:var(--space-2);margin-left:auto">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Button" size="sm" variant="secondary" icon-left="download" on-click="{{ savePage }}" hint-size="120px,32px">Save JSON</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Button" size="sm" icon-right="chevron-right" on-click="{{ nextPage }}" hint-size="90px,32px">Next</x-import>
+</div>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:var(--space-4);align-items:flex-start">
+<div style="flex:2 1 560px;display:flex;flex-direction:column;gap:var(--space-4);min-width:0">
+<sc-if value="{{ isPrices }}" hint-placeholder-val="{{ true }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Price · XAU/USD H1" description="TradingView chart · run markers listed below" padding="sm" hint-size="100%,460px">
+<x-import component-from-global-scope="qc-tv-chart" symbol="OANDA:XAUUSD" interval="60" style="height:420px" hint-size="100%,420px"></x-import>
+</x-import>
+</sc-if>
+<sc-if value="{{ isEquity }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Equity and drawdown" description="Capital 100,000 USD · after costs · OOS from 2024-07" hint-size="100%,520px">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.LineChart" data="{{ equity }}" series="{{ eqSeries }}" height="{{ 220 }}" area="{{ true }}" curved="{{ true }}" include-zero="{{ false }}" label="Equity" hint-size="100%,220px"></x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.LineChart" data="{{ equity }}" series="{{ ddSeries }}" height="{{ 140 }}" area="{{ true }}" label="Drawdown %" hint-size="100%,140px"></x-import>
+</div>
+</x-import>
+</sc-if>
+<sc-if value="{{ isCosts }}" hint-placeholder-val="{{ false }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Costs" description="On this page · USD" hint-size="100%,320px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.BarChart" data="{{ costs }}" series="{{ costSeries }}" stacked="{{ true }}" height="{{ 240 }}" label="Costs" hint-size="100%,240px"></x-import>
+</x-import>
+</sc-if>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Signals, orders and fills" description="Separate series — a signal is never shown as an execution" padding="none" hint-size="100%,300px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Table" layout="fixed" columns="{{ markerCols }}" rows="{{ markers }}" row-key="k" hint-size="100%,260px"></x-import>
+</x-import>
+</div>
+<div style="flex:1 1 320px;display:flex;flex-direction:column;gap:var(--space-4);min-width:0">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Manifest" description="Versions pinned to this run" hint-size="100%,420px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.DescriptionList" items="{{ manifest }}" hint-size="100%,360px"></x-import>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Variant result" description="Full period · after costs" hint-size="100%,200px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.MetricGroup" items="{{ kpis }}" columns="{{ 2 }}" size="lg" hint-size="100%,64px"></x-import>
+</x-import>
+</div>
+</div>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Variant comparison" description="Assumption differences are explicit — normalised instrument prices are not an achievable strategy return" padding="none" hint-size="100%,320px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Table" layout="fixed" columns="{{ runCols }}" rows="{{ runs }}" row-key="k" hint-size="100%,280px"></x-import>
+</x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { tab: 'prices', page: 1 };
+  renderVals() {
+    const app = this.props.app || window.__qc;
+    const NS = window.VelvetUIDesignSystem_ee2bd8;
+    if (!app || !NS || !NS.MetricGroup) { clearTimeout(this._w); this._w = setTimeout(() => this.forceUpdate(), 80); return { kpis: [] }; }
+    const { D } = app; const h = React.createElement; const tab = this.state.tab; const mono = { fontFamily: 'var(--font-mono)' };
+    const kindTone = { Signal: 'brand', Order: 'info', Fill: 'success' };
+    return {
+      tab, setTab: (t) => this.setState({ tab: t }),
+      isPrices: tab === 'prices' || tab === 'decisions', isEquity: tab === 'equity', isCosts: tab === 'costs',
+      status: { label: 'OOS PASS', tone: 'success' },
+      meta: [{ icon: 'database', label: 'DS-XAU-H1-c7' }, { icon: 'git-branch', label: 'TrendPullback v3' }, { icon: 'calendar', label: '21 Oct · 18:44' }],
+      headActions: h(React.Fragment, null, h(NS.Button, { variant: 'secondary', size: 'sm', iconLeft: 'folder-open', onClick: () => app.toast('Local file opened', 'info', 'RunReportDataPage is never uploaded') }, 'Open file'), h(NS.Button, { size: 'sm', iconLeft: 'git-merge', onClick: () => app.toast('Promotion to Paper proposed', 'success', 'Needs RiskOwner review · CR-215') }, 'Promote to Paper')),
+      tabs: [{ value: 'prices', label: 'Prices & indicators' }, { value: 'equity', label: 'Equity' }, { value: 'decisions', label: 'Decisions & fills', count: 5 }, { value: 'costs', label: 'Costs' }],
+      page: this.state.page, cursor: 'c_8f2' + this.state.page + 'a…91e',
+      nextPage: () => { this.setState({ page: this.state.page + 1 }); app.toast('Page replaced', 'info', 'Continuation does not merge pages'); },
+      savePage: () => app.toast('Page saved as JSON', 'success', 'RUN-0931-B-p' + this.state.page + '.json'),
+      price: D.price, priceSeries: [{ key: 'close', label: 'Close', color: 'var(--dv-1)' }, { key: 'ema', label: 'EMA 8', color: 'var(--dv-2)' }],
+      equity: D.equity, eqSeries: [{ key: 'equity', label: 'Equity', color: 'var(--dv-1)' }], ddSeries: [{ key: 'drawdown', label: 'Drawdown %', color: 'var(--dv-2)' }],
+      costs: [{ label: 'Wk 40', spread: 42, comm: 18, fin: 9 }, { label: 'Wk 41', spread: 38, comm: 14, fin: 11 }, { label: 'Wk 42', spread: 51, comm: 22, fin: 10 }, { label: 'Wk 43', spread: 29, comm: 9, fin: 12 }],
+      costSeries: [{ key: 'spread', label: 'Spread', color: 'var(--dv-1)' }, { key: 'comm', label: 'Commission', color: 'var(--dv-3)' }, { key: 'fin', label: 'Financing', color: 'var(--dv-4)' }],
+      markers: D.markers.map((m, k) => ({ ...m, k })),
+      markerCols: [
+        { key: 'at', label: 'Event time', width: 130, render: (r) => h('span', { style: mono }, '22 Oct ' + r.at) },
+        { key: 'kind', label: 'Series', width: 120, render: (r) => h(NS.Badge, { size: 'sm', tone: kindTone[r.kind] || 'neutral' }, r.kind) },
+        { key: 'label', label: 'Details', render: (r) => h('span', { style: { ...mono, fontSize: 13, color: r.tone === 'warning' ? 'var(--status-warning-fg)' : undefined } }, r.label) }
+      ],
+      manifest: D.manifest,
+      kpis: [{ value: '+38.2%', label: 'return' }, { value: '−9.1%', label: 'max drawdown' }, { value: '1.34', label: 'Sharpe' }, { value: '298', label: 'trades' }],
+      runs: D.runs.map((r, k) => ({ ...r, k })),
+      runCols: [
+        { key: 'id', label: 'Run', render: (r) => h('div', { style: { display: 'flex', flexDirection: 'column' } }, h('span', { style: { ...mono, fontWeight: 600 } }, r.id), h('span', { style: { fontSize: 12, color: 'var(--fg-secondary)' } }, r.variant)) },
+        { key: 'strategy', label: 'Strategy', hideOnMobile: true },
+        { key: 'env', label: 'Scope', render: (r) => h(NS.Badge, { size: 'sm', variant: 'outline' }, r.env) },
+        { key: 'period', label: 'Period', hideOnMobile: true, render: (r) => h('span', { style: { ...mono, fontSize: 12 } }, r.period) },
+        { key: 'ret', label: 'Return', align: 'right', render: (r) => h('span', { style: mono }, r.ret == null ? '—' : D.signed(r.ret, 1) + '%') },
+        { key: 'dd', label: 'Max DD', align: 'right', render: (r) => h('span', { style: mono }, r.dd == null ? '—' : D.signed(r.dd, 1) + '%') },
+        { key: 'sharpe', label: 'Sharpe', align: 'right', render: (r) => h('span', { style: mono }, r.sharpe == null ? '—' : r.sharpe.toFixed(2)) },
+        { key: 'oos', label: 'OOS', render: (r) => h(NS.Badge, { size: 'sm', tone: r.oos === 'OOS PASS' ? 'success' : r.oos === 'OOS FAIL' ? 'danger' : 'warning' }, r.oos) }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

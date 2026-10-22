@@ -1,0 +1,14 @@
+<!-- @dsCard group="26 Data" viewport="960x170" name="Cell stack" subtitle="Two-line table cell — ID + time, name + meta, price + fill" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.bundle.css"><script src="../../assets/theme-toggle.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:16px;align-items:center}.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}</style>
+<link rel="stylesheet" href="../card.css"></head><body><div id="root"></div>
+<script type="text/babel">
+const { CellStack, Table, DirectionBadge } = window.VelvetUIDesignSystem_ee2bd8;
+const rows=[{id:'ORD-7F21',at:'22 Oct 05:00:12',inst:'XAU/USD',acct:'Paper · Metals',px:'2,421.00',fill:'2,421.40 · 1.7 bp'},{id:'ORD-7E90',at:'21 Oct 16:20:41',inst:'XAG/USD',acct:'Paper · Metals',px:'29.41',fill:'29.44 · 10.2 bp'}];
+const App=()=>(<Table rowKey="id" rows={rows} columns={[{key:'id',label:'Order',render:r=><CellStack primary={r.id} secondary={r.at} mono/>},{key:'inst',label:'Instrument',render:r=><CellStack primary={r.inst} secondary={r.acct} mono leading={<DirectionBadge direction="BUY" size="sm"/>}/>},{key:'px',label:'Expected / fill',align:'right',render:r=><CellStack primary={r.px} secondary={r.fill} mono secondaryMono align="right" strong={false}/>}]}/>);
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

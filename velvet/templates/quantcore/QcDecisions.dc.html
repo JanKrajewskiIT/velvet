@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script><script src="./qc-data.js"></script></helmet>
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:var(--space-4)">
+<sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Stat" label="{{ s.label }}" value="{{ s.value }}" delta="{{ s.delta }}" tone="{{ s.tone }}" hint="{{ s.hint }}" hint-size="100%,110px"></x-import>
+</sc-for>
+</div>
+<sc-if value="{{ hasDue }}" hint-placeholder-val="{{ true }}">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Alert" tone="info" icon="clock" title="1 decision due for review" action="{{ reviewAction }}" hint-size="100%,64px">DEC-042 · ADD NVDA, 21 Oct. Review date 21 Nov, after earnings. You can review early.</x-import>
+</sc-if>
+<div style="display:flex;flex-wrap:wrap;gap:var(--space-4);align-items:flex-start">
+<div style="flex:2 1 600px;min-width:0">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Decisions" description="Thesis, conviction and invalidation are written at decision time. The outcome is computed on the review date against the benchmark." padding="none" actions="{{ addAction }}" hint-size="100%,520px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Table" layout="fixed" columns="{{ cols }}" rows="{{ rows }}" row-key="id" render-expanded="{{ expand }}" hint-size="100%,480px"></x-import>
+</x-import>
+</div>
+<div style="flex:1 1 320px;min-width:0;display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Your patterns" description="From 24 reviewed decisions · AI summary of computed stats" hint-size="100%,320px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.List" items="{{ patterns }}" hint-size="100%,260px"></x-import>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Hit rate by conviction" description="% of decisions that beat the benchmark" hint-size="100%,240px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.BarChart" data="{{ conv }}" series="{{ convSeries }}" height="{{ 180 }}" show-legend="{{ false }}" label="Hit rate by conviction" hint-size="100%,180px"></x-import>
+</x-import>
+</div>
+</div>
+{{ dialog }}
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { open: false, action: 'BUY', conviction: '3' };
+  renderVals() {
+    const app = this.props.app || window.__qc;
+    const NS = window.VelvetUIDesignSystem_ee2bd8;
+    if (!app || !NS || !NS.DirectionBadge || !app.D.decisions) { clearTimeout(this._w); this._w = setTimeout(() => this.forceUpdate(), 80); return { stats: [] }; }
+    const { D } = app; const h = React.createElement; const mono = { fontFamily: 'var(--font-mono)', fontVariantNumeric: 'tabular-nums' };
+    const ST = { Right: 'success', Wrong: 'danger', Mixed: 'warning', Open: 'neutral', Due: 'info' };
+    const AT = { BUY: 'success', ADD: 'success', SELL: 'danger', TRIM: 'danger', HOLD: 'neutral', SKIP: 'neutral' };
+    const open = () => this.setState({ open: true });
+    return {
+      stats: [
+        { label: 'Decisions logged', value: '42', hint: '24 reviewed · 18 open' },
+        { label: 'Hit rate vs benchmark', value: '63%', delta: '+4 pp YoY', tone: 'success', hint: 'reviewed decisions only' },
+        { label: 'Avg excess return', value: '+5.8 pp', tone: 'success', hint: 'per decision, at review date' },
+        { label: 'Due for review', value: '1', delta: 'next 30 days: 3', tone: 'neutral', hint: 'reminders on Overview' }
+      ],
+      hasDue: true,
+      reviewAction: h(NS.Button, { size: 'sm', variant: 'secondary', onClick: () => app.toast('Review opened', 'info', 'DEC-042 · outcome computed, add reflection') }, 'Review now'),
+      addAction: h(NS.Button, { size: 'sm', iconLeft: 'plus', onClick: open }, 'Log decision'),
+      rows: D.decisions,
+      cols: [
+        { key: 'date', label: 'Date', width: 110, render: (r) => h('span', { style: { ...mono, fontSize: 13 } }, r.date) },
+        { key: 'sym', label: 'Decision', render: (r) => h('div', { style: { display: 'flex', alignItems: 'center', gap: 8 } }, h(NS.DirectionBadge, { direction: r.action, size: 'sm' }), h('span', { style: { ...mono, fontWeight: 600 } }, r.sym)) },
+        { key: 'thesis', label: 'Thesis', hideOnMobile: true, render: (r) => h('span', { style: { fontSize: 13, color: 'var(--fg-secondary)' } }, r.thesis) },
+        { key: 'conviction', label: 'Conv.', align: 'right', render: (r) => h('span', { style: mono }, r.conviction + '/5') },
+        { key: 'ret', label: 'vs bench', align: 'right', render: (r) => r.bench == null ? h('span', { style: { ...mono, color: 'var(--fg-tertiary)' } }, '—') : h('span', { style: { ...mono, fontWeight: 600, color: (r.action === 'SELL' ? r.bench - r.ret : r.ret - r.bench) >= 0 ? 'var(--status-success-fg)' : 'var(--status-danger-fg)' } }, D.signed(r.action === 'SELL' ? r.bench - r.ret : r.ret - r.bench, 1) + ' pp') },
+        { key: 'status', label: 'Outcome', render: (r) => h(NS.Badge, { size: 'sm', tone: ST[r.status], dot: true }, r.status) }
+      ],
+      expand: (r) => h('div', { style: { padding: '8px 16px 16px' } }, h(NS.DescriptionList, { items: [
+        { term: 'Thesis', description: r.thesis }, { term: 'Invalidation', description: r.invalid }, { term: 'Review date', description: r.review },
+        { term: 'Asset return since', description: D.signed(r.ret, 1) + '%', mono: true }, { term: 'Benchmark', description: r.bench == null ? 'n/a' : D.signed(r.bench, 1) + '%', mono: true },
+        { term: 'Tags', description: r.tags.join(' · ') }].concat(r.note ? [{ term: 'Reflection', description: r.note }] : []) })),
+      patterns: D.patterns.map((p, k) => ({ id: k, title: p.title, description: p.detail, leading: h(NS.IconTile, { icon: p.icon, size: 'sm', tone: p.tone }) })),
+      conv: [{ label: '1–2', hit: 40 }, { label: '3', hit: 61 }, { label: '4–5', hit: 78 }], convSeries: [{ key: 'hit', label: 'Hit rate %', color: 'var(--dv-1)' }],
+      dialog: h(NS.Dialog, { open: this.state.open, onClose: () => this.setState({ open: false }), placement: 'right', size: 'md', title: 'Log decision', description: "Written now, scored later. It can't be edited afterwards. Add a follow-up note instead.",
+        footer: h(React.Fragment, null, h(NS.Button, { variant: 'secondary', onClick: () => this.setState({ open: false }) }, 'Cancel'), h(NS.Button, { iconLeft: 'check', onClick: () => { this.setState({ open: false }); app.toast('Decision logged', 'success', 'DEC-043 · market snapshot pinned · review reminder set'); } }, 'Log decision')) },
+        h('div', { style: { display: 'flex', flexDirection: 'column', gap: 'var(--space-5)' } },
+          h('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-3)' } }, h(NS.Input, { label: 'Instrument', placeholder: 'e.g. KGH' }), h(NS.Select, { label: 'Review in', options: [{ value: '1m', label: '1 month' }, { value: '3m', label: '3 months' }, { value: '6m', label: '6 months' }, { value: '12m', label: '12 months' }], value: '6m' })),
+          h(NS.ChipGroup, { label: 'Action', options: ['BUY', 'ADD', 'TRIM', 'SELL', 'HOLD', 'SKIP'], value: this.state.action, onValueChange: (v) => this.setState({ action: v }) }),
+          h(NS.Textarea, { label: 'Thesis', rows: 3, placeholder: 'Why now? What do you expect to happen?' }),
+          h(NS.Textarea, { label: 'Invalidation', rows: 2, placeholder: 'What would prove you wrong?', hint: 'Decisions without invalidation underperform by 4.2 pp' }),
+          h(NS.ChipGroup, { label: 'Conviction', options: ['1', '2', '3', '4', '5'], value: this.state.conviction, onValueChange: (v) => this.setState({ conviction: v }) }),
+          h(NS.Select, { label: 'Benchmark', options: [{ value: 'wig', label: 'WIG' }, { value: 'spx', label: 'S&P 500 (PLN)' }, { value: 'acwi', label: 'MSCI ACWI (PLN)' }], value: 'spx' })))
+    };
+  }
+}
+</script>
+</body>
+</html>

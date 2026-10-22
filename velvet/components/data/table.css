@@ -34,7 +34,7 @@
 .vui-table--fixed{table-layout:fixed}
 .vui-table--layout-fixed{table-layout:fixed;width:100%}
 .vui-table__scroll:has(>.vui-table--layout-fixed){overflow:visible}
-.vui-table--layout-fixed td{overflow-wrap:anywhere}
+.vui-table--layout-fixed td,.vui-table--layout-fixed th{white-space:normal;overflow-wrap:anywhere}
 .vui-table--fixed td,.vui-table--fixed th{overflow:hidden;text-overflow:ellipsis}
 .vui-table--sticky thead th{position:sticky;top:0;z-index:2;box-shadow:inset 0 calc(-1 * var(--border-width)) 0 var(--border-subtle)}
 .vui-table th{position:relative}

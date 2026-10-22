@@ -1,8 +1,10 @@
+import type { JSX } from 'solid-js';
+
 export interface NavbarItem {
   id: string;
   label: string;
-  /** Velvet icon name (required for variant="menubar") */
-  icon?: string;
+  /** Velvet icon name or a custom node; required for variant="menubar". */
+  icon?: JSX.Element;
   href?: string;
 }
 

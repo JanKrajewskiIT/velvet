@@ -1,0 +1,7 @@
+/* UsageMeter */
+.vui-usage{display:flex;flex-direction:column;gap:var(--space-2);min-width:0}
+.vui-usage__top{display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-3);font-size:var(--type-body-sm-size)}
+.vui-usage__label{font-weight:600;color:var(--fg-primary);min-width:0}
+.vui-usage__val{font-family:var(--font-mono);font-variant-numeric:tabular-nums;color:var(--fg-secondary);white-space:nowrap}
+.vui-usage__hint{font-size:var(--type-caption-size);color:var(--fg-tertiary)}
+.vui-usage--sm{gap:var(--space-1-5,6px)}.vui-usage--sm .vui-usage__label{font-weight:500}

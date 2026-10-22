@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script src="./ds-base.js"></script><script src="./qc-data.js"></script></helmet>
+<div style="display:flex;flex-direction:column;gap:var(--space-5)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.PageHeader" eyebrow="Thursday, 22 October · GPW open · US opens 15:30" title="Good afternoon, Anna" description="{{ summary }}" actions="{{ headActions }}" hint-size="100%,120px"></x-import>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:var(--space-4)">
+<sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Stat" label="{{ s.label }}" value="{{ s.value }}" delta="{{ s.delta }}" tone="{{ s.tone }}" hint="{{ s.hint }}" spark="{{ s.spark }}" hint-size="100%,130px"></x-import>
+</sc-for>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:var(--space-4);align-items:flex-start">
+<div style="flex:3 1 560px;min-width:0;display:flex;flex-direction:column;gap:var(--space-4)">
+{{ brief }}
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Watchlist" description="Free & low-cost feeds · delayed where marked" padding="none" actions="{{ marketsAction }}" hint-size="100%,380px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Table" layout="fixed" columns="{{ wlCols }}" rows="{{ watchlist }}" row-key="sym" hint-size="100%,340px"></x-import>
+</x-import>
+</div>
+<div style="flex:2 1 360px;min-width:0;display:flex;flex-direction:column;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Coming up" description="Macro · central banks · earnings · ESPI" actions="{{ calAction }}" hint-size="100%,420px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.List" size="sm" items="{{ upcoming }}" hint-size="100%,360px"></x-import>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Automations on paper" description="No real money · last 28 days" actions="{{ autoAction }}" hint-size="100%,300px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.List" size="sm" items="{{ autos }}" hint-size="100%,240px"></x-import>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Needs your attention" description="Reviews, health and tax deadlines" hint-size="100%,240px">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.List" size="sm" items="{{ attention }}" hint-size="100%,180px"></x-import>
+</x-import>
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Card" title="Trading readiness" description="Paper · ACC-PAPER-01" hint-size="100%,160px">
+<div style="display:flex;align-items:center;gap:var(--space-4)">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Gauge" value="{{ passed }}" min="{{ 0 }}" max="{{ 6 }}" tone="danger" size="sm" label="gates" format="{{ fmtGates }}" hint-size="140px,96px"></x-import>
+<div style="display:flex;flex-direction:column;gap:var(--space-2);min-width:0">
+<x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Badge" tone="danger" icon="lock" hint-size="120px,22px">RECON_LAG</x-import>
+<span style="font-size:var(--type-body-sm-size);color:var(--fg-secondary)">New paper orders blocked. Reconciliation lag 6 min, limit 5 min.</span>
+<div><x-import component-from-global-scope="VelvetUIDesignSystem_ee2bd8.Button" size="sm" variant="ghost" icon-right="arrow-right" on-click="{{ goOps }}" hint-size="100px,32px">Runbook</x-import></div>
+</div>
+</div>
+</x-import>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const app = this.props.app || window.__qc;
+    const NS = window.VelvetUIDesignSystem_ee2bd8;
+    if (!app || !NS || !NS.InstrumentLabel || !NS.PriceChange || !NS.DataState || !app.D.markets) { clearTimeout(this._w); this._w = setTimeout(() => this.forceUpdate(), 80); return { stats: [] }; }
+    const { D } = app; const h = React.createElement; const m = app.money; const P = D.portfolioTotal;
+    const mono = { fontFamily: 'var(--font-mono)', fontVariantNumeric: 'tabular-nums' };
+    const link = (label, to, sub) => h(NS.Button, { variant: 'ghost', size: 'sm', iconRight: 'arrow-right', onClick: () => app.go(to, sub) }, label);
+    const IMP = { High: 'danger', Medium: 'warning', Low: 'neutral' };
+    const wl = [D.markets.pl[0], D.markets.pl[3], D.markets.us[0], D.markets.us[2], D.markets.fx[0], D.markets.crypto[0]];
+    const top = D.automations.filter((a) => a.ret != null).sort((a, b) => b.sharpe - a.sharpe);
+    return {
+      summary: 'FOMC in 6 days and Orlen, Apple and Microsoft report next week. 3 automations are trading on paper.',
+      headActions: h(React.Fragment, null, h(NS.Button, { size: 'sm', variant: 'secondary', iconLeft: 'upload', onClick: () => app.go('portfolio', 'import') }, 'Import statement'), h(NS.Button, { size: 'sm', iconLeft: 'plus', onClick: () => app.go('strategies', 'new') }, 'New automation')),
+      stats: [
+        { label: 'Net worth', value: m(D.fmt(P.value, 0) + ' PLN'), delta: D.signed(P.dayPct, 2) + '%', tone: 'success', hint: 'today ' + m(D.signed(P.day, 0) + ' PLN'), spark: D.perf.map((x) => x.portfolio) },
+        { label: 'Portfolio TWR · YTD', value: D.signed(P.twrYtd, 1) + '%', delta: '+5.5 pp vs WIG', tone: 'success', hint: 'MWR ' + D.signed(P.mwrYtd, 1) + '% · S&P 500 +12.3%', spark: D.perf.map((x) => x.portfolio - x.wig) },
+        { label: 'Paper automations · 28D', value: '+3.0%', delta: 'Sharpe 0.89 avg', tone: 'neutral', hint: '3 on paper · 1 in replay', spark: D.autoEquity.map((x) => (x.a1 + x.a2 + x.a3) / 3) },
+        { label: 'Next high-impact event', value: 'FOMC', delta: 'in 6 days', tone: 'warning', hint: '28 Oct 19:00 · blackout set' }
+      ],
+      brief: h(NS.AiResultPanel, { title: 'Morning brief', model: D.digest.model, elapsed: D.digest.generated, status: 'done', headline: D.digest.headline, subline: D.digest.sources + ' sources · ' + D.digest.failed + ' unavailable — not the same as “no news”', sections: D.digest.sections, sources: D.digest.links, disclaimer: 'Summary of sources. Not investment advice; strategies only consume structured events.', onRegenerate: () => app.toast('Brief regenerated', 'success', 'New digest version · sources pinned') }),
+      marketsAction: link('Markets', 'markets'),
+      watchlist: wl,
+      wlCols: [
+        { key: 'sym', label: 'Instrument', render: (r) => h(NS.InstrumentLabel, { symbol: r.sym, name: r.name, exchange: r.tv.split(':')[0], size: 'sm', onClick: () => { window.__qcSym = r.sym; app.go('markets'); } }) },
+        { key: 'spark', label: '5D', width: 120, hideOnMobile: true, render: (r) => h(NS.Sparkline, { data: r.spark, height: 28, color: r.chg >= 0 ? 'var(--market-up-solid)' : 'var(--market-down-solid)' }) },
+        { key: 'last', label: 'Last', align: 'right', render: (r) => h('span', { style: mono }, D.fmt(r.last, r.last < 10 ? 4 : 2) + ' ' + r.ccy) },
+        { key: 'chg', label: 'Day', align: 'right', render: (r) => h(NS.PriceChange, { value: r.chg, label: 'Day change' }) },
+        { key: 'src', label: 'Source', hideOnMobile: true, render: (r) => h(NS.DataState, { state: /live|IEX/.test(r.src) ? 'fresh' : 'delayed', label: r.src }) }
+      ],
+      calAction: link('Calendar', 'news', 'calendar'),
+      upcoming: D.events.slice(0, 8).map((e) => ({ id: e.id, title: e.title, description: new Date(e.date).toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short' }) + ' · ' + e.time + (e.cons !== '—' ? ' · cons. ' + e.cons : ''),
+        leading: h(NS.Badge, { size: 'sm', variant: 'outline' }, e.region),
+        trailing: h('div', { style: { display: 'flex', gap: 4 } }, e.held ? h(NS.Badge, { size: 'sm', tone: 'brand' }, 'Held') : null, h(NS.Badge, { size: 'sm', tone: IMP[e.imp], dot: true }, e.imp)) })),
+      autoAction: link('Compare', 'strategies', 'compare'),
+      autos: top.map((a) => ({ id: a.id, title: a.name, description: a.approach + ' · ' + a.assets + ' · ' + a.tf,
+        leading: h(NS.Badge, { size: 'sm', tone: a.stage === 'Paper' ? 'info' : 'neutral' }, a.stage),
+        trailing: h('div', { style: { display: 'flex', flexDirection: 'column', alignItems: 'flex-end' } }, h(NS.PriceChange, { value: a.ret, digits: 1, arrow: false }), h('span', { style: { ...mono, fontSize: 12, color: 'var(--fg-secondary)' } }, 'Sharpe ' + a.sharpe.toFixed(2))) })),
+      passed: D.readiness.filter((g) => g.state === 'ok').length, fmtGates: (v) => v + '/6',
+      goOps: () => app.go('operations'),
+      attention: [
+        { id: 'd', title: 'Review decision DEC-042 · NVDA', description: 'Due 21 Nov · outcome so far +1.9 pp', leading: h(NS.IconTile, { icon: 'notebook-pen', size: 'sm' }), trailing: h(NS.Button, { size: 'xs', variant: 'ghost', onClick: () => app.go('portfolio', 'decisions') }, 'Open') },
+        { id: 'h', title: 'News-aware Breakout degraded', description: 'Below P5 · new entries paused', leading: h(NS.IconTile, { icon: 'triangle-alert', size: 'sm', tone: 'danger' }), trailing: h(NS.Button, { size: 'xs', variant: 'ghost', onClick: () => app.go('strategies', 'health') }, 'Open') },
+        { id: 'c', title: 'CR-214 awaiting RiskOwner review', description: 'USD exposure limit 25% → 30%', leading: h(NS.IconTile, { icon: 'file-signature', size: 'sm', tone: 'info' }), trailing: h(NS.Button, { size: 'xs', variant: 'ghost', onClick: () => app.go('operations', 'changes') }, 'Open') },
+        { id: 't', title: 'Tax-loss harvesting · 70 days left', description: '3 positions · up to 641 PLN saving', leading: h(NS.IconTile, { icon: 'calendar', size: 'sm', tone: 'warning' }), trailing: h(NS.Button, { size: 'xs', variant: 'ghost', onClick: () => app.go('portfolio', 'tax') }, 'Open') }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

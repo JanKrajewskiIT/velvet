@@ -1,4 +1,4 @@
-import { type Accessor, createSignal } from 'solid-js';
+import { type Accessor, createMemo, createSignal } from 'solid-js';
 
 /** Returns an error message, or nothing when the value is valid. */
 export type Validator = (value: string) => string | undefined | null | false;
@@ -7,27 +7,17 @@ export interface Validation {
   /** Current validation message. */
   message: Accessor<string | undefined>;
   /** Validates on blur and marks the field touched. */
-  blur: (value: string) => void;
-  /** Re-validates on every change once the field was touched. */
-  input: (value: string) => void;
+  blur: () => void;
 }
 
 /** Blur-then-live validation shared by the text fields. */
-export const createValidation = (validate: Accessor<Validator | undefined>): Validation => {
+export const createValidation = (validate: Accessor<Validator | undefined>, value: Accessor<string>): Validation => {
   const [touched, setTouched] = createSignal(false);
-  const [message, setMessage] = createSignal<string | undefined>();
-  const run = (validator: Validator, value: string) => setMessage(validator(value) || undefined);
+  const message = createMemo(() => (touched() ? validate()?.(value()) || undefined : undefined));
   return {
     message,
-    blur: (value) => {
-      const validator = validate();
-      if (!validator) return;
-      setTouched(true);
-      run(validator, value);
-    },
-    input: (value) => {
-      const validator = validate();
-      if (validator && touched()) run(validator, value);
+    blur: () => {
+      if (validate()) setTouched(true);
     },
   };
 };
