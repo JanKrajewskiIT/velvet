@@ -54,6 +54,7 @@ export interface InputProps extends Omit<
 
 /** Text field with label, hint, icons, prefix/suffix and validation. The message lane is fixed-height when `validate`, `reserveHint` or `showCount` is set, so errors never reflow the form. */
 export const Input = (props: InputProps) => {
+  // eslint-disable-next-line @typescript-eslint/no-deprecated -- Input implements its own deprecated multiline prop
   const merged = mergeProps({ size: 'md', defaultValue: '', multiline: false } satisfies InputProps, props);
   const [local, rest] = splitProps(merged, [
     'label',
