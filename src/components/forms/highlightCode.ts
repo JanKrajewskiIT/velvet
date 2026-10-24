@@ -24,7 +24,8 @@ const KEYWORDS = new Set([
   'let',
   'const',
 ]);
-const TOKENS = /"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|(?:#|\/\/)[^\n]*|\b[A-Za-z_][\w.]*\b|-?\b\d+(?:\.\d+)?\b/gu;
+// Optional closing quotes prevent repeated scans of unfinished strings containing escaped quotes.
+const TOKENS = /"(?:\\.|[^"\\])*"?|'(?:\\.|[^'\\])*'?|(?:#|\/\/)[^\n]*|\b[A-Za-z_][\w.]*\b|-?\b\d+(?:\.\d+)?\b/gu;
 const TOKEN_CLASSES = {
   key: 'tk-k',
   keyword: 'tk-w',
