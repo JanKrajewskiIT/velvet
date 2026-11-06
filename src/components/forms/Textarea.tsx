@@ -5,6 +5,7 @@ import { cx } from '../../utils/cx';
 import { joinIdRefs } from '../../utils/joinIdRefs';
 import { Control } from '../primitives/Control';
 import { Field } from '../primitives/Field';
+import type { FieldErrorAnnouncementProps } from '../primitives/fieldErrorAnnouncement';
 import { typographyClass } from '../primitives/typography';
 import { callHandler } from './callHandler';
 import { createValidation, type Validator } from './createValidation';
@@ -12,10 +13,10 @@ import styles from './Textarea.module.css';
 
 const FALLBACK_LINE_HEIGHT_PX = 20;
 
-export interface TextareaProps extends Omit<
-  JSX.TextareaHTMLAttributes<HTMLTextAreaElement>,
-  'size' | 'value' | 'class' | 'style'
-> {
+export interface TextareaProps
+  extends
+    Omit<JSX.TextareaHTMLAttributes<HTMLTextAreaElement>, 'size' | 'value' | 'class' | 'style'>,
+    FieldErrorAnnouncementProps {
   label?: JSX.Element;
   hint?: JSX.Element;
   error?: JSX.Element;
@@ -52,6 +53,7 @@ export const Textarea = (props: TextareaProps) => {
     'label',
     'hint',
     'error',
+    'data-field-error-announcement',
     'optional',
     'required',
     'rows',
@@ -100,6 +102,7 @@ export const Textarea = (props: TextareaProps) => {
       label={local.label}
       hint={local.hint}
       error={local.error || validation.message()}
+      data-field-error-announcement={local['data-field-error-announcement']}
       optional={local.optional}
       required={local.required}
       id={local.id}

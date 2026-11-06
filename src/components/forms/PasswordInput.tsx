@@ -8,6 +8,7 @@ import type { Tone } from '../../utils/tone';
 import { Control } from '../primitives/Control';
 import { ControlInput } from '../primitives/ControlInput';
 import { Field } from '../primitives/Field';
+import type { FieldErrorAnnouncementProps } from '../primitives/fieldErrorAnnouncement';
 import { Glyph } from '../primitives/Glyph';
 import { Meter } from '../primitives/Meter';
 import { callHandler } from './callHandler';
@@ -29,10 +30,10 @@ const strengthTone = (score: number): Tone => {
   return score === FAIR_SCORE ? 'warning' : 'danger';
 };
 
-export interface PasswordInputProps extends Omit<
-  JSX.InputHTMLAttributes<HTMLInputElement>,
-  'size' | 'type' | 'value' | 'class'
-> {
+export interface PasswordInputProps
+  extends
+    Omit<JSX.InputHTMLAttributes<HTMLInputElement>, 'size' | 'type' | 'value' | 'class'>,
+    FieldErrorAnnouncementProps {
   /** @default localized "Password" */
   label?: JSX.Element;
   hint?: JSX.Element;
@@ -71,6 +72,7 @@ export const PasswordInput = (props: PasswordInputProps) => {
     'label',
     'hint',
     'error',
+    'data-field-error-announcement',
     'optional',
     'required',
     'showStrength',
@@ -108,6 +110,7 @@ export const PasswordInput = (props: PasswordInputProps) => {
       label={local.label ?? translate('velvet.forms.passwordInput.label')}
       hint={score() >= 0 && !local.error ? strengthHint() : local.hint}
       error={local.error}
+      data-field-error-announcement={local['data-field-error-announcement']}
       optional={local.optional}
       required={local.required}
       id={local.id}

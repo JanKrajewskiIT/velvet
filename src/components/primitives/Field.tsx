@@ -1,8 +1,10 @@
 import { createUniqueId, type JSX, Show } from 'solid-js';
 
 import { cx } from '../../utils/cx';
+import { joinIdRefs } from '../../utils/joinIdRefs';
 import styles from './Field.module.css';
-import { FieldHint } from './FieldHint';
+import type { FieldErrorAnnouncementProps } from './fieldErrorAnnouncement';
+import { FieldFeedback } from './FieldFeedback';
 import { FieldLabel } from './FieldLabel';
 import { Text } from './Text';
 
@@ -14,10 +16,10 @@ export interface FieldControlProps {
   required?: boolean;
 }
 
-export interface FieldProps {
+export interface FieldProps extends FieldErrorAnnouncementProps {
   label?: JSX.Element;
   hint?: JSX.Element;
-  /** Replaces the hint and turns the control invalid. */
+  /** Replaces the hint, turns the control invalid and is announced politely unless speech is delegated. */
   error?: JSX.Element;
   optional?: boolean;
   required?: boolean;
@@ -37,9 +39,10 @@ export const Field = (props: FieldProps) => {
   const autoId = createUniqueId();
   const id = () => props.id ?? autoId;
   const hintId = () => `${id()}-hint`;
+  const errorId = () => `${id()}-error`;
+  const countId = () => `${id()}-count`;
   const hasCounter = () => props.maxCount != null;
   const lane = () => props.reserveHint === true || hasCounter();
-  const hasMessage = () => !!(props.error || props.hint);
 
   const control: FieldControlProps = {
     get id() {
@@ -49,7 +52,10 @@ export const Field = (props: FieldProps) => {
       return !!props.error;
     },
     get describedBy() {
-      return hasMessage() || hasCounter() ? hintId() : undefined;
+      return joinIdRefs(
+        props.error ? errorId() : props.hint ? hintId() : undefined,
+        hasCounter() ? countId() : undefined,
+      );
     },
     get required() {
       return props.required;
@@ -74,27 +80,30 @@ export const Field = (props: FieldProps) => {
       <Show when={renderer()} keyed fallback={content()}>
         {(render) => render(control)}
       </Show>
-      <Show when={hasMessage() || lane()}>
-        <div class={cx(styles.fieldPartFoot, lane() && styles.hintVariantLane)}>
-          <FieldHint id={hintId()} error={!!props.error} lane={lane()}>
-            {props.error || props.hint}
-          </FieldHint>
-          <Show when={hasCounter()}>
-            <Text
-              as="span"
-              variant="kbd"
-              tone="inherit"
-              class={cx(
-                styles.hint,
-                styles.fieldPartCount,
-                (props.count ?? 0) >= (props.maxCount ?? 0) && styles.fieldPartCountVariantMax,
-              )}
-            >
-              {props.count ?? 0}/{props.maxCount}
-            </Text>
-          </Show>
-        </div>
-      </Show>
+      <FieldFeedback
+        hintId={hintId()}
+        errorId={errorId()}
+        hint={props.hint}
+        error={props.error}
+        reserveSpace={lane()}
+        data-field-error-announcement={props['data-field-error-announcement']}
+      >
+        <Show when={hasCounter()}>
+          <Text
+            as="span"
+            id={countId()}
+            variant="kbd"
+            tone="inherit"
+            class={cx(
+              styles.hint,
+              styles.fieldPartCount,
+              (props.count ?? 0) >= (props.maxCount ?? 0) && styles.fieldPartCountVariantMax,
+            )}
+          >
+            {props.count ?? 0}/{props.maxCount}
+          </Text>
+        </Show>
+      </FieldFeedback>
     </div>
   );
 };

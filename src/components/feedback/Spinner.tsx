@@ -1,8 +1,9 @@
-import { Index, mergeProps } from 'solid-js';
+import { Index, mergeProps, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { VisuallyHidden } from '../primitives/VisuallyHidden';
 import styles from './Spinner.module.css';
 
 const LOADER_CLASSES = {
@@ -27,6 +28,8 @@ export interface SpinnerProps {
   size?: 'sm' | 'md' | 'lg' | 'inline';
   /** Accessible status text. @default localized "Loading" */
   label?: string;
+  /** Hide from assistive technology when another element describes the pending action. */
+  decorative?: boolean;
   /** `current` inherits the text colour. @default 'brand' */
   tone?: 'brand' | 'current';
   class?: string;
@@ -39,8 +42,10 @@ export const Spinner = (props: SpinnerProps) => {
   const parts = () => Array.from({ length: ELEMENT_COUNT[p.variant] });
   return (
     <span
-      role="status"
-      aria-label={p.label ?? translate('velvet.common.loading')}
+      role={p.decorative ? undefined : 'status'}
+      aria-live={p.decorative ? undefined : 'polite'}
+      aria-atomic={p.decorative ? undefined : true}
+      aria-hidden={p.decorative || undefined}
       class={cx(
         styles.loader,
         variantClass(LOADER_CLASSES, p.variant),
@@ -49,7 +54,10 @@ export const Spinner = (props: SpinnerProps) => {
         p.class,
       )}
     >
-      <Index each={parts()}>{() => <i />}</Index>
+      <Index each={parts()}>{() => <i aria-hidden="true" />}</Index>
+      <Show when={!p.decorative}>
+        <VisuallyHidden>{p.label ?? translate('velvet.common.loading')}</VisuallyHidden>
+      </Show>
     </span>
   );
 };

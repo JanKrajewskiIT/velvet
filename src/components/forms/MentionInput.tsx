@@ -6,6 +6,7 @@ import { createFloating } from '../../hooks/createFloating';
 import { cx } from '../../utils/cx';
 import { Control } from '../primitives/Control';
 import { Field } from '../primitives/Field';
+import type { FieldErrorAnnouncementProps } from '../primitives/fieldErrorAnnouncement';
 import { typographyClass } from '../primitives/typography';
 import { CARET_LEFT_OFFSET_PX, createMentionLayout } from './createMentionLayout';
 import { createMentionSearch } from './createMentionSearch';
@@ -15,7 +16,7 @@ import { MentionSuggestions } from './MentionSuggestions';
 
 const NAVIGATION_KEYS = ['ArrowLeft', 'ArrowRight', 'Home', 'End'];
 
-export interface MentionInputProps {
+export interface MentionInputProps extends FieldErrorAnnouncementProps {
   label?: JSX.Element;
   hint?: JSX.Element;
   error?: JSX.Element;
@@ -115,6 +116,7 @@ export const MentionInput = (props: MentionInputProps) => {
       label={p.label}
       hint={p.hint}
       error={p.error}
+      data-field-error-announcement={p['data-field-error-announcement']}
       optional={p.optional}
       required={p.required}
       id={p.id ?? autoId}

@@ -3,8 +3,10 @@ import { createUniqueId, type JSX, mergeProps, Show } from 'solid-js';
 import { useTranslate } from '../../i18n/useTranslate';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { joinIdRefs } from '../../utils/joinIdRefs';
 import { EmptyText } from '../primitives/EmptyText';
-import { FieldHint } from '../primitives/FieldHint';
+import type { FieldErrorAnnouncementProps } from '../primitives/fieldErrorAnnouncement';
+import { FieldFeedback } from '../primitives/FieldFeedback';
 import { FieldLabel } from '../primitives/FieldLabel';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
@@ -24,7 +26,7 @@ const MDE_CLASSES = {
 
 export type { MarkdownEditorMode };
 
-export interface MarkdownEditorProps {
+export interface MarkdownEditorProps extends FieldErrorAnnouncementProps {
   value?: string;
   defaultValue?: string;
   onChange?: (value: string) => void;
@@ -75,7 +77,8 @@ export const MarkdownEditor = (props: MarkdownEditorProps) => {
   const footId = () => `${fieldId()}-foot`;
   const modifierLabel = createModifierLabel();
   const editor = createMarkdownEditor(merged);
-  const hasMessage = () => !!(merged.error || merged.hint);
+  const hintId = () => `${fieldId()}-hint`;
+  const errorId = () => `${fieldId()}-error`;
 
   return (
     <div class={cx(styles.field, styles.mdeField, merged.class)}>
@@ -114,7 +117,7 @@ export const MarkdownEditor = (props: MarkdownEditorProps) => {
               readOnly={merged.readOnly}
               spellcheck
               aria-invalid={merged.error ? true : undefined}
-              aria-describedby={footId()}
+              aria-describedby={joinIdRefs(footId(), merged.error ? errorId() : merged.hint ? hintId() : undefined)}
               onInput={editor.onInput}
               onKeyDown={editor.onKeyDown}
             />
@@ -151,11 +154,13 @@ export const MarkdownEditor = (props: MarkdownEditorProps) => {
           </Text>
         </Text>
       </div>
-      <Show when={hasMessage()}>
-        <FieldHint error={!!merged.error} role={merged.error ? 'alert' : undefined}>
-          {merged.error || merged.hint}
-        </FieldHint>
-      </Show>
+      <FieldFeedback
+        hintId={hintId()}
+        errorId={errorId()}
+        hint={merged.hint}
+        error={merged.error}
+        data-field-error-announcement={merged['data-field-error-announcement']}
+      />
     </div>
   );
 };

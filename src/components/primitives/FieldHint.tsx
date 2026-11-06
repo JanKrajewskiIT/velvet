@@ -7,7 +7,7 @@ import { Text } from './Text';
 
 export interface FieldHintProps extends HtmlProps<HTMLSpanElement> {
   error?: boolean;
-  /** Fixed-height lane that announces changes politely. */
+  /** Fixed-height lane; hint text is not announced automatically. */
   lane?: boolean;
 }
 
@@ -19,7 +19,6 @@ export const FieldHint = (props: FieldHintProps) => {
       variant="caption"
       tone="inherit"
       class={cx(styles.hint, local.error && styles.hintVariantError, local.lane && styles.hintVariantLane, local.class)}
-      aria-live={local.lane ? 'polite' : undefined}
       {...rest}
     >
       {local.children}

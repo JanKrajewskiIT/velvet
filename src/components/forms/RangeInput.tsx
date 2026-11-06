@@ -4,7 +4,8 @@ import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { numberRange } from '../../utils/decimalValue';
-import { FieldHint } from '../primitives/FieldHint';
+import type { FieldErrorAnnouncementProps } from '../primitives/fieldErrorAnnouncement';
+import { FieldFeedback } from '../primitives/FieldFeedback';
 import { FieldLabel } from '../primitives/FieldLabel';
 import { Text } from '../primitives/Text';
 import { createFormValidation } from './createFormValidation';
@@ -16,7 +17,7 @@ import { isInverted, type RangeBoundKey, type RangeValue } from './rangeValue';
 import { Select } from './Select';
 import type { SelectOption } from './selectOption';
 
-export interface RangeInputProps extends FormControlProps {
+export interface RangeInputProps extends FormControlProps, FieldErrorAnnouncementProps {
   unitName?: string;
   periodName?: string;
   label?: JSX.Element;
@@ -75,6 +76,7 @@ export const RangeInput = (props: RangeInputProps) => {
   const autoId = createUniqueId();
   const id = () => p.id ?? autoId;
   const hintId = () => `${id()}-hint`;
+  const errorId = () => `${id()}-error`;
   const validation = createFormValidation();
   const [invalidBounds, setInvalidBounds] = createSignal({ min: false, max: false });
   const [resetKey, setResetKey] = createSignal(0);
@@ -118,7 +120,7 @@ export const RangeInput = (props: RangeInputProps) => {
     invalid: !!message() || validation.invalid(),
     prefix: p.prefix,
     suffix: p.suffix,
-    describedBy: validation.describedBy(message() || p.hint ? hintId() : undefined),
+    describedBy: validation.describedBy(message() ? errorId() : p.hint ? hintId() : undefined),
     resetKey: resetKey(),
   });
 
@@ -215,11 +217,13 @@ export const RangeInput = (props: RangeInputProps) => {
           setResetKey((key) => key + 1);
         }}
       />
-      <Show when={message() || p.hint}>
-        <FieldHint id={hintId()} error={!!message()}>
-          {message() || p.hint}
-        </FieldHint>
-      </Show>
+      <FieldFeedback
+        hintId={hintId()}
+        errorId={errorId()}
+        hint={p.hint}
+        error={message()}
+        data-field-error-announcement={p['data-field-error-announcement']}
+      />
     </div>
   );
 };

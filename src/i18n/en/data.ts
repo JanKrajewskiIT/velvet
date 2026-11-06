@@ -8,6 +8,7 @@ export const dataEn = defineDictionary({
     statusOffline: 'Offline',
   },
   codeSnippet: {
+    codeLabel: 'Code',
     copyFailed: 'Copy failed',
     copyCode: 'Copy code',
     copiedAnnouncement: 'Copied to clipboard',

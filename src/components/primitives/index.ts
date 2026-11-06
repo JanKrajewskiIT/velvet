@@ -8,6 +8,12 @@ export { Count, type CountProps, type CountTone } from './Count';
 export { Dot, type DotProps } from './Dot';
 export { EmptyText, type EmptyTextProps } from './EmptyText';
 export { Field, type FieldControlProps, type FieldProps } from './Field';
+export {
+  FIELD_ERROR_ANNOUNCEMENTS,
+  type FieldErrorAnnouncement,
+  type FieldErrorAnnouncementProps,
+} from './fieldErrorAnnouncement';
+export { FieldFeedback, type FieldFeedbackProps } from './FieldFeedback';
 export { FieldHint, type FieldHintProps } from './FieldHint';
 export { FieldLabel, type FieldLabelProps } from './FieldLabel';
 export { Glyph, type GlyphProps, type GlyphSize, renderIcon } from './Glyph';

@@ -19,6 +19,7 @@ import { Chevron } from '../primitives/Chevron';
 import { Control, type ControlProps } from '../primitives/Control';
 import { ControlInput } from '../primitives/ControlInput';
 import { Field } from '../primitives/Field';
+import type { FieldErrorAnnouncementProps } from '../primitives/fieldErrorAnnouncement';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
 import styles from './Cascader.module.css';
@@ -32,7 +33,7 @@ import { createFormValidation } from './createFormValidation';
 import type { FormControlProps } from './formControl';
 import { FormValue } from './FormValue';
 
-export interface CascaderProps extends FormControlProps {
+export interface CascaderProps extends FormControlProps, FieldErrorAnnouncementProps {
   /** Notifies a native reset, including an empty controlled value. */
   onResetValue?: (value: string | null) => void;
   label?: JSX.Element;
@@ -149,7 +150,15 @@ export const Cascader = (props: CascaderProps) => {
   };
 
   return (
-    <Field label={p.label} hint={p.hint} error={p.error} optional={p.optional} required={p.required} id={p.id}>
+    <Field
+      label={p.label}
+      hint={p.hint}
+      error={p.error}
+      optional={p.optional}
+      required={p.required}
+      id={p.id}
+      data-field-error-announcement={p['data-field-error-announcement']}
+    >
       {(control) => (
         <div ref={setRoot} class={styles.casc}>
           <Control

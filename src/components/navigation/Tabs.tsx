@@ -36,6 +36,7 @@ export interface TabItem {
   panelId?: string;
 }
 
+/** Supply aria-label or aria-labelledby; a name is required when a view contains multiple tablists. */
 export interface TabsProps extends HtmlProps<HTMLDivElement, 'onChange' | 'children'> {
   items: TabItem[];
   value?: string;
@@ -58,7 +59,7 @@ const ARROW_KEYS = {
   vertical: { previous: 'ArrowUp', next: 'ArrowDown' },
 } as const;
 
-/** Tab switcher with a sliding indicator. Arrow keys / Home / End move and select (roving tabindex). */
+/** Tab switcher with roving focus; manual activation leaves selection to Enter, Space or click. */
 export const Tabs = (props: TabsProps) => {
   const merged = mergeProps({ variant: 'underline', orientation: 'horizontal' } satisfies Partial<TabsProps>, props);
   const [local, rest] = splitProps(merged, [
@@ -72,6 +73,7 @@ export const Tabs = (props: TabsProps) => {
     'block',
     'class',
     'onKeyDown',
+    'onFocusOut',
     'activation',
     'id',
     'ref',
@@ -159,6 +161,10 @@ export const Tabs = (props: TabsProps) => {
       role="tablist"
       aria-orientation={vertical() ? 'vertical' : 'horizontal'}
       onKeyDown={onKeyDown}
+      onFocusOut={(event) => {
+        callHandler(local.onFocusOut, event);
+        if (!(event.relatedTarget instanceof Node) || !list.contains(event.relatedTarget)) setFocused(undefined);
+      }}
       class={cx(
         styles.tabs,
         indicator() && styles.tabsVariantJs,

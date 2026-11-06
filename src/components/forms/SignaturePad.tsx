@@ -4,6 +4,7 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { Button } from '../actions/Button';
 import { Field } from '../primitives/Field';
+import type { FieldErrorAnnouncementProps } from '../primitives/fieldErrorAnnouncement';
 import { Text } from '../primitives/Text';
 import styles from './SignaturePad.module.css';
 import {
@@ -14,7 +15,7 @@ import {
   type SignatureStroke,
 } from './signatureStroke';
 
-export interface SignaturePadProps {
+export interface SignaturePadProps extends FieldErrorAnnouncementProps {
   label?: JSX.Element;
   hint?: JSX.Element;
   error?: JSX.Element;
@@ -109,6 +110,7 @@ export const SignaturePad = (props: SignaturePadProps) => {
       label={p.label}
       hint={p.hint}
       error={p.error}
+      data-field-error-announcement={p['data-field-error-announcement']}
       optional={p.optional}
       required={p.required}
       id={p.id}

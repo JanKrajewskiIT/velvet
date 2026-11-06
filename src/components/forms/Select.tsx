@@ -11,6 +11,7 @@ import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { Chevron } from '../primitives/Chevron';
 import { Field } from '../primitives/Field';
+import type { FieldErrorAnnouncementProps } from '../primitives/fieldErrorAnnouncement';
 import { Glyph, renderIcon } from '../primitives/Glyph';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
@@ -38,7 +39,7 @@ export interface SelectChangeEvent {
   target: { value: string; name?: string };
 }
 
-export interface SelectProps extends FormControlProps {
+export interface SelectProps extends FormControlProps, FieldErrorAnnouncementProps {
   label?: JSX.Element;
   hint?: JSX.Element;
   error?: JSX.Element;
@@ -182,7 +183,15 @@ export const Select = (props: SelectProps) => {
   createActiveOptionScroll(open, () => (active() >= 0 ? optionId(active()) : undefined));
 
   return (
-    <Field label={p.label} hint={p.hint} error={p.error} optional={p.optional} required={p.required} id={id()}>
+    <Field
+      label={p.label}
+      hint={p.hint}
+      error={p.error}
+      optional={p.optional}
+      required={p.required}
+      id={id()}
+      data-field-error-announcement={p['data-field-error-announcement']}
+    >
       {(control) => (
         <div ref={setRoot} class={styles.select}>
           <button

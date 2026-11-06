@@ -1,10 +1,11 @@
 import type { JSX } from 'solid-js';
 
+import type { FieldErrorAnnouncementProps } from '../primitives/fieldErrorAnnouncement';
 import type { LoadOptions } from './createAsyncOptions';
 import type { FormControlProps } from './formControl';
 import type { SelectOption } from './selectOption';
 
-export interface MultiSelectProps extends FormControlProps {
+export interface MultiSelectProps extends FormControlProps, FieldErrorAnnouncementProps {
   label?: JSX.Element;
   hint?: JSX.Element;
   error?: JSX.Element;

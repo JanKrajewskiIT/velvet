@@ -20,6 +20,7 @@ import { clamp } from '../../utils/math';
 import { Control } from '../primitives/Control';
 import { ControlInput } from '../primitives/ControlInput';
 import { Field } from '../primitives/Field';
+import type { FieldErrorAnnouncementProps } from '../primitives/fieldErrorAnnouncement';
 import { Glyph } from '../primitives/Glyph';
 import { Text } from '../primitives/Text';
 import { callHandler } from './callHandler';
@@ -31,10 +32,13 @@ const HOLD_DELAY_MS = 450;
 const HOLD_REPEAT_MS = 60;
 const SHIFT_MULTIPLIER = 10;
 
-export interface NumberInputProps extends Omit<
-  JSX.InputHTMLAttributes<HTMLInputElement>,
-  'size' | 'value' | 'defaultValue' | 'min' | 'max' | 'step' | 'prefix' | 'class' | 'type'
-> {
+export interface NumberInputProps
+  extends
+    Omit<
+      JSX.InputHTMLAttributes<HTMLInputElement>,
+      'size' | 'value' | 'defaultValue' | 'min' | 'max' | 'step' | 'prefix' | 'class' | 'type'
+    >,
+    FieldErrorAnnouncementProps {
   label?: JSX.Element;
   hint?: JSX.Element;
   error?: JSX.Element;
@@ -70,6 +74,7 @@ export const NumberInput = (props: NumberInputProps) => {
     'label',
     'hint',
     'error',
+    'data-field-error-announcement',
     'optional',
     'value',
     'defaultValue',
@@ -185,6 +190,7 @@ export const NumberInput = (props: NumberInputProps) => {
       label={local.label}
       hint={local.hint}
       error={local.error || message()}
+      data-field-error-announcement={local['data-field-error-announcement']}
       optional={local.optional}
       required={local.required}
       id={id()}

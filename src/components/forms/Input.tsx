@@ -6,6 +6,7 @@ import { joinIdRefs } from '../../utils/joinIdRefs';
 import { Polymorphic } from '../../utils/polymorphic';
 import { Control } from '../primitives/Control';
 import { Field } from '../primitives/Field';
+import type { FieldErrorAnnouncementProps } from '../primitives/fieldErrorAnnouncement';
 import { typographyClass } from '../primitives/typography';
 import { callHandler } from './callHandler';
 import { createValidation, type Validator } from './createValidation';
@@ -17,10 +18,10 @@ type InputInputEvent = InputEvent & { currentTarget: HTMLInputElement; target: H
 
 const fieldValue = (e: Event): string => (e.currentTarget as TextField).value;
 
-export interface InputProps extends Omit<
-  JSX.InputHTMLAttributes<HTMLInputElement>,
-  'size' | 'prefix' | 'value' | 'class'
-> {
+export interface InputProps
+  extends
+    Omit<JSX.InputHTMLAttributes<HTMLInputElement>, 'size' | 'prefix' | 'value' | 'class'>,
+    FieldErrorAnnouncementProps {
   label?: JSX.Element;
   hint?: JSX.Element;
   /** Controlled error message (overrides `validate`). */
@@ -60,6 +61,7 @@ export const Input = (props: InputProps) => {
     'label',
     'hint',
     'error',
+    'data-field-error-announcement',
     'optional',
     'required',
     'iconLeft',
@@ -93,6 +95,7 @@ export const Input = (props: InputProps) => {
       label={local.label}
       hint={local.hint}
       error={local.error || validation.message()}
+      data-field-error-announcement={local['data-field-error-announcement']}
       optional={local.optional}
       required={local.required}
       id={local.id}

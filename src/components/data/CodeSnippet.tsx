@@ -42,6 +42,8 @@ export interface CodeSnippetProps {
   /** @default 'jsx' */
   language?: string;
   title?: string;
+  /** Accessible name of the code region and variant tablist. Defaults to title, then localized "Code". */
+  label?: string;
   /** Multiple variants — npm / yarn / pnpm. */
   tabs?: CodeSnippetTab[];
   /** @default true */
@@ -68,12 +70,15 @@ export const CodeSnippet = (props: CodeSnippetProps) => {
   const translate = useTranslate();
   const baseId = createUniqueId();
   const [tabIndex, setTabIndex] = createSignal(0);
+  const hasTabs = () => (merged.tabs?.length ?? 0) > 0;
+  const activeTabIndex = () => Math.min(tabIndex(), Math.max((merged.tabs?.length ?? 0) - 1, 0));
+  const snippetLabel = () => merged.label ?? merged.title ?? translate('velvet.data.codeSnippet.codeLabel');
   const [copyStatus, setCopyStatus] = createSignal<CopyStatus>('idle');
   let resetTimer: ReturnType<typeof setTimeout> | undefined;
   onCleanup(() => clearTimeout(resetTimer));
 
   const current = () => {
-    const tab = merged.tabs?.[tabIndex()];
+    const tab = merged.tabs?.[activeTabIndex()];
     return tab
       ? { code: tab.code, language: tab.language ?? merged.language, label: tab.label }
       : { code: merged.code, language: merged.language, label: merged.title };
@@ -121,38 +126,36 @@ export const CodeSnippet = (props: CodeSnippetProps) => {
     <div class={cx(typographyClass('body-sm'), styles.code, merged.class)}>
       <div class={styles.codePartBar}>
         <Show
-          when={merged.tabs}
+          when={hasTabs()}
           fallback={
             <Text as="span" variant="kbd" tone="inherit" class={styles.codePartTitle}>
               {current().label || current().language}
             </Text>
           }
         >
-          {(tabs) => (
-            <div role="tablist" class={styles.codePartTabs}>
-              <For each={tabs()}>
-                {(tab, index) => (
-                  <button
-                    type="button"
-                    role="tab"
-                    id={`${baseId}-t${index()}`}
-                    aria-selected={index() === tabIndex()}
-                    aria-controls={`${baseId}-panel`}
-                    tabIndex={index() === tabIndex() ? 0 : -1}
-                    class={cx(
-                      typographyClass('kbd'),
-                      styles.codePartTab,
-                      index() === tabIndex() && styles.codePartTabVariantOn,
-                    )}
-                    onClick={() => setTabIndex(index())}
-                    onKeyDown={(event) => onTabKeyDown(event, index())}
-                  >
-                    {tab.label}
-                  </button>
-                )}
-              </For>
-            </div>
-          )}
+          <div role="tablist" aria-label={snippetLabel()} class={styles.codePartTabs}>
+            <For each={merged.tabs}>
+              {(tab, index) => (
+                <button
+                  type="button"
+                  role="tab"
+                  id={`${baseId}-t${index()}`}
+                  aria-selected={index() === activeTabIndex()}
+                  aria-controls={`${baseId}-panel`}
+                  tabIndex={index() === activeTabIndex() ? 0 : -1}
+                  class={cx(
+                    typographyClass('kbd'),
+                    styles.codePartTab,
+                    index() === activeTabIndex() && styles.codePartTabVariantOn,
+                  )}
+                  onClick={() => setTabIndex(index())}
+                  onKeyDown={(event) => onTabKeyDown(event, index())}
+                >
+                  {tab.label}
+                </button>
+              )}
+            </For>
+          </div>
         </Show>
         <button
           type="button"
@@ -181,8 +184,9 @@ export const CodeSnippet = (props: CodeSnippetProps) => {
         class={cx(styles.codePartPre, merged.wrap && styles.codePartPreVariantWrap)}
         style={{ 'max-height': cssLength(merged.maxHeight) }}
         tabIndex={0}
-        role={merged.tabs ? 'tabpanel' : undefined}
-        aria-labelledby={merged.tabs ? `${baseId}-t${tabIndex()}` : undefined}
+        role={hasTabs() ? 'tabpanel' : 'region'}
+        aria-label={hasTabs() ? undefined : snippetLabel()}
+        aria-labelledby={hasTabs() ? `${baseId}-t${activeTabIndex()}` : undefined}
       >
         <code>
           <For each={lines()}>

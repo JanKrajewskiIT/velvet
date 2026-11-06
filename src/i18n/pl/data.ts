@@ -10,6 +10,7 @@ export const dataPl: TranslationOf<typeof dataEn> = {
     statusOffline: 'Niedostępny',
   },
   codeSnippet: {
+    codeLabel: 'Kod',
     copyFailed: 'Nie udało się skopiować',
     copyCode: 'Kopiuj kod',
     copiedAnnouncement: 'Skopiowano do schowka',

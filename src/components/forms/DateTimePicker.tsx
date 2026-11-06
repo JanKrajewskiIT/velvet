@@ -7,6 +7,7 @@ import { cx } from '../../utils/cx';
 import { fmtDate, minutesOfDay, startOfDay } from '../../utils/date';
 import { Button } from '../actions/Button';
 import { Field } from '../primitives/Field';
+import type { FieldErrorAnnouncementProps } from '../primitives/fieldErrorAnnouncement';
 import { Glyph } from '../primitives/Glyph';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
@@ -22,7 +23,7 @@ import { formDateTime } from './formDate';
 import { FormValue } from './FormValue';
 import { formatMinutes } from './time';
 
-export interface DateTimePickerProps extends FormControlProps {
+export interface DateTimePickerProps extends FormControlProps, FieldErrorAnnouncementProps {
   serializeValue?: (date: Date) => string;
   label?: JSX.Element;
   hint?: JSX.Element;
@@ -175,7 +176,15 @@ export const DateTimePicker = (props: DateTimePickerProps) => {
   };
 
   return (
-    <Field label={p.label} hint={p.hint} error={p.error} optional={p.optional} required={p.required} id={p.id}>
+    <Field
+      label={p.label}
+      hint={p.hint}
+      error={p.error}
+      optional={p.optional}
+      required={p.required}
+      id={p.id}
+      data-field-error-announcement={p['data-field-error-announcement']}
+    >
       {(control) => (
         <span ref={popover.setWrap} class={cx(styles.popoverWrap, styles.datepicker)}>
           <DateField

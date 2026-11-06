@@ -1,10 +1,11 @@
 import type { JSX } from 'solid-js';
 
 import type { ControlProps } from '../primitives/Control';
+import type { FieldErrorAnnouncementProps } from '../primitives/fieldErrorAnnouncement';
 import type { FormControlProps } from './formControl';
 import type { TreeSelectNode } from './treeSelectRows';
 
-interface TreeSelectBaseProps extends FormControlProps {
+interface TreeSelectBaseProps extends FormControlProps, FieldErrorAnnouncementProps {
   label?: JSX.Element;
   hint?: JSX.Element;
   error?: JSX.Element;

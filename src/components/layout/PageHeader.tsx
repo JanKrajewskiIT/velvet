@@ -6,7 +6,7 @@ import type { StatusTone } from '../../utils/tone';
 import { IconButton } from '../actions/IconButton';
 import { Badge } from '../display/Badge';
 import { Breadcrumb, type BreadcrumbItem } from '../navigation/Breadcrumb';
-import { type TabItem, Tabs } from '../navigation/Tabs';
+import { type TabItem, Tabs, type TabsProps } from '../navigation/Tabs';
 import { Glyph } from '../primitives/Glyph';
 import { Heading } from '../primitives/Heading';
 import { Text } from '../primitives/Text';
@@ -43,6 +43,8 @@ export interface PageHeaderProps {
   actions?: JSX.Element;
   /** Section tabs on the bottom edge. */
   tabs?: TabItem[];
+  tabsLabel?: string;
+  tabActivation?: TabsProps['activation'];
   activeTab?: string;
   defaultTab?: string;
   onTabChange?: (value: string) => void;
@@ -140,6 +142,8 @@ export const PageHeader = (p: PageHeaderProps) => {
         <Tabs
           class={styles.pageHeaderPartTabs}
           items={p.tabs ?? []}
+          aria-label={p.tabsLabel}
+          activation={p.tabActivation}
           value={p.activeTab}
           defaultValue={p.defaultTab ?? p.tabs?.[0]?.value}
           onValueChange={(value) => p.onTabChange?.(value)}

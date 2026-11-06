@@ -198,7 +198,15 @@ export const Autocomplete = (props: AutocompleteProps) => {
   };
 
   return (
-    <Field label={p.label} hint={p.hint} error={p.error} optional={p.optional} required={p.required} id={id()}>
+    <Field
+      label={p.label}
+      hint={p.hint}
+      error={p.error}
+      optional={p.optional}
+      required={p.required}
+      id={id()}
+      data-field-error-announcement={p['data-field-error-announcement']}
+    >
       {(control) => (
         <div
           ref={popup.setRoot}

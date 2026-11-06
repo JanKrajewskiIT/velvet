@@ -96,7 +96,12 @@ export const ConfirmDialog = (props: ConfirmDialogProps) => {
       description={p.description}
       footer={
         <>
-          <Button variant="secondary" disabled={busy()} autofocus={danger()} onClick={() => p.onCancel?.()}>
+          <Button
+            variant="secondary"
+            aria-disabled={busy() || undefined}
+            autofocus={danger()}
+            onClick={() => p.onCancel?.()}
+          >
             {cancelLabel()}
           </Button>
           <Button

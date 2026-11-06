@@ -2,14 +2,6 @@
   composes: field from '../../styles/shared/primitives/field.module.css';
 }
 
-.fieldPartFoot {
-  composes: fieldPartFoot from '../../styles/shared/primitives/field.module.css';
-}
-
-.hintVariantLane {
-  composes: hintVariantLane from '../../styles/shared/primitives/field.module.css';
-}
-
 .hint {
   composes: hint from '../../styles/shared/primitives/field.module.css';
 }

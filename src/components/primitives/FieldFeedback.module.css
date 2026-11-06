@@ -1,0 +1,26 @@
+.feedback {
+  composes: fieldPartFoot from '../../styles/shared/primitives/field.module.css';
+}
+
+.feedbackVariantLane {
+  composes: hintVariantLane from '../../styles/shared/primitives/field.module.css';
+}
+
+.feedbackVariantEmpty {
+  composes: srOnly from '../../styles/shared/navigation/link.module.css';
+}
+
+.message {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.error {
+  composes: hint from '../../styles/shared/primitives/field.module.css';
+}
+
+.errorVariantPresent {
+  composes: hintVariantError from '../../styles/shared/primitives/field.module.css';
+}

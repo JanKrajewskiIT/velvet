@@ -1,5 +1,6 @@
 import { type JSX, mergeProps, Show, splitProps } from 'solid-js';
 
+import { callHandler } from '../../utils/callHandler';
 import { cx } from '../../utils/cx';
 import { Spinner } from '../feedback/Spinner';
 import { renderIcon } from '../primitives/Glyph';
@@ -17,7 +18,7 @@ export interface ButtonProps extends JSX.ButtonHTMLAttributes<HTMLButtonElement>
   /** Glyph name (e.g. `"plus"`) or a node. */
   iconLeft?: JSX.Element;
   iconRight?: JSX.Element;
-  /** Shows a spinner and disables. */
+  /** Shows a decorative spinner and blocks activation while preserving focus and the action label. */
   loading?: boolean;
   /** Full width. */
   block?: boolean;
@@ -34,10 +35,35 @@ export const Button = (props: ButtonProps) => {
     'loading',
     'block',
     'disabled',
+    'aria-disabled',
+    'onClick',
+    'onKeyDown',
+    'onKeyUp',
     'class',
     'children',
   ]);
   const groupSize = useButtonGroupSize();
+  const blocked = () =>
+    local.disabled || local.loading || local['aria-disabled'] === true || local['aria-disabled'] === 'true';
+  const click: JSX.EventHandler<HTMLButtonElement, MouseEvent> = (event) => {
+    if (blocked()) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
+    callHandler(local.onClick, event);
+  };
+  const keyboard = (
+    event: KeyboardEvent & { currentTarget: HTMLButtonElement; target: Element },
+    handler: ButtonProps['onKeyDown'],
+  ) => {
+    if (blocked() && (event.key === 'Enter' || event.key === ' ')) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
+    callHandler(handler, event);
+  };
   return (
     <button
       {...rest}
@@ -46,11 +72,15 @@ export const Button = (props: ButtonProps) => {
         buttonClass({ variant: local.variant, size: local.size ?? groupSize(), block: local.block }),
         local.class,
       )}
-      disabled={local.disabled || local.loading}
-      aria-busy={local.loading || undefined}
+      disabled={local.disabled}
+      aria-disabled={local.loading || local['aria-disabled']}
+      aria-busy={local.loading || rest['aria-busy']}
+      onClick={click}
+      onKeyDown={(event) => keyboard(event, local.onKeyDown)}
+      onKeyUp={(event) => keyboard(event, local.onKeyUp)}
     >
       <Show when={local.loading} fallback={renderIcon(local.iconLeft)}>
-        <Spinner size="inline" tone="current" />
+        <Spinner size="inline" tone="current" decorative />
       </Show>
       {local.children}
       <Show when={!local.loading}>{renderIcon(local.iconRight)}</Show>

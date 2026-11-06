@@ -75,7 +75,15 @@ export const TreeSelect = (props: TreeSelectProps) => {
   };
 
   return (
-    <Field label={p.label} hint={p.hint} error={p.error} optional={p.optional} required={p.required} id={p.id}>
+    <Field
+      label={p.label}
+      hint={p.hint}
+      error={p.error}
+      optional={p.optional}
+      required={p.required}
+      id={p.id}
+      data-field-error-announcement={p['data-field-error-announcement']}
+    >
       {(control) => (
         <div ref={setRoot} class={cx(styles.select, styles.tselect)}>
           <Control

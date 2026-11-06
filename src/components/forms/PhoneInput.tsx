@@ -17,6 +17,7 @@ import { joinIdRefs } from '../../utils/joinIdRefs';
 import { Control } from '../primitives/Control';
 import { ControlInput } from '../primitives/ControlInput';
 import { Field } from '../primitives/Field';
+import type { FieldErrorAnnouncementProps } from '../primitives/fieldErrorAnnouncement';
 import { Glyph } from '../primitives/Glyph';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
@@ -38,10 +39,13 @@ export interface PhoneValueMeta {
   valid: boolean;
 }
 
-export interface PhoneInputProps extends Omit<
-  JSX.InputHTMLAttributes<HTMLInputElement>,
-  'size' | 'value' | 'defaultValue' | 'class' | 'type' | 'name' | 'prefix'
-> {
+export interface PhoneInputProps
+  extends
+    Omit<
+      JSX.InputHTMLAttributes<HTMLInputElement>,
+      'size' | 'value' | 'defaultValue' | 'class' | 'type' | 'name' | 'prefix'
+    >,
+    FieldErrorAnnouncementProps {
   /** @default localized "Phone" */
   label?: JSX.Element;
   hint?: JSX.Element;
@@ -89,6 +93,7 @@ export const PhoneInput = (props: PhoneInputProps) => {
     'label',
     'hint',
     'error',
+    'data-field-error-announcement',
     'optional',
     'countries',
     'defaultCountry',
@@ -189,6 +194,7 @@ export const PhoneInput = (props: PhoneInputProps) => {
       label={local.label ?? translate('velvet.forms.phoneInput.label')}
       hint={local.hint}
       error={local.error || lengthError()}
+      data-field-error-announcement={local['data-field-error-announcement']}
       optional={local.optional}
       required={local.required}
       id={id()}

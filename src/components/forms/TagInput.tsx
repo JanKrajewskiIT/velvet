@@ -6,6 +6,7 @@ import { cx } from '../../utils/cx';
 import { Tag } from '../display/Tag';
 import { Control } from '../primitives/Control';
 import { Field } from '../primitives/Field';
+import type { FieldErrorAnnouncementProps } from '../primitives/fieldErrorAnnouncement';
 import { typographyClass } from '../primitives/typography';
 import { createFormValidation } from './createFormValidation';
 import type { FormControlProps } from './formControl';
@@ -16,7 +17,7 @@ const DUPLICATE_FLASH_MS = 600;
 const LIST_SEPARATOR = ',';
 const PASTED_LIST = /[,\n]/u;
 
-export interface TagInputProps extends FormControlProps {
+export interface TagInputProps extends FormControlProps, FieldErrorAnnouncementProps {
   label?: JSX.Element;
   hint?: JSX.Element;
   error?: JSX.Element;
@@ -110,6 +111,7 @@ export const TagInput = (props: TagInputProps) => {
       label={p.label}
       hint={p.hint}
       error={p.error}
+      data-field-error-announcement={p['data-field-error-announcement']}
       optional={p.optional}
       required={p.required}
       id={id()}

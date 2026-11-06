@@ -5,7 +5,8 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { clamp } from '../../utils/math';
 import { positiveInteger } from '../../utils/numericOption';
-import { FieldHint } from '../primitives/FieldHint';
+import type { FieldErrorAnnouncementProps } from '../primitives/fieldErrorAnnouncement';
+import { FieldFeedback } from '../primitives/FieldFeedback';
 import { FieldLabel } from '../primitives/FieldLabel';
 import { Separator } from '../primitives/Separator';
 import { createFormValidation } from './createFormValidation';
@@ -19,7 +20,7 @@ const ALPHANUMERIC_CHAR = /^[a-z0-9]$/iu;
 const SIX_BOXES = 6;
 const EIGHT_BOXES = 8;
 
-export interface OtpInputProps extends FormControlProps {
+export interface OtpInputProps extends FormControlProps, FieldErrorAnnouncementProps {
   /** @default 6 */
   length?: number;
   label?: JSX.Element;
@@ -165,7 +166,9 @@ export const OtpInput = (props: OtpInputProps) => {
                 autofocus={p.autoFocus && index === 0}
                 aria-label={cellLabel(index + 1, length())}
                 aria-invalid={!!p.error || validation.invalid() || undefined}
-                aria-describedby={validation.describedBy(p.error || p.hint ? `${id()}-hint` : undefined)}
+                aria-describedby={validation.describedBy(
+                  p.error ? `${id()}-error` : p.hint ? `${id()}-hint` : undefined,
+                )}
                 onInput={(e) => onInput(index, e.currentTarget)}
                 onKeyDown={(e) => onKeyDown(index, e)}
                 onPaste={(e) => onPaste(index, e)}
@@ -185,11 +188,13 @@ export const OtpInput = (props: OtpInputProps) => {
         focusInvalid={() => focusCell(0)}
         onReset={() => setStored(p.defaultValue)}
       />
-      <Show when={p.error || p.hint}>
-        <FieldHint id={`${id()}-hint`} error={!!p.error} aria-live="polite">
-          {p.error || p.hint}
-        </FieldHint>
-      </Show>
+      <FieldFeedback
+        hintId={`${id()}-hint`}
+        errorId={`${id()}-error`}
+        hint={p.hint}
+        error={p.error}
+        data-field-error-announcement={p['data-field-error-announcement']}
+      />
     </div>
   );
 };
