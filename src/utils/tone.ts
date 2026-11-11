@@ -15,7 +15,7 @@ export const CATEGORY_TONES = Object.freeze([
 
 export type Tone = StatusTone | (typeof CATEGORY_TONES)[number];
 
-const TONE_ICON: Record<StatusTone, string> = {
+export const TONE_ICON: Record<StatusTone, string> = {
   neutral: 'bell',
   brand: 'sparkles',
   info: 'info',

@@ -29,4 +29,4 @@ export {
 } from './theme/theme';
 export { addDays, addMonths, fmtDate, sameDay, startOfDay, weekdayNames } from './utils/date';
 export { reportAsyncError } from './utils/reportAsyncError';
-export { CATEGORY_TONES, type StatusTone, type Tone, TONES } from './utils/tone';
+export { CATEGORY_TONES, type StatusTone, type Tone, TONE_ICON, TONES } from './utils/tone';
