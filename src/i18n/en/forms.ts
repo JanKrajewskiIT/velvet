@@ -92,6 +92,7 @@ export const formsEn = defineDictionary({
   },
   inlineEdit: {
     placeholder: 'Click to add…',
+    editHint: 'Click to edit',
     saveErrorText: 'Couldn’t save — try again.',
   },
   mentionInput: {

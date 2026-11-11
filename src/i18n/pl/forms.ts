@@ -95,6 +95,7 @@ export const formsPl: TranslationOf<typeof formsEn> = {
   },
   inlineEdit: {
     placeholder: 'Kliknij, aby dodać…',
+    editHint: 'Kliknij, aby edytować',
     saveErrorText: 'Nie udało się zapisać — spróbuj ponownie.',
   },
   mentionInput: {

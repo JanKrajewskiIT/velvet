@@ -165,7 +165,11 @@ export const InlineEdit = (props: InlineEditProps) => {
           disabled={p.disabled}
           aria-disabled={p.disabled || busy() || undefined}
           aria-busy={busy() || undefined}
-          aria-label={p.label ? `${p.label}: ${current() || placeholder()}` : undefined}
+          aria-label={
+            p.label
+              ? `${p.label}: ${current() || placeholder()}. ${translate('velvet.forms.inlineEdit.editHint')}`
+              : undefined
+          }
         >
           <Text
             as="span"
