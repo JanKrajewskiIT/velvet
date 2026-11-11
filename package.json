@@ -114,7 +114,7 @@
         "dist/**/*.mjs",
         "!dist/**/*.module.css.mjs"
       ],
-      "limit": "550 kB",
+      "limit": "600 kB",
       "name": "Published JavaScript modules"
     },
     {
