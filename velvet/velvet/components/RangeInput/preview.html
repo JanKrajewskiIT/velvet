@@ -1,0 +1,21 @@
+<!-- @dsCard group="Components · Inputs" height=436 width=960 subtitle="Money range (currency + period) · fixed suffix · inverted-range error · disabled" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:var(--space-5)}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { RangeInput } = NS;
+const App = () => { var _a, _b; const [v, setV] = React.useState({ min: 12000, max: 18000 }); return (React.createElement("div", { className: "pane" },
+    React.createElement("div", { style: { display: 'grid', gridTemplateColumns: 'minmax(0,1.4fr) minmax(0,1fr)', gap: 24 } },
+        React.createElement(RangeInput, { label: "Budget", locale: "pl", value: v, onValueChange: setV, unitOptions: ['PLN', 'EUR', 'USD', 'GBP'], defaultUnit: "PLN", periodOptions: ['Hourly', 'Monthly', 'Yearly'], defaultPeriod: "Monthly", hint: 'Gross · ' + ((_a = v.min) !== null && _a !== void 0 ? _a : '…') + ' – ' + ((_b = v.max) !== null && _b !== void 0 ? _b : '…') }),
+        React.createElement(RangeInput, { label: "Area", suffix: "m\u00B2", fromLabel: "Min", toLabel: "Max", defaultValue: { min: 40 }, optional: true })),
+    React.createElement("div", { style: { display: 'grid', gridTemplateColumns: 'minmax(0,1.4fr) minmax(0,1fr)', gap: 24 } },
+        React.createElement(RangeInput, { label: "Budget", locale: "pl", prefix: "\u20AC", defaultValue: { min: 9000, max: 5000 } }),
+        React.createElement(RangeInput, { label: "Team size", defaultValue: { min: 3, max: 8 }, disabled: true })))); };
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

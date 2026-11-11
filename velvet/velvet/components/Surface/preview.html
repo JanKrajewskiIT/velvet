@@ -1,0 +1,99 @@
+<!-- @dsCard group="Atoms" height=1893 width=960 subtitle="The one primitive that paints a container · paint · tone · behaviour · tokens" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>
+html body{margin:0;padding:0;background:var(--bg-raised);color:var(--fg-primary);font:var(--type-body)}
+.ap{display:flex;flex-direction:column;gap:var(--space-5);padding:var(--space-5) var(--space-6)}
+.vcard{display:flex;flex-direction:column;gap:var(--space-3);min-width:0}
+.vcard+.vcard{padding-top:var(--space-5);border-top:var(--border-width) solid var(--border-subtle)}
+.vcard-t{display:flex;align-items:baseline;gap:var(--space-2);margin:0;font:var(--type-label-sm);color:var(--fg-primary)}
+.vcard-t small{font:var(--type-regular-weight) var(--type-kbd-size)/1.3 var(--font-mono);color:var(--fg-tertiary)}
+.ap-rows{display:flex;flex-direction:column}
+.ap-row{display:grid;grid-template-columns:120px minmax(0,1fr);gap:var(--space-4);align-items:center;padding:var(--space-3) 0;border-top:var(--border-width) solid var(--border-subtle)}
+.ap-row:first-child{border-top:0;padding-top:0}.ap-row:last-child{padding-bottom:0}
+.ap-row--top{align-items:start}
+.ap-k{font:var(--type-medium-weight) var(--type-kbd-size)/1.4 var(--font-mono);color:var(--fg-tertiary);min-width:0}
+.ap-v{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-3) var(--space-5);min-width:0}
+.ap-v--tight{gap:var(--space-2) var(--space-3)}
+.ap-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--min,240px)),1fr));gap:var(--space-4) var(--space-5);align-items:start}
+.ap-cell{display:flex;flex-direction:column;align-items:center;gap:var(--space-2);min-width:0}
+.ap-cell--fill{align-items:stretch}
+.ap-cell--start{align-items:flex-start}
+.ap-spec{display:flex;align-items:center;justify-content:center;min-height:var(--h,32px)}
+.ap-cell--fill>.ap-spec,.ap-cell--start>.ap-spec{justify-content:flex-start}
+.ap-cell--fill>.ap-spec>*{flex:1;min-width:0}
+.ap-cap{font:var(--type-regular-weight) var(--type-kbd-size)/1.4 var(--font-mono);color:var(--fg-tertiary)}
+.ap-cap b{font-weight:var(--type-medium-weight);color:var(--fg-secondary)}
+.ap-mxw{overflow-x:auto;max-width:100%}
+.ap-mx{width:max-content;display:grid;grid-template-columns:var(--rh,96px) repeat(var(--n),var(--cw,88px));gap:var(--space-3) var(--space-2);align-items:center;justify-items:center}
+.ap-mx>.ap-k{justify-self:start}.ap-mx>.ap-th{justify-self:center;text-align:center}
+.ap-stage{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-3) var(--space-4);padding:var(--space-4);border:var(--border-width) solid var(--border-subtle);border-radius:var(--radius-md);background:var(--bg-subtle);min-width:0}
+.ap-stage--col{flex-direction:column;align-items:stretch}
+.ap-note{font:var(--type-caption);color:var(--fg-tertiary);margin:0}
+
+@media (max-width:520px){.ap-row{grid-template-columns:minmax(0,1fr);gap:var(--space-2)}.ap{padding:var(--space-4)}}
+</style></head><body>
+<main class="ap" id="ap"></main>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const h = React.createElement;
+const Row = ({ k, children, top, tight }) => h('div', { className: 'ap-row' + (top ? ' ap-row--top' : '') }, h('span', { className: 'ap-k' }, k), h('div', { className: 'ap-v' + (tight ? ' ap-v--tight' : '') }, children));
+const Rows = ({ children }) => h('div', { className: 'ap-rows' }, children);
+const Cap = ({ children }) => h('span', { className: 'ap-cap' }, children);
+const Cell = ({ cap, children, fill, start, h: hh, style }) => h('div', { className: 'ap-cell' + (fill ? ' ap-cell--fill' : start ? ' ap-cell--start' : ''), style }, h('div', { className: 'ap-spec', style: hh ? { '--h': hh + 'px' } : undefined }, children), cap ? h(Cap, null, cap) : null);
+const Grid = ({ cols = 3, min, children, style }) => h('div', { className: 'ap-grid', style: { '--min': (min || { 5: 160, 4: 200, 3: 250, 2: 380, 1: 300 }[cols] || 240) + 'px', ...style } }, children);
+const Stage = ({ children, col, style }) => h('div', { className: 'ap-stage' + (col ? ' ap-stage--col' : ''), style }, children);
+const Mx = ({ head, rows, rh, cw }) => h('div', { className: 'ap-mxw' }, h('div', { className: 'ap-mx', style: { '--n': head.length, '--rh': rh, '--cw': cw } },
+    h('span'), head.map((x, i) => h('span', { key: i, className: 'ap-k ap-th' }, x)),
+    rows.map(([label, cells], r) => h(React.Fragment, { key: r }, h('span', { className: 'ap-k' }, label), cells.map((c, i) => h(React.Fragment, { key: i }, c))))));
+function mountAll(list) {
+    const host = document.getElementById('ap');
+    list.forEach(([title, desc, el], i) => {
+        const s = document.createElement('section'); s.className = 'vcard';
+        if (title) { const t = document.createElement('div'); t.className = 'vcard-t'; t.textContent = title; if (desc) { const sm = document.createElement('small'); sm.textContent = desc; t.appendChild(sm); } s.appendChild(t); }
+        const r = document.createElement('div'); r.id = 'root-' + i; s.appendChild(r); host.appendChild(s);
+        ReactDOM.createRoot(r).render(el);
+    });
+}
+const { Surface, Button } = NS;
+const nm = { font: "var(--type-label)", fontWeight: 600 };
+const sb = { font: "var(--type-caption)", color: "inherit", opacity: 0.72 };
+const tileCss = { minHeight: 84, justifyContent: "center", gap: 2 };
+const Tile = ({ name, text, ...p }) => /* @__PURE__ */ React.createElement(Surface, { padding: "md", style: tileCss, ...p }, /* @__PURE__ */ React.createElement("span", { style: nm }, name), /* @__PURE__ */ React.createElement("span", { style: sb }, text));
+const V = [["default", "Resting card"], ["low", "Toolbars, filter bars"], ["flat", "Border, no shadow"], ["raised", "Shadow, no border"], ["subtle", "Recedes into the page"], ["sunken", "Wells and insets"], ["brand", "Tinted brand wash"], ["brand-solid", "Filled brand"], ["inverse", "Dark on light"], ["glass", "Frosted · over imagery"]];
+const Paint = () => /* @__PURE__ */ React.createElement(Grid, { cols: 5, style: { gap: 12 } }, V.map(([v, s]) => v === "glass" ? /* @__PURE__ */ React.createElement("div", { key: v, style: { padding: 10, borderRadius: "var(--radius-xl)", background: "repeating-linear-gradient(135deg,var(--bg-sunken) 0 8px,var(--bg-page) 8px 16px)" } }, /* @__PURE__ */ React.createElement(Tile, { variant: v, name: v, text: s })) : /* @__PURE__ */ React.createElement(Tile, { key: v, variant: v, name: v, text: s })));
+const ST = ["brand", "neutral", "success", "warning", "danger", "info"], LB = ["blue", "indigo", "violet", "magenta", "teal", "cyan", "olive", "slate"];
+const ToneTile = ({ t }) => /* @__PURE__ */ React.createElement(Surface, { tone: t, accent: true, padding: "sm", style: { boxSizing: "border-box", width: 84, minHeight: 56, justifyContent: "flex-end", gap: 6, "--surface-pad-sm": "12px" } }, /* @__PURE__ */ React.createElement("span", { style: { alignSelf: "flex-start", padding: "2px 8px", borderRadius: "var(--radius-sm)", background: "var(--tone-bg)", color: "var(--tone-fg)", font: "var(--type-label-sm)" } }, t));
+const Tone = () => /* @__PURE__ */ React.createElement(Rows, null, /* @__PURE__ */ React.createElement(Row, { k: "status · meaning", top: true }, /* @__PURE__ */ React.createElement("div", { className: "ap-v", style: { gap: 12 } }, ST.map((t) => /* @__PURE__ */ React.createElement(ToneTile, { key: t, t })))), /* @__PURE__ */ React.createElement(Row, { k: "label · decorative", top: true }, /* @__PURE__ */ React.createElement("div", { className: "ap-v", style: { gap: 12 } }, LB.map((t) => /* @__PURE__ */ React.createElement(ToneTile, { key: t, t })))));
+const Behaviour = () => {
+  const [k, setK] = React.useState(0);
+  return /* @__PURE__ */ React.createElement(Rows, null, /* @__PURE__ */ React.createElement(Row, { k: "hover the tiles", top: true }, /* @__PURE__ */ React.createElement(Grid, { cols: 4, style: { width: "100%", gap: 16 } }, /* @__PURE__ */ React.createElement(Cell, { fill: true, start: true, cap: "hoverable · --surface-lift" }, /* @__PURE__ */ React.createElement(Tile, { hoverable: true, name: "hoverable", text: "Neutral lift. Not clickable." })), /* @__PURE__ */ React.createElement(Cell, { fill: true, start: true, cap: 'interactive · as="button"' }, /* @__PURE__ */ React.createElement(Tile, { as: "button", interactive: true, name: "interactive", text: "The whole box is one action." })), /* @__PURE__ */ React.createElement(Cell, { fill: true, start: true, cap: "tonal + tone · violet" }, /* @__PURE__ */ React.createElement(Tile, { hoverable: true, tonal: true, tone: "violet", name: "tonal", text: "Lift and glow track the tone." })), /* @__PURE__ */ React.createElement(Cell, { fill: true, start: true, cap: "selected · --bg-selected" }, /* @__PURE__ */ React.createElement(Tile, { selected: true, name: "selected", text: "Brand-tinted chosen state." })))), /* @__PURE__ */ React.createElement(Row, { k: "reveal", top: true }, /* @__PURE__ */ React.createElement("div", { key: k, style: { display: "grid", gridTemplateColumns: "repeat(3,minmax(0,140px))", gap: 12 } }, [0, 1, 2].map((i) => /* @__PURE__ */ React.createElement(Surface, { key: i, reveal: i, padding: "md", style: { minHeight: 56, justifyContent: "center", gap: 2 } }, /* @__PURE__ */ React.createElement("span", { style: nm }, "reveal=", i), /* @__PURE__ */ React.createElement("span", { style: sb }, i * 50, " ms")))), /* @__PURE__ */ React.createElement(Button, { size: "sm", variant: "secondary", onClick: () => setK(k + 1) }, "Replay"), /* @__PURE__ */ React.createElement(Cap, null, "50 ms stagger per index")));
+};
+const TK = [["--surface-bg", "color", "background"], ["--surface-border", "color", "hairline"], ["--surface-radius", "radius", "corner"], ["--surface-shadow", "shadow", "rest elevation"], ["--surface-shadow-hover", "shadow", "hover elevation"], ["--surface-pad-sm", "pad", 'padding="sm"'], ["--surface-pad-md", "pad", 'padding="md"'], ["--surface-pad-lg", "pad", 'padding="lg"'], ["--surface-lift", "text", "hover lift"], ["--surface-lift-tonal", "text", "tonal lift"], ["--surface-tonal-border-mix", "text", "tonal border"], ["--surface-tonal-glow-mix", "text", "tonal glow"]];
+const raw = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const Sample = ({ k, n }) => {
+  const box = { width: 64, height: 28, display: "grid", placeItems: "center" };
+  if (k === "color") return /* @__PURE__ */ React.createElement("div", { style: { ...box, background: "var(--bg-page)", border: "var(--border-width) solid var(--border-subtle)", borderRadius: "var(--radius-xs)" } }, /* @__PURE__ */ React.createElement("div", { style: { width: 40, height: 14, borderRadius: 3, background: n === "--surface-bg" ? "var(--surface-bg)" : "transparent", border: (n === "--surface-border" ? "2px" : "1px") + " solid var(--surface-border)" } }));
+  if (k === "radius") return /* @__PURE__ */ React.createElement("div", { style: { ...box, border: "1.5px solid var(--fg-tertiary)", borderRadius: "var(--surface-radius)" } });
+  if (k === "shadow") return /* @__PURE__ */ React.createElement("div", { style: { ...box, background: "var(--surface-bg)", borderRadius: "var(--radius-xs)", boxShadow: "var(" + n + ")" } });
+  if (k === "pad") return /* @__PURE__ */ React.createElement("div", { style: { width: "var(" + n + ")", height: 8, background: "var(--fg-brand)", borderRadius: 2 } });
+  return /* @__PURE__ */ React.createElement("span", { className: "ap-cap" }, "—");
+};
+const cols = { display: "grid", gridTemplateColumns: "minmax(0,196px) minmax(0,1fr) 56px", gap: 12, alignItems: "center", padding: "8px 0", borderTop: "var(--border-width) solid var(--border-subtle)", minWidth: 0 };
+const Tokens = () => {
+  const [, f] = React.useState(0);
+  React.useEffect(() => {
+    f(1);
+  }, []);
+  return /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,380px),1fr))", columnGap: 32 } }, TK.map(([n, k, d]) => /* @__PURE__ */ React.createElement("div", { key: n, style: cols }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { font: "var(--type-medium-weight) var(--type-caption-size)/1.3 var(--font-mono)", color: "var(--fg-primary)" } }, n), /* @__PURE__ */ React.createElement("div", { className: "ap-cap" }, d)), /* @__PURE__ */ React.createElement("div", { title: raw(n), style: { font: "var(--type-kbd-size)/1.3 var(--font-mono)", color: "var(--fg-secondary)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" } }, raw(n)), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement(Sample, { k, n })))));
+};
+mountAll([
+  ["Paint", 'variant="…" · how it looks at rest', /* @__PURE__ */ React.createElement(Paint, null)],
+  ["Tone", "tone sets --tone / --tone-fg / --tone-bg · accent draws the strip", /* @__PURE__ */ React.createElement(Tone, null)],
+  ["Behaviour & state", "hoverable · interactive · tonal · selected · reveal", /* @__PURE__ */ React.createElement(Behaviour, null)],
+  ["Tokens", "--surface-* · the only knobs that paint a container", /* @__PURE__ */ React.createElement(Tokens, null)]
+]);
+
+})();
+</script></body></html>

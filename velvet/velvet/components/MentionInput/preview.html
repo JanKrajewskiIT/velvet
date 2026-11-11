@@ -1,0 +1,26 @@
+<!-- @dsCard group="Components · Inputs" height=396 width=960 subtitle="@people · #projects · listbox at the caret · ↑↓ ↵ Tab Esc · highlighted tokens · plain-text value" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}.col{display:flex;flex-direction:column;gap:6px;min-width:0}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const L = ({ children }) => React.createElement("span", { className: "lbl" }, children);
+const { MentionInput } = NS;
+const USERS = [{ id: 1, label: 'Anna Kowal', description: 'Design lead' }, { id: 2, label: 'Marek Nowak', description: 'Researcher' }, { id: 3, label: 'Julia Wiśniewska', description: 'Reviewer' }, { id: 4, label: 'Tomasz Zieliński', description: 'Engineering manager' }, { id: 5, label: 'Ola Mazur', description: 'Product designer' }];
+const TAGS = [{ label: 'planning-q4' }, { label: 'design-system' }, { label: 'onboarding' }];
+const App = () => {
+    const [v, setV] = React.useState('Great work — @Anna Kowal can you review with @Marek Nowak? Filed under #planning-q4. ');
+    return React.createElement("div", { className: "pane" },
+        React.createElement("div", { className: "g2", style: { gridTemplateColumns: 'minmax(0,3fr) minmax(0,2fr)' } },
+            React.createElement(MentionInput, { label: "Comment", hint: "Type @ for people, # for projects", users: USERS, tags: TAGS, value: v, onValueChange: setV, rows: 3 }),
+            React.createElement("div", { className: "col" },
+                React.createElement(L, null, "value (plain text)"),
+                React.createElement("div", { style: { font: '400 12px/1.6 var(--font-mono)', color: 'var(--fg-secondary)', whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' } }, JSON.stringify(v)))));
+};
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

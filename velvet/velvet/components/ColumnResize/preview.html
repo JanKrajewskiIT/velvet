@@ -1,0 +1,29 @@
+<!-- @dsCard group="Components · Data" height=360 width=960 subtitle="Column-width handle · drag · ← → · double-click to reset" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl{font:600 10px/1.3 var(--font-sans);letter-spacing:.08em;text-transform:uppercase;color:var(--fg-tertiary);margin-bottom:10px}
+.pane{display:flex;flex-direction:column;gap:var(--space-5)}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-5)}.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-5)}.r{display:flex;flex-wrap:wrap;gap:var(--space-2);align-items:center}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const h = React.createElement;
+const { ColumnResize } = NS;
+const COLS = [{ key: 'name', label: 'Name', def: 200 }, { key: 'role', label: 'Role', def: 160 }, { key: 'status', label: 'Status', def: 120 }];
+const ROWS = [['Atlas Studio', 'Design lead', 'Active'], ['Northwind', 'Product designer', 'Paused'], ['Globex', 'UX researcher', 'Active']];
+const cell = (w, extra) => ({ position: 'relative', boxSizing: 'border-box', width: w, flex: 'none', padding: '0 var(--space-3)', height: 'var(--control-height-md)', display: 'flex', alignItems: 'center', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis', ...extra });
+const App = () => {
+ const [w, setW] = React.useState({ name: 200, role: 160, status: 120 });
+ return (h("div", { className: "pane" },
+ h("div", { style: { border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-md)', overflowX: 'auto', width: 'fit-content', maxWidth: '100%' } },
+ h("div", { style: { display: 'flex', background: 'var(--bg-subtle)', font: 'var(--type-label)', color: 'var(--fg-secondary)' } },
+ COLS.map(c => h("div", { key: c.key, style: cell(w[c.key]) }, c.label,
+ h(ColumnResize, { label: 'Resize ' + c.label, width: w[c.key], min: 80, onResize: v => setW(s => ({ ...s, [c.key]: v })), onReset: () => setW(s => ({ ...s, [c.key]: c.def })) })))),
+ ROWS.map((r, i) => h("div", { key: i, style: { display: 'flex', borderTop: '1px solid var(--border-subtle)', fontSize: 'var(--type-body-sm-size)' } }, r.map((v, j) => h("div", { key: j, style: cell(w[COLS[j].key]) }, v))))),
+ h("div", { className: "lbl" }, 'Widths · ' + COLS.map(c => c.label + ' ' + Math.round(w[c.key]) + ' px').join(' · ')),
+ h("div", { className: "lbl" }, "Drag the edge of a header cell · focus it and press ← → to move by 16 px · double-click to reset")));
+};
+ReactDOM.createRoot(document.getElementById('root-0')).render(h(App, null));
+
+})();
+</script></body></html>

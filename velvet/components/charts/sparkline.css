@@ -1,6 +1,0 @@
-/* Sparkline */
-.vui-spark{position:relative;width:100%;min-width:0}
-.vui-spark svg{display:block;overflow:visible;outline:0;border-radius:var(--radius-xs)}
-.vui-spark svg:focus-visible{box-shadow:var(--focus-ring)}
-.vui-spark__val{position:absolute;top:-22px;right:0;display:inline-flex;gap:var(--space-1-5);padding:var(--space-0-5) var(--space-1-5);border-radius:var(--radius-sm);background:var(--bg-overlay);box-shadow:var(--elevation-card);font:var(--type-title-weight) var(--type-overline-size)/1.4 var(--font-mono);font-variant-numeric:tabular-nums;pointer-events:none}
-.vui-spark__val span{color:var(--fg-tertiary);font-weight:var(--type-body-weight)}

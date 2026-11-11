@@ -1,0 +1,589 @@
+{
+  "_": "Single source of truth for sections: title, blurb (shown in the Showcase), viewer group and order of items; section 00 holds only items that are not shown in the Showcase, so the Showcase numbers run 01…; `default: true` marks the group the Library opens on. Edit here, then run: node docs/sync-sections.mjs (from the project root). It rewrites the @ds-bundle header of components/bundle.js (order in the design-system page), the group= marker of every preview, and showcase/cards.json (order in the Showcase app). Card captions (name, subtitle, viewport) live in showcase/cards.json and are carried over. An item is a component/card folder name; {\"name\",\"card\"} is a Showcase-only card (file under showcase/cards/), {\"name\",\"showcase\":false} is shown only in the design-system page.",
+  "tabs": [
+    {
+      "id": "found",
+      "title": "Foundations",
+      "from": 0,
+      "to": 8
+    },
+    {
+      "id": "icons",
+      "title": "Icons",
+      "from": 9,
+      "to": 9
+    },
+    {
+      "id": "atoms",
+      "title": "Atoms",
+      "from": 10,
+      "to": 10
+    },
+    {
+      "id": "comp",
+      "title": "Components",
+      "from": 11,
+      "to": 99
+    }
+  ],
+  "sections": [
+    {
+      "n": "00",
+      "title": "Overview",
+      "blurb": "Global theme switch for the specimen cards. The rules themselves are in docs/rules.md.",
+      "group": "Foundations · Tokens",
+      "items": [
+        {
+          "name": "ThemeSwitch",
+          "showcase": false
+        }
+      ]
+    },
+    {
+      "n": "01",
+      "title": "Brand",
+      "blurb": "Wordmark, signet and how they sit on light, dark and brand fills.",
+      "group": "Brand",
+      "items": [
+        "BrandWordmark",
+        {
+          "name": "ColorBrand",
+          "card": "showcase/cards/color-brand.html"
+        },
+        "BrandLogo"
+      ]
+    },
+    {
+      "n": "02",
+      "title": "Color",
+      "blurb": "OKLCH ramps, semantic roles and contrast — every pairing checked.",
+      "group": "Foundations · Color",
+      "items": [
+        "ColorBackgrounds",
+        "ColorCategorical",
+        {
+          "name": "ColorNeutral",
+          "card": "showcase/cards/color-neutral.html"
+        },
+        "ColorOnColor",
+        {
+          "name": "ColorStatusRamps",
+          "card": "showcase/cards/color-status-ramps.html"
+        },
+        "ColorStatus",
+        "ColorTextOnBg",
+        "ColorToneContrast"
+      ]
+    },
+    {
+      "n": "03",
+      "title": "Type",
+      "blurb": "Three families, one role scale. Display, text, mono.",
+      "group": "Foundations · Type",
+      "items": [
+        {
+          "name": "TypeFamilies",
+          "card": "showcase/cards/type-families.html"
+        },
+        "TypeFigures",
+        "TypeRolesDisplay",
+        {
+          "name": "TypeRolesText",
+          "card": "showcase/cards/type-roles-text.html"
+        },
+        {
+          "name": "TypeScale",
+          "card": "showcase/cards/type-scale.html"
+        },
+        {
+          "name": "TypeTrackingLeading",
+          "card": "showcase/cards/type-tracking-leading.html"
+        }
+      ]
+    },
+    {
+      "n": "04",
+      "title": "Shape",
+      "blurb": "Radius and border weights, from hairline to pill.",
+      "group": "Foundations · Shape",
+      "items": [
+        "ShapeBorder",
+        {
+          "name": "ShapeRadius",
+          "card": "showcase/cards/shape-radius.html"
+        }
+      ]
+    },
+    {
+      "n": "05",
+      "title": "Space & Layout",
+      "blurb": "A 4px grid, containers, breakpoints and the app shell.",
+      "group": "Foundations · Space & Layout",
+      "items": [
+        "Breakpoints",
+        "LayoutContainers",
+        "LayoutShell",
+        "SizeControls",
+        "SizeFixed",
+        "SizeNestedOverlays",
+        {
+          "name": "SpaceScale",
+          "card": "showcase/cards/space-scale.html"
+        }
+      ]
+    },
+    {
+      "n": "06",
+      "title": "Depth",
+      "blurb": "Elevation intents, layers, shadows and scrims.",
+      "group": "Foundations · Depth",
+      "items": [
+        "ElevationIntents",
+        "ElevationLayers",
+        "ElevationScrims",
+        {
+          "name": "ElevationShadows",
+          "card": "showcase/cards/elevation-shadows.html"
+        }
+      ]
+    },
+    {
+      "n": "07",
+      "title": "Motion",
+      "blurb": "Five durations, five curves, named by intent.",
+      "group": "Foundations · Motion",
+      "items": [
+        "MotionDurations",
+        "MotionEasing",
+        "MotionIntents",
+        "MotionKeyframes"
+      ]
+    },
+    {
+      "n": "08",
+      "title": "State",
+      "blurb": "Hover, pressed, selected and focus — one consistent language.",
+      "group": "Foundations · State",
+      "items": [
+        "StateAccessibility",
+        "StateActions",
+        "StateFocus",
+        "StateLayers"
+      ]
+    },
+    {
+      "n": "09",
+      "title": "Icons",
+      "blurb": "One stroke-based set, sized to the 12–24 icon scale.",
+      "group": "Icons",
+      "items": [
+        "Icon"
+      ]
+    },
+    {
+      "n": "10",
+      "title": "Atoms",
+      "blurb": "The smallest parts every component is built from.",
+      "default": true,
+      "group": "Atoms",
+      "items": [
+        "Avatar",
+        "Badge",
+        "Checkmark",
+        "Chevron",
+        "CloseButton",
+        "Control",
+        "Count",
+        "Dot",
+        "EmptyText",
+        "Field",
+        "Glyph",
+        "Handle",
+        "IconTile",
+        "Indicator",
+        "Kbd",
+        "Mark",
+        "Marker",
+        "Meter",
+        "Option",
+        "Listbox",
+        "Rail",
+        "SectionLabel",
+        "Segmented",
+        "Separator",
+        "Skeleton",
+        "Spinner",
+        "Surface",
+        "Swatch",
+        "Tag",
+        "Text",
+        "VisuallyHidden",
+        "Weekday"
+      ]
+    },
+    {
+      "n": "11",
+      "title": "Layout",
+      "blurb": "Stacks, dividers, split panes and scroll areas.",
+      "group": "Components · Layout",
+      "items": [
+        "Columns",
+        "Divider",
+        "Grid",
+        "ScrollArea",
+        "SplitPane",
+        "Stack"
+      ]
+    },
+    {
+      "n": "12",
+      "title": "Display",
+      "blurb": "Accordions, list items, markdown, code snippets, QR codes, countdowns and watermarks, direction badges, code labels and news items.",
+      "group": "Components · Display",
+      "items": [
+        "Accordion",
+        "CodeLabel",
+        "CodeSnippet",
+        "Countdown",
+        "DirectionBadge",
+        "ListItem",
+        "Markdown",
+        "NewsItem",
+        "QRCode",
+        "RatingSummary",
+        "Watermark"
+      ]
+    },
+    {
+      "n": "13",
+      "title": "Feedback",
+      "blurb": "Alerts, banners, toasts, notifications, data states, status pages and the environment strip.",
+      "group": "Components · Feedback",
+      "items": [
+        "Alert",
+        "Banner",
+        "DataState",
+        "EmptyState",
+        "EnvironmentBar",
+        "ErrorState",
+        "NotificationCenter",
+        "NotificationList",
+        "StatusPage",
+        "Toast"
+      ]
+    },
+    {
+      "n": "14",
+      "title": "Progress",
+      "blurb": "Progress bars and rings, loaders, checklists and gates.",
+      "group": "Components · Progress",
+      "items": [
+        "GateList",
+        "Loader",
+        "LoadingOverlay",
+        "Progress",
+        "ProgressRing",
+        "RobotProcessingIndicator",
+        "SetupChecklist"
+      ]
+    },
+    {
+      "n": "15",
+      "title": "Actions",
+      "blurb": "Buttons in every variant, size and state.",
+      "group": "Components · Actions",
+      "items": [
+        "AuthButton",
+        "Button",
+        "ButtonGroup",
+        "CalendarEventButton",
+        "CopyButton",
+        "Fab",
+        "IconButton",
+        "ThemeToggle",
+        "ToggleButton",
+        "ToggleGroup",
+        "Toolbar"
+      ]
+    },
+    {
+      "n": "16",
+      "title": "Inputs",
+      "blurb": "Text, numbers, passwords, phones, files and rich text.",
+      "group": "Components · Inputs",
+      "items": [
+        "CodeEditor",
+        "CopyField",
+        "FileUpload",
+        "InlineEdit",
+        "Input",
+        "MarkdownEditor",
+        "MentionInput",
+        "NumberInput",
+        "OtpInput",
+        "PasswordInput",
+        "PhoneInput",
+        "RangeInput",
+        "RichTextEditor",
+        "SearchInput",
+        "SignaturePad",
+        "TagInput",
+        "Textarea"
+      ]
+    },
+    {
+      "n": "17",
+      "title": "Selection",
+      "blurb": "Select, autocomplete, chips, checkboxes, sliders, switches.",
+      "group": "Components · Selection",
+      "items": [
+        "Autocomplete",
+        "Cascader",
+        "Checkbox",
+        "Chip",
+        "ChipGroup",
+        "MultiSelect",
+        "OptionSwitcher",
+        "Radio",
+        "Rating",
+        "Select",
+        "Slider",
+        "Switch",
+        "TransferList",
+        "TreeSelect"
+      ]
+    },
+    {
+      "n": "18",
+      "title": "Pickers",
+      "blurb": "Dates, ranges, times and colours.",
+      "group": "Components · Pickers",
+      "items": [
+        "Calendar",
+        "ColorPicker",
+        "DatePicker",
+        "DateRangePicker",
+        "DateTimePicker",
+        "TimePicker",
+        "TimeStepper"
+      ]
+    },
+    {
+      "n": "19",
+      "title": "Forms",
+      "blurb": "Layout, validation and multi-step flows.",
+      "group": "Components · Forms",
+      "items": [
+        "EditableCollection",
+        "ErrorSummary",
+        "FormLayout",
+        "Wizard"
+      ]
+    },
+    {
+      "n": "20",
+      "title": "Overlays",
+      "blurb": "Dialogs, drawers, sheets, popovers, tooltips, tours and task dialogs.",
+      "group": "Components · Overlays",
+      "items": [
+        "BottomSheet",
+        "ColorLabelManager",
+        "ColorLabelSelectionDialog",
+        "ConfirmAction",
+        "ConfirmDialog",
+        "Dialog",
+        "ImportSourcesDialog",
+        "Popover",
+        "Tooltip",
+        "Tour"
+      ]
+    },
+    {
+      "n": "21",
+      "title": "Menus",
+      "blurb": "Menus, context menus, split buttons and the command palette.",
+      "group": "Components · Menus",
+      "items": [
+        "CommandPalette",
+        "ContextMenu",
+        "DropdownButton",
+        "LocaleSwitcher",
+        "Menu",
+        "MenuPanel",
+        "MenuChip"
+      ]
+    },
+    {
+      "n": "22",
+      "title": "Navigation",
+      "blurb": "App chrome — navbar, sidebar, bottom bar, page header and footer.",
+      "group": "Components · Navigation",
+      "items": [
+        "BottomNav",
+        "Footer",
+        "Navbar",
+        "NavbarChip",
+        "PageHeader",
+        "SearchTrigger",
+        "Sidebar"
+      ]
+    },
+    {
+      "n": "23",
+      "title": "Wayfinding",
+      "blurb": "Tabs, breadcrumbs, steppers, pagination, trees and links.",
+      "group": "Components · Wayfinding",
+      "items": [
+        "Anchor",
+        "BackToTop",
+        "Breadcrumb",
+        "HierarchyNavigator",
+        "Link",
+        "LoadMore",
+        "Pagination",
+        "PeriodNav",
+        "Stepper",
+        "Tabs",
+        "TreeView"
+      ]
+    },
+    {
+      "n": "24",
+      "title": "Cards",
+      "blurb": "Card and every card built on top of it.",
+      "group": "Components · Cards",
+      "items": [
+        "Card",
+        "FeatureCard",
+        "FlipCard",
+        "QuestionCard",
+        "ScoreCard",
+        "StructuredCard"
+      ]
+    },
+    {
+      "n": "25",
+      "title": "Media",
+      "blurb": "Carousels, lightbox, players and image tools.",
+      "group": "Components · Media",
+      "items": [
+        "AudioPlayer",
+        "Carousel",
+        "ImageCropper",
+        "ImageGrid",
+        "Lightbox",
+        "Marquee",
+        "MediaFrame",
+        "PlayerButton",
+        "VideoPlayer"
+      ]
+    },
+    {
+      "n": "26",
+      "title": "Charts",
+      "blurb": "Charts coloured from one categorical palette, keyboard-readable.",
+      "group": "Components · Charts",
+      "items": [
+        "BarChart",
+        "ChartLegend",
+        "ChartTooltip",
+        "DonutChart",
+        "FunnelChart",
+        "Gantt",
+        "Gauge",
+        "Heatmap",
+        "LineChart",
+        "RangeBandChart",
+        "RadarChart",
+        "Sparkline"
+      ]
+    },
+    {
+      "n": "27",
+      "title": "Metrics",
+      "blurb": "Single values and comparisons — stats, deltas, money, bars and meters.",
+      "group": "Components · Metrics",
+      "items": [
+        "ComparisonBar",
+        "ContributionBar",
+        "Delta",
+        "MetricGroup",
+        "Money",
+        "SkillBar",
+        "Stat",
+        "UsageMeter",
+        "ValueShift"
+      ]
+    },
+    {
+      "n": "28",
+      "title": "Data",
+      "blurb": "Tables, grids, lists, timelines, logs and the filter bars above them.",
+      "group": "Components · Data",
+      "items": [
+        "CellStack",
+        "ColumnResize",
+        "ColumnManager",
+        "DataGrid",
+        "DescriptionList",
+        "DiffViewer",
+        "DualFilterBar",
+        "FilterBar",
+        "List",
+        "LogViewer",
+        "QueryBuilder",
+        "Table",
+        "Timeline",
+        "VirtualList",
+        "VirtualTable"
+      ]
+    },
+    {
+      "n": "29",
+      "title": "Planning",
+      "blurb": "Calendars, planners, kanban boards and schedulers.",
+      "group": "Components · Planning",
+      "items": [
+        "CalendarOrganizer",
+        "EventCalendar",
+        "Kanban",
+        "Scheduler"
+      ]
+    },
+    {
+      "n": "30",
+      "title": "Patterns",
+      "blurb": "Product-level compositions — conversation, AI output and plans.",
+      "group": "Patterns",
+      "items": [
+        "AiResultPanel",
+        "AnalysisReport",
+        "AnalysisRequest",
+        "ChatMessage",
+        "ChatThread",
+        "CommentThread",
+        "PracticeSetup",
+        "PracticeSession",
+        "PracticeSummary",
+        "PricingTable",
+        "PromptInput"
+      ]
+    },
+    {
+      "n": "31",
+      "title": "Trading",
+      "blurb": "Surfaces for apps where an action has real consequences: the status bar, venue sessions, the context and kill switches, live prices, the instrument masthead, order entry and a viewer-arranged dashboard.",
+      "group": "Components · Trading",
+      "items": [
+        "StatusBar",
+        "MarketSessionClock",
+        "ContextSwitcher",
+        "KillSwitchButton",
+        "PriceCell",
+        "InstrumentHeader",
+        "OrderTicket",
+        "WidgetGrid"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+<!-- @dsCard group="Components · Progress" height=524 width=960 subtitle="14 decorative loaders · 1:1 port from VelvetUi · PageLoader" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.cell{display:grid;grid-template-rows:96px auto;place-items:center;gap:6px;padding:10px 4px;border-radius:12px;background:var(--bg-subtle);overflow:hidden}.cell>div:first-child{display:grid;place-items:center;width:100%;height:96px;overflow:hidden}.n{font:500 11px/1.2 var(--font-mono);color:var(--fg-tertiary)}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const { Loader, PageLoader } = window.VelvetUIDesignSystem_ee2bd8;
+const L = [['bike', .6], ['bouncing-dots', .6], ['concentric-pulse', .9], ['corner-pulse', 1], ['dual-plane', .8], ['ellipsis', 1], ['equalizer', 1], ['honeycomb', .42], ['jelly-triangle', 1], ['orbit-squares', .8], ['pulse-ring', 1], ['ripple-dots', .8], ['shape-trail', 1], ['shape-trail', 1, 'triangle'], ['shuffle-grid', 1]];
+const App = () => (React.createElement("div", { className: "pane" }, L.map(([v, s, sh], i) => React.createElement("div", { className: "cell", key: i },
+    React.createElement("div", null,
+        React.createElement(Loader, { variant: v, scale: s, shape: sh })),
+    React.createElement("span", { className: "n" },
+        v,
+        sh ? ' · ' + sh : '')))));
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

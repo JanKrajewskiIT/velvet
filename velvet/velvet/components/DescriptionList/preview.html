@@ -1,0 +1,19 @@
+<!-- @dsCard group="Components · Data" height=292 width=960 subtitle="Record details · row or grid" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { DescriptionList, Badge, Card } = NS;
+const App = () => (React.createElement("div", { className: "pane" },
+    React.createElement("div", { className: "g2" },
+        React.createElement(DescriptionList, { items: [{ term: 'Plan', description: React.createElement(Badge, { tone: "brand" }, "Team") }, { term: 'Billing email', description: 'finance@velvet.design' }, { term: 'Workspace ID', description: 'ws_8b0036f2', mono: true }, { term: 'VAT number' }] }),
+        React.createElement(Card, { padding: "md" },
+            React.createElement(DescriptionList, { layout: "grid", items: [{ term: 'Invoice', description: 'INV-2026-0914' }, { term: 'Amount', description: '€1,240.00' }, { term: 'Issued', description: 'Sep 14, 2026' }, { term: 'Due', description: 'Sep 28, 2026' }, { term: 'Notes', description: 'Net 14 · paid by card', span: 2 }] })))));
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

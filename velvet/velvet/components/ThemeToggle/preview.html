@@ -1,0 +1,38 @@
+<!-- @dsCard group="Components · Actions" height=378 width=960 subtitle="appearance rings | segmented × variant light · navbar · dark · syncs html[data-theme]" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.tile{display:flex;flex-direction:column;gap:12px;padding:14px 16px;border:1px solid var(--border-subtle);border-radius:var(--radius-lg)}.lbl{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary)}.stage{display:grid;place-items:center;min-height:88px;border-radius:var(--radius-md)}.s-light{background:var(--bg-sunken,var(--bg-raised));border:1px solid var(--border-subtle)}.s-nav{background:var(--action-primary)}.s-dark{background:var(--bg-raised)}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const { ThemeToggle } = window.VelvetUIDesignSystem_ee2bd8;
+const App = () => (React.createElement("div", { className: "pane" },
+    React.createElement("div", { className: "tile" },
+        React.createElement("span", { className: "lbl" }, "variant=\"light\""),
+        React.createElement("div", { className: "stage s-light" },
+            React.createElement(ThemeToggle, null))),
+    React.createElement("div", { className: "tile" },
+        React.createElement("span", { className: "lbl" }, "variant=\"navbar\""),
+        React.createElement("div", { className: "stage s-nav" },
+            React.createElement(ThemeToggle, { variant: "navbar" }))),
+    React.createElement("div", { className: "tile" },
+        React.createElement("span", { className: "lbl" }, "variant=\"dark\""),
+        React.createElement("div", { className: "stage s-dark", "data-theme": "dark" },
+            React.createElement(ThemeToggle, { variant: "dark" }))),
+    React.createElement("div", { className: "tile" },
+        React.createElement("span", { className: "lbl" }, "appearance=\"segmented\""),
+        React.createElement("div", { className: "stage s-light" },
+            React.createElement(ThemeToggle, { appearance: "segmented" }))),
+    React.createElement("div", { className: "tile" },
+        React.createElement("span", { className: "lbl" }, "segmented \u00B7 navbar"),
+        React.createElement("div", { className: "stage s-nav" },
+            React.createElement(ThemeToggle, { appearance: "segmented", variant: "navbar" }))),
+    React.createElement("div", { className: "tile" },
+        React.createElement("span", { className: "lbl" }, "segmented \u00B7 dark \u00B7 sm"),
+        React.createElement("div", { className: "stage s-dark", "data-theme": "dark" },
+            React.createElement(ThemeToggle, { appearance: "segmented", variant: "dark", size: "sm" })))));
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

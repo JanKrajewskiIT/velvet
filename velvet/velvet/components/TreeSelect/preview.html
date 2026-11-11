@@ -1,0 +1,19 @@
+<!-- @dsCard group="Components · Selection" height=484 width=960 subtitle="Hierarchical select · search · single or tri-state multiple" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { TreeSelect } = NS;
+const T = [{ id: 'eng', label: 'Engineering', meta: '42', children: [{ id: 'fe', label: 'Frontend', meta: '14' }, { id: 'be', label: 'Backend', meta: '18' }, { id: 'pl', label: 'Platform', meta: '10' }] }, { id: 'des', label: 'Design', meta: '12', children: [{ id: 'pd', label: 'Product design', meta: '8' }, { id: 'br', label: 'Brand', meta: '4' }] }, { id: 'ops', label: 'Operations', meta: '9', children: [{ id: 'fin', label: 'Finance', meta: '4' }, { id: 'ppl', label: 'People', meta: '5' }] }];
+const App = () => (React.createElement("div", { className: "pane" },
+    React.createElement("div", { className: "g2" },
+        React.createElement(TreeSelect, { label: "Team", data: T, defaultValue: "pd", defaultExpanded: ['des'], leavesOnly: true }),
+        React.createElement(TreeSelect, { label: "Visible to", data: T, multiple: true, defaultValue: ['fe', 'be', 'pd'], defaultExpanded: ['eng'], hint: "Parents select all their teams" }))));
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

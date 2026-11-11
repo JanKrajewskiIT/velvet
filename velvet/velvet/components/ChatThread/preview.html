@@ -1,0 +1,51 @@
+<!-- @dsCard group="Patterns" height=800 width=960 subtitle="user bubble · assistant tools · sources · streaming caret · typing — send a prompt to stream a reply" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}.col{display:flex;flex-direction:column;gap:6px;min-width:0}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<div class="vcard"><div class="vcard-t">Message states — typing · streaming · stopped</div><div id="root-1"></div></div>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const L = ({ children }) => React.createElement("span", { className: "lbl" }, children);
+const { ChatThread, ChatMessage, PromptInput } = NS;
+const R1 = 'Shortlisted 3 of 12 contacts for the design review. Anna Kowal leads on design depth and design-systems work; Marek Nowak is strongest on research. Want me to draft review invites?';
+const R2 = 'Here is a draft:\n\n“Hi Anna — thanks for applying to Velvet. We’d love to invite you to a 45-minute review with the design team next week. Which of these slots works best?”';
+const App = () => {
+    const [msgs, setMsgs] = React.useState([{ id: 1, role: 'system', content: 'Today · 09:41' }, { id: 2, role: 'user', content: 'Summarise the strongest contacts for the design review.' }, { id: 3, role: 'assistant', content: R1, sources: [{ title: 'Anna Kowal — Notes.pdf' }, { title: 'Design review notes' }, { title: 'Marek Nowak — Notes.pdf' }] }]);
+    const [fb, setFb] = React.useState({ 3: 'up' });
+    const [busy, setBusy] = React.useState(false);
+    const tm = React.useRef();
+    const send = (t) => {
+        const id = Date.now();
+        setMsgs(m => [...m, { id, role: 'user', content: t }, { id: id + 1, role: 'assistant', content: '', streaming: true }]);
+        setBusy(true);
+        let k = 0;
+        clearInterval(tm.current);
+        tm.current = setTimeout(() => { tm.current = setInterval(() => { k += 3; setMsgs(m => m.map(x => x.id === id + 1 ? { ...x, content: R2.slice(0, k), streaming: k < R2.length } : x)); if (k >= R2.length) {
+            clearInterval(tm.current);
+            setBusy(false);
+        } }, 28); }, 800);
+    };
+    const stop = () => { clearInterval(tm.current); clearTimeout(tm.current); setBusy(false); setMsgs(m => m.map(x => x.streaming ? { ...x, streaming: false, error: x.content ? undefined : 'Generation stopped.' } : x)); };
+    return React.createElement("div", { className: "pane", style: { gap: 12 } },
+        React.createElement(ChatThread, { height: 448 }, msgs.map(m => React.createElement(ChatMessage, { key: m.id, role: m.role, content: m.content, streaming: m.streaming, sources: m.sources, error: m.error, feedback: fb[m.id], onFeedback: (v) => setFb({ ...fb, [m.id]: v }), onRetry: m.role === 'assistant' ? () => { } : undefined }))),
+        React.createElement(PromptInput, { loading: busy, onStop: stop, onSubmit: send, onAttach: () => { }, suggestions: ['Draft review invites', 'Compare the top 3', 'What’s missing from Marek’s notes?'] }));
+};
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+(function(){
+"use strict";
+const { ChatMessage, TypingIndicator } = window.VelvetUIDesignSystem_ee2bd8;
+const L = ({ children }) => React.createElement("span", { className: "lbl" }, children);
+const App = () => (React.createElement("div", { className: "g2" },
+    React.createElement("div", { className: "col" }, React.createElement(L, null, "typing \u2014 body still empty"), React.createElement(ChatMessage, { role: "assistant", content: "", streaming: true })),
+    React.createElement("div", { className: "col" }, React.createElement(L, null, "streaming \u2014 caret after partial text"), React.createElement(ChatMessage, { role: "assistant", content: "Shortlisted 3 of 12 contacts for", streaming: true })),
+    React.createElement("div", { className: "col" }, React.createElement(L, null, "TypingIndicator \u2014 standalone"), React.createElement("div", { className: "r" }, React.createElement(TypingIndicator, null), React.createElement("span", { style: { fontSize: 13, color: 'var(--fg-tertiary)' } }, "Assistant is typing"))),
+    React.createElement("div", { className: "col" }, React.createElement(L, null, "stopped \u2014 inline error with retry"), React.createElement(ChatMessage, { role: "assistant", content: "", error: "Generation stopped.", onRetry: () => { } }))));
+ReactDOM.createRoot(document.getElementById('root-1')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

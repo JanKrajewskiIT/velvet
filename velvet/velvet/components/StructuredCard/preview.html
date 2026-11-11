@@ -1,0 +1,32 @@
+<!-- @dsCard group="Components · Cards" height=392 width=960 subtitle="Regions · media + scrim + floating tag · header / body / footer hairlines" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+a{color:var(--fg-link)}a:hover{color:var(--fg-link-hover)}.pane{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:start}.ph{width:100%;height:100%;display:grid;place-items:center;font:500 10px/1 var(--font-mono);color:var(--fg-tertiary);background:repeating-linear-gradient(135deg,transparent 0 9px,color-mix(in oklab,var(--border-default) 60%,transparent) 9px 10px)}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const { StructuredCard, Badge, Button, Icon, Avatar, AvatarGroup, Link } = window.VelvetUIDesignSystem_ee2bd8;
+const App = () => (React.createElement("div", { className: "pane" },
+    React.createElement(StructuredCard, { hoverable: true, tonal: true, tone: "teal", accent: true, reveal: 0, title: "Project Atlas", meta: React.createElement(React.Fragment, null,
+            React.createElement(Icon, { name: "clock" }),
+            "Updated 2h ago"), badge: React.createElement(Badge, { tone: "success", dot: true }, "Active"), footer: React.createElement(React.Fragment, null,
+            React.createElement(AvatarGroup, null,
+                React.createElement(Avatar, { name: "Jan Kowal", size: "sm" }),
+                React.createElement(Avatar, { name: "Maria Nowak", size: "sm", tone: "info" }),
+                React.createElement(Avatar, { initials: "+3", size: "sm", tone: "neutral" })),
+            React.createElement(Button, { size: "sm" }, "Open")) }, "Header and footer carry hairlines from the same --card-border the card uses."),
+    React.createElement(StructuredCard, { hoverable: true, tonal: true, tone: "violet", reveal: 1, media: React.createElement("div", { className: "ph" }, "media \u00B7 16:9"), mediaTag: React.createElement(Badge, { variant: "solid", tone: "neutral" }, "Guide"), mediaMeta: React.createElement(React.Fragment, null,
+            React.createElement(Icon, { name: "clock" }),
+            "6 min read"), footer: React.createElement(React.Fragment, null,
+            React.createElement("span", { style: { display: 'flex', alignItems: 'center', gap: 6, font: 'var(--type-caption)', color: 'var(--fg-tertiary)' } },
+                React.createElement(Icon, { name: "user" }),
+                "Maria Nowak"),
+            React.createElement(Link, { href: "#", standalone: true, onClick: e => e.preventDefault() }, "Read")) },
+        React.createElement("div", { className: "vui-scard__title" }, "Designing with surfaces"),
+        "The scrim keeps overlaid tags legible on any image."),
+    React.createElement(StructuredCard, { hoverable: true, tonal: true, tone: "blue", accent: true, reveal: 2, media: React.createElement("div", { className: "ph" }, "cover \u00B7 16:9"), title: "Media + header", meta: "3 hairline-divided regions", badge: React.createElement(Badge, { tone: "info" }, "New") }, "Stack any regions \u2014 media, header, body and footer compose freely.")));
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

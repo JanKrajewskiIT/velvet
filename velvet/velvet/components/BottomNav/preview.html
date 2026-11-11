@@ -1,0 +1,19 @@
+<!-- @dsCard group="Components · Navigation" height=358 width=960 subtitle="Mobile tab bar · elevated centre action · badge" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const { BottomNav } = window.VelvetUIDesignSystem_ee2bd8;
+const L = { home: 'Home', search: 'Search', activity: 'Activity', profile: 'Profile' };
+const App = () => { const [v, setV] = React.useState('home'); const [s, setS] = React.useState('Home screen'); return (React.createElement("div", { className: "pane", style: { alignItems: 'center' } },
+    React.createElement("div", { style: { width: 380, borderRadius: 28, overflow: 'hidden', border: '1px solid var(--border-subtle)', boxShadow: 'var(--elevation-card-hover)', background: 'var(--bg-raised)' } },
+        React.createElement("div", { style: { height: 220, background: 'var(--bg-subtle)', display: 'grid', placeItems: 'center', color: 'var(--fg-tertiary)', fontSize: 13, fontWeight: 500 } },
+            React.createElement("span", null, s)),
+        React.createElement(BottomNav, { fixed: false, value: v, onChange: (x) => { setV(x); setS(L[x] + ' screen'); }, action: { label: 'Create', icon: 'plus', onClick: () => setS('New post') }, items: [{ value: 'home', label: 'Home', icon: 'home' }, { value: 'search', label: 'Search', icon: 'search' }, { value: 'activity', label: 'Activity', icon: 'bell', badge: 3 }, { value: 'profile', label: 'Profile', icon: 'user' }] })))); };
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

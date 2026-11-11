@@ -1,0 +1,51 @@
+<!-- @dsCard group="Components · Overlays" height=654 width=960 -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}
+.pane{display:flex;flex-direction:column;gap:12px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.lbl{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);width:72px;flex:none}</style></head><body>
+<div class="vcard"><div class="vcard-t">Popover — hover card — openOn=&amp;quot;hover&amp;quot; · delay · stays open over the panel · opens on focus</div><div id="root-0"></div></div>
+<div class="vcard"><div class="vcard-t">Popover — Click-triggered panel on the top material</div><div id="root-1"></div></div>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { Popover, Avatar, Button, Badge } = NS;
+const App = () => (React.createElement("div", { className: "pane" },
+    React.createElement("div", { style: { margin: 0, fontSize: 14, color: 'var(--fg-secondary)' } },
+        "Reviewed by ",
+        React.createElement(Popover, { openOn: "hover", defaultOpen: true, trigger: React.createElement("a", { href: "#", style: { fontWeight: 600 } }, "Anna Kowalska") },
+            React.createElement("div", { style: { display: 'flex', flexDirection: 'column', gap: 10, width: 260 } },
+                React.createElement("div", { className: "r", style: { gap: 10 } },
+                    React.createElement(Avatar, { name: "Anna Kowalska" }),
+                    React.createElement("div", null,
+                        React.createElement("div", { style: { fontWeight: 600, color: 'var(--fg-primary)' } }, "Anna Kowalska"),
+                        React.createElement("div", { className: "lbl" }, "Lead designer \u00B7 Krak\u00F3w"))),
+                React.createElement("div", { style: { fontSize: 13 } }, "Owns the Velvet design system and the checkout redesign."),
+                React.createElement("div", { className: "r", style: { gap: 6 } },
+                    React.createElement(Badge, { tone: "success", dot: true }, "Available"),
+                    React.createElement(Badge, null, "Design")),
+                React.createElement(Button, { size: "sm", variant: "secondary", iconLeft: "message-square" }, "Message"))),
+        " on Oct 2.")));
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { Popover, Button, Avatar, Badge } = NS;
+const App = () => (React.createElement("div", { className: "pane" },
+    React.createElement("div", { className: "r", style: { gap: 24, alignItems: 'flex-start' } },
+        React.createElement(Popover, { defaultOpen: true, title: "Anna Kowalska", trigger: React.createElement("button", { type: "button", style: { border: 0, background: 'none', padding: 0, cursor: 'pointer', borderRadius: '50%' } },
+                React.createElement(Avatar, { name: "Anna Kowalska", status: "online" })) },
+            React.createElement("div", { style: { display: 'flex', flexDirection: 'column', gap: 10 } },
+                React.createElement("span", null, "Workspace owner \u00B7 Krak\u00F3w"),
+                React.createElement("div", { className: "r", style: { gap: 6 } },
+                    React.createElement(Badge, { tone: "brand" }, "Owner"),
+                    React.createElement(Badge, null, "Design")),
+                React.createElement(Button, { size: "sm", variant: "secondary", block: true }, "View profile"))),
+        React.createElement("div", { style: { marginLeft: 'auto' } },
+            React.createElement(Popover, { align: "end", title: "Quick settings", trigger: React.createElement(Button, { variant: "secondary", iconLeft: "sliders" }, "Settings") }, "Popovers can hold rich content \u2014 profiles, menus, short forms.")))));
+ReactDOM.createRoot(document.getElementById('root-1')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

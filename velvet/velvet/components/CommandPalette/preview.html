@@ -1,0 +1,18 @@
+<!-- @dsCard group="Components · Menus" height=700 width=960 subtitle="⌘K · fuzzy search, groups, shortcuts" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { CommandPalette, SearchTrigger } = NS;
+const G = [{ label: 'Suggestions', items: [{ label: 'New project', icon: 'plus', shortcut: 'N', keywords: ['create'] }, { label: 'Invite teammates', icon: 'users', keywords: ['member', 'add'] }, { label: 'Toggle theme', icon: 'moon', shortcut: '⇧T', keywords: ['dark', 'light'] }] }, { label: 'Navigate', items: [{ label: 'Dashboard', icon: 'layout-dashboard', shortcut: 'G D' }, { label: 'Projects', icon: 'folder', shortcut: 'G P' }, { label: 'Inbox', icon: 'inbox', shortcut: 'G I' }, { label: 'Settings', icon: 'settings', shortcut: 'G S' }] }, { label: 'People', items: [{ label: 'Anna Kowalska', icon: 'user', description: 'Owner' }, { label: 'Marek Nowak', icon: 'user', description: 'Admin' }] }];
+const App = () => { const [o, setO] = React.useState(true); return (React.createElement("div", { className: "pane", style: { height: '100vh', position: 'relative', transform: 'translateZ(0)' } },
+    React.createElement(SearchTrigger, { onOpen: () => setO(true) }),
+    React.createElement(CommandPalette, { open: o, onClose: () => setO(false), groups: G }))); };
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

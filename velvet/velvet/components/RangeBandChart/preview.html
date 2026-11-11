@@ -1,0 +1,15 @@
+<!-- @dsCard group="Components · Charts" height=416 width=960 subtitle="Actual vs expected range band · negatives supported" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:16px;align-items:center}.lbl{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);width:96px;flex:none}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const { RangeBandChart } = window.VelvetUIDesignSystem_ee2bd8;
+const data = Array.from({ length: 29 }, (_, i) => { const mu = i * 0.16, sd = Math.sqrt(i) * 0.55; return { label: 'D' + i, lo: +(mu - 1.64 * sd).toFixed(2), mid: +mu.toFixed(2), hi: +(mu + 1.64 * sd).toFixed(2), value: +(i * 0.13 - (i > 14 ? (i - 14) * 0.21 : 0) + Math.sin(i / 2) * 0.25).toFixed(2) }; });
+const App = () => (React.createElement(RangeBandChart, { data: data, height: 290, bandLabel: "P5\u2013P95 expected", valueLabel: "Actual", format: v => v.toFixed(1) + '%', label: "Actual vs expected range" }));
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

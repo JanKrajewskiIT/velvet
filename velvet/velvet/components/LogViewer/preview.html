@@ -1,0 +1,26 @@
+<!-- @dsCard group="Components · Data" height=468 width=960 subtitle="live tail · level toggles + counts · filter highlight · wrap · scroll up to pause, “N new” to resume" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}.col{display:flex;flex-direction:column;gap:6px;min-width:0}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const L = ({ children }) => React.createElement("span", { className: "lbl" }, children);
+const { LogViewer } = NS;
+const SRC = ['api', 'worker', 'auth', 'billing'];
+const MSG = [['info', 'GET /v1/contacts 200 in 42ms'], ['debug', 'cache hit key=contacts:list:p1'], ['info', 'POST /v1/meetings 201 in 118ms'], ['warn', 'Slow query on orders (812ms) — missing index on status_id'], ['info', 'Job email.digest completed (14 sent)'], ['error', 'Stripe webhook signature mismatch — event evt_3Q… rejected'], ['debug', 'token refreshed for user 4821'], ['info', 'GET /v1/roles 200 in 31ms'], ['warn', 'Rate limit 80% for org velvet']];
+let n = 0;
+const mk = () => { const m = MSG[(n * 7 + 3) % MSG.length]; n++; return { ts: Date.now() - ((60 - n) * 1500), level: m[0], source: SRC[n % SRC.length], message: m[1] }; };
+const INIT = Array.from({ length: 40 }, mk);
+const App = () => {
+    const [lines, setLines] = React.useState(INIT);
+    React.useEffect(() => { const t = setInterval(() => setLines(l => [...l, { ...mk(), ts: Date.now() }].slice(-500)), 1200); return () => clearInterval(t); }, []);
+    return React.createElement("div", { className: "pane" },
+        React.createElement(LogViewer, { title: "api-prod \u00B7 eu-central", lines: lines, height: 340 }));
+};
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

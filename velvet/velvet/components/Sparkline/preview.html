@@ -1,0 +1,30 @@
+<!-- @dsCard group="Components · Charts" height=223 width=960 subtitle="Inline trend · scrub with mouse or ←→" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { Sparkline } = NS;
+const D = [12, 14, 11, 18, 16, 22, 20, 27, 25, 31, 29, 36];
+const L = D.map((_, i) => 'Week ' + (i + 1));
+const App = () => (React.createElement("div", { className: "pane" },
+    React.createElement("div", { className: "g2" },
+        React.createElement("div", null,
+            React.createElement("div", { className: "lbl" }, "Default"),
+            React.createElement(Sparkline, { data: D, labels: L, label: "Signups" })),
+        React.createElement("div", null,
+            React.createElement("div", { className: "lbl" }, "Area"),
+            React.createElement(Sparkline, { data: D, labels: L, area: true, label: "Signups" })),
+        React.createElement("div", null,
+            React.createElement("div", { className: "lbl" }, "Custom colour \u00B7 taller"),
+            React.createElement(Sparkline, { data: D, height: 64, area: true, color: "var(--status-success-solid)", format: v => v + ' users' })),
+        React.createElement("div", null,
+            React.createElement("div", { className: "lbl" }, "Declining"),
+            React.createElement(Sparkline, { data: [...D].reverse(), color: "var(--status-danger-solid)" })))));
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

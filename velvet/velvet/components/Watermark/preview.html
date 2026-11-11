@@ -1,0 +1,32 @@
+<!-- @dsCard group="Components · Display" height=308 width=960 subtitle="repeating diagonal stamp · theme-aware mask · multi-line viewer stamp · never blocks clicks" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}.col{display:flex;flex-direction:column;gap:6px;min-width:0}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const L = ({ children }) => React.createElement("span", { className: "lbl" }, children);
+const { Watermark, Surface, Button } = NS;
+const Doc = ({ t }) => (React.createElement(Surface, { padding: "md" },
+    React.createElement("div", { style: { display: 'flex', flexDirection: 'column', gap: 8 } },
+        React.createElement("span", { style: { font: 'var(--type-title)' } }, t),
+        React.createElement("span", { style: { font: 'var(--type-body-sm)', color: 'var(--fg-secondary)', textWrap: 'pretty' } }, "Fee \u20AC92,000 \u00B7 discount 8% \u00B7 start 1 December. Onboarding support and a 6-month review are included. This proposal expires on 20 October."),
+        React.createElement("div", { className: "r" },
+            React.createElement(Button, { size: "sm" }, "Accept"),
+            React.createElement(Button, { size: "sm", variant: "ghost" }, "Download")))));
+const App = () => (React.createElement("div", { className: "pane" },
+    React.createElement("div", { className: "g2" },
+        React.createElement("div", { className: "col" },
+            React.createElement(L, null, "text=\"Confidential\""),
+            React.createElement(Watermark, null,
+                React.createElement(Doc, { t: "Proposal \u2014 Design retainer" }))),
+        React.createElement("div", { className: "col" },
+            React.createElement(L, null, "lines = viewer + date"),
+            React.createElement(Watermark, { lines: ['anna@velvet.io', '6 Oct 2026 · 09:41'], fontSize: 12, opacity: 0.1, gap: [72, 56] },
+                React.createElement(Doc, { t: "Proposal \u2014 Product retainer" }))))));
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

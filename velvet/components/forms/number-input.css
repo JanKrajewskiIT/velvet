@@ -1,7 +1,0 @@
-/* NumberInput */
-.vui-number{padding:0 var(--track-pad)}
-.vui-number__step{display:grid;place-items:center;flex:none;width:calc(var(--control-height-md) - 8px);height:calc(100% - 6px);padding:0;border:0;border-radius:var(--radius-nested);background:var(--bg-subtle);color:var(--fg-secondary);cursor:pointer;transition:background-color var(--motion-fast),color var(--motion-fast)}
-.vui-number__step:hover:not(:disabled){background:var(--bg-pressed);color:var(--fg-primary)}
-.vui-number__step:active:not(:disabled){transform:scale(.94)}
-.vui-number__step:disabled{opacity:var(--opacity-disabled);cursor:not-allowed}
-.vui-number__input{text-align:center;font-variant-numeric:tabular-nums;padding:0 var(--space-1)!important}

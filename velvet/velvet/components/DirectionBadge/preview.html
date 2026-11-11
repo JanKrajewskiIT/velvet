@@ -1,0 +1,21 @@
+<!-- @dsCard group="Components · Display" height=166 width=960 subtitle="Up · down · flat · muted — solid, soft and outline" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:16px;align-items:center}.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const { DirectionBadge } = window.VelvetUIDesignSystem_ee2bd8;
+const App = () => (React.createElement("div", { className: "pane" },
+ React.createElement("div", { className: "r" },
+ ['up', 'down', 'flat', 'muted'].map(d => React.createElement(DirectionBadge, { key: d, direction: d, icon: true })),
+ React.createElement(DirectionBadge, { direction: "up", suffix: "x2" }),
+ React.createElement(DirectionBadge, { direction: "down", suffix: "-3" })),
+ React.createElement("div", { className: "r" },
+ ['up', 'down', 'flat', 'muted'].map(d => React.createElement(DirectionBadge, { key: d, direction: d, variant: "soft", size: "sm" }, d === 'up' ? 'Added' : d === 'down' ? 'Removed' : d === 'flat' ? 'Kept' : 'Skipped')),
+ ['up', 'down'].map(d => React.createElement(DirectionBadge, { key: d, direction: d, variant: "outline" })))));
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

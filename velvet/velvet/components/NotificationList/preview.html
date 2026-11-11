@@ -1,0 +1,24 @@
+<!-- @dsCard group="Components · Feedback" height=520 width=960 subtitle="The bare list for an activity page · tones · unread · avatar · empty text" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl{font:600 10px/1.3 var(--font-sans);letter-spacing:.08em;text-transform:uppercase;color:var(--fg-tertiary);margin-bottom:10px}
+.pane{display:flex;flex-direction:column;gap:var(--space-5)}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-5)}.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-5)}.r{display:flex;flex-wrap:wrap;gap:var(--space-2);align-items:center}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const h = React.createElement;
+const { NotificationList, Card, Avatar } = NS;
+const ITEMS = [{ id: 1, title: 'Meeting tomorrow', body: 'Acme · 10:00', time: '1h', unread: true, tone: 'brand', icon: 'calendar' }, { id: 2, title: 'Match ready', time: '3h', unread: true, tone: 'success' }, { id: 3, title: 'Invoice overdue', body: 'INV-2041 is 5 days late', time: 'yesterday', tone: 'warning' }, { id: 4, title: 'Anna commented on the brief', body: 'Can we move the review to Thursday?', time: '2d', avatar: h(Avatar, { name: 'Anna Kowalska', size: 'sm' }) }];
+const App = () => {
+ const [last, setLast] = React.useState('');
+ return (h("div", { className: "pane" },
+ h("div", { className: "g2" },
+ h("div", null, h("div", { className: "lbl" }, "items"), h(Card, { padding: "none" }, h(NotificationList, { items: ITEMS, onItemClick: it => setLast(it.title) }))),
+ h("div", null, h("div", { className: "lbl" }, "empty"), h(Card, { padding: "none" }, h(NotificationList, { items: [], emptyText: "You’re all caught up." })))),
+ last && h("div", { className: "lbl" }, 'Opened: ' + last)));
+};
+ReactDOM.createRoot(document.getElementById('root-0')).render(h(App, null));
+
+})();
+</script></body></html>

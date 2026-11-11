@@ -1,7 +1,0 @@
-/* ScoreCard */
-.vui-score>.vui-card__body{display:flex;flex-direction:column;gap:var(--space-4)}
-.vui-score__top{display:flex;align-items:center;gap:var(--space-4)}
-.vui-score__meta{display:flex;flex-direction:column;align-items:flex-start;gap:var(--space-1-5);min-width:0}
-.vui-score__label{font-size:var(--type-body-sm-size);color:var(--fg-secondary)}
-.vui-score__hint{font-size:var(--type-caption-size);color:var(--fg-tertiary)}
-.vui-score__criteria{display:flex;flex-direction:column;gap:var(--space-3);padding-top:var(--space-4);border-top:var(--border-width) solid var(--border-subtle)}

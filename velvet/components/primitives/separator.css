@@ -1,7 +1,0 @@
-/* Atom · Separator — inline, between siblings. Block-level breaks = Divider. */
-.vui-sep{flex:none;display:inline-block}
-.vui-sep--line{background:var(--border-default)}
-.vui-sep--line.vui-sep--vertical{width:var(--border-width);height:1.25em;align-self:center}
-.vui-sep--line.vui-sep--horizontal{width:100%;height:var(--border-width)}
-.vui-sep--dash{width:10px;height:var(--border-width-thick);align-self:center;border-radius:var(--radius-2xs);background:var(--border-strong)}
-.vui-sep--text{color:var(--fg-tertiary)}

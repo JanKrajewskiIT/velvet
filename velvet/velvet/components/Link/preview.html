@@ -1,0 +1,37 @@
+<!-- @dsCard group="Components · Wayfinding" height=202 width=960 subtitle="Inline · plain · quiet · standalone · external · disabled" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:28px;align-items:start}.lbl{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin-bottom:12px}.prose{font:var(--type-body);line-height:1.7;color:var(--fg-secondary);max-width:44ch}.col{display:flex;flex-direction:column;gap:14px;font:var(--type-body)}.row{display:flex;flex-wrap:wrap;gap:var(--space-5);align-items:center}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const { Link } = window.VelvetUIDesignSystem_ee2bd8;
+const no = e => e.preventDefault();
+const App = () => (React.createElement("div", { className: "pane" },
+    React.createElement("div", null,
+        React.createElement("div", { className: "lbl" }, "inline \u00B7 in prose"),
+        React.createElement("p", { className: "prose" },
+            "Velvet opiera si\u0119 na tokenach OKLCH \u2014 zobacz ",
+            React.createElement(Link, { href: "#", onClick: no }, "dokumentacj\u0119 kolor\u00F3w"),
+            " albo przejd\u017A do ",
+            React.createElement(Link, { href: "#", variant: "plain", onClick: no }, "skali typografii"),
+            ". Pe\u0142na specyfikacja jest ",
+            React.createElement(Link, { href: "#", external: true, onClick: no }, "w repozytorium"),
+            ", a starsze wersje s\u0105 ",
+            React.createElement(Link, { disabled: true }, "ju\u017C niedost\u0119pne"),
+            ".")),
+    React.createElement("div", null,
+        React.createElement("div", { className: "lbl" }, "variants \u00B7 states"),
+        React.createElement("div", { className: "col" },
+            React.createElement("div", { className: "row" },
+                React.createElement(Link, { href: "#", onClick: no }, "Default"),
+                React.createElement(Link, { href: "#", variant: "plain", onClick: no }, "Plain"),
+                React.createElement(Link, { href: "#", variant: "quiet", onClick: no }, "Quiet"),
+                React.createElement(Link, { disabled: true }, "Disabled")),
+            React.createElement(Link, { href: "#", external: true, onClick: no }, "Open external panel"),
+            React.createElement(Link, { href: "#", standalone: true, onClick: no }, "Go to settings")))));
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Velvet UI — card</title>
+<!-- Host for one components/<Name>/preview.html. A preview is a bare root element plus a script: the design-system page preloads the
+     tokens, stylesheet, React and the bundle around it. This page does the same, so the Showcase can show the preview in an iframe:
+     card.html?p=components/Button/preview.html -->
+<script src="./theme.js"></script>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../components/bundle.css">
+<style>html,body{margin:0}body{background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}</style>
+<script src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.development.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.development.js"></script>
+<script src="../components/bundle.js"></script>
+<script>addEventListener('error',function(e){var d=document.createElement('pre');d.style.cssText='margin:12px;padding:10px 12px;border:1px solid #c22b1d;border-radius:8px;color:#c22b1d;background:#fff;font:12px/1.5 ui-monospace,monospace;white-space:pre-wrap';d.textContent='Preview error: '+(e.message||'script failed to load')+(e.filename?'\n'+e.filename.split('/').slice(-2).join('/')+':'+e.lineno:'');(document.body||document.documentElement).appendChild(d);},true);</script>
+</head>
+<body>
+<script>
+(function(){
+  var p=new URLSearchParams(location.search).get('p')||'';
+  if(!/^components\/[A-Za-z0-9]+\/preview\.html$/.test(p)){document.body.textContent='Not a component preview path.';return;}
+  fetch('../'+p).then(function(r){if(!r.ok)throw new Error(r.status);return r.text();}).then(function(t){
+    var doc=new DOMParser().parseFromString(t,'text/html');
+    doc.head.querySelectorAll('style').forEach(function(s){document.head.appendChild(s.cloneNode(true));});
+    document.body.innerHTML='';
+    Array.prototype.slice.call(doc.body.childNodes).forEach(function(n){
+      if(n.nodeName==='SCRIPT'){var s=document.createElement('script');s.textContent=n.textContent;document.body.appendChild(s);}
+      else document.body.appendChild(document.importNode(n,true));
+    });
+  }).catch(function(e){document.body.textContent='Could not load '+p+' ('+e.message+').';});
+})();
+</script>
+</body></html>

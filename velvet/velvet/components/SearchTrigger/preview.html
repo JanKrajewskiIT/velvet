@@ -1,0 +1,19 @@
+<!-- @dsCard group="Components · Navigation" height=116 width=960 subtitle="⌘K / Ctrl+K opens the command palette" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:12px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.lbl{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);width:72px;flex:none}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { SearchTrigger } = NS;
+const App = () => { const [n, setN] = React.useState(0); return (React.createElement("div", { className: "pane", style: { flexDirection: 'row', alignItems: 'center', gap: 14 } },
+    React.createElement(SearchTrigger, { placeholder: "Search projects, people\u2026", onOpen: () => setN(x => x + 1) }),
+    React.createElement("span", { style: { fontSize: 12, color: 'var(--fg-tertiary)', fontFamily: 'var(--font-mono)' } },
+        "opened \u00D7",
+        n))); };
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

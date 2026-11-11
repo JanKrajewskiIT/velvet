@@ -1,0 +1,41 @@
+<!-- @dsCard group="Components · Actions" height=330 width=960 subtitle="multiple (B / I / U) · single (view switch) · attached or loose · sizes" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl{font:600 10px/1.3 var(--font-sans);letter-spacing:.08em;text-transform:uppercase;color:var(--fg-tertiary);margin-bottom:10px}
+.pane{display:flex;flex-direction:column;gap:var(--space-5)}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-5)}.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-5)}.r{display:flex;flex-wrap:wrap;gap:var(--space-2);align-items:center}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const h = React.createElement;
+const { ToggleGroup, ToggleButton } = NS;
+const App = () => {
+ const [fmt, setFmt] = React.useState(['bold']);
+ const [view, setView] = React.useState('grid');
+ return (h("div", { className: "pane" },
+ h("div", { className: "g2" },
+ h("div", null, h("div", { className: "lbl" }, "multiple · icon-only"),
+ h(ToggleGroup, { type: "multiple", label: "Text format", value: fmt, onValueChange: setFmt },
+ h(ToggleButton, { value: "bold", icon: "bold", label: "Bold", tone: "neutral" }),
+ h(ToggleButton, { value: "italic", icon: "italic", label: "Italic", tone: "neutral" }),
+ h(ToggleButton, { value: "underline", icon: "underline", label: "Underline", tone: "neutral" }))),
+ h("div", null, h("div", { className: "lbl" }, "single · exactly one"),
+ h(ToggleGroup, { type: "single", label: "View", value: view, onValueChange: v => setView(v || 'grid') },
+ h(ToggleButton, { value: "grid", icon: "layout-grid" }, "Grid"),
+ h(ToggleButton, { value: "list", icon: "list" }, "List"),
+ h(ToggleButton, { value: "board", icon: "kanban" }, "Board")))),
+ h("div", { className: "g3" },
+ h("div", null, h("div", { className: "lbl" }, "loose (attached=false)"),
+ h(ToggleGroup, { type: "multiple", attached: false, label: "Filters", defaultValue: ['mine'] },
+ h(ToggleButton, { value: "mine" }, "Mine"), h(ToggleButton, { value: "open" }, "Open"), h(ToggleButton, { value: "late" }, "Late"))),
+ h("div", null, h("div", { className: "lbl" }, "sm"),
+ h(ToggleGroup, { type: "single", size: "sm", label: "Density", defaultValue: 'comfortable' },
+ h(ToggleButton, { value: "comfortable" }, "Comfortable"), h(ToggleButton, { value: "compact" }, "Compact"))),
+ h("div", null, h("div", { className: "lbl" }, "disabled"),
+ h(ToggleGroup, { type: "single", disabled: true, label: "Mode", defaultValue: 'a' },
+ h(ToggleButton, { value: "a" }, "Day"), h(ToggleButton, { value: "b" }, "Night"))))));
+};
+ReactDOM.createRoot(document.getElementById('root-0')).render(h(App, null));
+
+})();
+</script></body></html>

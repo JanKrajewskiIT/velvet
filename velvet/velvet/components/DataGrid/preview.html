@@ -1,0 +1,47 @@
+<!-- @dsCard group="Components · Data" height=586 width=960 subtitle="Toolbar search · QueryBuilder filters · ColumnManager · view state + Reset view · select · expand · frozen cols · edit" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { DataGrid, Badge, Button } = NS;
+const TONE = { 'In progress': 'info', 'Done': 'success', 'On hold': 'warning', 'At risk': 'danger' };
+const INIT = [['Q3 migration', 'In progress', 128000, 72, 'AK +3', '2 h ago', 'Anna Kowalska', 'EU-West', 'Low'], ['Learning portal', 'Done', 86400, 100, 'MN +5', 'yesterday', 'Marek Nowak', 'EU-Central', '—'], ['AI assistant', 'In progress', 214000, 48, 'PZ +2', '10 min ago', 'Piotr Zięba', 'US-East', 'Medium'], ['API audit', 'On hold', 42000, 30, 'KL', '3 days ago', 'Karol Lis', 'EU-West', 'High'], ['Onboarding', 'Done', 19800, 100, 'AK +1', 'last week', 'Anna Kowalska', 'EU-North', '—'], ['Billing v3', 'At risk', 96500, 55, 'JW +4', '1 h ago', 'Julia Wiśniewska', 'EU-West', 'High'], ['Search rebuild', 'In progress', 54000, 64, 'TP +2', 'today', 'Tomasz Piątek', 'US-West', 'Medium'], ['Brand refresh', 'Done', 23000, 100, 'MN', '2 weeks ago', 'Marek Nowak', 'EU-Central', '—']].map((r, i) => ({ id: i + 1, name: r[0], status: r[1], budget: r[2], progress: r[3], team: r[4], updated: r[5], owner: r[6], region: r[7], risk: r[8] }));
+const STAT = ['In progress', 'Done', 'On hold', 'At risk'];
+const cols = [{ key: 'name', label: 'Project', width: 190, minWidth: 140, maxWidth: 320, editable: true, locked: true, render: r => React.createElement("b", { style: { fontWeight: 600 } }, r.name) }, { key: 'status', label: 'Status', width: 140, editable: true, options: STAT, render: r => React.createElement(Badge, { tone: TONE[r.status], dot: true }, r.status) }, { key: 'budget', label: 'Budget', type: 'number', width: 120, editable: true, format: v => Number(v).toLocaleString('pl-PL') + ' zł' }, { key: 'progress', label: 'Progress', type: 'number', width: 150, render: r => React.createElement("span", { style: { display: 'flex', alignItems: 'center', gap: 8, width: '100%' } },
+            React.createElement("span", { style: { flex: 1, height: 4, borderRadius: 2, background: 'var(--bg-sunken)', overflow: 'hidden' } },
+                React.createElement("span", { style: { display: 'block', height: '100%', width: r.progress + '%', background: r.progress === 100 ? 'var(--status-success-fg, var(--action-primary))' : 'var(--action-primary)' } })),
+            React.createElement("span", { style: { fontFamily: 'var(--font-mono)', fontSize: 11, width: 32, textAlign: 'right' } },
+                r.progress,
+                "%")) }, { key: 'team', label: 'Team', width: 100 }, { key: 'updated', label: 'Updated', width: 130, render: r => React.createElement("span", { style: { color: 'var(--fg-tertiary)' } }, r.updated) }, { key: 'region', label: 'Region', width: 120, hidden: true }];
+const fields = [{ key: 'name', label: 'Project' }, { key: 'status', label: 'Status', type: 'select', options: STAT.map(s => ({ value: s, label: s })) }, { key: 'budget', label: 'Budget', type: 'number' }, { key: 'progress', label: 'Progress', type: 'number' }, { key: 'region', label: 'Region' }];
+const K = ({ k, v }) => React.createElement("div", null,
+    React.createElement("div", { style: { font: '600 10px/1.2 var(--font-sans)', textTransform: 'uppercase', letterSpacing: '.05em', color: 'var(--fg-tertiary)' } }, k),
+    React.createElement("div", { style: { fontSize: 13, marginTop: 'var(--space-1)' } }, v));
+const App = () => {
+    const [rows, setRows] = React.useState(INIT);
+    const [view, setView] = React.useState({ sort: { key: 'budget', dir: 'desc' }, columns: [{ key: 'name', visible: true, pin: 'left' }, { key: 'status', visible: true }, { key: 'budget', visible: true }, { key: 'progress', visible: true }, { key: 'team', visible: false }, { key: 'updated', visible: true }, { key: 'region', visible: true }], widths: { name: 220 } });
+    const hidden = view.columns ? view.columns.filter(c => !c.visible).map(c => c.key) : [];
+    return (React.createElement("div", { className: "pane" },
+        React.createElement(DataGrid, { height: 360, rows: rows, view: view, onViewChange: setView, onRowsChange: setRows, columns: cols, rowNumbers: false, selectable: true, searchable: true, filterFields: fields, columnManager: true, onExport: null, footer: true, bulkActions: sel => React.createElement(React.Fragment, null,
+                React.createElement(Button, { size: "sm", variant: "secondary", iconLeft: "download" },
+                    "Export ",
+                    sel.length),
+                React.createElement(Button, { size: "sm", variant: "secondary", iconLeft: "trash-2", onClick: () => setRows(rows.filter(r => !sel.includes(r))) }, "Delete")), renderDetail: r => React.createElement("div", { style: { display: 'grid', gridTemplateColumns: 'repeat(3,minmax(0,180px))', gap: '10px 24px' } },
+                React.createElement(K, { k: "Owner", v: r.owner }),
+                React.createElement(K, { k: "Region", v: r.region }),
+                React.createElement(K, { k: "Risk level", v: r.risk })) }),
+        React.createElement("span", { className: "lbl" },
+            "Controlled view \u2192 sort ",
+            view.sort ? view.sort.key + ' ' + view.sort.dir : 'none',
+            " \u00B7 hidden ",
+            hidden.join(', ') || 'none',
+            " \u00B7 Reset view \u2192 column defaults \u00B7 Project width 140\u2013320")));
+};
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

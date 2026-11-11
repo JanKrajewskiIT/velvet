@@ -1,0 +1,18 @@
+<!-- @dsCard group="Components · Overlays" height=496 width=960 subtitle="primary vs danger · type-to-confirm · async" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { ConfirmDialog, Button } = NS;
+const App = () => { const [o, setO] = React.useState(true); return (React.createElement("div", { className: "pane", style: { height: '100vh', overflow: 'hidden', transform: 'translateZ(0)' } },
+    React.createElement("div", { className: "r" },
+        React.createElement(Button, { variant: "danger", iconLeft: "trash-2", onClick: () => setO(true) }, "Delete workspace")),
+    React.createElement(ConfirmDialog, { open: o, tone: "danger", title: "Delete workspace?", description: "This permanently removes all projects, members and data. This action can\u2019t be undone.", requireText: "velvet-studio", confirmLabel: "Delete workspace", onCancel: () => setO(false), onConfirm: () => new Promise(r => setTimeout(() => { setO(false); r(); }, 800)) }))); };
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

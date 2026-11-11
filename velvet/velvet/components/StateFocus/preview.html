@@ -1,0 +1,26 @@
+<!-- @dsCard group="Foundations · State" page height=380 width=960 subtitle="Focus — ‑‑focus-ring · -danger · -inset · ‑‑focus-outline" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../tokens.css"><link rel="stylesheet" href="../../components/bundle.css"><link rel="stylesheet" href="../../guidelines/card.css"><script src="../../guidelines/theme-toggle.js"></script><script src="../../guidelines/card.js"></script>
+<style>
+html body{margin:0;padding:var(--space-5) var(--space-6);background:var(--bg-raised);color:var(--fg-primary);font:var(--type-body)}
+.sf{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-5) var(--space-4)}
+@media (min-width:900px){.sf{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (max-width:420px){.sf{grid-template-columns:minmax(0,1fr)}}
+.sf-c{display:flex;flex-direction:column;gap:var(--space-2);min-width:0}
+.sf-s{display:grid;place-items:center;height:112px;border:var(--border-width) solid var(--border-subtle);border-radius:var(--radius-md);background:var(--bg-subtle)}
+.sf-k{overflow-wrap:anywhere;font:var(--type-medium-weight) var(--type-kbd-size)/1.3 var(--font-mono);color:var(--fg-primary)}
+.sf-u{font:var(--type-caption);color:var(--fg-tertiary)}
+.sf-btn{display:grid;place-items:center;height:var(--control-height-sm);padding:0 var(--space-4);border-radius:var(--button-radius);background:var(--action-primary);color:var(--action-primary-fg);font:var(--type-button-sm);box-shadow:var(--focus-ring)}
+.sf-in{width:min(136px,86%);height:var(--control-height-sm);box-sizing:border-box;padding:0 var(--space-3);display:flex;align-items:center;border:var(--border-width) solid var(--control-border-invalid);border-radius:var(--control-radius);background:var(--control-bg);box-shadow:var(--focus-ring-danger);font:var(--type-body-sm);color:var(--fg-primary)}
+.sf-grid{display:grid;grid-template-columns:repeat(3,48px);border:var(--border-width) solid var(--border-default);border-radius:var(--radius-md);background:var(--bg-raised);overflow:hidden;font:var(--type-caption);color:var(--fg-secondary)}
+.sf-grid span{display:flex;align-items:center;height:30px;padding:0 var(--space-2);border-right:var(--border-width) solid var(--border-subtle);border-bottom:var(--border-width) solid var(--border-subtle);box-sizing:border-box;font-variant-numeric:tabular-nums}
+.sf-grid span:nth-child(3n){border-right:0}.sf-grid span:nth-last-child(-n+3){border-bottom:0}
+.sf-grid .on{box-shadow:var(--focus-ring-inset);color:var(--fg-primary);background:var(--bg-raised);position:relative}
+.sf-sw{width:32px;height:32px;border-radius:var(--radius-md);background:var(--label-teal);outline:var(--focus-outline);outline-offset:var(--focus-ring-offset)}
+</style></head><body>
+<div class="sf">
+<div class="sf-c"><div class="sf-s"><div class="sf-btn">Save</div></div><span class="sf-k">--focus-ring</span><span class="sf-u">Buttons, controls, anything that sits free on a ground.</span></div>
+<div class="sf-c"><div class="sf-s"><div class="sf-in">anna@</div></div><span class="sf-k">--focus-ring-danger</span><span class="sf-u">Focused field that is also invalid.</span></div>
+<div class="sf-c"><div class="sf-s"><div class="sf-grid"><span>Q1</span><span>Q2</span><span>Q3</span><span>12</span><span class="on">48</span><span>31</span><span>7</span><span>19</span><span>24</span></div></div><span class="sf-k">--focus-ring-inset</span><span class="sf-u">Cells and rows that are clipped by their container.</span></div>
+<div class="sf-c"><div class="sf-s"><div class="sf-sw"></div></div><span class="sf-k">--focus-outline</span><span class="sf-u">Non-box shapes: swatches, markers, custom elements.</span></div>
+</div>
+</body></html>

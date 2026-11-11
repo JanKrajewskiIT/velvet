@@ -1,0 +1,23 @@
+<!-- @dsCard group="Components · Planning" height=653 width=960 subtitle="Month grid + day panel · controlled selection · quick add · delete with inline confirm · arrows" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { CalendarOrganizer } = NS;
+const t = new Date();
+const d = (n) => new Date(t.getFullYear(), t.getMonth(), t.getDate() + n);
+const INIT = [{ id: 1, date: d(0), title: 'Design review', time: '10:00', color: 'var(--dv-1)', location: 'Room 2' }, { id: 2, date: d(0), title: '1:1 with Marek', time: '14:30', color: 'var(--dv-4)' }, { id: 3, date: d(0), title: 'Ship density mode', color: 'var(--dv-3)' }, { id: 4, date: d(2), title: 'Sprint planning', time: '09:30', color: 'var(--dv-5)' }, { id: 5, date: d(-3), title: 'Brand workshop', time: '13:00', color: 'var(--dv-2)' }, { id: 6, date: d(6), title: 'Offsite', color: 'var(--dv-7)' }];
+const App = () => { const [e, setE] = React.useState(INIT); const [day, setDay] = React.useState(d(0)); return (React.createElement("div", { className: "pane" },
+    React.createElement(CalendarOrganizer, { events: e, onEventsChange: setE, selected: day, onSelectedChange: setDay }),
+    React.createElement("span", { className: "lbl" },
+        "Selected (controlled): ",
+        day.toDateString(),
+        " \u00B7 trash icon asks Cancel / Delete before removing"))); };
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

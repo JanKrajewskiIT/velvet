@@ -1,9 +1,0 @@
-/* Radio */
-.vui-radio{border-radius:50%}
-.vui-radio{box-shadow:inset 0 0 0 9px var(--bg-field)}
-.vui-radio:checked{border-color:var(--action-primary);background:var(--action-primary);box-shadow:inset 0 0 0 4px var(--bg-field)}
-.vui-radio:not(:checked):focus-visible{box-shadow:inset 0 0 0 9px var(--bg-field),var(--focus-ring)}
-.vui-radio:checked:focus-visible{box-shadow:inset 0 0 0 4px var(--bg-field),var(--focus-ring)}
-.vui-radio:checked:hover:not(:disabled){background:var(--check-on-hover);border-color:var(--check-on-hover)}
-.vui-radio:not(:checked):active:not(:disabled){border-color:var(--check-border-focus);box-shadow:inset 0 0 0 9px var(--check-press-bg),0 0 0 var(--halo-sm) var(--check-press-halo)}
-.vui-radio:checked:active:not(:disabled){background:var(--check-on-active);border-color:var(--check-on-active);box-shadow:inset 0 0 0 4px var(--bg-field),0 0 0 var(--halo-sm) var(--check-press-halo)}

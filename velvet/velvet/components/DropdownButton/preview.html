@@ -1,0 +1,20 @@
+<!-- @dsCard group="Components · Menus" height=124 width=960 subtitle="Split button — main action + alternatives" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { DropdownButton } = NS;
+const App = () => { const [s, setS] = React.useState(''); return (React.createElement("div", { className: "pane" },
+    React.createElement("div", { className: "r", style: { gap: 16 } },
+        React.createElement(DropdownButton, { icon: "check", onClick: () => setS('Saved'), items: [{ label: 'Save as draft', icon: 'file', onSelect: () => setS('Draft saved') }, { label: 'Save & publish', icon: 'globe', onSelect: () => setS('Published') }] }, "Save"),
+        React.createElement(DropdownButton, { variant: "secondary", icon: "download", onClick: () => setS('Exported CSV'), items: [{ label: 'Export as CSV', onSelect: () => setS('CSV') }, { label: 'Export as PDF', onSelect: () => setS('PDF') }] }, "Export"),
+        React.createElement(DropdownButton, { variant: "ghost", items: [{ label: 'Newest first' }, { label: 'Oldest first' }] }, "Sort"),
+        React.createElement("span", { className: "lbl" }, s)))); };
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

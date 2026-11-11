@@ -1,0 +1,22 @@
+<!-- @dsCard group="Components · Display" height=166 width=960 subtitle="Code, tag and name — clickable to open" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:16px;align-items:center}.lbl{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);width:96px;flex:none}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const { CodeLabel } = window.VelvetUIDesignSystem_ee2bd8;
+const App = () => {
+ const [s, setS] = React.useState('SKU-1042');
+ const L = [['SKU-1042', 'EU', 'Desk lamp'], ['SKU-2210', 'US', 'Standing desk'], ['SKU-3305', 'APAC', 'Monitor arm'], ['SKU-4120', 'EU', 'Cable tray']];
+ return (React.createElement("div", { className: "pane" },
+ React.createElement("div", { className: "r" }, L.map(([a, b, c]) => React.createElement(CodeLabel, { key: a, code: a, tag: b, name: c, showMark: true, selected: s === a, onClick: () => setS(a) }))),
+ React.createElement("div", { className: "r" },
+ React.createElement(CodeLabel, { size: "sm", code: "SKU-5001", tag: "EU", name: "Wireless keyboard", meta: "Supplier A \u00B7 Batch 7" }),
+ React.createElement(CodeLabel, { size: "sm", code: "SKU-5002", name: "Wireless mouse" }))));
+};
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

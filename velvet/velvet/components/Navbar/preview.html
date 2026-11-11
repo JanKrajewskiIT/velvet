@@ -1,0 +1,49 @@
+<!-- @dsCard group="Components · Navigation" height=596 width=960 subtitle="links (default · brand) · menubar: full logo, dark active disc, notifications / ⌘K / account menu · condensed" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:14px}.lbl{margin-bottom:8px}.band{padding-bottom:12px}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { Navbar, NavbarLocale, NavbarUser, NotificationCenter, SearchTrigger, BrandLogo, IconButton, Avatar } = NS;
+const MB = [{ id: 'home', label: 'Dashboard', icon: 'home' }, { id: 'search', label: 'Search', icon: 'search' }, { id: 'settings', label: 'Settings', icon: 'settings' }];
+const MB5 = [{ id: 'home', label: 'Dashboard', icon: 'home' }, { id: 'grid', label: 'Projects', icon: 'layout-grid' }, { id: 'reports', label: 'Reports', icon: 'bar-chart' }, { id: 'globe', label: 'Language', icon: 'globe' }, { id: 'settings', label: 'Settings', icon: 'settings' }];
+const App = () => {
+    const [a, setA] = React.useState('proposals');
+    const [m1, setM1] = React.useState('home');
+    const [m2, setM2] = React.useState('reports');
+    const [m3, setM3] = React.useState('home');
+    const items = [{ id: 'home', label: 'Home' }, { id: 'proposals', label: 'Proposals' }, { id: 'questions', label: 'Questions' }, { id: 'guides', label: 'Guides' }];
+    const acts = React.createElement(React.Fragment, null,
+        React.createElement(IconButton, { icon: "search", label: "Search", variant: "ghost" }),
+        React.createElement(IconButton, { icon: "bell", label: "Notifications", variant: "ghost" }),
+        React.createElement(Avatar, { name: "Anna Kowalska", size: "sm" }));
+    const br = React.createElement("strong", { style: { fontFamily: 'var(--font-display)', fontSize: 18 } }, "Recron");
+    return (React.createElement("div", { className: "pane" },
+        React.createElement("div", null,
+            React.createElement("div", { className: "lbl" }, "links \u00B7 default"),
+            React.createElement("div", { style: { border: '1px solid var(--border-subtle)', borderRadius: 12, overflow: 'hidden' } },
+                React.createElement(Navbar, { brand: br, items: items, active: a, onNavigate: setA, actions: acts }))),
+        React.createElement("div", null,
+            React.createElement("div", { className: "lbl" }, "links \u00B7 tone brand"),
+            React.createElement("div", { style: { borderRadius: 12, overflow: 'hidden' } },
+                React.createElement(Navbar, { tone: "brand", brand: br, items: items, active: a, onNavigate: setA, actions: acts }))),
+        React.createElement("div", { className: "band" },
+            React.createElement("div", { className: "lbl" }, "menubar \u00B7 full logo \u00B7 notifications \u00B7 \u2318K \u00B7 account menu"),
+            React.createElement(Navbar, { variant: "menubar", logo: React.createElement(BrandLogo, { brand: "recron", tone: "inverse", size: 28 }), showActiveLabel: false, items: MB, active: m1, onNavigate: setM1, actions: React.createElement(React.Fragment, null,
+                    React.createElement(SearchTrigger, { placeholder: "Search", hotkey: false }),
+                    React.createElement(NotificationCenter, { items: [{ id: 1, title: 'Meeting tomorrow', body: 'Acme · 10:00', time: '1h', unread: true, tone: 'brand', icon: 'calendar' }, { id: 2, title: 'Match ready', time: '3h', unread: true, tone: 'success' }] }),
+                    React.createElement(NavbarUser, { name: "Anna Kowalska", items: [{ label: 'Profile', icon: 'user' }, { label: 'Settings', icon: 'settings' }, { divider: true }, { label: 'Sign out', icon: 'log-out', danger: true }] })) })),
+        React.createElement("div", { className: "band" },
+            React.createElement("div", { className: "lbl" }, "menubar \u00B7 no active label \u00B7 5 items"),
+            React.createElement(Navbar, { variant: "menubar", logo: "R", showActiveLabel: false, items: MB5, active: m2, onNavigate: setM2, actions: React.createElement(NavbarLocale, null) })),
+        React.createElement("div", null,
+            React.createElement("div", { className: "lbl" }, "menubar \u00B7 condensed (burger)"),
+            React.createElement(Navbar, { variant: "menubar", condensed: true, logo: "R", items: MB, active: m3, onNavigate: setM3 }))));
+};
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

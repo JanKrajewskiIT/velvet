@@ -1,0 +1,15 @@
+<!-- @dsCard group="Components · Trading" height=210 width=960 subtitle="Symbol, live quote, session and key facts in one masthead" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}.pane{display:flex;flex-direction:column;gap:16px}.lbl{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 6px}.brandbar{display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:12px 16px;border-radius:12px;background:var(--bg-brand)}</style></head><body>
+<div id="root-0"></div>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8; const h = React.createElement;
+const { InstrumentHeader, Button } = NS;
+const App = () => h(InstrumentHeader, { symbol: 'ACME', name: 'Acme Corp.', venue: 'XNYS · USD', tag: 'Equity', price: 182.4, currency: 'USD', change: 1.32, changeAbs: 2.38, session: { state: 'open', label: 'Open until 16:00 New York' },
+  meta: [{ label: 'Prev. close', value: '180.02' }, { label: 'Day range', value: '179.10 – 183.05' }, { label: 'Volume', value: '12.4 M' }, { label: 'Source', value: 'IEX · real time', mono: false }],
+  actions: h(React.Fragment, null, h(Button, { size: 'sm', variant: 'secondary', iconLeft: 'bell' }, 'Price alert'), h(Button, { size: 'sm', iconLeft: 'plus' }, 'Add to watchlist')) });
+ReactDOM.createRoot(document.getElementById('root-0')).render(h(App));
+})();
+</script></body></html>

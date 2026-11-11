@@ -1,0 +1,32 @@
+<!-- @dsCard group="Components · Media" height=654 width=960 subtitle="‑‑aspect-* ratio scale · shimmer · striped placeholder · glass play · badge · overlay · caption" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { MediaFrame } = NS;
+const L = ({ children }) => React.createElement("div", { className: "lbl" }, children);
+const App = () => (React.createElement("div", { className: "pane", style: { display: 'flex', flexDirection: 'column', gap: 14 } },
+    React.createElement(L, null, "ratio scale \u00B7 --aspect-*"),
+    React.createElement("div", { style: { display: 'grid', gridTemplateColumns: 'repeat(4,minmax(0,1fr))', gap: 12, alignItems: 'start' } },
+        React.createElement(MediaFrame, { ratio: "square", showRatio: true, placeholder: "square \u00B7 avatar", bordered: true, credit: "--aspect-square" }),
+        React.createElement(MediaFrame, { ratio: "video", kind: "video", size: "sm", bordered: true, credit: "--aspect-video", title: "Intro" }),
+        React.createElement(MediaFrame, { ratio: "photo", showRatio: true, placeholder: "photo", bordered: true, credit: "--aspect-photo" }),
+        React.createElement(MediaFrame, { ratio: "portrait", showRatio: true, placeholder: "portrait \u00B7 story", bordered: true, credit: "--aspect-portrait" })),
+    React.createElement("div", { style: { display: 'grid', gridTemplateColumns: 'repeat(3,minmax(0,1fr))', gap: 12, alignItems: 'start' } },
+        React.createElement("div", { style: { display: 'flex', flexDirection: 'column', gap: 6 } },
+            React.createElement(L, null, "video 21:9 \u00B7 badge \u00B7 overlay"),
+            React.createElement(MediaFrame, { ratio: "wide", kind: "video", bordered: true, badge: "2:14", overlay: React.createElement("span", null, "Studio tour"), title: "Studio tour" })),
+        React.createElement("div", { style: { display: 'flex', flexDirection: 'column', gap: 6 } },
+            React.createElement(L, null, "loading \u00B7 forced shimmer"),
+            React.createElement(MediaFrame, { ratio: "video", loading: true, caption: "Placeholder keeps the ratio" })),
+        React.createElement("div", { style: { display: 'flex', flexDirection: 'column', gap: 6 } },
+            React.createElement(L, null, "error fallback"),
+            React.createElement(MediaFrame, { ratio: "video", src: "https://example.invalid/missing.jpg", alt: "Office", bordered: true, caption: "Retry from the source", credit: "404" })))));
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

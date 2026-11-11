@@ -1,0 +1,87 @@
+<!-- @dsCard group="Components · Charts" height=420 width=960 subtitle="One key for every chart · inline, toggle, list" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>
+html body{margin:0;padding:0;background:var(--bg-raised);color:var(--fg-primary);font:var(--type-body)}
+.ap{display:flex;flex-direction:column;gap:var(--space-5);padding:var(--space-5) var(--space-6)}
+.vcard{display:flex;flex-direction:column;gap:var(--space-3);min-width:0}
+.vcard+.vcard{padding-top:var(--space-5);border-top:var(--border-width) solid var(--border-subtle)}
+.vcard-t{display:flex;align-items:baseline;gap:var(--space-2);margin:0;font:var(--type-label-sm);color:var(--fg-primary)}
+.vcard-t small{font:var(--type-regular-weight) var(--type-kbd-size)/1.3 var(--font-mono);color:var(--fg-tertiary)}
+.ap-rows{display:flex;flex-direction:column}
+.ap-row{display:grid;grid-template-columns:120px minmax(0,1fr);gap:var(--space-4);align-items:center;padding:var(--space-3) 0;border-top:var(--border-width) solid var(--border-subtle)}
+.ap-row:first-child{border-top:0;padding-top:0}.ap-row:last-child{padding-bottom:0}
+.ap-row--top{align-items:start}
+.ap-k{font:var(--type-medium-weight) var(--type-kbd-size)/1.4 var(--font-mono);color:var(--fg-tertiary);min-width:0}
+.ap-v{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-3) var(--space-5);min-width:0}
+.ap-v--tight{gap:var(--space-2) var(--space-3)}
+.ap-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--min,240px)),1fr));gap:var(--space-4) var(--space-5);align-items:start}
+.ap-cell{display:flex;flex-direction:column;align-items:center;gap:var(--space-2);min-width:0}
+.ap-cell--fill{align-items:stretch}
+.ap-cell--start{align-items:flex-start}
+.ap-spec{display:flex;align-items:center;justify-content:center;min-height:var(--h,32px)}
+.ap-cell--fill>.ap-spec,.ap-cell--start>.ap-spec{justify-content:flex-start}
+.ap-cell--fill>.ap-spec>*{flex:1;min-width:0}
+.ap-cap{font:var(--type-regular-weight) var(--type-kbd-size)/1.4 var(--font-mono);color:var(--fg-tertiary)}
+.ap-cap b{font-weight:var(--type-medium-weight);color:var(--fg-secondary)}
+.ap-mxw{overflow-x:auto;max-width:100%}
+.ap-mx{width:max-content;display:grid;grid-template-columns:var(--rh,96px) repeat(var(--n),var(--cw,88px));gap:var(--space-3) var(--space-2);align-items:center;justify-items:center}
+.ap-mx>.ap-k{justify-self:start}.ap-mx>.ap-th{justify-self:center;text-align:center}
+.ap-stage{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-3) var(--space-4);padding:var(--space-4);border:var(--border-width) solid var(--border-subtle);border-radius:var(--radius-md);background:var(--bg-subtle);min-width:0}
+.ap-stage--col{flex-direction:column;align-items:stretch}
+.ap-note{font:var(--type-caption);color:var(--fg-tertiary);margin:0}
+
+@media (max-width:520px){.ap-row{grid-template-columns:minmax(0,1fr);gap:var(--space-2)}.ap{padding:var(--space-4)}}
+</style></head><body>
+<main class="ap" id="ap"></main>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const h = React.createElement;
+const Row = ({ k, children, top, tight }) => h('div', { className: 'ap-row' + (top ? ' ap-row--top' : '') }, h('span', { className: 'ap-k' }, k), h('div', { className: 'ap-v' + (tight ? ' ap-v--tight' : '') }, children));
+const Rows = ({ children }) => h('div', { className: 'ap-rows' }, children);
+const Cap = ({ children }) => h('span', { className: 'ap-cap' }, children);
+const Cell = ({ cap, children, fill, start, h: hh, style }) => h('div', { className: 'ap-cell' + (fill ? ' ap-cell--fill' : start ? ' ap-cell--start' : ''), style }, h('div', { className: 'ap-spec', style: hh ? { '--h': hh + 'px' } : undefined }, children), cap ? h(Cap, null, cap) : null);
+const Grid = ({ cols = 3, min, children, style }) => h('div', { className: 'ap-grid', style: { '--min': (min || { 5: 160, 4: 200, 3: 250, 2: 380, 1: 300 }[cols] || 240) + 'px', ...style } }, children);
+const Stage = ({ children, col, style }) => h('div', { className: 'ap-stage' + (col ? ' ap-stage--col' : ''), style }, children);
+const Mx = ({ head, rows, rh, cw }) => h('div', { className: 'ap-mxw' }, h('div', { className: 'ap-mx', style: { '--n': head.length, '--rh': rh, '--cw': cw } },
+    h('span'), head.map((x, i) => h('span', { key: i, className: 'ap-k ap-th' }, x)),
+    rows.map(([label, cells], r) => h(React.Fragment, { key: r }, h('span', { className: 'ap-k' }, label), cells.map((c, i) => h(React.Fragment, { key: i }, c))))));
+function mountAll(list) {
+    const host = document.getElementById('ap');
+    list.forEach(([title, desc, el], i) => {
+        const s = document.createElement('section'); s.className = 'vcard';
+        if (title) { const t = document.createElement('div'); t.className = 'vcard-t'; t.textContent = title; if (desc) { const sm = document.createElement('small'); sm.textContent = desc; t.appendChild(sm); } s.appendChild(t); }
+        const r = document.createElement('div'); r.id = 'root-' + i; s.appendChild(r); host.appendChild(s);
+        ReactDOM.createRoot(r).render(el);
+    });
+}
+const { ChartLegend } = NS;
+const S = [{ key: 'a', label: 'Revenue', color: 'var(--dv-1)' }, { key: 'b', label: 'Costs', color: 'var(--dv-2)' }, { key: 'c', label: 'Margin', color: 'var(--dv-3)' }];
+function Toggle() {
+  const [off, setOff] = React.useState(['b']);
+  return h(ChartLegend, { items: S, off, onToggle: s => setOff(o => o.includes(s.key) ? o.filter(k => k !== s.key) : [...o, s.key]) });
+}
+function List() {
+  const [off, setOff] = React.useState([]);
+  const items = [{ key: 'x', label: 'Direct', color: 'var(--dv-1)', valueLabel: '1 240', shareLabel: '52%' }, { key: 'y', label: 'Referral', color: 'var(--dv-2)', valueLabel: '720', shareLabel: '30%' }, { key: 'z', label: 'Organic', color: 'var(--dv-3)', valueLabel: '430', shareLabel: '18%' }];
+  return h(ChartLegend, { layout: 'list', items, off, onToggle: s => setOff(o => o.includes(s.key) ? o.filter(k => k !== s.key) : [...o, s.key]) });
+}
+mountAll([
+  [
+    'ChartLegend', 'inline · band swatch · round swatch',
+    h(Grid, { cols: 2 },
+      h(Cell, { fill: true, cap: 'inline — one key per series' }, h(ChartLegend, { items: S })),
+      h(Cell, { fill: true, cap: 'swatch="band" · round marker (range-band chart)' }, h(ChartLegend, { items: [{ key: 'band', label: 'Expected range', swatch: 'band' }, { key: 'm', label: 'Median', color: 'var(--chart-median)' }, { key: 'o', label: '3 outside range', color: 'var(--trend-down-solid)', round: true }] })))
+  ],
+  [
+    'ChartLegend · toggle', 'onToggle makes each key an aria-pressed button',
+    h(Cell, { fill: true, cap: 'Costs is hidden' }, h(Toggle, null))
+  ],
+  [
+    'ChartLegend · layout="list"', 'value + share columns (donut)',
+    h(Cell, { fill: true, cap: 'toggle + onHover(item | null)' }, h(List, null))
+  ]
+]);
+})();
+</script></body></html>

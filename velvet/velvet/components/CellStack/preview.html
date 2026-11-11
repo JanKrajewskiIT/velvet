@@ -1,0 +1,15 @@
+<!-- @dsCard group="Components · Data" height=206 width=960 subtitle="Two-line table cell — ID + time, name + meta, amount + detail" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:16px;align-items:center}.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const { CellStack, Table, DirectionBadge } = window.VelvetUIDesignSystem_ee2bd8;
+const rows = [{ id: 'T-7F21', at: '22 Oct 05:00:12', item: 'Desk lamp', cat: 'Home office', quoted: '24.00', charged: '24.90 \u00B7 +3.8%' }, { id: 'T-7E90', at: '21 Oct 16:20:41', item: 'Monitor arm', cat: 'Home office', quoted: '61.50', charged: '61.50 \u00B7 0%' }];
+const App = () => (React.createElement(Table, { rowKey: "id", rows: rows, columns: [{ key: 'id', label: 'Ticket', render: r => React.createElement(CellStack, { primary: r.id, secondary: r.at, mono: true }) }, { key: 'item', label: 'Item', render: r => React.createElement(CellStack, { primary: r.item, secondary: r.cat, leading: React.createElement(DirectionBadge, { direction: "up", size: "sm" }) }) }, { key: 'quoted', label: 'Quoted / charged', align: 'right', render: r => React.createElement(CellStack, { primary: r.quoted, secondary: r.charged, mono: true, secondaryMono: true, align: "right", strong: false }) }] }));
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

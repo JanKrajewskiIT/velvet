@@ -1,0 +1,65 @@
+<!-- @dsCard group="Components · Actions" height=588 width=960 -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:8px}.it{display:flex;align-items:center;gap:10px;height:40px;padding:0 12px;border:1px solid var(--border-subtle);border-radius:var(--radius-md);background:var(--bg-raised);font:var(--type-body)}.it .vui-icon{color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:12px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.lbl{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);width:72px;flex:none}</style></head><body>
+<div class="vcard"><div class="vcard-t">Button — add row — variant=dashed + block at the end of a list; pop-in on new item</div><div id="root-0"></div></div>
+<div class="vcard"><div class="vcard-t">Button — sizes — sm 32 · md 36 · lg 44</div><div id="root-1"></div></div>
+<div class="vcard"><div class="vcard-t">Button — states — Loading, disabled, full width</div><div id="root-2"></div></div>
+<div class="vcard"><div class="vcard-t">Button — variants — Primary, secondary, soft, ghost, danger, link, dashed</div><div id="root-3"></div></div>
+<script>
+(function(){
+"use strict";
+const { Button } = window.VelvetUIDesignSystem_ee2bd8;
+const App = () => {
+    const [items, set] = React.useState(['Senior Product Designer', 'Frontend Engineer']);
+    return (React.createElement("div", { className: "pane" },
+        items.map((t, i) => (React.createElement("div", { key: i, className: 'it' + (i > 1 ? ' vui-pop-in' : '') },
+            React.createElement("i", { className: "vui-icon icon-briefcase" }),
+            t))),
+        React.createElement(Button, { variant: "dashed", block: true, iconLeft: "plus", onClick: () => set(a => [...a, 'New position ' + (a.length - 1)]) }, "Add position")));
+};
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+(function(){
+"use strict";
+const { Button } = window.VelvetUIDesignSystem_ee2bd8;
+const App = () => (React.createElement("div", { className: "pane" },
+    React.createElement("div", { className: "r" },
+        React.createElement(Button, { size: "sm" }, "Small"),
+        React.createElement(Button, null, "Medium"),
+        React.createElement(Button, { size: "lg" }, "Large"),
+        React.createElement(Button, { size: "lg", iconRight: "arrow-right" }, "With icon"))));
+ReactDOM.createRoot(document.getElementById('root-1')).render(React.createElement(App, null));
+
+})();
+(function(){
+"use strict";
+const { Button } = window.VelvetUIDesignSystem_ee2bd8;
+const App = () => (React.createElement("div", { className: "pane" },
+    React.createElement("div", { className: "r" },
+        React.createElement(Button, { loading: true }, "Saving"),
+        React.createElement(Button, { disabled: true }, "Disabled"),
+        React.createElement(Button, { variant: "secondary", disabled: true }, "Disabled"),
+        React.createElement("div", { style: { flex: 1, minWidth: 180 } },
+            React.createElement(Button, { block: true }, "Full width")))));
+ReactDOM.createRoot(document.getElementById('root-2')).render(React.createElement(App, null));
+
+})();
+(function(){
+"use strict";
+const { Button } = window.VelvetUIDesignSystem_ee2bd8;
+const App = () => (React.createElement("div", { className: "pane" },
+    React.createElement("div", { className: "r" },
+        React.createElement(Button, { iconLeft: "plus" }, "Primary"),
+        React.createElement(Button, { variant: "secondary" }, "Secondary"),
+        React.createElement(Button, { variant: "soft" }, "Soft"),
+        React.createElement(Button, { variant: "ghost" }, "Ghost"),
+        React.createElement(Button, { variant: "danger", iconLeft: "trash-2" }, "Delete"),
+        React.createElement(Button, { variant: "link" }, "Link"),
+        React.createElement(Button, { variant: "dashed", iconLeft: "plus" }, "Add"))));
+ReactDOM.createRoot(document.getElementById('root-3')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

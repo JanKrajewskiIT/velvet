@@ -1,0 +1,70 @@
+<!-- @dsCard group="Components · Cards" height=378 width=960 subtitle="Q&A · concept · metric with details — hover or click to flip" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { FlipCard } = NS;
+const chip = (t, inv) => React.createElement("span", { style: { font: '600 9px/1 var(--font-sans)', textTransform: 'uppercase', letterSpacing: '.06em', padding: '4px var(--space-2-5)', borderRadius: 999, background: inv ? 'var(--on-color-pressed)' : 'var(--bg-selected)', color: inv ? 'inherit' : 'var(--fg-brand)' } }, t);
+const Top = ({ t, inv }) => React.createElement("div", { style: { display: 'flex', alignItems: 'center', justifyContent: 'space-between' } },
+    chip(t, inv),
+    React.createElement("i", { className: "vui-icon icon-refresh", "aria-hidden": "true", style: { fontSize: 16, opacity: inv ? .7 : 1, color: inv ? 'inherit' : 'var(--fg-tertiary)' } }));
+const Foot = ({ i, t, inv }) => React.createElement("div", { style: { display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: inv ? 'inherit' : 'var(--fg-tertiary)', opacity: inv ? .75 : 1 } },
+    React.createElement("i", { className: 'vui-icon icon-' + i, "aria-hidden": "true", style: { fontSize: 13 } }),
+    t);
+const Q = ({ children, s }) => React.createElement("div", { style: { fontSize: s || 18, fontWeight: 600, letterSpacing: '-.01em', lineHeight: 1.3 } }, children);
+const A = ({ children }) => React.createElement("div", null,
+    React.createElement("div", { style: { font: '600 9px/1 var(--font-sans)', textTransform: 'uppercase', letterSpacing: '.1em', opacity: .7, marginBottom: 8 } }, "In short"),
+    React.createElement("div", { style: { fontSize: 13, lineHeight: 1.6 } }, children));
+const code = { background: 'var(--bg-sunken)', padding: '1px var(--space-1-5)', borderRadius: 4, fontFamily: 'var(--font-mono)', fontSize: '.9em' };
+const codeInv = { ...code, background: 'var(--on-color-pressed)' };
+const Row = ({ k, v }) => React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between' } },
+    React.createElement("span", { style: { opacity: .7 } }, k),
+    React.createElement("b", null, v));
+const P = { width: 230, height: 290, align: 'start', flipOnHover: true };
+const App = () => (React.createElement("div", { className: "pane" },
+    React.createElement("div", { style: { display: 'flex', gap: 'var(--space-5)', flexWrap: 'wrap' } },
+        React.createElement(FlipCard, { ...P, label: "Card: throttle vs debounce", front: React.createElement(React.Fragment, null,
+                React.createElement(Top, { t: "Question" }),
+                React.createElement(Q, null,
+                    "How does ",
+                    React.createElement("code", { style: code }, "throttle"),
+                    " differ from ",
+                    React.createElement("code", { style: code }, "debounce"),
+                    "?"),
+                React.createElement(Foot, { i: "book-open", t: "JavaScript \u00B7 Performance" })), back: React.createElement(React.Fragment, null,
+                React.createElement(Top, { t: "Answer", inv: true }),
+                React.createElement(A, null,
+                    React.createElement("code", { style: codeInv }, "throttle"),
+                    " runs at most once per interval; ",
+                    React.createElement("code", { style: codeInv }, "debounce"),
+                    " waits until calls ",
+                    React.createElement("b", null, "stop"),
+                    " for the interval."),
+                React.createElement(Foot, { i: "check", t: "I know this", inv: true })) }),
+        React.createElement(FlipCard, { ...P, defaultFlipped: true, label: "Card: event delegation", front: React.createElement(React.Fragment, null,
+                React.createElement(Top, { t: "Concept" }),
+                React.createElement(Q, null, "What is \u201Cevent delegation\u201D?"),
+                React.createElement(Foot, { i: "code", t: "JavaScript \u00B7 DOM" })), back: React.createElement(React.Fragment, null,
+                React.createElement(Top, { t: "Answer", inv: true }),
+                React.createElement(A, null, "One listener on a shared ancestor handles events from many children thanks to bubbling \u2014 fewer listeners, works for dynamic elements."),
+                React.createElement(Foot, { i: "star", t: "Review tomorrow", inv: true })) }),
+        React.createElement(FlipCard, { ...P, backVariant: "inverse", label: "Score", front: React.createElement(React.Fragment, null,
+                React.createElement(Top, { t: "Score" }),
+                React.createElement("div", null,
+                    React.createElement("div", { style: { fontFamily: 'var(--font-display)', fontSize: 52, fontWeight: 600, letterSpacing: '-.03em', lineHeight: 1, marginBottom: 6 } }, "78%"),
+                    React.createElement(Q, { s: 15 }, "Accuracy")),
+                React.createElement(Foot, { i: "bar-chart", t: "Last 30 days" })), back: React.createElement(React.Fragment, null,
+                React.createElement(Top, { t: "Details", inv: true }),
+                React.createElement("div", { style: { fontSize: 13, lineHeight: 1.9 } },
+                    React.createElement(Row, { k: "Solved", v: "142" }),
+                    React.createElement(Row, { k: "Correct", v: "111" }),
+                    React.createElement(Row, { k: "Streak", v: "9 days" })),
+                React.createElement(Foot, { i: "trending-up", t: "+6 pts vs previous", inv: true })) }))));
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

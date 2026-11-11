@@ -1,5 +1,0 @@
-/* Atom · EmptyText — inline empty message. Hosts may set height / padding; colour and type come from here. */
-.vui-empty-text{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--space-1-5);padding:var(--space-6) var(--space-4);font-size:var(--type-body-sm-size);line-height:var(--type-body-leading);color:var(--fg-tertiary);text-align:center;text-wrap:pretty}
-.vui-empty-text--start{align-items:flex-start;padding-inline:0;text-align:left}
-.vui-empty-text--dashed{border:var(--border-width) dashed var(--border-default);border-radius:var(--radius-md)}
-.vui-empty-text__icon{font-size:var(--size-icon-2xl)}

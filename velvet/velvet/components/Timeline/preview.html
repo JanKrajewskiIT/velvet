@@ -1,0 +1,107 @@
+<!-- @dsCard group="Components · Data" height=1590 width=960 -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:16px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.pane{display:flex;flex-direction:column;gap:var(--space-5)}.box{border:1px solid var(--border-subtle);border-radius:14px;padding:16px var(--space-5)}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.pane{display:flex;flex-direction:column;gap:14px}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}</style></head><body>
+<div class="vcard"><div class="vcard-t">Timeline · actions — badge · meta facts · row actions (edit, calendar, delete w/ inline confirm) · add row</div><div id="root-0"></div></div>
+<div class="vcard"><div class="vcard-t">Timeline · compact — Activity feed for dashboard cards · no rail · one line per event</div><div id="root-1"></div></div>
+<div class="vcard"><div class="vcard-t">Timeline — pipeline — Pipeline stages: done · current · upcoming</div><div id="root-2"></div></div>
+<div class="vcard"><div class="vcard-t">Timeline — Activity feed · tone markers · avatars</div><div id="root-3"></div></div>
+<script>
+(function(){
+"use strict";
+const { Timeline, Markdown } = window.VelvetUIDesignSystem_ee2bd8;
+const INIT = [
+    { id: '1', status: 'done', title: 'Phone screen', badge: { label: 'Passed', icon: 'check', tone: 'success' }, meta: [{ icon: 'calendar', label: 'Sep 28, 2026' }, { icon: 'clock', label: '30 min' }, { icon: 'phone', label: 'Phone' }] },
+    { id: '2', status: 'current', title: 'Design review', badge: { label: 'Synced', icon: 'calendar', tone: 'brand' }, meta: [{ icon: 'calendar', label: 'Oct 7, 2026 · 14:00' }, { icon: 'clock', label: '60 min' }, { icon: 'map-pin', label: 'Google Meet' }], content: React.createElement(Markdown, { size: "sm", source: 'Focus on **design-system** case study. Ask about *team leadership*.' }), cal: { title: 'Design review — Anna Kowalska', start: '2026-10-07T14:00', durationMinutes: 60, location: 'Google Meet' } },
+    { id: '3', status: 'upcoming', title: 'Final review', meta: [{ icon: 'calendar', label: 'Not scheduled' }] }
+];
+const App = () => {
+    const [items, setItems] = React.useState(INIT);
+    const acts = (it) => [{ id: 'edit', label: 'Edit', icon: 'pencil' }, ...(it.status !== 'done' ? [{ id: 'cal', label: 'Add to calendar', icon: 'calendar-plus', onClick: () => it.cal && window.open(window.VelvetUIDesignSystem_ee2bd8.buildGoogleCalendarUrl(it.cal), '_blank') }] : []), { id: 'del', label: 'Delete', icon: 'trash-2', tone: 'danger', confirm: 'Delete “' + it.title + '”?', onClick: () => new Promise(r => setTimeout(() => { setItems(x => x.filter(y => y.id !== it.id)); r(); }, 500)) }];
+    return (React.createElement("div", { className: "pane" },
+        React.createElement(Timeline, { items: items.map(it => ({ ...it, actions: acts(it) })), onAction: (a, it) => console.log(a, it.id), onAdd: () => setItems(x => [...x, { id: String(Date.now()), status: 'upcoming', title: 'New stage' }]), addLabel: "Add stage" })));
+};
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { Timeline, Avatar } = NS;
+const I = [{ icon: 'check', tone: 'success', title: React.createElement("span", null,
+            React.createElement("b", null, "Ada Kowalska"),
+            " approved ",
+            React.createElement("b", null, "Nocturne release")), time: '2m' }, { icon: 'upload', title: React.createElement("span", null,
+            React.createElement("b", null, "Jan D\u0105browski"),
+            " uploaded 4 files to ",
+            React.createElement("b", null, "Atlas")), time: '1h' }, { icon: 'triangle-alert', tone: 'warning', title: React.createElement("span", null,
+            "Build ",
+            React.createElement("b", null, "#482"),
+            " failed on staging"), time: '3h' }, { icon: 'tag', tone: 'brand', title: React.createElement("span", null,
+            React.createElement("b", null, "Ola Nowak"),
+            " added label ",
+            React.createElement("b", null, "Design")), time: 'Yesterday' }];
+const P = [{ avatar: React.createElement(Avatar, { name: "Ada Kowalska", size: "xs" }), title: React.createElement("span", null,
+            React.createElement("b", null, "Ada"),
+            " commented on ",
+            React.createElement("b", null, "Q4 plan")), description: '“Moved the review to Thursday.”', time: '5m' }, { avatar: React.createElement(Avatar, { name: "Jan D\u0105browski", size: "xs" }), title: React.createElement("span", null,
+            React.createElement("b", null, "Jan"),
+            " joined ",
+            React.createElement("b", null, "Atlas")), time: '2h' }, { avatar: React.createElement(Avatar, { name: "Ola Nowak", size: "xs" }), title: React.createElement("span", null,
+            React.createElement("b", null, "Ola"),
+            " closed 3 tasks"), time: '4h' }];
+const App = () => (React.createElement("div", { className: "pane" },
+    React.createElement("div", { className: "g2" },
+        React.createElement("div", { className: "box" },
+            React.createElement("div", { className: "lbl", style: { marginBottom: 10 } }, "Icons \u00B7 divided"),
+            React.createElement(Timeline, { variant: "compact", divided: true, items: I })),
+        React.createElement("div", { className: "box" },
+            React.createElement("div", { className: "lbl", style: { marginBottom: 10 } }, "Avatars \u00B7 description"),
+            React.createElement(Timeline, { variant: "compact", items: P })))));
+ReactDOM.createRoot(document.getElementById('root-1')).render(React.createElement(App, null));
+
+})();
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { Timeline, Card, Avatar, Badge } = NS;
+const App = () => (React.createElement("div", { className: "pane" },
+    React.createElement("div", { className: "g2" },
+        React.createElement(Card, { title: "Anna Kowalska", description: "Senior Frontend Engineer", actions: React.createElement(Badge, { tone: "info", size: "sm", dot: true }, "Technical review") },
+            React.createElement(Timeline, { items: [
+                    { id: 1, status: 'done', title: 'Applied', time: '12 Sep', description: 'Via careers page' },
+                    { id: 2, status: 'done', title: 'Screening', time: '14 Sep', description: 'Match 82% · approved by Olga B.' },
+                    { id: 3, status: 'done', title: 'Intro call', time: '19 Sep', description: '30 min · Olga Brzeska' },
+                    { id: 4, status: 'current', title: 'Technical review', time: 'Today, 14:30', content: React.createElement("div", { style: { display: 'flex', alignItems: 'center', gap: 8 } },
+                            React.createElement(Avatar, { name: "Jan Nowak", size: "xs" }),
+                            React.createElement("span", null, "Jan Nowak \u00B7 Room 3")) },
+                    { id: 5, status: 'upcoming', title: 'Team fit', description: 'Not scheduled' },
+                    { id: 6, status: 'upcoming', title: 'Proposal' }
+                ] })),
+        React.createElement(Card, { title: "Krzysztof Lis", description: "DevOps Engineer", actions: React.createElement(Badge, { tone: "danger", size: "sm", dot: true }, "Rejected") },
+            React.createElement(Timeline, { items: [
+                    { id: 1, status: 'done', title: 'Applied', time: '2 Sep' },
+                    { id: 2, status: 'done', title: 'Screening', time: '4 Sep', description: 'Match 71%' },
+                    { id: 3, status: 'done', title: 'Technical review', time: '11 Sep' },
+                    { id: 4, tone: 'danger', icon: 'x', title: 'Rejected', time: '13 Sep', description: 'Missing Kubernetes production experience' }
+                ] })))));
+ReactDOM.createRoot(document.getElementById('root-2')).render(React.createElement(App, null));
+
+})();
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { Timeline, Avatar, Badge } = NS;
+const App = () => (React.createElement("div", { className: "pane" },
+    React.createElement(Timeline, { items: [{ title: React.createElement("span", null,
+                    React.createElement("b", null, "Anna Kowalska"),
+                    " commented on Atlas redesign"), time: '2m ago', avatar: React.createElement(Avatar, { name: "Anna Kowalska", size: "sm" }), content: 'Nav spacing looks right now — ship it.' }, { title: React.createElement("span", null,
+                    "Status changed to ",
+                    React.createElement(Badge, { tone: "success", size: "sm" }, "Approved")), time: '1h ago', icon: 'circle-check', tone: 'success' }, { title: 'Build failed on main', description: '3 tests failing in components/data.', time: 'Yesterday', icon: 'circle-x', tone: 'danger' }, { title: 'Project created', time: 'Sep 12', tone: 'brand' }] })));
+ReactDOM.createRoot(document.getElementById('root-3')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

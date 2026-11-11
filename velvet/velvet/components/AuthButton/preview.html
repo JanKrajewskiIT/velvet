@@ -1,0 +1,19 @@
+<!-- @dsCard group="Components · Actions" height=118 width=960 subtitle="Session toggle · async sign-in · initializing · error · icon-only" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;gap:16px;align-items:center}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const { AuthButton } = window.VelvetUIDesignSystem_ee2bd8;
+const later = (f) => () => new Promise(r => setTimeout(() => { f(); r(); }, 600));
+const App = () => { const [s, setS] = React.useState(false); return (React.createElement("div", { className: "pane" },
+    React.createElement(AuthButton, { signedIn: s, onSignIn: later(() => setS(true)), onSignOut: () => setS(false) }),
+    React.createElement(AuthButton, { signedIn: s, iconOnly: true, size: "sm", onSignIn: () => setS(true), onSignOut: () => setS(false) }),
+    React.createElement(AuthButton, { signedIn: false, initializing: true }),
+    React.createElement(AuthButton, { signedIn: false, error: "Popup was blocked \u2014 try again", onSignIn: () => { } }))); };
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

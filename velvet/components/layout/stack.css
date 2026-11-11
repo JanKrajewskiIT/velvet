@@ -1,6 +1,0 @@
-/* Stack */
-.vui-stack{display:flex;min-width:0}
-.vui-stack--divided>*+*{border-top:var(--border-width) solid var(--border-subtle);padding-top:inherit}
-.vui-stack--divided[style*="row"]>*+*{border-top:0;border-left:var(--border-width) solid var(--border-subtle)}
-.vui-grid-layout{display:grid;min-width:0}
-@media (max-width:639px){.vui-grid-layout--fixed{grid-template-columns:minmax(0,1fr)!important}}

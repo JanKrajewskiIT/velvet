@@ -1,0 +1,1871 @@
+[
+  {
+    "path": "components/BrandWordmark/preview.html",
+    "group": "01 Brand",
+    "viewport": "960x200",
+    "subtitle": "Type-only placeholder — no logo supplied",
+    "name": "Wordmark"
+  },
+  {
+    "path": "showcase/cards/color-brand.html",
+    "group": "01 Brand",
+    "viewport": "960x124",
+    "subtitle": "Brand ramp · 700 = #8b0036",
+    "name": "Velvet"
+  },
+  {
+    "path": "components/BrandLogo/preview.html",
+    "group": "01 Brand",
+    "viewport": "960x620",
+    "subtitle": "Velvet logotype & signet · on surface · inverse on brand · sizes",
+    "name": "BrandLogo"
+  },
+  {
+    "path": "components/ColorBackgrounds/preview.html",
+    "group": "02 Color",
+    "viewport": "960x200",
+    "subtitle": "--bg-*",
+    "name": "Backgrounds"
+  },
+  {
+    "path": "components/ColorCategorical/preview.html",
+    "group": "02 Color",
+    "viewport": "960x386",
+    "subtitle": "8 hues · --hue-* → --label-* (tags) and --dv-1…8 (charts) · --dv-seq-1…5",
+    "name": "Categorical"
+  },
+  {
+    "path": "showcase/cards/color-neutral.html",
+    "group": "02 Color",
+    "viewport": "960x124",
+    "subtitle": "Warm, rose-tinted · 0 → 1000",
+    "name": "Neutral"
+  },
+  {
+    "path": "components/ColorOnColor/preview.html",
+    "group": "02 Color",
+    "viewport": "960x200",
+    "subtitle": "--on-color-* · brand fills & media",
+    "name": "On colour"
+  },
+  {
+    "path": "showcase/cards/color-status-ramps.html",
+    "group": "02 Color",
+    "viewport": "960x192",
+    "subtitle": "success · warning · danger · info",
+    "name": "Status ramps"
+  },
+  {
+    "path": "components/ColorStatus/preview.html",
+    "group": "02 Color",
+    "viewport": "960x238",
+    "subtitle": "fg · bg · border · solid",
+    "name": "Status roles"
+  },
+  {
+    "path": "components/ColorTextOnBg/preview.html",
+    "group": "02 Color",
+    "viewport": "960x408",
+    "subtitle": "--fg-* × --bg-* · live WCAG ratio",
+    "name": "Text on backgrounds"
+  },
+  {
+    "path": "components/ColorToneContrast/preview.html",
+    "group": "02 Color",
+    "viewport": "960x220",
+    "subtitle": "--tone-fg on --tone-bg and on raised · live WCAG ratio, both themes",
+    "name": "Tone contrast"
+  },
+  {
+    "path": "showcase/cards/type-families.html",
+    "group": "03 Type",
+    "viewport": "960x390",
+    "subtitle": "--font-display · --font-sans · --font-mono × --font-weight-*",
+    "name": "Families & weights"
+  },
+  {
+    "path": "components/TypeFigures/preview.html",
+    "group": "03 Type",
+    "viewport": "960x522",
+    "subtitle": "Tabular figures · typographic characters · Polish diacritics",
+    "name": "Figures, characters & Polish"
+  },
+  {
+    "path": "components/TypeRolesDisplay/preview.html",
+    "group": "03 Type",
+    "viewport": "960x524",
+    "subtitle": "--type-display-* · h1–h5 · title · kpi",
+    "name": "Roles · display & headings"
+  },
+  {
+    "path": "showcase/cards/type-roles-text.html",
+    "group": "03 Type",
+    "viewport": "960x690",
+    "subtitle": "body · label · caption · section · button · code · kbd · micro",
+    "name": "Roles · text & UI"
+  },
+  {
+    "path": "showcase/cards/type-scale.html",
+    "group": "03 Type",
+    "viewport": "960x620",
+    "subtitle": "--font-size-*",
+    "name": "Size scale"
+  },
+  {
+    "path": "showcase/cards/type-tracking-leading.html",
+    "group": "03 Type",
+    "viewport": "960x300",
+    "subtitle": "--tracking-* · --leading-*",
+    "name": "Tracking & leading"
+  },
+  {
+    "path": "components/ShapeBorder/preview.html",
+    "group": "04 Shape",
+    "viewport": "960x366",
+    "subtitle": "--border-width / -medium / -thick / -accent · --border-*",
+    "name": "Border"
+  },
+  {
+    "path": "showcase/cards/shape-radius.html",
+    "group": "04 Shape",
+    "viewport": "960x150",
+    "subtitle": "--radius-*",
+    "name": "Radius"
+  },
+  {
+    "path": "components/Breakpoints/preview.html",
+    "group": "05 Space & Layout",
+    "viewport": "960x226",
+    "subtitle": "Mobile-first; controls grow on touch",
+    "name": "Breakpoints & controls"
+  },
+  {
+    "path": "components/LayoutContainers/preview.html",
+    "group": "05 Space & Layout",
+    "viewport": "960x318",
+    "subtitle": "Pick max-width by content type, not one global value",
+    "name": "Containers"
+  },
+  {
+    "path": "components/LayoutShell/preview.html",
+    "group": "05 Space & Layout",
+    "viewport": "960x374",
+    "subtitle": "Topbar · sidebar · container · 12-col grid · footer",
+    "name": "App shell"
+  },
+  {
+    "path": "components/SizeControls/preview.html",
+    "group": "05 Space & Layout",
+    "viewport": "960x250",
+    "subtitle": "--control-height-* · data-density",
+    "name": "Control heights × density"
+  },
+  {
+    "path": "components/SizeFixed/preview.html",
+    "group": "05 Space & Layout",
+    "viewport": "960x540",
+    "subtitle": "icon · avatar · dot · check · hit target · icon tile",
+    "name": "Fixed sizes"
+  },
+  {
+    "path": "components/SizeNestedOverlays/preview.html",
+    "group": "05 Space & Layout",
+    "viewport": "960x360",
+    "subtitle": "--control-height-inner · --row-height-* · --overlay-* · --halo-* · --track-pad",
+    "name": "Nested · rows · overlays · halos"
+  },
+  {
+    "path": "showcase/cards/space-scale.html",
+    "group": "05 Space & Layout",
+    "viewport": "960x388",
+    "subtitle": "--space-* · 4px grid",
+    "name": "Space scale"
+  },
+  {
+    "path": "components/ElevationIntents/preview.html",
+    "group": "06 Depth",
+    "viewport": "960x270",
+    "subtitle": "--elevation-* · incl. drawer",
+    "name": "Elevation intents"
+  },
+  {
+    "path": "components/ElevationLayers/preview.html",
+    "group": "06 Depth",
+    "viewport": "960x340",
+    "subtitle": "--z-*",
+    "name": "Layers"
+  },
+  {
+    "path": "components/ElevationScrims/preview.html",
+    "group": "06 Depth",
+    "viewport": "960x304",
+    "subtitle": "--scrim-* · --blur-*",
+    "name": "Scrims & blur"
+  },
+  {
+    "path": "showcase/cards/elevation-shadows.html",
+    "group": "06 Depth",
+    "viewport": "960x158",
+    "subtitle": "--shadow-xs … xl",
+    "name": "Shadow ladder"
+  },
+  {
+    "path": "components/MotionDurations/preview.html",
+    "group": "07 Motion",
+    "viewport": "960x260",
+    "subtitle": "--dur-* · slowed to compare",
+    "name": "Durations"
+  },
+  {
+    "path": "components/MotionEasing/preview.html",
+    "group": "07 Motion",
+    "viewport": "960x390",
+    "subtitle": "--ease-* · 320ms",
+    "name": "Easing"
+  },
+  {
+    "path": "components/MotionIntents/preview.html",
+    "group": "07 Motion",
+    "viewport": "960x310",
+    "subtitle": "--motion-* · live loop",
+    "name": "Motion intents"
+  },
+  {
+    "path": "components/MotionKeyframes/preview.html",
+    "group": "07 Motion",
+    "viewport": "960x240",
+    "subtitle": "Base-layer animations used across components",
+    "name": "Shared keyframes"
+  },
+  {
+    "path": "components/StateAccessibility/preview.html",
+    "group": "08 State",
+    "viewport": "960x370",
+    "subtitle": "Focus, non-colour state, hidden context, announcements",
+    "name": "Accessibility contract"
+  },
+  {
+    "path": "components/StateActions/preview.html",
+    "group": "08 State",
+    "viewport": "960x280",
+    "subtitle": "--action-* × rest · hover · active · disabled · focus",
+    "name": "Action states"
+  },
+  {
+    "path": "components/StateFocus/preview.html",
+    "group": "08 State",
+    "viewport": "960x134",
+    "subtitle": "--focus-ring · -danger · -inset · --focus-outline",
+    "name": "Focus"
+  },
+  {
+    "path": "components/StateLayers/preview.html",
+    "group": "08 State",
+    "viewport": "960x276",
+    "subtitle": "washes over any background",
+    "name": "State layers"
+  },
+  {
+    "path": "components/Icon/preview.html",
+    "group": "09 Icons",
+    "viewport": "960x716",
+    "subtitle": "Search, size, stroke, colour, construction, copy/download",
+    "name": "Icon"
+  },
+  {
+    "path": "components/Avatar/preview.html",
+    "group": "10 Atoms",
+    "viewport": "960x352",
+    "subtitle": "Sizes, tones, group · color=&quot;auto&quot; (stable hue from name)",
+    "name": "Avatar"
+  },
+  {
+    "path": "components/Badge/preview.html",
+    "group": "10 Atoms",
+    "viewport": "960x220",
+    "subtitle": "Tones × soft / solid / outline · counts on icons, avatars, tabs",
+    "name": "Badge"
+  },
+  {
+    "path": "components/Checkmark/preview.html",
+    "group": "10 Atoms",
+    "viewport": "960x192",
+    "subtitle": "size × state",
+    "name": "Checkmark"
+  },
+  {
+    "path": "components/Chevron/preview.html",
+    "group": "10 Atoms",
+    "viewport": "960x192",
+    "subtitle": "direction × open · click to toggle",
+    "name": "Chevron"
+  },
+  {
+    "path": "components/CloseButton/preview.html",
+    "group": "10 Atoms",
+    "viewport": "960x224",
+    "subtitle": "variant × size · one × for close, dismiss, remove, clear",
+    "name": "CloseButton"
+  },
+  {
+    "path": "components/Control/preview.html",
+    "group": "10 Atoms",
+    "viewport": "960x286",
+    "subtitle": "Bordered field shell · sizes · adornments · states",
+    "name": "Control"
+  },
+  {
+    "path": "components/Count/preview.html",
+    "group": "10 Atoms",
+    "viewport": "960x252",
+    "subtitle": "Numeric pill · tones · sizes · 99+ · grid-centred tabular figures",
+    "name": "Count"
+  },
+  {
+    "path": "components/Dot/preview.html",
+    "group": "10 Atoms",
+    "viewport": "960x136",
+    "subtitle": "Status · presence · category marker",
+    "name": "Dot"
+  },
+  {
+    "path": "components/EmptyText/preview.html",
+    "group": "10 Atoms",
+    "viewport": "960x224",
+    "subtitle": "inline empty message · center · start · dashed · icon",
+    "name": "EmptyText"
+  },
+  {
+    "path": "components/Field/preview.html",
+    "group": "10 Atoms",
+    "viewport": "960x350",
+    "subtitle": "Label · hint · error · counter — ids and aria wired",
+    "name": "Field"
+  },
+  {
+    "path": "components/Glyph/preview.html",
+    "group": "10 Atoms",
+    "viewport": "960x230",
+    "subtitle": "CSS-mask icon · name × size · decorative vs labelled",
+    "name": "Glyph"
+  },
+  {
+    "path": "components/Handle/preview.html",
+    "group": "10 Atoms",
+    "viewport": "960x224",
+    "subtitle": "grip · focusable vs decorative · ↑↓ to reorder",
+    "name": "Handle"
+  },
+  {
+    "path": "components/IconTile/preview.html",
+    "group": "10 Atoms",
+    "viewport": "960x156",
+    "subtitle": "Glyph in a tinted box · tone · sm–xl · circle",
+    "name": "IconTile"
+  },
+  {
+    "path": "components/Indicator/preview.html",
+    "group": "10 Atoms",
+    "viewport": "960x230",
+    "subtitle": "Anchors a Count or Dot to an icon, button or avatar",
+    "name": "Indicator"
+  },
+  {
+    "path": "components/Kbd/preview.html",
+    "group": "10 Atoms",
+    "viewport": "960x138",
+    "subtitle": "Keyboard keys · mod+k adapts to platform",
+    "name": "Kbd"
+  },
+  {
+    "path": "components/Mark/preview.html",
+    "group": "10 Atoms",
+    "viewport": "960x180",
+    "subtitle": "highlight · text · mention",
+    "name": "Mark"
+  },
+  {
+    "path": "components/Marker/preview.html",
+    "group": "10 Atoms",
+    "viewport": "960x232",
+    "subtitle": "appearance · tone · size · ring · dot",
+    "name": "Marker"
+  },
+  {
+    "path": "components/Meter/preview.html",
+    "group": "10 Atoms",
+    "viewport": "960x238",
+    "subtitle": "size · tone · steps · rating",
+    "name": "Meter"
+  },
+  {
+    "path": "components/Option/preview.html",
+    "group": "10 Atoms",
+    "viewport": "960x296",
+    "subtitle": "One listbox / menu row · icon · description · shortcut · check",
+    "name": "Option"
+  },
+  {
+    "path": "components/Listbox/preview.html",
+    "group": "10 Atoms",
+    "viewport": "960x470",
+    "subtitle": "Floating list under a field · option row · empty · loading",
+    "name": "Listbox"
+  },
+  {
+    "path": "components/Rail/preview.html",
+    "group": "10 Atoms",
+    "viewport": "960x272",
+    "subtitle": "connector between markers · size · done / active / dashed",
+    "name": "Rail"
+  },
+  {
+    "path": "components/SectionLabel/preview.html",
+    "group": "10 Atoms",
+    "viewport": "960x186",
+    "subtitle": "Group heading · --type-section · icon / end slot",
+    "name": "SectionLabel"
+  },
+  {
+    "path": "components/Segmented/preview.html",
+    "group": "10 Atoms",
+    "viewport": "960x254",
+    "subtitle": "track + raised item · size · icon · round · block",
+    "name": "Segmented"
+  },
+  {
+    "path": "components/Separator/preview.html",
+    "group": "10 Atoms",
+    "viewport": "960x184",
+    "subtitle": "inline · line · dash · text",
+    "name": "Separator"
+  },
+  {
+    "path": "components/Skeleton/preview.html",
+    "group": "10 Atoms",
+    "viewport": "960x282",
+    "subtitle": "Placeholder for content of known shape · shimmer",
+    "name": "Skeleton"
+  },
+  {
+    "path": "components/Spinner/preview.html",
+    "group": "10 Atoms",
+    "viewport": "960x126",
+    "subtitle": "ring · dots · bars · pulse · sizes",
+    "name": "Spinner"
+  },
+  {
+    "path": "components/Surface/preview.html",
+    "group": "10 Atoms",
+    "viewport": "960x2014",
+    "subtitle": "variant = how it looks at rest",
+    "name": "Surface"
+  },
+  {
+    "path": "components/Swatch/preview.html",
+    "group": "10 Atoms",
+    "viewport": "960x324",
+    "subtitle": "size · shape · state · tone",
+    "name": "Swatch"
+  },
+  {
+    "path": "components/Tag/preview.html",
+    "group": "10 Atoms",
+    "viewport": "960x146",
+    "subtitle": "Selectable filters and removable chips",
+    "name": "Tag"
+  },
+  {
+    "path": "components/Text/preview.html",
+    "group": "10 Atoms",
+    "viewport": "960x366",
+    "subtitle": "Applies one --type-* role + text tone",
+    "name": "Text"
+  },
+  {
+    "path": "components/VisuallyHidden/preview.html",
+    "group": "10 Atoms",
+    "viewport": "960x268",
+    "subtitle": "screen-reader-only text · skip to main · polite / assertive announcements",
+    "name": "VisuallyHidden"
+  },
+  {
+    "path": "components/Weekday/preview.html",
+    "group": "10 Atoms",
+    "viewport": "960x148",
+    "subtitle": "date-grid header · weekdayNames(locale, start, len)",
+    "name": "Weekday"
+  },
+  {
+    "path": "components/Columns/preview.html",
+    "group": "11 Layout",
+    "viewport": "960x320",
+    "subtitle": "Main + aside · weighted columns that wrap on their own",
+    "name": "Columns"
+  },
+  {
+    "path": "components/Divider/preview.html",
+    "group": "11 Layout",
+    "viewport": "960x156",
+    "subtitle": "Plain, labelled, vertical",
+    "name": "Divider"
+  },
+  {
+    "path": "components/Grid/preview.html",
+    "group": "11 Layout",
+    "viewport": "960x320",
+    "subtitle": "Fixed or auto-fill columns · fit stretches a short row · token gaps",
+    "name": "Grid"
+  },
+  {
+    "path": "components/ScrollArea/preview.html",
+    "group": "11 Layout",
+    "viewport": "960x296",
+    "subtitle": "Thin scrollbar · edge fades only where content continues · horizontal rows",
+    "name": "ScrollArea"
+  },
+  {
+    "path": "components/SplitPane/preview.html",
+    "group": "11 Layout",
+    "viewport": "960x357",
+    "subtitle": "Nestable · px floor · collapsible · drag, arrows, double-click",
+    "name": "SplitPane"
+  },
+  {
+    "path": "components/Stack/preview.html",
+    "group": "11 Layout",
+    "viewport": "960x126",
+    "subtitle": "Row or column · token gaps · alignment",
+    "name": "Stack"
+  },
+  {
+    "path": "components/Accordion/preview.html",
+    "group": "12 Display",
+    "viewport": "960x854",
+    "subtitle": "Separated · flush · animated height",
+    "name": "Accordion"
+  },
+  {
+    "path": "components/CodeLabel/preview.html",
+    "group": "12 Display",
+    "viewport": "960x166",
+    "subtitle": "Code, tag and name — clickable to open",
+    "name": "CodeLabel"
+  },
+  {
+    "path": "components/CodeSnippet/preview.html",
+    "group": "12 Display",
+    "viewport": "960x376",
+    "subtitle": "Highlighting · line numbers · copy · tabs",
+    "name": "CodeSnippet"
+  },
+  {
+    "path": "components/Countdown/preview.html",
+    "group": "12 Display",
+    "viewport": "960x198",
+    "subtitle": "Live timer · boxes or inline",
+    "name": "Countdown"
+  },
+  {
+    "path": "components/DirectionBadge/preview.html",
+    "group": "12 Display",
+    "viewport": "960x166",
+    "subtitle": "Up · down · flat · muted — solid, soft and outline",
+    "name": "DirectionBadge"
+  },
+  {
+    "path": "components/ListItem/preview.html",
+    "group": "12 Display",
+    "viewport": "960x296",
+    "subtitle": "Row atom · leading / title / description / meta / trailing",
+    "name": "ListItem"
+  },
+  {
+    "path": "components/Markdown/preview.html",
+    "group": "12 Display",
+    "viewport": "960x756",
+    "subtitle": "Safe Markdown → prose · lists · tasks · code · tables · quotes",
+    "name": "Markdown"
+  },
+  {
+    "path": "components/NewsItem/preview.html",
+    "group": "12 Display",
+    "viewport": "960x366",
+    "subtitle": "Source · impact · AI summary bullets · tags",
+    "name": "NewsItem"
+  },
+  {
+    "path": "components/QRCode/preview.html",
+    "group": "12 Display",
+    "viewport": "960x268",
+    "subtitle": "generated in-browser · ECC L–H · quiet zone · centre logo · always ink on white",
+    "name": "QRCode"
+  },
+  {
+    "path": "components/RatingSummary/preview.html",
+    "group": "12 Display",
+    "viewport": "960x222",
+    "subtitle": "Average, distribution, filter by star",
+    "name": "RatingSummary"
+  },
+  {
+    "path": "components/Watermark/preview.html",
+    "group": "12 Display",
+    "viewport": "960x308",
+    "subtitle": "repeating diagonal stamp · theme-aware mask · multi-line viewer stamp · never blocks clicks",
+    "name": "Watermark"
+  },
+  {
+    "path": "components/Alert/preview.html",
+    "group": "13 Feedback",
+    "viewport": "960x366",
+    "subtitle": "Inline message · 6 tones · soft / outline / solid",
+    "name": "Alert"
+  },
+  {
+    "path": "components/Banner/preview.html",
+    "group": "13 Feedback",
+    "viewport": "960x248",
+    "subtitle": "Full-width announcement strip",
+    "name": "Banner"
+  },
+  {
+    "path": "components/DataState/preview.html",
+    "group": "13 Feedback",
+    "viewport": "960x130",
+    "subtitle": "Inline indicator — fresh · delayed · stale · partial · unavailable · empty",
+    "name": "DataState"
+  },
+  {
+    "path": "components/EmptyState/preview.html",
+    "group": "13 Feedback",
+    "viewport": "960x700",
+    "subtitle": "Nothing here yet · sizes sm / md / lg · tones · actions",
+    "name": "EmptyState"
+  },
+  {
+    "path": "components/EnvironmentBar/preview.html",
+    "group": "13 Feedback",
+    "viewport": "960x286",
+    "subtitle": "Four tones that never look alike · the stop action stays visible",
+    "name": "EnvironmentBar"
+  },
+  {
+    "path": "components/ErrorState/preview.html",
+    "group": "13 Feedback",
+    "viewport": "960x640",
+    "subtitle": "A section failed to load · retry · details behind a toggle · sizes",
+    "name": "ErrorState"
+  },
+  {
+    "path": "components/NotificationCenter/preview.html",
+    "group": "13 Feedback",
+    "viewport": "960x546",
+    "subtitle": "Bell + unread count → list · mark all read",
+    "name": "NotificationCenter"
+  },
+  {
+    "path": "components/NotificationList/preview.html",
+    "group": "13 Feedback",
+    "viewport": "960x520",
+    "subtitle": "The bare list for an activity page · tones · unread · avatar · empty text",
+    "name": "NotificationList"
+  },
+  {
+    "path": "components/StatusPage/preview.html",
+    "group": "13 Feedback",
+    "viewport": "960x656",
+    "subtitle": "Errors, outcomes, empty and data states · lg page / md·sm inline · details slot",
+    "name": "StatusPage"
+  },
+  {
+    "path": "components/Toast/preview.html",
+    "group": "13 Feedback",
+    "viewport": "960x690",
+    "subtitle": "Transient status messages",
+    "name": "Toast"
+  },
+  {
+    "path": "components/GateList/preview.html",
+    "group": "14 Progress",
+    "viewport": "960x366",
+    "subtitle": "Ordered checks — first failure blocks, later ones dimmed",
+    "name": "GateList"
+  },
+  {
+    "path": "components/Loader/preview.html",
+    "group": "14 Progress",
+    "viewport": "960x524",
+    "subtitle": "14 decorative loaders · 1:1 port from VelvetUi · PageLoader",
+    "name": "Loader"
+  },
+  {
+    "path": "components/LoadingOverlay/preview.html",
+    "group": "14 Progress",
+    "viewport": "960x196",
+    "subtitle": "Keeps stale content visible while refreshing",
+    "name": "LoadingOverlay"
+  },
+  {
+    "path": "components/Progress/preview.html",
+    "group": "14 Progress",
+    "viewport": "960x172",
+    "subtitle": "Linear · tones · formatted value · indeterminate",
+    "name": "Progress"
+  },
+  {
+    "path": "components/ProgressRing/preview.html",
+    "group": "14 Progress",
+    "viewport": "960x146",
+    "subtitle": "Circular · size · stroke · tone",
+    "name": "ProgressRing"
+  },
+  {
+    "path": "components/RobotProcessingIndicator/preview.html",
+    "group": "14 Progress",
+    "viewport": "960x232",
+    "subtitle": "Inline AI status · blinking robot + visible label",
+    "name": "RobotProcessingIndicator"
+  },
+  {
+    "path": "components/SetupChecklist/preview.html",
+    "group": "14 Progress",
+    "viewport": "960x596",
+    "subtitle": "Grid + list layouts · done / next / open steps · hides when complete",
+    "name": "SetupChecklist"
+  },
+  {
+    "path": "components/AuthButton/preview.html",
+    "group": "15 Actions",
+    "viewport": "960x118",
+    "subtitle": "Session toggle · async sign-in · icon-only",
+    "name": "AuthButton"
+  },
+  {
+    "path": "components/Button/preview.html",
+    "group": "15 Actions",
+    "viewport": "960x588",
+    "subtitle": "Primary action trigger.",
+    "name": "Button"
+  },
+  {
+    "path": "components/ButtonGroup/preview.html",
+    "group": "15 Actions",
+    "viewport": "960x172",
+    "subtitle": "Attached · split button · toggle state · spaced",
+    "name": "ButtonGroup"
+  },
+  {
+    "path": "components/CalendarEventButton/preview.html",
+    "group": "15 Actions",
+    "viewport": "960x229",
+    "subtitle": "Add to calendar · Google · Outlook · .ics · added state · icon-only · invalid → disabled",
+    "name": "CalendarEventButton"
+  },
+  {
+    "path": "components/CopyButton/preview.html",
+    "group": "15 Actions",
+    "viewport": "960x110",
+    "subtitle": "Copy → ✓ morph, announced",
+    "name": "CopyButton"
+  },
+  {
+    "path": "components/Fab/preview.html",
+    "group": "15 Actions",
+    "viewport": "960x427",
+    "subtitle": "Single action · extended · speed dial (click to open)",
+    "name": "Fab"
+  },
+  {
+    "path": "components/IconButton/preview.html",
+    "group": "15 Actions",
+    "viewport": "960x126",
+    "subtitle": "Square icon-only button — always labelled",
+    "name": "IconButton"
+  },
+  {
+    "path": "components/ThemeToggle/preview.html",
+    "group": "15 Actions",
+    "viewport": "960x378",
+    "subtitle": "appearance rings | segmented × variant light · navbar · dark · syncs html[data-theme]",
+    "name": "ThemeToggle"
+  },
+  {
+    "path": "components/ToggleButton/preview.html",
+    "group": "15 Actions",
+    "viewport": "960x278",
+    "subtitle": "aria-pressed actions · multiple (B/I/U) · single (view switch)",
+    "name": "ToggleButton"
+  },
+  {
+    "path": "components/ToggleGroup/preview.html",
+    "group": "15 Actions",
+    "viewport": "960x330",
+    "subtitle": "multiple (B / I / U) · single (view switch) · attached or loose · sizes",
+    "name": "ToggleGroup"
+  },
+  {
+    "path": "components/Toolbar/preview.html",
+    "group": "15 Actions",
+    "viewport": "960x234",
+    "subtitle": "Never wraps — overflow collapses into ⋯",
+    "name": "Toolbar"
+  },
+  {
+    "path": "components/CodeEditor/preview.html",
+    "group": "16 Inputs",
+    "viewport": "960x366",
+    "subtitle": "Editable code field — line numbers, Tab indent, syntax colours",
+    "name": "CodeEditor"
+  },
+  {
+    "path": "components/CopyField/preview.html",
+    "group": "16 Inputs",
+    "viewport": "960x141",
+    "subtitle": "Read-only value with inline copy",
+    "name": "CopyField"
+  },
+  {
+    "path": "components/FileUpload/preview.html",
+    "group": "16 Inputs",
+    "viewport": "960x436",
+    "subtitle": "Dropzone + list: uploading, done, error/retry, remove",
+    "name": "FileUpload"
+  },
+  {
+    "path": "components/InlineEdit/preview.html",
+    "group": "16 Inputs",
+    "viewport": "960x190",
+    "subtitle": "Click to edit · Enter saves · Esc cancels",
+    "name": "InlineEdit"
+  },
+  {
+    "path": "components/Input/preview.html",
+    "group": "16 Inputs",
+    "viewport": "960x951",
+    "subtitle": "Recipes: email · URL · prefix/suffix · error · disabled",
+    "name": "Input"
+  },
+  {
+    "path": "components/MarkdownEditor/preview.html",
+    "group": "16 Inputs",
+    "viewport": "960x480",
+    "subtitle": "Write · Split · Preview · toolbar + shortcuts · MarkdownEditDialog with draft, discard guard, async save",
+    "name": "MarkdownEditor"
+  },
+  {
+    "path": "components/MentionInput/preview.html",
+    "group": "16 Inputs",
+    "viewport": "960x396",
+    "subtitle": "@people · #projects · listbox at the caret · ↑↓ ↵ Tab Esc · highlighted tokens · plain-text value",
+    "name": "MentionInput"
+  },
+  {
+    "path": "components/NumberInput/preview.html",
+    "group": "16 Inputs",
+    "viewport": "960x166",
+    "subtitle": "Stepper, clamped min/max, ↑↓ (Shift ×10)",
+    "name": "NumberInput"
+  },
+  {
+    "path": "components/OtpInput/preview.html",
+    "group": "16 Inputs",
+    "viewport": "960x176",
+    "subtitle": "Auto-advance, paste, Backspace steps back",
+    "name": "OtpInput"
+  },
+  {
+    "path": "components/PasswordInput/preview.html",
+    "group": "16 Inputs",
+    "viewport": "960x176",
+    "subtitle": "Show/hide toggle + live strength meter",
+    "name": "PasswordInput"
+  },
+  {
+    "path": "components/PhoneInput/preview.html",
+    "group": "16 Inputs",
+    "viewport": "960x242",
+    "subtitle": "Country picker · formats as you type · emits E.164",
+    "name": "PhoneInput"
+  },
+  {
+    "path": "components/RangeInput/preview.html",
+    "group": "16 Inputs",
+    "viewport": "960x436",
+    "subtitle": "Money range (currency + period) · fixed suffix · inverted-range error · disabled",
+    "name": "RangeInput"
+  },
+  {
+    "path": "components/RichTextEditor/preview.html",
+    "group": "16 Inputs",
+    "viewport": "960x451",
+    "subtitle": "Own engine · marks, blocks, links, markdown, undo, safe paste",
+    "name": "RichTextEditor"
+  },
+  {
+    "path": "components/SearchInput/preview.html",
+    "group": "16 Inputs",
+    "viewport": "960x173",
+    "subtitle": "Clear button, suggestions with match highlight, keyboard",
+    "name": "SearchInput"
+  },
+  {
+    "path": "components/SignaturePad/preview.html",
+    "group": "16 Inputs",
+    "viewport": "960x336",
+    "subtitle": "smoothed ink · speed / pressure width · undo · clear · PNG out · theme-aware",
+    "name": "SignaturePad"
+  },
+  {
+    "path": "components/TagInput/preview.html",
+    "group": "16 Inputs",
+    "viewport": "960x172",
+    "subtitle": "Enter or comma adds · Backspace removes · dupes flash",
+    "name": "TagInput"
+  },
+  {
+    "path": "components/Textarea/preview.html",
+    "group": "16 Inputs",
+    "viewport": "960x336",
+    "subtitle": "Auto-grows rows → maxRows · counter · validation · manual resize",
+    "name": "Textarea"
+  },
+  {
+    "path": "components/Autocomplete/preview.html",
+    "group": "17 Selection",
+    "viewport": "960x376",
+    "subtitle": "Type to filter · local or async · allowCustom",
+    "name": "Autocomplete"
+  },
+  {
+    "path": "components/Cascader/preview.html",
+    "group": "17 Selection",
+    "viewport": "960x472",
+    "subtitle": "Column-by-column path pick · hover expand · search",
+    "name": "Cascader"
+  },
+  {
+    "path": "components/Checkbox/preview.html",
+    "group": "17 Selection",
+    "viewport": "960x104",
+    "subtitle": "Checked, indeterminate, off, disabled",
+    "name": "Checkbox"
+  },
+  {
+    "path": "components/Chip/preview.html",
+    "group": "17 Selection",
+    "viewport": "960x146",
+    "subtitle": "Selectable pill · icon · count · sm/md",
+    "name": "Chip"
+  },
+  {
+    "path": "components/ChipGroup/preview.html",
+    "group": "17 Selection",
+    "viewport": "960x156",
+    "subtitle": "Multi-select filter chips with counts",
+    "name": "ChipGroup"
+  },
+  {
+    "path": "components/MultiSelect/preview.html",
+    "group": "17 Selection",
+    "viewport": "960x416",
+    "subtitle": "Tags in the field · checkbox menu · async + cap",
+    "name": "MultiSelect"
+  },
+  {
+    "path": "components/OptionSwitcher/preview.html",
+    "group": "17 Selection",
+    "viewport": "960x440",
+    "subtitle": "Required single choice · track · chips · tiles (icon-first) · list (with description and locked reason)",
+    "name": "OptionSwitcher"
+  },
+  {
+    "path": "components/Radio/preview.html",
+    "group": "17 Selection",
+    "viewport": "960x98",
+    "subtitle": "Single choice within a group",
+    "name": "Radio"
+  },
+  {
+    "path": "components/Rating/preview.html",
+    "group": "17 Selection",
+    "viewport": "960x120",
+    "subtitle": "Hover previews, click commits, ←→ keys; read-only",
+    "name": "Rating"
+  },
+  {
+    "path": "components/Select/preview.html",
+    "group": "17 Selection",
+    "viewport": "960x386",
+    "subtitle": "Custom dropdown — icons, descriptions, keyboard",
+    "name": "Select"
+  },
+  {
+    "path": "components/Slider/preview.html",
+    "group": "17 Selection",
+    "viewport": "960x306",
+    "subtitle": "Single or dual thumb · labelled thresholds · snap to marks",
+    "name": "Slider"
+  },
+  {
+    "path": "components/Switch/preview.html",
+    "group": "17 Selection",
+    "viewport": "960x98",
+    "subtitle": "Instant on/off settings",
+    "name": "Switch"
+  },
+  {
+    "path": "components/TransferList/preview.html",
+    "group": "17 Selection",
+    "viewport": "960x692",
+    "subtitle": "search + highlight · groups · drag between lists · orderable · max meter",
+    "name": "TransferList"
+  },
+  {
+    "path": "components/TreeSelect/preview.html",
+    "group": "17 Selection",
+    "viewport": "960x484",
+    "subtitle": "Hierarchical select · search · single or tri-state multiple",
+    "name": "TreeSelect"
+  },
+  {
+    "path": "components/Calendar/preview.html",
+    "group": "18 Pickers",
+    "viewport": "960x376",
+    "subtitle": "Single + range · event dots · full keyboard",
+    "name": "Calendar"
+  },
+  {
+    "path": "components/ColorPicker/preview.html",
+    "group": "18 Pickers",
+    "viewport": "960x459",
+    "subtitle": "swatches = curated grid · full = area + hue + hex + presets",
+    "name": "ColorPicker"
+  },
+  {
+    "path": "components/DatePicker/preview.html",
+    "group": "18 Pickers",
+    "viewport": "960x516",
+    "subtitle": "Compact date field · min/max · calendar popover",
+    "name": "DatePicker"
+  },
+  {
+    "path": "components/DateRangePicker/preview.html",
+    "group": "18 Pickers",
+    "viewport": "960x517",
+    "subtitle": "Presets · two months · Apply draft",
+    "name": "DateRangePicker"
+  },
+  {
+    "path": "components/DateTimePicker/preview.html",
+    "group": "18 Pickers",
+    "viewport": "960x526",
+    "subtitle": "Calendar + time column · draft until Apply · min/max",
+    "name": "DateTimePicker"
+  },
+  {
+    "path": "components/TimePicker/preview.html",
+    "group": "18 Pickers",
+    "viewport": "960x374",
+    "subtitle": "Typed or listed time · 24h / 12h",
+    "name": "TimePicker"
+  },
+  {
+    "path": "components/TimeStepper/preview.html",
+    "group": "18 Pickers",
+    "viewport": "960x242",
+    "subtitle": "Inline hour/minute stepper · AM/PM · wraps · ↑↓ keys",
+    "name": "TimeStepper"
+  },
+  {
+    "path": "components/EditableCollection/preview.html",
+    "group": "19 Forms",
+    "viewport": "960x436",
+    "subtitle": "Inline edit · drag reorder · level select · validate · add row",
+    "name": "EditableCollection"
+  },
+  {
+    "path": "components/ErrorSummary/preview.html",
+    "group": "19 Forms",
+    "viewport": "960x523",
+    "subtitle": "Submit → error summary + per-field messages · re-validates as you fix",
+    "name": "ErrorSummary"
+  },
+  {
+    "path": "components/FormLayout/preview.html",
+    "group": "19 Forms",
+    "viewport": "960x606",
+    "subtitle": "FormLayout · FormSection (stacked / aside) · FormGrid + FormSpan · ActionRow (start slot, sticky)",
+    "name": "FormLayout"
+  },
+  {
+    "path": "components/Wizard/preview.html",
+    "group": "19 Forms",
+    "viewport": "960x412",
+    "subtitle": "Stepper + step panels + Back/Next · validation blocks Next",
+    "name": "Wizard"
+  },
+  {
+    "path": "components/BottomSheet/preview.html",
+    "group": "20 Overlays",
+    "viewport": "960x552",
+    "subtitle": "Drag or flick down to dismiss",
+    "name": "BottomSheet"
+  },
+  {
+    "path": "components/ColorLabelManager/preview.html",
+    "group": "20 Overlays",
+    "viewport": "960x385",
+    "subtitle": "Edit / delete per row · Name + Color form · inline delete confirm",
+    "name": "ColorLabelManager"
+  },
+  {
+    "path": "components/ColorLabelSelectionDialog/preview.html",
+    "group": "20 Overlays",
+    "viewport": "960x372",
+    "subtitle": "Assign labels to an item · search + create inline · max · async apply · links to ColorLabelManager",
+    "name": "ColorLabelSelectionDialog"
+  },
+  {
+    "path": "components/ConfirmAction/preview.html",
+    "group": "20 Overlays",
+    "viewport": "960x354",
+    "subtitle": "Inline popover confirm for row-level destructive actions",
+    "name": "ConfirmAction"
+  },
+  {
+    "path": "components/ConfirmDialog/preview.html",
+    "group": "20 Overlays",
+    "viewport": "960x496",
+    "subtitle": "primary vs danger · type-to-confirm · async",
+    "name": "ConfirmDialog"
+  },
+  {
+    "path": "components/Dialog/preview.html",
+    "group": "20 Overlays",
+    "viewport": "960x674",
+    "subtitle": "Modal; bottom sheet under 768px",
+    "name": "Dialog"
+  },
+  {
+    "path": "components/ImportSourcesDialog/preview.html",
+    "group": "20 Overlays",
+    "viewport": "960x678",
+    "subtitle": "Connected checklist · connect / reconnect",
+    "name": "ImportSourcesDialog"
+  },
+  {
+    "path": "components/Popover/preview.html",
+    "group": "20 Overlays",
+    "viewport": "960x654",
+    "subtitle": "Click-triggered panel on the top material",
+    "name": "Popover"
+  },
+  {
+    "path": "components/Tooltip/preview.html",
+    "group": "20 Overlays",
+    "viewport": "960x172",
+    "subtitle": "Short hint with optional shortcut",
+    "name": "Tooltip"
+  },
+  {
+    "path": "components/Tour/preview.html",
+    "group": "20 Overlays",
+    "viewport": "960x396",
+    "subtitle": "Spotlight + step card · ← → Esc",
+    "name": "Tour"
+  },
+  {
+    "path": "components/CommandPalette/preview.html",
+    "group": "21 Menus",
+    "viewport": "960x700",
+    "subtitle": "⌘K · fuzzy search, groups, shortcuts",
+    "name": "CommandPalette"
+  },
+  {
+    "path": "components/ContextMenu/preview.html",
+    "group": "21 Menus",
+    "viewport": "960x436",
+    "subtitle": "Right-click or Shift+F10 · opens at the pointer",
+    "name": "ContextMenu"
+  },
+  {
+    "path": "components/DropdownButton/preview.html",
+    "group": "21 Menus",
+    "viewport": "960x124",
+    "subtitle": "Split button — main action + alternatives",
+    "name": "DropdownButton"
+  },
+  {
+    "path": "components/LocaleSwitcher/preview.html",
+    "group": "21 Menus",
+    "viewport": "960x118",
+    "subtitle": "PL/EN pill · or a list of locales",
+    "name": "LocaleSwitcher"
+  },
+  {
+    "path": "components/Menu/preview.html",
+    "group": "21 Menus",
+    "viewport": "960x366",
+    "subtitle": "Actions dropdown · icons, shortcuts, sections, danger",
+    "name": "Menu"
+  },
+  {
+    "path": "components/MenuPanel/preview.html",
+    "group": "21 Menus",
+    "viewport": "960x470",
+    "subtitle": "The bare panel for custom positioning · sections · shortcuts · checked · destructive",
+    "name": "MenuPanel"
+  },
+  {
+    "path": "components/MenuChip/preview.html",
+    "group": "21 Menus",
+    "viewport": "960x314",
+    "subtitle": "Filter chip with a single-choice menu",
+    "name": "MenuChip"
+  },
+  {
+    "path": "components/BottomNav/preview.html",
+    "group": "22 Navigation",
+    "viewport": "960x358",
+    "subtitle": "Mobile tab bar · elevated centre action · badge",
+    "name": "BottomNav"
+  },
+  {
+    "path": "components/Footer/preview.html",
+    "group": "22 Navigation",
+    "viewport": "960x510",
+    "subtitle": "Full: mark · blurb · CTA · social · columns with badges · legal bar with status · Compact in-app row",
+    "name": "Footer"
+  },
+  {
+    "path": "components/Navbar/preview.html",
+    "group": "22 Navigation",
+    "viewport": "960x596",
+    "subtitle": "links (default · brand) · menubar: full logo, dark active disc, notifications / ⌘K / account menu · condensed",
+    "name": "Navbar"
+  },
+  {
+    "path": "components/NavbarChip/preview.html",
+    "group": "22 Navigation",
+    "viewport": "960x186",
+    "subtitle": "Balance / account pill and privacy toggle for Navbar actions",
+    "name": "NavbarChip"
+  },
+  {
+    "path": "components/PageHeader/preview.html",
+    "group": "22 Navigation",
+    "viewport": "960x422",
+    "subtitle": "Breadcrumb · back · title + status · meta · actions · tabs",
+    "name": "PageHeader"
+  },
+  {
+    "path": "components/SearchTrigger/preview.html",
+    "group": "22 Navigation",
+    "viewport": "960x116",
+    "subtitle": "⌘K / Ctrl+K opens the command palette",
+    "name": "SearchTrigger"
+  },
+  {
+    "path": "components/Sidebar/preview.html",
+    "group": "22 Navigation",
+    "viewport": "960x561",
+    "subtitle": "Floating card · groups · accordion children · counts · 64px rail with tooltips",
+    "name": "Sidebar"
+  },
+  {
+    "path": "components/Anchor/preview.html",
+    "group": "23 Wayfinding",
+    "viewport": "960x356",
+    "subtitle": "On-this-page TOC · tracks the section in view · smooth scroll + focus",
+    "name": "Anchor"
+  },
+  {
+    "path": "components/BackToTop/preview.html",
+    "group": "23 Wayfinding",
+    "viewport": "960x358",
+    "subtitle": "Appears after threshold · progress ring",
+    "name": "BackToTop"
+  },
+  {
+    "path": "components/Breadcrumb/preview.html",
+    "group": "23 Wayfinding",
+    "viewport": "960x148",
+    "subtitle": "Current page last · middle collapses into …",
+    "name": "Breadcrumb"
+  },
+  {
+    "path": "components/HierarchyNavigator/preview.html",
+    "group": "23 Wayfinding",
+    "viewport": "960x273",
+    "subtitle": "Drill-down picker · one level at a time",
+    "name": "HierarchyNavigator"
+  },
+  {
+    "path": "components/Link/preview.html",
+    "group": "23 Wayfinding",
+    "viewport": "960x202",
+    "subtitle": "Inline · plain · quiet · standalone · external · disabled",
+    "name": "Link"
+  },
+  {
+    "path": "components/LoadMore/preview.html",
+    "group": "23 Wayfinding",
+    "viewport": "960x456",
+    "subtitle": "Feed footer · progress count · step size · loading · end state",
+    "name": "LoadMore"
+  },
+  {
+    "path": "components/Pagination/preview.html",
+    "group": "23 Wayfinding",
+    "viewport": "960x164",
+    "subtitle": "Truncated pages · range + rows · compact",
+    "name": "Pagination"
+  },
+  {
+    "path": "components/PeriodNav/preview.html",
+    "group": "23 Wayfinding",
+    "viewport": "960x300",
+    "subtitle": "Today and previous / next for months, weeks and days",
+    "name": "PeriodNav"
+  },
+  {
+    "path": "components/Stepper/preview.html",
+    "group": "23 Wayfinding",
+    "viewport": "960x443",
+    "subtitle": "Animated connector fill · check pop · linear or free navigation",
+    "name": "Stepper"
+  },
+  {
+    "path": "components/Tabs/preview.html",
+    "group": "23 Wayfinding",
+    "viewport": "960x494",
+    "subtitle": "Tab switcher with a sliding indicator.",
+    "name": "Tabs"
+  },
+  {
+    "path": "components/TreeView/preview.html",
+    "group": "23 Wayfinding",
+    "viewport": "960x400",
+    "subtitle": "Files with selection · checkable tri-state permissions",
+    "name": "TreeView"
+  },
+  {
+    "path": "components/Card/preview.html",
+    "group": "24 Cards",
+    "viewport": "960x538",
+    "subtitle": "Surface + regions: header · actions · body · footer · padding",
+    "name": "Card"
+  },
+  {
+    "path": "components/FeatureCard/preview.html",
+    "group": "24 Cards",
+    "viewport": "960x636",
+    "subtitle": "thin border at rest → depth + tone glow on hover · tone",
+    "name": "FeatureCard"
+  },
+  {
+    "path": "components/FlipCard/preview.html",
+    "group": "24 Cards",
+    "viewport": "960x378",
+    "subtitle": "Flashcard Q&A · concept · metric with details — hover or click to flip",
+    "name": "FlipCard"
+  },
+  {
+    "path": "components/QuestionCard/preview.html",
+    "group": "24 Cards",
+    "viewport": "960x440",
+    "subtitle": "Card + category · difficulty · tags · expandable answer",
+    "name": "QuestionCard"
+  },
+  {
+    "path": "components/ScoreCard/preview.html",
+    "group": "24 Cards",
+    "viewport": "960x365",
+    "subtitle": "Result Card: score ring · verdict · criteria",
+    "name": "ScoreCard"
+  },
+  {
+    "path": "components/StructuredCard/preview.html",
+    "group": "24 Cards",
+    "viewport": "960x392",
+    "subtitle": "Regions · media + scrim + floating tag · header / body / footer hairlines",
+    "name": "StructuredCard"
+  },
+  {
+    "path": "components/AudioPlayer/preview.html",
+    "group": "25 Media",
+    "viewport": "960x212",
+    "subtitle": "waveform scrubber (role=slider) · speed · mute · sm voice-note row",
+    "name": "AudioPlayer"
+  },
+  {
+    "path": "components/Carousel/preview.html",
+    "group": "25 Media",
+    "viewport": "960x504",
+    "subtitle": "One slide · arrows · dots · swipe · ←→ · autoplay pauses",
+    "name": "Carousel"
+  },
+  {
+    "path": "components/ImageCropper/preview.html",
+    "group": "25 Media",
+    "viewport": "960x476",
+    "subtitle": "fixed frame · drag / arrows to pan · wheel / slider / ± to zoom · rotate · circle mask",
+    "name": "ImageCropper"
+  },
+  {
+    "path": "components/ImageGrid/preview.html",
+    "group": "25 Media",
+    "viewport": "960x334",
+    "subtitle": "Mixed ratios · columns=6",
+    "name": "ImageGrid"
+  },
+  {
+    "path": "components/Lightbox/preview.html",
+    "group": "25 Media",
+    "viewport": "960x456",
+    "subtitle": "full-screen viewer · overlay IconButtons · zoom · thumbs",
+    "name": "Lightbox"
+  },
+  {
+    "path": "components/Marquee/preview.html",
+    "group": "25 Media",
+    "viewport": "960x138",
+    "subtitle": "Infinite logo row · pauses on hover",
+    "name": "Marquee"
+  },
+  {
+    "path": "components/MediaFrame/preview.html",
+    "group": "25 Media",
+    "viewport": "960x654",
+    "subtitle": "--aspect-* ratio scale · shimmer · striped placeholder · glass play · badge · overlay · caption",
+    "name": "MediaFrame"
+  },
+  {
+    "path": "components/PlayerButton/preview.html",
+    "group": "25 Media",
+    "viewport": "960x250",
+    "subtitle": "The transparent control shared by VideoPlayer and AudioPlayer",
+    "name": "PlayerButton"
+  },
+  {
+    "path": "components/VideoPlayer/preview.html",
+    "group": "25 Media",
+    "viewport": "960x436",
+    "subtitle": "scrim controls · buffered seek · volume · speed · full screen · auto-hide · keyboard",
+    "name": "VideoPlayer"
+  },
+  {
+    "path": "components/BarChart/preview.html",
+    "group": "26 Charts",
+    "viewport": "960x345",
+    "subtitle": "Grouped or stacked · hover/←→ for values",
+    "name": "BarChart"
+  },
+  {
+    "path": "components/ChartLegend/preview.html",
+    "group": "26 Charts",
+    "viewport": "960x420",
+    "subtitle": "One key for every chart · inline, toggle, list",
+    "name": "ChartLegend"
+  },
+  {
+    "path": "components/ChartTooltip/preview.html",
+    "group": "26 Charts",
+    "viewport": "960x260",
+    "subtitle": "Floating read-out inside a chart plot",
+    "name": "ChartTooltip"
+  },
+  {
+    "path": "components/DonutChart/preview.html",
+    "group": "26 Charts",
+    "viewport": "960x268",
+    "subtitle": "Legend toggles recut the donut",
+    "name": "DonutChart"
+  },
+  {
+    "path": "components/FunnelChart/preview.html",
+    "group": "26 Charts",
+    "viewport": "960x436",
+    "subtitle": "centred steps · share of first step · conversion + drop-off · ghost of the previous step",
+    "name": "FunnelChart"
+  },
+  {
+    "path": "components/Gantt/preview.html",
+    "group": "26 Charts",
+    "viewport": "960x488",
+    "subtitle": "sticky task column · groups · progress · milestones · dependencies · today line · day / week / month",
+    "name": "Gantt"
+  },
+  {
+    "path": "components/Gauge/preview.html",
+    "group": "26 Charts",
+    "viewport": "960x292",
+    "subtitle": "half-circle meter · thresholds recolour + notch · sm / md / lg",
+    "name": "Gauge"
+  },
+  {
+    "path": "components/Heatmap/preview.html",
+    "group": "26 Charts",
+    "viewport": "960x473",
+    "subtitle": "Calendar density · hover or arrow keys · sequential palette",
+    "name": "Heatmap"
+  },
+  {
+    "path": "components/LineChart/preview.html",
+    "group": "26 Charts",
+    "viewport": "960x383",
+    "subtitle": "Crosshair · keyboard · table equivalent",
+    "name": "LineChart"
+  },
+  {
+    "path": "components/RangeBandChart/preview.html",
+    "group": "26 Charts",
+    "viewport": "960x416",
+    "subtitle": "Actual vs expected range band · negatives supported",
+    "name": "RangeBandChart"
+  },
+  {
+    "path": "components/RadarChart/preview.html",
+    "group": "26 Charts",
+    "viewport": "960x410",
+    "subtitle": "1–3 profiles × 5–8 axes · legend toggles · vertex hover",
+    "name": "RadarChart"
+  },
+  {
+    "path": "components/Sparkline/preview.html",
+    "group": "26 Charts",
+    "viewport": "960x223",
+    "subtitle": "Inline trend · scrub with mouse or ←→",
+    "name": "Sparkline"
+  },
+  {
+    "path": "components/ComparisonBar/preview.html",
+    "group": "27 Metrics",
+    "viewport": "960x279",
+    "subtitle": "ComparisonBar (pick 2–4) → ComparisonDialog: radar · table with best-value stars · AI insights",
+    "name": "ComparisonBar"
+  },
+  {
+    "path": "components/ContributionBar/preview.html",
+    "group": "27 Metrics",
+    "viewport": "960x286",
+    "subtitle": "Diverging bars from zero — what each factor adds to a total",
+    "name": "ContributionBar"
+  },
+  {
+    "path": "components/Delta/preview.html",
+    "group": "27 Metrics",
+    "viewport": "960x176",
+    "subtitle": "Direction colours in three conventions — null is never zero",
+    "name": "Delta"
+  },
+  {
+    "path": "components/MetricGroup/preview.html",
+    "group": "27 Metrics",
+    "viewport": "960x226",
+    "subtitle": "Compact KPI grid — lighter than Stat",
+    "name": "MetricGroup"
+  },
+  {
+    "path": "components/Money/preview.html",
+    "group": "27 Metrics",
+    "viewport": "960x330",
+    "subtitle": "Sign colour, compact, privacy masking, locale, null is never zero",
+    "name": "Money"
+  },
+  {
+    "path": "components/SkillBar/preview.html",
+    "group": "27 Metrics",
+    "viewport": "960x260",
+    "subtitle": "Competency meter with grow-in shimmer",
+    "name": "SkillBar"
+  },
+  {
+    "path": "components/Stat/preview.html",
+    "group": "27 Metrics",
+    "viewport": "960x728",
+    "subtitle": "KPI Card: label · value · delta · hint",
+    "name": "Stat"
+  },
+  {
+    "path": "components/UsageMeter/preview.html",
+    "group": "27 Metrics",
+    "viewport": "960x236",
+    "subtitle": "Label · used / limit · bar · hint — auto tone at 70% / 90%",
+    "name": "UsageMeter"
+  },
+  {
+    "path": "components/ValueShift/preview.html",
+    "group": "27 Metrics",
+    "viewport": "960x146",
+    "subtitle": "Before → after, deterioration highlighted",
+    "name": "ValueShift"
+  },
+  {
+    "path": "components/CellStack/preview.html",
+    "group": "28 Data",
+    "viewport": "960x206",
+    "subtitle": "Two-line table cell — ID + time, name + meta, amount + detail",
+    "name": "CellStack"
+  },
+  {
+    "path": "components/ColumnResize/preview.html",
+    "group": "28 Data",
+    "viewport": "960x360",
+    "subtitle": "Column-width handle · drag · ← → · double-click to reset",
+    "name": "ColumnResize"
+  },
+  {
+    "path": "components/ColumnManager/preview.html",
+    "group": "28 Data",
+    "viewport": "960x620",
+    "subtitle": "Visibility switch · drag or ↑/↓ reorder · pin any number left / right · search past 8",
+    "name": "ColumnManager"
+  },
+  {
+    "path": "components/DataGrid/preview.html",
+    "group": "28 Data",
+    "viewport": "960x586",
+    "subtitle": "Toolbar search · QueryBuilder filters · ColumnManager · select · expand · frozen cols · edit",
+    "name": "DataGrid"
+  },
+  {
+    "path": "components/DescriptionList/preview.html",
+    "group": "28 Data",
+    "viewport": "960x292",
+    "subtitle": "Record details · row or grid",
+    "name": "DescriptionList"
+  },
+  {
+    "path": "components/DiffViewer/preview.html",
+    "group": "28 Data",
+    "viewport": "960x524",
+    "subtitle": "unified / split · word-level highlights · folded unchanged lines · on the code surface",
+    "name": "DiffViewer"
+  },
+  {
+    "path": "components/DualFilterBar/preview.html",
+    "group": "28 Data",
+    "viewport": "960x324",
+    "subtitle": "simple = one pill track · full = labels, search, count",
+    "name": "DualFilterBar"
+  },
+  {
+    "path": "components/FilterBar/preview.html",
+    "group": "28 Data",
+    "viewport": "960x434",
+    "subtitle": "Search + faceted chips · single summary or count · clear all · live result count",
+    "name": "FilterBar"
+  },
+  {
+    "path": "components/List/preview.html",
+    "group": "28 Data",
+    "viewport": "960x366",
+    "subtitle": "Rows for people, files, candidates",
+    "name": "List"
+  },
+  {
+    "path": "components/LogViewer/preview.html",
+    "group": "28 Data",
+    "viewport": "960x468",
+    "subtitle": "live tail · level toggles + counts · filter highlight · wrap · scroll up to pause, “N new” to resume",
+    "name": "LogViewer"
+  },
+  {
+    "path": "components/QueryBuilder/preview.html",
+    "group": "28 Data",
+    "viewport": "960x343",
+    "subtitle": "Typed operators · and/or toggle · one level of groups · readable summary",
+    "name": "QueryBuilder"
+  },
+  {
+    "path": "components/Table/preview.html",
+    "group": "28 Data",
+    "viewport": "960x1102",
+    "subtitle": "Toolbar · sort · Shift-range select · resize · expandable rows · sticky header · empty",
+    "name": "Table"
+  },
+  {
+    "path": "components/Timeline/preview.html",
+    "group": "28 Data",
+    "viewport": "960x1590",
+    "subtitle": "Activity feed · tone markers · avatars",
+    "name": "Timeline"
+  },
+  {
+    "path": "components/VirtualList/preview.html",
+    "group": "28 Data",
+    "viewport": "960x516",
+    "subtitle": "10 000 rows · selectable · infinite load · keyboard",
+    "name": "VirtualList"
+  },
+  {
+    "path": "components/VirtualTable/preview.html",
+    "group": "28 Data",
+    "viewport": "960x416",
+    "subtitle": "100,000 rows · only visible rows rendered",
+    "name": "VirtualTable"
+  },
+  {
+    "path": "components/CalendarOrganizer/preview.html",
+    "group": "29 Planning",
+    "viewport": "960x653",
+    "subtitle": "Month grid + day panel · quick add · arrows",
+    "name": "CalendarOrganizer"
+  },
+  {
+    "path": "components/EventCalendar/preview.html",
+    "group": "29 Planning",
+    "viewport": "960x1058",
+    "subtitle": "Month grid + day agenda · layout=",
+    "name": "EventCalendar"
+  },
+  {
+    "path": "components/Kanban/preview.html",
+    "group": "29 Planning",
+    "viewport": "960x406",
+    "subtitle": "Drag & drop or Ctrl + arrows · WIP limits",
+    "name": "Kanban"
+  },
+  {
+    "path": "components/Scheduler/preview.html",
+    "group": "29 Planning",
+    "viewport": "960x710",
+    "subtitle": "Day / week time grid · overlapping lanes · now line · slot click",
+    "name": "Scheduler"
+  },
+  {
+    "path": "components/AiResultPanel/preview.html",
+    "group": "30 Patterns",
+    "viewport": "960x539",
+    "subtitle": "Provenance · score ring · findings · sources · streaming / error states",
+    "name": "AiResultPanel"
+  },
+  {
+    "path": "components/AnalysisReport/preview.html",
+    "group": "30 Patterns",
+    "viewport": "960x1060",
+    "subtitle": "Score ring · categories · keywords · strengths and gaps · recommendations",
+    "name": "AnalysisReport"
+  },
+  {
+    "path": "components/AnalysisRequest/preview.html",
+    "group": "30 Patterns",
+    "viewport": "960x1742",
+    "subtitle": "Compose and send an AI analysis request from several pieces of context — e.g.",
+    "name": "AnalysisRequest"
+  },
+  {
+    "path": "components/ChatMessage/preview.html",
+    "group": "30 Patterns",
+    "viewport": "960x820",
+    "subtitle": "user · assistant (tools, sources) · streaming · typing · error · system",
+    "name": "ChatMessage"
+  },
+  {
+    "path": "components/ChatThread/preview.html",
+    "group": "30 Patterns",
+    "viewport": "960x800",
+    "subtitle": "user bubble · assistant tools · sources · streaming caret · typing — send a prompt to stream a reply",
+    "name": "ChatThread"
+  },
+  {
+    "path": "components/CommentThread/preview.html",
+    "group": "30 Patterns",
+    "viewport": "960x654",
+    "subtitle": "Reply · like · edit / delete own · collapsed replies · @mentions",
+    "name": "CommentThread"
+  },
+  {
+    "path": "components/PracticeSetup/preview.html",
+    "group": "30 Patterns",
+    "viewport": "960x567",
+    "subtitle": "Setup → session (Space · 1 · 2) → summary",
+    "name": "PracticeSetup"
+  },
+  {
+    "path": "components/PracticeSession/preview.html",
+    "group": "30 Patterns",
+    "viewport": "960x560",
+    "subtitle": "One card at a time · flip (Space) · Didn’t know (1) · Knew it (2)",
+    "name": "PracticeSession"
+  },
+  {
+    "path": "components/PracticeSummary/preview.html",
+    "group": "30 Patterns",
+    "viewport": "960x470",
+    "subtitle": "Accuracy ring · known / to review · restart and review missed",
+    "name": "PracticeSummary"
+  },
+  {
+    "path": "components/PricingTable/preview.html",
+    "group": "30 Patterns",
+    "viewport": "960x546",
+    "subtitle": "One featured tier · monthly / yearly switch · current plan · excluded features",
+    "name": "PricingTable"
+  },
+  {
+    "path": "components/PromptInput/preview.html",
+    "group": "30 Patterns",
+    "viewport": "960x428",
+    "subtitle": "↵ send · ⇧↵ newline · attachments · toolbar slot · Stop while generating · error turn",
+    "name": "PromptInput"
+  },
+  {
+    "path": "components/StatusBar/preview.html",
+    "group": "31 Trading",
+    "viewport": "960x170",
+    "subtitle": "Connection · context · state on the left, sessions and clock on the right",
+    "name": "StatusBar"
+  },
+  {
+    "path": "components/MarketSessionClock/preview.html",
+    "group": "31 Trading",
+    "viewport": "960x230",
+    "subtitle": "Open until · opens in · closed · holiday, from each venue's own time zone",
+    "name": "MarketSessionClock"
+  },
+  {
+    "path": "components/ContextSwitcher/preview.html",
+    "group": "31 Trading",
+    "viewport": "960x120",
+    "subtitle": "Chip + menu; switching into a context with real consequences asks first",
+    "name": "ContextSwitcher"
+  },
+  {
+    "path": "components/KillSwitchButton/preview.html",
+    "group": "31 Trading",
+    "viewport": "960x150",
+    "subtitle": "Danger chip on a brand bar · typed confirmation · active state",
+    "name": "KillSwitchButton"
+  },
+  {
+    "path": "components/PriceCell/preview.html",
+    "group": "31 Trading",
+    "viewport": "960x150",
+    "subtitle": "Tabular price that flashes up or down on change · masked in privacy mode",
+    "name": "PriceCell"
+  },
+  {
+    "path": "components/InstrumentHeader/preview.html",
+    "group": "31 Trading",
+    "viewport": "960x210",
+    "subtitle": "Symbol, live quote, session and key facts in one masthead",
+    "name": "InstrumentHeader"
+  },
+  {
+    "path": "components/OrderTicket/preview.html",
+    "group": "31 Trading",
+    "viewport": "960x640",
+    "subtitle": "Side · type · size · protection, with a live risk estimate and a confirmation",
+    "name": "OrderTicket"
+  },
+  {
+    "path": "components/WidgetGrid/preview.html",
+    "group": "31 Trading",
+    "viewport": "960x470",
+    "subtitle": "Viewer-arranged dashboard · drag or use the bar · hidden widgets wait in a tray",
+    "name": "WidgetGrid"
+  }
+]

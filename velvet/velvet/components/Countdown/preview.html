@@ -1,0 +1,20 @@
+<!-- @dsCard group="Components · Display" height=198 width=960 subtitle="Live timer · boxes or inline" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { Countdown } = NS;
+const to = Date.now() + ((2 * 24 + 5) * 3600 + 14 * 60 + 30) * 1000;
+const App = () => (React.createElement("div", { className: "pane" },
+    React.createElement(Countdown, { to: to }),
+    React.createElement("div", { className: "r", style: { gap: 8 } },
+        React.createElement("span", { className: "lbl" }, "Sale ends in"),
+        React.createElement(Countdown, { to: Date.now() + 5 * 3600e3, variant: "inline", units: ['hours', 'minutes', 'seconds'] }))));
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

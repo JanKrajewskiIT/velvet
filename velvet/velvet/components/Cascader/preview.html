@@ -1,0 +1,20 @@
+<!-- @dsCard group="Components · Selection" height=472 width=960 subtitle="Column-by-column path pick · hover expand · search" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:14px}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const { Cascader } = window.VelvetUIDesignSystem_ee2bd8;
+const L = [{ id: 'eu', label: 'Europe', children: [{ id: 'pl', label: 'Poland', children: [{ id: 'waw', label: 'Warsaw' }, { id: 'krk', label: 'Kraków' }, { id: 'wro', label: 'Wrocław' }] }, { id: 'de', label: 'Germany', children: [{ id: 'ber', label: 'Berlin' }, { id: 'muc', label: 'Munich' }] }, { id: 'es', label: 'Spain', children: [{ id: 'mad', label: 'Madrid' }, { id: 'bcn', label: 'Barcelona' }] }] }, { id: 'na', label: 'North America', children: [{ id: 'us', label: 'United States', children: [{ id: 'nyc', label: 'New York' }, { id: 'sf', label: 'San Francisco' }] }, { id: 'ca', label: 'Canada', children: [{ id: 'tor', label: 'Toronto' }] }] }, { id: 'as', label: 'Asia', children: [{ id: 'jp', label: 'Japan', children: [{ id: 'tyo', label: 'Tokyo' }] }] }];
+const C = [{ id: 'eng', label: 'Engineering', icon: 'code', children: [{ id: 'fe', label: 'Frontend' }, { id: 'be', label: 'Backend' }, { id: 'pl2', label: 'Platform' }] }, { id: 'des', label: 'Design', icon: 'palette', children: [{ id: 'pd', label: 'Product' }, { id: 'br', label: 'Brand' }] }, { id: 'ops', label: 'Operations', icon: 'briefcase', children: [{ id: 'fin', label: 'Finance' }, { id: 'ppl', label: 'People' }] }];
+const App = () => { const ref = React.useRef(null); React.useEffect(() => { const b = ref.current && ref.current.querySelector('.vui-casc__trigger'); b && b.click(); }, []); return (React.createElement("div", { className: "pane" },
+    React.createElement("div", { className: "g2" },
+        React.createElement("div", { ref: ref },
+            React.createElement(Cascader, { label: "Team location", data: L, defaultValue: "waw" })),
+        React.createElement(Cascader, { label: "Department", data: C, expandTrigger: "hover", changeOnSelect: true, searchable: true, displayLast: true, placeholder: "Any department", hint: "Hover to expand \u00B7 parents selectable" })))); };
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

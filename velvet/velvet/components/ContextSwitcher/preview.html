@@ -1,0 +1,15 @@
+<!-- @dsCard group="Components · Trading" height=120 width=960 subtitle="Chip + menu; switching into a context with real consequences asks first" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}.pane{display:flex;flex-direction:column;gap:16px}.lbl{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 6px}.brandbar{display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:12px 16px;border-radius:12px;background:var(--bg-brand)}</style></head><body>
+<div id="root-0"></div>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8; const h = React.createElement;
+const { ContextSwitcher } = NS;
+const items = [{ id: 'dev', label: 'DEV-01', description: 'Sandbox · test data', tone: 'info' }, { id: 'stg', label: 'STG-02', description: 'Staging · copy of production', tone: 'warning' }, { id: 'prd', label: 'PRD-01', description: 'Production · real customers', tone: 'danger' }];
+function App() { const [v, setV] = React.useState('dev'); const cur = items.find((x) => x.id === v);
+  return h('div', { className: 'brandbar' }, h(ContextSwitcher, { items, value: v, onValueChange: setV, sectionLabel: 'Environment', label: cur.label + ' — change environment', confirmWhen: (n) => n.tone === 'danger', confirmTitle: (n) => 'Switch to ' + n.label + '?', confirmDescription: (n) => n.description + '. Actions from now on affect real data.', confirmLabel: 'Switch', extraItems: [{ label: 'Manage environments', icon: 'settings' }] }, h('strong', null, cur.label))); }
+ReactDOM.createRoot(document.getElementById('root-0')).render(h(App));
+})();
+</script></body></html>

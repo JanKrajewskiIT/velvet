@@ -1,0 +1,21 @@
+<!-- @dsCard group="Components · Data" height=366 width=960 subtitle="Rows for people, files, contacts" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:14px}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { List, Avatar, Badge, Card } = NS;
+const P = [['Anna Kowalska', 'Senior Frontend Engineer', 'Meeting', 'info'], ['Jan Nowak', 'Backend Lead', 'Proposal', 'success'], ['Olga Brzeska', 'UX Designer', 'Screening', 'neutral'], ['Krzysztof Lis', 'DevOps Engineer', 'Rejected', 'danger']];
+const App = () => { const [id, setId] = React.useState(1); return (React.createElement("div", { className: "pane" },
+    React.createElement("div", { className: "g2" },
+        React.createElement(Card, { padding: "sm" },
+            React.createElement(List, { value: id, onValueChange: setId, items: P.map((p, i) => ({ id: i, leading: React.createElement(Avatar, { name: p[0] }), title: p[0], description: p[1], trailing: React.createElement(Badge, { tone: p[3], size: "sm" }, p[2]) })) })),
+        React.createElement(Card, { padding: "sm" },
+            React.createElement(List, { size: "sm", items: [{ id: 1, leading: React.createElement("i", { className: "vui-icon icon-file" }), title: 'CV_Anna_Kowalska.pdf', trailing: '212 KB' }, { id: 2, leading: React.createElement("i", { className: "vui-icon icon-file" }), title: 'Report.pdf', trailing: '4.8 MB' }, { id: 3, leading: React.createElement("i", { className: "vui-icon icon-link" }), title: 'github.com/akowalska', trailing: 'Link' }] }))))); };
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

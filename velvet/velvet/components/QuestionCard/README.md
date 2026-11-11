@@ -1,0 +1,7 @@
+Question card built on Card: category + level badges, question text, difficulty stars, time, tags, optional upvote, save and expandable answer. Put several in a responsive grid. Without `answer` it renders a plain heading instead of an expander. Other Card / Surface props pass through.
+
+Use in a grid (`repeat(auto-fill,minmax(320px,1fr))`) for question banks and FAQs. Keep `category` to one word; difficulty is stars, not text. Pass `answer` only when you have one.
+
+```jsx
+<QuestionCard category="React" level="Advanced" difficulty={4} time="18 min" tags={['Hooks']} question="Explain useEffect vs useLayoutEffect." answer="useLayoutEffect runs synchronously after DOM mutations, before paint…" votes={12} voted={v} onVote={toggleVote} starred={s} onStar={toggleStar} />
+```

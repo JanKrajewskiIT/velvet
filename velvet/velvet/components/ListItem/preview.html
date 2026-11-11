@@ -1,0 +1,28 @@
+<!-- @dsCard group="Components · Display" height=296 width=960 subtitle="Row atom · leading / title / description / meta / trailing" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.g{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}.col{display:flex;flex-direction:column;gap:6px}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const { ListItem, IconTile, Avatar, Badge, Count, IconButton, Checkbox, Dot } = window.VelvetUIDesignSystem_ee2bd8;
+const App = () => {
+    const [on, setOn] = React.useState(true);
+    return (React.createElement("div", { className: "g" },
+        React.createElement("div", { className: "col" },
+            React.createElement("span", { className: "lbl" }, "static \u00B7 action \u00B7 selected"),
+            React.createElement(ListItem, { leading: React.createElement(Avatar, { name: "Maya Lin", size: "sm" }), title: "Maya Lin", description: "Product designer \u00B7 Berlin", trailing: React.createElement(Badge, { size: "sm", tone: "success", dot: true }, "Active") }),
+            React.createElement(ListItem, { onClick: () => { }, leading: React.createElement(IconTile, { icon: "file-text" }), title: "Proposal letter.pdf", description: "Updated 2h ago", trailing: React.createElement(IconButton, { icon: "more-horizontal", label: "More", size: "xs" }) }),
+            React.createElement(ListItem, { selected: true, onClick: () => { }, size: "sm", leading: React.createElement(IconTile, { icon: "folder", size: "sm", tone: "brand" }), title: "Design team", trailing: React.createElement(Count, { value: 12, tone: "neutral", size: "sm" }) })),
+        React.createElement("div", { className: "col" },
+            React.createElement("span", { className: "lbl" }, "label + checkbox \u00B7 multi-line"),
+            React.createElement(ListItem, { as: "label", leading: React.createElement(React.Fragment, null,
+                    React.createElement(Checkbox, { checked: on, onChange: () => setOn(!on) }),
+                    React.createElement(IconTile, { icon: "database", outline: true })), title: "CRM sync", description: "1,284 contacts", trailing: "Connected" }),
+            React.createElement(ListItem, { onClick: () => { }, align: "start", clamp: 2, leading: React.createElement(IconTile, { icon: "sparkles", tone: "brand", shape: "circle", size: "sm" }), title: "Analysis ready", description: "Proposal shortlist scored \u2014 8 strong matches, 3 need review before Friday's panel.", meta: "5 min ago", trailing: React.createElement(Dot, { tone: "brand", size: "lg", label: "Unread" }) }))));
+};
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

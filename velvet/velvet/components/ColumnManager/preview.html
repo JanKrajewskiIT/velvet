@@ -1,0 +1,23 @@
+<!-- @dsCard group="Components · Data" height=620 width=960 subtitle="Visibility switch · drag or ↑/↓ reorder · pin left / right · per-column hideable / pinnable / movable · last visible column protected" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { ColumnManager, Table, Popover, Button } = NS;
+const COLS = [{ key: 'name', label: 'Company', locked: true, pin: 'left' }, { key: 'role', label: 'Role', pin: 'left' }, { key: 'status', label: 'Status', hideable: false }, { key: 'budget', label: 'Budget', align: 'right' }, { key: 'mode', label: 'Work mode' }, { key: 'source', label: 'Source', visible: false }, { key: 'added', label: 'Added', visible: false }, { key: 'actions', label: 'Actions', pin: 'right', movable: false, pinnable: false }];
+const ROWS = [{ id: 1, name: 'Atlas Studio', role: 'Product designer', status: 'Meeting', budget: '18 000 zł', mode: 'Hybrid', source: 'Referral', added: 'Sep 12', actions: '⋯' }, { id: 2, name: 'Northwind', role: 'Design lead', status: 'Proposal', budget: '24 500 zł', mode: 'Remote', source: 'LinkedIn', added: 'Sep 18', actions: '⋯' }, { id: 3, name: 'Kite & Co', role: 'UX researcher', status: 'New', budget: '15 000 zł', mode: 'On-site', source: 'Website', added: 'Sep 30', actions: '⋯' }];
+const applyCols = (cols, st) => { const o = [...st.filter(x => x.pin === 'left'), ...st.filter(x => !x.pin), ...st.filter(x => x.pin === 'right')]; return o.filter(x => x.visible).map(x => { const c = cols.find(y => y.key === x.key); return c && { ...c, pin: x.pin || undefined, width: c.key === 'actions' ? 64 : 160 }; }).filter(Boolean); };
+const App = () => { const [s, setS] = React.useState(COLS.map(c => ({ key: c.key, visible: c.visible !== false, pin: c.pin || null }))); const vis = s.filter(x => x.visible).length; return (React.createElement("div", { className: "pane" },
+    React.createElement("div", { style: { maxWidth: 560 } },
+        React.createElement(Table, { title: "Applications", toolbar: React.createElement(Popover, { align: "end", defaultOpen: true, trigger: React.createElement(Button, { variant: "secondary", size: "sm", iconLeft: "sliders" },
+                    "Columns ",
+                    React.createElement("span", { className: "vui-count vui-count--soft vui-count--sm" }, vis + '/' + s.length)) },
+                React.createElement(ColumnManager, { columns: COLS, value: s, onChange: setS, pinRight: true })), columns: applyCols(COLS, s), rows: ROWS })))); };
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

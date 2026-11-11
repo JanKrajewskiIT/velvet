@@ -1,0 +1,17 @@
+<!-- @dsCard group="Components · Cards" height=440 width=960 subtitle="Card + category · difficulty · tags · expandable answer" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:14px}.g2{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-5);align-items:start}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { QuestionCard } = NS;
+const Q = [{ category: 'React', level: 'Advanced', difficulty: 4, time: '18 min', tags: ['Hooks', 'Rendering'], question: 'Explain the difference between useEffect and useLayoutEffect.', answer: 'useLayoutEffect fires synchronously after DOM mutations and before the browser paints, so use it for measurements. useEffect runs after paint and is the default.', votes: 24 }, { category: 'System design', categoryTone: 'info', level: 'Intermediate', difficulty: 3, time: '25 min', tags: ['Caching'], question: 'How would you design a rate limiter for a public API?', votes: 9 }, { category: 'Process', categoryTone: 'success', level: 'Any', difficulty: 2, time: '5 min', tags: ['Teamwork'], question: 'How do you handle a disagreement about priorities?', votes: 41 }];
+const App = () => { const [st, setSt] = React.useState({ 0: { v: true }, 2: { s: true } }); const t = (i, k) => setSt(s => ({ ...s, [i]: { ...s[i], [k]: !(s[i] || {})[k] } })); return (React.createElement("div", { className: "pane" },
+    React.createElement("div", { className: "g2" }, Q.map((q, i) => React.createElement(QuestionCard, { key: i, ...q, defaultExpanded: i === 0, votes: q.votes + ((st[i] || {}).v ? 1 : 0), voted: !!(st[i] || {}).v, onVote: () => t(i, 'v'), starred: !!(st[i] || {}).s, onStar: () => t(i, 's') }))))); };
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

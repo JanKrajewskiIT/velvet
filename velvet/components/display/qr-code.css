@@ -1,8 +1,0 @@
-/* QRCode */
-.vui-qr{position:relative;display:inline-block;flex:none;overflow:hidden;border-radius:var(--radius-md);background:var(--white);box-shadow:0 0 0 var(--border-width) var(--border-subtle)}
-.vui-qr svg{display:block}
-.vui-qr__bg{fill:var(--white)}
-.vui-qr__fg{fill:var(--neutral-1000,var(--black))}
-.vui-qr__logo{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:grid;place-items:center;border-radius:22%;background:var(--white);box-shadow:0 0 0 3px var(--white);color:var(--action-primary)}
-.vui-qr__logo .vui-icon{font-size:1em}
-.vui-qr--error{display:grid;place-items:center;padding:var(--space-3);box-sizing:border-box;background:var(--bg-subtle);color:var(--fg-tertiary);font:var(--type-caption);text-align:center}

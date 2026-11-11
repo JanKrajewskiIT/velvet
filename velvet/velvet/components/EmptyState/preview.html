@@ -1,0 +1,22 @@
+<!-- @dsCard group="Components · Feedback" height=700 width=960 subtitle="Nothing here yet · sizes sm / md / lg · tones · actions" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl{font:600 10px/1.3 var(--font-sans);letter-spacing:.08em;text-transform:uppercase;color:var(--fg-tertiary);margin-bottom:10px}
+.pane{display:flex;flex-direction:column;gap:var(--space-5)}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-5)}.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-5)}.r{display:flex;flex-wrap:wrap;gap:var(--space-2);align-items:center}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const h = React.createElement;
+const { EmptyState, Button } = NS;
+const App = () => (h("div", { className: "pane" },
+ h("div", { className: "g2" },
+ h("div", null, h("div", { className: "lbl" }, "md · brand (default)"), h(EmptyState, { icon: "folder", title: "No projects yet", description: "Create a project to start tracking work.", actions: h(Button, { size: "sm" }, "New project") })),
+ h("div", null, h("div", { className: "lbl" }, "md · neutral"), h(EmptyState, { icon: "search", tone: "neutral", title: "No results", description: "Try a different keyword or clear the filters.", actions: h(Button, { size: "sm", variant: "ghost" }, "Clear filters") }))),
+ h("div", { className: "g2" },
+ h("div", null, h("div", { className: "lbl" }, "lg · success"), h(EmptyState, { size: "lg", icon: "inbox", tone: "success", title: "Inbox zero", description: "You’re all caught up. New messages will show up here." })),
+ h("div", null, h("div", { className: "lbl" }, "sm · inline in a panel"), h(EmptyState, { size: "sm", icon: "bell", tone: "info", title: "No notifications", description: "We’ll tell you when something needs you." })))));
+ReactDOM.createRoot(document.getElementById('root-0')).render(h(App, null));
+
+})();
+</script></body></html>

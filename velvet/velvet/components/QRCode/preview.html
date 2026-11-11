@@ -1,0 +1,33 @@
+<!-- @dsCard group="Components · Display" height=268 width=960 subtitle="generated in-browser · ECC L–H · quiet zone · centre logo · always ink on white" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}.col{display:flex;flex-direction:column;gap:6px;min-width:0}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const L = ({ children }) => React.createElement("span", { className: "lbl" }, children);
+const { QRCode } = NS;
+const URL = 'https://velvet.design/invite/8F3K-2Q9P';
+const App = () => (React.createElement("div", { className: "pane" },
+    React.createElement("div", { className: "r", style: { gap: 32, alignItems: 'flex-start' } },
+        React.createElement("div", { className: "col" },
+            React.createElement(QRCode, { value: URL, size: 160 }),
+            React.createElement(L, null, "M \u00B7 160")),
+        React.createElement("div", { className: "col" },
+            React.createElement(QRCode, { value: URL, size: 160, logo: "sparkles" }),
+            React.createElement(L, null, "logo \u2192 H")),
+        React.createElement("div", { className: "col" },
+            React.createElement(QRCode, { value: "otpauth://totp/Velvet:anna@velvet.io?secret=JBSWY3DPEHPK3PXP&issuer=Velvet", size: 120, level: "L" }),
+            React.createElement(L, null, "2FA \u00B7 120")),
+        React.createElement("div", { className: "col", style: { maxWidth: 240, gap: 8 } },
+            React.createElement("span", { style: { font: 'var(--type-title)' } }, "Scan to join the workspace"),
+            React.createElement("span", { style: { font: 'var(--type-body-sm)', color: 'var(--fg-secondary)' } },
+                "Or open ",
+                React.createElement("a", { href: "#" }, "velvet.design/invite/8F3K-2Q9P"),
+                " \u2014 always pair the code with a visible link.")))));
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

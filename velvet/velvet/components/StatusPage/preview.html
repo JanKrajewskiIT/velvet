@@ -1,0 +1,43 @@
+<!-- @dsCard group="Components · Feedback" height=656 width=960 subtitle="Errors, outcomes, empty and data states · lg page / md·sm inline · details slot" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { StatusPage, EmptyState, ErrorState, DataState, Button, OptionSwitcher } = NS;
+const sm = { size: 'sm' };
+const views = {
+    '404': () => React.createElement(StatusPage, { code: 404, actions: React.createElement(React.Fragment, null,
+            React.createElement(Button, { ...sm, variant: "secondary", iconLeft: "arrow-left" }, "Go back"),
+            React.createElement(Button, { ...sm }, "Home")) }),
+    '403': () => React.createElement(StatusPage, { code: 403, actions: React.createElement(React.Fragment, null,
+            React.createElement(Button, { ...sm, variant: "secondary" }, "Switch account"),
+            React.createElement(Button, { ...sm }, "Request access")) }),
+    '500': () => React.createElement(StatusPage, { code: 500, actions: React.createElement(React.Fragment, null,
+            React.createElement(Button, { ...sm, variant: "secondary" }, "Status page"),
+            React.createElement(Button, { ...sm, iconLeft: "refresh" }, "Try again")) }),
+    offline: () => React.createElement(StatusPage, { code: "offline", actions: React.createElement(Button, { ...sm, iconLeft: "refresh" }, "Retry") }),
+    success: () => React.createElement(StatusPage, { status: "success", size: "md", title: "Payment received", description: "We emailed the receipt to anna@velvet.app.", actions: React.createElement(React.Fragment, null,
+            React.createElement(Button, { ...sm, variant: "secondary" }, "View receipt"),
+            React.createElement(Button, { ...sm }, "Go to dashboard")) }),
+    warning: () => React.createElement(StatusPage, { status: "warning", size: "md", title: "Import finished with 3 issues", description: "118 of 121 contacts were added.", actions: React.createElement(Button, { ...sm }, "Review issues") }),
+    empty: () => React.createElement(EmptyState, { icon: "folder", title: "No projects yet", description: "Create your first project to start collaborating with your team.", actions: React.createElement(React.Fragment, null,
+            React.createElement(Button, { ...sm, variant: "secondary" }, "Import"),
+            React.createElement(Button, { ...sm, iconLeft: "plus" }, "New project")) }),
+    error: () => React.createElement(ErrorState, { title: "Couldn\u2019t load invoices", description: "The server took too long to respond.", onRetry: () => { }, details: 'GET /api/invoices 504\nGateway Timeout' }),
+  stale: () => React.createElement(DataState, { variant: "block", state: "stale", label: "Data is 2 hours old", detail: "The last refresh failed. Figures below may be out of date.", source: "Reports API", asOf: "21 Oct 14:02", action: React.createElement(Button, { ...sm, variant: "secondary", iconLeft: "refresh" }, "Refresh") }),
+  partial: () => React.createElement(DataState, { variant: "block", state: "partial", label: "12 of 14 sources", detail: "Two sources did not respond. Totals cover the sources that did.", action: React.createElement(Button, { ...sm, variant: "secondary" }, "Retry failed sources") }),
+  unavailable: () => React.createElement(DataState, { variant: "block", state: "unavailable", label: "Usage history unavailable", detail: "No data for the selected period. This is missing data, not zero.", source: "Dataset ds-2041" }),
+  'no data': () => React.createElement(DataState, { variant: "block", state: "empty", label: "No matching items", detail: "All 14 sources were checked for the last 7 days. Nothing matched.", action: React.createElement(Button, { ...sm, variant: "ghost" }, "Widen range") })
+};
+const App = () => { const [c, setC] = React.useState('404'); const V = views[c]; return (React.createElement("div", { className: "pane", style: { gap: 8 } },
+    React.createElement(OptionSwitcher, { size: "sm", options: [{ value: '404', label: '404' }, { value: '403', label: '403' }, { value: '500', label: '500' }, { value: 'offline', label: 'Offline' }, { value: 'success', label: 'Success' }, { value: 'warning', label: 'Warning' }, { value: 'empty', label: 'Nothing yet' }, { value: 'error', label: 'Load error' }, { value: 'stale', label: 'Stale data' }, { value: 'partial', label: 'Partial data' }, { value: 'unavailable', label: 'Unavailable data' }, { value: 'no data', label: 'No data' }], value: c, onValueChange: setC }),
+    React.createElement("div", { style: { display: 'grid', placeItems: 'center', minHeight: 540 } },
+        React.createElement(V, null)))); };
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

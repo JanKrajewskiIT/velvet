@@ -1,0 +1,650 @@
+/* Velvet UI Design System (nowy format) — generated from tokens.json */
+:root, [data-theme="light"] {
+  --velvet-50: oklch(97.1% 0.012 359); /* Brand ramp, step 50. Reference scale: components reach it only through sys tokens. Read by --bg-brand-subtle, --bg-selected, --action-soft. */
+  --velvet-100: oklch(94.2% 0.026 356); /* Brand ramp, step 100. Reference scale: components reach it only through sys tokens. Aliased by dv-seq-1 (light), dv-seq-5 (dark); read by --bg-selected-hover, --action-soft-hover. */
+  --velvet-200: oklch(87.3% 0.058 358); /* Brand ramp, step 200. Reference scale: components reach it only through sys tokens. Aliased by fg-link-hover (dark), selection-bg (light), action-soft-fg (dark). */
+  --velvet-300: oklch(77.4% 0.108 360); /* Brand ramp, step 300. Reference scale: components reach it only through sys tokens. Aliased by fg-brand (dark), fg-link (dark), dv-seq-2 (light), dv-seq-4 (dark). */
+  --velvet-400: oklch(65.8% 0.165 3); /* Brand ramp, step 400. Reference scale: components reach it only through sys tokens. Aliased by border-focus (dark), border-brand (dark), code-accent; read by --bg-brand-subtle, --bg-selected, --bg-selected-hover. */
+  --velvet-500: oklch(55.8% 0.193 6); /* Brand ramp, step 500. Reference scale: components reach it only through sys tokens. Aliased by action-primary-hover (dark), dv-seq-3; read by --glow-brand, --focus-ring-color. */
+  --velvet-600: oklch(48.3% 0.184 9); /* Brand ramp, step 600. Reference scale: components reach it only through sys tokens. Aliased by bg-brand (dark), border-focus (light), action-primary (dark). */
+  --velvet-700: oklch(40.7% 0.163 9); /* Brand colour #8b0036 (ramp step 700): the light-theme primary action, brand text, brand border and selection colour. Reference scale: components reach it only through sys tokens. Aliased by bg-brand (light), fg-brand (light), fg-link (light), selection-bg (dark) +6; read by --glow-brand. */
+  --velvet-800: oklch(35.4% 0.142 8); /* Brand ramp, step 800. Reference scale: components reach it only through sys tokens. Aliased by action-primary-hover (light). */
+  --velvet-900: oklch(30.9% 0.118 7); /* Brand ramp, step 900. Reference scale: components reach it only through sys tokens. Aliased by fg-link-hover (light), action-primary-active (light), dv-seq-1 (dark), dv-seq-5 (light). */
+  --velvet-950: oklch(21.9% 0.088 6); /* Brand ramp, step 950. Reference scale: components reach it only through sys tokens. Aliased by tint (light), selection-fg (light). */
+  --neutral-0: oklch(100% 0 0); /* Neutral ramp (warm, faintly rose-tinted), step 0. Reference scale: components reach it only through sys tokens. Aliased by bg-raised (light), bg-overlay (light), bg-field (light), fg-inverse (light). */
+  --neutral-25: oklch(98.9% 0.001 355); /* Neutral ramp (warm, faintly rose-tinted), step 25. Reference scale: components reach it only through sys tokens. Aliased by bg-page (light); read by --bg-glass. */
+  --neutral-50: oklch(97.2% 0.002 355); /* Neutral ramp (warm, faintly rose-tinted), step 50. Reference scale: components reach it only through sys tokens. Aliased by bg-subtle (light), bg-inverse (dark), fg-primary (dark). */
+  --neutral-100: oklch(94.6% 0.003 355); /* Neutral ramp (warm, faintly rose-tinted), step 100. Reference scale: components reach it only through sys tokens. Aliased by bg-sunken (light). */
+  --neutral-200: oklch(90.4% 0.005 355); /* Neutral ramp (warm, faintly rose-tinted), step 200. Reference scale: components reach it only through sys tokens. Nothing reads it yet — available for new sys tokens. */
+  --neutral-300: oklch(82.9% 0.007 355); /* Neutral ramp (warm, faintly rose-tinted), step 300. Reference scale: components reach it only through sys tokens. Aliased by fg-secondary (dark). */
+  --neutral-400: oklch(70.0% 0.009 352); /* Neutral ramp (warm, faintly rose-tinted), step 400. Reference scale: components reach it only through sys tokens. Aliased by fg-tertiary (dark), fg-disabled (light), border-control-hover (dark). */
+  --neutral-500: oklch(57.3% 0.010 352); /* Neutral ramp (warm, faintly rose-tinted), step 500. Reference scale: components reach it only through sys tokens. Aliased by border-control (dark), border-control-hover (light). */
+  --neutral-550: oklch(52% 0.010 353); /* Half step between neutral-500 and neutral-600, added so that fg-tertiary holds 4.5:1 on every light ground. Reference scale. Aliased by fg-tertiary (light). */
+  --neutral-600: oklch(46.7% 0.009 355); /* Neutral ramp (warm, faintly rose-tinted), step 600. Reference scale: components reach it only through sys tokens. Aliased by fg-secondary (light), fg-disabled (dark). */
+  --neutral-700: oklch(37.6% 0.010 352); /* Neutral ramp (warm, faintly rose-tinted), step 700. Reference scale: components reach it only through sys tokens. Nothing reads it yet — available for new sys tokens. */
+  --neutral-800: oklch(29.0% 0.007 352); /* Neutral ramp (warm, faintly rose-tinted), step 800. Reference scale: components reach it only through sys tokens. Aliased by bg-overlay (dark), status-neutral-solid, code-border. */
+  --neutral-850: oklch(25.7% 0.006 355); /* Neutral ramp (warm, faintly rose-tinted), step 850. Reference scale: components reach it only through sys tokens. Nothing reads it yet — available for new sys tokens. */
+  --neutral-900: oklch(22.2% 0.005 355); /* Neutral ramp (warm, faintly rose-tinted), step 900. Reference scale: components reach it only through sys tokens. Aliased by wash (light), bg-raised (dark), bg-inverse (light), fg-primary (light) +2. */
+  --neutral-925: oklch(19.5% 0.005 355); /* Neutral ramp (warm, faintly rose-tinted), step 925. Reference scale: components reach it only through sys tokens. Aliased by bg-subtle (dark), bg-field (dark). */
+  --neutral-950: oklch(17.6% 0.004 355); /* Neutral ramp (warm, faintly rose-tinted), step 950. Reference scale: components reach it only through sys tokens. Aliased by bg-page (dark); read by --scrim-backdrop, --bg-glass, ImageCropper. */
+  --neutral-1000: oklch(14.6% 0.002 355); /* Neutral ramp (warm, faintly rose-tinted), step 1000. Reference scale: components reach it only through sys tokens. Aliased by bg-sunken (dark), bg-media; read by --scrim-media, QRCode. */
+  --white: oklch(100% 0 0); /* Pure white, fixed in both themes: text and icons on brand and status fills, switch and slider thumbs, and the highlight edge on dark surfaces. Aliased by wash (dark), selection-fg (dark), action-primary-fg, action-danger-fg +2; read by --skeleton-shine, --highlight-inset, --on-color-muted, .vui-player, ImageCropper, QRCode. */
+  --black: oklch(0% 0 0); /* Pure black, fixed in both themes; the dark-theme value of tint. Aliased by tint (dark); read by --scrim-image, --thumb-shadow, --swatch-ring, ColorPicker, .vui-player, Marquee. */
+  --success-50: oklch(97.5% 0.015 158); /* Success status ramp, step 50. Reference scale: components reach it only through sys tokens. Read by --status-success-bg. */
+  --success-100: oklch(93.6% 0.038 157); /* Success status ramp, step 100. Reference scale: components reach it only through sys tokens. Nothing reads it yet — available for new sys tokens. */
+  --success-200: oklch(86.4% 0.076 157); /* Success status ramp, step 200. Reference scale: components reach it only through sys tokens. Read by --status-success-border. */
+  --success-300: oklch(78.5% 0.115 155); /* Success status ramp, step 300. Reference scale: components reach it only through sys tokens. Nothing reads it yet — available for new sys tokens. */
+  --success-400: oklch(69.8% 0.149 154); /* Success status ramp, step 400. Reference scale: components reach it only through sys tokens. Aliased by status-success-fg (dark); read by --status-success-bg, --status-success-border. */
+  --success-500: oklch(58.3% 0.137 154); /* Success status ramp, step 500. Reference scale: components reach it only through sys tokens. Nothing reads it yet — available for new sys tokens. */
+  --success-600: oklch(51.2% 0.121 154); /* Success status ramp, step 600. Reference scale: components reach it only through sys tokens. Aliased by status-success-solid. */
+  --success-700: oklch(44.0% 0.099 156); /* Success status ramp, step 700. Reference scale: components reach it only through sys tokens. Aliased by status-success-fg (light). */
+  --success-800: oklch(37.5% 0.082 156); /* Success status ramp, step 800. Reference scale: components reach it only through sys tokens. Nothing reads it yet — available for new sys tokens. */
+  --success-900: oklch(31.0% 0.065 157); /* Success status ramp, step 900. Reference scale: components reach it only through sys tokens. Nothing reads it yet — available for new sys tokens. */
+  --success-950: oklch(23.0% 0.045 158); /* Success status ramp, step 950. Reference scale: components reach it only through sys tokens. Nothing reads it yet — available for new sys tokens. */
+  --warning-50: oklch(98.1% 0.019 83); /* Warning status ramp, step 50. Reference scale: components reach it only through sys tokens. Read by --status-warning-bg. */
+  --warning-100: oklch(95.0% 0.053 87); /* Warning status ramp, step 100. Reference scale: components reach it only through sys tokens. Nothing reads it yet — available for new sys tokens. */
+  --warning-200: oklch(89.8% 0.105 86); /* Warning status ramp, step 200. Reference scale: components reach it only through sys tokens. Read by --status-warning-border. */
+  --warning-300: oklch(84.5% 0.135 79); /* Warning status ramp, step 300. Reference scale: components reach it only through sys tokens. Nothing reads it yet — available for new sys tokens. */
+  --warning-400: oklch(78.2% 0.158 72); /* Warning status ramp, step 400. Reference scale: components reach it only through sys tokens. Aliased by status-warning-fg (dark), rating-fill (dark); read by --status-warning-bg, --status-warning-border. */
+  --warning-500: oklch(68.4% 0.154 65); /* Warning status ramp, step 500. Reference scale: components reach it only through sys tokens. Aliased by status-warning-solid (dark). */
+  --warning-550: oklch(67% 0.153 65); /* Half step between warning-500 and warning-600, used for the light-theme warning solid so it holds 3:1 against white surfaces while dark ink (on-warning-solid) stays above 4.5:1. Reference scale. Aliased by status-warning-solid (light), rating-fill (light). */
+  --warning-600: oklch(59.5% 0.135 64); /* Warning status ramp, step 600. Reference scale: components reach it only through sys tokens. Nothing reads it yet — available for new sys tokens. */
+  --warning-700: oklch(49.9% 0.114 63); /* Warning status ramp, step 700. Reference scale: components reach it only through sys tokens. Aliased by status-warning-fg (light). */
+  --warning-800: oklch(41.5% 0.094 64); /* Warning status ramp, step 800. Reference scale: components reach it only through sys tokens. Nothing reads it yet — available for new sys tokens. */
+  --warning-900: oklch(33.3% 0.074 66); /* Warning status ramp, step 900. Reference scale: components reach it only through sys tokens. Nothing reads it yet — available for new sys tokens. */
+  --warning-950: oklch(24.0% 0.052 66); /* Warning status ramp, step 950. Reference scale: components reach it only through sys tokens. Nothing reads it yet — available for new sys tokens. */
+  --danger-50: oklch(97.2% 0.012 24); /* Danger status ramp (orange-red, hue 30, so errors never read as brand velvet, hue 9), step 50. Reference scale: components reach it only through sys tokens. Read by --status-danger-bg. */
+  --danger-100: oklch(93.5% 0.031 25); /* Danger status ramp (orange-red, hue 30, so errors never read as brand velvet, hue 9), step 100. Reference scale: components reach it only through sys tokens. Nothing reads it yet — available for new sys tokens. */
+  --danger-200: oklch(86.6% 0.066 27); /* Danger status ramp (orange-red, hue 30, so errors never read as brand velvet, hue 9), step 200. Reference scale: components reach it only through sys tokens. Read by --status-danger-border. */
+  --danger-300: oklch(78.0% 0.120 27); /* Danger status ramp (orange-red, hue 30, so errors never read as brand velvet, hue 9), step 300. Reference scale: components reach it only through sys tokens. Nothing reads it yet — available for new sys tokens. */
+  --danger-400: oklch(68.6% 0.173 28); /* Danger status ramp (orange-red, hue 30, so errors never read as brand velvet, hue 9), step 400. Reference scale: components reach it only through sys tokens. Aliased by status-danger-fg (dark); read by --status-danger-bg, --status-danger-border, --focus-ring-danger-color. */
+  --danger-500: oklch(60.1% 0.203 30); /* Danger status ramp (orange-red, hue 30, so errors never read as brand velvet, hue 9), step 500. Reference scale: components reach it only through sys tokens. Read by --focus-ring-danger-color. */
+  --danger-550: oklch(56.5% 0.197 30); /* Half step between danger-500 and danger-600, used in the dark theme where white text needs 4.5:1 on the danger fills (danger-500 gives 4.33:1, danger-600 leaves only 3.0:1 against dark grounds). Reference scale. Aliased by action-danger-hover (dark), status-danger-solid (dark). */
+  --danger-600: oklch(53.3% 0.189 30); /* Danger status ramp (orange-red, hue 30, so errors never read as brand velvet, hue 9), step 600. Reference scale: components reach it only through sys tokens. Aliased by action-danger, status-danger-solid (light). */
+  --danger-700: oklch(45.6% 0.159 30); /* Danger status ramp (orange-red, hue 30, so errors never read as brand velvet, hue 9), step 700. Reference scale: components reach it only through sys tokens. Aliased by action-danger-hover (light), status-danger-fg (light). */
+  --danger-800: oklch(37.8% 0.130 30); /* Danger status ramp (orange-red, hue 30, so errors never read as brand velvet, hue 9), step 800. Reference scale: components reach it only through sys tokens. Nothing reads it yet — available for new sys tokens. */
+  --danger-900: oklch(30.0% 0.102 30); /* Danger status ramp (orange-red, hue 30, so errors never read as brand velvet, hue 9), step 900. Reference scale: components reach it only through sys tokens. Nothing reads it yet — available for new sys tokens. */
+  --danger-950: oklch(22.0% 0.070 30); /* Danger status ramp (orange-red, hue 30, so errors never read as brand velvet, hue 9), step 950. Reference scale: components reach it only through sys tokens. Nothing reads it yet — available for new sys tokens. */
+  --info-50: oklch(96.9% 0.015 261); /* Info status ramp, step 50. Reference scale: components reach it only through sys tokens. Read by --status-info-bg. */
+  --info-100: oklch(92.8% 0.033 261); /* Info status ramp, step 100. Reference scale: components reach it only through sys tokens. Nothing reads it yet — available for new sys tokens. */
+  --info-200: oklch(85.3% 0.068 261); /* Info status ramp, step 200. Reference scale: components reach it only through sys tokens. Read by --status-info-border. */
+  --info-300: oklch(76.0% 0.110 260); /* Info status ramp, step 300. Reference scale: components reach it only through sys tokens. Nothing reads it yet — available for new sys tokens. */
+  --info-400: oklch(66.8% 0.151 260); /* Info status ramp, step 400. Reference scale: components reach it only through sys tokens. Aliased by status-info-fg (dark); read by --status-info-bg, --status-info-border. */
+  --info-500: oklch(56.2% 0.179 260); /* Info status ramp, step 500. Reference scale: components reach it only through sys tokens. Aliased by status-info-solid (dark). */
+  --info-600: oklch(48.4% 0.167 261); /* Info status ramp, step 600. Reference scale: components reach it only through sys tokens. Aliased by status-info-solid (light). */
+  --info-700: oklch(41.6% 0.137 261); /* Info status ramp, step 700. Reference scale: components reach it only through sys tokens. Aliased by status-info-fg (light). */
+  --info-800: oklch(35.5% 0.114 261); /* Info status ramp, step 800. Reference scale: components reach it only through sys tokens. Nothing reads it yet — available for new sys tokens. */
+  --info-900: oklch(29.5% 0.091 261); /* Info status ramp, step 900. Reference scale: components reach it only through sys tokens. Nothing reads it yet — available for new sys tokens. */
+  --info-950: oklch(21.5% 0.062 261); /* Info status ramp, step 950. Reference scale: components reach it only through sys tokens. Nothing reads it yet — available for new sys tokens. */
+  --hue-blue: oklch(55% 0.15 258); /* Categorical hue (blue) used to build the data-viz series and decorative label colours; never for UI status. Aliased by label-blue; read by --dv-1. */
+  --hue-indigo: oklch(55% 0.15 280); /* Categorical hue (indigo) used to build the data-viz series and decorative label colours; never for UI status. Aliased by label-indigo; read by --dv-7. */
+  --hue-violet: oklch(55% 0.16 300); /* Categorical hue (violet) used to build the data-viz series and decorative label colours; never for UI status. Aliased by label-violet; read by --dv-4. */
+  --hue-magenta: oklch(55% 0.17 330); /* Categorical hue (magenta) used to build the data-viz series and decorative label colours; never for UI status. Aliased by label-magenta; read by --dv-2. */
+  --hue-teal: oklch(55% 0.10 190); /* Categorical hue (teal) used to build the data-viz series and decorative label colours; never for UI status. Aliased by label-teal; read by --dv-3. */
+  --hue-cyan: oklch(55% 0.11 225); /* Categorical hue (cyan) used to build the data-viz series and decorative label colours; never for UI status. Aliased by label-cyan; read by --dv-6. */
+  --hue-olive: oklch(55% 0.10 115); /* Categorical hue (olive) used to build the data-viz series and decorative label colours; never for UI status. Aliased by label-olive; read by --dv-5. */
+  --hue-slate: oklch(55% 0.03 265); /* Categorical hue (slate) used to build the data-viz series and decorative label colours; never for UI status. Aliased by label-slate; read by --dv-8. */
+  --syntax-bg: oklch(17.5% 0.010 25); /* Code-block palette, ground: fixed dark ground, identical in both themes. Read only by the sys --code-* tokens. Aliased by code-bg. */
+  --syntax-fg: oklch(92.5% 0.008 355); /* Code-block palette, default text: fixed dark ground, identical in both themes. Read only by the sys --code-* tokens. Aliased by code-fg. */
+  --syntax-muted: oklch(70.5% 0.014 355); /* Code-block palette, muted text: fixed dark ground, identical in both themes. Read only by the sys --code-* tokens. Aliased by code-muted. */
+  --syntax-gutter: oklch(59.0% 0.014 355); /* Code-block palette, line-number gutter: fixed dark ground, identical in both themes. Read only by the sys --code-* tokens. Aliased by code-gutter. */
+  --syntax-comment: oklch(60.0% 0.012 355); /* Code-block palette, comments: fixed dark ground, identical in both themes. Read only by the sys --code-* tokens. Aliased by code-comment. */
+  --syntax-keyword: oklch(75.0% 0.120 360); /* Code-block palette, keywords: fixed dark ground, identical in both themes. Read only by the sys --code-* tokens. Aliased by code-keyword. */
+  --syntax-string: oklch(83.0% 0.080 150); /* Code-block palette, strings: fixed dark ground, identical in both themes. Read only by the sys --code-* tokens. Aliased by code-string. */
+  --syntax-number: oklch(81.5% 0.110 70); /* Code-block palette, numbers: fixed dark ground, identical in both themes. Read only by the sys --code-* tokens. Aliased by code-number. */
+  --syntax-function: oklch(77.0% 0.110 260); /* Code-block palette, function names: fixed dark ground, identical in both themes. Read only by the sys --code-* tokens. Aliased by code-function. */
+  --syntax-added: oklch(79.5% 0.120 155); /* Code-block palette, added lines in diffs: fixed dark ground, identical in both themes. Read only by the sys --code-* tokens. Aliased by code-added. */
+  --tint: var(--velvet-950); /* Tint base for hairline borders: velvet-950 in light (wine-tinted), black in dark. The shadow ladder in `shadow` is built from the same two colours. Read by --border-subtle, --border-default, --border-strong. */
+  --wash: var(--neutral-900); /* State-layer base for hover, pressed and selected washes: neutral-900 in light, white in dark. Read by --bg-hover, --bg-pressed, .vui-table. */
+  --bg-page: var(--neutral-25); /* Page background: the base ground of every screen. Contrast on it (light / dark): fg-primary 16.7 / 17.5, fg-secondary 6.7 / 11.2, fg-tertiary 5.4 / 7.1. Read by --env-neutral-chip-fg, --hc-soft, --rr, EditableCollection, .vui-page-loader. */
+  --bg-subtle: var(--neutral-50); /* Subtle ground one step off the page: tinted bars such as card footers. Contrast on it (light / dark): fg-primary 15.9 / 16.9, fg-secondary 6.4 / 10.8, fg-tertiary 5.1 / 6.8. Read by --trend-flat-bg, --env-neutral-bg, --card-footer-bg, AnalysisRequest, DataGrid, Gantt. */
+  --bg-raised: var(--neutral-0); /* Raised ground: cards and panels. White in light, one step lighter than the page in dark. Contrast on it (light / dark): fg-primary 17.3 / 15.9, fg-secondary 6.9 / 10.2, fg-tertiary 5.5 / 6.4. Read by --surface-bg, --button-secondary-bg, --count-ring, AnalysisRequest, NotificationCenter, MenuChip. */
+  --bg-sunken: var(--neutral-100); /* Sunken ground: tracks, wells and inset areas, darker than the page in both themes. Contrast on it (light / dark): fg-primary 14.7 / 18.2, fg-secondary 5.9 / 11.6, fg-tertiary 4.7 / 7.4. Aliased by skeleton-base; read by --segment-bg, --media-bg, --meter-track, IconTile, TransferList, AnalysisRequest. */
+  --bg-overlay: var(--neutral-0); /* Overlay ground: popovers, menus and dialogs. White in light, the lightest dark step in dark. Contrast on it (light / dark): fg-primary 17.3 / 13.0, fg-secondary 6.9 / 8.3, fg-tertiary 5.5 / 5.3. Read by --panel-bg, --dialog-bg, .vui-fab, .vui-btn, CalendarEventButton. */
+  --bg-field: var(--neutral-0); /* Field ground: inputs, selects and other typed-into controls. Contrast on it (light / dark): fg-primary 17.3 / 16.9, fg-secondary 6.9 / 10.8, fg-tertiary 5.5 / 6.8. Read by --control-bg, Radio, OtpInput, RichTextEditor. */
+  --bg-inverse: var(--neutral-900); /* Inverse ground, dark in light and light in dark, for high-emphasis surfaces. Text on it is fg-inverse (17.3 / 15.9 light / dark). Read by --tooltip-bg, Surface, Count, .vui-skiplink. */
+  --bg-brand: var(--velvet-700); /* Brand fill: velvet-700 in light, velvet-600 in dark. Text on it is on-color-fg (9.8 / 7.2 light / dark). Read by --footer-mark-bg, AnalysisRequest. */
+  --bg-media: var(--neutral-1000); /* Fixed near-black ground for media surfaces, identical in both themes. */
+  --fg-primary: var(--neutral-900); /* Body copy and headings on every bg-* ground (page, subtle, raised, sunken, overlay, field): at least 14.7:1 light, 13.0:1 dark. Read by --env-neutral-fg, --button-secondary-fg, --button-ghost-fg, Surface, MenuChip, Markdown. */
+  --fg-secondary: var(--neutral-600); /* Secondary copy, descriptions and resting icons on every bg-* ground: at least 5.9:1 light, 8.3:1 dark. Read by --trend-flat-fg, --env-neutral-chip-bg, --nav-item-fg, AtsAnalysisPanel, AnalysisRequest, Pagination. */
+  --fg-tertiary: var(--neutral-550); /* Metadata, captions and placeholders: at least 4.7:1 light, 5.3:1 dark on every bg-* ground. Kept a step quieter than fg-secondary (neutral-550 in light), so use fg-secondary where the text carries the message. Aliased by dv-axis; read by --trend-flat-solid, --chart-median, --control-placeholder, AnalysisRequest, AiResultPanel, AtsAnalysisPanel. */
+  --fg-disabled: var(--neutral-400); /* Disabled text and icons (2.0-2.8:1 by design, which WCAG exempts for inactive controls). Never for information the person must read. Read by TransferList, Calendar, CalendarEventButton. */
+  --fg-inverse: var(--neutral-0); /* Text on bg-inverse (17.3 / 15.9 light / dark). Read by --tooltip-fg, .vui-skiplink, Surface, Count. */
+  --fg-brand: var(--velvet-700); /* Brand-coloured text, active navigation and brand icons on every bg-* ground: at least 8.3:1 light (velvet-700), 6.6:1 dark (velvet-300). Read by --option-check, --nav-item-fg-active, --mark-mention-fg, MenuChip, DataGrid, Select. */
+  --fg-link: var(--velvet-700); /* Link text on every bg-* ground: at least 8.3:1 light, 6.6:1 dark. Read by .vui-btn, TransferList, Link. */
+  --fg-link-hover: var(--velvet-900); /* Link text on hover, one step stronger than fg-link: at least 11.9:1 light, 9.4:1 dark on every bg-* ground. Read by .vui-btn, Link. */
+  --selection-bg: var(--velvet-200); /* Text-selection background (velvet-200 in light, velvet-700 in dark). Text on it is selection-fg. */
+  --selection-fg: var(--velvet-950); /* Text colour inside a selection, on selection-bg (11.8 / 9.8 light / dark). */
+  --border-focus: var(--velvet-600); /* Focus ring colour (velvet-600 in light, velvet-400 in dark): 6.9:1 light, 5.1:1 dark against bg-page, bg-raised and bg-field (3:1 needed). Read by --focus-ring-inset, --focus-outline, --control-border-focus, FileUpload, ColumnResize, OtpInput. */
+  --border-brand: var(--velvet-700); /* Brand-coloured border for selected and active controls: 9.5:1 light, 5.1:1 dark against bg-page, bg-raised and bg-field. Read by Surface, MenuChip, Tag. */
+  --border-control: oklch(61% 0.009 353); /* Boundary of form controls: field shells, checkbox and radio boxes and the off track of switches. At least 3.2:1 light, 3.2:1 dark against every bg-* ground (3:1 needed for a boundary that carries meaning). Hairlines for dividers and card edges stay on --border-subtle/-default. Read by --control-border, --check-border, --switch-track. */
+  --border-control-hover: var(--neutral-500); /* Hover boundary of form controls, one step stronger than border-control: at least 3.8:1 light, 5.3:1 dark. Read by --control-border-hover. */
+  --action-primary: var(--velvet-700); /* Primary action fill (velvet-700 in light, velvet-600 in dark). action-primary-fg on it: 9.8 / 7.2 light / dark. Read by --button-primary-bg, --check-on, --switch-track-on, Surface, AnalysisRequest, ThemeToggle. */
+  --action-primary-hover: var(--velvet-800); /* Primary action fill on hover (one step darker in light, one step lighter in dark). action-primary-fg on it: 12.0 / 5.2 light / dark. Read by --button-primary-bg-hover, --check-on-hover, .vui-fab, BottomNav, .vui-audio. */
+  --action-primary-active: var(--velvet-900); /* Primary action fill while pressed. action-primary-fg on it: 13.9 / 9.8 light / dark. Read by --button-primary-bg-active, --check-on-active. */
+  --action-primary-fg: var(--white); /* Label and icon colour on action-primary, -hover and -active: white in both themes, at least 5.2:1 on all three. Read by --button-primary-fg, --check-mark, --count-fg, Calendar, .vui-fab, ThemeToggle. */
+  --action-soft-fg: var(--velvet-700); /* Label colour of soft (tinted) actions on bg-* grounds: at least 8.3:1 light, 9.4:1 dark. Read by --button-soft-fg, QuestionCard, Tag, Navbar. */
+  --action-danger: var(--danger-600); /* Destructive action fill. action-danger-fg on it: 5.7 / 5.7 light / dark. Read by --button-danger-bg. */
+  --action-danger-hover: var(--danger-700); /* Destructive action fill on hover. action-danger-fg on it: 7.9 / 5.0 light / dark. Read by --button-danger-bg-hover. */
+  --action-danger-fg: var(--white); /* Label and icon colour on action-danger (white in both themes); see action-danger and action-danger-hover for the contrast. Read by --button-danger-fg. */
+  --on-color-fg: var(--white); /* White text and icons on solid fills: at least 4.7:1 in both themes on bg-brand, the action-primary and action-danger fills and the success, danger, info and neutral solids. Not for status-warning-solid: it takes on-warning-solid. Read by --env-info-chip-fg, --env-danger-fg, --env-danger-chip-bg, .vui-navbar-mb, ThemeToggle, Navbar. */
+  --on-warning-solid: var(--neutral-900); /* Dark ink for text and icons on status-warning-solid (5.6:1 light, 5.9:1 dark). Warning fills never take white: amber is too light for it. Read by --env-warning-chip-fg, Badge. */
+  --status-success-fg: var(--success-700); /* Success text and icons on every bg-* ground: at least 6.3:1 light, 5.6:1 dark. Pair with an icon or a label, never colour alone. Read by --trend-pos-fg, --tone-fg, .vui-toast, AiResultPanel, AtsAnalysisPanel. */
+  --status-success-solid: var(--success-600); /* Success solid fill (badge, tag and dot fills). on-color-fg on it: 5.4:1 light, 5.4:1 dark. Against bg-raised (light / dark): 5.4 / 3.2. Read by --trend-pos-solid, --rail-done, --tone, AnalysisRequest, Count, Badge. */
+  --status-warning-fg: var(--warning-700); /* Warning text and icons on every bg-* ground: at least 5.3:1 light, 6.9:1 dark. Pair with an icon or a label, never colour alone. Read by --env-warning-fg, --trend-neg-fg, --tone-fg, AtsAnalysisPanel, .vui-toast, Alert. */
+  --status-warning-solid: var(--warning-550); /* Warning solid fill (badge, tag and dot fills). Text on it is on-warning-solid (5.6:1 light, 5.9:1 dark). Against bg-raised (light / dark): 3.1 / 5.9. Read by --env-warning-chip-bg, --trend-neg-solid, --tone, LogViewer, Tag, Badge. */
+  --status-danger-fg: var(--danger-700); /* Danger text and icons on every bg-* ground: at least 6.7:1 light, 4.7:1 dark. Pair with an icon or a label, never colour alone. Read by --trend-neg-fg, --env-danger-chip-fg, --field-error-fg, AuthButton, AiResultPanel, AnalysisRequest. */
+  --status-danger-solid: var(--danger-600); /* Danger solid fill (badge, tag and dot fills). on-color-fg on it: 5.7:1 light, 5.0:1 dark. Against bg-raised (light / dark): 5.7 / 3.4. Read by --trend-neg-solid, --env-danger-bg, --env-danger-border, DiffViewer, Scheduler, LogViewer. */
+  --status-info-fg: var(--info-700); /* Info text and icons on every bg-* ground: at least 7.5:1 light, 4.6:1 dark. Pair with an icon or a label, never colour alone. Read by --env-info-fg, --trend-pos-fg, --tone-fg, .vui-toast, AiResultPanel, Badge. */
+  --status-info-solid: var(--info-600); /* Info solid fill (badge, tag and dot fills). on-color-fg on it: 6.6:1 light, 4.7:1 dark. Against bg-raised (light / dark): 6.6 / 3.6. Read by --env-info-chip-bg, --trend-pos-solid, --tone, Badge, Alert, EventCalendar. */
+  --status-neutral-solid: var(--neutral-800); /* Neutral solid fill for badges and chips that carry no status (neutral-800 in both themes). on-color-fg on it: 14.2 / 14.2 light / dark. Read by Alert. */
+  --rating-fill: var(--warning-550); /* Filled star colour (warning-550 in light, warning-400 in dark): 3.1:1 light, 8.5:1 dark against bg-raised (3:1 needed for a mark that carries meaning). Still show the number or a label. Read by Meter, Rating, RatingSummary. */
+  --skeleton-base: var(--bg-sunken); /* Base colour of skeleton placeholders (aliases bg-sunken in both themes); the shimmer is drawn over it. Read by Skeleton. */
+  --thumb-bg: var(--white); /* Thumb of switches and sliders: white in both themes. Read by --switch-thumb, Slider. */
+  --label-blue: var(--hue-blue); /* Decorative label colour (blue), uniform OKLCH lightness 55%. White text on the fill: 4.9:1. Clear of velvet, red, green and orange so a label never reads as brand or status. Apply with data-tone="blue" (sets --tone, --tone-bg, --tone-fg). Read by --tone. */
+  --label-indigo: var(--hue-indigo); /* Decorative label colour (indigo), uniform OKLCH lightness 55%. White text on the fill: 5.1:1. Clear of velvet, red, green and orange so a label never reads as brand or status. Apply with data-tone="indigo" (sets --tone, --tone-bg, --tone-fg). Read by --tone. */
+  --label-violet: var(--hue-violet); /* Decorative label colour (violet), uniform OKLCH lightness 55%. White text on the fill: 5.2:1. Clear of velvet, red, green and orange so a label never reads as brand or status. Apply with data-tone="violet" (sets --tone, --tone-bg, --tone-fg). Read by --tone. */
+  --label-magenta: var(--hue-magenta); /* Decorative label colour (magenta), uniform OKLCH lightness 55%. White text on the fill: 5.3:1. Clear of velvet, red, green and orange so a label never reads as brand or status. Apply with data-tone="magenta" (sets --tone, --tone-bg, --tone-fg). Read by --tone. */
+  --label-teal: var(--hue-teal); /* Decorative label colour (teal), uniform OKLCH lightness 55%. White text on the fill: 4.6:1. Clear of velvet, red, green and orange so a label never reads as brand or status. Apply with data-tone="teal" (sets --tone, --tone-bg, --tone-fg). Read by --tone. */
+  --label-cyan: var(--hue-cyan); /* Decorative label colour (cyan), uniform OKLCH lightness 55%. White text on the fill: 4.7:1. Clear of velvet, red, green and orange so a label never reads as brand or status. Apply with data-tone="cyan" (sets --tone, --tone-bg, --tone-fg). Read by --tone. */
+  --label-olive: var(--hue-olive); /* Decorative label colour (olive), uniform OKLCH lightness 55%. White text on the fill: 4.8:1. Clear of velvet, red, green and orange so a label never reads as brand or status. Apply with data-tone="olive" (sets --tone, --tone-bg, --tone-fg). Read by --tone. */
+  --label-slate: var(--hue-slate); /* Decorative label colour (slate), uniform OKLCH lightness 55%. White text on the fill: 4.9:1. Clear of velvet, red, green and orange so a label never reads as brand or status. Apply with data-tone="slate" (sets --tone, --tone-bg, --tone-fg). Read by --tone. */
+  --dv-seq-1: var(--velvet-100); /* Sequential data-viz ramp, step 1 of 5 (low to high) for single-measure charts such as heatmaps. Never for UI status. */
+  --dv-seq-2: var(--velvet-300); /* Sequential data-viz ramp, step 2 of 5 (low to high) for single-measure charts such as heatmaps. Never for UI status. */
+  --dv-seq-3: var(--velvet-500); /* Sequential data-viz ramp, step 3 of 5 (low to high) for single-measure charts such as heatmaps. Never for UI status. */
+  --dv-seq-4: var(--velvet-700); /* Sequential data-viz ramp, step 4 of 5 (low to high) for single-measure charts such as heatmaps. Never for UI status. */
+  --dv-seq-5: var(--velvet-900); /* Sequential data-viz ramp, step 5 of 5 (low to high) for single-measure charts such as heatmaps. Never for UI status. */
+  --dv-axis: var(--fg-tertiary); /* Axis and gridline ink in charts (aliases fg-tertiary). Read by .vui-heat, .vui-chart. */
+  --code-bg: var(--syntax-bg); /* Code surface ground for the .vui-code family (CodeSnippet, CodeEditor, DiffViewer, LogViewer). Fixed dark ground, identical in both themes. Read by LogViewer, Markdown, .vui-ce. */
+  --code-fg: var(--syntax-fg); /* Code surface default text for the .vui-code family (CodeSnippet, CodeEditor, DiffViewer, LogViewer). Fixed dark ground, identical in both themes. Read by .vui-ce, LogViewer, Markdown. */
+  --code-border: var(--neutral-800); /* Code surface border for the .vui-code family (CodeSnippet, CodeEditor, DiffViewer, LogViewer). Fixed dark ground, identical in both themes. Read by .vui-ce, CodeSnippet. */
+  --code-muted: var(--syntax-muted); /* Code surface muted text for the .vui-code family (CodeSnippet, CodeEditor, DiffViewer, LogViewer). Fixed dark ground, identical in both themes. Read by LogViewer, CodeSnippet, DiffViewer. */
+  --code-gutter: var(--syntax-gutter); /* Code surface line-number gutter for the .vui-code family (CodeSnippet, CodeEditor, DiffViewer, LogViewer). Fixed dark ground, identical in both themes. Read by .vui-ce, CodeSnippet, DiffViewer. */
+  --code-comment: var(--syntax-comment); /* Code surface comments for the .vui-code family (CodeSnippet, CodeEditor, DiffViewer, LogViewer). Fixed dark ground, identical in both themes. Read by .vui-ce. */
+  --code-accent: var(--velvet-400); /* Accent colour on code surfaces. Fixed dark ground, identical in both themes. Read by LogViewer, .vui-ce, CodeSnippet. */
+  --code-keyword: var(--syntax-keyword); /* Code surface keywords for the .vui-code family (CodeSnippet, CodeEditor, DiffViewer, LogViewer). Fixed dark ground, identical in both themes. Read by .vui-ce. */
+  --code-string: var(--syntax-string); /* Code surface strings for the .vui-code family (CodeSnippet, CodeEditor, DiffViewer, LogViewer). Fixed dark ground, identical in both themes. Read by .vui-ce. */
+  --code-number: var(--syntax-number); /* Code surface numbers for the .vui-code family (CodeSnippet, CodeEditor, DiffViewer, LogViewer). Fixed dark ground, identical in both themes. Read by .vui-ce. */
+  --code-function: var(--syntax-function); /* Code surface function names for the .vui-code family (CodeSnippet, CodeEditor, DiffViewer, LogViewer). Fixed dark ground, identical in both themes. Read by .vui-ce, LogViewer. */
+  --code-added: var(--syntax-added); /* Code surface added lines in diffs for the .vui-code family (CodeSnippet, CodeEditor, DiffViewer, LogViewer). Fixed dark ground, identical in both themes. Read by DiffViewer, CodeSnippet. */
+  --shadow-xs: 0 1px 2px oklch(21.9% 0.088 6 / 0.06); /* Shadow ladder step 1 of 5. Components read it through --elevation-control (inputs and flat controls). Wine-tinted (velvet-950) in light, black in dark. */
+  --shadow-sm: 0 1px 3px oklch(21.9% 0.088 6 / 0.08), 0 1px 2px oklch(21.9% 0.088 6 / 0.04); /* Shadow ladder step 2 of 5: the card shadow, read through --elevation-card. Dark adds a 1px inset top highlight. */
+  --shadow-md: 0 4px 12px -2px oklch(21.9% 0.088 6 / 0.09), 0 2px 4px -2px oklch(21.9% 0.088 6 / 0.05); /* Shadow ladder step 3 of 5: hovered cards, read through --elevation-card-hover. Dark adds a 1px inset top highlight. */
+  --shadow-lg: 0 12px 32px -8px oklch(21.9% 0.088 6 / 0.14), 0 4px 8px -4px oklch(21.9% 0.088 6 / 0.06); /* Shadow ladder step 4 of 5: raised surfaces and popovers, read through --elevation-raised, --elevation-popover and --elevation-brand. */
+  --shadow-xl: 0 24px 64px -12px oklch(21.9% 0.088 6 / 0.22), 0 8px 16px -8px oklch(21.9% 0.088 6 / 0.08); /* Shadow ladder step 5 of 5: dialogs, read through --elevation-dialog. */
+  --shadow-drawer-right: -12px 0 40px -8px oklch(21.9% 0.088 6 / 0.16); /* Shadow cast to the left by a drawer docked on the right; read through --elevation-drawer-right. */
+  --shadow-drawer-left: 12px 0 40px -8px oklch(21.9% 0.088 6 / 0.16); /* Shadow cast to the right by a drawer docked on the left; read through --elevation-drawer-left. */
+  --shadow-media: 0 20px 60px oklch(0% 0 0 / 0.5); /* Shadow under floating media (lightbox, video): black at 50% in both themes; read through --elevation-media. */
+}
+[data-theme="dark"] {
+  --tint: var(--black);
+  --wash: var(--white);
+  --bg-page: var(--neutral-950);
+  --bg-subtle: var(--neutral-925);
+  --bg-raised: var(--neutral-900);
+  --bg-sunken: var(--neutral-1000);
+  --bg-overlay: var(--neutral-800);
+  --bg-field: var(--neutral-925);
+  --bg-inverse: var(--neutral-50);
+  --bg-brand: var(--velvet-600);
+  --bg-media: var(--neutral-1000);
+  --fg-primary: var(--neutral-50);
+  --fg-secondary: var(--neutral-300);
+  --fg-tertiary: var(--neutral-400);
+  --fg-disabled: var(--neutral-600);
+  --fg-inverse: var(--neutral-900);
+  --fg-brand: var(--velvet-300);
+  --fg-link: var(--velvet-300);
+  --fg-link-hover: var(--velvet-200);
+  --selection-bg: var(--velvet-700);
+  --selection-fg: var(--white);
+  --border-focus: var(--velvet-400);
+  --border-brand: var(--velvet-400);
+  --border-control: var(--neutral-500);
+  --border-control-hover: var(--neutral-400);
+  --action-primary: var(--velvet-600);
+  --action-primary-hover: var(--velvet-500);
+  --action-primary-active: var(--velvet-700);
+  --action-primary-fg: var(--white);
+  --action-soft-fg: var(--velvet-200);
+  --action-danger: var(--danger-600);
+  --action-danger-hover: var(--danger-550);
+  --action-danger-fg: var(--white);
+  --on-color-fg: var(--white);
+  --on-warning-solid: var(--neutral-900);
+  --status-success-fg: var(--success-400);
+  --status-success-solid: var(--success-600);
+  --status-warning-fg: var(--warning-400);
+  --status-warning-solid: var(--warning-500);
+  --status-danger-fg: var(--danger-400);
+  --status-danger-solid: var(--danger-550);
+  --status-info-fg: var(--info-400);
+  --status-info-solid: var(--info-500);
+  --status-neutral-solid: var(--neutral-800);
+  --rating-fill: var(--warning-400);
+  --skeleton-base: var(--bg-sunken);
+  --thumb-bg: var(--white);
+  --label-blue: var(--hue-blue);
+  --label-indigo: var(--hue-indigo);
+  --label-violet: var(--hue-violet);
+  --label-magenta: var(--hue-magenta);
+  --label-teal: var(--hue-teal);
+  --label-cyan: var(--hue-cyan);
+  --label-olive: var(--hue-olive);
+  --label-slate: var(--hue-slate);
+  --dv-seq-1: var(--velvet-900);
+  --dv-seq-2: var(--velvet-700);
+  --dv-seq-3: var(--velvet-500);
+  --dv-seq-4: var(--velvet-300);
+  --dv-seq-5: var(--velvet-100);
+  --dv-axis: var(--fg-tertiary);
+  --code-bg: var(--syntax-bg);
+  --code-fg: var(--syntax-fg);
+  --code-border: var(--neutral-800);
+  --code-muted: var(--syntax-muted);
+  --code-gutter: var(--syntax-gutter);
+  --code-comment: var(--syntax-comment);
+  --code-accent: var(--velvet-400);
+  --code-keyword: var(--syntax-keyword);
+  --code-string: var(--syntax-string);
+  --code-number: var(--syntax-number);
+  --code-function: var(--syntax-function);
+  --code-added: var(--syntax-added);
+  --shadow-xs: 0 1px 2px oklch(0% 0 0 / 0.4);
+  --shadow-sm: 0 1px 3px oklch(0% 0 0 / 0.45), inset 0 1px 0 oklch(100% 0 0 / 0.03);
+  --shadow-md: 0 4px 12px -2px oklch(0% 0 0 / 0.5), inset 0 1px 0 oklch(100% 0 0 / 0.04);
+  --shadow-lg: 0 12px 32px -8px oklch(0% 0 0 / 0.6), inset 0 1px 0 oklch(100% 0 0 / 0.05);
+  --shadow-xl: 0 24px 64px -12px oklch(0% 0 0 / 0.7), inset 0 1px 0 oklch(100% 0 0 / 0.06);
+  --shadow-drawer-right: -12px 0 40px -8px oklch(0% 0 0 / 0.55);
+  --shadow-drawer-left: 12px 0 40px -8px oklch(0% 0 0 / 0.55);
+}
+:root {
+  --space-0: 0; /* No spacing. */
+  --space-px: 1px; /* 1px hairline gap. Read by .vui-mde, ConfirmDialog, .vui-nav-sub. */
+  --space-0-5: 2px; /* 2px half step. Read by --segment-gap, Switch, CalendarOrganizer, LocaleSwitcher. */
+  --space-1: 4px; /* 4px: the base unit of the 4px grid. Read by --panel-pad, --rail-gap, CalendarOrganizer, Timeline, AtsAnalysisPanel. */
+  --space-1-5: 6px; /* 6px half step. Read by --field-gap, AtsAnalysisPanel, TransferList, CalendarOrganizer. */
+  --space-2: 8px; /* 8px step on the 4px grid. Read by --button-gap, --tooltip-offset, --badge-px, ColumnManager, TransferList, AnalysisRequest. */
+  --space-2-5: 10px; /* 10px half step. Read by --option-px, --option-gap, --tag-px, AnalysisRequest, TransferList, Sidebar. */
+  --space-3: 12px; /* 12px step on the 4px grid. Read by --button-px-sm, --segment-px, .vui-acct, AnalysisRequest, QueryBuilder. */
+  --space-3-5: 14px; /* 14px half step. Read by AtsAnalysisPanel, RichTextEditor, .vui-mde. */
+  --space-4: 16px; /* 16px step: the common gap between related blocks. Read by --grid-gap-sm, --stack-gap, --viewport-margin, Accordion, PageHeader, Markdown. */
+  --space-5: 20px; /* 20px step: card padding. Read by --surface-pad-md, AnalysisRequest, Accordion, Footer. */
+  --space-6: 24px; /* 24px step: dialog padding. Read by --grid-gap, --content-gap, --button-px-lg, Markdown, .vui-envbar, PageHeader. */
+  --space-7: 28px; /* 28px step on the 4px grid. Read by FileUpload, .vui-fc-summary, AiResultPanel. */
+  --space-8: 32px; /* 32px step on the 4px grid. Read by --surface-pad-lg, --footer-pad, --footer-col-gap, ThemeToggle, .vui-player, Control. */
+  --space-10: 40px; /* 40px step on the 4px grid. Read by Swatch, EmptyState, .vui-table. */
+  --space-12: 48px; /* 48px step on the 4px grid. Read by Alert, .vui-dialog, .vui-table. */
+  --space-16: 64px; /* 64px step on the 4px grid. Read by QueryBuilder, EmptyState. */
+  --space-20: 80px; /* 80px step on the 4px grid. */
+  --space-24: 96px; /* 96px step on the 4px grid. */
+  --border-width: 1px; /* 1px hairline: the default border and divider width. Read by .vui-table, Gantt, AnalysisRequest. */
+  --border-width-medium: 1.5px; /* 1.5px ring for dashed drop zones and outlined markers. Read by --marker-border, Kanban, FileUpload, Sidebar. */
+  --border-width-thick: 2px; /* 2px: keyboard focus and the active-tab indicator only. Read by --focus-ring-inset, --focus-outline, --tab-indicator, .vui-navbar-mb, Checkmark, ColorLabelManager. */
+  --border-width-accent: 3px; /* 3px accent strip (for example the tone strip on a Stat). Read by RichTextEditor, .vui-table, Accordion. */
+  --size-dot-sm: 4px; /* 4px dot. Read by Dot. */
+  --size-dot: 6px; /* 6px dot: status and presence markers. Read by Dot, .vui-hint, Slider. */
+  --size-dot-lg: 8px; /* 8px dot. Read by --marker-dot-sm, Dot, .vui-indicator, Avatar. */
+  --size-icon-xs: 12px; /* 12px icon size. The icon scale is 12/14/16/18/20/24px, with no 15, 17 or 22. Read by SectionLabel, .vui-icon, MenuChip. */
+  --size-icon-sm: 14px; /* 14px icon size. The icon scale is 12/14/16/18/20/24px, with no 15, 17 or 22. Read by ThemeToggle, Marker, .vui-icon. */
+  --size-icon-md: 16px; /* 16px icon size. The icon scale is 12/14/16/18/20/24px, with no 15, 17 or 22. Read by Tag, Option, IconTile. */
+  --size-icon-lg: 18px; /* 18px icon size. The icon scale is 12/14/16/18/20/24px, with no 15, 17 or 22. Read by ThemeToggle, Rating, TreeSelect. */
+  --size-icon-xl: 20px; /* 20px icon size. The icon scale is 12/14/16/18/20/24px, with no 15, 17 or 22. Read by IconTile, .vui-icon, Slider. */
+  --size-icon-2xl: 24px; /* 24px icon size. The icon scale is 12/14/16/18/20/24px, with no 15, 17 or 22. Read by IconTile, EmptyText, .vui-fab. */
+  --size-check: 18px; /* 18px check or radio box. Read by --check-size, MenuChip, AnalysisRequest. */
+  --size-check-sm: 16px; /* 16px check or radio box (small). Read by Checkmark, Checkbox. */
+  --size-swatch: 28px; /* 28px colour swatch. Read by Swatch, ColorLabelManager. */
+  --size-track-sm: 4px; /* 4px progress or meter track. Read by --slider-track-h, Meter, .vui-sheet. */
+  --size-track: 6px; /* 6px progress or meter track. Read by Meter. */
+  --size-track-lg: 8px; /* 8px progress or meter track. Read by Meter. */
+  --size-avatar-xs: 24px; /* 24px avatar (xs); the scale is 24/28/32/40/56px. Read by Avatar. */
+  --size-avatar-sm: 28px; /* 28px avatar (sm); the scale is 24/28/32/40/56px. Read by Avatar. */
+  --size-avatar-md: 32px; /* 32px avatar (md); the scale is 24/28/32/40/56px. Read by Avatar. */
+  --size-avatar-lg: 40px; /* 40px avatar (lg); the scale is 24/28/32/40/56px. Read by Avatar. */
+  --size-avatar-xl: 56px; /* 56px avatar (xl); the scale is 24/28/32/40/56px. Read by Avatar. */
+  --size-icon-tile-xs: 28px; /* 28px icon tile (xs): the tinted glyph box in notification, source, file and feature rows. Read by IconTile, TransferList. */
+  --size-icon-tile-sm: 32px; /* 32px icon tile (sm): the tinted glyph box in notification, source, file and feature rows. Read by IconTile. */
+  --size-icon-tile-md: 36px; /* 36px icon tile (md): the tinted glyph box in notification, source, file and feature rows. Read by IconTile. */
+  --size-icon-tile-lg: 40px; /* 40px icon tile (lg): the tinted glyph box in notification, source, file and feature rows. Read by IconTile. */
+  --size-icon-tile-xl: 48px; /* 48px icon tile (xl): the tinted glyph box in notification, source, file and feature rows. Read by IconTile. */
+  --size-icon-tile-2xl: 56px; /* 56px icon tile (2xl): the tinted glyph box in notification, source, file and feature rows. Read by IconTile. */
+  --size-icon-tile-3xl: 72px; /* 72px icon tile (3xl): the tinted glyph box in notification, source, file and feature rows. Read by IconTile. */
+  --radius-none: 0; /* Square corners. */
+  --radius-2xs: 2px; /* 2px: bars, marks and tracks. Read by Tabs, Gantt, .vui-tab. */
+  --radius-xs: 4px; /* 4px: chips and code. Read by --check-radius, .vui-btn, VirtualList, Markdown. */
+  --radius-sm: 6px; /* 6px: small controls. Read by --button-radius-sm, --control-radius-sm, --tooltip-radius, IconTile, LogViewer, FunnelChart. */
+  --radius-md: 8px; /* 8px: buttons and fields. Read by --radius-nested, --button-radius, --control-radius, Calendar, AnalysisRequest, TransferList. */
+  --radius-lg: 12px; /* 12px: cards and panels. Read by --surface-radius, --panel-radius, --media-radius, .vui-dgrid, .vui-cmpdlg, AnalysisRequest. */
+  --radius-xl: 16px; /* 16px: dialogs and the FAB. Read by --dialog-radius, --fab-radius, .vui-chatmsg, .vui-dialog, IconTile. */
+  --radius-2xl: 24px; /* 24px: hero tiles. Read by IconTile. */
+  --radius-full: 999px; /* Fully round: badges, switches and avatars. No pill buttons. Read by --badge-radius, --meter-radius, Slider, LocaleSwitcher, .vui-acct. */
+  --control-height-xs: 24px; /* 24px control height (xs), comfortable density. Read by --sl-thumb, Control, .vui-btn, DataGrid. */
+  --control-height-sm: 32px; /* 32px control height (sm) for buttons, fields, selects, segmented tracks and toolbars; 28px in compact density, 36px on coarse pointers. Read by .vui-navbar-mb, ComparisonBar, QueryBuilder. */
+  --control-height-md: 40px; /* 40px control height (md, the default); 32px in compact density, 44px on coarse pointers. Read by TimeStepper, .vui-btn, .vui-toggle. */
+  --control-height-lg: 48px; /* 48px control height (lg); 40px in compact density, 52px on coarse pointers. Read by .vui-btn, .vui-toggle, Control. */
+  --control-height-inner-sm: 26px; /* 26px height of a small button nested inside a field, toolbar, segmented track or calendar grid. Read by --segment-h-sm, Scheduler, TagInput, Tag. */
+  --control-height-inner: 28px; /* 28px height of a button nested inside a field, toolbar, segmented track or calendar grid. Read by Alert, Control, ThemeToggle. */
+  --control-height-inner-lg: 36px; /* 36px height of a large button nested inside a field, toolbar, segmented track or calendar grid. Read by --segment-h, --grid-row-height, --cal-cell, Rating, OptionSwitcher, Pagination. */
+  --control-pad-x: 12px; /* 12px horizontal padding of controls; 10px in compact density. Read by Control, PhoneInput, .vui-datefield. */
+  --row-height-sm: 40px; /* 40px row (sm): list rows, toolbars and accordions. Read by ListItem, TransferList, .vui-dgrid. */
+  --row-height: 48px; /* 48px row (default); 36px in compact density. Read by --table-row-height, .vui-table, AiResultPanel. */
+  --row-height-lg: 56px; /* 56px row (lg). Read by Accordion, .vui-cmdk, ListItem. */
+  --cell-py: 12px; /* 12px vertical padding of table cells; 6px in compact density. Read by .vui-table. */
+  --cell-px: 16px; /* 16px horizontal padding of table cells. Read by .vui-table, VirtualTable. */
+  --hit-target-sm: 24px; /* 24px minimum hit target for dense controls. Read by .vui-sheet. */
+  --hit-target-min: 44px; /* 44px minimum touch target. Read by Navbar, .vui-fab, HierarchyNavigator. */
+  --focus-ring-width: 3px; /* 3px width of the soft focus ring. Read by --focus-ring, --focus-ring-danger, .vui-inst. */
+  --focus-ring-offset: 2px; /* 2px gap between a control and its focus outline. Read by .vui-navbar-mb, Swatch. */
+  --halo-sm: 4px; /* 4px halo: press feedback. Read by --marker-halo, .vui-checkbox, Radio, Switch. */
+  --halo-md: 8px; /* 8px halo: the current step. Read by IconTile. */
+  --halo-lg: 10px; /* 10px halo: the empty-state icon. Read by IconTile, MenuChip. */
+  --track-pad: 3px; /* 3px inset between a segmented, toolbar or stepper track and the items inside it. Read by --radius-nested, --segment-pad, --segment-h, NumberInput, Toolbar, AnalysisRequest. */
+  --underline-offset: 3px; /* 3px offset of link underlines. Read by RichTextEditor, .vui-btn, ErrorSummary. */
+  --container-sm: 640px; /* 640px container max-width. */
+  --container-md: 768px; /* 768px container max-width. Read by DataGrid. */
+  --container-lg: 1024px; /* 1024px container max-width. */
+  --container-xl: 1280px; /* 1280px container max-width. Read by .vui-container, Footer. */
+  --container-2xl: 1440px; /* 1440px container max-width. Read by .vui-container. */
+  --bp-sm: 640px; /* 640px breakpoint (mobile-first). */
+  --bp-md: 768px; /* 768px breakpoint: the sidebar becomes an off-canvas drawer below it. */
+  --bp-lg: 1024px; /* 1024px breakpoint. */
+  --bp-xl: 1280px; /* 1280px breakpoint. */
+  --bp-2xl: 1536px; /* 1536px breakpoint. */
+  --overlay-offset: 6px; /* 6px gap between an overlay and its trigger. Read by --panel-offset, .vui-popover, CalendarEventButton, Select. */
+  --overlay-min-w: 220px; /* 220px minimum width of a floating panel. Read by CalendarEventButton, .vui-popover, .vui-menu. */
+  --overlay-w-sm: 300px; /* 300px floating panel width (sm). Read by Cascader, Tour, .vui-dgrid. */
+  --overlay-w: 340px; /* 340px floating panel width (default). Read by .vui-popover, .vui-menu. */
+  --overlay-w-md: 380px; /* 380px floating panel width (md). Read by .vui-dialog, Toast, NotificationCenter. */
+  --overlay-w-lg: 620px; /* 620px floating panel width (lg). Read by .vui-dgrid, .vui-cmdk. */
+  --overlay-max-h-sm: 280px; /* 280px maximum height of a floating list (sm). Read by Cascader, Select, MultiSelect. */
+  --overlay-max-h: 360px; /* 360px maximum height of a floating list (default). Read by NotificationCenter, ColumnManager. */
+  --overlay-max-h-lg: 520px; /* 520px maximum height of a floating list (lg). Read by .vui-dgrid, .vui-cmdk. */
+  --sidebar-width: 248px; /* 248px sidebar width on desktop. Read by Sidebar. */
+  --sidebar-width-collapsed: 64px; /* 64px collapsed sidebar (icon rail). Read by Sidebar. */
+  --topbar-height: 60px; /* 60px sticky topbar height. Read by --topbar-h. */
+  --opacity-disabled: .45; /* Opacity of disabled controls (.45). Read by Accordion, ListItem, Control. */
+  --opacity-muted: .7; /* Opacity of muted, de-emphasised content (.7). Read by .vui-tooltip. */
+  --z-base: 0; /* Base layer (0). */
+  --z-raised: 10; /* Raised content inside a stacking context (10). Read by SectionLabel, .vui-actionrow, Watermark. */
+  --z-dropdown: 1000; /* Dropdowns and listboxes (1000). Read by CalendarEventButton, Select, MentionInput. */
+  --z-sticky: 1100; /* Sticky headers and the topbar (1100). Read by Fab, .vui-envbar, BackToTop. */
+  --z-overlay: 1300; /* Scrims and drawers behind dialogs (1300). */
+  --z-modal: 1400; /* Dialogs, sheets and tours (1400). Read by .vui-skiplink, .vui-dialog-backdrop, BottomSheet. */
+  --z-toast: 1500; /* Toasts, above dialogs (1500). Read by Toast. */
+  --z-tooltip: 1600; /* Tooltips, the topmost layer (1600). Read by .vui-tooltip, Sidebar. */
+  --blur-sm: 4px; /* 4px blur: the dialog backdrop. Read by --dialog-backdrop-blur, SectionLabel, MediaFrame, TransferList. */
+  --blur-md: 12px; /* 12px blur: the sticky topbar (82% page colour plus blur). Read by --media-play-blur, --topbar-blur, Surface, .vui-actionrow, Lightbox. */
+  --blur-lg: 24px; /* 24px blur for large glass surfaces. */
+  --leading-none: 1; /* Line height 1 for single-line controls (buttons, KPI, kbd). Read by --type-kpi-leading, --type-button-sm-leading, --type-button-leading, Segmented, Marker, LocaleSwitcher. */
+  --leading-tight: 1.15; /* Line height 1.15 for h1 and h2. Read by --type-h1-leading, --type-h2-leading. */
+  --leading-snug: 1.3; /* Line height 1.3 for h3-h5, titles and labels. Read by --type-h3-leading, --type-h4-leading, --type-h5-leading, Timeline, AnalysisRequest, AtsAnalysisPanel. */
+  --leading-normal: 1.5; /* Line height 1.5 for app body text and captions. Read by --type-body-leading, --type-body-sm-leading, --type-caption-leading, AtsAnalysisPanel. */
+  --leading-relaxed: 1.65; /* Line height 1.65 for long-form reading text. Read by --type-body-lg-leading. */
+  --leading-display: 1.05; /* Line height 1.05 for the fluid display sizes. Read by --type-display-lg-leading, --type-display-md-leading, --type-display-sm-leading. */
+  --leading-compact: 1.2; /* Line height 1.2 for overlines and section labels. Read by --type-overline-leading, --type-section-leading. */
+  --leading-code: 1.6; /* Line height 1.6 for code. Read by --type-code-leading. */
+  --tracking-tighter: -0.03em; /* -0.03em: h1, h2 and KPI numerals. Read by --type-display-lg-tracking, --type-display-md-tracking, --type-display-sm-tracking. */
+  --tracking-tight: -0.015em; /* -0.015em: h3, h4 and titles. Read by --type-h3-tracking, --type-h4-tracking, --type-title-tracking. */
+  --tracking-snug: -0.005em; /* -0.005em: button labels. Read by --type-button-sm-tracking, --type-button-tracking, --type-button-lg-tracking. */
+  --tracking-normal: 0; /* No tracking adjustment (body text). Read by --type-h5-tracking, --type-body-lg-tracking, --type-body-tracking. */
+  --tracking-wide: 0.02em; /* 0.02em: slightly open small text. Read by LocaleSwitcher, Avatar. */
+  --tracking-label: 0.06em; /* 0.06em: uppercase section labels. Read by --type-section-tracking, CalendarOrganizer, AtsAnalysisPanel. */
+  --tracking-caps: 0.08em; /* 0.08em: overline micro-labels. Read by --type-overline-tracking. */
+  --font-size-3xs: 10px; /* 10px step of the type-size scale. Components never read it directly: they read the --type-<role>-size roles. Read by --type-micro-size, .vui-chatmsg. */
+  --font-size-2xs: 11px; /* 11px step of the type-size scale. Components never read it directly: they read the --type-<role>-size roles. Read by --type-overline-size, --type-kbd-size, --type-section-size. */
+  --font-size-xs: 12px; /* 12px step of the type-size scale. Components never read it directly: they read the --type-<role>-size roles. Read by --type-label-sm-size, --type-caption-size. */
+  --font-size-sm: 13px; /* 13px step of the type-size scale. Components never read it directly: they read the --type-<role>-size roles. Read by --type-body-sm-size, --type-label-size, --type-button-sm-size. */
+  --font-size-md: 14px; /* 14px step of the type-size scale. Components never read it directly: they read the --type-<role>-size roles. Read by --type-body-size, --type-button-size, .vui-audio. */
+  --font-size-base: 16px; /* 16px step of the type-size scale. Components never read it directly: they read the --type-<role>-size roles. Read by --type-h5-size, --type-title-size, --type-body-lg-size. */
+  --font-size-lg: 18px; /* 18px step of the type-size scale. Components never read it directly: they read the --type-<role>-size roles. Read by --type-title-lg-size, .vui-audio. */
+  --font-size-xl: 20px; /* 20px step of the type-size scale. Components never read it directly: they read the --type-<role>-size roles. Read by --type-h4-size, .vui-pc, Gauge, .vui-player. */
+  --font-size-2xl: 24px; /* 24px step of the type-size scale. Components never read it directly: they read the --type-<role>-size roles. Read by --type-h3-size, .vui-money, .vui-metrics, Gauge. */
+  --font-size-3xl: 30px; /* 30px step of the type-size scale. Components never read it directly: they read the --type-<role>-size roles. Read by --type-h2-size, --type-kpi-size, Gauge. */
+  --font-size-4xl: 36px; /* 36px step of the type-size scale. Components never read it directly: they read the --type-<role>-size roles. Read by --type-h1-size. */
+  --font-size-5xl: 48px; /* 48px step of the type-size scale. Components never read it directly: they read the --type-<role>-size roles. */
+  --font-size-6xl: 60px; /* 60px step of the type-size scale. Components never read it directly: they read the --type-<role>-size roles. */
+  --font-size-7xl: 72px; /* 72px step of the type-size scale. Components never read it directly: they read the --type-<role>-size roles. */
+  --font-size-display-sm: clamp(2rem,1.6rem + 1.6vw,2.75rem); /* Fluid display size (clamp(2rem,1.6rem + 1.6vw,2.75rem)), scaling with the viewport. Components never read it directly: they read the --type-<role>-size roles. Read by --type-display-sm-size. */
+  --font-size-display-md: clamp(2.5rem,1.8rem + 2.8vw,3.75rem); /* Fluid display size (clamp(2.5rem,1.8rem + 2.8vw,3.75rem)), scaling with the viewport. Components never read it directly: they read the --type-<role>-size roles. Read by --type-display-md-size. */
+  --font-size-display-lg: clamp(3rem,2rem + 4vw,4.5rem); /* Fluid display size (clamp(3rem,2rem + 4vw,4.5rem)), scaling with the viewport. Components never read it directly: they read the --type-<role>-size roles. Read by --type-display-lg-size. */
+  --font-weight-light: 300; /* Weight 300 (light). Components read it through the --type-<role>-weight roles. */
+  --font-weight-regular: 400; /* Weight 400 (regular). Components read it through the --type-<role>-weight roles. Read by --type-body-lg-weight, --type-body-weight, --type-body-sm-weight. */
+  --font-weight-medium: 500; /* Weight 500 (medium). Components read it through the --type-<role>-weight roles. Read by --type-label-weight, --type-label-sm-weight, --type-button-sm-weight, Gauge. */
+  --font-weight-semibold: 600; /* Weight 600 (semibold). Components read it through the --type-<role>-weight roles. Read by --type-display-lg-weight, --type-display-md-weight, --type-display-sm-weight, LogViewer, FunnelChart, .vui-player. */
+  --font-weight-bold: 700; /* Weight 700 (bold). Components read it through the --type-<role>-weight roles. Read by --type-heavy-weight, Gantt. */
+  --font-sans: "Hanken Grotesk",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-display: "Space Grotesk","Hanken Grotesk",ui-sans-serif,system-ui,sans-serif;
+  --font-mono: "JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  --text-t-h1: 600 36px/1.15 var(--font-display); /* Page titles (h1): Space Grotesk 36px semibold, tight tracking. Same values as --type-h1-*. */
+  --text-t-h2: 600 30px/1.15 var(--font-display); /* Section titles (h2): Space Grotesk 30px semibold. */
+  --text-t-h3: 600 24px/1.3 var(--font-display); /* Sub-section and large card titles (h3): Space Grotesk 24px semibold. */
+  --text-t-h4: 600 20px/1.3 var(--font-display); /* Card and dialog titles (h4): Space Grotesk 20px semibold. */
+  --text-t-h5: 600 16px/1.3 var(--font-sans); /* Small headings (h5) in Hanken Grotesk 16px semibold. */
+  --text-t-kpi: 600 30px/1 var(--font-display); /* KPI and statistic values: Space Grotesk 30px semibold, line height 1, tight tracking. */
+  --text-t-title: 600 16px/1.3 var(--font-display); /* Component titles (card, dialog, panel): Space Grotesk 16px semibold. */
+  --text-t-title-lg: 600 18px/1.3 var(--font-display); /* Larger component titles: Space Grotesk 18px semibold. */
+  --text-t-body: 400 14px/1.5 var(--font-sans); /* Default body text in app UI: Hanken Grotesk 14px, line height 1.5. */
+  --text-t-body-lg: 400 16px/1.65 var(--font-sans); /* Long-form reading text: 16px with line height 1.65. */
+  --text-t-body-sm: 400 13px/1.5 var(--font-sans); /* Dense body text and descriptions: 13px. */
+  --text-t-button: 500 14px/1 var(--font-sans); /* Button label: 14px medium, line height 1. */
+  --text-t-button-lg: 500 16px/1 var(--font-sans); /* Large button label: 16px medium. */
+  --text-t-button-sm: 500 13px/1 var(--font-sans); /* Small button label: 13px medium. */
+  --text-t-caption: 400 12px/1.5 var(--font-sans); /* Captions and metadata: 12px. */
+  --text-t-label: 500 13px/1.3 var(--font-sans); /* Form and control labels: 13px medium. */
+  --text-t-label-sm: 500 12px/1.3 var(--font-sans); /* Small labels and chips: 12px medium. */
+  --text-t-overline: 600 11px/1.2 var(--font-sans); /* Overline micro-labels: 11px semibold with open tracking; set in sentence case and let the style uppercase them. */
+  --text-t-section: 600 11px/1.2 var(--font-sans); /* Uppercase group headings in menus, listboxes, sidebars and panels: 11px semibold. */
+  --text-t-code: 400 13px/1.6 var(--font-mono); /* Code and tabular identifiers: JetBrains Mono 13px. */
+  --text-t-kbd: 500 11px/1 var(--font-mono); /* Key caps: JetBrains Mono 11px medium. */
+  --text-t-micro: 500 10px/1 var(--font-mono); /* Micro type: JetBrains Mono 10px, for counters in pills and source indices. */
+}
+.t-h1 {
+  font-family: var(--font-display);
+  font-size: 36px;
+  line-height: 1.15;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+.t-h2 {
+  font-family: var(--font-display);
+  font-size: 30px;
+  line-height: 1.15;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+.t-h3 {
+  font-family: var(--font-display);
+  font-size: 24px;
+  line-height: 1.3;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+.t-h4 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  line-height: 1.3;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+.t-h5 {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.3;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+.t-kpi {
+  font-family: var(--font-display);
+  font-size: 30px;
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+.t-title {
+  font-family: var(--font-display);
+  font-size: 16px;
+  line-height: 1.3;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+.t-title-lg {
+  font-family: var(--font-display);
+  font-size: 18px;
+  line-height: 1.3;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+.t-body {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.t-body-lg {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.65;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.t-body-sm {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.5;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.t-button {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+}
+.t-button-lg {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+}
+.t-button-sm {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+}
+.t-caption {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 1.5;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.t-label {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.3;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+.t-label-sm {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 1.3;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+.t-overline {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+.t-section {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+.t-code {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.t-kbd {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+.t-micro {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+@font-face {
+  font-family: "Hanken Grotesk";
+  src: url("fonts/HankenGrotesk-latin.woff2") format("woff2");
+  font-weight: 300 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Hanken Grotesk";
+  src: url("fonts/HankenGrotesk-latin-ext.woff2") format("woff2");
+  font-weight: 300 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Hanken Grotesk";
+  src: url("fonts/HankenGrotesk-Italic-latin.woff2") format("woff2");
+  font-weight: 300 800;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Hanken Grotesk";
+  src: url("fonts/HankenGrotesk-Italic-latin-ext.woff2") format("woff2");
+  font-weight: 300 800;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("fonts/JetBrainsMono-latin.woff2") format("woff2");
+  font-weight: 400 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("fonts/JetBrainsMono-latin-ext.woff2") format("woff2");
+  font-weight: 400 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("fonts/SpaceGrotesk-latin.woff2") format("woff2");
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("fonts/SpaceGrotesk-latin-ext.woff2") format("woff2");
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}

@@ -1,0 +1,19 @@
+<!-- @dsCard group="Components · Navigation" height=422 width=960 subtitle="Breadcrumb · back · title + status · meta · actions · tabs" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:12px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.lbl{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);width:72px;flex:none}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const { PageHeader, Button } = window.VelvetUIDesignSystem_ee2bd8;
+const App = () => (React.createElement("div", { className: "pane", style: { gap: 24 } },
+    React.createElement(PageHeader, { breadcrumb: [{ label: 'Projects', href: '#' }, { label: 'Migrations', href: '#' }, { label: 'Q3 migration' }], onBack: () => { }, title: "Q3 migration", status: { label: 'Active', tone: 'success' }, meta: [{ icon: 'user', label: 'Anna Kowalska' }, { icon: 'calendar', label: 'Due 30 Jun 2026' }, { icon: 'users', label: '6 members' }, { icon: 'git-branch', label: 'main' }], actions: React.createElement(React.Fragment, null,
+            React.createElement(Button, { variant: "secondary", className: "vui-btn--icon", iconLeft: "share", "aria-label": "Share" }),
+            React.createElement(Button, { variant: "secondary", iconLeft: "settings" }, "Settings"),
+            React.createElement(Button, { iconLeft: "plus" }, "New task")), tabs: [{ value: 'ov', label: 'Overview' }, { value: 'tasks', label: 'Tasks', count: 24 }, { value: 'files', label: 'Files', count: 8 }, { value: 'act', label: 'Activity' }] }),
+    React.createElement(PageHeader, { eyebrow: "Workspace / Velvet", title: "Projects", description: "Everything your team is working on.", actions: React.createElement(Button, { iconLeft: "plus" }, "New project") })));
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

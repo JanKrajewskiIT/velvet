@@ -1,0 +1,33 @@
+<!-- @dsCard group="Components · Metrics" height=176 width=960 subtitle="Direction colours in three conventions — null is never zero" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:16px;align-items:center}.lbl{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);width:96px;flex:none}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const { Delta } = window.VelvetUIDesignSystem_ee2bd8;
+const App = () => {
+ const [mc, setMc] = React.useState('standard');
+ React.useEffect(() => { document.documentElement.dataset.trendColors = mc; }, [mc]);
+ return (React.createElement("div", { className: "pane" },
+ React.createElement("div", { className: "r" },
+ React.createElement("span", { className: "lbl" }, "Delta"),
+ React.createElement(Delta, { value: 1.84 }),
+ React.createElement(Delta, { value: -0.62 }),
+ React.createElement(Delta, { value: 0 }),
+ React.createElement(Delta, { value: null }),
+ React.createElement(Delta, { value: 3.12, variant: "pill" }),
+ React.createElement(Delta, { value: -2.11, variant: "solid" }),
+ React.createElement(Delta, { value: 12, format: "number", unit: " bp", size: "sm" }),
+ React.createElement(Delta, { value: 5.5, format: "pp", arrow: false })),
+ React.createElement("div", { className: "r" },
+ React.createElement("span", { className: "lbl" }, "Convention"),
+ ['standard', 'inverted', 'cvd'].map(v => React.createElement("label", { key: v, style: { display: 'inline-flex', gap: 6, alignItems: 'center', fontSize: 13 } },
+ React.createElement("input", { type: "radio", name: "mc", checked: mc === v, onChange: () => setMc(v) }),
+ "data-trend-colors=\"", v, "\"")))));
+};
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

@@ -1,0 +1,17 @@
+<!-- @dsCard group="Components · Data" height=434 width=960 subtitle="Search + faceted chips · single summary or count · clear all · live result count" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { FilterBar, Button } = NS;
+const F = [{ key: 'status', label: 'Status', options: [{ value: 'active', label: 'Active', dot: 'success', count: 84 }, { value: 'trial', label: 'Trial', dot: 'info', count: 31 }, { value: 'paused', label: 'Paused', dot: 'warning', count: 9 }, { value: 'churned', label: 'Churned', dot: 'danger', count: 4 }] }, { key: 'plan', label: 'Plan', icon: 'tag', options: [{ value: 'free', label: 'Free' }, { value: 'pro', label: 'Pro' }, { value: 'team', label: 'Team' }, { value: 'ent', label: 'Enterprise' }] }, { key: 'owner', label: 'Owner', icon: 'user', multiple: false, options: [{ value: 'me', label: 'Me' }, { value: 'anna', label: 'Anna K.' }, { value: 'jan', label: 'Jan N.' }] }];
+const App = () => { const [v, setV] = React.useState({ status: ['active'], plan: ['pro', 'team'] }); const n = 128 - (v.status || []).length * 7 - (v.plan || []).length * 11; return (React.createElement("div", { className: "pane" },
+    React.createElement(FilterBar, { filters: F, value: v, onChange: setV, searchPlaceholder: "Search customers\u2026", resultCount: Math.max(0, n), resultLabel: "customers", actions: React.createElement(Button, { variant: "secondary", size: "sm", iconLeft: "download" }, "Export") }))); };
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

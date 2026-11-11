@@ -1,0 +1,18 @@
+<!-- @dsCard group="Components · Trading" height=640 width=960 subtitle="Side · type · size · protection, with a live risk estimate and a confirmation" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}.pane{display:flex;flex-direction:column;gap:16px}.lbl{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 6px}.brandbar{display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:12px 16px;border-radius:12px;background:var(--bg-brand)}</style></head><body>
+<div id="root-0"></div>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8; const h = React.createElement;
+const { OrderTicket, Toast } = NS;
+function App() { const [sent, setSent] = React.useState(null);
+  return h('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(320px,1fr))', gap: 20, alignItems: 'start' } },
+    h(OrderTicket, { symbol: 'ACME', price: 182.4, qtyUnit: 'shares', defaultQty: 10, equity: 25000, buyingPower: 12000, maxRiskPct: 1, account: 'ACC-01', envLabel: 'SANDBOX', onSubmit: (o) => setSent(o) }),
+    h('div', { style: { display: 'flex', flexDirection: 'column', gap: 12 } },
+      h(OrderTicket, { symbol: 'ACME', price: 182.4, qtyUnit: 'shares', account: 'ACC-01', envLabel: 'LIVE', envTone: 'danger', confirmTone: 'danger', blocked: 'Trading is stopped on ACC-01. Resume needs a recovery check.' }),
+      sent && h('pre', { style: { margin: 0, font: '12px/1.4 var(--font-mono)', color: 'var(--fg-secondary)' } }, JSON.stringify(sent, null, 1)))); }
+ReactDOM.createRoot(document.getElementById('root-0')).render(h(App));
+})();
+</script></body></html>

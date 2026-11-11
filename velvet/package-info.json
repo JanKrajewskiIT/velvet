@@ -1,0 +1,24 @@
+{
+  "name": "velvet-ui-handoff",
+  "generated": "2026-11-10",
+  "source_artifact": "https://claude.ai/artifact/G6b7UUevXNJzLDGj7rs21s",
+  "source_title": "Velvet UI Design System (nowy format)",
+  "bundle_global": "window.VelvetUIDesignSystem_ee2bd8",
+  "component_folders": 260,
+  "icons": 156,
+  "sha256": {
+    "tokens.json": "115e12da8dea1d6b1f0ac17651cdf188aa95f6d7a308b2b548460e3f24106efb",
+    "tokens.css": "3fcee8ef829df5ad2b96bc06a08ccd44dd1e140374a9db1316832bd44781323d",
+    "components/bundle.js": "8acd70bbd20753ec95b74813c3492ca8543ae8ff9b3e068d0af88583af3e6125",
+    "components/bundle.css": "64b5fff69c035270c42ff447f1baf0bc597ebf0a8052872c82932c5b2974e995",
+    "components/index.d.ts": "35315c56e5528a456755d474e97bedca29e4c3cf652811e11288da70fa2b0b41"
+  },
+  "excluded_on_purpose": [
+    "design-system.json",
+    "manifest.json",
+    "api/",
+    "SKILL.md",
+    "index.html",
+    "artifact-type/"
+  ]
+}

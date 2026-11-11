@@ -1,8 +1,0 @@
-/* CopyButton */
-.vui-copy__icons{position:relative;display:inline-grid;width:1.15em;height:1.15em}
-.vui-copy__icons .vui-icon{grid-area:1/1;font-size:1em;transition:opacity var(--motion-fast),transform var(--motion-spring)}
-.vui-copy__b{opacity:0;transform:scale(.4) rotate(-30deg)}
-.vui-copy--done .vui-copy__a{opacity:0;transform:scale(.4)}
-.vui-copy--done .vui-copy__b{opacity:1;transform:none;color:var(--status-success-fg)}
-.vui-copyfield{padding-right:var(--space-1)}
-.vui-copyfield__mono{font-family:var(--font-mono);font-size:var(--type-body-sm-size)}

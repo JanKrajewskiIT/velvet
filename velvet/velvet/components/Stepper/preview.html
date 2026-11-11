@@ -1,0 +1,29 @@
+<!-- @dsCard group="Components · Wayfinding" height=443 width=960 subtitle="Animated connector fill · check pop · linear or free navigation" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:var(--space-5)}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.muted b{color:var(--fg-primary)}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const { Stepper, Button } = window.VelvetUIDesignSystem_ee2bd8;
+const S = [{ label: 'Account', description: 'Email & password' }, { label: 'Workspace', description: 'Name & URL' }, { label: 'Integrations', description: 'Connect tools' }, { label: 'Plan', description: 'Pick a tier' }, { label: 'Done' }];
+const V = [{ label: 'Ticket created', description: 'RC-482 · 09:14' }, { label: 'Assigned', description: 'Web team' }, { label: 'In review', description: 'Code review open' }, { label: 'QA' }];
+const App = () => { const [c, setC] = React.useState(2); const last = S.length - 1; return (React.createElement("div", { className: "pane" },
+    React.createElement(Stepper, { steps: S, current: c, onStepClick: setC, linear: false }),
+    React.createElement("div", { className: "r", style: { justifyContent: 'space-between' } },
+        React.createElement("span", { className: "lbl" },
+            "Step ",
+            React.createElement("b", null, c + 1),
+            " / ",
+            S.length),
+        React.createElement("div", { className: "r" },
+            React.createElement(Button, { size: "sm", variant: "secondary", iconLeft: "arrow-left", disabled: c === 0, onClick: () => setC(Math.max(0, c - 1)) }, "Back"),
+            React.createElement(Button, { size: "sm", iconRight: c < last ? 'arrow-right' : undefined, onClick: () => setC(c < last ? c + 1 : 0) }, c < last ? 'Next' : 'Restart'))),
+    React.createElement("div", { className: "r", style: { alignItems: 'flex-start', gap: 40 } },
+        React.createElement(Stepper, { orientation: "vertical", steps: V, current: Math.min(c, V.length - 1) }),
+        React.createElement(Stepper, { orientation: "vertical", steps: V.slice(0, 3), current: 2, errorAt: 2 })))); };
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

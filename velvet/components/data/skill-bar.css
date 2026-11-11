@@ -1,5 +1,0 @@
-/* SkillBar — label row + Meter atom (lg) */
-.vui-skill{display:flex;flex-direction:column;gap:var(--space-1-5)}
-.vui-skill__head{display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-3)}
-.vui-skill__label{font-size:var(--type-body-sm-size);color:var(--fg-primary)}
-.vui-skill__level{font-size:var(--type-caption-size);color:var(--fg-tertiary)}

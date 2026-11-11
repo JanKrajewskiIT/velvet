@@ -1,0 +1,28 @@
+<!-- @dsCard group="Patterns" height=1060 width=960 subtitle="Score ring · categories · keywords · strengths and gaps · recommendations" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl{font:600 10px/1.3 var(--font-sans);letter-spacing:.08em;text-transform:uppercase;color:var(--fg-tertiary);margin-bottom:10px}
+.pane{display:flex;flex-direction:column;gap:var(--space-5)}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-5)}.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-5)}.r{display:flex;flex-wrap:wrap;gap:var(--space-2);align-items:center}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const h = React.createElement;
+const { AnalysisReport, OptionSwitcher } = NS;
+const STEPS = ['Reading proposal', 'Parsing brief', 'Matching requirements', 'Scoring & writing recommendations'];
+const RESULT = { score: 78, verdict: 'Strong on delivery, light on long-term support', summary: 'The vendor’s six years of platform work map directly to the brief’s core. The brief asks for a named support team of 3–5 people; the proposal describes shared support but no dedicated staff.',
+ categories: [{ label: 'Technical fit', score: 91, weight: 3 }, { label: 'Experience level', score: 82, weight: 2, note: '6 y vs 5+ required' }, { label: 'Support model', score: 48, weight: 2, note: 'Shared support only' }, { label: 'Domain (B2B SaaS)', score: 74, weight: 1 }, { label: 'Location & availability', score: 100, weight: 1 }],
+ keywords: { matched: ['Design systems', 'Figma', 'Accessibility', 'React', 'Design tokens', 'User research'], partial: ['Dedicated support'], missing: ['SLAs', 'Training'] },
+ strengths: ['Built and scaled a token-based design system used by 40+ teams', 'WCAG 2.2 AA audits across 3 products', 'Comfortable in code (React, CSS architecture)'],
+ gaps: ['No evidence of a dedicated support team', 'No incident-review process mentioned'],
+ recommendations: [{ severity: 'critical', title: 'Probe the support model in the review', message: 'Ask for a concrete example of supporting a product after launch.', evidence: { quote: 'Support is handled by the delivery team after launch', source: 'Proposal · Velvet Labs, 2021–24' } }, { severity: 'warning', title: 'Clarify the start date', message: 'Reviewer notes say “available soon” — confirm the exact date before the final round.' }, { severity: 'suggestion', title: 'Share the platform roadmap', message: 'Their strongest motivation signal; use it in the pitch.' }] };
+const App = () => {
+ const [st, setSt] = React.useState('done');
+ return (h("div", { className: "pane" },
+ h(OptionSwitcher, { options: [{ value: 'done', label: 'Done' }, { value: 'loading', label: 'Loading' }, { value: 'empty', label: 'Empty' }, { value: 'error', label: 'Error' }], value: st, onValueChange: setSt, size: "sm", label: "State" }),
+ h(AnalysisReport, { status: st, result: st === 'done' ? RESULT : null, steps: STEPS, step: 2, subject: "Velvet Labs", target: "Platform migration brief", model: "Claude", generatedAt: "just now", error: "The model timed out.", onRetry: () => setSt('loading'), onRerun: () => { }, onExport: () => { }, onFeedback: () => { } })));
+};
+ReactDOM.createRoot(document.getElementById('root-0')).render(h(App, null));
+
+})();
+</script></body></html>

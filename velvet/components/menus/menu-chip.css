@@ -1,5 +1,0 @@
-/* MenuChip */
-.vui-chip--menu{padding-right:var(--space-2)}
-.vui-chip__key{color:inherit}
-.vui-chip--on .vui-chip__key{color:var(--fg-secondary);font-weight:var(--type-body-weight)}
-.vui-chip__caret{font-size:var(--type-body-sm-size)!important;opacity:.7}

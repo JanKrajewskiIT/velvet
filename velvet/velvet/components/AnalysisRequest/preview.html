@@ -1,0 +1,53 @@
+<!-- @dsCard group="Patterns" height=1742 width=960 -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:16px}</style></head><body>
+<div class="vcard"><div class="vcard-t">AI analysis · result — AnalysisReport · score, categories, keywords, recommendations</div><div id="root-0"></div></div>
+<div class="vcard"><div class="vcard-t">AI analysis · request — Pick sources + analysis → run</div><div id="root-1"></div></div>
+<script>
+(function(){
+"use strict";
+const { AnalysisRequest, AnalysisReport } = window.VelvetUIDesignSystem_ee2bd8;
+const STEPS = ['Reading proposal', 'Parsing brief', 'Matching requirements', 'Scoring & writing recommendations'];
+const RESULT = { score: 78, verdict: 'Strong on delivery, light on long-term support', summary: 'The vendor’s six years of platform work map directly to the brief’s core. The brief asks for a named support team of 3–5 people; the proposal describes shared support but no dedicated staff.',
+ categories: [{ label: 'Technical fit', score: 91, weight: 3 }, { label: 'Experience level', score: 82, weight: 2, note: '6 y vs 5+ required' }, { label: 'Support model', score: 48, weight: 2, note: 'Shared support only' }, { label: 'Domain (B2B SaaS)', score: 74, weight: 1 }, { label: 'Location & availability', score: 100, weight: 1 }],
+ keywords: { matched: ['Design systems', 'Figma', 'Accessibility', 'React', 'Design tokens', 'User research'], partial: ['Dedicated support'], missing: ['SLAs', 'Training'] },
+ strengths: ['Built and scaled a token-based design system used by 40+ teams', 'WCAG 2.2 AA audits across 3 products', 'Comfortable in code (React, CSS architecture)'],
+ gaps: ['No evidence of a dedicated support team', 'No incident-review process mentioned'],
+ recommendations: [{ severity: 'critical', title: 'Probe the support model in the review', message: 'Ask for a concrete example of supporting a product after launch.', evidence: { quote: 'Support is handled by the delivery team after launch', source: 'Proposal · Velvet Labs, 2021–24' } }, { severity: 'warning', title: 'Clarify the start date', message: 'Reviewer notes say “available soon” — confirm the exact date before the final round.' }, { severity: 'suggestion', title: 'Share the platform roadmap', message: 'Their strongest motivation signal; use it in the pitch.' }] };
+const App = () => {
+ const [st, setSt] = React.useState('done');
+ const [step, setStep] = React.useState(0);
+ const run = () => new Promise(res => { setSt('loading'); setStep(0); let i = 0; const t = setInterval(() => { i++; setStep(i); if (i >= STEPS.length) {
+ clearInterval(t);
+ setSt('done');
+ res();
+ } }, 700); });
+ return (React.createElement("div", { className: "pane" },
+ React.createElement(AnalysisReport, { status: st, steps: STEPS, step: step, subject: "Velvet Labs", target: "Platform migration brief", model: "Claude", generatedAt: "just now", result: RESULT, onRerun: run, onRetry: run, onExport: () => { }, onFeedback: () => { } })));
+};
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+(function(){
+"use strict";
+const { AnalysisRequest } = window.VelvetUIDesignSystem_ee2bd8;
+const STEPS = ['Reading proposal', 'Parsing brief', 'Matching requirements', 'Scoring & writing recommendations'];
+const App = () => {
+ const [st, setSt] = React.useState('idle');
+ const [step, setStep] = React.useState(0);
+ const [doc, setDoc] = React.useState('ready');
+ const run = () => new Promise(res => { setSt('loading'); setStep(0); let i = 0; const t = setInterval(() => { i++; setStep(i); if (i >= STEPS.length) {
+ clearInterval(t);
+ setSt('idle');
+ res();
+ } }, 700); });
+ const sources = [{ id: 'proposal', kind: 'document', label: 'Proposal', detail: 'proposal_v2.pdf · 2 pages', status: doc, onAttach: () => setDoc('ready') }, { id: 'brief', kind: 'document', label: 'Brief', detail: 'Platform migration · Warsaw / remote' }, { id: 'notes', kind: 'notes', label: 'Reviewer notes', detail: '3 notes · last 2 days ago' }, { id: 'meeting', kind: 'transcript', label: 'Meeting transcript', status: 'missing', onAttach: () => { } }];
+ const analyses = [{ id: 'fit', label: 'Brief fit', description: 'Score the proposal against the brief', icon: 'target', requires: ['proposal', 'brief'] }, { id: 'keywords', label: 'Keywords', description: 'Keyword coverage of the proposal', icon: 'search', requires: ['proposal'] }, { id: 'questions', label: 'Review questions', description: 'Probe gaps and risks', icon: 'message-square', requires: ['proposal', 'brief'] }];
+ return (React.createElement("div", { className: "pane" },
+ React.createElement(AnalysisRequest, { description: "Velvet Labs \u00B7 Platform migration", model: "Claude \u00B7 EU", estimate: "\u2248 6k tokens \u00B7 1 credit", sources: sources, analyses: analyses, status: st === 'loading' ? 'running' : 'idle', steps: STEPS, step: step, onRun: run })));
+};
+ReactDOM.createRoot(document.getElementById('root-1')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

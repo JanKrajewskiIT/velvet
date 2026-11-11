@@ -1,0 +1,19 @@
+<!-- @dsCard group="Components · Feedback" height=286 width=960 subtitle="Four tones that never look alike · the stop action stays visible" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:16px;align-items:center}.lbl{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);width:96px;flex:none}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const { EnvironmentBar } = window.VelvetUIDesignSystem_ee2bd8;
+const items = [{ label: 'Region', value: 'eu-west' }, { label: 'Build', value: '4.18.2' }, { label: 'Owner', value: 'ops' }];
+const App = () => (React.createElement("div", { className: "pane", style: { gap: 8 } },
+ React.createElement(EnvironmentBar, { tone: "neutral", label: "Sandbox", items: [{ label: 'Run', value: 'RUN-0931' }], connection: { state: 'live', label: 'Live' } }),
+ React.createElement(EnvironmentBar, { tone: "info", label: "Staging", items: items, connection: { state: 'live', label: 'Live \u00B7 14:32:07' }, onStop: () => { } }),
+ React.createElement(EnvironmentBar, { tone: "warning", label: "Preview", items: items, connection: { state: 'stale', label: 'Stale \u00B7 14:30' }, onStop: () => { } }),
+ React.createElement(EnvironmentBar, { tone: "danger", label: "Production \u00B7 live data", items: items, connection: { state: 'live', label: 'Live' }, onStop: () => { }, stopLabel: "Stop all" })));
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

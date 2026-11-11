@@ -1,0 +1,50 @@
+<!-- @dsCard group="Components · Actions" height=278 width=960 subtitle="aria-pressed actions · multiple (B/I/U) · single (view switch)" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-6) 20px}.r{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.lbl{font:600 10px/1.3 var(--font-sans);letter-spacing:.08em;text-transform:uppercase;color:var(--fg-tertiary);margin-bottom:10px}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const { ToggleButton, ToggleGroup } = window.VelvetUIDesignSystem_ee2bd8;
+const App = () => {
+    const [fmt, setFmt] = React.useState(['bold']);
+    const [view, setView] = React.useState('grid');
+    return (React.createElement("div", { className: "pane" },
+        React.createElement("div", null,
+            React.createElement("div", { className: "lbl" }, "Single toggle"),
+            React.createElement("div", { className: "r" },
+                React.createElement(ToggleButton, { icon: "star", defaultPressed: true }, "Favourite"),
+                React.createElement(ToggleButton, { icon: "bell" }, "Follow"),
+                React.createElement(ToggleButton, { icon: "eye" }, "Preview"))),
+        React.createElement("div", null,
+            React.createElement("div", { className: "lbl" }, "Group \u00B7 multiple"),
+            React.createElement("div", { className: "r" },
+                React.createElement(ToggleGroup, { label: "Formatting", value: fmt, onValueChange: setFmt },
+                    React.createElement(ToggleButton, { value: "bold", icon: "bold", label: "Bold", tone: "neutral" }),
+                    React.createElement(ToggleButton, { value: "italic", icon: "italic", label: "Italic", tone: "neutral" }),
+                    React.createElement(ToggleButton, { value: "underline", icon: "underline", label: "Underline", tone: "neutral" })),
+                React.createElement(ToggleButton, { icon: "link", label: "Link", tone: "neutral" }),
+                React.createElement(ToggleButton, { icon: "code", label: "Code", tone: "neutral" })),
+            React.createElement("div", { className: "lbl" }, JSON.stringify(fmt))),
+        React.createElement("div", null,
+            React.createElement("div", { className: "lbl" }, "Group \u00B7 single"),
+            React.createElement(ToggleGroup, { type: "single", label: "View", value: view, onValueChange: setView },
+                React.createElement(ToggleButton, { value: "grid", icon: "layout-grid" }, "Grid"),
+                React.createElement(ToggleButton, { value: "list", icon: "list" }, "List"),
+                React.createElement(ToggleButton, { value: "tree", icon: "sitemap" }, "Tree")),
+            React.createElement("div", { className: "lbl" },
+                "\"",
+                view,
+                "\"")),
+        React.createElement("div", null,
+            React.createElement("div", { className: "lbl" }, "Small \u00B7 disabled"),
+            React.createElement("div", { className: "r" },
+                React.createElement(ToggleButton, { size: "sm", icon: "pin", defaultPressed: true }, "Pinned"),
+                React.createElement(ToggleButton, { size: "sm", icon: "lock", defaultPressed: true, disabled: true }, "Locked"),
+                React.createElement(ToggleButton, { size: "sm", icon: "eye-off", disabled: true }, "Hidden")))));
+};
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

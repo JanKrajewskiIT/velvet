@@ -1,6 +1,0 @@
-/* Atom · Kbd — a key cap; Kbd keys="mod+k" renders a combo. */
-.vui-kbd-combo{display:inline-flex;align-items:center;gap:var(--space-0-5)}
-.vui-kbd{display:inline-flex;align-items:center;justify-content:center;gap:var(--space-0-5);height:var(--kbd-height);min-width:var(--kbd-height);padding:0 var(--space-1-5);border:var(--border-width) solid var(--kbd-border);border-bottom-width:var(--border-width-thick);border-radius:var(--radius-xs);background:var(--kbd-bg);color:var(--kbd-fg);font:var(--type-kbd)}
-.vui-kbd--sm{height:var(--kbd-height-sm);min-width:var(--kbd-height-sm);padding:0 var(--space-1);font-size:var(--type-micro-size)}
-.vui-kbd--plain{height:auto;min-width:0;padding:0;border:0;background:none;color:inherit}
-.vui-kbd-combo:has(.vui-kbd--plain){gap:0}

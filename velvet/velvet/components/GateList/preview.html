@@ -1,0 +1,16 @@
+<!-- @dsCard group="Components · Progress" height=366 width=960 subtitle="Ordered checks — first failure blocks, later ones dimmed" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:16px;align-items:center}.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const { GateList } = window.VelvetUIDesignSystem_ee2bd8;
+const App = () => (React.createElement("div", { className: "g" },
+    React.createElement(GateList, { items: [{ label: 'Data quality', detail: 'Fresh 4 s · no gaps', status: 'pass' }, { label: 'Capacity', detail: 'Within limits', status: 'pass' }, { label: 'Maintenance window', detail: 'Starts in 6 d', status: 'pass' }, { label: 'Replication', detail: 'Lag 6 min > 5 min', status: 'fail', code: 'REPL_LAG' }, { label: 'Budget', detail: '48% used', status: 'pass' }] }),
+ React.createElement(GateList, { size: "sm", stopAtFirstFail: false, items: [{ label: 'Access policy', status: 'pass' }, { label: 'Configuration', detail: 'CR-214 in review', status: 'warn', code: 'REVIEW' }, { label: 'Recovery', status: 'pending' }, { label: 'Rollback plan', status: 'pass' }] })));
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

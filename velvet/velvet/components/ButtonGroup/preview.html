@@ -1,0 +1,31 @@
+<!-- @dsCard group="Components · Actions" height=172 width=960 subtitle="Attached · split button · toggle state · spaced" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { ButtonGroup, Button, IconButton } = NS;
+const App = () => { const [v, setV] = React.useState('list'); return (React.createElement("div", { className: "pane" },
+    React.createElement("div", { className: "r", style: { gap: 20 } },
+        React.createElement(ButtonGroup, { label: "Text style" },
+            React.createElement(IconButton, { icon: "bold", label: "Bold", variant: "secondary" }),
+            React.createElement(IconButton, { icon: "italic", label: "Italic", variant: "secondary" }),
+            React.createElement(IconButton, { icon: "underline", label: "Underline", variant: "secondary" })),
+        React.createElement(ButtonGroup, { label: "View" }, [['list', 'list', 'List'], ['layout-grid', 'grid', 'Grid'], ['kanban', 'board', 'Board']].map(([i, k, l]) => React.createElement(Button, { key: k, variant: "secondary", iconLeft: i, "aria-pressed": v === k, onClick: () => setV(k) }, l)))),
+    React.createElement("div", { className: "r", style: { gap: 20 } },
+        React.createElement(ButtonGroup, { label: "Publish" },
+            React.createElement(Button, { variant: "primary", iconLeft: "send" }, "Publish"),
+            React.createElement(IconButton, { icon: "chevron-down", label: "More publish options", variant: "primary" })),
+        React.createElement(ButtonGroup, { size: "sm", label: "Page" },
+            React.createElement(Button, { variant: "secondary", iconLeft: "chevron-left" }, "Prev"),
+            React.createElement(Button, { variant: "secondary" }, "Next")),
+        React.createElement(ButtonGroup, { attached: false },
+            React.createElement(Button, { variant: "ghost" }, "Cancel"),
+            React.createElement(Button, { variant: "primary" }, "Save changes"))))); };
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

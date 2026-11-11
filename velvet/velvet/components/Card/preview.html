@@ -1,0 +1,44 @@
+<!-- @dsCard group="Components · Cards" height=538 width=960 subtitle="Surface + regions: header · actions · body · footer · padding" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+a{color:var(--fg-link)}a:hover{color:var(--fg-link-hover)}.pane{display:flex;flex-direction:column;gap:var(--space-5)}.hd{display:flex;justify-content:space-between;align-items:baseline;gap:16px}.hd b{font:var(--type-title);letter-spacing:var(--type-title-tracking)}.cap b{color:var(--fg-secondary);font-weight:600}.slot{display:flex;flex-direction:column;gap:8px;min-width:0}.nm{font-weight:600;font-size:15px}.tile{min-height:112px;justify-content:center;gap:4px}.g{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-5);align-items:start}.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--space-5);align-items:start}.ph{height:44px;border-radius:var(--radius-sm);background:var(--bg-sunken)}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const NS = window.VelvetUIDesignSystem_ee2bd8;
+const { Card, Badge, Button, IconButton } = NS;
+const App = () => (React.createElement("div", { className: "pane" },
+    React.createElement("div", { className: "lbl" }, "paint \u00B7 tone \u00B7 behaviour \u2192 Surface"),
+    React.createElement("div", { className: "g" },
+        React.createElement("div", { className: "slot" },
+            React.createElement("span", { className: "cap" },
+                React.createElement("b", null, "title \u00B7 description \u00B7 actions \u00B7 body \u00B7 footer")),
+            React.createElement(Card, { title: "Monthly revenue", description: "Last 30 days", actions: React.createElement(IconButton, { icon: "more-horizontal", label: "More", size: "sm" }), footer: React.createElement(React.Fragment, null,
+                    React.createElement(Button, { size: "sm", variant: "ghost" }, "Export"),
+                    React.createElement(Button, { size: "sm", variant: "secondary" }, "View report")) },
+                React.createElement("div", { style: { display: 'flex', alignItems: 'baseline', gap: 10 } },
+                    React.createElement("span", { style: { fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 30, lineHeight: 1, letterSpacing: '-0.03em' } }, "\u20AC48,290"),
+                    React.createElement(Badge, { tone: "success", dot: true }, "+12.4%")))),
+        React.createElement("div", { className: "slot" },
+            React.createElement("span", { className: "cap" },
+                React.createElement("b", null, "title \u00B7 body")),
+            React.createElement(Card, { title: "Notifications", description: "Choose what we email you" },
+                React.createElement("div", { className: "sb" }, "Weekly digest, mentions and review requests."))),
+        React.createElement("div", { className: "slot" },
+            React.createElement("span", { className: "cap" },
+                React.createElement("b", null, "body \u00B7 footerAlign=\"between\"")),
+            React.createElement(Card, { footerAlign: "between", footer: React.createElement(React.Fragment, null,
+                    React.createElement("span", { className: "cap" }, "Draft \u00B7 2 min ago"),
+                    React.createElement(Button, { size: "sm" }, "Publish")) },
+                React.createElement("div", { className: "sb" }, "Body-only card with a footer bar. Use when the content carries its own heading.")))),
+    React.createElement("div", { className: "slot" },
+        React.createElement("span", { className: "cap" },
+            React.createElement("b", null, "padding"),
+            " \u00B7 --card-pad-*"),
+        React.createElement("div", { className: "g4" }, ['none', 'sm', 'md', 'lg'].map(p => React.createElement(Card, { key: p, padding: p, title: 'padding="' + p + '"' },
+            React.createElement("div", { className: "ph" })))))));
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

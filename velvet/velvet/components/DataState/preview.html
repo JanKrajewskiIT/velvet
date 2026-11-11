@@ -1,0 +1,22 @@
+<!-- @dsCard group="Components · Feedback" height=130 width=960 subtitle="Inline indicator — fresh · delayed · stale · partial · unavailable · empty" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:16px;align-items:center}.lbl{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);width:96px;flex:none}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const { DataState } = window.VelvetUIDesignSystem_ee2bd8;
+const App = () => (React.createElement("div", { className: "pane" },
+ React.createElement("div", { className: "r" },
+ React.createElement(DataState, { state: "fresh", source: "Reports API", asOf: "14:32:07" }),
+ React.createElement(DataState, { state: "delayed", label: "Delayed 15 min", source: "Metrics API \u00B7 cache" }),
+ React.createElement(DataState, { state: "stale", source: "Reports API", asOf: "21 Oct" }),
+ React.createElement(DataState, { state: "partial", label: "12 of 14 sources" }),
+ React.createElement(DataState, { state: "unavailable", source: "Audit log" }),
+ React.createElement(DataState, { state: "empty", label: "No matching items" })),
+ React.createElement("div", { className: "lbl", style: { width: "auto" } }, "variant=\"block\" is a panel: see the StatusPage preview (tabs Stale data, Partial data, Unavailable data, No data)")));
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

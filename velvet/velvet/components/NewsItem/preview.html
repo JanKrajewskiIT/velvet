@@ -1,0 +1,16 @@
+<!-- @dsCard group="Components · Display" height=366 width=960 subtitle="Source · impact · AI summary bullets · tags" -->
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;padding:var(--space-5) 20px;box-sizing:border-box;background:var(--bg-raised);color:var(--fg-primary);font-family:var(--font-sans)}#root,.pane{background:transparent}.vcard+.vcard{margin-top:20px}.vcard-t{font:500 11px/1.3 var(--font-mono);color:var(--fg-tertiary);margin:0 0 8px}.lbl,.mx>.hd,.mx>.rh{font:500 11px/1.3 var(--font-mono);letter-spacing:0;text-transform:none;color:var(--fg-tertiary)}
+.pane{display:flex;flex-direction:column;gap:14px}.r{display:flex;flex-wrap:wrap;gap:16px;align-items:center}.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}</style></head><body>
+<div class="vcard"><div id="root-0"></div></div>
+<script>
+(function(){
+"use strict";
+const { NewsItem, Button } = window.VelvetUIDesignSystem_ee2bd8;
+const App = () => (React.createElement("div", { className: "g" },
+ React.createElement(NewsItem, { title: "Release 4.2 ships offline mode and faster sync", source: "Changelog", time: "07:12", region: "EU", impact: "High", bullets: ['Offline edits sync when the connection returns.', 'Sync is about 40% faster on large workspaces.'], tags: ['sync', 'mobile', 'release'], onTagClick: () => { }, href: "#" }),
+ React.createElement(NewsItem, { title: "Scheduled maintenance on Saturday", source: "Status", time: "yesterday", region: "Global", impact: "Low", bullets: ['Read-only mode for 20 minutes from 02:00 UTC.'], tags: ['maintenance'], actions: React.createElement(Button, { size: "xs", variant: "ghost" }, "Open notice") })));
+ReactDOM.createRoot(document.getElementById('root-0')).render(React.createElement(App, null));
+
+})();
+</script></body></html>

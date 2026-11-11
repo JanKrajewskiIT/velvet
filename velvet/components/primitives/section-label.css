@@ -1,7 +1,0 @@
-/* Atom · SectionLabel — uppercase group heading. Hosts set padding; type + colour come from here. */
-.vui-section-label{display:flex;align-items:center;gap:var(--space-1-5);min-width:0;margin:0;font:var(--type-section);letter-spacing:var(--type-section-tracking);text-transform:uppercase;color:var(--fg-tertiary)}
-.vui-section-label .vui-icon{font-size:var(--size-icon-xs)}
-.vui-section-label__text{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.vui-section-label__end{margin-left:auto;display:inline-flex;align-items:center;gap:var(--space-1);text-transform:none;letter-spacing:normal;font-weight:var(--type-label-weight)}
-.vui-section-label--secondary{color:var(--fg-secondary)}.vui-section-label--brand{color:var(--fg-brand)}
-.vui-section-label--sticky{position:sticky;top:0;z-index:var(--z-raised);background:var(--bg-glass);backdrop-filter:blur(var(--blur-sm));-webkit-backdrop-filter:blur(var(--blur-sm))}
