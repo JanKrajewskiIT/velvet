@@ -1,4 +1,4 @@
-import { formatMessage } from '@jankrajewskiit/i18n';
+import { formatMessage, type Locale } from '@jankrajewskiit/i18n';
 
 import type { useTranslate } from '../../i18n/useTranslate';
 import { SESSION_MINUTES_PER_HOUR } from './marketSession';
@@ -6,7 +6,7 @@ import type { MarketSessionLabels, MarketSessionState } from './marketSessionTyp
 
 interface SessionTextOptions {
   translate: ReturnType<typeof useTranslate>;
-  locale: string;
+  locale: Locale;
   timeFormat: Intl.DateTimeFormat;
   labels?: Partial<MarketSessionLabels>;
 }

@@ -6,7 +6,7 @@ import { IconButton, type IconButtonProps } from '../actions/IconButton';
 const DEFAULT_DIRECTION = 'prev';
 const DEFAULT_SIZE = 'sm';
 
-export interface PeriodNavButtonProps extends Omit<IconButtonProps, 'icon' | 'label'> {
+export interface PeriodNavButtonProps extends Omit<IconButtonProps, 'dir' | 'icon' | 'label'> {
   /** @default 'prev' */
   dir?: 'prev' | 'next';
   /** Defaults to the localized previous / next label. */

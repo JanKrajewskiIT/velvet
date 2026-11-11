@@ -2,7 +2,7 @@ import { type JSX, mergeProps, Show, splitProps } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
-import type { HtmlProps } from '../../utils/polymorphic';
+import { type HtmlProps, Polymorphic } from '../../utils/polymorphic';
 import { toneIcon } from '../../utils/tone';
 import { Dot } from '../primitives/Dot';
 import styles from './DataState.module.css';
@@ -60,14 +60,21 @@ export const DataState = (props: DataStateProps) => {
     <Show
       when={local.variant === 'block'}
       fallback={
-        <span {...rest} role="status" class={cx(styles.root, local.class)} data-variant="inline">
+        <Polymorphic tag="span" {...rest} role="status" class={cx(styles.root, local.class)} data-variant="inline">
           <Dot tone={meta().tone} pulse={local.state === 'fresh'} />
           <span>{label()}</span>
           {source()}
-        </span>
+        </Polymorphic>
       }
     >
-      <div {...rest} role="status" class={cx(styles.block, local.class)} data-variant="block" data-tone={meta().tone}>
+      <Polymorphic
+        tag="div"
+        {...rest}
+        role="status"
+        class={cx(styles.block, local.class)}
+        data-variant="block"
+        data-tone={meta().tone}
+      >
         <EmptyState
           icon={meta().icon ?? toneIcon(meta().tone)}
           tone={meta().tone}
@@ -81,7 +88,7 @@ export const DataState = (props: DataStateProps) => {
           }
           actions={local.action}
         />
-      </div>
+      </Polymorphic>
     </Show>
   );
 };

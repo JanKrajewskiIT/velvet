@@ -1,5 +1,5 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { createEffect, createMemo, createSignal, mergeProps, on, onCleanup, Show, splitProps } from 'solid-js';
+import { createEffect, createMemo, createSignal, For, mergeProps, on, onCleanup, Show, splitProps } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
@@ -120,7 +120,7 @@ export const PriceCell = (props: PriceCellProps) => {
   return (
     <span {...rest} class={cx(styles.root, local.class)} data-size={local.size} data-tick={direction()}>
       <Show when={name()}>{(description) => <VisuallyHidden>{description()}</VisuallyHidden>}</Show>
-      <Show when={revision()} keyed>
+      <For each={[revision()]}>
         {() => (
           <span class={styles.value} aria-hidden={name() ? true : undefined}>
             {text()}
@@ -129,7 +129,7 @@ export const PriceCell = (props: PriceCellProps) => {
             </Show>
           </span>
         )}
-      </Show>
+      </For>
       <Show when={local.change != null && !local.hidden}>
         <Delta value={local.change} format={local.changeFormat} size="sm" locale={local.locale} />
       </Show>
