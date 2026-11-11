@@ -10,13 +10,6 @@ import { Badge } from '../primitives/Badge';
 import { Text } from '../primitives/Text';
 import styles from './Stat.module.css';
 
-const DELTA_COLOR = {
-  success: 'var(--status-success-fg)',
-  danger: 'var(--status-danger-fg)',
-  warning: 'var(--status-warning-fg)',
-  neutral: 'var(--fg-secondary)',
-} as const;
-
 const SPARK_HEIGHT = 32;
 
 export interface StatProps extends HtmlProps<HTMLElement, 'title'> {
@@ -24,7 +17,7 @@ export interface StatProps extends HtmlProps<HTMLElement, 'title'> {
   value: JSX.Element;
   delta?: string;
   /** Colour of the delta badge. @default 'success' */
-  tone?: keyof typeof DELTA_COLOR;
+  tone?: 'success' | 'danger' | 'warning' | 'neutral';
   hint?: JSX.Element;
   /** Category coding — Surface accent strip in this tone; also colours the sparkline. */
   accent?: Tone;
@@ -74,7 +67,7 @@ export const Stat = (props: StatProps) => {
         </Text>
         <Show when={local.delta}>
           {(delta) => (
-            <Badge size="sm" tone={local.tone} style={{ color: DELTA_COLOR[local.tone] }}>
+            <Badge size="sm" tone={local.tone}>
               {delta()}
             </Badge>
           )}

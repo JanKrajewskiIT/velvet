@@ -1,6 +1,7 @@
 import type { I18nKey } from '@jankrajewskiit/i18n';
-import { children as resolveChildren, createSignal, For, type JSX, mergeProps, onCleanup, Show } from 'solid-js';
+import { children as resolveChildren, For, type JSX, mergeProps, Show } from 'solid-js';
 
+import { type CopyStatus, createCopyFeedback } from '../../hooks/createCopyFeedback';
 import { useTranslate } from '../../i18n/useTranslate';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
@@ -57,8 +58,6 @@ export interface ChatMessageProps {
 
 const COPY_FEEDBACK_MS = 1500;
 
-type CopyStatus = 'idle' | 'copied' | 'failed';
-
 const COPY_LABEL_KEYS: Record<CopyStatus, I18nKey> = {
   idle: 'velvet.common.copy',
   copied: 'velvet.common.copied',
@@ -70,10 +69,8 @@ export const ChatMessage = (props: ChatMessageProps) => {
   const p = mergeProps({ role: 'assistant', streaming: false } satisfies ChatMessageProps, props);
   const translate = useTranslate();
   const rich = resolveChildren(() => p.children);
-  const [copyStatus, setCopyStatus] = createSignal<CopyStatus>('idle');
+  const { status: copyStatus, busy: copyBusy, copy: copyText } = createCopyFeedback(COPY_FEEDBACK_MS);
   let body: HTMLDivElement | undefined;
-  let resetTimer: ReturnType<typeof setTimeout> | undefined;
-  onCleanup(() => clearTimeout(resetTimer));
 
   const content = (): JSX.Element => (rich.toArray().length > 0 ? rich() : p.content);
   const empty = () => {
@@ -84,17 +81,9 @@ export const ChatMessage = (props: ChatMessageProps) => {
   const showTools = () => !isUser() && !p.streaming && !p.error && !empty();
   const errorText = () => (p.error === true ? translate('velvet.patterns.chatMessage.errorDefault') : p.error);
 
-  const copy = async () => {
+  const copy = () => {
     const text = p.content ?? body?.innerText ?? '';
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopyStatus('copied');
-      p.onCopy?.(text);
-    } catch {
-      setCopyStatus('failed');
-    }
-    clearTimeout(resetTimer);
-    resetTimer = setTimeout(() => setCopyStatus('idle'), COPY_FEEDBACK_MS);
+    return copyText(text, p.onCopy);
   };
   const copyLabel = () => translate(COPY_LABEL_KEYS[copyStatus()]);
   const vote = (value: 'up' | 'down') => p.onFeedback?.(p.feedback === value ? null : value);
@@ -221,6 +210,8 @@ export const ChatMessage = (props: ChatMessageProps) => {
                 size="xs"
                 variant="ghost"
                 onClick={() => void copy().catch(reportAsyncError)}
+                disabled={copyBusy()}
+                aria-busy={copyBusy() || undefined}
               />
               <Show when={p.onRetry}>
                 <IconButton

@@ -279,11 +279,9 @@
 }
 
 .navbarMbPartOverlay {
+  composes: raisedFrame from '../../styles/shared/primitives/raisedFrame.module.css';
   margin-top: var(--space-2);
   padding: var(--space-2) var(--space-4);
-  border: var(--border-width) solid var(--border-default);
-  border-radius: var(--radius-lg);
-  background: var(--bg-raised);
   box-shadow: var(--elevation-popover);
 }
 

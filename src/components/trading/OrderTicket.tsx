@@ -8,6 +8,7 @@ import { ConfirmDialog } from '../feedback/ConfirmDialog';
 import { OptionSwitcher } from '../forms/OptionSwitcher';
 import { Badge } from '../primitives/Badge';
 import { Glyph } from '../primitives/Glyph';
+import { Text } from '../primitives/Text';
 import { createOrderTicket } from './createOrderTicket';
 import styles from './OrderTicket.module.css';
 import { OrderTicketFields } from './OrderTicketFields';
@@ -96,7 +97,9 @@ export const OrderTicket = (props: OrderTicketProps) => {
         >
           {t.label('review')} · {t.what()}
         </Button>
-        <p class={styles.note}>{t.label('estimate')}</p>
+        <Text as="p" variant="body" tone="tertiary" class={styles.note}>
+          {t.label('estimate')}
+        </Text>
       </div>
       <ConfirmDialog
         open={!!t.review()}

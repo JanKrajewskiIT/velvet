@@ -15,7 +15,7 @@
 }
 
 .language {
-  font: 600 10px/1 var(--font-mono);
+  font: var(--type-title-weight) var(--type-micro-size)/var(--leading-none) var(--font-mono);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   padding: var(--space-1) var(--space-1-5);
@@ -32,7 +32,7 @@
   border-radius: var(--radius-md);
   background: var(--code-bg);
   color: var(--code-fg);
-  font: 13px/20px var(--font-mono);
+  font: var(--type-code-weight) var(--type-code-size)/var(--code-editor-line-height) var(--type-code-family);
 }
 
 .box:focus-within {

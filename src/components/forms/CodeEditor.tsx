@@ -161,6 +161,7 @@ export const CodeEditor = (props: CodeEditorProps) => {
       <div
         class={styles.box}
         style={{
+          '--code-editor-line-height': `${LINE_HEIGHT}px`,
           height: `${local.rows * LINE_HEIGHT + VERTICAL_PADDING}px`,
           'max-height': typeof local.maxHeight === 'number' ? `${local.maxHeight}px` : local.maxHeight,
         }}

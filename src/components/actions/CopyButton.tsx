@@ -1,6 +1,6 @@
-import { createSignal, mergeProps, onCleanup, Show } from 'solid-js';
+import { mergeProps, Show } from 'solid-js';
 
-import { createOperation } from '../../hooks/createOperation';
+import { createCopyFeedback } from '../../hooks/createCopyFeedback';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { reportAsyncError } from '../../utils/reportAsyncError';
@@ -10,8 +10,6 @@ import { buttonClass } from './buttonClass';
 import styles from './CopyButton.module.css';
 
 const COPIED_FEEDBACK_MS = 1600;
-
-type CopyStatus = 'idle' | 'copied' | 'failed';
 
 export interface CopyButtonProps {
   value: string | (() => string);
@@ -35,29 +33,11 @@ export const CopyButton = (props: CopyButtonProps) => {
   const p = mergeProps({ variant: 'secondary', size: 'sm' } satisfies Partial<CopyButtonProps>, props);
   const translate = useTranslate();
   const label = () => p.label ?? translate('velvet.common.copy');
-  const [status, setStatus] = createSignal<CopyStatus>('idle');
-  const operation = createOperation();
-  let resetTimer: ReturnType<typeof setTimeout> | undefined;
-  onCleanup(() => clearTimeout(resetTimer));
+  const { status, busy, copy: copyText } = createCopyFeedback(COPIED_FEEDBACK_MS);
 
-  const copy = async () => {
-    if (operation.busy()) return;
+  const copy = () => {
     const text = typeof p.value === 'function' ? p.value() : p.value;
-    const run = operation.begin();
-    if (!run) return;
-    let outcome: Exclude<CopyStatus, 'idle'>;
-    try {
-      await navigator.clipboard.writeText(text);
-      outcome = 'copied';
-    } catch {
-      outcome = 'failed';
-    }
-    if (!run.isCurrent()) return;
-    run.finish();
-    setStatus(outcome);
-    clearTimeout(resetTimer);
-    resetTimer = setTimeout(() => setStatus('idle'), COPIED_FEEDBACK_MS);
-    if (outcome === 'copied') p.onCopy?.(text);
+    return copyText(text, p.onCopy);
   };
 
   const feedback = () => {
@@ -77,8 +57,8 @@ export const CopyButton = (props: CopyButtonProps) => {
         p.class,
       )}
       onClick={() => void copy().catch(reportAsyncError)}
-      disabled={operation.busy()}
-      aria-busy={operation.busy() || undefined}
+      disabled={busy()}
+      aria-busy={busy() || undefined}
       aria-label={p.iconOnly ? caption() : undefined}
       title={p.iconOnly ? label() : undefined}
     >

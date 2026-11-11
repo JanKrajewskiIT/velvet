@@ -6,7 +6,7 @@
   height: var(--control-height-sm);
   padding: 0 var(--space-3);
   border-radius: var(--radius-full);
-  font: 600 var(--type-body-sm-size)/1 var(--font-sans);
+  font: var(--type-title-weight) var(--type-body-sm-size)/var(--leading-none) var(--font-sans);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
   cursor: pointer;

@@ -3,12 +3,10 @@
 }
 
 .hnav {
+  composes: raisedFrame from '../../styles/shared/primitives/raisedFrame.module.css';
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border: var(--border-width) solid var(--border-default);
-  border-radius: var(--radius-lg);
-  background: var(--bg-raised);
 }
 
 .hnavPartHead {

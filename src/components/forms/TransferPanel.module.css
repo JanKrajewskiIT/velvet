@@ -1,10 +1,8 @@
 .xferPartPanel {
+  composes: raisedFrame from '../../styles/shared/primitives/raisedFrame.module.css';
   display: flex;
   flex-direction: column;
   min-width: 0;
-  border: var(--border-width) solid var(--border-default);
-  border-radius: var(--radius-lg);
-  background: var(--bg-raised);
   box-shadow: var(--elevation-control);
   overflow: hidden;
   transition:

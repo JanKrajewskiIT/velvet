@@ -28,7 +28,7 @@
   place-items: center;
   width: 24px;
   height: 24px;
-  font-size: 18px;
+  font-size: var(--type-body-lg-size);
   color: var(--fg-tertiary);
 }
 
@@ -64,7 +64,7 @@
 }
 
 .code {
-  font: 600 11px/1 var(--font-mono);
+  font: var(--type-title-weight) var(--type-overline-size)/var(--leading-none) var(--font-mono);
   color: var(--fg-secondary);
   padding: var(--space-1) var(--space-1-5);
   border-radius: var(--radius-xs);
@@ -73,7 +73,7 @@
 }
 
 .tag {
-  font: 700 10px/1 var(--font-mono);
+  font: var(--type-heavy-weight) var(--type-micro-size)/var(--leading-none) var(--font-mono);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   padding: var(--space-1) var(--space-1-5);
@@ -100,5 +100,5 @@
 }
 
 .root[data-size='sm'] .icon {
-  font-size: 16px;
+  font-size: var(--type-body-size);
 }

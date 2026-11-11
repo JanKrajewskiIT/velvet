@@ -4,6 +4,7 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
 import { Dot } from '../primitives/Dot';
+import { Heading } from '../primitives/Heading';
 import { Tag } from '../primitives/Tag';
 import styles from './NewsItem.module.css';
 
@@ -84,7 +85,7 @@ export const NewsItem = (props: NewsItemProps) => {
           </span>
         </Show>
       </header>
-      <h3 class={styles.title}>
+      <Heading level={3} variant="title" class={styles.title}>
         <Show when={href()} fallback={local.title}>
           {(url) => (
             <a class={styles.link} href={url()} target="_blank" rel="noopener noreferrer">
@@ -92,7 +93,7 @@ export const NewsItem = (props: NewsItemProps) => {
             </a>
           )}
         </Show>
-      </h3>
+      </Heading>
       <Show when={local.bullets.length}>
         <div class={styles.summary}>
           <span class={styles.ai}>{local.aiLabel ?? translate('velvet.finance.newsItem.aiSummary')}</span>

@@ -20,7 +20,7 @@
 .value {
   order: -1;
   margin: 0;
-  font: 600 18px/1.2 var(--font-mono);
+  font: var(--type-title-weight) var(--type-body-lg-size)/var(--leading-compact) var(--font-mono);
   font-variant-numeric: tabular-nums;
   color: var(--fg-primary);
   white-space: nowrap;
@@ -29,7 +29,7 @@
 }
 
 .root[data-size='sm'] .value {
-  font-size: 15px;
+  font-size: var(--metric-group-value-sm-size);
 }
 
 .root[data-size='lg'] .value {
@@ -50,5 +50,5 @@
 }
 
 .root[data-size='sm'] .label {
-  font-size: 11px;
+  font-size: var(--type-overline-size);
 }

@@ -47,6 +47,8 @@
 --segment-fg:var(--fg-secondary);/* @kind color */--segment-fg-hover:var(--fg-primary);/* @kind color */--segment-on-bg:var(--bg-raised);/* @kind color */--segment-on-fg:var(--fg-primary);/* @kind color */--segment-on-shadow:var(--elevation-card);/* @kind shadow */
 /* Table */
 --table-row-height:var(--row-height);/* @kind spacing */--table-header-bg:var(--bg-subtle);/* @kind color */--table-border:var(--border-subtle);/* @kind color */--table-row-hover:var(--bg-hover);/* @kind color */--table-row-selected:var(--bg-selected);/* @kind color */--table-header-fg:var(--fg-tertiary);/* @kind color */--grid-row-height:var(--control-height-inner-lg);/* @kind spacing */--col-resize-w:8px;/* @kind spacing */--table-pin-shadow:8px 0 10px -6px color-mix(in oklab,var(--tint) 18%,transparent);/* @kind shadow */--table-pin-shadow-end:-8px 0 10px -6px color-mix(in oklab,var(--tint) 18%,transparent);/* @kind shadow */
+--virtual-table-header-height:38px;/* @kind spacing */--code-label-mark-sm-size:9px;/* @kind font */
+--metric-group-value-sm-size:15px;/* @kind font */--brand-logo-size-lg:28px;/* @kind font */--brand-logo-size-xl:44px;/* @kind font */--spinner-size-lg:40px;/* @kind font */
 /* Media frame */
 --media-radius:var(--radius-lg);/* @kind other */--media-bg:var(--bg-sunken);/* @kind color */--media-stripe:var(--bg-subtle);/* @kind color */--media-border:var(--border-subtle);/* @kind color */
 --media-play-size:52px;/* @kind spacing */--media-play-bg:var(--bg-glass);/* @kind color */--media-play-fg:var(--fg-primary);/* @kind color */--media-play-blur:var(--blur-md);/* @kind other */

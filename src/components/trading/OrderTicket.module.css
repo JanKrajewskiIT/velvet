@@ -55,7 +55,7 @@
 }
 
 .sidePrice {
-  font: var(--type-medium-weight) var(--font-size-md)/1.2 var(--font-mono);
+  font: var(--type-medium-weight) var(--type-body-size)/1.2 var(--font-mono);
   font-variant-numeric: tabular-nums;
 }
 
@@ -96,10 +96,9 @@
   margin-top: 1px;
 }
 
-.note {
+p.note {
   margin: 0;
-  font-size: var(--font-size-2xs);
-  color: var(--fg-tertiary);
+  font-size: var(--type-overline-size);
 }
 
 @media (forced-colors: active) {

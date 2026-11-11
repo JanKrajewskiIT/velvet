@@ -88,7 +88,7 @@
   border-radius: var(--radius-sm);
   background: var(--env-chip-bg);
   color: var(--env-chip-fg);
-  font: 700 12px/1.2 var(--font-mono);
+  font: var(--type-heavy-weight) var(--type-caption-size)/var(--leading-compact) var(--font-mono);
   letter-spacing: 0.12em;
   white-space: nowrap;
 }
@@ -114,7 +114,7 @@
 }
 
 .value {
-  font: 600 13px/1.2 var(--font-mono);
+  font: var(--type-title-weight) var(--type-label-size)/var(--leading-compact) var(--font-mono);
   letter-spacing: 0.02em;
 }
 

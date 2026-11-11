@@ -11,12 +11,12 @@
   }
 
   &[data-size='md'] {
-    font-size: var(--font-size-md);
-    font-weight: var(--font-weight-medium);
+    font-size: var(--type-body-size);
+    font-weight: var(--type-label-weight);
   }
 
   &[data-size='lg'] {
-    font: var(--font-weight-semibold) var(--font-size-3xl)/1.1 var(--font-display);
+    font: var(--type-h2-weight) var(--type-h2-size)/1.1 var(--type-h2-family);
     letter-spacing: -0.02em;
     font-variant-numeric: tabular-nums;
   }
@@ -41,7 +41,7 @@
   font-size: 0.72em;
   color: var(--fg-tertiary);
   font-family: var(--font-sans);
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--type-label-weight);
 }
 
 @keyframes tickUp {

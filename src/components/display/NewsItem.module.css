@@ -1,11 +1,9 @@
 .root {
+  composes: raisedFrame from '../../styles/shared/primitives/raisedFrame.module.css';
   display: flex;
   flex-direction: column;
   gap: var(--space-2-5);
   padding: var(--space-4) var(--space-5);
-  border: var(--border-width) solid var(--border-default);
-  border-radius: var(--radius-lg);
-  background: var(--bg-raised);
 }
 
 .head {
@@ -29,9 +27,9 @@
   color: var(--fg-secondary);
 }
 
-.title {
+h3.title {
   margin: 0;
-  font: 600 var(--type-body-size)/1.35 var(--font-sans);
+  font: var(--type-title-weight) var(--type-body-size)/1.35 var(--font-sans);
   color: var(--fg-primary);
   text-wrap: pretty;
 }
@@ -53,7 +51,7 @@
 }
 
 .ai {
-  font: 600 10px/1 var(--font-mono);
+  font: var(--type-title-weight) var(--type-micro-size)/var(--leading-none) var(--font-mono);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--fg-brand);

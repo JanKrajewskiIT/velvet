@@ -1,6 +1,7 @@
 import type { I18nKey } from '@jankrajewskiit/i18n';
-import { createMemo, createSignal, createUniqueId, For, mergeProps, onCleanup, Show } from 'solid-js';
+import { createMemo, createSignal, createUniqueId, For, mergeProps, Show } from 'solid-js';
 
+import { type CopyStatus, createCopyFeedback } from '../../hooks/createCopyFeedback';
 import { useTranslate } from '../../i18n/useTranslate';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
@@ -22,8 +23,6 @@ const TK_CLASSES = {
 } as const;
 
 const COPIED_FEEDBACK_MS = 1600;
-
-type CopyStatus = 'idle' | 'copied' | 'failed';
 
 const COPY_LABEL_KEY: Record<CopyStatus, I18nKey> = {
   idle: 'velvet.common.copy',
@@ -73,9 +72,7 @@ export const CodeSnippet = (props: CodeSnippetProps) => {
   const hasTabs = () => (merged.tabs?.length ?? 0) > 0;
   const activeTabIndex = () => Math.min(tabIndex(), Math.max((merged.tabs?.length ?? 0) - 1, 0));
   const snippetLabel = () => merged.label ?? merged.title ?? translate('velvet.data.codeSnippet.codeLabel');
-  const [copyStatus, setCopyStatus] = createSignal<CopyStatus>('idle');
-  let resetTimer: ReturnType<typeof setTimeout> | undefined;
-  onCleanup(() => clearTimeout(resetTimer));
+  const { status: copyStatus, busy: copyBusy, copy } = createCopyFeedback(COPIED_FEEDBACK_MS);
 
   const current = () => {
     const tab = merged.tabs?.[activeTabIndex()];
@@ -92,17 +89,6 @@ export const CodeSnippet = (props: CodeSnippetProps) => {
       : copyStatus() === 'failed'
         ? translate('velvet.data.codeSnippet.copyFailed')
         : '';
-
-  const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(current().code);
-      setCopyStatus('copied');
-    } catch {
-      setCopyStatus('failed');
-    }
-    clearTimeout(resetTimer);
-    resetTimer = setTimeout(() => setCopyStatus('idle'), COPIED_FEEDBACK_MS);
-  };
 
   const onTabKeyDown = (event: KeyboardEvent, index: number) => {
     const count = merged.tabs?.length ?? 0;
@@ -164,7 +150,9 @@ export const CodeSnippet = (props: CodeSnippetProps) => {
             styles.codePartCopy,
             copyStatus() === 'copied' && styles.codePartCopyVariantDone,
           )}
-          onClick={() => void copy().catch(reportAsyncError)}
+          onClick={() => void copy(current().code).catch(reportAsyncError)}
+          disabled={copyBusy()}
+          aria-busy={copyBusy() || undefined}
           aria-label={copyStatus() === 'idle' ? translate('velvet.data.codeSnippet.copyCode') : copyLabel()}
         >
           <Glyph name={copyStatus() === 'copied' ? 'check' : 'copy'} />

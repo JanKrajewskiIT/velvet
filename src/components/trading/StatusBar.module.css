@@ -9,7 +9,7 @@
   box-sizing: border-box;
   background: var(--bg-raised);
   border-top: var(--border-width) solid var(--border-subtle);
-  font: var(--font-weight-regular) var(--font-size-xs) / 1 var(--font-sans);
+  font: var(--type-caption-weight) var(--type-caption-size) / var(--leading-none) var(--type-caption-family);
   color: var(--fg-secondary);
   white-space: nowrap;
   overflow: hidden;

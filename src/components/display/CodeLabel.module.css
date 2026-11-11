@@ -27,7 +27,7 @@ button.root:hover .code {
 
 .root .mark {
   border-radius: var(--radius-md);
-  font: 700 11px/1 var(--font-mono);
+  font: var(--type-heavy-weight) var(--type-overline-size)/var(--leading-none) var(--font-mono);
   letter-spacing: 0.02em;
   overflow: hidden;
 }
@@ -35,7 +35,7 @@ button.root:hover .code {
 .root[data-size='sm'] .mark {
   width: var(--size-icon-2xl);
   height: var(--size-icon-2xl);
-  font-size: 9px;
+  font-size: var(--code-label-mark-sm-size);
 }
 
 .text {
@@ -52,7 +52,7 @@ button.root:hover .code {
 }
 
 .code {
-  font: 600 var(--type-body-size)/1.25 var(--font-mono);
+  font: var(--type-title-weight) var(--type-body-size)/1.25 var(--font-mono);
   color: var(--fg-primary);
   white-space: nowrap;
 }
@@ -66,7 +66,7 @@ button.root:hover .code {
 }
 
 .tag {
-  font: 600 10px/1 var(--font-mono);
+  font: var(--type-overline-weight) var(--type-micro-size)/var(--leading-none) var(--font-mono);
   letter-spacing: 0.06em;
   padding: var(--space-1) var(--space-1-5);
   border-radius: var(--radius-xs);

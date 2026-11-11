@@ -71,11 +71,11 @@
 }
 
 .logoVariantLg {
-  font-size: 28px;
+  font-size: var(--brand-logo-size-lg);
 }
 
 .logoVariantXl {
-  font-size: 44px;
+  font-size: var(--brand-logo-size-xl);
 }
 
 .logoR {

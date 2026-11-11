@@ -6,10 +6,8 @@
 }
 
 .pageHeaderVariantCard {
+  composes: raisedFrame from '../../styles/shared/primitives/raisedFrame.module.css';
   padding: var(--space-5) var(--space-6);
-  border: var(--border-width) solid var(--border-default);
-  border-radius: var(--radius-lg);
-  background: var(--bg-raised);
   box-shadow: var(--elevation-control);
 
   --tabs-border-width: 0;

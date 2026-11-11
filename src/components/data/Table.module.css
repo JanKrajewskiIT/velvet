@@ -16,12 +16,11 @@
 }
 
 .tableWrap {
+  composes: raisedFrame from '../../styles/shared/primitives/raisedFrame.module.css';
+
   --_r: calc(var(--radius-lg) - 1px);
 
   position: relative;
-  border: var(--border-width) solid var(--border-default);
-  border-radius: var(--radius-lg);
-  background: var(--bg-raised);
 }
 
 .tableWrap > :first-child {

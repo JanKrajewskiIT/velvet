@@ -3,7 +3,7 @@
 }
 
 .loaderVariantLg {
-  font-size: 40px;
+  font-size: var(--spinner-size-lg);
 }
 
 .loaderVariantInline {

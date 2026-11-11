@@ -23,7 +23,7 @@
 .symbol {
   margin: 0;
   font: var(--type-display-md);
-  font-size: var(--font-size-3xl);
+  font-size: var(--type-h2-size);
   letter-spacing: -0.02em;
   color: var(--fg-primary);
 }

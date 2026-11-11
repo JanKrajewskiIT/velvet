@@ -48,7 +48,7 @@
 }
 
 .value {
-  font: 600 var(--type-caption-size)/1 var(--font-mono);
+  font: var(--type-title-weight) var(--type-caption-size)/var(--leading-none) var(--font-mono);
   font-variant-numeric: tabular-nums;
   text-align: right;
   color: var(--trend-flat-fg);
