@@ -1,7 +1,0 @@
-.selectPartDesc {
-  color: var(--fg-tertiary);
-}
-
-.selectPartLabel {
-  composes: selectPartLabel from '../../styles/shared/forms/select.module.css';
-}
