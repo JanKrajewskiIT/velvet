@@ -19,14 +19,6 @@
   composes: chart from '../../styles/shared/charts/chart.module.css';
 }
 
-.chartPartLegend {
-  composes: chartPartLegend from '../../styles/shared/charts/chart.module.css';
-}
-
-.chartPartLg {
-  composes: chartPartLg from '../../styles/shared/charts/chart.module.css';
-}
-
 .chartPartPlot {
   composes: chartPartPlot from '../../styles/shared/charts/chart.module.css';
 }
@@ -41,18 +33,6 @@
 
 .chartPartTickVariantOn {
   composes: chartPartTickVariantOn from '../../styles/shared/charts/chart.module.css';
-}
-
-.chartPartTip {
-  composes: chartPartTip from '../../styles/shared/charts/chart.module.css';
-}
-
-.chartPartTipT {
-  composes: chartPartTipT from '../../styles/shared/charts/chart.module.css';
-}
-
-.chartPartTipR {
-  composes: chartPartTipR from '../../styles/shared/charts/chart.module.css';
 }
 
 @keyframes vuiBarIn {

@@ -41,6 +41,9 @@ export const feedbackEn = defineDictionary({
   loadingOverlay: {
     label: 'Loading…',
   },
+  robotProcessingIndicator: {
+    label: 'Processing',
+  },
   notificationCenter: {
     title: 'Notifications',
     unreadLabel: '{title}, {count} unread',

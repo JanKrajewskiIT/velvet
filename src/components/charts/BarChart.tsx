@@ -2,20 +2,21 @@ import { createMemo, createSignal, For, mergeProps, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
-import { clamp } from '../../utils/math';
 import { positiveNumber } from '../../utils/numericOption';
-import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
 import { VisuallyHidden } from '../primitives/VisuallyHidden';
 import styles from './BarChart.module.css';
+import { ChartLegend } from './ChartLegend';
+import { chartLegendItems } from './chartLegendItems';
 import { type ChartDatum, type ChartSeries, chartValueText, colorOf, defaultSeries, valueOf } from './chartSeries';
+import { ChartTooltip } from './ChartTooltip';
+import { chartTooltipRows } from './chartTooltipRows';
 import { createChartFormat } from './createChartFormat';
 import { createWidth } from './createWidth';
 import { numericScale } from './numericScale';
 
 const PAD = { l: 40, r: 8, t: 12, b: 28 } as const;
 const MAX_GROUP_WIDTH = 56;
-const TIP_MARGIN = 70;
 
 export interface BarChartProps {
   /** `[{ label: 'Mon', value: 12 }]` or one key per series. */
@@ -115,16 +116,7 @@ export const BarChart = (props: BarChartProps) => {
   return (
     <div ref={ref} class={cx(typographyClass('body'), styles.chart, merged.class)}>
       <Show when={merged.showLegend ?? series().length > 1}>
-        <div class={styles.chartPartLegend}>
-          <For each={series()}>
-            {(s, k) => (
-              <Text as="span" variant="caption" tone="secondary" class={styles.chartPartLg}>
-                <i style={{ background: colorOf(s, k()) }} />
-                {s.label}
-              </Text>
-            )}
-          </For>
-        </div>
+        <ChartLegend items={chartLegendItems(series())} />
       </Show>
       <div class={styles.chartPartPlot} style={{ height: `${height()}px` }}>
         <svg
@@ -182,29 +174,14 @@ export const BarChart = (props: BarChartProps) => {
         </svg>
         <Show when={hovered()}>
           {(d) => (
-            <div
-              class={cx(styles.chartPartTip, typographyClass('caption'))}
-              style={{
-                left: `${clamp(bandCentre(hover()), TIP_MARGIN, width() - TIP_MARGIN)}px`,
-                top: `${PAD.t}px`,
-              }}
-              aria-hidden="true"
-            >
-              <Text as="div" variant="label-sm" tone="inherit" class={styles.chartPartTipT}>
-                {d().label}
-              </Text>
-              <For each={series()}>
-                {(s, k) => (
-                  <Text as="div" variant="caption" tone="inherit" class={styles.chartPartTipR}>
-                    <i style={{ background: colorOf(s, k()) }} />
-                    {s.label}
-                    <Text as="b" variant="label-sm" tone="inherit">
-                      {chartValueText(d(), s.key, format, translate('velvet.charts.chartSeries.noValue'))}
-                    </Text>
-                  </Text>
-                )}
-              </For>
-            </div>
+            <ChartTooltip
+              x={bandCentre(hover())}
+              y={PAD.t}
+              width={width()}
+              title={d().label}
+              rows={chartTooltipRows(d(), series(), format, translate('velvet.charts.chartSeries.noValue'))}
+              live={false}
+            />
           )}
         </Show>
         <VisuallyHidden role="status">

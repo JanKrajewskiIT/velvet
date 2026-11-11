@@ -1,7 +1,7 @@
 .root {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1-5, 6px);
+  gap: var(--space-1-5);
   min-width: 0;
 }
 
@@ -18,7 +18,7 @@
   font: 600 10px/1 var(--font-mono);
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  padding: 3px 5px;
+  padding: var(--space-1) var(--space-1-5);
   border-radius: var(--radius-xs);
   background: var(--bg-subtle);
   color: var(--fg-secondary);
@@ -47,7 +47,7 @@
 .gutter {
   flex: none;
   overflow: hidden;
-  padding: 12px 10px 12px 12px;
+  padding: var(--space-3) var(--space-2-5) var(--space-3) var(--space-3);
   text-align: right;
   color: var(--code-gutter);
   border-right: var(--border-width) solid var(--code-line);
@@ -70,7 +70,7 @@
   width: 100%;
   height: 100%;
   margin: 0;
-  padding: 12px 14px;
+  padding: var(--space-3) var(--space-3-5);
   font: inherit;
   white-space: pre;
   overflow: auto;
@@ -99,7 +99,7 @@
 }
 
 .textarea::selection {
-  background: color-mix(in oklab, var(--code-accent, #8ab4ff) 35%, transparent);
+  background: color-mix(in oklab, var(--code-accent) 35%, transparent);
 }
 
 .textarea::placeholder {

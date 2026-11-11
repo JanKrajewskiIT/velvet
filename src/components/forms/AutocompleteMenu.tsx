@@ -1,12 +1,11 @@
 import { For, Show } from 'solid-js';
 
-import { cx } from '../../utils/cx';
-import { Glyph } from '../primitives/Glyph';
+import { Listbox } from '../primitives/Listbox';
+import { ListboxPanel } from '../primitives/ListboxPanel';
 import { highlightMatch } from '../primitives/Mark';
 import { AutocompleteCustomOption } from './AutocompleteCustomOption';
 import styles from './AutocompleteMenu.module.css';
 import { ComboboxOption } from './ComboboxOption';
-import { ComboboxOptionText } from './ComboboxOptionText';
 import type { ComboboxPopup } from './createComboboxPopup';
 import { OptionListStatus, type OptionListStatusProps } from './OptionListStatus';
 import type { SelectOption } from './selectOption';
@@ -24,18 +23,16 @@ export interface AutocompleteMenuProps {
 }
 
 export const AutocompleteMenu = (props: AutocompleteMenuProps) => (
-  <div
+  <ListboxPanel
+    flip={false}
+    up={props.popup.floating.side() === 'top'}
     ref={props.popup.floating.ref}
-    class={cx(
-      styles.selectPartMenu,
-      styles.comboboxPartMenu,
-      props.popup.floating.side() === 'top' && styles.selectPartMenuVariantUp,
-    )}
+    class={styles.comboboxPartMenu}
     style={props.popup.floating.style()}
   >
-    <ul
+    <Listbox
+      floating={false}
       id={props.popup.listId()}
-      role="listbox"
       aria-busy={props.status.loading || undefined}
       aria-label={props.label}
       aria-labelledby={props.labelledBy}
@@ -50,13 +47,11 @@ export const AutocompleteMenu = (props: AutocompleteMenuProps) => (
             disabled={option.disabled}
             onHover={() => !option.disabled && props.popup.setActive(index())}
             onPick={() => props.onPick(option)}
-          >
-            <Show when={option.icon}>{(icon) => <Glyph name={icon()} />}</Show>
-            <ComboboxOptionText label={highlightMatch(option.label, props.query)} description={option.description} />
-            <Show when={props.value === option.value}>
-              <Glyph name="check" class={styles.selectPartCheck} />
-            </Show>
-          </ComboboxOption>
+            icon={option.icon}
+            label={highlightMatch(option.label, props.query)}
+            description={option.description}
+            checkEnd
+          />
         )}
       </For>
       <Show when={props.custom}>
@@ -70,7 +65,7 @@ export const AutocompleteMenu = (props: AutocompleteMenuProps) => (
           />
         )}
       </Show>
-    </ul>
+    </Listbox>
     <OptionListStatus {...props.status} />
-  </div>
+  </ListboxPanel>
 );

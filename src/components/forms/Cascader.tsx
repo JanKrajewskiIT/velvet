@@ -20,6 +20,7 @@ import { Control, type ControlProps } from '../primitives/Control';
 import { ControlInput } from '../primitives/ControlInput';
 import { Field } from '../primitives/Field';
 import type { FieldErrorAnnouncementProps } from '../primitives/fieldErrorAnnouncement';
+import { ListboxPanel } from '../primitives/ListboxPanel';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
 import styles from './Cascader.module.css';
@@ -223,16 +224,18 @@ export const Cascader = (props: CascaderProps) => {
             }}
           />
           <Show when={open()}>
-            {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- dialog owns arrow/Enter/Escape navigation of its columns; tabIndex -1 is for programmatic focus */}
-            <div
+            {}
+            <ListboxPanel
+              flip={false}
+              up={floating.side() === 'top'}
               ref={(element) => {
-                menu = element;
+                if (element instanceof HTMLDivElement) menu = element;
                 floating.ref(element);
               }}
               style={floating.style()}
               id={listId}
               tabIndex={-1}
-              class={cx(styles.selectPartMenu, styles.cascPartMenu)}
+              class={styles.cascPartMenu}
               role="dialog"
               aria-label={typeof p.label === 'string' ? p.label : translate('velvet.forms.cascader.dialogLabel')}
               onKeyDown={onMenuKeyDown}
@@ -273,7 +276,7 @@ export const Cascader = (props: CascaderProps) => {
                   onPick={commitAndClose}
                 />
               </Show>
-            </div>
+            </ListboxPanel>
           </Show>
         </div>
       )}

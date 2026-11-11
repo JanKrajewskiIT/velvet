@@ -1,0 +1,32 @@
+:import('../../styles/shared/actions/button.module.css') {
+  externalBtnVariantPrimary: btnVariantPrimary;
+}
+
+.authPartIcon {
+  display: inline-flex;
+  animation: vuiAuthIn var(--motion-pop);
+}
+
+.authVariantError {
+  border-color: var(--status-danger-fg);
+  box-shadow: inset 0 0 0 var(--border-width) var(--status-danger-fg);
+}
+
+.authVariantError .authPartIcon {
+  color: var(--status-danger-fg);
+}
+
+:global(.externalBtnVariantPrimary).authVariantError .authPartIcon {
+  color: inherit;
+}
+
+.srOnly {
+  composes: srOnly from '../../styles/shared/navigation/link.module.css';
+}
+
+@keyframes vuiAuthIn {
+  from {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.5);
+  }
+}

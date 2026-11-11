@@ -12,6 +12,7 @@ export * from './components/menus';
 export * from './components/navigation';
 export * from './components/patterns';
 export * from './components/primitives';
+export * from './components/trading';
 export { createFloating, type Floating, type FloatingAnchor, type FloatingOptions } from './hooks/createFloating';
 export { velvetMessages } from './i18n';
 export { mountVelvetApp, type MountVelvetAppOptions } from './provider/mountVelvetApp';

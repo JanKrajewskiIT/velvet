@@ -3,9 +3,9 @@ import { children, For, Index, type JSX, Match, mergeProps, Show, Switch } from 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { Button } from '../actions/Button';
-import { Avatar } from '../data/Avatar';
 import { Dialog, type DialogProps } from '../feedback/Dialog';
 import { Spinner } from '../feedback/Spinner';
+import { Avatar } from '../primitives/Avatar';
 import { Dot } from '../primitives/Dot';
 import { Glyph } from '../primitives/Glyph';
 import { Text } from '../primitives/Text';

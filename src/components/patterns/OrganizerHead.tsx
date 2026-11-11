@@ -1,6 +1,5 @@
 import { useTranslate } from '../../i18n/useTranslate';
-import { Button } from '../actions/Button';
-import { IconButton } from '../actions/IconButton';
+import { PeriodNav } from '../navigation/PeriodNav';
 import { Text } from '../primitives/Text';
 import type { OrganizerCalendar } from './createOrganizerCalendar';
 import { countInMonth, type OrganizerEvent } from './organizerEvents';
@@ -26,23 +25,13 @@ export const OrganizerHead = (props: OrganizerHeadProps) => {
           })}
         </Text>
       </div>
-      <div class={styles.organizerPartNav}>
-        <Button variant="secondary" size="sm" onClick={props.calendar.goToday}>
-          {translate('velvet.common.today')}
-        </Button>
-        <IconButton
-          icon="chevron-left"
-          label={translate('velvet.patterns.calendarOrganizer.previousMonth')}
-          size="sm"
-          onClick={() => props.calendar.shiftMonth(-1)}
-        />
-        <IconButton
-          icon="chevron-right"
-          label={translate('velvet.patterns.calendarOrganizer.nextMonth')}
-          size="sm"
-          onClick={() => props.calendar.shiftMonth(1)}
-        />
-      </div>
+      <PeriodNav
+        onToday={() => props.calendar.goToday()}
+        onPrev={() => props.calendar.shiftMonth(-1)}
+        onNext={() => props.calendar.shiftMonth(1)}
+        prevLabel={translate('velvet.patterns.calendarOrganizer.previousMonth')}
+        nextLabel={translate('velvet.patterns.calendarOrganizer.nextMonth')}
+      />
     </div>
   );
 };

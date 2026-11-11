@@ -15,6 +15,7 @@ import { menusPl } from './menus';
 import { navigationPl } from './navigation';
 import { patternsPl } from './patterns';
 import { primitivesPl } from './primitives';
+import { tradingPl } from './trading';
 
 export const velvetPl: TranslationOf<typeof velvetEn> = {
   velvet: {
@@ -32,5 +33,6 @@ export const velvetPl: TranslationOf<typeof velvetEn> = {
     navigation: navigationPl,
     patterns: patternsPl,
     primitives: primitivesPl,
+    trading: tradingPl,
   },
 };

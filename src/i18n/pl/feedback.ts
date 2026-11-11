@@ -43,6 +43,9 @@ export const feedbackPl: TranslationOf<typeof feedbackEn> = {
   loadingOverlay: {
     label: 'Ładowanie…',
   },
+  robotProcessingIndicator: {
+    label: 'Przetwarzanie',
+  },
   notificationCenter: {
     title: 'Powiadomienia',
     unreadLabel: '{title}, nieprzeczytane: {count}',

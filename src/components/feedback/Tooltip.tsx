@@ -5,6 +5,7 @@ import {
   createUniqueId,
   type JSX,
   mergeProps,
+  on,
   onCleanup,
   Show,
 } from 'solid-js';
@@ -27,6 +28,9 @@ const TOOLTIP_CLASSES = {
 /** Pause (ms) before hiding, so the pointer can cross the gap between trigger and tooltip. */
 const HIDE_DELAY = 120;
 
+const focusStaysWithin = (event: FocusEvent & { currentTarget: HTMLElement }): boolean =>
+  event.relatedTarget instanceof Node && event.currentTarget.contains(event.relatedTarget);
+
 export interface TooltipProps {
   content: JSX.Element;
   /** Preferred side; flips when there is no room. @default 'top' */
@@ -36,7 +40,7 @@ export interface TooltipProps {
   /** Force visible (docs/demos). */
   open?: boolean;
   class?: string;
-  /** The trigger. Its first element is described by the tooltip (`aria-describedby`). */
+  /** The trigger. The first element, or the wrapper for text, receives `aria-describedby`. */
   children: JSX.Element;
 }
 
@@ -52,28 +56,40 @@ export const Tooltip = (props: TooltipProps) => {
   let hideTimer: ReturnType<typeof setTimeout> | undefined;
 
   const visible = () => !dismissed() && (!!p.open || hovered() || focused());
+  createEffect(
+    on(
+      () => p.open,
+      (open) => {
+        if (open) setDismissed(false);
+      },
+      { defer: true },
+    ),
+  );
   const enter = () => {
     clearTimeout(hideTimer);
     setHovered(true);
+    setDismissed(false);
   };
   const leave = () => {
     clearTimeout(hideTimer);
-    hideTimer = setTimeout(() => {
-      setHovered(false);
-      setDismissed(false);
-    }, HIDE_DELAY);
+    hideTimer = setTimeout(() => setHovered(false), HIDE_DELAY);
   };
   onCleanup(() => clearTimeout(hideTimer));
   createLayer(visible, () => setDismissed(true), { root: wrap, onOutside: () => setDismissed(true) });
-  const floating = createFloating(visible, () => wrap()?.firstElementChild ?? wrap(), {
+  const anchor = () => {
+    trigger();
+    const wrapper = wrap();
+    const first = wrapper?.firstElementChild;
+    return first && first.id !== id ? first : wrapper;
+  };
+  const floating = createFloating(visible, anchor, {
     side: () => p.side,
     align: () => 'center',
     offset: 'var(--tooltip-offset)',
   });
 
   createEffect(() => {
-    trigger();
-    const described = wrap()?.firstElementChild;
+    const described = anchor();
     if (!described) return;
     const previous = described.getAttribute('aria-describedby');
     described.setAttribute('aria-describedby', previous ? `${previous} ${id}` : id);
@@ -89,16 +105,19 @@ export const Tooltip = (props: TooltipProps) => {
       class={cx(styles.tooltipWrap, p.class)}
       onPointerEnter={enter}
       onPointerLeave={leave}
-      onFocusIn={() => setFocused(true)}
-      onFocusOut={() => {
-        setFocused(false);
+      onFocusIn={(event) => {
+        if (focusStaysWithin(event)) return;
+        setFocused(true);
         setDismissed(false);
+      }}
+      onFocusOut={(event) => {
+        if (!focusStaysWithin(event)) setFocused(false);
       }}
     >
       {trigger()}
       <Text
         as="span"
-        variant="caption"
+        variant="label-sm"
         tone="inherit"
         ref={floating.ref}
         id={id}

@@ -12,11 +12,11 @@ import { cx } from '../../utils/cx';
 import { Chevron } from '../primitives/Chevron';
 import { Field } from '../primitives/Field';
 import type { FieldErrorAnnouncementProps } from '../primitives/fieldErrorAnnouncement';
-import { Glyph, renderIcon } from '../primitives/Glyph';
+import { renderIcon } from '../primitives/Glyph';
+import { Listbox } from '../primitives/Listbox';
+import { ListboxOption } from '../primitives/ListboxOption';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
-import { ComboboxOption } from './ComboboxOption';
-import { ComboboxOptionText } from './ComboboxOptionText';
 import { createFormValidation } from './createFormValidation';
 import type { FormControlProps } from './formControl';
 import { FormValue } from './FormValue';
@@ -251,34 +251,31 @@ export const Select = (props: SelectProps) => {
             }}
           />
           <Show when={open()}>
-            <ul
+            <Listbox
               ref={floating.ref}
               id={listId()}
-              role="listbox"
               aria-label={p['aria-label']}
               aria-labelledby={p['aria-labelledby'] ?? (p.label ? `${id()}-label` : control.id)}
-              class={cx(styles.selectPartMenu, floating.side() === 'top' && styles.selectPartMenuVariantUp)}
+              up={floating.side() === 'top'}
+              flip={false}
               style={floating.style()}
             >
               <For each={options()}>
                 {(option, index) => (
-                  <ComboboxOption
+                  <ListboxOption
                     id={optionId(index())}
                     selected={option.value === current()}
                     active={index() === active()}
                     disabled={option.disabled}
-                    onHover={() => !option.disabled && setActive(index())}
-                    onPick={() => pick(option)}
-                  >
-                    {renderIcon(option.icon)}
-                    <ComboboxOptionText label={option.label} description={option.description} />
-                    <Show when={option.value === current()}>
-                      <Glyph name="check" class={styles.selectPartCheck} />
-                    </Show>
-                  </ComboboxOption>
+                    icon={option.icon}
+                    label={option.label}
+                    description={option.description}
+                    onMouseEnter={() => !option.disabled && setActive(index())}
+                    onClick={() => pick(option)}
+                  />
                 )}
               </For>
-            </ul>
+            </Listbox>
           </Show>
         </div>
       )}

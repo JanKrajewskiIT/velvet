@@ -9,9 +9,3 @@
 .organizerPartSub {
   margin-top: var(--space-1);
 }
-
-.organizerPartNav {
-  display: flex;
-  align-items: center;
-  gap: var(--space-1);
-}

@@ -9,11 +9,13 @@
   border-radius: var(--radius-sm);
   background: none;
   color: inherit;
-  font-variant-numeric: tabular-nums;
   cursor: pointer;
   transition: background-color var(--motion-fast);
 
   --glyph-size: var(--size-icon-lg, 18px);
+
+  font: var(--type-strong-weight) var(--type-caption-size)/1 var(--font-sans);
+  font-variant-numeric: tabular-nums;
 }
 
 .playerPartBtn:hover {

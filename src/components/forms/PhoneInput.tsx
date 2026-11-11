@@ -285,6 +285,7 @@ export const PhoneInput = (props: PhoneInputProps) => {
             <PhoneCountryList
               ref={floating.ref}
               style={floating.style()}
+              up={floating.side() === 'top'}
               id={listId()}
               label={countryLabel()}
               countries={local.countries}

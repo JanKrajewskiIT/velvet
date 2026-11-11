@@ -59,12 +59,12 @@
   top: calc(100% + var(--space-3));
   right: 0;
   z-index: var(--z-dropdown);
-  width: var(--overlay-w-sm);
+  width: 288px;
   padding: var(--space-2);
   border: var(--border-width) solid var(--border-subtle);
   border-radius: var(--radius-xl);
   background: var(--bg-raised);
-  box-shadow: var(--elevation-popover, var(--shadow-lg));
+  box-shadow: var(--elevation-popover);
   color: var(--fg-primary);
   text-align: left;
   transform-origin: top right;
@@ -96,6 +96,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-weight: var(--type-strong-weight);
 }
 
 .acctPartList {

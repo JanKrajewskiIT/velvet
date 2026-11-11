@@ -55,26 +55,6 @@
   color: var(--fg-brand);
 }
 
-.option {
-  composes: option from '../../styles/shared/primitives/option.module.css';
-}
-
-.optionVariantActive {
-  composes: optionVariantActive from '../../styles/shared/primitives/option.module.css';
-}
-
-.optionPartLabel {
-  composes: optionPartLabel from '../../styles/shared/primitives/option.module.css';
-}
-
-.optionPartKbd {
-  composes: optionPartKbd from '../../styles/shared/primitives/option.module.css';
-}
-
-.selectPartCheck {
-  composes: selectPartCheck from '../../styles/shared/forms/select.module.css';
-}
-
 @keyframes vuiCascIn {
   from {
     opacity: 0;

@@ -5,6 +5,7 @@ import { activeItemKey } from '../../utils/activeItem';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
+import { Option } from '../primitives/Option';
 import { Segmented } from '../primitives/Segmented';
 import { SegmentedItem } from '../primitives/SegmentedItem';
 import { Text } from '../primitives/Text';
@@ -15,6 +16,7 @@ const SWITCHER_CLASSES = {
   chips: styles.switcherVariantChips,
   icons: styles.switcherVariantIcons,
   tiles: styles.switcherVariantTiles,
+  list: styles.switcherVariantList,
   sm: styles.switcherVariantSm,
 } as const;
 
@@ -24,6 +26,8 @@ export interface SwitcherOption {
   /** Glyph name. */
   icon?: string;
   disabled?: boolean;
+  description?: JSX.Element;
+  disabledReason?: JSX.Element;
 }
 
 export interface OptionSwitcherProps {
@@ -34,7 +38,7 @@ export interface OptionSwitcherProps {
   defaultValue?: string;
   onValueChange?: (value: string) => void;
   /** @default 'track' */
-  variant?: 'track' | 'chips' | 'tiles';
+  variant?: 'track' | 'chips' | 'tiles' | 'list';
   /** @default 'md' */
   size?: 'sm' | 'md';
   /** Icons only; a string label becomes `aria-label` and `title`. Every option needs an icon and a string label. */
@@ -53,7 +57,7 @@ const normalizeSwitcherOption = (option: string | SwitcherOption): SwitcherOptio
 const stringLabel = (option: SwitcherOption): string | undefined =>
   typeof option.label === 'string' ? option.label : undefined;
 
-/** Required single choice among 2–5 options (radiogroup; ←→ move + select). `track` = segmented tool track · `chips` = separate pills · `tiles` = icon above label. Use Tabs when the choice swaps page panels, ChipGroup for multi-select. */
+/** Single choice with roving radio focus. `list` adds descriptions and disabled reasons. Use Tabs for page panels and ChipGroup for multi-select. */
 export const OptionSwitcher = (props: OptionSwitcherProps) => {
   const p = mergeProps({ variant: 'track', size: 'md', iconOnly: false } satisfies Partial<OptionSwitcherProps>, props);
   const options = createMemo(() => p.options.map(normalizeSwitcherOption));
@@ -72,12 +76,17 @@ export const OptionSwitcher = (props: OptionSwitcherProps) => {
 
   const onKeyDown: JSX.EventHandler<HTMLDivElement, KeyboardEvent> = (event) => {
     const step = STEP_BY_KEY[event.key];
-    if (step === undefined || event.defaultPrevented) return;
+    if ((step === undefined && event.key !== 'Home' && event.key !== 'End') || event.defaultPrevented) return;
     const enabled = options().filter((option) => !option.disabled);
     const buttons = [...event.currentTarget.querySelectorAll<HTMLElement>(ENABLED_RADIOS)];
     const focused = buttons.findIndex((button) => button.contains(event.target));
     const at = focused < 0 ? enabled.findIndex((option) => option.value === tabStop()) : focused;
-    const nextIndex = (at + step + enabled.length) % enabled.length;
+    const nextIndex =
+      event.key === 'Home'
+        ? 0
+        : event.key === 'End'
+          ? enabled.length - 1
+          : (at + (step ?? 0) + enabled.length) % enabled.length;
     const next = enabled[nextIndex];
     if (!next) return;
     event.preventDefault();
@@ -131,30 +140,53 @@ export const OptionSwitcher = (props: OptionSwitcherProps) => {
       >
         <For each={options()}>
           {(option) => (
-            <button
-              type="button"
-              role="radio"
-              aria-checked={current() === option.value}
-              tabIndex={tabStop() === option.value ? 0 : -1}
-              disabled={option.disabled}
-              aria-label={p.iconOnly ? stringLabel(option) : undefined}
-              title={p.iconOnly ? stringLabel(option) : undefined}
-              class={cx(
-                typographyClass(p.size === 'sm' ? 'label-sm' : 'button-sm'),
-                styles.switcherPartOpt,
-                current() === option.value && styles.switcherPartOptVariantOn,
-              )}
-              onClick={() => setCurrent(option.value)}
+            <Show
+              when={p.variant === 'list'}
+              fallback={
+                <button
+                  type="button"
+                  role="radio"
+                  aria-checked={current() === option.value}
+                  tabIndex={tabStop() === option.value ? 0 : -1}
+                  disabled={option.disabled}
+                  aria-label={p.iconOnly ? stringLabel(option) : undefined}
+                  title={p.iconOnly ? stringLabel(option) : undefined}
+                  class={cx(
+                    typographyClass(p.size === 'sm' ? 'label-sm' : 'button-sm'),
+                    styles.switcherPartOpt,
+                    current() === option.value && styles.switcherPartOptVariantOn,
+                  )}
+                  onClick={() => setCurrent(option.value)}
+                >
+                  <Show when={option.icon}>{(icon) => <Glyph name={icon()} />}</Show>
+                  <Show when={!p.iconOnly}>
+                    <Show when={p.variant === 'tiles'} fallback={option.label}>
+                      <Text as="span" variant="label-sm" tone="inherit" class="vui-switcher__tlabel">
+                        {option.label}
+                      </Text>
+                    </Show>
+                  </Show>
+                </button>
+              }
             >
-              <Show when={option.icon}>{(icon) => <Glyph name={icon()} />}</Show>
-              <Show when={!p.iconOnly}>
-                <Show when={p.variant === 'tiles'} fallback={option.label}>
-                  <Text as="span" variant="label-sm" tone="inherit" class="vui-switcher__tlabel">
-                    {option.label}
-                  </Text>
-                </Show>
-              </Show>
-            </button>
+              <Option
+                as="button"
+                type="button"
+                role="radio"
+                data-value={option.value}
+                selected={current() === option.value}
+                tabIndex={tabStop() === option.value ? 0 : -1}
+                disabled={option.disabled}
+                showCheck
+                icon={option.icon || (option.disabled && option.disabledReason ? 'lock' : undefined)}
+                label={option.label}
+                description={option.disabled && option.disabledReason ? option.disabledReason : option.description}
+                class={styles.switcherPartListOption}
+                onClick={() => {
+                  if (!option.disabled) setCurrent(option.value);
+                }}
+              />
+            </Show>
           )}
         </For>
       </div>

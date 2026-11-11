@@ -6,6 +6,7 @@ import {
   mergeProps,
   onCleanup,
   Show,
+  splitProps,
 } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
@@ -13,7 +14,10 @@ import { createDismiss } from '../../hooks/createDismiss';
 import { createFloating } from '../../hooks/createFloating';
 import { createTrigger } from '../../hooks/createTrigger';
 import { useTranslate } from '../../i18n/useTranslate';
+import { assignRef } from '../../utils/assignRef';
+import { callHandler } from '../../utils/callHandler';
 import { cx } from '../../utils/cx';
+import type { HtmlProps } from '../../utils/polymorphic';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
 import styles from './Popover.module.css';
@@ -26,7 +30,7 @@ export interface PopoverTriggerProps {
   onClick: (e: MouseEvent) => void;
 }
 
-export interface PopoverProps {
+export interface PopoverProps extends HtmlProps<HTMLSpanElement, 'title'> {
   /** Label, a native interactive element, or a render function spreading the received attributes onto its trigger. */
   trigger: JSX.Element | ((trigger: PopoverTriggerProps) => JSX.Element);
   title?: JSX.Element;
@@ -46,13 +50,17 @@ export interface PopoverProps {
   openDelay?: number;
   /** Hover only, ms. @default 150 */
   closeDelay?: number;
+  /** Class applied to the floating panel. */
+  panelClassName?: string;
+  /** Render content directly, without the body typography wrapper. @default false */
+  bare?: boolean;
   class?: string;
   children?: JSX.Element;
 }
 
 /** Floating panel for rich content — profiles, quick settings, small forms. Use Tooltip for plain-text hints. Closes on outside click and Esc. */
 export const Popover = (props: PopoverProps) => {
-  const p = mergeProps(
+  const merged = mergeProps(
     {
       side: 'bottom',
       align: 'start',
@@ -63,12 +71,36 @@ export const Popover = (props: PopoverProps) => {
     } satisfies Partial<PopoverProps>,
     props,
   );
+  const [p, rest] = splitProps(merged, [
+    'trigger',
+    'title',
+    'label',
+    'side',
+    'align',
+    'open',
+    'defaultOpen',
+    'onOpenChange',
+    'openOn',
+    'openDelay',
+    'closeDelay',
+    'panelClassName',
+    'bare',
+    'class',
+    'children',
+    'ref',
+    'onClick',
+    'onKeyDown',
+    'onMouseEnter',
+    'onMouseLeave',
+    'onFocusIn',
+    'onFocusOut',
+  ]);
   const [isOpen, setOpen] = createControllable({
     value: () => p.open,
     defaultValue: p.defaultOpen,
     onChange: (next) => p.onOpenChange?.(next),
   });
-  const [wrap, setWrap] = createSignal<HTMLElement>();
+  const [wrap, setWrap] = createSignal<HTMLSpanElement>();
   const id = createUniqueId();
   const titleId = `${id}-title`;
   const translate = useTranslate();
@@ -115,15 +147,41 @@ export const Popover = (props: PopoverProps) => {
   return (
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions -- delegates events from the supplied native trigger, which owns keyboard semantics
     <span
-      ref={setWrap}
+      {...rest}
+      ref={(element) => {
+        setWrap(element);
+        assignRef(p.ref, element);
+      }}
       class={cx(styles.popoverWrap, hover() && styles.popoverWrapVariantHover, p.class)}
-      onClick={trigger.onClick}
-      onKeyDown={trigger.onKeyDown}
-      onMouseEnter={() => hover() && later(true, p.openDelay)}
-      onMouseLeave={() => hover() && later(false, p.closeDelay)}
-      onFocusIn={() => hover() && later(true, 0)}
+      onClick={(event) => {
+        callHandler(p.onClick, event);
+        if (!event.defaultPrevented) trigger.onClick(event);
+      }}
+      onKeyDown={(event) => {
+        callHandler(p.onKeyDown, event);
+        if (!event.defaultPrevented) trigger.onKeyDown(event);
+      }}
+      onMouseEnter={(event) => {
+        callHandler(p.onMouseEnter, event);
+        if (!event.defaultPrevented && hover()) later(true, p.openDelay);
+      }}
+      onMouseLeave={(event) => {
+        callHandler(p.onMouseLeave, event);
+        if (!event.defaultPrevented && hover()) later(false, p.closeDelay);
+      }}
+      onFocusIn={(event) => {
+        callHandler(p.onFocusIn, event);
+        if (!event.defaultPrevented && hover()) later(true, 0);
+      }}
       onFocusOut={(e) => {
-        if (hover() && !e.currentTarget.contains(e.relatedTarget as Node | null)) later(false, p.closeDelay);
+        callHandler(p.onFocusOut, e);
+        if (
+          !e.defaultPrevented &&
+          hover() &&
+          !(e.relatedTarget instanceof Node && e.currentTarget.contains(e.relatedTarget))
+        ) {
+          later(false, p.closeDelay);
+        }
       }}
     >
       {trigger.content}
@@ -139,17 +197,25 @@ export const Popover = (props: PopoverProps) => {
             styles.popover,
             floating.side() === 'top' && styles.popoverVariantTop,
             p.align === 'end' && styles.popoverVariantEnd,
+            p.panelClassName,
           )}
           style={floating.style()}
         >
           <Show when={title()}>
-            <Text as="div" variant="title" tone="inherit" id={titleId} class={styles.popoverPartTitle}>
+            <div id={titleId} class={styles.popoverPartTitle}>
               {title()}
-            </Text>
+            </div>
           </Show>
-          <Text as="div" variant="body-sm" tone="secondary" class="vui-popover__body">
+          <Show
+            when={p.bare}
+            fallback={
+              <Text as="div" variant="body-sm" tone="secondary" class="vui-popover__body">
+                {p.children}
+              </Text>
+            }
+          >
             {p.children}
-          </Text>
+          </Show>
         </div>
       </Show>
     </span>

@@ -9,7 +9,7 @@
   position: relative;
   overflow: hidden;
   border-radius: var(--media-radius);
-  background: var(--neutral-950, var(--black));
+  background: var(--bg-media);
   cursor: grab;
   touch-action: none;
   user-select: none;

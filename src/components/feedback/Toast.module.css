@@ -10,8 +10,8 @@
   animation: var(--toast-animation, vuiPop var(--motion-enter));
   position: relative;
   overflow: hidden;
-  background: var(--panel-bg);
-  border: var(--border-width) solid var(--panel-border);
+  background: var(--bg-overlay);
+  border: var(--border-width) solid var(--border-default);
   border-radius: var(--panel-radius);
   box-shadow: var(--panel-shadow);
   color: var(--fg-primary);

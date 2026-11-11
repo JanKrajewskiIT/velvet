@@ -5,7 +5,7 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { addDays, startOfDay } from '../../utils/date';
 import { Button } from '../actions/Button';
 import { ButtonGroup } from '../actions/ButtonGroup';
-import { IconButton } from '../actions/IconButton';
+import { PeriodNav } from '../navigation/PeriodNav';
 import { Heading } from '../primitives/Heading';
 import type { SchedulerController } from './schedulerController';
 import styles from './SchedulerToolbar.module.css';
@@ -25,29 +25,17 @@ export const SchedulerToolbar = (props: SchedulerToolbarProps) => {
   const calendar = () => props.scheduler.calendar;
   return (
     <div class={styles.schedPartBar}>
-      <Button variant="secondary" size="sm" onClick={() => calendar().setDate(startOfDay(new Date()))}>
-        {translate('velvet.common.today')}
-      </Button>
-      <ButtonGroup label={translate('velvet.data.scheduler.navigateLabel')}>
-        <IconButton
-          icon="chevron-left"
-          label={translate(
-            calendar().view() === 'day' ? 'velvet.data.scheduler.previousDay' : 'velvet.data.scheduler.previousWeek',
-          )}
-          variant="secondary"
-          size="sm"
-          onClick={() => calendar().setDate(addDays(calendar().date(), -calendar().step()))}
-        />
-        <IconButton
-          icon="chevron-right"
-          label={translate(
-            calendar().view() === 'day' ? 'velvet.data.scheduler.nextDay' : 'velvet.data.scheduler.nextWeek',
-          )}
-          variant="secondary"
-          size="sm"
-          onClick={() => calendar().setDate(addDays(calendar().date(), calendar().step()))}
-        />
-      </ButtonGroup>
+      <PeriodNav
+        onToday={() => calendar().setDate(startOfDay(new Date()))}
+        onPrev={() => calendar().setDate(addDays(calendar().date(), -calendar().step()))}
+        onNext={() => calendar().setDate(addDays(calendar().date(), calendar().step()))}
+        prevLabel={translate(
+          calendar().view() === 'day' ? 'velvet.data.scheduler.previousDay' : 'velvet.data.scheduler.previousWeek',
+        )}
+        nextLabel={translate(
+          calendar().view() === 'day' ? 'velvet.data.scheduler.nextDay' : 'velvet.data.scheduler.nextWeek',
+        )}
+      />
       <Heading level={3} variant="title" class={styles.schedPartRange} aria-live="polite">
         {calendar().range()}
       </Heading>

@@ -6,7 +6,7 @@ import { createFrameFocus } from '../../hooks/createFrameFocus';
 import { useTranslate } from '../../i18n/useTranslate';
 import { classSelector } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
-import { Avatar } from '../data/Avatar';
+import { Avatar } from '../primitives/Avatar';
 import { renderIcon } from '../primitives/Glyph';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';

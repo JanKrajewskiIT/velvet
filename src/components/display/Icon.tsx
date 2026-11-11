@@ -2,14 +2,17 @@ import { type JSX, mergeProps, splitProps } from 'solid-js';
 
 import { cx } from '../../utils/cx';
 import styles from './Icon.module.css';
+import { type IconAlias, IconAliases } from './IconAliases';
 import { type IconName, VelvetIcons } from './VelvetIcons';
 
 const DEFAULT_STROKE_WIDTH = 1.75;
 const DEFAULT_SIZE = '1.15em';
 
+const isIconAlias = (name: IconName | IconAlias): name is IconAlias => Object.hasOwn(IconAliases, name);
+
 export interface IconProps extends Omit<JSX.SvgSVGAttributes<SVGSVGElement>, 'style' | 'color' | 'children'> {
   /** Velvet icon name, e.g. `"arrow-right"`. See `VelvetIcons` for the full list. */
-  name: IconName;
+  name: IconName | IconAlias;
   /** Pixel size or any CSS length. @default '1.15em' */
   size?: number | string;
   color?: string;
@@ -27,6 +30,10 @@ export const Icon = (props: IconProps) => {
     props,
   );
   const [local, rest] = splitProps(merged, ['name', 'size', 'color', 'strokeWidth', 'label', 'class', 'style']);
+  const name = () => {
+    const value = local.name;
+    return isIconAlias(value) ? IconAliases[value] : value;
+  };
   return (
     <svg
       {...rest}
@@ -44,7 +51,7 @@ export const Icon = (props: IconProps) => {
       aria-label={local.label}
       role={local.label ? 'img' : undefined}
       // eslint-disable-next-line solid/no-innerhtml -- markup comes from the static, library-owned VelvetIcons map
-      innerHTML={VelvetIcons[local.name]}
+      innerHTML={VelvetIcons[name()]}
     />
   );
 };

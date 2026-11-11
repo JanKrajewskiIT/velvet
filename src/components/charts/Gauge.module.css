@@ -47,16 +47,16 @@
 }
 
 .gaugePartValue b {
-  font-size: var(--font-size-2xl);
+  font-size: var(--type-h3-size);
   font-variant-numeric: tabular-nums;
 }
 
 .gauge[data-size='sm'] .gaugePartValue b {
-  font-size: var(--font-size-xl);
+  font-size: var(--type-h4-size);
 }
 
 .gauge[data-size='lg'] .gaugePartValue b {
-  font-size: var(--font-size-3xl);
+  font-size: var(--type-kpi-size);
 }
 
 .gaugePartLabel {
@@ -65,6 +65,7 @@
 
 .gaugePartValue span {
   color: var(--fg-secondary);
+  font-weight: var(--type-medium-weight);
 }
 
 .gaugePartBounds {

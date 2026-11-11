@@ -1,6 +1,6 @@
 import { type JSX, Show } from 'solid-js';
 
-import { Badge } from '../display/Badge';
+import { Badge } from '../primitives/Badge';
 import { Text } from '../primitives/Text';
 import styles from './KanbanCardBody.module.css';
 import type { KanbanCard } from './kanbanTypes';

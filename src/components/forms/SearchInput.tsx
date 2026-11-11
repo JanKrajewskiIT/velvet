@@ -22,10 +22,11 @@ import { ControlInput } from '../primitives/ControlInput';
 import { EmptyText } from '../primitives/EmptyText';
 import { FieldLabel } from '../primitives/FieldLabel';
 import { Glyph } from '../primitives/Glyph';
+import { Listbox } from '../primitives/Listbox';
+import { ListboxPanel } from '../primitives/ListboxPanel';
 import { highlightMatch } from '../primitives/Mark';
 import { callHandler } from './callHandler';
 import { ComboboxOption } from './ComboboxOption';
-import { ComboboxOptionText } from './ComboboxOptionText';
 import styles from './SearchInput.module.css';
 import { type AutocompleteOption, filterOptions, normalizeOption } from './selectOption';
 
@@ -214,27 +215,37 @@ export const SearchInput = (props: SearchInputProps) => {
           </Show>
         </Control>
         <Show when={showList()}>
-          <ul ref={floating.ref} style={floating.style()} id={listId()} role="listbox" class={styles.selectPartMenu}>
-            <For each={options()}>
-              {(option, index) => (
-                <ComboboxOption
-                  id={optionId(index())}
-                  selected={index() === active()}
-                  active={index() === active()}
-                  onHover={() => setActive(index())}
-                  onPick={() => pick(option)}
-                >
-                  <Show when={option.icon}>{(icon) => <Glyph name={icon()} />}</Show>
-                  <ComboboxOptionText label={highlightMatch(option.label, query())} description={option.description} />
-                </ComboboxOption>
-              )}
-            </For>
+          <ListboxPanel flip={false} up={floating.side() === 'top'} ref={floating.ref} style={floating.style()}>
+            <Listbox
+              floating={false}
+              id={listId()}
+              aria-label={
+                typeof local.label === 'string'
+                  ? local.label
+                  : (rest['aria-label'] ?? translate('velvet.forms.searchInput.placeholder'))
+              }
+            >
+              <For each={options()}>
+                {(option, index) => (
+                  <ComboboxOption
+                    id={optionId(index())}
+                    selected={index() === active()}
+                    active={index() === active()}
+                    onHover={() => setActive(index())}
+                    onPick={() => pick(option)}
+                    icon={option.icon}
+                    label={highlightMatch(option.label, query())}
+                    description={option.description}
+                  />
+                )}
+              </For>
+            </Listbox>
             <Show when={options().length === 0}>
-              <EmptyText as="li" align="start" class={styles.selectPartEmpty}>
+              <EmptyText role="status" align="start" class={styles.selectPartEmpty}>
                 {local.emptyText ?? translate('velvet.forms.searchInput.emptyText')}
               </EmptyText>
             </Show>
-          </ul>
+          </ListboxPanel>
         </Show>
       </div>
     </div>

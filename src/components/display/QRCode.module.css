@@ -17,7 +17,7 @@
 }
 
 .qrPartFg {
-  fill: var(--neutral-1000, var(--black));
+  fill: var(--bg-media);
 }
 
 .qrPartLogo {

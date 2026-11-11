@@ -2,9 +2,9 @@
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  height: 32px;
-  padding: 0 12px;
+  gap: var(--space-1-5);
+  height: var(--control-height-sm);
+  padding: 0 var(--space-3);
   border-radius: var(--radius-full);
   font: 600 var(--type-body-sm-size)/1 var(--font-sans);
   font-variant-numeric: tabular-nums;
@@ -61,7 +61,7 @@
 
 @media (width <= 640px) {
   .root:not(.iconOnly) {
-    padding: 0 10px;
+    padding: 0 var(--space-2-5);
     font-size: var(--type-caption-size);
   }
 }

@@ -1,8 +1,8 @@
 import { For } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
-import { Tag } from '../display/Tag';
 import { SectionLabel } from '../primitives/SectionLabel';
+import { Tag } from '../primitives/Tag';
 import { Text } from '../primitives/Text';
 import styles from './AtsKeywordList.module.css';
 

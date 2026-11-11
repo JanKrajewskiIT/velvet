@@ -17,7 +17,7 @@ export const patternsEn = defineDictionary({
   },
   analysisRequest: {
     title: 'Request AI analysis',
-    instructionsPlaceholder: 'Focus on… (optional) — e.g. leadership experience, notice period, salary fit',
+    instructionsPlaceholder: 'Focus on… (optional) — e.g. scope, assumptions, delivery risks',
     runLabel: 'Run analysis',
     runErrorText: 'The analysis couldn’t start. Try again.',
     includeOne: 'Include at least one source',
@@ -210,8 +210,8 @@ export const patternsEn = defineDictionary({
     tally: '{known} known · {review} to review',
   },
   flashcardSetup: {
-    title: 'Choose a deck',
-    deck: 'Deck',
+    title: 'Choose a set',
+    deck: 'Set',
     categories: 'Categories',
     filterPlaceholder: 'Filter…',
     filterLabel: 'Filter categories',

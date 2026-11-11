@@ -11,6 +11,7 @@ import { ControlInput } from '../primitives/ControlInput';
 import { EmptyText } from '../primitives/EmptyText';
 import { Field } from '../primitives/Field';
 import { Glyph } from '../primitives/Glyph';
+import { ListboxPanel } from '../primitives/ListboxPanel';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
 import { createFormValidation } from './createFormValidation';
@@ -147,11 +148,13 @@ export const TreeSelect = (props: TreeSelectProps) => {
             }}
           />
           <Show when={open()}>
-            {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions -- relays key events bubbling from the search input and the tree */}
-            <div
+            {}
+            <ListboxPanel
+              flip={false}
+              up={floating.side() === 'top'}
               ref={floating.ref}
               style={floating.style()}
-              class={cx(styles.selectPartMenu, styles.tselectPartMenu)}
+              class={styles.tselectPartMenu}
               onKeyDown={onKeyDown}
             >
               <Show when={p.searchable}>
@@ -210,7 +213,7 @@ export const TreeSelect = (props: TreeSelectProps) => {
                   </Button>
                 </div>
               </Show>
-            </div>
+            </ListboxPanel>
           </Show>
         </div>
       )}

@@ -3,9 +3,10 @@ import { createMemo, createSignal, For, Index, mergeProps, Show } from 'solid-js
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
-import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
+import { ChartLegend } from './ChartLegend';
 import { seriesColor } from './chartScale';
+import { ChartTooltip } from './ChartTooltip';
 import styles from './RadarChart.module.css';
 
 const LABEL_PAD = 56;
@@ -120,26 +121,14 @@ export const RadarChart = (props: RadarChartProps) => {
   return (
     <div class={cx(typographyClass('body'), styles.chart, styles.radar, merged.class)}>
       <Show when={merged.showLegend && items().length > 1}>
-        <div class={styles.chartPartLegend}>
-          <For each={items()}>
-            {(s) => (
-              <button
-                type="button"
-                class={cx(
-                  typographyClass('caption'),
-                  styles.chartPartLg,
-                  styles.radarPartLg,
-                  excluded().includes(s.label) && styles.radarPartLgVariantOff,
-                )}
-                aria-pressed={!excluded().includes(s.label)}
-                onClick={() => toggle(s.label)}
-              >
-                <i style={{ background: s.color }} />
-                {s.label}
-              </button>
-            )}
-          </For>
-        </div>
+        <ChartLegend
+          items={items()}
+          off={excluded()}
+          onToggle={(item) => {
+            if (typeof item.label === 'string') toggle(item.label);
+          }}
+          class={styles.legend}
+        />
       </Show>
       <div class={styles.chartPartPlot} style={{ width: `${merged.size}px`, 'max-width': '100%' }}>
         <svg
@@ -224,22 +213,14 @@ export const RadarChart = (props: RadarChartProps) => {
         </svg>
         <Show when={hover()}>
           {(h) => (
-            <div
-              class={cx(styles.chartPartTip, styles.radarPartTip, typographyClass('caption'))}
-              style={{ left: `${(h().x / merged.size) * 100}%`, top: `${(h().y / merged.size) * 100}%` }}
-              aria-hidden="true"
-            >
-              <Text as="span" variant="label-sm" tone="inherit" class={styles.radarPartTipK}>
-                <i style={{ background: h().color }} />
-                {h().series}
-              </Text>
-              <Text as="span" variant="caption" tone="inherit">
-                {hoverAxisLabel(h())}
-                <Text as="strong" variant="label-sm" tone="inherit">
-                  {format(h().value)}
-                </Text>
-              </Text>
-            </div>
+            <ChartTooltip
+              class={styles.radarPartTip}
+              x={`${(h().x / merged.size) * 100}%`}
+              y={`${(h().y / merged.size) * 100}%`}
+              title={hoverAxisLabel(h())}
+              rows={[{ color: h().color, label: h().series, value: format(h().value) }]}
+              live={false}
+            />
           )}
         </Show>
       </div>

@@ -12,9 +12,9 @@
     left var(--motion-enter),
     top var(--motion-enter);
   animation: vuiSelectIn var(--motion-move);
-  background: var(--panel-bg);
-  border: var(--border-width) solid var(--panel-border);
-  border-radius: var(--panel-radius);
-  box-shadow: var(--panel-shadow);
+  background: var(--bg-overlay);
+  border: var(--border-width) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--elevation-dialog);
   color: var(--fg-primary);
 }

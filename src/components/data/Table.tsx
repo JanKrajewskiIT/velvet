@@ -14,17 +14,21 @@ import { createTableSort } from './createTableSort';
 import { createTableWidths } from './createTableWidths';
 import { cssLength, type RowKey } from './rowData';
 import styles from './Table.module.css';
+import { TableAddRowAction } from './TableAddRowAction';
 import { TableBulkBar } from './TableBulkBar';
 import type { TableController } from './tableController';
 import { TableHeaderRow } from './TableHeaderRow';
 import { TableRow } from './TableRow';
 import { TableSkeletonRows } from './TableSkeletonRows';
 import { TableToolbar } from './TableToolbar';
-import type { TableProps } from './tableTypes';
+import type { TableAddRowOptions, TableProps } from './tableTypes';
 
-export type { TableColumn, TableProps, TableSort } from './tableTypes';
+export type { TableAddRowOptions, TableColumn, TableProps, TableSort } from './tableTypes';
 
 const NO_SELECTION: readonly RowKey[] = Object.freeze([]);
+
+const isAddRowOptions = (value: TableAddRowOptions | JSX.Element): value is TableAddRowOptions =>
+  typeof value === 'object' && value !== null && 'onAdd' in value;
 
 /** Data table: toolbar (title · count · actions), sort, row selection (Shift-click selects a range) with bulk-action bar, drag-to-resize columns, expandable detail rows, sticky header, keyboard (↑↓ move · Space select · →/← expand · ⌘A all · Esc clear), skeleton loading, empty state. Framed on its own; borderless inside `<Card padding="none">`. */
 export const Table = <T extends object>(props: TableProps<T>): JSX.Element => {
@@ -97,6 +101,15 @@ export const Table = <T extends object>(props: TableProps<T>): JSX.Element => {
     expansion,
   });
   const span = () => p.columns.length + (p.selectable ? 1 : 0) + (p.renderExpanded ? 1 : 0);
+  const addRow = () => {
+    const value = p.addRow;
+    if (!isAddRowOptions(value)) return value;
+    return (
+      <TableAddRowAction colSpan={span()} disabled={value.disabled} onClick={() => value.onAdd()}>
+        {value.label}
+      </TableAddRowAction>
+    );
+  };
   const table: TableController<T> = { config, sort, widths, pins, selection, expansion, onRowKey, keyOf, span };
 
   const sticky = () => p.stickyHeader ?? !!p.maxHeight;
@@ -154,7 +167,7 @@ export const Table = <T extends object>(props: TableProps<T>): JSX.Element => {
                   </td>
                 </tr>
               </Show>
-              {p.addRow}
+              {addRow()}
             </Show>
           </tbody>
         </table>

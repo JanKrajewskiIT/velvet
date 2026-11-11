@@ -68,7 +68,7 @@
   background: var(--media-play-bg);
   color: var(--media-play-fg);
   backdrop-filter: blur(var(--media-play-blur));
-  font-size: var(--font-size-xl);
+  font-size: var(--type-h4-size);
   cursor: pointer;
   transition: transform var(--motion-spring);
 }

@@ -8,6 +8,7 @@ import { Button } from '../actions/Button';
 import { typographyClass } from '../primitives/typography';
 import { VisuallyHidden } from '../primitives/VisuallyHidden';
 import { ChartLegend } from './ChartLegend';
+import { chartLegendItems } from './chartLegendItems';
 import { type ChartDatum, type ChartSeries, chartValueText, colorOf, defaultSeries, valueOf } from './chartSeries';
 import { createChartFormat } from './createChartFormat';
 import { createLineCursor } from './createLineCursor';
@@ -78,7 +79,7 @@ export const LineChart = (props: LineChartProps) => {
     <div ref={ref} class={cx(typographyClass('body'), styles.chart, merged.class)}>
       <div class={styles.chartPartBarTop}>
         <Show when={series().length > 1} fallback={<span />}>
-          <ChartLegend series={series()} />
+          <ChartLegend items={chartLegendItems(series())} />
         </Show>
         <Button
           variant="ghost"

@@ -1,0 +1,10 @@
+.empty {
+  composes: empty from '../../styles/shared/primitives/listbox.module.css';
+}
+
+.empty.error {
+  color: var(--status-danger-fg);
+  display: flex;
+  align-items: center;
+  gap: var(--space-1-5);
+}

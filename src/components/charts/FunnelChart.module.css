@@ -59,7 +59,7 @@
   position: relative;
   height: 100%;
   border-radius: var(--radius-sm);
-  animation: vuiFunnelIn var(--motion-slide) backwards;
+  animation: dashIn var(--motion-slide) backwards;
 }
 
 .funnelPartVal {
@@ -102,7 +102,7 @@
   border-radius: var(--radius-full);
   background: var(--bg-subtle);
   color: var(--fg-primary);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--type-strong-weight);
   font-variant-numeric: tabular-nums;
 }
 
@@ -128,7 +128,7 @@
   }
 }
 
-@keyframes vuiFunnelIn {
+@keyframes dashIn {
   from {
     transform: scaleX(0);
   }

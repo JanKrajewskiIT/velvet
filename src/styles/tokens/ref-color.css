@@ -20,6 +20,7 @@
 --neutral-300:oklch(82.9% 0.007 355);/* #cbc5c7 */
 --neutral-400:oklch(70.0% 0.009 352);/* #a39c9f */
 --neutral-500:oklch(57.3% 0.010 352);/* #7d7679 */
+--neutral-550:oklch(52% 0.010 353);
 --neutral-600:oklch(46.7% 0.009 355);/* #5e585a */
 --neutral-700:oklch(37.6% 0.010 352);/* #463f42 */
 --neutral-800:oklch(29.0% 0.007 352);/* #2e2a2c */
@@ -35,8 +36,10 @@
 /* Danger is orange-red (hue 30) so errors never read as brand velvet (hue 9). */
 --danger-50:oklch(97.2% 0.012 24);--danger-100:oklch(93.5% 0.031 25);--danger-200:oklch(86.6% 0.066 27);--danger-300:oklch(78.0% 0.120 27);--danger-400:oklch(68.6% 0.173 28);--danger-500:oklch(60.1% 0.203 30);--danger-600:oklch(53.3% 0.189 30);--danger-700:oklch(45.6% 0.159 30);--danger-800:oklch(37.8% 0.130 30);--danger-900:oklch(30.0% 0.102 30);--danger-950:oklch(22.0% 0.070 30);
 --info-50:oklch(96.9% 0.015 261);--info-100:oklch(92.8% 0.033 261);--info-200:oklch(85.3% 0.068 261);--info-300:oklch(76.0% 0.110 260);--info-400:oklch(66.8% 0.151 260);--info-500:oklch(56.2% 0.179 260);--info-600:oklch(48.4% 0.167 261);--info-700:oklch(41.6% 0.137 261);--info-800:oklch(35.5% 0.114 261);--info-900:oklch(29.5% 0.091 261);--info-950:oklch(21.5% 0.062 261);
-/* Categorical hues — decorative only. Uniform L 57%, clear of velvet / red / green / orange. */
---hue-blue:oklch(57% 0.15 258);--hue-indigo:oklch(57% 0.15 280);--hue-violet:oklch(57% 0.16 300);--hue-magenta:oklch(57% 0.17 330);--hue-teal:oklch(57% 0.10 190);--hue-cyan:oklch(57% 0.11 225);--hue-olive:oklch(57% 0.10 115);--hue-slate:oklch(57% 0.03 265);
+--warning-550:oklch(67% 0.153 65);
+--danger-550:oklch(56.5% 0.197 30);
+/* Categorical hues — decorative only. Uniform L 55%, clear of velvet / red / green / orange. */
+--hue-blue:oklch(55% 0.15 258);--hue-indigo:oklch(55% 0.15 280);--hue-violet:oklch(55% 0.16 300);--hue-magenta:oklch(55% 0.17 330);--hue-teal:oklch(55% 0.10 190);--hue-cyan:oklch(55% 0.11 225);--hue-olive:oklch(55% 0.10 115);--hue-slate:oklch(55% 0.03 265);
 /* Syntax — code-block palette on a fixed dark ground (same in both themes). Read only by sys --code-*. */
---syntax-bg:oklch(17.5% 0.010 25);--syntax-fg:oklch(92.5% 0.008 355);--syntax-muted:oklch(70.5% 0.014 355);--syntax-gutter:oklch(46.0% 0.014 355);--syntax-comment:oklch(57.5% 0.012 355);--syntax-keyword:oklch(75.0% 0.120 360);--syntax-string:oklch(83.0% 0.080 150);--syntax-number:oklch(81.5% 0.110 70);--syntax-function:oklch(77.0% 0.110 260);--syntax-added:oklch(79.5% 0.120 155);
+--syntax-bg:oklch(17.5% 0.010 25);--syntax-fg:oklch(92.5% 0.008 355);--syntax-muted:oklch(70.5% 0.014 355);--syntax-gutter:oklch(59.0% 0.014 355);--syntax-comment:oklch(60.0% 0.012 355);--syntax-keyword:oklch(75.0% 0.120 360);--syntax-string:oklch(83.0% 0.080 150);--syntax-number:oklch(81.5% 0.110 70);--syntax-function:oklch(77.0% 0.110 260);--syntax-added:oklch(79.5% 0.120 155);
 }

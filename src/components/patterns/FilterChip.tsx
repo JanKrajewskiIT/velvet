@@ -8,11 +8,15 @@ import { createTypeahead } from '../../utils/createTypeahead';
 import { classSelector } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { Button } from '../actions/Button';
+import { Chip } from '../forms/Chip';
+import { Chevron } from '../primitives/Chevron';
 import { Count } from '../primitives/Count';
 import { Dot } from '../primitives/Dot';
 import { Glyph } from '../primitives/Glyph';
+import { Listbox } from '../primitives/Listbox';
+import { ListboxPanel } from '../primitives/ListboxPanel';
+import { Option } from '../primitives/Option';
 import { Text } from '../primitives/Text';
-import { typographyClass } from '../primitives/typography';
 import styles from './FilterChip.module.css';
 import type { FilterDef } from './filterDefs';
 
@@ -21,6 +25,12 @@ export interface FilterChipProps {
   selected: string[];
   onChange: (selected: string[]) => void;
 }
+
+const optionLabelText = (label: FilterDef['options'][number]['label']): string => {
+  if (typeof label === 'string' || typeof label === 'number') return String(label);
+  if (Array.isArray(label)) return label.map(optionLabelText).join('');
+  return typeof Node !== 'undefined' && label instanceof Node ? (label.textContent ?? '') : '';
+};
 
 /** Facet chip that opens a checklist; one pick reads "Label: Value", several show a count. */
 export const FilterChip = (props: FilterChipProps) => {
@@ -38,7 +48,7 @@ export const FilterChip = (props: FilterChipProps) => {
     );
   const focusOption = (index: number) => {
     setActiveValue(props.filter.options[index]?.value);
-    focusFrame('[role="option"][tabindex="0"]');
+    focusFrame(props.filter.options.length ? '[role="option"][tabindex="0"]' : '[role="listbox"]');
   };
   const openList = (last = false) => {
     setOpen(true);
@@ -50,7 +60,7 @@ export const FilterChip = (props: FilterChipProps) => {
   const floating = createFloating(open, root);
   const multiple = () => props.filter.multiple !== false;
   const picked = () => props.filter.options.filter((option) => props.selected.includes(option.value));
-  const summary = () => (picked().length === 1 ? picked()[0]?.label : null);
+  const summary = () => (picked().length === 1 ? optionLabelText(picked()[0]?.label) : '');
   const toggle = (value: string) => {
     if (multiple())
       props.onChange(
@@ -97,9 +107,11 @@ export const FilterChip = (props: FilterChipProps) => {
         if (!(next instanceof Node) || !event.currentTarget.contains(next)) setOpen(false);
       }}
     >
-      <button
-        type="button"
-        class={cx(typographyClass('label'), styles.fchip, picked().length > 0 && styles.fchipVariantOn)}
+      <Chip
+        size="sm"
+        check={false}
+        icon={props.filter.icon}
+        class={cx(styles.fchip, picked().length > 0 && styles.fchipVariantOn)}
         aria-haspopup="listbox"
         aria-expanded={open()}
         aria-controls={listId}
@@ -110,84 +122,65 @@ export const FilterChip = (props: FilterChipProps) => {
           openList(event.key === 'ArrowUp');
         }}
       >
-        <Show when={props.filter.icon}>{(icon) => <Glyph name={icon()} />}</Show>
         <Text as="span" variant="label" tone="inherit">
           {props.filter.label}
-          <Show when={summary()}>
-            {(value) => (
-              <Text as="span" variant="label" tone="inherit">
-                : {value()}
-              </Text>
-            )}
-          </Show>
+          <Show when={summary()}>{(value) => <span class={styles.fchipPartValue}>: {value()}</span>}</Show>
         </Text>
         <Show when={picked().length > 1}>
           <Count value={picked().length} tone="soft" size="sm" showZero />
         </Show>
-        <Glyph name="chevron-down" class={styles.fchipPartChev} />
-      </button>
+        <Chevron open={open()} class={styles.fchipPartChev} />
+      </Chip>
       <Show when={open()}>
-        <div
+        <ListboxPanel
           ref={floating.ref}
           style={floating.style()}
-          class={cx(styles.menu, styles.menuVariantPop, styles.fchipPartMenu)}
+          flip={false}
+          up={floating.side() === 'top'}
+          class={styles.fchipPartMenu}
         >
-          <div
+          <Listbox
+            floating={false}
             id={listId}
-            role="listbox"
             tabIndex={props.filter.options.length ? -1 : 0}
-            aria-multiselectable={multiple() || undefined}
+            multiselectable={multiple()}
             aria-label={props.filter.label}
           >
             <For each={props.filter.options}>
               {(option, index) => {
                 const on = () => props.selected.includes(option.value);
                 return (
-                  <div
-                    role="option"
-                    aria-selected={on()}
+                  <Option
+                    as="li"
+                    selected={on()}
+                    showCheck={!multiple()}
                     tabIndex={index() === active() ? 0 : -1}
-                    class={cx(styles.option, typographyClass('body'))}
                     onClick={() => toggle(option.value)}
                     onKeyDown={(e) => onOptionKeyDown(e, option.value)}
                     onFocus={() => setActiveValue(option.value)}
-                  >
-                    <Show
-                      when={multiple()}
-                      fallback={
-                        <span class={styles.optionPartCheck}>
+                    leading={
+                      <Show when={multiple()}>
+                        <Text
+                          as="span"
+                          variant="caption"
+                          tone="inherit"
+                          class={cx(styles.fchipPartBox, on() && styles.fchipPartBoxVariantOn)}
+                          aria-hidden="true"
+                        >
                           <Show when={on()}>
                             <Glyph name="check" />
                           </Show>
-                        </span>
-                      }
-                    >
-                      <Text
-                        as="span"
-                        variant="caption"
-                        tone="inherit"
-                        class={cx(styles.fchipPartBox, on() && styles.fchipPartBoxVariantOn)}
-                        aria-hidden="true"
-                      >
-                        <Show when={on()}>
-                          <Glyph name="check" />
-                        </Show>
-                      </Text>
-                    </Show>
-                    <Show when={option.dot}>{(tone) => <Dot tone={tone()} />}</Show>
-                    <Text as="span" variant="body" tone="inherit" class={styles.optionPartLabel}>
-                      {option.label}
-                    </Text>
-                    <Show when={option.count != null}>
-                      <Text as="span" variant="kbd" tone="tertiary" class={styles.optionPartKbd}>
-                        {option.count}
-                      </Text>
-                    </Show>
-                  </div>
+                        </Text>
+                      </Show>
+                    }
+                    icon={<Show when={option.dot}>{(tone) => <Dot tone={tone()} />}</Show>}
+                    label={option.label}
+                    shortcut={option.count == null ? undefined : String(option.count)}
+                  />
                 );
               }}
             </For>
-          </div>
+          </Listbox>
           <Show when={picked().length > 0}>
             <div class={styles.fchipPartFoot}>
               <Button
@@ -202,7 +195,7 @@ export const FilterChip = (props: FilterChipProps) => {
               </Button>
             </div>
           </Show>
-        </div>
+        </ListboxPanel>
       </Show>
     </span>
   );

@@ -1,0 +1,140 @@
+import type { I18nKey } from '@jankrajewskiit/i18n';
+import { children, createSignal, type JSX, mergeProps, Show, splitProps } from 'solid-js';
+
+import { useTranslate } from '../../i18n/useTranslate';
+import { variantClass } from '../../utils/cssModule';
+import { cx } from '../../utils/cx';
+import type { HtmlProps } from '../../utils/polymorphic';
+import styles from './Avatar.module.css';
+import { Dot } from './Dot';
+
+const AVATAR_CLASSES = {
+  xs: styles.avatarVariantXs,
+  sm: styles.avatarVariantSm,
+  lg: styles.avatarVariantLg,
+  xl: styles.avatarVariantXl,
+  neutral: styles.avatarVariantNeutral,
+  solid: styles.avatarVariantSolid,
+} as const;
+
+const STATUS_TONE = { online: 'success', away: 'warning', busy: 'danger', offline: 'neutral' } as const;
+const SERIES_COLORS = 8;
+
+export type AvatarStatus = keyof typeof STATUS_TONE;
+
+const STATUS_LABEL_KEY: Record<AvatarStatus, I18nKey> = {
+  online: 'velvet.data.avatar.statusOnline',
+  away: 'velvet.data.avatar.statusAway',
+  busy: 'velvet.data.avatar.statusBusy',
+  offline: 'velvet.data.avatar.statusOffline',
+};
+
+export interface AvatarProps extends HtmlProps<HTMLSpanElement, 'color'> {
+  name?: string;
+  initials?: string;
+  src?: string;
+  /** @default 'md' */
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  /** @default 'brand' */
+  tone?: 'brand' | 'neutral';
+  /**
+   * Solid fill (any CSS colour, e.g. var(--dv-3)) with on-colour initials — series / person colour coding.
+   * 'auto' = stable --dv-1…8 hue hashed from name — companies / people in lists get a consistent colour without storing one.
+   */
+  color?: 'auto' | (string & {});
+  /** Custom content (icon, node) instead of image / initials. */
+  children?: JSX.Element;
+  /** Presence indicator, bottom-right. */
+  status?: AvatarStatus;
+}
+
+const hashColor = (seed: string): string => {
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) hash = (seed.charCodeAt(i) + ((hash << 5) - hash)) | 0;
+  return `var(--dv-${(Math.abs(hash) % SERIES_COLORS) + 1})`;
+};
+
+const initialsOf = (name: string): string =>
+  name
+    .split(' ')
+    .map((part) => part.charAt(0))
+    .slice(0, 2)
+    .join('')
+    .toUpperCase();
+
+/** Initials or image avatar with optional presence dot. */
+export const Avatar = (props: AvatarProps) => {
+  const merged = mergeProps({ size: 'md', tone: 'brand' } satisfies AvatarProps, props);
+  const translate = useTranslate();
+  const [local, rest] = splitProps(merged, [
+    'name',
+    'initials',
+    'src',
+    'size',
+    'tone',
+    'color',
+    'status',
+    'children',
+    'class',
+    'style',
+  ]);
+  const custom = children(() => local.children);
+
+  const seed = () => local.name || local.initials || '';
+  const color = () => (local.color === 'auto' ? (seed() ? hashColor(seed()) : undefined) : local.color);
+  const text = () => local.initials || (local.name ? initialsOf(local.name) : '');
+  const style = (): JSX.CSSProperties | undefined => {
+    const fill = color();
+    return fill ? { '--avatar-c': fill, ...local.style } : local.style;
+  };
+  const faceAttributes = () => (local.status ? {} : rest);
+
+  const face = () => (
+    <span
+      {...faceAttributes()}
+      class={cx(
+        styles.avatar,
+        local.size !== 'md' && variantClass(AVATAR_CLASSES, local.size),
+        local.tone === 'neutral' && styles.avatarVariantNeutral,
+        color() && styles.avatarVariantSolid,
+        !local.status && local.class,
+      )}
+      style={style()}
+      title={local.name}
+    >
+      <Show
+        when={custom()}
+        fallback={
+          <Show when={local.src} keyed fallback={text()}>
+            {(src) => {
+              const [broken, setBroken] = createSignal(false);
+              return (
+                <Show when={!broken()} fallback={text()}>
+                  <img src={src} alt={local.name || ''} onError={() => setBroken(true)} />
+                </Show>
+              );
+            }}
+          </Show>
+        }
+      >
+        {custom()}
+      </Show>
+    </span>
+  );
+
+  return (
+    <Show when={local.status} fallback={face()}>
+      {(status) => (
+        <span {...rest} class={cx(styles.avatarWrap, local.class)}>
+          {face()}
+          <Dot
+            tone={STATUS_TONE[status()]}
+            ring
+            label={translate(STATUS_LABEL_KEY[status()])}
+            class={styles.avatarPartStatus}
+          />
+        </span>
+      )}
+    </Show>
+  );
+};

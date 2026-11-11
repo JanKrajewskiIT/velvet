@@ -2,8 +2,8 @@ import { mergeProps, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
-import { Avatar } from '../data/Avatar';
 import { Menu } from '../menus/Menu';
+import { Avatar } from '../primitives/Avatar';
 import { Glyph } from '../primitives/Glyph';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';

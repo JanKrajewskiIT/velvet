@@ -1,0 +1,15 @@
+.root[data-variant='chip'][data-tone='on-color'] {
+  background: var(--status-danger-solid);
+  border-color: transparent;
+  color: var(--on-color-fg);
+
+  &:hover {
+    background: color-mix(in oklab, var(--status-danger-solid) 86%, black);
+  }
+}
+
+.root[data-variant='chip'][aria-pressed='true'] {
+  background: color-mix(in oklab, var(--status-danger-solid) 72%, black);
+  color: var(--on-color-fg);
+  box-shadow: inset 0 0 0 var(--border-width-thick) var(--on-color-fg);
+}

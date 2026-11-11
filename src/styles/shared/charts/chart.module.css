@@ -28,12 +28,6 @@
   color: var(--fg-secondary);
 }
 
-.chartPartLg i {
-  width: 10px;
-  height: 10px;
-  border-radius: var(--radius-2xs);
-}
-
 .chartPartPlot {
   position: relative;
 }
@@ -82,7 +76,7 @@
   transform: translate(-50%, calc(-100% - 8px));
   min-width: 120px;
   padding: var(--space-2) var(--space-2-5);
-  border-radius: var(--panel-radius);
+  border-radius: var(--radius-md);
   box-shadow: var(--panel-shadow);
   color: var(--fg-primary);
   pointer-events: none;
@@ -100,17 +94,4 @@
   align-items: center;
   gap: var(--space-1-5);
   color: var(--fg-secondary);
-}
-
-.chartPartTipR i {
-  width: var(--size-dot-lg);
-  height: var(--size-dot-lg);
-  border-radius: var(--radius-2xs);
-}
-
-.chartPartTipR b {
-  margin-left: auto;
-  padding-left: var(--space-3);
-  color: var(--fg-primary);
-  font-variant-numeric: tabular-nums;
 }

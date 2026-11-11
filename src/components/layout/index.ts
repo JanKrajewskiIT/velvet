@@ -1,3 +1,5 @@
+export { Column, type ColumnProps } from './Column';
+export { Columns, type ColumnsProps } from './Columns';
 export { Footer, type FooterProps } from './Footer';
 export {
   FOOTER_STATUS,

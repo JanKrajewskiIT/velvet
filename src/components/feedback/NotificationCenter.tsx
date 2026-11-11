@@ -1,14 +1,11 @@
-import { createMemo, createSignal, mergeProps, Show, splitProps } from 'solid-js';
+import { createMemo, mergeProps, Show, splitProps } from 'solid-js';
 
-import { createControllable } from '../../hooks/createControllable';
-import { createDismiss } from '../../hooks/createDismiss';
-import { createFloating } from '../../hooks/createFloating';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
 import { Button } from '../actions/Button';
 import { buttonClass } from '../actions/buttonClass';
-import { Badge } from '../display/Badge';
+import { Badge } from '../primitives/Badge';
 import { Count } from '../primitives/Count';
 import { Glyph } from '../primitives/Glyph';
 import { Text } from '../primitives/Text';
@@ -16,6 +13,7 @@ import { typographyClass } from '../primitives/typography';
 import styles from './NotificationCenter.module.css';
 import type { NotificationItem } from './NotificationItem';
 import { NotificationList } from './NotificationList';
+import { Popover } from './Popover';
 
 const MAX_BADGE_COUNT = 9;
 
@@ -50,78 +48,70 @@ export const NotificationCenter = (props: NotificationCenterProps) => {
     'align',
     'class',
   ]);
-  const [isOpen, setOpen] = createControllable({
-    value: () => local.open,
-    defaultValue: local.defaultOpen,
-    onChange: (next) => local.onOpenChange?.(next),
-  });
   const unread = createMemo(() => local.items.filter((item) => item.unread).length);
   const translate = useTranslate();
   const title = () => local.title ?? translate('velvet.feedback.notificationCenter.title');
-  const [wrap, setWrap] = createSignal<HTMLSpanElement>();
-
-  createDismiss(isOpen, () => setOpen(false), wrap);
-
-  const floating = createFloating(isOpen, wrap, { align: () => local.align });
-
   return (
-    <span {...rest} ref={setWrap} class={cx(styles.popoverWrap, local.class)}>
-      <button
-        type="button"
-        class={cx(buttonClass({ variant: 'ghost', icon: true }), styles.notifPartBell)}
-        aria-label={
-          unread() > 0
-            ? translate('velvet.feedback.notificationCenter.unreadLabel', { title: title(), count: unread() })
-            : title()
-        }
-        aria-haspopup="dialog"
-        aria-expanded={isOpen()}
-        onClick={() => setOpen(!isOpen())}
-      >
-        <Glyph name="bell" />
-        <Count value={unread()} max={MAX_BADGE_COUNT} size="sm" class={styles.indicatorPartItem} aria-hidden="true" />
-      </button>
-      <Show when={isOpen()}>
-        <div
-          ref={floating.ref}
-          style={floating.style()}
-          role="dialog"
-          aria-label={title()}
-          class={cx(
-            typographyClass('body'),
-            styles.popover,
-            styles.notif,
-            local.align === 'end' && styles.popoverVariantEnd,
-          )}
+    <Popover
+      {...rest}
+      open={local.open}
+      defaultOpen={local.defaultOpen}
+      onOpenChange={local.onOpenChange}
+      align={local.align}
+      label={title()}
+      bare
+      panelClassName={styles.notif}
+      class={local.class}
+      trigger={(triggerProps) => (
+        <button
+          {...triggerProps}
+          type="button"
+          class={cx(buttonClass({ variant: 'ghost', icon: true }), styles.notifPartBell)}
+          aria-label={
+            unread() > 0
+              ? translate('velvet.feedback.notificationCenter.unreadLabel', { title: title(), count: unread() })
+              : title()
+          }
         >
-          <div class={styles.notifPartHead}>
-            <Text as="span" variant="title" tone="inherit" class={styles.notifPartHeading}>
-              {title()}
-              <Show when={unread() > 0}>
-                <Badge size="sm" tone="brand">
-                  {translate('velvet.feedback.notificationCenter.newCount', { count: unread() })}
-                </Badge>
-              </Show>
-            </Text>
-            <Show when={local.onMarkAllRead && unread() > 0}>
-              <Button variant="link" size="sm" onClick={() => local.onMarkAllRead?.()}>
-                {translate('velvet.feedback.notificationCenter.markAllRead')}
-              </Button>
-            </Show>
-          </div>
-          <NotificationList items={local.items} onItemClick={local.onItemClick} />
-          <Show when={local.onViewAll}>
-            <button
-              type="button"
-              class={cx(styles.notifPartFoot, typographyClass('caption'))}
-              onClick={() => local.onViewAll?.()}
-            >
-              {translate('velvet.feedback.notificationCenter.viewAll')}
-              <Glyph name="arrow-right" />
-            </button>
+          <Glyph name="bell" />
+          <Show when={unread() > 0}>
+            <Count
+              value={unread()}
+              max={MAX_BADGE_COUNT}
+              size="sm"
+              class={styles.indicatorPartItem}
+              aria-hidden="true"
+            />
           </Show>
-        </div>
+        </button>
+      )}
+    >
+      <div class={styles.notifPartHead}>
+        <Text as="span" variant="title" tone="inherit" class={styles.notifPartHeading}>
+          {title()}
+          <Show when={unread() > 0}>
+            <Badge size="sm" tone="brand">
+              {translate('velvet.feedback.notificationCenter.newCount', { count: unread() })}
+            </Badge>
+          </Show>
+        </Text>
+        <Show when={local.onMarkAllRead && unread() > 0}>
+          <Button variant="link" size="sm" onClick={() => local.onMarkAllRead?.()}>
+            {translate('velvet.feedback.notificationCenter.markAllRead')}
+          </Button>
+        </Show>
+      </div>
+      <NotificationList items={local.items} onItemClick={local.onItemClick} />
+      <Show when={local.onViewAll}>
+        <button
+          type="button"
+          class={cx(styles.notifPartFoot, typographyClass('caption'))}
+          onClick={() => local.onViewAll?.()}
+        >
+          {translate('velvet.feedback.notificationCenter.viewAll')}
+          <Glyph name="arrow-right" />
+        </button>
       </Show>
-    </span>
+    </Popover>
   );
 };

@@ -1,15 +1,3 @@
 .timePartMenu {
   max-height: var(--overlay-max-h-sm);
 }
-
-.selectPartMenu {
-  composes: selectPartMenu from '../../styles/shared/forms/select.module.css';
-}
-
-.selectPartLabel {
-  composes: selectPartLabel from '../../styles/shared/forms/select.module.css';
-}
-
-.selectPartCheck {
-  composes: selectPartCheck from '../../styles/shared/forms/select.module.css';
-}

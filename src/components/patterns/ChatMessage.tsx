@@ -6,7 +6,7 @@ import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { reportAsyncError } from '../../utils/reportAsyncError';
 import { IconButton } from '../actions/IconButton';
-import { Avatar } from '../data/Avatar';
+import { Avatar } from '../primitives/Avatar';
 import { Glyph } from '../primitives/Glyph';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';

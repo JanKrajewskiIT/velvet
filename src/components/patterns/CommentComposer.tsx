@@ -3,7 +3,7 @@ import { createEffect, createSignal, mergeProps, onMount, Show } from 'solid-js'
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { Button } from '../actions/Button';
-import { Avatar } from '../data/Avatar';
+import { Avatar } from '../primitives/Avatar';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
 import styles from './CommentComposer.module.css';

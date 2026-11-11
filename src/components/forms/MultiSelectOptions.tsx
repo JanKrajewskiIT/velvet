@@ -4,7 +4,6 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { Checkmark } from '../primitives/Checkmark';
 import { Glyph } from '../primitives/Glyph';
 import { ComboboxOption } from './ComboboxOption';
-import { ComboboxOptionText } from './ComboboxOptionText';
 import type { ComboboxPopup } from './createComboboxPopup';
 import type { MultiSelectEntry } from './createMultiSelectEntries';
 import styles from './MultiSelectOptions.module.css';
@@ -30,23 +29,25 @@ export const MultiSelectOptions = (props: MultiSelectOptionsProps) => {
           class={styles.option}
           onHover={() => !option.disabled && props.popup.setActive(index())}
           onPick={() => props.onToggle(option)}
-        >
-          <Show when={option.create} fallback={<Checkmark size="sm" checked={props.selected.includes(option.value)} />}>
-            <Glyph name="plus" />
-          </Show>
-          <Show when={option.icon}>{(icon) => <Glyph name={icon()} />}</Show>
-          <ComboboxOptionText
-            label={
-              option.create
-                ? translate('velvet.forms.multiSelect.createOption', {
-                    verb: props.createLabel ?? translate('velvet.forms.multiSelect.createLabel'),
-                    label: option.label,
-                  })
-                : option.label
-            }
-            description={option.description}
-          />
-        </ComboboxOption>
+          leading={
+            <Show
+              when={option.create}
+              fallback={<Checkmark size="sm" checked={props.selected.includes(option.value)} />}
+            >
+              <Glyph name="plus" />
+            </Show>
+          }
+          icon={option.icon}
+          description={option.description}
+          label={
+            option.create
+              ? translate('velvet.forms.multiSelect.createOption', {
+                  verb: props.createLabel ?? translate('velvet.forms.multiSelect.createLabel'),
+                  label: option.label,
+                })
+              : option.label
+          }
+        />
       )}
     </For>
   );

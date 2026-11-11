@@ -33,7 +33,7 @@ export interface TreeViewProps {
   draggable?: boolean;
   /** Moves `draggedId` as a child of `targetId`; the consumer updates `data`. */
   onMove?: (draggedId: string, targetId: string) => void;
-  /** Positional moves; also enables moving unless draggable is explicitly false. */
+  /** Design-system onMove(move) contract, named explicitly to preserve legacy onMove(id, targetId). Takes precedence and enables moving unless draggable is false. */
   onMovePosition?: (move: TreeMove) => void;
   canDrop?: (node: TreeNode, target: TreeNode, position: TreeMovePosition) => boolean;
   /** Called when a lazy node without children expands. Resolve after you put the children into data; while pending a Loading… row shows, on reject an error row with Retry (Enter / Space on it retries). */

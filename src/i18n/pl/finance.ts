@@ -4,6 +4,7 @@ import type { financeEn } from '../en/finance';
 
 export const financePl: TranslationOf<typeof financeEn> = {
   money: { hidden: 'Kwota ukryta' },
+  directionBadge: { up: 'Wzrost', down: 'Spadek', flat: 'Bez zmian', muted: 'Brak' },
   priceChange: {
     up: 'wzrost',
     down: 'spadek',
@@ -25,8 +26,10 @@ export const financePl: TranslationOf<typeof financeEn> = {
     demo: 'DEMO',
     shadow: 'OBSERWACJA',
     live: 'LIVE · PRAWDZIWE ŚRODKI',
+    tones: { neutral: 'Neutralne', info: 'Informacja', warning: 'Ostrzeżenie', danger: 'Zagrożenie' },
     label: 'Środowisko: {environment}',
     kill: 'Zatrzymaj handel',
+    stop: 'Zatrzymaj',
   },
   valueShift: { expected: 'Oczekiwano', actual: 'uzyskano', worse: 'pogorszenie', better: 'poprawa' },
   newsItem: { aiSummary: 'Podsumowanie AI', impact: 'Wpływ: {impact}' },

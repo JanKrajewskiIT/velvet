@@ -3,7 +3,7 @@
   border: var(--border-width) solid var(--surface-border);
   display: flex;
   flex-direction: column;
-  border-radius: var(--surface-radius);
+  border-radius: var(--radius-xl);
   box-shadow: var(--elevation-control);
   color: var(--fg-primary);
   overflow: hidden;

@@ -1,6 +1,8 @@
 export { BarChart, type BarChartProps } from './BarChart';
+export { ChartLegend, type ChartLegendItem, type ChartLegendProps } from './ChartLegend';
 export { compact, niceTicks, seriesColor } from './chartScale';
 export { type ChartDatum, type ChartSeries } from './chartSeries';
+export { ChartTooltip, type ChartTooltipProps, type ChartTooltipRow } from './ChartTooltip';
 export { type ComparisonCell, type ComparisonItem, type ComparisonRow } from './comparison';
 export { ComparisonBar, type ComparisonBarProps } from './ComparisonBar';
 export { ComparisonDialog, type ComparisonDialogProps } from './ComparisonDialog';
@@ -14,4 +16,5 @@ export { Heatmap, type HeatmapCell, type HeatmapPoint, type HeatmapProps } from 
 export { HEATMAP_COLORS } from './heatmapColors';
 export { LineChart, type LineChartProps } from './LineChart';
 export { type RadarAxis, RadarChart, type RadarChartProps, type RadarSeries } from './RadarChart';
+export { RangeBandChart, type RangeBandChartProps } from './RangeBandChart';
 export { Sparkline, type SparklineProps } from './Sparkline';

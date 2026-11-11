@@ -19,6 +19,7 @@ export const commonPl: TranslationOf<typeof commonEn> = {
   loading: 'Ładowanie',
   next: 'Dalej',
   no: 'Nie',
+  previous: 'Poprzedni',
   remove: 'Usuń',
   retry: 'Ponów',
   save: 'Zapisz',

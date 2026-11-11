@@ -12,7 +12,7 @@
     var(--count-shadow);
 }
 
-.notif {
+.notif[role='dialog'] {
   width: min(var(--overlay-w-md), calc(100vw - var(--viewport-margin)));
   padding: 0;
   max-width: none;
@@ -62,18 +62,6 @@
   box-shadow: inset var(--focus-ring);
 }
 
-.popoverWrap {
-  composes: popoverWrap from '../../styles/shared/feedback/popover.module.css';
-}
-
 .indicatorPartItem {
   composes: indicatorPartItem from '../../styles/shared/primitives/dot.module.css';
-}
-
-.popover {
-  composes: popover from '../../styles/shared/feedback/popover.module.css';
-}
-
-.popoverVariantEnd {
-  composes: popoverVariantEnd from '../../styles/shared/feedback/popover.module.css';
 }

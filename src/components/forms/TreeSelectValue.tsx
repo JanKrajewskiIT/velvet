@@ -1,7 +1,7 @@
 import { For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
-import { Tag } from '../display/Tag';
+import { Tag } from '../primitives/Tag';
 import { Text } from '../primitives/Text';
 import type { TreeSelectNode } from './treeSelectRows';
 import styles from './TreeSelectValue.module.css';

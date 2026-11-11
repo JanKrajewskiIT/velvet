@@ -1,0 +1,41 @@
+.item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  min-width: 0;
+
+  &[data-mono] .text {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  &[data-strong] .text {
+    color: var(--fg-primary);
+    font-weight: var(--type-title-weight);
+  }
+
+  &[data-tone='danger'][data-strong] .text {
+    color: var(--status-danger-fg);
+  }
+}
+
+.text {
+  font: inherit;
+}
+
+.icon {
+  font-size: var(--size-icon-sm);
+  flex: none;
+}
+
+@media (width <= 1023px) {
+  .item[data-hide='md'] {
+    display: none;
+  }
+}
+
+@media (width <= 639px) {
+  .item[data-hide='sm'] {
+    display: none;
+  }
+}

@@ -1,7 +1,7 @@
 import { Show } from 'solid-js';
 
 import { cx } from '../../utils/cx';
-import { Badge } from '../display/Badge';
+import { Badge } from '../primitives/Badge';
 import { Glyph } from '../primitives/Glyph';
 import { typographyClass } from '../primitives/typography';
 import styles from './FooterLinkItem.module.css';

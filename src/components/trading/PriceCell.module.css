@@ -1,0 +1,75 @@
+.root {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+
+  &[data-size='sm'] {
+    font-size: var(--type-body-sm-size);
+  }
+
+  &[data-size='md'] {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-medium);
+  }
+
+  &[data-size='lg'] {
+    font: var(--font-weight-semibold) var(--font-size-3xl)/1.1 var(--font-display);
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &[data-tick='up'] .value {
+    animation: tickUp var(--dur-slower) var(--ease-standard);
+  }
+
+  &[data-tick='down'] .value {
+    animation: tickDown var(--dur-slower) var(--ease-standard);
+  }
+}
+
+.value {
+  border-radius: var(--radius-sm);
+  padding: 0 var(--space-1);
+  margin: 0 calc(-1 * var(--space-1));
+}
+
+.currency {
+  margin-left: 0.35em;
+  font-size: 0.72em;
+  color: var(--fg-tertiary);
+  font-family: var(--font-sans);
+  font-weight: var(--font-weight-medium);
+}
+
+@keyframes tickUp {
+  0%,
+  35% {
+    background: var(--trend-up-bg);
+    color: var(--trend-up-fg);
+  }
+
+  100% {
+    background: transparent;
+  }
+}
+
+@keyframes tickDown {
+  0%,
+  35% {
+    background: var(--trend-down-bg);
+    color: var(--trend-down-fg);
+  }
+
+  100% {
+    background: transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root .value {
+    animation: none !important;
+  }
+}

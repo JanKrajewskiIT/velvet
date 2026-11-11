@@ -9,7 +9,7 @@ export interface StatusPageCopy {
   tagKey?: I18nKey;
   titleKey: I18nKey;
   descriptionKey: I18nKey;
-  icon: string;
+  icon?: string;
   tone: StateTone;
 }
 
@@ -32,7 +32,6 @@ export const STATUS_PAGES: Record<StatusPageCode, StatusPageCopy> = {
     tagKey: 'velvet.feedback.statusPage.serverError.tag',
     titleKey: 'velvet.feedback.statusPage.serverError.title',
     descriptionKey: 'velvet.feedback.statusPage.serverError.description',
-    icon: 'triangle-alert',
     tone: 'danger',
   },
   offline: {
@@ -44,19 +43,16 @@ export const STATUS_PAGES: Record<StatusPageCode, StatusPageCopy> = {
   success: {
     titleKey: 'velvet.feedback.statusPage.success.title',
     descriptionKey: 'velvet.feedback.statusPage.success.description',
-    icon: 'circle-check',
     tone: 'success',
   },
   warning: {
     titleKey: 'velvet.feedback.statusPage.warning.title',
     descriptionKey: 'velvet.feedback.statusPage.warning.description',
-    icon: 'triangle-alert',
     tone: 'warning',
   },
   info: {
     titleKey: 'velvet.feedback.statusPage.info.title',
     descriptionKey: 'velvet.feedback.statusPage.info.description',
-    icon: 'info',
     tone: 'info',
   },
 };

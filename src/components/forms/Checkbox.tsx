@@ -4,8 +4,10 @@ import { cx } from '../../utils/cx';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
 import styles from './Checkbox.module.css';
+import { createNativeChecked, type NativeCheckedProps } from './createNativeChecked';
 
-export interface CheckboxProps extends Omit<JSX.InputHTMLAttributes<HTMLInputElement>, 'type' | 'size' | 'ref'> {
+export interface CheckboxProps
+  extends Omit<JSX.InputHTMLAttributes<HTMLInputElement>, 'type' | 'size' | 'checked' | 'ref'>, NativeCheckedProps {
   label?: JSX.Element;
   /** Secondary line under the label. */
   description?: JSX.Element;
@@ -20,7 +22,17 @@ export interface CheckboxProps extends Omit<JSX.InputHTMLAttributes<HTMLInputEle
 /** Checkbox for multi-select and consent. Supports indeterminate. `class` styles the wrapping label; other attributes go to the input. */
 export const Checkbox = (props: CheckboxProps) => {
   const merged = mergeProps({ size: 'md' } satisfies CheckboxProps, props);
-  const [local, rest] = splitProps(merged, ['label', 'description', 'indeterminate', 'size', 'ref', 'class']);
+  const [local, rest] = splitProps(merged, [
+    'label',
+    'description',
+    'indeterminate',
+    'size',
+    'ref',
+    'class',
+    'checked',
+    'defaultChecked',
+  ]);
+  const checked = createNativeChecked(local);
   let input!: HTMLInputElement;
   createEffect(() => {
     input.indeterminate = !!local.indeterminate;
@@ -37,6 +49,7 @@ export const Checkbox = (props: CheckboxProps) => {
     >
       <input
         {...rest}
+        {...checked()}
         ref={(element) => {
           input = element;
           local.ref?.(element);

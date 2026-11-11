@@ -72,10 +72,6 @@
   composes: controlPartChevron from '../../styles/shared/primitives/control.module.css';
 }
 
-.selectPartMenu {
-  composes: selectPartMenu from '../../styles/shared/forms/select.module.css';
-}
-
 .tselectPartEmpty {
   composes: tselectPartEmpty from '../../styles/shared/patterns/filter-bar.module.css';
 }

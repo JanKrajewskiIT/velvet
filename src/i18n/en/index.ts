@@ -14,6 +14,7 @@ import { menusEn } from './menus';
 import { navigationEn } from './navigation';
 import { patternsEn } from './patterns';
 import { primitivesEn } from './primitives';
+import { tradingEn } from './trading';
 
 export const velvetEn = defineDictionary({
   velvet: {
@@ -31,5 +32,6 @@ export const velvetEn = defineDictionary({
     navigation: navigationEn,
     patterns: patternsEn,
     primitives: primitivesEn,
+    trading: tradingEn,
   },
 });

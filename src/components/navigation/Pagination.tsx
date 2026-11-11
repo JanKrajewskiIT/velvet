@@ -111,7 +111,7 @@ export const Pagination = (props: PaginationProps) => {
       </Show>
       <Show when={p.pageSizeOptions && p.onPageSizeChange}>
         <div class={cx(styles.pagerPartSize, typographyClass('body-sm'))}>
-          <Text as="span" variant="caption" tone="inherit">
+          <Text as="span" variant="body-sm" tone="inherit">
             {labels().rows}
           </Text>
           <Select

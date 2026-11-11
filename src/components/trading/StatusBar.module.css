@@ -1,0 +1,40 @@
+.root {
+  --statusbar-height: 32px;
+
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  height: var(--statusbar-height);
+  padding: 0 var(--space-4);
+  box-sizing: border-box;
+  background: var(--bg-raised);
+  border-top: var(--border-width) solid var(--border-subtle);
+  font: var(--font-weight-regular) var(--font-size-xs) / 1 var(--font-sans);
+  color: var(--fg-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+
+  & b {
+    color: var(--fg-primary);
+    font-weight: var(--type-title-weight);
+  }
+}
+
+.fixed {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--z-sticky);
+}
+
+.group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.end {
+  margin-left: auto;
+}

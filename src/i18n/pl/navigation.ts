@@ -56,6 +56,9 @@ export const navigationPl: TranslationOf<typeof navigationEn> = {
     done: 'ukończono',
     error: 'zawiera błędy',
   },
+  periodNav: {
+    navigate: 'Nawigacja',
+  },
   treeView: {
     loading: 'Ładowanie…',
     loadFailed: 'Nie udało się wczytać',

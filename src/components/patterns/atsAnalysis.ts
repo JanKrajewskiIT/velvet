@@ -39,6 +39,11 @@ export interface AtsResult {
   recommendations?: AtsRecommendation[];
 }
 
+export type ReportSeverity = AtsSeverity;
+export type ReportCategory = AtsCategory;
+export type ReportRecommendation = AtsRecommendation;
+export type ReportResult = AtsResult;
+
 export interface ScoreBand {
   min: number;
   label: string;

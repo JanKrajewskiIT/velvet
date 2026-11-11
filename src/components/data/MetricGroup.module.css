@@ -13,7 +13,7 @@
 .item {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: var(--space-0-5);
   min-width: 0;
 }
 
@@ -33,15 +33,15 @@
 }
 
 .root[data-size='lg'] .value {
-  font-size: var(--font-size-2xl, 24px);
+  font-size: var(--type-h3-size);
 }
 
 .value[data-dir='up'] {
-  color: var(--market-up-fg);
+  color: var(--trend-up-fg);
 }
 
 .value[data-dir='down'] {
-  color: var(--market-down-fg);
+  color: var(--trend-down-fg);
 }
 
 .label {

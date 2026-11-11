@@ -1,4 +1,3 @@
-import { Glyph } from '../primitives/Glyph';
 import styles from './AutocompleteCustomOption.module.css';
 import { ComboboxOption } from './ComboboxOption';
 
@@ -18,8 +17,7 @@ export const AutocompleteCustomOption = (props: AutocompleteCustomOptionProps) =
     active={props.active}
     onHover={props.onHover}
     onPick={props.onPick}
-  >
-    <Glyph name="plus" />
-    {props.label}
-  </ComboboxOption>
+    icon="plus"
+    label={props.label}
+  />
 );

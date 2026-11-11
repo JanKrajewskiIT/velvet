@@ -1,0 +1,4 @@
+.row {
+  composes: option from '../../styles/shared/primitives/option.module.css';
+  pointer-events: none;
+}

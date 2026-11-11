@@ -95,6 +95,7 @@ export const Heatmap = (props: HeatmapProps) => {
                 as="span"
                 variant="overline"
                 tone="inherit"
+                class={styles.heatPartMonth}
                 style={{
                   'grid-column': `${m.week + 1} / span ${Math.min(MIN_MONTH_LABEL_GAP, merged.weeks - m.week)}`,
                 }}
@@ -107,7 +108,7 @@ export const Heatmap = (props: HeatmapProps) => {
         <div class={styles.heatPartDays} aria-hidden="true">
           <For each={weekdayLabels()}>
             {(name) => (
-              <Text as="span" variant="overline" tone="inherit">
+              <Text as="span" variant="overline" tone="inherit" class={styles.heatPartDay}>
                 {name}
               </Text>
             )}

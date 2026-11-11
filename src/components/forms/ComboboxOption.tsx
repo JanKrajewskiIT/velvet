@@ -1,8 +1,6 @@
 import type { JSX } from 'solid-js';
 
-import { cx } from '../../utils/cx';
-import { typographyClass } from '../primitives/typography';
-import styles from './ComboboxOption.module.css';
+import { ListboxOption } from '../primitives/ListboxOption';
 
 export interface ComboboxOptionProps {
   id: string;
@@ -10,29 +8,31 @@ export interface ComboboxOptionProps {
   active: boolean;
   disabled?: boolean | undefined;
   class?: string;
+  icon?: JSX.Element;
+  label?: JSX.Element;
+  description?: JSX.Element;
+  leading?: JSX.Element;
+  trailing?: JSX.Element;
+  checkEnd?: boolean;
   onHover?: () => void;
   onPick: () => void;
   children?: JSX.Element;
 }
 
-/** One row of a combobox popup; focus stays on the owning control, which handles the keyboard through `aria-activedescendant`. */
 export const ComboboxOption = (props: ComboboxOptionProps) => (
-  // eslint-disable-next-line jsx-a11y/click-events-have-key-events -- keyboard handled by the owning control via aria-activedescendant
-  <li
+  <ListboxOption
     id={props.id}
-    role="option"
-    aria-selected={props.selected}
-    aria-disabled={props.disabled || undefined}
-    class={cx(
-      typographyClass('body'),
-      styles.selectPartOption,
-      props.class,
-      props.active && styles.selectPartOptionVariantActive,
-    )}
-    onMouseEnter={() => props.onHover?.()}
-    onMouseDown={(e) => e.preventDefault()}
+    selected={props.selected}
+    active={props.active}
+    disabled={props.disabled}
+    class={props.class}
+    icon={props.icon}
+    label={props.label ?? props.children}
+    description={props.description}
+    leading={props.leading}
+    trailing={props.trailing}
+    checkEnd={props.checkEnd ?? false}
+    onMouseEnter={() => !props.disabled && props.onHover?.()}
     onClick={() => props.onPick()}
-  >
-    {props.children}
-  </li>
+  />
 );

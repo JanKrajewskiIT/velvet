@@ -2,7 +2,7 @@ import { For, Show } from 'solid-js';
 
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
-import { Badge } from '../display/Badge';
+import { Badge } from '../primitives/Badge';
 import { Glyph } from '../primitives/Glyph';
 import { Marker, type MarkerProps } from '../primitives/Marker';
 import { RailItem } from '../primitives/RailItem';

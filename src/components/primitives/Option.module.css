@@ -25,3 +25,10 @@
 .optionPartKbd {
   composes: optionPartKbd from '../../styles/shared/primitives/option.module.css';
 }
+
+.optionPartCheckEnd {
+  --glyph-color: var(--fg-brand);
+
+  flex: none;
+  margin-inline-start: auto;
+}

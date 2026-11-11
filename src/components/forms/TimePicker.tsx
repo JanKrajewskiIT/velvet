@@ -273,6 +273,7 @@ export const TimePicker = (props: TimePickerProps) => {
           <TimePickerMenu
             ref={floating.ref}
             style={floating.style()}
+            up={floating.side() === 'top'}
             id={listId()}
             label={p['aria-label'] ?? translate('velvet.forms.timePicker.optionsLabel')}
             labelledBy={p['aria-labelledby'] ?? (p.label ? `${id()}-label` : undefined)}

@@ -2,6 +2,7 @@ import { defineDictionary } from '@jankrajewskiit/i18n';
 
 export const financeEn = defineDictionary({
   money: { hidden: 'Amount hidden' },
+  directionBadge: { up: 'Up', down: 'Down', flat: 'Flat', muted: 'None' },
   priceChange: {
     up: 'up',
     down: 'down',
@@ -23,8 +24,10 @@ export const financeEn = defineDictionary({
     demo: 'DEMO',
     shadow: 'SHADOW',
     live: 'LIVE · REAL FUNDS',
+    tones: { neutral: 'Neutral', info: 'Info', warning: 'Warning', danger: 'Danger' },
     label: 'Environment: {environment}',
     kill: 'Kill Switch',
+    stop: 'Stop',
   },
   valueShift: { expected: 'Expected', actual: 'actual', worse: 'worse', better: 'better' },
   newsItem: { aiSummary: 'AI summary', impact: '{impact} impact' },

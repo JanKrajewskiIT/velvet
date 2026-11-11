@@ -1,18 +1,33 @@
-/* SYS · MARKET — semantic colours for price direction and execution environment.
-   Direction never reuses status-success/danger by name: a falling price is not an error.
-   data-market-colors on <html> (or any subtree): "standard" (default, green up), "inverted" (red up — CN/JP/KR convention), "cvd" (blue up / orange down, colour-vision safe). */
-:root,[data-theme],[data-market-colors]{
---mkt-gain-fg:var(--status-success-fg);--mkt-gain-solid:var(--status-success-solid);--mkt-gain-bg:var(--status-success-bg);
---mkt-loss-fg:var(--status-danger-fg);--mkt-loss-solid:var(--status-danger-solid);--mkt-loss-bg:var(--status-danger-bg);
+/* data-market-colors remains supported for consumers of the earlier finance API. */
+:root,[data-theme],[data-trend-colors],[data-market-colors]{
+--trend-pos-fg:var(--status-success-fg);--trend-pos-solid:var(--status-success-solid);--trend-pos-bg:var(--status-success-bg);
+--trend-neg-fg:var(--status-danger-fg);--trend-neg-solid:var(--status-danger-solid);--trend-neg-bg:var(--status-danger-bg);
+--trend-up-fg:var(--trend-pos-fg);--trend-up-solid:var(--trend-pos-solid);--trend-up-bg:var(--trend-pos-bg);
+--trend-down-fg:var(--trend-neg-fg);--trend-down-solid:var(--trend-neg-solid);--trend-down-bg:var(--trend-neg-bg);
+--trend-flat-fg:var(--fg-secondary);--trend-flat-solid:var(--fg-tertiary);--trend-flat-bg:var(--bg-subtle);
+--chart-band:color-mix(in oklab,var(--dv-1) 14%,transparent);--chart-band-edge:color-mix(in oklab,var(--dv-1) 40%,transparent);--chart-median:var(--fg-tertiary);
+--env-neutral-bg:var(--bg-subtle);--env-neutral-fg:var(--fg-primary);--env-neutral-border:var(--border-default);--env-neutral-chip-bg:var(--fg-secondary);--env-neutral-chip-fg:var(--bg-page);
+--env-info-bg:var(--status-info-bg);--env-info-fg:var(--status-info-fg);--env-info-border:var(--status-info-border);--env-info-chip-bg:var(--status-info-solid);--env-info-chip-fg:var(--on-color-fg);
+--env-warning-bg:var(--status-warning-bg);--env-warning-fg:var(--status-warning-fg);--env-warning-border:var(--status-warning-border);--env-warning-chip-bg:var(--status-warning-solid);--env-warning-chip-fg:var(--on-warning-solid);
+--env-danger-bg:var(--status-danger-solid);--env-danger-fg:var(--on-color-fg);--env-danger-border:var(--status-danger-solid);--env-danger-chip-bg:var(--on-color-fg);--env-danger-chip-fg:var(--status-danger-fg);
+--mkt-gain-fg:var(--trend-pos-fg);--mkt-gain-solid:var(--trend-pos-solid);--mkt-gain-bg:var(--trend-pos-bg);
+--mkt-loss-fg:var(--trend-neg-fg);--mkt-loss-solid:var(--trend-neg-solid);--mkt-loss-bg:var(--trend-neg-bg);
 --market-up-fg:var(--mkt-gain-fg);--market-up-solid:var(--mkt-gain-solid);--market-up-bg:var(--mkt-gain-bg);
 --market-down-fg:var(--mkt-loss-fg);--market-down-solid:var(--mkt-loss-solid);--market-down-bg:var(--mkt-loss-bg);
---market-flat-fg:var(--fg-secondary);--market-flat-solid:var(--fg-tertiary);--market-flat-bg:var(--bg-subtle);
---market-band:color-mix(in oklab,var(--dv-1) 14%,transparent);--market-band-edge:color-mix(in oklab,var(--dv-1) 40%,transparent);--market-median:var(--fg-tertiary);
-/* Execution environment — Paper/Demo/Live must never be confused */
---env-research-bg:var(--bg-subtle);--env-research-fg:var(--fg-primary);--env-research-border:var(--border-default);--env-research-chip-bg:var(--fg-secondary);--env-research-chip-fg:var(--bg-page);
---env-paper-bg:var(--status-info-bg);--env-paper-fg:var(--status-info-fg);--env-paper-border:var(--status-info-border);--env-paper-chip-bg:var(--status-info-solid);--env-paper-chip-fg:var(--on-color-fg);
---env-demo-bg:var(--status-warning-bg);--env-demo-fg:var(--status-warning-fg);--env-demo-border:var(--status-warning-border);--env-demo-chip-bg:var(--status-warning-solid);--env-demo-chip-fg:var(--fg-primary);
---env-live-bg:var(--status-danger-solid);--env-live-fg:var(--on-color-fg);--env-live-border:var(--status-danger-solid);--env-live-chip-bg:var(--on-color-fg);--env-live-chip-fg:var(--status-danger-fg);
+--market-flat-fg:var(--trend-flat-fg);--market-flat-solid:var(--trend-flat-solid);--market-flat-bg:var(--trend-flat-bg);
+--market-band:var(--chart-band);--market-band-edge:var(--chart-band-edge);--market-median:var(--chart-median);
+--env-research-bg:var(--env-neutral-bg);--env-research-fg:var(--env-neutral-fg);--env-research-border:var(--env-neutral-border);--env-research-chip-bg:var(--env-neutral-chip-bg);--env-research-chip-fg:var(--env-neutral-chip-fg);
+--env-paper-bg:var(--env-info-bg);--env-paper-fg:var(--env-info-fg);--env-paper-border:var(--env-info-border);--env-paper-chip-bg:var(--env-info-chip-bg);--env-paper-chip-fg:var(--env-info-chip-fg);
+--env-demo-bg:var(--env-warning-bg);--env-demo-fg:var(--env-warning-fg);--env-demo-border:var(--env-warning-border);--env-demo-chip-bg:var(--env-warning-chip-bg);--env-demo-chip-fg:var(--env-warning-chip-fg);
+--env-live-bg:var(--env-danger-bg);--env-live-fg:var(--env-danger-fg);--env-live-border:var(--env-danger-border);--env-live-chip-bg:var(--env-danger-chip-bg);--env-live-chip-fg:var(--env-danger-chip-fg);
 }
-[data-market-colors="inverted"]{--market-up-fg:var(--mkt-loss-fg);--market-up-solid:var(--mkt-loss-solid);--market-up-bg:var(--mkt-loss-bg);--market-down-fg:var(--mkt-gain-fg);--market-down-solid:var(--mkt-gain-solid);--market-down-bg:var(--mkt-gain-bg)}
-[data-market-colors="cvd"]{--mkt-gain-fg:var(--status-info-fg);--mkt-gain-solid:var(--status-info-solid);--mkt-gain-bg:var(--status-info-bg);--mkt-loss-fg:var(--status-warning-fg);--mkt-loss-solid:var(--status-warning-solid);--mkt-loss-bg:var(--status-warning-bg)}
+[data-trend-colors="inverted"],[data-market-colors="inverted"]:not([data-trend-colors]){
+--trend-up-fg:var(--trend-neg-fg);--trend-up-solid:var(--trend-neg-solid);--trend-up-bg:var(--trend-neg-bg);
+--trend-down-fg:var(--trend-pos-fg);--trend-down-solid:var(--trend-pos-solid);--trend-down-bg:var(--trend-pos-bg);
+--market-up-fg:var(--mkt-loss-fg);--market-up-solid:var(--mkt-loss-solid);--market-up-bg:var(--mkt-loss-bg);
+--market-down-fg:var(--mkt-gain-fg);--market-down-solid:var(--mkt-gain-solid);--market-down-bg:var(--mkt-gain-bg);
+}
+[data-trend-colors="cvd"],[data-market-colors="cvd"]:not([data-trend-colors]){
+--trend-pos-fg:var(--status-info-fg);--trend-pos-solid:var(--status-info-solid);--trend-pos-bg:var(--status-info-bg);
+--trend-neg-fg:var(--status-warning-fg);--trend-neg-solid:var(--status-warning-solid);--trend-neg-bg:var(--status-warning-bg);
+}

@@ -1,5 +1,6 @@
 .heatWrap {
-  --heatmap-cell-gap: var(--space-0-5);
+  --heatmap-cell-gap: var(--space-1);
+  --heatmap-month-label-height: 14px;
 
   gap: var(--space-3);
 }
@@ -16,11 +17,12 @@
   grid-column: 2;
   display: grid;
   gap: var(--heatmap-cell-gap);
-  height: 14px;
+  height: var(--heatmap-month-label-height);
   color: var(--dv-axis);
 }
 
-.heatPartMonths span {
+.heatPartMonth {
+  line-height: var(--heatmap-month-label-height);
   white-space: nowrap;
 }
 
@@ -30,6 +32,10 @@
   gap: var(--heatmap-cell-gap);
   align-items: center;
   color: var(--dv-axis);
+}
+
+.heatPartDay {
+  line-height: 1;
 }
 
 .heatPartCells {

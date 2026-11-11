@@ -4,6 +4,7 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { toneIcon } from '../../utils/tone';
 import { Glyph } from '../primitives/Glyph';
 import { Heading } from '../primitives/Heading';
 import { Text } from '../primitives/Text';
@@ -62,8 +63,8 @@ export const StatusPage = (props: StatusPageProps) => {
   const copy = () => STATUS_PAGES[current()];
   const isError = () => isErrorCode(current());
   const hero = () => isError() && local.size === 'lg';
-  const icon = () => local.icon ?? copy().icon;
   const tone = () => local.tone ?? copy().tone;
+  const icon = () => local.icon ?? copy().icon ?? toneIcon(tone());
   const errorLabel = () => translate('velvet.feedback.statusPage.error', { code: String(current()) });
 
   return (

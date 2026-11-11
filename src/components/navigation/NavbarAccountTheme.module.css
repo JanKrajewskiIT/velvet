@@ -37,7 +37,7 @@
 .acctPartSegbtn[aria-checked='true'] {
   background: var(--bg-raised);
   color: var(--fg-brand);
-  box-shadow: var(--shadow-xs);
+  box-shadow: var(--elevation-control);
 }
 
 .acctPartSegbtn:focus-visible {

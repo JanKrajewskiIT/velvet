@@ -1,8 +1,6 @@
-import { For, type JSX, Show } from 'solid-js';
+import { For, type JSX } from 'solid-js';
 
-import { cx } from '../../utils/cx';
-import { Glyph } from '../primitives/Glyph';
-import { Text } from '../primitives/Text';
+import { Listbox } from '../primitives/Listbox';
 import { ComboboxOption } from './ComboboxOption';
 import { formatTime } from './time';
 import styles from './TimePickerMenu.module.css';
@@ -18,19 +16,21 @@ export interface TimePickerMenuProps {
   locale: string;
   ref: JSX.HTMLAttributes<HTMLUListElement>['ref'];
   style?: JSX.CSSProperties;
+  up?: boolean;
   onHover: (index: number) => void;
   onSelect: (time: string) => void;
 }
 
 export const TimePickerMenu = (props: TimePickerMenuProps) => (
-  <ul
+  <Listbox
+    flip={false}
+    up={props.up}
     ref={props.ref}
     style={props.style}
     id={props.id}
-    role="listbox"
     aria-label={props.label}
     aria-labelledby={props.labelledBy}
-    class={cx(styles.selectPartMenu, styles.timePartMenu)}
+    class={styles.timePartMenu}
   >
     <For each={props.options}>
       {(option, index) => (
@@ -40,15 +40,10 @@ export const TimePickerMenu = (props: TimePickerMenuProps) => (
           active={index() === props.active}
           onHover={() => props.onHover(index())}
           onPick={() => props.onSelect(option)}
-        >
-          <Text as="span" variant="body" tone="inherit" class={styles.selectPartLabel} tabular>
-            {formatTime(option, props.hour12, props.locale)}
-          </Text>
-          <Show when={option === props.value}>
-            <Glyph name="check" class={styles.selectPartCheck} />
-          </Show>
-        </ComboboxOption>
+          label={formatTime(option, props.hour12, props.locale)}
+          checkEnd
+        />
       )}
     </For>
-  </ul>
+  </Listbox>
 );

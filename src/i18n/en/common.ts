@@ -18,6 +18,7 @@ export const commonEn = defineDictionary({
   loading: 'Loading',
   next: 'Next',
   no: 'No',
+  previous: 'Previous',
   remove: 'Remove',
   retry: 'Retry',
   save: 'Save',

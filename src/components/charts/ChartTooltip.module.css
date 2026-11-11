@@ -1,0 +1,21 @@
+.tip {
+  composes: chartPartTip from '../../styles/shared/charts/chart.module.css';
+}
+
+.title {
+  composes: chartPartTipT from '../../styles/shared/charts/chart.module.css';
+  font-weight: var(--type-title-weight);
+}
+
+.row {
+  composes: chartPartTipR from '../../styles/shared/charts/chart.module.css';
+
+  --chart-swatch-size: var(--size-dot-lg);
+}
+
+.value {
+  margin-left: auto;
+  padding-left: var(--space-3);
+  color: var(--fg-primary);
+  font-variant-numeric: tabular-nums;
+}

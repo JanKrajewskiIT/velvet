@@ -1,7 +1,7 @@
 .srOnly {
   position: absolute;
-  width: var(--border-width);
-  height: var(--border-width);
+  width: 1px;
+  height: 1px;
   padding: 0;
   margin: calc(-1 * var(--space-px));
   overflow: hidden;

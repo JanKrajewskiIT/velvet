@@ -6,23 +6,9 @@
 }
 
 .cascPartHit {
+  display: flex;
+  min-width: 0;
   flex-flow: row wrap;
   align-items: center;
   gap: var(--space-1-5);
-}
-
-.tselectPartEmpty {
-  composes: tselectPartEmpty from '../../styles/shared/patterns/filter-bar.module.css';
-}
-
-.option {
-  composes: option from '../../styles/shared/primitives/option.module.css';
-}
-
-.optionVariantActive {
-  composes: optionVariantActive from '../../styles/shared/primitives/option.module.css';
-}
-
-.optionPartLabel {
-  composes: optionPartLabel from '../../styles/shared/primitives/option.module.css';
 }

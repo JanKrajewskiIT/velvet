@@ -1,0 +1,22 @@
+.swatch {
+  display: inline-block;
+  flex: none;
+  width: var(--chart-swatch-size, 10px);
+  height: var(--chart-swatch-size, 10px);
+  border-radius: var(--radius-2xs);
+  opacity: var(--chart-swatch-opacity, 1);
+  transition: opacity var(--motion-fast);
+  vertical-align: middle;
+}
+
+.round {
+  border-radius: var(--radius-full);
+}
+
+.band {
+  width: 14px;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--chart-band);
+  border: 1px dashed var(--chart-band-edge);
+}

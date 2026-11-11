@@ -6,11 +6,12 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import type { RowKey } from '../data/rowData';
 import { Text } from '../primitives/Text';
-import { typographyClass } from '../primitives/typography';
+import { ChartLegend, type ChartLegendItem } from './ChartLegend';
 import { percentOf, seriesColor } from './chartScale';
 import styles from './DonutChart.module.css';
 
 const MAX_GAP = 3;
+const legendKey = (key: RowKey): string => `${typeof key}:${key}`;
 
 export interface DonutDatum {
   id?: RowKey;
@@ -104,6 +105,16 @@ export const DonutChart = (props: DonutChartProps) => {
       if (current.includes(label)) return current.filter((x) => x !== label);
       return visible().length > 1 ? [...current, label] : current;
     });
+  const legend = createMemo(() =>
+    items().map((item) => ({
+      key: legendKey(item.key),
+      label: item.label,
+      color: item.color,
+      valueLabel: format(item.value),
+      shareLabel: !excluded().includes(item.key) && total() ? `${percentOf(item.value, total())}%` : '—',
+    })),
+  );
+  const legendDatum = (item: ChartLegendItem) => items().find((datum) => legendKey(datum.key) === item.key);
 
   return (
     <div class={cx(styles.donut, merged.class)}>
@@ -148,38 +159,16 @@ export const DonutChart = (props: DonutChartProps) => {
           </Text>
         </div>
       </div>
-      <ul class={styles.donutPartLegend}>
-        <For each={items()}>
-          {(d) => {
-            const on = () => !excluded().includes(d.key);
-            return (
-              <li>
-                <button
-                  type="button"
-                  aria-pressed={on()}
-                  class={cx(typographyClass('body-sm'), styles.donutPartItem, !on() && styles.donutPartItemVariantOff)}
-                  onMouseEnter={() => on() && setHover(d.key)}
-                  onMouseLeave={() => setHover(null)}
-                  onFocus={() => on() && setHover(d.key)}
-                  onBlur={() => setHover(null)}
-                  onClick={() => toggle(d.key)}
-                >
-                  <i style={{ background: d.color }} />
-                  <Text as="span" variant="body-sm" tone="inherit" class={styles.donutPartName}>
-                    {d.label}
-                  </Text>
-                  <Text as="span" variant="body-sm" tone="secondary" tabular class="vui-donut__num">
-                    {format(d.value)}
-                  </Text>
-                  <Text as="span" variant="kbd" tone="inherit" class={styles.donutPartPct}>
-                    {on() && total() ? `${percentOf(d.value, total())}%` : '—'}
-                  </Text>
-                </button>
-              </li>
-            );
-          }}
-        </For>
-      </ul>
+      <ChartLegend
+        layout="list"
+        items={legend()}
+        off={excluded().map(legendKey)}
+        onToggle={(item) => {
+          const datum = legendDatum(item);
+          if (datum) toggle(datum.key);
+        }}
+        onHover={(item) => setHover(item ? (legendDatum(item)?.key ?? null) : null)}
+      />
     </div>
   );
 };

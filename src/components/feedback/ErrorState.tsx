@@ -4,6 +4,7 @@ import { useTranslate } from '../../i18n/useTranslate';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { toneIcon } from '../../utils/tone';
 import { Button } from '../actions/Button';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
@@ -25,7 +26,7 @@ export interface ErrorStateProps extends HtmlProps<HTMLDivElement, 'title'> {
   retryLabel?: string;
   /** Error text / stack, hidden behind "Show details". */
   details?: string;
-  /** @default 'triangle-alert' */
+  /** Defaults to the shared danger-tone icon. */
   icon?: string;
   /** @default 'md' */
   size?: StateSize;
@@ -33,7 +34,7 @@ export interface ErrorStateProps extends HtmlProps<HTMLDivElement, 'title'> {
 
 /** Failed-to-load placeholder with Retry and optional collapsible technical details. */
 export const ErrorState = (props: ErrorStateProps) => {
-  const merged = mergeProps({ icon: 'triangle-alert', size: 'md' } satisfies ErrorStateProps, props);
+  const merged = mergeProps({ size: 'md' } satisfies ErrorStateProps, props);
   const [local, rest] = splitProps(merged, [
     'title',
     'description',
@@ -63,7 +64,7 @@ export const ErrorState = (props: ErrorStateProps) => {
         local.class,
       )}
     >
-      <StateTile icon={local.icon} size={local.size} tone="danger" />
+      <StateTile icon={local.icon ?? toneIcon('danger')} size={local.size} tone="danger" />
       <div class={styles.emptyPartText}>
         <Text
           as="div"

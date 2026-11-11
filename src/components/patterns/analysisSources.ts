@@ -5,6 +5,9 @@ import { freezeRecords } from '../../utils/freezeRecords';
 import { englishText, type StaticTranslate } from './englishText';
 
 export const KIND_ICON = {
+  document: 'file-text',
+  organization: 'building',
+  link: 'link',
   cv: 'file-text',
   job: 'briefcase',
   notes: 'message-square',
@@ -22,10 +25,10 @@ export type AnalysisSourceStatus = 'ready' | 'missing' | 'loading' | 'error';
 export interface AnalysisSource {
   id: string;
   label: string;
-  /** Picks the icon: cv · job · notes · transcript · profile · company · portfolio · other */
+  /** Picks the icon: document · notes · transcript · profile · organization · link · other. */
   kind?: AnalysisSourceKind;
   icon?: string;
-  /** e.g. "Anna_Kowalska_CV.pdf · 2 pages" */
+  /** e.g. "proposal.pdf · 2 pages" */
   detail?: JSX.Element;
   /** @default 'ready' */
   status?: AnalysisSourceStatus;

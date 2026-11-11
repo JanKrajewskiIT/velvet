@@ -1,13 +1,5 @@
-.selectPartMenu {
-  composes: selectPartMenu from '../../styles/shared/forms/select.module.css';
-}
-
 .phonePartCode {
   composes: phonePartCode from '../../styles/shared/forms/phone-input.module.css';
-}
-
-.selectPartLabel {
-  composes: selectPartLabel from '../../styles/shared/forms/select.module.css';
 }
 
 .phonePartDial {

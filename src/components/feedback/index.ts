@@ -4,8 +4,15 @@ export { BottomSheet, type BottomSheetProps } from './BottomSheet';
 export { ConfirmAction, type ConfirmActionProps } from './ConfirmAction';
 export { ConfirmDialog, type ConfirmDialogProps } from './ConfirmDialog';
 export { Countdown, type CountdownProps, type CountdownUnit } from './Countdown';
+export { DataState, type DataStateProps } from './DataState';
 export { Dialog, type DialogProps } from './Dialog';
 export { EmptyState, type EmptyStateProps } from './EmptyState';
+export {
+  EnvironmentBar,
+  type EnvironmentBarItem,
+  type EnvironmentBarProps,
+  type EnvironmentBarTone,
+} from './EnvironmentBar';
 export { ErrorState, type ErrorStateProps } from './ErrorState';
 export { type GateItem, GateList, type GateListProps } from './GateList';
 export { Loader, LOADER_VARIANTS, type LoaderProps, type LoaderVariant } from './Loader';

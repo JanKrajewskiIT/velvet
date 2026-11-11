@@ -14,12 +14,8 @@
   color: var(--fg-secondary);
   cursor: pointer;
   white-space: nowrap;
+  font: var(--type-label);
   transition: var(--transition-colors);
-}
-
-.fchip:hover {
-  background: var(--bg-hover);
-  color: var(--fg-primary);
 }
 
 .fchip:focus-visible {
@@ -27,11 +23,16 @@
   box-shadow: var(--focus-ring);
 }
 
-.fchipVariantOn {
+.fchip.fchipVariantOn {
   border-style: solid;
   border-color: color-mix(in oklab, var(--border-brand) 40%, transparent);
   background: var(--bg-brand-subtle);
   color: var(--fg-brand);
+}
+
+.fchip:hover {
+  background: var(--bg-hover);
+  color: var(--fg-primary);
 }
 
 .fchipPartMenu {
@@ -50,6 +51,10 @@
   --glyph-size: var(--size-icon-xs);
 }
 
+.fchipPartValue {
+  font-weight: var(--type-title-weight);
+}
+
 .fchipVariantOn > :global(.externalIcon) {
   color: currentcolor;
 }
@@ -62,32 +67,12 @@
   composes: menuWrap from '../../styles/shared/menus/menu.module.css';
 }
 
-.menu {
-  composes: menu from '../../styles/shared/menus/menu.module.css';
-}
-
-.menuVariantPop {
-  composes: menuVariantPop from '../../styles/shared/menus/menu.module.css';
-}
-
-.option {
-  composes: option from '../../styles/shared/primitives/option.module.css';
-}
-
-.optionPartCheck {
-  composes: optionPartCheck from '../../styles/shared/primitives/option.module.css';
-}
-
 .fchipPartBox {
   composes: fchipPartBox from '../../styles/shared/patterns/filter-bar.module.css';
 }
 
 .fchipPartBoxVariantOn {
   composes: fchipPartBoxVariantOn from '../../styles/shared/patterns/filter-bar.module.css';
-}
-
-.optionPartKbd {
-  composes: optionPartKbd from '../../styles/shared/primitives/option.module.css';
 }
 
 .fchipPartFoot {

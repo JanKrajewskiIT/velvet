@@ -5,11 +5,13 @@ import { createDismiss } from '../../hooks/createDismiss';
 import { useTranslate } from '../../i18n/useTranslate';
 import { classSelector } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
-import { Tag } from '../display/Tag';
 import { Spinner } from '../feedback/Spinner';
 import { Chevron } from '../primitives/Chevron';
 import { Control } from '../primitives/Control';
 import { Field } from '../primitives/Field';
+import { Listbox } from '../primitives/Listbox';
+import { ListboxPanel } from '../primitives/ListboxPanel';
+import { Tag } from '../primitives/Tag';
 import { typographyClass } from '../primitives/typography';
 import { callbackAlias } from './callbackAlias';
 import { createComboboxOptions } from './createComboboxOptions';
@@ -201,19 +203,17 @@ export const MultiSelect = (props: MultiSelectProps) => {
             }}
           />
           <Show when={open()}>
-            <div
+            <ListboxPanel
+              flip={false}
+              up={floating.side() === 'top'}
               ref={floating.ref}
-              class={cx(
-                styles.selectPartMenu,
-                styles.multiPartMenu,
-                floating.side() === 'top' && styles.selectPartMenuVariantUp,
-              )}
+              class={cx(styles.multiPartMenu)}
               style={floating.style()}
             >
-              <ul
+              <Listbox
+                floating={false}
                 id={listId()}
-                role="listbox"
-                aria-multiselectable="true"
+                multiselectable
                 aria-busy={remote.loading() || undefined}
                 aria-label={p['aria-label']}
                 aria-labelledby={p['aria-labelledby'] ?? (p.label ? `${id()}-label` : undefined)}
@@ -226,7 +226,7 @@ export const MultiSelect = (props: MultiSelectProps) => {
                   createLabel={p.createLabel}
                   onToggle={toggle}
                 />
-              </ul>
+              </Listbox>
               <OptionListStatus
                 loading={remote.loading()}
                 failed={remote.failed()}
@@ -246,7 +246,7 @@ export const MultiSelect = (props: MultiSelectProps) => {
                 clearLabel={p.clearLabel}
                 onClear={() => !p.disabled && setSelected([])}
               />
-            </div>
+            </ListboxPanel>
           </Show>
         </div>
       )}

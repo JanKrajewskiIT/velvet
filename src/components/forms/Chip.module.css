@@ -24,8 +24,8 @@
   place-items: center;
   flex: none;
   box-sizing: border-box;
-  min-width: var(--count-size);
-  height: var(--count-size);
+  min-width: var(--size-check);
+  height: var(--size-check);
   padding: 0 var(--count-px);
   border-radius: var(--radius-full);
   white-space: nowrap;

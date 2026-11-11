@@ -6,6 +6,7 @@ export {
   type AiSection,
   type AiSource,
 } from './AiResultPanel';
+export { AnalysisReport, type AnalysisReportProps } from './AnalysisReport';
 export { AnalysisRequest, type AnalysisRequestProps } from './AnalysisRequest';
 export {
   type AnalysisDepth,
@@ -21,6 +22,10 @@ export {
   type AtsRecommendation,
   type AtsResult,
   type AtsSeverity,
+  type ReportCategory,
+  type ReportRecommendation,
+  type ReportResult,
+  type ReportSeverity,
   SCORE_BANDS,
   type ScoreBand,
   scoreBand,
@@ -54,6 +59,10 @@ export {
   type FlashDirection,
   type FlashOrder,
   type FlashResult,
+  type PracticeCard,
+  type PracticeCollection,
+  type PracticeConfig,
+  type PracticeResult,
 } from './flashcard';
 export { FlashcardSession, type FlashcardSessionProps } from './FlashcardSession';
 export { FlashcardSetup, type FlashcardSetupProps } from './FlashcardSetup';
@@ -65,6 +74,9 @@ export {
   type ImportSourcesDialogProps,
 } from './ImportSourcesDialog';
 export { type OrganizerEvent } from './organizerEvents';
+export { PracticeSession, type PracticeSessionProps } from './PracticeSession';
+export { PracticeSetup, type PracticeSetupProps } from './PracticeSetup';
+export { PracticeSummary, type PracticeSummaryProps } from './PracticeSummary';
 export {
   type Billing,
   BILLINGS,

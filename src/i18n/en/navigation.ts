@@ -54,6 +54,9 @@ export const navigationEn = defineDictionary({
     done: 'completed',
     error: 'has errors',
   },
+  periodNav: {
+    navigate: 'Navigate',
+  },
   treeView: {
     loading: 'Loading…',
     loadFailed: 'Couldn’t load',

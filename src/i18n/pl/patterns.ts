@@ -19,8 +19,7 @@ export const patternsPl: TranslationOf<typeof patternsEn> = {
   },
   analysisRequest: {
     title: 'Poproś o analizę AI',
-    instructionsPlaceholder:
-      'Skup się na… (opcjonalnie) — np. doświadczeniu w zarządzaniu, okresie wypowiedzenia, oczekiwaniach finansowych',
+    instructionsPlaceholder: 'Skup się na… (opcjonalnie) — np. zakresie, założeniach, ryzykach realizacji',
     runLabel: 'Uruchom analizę',
     runErrorText: 'Nie udało się rozpocząć analizy. Spróbuj ponownie.',
     includeOne: 'Uwzględnij co najmniej jedno źródło',
@@ -219,8 +218,8 @@ export const patternsPl: TranslationOf<typeof patternsEn> = {
     tally: 'Znane: {known} · do powtórki: {review}',
   },
   flashcardSetup: {
-    title: 'Wybierz talię',
-    deck: 'Talia',
+    title: 'Wybierz zestaw',
+    deck: 'Zestaw',
     categories: 'Kategorie',
     filterPlaceholder: 'Filtruj…',
     filterLabel: 'Filtruj kategorie',

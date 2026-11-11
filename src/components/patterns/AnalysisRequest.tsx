@@ -41,7 +41,7 @@ export interface AnalysisRequestProps {
   /** @default '' */
   defaultInstructions?: string;
   onInstructionsChange?: (value: string) => void;
-  /** @default localized "Focus on… (optional) — e.g. leadership experience, notice period, salary fit" */
+  /** @default localized "Focus on… (optional) — e.g. scope, assumptions, delivery risks" */
   instructionsPlaceholder?: string;
   depth?: string;
   /** @default 'standard' */
@@ -51,7 +51,7 @@ export interface AnalysisRequestProps {
   depths?: readonly AnalysisDepth[];
   /** @default 'idle' */
   status?: 'idle' | 'running';
-  /** Progress labels while running, e.g. ['Reading CV', 'Matching requirements', 'Scoring'] */
+  /** Progress labels while running, e.g. ['Reading sources', 'Checking requirements', 'Scoring'] */
   steps?: string[];
   /** Index of the current step */
   step?: number;

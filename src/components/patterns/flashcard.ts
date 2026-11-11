@@ -36,6 +36,11 @@ export interface FlashcardConfig {
   direction: FlashDirection;
 }
 
+export type PracticeCollection = FlashDeck;
+export type PracticeCard = Flashcard;
+export type PracticeResult = FlashResult;
+export type PracticeConfig = Omit<FlashcardConfig, 'deck'> & { collection: string };
+
 export const FLASH_ORDER_LABEL_KEYS: Record<FlashOrder, I18nKey> = {
   due: 'velvet.patterns.flashcardSetup.orders.due',
   random: 'velvet.patterns.flashcardSetup.orders.random',

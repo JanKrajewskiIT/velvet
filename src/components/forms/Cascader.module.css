@@ -55,7 +55,3 @@
 .controlPartChevron {
   composes: controlPartChevron from '../../styles/shared/primitives/control.module.css';
 }
-
-.selectPartMenu {
-  composes: selectPartMenu from '../../styles/shared/forms/select.module.css';
-}

@@ -1,0 +1,53 @@
+.root {
+  --delta-default-fg: var(--trend-flat-fg);
+  --delta-default-tint: var(--trend-flat-bg);
+  --delta-default-fill: var(--trend-flat-solid);
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-0-5);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--type-strong-weight);
+  font-size: inherit;
+  line-height: 1.2;
+  white-space: nowrap;
+  color: var(--delta-fg, var(--delta-default-fg));
+}
+
+.root[data-dir='up'] {
+  --delta-default-fg: var(--trend-up-fg);
+  --delta-default-tint: var(--trend-up-bg);
+  --delta-default-fill: var(--trend-up-solid);
+}
+
+.root[data-dir='down'] {
+  --delta-default-fg: var(--trend-down-fg);
+  --delta-default-tint: var(--trend-down-bg);
+  --delta-default-fill: var(--trend-down-solid);
+}
+
+.icon {
+  --glyph-size: 0.9em;
+}
+
+.root[data-size='sm'] {
+  font-size: var(--type-caption-size);
+}
+
+.root[data-size='lg'] {
+  font-size: var(--type-h4-size);
+}
+
+.root[data-variant='pill'] {
+  padding: var(--space-0-5) var(--space-2);
+  border-radius: var(--radius-full);
+  background: var(--delta-tint, var(--delta-default-tint));
+}
+
+.root[data-variant='solid'] {
+  padding: var(--space-0-5) var(--space-2);
+  border-radius: var(--radius-sm);
+  color: var(--on-color-fg);
+  background: var(--delta-fill, var(--delta-default-fill));
+}

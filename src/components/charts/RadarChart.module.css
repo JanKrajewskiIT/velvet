@@ -1,35 +1,9 @@
-:import('../../styles/shared/charts/chart.module.css') {
-  externalChartPartLegend: chartPartLegend;
-}
-
 .radar {
   align-items: center;
 }
 
-.radar :global(.externalChartPartLegend) {
+.legend {
   justify-content: center;
-}
-
-.radarPartLg {
-  border: 0;
-  background: none;
-  padding: var(--space-0-5) var(--space-1);
-  border-radius: var(--radius-xs);
-  cursor: pointer;
-  transition: opacity var(--motion-fast);
-}
-
-.radarPartLg:focus-visible {
-  outline: none;
-  box-shadow: var(--focus-ring);
-}
-
-.radarPartLgVariantOff {
-  opacity: 0.45;
-}
-
-.radarPartLgVariantOff i {
-  background: var(--border-strong);
 }
 
 .radarPartRing {
@@ -86,25 +60,6 @@
   color: var(--fg-secondary);
 }
 
-.radarPartTipK {
-  display: flex;
-  align-items: center;
-  gap: var(--space-1-5);
-  color: var(--fg-primary);
-}
-
-.radarPartTipK i {
-  width: var(--size-dot-lg);
-  height: var(--size-dot-lg);
-  border-radius: var(--radius-2xs);
-}
-
-.radarPartTip strong {
-  margin-left: var(--space-2);
-  color: var(--fg-primary);
-  font-variant-numeric: tabular-nums;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .radarPartSeries {
     animation: none;
@@ -113,14 +68,6 @@
 
 .chart {
   composes: chart from '../../styles/shared/charts/chart.module.css';
-}
-
-.chartPartLegend {
-  composes: chartPartLegend from '../../styles/shared/charts/chart.module.css';
-}
-
-.chartPartLg {
-  composes: chartPartLg from '../../styles/shared/charts/chart.module.css';
 }
 
 .chartPartPlot {
@@ -137,10 +84,6 @@
 
 .chartPartTickVariantOn {
   composes: chartPartTickVariantOn from '../../styles/shared/charts/chart.module.css';
-}
-
-.chartPartTip {
-  composes: chartPartTip from '../../styles/shared/charts/chart.module.css';
 }
 
 @keyframes vuiRadarIn {

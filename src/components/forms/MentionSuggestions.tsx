@@ -1,7 +1,7 @@
 import { For, type JSX } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
-import { Avatar } from '../data/Avatar';
+import { Avatar } from '../primitives/Avatar';
 import { Option } from '../primitives/Option';
 import { Surface } from '../primitives/Surface';
 import type { MentionOption } from './mentionModel';

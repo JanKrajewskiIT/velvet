@@ -1,3 +1,4 @@
+export { AuthControl, type AuthControlProps } from './AuthControl';
 export { Button, type ButtonProps, type ButtonVariant } from './Button';
 export { type ButtonSize } from './buttonClass';
 export { ButtonGroup, type ButtonGroupProps } from './ButtonGroup';

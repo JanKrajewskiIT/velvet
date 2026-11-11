@@ -43,11 +43,3 @@
 .taginputPartInput {
   composes: taginputPartInput from '../../styles/shared/forms/tag-input.module.css';
 }
-
-.selectPartMenu {
-  composes: selectPartMenu from '../../styles/shared/forms/select.module.css';
-}
-
-.selectPartMenuVariantUp {
-  composes: selectPartMenuVariantUp from '../../styles/shared/forms/select.module.css';
-}

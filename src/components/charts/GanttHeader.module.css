@@ -69,7 +69,7 @@
 
 .ganttPartUnitVariantToday {
   color: var(--fg-brand);
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--type-heavy-weight);
 }
 
 @media (width <= 639px) {

@@ -52,7 +52,31 @@
 --type-section:var(--type-section-weight) var(--type-section-size)/var(--type-section-leading) var(--type-section-family);/* @kind font */
 /* Weight intent beyond the role set — wordmarks, big numerals */
 --type-heavy-weight:var(--font-weight-bold);/* @kind other */
+--type-strong-weight:var(--font-weight-semibold);/* @kind other */--type-medium-weight:var(--font-weight-medium);/* @kind other */--type-regular-weight:var(--font-weight-regular);/* @kind other */
 /* Micro — counters inside pills, source indices, inline mono tags. Below this, nothing. */
 --type-micro-family:var(--font-mono);/* @kind other */--type-micro-size:var(--font-size-3xs);/* @kind other */--type-micro-leading:var(--leading-none);/* @kind other */--type-micro-weight:var(--font-weight-medium);/* @kind other */--type-micro-tracking:var(--tracking-normal);/* @kind other */
 --type-micro:var(--type-micro-weight) var(--type-micro-size)/var(--type-micro-leading) var(--type-micro-family);/* @kind font */
+/* Font shorthand aliases from the design system. Tracking remains a separate token. */
+--text-t-h1:var(--type-h1);/* @kind font */
+--text-t-h2:var(--type-h2);/* @kind font */
+--text-t-h3:var(--type-h3);/* @kind font */
+--text-t-h4:var(--type-h4);/* @kind font */
+--text-t-h5:var(--type-h5);/* @kind font */
+--text-t-kpi:var(--type-kpi);/* @kind font */
+--text-t-title:var(--type-title);/* @kind font */
+--text-t-title-lg:var(--type-title-lg);/* @kind font */
+--text-t-body:var(--type-body);/* @kind font */
+--text-t-body-lg:var(--type-body-lg);/* @kind font */
+--text-t-body-sm:var(--type-body-sm);/* @kind font */
+--text-t-button:var(--type-button);/* @kind font */
+--text-t-button-lg:var(--type-button-lg);/* @kind font */
+--text-t-button-sm:var(--type-button-sm);/* @kind font */
+--text-t-caption:var(--type-caption);/* @kind font */
+--text-t-label:var(--type-label);/* @kind font */
+--text-t-label-sm:var(--type-label-sm);/* @kind font */
+--text-t-overline:var(--type-overline);/* @kind font */
+--text-t-section:var(--type-section);/* @kind font */
+--text-t-code:var(--type-code);/* @kind font */
+--text-t-kbd:var(--type-kbd);/* @kind font */
+--text-t-micro:var(--type-micro);/* @kind font */
 }

@@ -19,8 +19,8 @@
   min-width: 64px;
   height: 64px;
   padding: 0 var(--space-2);
-  border-radius: var(--surface-radius);
-  box-shadow: var(--surface-shadow);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--elevation-card), var(--highlight-inset);
   color: var(--fg-primary);
   transition:
     box-shadow var(--motion-base),

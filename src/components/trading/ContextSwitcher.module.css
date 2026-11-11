@@ -1,0 +1,10 @@
+.root[data-tone][data-ctx-tone='danger'] {
+  box-shadow: none;
+  background: var(--on-color-fg);
+  border-color: transparent;
+  color: var(--status-danger-fg);
+
+  &:hover {
+    background: color-mix(in oklab, var(--on-color-fg) 90%, var(--status-danger-solid));
+  }
+}

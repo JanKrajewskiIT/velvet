@@ -1,0 +1,7 @@
+.panel {
+  composes: panel from '../../styles/shared/primitives/listbox.module.css';
+}
+
+.up {
+  composes: up from '../../styles/shared/primitives/listbox.module.css';
+}

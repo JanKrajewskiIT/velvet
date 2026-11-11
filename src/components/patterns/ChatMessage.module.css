@@ -164,6 +164,8 @@
   border-radius: 50%;
   background: var(--bg-subtle);
   color: var(--fg-secondary);
+  font-size: var(--type-micro-size);
+  font-weight: var(--type-strong-weight);
 }
 
 .chatmsgVariantSystem {

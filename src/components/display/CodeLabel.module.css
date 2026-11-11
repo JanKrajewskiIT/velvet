@@ -1,0 +1,84 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+  text-align: left;
+}
+
+button.root {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+}
+
+button.root:focus-visible {
+  outline: var(--focus-ring-width, 2px) solid var(--border-brand);
+  outline-offset: 2px;
+}
+
+button.root:hover .code {
+  color: var(--fg-brand);
+}
+
+.root .mark {
+  border-radius: var(--radius-md);
+  font: 700 11px/1 var(--font-mono);
+  letter-spacing: 0.02em;
+  overflow: hidden;
+}
+
+.root[data-size='sm'] .mark {
+  width: var(--size-icon-2xl);
+  height: var(--size-icon-2xl);
+  font-size: 9px;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.code {
+  font: 600 var(--type-body-size)/1.25 var(--font-mono);
+  color: var(--fg-primary);
+  white-space: nowrap;
+}
+
+.root[data-size='sm'] .code {
+  font-size: var(--type-body-sm-size);
+}
+
+.root[data-selected='true'] .code {
+  color: var(--fg-brand);
+}
+
+.tag {
+  font: 600 10px/1 var(--font-mono);
+  letter-spacing: 0.06em;
+  padding: var(--space-1) var(--space-1-5);
+  border-radius: var(--radius-xs);
+  background: var(--bg-subtle);
+  color: var(--fg-secondary);
+  text-transform: uppercase;
+}
+
+.name {
+  font-size: var(--type-caption-size);
+  color: var(--fg-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

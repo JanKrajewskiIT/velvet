@@ -4,6 +4,13 @@ import type { RowKey, RowSort } from './rowData';
 
 export type TableSort = RowSort;
 
+export interface TableAddRowOptions {
+  onAdd: () => void;
+  /** @default localized "Add row" */
+  label?: JSX.Element;
+  disabled?: boolean;
+}
+
 export interface TableColumn<T extends object = object> {
   key: string;
   label: JSX.Element;
@@ -56,8 +63,8 @@ export interface TableProps<T extends object = object> {
   count?: JSX.Element;
   /** Toolbar actions, right-aligned. */
   toolbar?: JSX.Element;
-  /** A native table row, usually TableAddRowAction; shown after records when not loading. */
-  addRow?: JSX.Element;
+  /** Add action configuration, or a native row slot for compatibility. Hidden while loading. */
+  addRow?: TableAddRowOptions | JSX.Element;
   /** Drag column edges to resize (double-click resets a column; ←/→ on the handle). Adds “Reset widths” to the toolbar once changed. */
   resizable?: boolean;
   /** Adds a chevron column; renders this below the row when expanded. */

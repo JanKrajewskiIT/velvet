@@ -3,7 +3,7 @@ import { createMemo, Index, Show } from 'solid-js';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { addMonths, fmtDate, sameDay } from '../../utils/date';
-import { IconButton } from '../actions/IconButton';
+import { PeriodNavButton } from '../navigation/PeriodNavButton';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
 import { Weekday } from '../primitives/Weekday';
@@ -29,9 +29,10 @@ export const CalendarMonth = (props: CalendarMonthProps) => {
     <div class={styles.calPartMonth}>
       <div class={styles.calPartHead}>
         <Show when={props.index === 0} fallback={<span class={styles.calPartNavSp} />}>
-          <IconButton
+          <PeriodNavButton
             size="sm"
-            icon="chevron-left"
+            dir="prev"
+            variant="ghost"
             label={translate('velvet.forms.calendar.previousMonth')}
             class="vui-cal__nav"
             onClick={() => calendar().setView(addMonths(calendar().view(), -1))}
@@ -41,9 +42,10 @@ export const CalendarMonth = (props: CalendarMonthProps) => {
           {title()}
         </Text>
         <Show when={props.index === calendar().months() - 1} fallback={<span class={styles.calPartNavSp} />}>
-          <IconButton
+          <PeriodNavButton
             size="sm"
-            icon="chevron-right"
+            dir="next"
+            variant="ghost"
             label={translate('velvet.forms.calendar.nextMonth')}
             class="vui-cal__nav"
             onClick={() => calendar().setView(addMonths(calendar().view(), 1))}

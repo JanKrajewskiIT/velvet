@@ -3,10 +3,10 @@ import { For, type JSX, Show, splitProps } from 'solid-js';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
-import { Badge } from '../display/Badge';
 import { Card, type CardProps } from '../display/Card';
 import { Progress, type ProgressTone } from '../feedback/Progress';
 import { ProgressRing } from '../feedback/ProgressRing';
+import { Badge } from '../primitives/Badge';
 import { Text } from '../primitives/Text';
 import styles from './ScoreCard.module.css';
 

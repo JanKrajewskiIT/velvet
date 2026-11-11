@@ -5,8 +5,8 @@ import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
 import type { Tone } from '../../utils/tone';
 import { Sparkline } from '../charts/Sparkline';
-import { Badge } from '../display/Badge';
 import { Card, type CardProps } from '../display/Card';
+import { Badge } from '../primitives/Badge';
 import { Text } from '../primitives/Text';
 import styles from './Stat.module.css';
 

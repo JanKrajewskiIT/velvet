@@ -29,6 +29,7 @@
 
 .popoverPartTitle {
   margin-bottom: var(--space-1);
+  font-weight: var(--type-title-weight);
 }
 
 .popoverWrap {

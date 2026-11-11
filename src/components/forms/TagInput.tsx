@@ -3,10 +3,10 @@ import { createSignal, createUniqueId, For, type JSX, mergeProps, onCleanup } fr
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
-import { Tag } from '../display/Tag';
 import { Control } from '../primitives/Control';
 import { Field } from '../primitives/Field';
 import type { FieldErrorAnnouncementProps } from '../primitives/fieldErrorAnnouncement';
+import { Tag } from '../primitives/Tag';
 import { typographyClass } from '../primitives/typography';
 import { createFormValidation } from './createFormValidation';
 import type { FormControlProps } from './formControl';

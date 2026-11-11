@@ -17,6 +17,8 @@ export { NavbarLocale, type NavbarLocaleProps } from './NavbarLocale';
 export { NavbarUser, type NavbarUserProps } from './NavbarUser';
 export { PAGE_GAP, pageRange, type PageRangeItem } from './pageRange';
 export { Pagination, type PaginationLabels, type PaginationProps } from './Pagination';
+export { PeriodNav, type PeriodNavProps } from './PeriodNav';
+export { PeriodNavButton, type PeriodNavButtonProps } from './PeriodNavButton';
 export { type ScrollContainer } from './scrollContainer';
 export { type StepItem, Stepper, type StepperLabels, type StepperProps, type StepStatus } from './Stepper';
 export { tabIds } from './tabIds';

@@ -12,6 +12,8 @@ export interface GridProps extends HtmlProps<HTMLElement> {
   columns?: number;
   /** px or CSS length — switches to auto-fill columns of at least this width. */
   min?: number | string;
+  /** With `min`, collapse empty tracks so cards fill the row. @default false */
+  fit?: boolean;
   /** Space-scale step or any CSS length. @default 4 */
   gap?: number | string;
 }
@@ -19,10 +21,10 @@ export interface GridProps extends HtmlProps<HTMLElement> {
 /** CSS grid: fixed columns, or auto-fill cards of a minimum width. */
 export const Grid = (props: GridProps) => {
   const merged = mergeProps({ as: 'div', columns: 3, gap: 4 } satisfies GridProps, props);
-  const [local, rest] = splitProps(merged, ['as', 'columns', 'min', 'gap', 'class', 'style']);
+  const [local, rest] = splitProps(merged, ['as', 'columns', 'min', 'fit', 'gap', 'class', 'style']);
   const template = () =>
     local.min
-      ? `repeat(auto-fill, minmax(min(${lengthValue(local.min)}, 100%), 1fr))`
+      ? `repeat(${local.fit ? 'auto-fit' : 'auto-fill'}, minmax(min(${lengthValue(local.min)}, 100%), 1fr))`
       : `repeat(${local.columns}, minmax(0, 1fr))`;
   return (
     <Polymorphic

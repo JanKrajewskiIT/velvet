@@ -62,14 +62,14 @@
   width: var(--size-icon-tile-2xl);
   height: var(--size-icon-tile-2xl);
   border-radius: var(--radius-xl);
-  font-size: var(--type-h3-size);
+  font-size: calc(var(--size-icon-tile-2xl) / 2);
 }
 
 .iconTileVariant3xl {
   width: var(--size-icon-tile-3xl);
   height: var(--size-icon-tile-3xl);
   border-radius: var(--radius-2xl);
-  font-size: var(--type-h2-size);
+  font-size: calc(var(--size-icon-tile-3xl) / 2);
 }
 
 .iconTileVariantHaloMd {
@@ -83,4 +83,6 @@
 .iconTileVariant2xl,
 .iconTileVariant3xl {
   --glyph-size: 1em;
+
+  font-size: calc(var(--size-icon-tile-2xl) / 2);
 }
