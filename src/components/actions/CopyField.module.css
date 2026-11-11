@@ -2,6 +2,11 @@
   padding-right: var(--space-1);
 }
 
+.mono {
+  font-family: var(--font-mono);
+  font-size: var(--type-body-sm-size);
+}
+
 .field {
   composes: field from '../../styles/shared/primitives/field.module.css';
 }

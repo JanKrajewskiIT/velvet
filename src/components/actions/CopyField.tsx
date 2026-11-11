@@ -25,7 +25,8 @@ export const CopyField = (props: CopyFieldProps) => {
       </Show>
       <Control readOnly class={styles.copyfield}>
         <ControlInput
-          textVariant={p.mono ? 'code' : 'body'}
+          textVariant="body"
+          class={p.mono ? styles.mono : undefined}
           value={p.value}
           readOnly
           aria-label={p.label}

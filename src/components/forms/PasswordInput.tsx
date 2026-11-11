@@ -63,7 +63,6 @@ export const PasswordInput = (props: PasswordInputProps) => {
       showStrength: false,
       size: 'md',
       defaultValue: '',
-      autocomplete: 'new-password',
       spellcheck: false,
     } satisfies PasswordInputProps,
     props,
