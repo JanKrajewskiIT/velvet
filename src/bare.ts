@@ -27,6 +27,7 @@ export {
   THEME_STORAGE_KEY,
   type ThemePreference,
 } from './theme/theme';
+export { type CsvCell, downloadBlob, neutralizeSpreadsheetFormula, toCsvText } from './utils/csv';
 export { addDays, addMonths, fmtDate, sameDay, startOfDay, weekdayNames } from './utils/date';
 export { reportAsyncError } from './utils/reportAsyncError';
 export { CATEGORY_TONES, type StatusTone, type Tone, TONE_ICON, TONES } from './utils/tone';

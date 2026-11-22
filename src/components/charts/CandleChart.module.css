@@ -1,0 +1,15 @@
+.chart {
+  composes: chart from '../../styles/shared/charts/chart.module.css';
+}
+
+.barTop {
+  composes: chartPartBarTop from '../../styles/shared/charts/chart.module.css';
+}
+
+.plot {
+  composes: chartPartPlot from '../../styles/shared/charts/chart.module.css';
+}
+
+.cross {
+  composes: chartPartCross from '../../styles/shared/charts/chart.module.css';
+}

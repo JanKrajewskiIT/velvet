@@ -1,0 +1,62 @@
+.wick {
+  stroke: var(--candle);
+  stroke-width: 1.5;
+  shape-rendering: crispedges;
+}
+
+.body {
+  fill: var(--candle);
+  stroke: var(--candle);
+  stroke-width: 1;
+  shape-rendering: crispedges;
+}
+
+.overlay {
+  fill: none;
+  stroke-width: 1.75;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.marker {
+  stroke: var(--bg-raised);
+  stroke-width: 2;
+}
+
+.bodyHollow {
+  fill: none;
+}
+
+.selected {
+  fill: var(--bg-selected);
+  stroke: var(--chart-band-edge);
+  stroke-width: 1;
+  pointer-events: none;
+}
+
+.gap {
+  stroke: var(--border-subtle);
+  stroke-width: 1;
+  stroke-dasharray: 2 4;
+  pointer-events: none;
+}
+
+.reference {
+  stroke: var(--reference);
+  stroke-width: 1;
+  stroke-dasharray: 5 4;
+  pointer-events: none;
+}
+
+.referenceLabel {
+  fill: var(--reference);
+  font: var(--type-overline);
+  letter-spacing: var(--type-overline-tracking);
+  pointer-events: none;
+}
+
+.guide {
+  stroke: var(--border-strong);
+  stroke-width: 1;
+  pointer-events: none;
+}

@@ -25,6 +25,7 @@ export {
   constrainColumnWidth,
   DEFAULT_COLUMN_MIN_WIDTH,
 } from './utils/columnWidth';
+export { type CsvCell, downloadBlob, neutralizeSpreadsheetFormula, toCsvText } from './utils/csv';
 export { type ClassValue, cx } from './utils/cx';
 export { decimalPlaces, type NumberRange, numberRange, parseDecimal } from './utils/decimalValue';
 export { createId } from './utils/id';

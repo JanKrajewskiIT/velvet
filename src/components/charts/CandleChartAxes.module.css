@@ -1,0 +1,11 @@
+.grid {
+  composes: chartPartGrid from '../../styles/shared/charts/chart.module.css';
+}
+
+.tick {
+  composes: chartPartTick from '../../styles/shared/charts/chart.module.css';
+}
+
+.tickOn {
+  composes: chartPartTickVariantOn from '../../styles/shared/charts/chart.module.css';
+}

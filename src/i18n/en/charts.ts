@@ -5,6 +5,18 @@ export const chartsEn = defineDictionary({
     label: 'Bar chart',
     instructions: '{label}. Use arrow keys to read values.',
   },
+  candleChart: {
+    label: 'Candlestick chart',
+    instructions: '{label}. Use arrow keys to read values.',
+    chart: 'Chart',
+    table: 'Table',
+    periodHeader: 'Period',
+    markersHeader: 'Markers',
+    open: 'Open',
+    high: 'High',
+    low: 'Low',
+    close: 'Close',
+  },
   chartSeries: {
     noValue: 'No measurement',
     valueLabel: 'Value',

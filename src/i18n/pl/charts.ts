@@ -7,6 +7,18 @@ export const chartsPl: TranslationOf<typeof chartsEn> = {
     label: 'Wykres słupkowy',
     instructions: '{label}. Użyj klawiszy strzałek, aby odczytać wartości.',
   },
+  candleChart: {
+    label: 'Wykres świecowy',
+    instructions: '{label}. Użyj klawiszy strzałek, aby odczytać wartości.',
+    chart: 'Wykres',
+    table: 'Tabela',
+    periodHeader: 'Okres',
+    markersHeader: 'Znaczniki',
+    open: 'Otwarcie',
+    high: 'Maksimum',
+    low: 'Minimum',
+    close: 'Zamknięcie',
+  },
   chartSeries: {
     noValue: 'Brak pomiaru',
     valueLabel: 'Wartość',

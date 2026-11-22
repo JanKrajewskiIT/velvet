@@ -1,4 +1,12 @@
 export { BarChart, type BarChartProps } from './BarChart';
+export { CandleChart, type CandleChartProps } from './CandleChart';
+export {
+  type CandleDatum,
+  type CandleMarker,
+  type CandleOverlay,
+  type CandleReference,
+  type CandleValue,
+} from './candleData';
 export { ChartLegend, type ChartLegendItem, type ChartLegendProps } from './ChartLegend';
 export { compact, niceTicks, seriesColor } from './chartScale';
 export { type ChartDatum, type ChartSeries } from './chartSeries';
