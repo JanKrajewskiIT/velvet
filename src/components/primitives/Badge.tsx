@@ -1,8 +1,10 @@
-import { type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { Show } from 'solid-js';
 
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import type { StatusTone } from '../../utils/tone';
 import styles from './Badge.module.css';
 import { renderIcon } from './Glyph';
@@ -40,8 +42,17 @@ export interface BadgeProps extends HtmlProps<HTMLSpanElement> {
 
 /** Small non-interactive status or count label. */
 export const Badge = (props: BadgeProps) => {
-  const merged = mergeProps({ tone: 'neutral', variant: 'soft', size: 'md' } satisfies BadgeProps, props);
-  const [local, rest] = splitProps(merged, ['tone', 'variant', 'size', 'dot', 'pulse', 'icon', 'class', 'children']);
+  const merged = withDefaults({ tone: 'neutral', variant: 'soft', size: 'md' } satisfies BadgeProps, props);
+  const [local, rest] = partitionProps(merged, [
+    'tone',
+    'variant',
+    'size',
+    'dot',
+    'pulse',
+    'icon',
+    'class',
+    'children',
+  ]);
   return (
     <Text
       as="span"

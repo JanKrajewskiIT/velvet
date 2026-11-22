@@ -1,6 +1,8 @@
-import { createEffect, type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, Show } from 'solid-js';
 
 import { cx } from '../../utils/cx';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
 import styles from './Checkbox.module.css';
@@ -21,8 +23,8 @@ export interface CheckboxProps
 
 /** Checkbox for multi-select and consent. Supports indeterminate. `class` styles the wrapping label; other attributes go to the input. */
 export const Checkbox = (props: CheckboxProps) => {
-  const merged = mergeProps({ size: 'md' } satisfies CheckboxProps, props);
-  const [local, rest] = splitProps(merged, [
+  const merged = withDefaults({ size: 'md' } satisfies CheckboxProps, props);
+  const [local, rest] = partitionProps(merged, [
     'label',
     'description',
     'indeterminate',
@@ -34,9 +36,12 @@ export const Checkbox = (props: CheckboxProps) => {
   ]);
   const checked = createNativeChecked(local);
   let input!: HTMLInputElement;
-  createEffect(() => {
-    input.indeterminate = !!local.indeterminate;
-  });
+  createEffect(
+    () => !!local.indeterminate,
+    (indeterminate) => {
+      input.indeterminate = indeterminate;
+    },
+  );
   return (
     <label
       class={cx(

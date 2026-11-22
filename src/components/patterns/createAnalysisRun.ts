@@ -1,4 +1,5 @@
-import { type Accessor, createSignal, type JSX, onCleanup } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { type Accessor, createSignal, onCleanup } from 'solid-js';
 
 import { createOperation } from '../../hooks/createOperation';
 import { reportAsyncError } from '../../utils/reportAsyncError';

@@ -1,8 +1,9 @@
-import { type JSX, mergeProps, splitProps } from 'solid-js';
+import { type JSX } from '@solidjs/web';
 
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import type { Tone } from '../../utils/tone';
 import { renderIcon } from './Glyph';
 import styles from './IconTile.module.css';
@@ -42,8 +43,8 @@ export interface IconTileProps extends HtmlProps<HTMLSpanElement> {
 
 /** A glyph in a tinted box — the leading visual of notification rows, source rows, feature cards and dialogs. */
 export const IconTile = (props: IconTileProps) => {
-  const merged = mergeProps({ size: 'md', shape: 'square' } satisfies IconTileProps, props);
-  const [local, rest] = splitProps(merged, [
+  const merged = withDefaults({ size: 'md', shape: 'square' } satisfies IconTileProps, props);
+  const [local, rest] = partitionProps(merged, [
     'icon',
     'tone',
     'size',
@@ -69,7 +70,7 @@ export const IconTile = (props: IconTileProps) => {
       )}
       data-tone={local.tone}
       style={local.color ? { ...local.style, color: local.color } : local.style}
-      aria-hidden={rest['aria-label'] ? undefined : true}
+      aria-hidden={rest['aria-label'] ? undefined : 'true'}
       {...rest}
     >
       {local.children ?? renderIcon(local.icon)}

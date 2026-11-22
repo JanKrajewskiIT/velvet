@@ -1,4 +1,4 @@
-import { type Accessor, batch, createMemo, createSignal } from 'solid-js';
+import { type Accessor, createMemo, createSignal } from 'solid-js';
 
 import { type TreeRow, type TreeSelectNode, visibleRows } from './treeSelectRows';
 
@@ -42,11 +42,10 @@ export const createTreeSelectView = (
     setQuery(text);
     setActive(0);
   };
-  const reset = () =>
-    batch(() => {
-      setQuery('');
-      setActive(0);
-    });
+  const reset = () => {
+    setQuery('');
+    setActive(0);
+  };
 
   return {
     query,

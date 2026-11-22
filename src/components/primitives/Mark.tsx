@@ -1,8 +1,9 @@
-import { type JSX, mergeProps, splitProps } from 'solid-js';
+import { type JSX } from '@solidjs/web';
 
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import styles from './Mark.module.css';
 
 const MARK_CLASSES = {
@@ -19,8 +20,8 @@ export interface MarkProps extends HtmlProps<HTMLElement> {
 
 /** A highlighted run inside text: search hits, emphasis, @mentions. */
 export const Mark = (props: MarkProps) => {
-  const merged = mergeProps({ variant: 'highlight' } satisfies MarkProps, props);
-  const [local, rest] = splitProps(merged, ['variant', 'class']);
+  const merged = withDefaults({ variant: 'highlight' } satisfies MarkProps, props);
+  const [local, rest] = partitionProps(merged, ['variant', 'class']);
   return (
     <mark {...rest} class={cx(styles.mark, variantClass(MARK_CLASSES, local.variant, 'highlight'), local.class)} />
   );

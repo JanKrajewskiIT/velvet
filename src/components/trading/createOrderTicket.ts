@@ -189,10 +189,16 @@ export const createOrderTicket = (props: OrderTicketProps) => {
     summary: string;
     submit: OrderTicketProps['onSubmit'];
   }>();
-  createEffect(() => {
-    const current = frame();
-    if (review() && (!can() || !equalFrame(review()?.frame ?? [], current))) setReview(undefined);
-  });
+  createEffect(
+    () => {
+      const current = frame();
+      const pending = review();
+      return !!pending && (!can() || !equalFrame(pending.frame, current));
+    },
+    (stale) => {
+      if (stale) setReview(undefined);
+    },
+  );
   const ask = () => {
     if (can()) setReview({ frame: frame(), order: order(), summary: summary(), submit: props.onSubmit });
   };

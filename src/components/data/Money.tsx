@@ -1,9 +1,10 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { createMemo, mergeProps, Show, splitProps } from 'solid-js';
+import { createMemo, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { marketDirection } from '../finance/marketDirection';
 import styles from './Money.module.css';
 import { useMoneyHidden } from './moneyPrivacyContext';
@@ -24,8 +25,8 @@ export interface MoneyProps extends HtmlProps<HTMLSpanElement, 'children' | 'hid
 }
 
 export const Money = (props: MoneyProps) => {
-  const merged = mergeProps({ digits: 2, size: 'md', currencyDisplay: 'code' } satisfies Partial<MoneyProps>, props);
-  const [local, rest] = splitProps(merged, [
+  const merged = withDefaults({ digits: 2, size: 'md', currencyDisplay: 'code' } satisfies Partial<MoneyProps>, props);
+  const [local, rest] = partitionProps(merged, [
     'amount',
     'currency',
     'digits',

@@ -1,9 +1,11 @@
-import { For, type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { For, Show } from 'solid-js';
 
 import { createRecordKeys } from '../../hooks/createRecordKeys';
 import { cssLength } from '../../utils/cssLength';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { typographyClass } from '../primitives/typography';
 import { ChartSwatch } from './ChartSwatch';
 import styles from './ChartTooltip.module.css';
@@ -34,11 +36,11 @@ export interface ChartTooltipProps extends HtmlProps<HTMLDivElement, 'title'> {
 
 /** Floating read-out with a title and one row per series. */
 export const ChartTooltip = (props: ChartTooltipProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     { edge: DEFAULT_EDGE, rows: NO_ROWS, live: true } satisfies Partial<ChartTooltipProps>,
     props,
   );
-  const [local, rest] = splitProps(merged, ['x', 'y', 'width', 'edge', 'title', 'rows', 'live', 'class', 'style']);
+  const [local, rest] = partitionProps(merged, ['x', 'y', 'width', 'edge', 'title', 'rows', 'live', 'class', 'style']);
   const records = createRecordKeys(
     () => local.rows,
     (row, index) => row.key ?? index,
@@ -53,7 +55,7 @@ export const ChartTooltip = (props: ChartTooltipProps) => {
       {...rest}
       role={local.live ? 'status' : undefined}
       aria-live={local.live ? 'polite' : undefined}
-      aria-hidden={local.live ? undefined : true}
+      aria-hidden={local.live ? undefined : 'true'}
       class={cx(typographyClass('caption'), styles.tip, local.class)}
       style={{ left: cssLength(left()), top: cssLength(local.y), ...local.style }}
     >

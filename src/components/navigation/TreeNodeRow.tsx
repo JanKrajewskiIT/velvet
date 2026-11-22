@@ -1,5 +1,6 @@
-import { Index, Show } from 'solid-js';
+import { For, Show } from 'solid-js';
 
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { Checkmark } from '../primitives/Checkmark';
@@ -45,13 +46,17 @@ export const TreeNodeRow = (props: TreeNodeRowProps) => {
       aria-level={props.row.level}
       aria-setsize={props.row.size}
       aria-posinset={props.row.pos}
-      aria-expanded={branch() ? isOpen() : undefined}
-      aria-selected={props.tree.config.checkable ? undefined : props.tree.model.selected() === node().id}
-      aria-checked={
-        props.tree.config.checkable ? (checkState() === 'mixed' ? 'mixed' : checkState() === 'on') : undefined
+      aria-expanded={branch() ? booleanAttribute(isOpen()) : undefined}
+      aria-selected={
+        props.tree.config.checkable ? undefined : booleanAttribute(props.tree.model.selected() === node().id)
       }
-      tabIndex={props.tree.focus.tabbableId() === props.row.id ? 0 : -1}
-      draggable={props.tree.move.enabled()}
+      aria-checked={
+        props.tree.config.checkable
+          ? booleanAttribute(checkState() === 'mixed' ? 'mixed' : checkState() === 'on')
+          : undefined
+      }
+      tabindex={props.tree.focus.tabbableId() === props.row.id ? 0 : -1}
+      draggable={booleanAttribute(props.tree.move.enabled())}
       class={cx(
         styles.treePartRow,
         props.tree.model.selected() === node().id && styles.treePartRowVariantSel,
@@ -100,7 +105,7 @@ export const TreeNodeRow = (props: TreeNodeRowProps) => {
         if (props.tree.move.sourceId() === node().id && !props.tree.move.keyboard()) props.tree.move.cancel();
       }}
     >
-      <Index each={Array.from({ length: props.row.level - 1 })}>
+      <For keyed={false} each={Array.from({ length: props.row.level - 1 })}>
         {(_, k) => (
           <span
             class={styles.treePartGuide}
@@ -108,7 +113,7 @@ export const TreeNodeRow = (props: TreeNodeRowProps) => {
             aria-hidden="true"
           />
         )}
-      </Index>
+      </For>
       <span
         class={cx(styles.treePartCaret, isOpen() && 'vui-tree__caret--open', !branch() && 'vui-tree__caret--leaf')}
         aria-hidden="true"

@@ -100,9 +100,15 @@ export const createWidgetGrid = (props: WidgetGridProps) => {
     focusWidget(id);
     setAnnouncement(named('show', id));
   };
-  createEffect(() => {
-    if (!props.editing || (drag() && !widgets().has(drag() ?? ''))) setDrag(undefined);
-  });
+  createEffect(
+    () => {
+      const id = drag();
+      return !props.editing || (id !== undefined && !widgets().has(id));
+    },
+    (invalid) => {
+      if (invalid) setDrag(undefined);
+    },
+  );
   return {
     props,
     root,

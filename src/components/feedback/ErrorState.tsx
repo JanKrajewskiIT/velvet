@@ -1,9 +1,12 @@
-import { createSignal, type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createSignal, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { toneIcon } from '../../utils/tone';
 import { Button } from '../actions/Button';
 import { Text } from '../primitives/Text';
@@ -34,8 +37,8 @@ export interface ErrorStateProps extends HtmlProps<HTMLDivElement, 'title'> {
 
 /** Failed-to-load placeholder with Retry and optional collapsible technical details. */
 export const ErrorState = (props: ErrorStateProps) => {
-  const merged = mergeProps({ size: 'md' } satisfies ErrorStateProps, props);
-  const [local, rest] = splitProps(merged, [
+  const merged = withDefaults({ size: 'md' } satisfies ErrorStateProps, props);
+  const [local, rest] = partitionProps(merged, [
     'title',
     'description',
     'onRetry',
@@ -93,7 +96,7 @@ export const ErrorState = (props: ErrorStateProps) => {
             </Button>
           </Show>
           <Show when={local.details}>
-            <Button variant="ghost" size="sm" aria-expanded={open()} onClick={() => setOpen(!open())}>
+            <Button variant="ghost" size="sm" aria-expanded={booleanAttribute(open())} onClick={() => setOpen(!open())}>
               {open()
                 ? translate('velvet.feedback.errorState.hideDetails')
                 : translate('velvet.feedback.errorState.showDetails')}

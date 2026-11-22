@@ -1,8 +1,9 @@
-import { createUniqueId, For, mergeProps } from 'solid-js';
+import { createUniqueId, For } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { classSelector, variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import styles from './Accordion.module.css';
 import { AccordionSection } from './AccordionSection';
 import type { AccordionItem, AccordionVariant } from './accordionTypes';
@@ -43,7 +44,7 @@ const itemKey = (item: AccordionItem, index: number) => item.value ?? String(ind
 
 /** Collapsible sections (FAQ, settings groups). Animated height, ↑↓ Home End between headers; closed panels are hidden from focus and screen readers. */
 export const Accordion = (props: AccordionProps) => {
-  const merged = mergeProps({ multiple: false, variant: 'separated' } satisfies Partial<AccordionProps>, props);
+  const merged = withDefaults({ multiple: false, variant: 'separated' } satisfies Partial<AccordionProps>, props);
   const baseId = createUniqueId();
   const [open, setOpen] = createControllable<string[]>({
     value: () => props.value,

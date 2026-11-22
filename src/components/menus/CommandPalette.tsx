@@ -1,5 +1,5 @@
-import { type JSX, Show } from 'solid-js';
-import { Portal } from 'solid-js/web';
+import { type JSX, Portal } from '@solidjs/web';
+import { Show } from 'solid-js';
 
 import { cx } from '../../utils/cx';
 import styles from './CommandPalette.module.css';

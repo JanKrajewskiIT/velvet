@@ -1,8 +1,9 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { createMemo, createSignal, For, Index, mergeProps, Show } from 'solid-js';
+import { createMemo, createSignal, For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { typographyClass } from '../primitives/typography';
 import { ChartLegend } from './ChartLegend';
 import { seriesColor } from './chartScale';
@@ -63,7 +64,7 @@ const valueAt = (series: RadarSeries, key: string): number => {
 
 /** Compares 1–3 profiles across 5–8 dimensions. The legend toggles series, hovering a vertex dims the others and shows its value; every value is also in the accessible name. */
 export const RadarChart = (props: RadarChartProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     { size: 300, levels: 4, showLegend: true, fill: true } satisfies Partial<RadarChartProps>,
     props,
   );
@@ -180,7 +181,7 @@ export const RadarChart = (props: RadarChartProps) => {
                   class={styles.radarPartArea}
                   fill-opacity={merged.fill ? undefined : 0}
                 />
-                <Index each={shape.points}>
+                <For keyed={false} each={shape.points}>
                   {(p, i) => {
                     const axis = () => merged.axes[i];
                     const active = () => hover()?.series === shape.series.label && hover()?.axis === axis()?.key;
@@ -206,7 +207,7 @@ export const RadarChart = (props: RadarChartProps) => {
                       />
                     );
                   }}
-                </Index>
+                </For>
               </g>
             )}
           </For>

@@ -1,10 +1,12 @@
-import { createEffect, createSignal, createUniqueId, For, mergeProps, Show } from 'solid-js';
+import { createEffect, createSignal, createUniqueId, For, Show } from 'solid-js';
 
 import { createDismiss } from '../../hooks/createDismiss';
 import { createFloating } from '../../hooks/createFloating';
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { classSelector } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Button } from '../actions/Button';
 import { Control } from '../primitives/Control';
 import { ControlInput } from '../primitives/ControlInput';
@@ -33,7 +35,7 @@ export type { TreeSelectProps };
  * auto-expands matches. multiple: tri-state checkboxes with tags in the field. Use Select for flat lists.
  */
 export const TreeSelect = (props: TreeSelectProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     {
       multiple: false,
       leavesOnly: false,
@@ -49,9 +51,12 @@ export const TreeSelect = (props: TreeSelectProps) => {
   const listId = createUniqueId();
   const [open, setOpen] = createSignal(false);
   const [root, setRoot] = createSignal<HTMLElement>();
-  createEffect(() => {
-    if (p.disabled) setOpen(false);
-  });
+  createEffect(
+    () => p.disabled,
+    (disabled) => {
+      if (disabled) setOpen(false);
+    },
+  );
   const floating = createFloating(open, root, { matchWidth: true });
   const view = createTreeSelectView(() => p.data, p.defaultExpanded);
   const rowId = (id: string) => `${listId}-${id}`;
@@ -109,7 +114,7 @@ export const TreeSelect = (props: TreeSelectProps) => {
               role="combobox"
               disabled={p.disabled}
               aria-haspopup="tree"
-              aria-expanded={open()}
+              aria-expanded={booleanAttribute(open())}
               aria-controls={listId}
               aria-describedby={validation.describedBy(control.describedBy)}
               aria-label={p['aria-label']}
@@ -174,9 +179,9 @@ export const TreeSelect = (props: TreeSelectProps) => {
                 ref={popup.setTree}
                 id={listId}
                 role="tree"
-                aria-multiselectable={p.multiple || undefined}
+                aria-multiselectable={booleanAttribute(p.multiple || undefined)}
                 aria-label={typeof p.label === 'string' ? p.label : translate('velvet.forms.treeSelect.treeLabel')}
-                tabIndex={p.searchable ? -1 : 0}
+                tabindex={p.searchable ? -1 : 0}
                 class={styles.tselectPartTree}
                 aria-activedescendant={
                   !p.searchable && view.activeRow() ? rowId(view.activeRow()?.node.id ?? '') : undefined

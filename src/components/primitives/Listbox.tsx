@@ -1,8 +1,10 @@
-import { mergeProps, Show, splitProps } from 'solid-js';
+import { Show } from 'solid-js';
 
 import { assignRef } from '../../utils/assignRef';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import styles from './Listbox.module.css';
 import { ListboxPanel } from './ListboxPanel';
 
@@ -16,8 +18,8 @@ export interface ListboxProps extends HtmlProps<HTMLUListElement> {
 
 /** Listbox surface; the owning control supplies active-item and selection behavior. */
 export const Listbox = (props: ListboxProps) => {
-  const merged = mergeProps({ floating: true } satisfies ListboxProps, props);
-  const [local, rest] = splitProps(merged, ['floating', 'multiselectable', 'up', 'flip', 'ref', 'class']);
+  const merged = withDefaults({ floating: true } satisfies ListboxProps, props);
+  const [local, rest] = partitionProps(merged, ['floating', 'multiselectable', 'up', 'flip', 'ref', 'class']);
   return (
     <Show
       when={local.floating}
@@ -26,7 +28,7 @@ export const Listbox = (props: ListboxProps) => {
           {...rest}
           ref={local.ref}
           role="listbox"
-          aria-multiselectable={local.multiselectable || undefined}
+          aria-multiselectable={booleanAttribute(local.multiselectable || undefined)}
           class={cx(styles.list, local.class)}
         />
       }
@@ -41,7 +43,7 @@ export const Listbox = (props: ListboxProps) => {
         up={local.up}
         flip={local.flip}
         role="listbox"
-        aria-multiselectable={local.multiselectable || undefined}
+        aria-multiselectable={booleanAttribute(local.multiselectable || undefined)}
         class={local.class}
       />
     </Show>

@@ -1,6 +1,5 @@
-import { splitProps } from 'solid-js';
-
 import { cx } from '../../utils/cx';
+import { partitionProps } from '../../utils/props';
 import { Delta, type DeltaProps } from '../data/Delta';
 import styles from './PriceChange.module.css';
 
@@ -10,7 +9,7 @@ export interface PriceChangeProps extends Omit<DeltaProps, 'format' | 'locale'> 
 
 /** @deprecated Use Delta. For basis points, pass unit=" bp". */
 export const PriceChange = (props: PriceChangeProps) => {
-  const [local, rest] = splitProps(props, ['format', 'unit', 'class']);
+  const [local, rest] = partitionProps(props, ['format', 'unit', 'class']);
   return (
     <Delta
       {...rest}

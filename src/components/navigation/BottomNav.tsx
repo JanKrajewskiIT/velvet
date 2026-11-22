@@ -1,9 +1,10 @@
-import { For, mergeProps, Show, untrack } from 'solid-js';
+import { For, Show, untrack } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { Polymorphic } from '../../utils/polymorphic';
+import { withDefaults } from '../../utils/props';
 import { Glyph } from '../primitives/Glyph';
 import { Indicator } from '../primitives/Indicator';
 import { Text } from '../primitives/Text';
@@ -53,7 +54,7 @@ const badgeParts = (badge: BottomNavItem['badge']): { count: number | string | n
  * elevated centre action. `fixed` pins it to the viewport bottom with safe-area padding. Hide Sidebar on mobile when using it.
  */
 export const BottomNav = (props: BottomNavProps) => {
-  const p = mergeProps({ fixed: true } satisfies Partial<BottomNavProps>, props);
+  const p = withDefaults({ fixed: true } satisfies Partial<BottomNavProps>, props);
   const translate = useTranslate();
   const label = () => p.label ?? translate('velvet.navigation.bottomNav.label');
   const [current, setCurrent] = createControllable<string | undefined>({

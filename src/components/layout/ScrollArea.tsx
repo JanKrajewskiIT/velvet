@@ -1,10 +1,12 @@
-import { createEffect, createSignal, type JSX, mergeProps, on, onCleanup, onMount, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, createSignal, onSettled, Show } from 'solid-js';
 
 import { assignRef } from '../../utils/assignRef';
 import { callHandler } from '../../utils/callHandler';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import styles from './ScrollArea.module.css';
 import { lengthValue } from './space';
 
@@ -39,8 +41,8 @@ export interface ScrollAreaProps extends HtmlProps<HTMLDivElement> {
 
 /** Scroll container with a themed scrollbar and edge fades that appear only where content continues. */
 export const ScrollArea = (props: ScrollAreaProps) => {
-  const merged = mergeProps({ orientation: 'vertical', fade: true } satisfies ScrollAreaProps, props);
-  const [local, rest] = splitProps(merged, [
+  const merged = withDefaults({ orientation: 'vertical', fade: true } satisfies ScrollAreaProps, props);
+  const [local, rest] = partitionProps(merged, [
     'maxHeight',
     'height',
     'maxWidth',
@@ -52,7 +54,7 @@ export const ScrollArea = (props: ScrollAreaProps) => {
     'children',
     'onScroll',
     'ref',
-    'tabIndex',
+    'tabindex',
   ]);
   let area!: HTMLDivElement;
   const [edges, setEdges] = createSignal<ScrollEdges>({ start: false, end: false }, { equals: sameEdges });
@@ -64,13 +66,15 @@ export const ScrollArea = (props: ScrollAreaProps) => {
     setEdges({ start: position > EDGE_THRESHOLD_PX, end: position < max - EDGE_THRESHOLD_PX });
   };
 
-  onMount(() => {
+  let frame = 0;
+  const schedule = () => {
+    cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(measure);
+  };
+  createEffect(() => local.orientation, schedule, { defer: true });
+
+  onSettled(() => {
     measure();
-    let frame = 0;
-    const schedule = () => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(measure);
-    };
     const observer = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(schedule);
     const observe = () => {
       observer?.disconnect();
@@ -81,12 +85,11 @@ export const ScrollArea = (props: ScrollAreaProps) => {
     const mutations = new MutationObserver(observe);
     mutations.observe(area, { childList: true, subtree: true, characterData: true, attributes: true });
     observe();
-    createEffect(on(() => local.orientation, schedule));
-    onCleanup(() => {
+    return () => {
       observer?.disconnect();
       mutations.disconnect();
       cancelAnimationFrame(frame);
-    });
+    };
   });
 
   const fadeSize = (visible: boolean) => (local.fade && visible ? FADE_SIZE : '0px');
@@ -110,7 +113,7 @@ export const ScrollArea = (props: ScrollAreaProps) => {
         measure();
         callHandler(local.onScroll, event);
       }}
-      tabIndex={local.tabIndex ?? 0}
+      tabindex={local.tabindex ?? 0}
       role={local.label ? 'region' : undefined}
       aria-label={local.label}
       class={cx(styles.scroll, variantClass(SCROLL_CLASSES, AXIS[local.orientation]), local.class)}

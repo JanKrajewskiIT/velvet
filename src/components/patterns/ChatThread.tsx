@@ -1,4 +1,5 @@
-import { createSignal, type JSX, onCleanup, onMount, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createSignal, onSettled, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
@@ -30,7 +31,7 @@ export const ChatThread = (props: ChatThreadProps) => {
     if (following()) thread.scrollTop = thread.scrollHeight;
   };
 
-  onMount(() => {
+  onSettled(() => {
     follow();
     let frame = 0;
     const schedule = () => {
@@ -49,11 +50,11 @@ export const ChatThread = (props: ChatThreadProps) => {
     const observer = new MutationObserver(observeChildren);
     observeChildren();
     observer.observe(thread, { childList: true, subtree: true, characterData: true });
-    onCleanup(() => {
+    return () => {
       observer.disconnect();
       resizing.disconnect();
       cancelAnimationFrame(frame);
-    });
+    };
   });
 
   return (
@@ -65,7 +66,7 @@ export const ChatThread = (props: ChatThreadProps) => {
         role="log"
         aria-label={props.label ?? translate('velvet.patterns.chatThread.label')}
         // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a scrollable log region must be focusable so keyboard users can scroll it
-        tabIndex={0}
+        tabindex={0}
         class={cx(styles.chatthread, props.class)}
         style={{ height: cssLength(props.height), ...props.style }}
         onScroll={() => {

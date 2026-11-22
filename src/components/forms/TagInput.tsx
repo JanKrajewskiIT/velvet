@@ -1,8 +1,11 @@
-import { createSignal, createUniqueId, For, type JSX, mergeProps, onCleanup } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createSignal, createUniqueId, For, onCleanup } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Control } from '../primitives/Control';
 import { Field } from '../primitives/Field';
 import type { FieldErrorAnnouncementProps } from '../primitives/fieldErrorAnnouncement';
@@ -46,7 +49,7 @@ export interface TagInputProps extends FormControlProps, FieldErrorAnnouncementP
 
 /** Free-text tags inside a field. Enter or comma adds, Backspace on empty removes the last, pasted comma/newline lists split, duplicates (case-insensitive) flash instead of adding. */
 export const TagInput = (props: TagInputProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     { defaultValue: [], separators: ['Enter', LIST_SEPARATOR], size: 'md' } satisfies TagInputProps,
     props,
   );
@@ -151,12 +154,12 @@ export const TagInput = (props: TagInputProps) => {
             class={cx(styles.taginputPartInput, typographyClass('body'))}
             value={text()}
             disabled={p.disabled}
-            readOnly={isFull()}
+            readonly={isFull()}
             placeholder={
               isFull() || tags().length ? '' : (p.placeholder ?? translate('velvet.forms.tagInput.placeholder'))
             }
             aria-describedby={validation.describedBy(control.describedBy)}
-            aria-invalid={control.invalid || validation.invalid() || undefined}
+            aria-invalid={booleanAttribute(control.invalid || validation.invalid() || undefined)}
             aria-label={p['aria-label']}
             aria-labelledby={p['aria-labelledby']}
             onInput={(e) => {

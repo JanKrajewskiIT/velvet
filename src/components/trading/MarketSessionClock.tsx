@@ -1,9 +1,11 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { createEffect, createMemo, createSignal, For, mergeProps, onCleanup, onMount, Show } from 'solid-js';
+import { createEffect, createMemo, createSignal, For, onSettled, Show } from 'solid-js';
 
 import { createRecordKeys } from '../../hooks/createRecordKeys';
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import type { StatusTone } from '../../utils/tone';
 import { Dot } from '../primitives/Dot';
 import { Text } from '../primitives/Text';
@@ -42,23 +44,27 @@ export interface MarketSessionClockProps {
 }
 
 export const MarketSessionClock = (props: MarketSessionClockProps) => {
-  const p = mergeProps({ markets: NO_MARKETS, refresh: DEFAULT_REFRESH, variant: 'inline' }, props);
+  const p = withDefaults({ markets: NO_MARKETS, refresh: DEFAULT_REFRESH, variant: 'inline' }, props);
   const translate = useTranslate();
   const i18n = useI18n();
   const [mounted, setMounted] = createSignal(false);
   const [tick, setTick] = createSignal<number>();
-  onMount(() => setMounted(true));
-  createEffect(() => {
-    const refresh = p.refresh;
-    if (!Number.isFinite(refresh) || refresh < 0 || refresh > MAX_REFRESH) {
-      throw new RangeError(`MarketSessionClock.refresh must be finite, between 0 and ${MAX_REFRESH} milliseconds.`);
-    }
-    if (!mounted() || p.now != null) return;
-    setTick(Date.now());
-    if (!refresh) return;
-    const timer = setInterval(() => setTick(Date.now()), Math.max(1, Math.floor(refresh)));
-    onCleanup(() => clearInterval(timer));
+  onSettled(() => {
+    setMounted(true);
   });
+  createEffect(
+    () => [p.refresh, mounted(), p.now] as const,
+    ([refresh, ready, now]) => {
+      if (!Number.isFinite(refresh) || refresh < 0 || refresh > MAX_REFRESH) {
+        throw new RangeError(`MarketSessionClock.refresh must be finite, between 0 and ${MAX_REFRESH} milliseconds.`);
+      }
+      if (!ready || now != null) return;
+      setTick(Date.now());
+      if (!refresh) return;
+      const timer = setInterval(() => setTick(Date.now()), Math.max(1, Math.floor(refresh)));
+      return () => clearInterval(timer);
+    },
+  );
   const date = createMemo(() => {
     const fixed = p.now;
     const time = fixed instanceof Date ? fixed.getTime() : (fixed ?? tick());
@@ -125,7 +131,7 @@ export const MarketSessionClock = (props: MarketSessionClockProps) => {
                   hide={p.hide}
                   title={title(row().market)}
                   class={p.class}
-                  aria-busy={!date() || undefined}
+                  aria-busy={booleanAttribute(!date() || undefined)}
                 >
                   <Text as="b" variant="caption" class={styles.code}>
                     {row().market.code}
@@ -141,7 +147,7 @@ export const MarketSessionClock = (props: MarketSessionClockProps) => {
       <ul
         class={cx(styles.list, p.class)}
         aria-label={p.title || translate('velvet.trading.marketSessionClock.label')}
-        aria-busy={!date() || undefined}
+        aria-busy={booleanAttribute(!date() || undefined)}
       >
         <For each={records.keys()}>
           {(key) => (

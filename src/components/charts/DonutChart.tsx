@@ -1,9 +1,10 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { createEffect, createMemo, createSignal, For, mergeProps, Show } from 'solid-js';
+import { createEffect, createMemo, createSignal, For, Show } from 'solid-js';
 
 import { createRecordKeys } from '../../hooks/createRecordKeys';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import type { RowKey } from '../data/rowData';
 import { Text } from '../primitives/Text';
 import { ChartLegend, type ChartLegendItem } from './ChartLegend';
@@ -39,7 +40,7 @@ export interface DonutChartProps {
 
 /** Part-to-whole donut with an interactive legend: click an entry to exclude it and recut the rest (at least one stays); hover or focus a segment or entry to see its share in the centre. Max ~6 slices — group the tail as "Other". */
 export const DonutChart = (props: DonutChartProps) => {
-  const merged = mergeProps({ size: 180, thickness: 22 } satisfies Partial<DonutChartProps>, props);
+  const merged = withDefaults({ size: 180, thickness: 22 } satisfies Partial<DonutChartProps>, props);
   const i18n = useI18n();
   const translate = useTranslate();
   const format = (v: number) => (merged.format ?? ((n: number) => i18n.formatNumber(n)))(v);
@@ -66,13 +67,15 @@ export const DonutChart = (props: DonutChartProps) => {
       throw new RangeError('Donut values must be finite and non-negative.');
     return merged.data.map((d, i) => ({ ...d, key: keys.keys()[i] ?? i, color: d.color ?? seriesColor(i) }));
   });
-  createEffect(() => {
-    const available = new Set(items().map((item) => item.key));
-    setExcluded((current) => {
-      const next = current.filter((key) => available.has(key));
-      return available.size && next.length === available.size ? next.slice(1) : next;
-    });
-  });
+  createEffect(
+    () => new Set(items().map((item) => item.key)),
+    (available) => {
+      setExcluded((current) => {
+        const next = current.filter((key) => available.has(key));
+        return available.size && next.length === available.size ? next.slice(1) : next;
+      });
+    },
+  );
   const visible = createMemo(() => items().filter((d) => !excluded().includes(d.key)));
   const total = createMemo(() => {
     const value = visible().reduce((sum, d) => sum + d.value, 0);

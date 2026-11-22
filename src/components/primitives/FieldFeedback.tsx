@@ -1,4 +1,5 @@
-import { children, type JSX, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { children, Show } from 'solid-js';
 
 import { cx } from '../../utils/cx';
 import { FIELD_ERROR_ANNOUNCEMENTS, type FieldErrorAnnouncementProps } from './fieldErrorAnnouncement';

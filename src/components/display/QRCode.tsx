@@ -1,7 +1,9 @@
-import { children, createMemo, type JSX, mergeProps, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { children, createMemo, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { renderIcon } from '../primitives/Glyph';
 import { typographyClass } from '../primitives/typography';
 import { DEFAULT_QR_LEVEL, encodeQR, type QRLevel } from './encodeQR';
@@ -43,7 +45,7 @@ const modulesPath = (modules: readonly (readonly boolean[])[], margin: number): 
  * Pair with a visible link or code: the image alone is not accessible.
  */
 export const QRCode = (props: QRCodeProps) => {
-  const merged = mergeProps({ size: 160, margin: 4 } satisfies Partial<QRCodeProps>, props);
+  const merged = withDefaults({ size: 160, margin: 4 } satisfies Partial<QRCodeProps>, props);
   const translate = useTranslate();
   const logo = children(() => merged.logo);
   const level = () => merged.level ?? (logo() ? LOGO_LEVEL : DEFAULT_QR_LEVEL);

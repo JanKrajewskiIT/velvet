@@ -1,9 +1,10 @@
-import { type JSX, mergeProps, splitProps } from 'solid-js';
+import { type JSX } from '@solidjs/web';
 
 import { callHandler } from '../../utils/callHandler';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { type ElementTag, type HtmlProps, Polymorphic } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import type { Tone } from '../../utils/tone';
 import styles from './Surface.module.css';
 
@@ -79,8 +80,8 @@ export interface SurfaceProps extends HtmlProps<HTMLElement> {
 
 /** The one primitive that paints a container: background, border, radius, elevation, padding, tone and behaviour. */
 export const Surface = (props: SurfaceProps) => {
-  const merged = mergeProps({ as: 'div', variant: 'default', padding: 'none' } satisfies SurfaceProps, props);
-  const [local, rest] = splitProps(merged, [
+  const merged = withDefaults({ as: 'div', variant: 'default', padding: 'none' } satisfies SurfaceProps, props);
+  const [local, rest] = partitionProps(merged, [
     'as',
     'variant',
     'padding',
@@ -97,12 +98,12 @@ export const Surface = (props: SurfaceProps) => {
     'onKeyDown',
     'onClick',
     'role',
-    'tabIndex',
+    'tabindex',
   ]);
   const lifts = () => local.hoverable || local.interactive || local.tonal;
   const revealed = () => local.reveal != null && local.reveal !== false;
   const buttonRole = () => local.interactive && local.as === 'div' && (!local.role || local.role === 'button');
-  const disabled = () => rest['aria-disabled'] === true || rest['aria-disabled'] === 'true';
+  const disabled = () => rest['aria-disabled'] === 'true';
   const onKeyDown: JSX.EventHandler<HTMLElement, KeyboardEvent> = (event) => {
     callHandler(local.onKeyDown, event);
     if (
@@ -144,7 +145,7 @@ export const Surface = (props: SurfaceProps) => {
       data-tone={local.tone}
       style={typeof local.reveal === 'number' ? { '--i': local.reveal, ...local.style } : local.style}
       role={local.role ?? (buttonRole() ? 'button' : undefined)}
-      tabIndex={buttonRole() && disabled() ? -1 : (local.tabIndex ?? (buttonRole() ? 0 : undefined))}
+      tabindex={buttonRole() && disabled() ? -1 : (local.tabindex ?? (buttonRole() ? 0 : undefined))}
       onKeyDown={onKeyDown}
       onClick={onClick}
     />

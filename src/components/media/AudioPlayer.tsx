@@ -1,9 +1,10 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { createEffect, createMemo, createSignal, Index, mergeProps, Show } from 'solid-js';
+import { createEffect, createMemo, createSignal, For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Glyph } from '../primitives/Glyph';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
@@ -48,7 +49,7 @@ export interface AudioPlayerProps {
  * click or drag to seek, ← → 5 s, PgUp / PgDn 15 s, Home / End, Space plays.
  */
 export const AudioPlayer = (props: AudioPlayerProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     { bars: DEFAULT_BARS, rates: [1, 1.25, 1.5, 2, 0.75], size: 'md' } satisfies Partial<AudioPlayerProps>,
     props,
   );
@@ -87,11 +88,11 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
     e.preventDefault();
   };
 
-  createEffect(() => {
-    audio.playbackRate = rate();
+  createEffect(rate, (speed) => {
+    audio.playbackRate = speed;
   });
-  createEffect(() => {
-    audio.muted = muted();
+  createEffect(muted, (isMuted) => {
+    audio.muted = isMuted;
   });
 
   return (
@@ -152,7 +153,7 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
             }}
             class={styles.audioPartWave}
             role="slider"
-            tabIndex={0}
+            tabindex={0}
             aria-label={
               p.title
                 ? translate('velvet.media.audioPlayer.seekTitled', { title: p.title })
@@ -181,14 +182,14 @@ export const AudioPlayer = (props: AudioPlayerProps) => {
               scrubbing = false;
             }}
           >
-            <Index each={bars()}>
+            <For keyed={false} each={bars()}>
               {(peak, i) => (
                 <i
                   class={i / barCount() < progress() ? styles.audioPartBarVariantOn : undefined}
                   style={{ height: `${Math.max(MIN_BAR_HEIGHT_PERCENT, peak() * 100)}%` }}
                 />
               )}
-            </Index>
+            </For>
           </div>
           <Text as="span" variant="caption" tone="secondary" tabular class={styles.audioPartTime}>
             {fmtTime(state().time)} / {fmtTime(state().duration)}

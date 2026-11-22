@@ -1,6 +1,7 @@
 import { For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { Checkmark } from '../primitives/Checkmark';
 import { IconTile } from '../primitives/IconTile';
 import { Text } from '../primitives/Text';
@@ -32,7 +33,7 @@ export const AnalysisTypePicker = (props: AnalysisTypePickerProps) => {
             <button
               type="button"
               role="radio"
-              aria-checked={type.id === props.analysis}
+              aria-checked={booleanAttribute(type.id === props.analysis)}
               class={styles.areqPartType}
               onClick={() => props.onSelect(type.id)}
             >

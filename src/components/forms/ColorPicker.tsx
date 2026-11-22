@@ -1,10 +1,13 @@
-import { createSignal, For, type JSX, Match, mergeProps, Show, Switch } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createSignal, For, Match, Show, Switch } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { createDismiss } from '../../hooks/createDismiss';
 import { createFloating } from '../../hooks/createFloating';
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { FieldLabel } from '../primitives/FieldLabel';
 import { Glyph } from '../primitives/Glyph';
 import { Text } from '../primitives/Text';
@@ -38,7 +41,7 @@ const DEFAULT_SWATCHES = ['#8b0036', '#c92d62', '#d98200', '#1f9254', '#1b8a9c',
 
 /** Colour field → popover with saturation/brightness area, hue strip, hex input and preset swatches. `inline` renders the panel directly. */
 export const ColorPicker = (props: ColorPickerProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     {
       defaultValue: '#8b0036',
       swatches: DEFAULT_SWATCHES,
@@ -77,7 +80,7 @@ export const ColorPicker = (props: ColorPickerProps) => {
                   <button
                     type="button"
                     role="radio"
-                    aria-checked={isSelected(swatch)}
+                    aria-checked={booleanAttribute(isSelected(swatch))}
                     aria-label={swatch}
                     disabled={p.disabled}
                     class={cx(styles.swatch, styles.swatchVariantLg)}
@@ -128,7 +131,7 @@ export const ColorPicker = (props: ColorPickerProps) => {
               class={cx(styles.control, styles.colorPartTrigger)}
               disabled={p.disabled}
               aria-haspopup="dialog"
-              aria-expanded={open()}
+              aria-expanded={booleanAttribute(open())}
               aria-label={translate('velvet.forms.colorPicker.triggerLabel', { name: labelText(), value: current() })}
               onClick={() => setOpen(!open())}
             >

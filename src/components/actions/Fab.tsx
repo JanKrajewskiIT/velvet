@@ -1,10 +1,12 @@
-import { createSignal, createUniqueId, For, mergeProps, Show } from 'solid-js';
+import { createSignal, createUniqueId, For, Show } from 'solid-js';
 
 import { createDismiss } from '../../hooks/createDismiss';
 import { createFloating } from '../../hooks/createFloating';
 import { createMenuNavigation } from '../../hooks/createMenuNavigation';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { classSelector } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Glyph } from '../primitives/Glyph';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
@@ -34,7 +36,7 @@ export interface FabProps {
 
 /** Floating action button — the single most important creation action on mobile screens. */
 export const Fab = (props: FabProps) => {
-  const p = mergeProps({ icon: 'plus', position: 'fixed' } satisfies Partial<FabProps>, props);
+  const p = withDefaults({ icon: 'plus', position: 'fixed' } satisfies Partial<FabProps>, props);
   const [open, setOpen] = createSignal(false);
   const [wrap, setWrap] = createSignal<HTMLDivElement>();
   const dial = () => (p.actions?.length ?? 0) > 0;
@@ -84,7 +86,7 @@ export const Fab = (props: FabProps) => {
           class={styles.fabPartDial}
           role="menu"
           aria-label={p.label}
-          aria-hidden={!open()}
+          aria-hidden={booleanAttribute(!open())}
           onKeyDown={menu.onKeyDown}
         >
           <For each={p.actions}>
@@ -101,7 +103,7 @@ export const Fab = (props: FabProps) => {
                 <button
                   type="button"
                   role="menuitem"
-                  tabIndex={open() && i() === menu.active() ? 0 : -1}
+                  tabindex={open() && i() === menu.active() ? 0 : -1}
                   class={styles.fabPartMini}
                   aria-label={action.label}
                   onClick={() => choose(action)}
@@ -119,7 +121,7 @@ export const Fab = (props: FabProps) => {
         class={cx(typographyClass('button'), styles.fab, p.extended && styles.fabVariantExtended)}
         aria-label={p.extended ? undefined : p.label}
         aria-haspopup={dial() ? 'menu' : undefined}
-        aria-expanded={dial() ? open() : undefined}
+        aria-expanded={dial() ? booleanAttribute(open()) : undefined}
         aria-controls={dial() ? menuId : undefined}
         onClick={() => {
           if (!dial()) p.onClick?.();

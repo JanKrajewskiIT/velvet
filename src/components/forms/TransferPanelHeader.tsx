@@ -23,8 +23,8 @@ export const TransferPanelHeader = (props: TransferPanelHeaderProps) => {
     <header class={styles.xferPartHead}>
       <Checkmark
         role="checkbox"
-        tabIndex={0}
-        aria-checked={props.view.allChecked() ? true : props.view.someChecked() ? 'mixed' : false}
+        tabindex={0}
+        aria-checked={props.view.allChecked() ? 'true' : props.view.someChecked() ? 'mixed' : 'false'}
         aria-label={translate('velvet.forms.transferPanel.selectAll', { title: props.title })}
         checked={props.view.allChecked()}
         indeterminate={props.view.someChecked()}

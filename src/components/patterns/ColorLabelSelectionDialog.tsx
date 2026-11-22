@@ -1,6 +1,8 @@
-import { type JSX, mergeProps, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { withDefaults } from '../../utils/props';
 import { Dialog } from '../feedback/Dialog';
 import { SearchInput } from '../forms/SearchInput';
 import { Glyph } from '../primitives/Glyph';
@@ -50,7 +52,7 @@ export interface ColorLabelSelectionDialogProps {
 
 /** Assign colour labels to one item: toggle chips (max 1 = single choice), search, inline create, and a draft that Apply commits. */
 export const ColorLabelSelectionDialog = (props: ColorLabelSelectionDialogProps) => {
-  const p = mergeProps({ colors: LABEL_COLORS } satisfies Partial<ColorLabelSelectionDialogProps>, props);
+  const p = withDefaults({ colors: LABEL_COLORS } satisfies Partial<ColorLabelSelectionDialogProps>, props);
   const translate = useTranslate();
   const title = () => p.title ?? translate('velvet.patterns.colorLabelSelectionDialog.title');
   const submitLabel = () => p.submitLabel ?? translate('velvet.common.apply');

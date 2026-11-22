@@ -1,8 +1,9 @@
-import { createMemo, mergeProps, Show, splitProps } from 'solid-js';
+import { createMemo, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { Button } from '../actions/Button';
 import { buttonClass } from '../actions/buttonClass';
 import { Badge } from '../primitives/Badge';
@@ -35,8 +36,8 @@ export interface NotificationCenterProps extends HtmlProps<HTMLSpanElement, 'tit
 
 /** Bell button with unread count → popover list with unread dots, colour-coded icons, "Mark all read" and a footer link. Put it in the app header, right side. */
 export const NotificationCenter = (props: NotificationCenterProps) => {
-  const merged = mergeProps({ defaultOpen: false, align: 'end' } satisfies Partial<NotificationCenterProps>, props);
-  const [local, rest] = splitProps(merged, [
+  const merged = withDefaults({ defaultOpen: false, align: 'end' } satisfies Partial<NotificationCenterProps>, props);
+  const [local, rest] = partitionProps(merged, [
     'items',
     'onItemClick',
     'onMarkAllRead',
@@ -61,7 +62,7 @@ export const NotificationCenter = (props: NotificationCenterProps) => {
       label={title()}
       bare
       panelClassName={styles.notif}
-      class={local.class}
+      class={local.class == null ? undefined : cx(local.class)}
       trigger={(triggerProps) => (
         <button
           {...triggerProps}

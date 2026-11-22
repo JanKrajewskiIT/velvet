@@ -1,7 +1,9 @@
-import { Index, type JSX, mergeProps, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { EmptyText } from '../primitives/EmptyText';
 import { Glyph } from '../primitives/Glyph';
 import { Text } from '../primitives/Text';
@@ -58,7 +60,7 @@ export interface EditableCollectionProps {
 
 /** Repeatable editable rows — skills with a level, requirements, checklist. Each row: grip (or ↑↓ on it) · text input · optional level select · optional importance stars · delete. Empty rows are flagged after blur; Add focuses the new row. */
 export const EditableCollection = (props: EditableCollectionProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     {
       defaultItems: [],
       weighted: false,
@@ -103,7 +105,7 @@ export const EditableCollection = (props: EditableCollectionProps) => {
         }
       >
         <ol class={styles.editcolPartList} aria-label={p.label ?? translate('velvet.forms.editableCollection.label')}>
-          <Index each={items()}>
+          <For keyed={false} each={items()}>
             {(item, index) => (
               <EditableCollectionRow
                 item={item()}
@@ -120,7 +122,7 @@ export const EditableCollection = (props: EditableCollectionProps) => {
                 maxWeight={p.maxWeight}
               />
             )}
-          </Index>
+          </For>
         </ol>
       </Show>
       <Show when={rows.canAdd()}>

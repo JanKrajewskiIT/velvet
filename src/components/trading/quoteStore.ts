@@ -1,5 +1,3 @@
-import { batch } from 'solid-js';
-
 import { reportAsyncError } from '../../utils/reportAsyncError';
 
 export interface QuoteStore {
@@ -20,22 +18,20 @@ export const createQuoteStore = (initial: Readonly<Record<string, number>> = {})
   const update = (entries: ReadonlyArray<readonly [string, number]>) => {
     entries.forEach(([symbol, value]) => checkQuote(symbol, value));
     const changed = entries.filter(([symbol, value]) => !Object.is(values.get(symbol), value));
-    batch(() => {
-      for (const [symbol, value] of changed) values.set(symbol, value);
-      for (const [symbol, value] of changed) {
-        const group = listeners.get(symbol);
-        if (!group) continue;
-        for (const listener of [...group]) {
-          if (!Object.is(values.get(symbol), value)) break;
-          if (!group.has(listener)) continue;
-          try {
-            listener(value);
-          } catch (error) {
-            reportAsyncError(error);
-          }
+    for (const [symbol, value] of changed) values.set(symbol, value);
+    for (const [symbol, value] of changed) {
+      const group = listeners.get(symbol);
+      if (!group) continue;
+      for (const listener of [...group]) {
+        if (!Object.is(values.get(symbol), value)) break;
+        if (!group.has(listener)) continue;
+        try {
+          listener(value);
+        } catch (error) {
+          reportAsyncError(error);
         }
       }
-    });
+    }
   };
   const setMany = (next: Readonly<Record<string, number>>) => update(Object.entries(next));
   setMany(initial);

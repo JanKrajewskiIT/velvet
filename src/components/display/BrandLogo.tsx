@@ -1,7 +1,9 @@
-import { For, type JSX, mergeProps, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { For, Show } from 'solid-js';
 
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import styles from './BrandLogo.module.css';
 import { Q_MARK, Q_WORD } from './quantcoreLogoPaths';
 import { R_MARK, R_WORD } from './recronLogoPaths';
@@ -42,7 +44,7 @@ export interface BrandLogoProps {
 
 /** Brand signet and wordmark for Recron, QuantCore or Velvet UI. */
 export const BrandLogo = (props: BrandLogoProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     { brand: 'velvet', variant: 'lockup', tone: 'default', size: 'md', glow: true } satisfies BrandLogoProps,
     props,
   );

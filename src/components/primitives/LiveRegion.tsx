@@ -1,6 +1,7 @@
-import { createEffect, createSignal, mergeProps, onCleanup } from 'solid-js';
+import { createEffect, createSignal } from 'solid-js';
 
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import styles from './LiveRegion.module.css';
 import { Text } from './Text';
 
@@ -20,22 +21,26 @@ export interface LiveRegionProps {
 
 /** Announces dynamic changes ("3 results", "Saved") to screen readers. Mount it once, then change `message`. */
 export const LiveRegion = (props: LiveRegionProps) => {
-  const p = mergeProps({ politeness: 'polite', clearAfter: 5000 } satisfies LiveRegionProps, props);
+  const p = withDefaults({ politeness: 'polite', clearAfter: 5000 } satisfies LiveRegionProps, props);
   const [shown, setShown] = createSignal('');
 
-  createEffect(() => {
-    const message = p.message;
-    const text = typeof message === 'object' ? message.text : message;
-    setShown('');
-    if (!text) return;
-    // Clearing first, then writing after a tick, makes screen readers announce a repeated message again.
-    const show = setTimeout(() => setShown(text), LIVE_REGION_DELAY_MS);
-    const clear = p.clearAfter ? setTimeout(() => setShown(''), p.clearAfter + LIVE_REGION_DELAY_MS) : undefined;
-    onCleanup(() => {
-      clearTimeout(show);
-      clearTimeout(clear);
-    });
-  });
+  createEffect(
+    () => {
+      const message = p.message;
+      return { text: typeof message === 'object' ? message.text : message, clearAfter: p.clearAfter };
+    },
+    ({ text, clearAfter }) => {
+      setShown('');
+      if (!text) return;
+      // Clearing first, then writing after a tick, makes screen readers announce a repeated message again.
+      const show = setTimeout(() => setShown(text), LIVE_REGION_DELAY_MS);
+      const clear = clearAfter ? setTimeout(() => setShown(''), clearAfter + LIVE_REGION_DELAY_MS) : undefined;
+      return () => {
+        clearTimeout(show);
+        clearTimeout(clear);
+      };
+    },
+  );
 
   return (
     <Text

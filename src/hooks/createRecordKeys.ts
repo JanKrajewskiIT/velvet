@@ -27,8 +27,11 @@ export const createRecordKeys = <T>(
     });
     return { keys, indices, duplicated };
   });
-  createEffect(() => {
-    if (data().duplicated) console.warn(`${name}: duplicate record keys; provide unique keys to preserve identity.`);
-  });
+  createEffect(
+    () => data().duplicated,
+    (duplicated) => {
+      if (duplicated) console.warn(`${name}: duplicate record keys; provide unique keys to preserve identity.`);
+    },
+  );
   return { keys: (): readonly RowKey[] => data().keys, indexOf: (key: RowKey) => data().indices.get(key) ?? -1 };
 };

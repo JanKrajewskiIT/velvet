@@ -1,8 +1,10 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { createMemo, For, type JSX, mergeProps, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createMemo, For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Delta } from '../data/Delta';
 import { Badge } from '../primitives/Badge';
 import { Dot } from '../primitives/Dot';
@@ -42,7 +44,7 @@ export interface InstrumentHeaderProps {
 }
 
 export const InstrumentHeader = (props: InstrumentHeaderProps) => {
-  const p = mergeProps({ digits: DEFAULT_PRICE_DIGITS, hidden: false }, props);
+  const p = withDefaults({ digits: DEFAULT_PRICE_DIGITS, hidden: false }, props);
   const i18n = useI18n();
   const translate = useTranslate();
   const key = () => p.quoteKey ?? (typeof p.symbol === 'string' ? p.symbol : undefined);

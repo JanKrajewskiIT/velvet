@@ -1,7 +1,9 @@
-import { createMemo, createSignal, For, type JSX } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createMemo, createSignal, For } from 'solid-js';
 
 import { createFrameFocus } from '../../hooks/createFrameFocus';
 import { activeItemKey } from '../../utils/activeItem';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { createTypeahead } from '../../utils/createTypeahead';
 import { cx } from '../../utils/cx';
 import { typographyClass } from '../primitives/typography';
@@ -81,8 +83,8 @@ export const DateTimeSlots = (props: DateTimeSlotsProps) => {
             type="button"
             role="option"
             data-time={minutes}
-            tabIndex={minutes === active() ? 0 : -1}
-            aria-selected={minutes === props.value}
+            tabindex={minutes === active() ? 0 : -1}
+            aria-selected={booleanAttribute(minutes === props.value)}
             data-near={
               props.value !== null && minutes <= props.value && props.value < minutes + props.step ? 'true' : undefined
             }

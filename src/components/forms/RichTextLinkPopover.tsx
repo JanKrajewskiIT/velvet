@@ -1,9 +1,10 @@
 import type { I18nKey } from '@jankrajewskiit/i18n';
-import { createSignal, onMount, Show } from 'solid-js';
+import { createSignal, onSettled, Show } from 'solid-js';
 
 import { createDismiss } from '../../hooks/createDismiss';
 import { createFloating } from '../../hooks/createFloating';
 import { createFrameFocus } from '../../hooks/createFrameFocus';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { classSelector } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { Button } from '../actions/Button';
@@ -63,7 +64,9 @@ export const RichTextLinkPopover = (props: RichTextLinkPopoverProps) => {
     { refocus: false },
   );
   const focusInput = createFrameFocus(root);
-  onMount(() => focusInput('input'));
+  onSettled(() => {
+    focusInput('input');
+  });
 
   return (
     <div
@@ -82,7 +85,7 @@ export const RichTextLinkPopover = (props: RichTextLinkPopoverProps) => {
             value={props.href}
             placeholder={props.labels.placeholder}
             aria-label={props.labels.address}
-            aria-invalid={!!props.error || undefined}
+            aria-invalid={booleanAttribute(!!props.error || undefined)}
             onInput={(event) => props.onHrefChange(event.currentTarget.value)}
             onKeyDown={(event) => {
               if (event.key !== 'Enter') return;

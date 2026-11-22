@@ -1,8 +1,10 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { children, createUniqueId, For, type JSX, mergeProps, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { children, createUniqueId, For, Show } from 'solid-js';
 
 import { cx } from '../../utils/cx';
 import { clamp } from '../../utils/math';
+import { withDefaults } from '../../utils/props';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
 import styles from './Gauge.module.css';
@@ -53,7 +55,7 @@ const toneColor = (tone: string): string => (tone in GAUGE_TONE ? GAUGE_TONE[ton
 
 /** Half-circle meter for one value against a range — utilisation, score, SLA, quota. `role="meter"`. Thresholds recolour the arc once the value passes them and draw a notch on the track; the numeric value is always shown. */
 export const Gauge = (props: GaugeProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     { min: 0, max: 100, tone: 'brand', size: 'md', showBounds: true } satisfies Partial<GaugeProps>,
     props,
   );

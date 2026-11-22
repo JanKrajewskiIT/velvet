@@ -1,10 +1,13 @@
-import { createMemo, For, type JSX, mergeProps, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createMemo, For, merge, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { createRecordKeys } from '../../hooks/createRecordKeys';
 import { createRowIdentity } from '../../hooks/createRowIdentity';
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { typographyClass } from '../primitives/typography';
 import { createTableExpansion } from './createTableExpansion';
 import { createTableKeyboard } from './createTableKeyboard';
@@ -32,7 +35,7 @@ const isAddRowOptions = (value: TableAddRowOptions | JSX.Element): value is Tabl
 
 /** Data table: toolbar (title · count · actions), sort, row selection (Shift-click selects a range) with bulk-action bar, drag-to-resize columns, expandable detail rows, sticky header, keyboard (↑↓ move · Space select · →/← expand · ⌘A all · Esc clear), skeleton loading, empty state. Framed on its own; borderless inside `<Card padding="none">`. */
 export const Table = <T extends object>(props: TableProps<T>): JSX.Element => {
-  const p = mergeProps(
+  const p = withDefaults(
     {
       rowKey: 'id',
       selectable: false,
@@ -48,7 +51,7 @@ export const Table = <T extends object>(props: TableProps<T>): JSX.Element => {
     defaultValue: p.defaultSelected ?? [...NO_SELECTION],
     onChange: (keys) => p.onSelectedChange?.(keys),
   });
-  const config = mergeProps(p, {
+  const config = merge(p, {
     get selected() {
       return selected();
     },
@@ -141,7 +144,7 @@ export const Table = <T extends object>(props: TableProps<T>): JSX.Element => {
             p.layout === 'fixed' && styles.tableVariantLayoutFixed,
             pins.hasPins() && styles.tableVariantPins,
           )}
-          aria-busy={p.loading || undefined}
+          aria-busy={booleanAttribute(p.loading || undefined)}
         >
           <thead
             ref={(element) => {
@@ -162,7 +165,7 @@ export const Table = <T extends object>(props: TableProps<T>): JSX.Element => {
               <For each={sort.sorted()}>{(row, i) => <TableRow table={table} row={row} index={i()} />}</For>
               <Show when={p.rows.length === 0}>
                 <tr class={styles.row}>
-                  <td class={styles.tablePartEmpty} colSpan={span()}>
+                  <td class={styles.tablePartEmpty} colspan={span()}>
                     {empty()}
                   </td>
                 </tr>

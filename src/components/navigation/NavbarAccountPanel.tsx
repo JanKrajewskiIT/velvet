@@ -4,6 +4,7 @@ import { createDismiss } from '../../hooks/createDismiss';
 import { createFloating } from '../../hooks/createFloating';
 import { createFrameFocus } from '../../hooks/createFrameFocus';
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { classSelector } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { Avatar } from '../primitives/Avatar';
@@ -49,7 +50,7 @@ export const NavbarAccountPanel = (props: NavbarAccountPanelProps) => {
         type="button"
         class={styles.acctPartTrigger}
         aria-haspopup="dialog"
-        aria-expanded={open()}
+        aria-expanded={booleanAttribute(open())}
         aria-controls={id}
         aria-label={props.accessibleName}
         title={props.name}
@@ -71,7 +72,7 @@ export const NavbarAccountPanel = (props: NavbarAccountPanelProps) => {
           id={id}
           ref={floating.ref}
           role="dialog"
-          tabIndex={-1}
+          tabindex={-1}
           aria-label={props.label}
           class={cx(styles.acctPartPanel, typographyClass('body'))}
           style={floating.style()}

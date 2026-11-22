@@ -1,7 +1,10 @@
-import { type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { Show } from 'solid-js';
 
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { callHandler } from '../../utils/callHandler';
 import { cx } from '../../utils/cx';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { Spinner } from '../feedback/Spinner';
 import { renderIcon } from '../primitives/Glyph';
 import styles from './Button.module.css';
@@ -26,8 +29,8 @@ export interface ButtonProps extends JSX.ButtonHTMLAttributes<HTMLButtonElement>
 
 /** Primary action trigger. One primary per view; secondary/ghost for the rest. */
 export const Button = (props: ButtonProps) => {
-  const merged = mergeProps({ variant: 'primary', type: 'button' } satisfies ButtonProps, props);
-  const [local, rest] = splitProps(merged, [
+  const merged = withDefaults({ variant: 'primary', type: 'button' } satisfies ButtonProps, props);
+  const [local, rest] = partitionProps(merged, [
     'variant',
     'size',
     'iconLeft',
@@ -43,8 +46,7 @@ export const Button = (props: ButtonProps) => {
     'children',
   ]);
   const groupSize = useButtonGroupSize();
-  const blocked = () =>
-    local.disabled || local.loading || local['aria-disabled'] === true || local['aria-disabled'] === 'true';
+  const blocked = () => local.disabled || local.loading || local['aria-disabled'] === 'true';
   const click: JSX.EventHandler<HTMLButtonElement, MouseEvent> = (event) => {
     if (blocked()) {
       event.preventDefault();
@@ -73,8 +75,8 @@ export const Button = (props: ButtonProps) => {
         local.class,
       )}
       disabled={local.disabled}
-      aria-disabled={local.loading || local['aria-disabled']}
-      aria-busy={local.loading || rest['aria-busy']}
+      aria-disabled={booleanAttribute(local.loading || local['aria-disabled'])}
+      aria-busy={booleanAttribute(local.loading || rest['aria-busy'])}
       onClick={click}
       onKeyDown={(event) => keyboard(event, local.onKeyDown)}
       onKeyUp={(event) => keyboard(event, local.onKeyUp)}

@@ -2,6 +2,7 @@ import { createMemo, createSignal, For, Show } from 'solid-js';
 
 import { isTopLayer } from '../../hooks/createLayer';
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { IconButton } from '../actions/IconButton';
 import { Text } from '../primitives/Text';
@@ -59,7 +60,7 @@ export const LightboxPanel = (props: LightboxPanelProps) => {
           shape="circle"
           icon="zoom-in"
           label={zoom() ? translate('velvet.media.lightbox.zoomOut') : translate('velvet.media.lightbox.zoomIn')}
-          aria-pressed={zoom()}
+          aria-pressed={booleanAttribute(zoom())}
           onClick={() => setZoom(!zoom())}
         />
         <IconButton
@@ -114,7 +115,7 @@ export const LightboxPanel = (props: LightboxPanelProps) => {
               <button
                 type="button"
                 aria-label={translate('velvet.media.lightbox.thumb', { index: k() + 1 })}
-                aria-current={k() === props.index ? true : undefined}
+                aria-current={k() === props.index ? 'true' : undefined}
                 class={cx(styles.lightboxPartThumb, k() === props.index && styles.lightboxPartThumbVariantOn)}
                 onClick={() => go(k())}
               >

@@ -1,10 +1,13 @@
 import type { I18nKey } from '@jankrajewskiit/i18n';
-import { children as resolveChildren, For, type JSX, mergeProps, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { children as resolveChildren, For, Show } from 'solid-js';
 
 import { type CopyStatus, createCopyFeedback } from '../../hooks/createCopyFeedback';
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { reportAsyncError } from '../../utils/reportAsyncError';
 import { IconButton } from '../actions/IconButton';
 import { Avatar } from '../primitives/Avatar';
@@ -66,7 +69,7 @@ const COPY_LABEL_KEYS: Record<CopyStatus, I18nKey> = {
 
 /** One turn in an AI / support conversation: user bubble, assistant text with tools, or a centred system note. */
 export const ChatMessage = (props: ChatMessageProps) => {
-  const p = mergeProps({ role: 'assistant', streaming: false } satisfies ChatMessageProps, props);
+  const p = withDefaults({ role: 'assistant', streaming: false } satisfies ChatMessageProps, props);
   const translate = useTranslate();
   const rich = resolveChildren(() => p.children);
   const { status: copyStatus, busy: copyBusy, copy: copyText } = createCopyFeedback(COPY_FEEDBACK_MS);
@@ -211,7 +214,7 @@ export const ChatMessage = (props: ChatMessageProps) => {
                 variant="ghost"
                 onClick={() => void copy().catch(reportAsyncError)}
                 disabled={copyBusy()}
-                aria-busy={copyBusy() || undefined}
+                aria-busy={booleanAttribute(copyBusy() || undefined)}
               />
               <Show when={p.onRetry}>
                 <IconButton
@@ -228,7 +231,7 @@ export const ChatMessage = (props: ChatMessageProps) => {
                   class={cx(styles.chatmsgPartTool, p.feedback === 'up' && styles.chatmsgPartToolVariantOn)}
                   icon="thumbs-up"
                   label={translate('velvet.patterns.chatMessage.goodResponse')}
-                  aria-pressed={p.feedback === 'up'}
+                  aria-pressed={booleanAttribute(p.feedback === 'up')}
                   size="xs"
                   variant="ghost"
                   onClick={() => vote('up')}
@@ -241,7 +244,7 @@ export const ChatMessage = (props: ChatMessageProps) => {
                   )}
                   icon="thumbs-up"
                   label={translate('velvet.patterns.chatMessage.badResponse')}
-                  aria-pressed={p.feedback === 'down'}
+                  aria-pressed={booleanAttribute(p.feedback === 'down')}
                   size="xs"
                   variant="ghost"
                   onClick={() => vote('down')}

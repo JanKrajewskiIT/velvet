@@ -1,6 +1,7 @@
 import { For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
 import { typographyClass } from '../primitives/typography';
@@ -43,7 +44,7 @@ export const TimelineActions = (props: TimelineActionsProps) => {
                   : action.label
               }
               disabled={action.disabled}
-              aria-expanded={action.confirm ? props.confirmingId === action.id : undefined}
+              aria-expanded={action.confirm ? booleanAttribute(props.confirmingId === action.id) : undefined}
               onClick={() => props.onActivate(action)}
             >
               <Show when={action.icon} fallback={action.label}>

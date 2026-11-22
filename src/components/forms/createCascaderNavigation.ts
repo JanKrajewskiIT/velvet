@@ -1,4 +1,4 @@
-import { type Accessor, batch, createMemo, createSignal } from 'solid-js';
+import { type Accessor, createMemo, createSignal } from 'solid-js';
 
 import type { CascaderActivation } from './CascaderColumns';
 import { type CascaderNode, hasChildren, pathTo } from './cascaderPaths';
@@ -38,16 +38,12 @@ export const createCascaderNavigation = (options: CascaderNavigationOptions): Ca
 
   const reset = (pickedIds: readonly string[]) => {
     const first = options.data()[0]?.id;
-    batch(() => {
-      setTrail(pickedIds.length ? [...pickedIds] : first ? [first] : []);
-      setColumn(Math.max(0, pickedIds.length - 1));
-    });
+    setTrail(pickedIds.length ? [...pickedIds] : first ? [first] : []);
+    setColumn(Math.max(0, pickedIds.length - 1));
   };
   const activate = (level: number, node: CascaderNode, via: CascaderActivation) => {
-    batch(() => {
-      setTrail([...trail().slice(0, level), node.id]);
-      setColumn(level);
-    });
+    setTrail([...trail().slice(0, level), node.id]);
+    setColumn(level);
     const path = pathTo(options.data(), node.id);
     if (!path || via !== 'click') return;
     if (!hasChildren(node)) options.commitAndClose(path);
@@ -71,10 +67,8 @@ export const createCascaderNavigation = (options: CascaderNavigationOptions): Ca
       const child = parent.children?.[0];
       if (!child) return;
       e.preventDefault();
-      batch(() => {
-        setTrail([...trail().slice(0, column() + 1), child.id]);
-        setColumn(column() + 1);
-      });
+      setTrail([...trail().slice(0, column() + 1), child.id]);
+      setColumn(column() + 1);
     };
     switch (e.key) {
       case 'ArrowDown':
@@ -89,10 +83,8 @@ export const createCascaderNavigation = (options: CascaderNavigationOptions): Ca
       case 'ArrowLeft':
         if (column() > 0) {
           e.preventDefault();
-          batch(() => {
-            setTrail(trail().slice(0, column()));
-            setColumn(column() - 1);
-          });
+          setTrail(trail().slice(0, column()));
+          setColumn(column() - 1);
         }
         break;
       case 'Enter': {

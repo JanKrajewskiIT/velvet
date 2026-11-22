@@ -1,7 +1,8 @@
-import { type JSX, mergeProps, splitProps } from 'solid-js';
+import { type JSX } from '@solidjs/web';
 
 import { cx } from '../../utils/cx';
 import { type ElementTag, type HtmlProps, Polymorphic } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import styles from './Columns.module.css';
 import { spaceValue } from './space';
 
@@ -19,8 +20,8 @@ export interface ColumnsProps extends HtmlProps<HTMLElement> {
 
 /** Wrapping row of weighted Column children. */
 export const Columns = (props: ColumnsProps) => {
-  const merged = mergeProps({ as: 'div', gap: DEFAULT_GAP, align: DEFAULT_ALIGN } satisfies ColumnsProps, props);
-  const [local, rest] = splitProps(merged, ['as', 'gap', 'align', 'class', 'style']);
+  const merged = withDefaults({ as: 'div', gap: DEFAULT_GAP, align: DEFAULT_ALIGN } satisfies ColumnsProps, props);
+  const [local, rest] = partitionProps(merged, ['as', 'gap', 'align', 'class', 'style']);
   return (
     <Polymorphic
       {...rest}

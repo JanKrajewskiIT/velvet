@@ -1,4 +1,5 @@
-import { createEffect, createMemo, createSignal, createUniqueId, For, type JSX, mergeProps, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, createMemo, createSignal, createUniqueId, For, Show } from 'solid-js';
 
 import { createActiveOptionScroll } from '../../hooks/createActiveOptionScroll';
 import { createControllable } from '../../hooks/createControllable';
@@ -6,9 +7,11 @@ import { createDismiss } from '../../hooks/createDismiss';
 import { createFloating } from '../../hooks/createFloating';
 import { useTranslate } from '../../i18n/useTranslate';
 import { activeItemKey } from '../../utils/activeItem';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { createTypeahead } from '../../utils/createTypeahead';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Chevron } from '../primitives/Chevron';
 import { Field } from '../primitives/Field';
 import type { FieldErrorAnnouncementProps } from '../primitives/fieldErrorAnnouncement';
@@ -67,7 +70,7 @@ export interface SelectProps extends FormControlProps, FieldErrorAnnouncementPro
 
 /** Custom listbox select (WAI-ARIA select-only combobox). ↑ ↓ Home End Enter Space Esc and type-ahead; the list flips upward near the viewport bottom and is not clipped by scrolling ancestors. */
 export const Select = (props: SelectProps) => {
-  const p = mergeProps({ options: NO_OPTIONS, size: 'md', defaultValue: '' } satisfies SelectProps, props);
+  const p = withDefaults({ options: NO_OPTIONS, size: 'md', defaultValue: '' } satisfies SelectProps, props);
   const translate = useTranslate();
   const validation = createFormValidation();
   const autoId = createUniqueId();
@@ -104,9 +107,12 @@ export const Select = (props: SelectProps) => {
 
   createDismiss(open, () => setOpen(false), root);
   const floating = createFloating(open, root, { matchWidth: true });
-  createEffect(() => {
-    if (p.disabled) setOpen(false);
-  });
+  createEffect(
+    () => p.disabled,
+    (disabled) => {
+      if (disabled) setOpen(false);
+    },
+  );
 
   const openList = () => {
     if (p.disabled) return;
@@ -204,13 +210,13 @@ export const Select = (props: SelectProps) => {
             role="combobox"
             aria-label={p['aria-label']}
             aria-labelledby={p['aria-labelledby']}
-            aria-required={p.required || undefined}
+            aria-required={booleanAttribute(p.required || undefined)}
             aria-haspopup="listbox"
-            aria-expanded={open()}
+            aria-expanded={booleanAttribute(open())}
             aria-controls={listId()}
             aria-activedescendant={open() && active() >= 0 ? optionId(active()) : undefined}
             aria-describedby={validation.describedBy(control.describedBy)}
-            aria-invalid={control.invalid || validation.invalid() || undefined}
+            aria-invalid={booleanAttribute(control.invalid || validation.invalid() || undefined)}
             class={cx(
               typographyClass(p.size === 'sm' ? 'body-sm' : 'body'),
               styles.control,

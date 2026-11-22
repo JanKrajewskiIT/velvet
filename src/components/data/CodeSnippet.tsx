@@ -1,10 +1,12 @@
 import type { I18nKey } from '@jankrajewskiit/i18n';
-import { createMemo, createSignal, createUniqueId, For, mergeProps, Show } from 'solid-js';
+import { createMemo, createSignal, createUniqueId, For, Show } from 'solid-js';
 
 import { type CopyStatus, createCopyFeedback } from '../../hooks/createCopyFeedback';
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Glyph } from '../primitives/Glyph';
 import { Text } from '../primitives/Text';
@@ -56,7 +58,7 @@ export interface CodeSnippetProps {
 
 /** Code block with lightweight highlighting (js/jsx/ts/html/css/bash), line numbers, copy button (announced), optional language tabs. Always dark, in both themes. */
 export const CodeSnippet = (props: CodeSnippetProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     {
       code: '',
       language: 'jsx',
@@ -126,9 +128,9 @@ export const CodeSnippet = (props: CodeSnippetProps) => {
                   type="button"
                   role="tab"
                   id={`${baseId}-t${index()}`}
-                  aria-selected={index() === activeTabIndex()}
+                  aria-selected={booleanAttribute(index() === activeTabIndex())}
                   aria-controls={`${baseId}-panel`}
-                  tabIndex={index() === activeTabIndex() ? 0 : -1}
+                  tabindex={index() === activeTabIndex() ? 0 : -1}
                   class={cx(
                     typographyClass('kbd'),
                     styles.codePartTab,
@@ -152,7 +154,7 @@ export const CodeSnippet = (props: CodeSnippetProps) => {
           )}
           onClick={() => void copy(current().code).catch(reportAsyncError)}
           disabled={copyBusy()}
-          aria-busy={copyBusy() || undefined}
+          aria-busy={booleanAttribute(copyBusy() || undefined)}
           aria-label={copyStatus() === 'idle' ? translate('velvet.data.codeSnippet.copyCode') : copyLabel()}
         >
           <Glyph name={copyStatus() === 'copied' ? 'check' : 'copy'} />
@@ -171,7 +173,7 @@ export const CodeSnippet = (props: CodeSnippetProps) => {
         id={`${baseId}-panel`}
         class={cx(styles.codePartPre, merged.wrap && styles.codePartPreVariantWrap)}
         style={{ 'max-height': cssLength(merged.maxHeight) }}
-        tabIndex={0}
+        tabindex={0}
         role={hasTabs() ? 'tabpanel' : 'region'}
         aria-label={hasTabs() ? undefined : snippetLabel()}
         aria-labelledby={hasTabs() ? `${baseId}-t${activeTabIndex()}` : undefined}

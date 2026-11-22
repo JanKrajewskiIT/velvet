@@ -1,7 +1,8 @@
-import { createMemo, For, mergeProps, Show } from 'solid-js';
+import { createMemo, For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Button } from '../actions/Button';
 import { Avatar } from '../primitives/Avatar';
 import { CloseButton } from '../primitives/CloseButton';
@@ -32,7 +33,7 @@ export interface ComparisonBarProps {
 
 /** Selection tray for "pick 2–4 things, then compare" (candidates, offers, plans). Slides up from the bottom when something is selected (floating) or sits inline. Shows removable chips, empty slots up to `min`, a live hint and Compare — disabled outside min…max. */
 export const ComparisonBar = (props: ComparisonBarProps) => {
-  const merged = mergeProps({ min: 2, max: 4, floating: true } satisfies Partial<ComparisonBarProps>, props);
+  const merged = withDefaults({ min: 2, max: 4, floating: true } satisfies Partial<ComparisonBarProps>, props);
   const translate = useTranslate();
   const compareLabel = () => merged.compareLabel ?? translate('velvet.charts.comparisonBar.compareLabel');
 
@@ -69,7 +70,7 @@ export const ComparisonBar = (props: ComparisonBarProps) => {
       )}
       role="region"
       aria-label={translate('velvet.charts.comparisonBar.regionLabel')}
-      aria-hidden={shown() ? undefined : true}
+      aria-hidden={shown() ? undefined : 'true'}
     >
       <div class={styles.cmpbarPartItems}>
         <For each={merged.items}>
@@ -87,7 +88,7 @@ export const ComparisonBar = (props: ComparisonBarProps) => {
                     variant="bare"
                     class={styles.cmpbarPartX}
                     label={translate('velvet.charts.comparisonBar.removeLabel', { label: item.label })}
-                    tabIndex={tabIndex()}
+                    tabindex={tabIndex()}
                     onClick={() => remove()(item.id)}
                   />
                 )}
@@ -115,7 +116,7 @@ export const ComparisonBar = (props: ComparisonBarProps) => {
       <div class={styles.cmpbarPartActs}>
         <Show when={merged.onClear}>
           {(clear) => (
-            <Button variant="ghost" size="sm" tabIndex={tabIndex()} onClick={() => clear()()}>
+            <Button variant="ghost" size="sm" tabindex={tabIndex()} onClick={() => clear()()}>
               {translate('velvet.common.clear')}
             </Button>
           )}
@@ -124,7 +125,7 @@ export const ComparisonBar = (props: ComparisonBarProps) => {
           size="sm"
           iconLeft="bar-chart"
           disabled={!ready()}
-          tabIndex={tabIndex()}
+          tabindex={tabIndex()}
           onClick={() => merged.onCompare?.()}
         >
           {compareText()}

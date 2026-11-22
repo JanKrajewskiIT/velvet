@@ -1,9 +1,11 @@
-import { type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { Show } from 'solid-js';
 
 import { callHandler } from '../../utils/callHandler';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { type HtmlProps, Polymorphic } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import styles from './ListItem.module.css';
 import { Text } from './Text';
 import type { TextVariant } from './typography';
@@ -45,8 +47,8 @@ const isPresent = (slot: JSX.Element): boolean => slot != null && slot !== false
 
 /** One row: leading · title · description · meta · trailing. Interactive when it renders as button / a / label. */
 export const ListItem = (props: ListItemProps) => {
-  const merged = mergeProps({ size: 'md', align: 'center', clamp: 1 } satisfies ListItemProps, props);
-  const [local, rest] = splitProps(merged, [
+  const merged = withDefaults({ size: 'md', align: 'center', clamp: 1 } satisfies ListItemProps, props);
+  const [local, rest] = partitionProps(merged, [
     'as',
     'leading',
     'title',
@@ -65,7 +67,7 @@ export const ListItem = (props: ListItemProps) => {
     'href',
     'onClick',
     'onKeyDown',
-    'tabIndex',
+    'tabindex',
     'class',
     'children',
   ]);
@@ -106,10 +108,10 @@ export const ListItem = (props: ListItemProps) => {
       href={local.disabled ? undefined : local.href}
       type={tag() === 'button' ? 'button' : undefined}
       disabled={tag() === 'button' ? local.disabled : undefined}
-      aria-disabled={tag() !== 'button' && local.disabled ? true : rest['aria-disabled']}
+      aria-disabled={tag() !== 'button' && local.disabled ? 'true' : rest['aria-disabled']}
       aria-current={local.selected && tag() !== 'label' ? 'true' : rest['aria-current']}
       role={rest.role ?? (nested() ? 'button' : undefined)}
-      tabIndex={local.disabled && isAction() ? -1 : (local.tabIndex ?? (nested() ? 0 : undefined))}
+      tabindex={local.disabled && isAction() ? -1 : (local.tabindex ?? (nested() ? 0 : undefined))}
       onKeyDown={onKeyDown}
       onClick={onClick}
     >

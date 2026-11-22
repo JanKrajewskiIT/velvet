@@ -1,8 +1,9 @@
-import { mergeProps, Show, splitProps } from 'solid-js';
+import { Show } from 'solid-js';
 
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import styles from './Separator.module.css';
 
 const SEP_CLASSES = {
@@ -24,8 +25,8 @@ export interface SeparatorProps extends HtmlProps<HTMLSpanElement> {
 
 /** Inline separator between siblings in a row. For block-level section breaks use Divider. */
 export const Separator = (props: SeparatorProps) => {
-  const merged = mergeProps({ variant: 'line', orientation: 'vertical' } satisfies SeparatorProps, props);
-  const [local, rest] = splitProps(merged, ['variant', 'orientation', 'semantic', 'class', 'children']);
+  const merged = withDefaults({ variant: 'line', orientation: 'vertical' } satisfies SeparatorProps, props);
+  const [local, rest] = partitionProps(merged, ['variant', 'orientation', 'semantic', 'class', 'children']);
   return (
     <span
       class={cx(
@@ -36,7 +37,7 @@ export const Separator = (props: SeparatorProps) => {
       )}
       role={local.semantic ? 'separator' : undefined}
       aria-orientation={local.semantic ? local.orientation : undefined}
-      aria-hidden={local.semantic ? undefined : true}
+      aria-hidden={local.semantic ? undefined : 'true'}
       {...rest}
     >
       <Show when={local.variant === 'text'}>{local.children ?? '/'}</Show>

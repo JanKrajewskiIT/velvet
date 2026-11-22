@@ -1,4 +1,4 @@
-import { type Accessor, createEffect, createUniqueId, getOwner, onCleanup, onMount } from 'solid-js';
+import { type Accessor, createEffect, createUniqueId, getOwner, onSettled } from 'solid-js';
 
 import { createMarqueeSnapshot } from './marqueeSnapshot';
 
@@ -10,29 +10,29 @@ export const createMarqueeCopy = (
 ): void => {
   if (!getOwner()) throw new Error('createMarqueeCopy requires a Solid owner.');
   const snapshot = createMarqueeSnapshot(createUniqueId());
-  onMount(() => {
+  let schedule: (() => void) | undefined;
+  createEffect(version, () => schedule?.(), { defer: true });
+  onSettled(() => {
     const original = source();
     const copy = target();
     let frame = 0;
     const sync = () => snapshot(original, copy);
     sync();
-    const schedule = () => {
+    const requestSnapshot = () => {
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(sync);
     };
-    const observer = new MutationObserver(schedule);
+    schedule = requestSnapshot;
+    const observer = new MutationObserver(requestSnapshot);
     observer.observe(original, { attributes: true, childList: true, characterData: true, subtree: true });
-    original.addEventListener('input', schedule);
-    original.addEventListener('change', schedule);
-    createEffect(() => {
-      version();
-      schedule();
-    });
-    onCleanup(() => {
+    original.addEventListener('input', requestSnapshot);
+    original.addEventListener('change', requestSnapshot);
+    return () => {
+      schedule = undefined;
       observer.disconnect();
       cancelAnimationFrame(frame);
-      original.removeEventListener('input', schedule);
-      original.removeEventListener('change', schedule);
-    });
+      original.removeEventListener('input', requestSnapshot);
+      original.removeEventListener('change', requestSnapshot);
+    };
   });
 };

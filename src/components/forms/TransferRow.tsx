@@ -1,5 +1,7 @@
-import { type JSX, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { Show } from 'solid-js';
 
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { Checkmark } from '../primitives/Checkmark';
 import { Glyph } from '../primitives/Glyph';
@@ -43,16 +45,16 @@ export const TransferRow = (props: TransferRowProps) => {
       <li
         data-k={props.index}
         role="option"
-        aria-selected={selected()}
-        aria-disabled={props.item.disabled || undefined}
-        tabIndex={props.index === props.selection.focus() ? 0 : -1}
+        aria-selected={booleanAttribute(selected())}
+        aria-disabled={booleanAttribute(props.item.disabled || undefined)}
+        tabindex={props.index === props.selection.focus() ? 0 : -1}
         class={cx(
           styles.xferPartItem,
           selected() && styles.xferPartItemVariantOn,
           props.item.disabled && styles.xferPartItemVariantDisabled,
           props.drag.dropsBefore(props.item.value) && styles.xferPartItemVariantBefore,
         )}
-        draggable={!props.item.disabled}
+        draggable={booleanAttribute(!props.item.disabled)}
         onDragStart={(e) => props.drag.onDragStart(e, props.item)}
         onDragOver={(e) => props.orderable && props.drag.onDragOver(e, { before: props.item.value })}
         onDrop={(e) => props.orderable && props.drag.onDrop(e, props.item.value)}

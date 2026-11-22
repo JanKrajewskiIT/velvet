@@ -1,9 +1,11 @@
-import { children, createMemo, type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { children, createMemo, Show } from 'solid-js';
 
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { clamp } from '../../utils/math';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { Text } from '../primitives/Text';
 import type { ProgressTone } from './Progress';
 import styles from './ProgressRing.module.css';
@@ -40,7 +42,7 @@ const VALUE_FONT_RATIO = 0.24;
 
 /** Circular progress with centred percentage. */
 export const ProgressRing = (props: ProgressRingProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     {
       value: 0,
       max: 100,
@@ -52,7 +54,7 @@ export const ProgressRing = (props: ProgressRingProps) => {
     } satisfies ProgressRingProps,
     props,
   );
-  const [local, rest] = splitProps(merged, [
+  const [local, rest] = partitionProps(merged, [
     'value',
     'max',
     'size',

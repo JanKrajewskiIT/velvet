@@ -1,8 +1,10 @@
-import { mergeProps, Show, splitProps } from 'solid-js';
+import { Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { VisuallyHidden } from '../primitives/VisuallyHidden';
 import { Loader, type LoaderVariant } from './Loader';
 import styles from './PageLoader.module.css';
@@ -20,16 +22,16 @@ export interface PageLoaderProps extends HtmlProps<HTMLDivElement> {
 
 /** Page veil with a centred Loader. */
 export const PageLoader = (props: PageLoaderProps) => {
-  const merged = mergeProps({ fullScreen: true, variant: 'ripple-dots' } satisfies PageLoaderProps, props);
-  const [local, rest] = splitProps(merged, ['fullScreen', 'variant', 'label', 'decorative', 'class']);
+  const merged = withDefaults({ fullScreen: true, variant: 'ripple-dots' } satisfies PageLoaderProps, props);
+  const [local, rest] = partitionProps(merged, ['fullScreen', 'variant', 'label', 'decorative', 'class']);
   const translate = useTranslate();
   return (
     <div
       {...rest}
       role={local.decorative ? undefined : 'status'}
       aria-live={local.decorative ? undefined : 'polite'}
-      aria-atomic={local.decorative ? undefined : true}
-      aria-hidden={local.decorative || rest['aria-hidden']}
+      aria-atomic={local.decorative ? undefined : 'true'}
+      aria-hidden={booleanAttribute(local.decorative || rest['aria-hidden'])}
       class={cx(styles.pageLoader, local.fullScreen && styles.pageLoaderVariantFull, local.class)}
     >
       <Loader variant={local.variant} decorative />

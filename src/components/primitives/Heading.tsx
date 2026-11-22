@@ -1,6 +1,5 @@
-import { splitProps } from 'solid-js';
-
 import { cx } from '../../utils/cx';
+import { partitionProps } from '../../utils/props';
 import styles from './Heading.module.css';
 import { Text, type TextProps } from './Text';
 import { HEADING_ROLES, type HeadingVariant } from './typography';
@@ -17,14 +16,14 @@ const HEADING_LEVELS = {
 export type HeadingLevel = keyof typeof HEADING_LEVELS;
 export type { HeadingVariant } from './typography';
 
-export interface HeadingProps extends Omit<TextProps, 'as' | 'variant' | 'for' | 'dateTime' | 'datetime'> {
+export interface HeadingProps extends Omit<TextProps, 'as' | 'variant' | 'for' | 'datetime'> {
   level: HeadingLevel;
   /** Visual role, independent of the document level. Level 6 defaults to h5. */
   variant?: HeadingVariant;
 }
 
 export const Heading = (props: HeadingProps) => {
-  const [local, rest] = splitProps(props, ['level', 'variant', 'class']);
+  const [local, rest] = partitionProps(props, ['level', 'variant', 'class']);
   return (
     <Text
       {...rest}

@@ -1,4 +1,4 @@
-import { type Accessor, createEffect, createSignal, getOwner, onCleanup } from 'solid-js';
+import { type Accessor, createEffect, createSignal, getOwner } from 'solid-js';
 
 import type { QuoteStore } from './quoteStore';
 
@@ -18,18 +18,17 @@ export const useQuote = (
     return { source, key, value: source && key !== undefined ? source.get(key) : undefined };
   };
   const [snapshot, setSnapshot] = createSignal(read());
-  createEffect(() => {
-    const next = read();
+  createEffect(read, (next) => {
     setSnapshot(next);
     if (!next.source || next.key === undefined) return;
     let active = true;
     const unsubscribe = next.source.subscribe(next.key, (value) => {
       if (active && resolve(store) === next.source && resolve(symbol) === next.key) setSnapshot({ ...next, value });
     });
-    onCleanup(() => {
+    return () => {
       active = false;
       unsubscribe();
-    });
+    };
   });
   return () => {
     const previous = snapshot();

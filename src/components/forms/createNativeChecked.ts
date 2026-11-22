@@ -12,7 +12,7 @@ export const createNativeChecked = (props: NativeCheckedProps) => {
   // The attribute supplies the reset value and server markup. The property also updates dirty controlled inputs.
   return () => {
     const checked = props.checked;
-    if (checked === undefined) return { 'bool:checked': initial };
-    return { 'bool:checked': checked, 'prop:checked': checked };
+    if (checked === undefined) return { defaultChecked: initial };
+    return { defaultChecked: checked, checked };
   };
 };

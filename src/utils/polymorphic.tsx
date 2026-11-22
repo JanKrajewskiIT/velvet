@@ -1,5 +1,5 @@
-import { type JSX, splitProps, type ValidComponent } from 'solid-js';
-import { Dynamic } from 'solid-js/web';
+import { dynamic, type JSX, type ValidComponent } from '@solidjs/web';
+import { isStatic, omit } from 'solid-js';
 
 export type ElementTag = keyof JSX.IntrinsicElements;
 
@@ -14,10 +14,10 @@ type PolymorphicProps = { tag: ElementTag } & JSX.HTMLAttributes<HTMLElement> & 
 
 /**
  * Renders `tag` with the given attributes. The one place that bridges the tag union to
- * `Dynamic`'s per-element prop types, so components can accept an `as` prop without casts.
+ * `dynamic`'s per-element prop types, so components can accept an `as` prop without casts.
  */
 export const Polymorphic = (props: PolymorphicProps): JSX.Element => {
-  const [local, rest] = splitProps(props, ['tag']);
-  const component = (): ValidComponent => local.tag;
-  return <Dynamic component={component()} {...rest} />;
+  const Tag = dynamic((): ValidComponent => props.tag, { static: isStatic(props, 'tag') });
+  const rest = omit(props, 'tag');
+  return <Tag {...rest} />;
 };

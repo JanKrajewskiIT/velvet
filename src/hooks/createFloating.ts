@@ -1,4 +1,5 @@
-import { type Accessor, createEffect, createMemo, createSignal, type JSX, onCleanup } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { type Accessor, createEffect, createMemo, createSignal } from 'solid-js';
 
 import { fixedOrigin, type FloatingAlign, type FloatingSide, placeFloating, type Placement } from '../utils/floating';
 import { isFloatingAnchorVisible } from '../utils/floatingAnchor';
@@ -56,68 +57,68 @@ export const createFloating = (
     setPanel(element);
   };
 
-  createEffect(() => {
-    if (!open() || !panel() || !anchor()) {
-      setPlacement(undefined);
-      return;
-    }
-    const side = preferred();
-    const align = options.align?.() ?? 'start';
-    const openedPanel = panel();
-    if (!openedPanel) return;
-    let frame = 0;
+  createEffect(
+    () =>
+      open() ? { panel: panel(), anchor: anchor(), side: preferred(), align: options.align?.() ?? 'start' } : undefined,
+    (placement) => {
+      if (!placement?.panel || !placement.anchor) {
+        setPlacement(undefined);
+        return;
+      }
+      const { panel: openedPanel, anchor: reference, side, align } = placement;
+      let frame = 0;
 
-    const measure = () => {
-      const element = panel();
-      const reference = anchor();
-      if (!element || !reference || !element.isConnected) return;
-      const dialog = element.closest('dialog[data-vui-modal]');
-      if (dialog && !dialog.hasAttribute('open')) return;
-      if (element.popover === 'manual' && !element.matches(':popover-open')) element.showPopover();
-      const box = reference.getBoundingClientRect();
-      const context = reference instanceof Element ? reference : reference.contextElement;
-      const origin = fixedOrigin(element);
-      const gap = measureFloatingOffset(element, offset);
-      const placed = placeFloating(
-        box,
-        { width: matchWidth ? box.width : element.offsetWidth, height: element.offsetHeight },
-        { width: document.documentElement.clientWidth, height: document.documentElement.clientHeight },
-        { side, align, offset: gap, padding },
-      );
-      setPlacement({
-        side: placed.side,
-        x: Math.round(placed.x - origin.x),
-        y: Math.round(placed.y - origin.y),
-        anchorWidth: box.width,
-        visible: isFloatingAnchorVisible(box, context),
-      });
-    };
-    const schedule = () => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(measure);
-    };
+      const measure = () => {
+        const element = panel();
+        const reference = anchor();
+        if (!element || !reference || !element.isConnected) return;
+        const dialog = element.closest('dialog[data-vui-modal]');
+        if (dialog && !dialog.hasAttribute('open')) return;
+        if (element.popover === 'manual' && !element.matches(':popover-open')) element.showPopover();
+        const box = reference.getBoundingClientRect();
+        const context = reference instanceof Element ? reference : reference.contextElement;
+        const origin = fixedOrigin(element);
+        const gap = measureFloatingOffset(element, offset);
+        const placed = placeFloating(
+          box,
+          { width: matchWidth ? box.width : element.offsetWidth, height: element.offsetHeight },
+          { width: document.documentElement.clientWidth, height: document.documentElement.clientHeight },
+          { side, align, offset: gap, padding },
+        );
+        setPlacement({
+          side: placed.side,
+          x: Math.round(placed.x - origin.x),
+          y: Math.round(placed.y - origin.y),
+          anchorWidth: box.width,
+          visible: isFloatingAnchorVisible(box, context),
+        });
+      };
+      const schedule = () => {
+        cancelAnimationFrame(frame);
+        frame = requestAnimationFrame(measure);
+      };
 
-    measure();
-    // A parent modal may enter the top layer after its children's first effects.
-    schedule();
-    window.addEventListener('scroll', schedule, true);
-    window.addEventListener('resize', schedule);
-    const observer = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(schedule);
-    const intersection = typeof IntersectionObserver === 'undefined' ? undefined : new IntersectionObserver(schedule);
-    const reference = anchor();
-    const watched = [openedPanel, reference instanceof Element ? reference : reference?.contextElement];
-    for (const target of watched) if (target) observer?.observe(target);
-    const context = watched[1];
-    if (context) intersection?.observe(context);
-    onCleanup(() => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener('scroll', schedule, true);
-      window.removeEventListener('resize', schedule);
-      observer?.disconnect();
-      intersection?.disconnect();
-      if (openedPanel.popover === 'manual' && openedPanel.matches(':popover-open')) openedPanel.hidePopover();
-    });
-  });
+      measure();
+      // A parent modal may enter the top layer after its children's first effects.
+      schedule();
+      window.addEventListener('scroll', schedule, true);
+      window.addEventListener('resize', schedule);
+      const observer = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(schedule);
+      const intersection = typeof IntersectionObserver === 'undefined' ? undefined : new IntersectionObserver(schedule);
+      const watched = [openedPanel, reference instanceof Element ? reference : reference.contextElement];
+      for (const target of watched) if (target) observer?.observe(target);
+      const context = watched[1];
+      if (context) intersection?.observe(context);
+      return () => {
+        cancelAnimationFrame(frame);
+        window.removeEventListener('scroll', schedule, true);
+        window.removeEventListener('resize', schedule);
+        observer?.disconnect();
+        intersection?.disconnect();
+        if (openedPanel.popover === 'manual' && openedPanel.matches(':popover-open')) openedPanel.hidePopover();
+      };
+    },
+  );
 
   const style = createMemo<JSX.CSSProperties | undefined>(() => {
     const placed = placement();

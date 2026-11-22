@@ -1,5 +1,6 @@
 import { Show } from 'solid-js';
 
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { Input } from '../forms/Input';
 import { Select } from '../forms/Select';
 import type { OrderTicketController } from './createOrderTicket';
@@ -56,7 +57,7 @@ export const OrderTicketFields = (props: { ticket: OrderTicketController }) => {
           label={t().label('sl')}
           value={t().sl()}
           suffix={t().currency()}
-          aria-invalid={t().wrongSl() || undefined}
+          aria-invalid={booleanAttribute(t().wrongSl() || undefined)}
           onInput={(event) => t().setSl(event.currentTarget.value)}
         />
         <Input
@@ -67,7 +68,7 @@ export const OrderTicketFields = (props: { ticket: OrderTicketController }) => {
           label={t().label('tp')}
           value={t().tp()}
           suffix={t().currency()}
-          aria-invalid={t().wrongTp() || undefined}
+          aria-invalid={booleanAttribute(t().wrongTp() || undefined)}
           onInput={(event) => t().setTp(event.currentTarget.value)}
         />
       </div>

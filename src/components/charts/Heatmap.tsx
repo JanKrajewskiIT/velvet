@@ -1,9 +1,10 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { For, mergeProps, Show } from 'solid-js';
+import { For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { ymd } from '../../utils/date';
+import { withDefaults } from '../../utils/props';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
 import { createHeatmapCursor } from './createHeatmapCursor';
@@ -18,7 +19,7 @@ export type { HeatmapCell, HeatmapPoint, HeatmapProps } from './heatmapTypes';
 
 /** Calendar density grid — "how much, when". Weeks are columns, weekdays rows; level colours come from --dv-seq-*. Hover or arrow-key through days (←→ week, ↑↓ day, Home/End); each cell has a full spoken label with its value. */
 export const Heatmap = (props: HeatmapProps) => {
-  const merged: HeatmapConfig = mergeProps(
+  const merged: HeatmapConfig = withDefaults(
     {
       weeks: 20,
       weekStart: 1,

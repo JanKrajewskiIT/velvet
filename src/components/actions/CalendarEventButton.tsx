@@ -1,12 +1,14 @@
 import type { I18nKey } from '@jankrajewskiit/i18n';
-import { createSignal, createUniqueId, For, mergeProps, Show } from 'solid-js';
+import { createSignal, createUniqueId, For, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { createDismiss } from '../../hooks/createDismiss';
 import { createFloating } from '../../hooks/createFloating';
 import { createMenuNavigation } from '../../hooks/createMenuNavigation';
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Chevron } from '../primitives/Chevron';
 import { Glyph } from '../primitives/Glyph';
 import { typographyClass } from '../primitives/typography';
@@ -85,7 +87,7 @@ export interface CalendarEventButtonProps {
 
 /** "Add to calendar" for interviews, deadlines and meetings. Flips to a ✓ state after adding. Disabled when `start` is missing or invalid. */
 export const CalendarEventButton = (props: CalendarEventButtonProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     { providers: CALENDAR_PROVIDERS, variant: 'secondary', size: 'md' } satisfies Partial<CalendarEventButtonProps>,
     props,
   );
@@ -127,7 +129,7 @@ export const CalendarEventButton = (props: CalendarEventButtonProps) => {
         )}
         disabled={p.disabled || !isValidEvent(p.event)}
         aria-haspopup={single() ? undefined : 'menu'}
-        aria-expanded={single() ? undefined : open()}
+        aria-expanded={single() ? undefined : booleanAttribute(open())}
         aria-controls={single() ? undefined : menuId}
         aria-label={p.iconOnly ? text() : undefined}
         title={p.iconOnly ? text() : undefined}
@@ -167,7 +169,7 @@ export const CalendarEventButton = (props: CalendarEventButtonProps) => {
               <button
                 type="button"
                 role="menuitem"
-                tabIndex={index() === menu.active() ? 0 : -1}
+                tabindex={index() === menu.active() ? 0 : -1}
                 onFocus={() => menu.onFocus(index())}
                 class={cx(styles.calbtnPartItem, typographyClass('button-sm'))}
                 onClick={() => pick(provider)}

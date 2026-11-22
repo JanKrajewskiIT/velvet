@@ -1,7 +1,9 @@
-import { For, type JSX, mergeProps, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { For } from 'solid-js';
 
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import styles from './MetricGroup.module.css';
 
 export interface MetricItem {
@@ -20,8 +22,11 @@ export interface MetricGroupProps extends HtmlProps<HTMLDListElement> {
 }
 
 export const MetricGroup = (props: MetricGroupProps) => {
-  const merged = mergeProps({ minWidth: 120, size: 'md', variant: 'plain' } satisfies Partial<MetricGroupProps>, props);
-  const [local, rest] = splitProps(merged, ['items', 'columns', 'minWidth', 'size', 'variant', 'class', 'style']);
+  const merged = withDefaults(
+    { minWidth: 120, size: 'md', variant: 'plain' } satisfies Partial<MetricGroupProps>,
+    props,
+  );
+  const [local, rest] = partitionProps(merged, ['items', 'columns', 'minWidth', 'size', 'variant', 'class', 'style']);
   return (
     <dl
       {...rest}

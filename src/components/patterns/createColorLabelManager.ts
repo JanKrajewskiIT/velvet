@@ -1,4 +1,4 @@
-import { createEffect, createMemo, createSignal, createUniqueId, on, untrack } from 'solid-js';
+import { createEffect, createMemo, createSignal, createUniqueId, untrack } from 'solid-js';
 
 import { createOperation } from '../../hooks/createOperation';
 import { useTranslate } from '../../i18n/useTranslate';
@@ -27,19 +27,19 @@ export const createColorLabelManager = (p: ColorLabelManagerConfig) => {
     return current ? (current.id ?? '') : null;
   });
 
-  createEffect(on(draftIdentity, (identity) => identity !== null && nameInput?.focus({ preventScroll: true })));
+  createEffect(draftIdentity, (identity) => {
+    if (identity !== null) nameInput?.focus({ preventScroll: true });
+  });
   createEffect(
-    on(
-      () => p.open,
-      (open) => {
-        operation.invalidate();
-        if (open) return;
-        setDraft(null);
-        setConfirming(null);
-        setNameError(null);
-        setFailed(false);
-      },
-    ),
+    () => p.open,
+    (open) => {
+      operation.invalidate();
+      if (open) return;
+      setDraft(null);
+      setConfirming(null);
+      setNameError(null);
+      setFailed(false);
+    },
   );
 
   const nameTaken = (name: string, ownId: string | undefined) =>

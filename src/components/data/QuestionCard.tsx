@@ -1,9 +1,12 @@
-import { createUniqueId, For, type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createUniqueId, For, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import type { StatusTone } from '../../utils/tone';
 import { Button } from '../actions/Button';
 import { IconButton } from '../actions/IconButton';
@@ -53,7 +56,7 @@ export interface QuestionCardProps extends HtmlProps<HTMLElement, 'title'> {
 
 /** Interview / quiz question card built on Card. Without `answer` it renders a plain heading instead of an expander. */
 export const QuestionCard = (props: QuestionCardProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     {
       categoryTone: 'brand',
       padding: 'sm',
@@ -63,7 +66,7 @@ export const QuestionCard = (props: QuestionCardProps) => {
     } satisfies Partial<QuestionCardProps>,
     props,
   );
-  const [local, rest] = splitProps(merged, [
+  const [local, rest] = partitionProps(merged, [
     'question',
     'category',
     'categoryTone',
@@ -122,7 +125,7 @@ export const QuestionCard = (props: QuestionCardProps) => {
           <IconButton
             icon="star"
             label={translate(local.starred ? 'velvet.data.questionCard.removeSaved' : 'velvet.data.questionCard.save')}
-            aria-pressed={local.starred}
+            aria-pressed={booleanAttribute(local.starred)}
             variant={local.starred ? 'soft' : 'ghost'}
             size="sm"
             onClick={() => local.onStar?.()}
@@ -140,7 +143,7 @@ export const QuestionCard = (props: QuestionCardProps) => {
         <button
           type="button"
           class={cx(styles.qcardPartQ, styles.qcardPartQVariantBtn, typographyClass('label'))}
-          aria-expanded={open()}
+          aria-expanded={booleanAttribute(open())}
           aria-controls={answerId}
           onClick={toggle}
         >
@@ -195,7 +198,7 @@ export const QuestionCard = (props: QuestionCardProps) => {
                 styles.qcardPartVote,
                 local.voted && styles.qcardPartVoteVariantOn,
               )}
-              aria-pressed={local.voted}
+              aria-pressed={booleanAttribute(local.voted)}
               onClick={() => local.onVote?.()}
             >
               <Glyph name="arrow-up" />

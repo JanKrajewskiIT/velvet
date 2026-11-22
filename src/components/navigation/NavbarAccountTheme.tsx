@@ -1,7 +1,9 @@
-import { For, type JSX } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { For } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import type { ThemePreference } from '../../theme/theme';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
 import { Text } from '../primitives/Text';
@@ -46,8 +48,8 @@ export const NavbarAccountTheme = (props: NavbarAccountThemeProps) => {
               type="button"
               role="radio"
               class={styles.acctPartSegbtn}
-              aria-checked={selected() === theme}
-              tabIndex={selected() === theme ? 0 : -1}
+              aria-checked={booleanAttribute(selected() === theme)}
+              tabindex={selected() === theme ? 0 : -1}
               aria-label={translate(`velvet.actions.themeToggle.${theme}`)}
               title={translate(`velvet.actions.themeToggle.${theme}`)}
               onKeyDown={onKeyDown}

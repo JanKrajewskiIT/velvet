@@ -1,9 +1,11 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { For, type JSX, mergeProps, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { For, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Button } from '../actions/Button';
 import { SearchInput } from '../forms/SearchInput';
 import { Text } from '../primitives/Text';
@@ -42,7 +44,7 @@ export interface FilterBarProps {
  * with several shows a count. "Clear all" appears once anything is active; the live result count sits on the right.
  */
 export const FilterBar = (props: FilterBarProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     {
       search: true,
       defaultQuery: '',

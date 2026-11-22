@@ -1,9 +1,11 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { createMemo, For, mergeProps } from 'solid-js';
+import { createMemo, For } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { Polymorphic } from '../../utils/polymorphic';
+import { withDefaults } from '../../utils/props';
 import { Glyph } from '../primitives/Glyph';
 import { Meter } from '../primitives/Meter';
 import { Text } from '../primitives/Text';
@@ -40,7 +42,7 @@ export interface RatingSummaryProps {
 
 /** Review summary: big average, read-only stars, total, and a per-star distribution. */
 export const RatingSummary = (props: RatingSummaryProps) => {
-  const p = mergeProps({ activeStar: null } satisfies Partial<RatingSummaryProps>, props);
+  const p = withDefaults({ activeStar: null } satisfies Partial<RatingSummaryProps>, props);
   const i18n = useI18n();
   const translate = useTranslate();
   const locale = () => p.locale ?? i18n.locale();
@@ -104,7 +106,7 @@ export const RatingSummary = (props: RatingSummaryProps) => {
                   styles.ratesumPartRow,
                   on() && styles.ratesumPartRowVariantActive,
                 )}
-                aria-pressed={p.onFilter ? on() : undefined}
+                aria-pressed={p.onFilter ? booleanAttribute(on()) : undefined}
                 aria-label={rowLabel(star, countOf(star), percentOf(star))}
                 onClick={p.onFilter ? () => p.onFilter?.(on() ? null : star) : undefined}
               >

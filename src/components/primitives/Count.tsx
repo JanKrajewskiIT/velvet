@@ -1,8 +1,9 @@
-import { mergeProps, Show, splitProps } from 'solid-js';
+import { Show } from 'solid-js';
 
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import styles from './Count.module.css';
 import { Text } from './Text';
 import type { TextVariant } from './typography';
@@ -49,8 +50,8 @@ const formatCount = (value: number | string | undefined, max: number): number | 
 
 /** Numeric pill for unread counts, tab/chip totals and cart items. */
 export const Count = (props: CountProps) => {
-  const merged = mergeProps({ max: 99, tone: 'brand', size: 'md', showZero: false } satisfies CountProps, props);
-  const [local, rest] = splitProps(merged, ['value', 'max', 'tone', 'size', 'showZero', 'pop', 'label', 'class']);
+  const merged = withDefaults({ max: 99, tone: 'brand', size: 'md', showZero: false } satisfies CountProps, props);
+  const [local, rest] = partitionProps(merged, ['value', 'max', 'tone', 'size', 'showZero', 'pop', 'label', 'class']);
   const visible = () => local.showZero || (local.value !== 0 && local.value != null);
   return (
     <Show when={visible()}>

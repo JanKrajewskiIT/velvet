@@ -1,6 +1,5 @@
-import { mergeProps, splitProps } from 'solid-js';
-
 import { useTranslate } from '../../i18n/useTranslate';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { IconButton, type IconButtonProps } from '../actions/IconButton';
 
 const DEFAULT_DIRECTION = 'prev';
@@ -15,8 +14,8 @@ export interface PeriodNavButtonProps extends Omit<IconButtonProps, 'dir' | 'ico
 
 /** Previous or next period arrow. */
 export const PeriodNavButton = (props: PeriodNavButtonProps) => {
-  const merged = mergeProps({ dir: DEFAULT_DIRECTION, size: DEFAULT_SIZE } satisfies PeriodNavButtonProps, props);
-  const [local, rest] = splitProps(merged, ['dir', 'label']);
+  const merged = withDefaults({ dir: DEFAULT_DIRECTION, size: DEFAULT_SIZE } satisfies PeriodNavButtonProps, props);
+  const [local, rest] = partitionProps(merged, ['dir', 'label']);
   const translate = useTranslate();
   return (
     <IconButton

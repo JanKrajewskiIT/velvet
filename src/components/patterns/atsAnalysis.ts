@@ -1,5 +1,5 @@
 import type { I18nKey } from '@jankrajewskiit/i18n';
-import type { JSX } from 'solid-js';
+import { type JSX } from '@solidjs/web';
 
 import { freezeRecords } from '../../utils/freezeRecords';
 import { clamp } from '../../utils/math';

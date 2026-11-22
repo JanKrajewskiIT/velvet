@@ -1,8 +1,10 @@
-import { createMemo, For, mergeProps, Show } from 'solid-js';
+import { createMemo, For, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Button } from '../actions/Button';
 import { Chip } from '../forms/Chip';
 import { SearchInput } from '../forms/SearchInput';
@@ -47,7 +49,7 @@ const normalize = (option: string | DualFilterOption): DualFilterOption =>
 
 /** One toolbar, two independent chip groups: multi-select filters (with counts + Clear) | single-choice sort. Optional search and live result count. */
 export const DualFilterBar = (props: DualFilterBarProps) => {
-  const p = mergeProps({ variant: 'full' } satisfies Partial<DualFilterBarProps>, props);
+  const p = withDefaults({ variant: 'full' } satisfies Partial<DualFilterBarProps>, props);
   const translate = useTranslate();
   const filterLabel = () => p.filterLabel ?? translate('velvet.patterns.dualFilterBar.filterLabel');
   const sortLabel = () => p.sortLabel ?? translate('velvet.patterns.dualFilterBar.sortLabel');
@@ -117,7 +119,7 @@ export const DualFilterBar = (props: DualFilterBarProps) => {
                 <button
                   type="button"
                   role="radio"
-                  aria-checked={sort() === option.value}
+                  aria-checked={booleanAttribute(sort() === option.value)}
                   class={cx(
                     typographyClass('label-sm'),
                     styles.chip,
@@ -147,7 +149,7 @@ export const DualFilterBar = (props: DualFilterBarProps) => {
             {(option) => (
               <button
                 type="button"
-                aria-pressed={filters().includes(option.value)}
+                aria-pressed={booleanAttribute(filters().includes(option.value))}
                 class={cx(
                   typographyClass('button-sm'),
                   styles.dfbarSPartChip,
@@ -167,7 +169,7 @@ export const DualFilterBar = (props: DualFilterBarProps) => {
               <button
                 type="button"
                 role="radio"
-                aria-checked={sort() === option.value}
+                aria-checked={booleanAttribute(sort() === option.value)}
                 class={cx(
                   typographyClass('button-sm'),
                   styles.dfbarSPartChip,

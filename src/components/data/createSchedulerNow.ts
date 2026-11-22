@@ -1,12 +1,12 @@
-import { createSignal, onCleanup, onMount } from 'solid-js';
+import { createSignal, onSettled } from 'solid-js';
 
 const NOW_TICK_MS = 60_000;
 
 export const createSchedulerNow = () => {
   const [now, setNow] = createSignal(new Date());
-  onMount(() => {
+  onSettled(() => {
     const timer = setInterval(() => setNow(new Date()), NOW_TICK_MS);
-    onCleanup(() => clearInterval(timer));
+    return () => clearInterval(timer);
   });
   return now;
 };

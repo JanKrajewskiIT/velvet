@@ -1,10 +1,12 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { createMemo, Index, type JSX, mergeProps, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createMemo, For, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate, useTranslateRich } from '../../i18n/useTranslate';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Select } from '../forms/Select';
 import { Glyph } from '../primitives/Glyph';
 import { Text } from '../primitives/Text';
@@ -53,7 +55,10 @@ const pageNumber = (item: PageRangeItem): number | undefined => (item === PAGE_G
 
 /** Page navigation with truncation (1 … 4 5 6 … 20). Optional "1–20 of 243" range and rows-per-page select. */
 export const Pagination = (props: PaginationProps) => {
-  const p = mergeProps({ defaultPage: 1, siblingCount: 1, variant: 'full' } satisfies Partial<PaginationProps>, props);
+  const p = withDefaults(
+    { defaultPage: 1, siblingCount: 1, variant: 'full' } satisfies Partial<PaginationProps>,
+    props,
+  );
   const i18n = useI18n();
   const translate = useTranslate();
   const translateRich = useTranslateRich();
@@ -142,7 +147,7 @@ export const Pagination = (props: PaginationProps) => {
             </Text>
           }
         >
-          <Index each={pageRange(current(), count(), p.siblingCount)}>
+          <For keyed={false} each={pageRange(current(), count(), p.siblingCount)}>
             {(item) => (
               <Show
                 when={pageNumber(item())}
@@ -169,7 +174,7 @@ export const Pagination = (props: PaginationProps) => {
                 )}
               </Show>
             )}
-          </Index>
+          </For>
         </Show>
         <button
           type="button"

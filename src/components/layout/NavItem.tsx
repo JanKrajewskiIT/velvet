@@ -1,8 +1,11 @@
-import { children, For, type JSX, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { children, For, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { type HtmlProps, Polymorphic } from '../../utils/polymorphic';
+import { partitionProps } from '../../utils/props';
 import { Chevron } from '../primitives/Chevron';
 import { Count } from '../primitives/Count';
 import { renderIcon } from '../primitives/Glyph';
@@ -41,7 +44,7 @@ export interface NavItemProps extends HtmlProps<HTMLElement, 'onClick'> {
 
 /** Single navigation link inside Sidebar; with `subItems` it becomes an animated accordion parent. */
 export const NavItem = (props: NavItemProps) => {
-  const [local, rest] = splitProps(props, [
+  const [local, rest] = partitionProps(props, [
     'icon',
     'label',
     'active',
@@ -91,7 +94,7 @@ export const NavItem = (props: NavItemProps) => {
         href={local.href && !hasSub() ? local.href : undefined}
         type={local.href && !hasSub() ? undefined : 'button'}
         aria-current={local.active && !hasSub() ? 'page' : undefined}
-        aria-expanded={hasSub() ? isOpen() : undefined}
+        aria-expanded={hasSub() ? booleanAttribute(isOpen()) : undefined}
         aria-label={tip()}
         data-tip={tip()}
         data-collapsed={sidebar.collapsed()}
@@ -137,7 +140,7 @@ export const NavItem = (props: NavItemProps) => {
         <div
           data-collapsed={sidebar.collapsed()}
           class={cx(styles.navSub, isOpen() && styles.navSubVariantOpen)}
-          aria-hidden={!isOpen() || undefined}
+          aria-hidden={booleanAttribute(!isOpen() || undefined)}
         >
           <div class={styles.navSubPartInner}>
             <For each={subItems()}>
@@ -146,7 +149,7 @@ export const NavItem = (props: NavItemProps) => {
                   tag={item.href ? 'a' : 'button'}
                   href={item.href}
                   type={item.href ? undefined : 'button'}
-                  tabIndex={isOpen() ? undefined : -1}
+                  tabindex={isOpen() ? undefined : -1}
                   aria-current={item.active ? 'page' : undefined}
                   class={cx(styles.navSubPartLink, typographyClass('body-sm'))}
                   onClick={() => item.onClick?.()}

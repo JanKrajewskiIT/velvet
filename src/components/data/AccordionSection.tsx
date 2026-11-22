@@ -1,5 +1,6 @@
 import { Show } from 'solid-js';
 
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { Chevron } from '../primitives/Chevron';
 import { Glyph } from '../primitives/Glyph';
@@ -45,7 +46,7 @@ export const AccordionSection = (props: AccordionSectionProps) => {
           data-vui-accordion-trigger
           id={triggerId()}
           class={cx(styles.accordionPartTrigger, typographyClass('h5'))}
-          aria-expanded={props.open}
+          aria-expanded={booleanAttribute(props.open)}
           aria-controls={panelId()}
           disabled={props.item.disabled}
           onClick={() => props.onToggle()}
@@ -82,7 +83,7 @@ export const AccordionSection = (props: AccordionSectionProps) => {
         role="region"
         aria-labelledby={triggerId()}
         class={styles.accordionPartPanel}
-        aria-hidden={!props.open || undefined}
+        aria-hidden={booleanAttribute(!props.open || undefined)}
       >
         <div class={styles.accordionPartInner}>
           <Show when={props.variant === 'elevated'}>

@@ -1,4 +1,4 @@
-import { createEffect, createSignal, onCleanup } from 'solid-js';
+import { createEffect, createSignal } from 'solid-js';
 
 const MIN_WIDTH = 120;
 
@@ -10,8 +10,7 @@ export const createWidth = (initial = 600) => {
   const [width, setWidth] = createSignal(initial);
   const [host, setHost] = createSignal<HTMLElement>();
 
-  createEffect(() => {
-    const element = host();
+  createEffect(host, (element) => {
     if (!element) return;
     setWidth(element.clientWidth || initial);
     if (typeof ResizeObserver === 'undefined') return;
@@ -19,7 +18,7 @@ export const createWidth = (initial = 600) => {
       if (entry) setWidth(Math.max(MIN_WIDTH, entry.contentRect.width));
     });
     observer.observe(element);
-    onCleanup(() => observer.disconnect());
+    return () => observer.disconnect();
   });
 
   const ref = (element: HTMLElement) => setHost(element);

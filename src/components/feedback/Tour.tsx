@@ -1,19 +1,10 @@
-import {
-  createEffect,
-  createMemo,
-  createSignal,
-  createUniqueId,
-  type JSX,
-  mergeProps,
-  on,
-  onCleanup,
-  Show,
-} from 'solid-js';
-import { Portal } from 'solid-js/web';
+import { type JSX, Portal } from '@solidjs/web';
+import { createEffect, createMemo, createSignal, createUniqueId, onCleanup, Show } from 'solid-js';
 
 import { isTopLayer } from '../../hooks/createLayer';
 import { createModal } from '../../hooks/createModal';
 import { classSelector } from '../../utils/cssModule';
+import { withDefaults } from '../../utils/props';
 import styles from './Tour.module.css';
 import { TourCard } from './TourCard';
 import type { TourProps, TourStep } from './tourTypes';
@@ -29,7 +20,7 @@ export const Tour = (props: TourProps) => {
   const titleId = createUniqueId();
   const bodyId = createUniqueId();
   const [root, setRoot] = createSignal<HTMLDialogElement>();
-  const p = mergeProps({ defaultStep: 0, padding: 6 } satisfies Partial<TourProps>, props);
+  const p = withDefaults({ defaultStep: 0, padding: 6 } satisfies Partial<TourProps>, props);
   const [index, setIndex] = createSignal(p.defaultStep);
   const [rect, setRect] = createSignal<DOMRect>();
   const current = createMemo(() => {
@@ -42,10 +33,10 @@ export const Tour = (props: TourProps) => {
   });
 
   createEffect(
-    on(
-      () => p.open,
-      (open) => open && setIndex(p.defaultStep),
-    ),
+    () => p.open,
+    (open) => {
+      if (open) setIndex(p.defaultStep);
+    },
   );
 
   const next = () => {
@@ -54,36 +45,41 @@ export const Tour = (props: TourProps) => {
   };
   const back = () => setIndex(Math.max(0, index() - 1));
 
-  createEffect(() => {
-    if (!p.open) return;
-    const measure = () => {
-      const step = current()?.step;
-      setRect(step ? resolveTarget(step.target)?.getBoundingClientRect() : undefined);
-    };
-    const onKeyDown = (e: KeyboardEvent) => {
-      const dialog = root();
-      if (!dialog || !isTopLayer(dialog) || e.defaultPrevented) return;
-      const target = e.target;
-      if (target instanceof HTMLElement && (target.isContentEditable || target.matches('input, textarea, select')))
+  createEffect(
+    () => (p.open ? current()?.step : undefined),
+    (step) => {
+      if (!step) {
+        setRect(undefined);
         return;
-      if (e.key === 'ArrowRight') {
-        e.preventDefault();
-        next();
-      } else if (e.key === 'ArrowLeft') {
-        e.preventDefault();
-        back();
       }
-    };
-    measure();
-    window.addEventListener('resize', measure);
-    window.addEventListener('scroll', measure, true);
-    window.addEventListener('keydown', onKeyDown);
-    onCleanup(() => {
-      window.removeEventListener('resize', measure);
-      window.removeEventListener('scroll', measure, true);
-      window.removeEventListener('keydown', onKeyDown);
-    });
-  });
+      const measure = () => {
+        setRect(resolveTarget(step.target)?.getBoundingClientRect());
+      };
+      const onKeyDown = (e: KeyboardEvent) => {
+        const dialog = root();
+        if (!dialog || !isTopLayer(dialog) || e.defaultPrevented) return;
+        const target = e.target;
+        if (target instanceof HTMLElement && (target.isContentEditable || target.matches('input, textarea, select')))
+          return;
+        if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          next();
+        } else if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          back();
+        }
+      };
+      measure();
+      window.addEventListener('resize', measure);
+      window.addEventListener('scroll', measure, true);
+      window.addEventListener('keydown', onKeyDown);
+      return () => {
+        window.removeEventListener('resize', measure);
+        window.removeEventListener('scroll', measure, true);
+        window.removeEventListener('keydown', onKeyDown);
+      };
+    },
+  );
 
   const hole = (): JSX.CSSProperties | undefined => {
     const r = rect();

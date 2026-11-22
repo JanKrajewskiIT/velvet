@@ -25,7 +25,10 @@ export const createOperation = (options: OperationOptions = {}): Operation => {
   let pending: number | undefined;
   const invalidate = () => {
     sequence += 1;
-    if (options.concurrency !== 'single-flight') setBusy(false);
+    if (options.concurrency !== 'single-flight') {
+      pending = undefined;
+      setBusy(false);
+    }
   };
   onCleanup(() => {
     disposed = true;
@@ -36,7 +39,7 @@ export const createOperation = (options: OperationOptions = {}): Operation => {
     busy,
     invalidate,
     begin: () => {
-      if (disposed || busy()) return undefined;
+      if (disposed || pending !== undefined) return undefined;
       const current = ++sequence;
       pending = current;
       setBusy(true);

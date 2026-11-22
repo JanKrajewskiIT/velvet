@@ -1,8 +1,10 @@
-import { type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { Show } from 'solid-js';
 
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import styles from './Control.module.css';
 import { renderIcon } from './Glyph';
 import { Text } from './Text';
@@ -36,8 +38,8 @@ export interface ControlProps extends HtmlProps<HTMLDivElement, 'prefix'> {
 
 /** The bordered field shell used by the input components. */
 export const Control = (props: ControlProps) => {
-  const merged = mergeProps({ size: 'md' } satisfies ControlProps, props);
-  const [local, rest] = splitProps(merged, [
+  const merged = withDefaults({ size: 'md' } satisfies ControlProps, props);
+  const [local, rest] = partitionProps(merged, [
     'size',
     'invalid',
     'disabled',

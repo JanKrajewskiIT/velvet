@@ -1,8 +1,8 @@
-import { mergeProps, splitProps } from 'solid-js';
-
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import styles from './Checkmark.module.css';
 
 const CHECKMARK_CLASSES = {
@@ -29,8 +29,16 @@ export interface CheckmarkProps extends HtmlProps<HTMLSpanElement> {
 
 /** The check / indeterminate / radio glyph box for rows that are not native inputs. Native inputs use Checkbox / Radio. */
 export const Checkmark = (props: CheckmarkProps) => {
-  const merged = mergeProps({ size: 'md' } satisfies CheckmarkProps, props);
-  const [local, rest] = splitProps(merged, ['checked', 'indeterminate', 'radio', 'round', 'size', 'disabled', 'class']);
+  const merged = withDefaults({ size: 'md' } satisfies CheckmarkProps, props);
+  const [local, rest] = partitionProps(merged, [
+    'checked',
+    'indeterminate',
+    'radio',
+    'round',
+    'size',
+    'disabled',
+    'class',
+  ]);
   return (
     <span
       class={cx(
@@ -41,8 +49,8 @@ export const Checkmark = (props: CheckmarkProps) => {
         local.indeterminate ? styles.checkmarkVariantMixed : local.checked && styles.checkmarkVariantOn,
         local.class,
       )}
-      aria-hidden={rest.role ? undefined : true}
-      aria-disabled={local.disabled || undefined}
+      aria-hidden={rest.role ? undefined : 'true'}
+      aria-disabled={booleanAttribute(local.disabled || undefined)}
       {...rest}
     />
   );

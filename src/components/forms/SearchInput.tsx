@@ -1,20 +1,13 @@
-import {
-  createEffect,
-  createMemo,
-  createSignal,
-  createUniqueId,
-  For,
-  type JSX,
-  mergeProps,
-  Show,
-  splitProps,
-} from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, createMemo, createSignal, createUniqueId, For, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { createDismiss } from '../../hooks/createDismiss';
 import { createFloating } from '../../hooks/createFloating';
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute, isBooleanAttributeSet } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { Spinner } from '../feedback/Spinner';
 import { CloseButton } from '../primitives/CloseButton';
 import { Control } from '../primitives/Control';
@@ -64,11 +57,11 @@ export interface SearchInputProps extends Omit<
 
 /** Search field with clear button and optional suggestions dropdown (match highlighted). ↑↓ move · Enter picks (or submits the query) · Esc closes, then clears. */
 export const SearchInput = (props: SearchInputProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     { filter: true, loading: false, size: 'md', defaultValue: '' } satisfies SearchInputProps,
     props,
   );
-  const [local, rest] = splitProps(merged, [
+  const [local, rest] = partitionProps(merged, [
     'label',
     'placeholder',
     'value',
@@ -83,16 +76,18 @@ export const SearchInput = (props: SearchInputProps) => {
     'size',
     'inputRef',
     'disabled',
-    'readOnly',
+    'readonly',
     'id',
     'class',
     'onInput',
     'onFocus',
     'onKeyDown',
   ]);
+  const disabled = () => isBooleanAttributeSet(local.disabled);
+  const readonly = () => isBooleanAttributeSet(local.readonly);
   const translate = useTranslate();
   const autoId = createUniqueId();
-  const id = () => local.id ?? autoId;
+  const id = () => local.id || autoId;
   const listId = () => `${id()}-list`;
   const optionId = (index: number) => `${listId()}-${index}`;
 
@@ -105,7 +100,7 @@ export const SearchInput = (props: SearchInputProps) => {
   const [highlighted, setActive] = createSignal(0);
   const [root, setRoot] = createSignal<HTMLElement>();
   let input!: HTMLInputElement;
-  const editable = () => !local.disabled && !local.readOnly;
+  const editable = () => !disabled() && !readonly();
 
   const options = createMemo(() => {
     const all = (local.suggestions ?? []).map(normalizeOption);
@@ -130,8 +125,8 @@ export const SearchInput = (props: SearchInputProps) => {
   };
 
   createDismiss(showList, () => setOpen(false), root);
-  createEffect(() => {
-    if (!editable()) setOpen(false);
+  createEffect(editable, (enabled) => {
+    if (!enabled) setOpen(false);
   });
 
   const onKeyDown: JSX.EventHandler<HTMLInputElement, KeyboardEvent> = (e) => {
@@ -165,7 +160,7 @@ export const SearchInput = (props: SearchInputProps) => {
         <FieldLabel htmlFor={id()}>{local.label}</FieldLabel>
       </Show>
       <div ref={setRoot} class={styles.select}>
-        <Control size={local.size} disabled={local.disabled} readOnly={local.readOnly}>
+        <Control size={local.size} disabled={disabled()} readOnly={readonly()}>
           <span class={styles.controlPartAdorn}>
             <Show when={local.loading} fallback={<Glyph name="search" />}>
               <Spinner size="inline" tone="current" />
@@ -180,15 +175,15 @@ export const SearchInput = (props: SearchInputProps) => {
             id={id()}
             type="search"
             role={local.suggestions ? 'combobox' : undefined}
-            aria-expanded={local.suggestions ? showList() : undefined}
+            aria-expanded={local.suggestions ? booleanAttribute(showList()) : undefined}
             aria-controls={local.suggestions ? listId() : undefined}
             aria-autocomplete={local.suggestions ? 'list' : undefined}
             aria-activedescendant={showList() && activeOption() ? optionId(active()) : undefined}
             class={styles.controlPartInputVariantSearch}
             placeholder={local.placeholder ?? translate('velvet.forms.searchInput.placeholder')}
             value={query()}
-            disabled={local.disabled}
-            readOnly={local.readOnly}
+            disabled={disabled()}
+            readonly={readonly()}
             autocomplete="off"
             onInput={(e) => {
               if (!editable()) return;
@@ -197,7 +192,7 @@ export const SearchInput = (props: SearchInputProps) => {
               callHandler(local.onInput, e);
             }}
             onFocus={(e) => {
-              if (local.disabled) return;
+              if (disabled()) return;
               if (editable()) setOpen(true);
               callHandler(local.onFocus, e);
             }}

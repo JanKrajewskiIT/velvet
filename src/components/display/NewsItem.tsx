@@ -1,8 +1,10 @@
-import { For, type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { Dot } from '../primitives/Dot';
 import { Heading } from '../primitives/Heading';
 import { Tag } from '../primitives/Tag';
@@ -40,8 +42,8 @@ export interface NewsItemProps extends HtmlProps<HTMLElement, 'title'> {
 }
 
 export const NewsItem = (props: NewsItemProps) => {
-  const merged = mergeProps({ bullets: [] } satisfies Partial<NewsItemProps>, props);
-  const [local, rest] = splitProps(merged, [
+  const merged = withDefaults({ bullets: [] } satisfies Partial<NewsItemProps>, props);
+  const [local, rest] = partitionProps(merged, [
     'title',
     'href',
     'source',

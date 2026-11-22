@@ -1,21 +1,13 @@
-import {
-  createEffect,
-  createMemo,
-  createUniqueId,
-  For,
-  Index,
-  type JSX,
-  mergeProps,
-  onCleanup,
-  Show,
-  untrack,
-} from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, createMemo, createUniqueId, For, onCleanup, Show, untrack } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { numberRange } from '../../utils/decimalValue';
 import { clamp } from '../../utils/math';
+import { withDefaults } from '../../utils/props';
 import { FieldLabel } from '../primitives/FieldLabel';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
@@ -65,7 +57,7 @@ const asList = (value: SliderValue): number[] => (typeof value === 'number' ? [v
 
 /** Range control with filled track. Drag, click the track, or use ←→ ↑↓ PageUp/PageDown Home/End. */
 export const Slider = (props: SliderProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     { min: 0, max: 100, step: 1, format: String, showValue: true, snapToMarks: false } satisfies SliderProps,
     props,
   );
@@ -191,9 +183,12 @@ export const Slider = (props: SliderProps) => {
   };
 
   const valueText = () => (isRange() ? `${p.format(low())} – ${p.format(high())}` : p.format(low()));
-  createEffect(() => {
-    if (p.disabled) endDrag();
-  });
+  createEffect(
+    () => p.disabled,
+    (disabled) => {
+      if (disabled) endDrag();
+    },
+  );
 
   return (
     <div
@@ -252,7 +247,7 @@ export const Slider = (props: SliderProps) => {
             );
           }}
         </For>
-        <Index each={values()}>
+        <For keyed={false} each={values()}>
           {(value, index) => (
             <>
               <Show when={isRange()}>
@@ -268,7 +263,7 @@ export const Slider = (props: SliderProps) => {
               </Show>
               <span
                 role="slider"
-                tabIndex={p.disabled ? -1 : 0}
+                tabindex={p.disabled ? -1 : 0}
                 class={styles.sliderPartThumb}
                 style={{ left: `${percent(value())}%` }}
                 aria-labelledby={
@@ -282,17 +277,17 @@ export const Slider = (props: SliderProps) => {
                     : (p['aria-label'] ?? (p.label ? undefined : translate('velvet.forms.slider.valueLabel')))
                 }
                 aria-describedby={validation.describedBy(undefined)}
-                aria-invalid={validation.invalid() || undefined}
+                aria-invalid={booleanAttribute(validation.invalid() || undefined)}
                 aria-valuemin={isRange() && index === 1 ? low() : p.min}
                 aria-valuemax={isRange() && index === 0 ? high() : p.max}
                 aria-valuenow={value()}
                 aria-valuetext={p.format(value())}
-                aria-disabled={p.disabled || undefined}
+                aria-disabled={booleanAttribute(p.disabled || undefined)}
                 onKeyDown={(e) => onKeyDown(index, e)}
               />
             </>
           )}
-        </Index>
+        </For>
       </div>
       <Show when={p.showBounds}>
         <div class={cx(styles.sliderPartBounds, typographyClass('kbd'))}>

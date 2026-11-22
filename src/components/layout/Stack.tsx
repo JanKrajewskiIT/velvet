@@ -1,7 +1,8 @@
-import { type JSX, mergeProps, splitProps } from 'solid-js';
+import { type JSX } from '@solidjs/web';
 
 import { cx } from '../../utils/cx';
 import { type ElementTag, type HtmlProps, Polymorphic } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { spaceValue } from './space';
 import styles from './Stack.module.css';
 
@@ -21,8 +22,8 @@ export interface StackProps extends HtmlProps<HTMLElement> {
 
 /** Flex stack with token gaps. */
 export const Stack = (props: StackProps) => {
-  const merged = mergeProps({ as: 'div', direction: 'column', gap: 4 } satisfies StackProps, props);
-  const [local, rest] = splitProps(merged, [
+  const merged = withDefaults({ as: 'div', direction: 'column', gap: 4 } satisfies StackProps, props);
+  const [local, rest] = partitionProps(merged, [
     'as',
     'direction',
     'gap',

@@ -1,4 +1,5 @@
-import { createEffect, createMemo, createSignal, For, Index, type JSX, onCleanup, onMount, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, createMemo, createSignal, For, onSettled, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
@@ -41,12 +42,17 @@ export const Toolbar = (props: ToolbarProps) => {
     setFit(countFittingItems(items, widths, bar.clientWidth));
   };
 
-  createEffect(() => measureFit(props.items));
-  onMount(() => {
+  createEffect(
+    () => props.items,
+    (items) => {
+      measureFit(items);
+    },
+  );
+  onSettled(() => {
     if (typeof ResizeObserver === 'undefined') return;
     const observer = new ResizeObserver(() => measureFit(props.items));
     observer.observe(bar);
-    onCleanup(() => observer.disconnect());
+    return () => observer.disconnect();
   });
 
   const entries = createMemo(() => props.items.map((item, index) => ({ item, index })));
@@ -94,7 +100,7 @@ export const Toolbar = (props: ToolbarProps) => {
       {...trigger}
       type="button"
       data-tb={OVERFLOW}
-      tabIndex={tabStop() === OVERFLOW ? 0 : -1}
+      tabindex={tabStop() === OVERFLOW ? 0 : -1}
       class={cx(styles.toolbarPartBtn, 'vui-toolbar__more', typographyClass('label'))}
       aria-label={translate('velvet.menus.toolbar.overflowLabel', { label: moreLabel(), count: hiddenToolCount() })}
     >
@@ -126,11 +132,11 @@ export const Toolbar = (props: ToolbarProps) => {
       >
         <For each={props.items}>{(item) => <ToolbarEntry item={item} tabIndex={-1} />}</For>
       </div>
-      <Index each={shown()}>
+      <For keyed={false} each={shown()}>
         {(entry) => (
           <ToolbarEntry item={entry().item} index={entry().index} tabIndex={tabStop() === entry().index ? 0 : -1} />
         )}
-      </Index>
+      </For>
       <Show when={menuItems().length}>
         <Menu align="end" items={menuItems()} trigger={overflowButton} />
       </Show>

@@ -1,7 +1,9 @@
-import { createMemo, type JSX, Match, mergeProps, Show, Switch } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createMemo, Match, Show, Switch } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Button } from '../actions/Button';
 import { Skeleton } from '../feedback/Skeleton';
 import { SkeletonText } from '../feedback/SkeletonText';
@@ -48,7 +50,7 @@ const HERO_SKELETON_SIZE = 112;
 
 /** Result of a candidate ↔ role (or CV ↔ ATS) analysis: score ring and band, weighted categories, keyword coverage, strengths vs gaps and ranked recommendations. */
 export const AnalysisReport = (props: AnalysisReportProps) => {
-  const p = mergeProps({ status: 'done', steps: [] as string[], step: 0 } satisfies AnalysisReportProps, props);
+  const p = withDefaults({ status: 'done', steps: [] as string[], step: 0 } satisfies AnalysisReportProps, props);
   const translate = useTranslate();
   const title = () => p.title ?? translate('velvet.patterns.atsAnalysisPanel.title');
   const error = () => p.error ?? translate('velvet.patterns.atsAnalysisPanel.error');

@@ -1,4 +1,5 @@
-import { type JSX, onMount } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { onSettled } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { Button } from '../actions/Button';
@@ -14,7 +15,9 @@ export interface OrganizerDeleteConfirmProps {
 export const OrganizerDeleteConfirm = (props: OrganizerDeleteConfirmProps) => {
   const translate = useTranslate();
   let cancelButton: HTMLButtonElement | undefined;
-  onMount(() => cancelButton?.focus({ preventScroll: true }));
+  onSettled(() => {
+    cancelButton?.focus({ preventScroll: true });
+  });
   const onKeyDown: JSX.EventHandler<HTMLButtonElement, KeyboardEvent> = (event) => {
     if (event.key !== 'Escape') return;
     event.preventDefault();

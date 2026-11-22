@@ -1,4 +1,5 @@
-import { Index, type JSX } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { For } from 'solid-js';
 
 import { LoaderBike } from './LoaderBike';
 import styles from './loaderBodies.module.css';
@@ -70,26 +71,30 @@ const SHUFFLE_CELLS = Array.from({ length: 9 }, (_, i) => i);
 export const LOADER_BODIES = {
   bike: () => <LoaderBike />,
   'bouncing-dots': () => (
-    <Index each={BOUNCE_DOTS}>
+    <For keyed={false} each={BOUNCE_DOTS}>
       {(dot) => (
         <>
           <span class={styles.d} style={{ '--l': dot()[0], '--dl': `${dot()[1]}s` }} />
           <span class={styles.s} style={{ '--l': dot()[0], '--dl': `${dot()[1]}s` }} />
         </>
       )}
-    </Index>
+    </For>
   ),
   'concentric-pulse': () => (
-    <Index each={CONCENTRIC_SIZES}>{(size) => <span class={styles.part} style={{ '--sz': size() }} />}</Index>
+    <For keyed={false} each={CONCENTRIC_SIZES}>
+      {(size) => <span class={styles.part} style={{ '--sz': size() }} />}
+    </For>
   ),
   'corner-pulse': () => <LoaderSpans count={FOUR} />,
   'dual-plane': () => null,
   ellipsis: () => <LoaderSpans count={FOUR} />,
   equalizer: () => (
-    <Index each={EQUALIZER_DELAYS}>{(delay) => <span class={styles.part} style={{ '--dl': delay() }} />}</Index>
+    <For keyed={false} each={EQUALIZER_DELAYS}>
+      {(delay) => <span class={styles.part} style={{ '--dl': delay() }} />}
+    </For>
   ),
   honeycomb: () => (
-    <Index each={HONEYCOMB}>
+    <For keyed={false} each={HONEYCOMB}>
       {(cell) => (
         <span class={styles.g} style={{ '--x': `${cell()[0]}px`, '--y': `${cell()[1]}px`, '--dl': `${cell()[2]}s` }}>
           <span class={styles.h} />
@@ -97,7 +102,7 @@ export const LOADER_BODIES = {
           <span class={styles.h} />
         </span>
       )}
-    </Index>
+    </For>
   ),
   'jelly-triangle': (context) => (
     <>
@@ -120,15 +125,19 @@ export const LOADER_BODIES = {
     </>
   ),
   'orbit-squares': () => (
-    <Index each={ORBIT_DELAYS}>{(delay) => <span class={styles.part} style={{ '--dl': `${delay()}s` }} />}</Index>
+    <For keyed={false} each={ORBIT_DELAYS}>
+      {(delay) => <span class={styles.part} style={{ '--dl': `${delay()}s` }} />}
+    </For>
   ),
   'pulse-ring': () => (
-    <Index each={PULSE_RING_PHASES}>
+    <For keyed={false} each={PULSE_RING_PHASES}>
       {(phase, i) => <span class={styles.part} style={{ '--a': `${i * 45}deg`, '--f': phase() }} />}
-    </Index>
+    </For>
   ),
   'ripple-dots': () => (
-    <Index each={RIPPLE_DELAYS}>{(delay) => <span class={styles.part} style={{ '--dl': delay() }} />}</Index>
+    <For keyed={false} each={RIPPLE_DELAYS}>
+      {(delay) => <span class={styles.part} style={{ '--dl': delay() }} />}
+    </For>
   ),
   'shape-trail': (context) => <LoaderShapeTrail shape={context.shape} />,
   'shuffle-grid': () => <LoaderSpans count={SHUFFLE_CELLS} />,

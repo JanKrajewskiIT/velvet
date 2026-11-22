@@ -1,5 +1,5 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { batch, createEffect, createMemo, createSignal, on, untrack } from 'solid-js';
+import { createEffect, createMemo, createSignal, untrack } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { createToday } from '../../hooks/createToday';
@@ -74,28 +74,24 @@ export const createCalendar = (p: CalendarConfig) => {
   const focusVisible = () => monthKey(focus()) >= monthKey(view()) && monthKey(focus()) <= lastMonthKey();
 
   createEffect(
-    on(
-      focus,
-      (day) => {
-        if (!keyboardMove || !root) return;
-        keyboardMove = false;
-        root.querySelector<HTMLElement>(`[data-day="${day.toDateString()}"]`)?.focus();
-      },
-      { defer: true },
-    ),
+    focus,
+    (day) => {
+      if (!keyboardMove || !root) return;
+      keyboardMove = false;
+      root.querySelector<HTMLElement>(`[data-day="${day.toDateString()}"]`)?.focus();
+    },
+    { defer: true },
   );
 
   const pick = (d: Date) => {
     if (isOff(d)) return;
-    batch(() => {
-      setFocus(d);
-      if (isRange()) {
-        const { start, end } = range();
-        if (!start || end) setValue({ start: d, end: null });
-        else setValue(d < start ? { start: d, end: start } : { start, end: d });
-      } else setValue(d);
-      if (monthKey(d) < monthKey(view()) || monthKey(d) > lastMonthKey()) setView(d);
-    });
+    setFocus(d);
+    if (isRange()) {
+      const { start, end } = range();
+      if (!start || end) setValue({ start: d, end: null });
+      else setValue(d < start ? { start: d, end: start } : { start, end: d });
+    } else setValue(d);
+    if (monthKey(d) < monthKey(view()) || monthKey(d) > lastMonthKey()) setView(d);
   };
 
   const onKeyDown = (e: KeyboardEvent) => {
@@ -109,11 +105,9 @@ export const createCalendar = (p: CalendarConfig) => {
     if (!next) return;
     e.preventDefault();
     keyboardMove = true;
-    batch(() => {
-      setFocus(next);
-      if (monthKey(next) < monthKey(view())) setView(next);
-      else if (monthKey(next) > lastMonthKey()) setView(addMonths(next, -(months() - 1)));
-    });
+    setFocus(next);
+    if (monthKey(next) < monthKey(view())) setView(next);
+    else if (monthKey(next) > lastMonthKey()) setView(addMonths(next, -(months() - 1)));
   };
 
   return {

@@ -1,6 +1,7 @@
-import { mergeProps, Show } from 'solid-js';
+import { Show } from 'solid-js';
 
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Control } from '../primitives/Control';
 import { ControlInput } from '../primitives/ControlInput';
 import { FieldLabel } from '../primitives/FieldLabel';
@@ -17,7 +18,7 @@ export interface CopyFieldProps {
 
 /** Read-only value + copy button — API keys, invite links, IDs. Selects all on focus. */
 export const CopyField = (props: CopyFieldProps) => {
-  const p = mergeProps({ mono: true } satisfies Partial<CopyFieldProps>, props);
+  const p = withDefaults({ mono: true } satisfies Partial<CopyFieldProps>, props);
   return (
     <div class={cx(styles.field, p.class)}>
       <Show when={p.label}>
@@ -28,7 +29,7 @@ export const CopyField = (props: CopyFieldProps) => {
           textVariant="body"
           class={p.mono ? styles.mono : undefined}
           value={p.value}
-          readOnly
+          readonly
           aria-label={p.label}
           onFocus={(e) => e.currentTarget.select()}
         />

@@ -1,9 +1,12 @@
 import type { I18nKey } from '@jankrajewskiit/i18n';
-import { createSignal, type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createSignal, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute, isBooleanAttributeSet } from '../../utils/booleanAttribute';
 import { joinIdRefs } from '../../utils/joinIdRefs';
+import { partitionProps, withDefaults } from '../../utils/props';
 import type { Tone } from '../../utils/tone';
 import { Control } from '../primitives/Control';
 import { ControlInput } from '../primitives/ControlInput';
@@ -58,7 +61,7 @@ export interface PasswordInputProps
 
 /** Password field with show/hide toggle and optional live strength meter (4 segments + label). */
 export const PasswordInput = (props: PasswordInputProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     {
       showStrength: false,
       size: 'md',
@@ -67,7 +70,7 @@ export const PasswordInput = (props: PasswordInputProps) => {
     } satisfies PasswordInputProps,
     props,
   );
-  const [local, rest] = splitProps(merged, [
+  const [local, rest] = partitionProps(merged, [
     'label',
     'hint',
     'error',
@@ -88,6 +91,8 @@ export const PasswordInput = (props: PasswordInputProps) => {
     'aria-describedby',
     'aria-invalid',
   ]);
+  const required = () => isBooleanAttributeSet(local.required);
+  const disabled = () => isBooleanAttributeSet(local.disabled);
   const translate = useTranslate();
   const [revealed, setRevealed] = createSignal(false);
   const [text, setText] = createControllable({ value: () => local.value, defaultValue: local.defaultValue });
@@ -111,8 +116,8 @@ export const PasswordInput = (props: PasswordInputProps) => {
       error={local.error}
       data-field-error-announcement={local['data-field-error-announcement']}
       optional={local.optional}
-      required={local.required}
-      id={local.id}
+      required={required()}
+      id={local.id || undefined}
       reserveHint={local.showStrength}
     >
       {(control) => (
@@ -120,7 +125,7 @@ export const PasswordInput = (props: PasswordInputProps) => {
           <Control
             size={local.size}
             invalid={control.invalid}
-            disabled={local.disabled}
+            disabled={disabled()}
             class={local.class}
             iconLeft="lock"
             end={
@@ -132,8 +137,8 @@ export const PasswordInput = (props: PasswordInputProps) => {
                     ? (local.hideLabel ?? translate('velvet.forms.passwordInput.hideLabel'))
                     : (local.showLabel ?? translate('velvet.forms.passwordInput.showLabel'))
                 }
-                aria-pressed={revealed()}
-                disabled={local.disabled}
+                aria-pressed={booleanAttribute(revealed())}
+                disabled={disabled()}
                 onClick={() => setRevealed(!revealed())}
               >
                 <Glyph name={revealed() ? 'eye-off' : 'eye'} />
@@ -144,10 +149,10 @@ export const PasswordInput = (props: PasswordInputProps) => {
               {...rest}
               id={control.id}
               type={revealed() ? 'text' : 'password'}
-              disabled={local.disabled}
-              required={local.required}
+              disabled={disabled()}
+              required={required()}
               value={text()}
-              aria-invalid={control.invalid || local['aria-invalid']}
+              aria-invalid={booleanAttribute(control.invalid || local['aria-invalid'])}
               aria-describedby={joinIdRefs(local['aria-describedby'], control.describedBy)}
               onInput={(e) => {
                 setText(e.currentTarget.value);

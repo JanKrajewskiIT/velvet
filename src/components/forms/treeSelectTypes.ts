@@ -1,4 +1,4 @@
-import type { JSX } from 'solid-js';
+import { type JSX } from '@solidjs/web';
 
 import type { ControlProps } from '../primitives/Control';
 import type { FieldErrorAnnouncementProps } from '../primitives/fieldErrorAnnouncement';

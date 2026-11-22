@@ -1,7 +1,8 @@
-import { mergeProps, Show } from 'solid-js';
+import { Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { createCropGestures } from './createCropGestures';
 import { createCropView } from './createCropView';
 import type { CropArea } from './cropGeometry';
@@ -39,7 +40,7 @@ export interface ImageCropperProps {
  * and zooms (Slider, wheel, + / −) behind it and can never leave a gap. Rotate in 90° steps.
  */
 export const ImageCropper = (props: ImageCropperProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     {
       alt: '',
       aspect: 1,
@@ -76,7 +77,7 @@ export const ImageCropper = (props: ImageCropperProps) => {
             <img
               src={url()}
               alt={p.alt}
-              draggable={false}
+              draggable="false"
               class={styles.cropPartImg}
               onLoad={(e) =>
                 view.setNatural({ width: e.currentTarget.naturalWidth, height: e.currentTarget.naturalHeight })
@@ -98,7 +99,7 @@ export const ImageCropper = (props: ImageCropperProps) => {
           class={cx(styles.cropPartFrame, p.shape === 'circle' && styles.cropPartFrameVariantCircle)}
           style={{ width: `${view.frameSize().width}px`, height: `${view.frameSize().height}px` }}
           // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- the crop frame must take focus so arrow keys can adjust the crop
-          tabIndex={0}
+          tabindex={0}
           role="group"
           aria-label={translate('velvet.media.imageCropper.area')}
           onKeyDown={gestures.onKeyDown}

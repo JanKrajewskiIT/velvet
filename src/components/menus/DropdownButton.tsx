@@ -1,8 +1,10 @@
-import { type JSX, mergeProps, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { buttonClass, type ButtonSize } from '../actions/buttonClass';
 import { Spinner } from '../feedback/Spinner';
 import { Glyph, renderIcon } from '../primitives/Glyph';
@@ -39,7 +41,7 @@ export interface DropdownButtonProps {
 
 /** With `onClick`: split button, main action plus a chevron menu of alternatives. Without: a single button that opens the menu. */
 export const DropdownButton = (props: DropdownButtonProps) => {
-  const p = mergeProps({ variant: 'primary' } satisfies Partial<DropdownButtonProps>, props);
+  const p = withDefaults({ variant: 'primary' } satisfies Partial<DropdownButtonProps>, props);
   const translate = useTranslate();
   const menuLabel = () => p.menuLabel ?? translate('velvet.menus.dropdownButton.menuLabel');
   const textSkin = () => buttonClass({ variant: p.variant, size: p.size });

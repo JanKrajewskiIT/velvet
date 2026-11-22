@@ -1,8 +1,11 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { createEffect, createSignal, For, type JSX, mergeProps, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, createSignal, For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { EmptyText } from '../primitives/EmptyText';
 import { Glyph } from '../primitives/Glyph';
 import { Text } from '../primitives/Text';
@@ -39,7 +42,7 @@ export interface FileUploadProps {
 
 /** Dropzone (drag, click or Enter/Space to browse) + file list with progress, retry and remove. Upload itself is yours: receive File[] in `onFiles`, then drive each row through `files`. */
 export const FileUpload = (props: FileUploadProps) => {
-  const p = mergeProps({ files: [], multiple: true } satisfies Partial<FileUploadProps>, props);
+  const p = withDefaults({ files: [], multiple: true } satisfies Partial<FileUploadProps>, props);
   const translate = useTranslate();
   const i18n = useI18n();
   const [over, setOver] = createSignal(false);
@@ -47,8 +50,8 @@ export const FileUpload = (props: FileUploadProps) => {
   let input: HTMLInputElement | undefined;
   let dragDepth = 0;
   const canPick = () => !p.disabled && !!p.onFiles;
-  createEffect(() => {
-    if (!canPick()) {
+  createEffect(canPick, (enabled) => {
+    if (!enabled) {
       dragDepth = 0;
       setOver(false);
     }
@@ -79,8 +82,8 @@ export const FileUpload = (props: FileUploadProps) => {
     <div class={cx(styles.upload, p.class)}>
       <div
         role="button"
-        tabIndex={canPick() ? 0 : -1}
-        aria-disabled={!canPick() || undefined}
+        tabindex={canPick() ? 0 : -1}
+        aria-disabled={booleanAttribute(!canPick() || undefined)}
         class={cx(
           styles.uploadPartZone,
           over() && styles.uploadPartZoneVariantOver,

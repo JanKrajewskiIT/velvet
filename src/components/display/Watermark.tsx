@@ -1,8 +1,9 @@
-import { createMemo, mergeProps, splitProps } from 'solid-js';
+import { createMemo } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import styles from './Watermark.module.css';
 import { buildWatermarkTile } from './watermarkTile';
 
@@ -29,12 +30,12 @@ export interface WatermarkProps extends HtmlProps<HTMLDivElement> {
  * Deterrent only — not access control.
  */
 export const Watermark = (props: WatermarkProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     { rotate: -24, gap: [96, 72], fontSize: 14, fontWeight: 600, opacity: 0.08 } satisfies WatermarkProps,
     props,
   );
   const translate = useTranslate();
-  const [local, rest] = splitProps(merged, [
+  const [local, rest] = partitionProps(merged, [
     'text',
     'lines',
     'rotate',

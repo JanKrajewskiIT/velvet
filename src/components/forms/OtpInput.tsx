@@ -1,10 +1,13 @@
-import { createUniqueId, Index, type JSX, mergeProps, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createUniqueId, For, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { clamp } from '../../utils/math';
 import { positiveInteger } from '../../utils/numericOption';
+import { withDefaults } from '../../utils/props';
 import type { FieldErrorAnnouncementProps } from '../primitives/fieldErrorAnnouncement';
 import { FieldFeedback } from '../primitives/FieldFeedback';
 import { FieldLabel } from '../primitives/FieldLabel';
@@ -51,7 +54,7 @@ const defaultGroupAt = (length: number): number => {
 
 /** One-time-code boxes: auto-advance, Backspace steps back, ←→ move, paste fills from the focused box. `autocomplete="one-time-code"` lets SMS codes autofill on mobile. */
 export const OtpInput = (props: OtpInputProps) => {
-  const p = mergeProps({ length: SIX_BOXES, numeric: true, defaultValue: '' } satisfies OtpInputProps, props);
+  const p = withDefaults({ length: SIX_BOXES, numeric: true, defaultValue: '' } satisfies OtpInputProps, props);
   const translate = useTranslate();
   const validation = createFormValidation();
   const length = () => Math.min(32, positiveInteger(p.length, SIX_BOXES));
@@ -145,7 +148,7 @@ export const OtpInput = (props: OtpInputProps) => {
         </FieldLabel>
       </Show>
       <div class={cx(styles.otp, p.class)}>
-        <Index each={slots()}>
+        <For keyed={false} each={slots()}>
           {(_, index) => (
             <>
               <Show when={split() > 0 && index === split()}>
@@ -159,13 +162,13 @@ export const OtpInput = (props: OtpInputProps) => {
                   charAt(index) && styles.otpPartCellVariantFilled,
                 )}
                 value={charAt(index)}
-                inputMode={p.numeric ? 'numeric' : 'text'}
+                inputmode={p.numeric ? 'numeric' : 'text'}
                 autocomplete={index === 0 ? 'one-time-code' : 'off'}
-                maxLength={length()}
+                maxlength={length()}
                 disabled={p.disabled}
                 autofocus={p.autoFocus && index === 0}
                 aria-label={cellLabel(index + 1, length())}
-                aria-invalid={!!p.error || validation.invalid() || undefined}
+                aria-invalid={booleanAttribute(!!p.error || validation.invalid() || undefined)}
                 aria-describedby={validation.describedBy(
                   p.error ? `${id()}-error` : p.hint ? `${id()}-hint` : undefined,
                 )}
@@ -176,7 +179,7 @@ export const OtpInput = (props: OtpInputProps) => {
               />
             </>
           )}
-        </Index>
+        </For>
       </div>
       <FormValue
         name={p.name}

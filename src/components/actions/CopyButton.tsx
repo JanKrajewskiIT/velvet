@@ -1,8 +1,10 @@
-import { mergeProps, Show } from 'solid-js';
+import { Show } from 'solid-js';
 
 import { createCopyFeedback } from '../../hooks/createCopyFeedback';
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Glyph } from '../primitives/Glyph';
 import { Text } from '../primitives/Text';
@@ -30,7 +32,7 @@ export interface CopyButtonProps {
 
 /** Copies text to the clipboard; the icon morphs copy → check and the result is announced. */
 export const CopyButton = (props: CopyButtonProps) => {
-  const p = mergeProps({ variant: 'secondary', size: 'sm' } satisfies Partial<CopyButtonProps>, props);
+  const p = withDefaults({ variant: 'secondary', size: 'sm' } satisfies Partial<CopyButtonProps>, props);
   const translate = useTranslate();
   const label = () => p.label ?? translate('velvet.common.copy');
   const { status, busy, copy: copyText } = createCopyFeedback(COPIED_FEEDBACK_MS);
@@ -58,7 +60,7 @@ export const CopyButton = (props: CopyButtonProps) => {
       )}
       onClick={() => void copy().catch(reportAsyncError)}
       disabled={busy()}
-      aria-busy={busy() || undefined}
+      aria-busy={booleanAttribute(busy() || undefined)}
       aria-label={p.iconOnly ? caption() : undefined}
       title={p.iconOnly ? label() : undefined}
     >

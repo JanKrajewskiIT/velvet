@@ -1,9 +1,11 @@
-import { createEffect, For, type JSX, mergeProps, on, onCleanup, Show, untrack } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, For, Show, untrack } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { scrollBehavior } from '../../utils/motion';
+import { withDefaults } from '../../utils/props';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
 import styles from './Anchor.module.css';
@@ -45,7 +47,7 @@ const SCROLL_LANDING_GAP_PX = 8;
  * (instant under reduced motion), moving focus to its heading. Works on the window or any scroll container.
  */
 export const Anchor = (props: AnchorProps) => {
-  const p = mergeProps({ offset: 24 } satisfies Partial<AnchorProps>, props);
+  const p = withDefaults({ offset: 24 } satisfies Partial<AnchorProps>, props);
   const translate = useTranslate();
   const label = () => p.label ?? translate('velvet.navigation.anchor.label');
   const [current, setCurrent] = createControllable<string | undefined>({
@@ -62,7 +64,8 @@ export const Anchor = (props: AnchorProps) => {
   let lockedUntil = 0;
 
   createEffect(
-    on([() => p.container, () => p.items, () => p.offset], () => {
+    () => [p.container, p.items, p.offset] as const,
+    () => {
       const container = resolveScrollContainer(p.container);
       const source: HTMLElement | Window = container ?? window;
       const sync = () => {
@@ -83,8 +86,8 @@ export const Anchor = (props: AnchorProps) => {
       };
       sync();
       source.addEventListener('scroll', sync, { passive: true });
-      onCleanup(() => source.removeEventListener('scroll', sync));
-    }),
+      return () => source.removeEventListener('scroll', sync);
+    },
   );
 
   const goTo = (e: MouseEvent, id: string) => {

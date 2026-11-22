@@ -1,21 +1,12 @@
 import type { I18nKey } from '@jankrajewskiit/i18n';
-import {
-  createEffect,
-  createMemo,
-  createSignal,
-  Index,
-  mergeProps,
-  onCleanup,
-  Show,
-  splitProps,
-  untrack,
-} from 'solid-js';
+import { createEffect, createMemo, createSignal, For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { pad, toDate } from '../../utils/date';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { Separator } from '../primitives/Separator';
 import { Text } from '../primitives/Text';
 import styles from './Countdown.module.css';
@@ -58,31 +49,31 @@ export interface CountdownProps extends HtmlProps<HTMLDivElement> {
 
 /** Live countdown to a date — launches, offers, auction ends. Screen readers get one summary label, not per-second chatter. */
 export const Countdown = (props: CountdownProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     { units: COUNTDOWN_UNITS, variant: 'boxes', size: 'md' } satisfies Partial<CountdownProps>,
     props,
   );
-  const [local, rest] = splitProps(merged, ['to', 'onComplete', 'units', 'labels', 'variant', 'size', 'class']);
+  const [local, rest] = partitionProps(merged, ['to', 'onComplete', 'units', 'labels', 'variant', 'size', 'class']);
   const translate = useTranslate();
   const [now, setNow] = createSignal(Date.now());
   const target = createMemo(() => +toDate(local.to));
 
-  createEffect(() => {
+  createEffect(target, (deadline) => {
     let timer: ReturnType<typeof setTimeout> | undefined;
     const tick = () => {
       const current = Date.now();
       setNow(current);
-      if (current < target()) timer = setTimeout(tick, TICK_MS - (current % TICK_MS) + TICK_SLACK_MS);
+      if (current < deadline) timer = setTimeout(tick, TICK_MS - (current % TICK_MS) + TICK_SLACK_MS);
     };
     const onVisible = () => {
       if (document.visibilityState === 'visible') setNow(Date.now());
     };
     tick();
     document.addEventListener('visibilitychange', onVisible);
-    onCleanup(() => {
+    return () => {
       clearTimeout(timer);
       document.removeEventListener('visibilitychange', onVisible);
-    });
+    };
   });
 
   const remainingSeconds = createMemo(() =>
@@ -95,11 +86,14 @@ export const Countdown = (props: CountdownProps) => {
   const summary = () => local.units.map((unit) => `${valueOf(unit)} ${labelOf(unit).toLowerCase()}`).join(', ');
 
   let completedFor: number | undefined;
-  createEffect(() => {
-    if (!Number.isFinite(target()) || now() < target() || target() === completedFor) return;
-    completedFor = target();
-    untrack(() => local.onComplete?.());
-  });
+  createEffect(
+    () => [target(), now()] as const,
+    ([deadline, current]) => {
+      if (!Number.isFinite(deadline) || current < deadline || deadline === completedFor) return;
+      completedFor = deadline;
+      local.onComplete?.();
+    },
+  );
 
   return (
     <div
@@ -113,7 +107,7 @@ export const Countdown = (props: CountdownProps) => {
       role="timer"
       aria-label={translate('velvet.feedback.countdown.remaining', { summary: summary() })}
     >
-      <Index each={local.units}>
+      <For keyed={false} each={local.units}>
         {(unit, i) => (
           <>
             <Show when={local.variant === 'inline' && i > 0}>
@@ -150,7 +144,7 @@ export const Countdown = (props: CountdownProps) => {
             </span>
           </>
         )}
-      </Index>
+      </For>
     </div>
   );
 };

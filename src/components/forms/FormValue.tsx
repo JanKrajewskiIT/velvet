@@ -1,4 +1,4 @@
-import { createEffect, createMemo, createSignal, For, on, onCleanup, Show, untrack } from 'solid-js';
+import { createEffect, createMemo, createSignal, For, Show, untrack } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
@@ -25,12 +25,21 @@ export const FormValue = (props: FormValueProps) => {
   const values = createMemo(() => (typeof props.value === 'string' ? [props.value] : props.value));
   const present = () => values().some((value) => value !== '');
   const validationValue = () => (present() ? 'valid' : '');
-  createEffect(() => {
-    proxy()?.setCustomValidity(props.invalidMessage ?? '');
-    if (props.disabled || (!props.invalidMessage && (present() || !props.required))) props.validation.setInvalid(false);
-  });
   createEffect(
-    on([() => props.form, proxy], ([, initialInput]) => {
+    () =>
+      [
+        proxy(),
+        props.invalidMessage,
+        props.disabled || (!props.invalidMessage && (present() || !props.required)),
+      ] as const,
+    ([input, message, resetValidity]) => {
+      input?.setCustomValidity(message ?? '');
+      if (resetValidity) props.validation.setInvalid(false);
+    },
+  );
+  createEffect(
+    () => [props.form, proxy()] as const,
+    ([, initialInput]) => {
       if (!initialInput) return;
       const initialForm = initialInput.form;
       if (!initialForm) return;
@@ -45,11 +54,11 @@ export const FormValue = (props: FormValueProps) => {
           }),
         );
       initialForm.addEventListener('reset', reset);
-      onCleanup(() => {
+      return () => {
         disposed = true;
         initialForm.removeEventListener('reset', reset);
-      });
-    }),
+      };
+    },
   );
   return (
     <>
@@ -57,7 +66,7 @@ export const FormValue = (props: FormValueProps) => {
         ref={setProxy}
         class={styles.formValue}
         type="text"
-        tabIndex={-1}
+        tabindex={-1}
         aria-hidden="true"
         form={props.form}
         required={props.required}

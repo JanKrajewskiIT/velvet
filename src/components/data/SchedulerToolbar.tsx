@@ -2,6 +2,7 @@ import type { I18nKey } from '@jankrajewskiit/i18n';
 import { For } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { addDays, startOfDay } from '../../utils/date';
 import { Button } from '../actions/Button';
 import { ButtonGroup } from '../actions/ButtonGroup';
@@ -45,7 +46,7 @@ export const SchedulerToolbar = (props: SchedulerToolbarProps) => {
             <Button
               variant="secondary"
               size="sm"
-              aria-pressed={calendar().view() === option.value}
+              aria-pressed={booleanAttribute(calendar().view() === option.value)}
               onClick={() => calendar().setView(option.value)}
             >
               {translate(option.labelKey)}

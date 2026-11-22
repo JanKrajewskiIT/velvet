@@ -1,9 +1,11 @@
-import { children, createMemo, For, type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { children, createMemo, For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { IconButton } from '../actions/IconButton';
 import { Heading } from '../primitives/Heading';
 import { Text } from '../primitives/Text';
@@ -35,8 +37,8 @@ export interface SetupChecklistProps extends HtmlProps<HTMLElement, 'title'> {
 
 /** "Get started" card for first-run setup. Steps are independent and done in any order; the first open step is highlighted. */
 export const SetupChecklist = (props: SetupChecklistProps) => {
-  const merged = mergeProps({ layout: 'list', hideWhenComplete: true } satisfies Partial<SetupChecklistProps>, props);
-  const [local, rest] = splitProps(merged, [
+  const merged = withDefaults({ layout: 'list', hideWhenComplete: true } satisfies Partial<SetupChecklistProps>, props);
+  const [local, rest] = partitionProps(merged, [
     'title',
     'description',
     'steps',

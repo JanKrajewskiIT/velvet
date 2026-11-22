@@ -1,6 +1,7 @@
 import { Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { Button } from '../actions/Button';
 import { CopyButton } from '../actions/CopyButton';
 import { Text } from '../primitives/Text';
@@ -61,7 +62,7 @@ export const AiResultFooter = (props: AiResultFooterProps) => {
             <Button
               variant="ghost"
               size="sm"
-              aria-pressed={props.feedback === 'up'}
+              aria-pressed={booleanAttribute(props.feedback === 'up')}
               onClick={() => props.onToggleFeedback('up')}
             >
               {translate('velvet.common.yes')}
@@ -69,7 +70,7 @@ export const AiResultFooter = (props: AiResultFooterProps) => {
             <Button
               variant="ghost"
               size="sm"
-              aria-pressed={props.feedback === 'down'}
+              aria-pressed={booleanAttribute(props.feedback === 'down')}
               onClick={() => props.onToggleFeedback('down')}
             >
               {translate('velvet.common.no')}

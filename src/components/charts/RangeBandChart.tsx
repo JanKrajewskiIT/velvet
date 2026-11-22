@@ -1,9 +1,10 @@
-import { createMemo, For, mergeProps, Show } from 'solid-js';
+import { createMemo, For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { clamp } from '../../utils/math';
 import { positiveNumber } from '../../utils/numericOption';
+import { withDefaults } from '../../utils/props';
 import { BAND_PAD, createBandGeometry } from '../finance/createBandGeometry';
 import { RangeBandTooltip } from '../finance/RangeBandTooltip';
 import { typographyClass } from '../primitives/typography';
@@ -31,7 +32,7 @@ export interface RangeBandChartProps {
 }
 
 export const RangeBandChart = (props: RangeBandChartProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     { loKey: 'lo', hiKey: 'hi', midKey: 'mid', valueKey: 'value', height: 260 } satisfies Partial<RangeBandChartProps>,
     props,
   );

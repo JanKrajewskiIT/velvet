@@ -1,5 +1,7 @@
 import { type AuthContextValue, getCurrentReturnUrl } from '@jankrajewskiit/auth';
-import { type Accessor, batch, createEffect, createSignal, on, onCleanup } from 'solid-js';
+import { type Accessor, createEffect, createSignal } from 'solid-js';
+
+import { createOperation } from '../hooks/createOperation';
 
 interface AuthActionOptions {
   readonly returnUrl?: string;
@@ -14,27 +16,24 @@ interface AuthAction {
 }
 
 export const createAuthAction = (auth: AuthContextValue, options: AuthActionOptions): AuthAction => {
-  const [busy, setBusy] = createSignal(false);
+  const { busy, begin } = createOperation({ concurrency: 'single-flight' });
   const [failed, setFailed] = createSignal(false);
-  let sequence = 0;
-  let disposed = false;
 
-  onCleanup(() => {
-    disposed = true;
-    sequence += 1;
-  });
-
-  createEffect(on(auth.user, () => setFailed(false), { defer: true }));
+  createEffect(
+    auth.user,
+    () => {
+      setFailed(false);
+    },
+    { defer: true },
+  );
 
   const run = async (operation: () => Promise<void>) => {
-    if (disposed || busy() || auth.isLoading()) return;
-    const current = ++sequence;
+    if (auth.isLoading()) return;
+    const run = begin();
+    if (!run) return;
     const session = auth.user();
-    const isCurrent = () => !disposed && current === sequence && auth.user() === session;
-    batch(() => {
-      setBusy(true);
-      setFailed(false);
-    });
+    const isCurrent = () => run.isCurrent() && auth.user() === session;
+    setFailed(false);
 
     try {
       await operation();
@@ -47,7 +46,7 @@ export const createAuthAction = (auth: AuthContextValue, options: AuthActionOpti
       setFailed(true);
       options.onError?.(error);
     } finally {
-      if (current === sequence) setBusy(false);
+      run.finish();
     }
   };
 

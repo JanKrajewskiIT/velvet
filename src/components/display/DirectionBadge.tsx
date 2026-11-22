@@ -1,8 +1,10 @@
-import { type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { Glyph } from '../primitives/Glyph';
 import styles from './DirectionBadge.module.css';
 
@@ -33,11 +35,11 @@ export interface DirectionBadgeProps extends HtmlProps<HTMLSpanElement> {
 }
 
 export const DirectionBadge = (props: DirectionBadgeProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     { direction: 'flat', variant: 'solid', size: 'md' } satisfies Partial<DirectionBadgeProps>,
     props,
   );
-  const [local, rest] = splitProps(merged, ['direction', 'children', 'suffix', 'icon', 'variant', 'size', 'class']);
+  const [local, rest] = partitionProps(merged, ['direction', 'children', 'suffix', 'icon', 'variant', 'size', 'class']);
   const translate = useTranslate();
   const direction = () => (isDirection(local.direction) ? local.direction : undefined);
   const key = () => local.direction.toUpperCase();

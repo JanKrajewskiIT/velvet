@@ -1,7 +1,8 @@
-import { createEffect, createSignal, mergeProps, onMount, Show } from 'solid-js';
+import { createEffect, createSignal, onSettled, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Button } from '../actions/Button';
 import { Avatar } from '../primitives/Avatar';
 import { Text } from '../primitives/Text';
@@ -25,17 +26,16 @@ export interface CommentComposerProps {
 
 /** Auto-growing textarea with send / cancel actions. ⌘↵ sends, Esc cancels. */
 export const CommentComposer = (props: CommentComposerProps) => {
-  const p = mergeProps({ initial: '' } satisfies Partial<CommentComposerProps>, props);
+  const p = withDefaults({ initial: '' } satisfies Partial<CommentComposerProps>, props);
   const translate = useTranslate();
   const [text, setText] = createSignal(p.initial);
   let input!: HTMLTextAreaElement;
 
-  createEffect(() => {
-    text();
+  createEffect(text, () => {
     input.style.height = 'auto';
     input.style.height = `${Math.min(input.scrollHeight, MAX_HEIGHT_PX)}px`;
   });
-  onMount(() => {
+  onSettled(() => {
     if (!p.autoFocus) return;
     input.focus({ preventScroll: true });
     input.setSelectionRange(input.value.length, input.value.length);

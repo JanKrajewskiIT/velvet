@@ -1,7 +1,10 @@
-import { createMemo, createUniqueId, type JSX, mergeProps, onMount, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createMemo, createUniqueId, onSettled, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { FieldLabel } from '../primitives/FieldLabel';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
@@ -52,7 +55,7 @@ export interface RichTextEditorProps {
 
 /** Dependency-free WYSIWYG for comments, descriptions and notes, built on `contenteditable` with its own editing engine and undo stack. Output is allow-listed HTML: p h2 h3 blockquote pre ul ol li strong em u s code a[href] br. */
 export const RichTextEditor = (props: RichTextEditorProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     { defaultValue: '', minHeight: 140, toolbar: 'full' } satisfies Partial<RichTextEditorProps>,
     props,
   );
@@ -85,7 +88,7 @@ export const RichTextEditor = (props: RichTextEditorProps) => {
   });
   const { link, exec } = commands;
 
-  onMount(() => {
+  onSettled(() => {
     editor.replaceChildren(createRichTextFragment(p.defaultValue));
     history.record();
     state.afterChange();
@@ -135,17 +138,17 @@ export const RichTextEditor = (props: RichTextEditorProps) => {
           }}
           id={`${id}-editor`}
           class={cx(styles.rtePartArea, typographyClass('body'))}
-          contentEditable={editable()}
-          spellcheck
+          contenteditable={booleanAttribute(editable())}
+          spellcheck="true"
           role="textbox"
           aria-multiline="true"
           aria-labelledby={p.label ? `${id}-label` : undefined}
           aria-label={p.label ? undefined : placeholder()}
           aria-describedby={p.hint || p.error ? `${id}-hint` : undefined}
           aria-placeholder={placeholder()}
-          aria-invalid={!!p.error || undefined}
-          aria-disabled={p.disabled || undefined}
-          aria-readonly={p.readOnly || undefined}
+          aria-invalid={booleanAttribute(!!p.error || undefined)}
+          aria-disabled={booleanAttribute(p.disabled || undefined)}
+          aria-readonly={booleanAttribute(p.readOnly || undefined)}
           data-placeholder={placeholder()}
           data-empty={state.empty() || undefined}
           style={{

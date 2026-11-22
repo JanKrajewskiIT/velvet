@@ -1,5 +1,5 @@
+import { Portal } from '@solidjs/web';
 import { Show } from 'solid-js';
-import { Portal } from 'solid-js/web';
 
 import { createModalRoot } from '../feedback/createModalRoot';
 import styles from './Lightbox.module.css';

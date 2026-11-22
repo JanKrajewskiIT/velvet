@@ -1,10 +1,13 @@
-import { createSignal, type JSX, mergeProps, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createSignal, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { createDismiss } from '../../hooks/createDismiss';
 import { createFloating } from '../../hooks/createFloating';
 import { createTrigger } from '../../hooks/createTrigger';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Button } from '../actions/Button';
 import styles from './Menu.module.css';
 import type { MenuItem } from './menuItem';
@@ -15,7 +18,7 @@ const TRIGGER_SELECTOR = '[aria-haspopup="menu"]';
 /** Attributes and handlers a menu trigger must carry. Spread them last, after your own props, and call your own handlers yourself. */
 export interface MenuTriggerProps {
   'aria-haspopup': 'menu';
-  'aria-expanded': boolean;
+  'aria-expanded': 'true' | 'false';
   onClick: JSX.EventHandler<HTMLElement, MouseEvent>;
   onKeyDown: JSX.EventHandler<HTMLElement, KeyboardEvent>;
 }
@@ -43,7 +46,7 @@ export interface MenuProps {
 
 /** Dropdown menu of actions attached to a trigger. ↑↓ / Home / End move, type to jump, Enter selects, Esc closes and refocuses the trigger. */
 export const Menu = (props: MenuProps) => {
-  const p = mergeProps({ align: 'start', side: 'bottom', defaultOpen: false } satisfies Partial<MenuProps>, props);
+  const p = withDefaults({ align: 'start', side: 'bottom', defaultOpen: false } satisfies Partial<MenuProps>, props);
   const [wrap, setWrap] = createSignal<HTMLSpanElement>();
   const [isOpen, setOpen] = createControllable({
     value: () => p.open,
@@ -61,7 +64,7 @@ export const Menu = (props: MenuProps) => {
   const triggerProps: MenuTriggerProps = {
     'aria-haspopup': 'menu',
     get 'aria-expanded'() {
-      return isOpen();
+      return booleanAttribute(isOpen());
     },
     onClick: () => setOpen(!isOpen()),
     onKeyDown: (e) => {

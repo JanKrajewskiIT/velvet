@@ -1,4 +1,4 @@
-import { type Accessor, createSignal, getOwner, onCleanup, onMount } from 'solid-js';
+import { type Accessor, createSignal, getOwner, onSettled } from 'solid-js';
 
 import { addDays, startOfDay } from '../utils/date';
 
@@ -7,7 +7,7 @@ export const createToday = (): Accessor<Date> => {
   const [today, setToday] = createSignal(startOfDay(new Date()), {
     equals: (previous, next) => previous.getTime() === next.getTime(),
   });
-  onMount(() => {
+  onSettled(() => {
     let timer: ReturnType<typeof setTimeout> | undefined;
     const refresh = () => {
       clearTimeout(timer);
@@ -19,11 +19,11 @@ export const createToday = (): Accessor<Date> => {
     refresh();
     document.addEventListener('visibilitychange', refresh);
     window.addEventListener('focus', refresh);
-    onCleanup(() => {
+    return () => {
       clearTimeout(timer);
       document.removeEventListener('visibilitychange', refresh);
       window.removeEventListener('focus', refresh);
-    });
+    };
   });
   return today;
 };

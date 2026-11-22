@@ -1,6 +1,7 @@
 import { For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { fmtDate, sameDay, ymd } from '../../utils/date';
 import { Text } from '../primitives/Text';
@@ -30,7 +31,7 @@ export const OrganizerGrid = (props: OrganizerGridProps) => {
       <div
         ref={props.calendar.setGrid}
         role="grid"
-        tabIndex={-1}
+        tabindex={-1}
         aria-label={props.calendar.monthLabel()}
         class={styles.organizerPartGrid}
         onKeyDown={(e) => props.calendar.onGridKeyDown(e)}
@@ -49,8 +50,8 @@ export const OrganizerGrid = (props: OrganizerGridProps) => {
                 type="button"
                 role="gridcell"
                 data-k={ymd(d)}
-                tabIndex={ymd(d) === props.calendar.tabStop() ? 0 : -1}
-                aria-selected={on()}
+                tabindex={ymd(d) === props.calendar.tabStop() ? 0 : -1}
+                aria-selected={booleanAttribute(on())}
                 aria-label={label()}
                 class={cx(
                   styles.organizerPartDay,

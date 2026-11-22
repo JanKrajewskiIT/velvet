@@ -1,8 +1,9 @@
 import type { I18nKey } from '@jankrajewskiit/i18n';
-import { mergeProps, Show } from 'solid-js';
+import { Show } from 'solid-js';
 
 import { useTranslate, useTranslateRich } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Button } from '../actions/Button';
 import type { ProgressTone } from '../feedback/Progress';
 import { ProgressRing } from '../feedback/ProgressRing';
@@ -36,7 +37,7 @@ const ringTone = (percent: number): ProgressTone => {
 
 /** End-of-session result: accuracy ring, known / to-review counts, restart and review-missed actions. */
 export const PracticeSummary = (props: PracticeSummaryProps) => {
-  const p = mergeProps({ results: [] as FlashResult[] } satisfies Partial<PracticeSummaryProps>, props);
+  const p = withDefaults({ results: [] as FlashResult[] } satisfies Partial<PracticeSummaryProps>, props);
   const translate = useTranslate();
   const translateRich = useTranslateRich();
   const known = () => p.results.filter((result) => result.known).length;

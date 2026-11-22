@@ -1,8 +1,7 @@
-import { mergeProps, splitProps } from 'solid-js';
-
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import type { Tone } from '../../utils/tone';
 import styles from './Dot.module.css';
 
@@ -28,8 +27,8 @@ export interface DotProps extends HtmlProps<HTMLSpanElement> {
 
 /** Small round status / presence / category marker. Pair status colour with a label. */
 export const Dot = (props: DotProps) => {
-  const merged = mergeProps({ tone: 'neutral', size: 'md' } satisfies DotProps, props);
-  const [local, rest] = splitProps(merged, ['tone', 'size', 'pulse', 'ring', 'label', 'class']);
+  const merged = withDefaults({ tone: 'neutral', size: 'md' } satisfies DotProps, props);
+  const [local, rest] = partitionProps(merged, ['tone', 'size', 'pulse', 'ring', 'label', 'class']);
   return (
     <span
       class={cx(
@@ -42,7 +41,7 @@ export const Dot = (props: DotProps) => {
       data-tone={local.tone}
       role={local.label ? 'img' : undefined}
       aria-label={local.label}
-      aria-hidden={local.label ? undefined : true}
+      aria-hidden={local.label ? undefined : 'true'}
       {...rest}
     />
   );

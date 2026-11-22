@@ -1,4 +1,4 @@
-import { type Accessor, createEffect, createMemo, createSignal, on, onCleanup, onMount, untrack } from 'solid-js';
+import { type Accessor, createEffect, createMemo, createSignal, onSettled, untrack } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { clamp } from '../../utils/math';
@@ -74,35 +74,42 @@ export const createCropView = (options: CropViewOptions, stage: () => HTMLDivEle
     setZoomValue(next);
   };
 
-  onMount(() => {
+  onSettled(() => {
     const element = stage();
     setStageWidth(element.clientWidth);
     const observer = new ResizeObserver(() => setStageWidth(element.clientWidth));
     observer.observe(element);
-    onCleanup(() => observer.disconnect());
+    return () => observer.disconnect();
   });
 
   createEffect(
-    on(
-      () => options.src,
-      () => setNatural(undefined),
-      { defer: true },
-    ),
+    () => options.src,
+    () => {
+      setNatural(undefined);
+    },
+    { defer: true },
   );
 
-  createEffect(() => {
-    const report = options.onCropChange;
-    if (!natural() || !report) return;
-    const area = cropAreaOf({
-      scale: scale(),
-      frame: frameSize(),
-      image: rotated(),
-      position: position(),
-      zoom: zoom(),
-      rotation: rotation(),
-    });
-    untrack(() => report(area));
-  });
+  createEffect(
+    () => {
+      const report = options.onCropChange;
+      if (!natural() || !report) return;
+      return {
+        report,
+        area: cropAreaOf({
+          scale: scale(),
+          frame: frameSize(),
+          image: rotated(),
+          position: position(),
+          zoom: zoom(),
+          rotation: rotation(),
+        }),
+      };
+    },
+    (crop) => {
+      if (crop) crop.report(crop.area);
+    },
+  );
 
   const rotateLeft = () => {
     setRotation((rotation() + ROTATE_LEFT_DEGREES) % FULL_TURN_DEGREES);

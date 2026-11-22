@@ -1,8 +1,9 @@
-import { createEffect, createSignal, mergeProps, splitProps } from 'solid-js';
+import { createEffect, createSignal } from 'solid-js';
 
 import { assignRef } from '../../utils/assignRef';
 import { cx } from '../../utils/cx';
 import { type ElementTag, type HtmlProps, Polymorphic } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import styles from './ListboxPanel.module.css';
 
 const MIN_SPACE_BELOW = 260;
@@ -18,17 +19,19 @@ export interface ListboxPanelProps extends HtmlProps<HTMLElement> {
 
 /** Floating surface under a select, combobox or picker field. */
 export const ListboxPanel = (props: ListboxPanelProps) => {
-  const merged = mergeProps({ as: 'div', flip: true } satisfies ListboxPanelProps, props);
-  const [local, rest] = splitProps(merged, ['as', 'up', 'flip', 'ref', 'class']);
+  const merged = withDefaults({ as: 'div', flip: true } satisfies ListboxPanelProps, props);
+  const [local, rest] = partitionProps(merged, ['as', 'up', 'flip', 'ref', 'class']);
   const [node, setNode] = createSignal<HTMLElement>();
   const [auto, setAuto] = createSignal(false);
-  createEffect(() => {
-    const parent = node()?.parentElement;
-    if (local.up !== undefined || !local.flip || !parent) return;
-    const rect = parent.getBoundingClientRect();
-    const below = window.innerHeight - rect.bottom;
-    setAuto(below < MIN_SPACE_BELOW && rect.top > below);
-  });
+  createEffect(
+    () => [node()?.parentElement, local.up, local.flip] as const,
+    ([parent, up, flip]) => {
+      if (up !== undefined || !flip || !parent) return;
+      const rect = parent.getBoundingClientRect();
+      const below = window.innerHeight - rect.bottom;
+      setAuto(below < MIN_SPACE_BELOW && rect.top > below);
+    },
+  );
   const up = () => local.up ?? (local.flip && auto());
   return (
     <Polymorphic

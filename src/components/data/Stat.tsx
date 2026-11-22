@@ -1,8 +1,10 @@
-import { type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import type { Tone } from '../../utils/tone';
 import { Sparkline } from '../charts/Sparkline';
 import { Card, type CardProps } from '../display/Card';
@@ -15,7 +17,8 @@ const SPARK_HEIGHT = 32;
 export interface StatProps extends HtmlProps<HTMLElement, 'title'> {
   label: JSX.Element;
   value: JSX.Element;
-  delta?: string;
+  /** Content of the delta badge, for example a formatted figure or a `Delta`. */
+  delta?: JSX.Element;
   /** Colour of the delta badge. @default 'success' */
   tone?: 'success' | 'danger' | 'warning' | 'neutral';
   hint?: JSX.Element;
@@ -36,8 +39,8 @@ export interface StatProps extends HtmlProps<HTMLElement, 'title'> {
 
 /** KPI card built on Card: label, big value, delta badge, hint. `spark` adds a trend line. */
 export const Stat = (props: StatProps) => {
-  const merged = mergeProps({ tone: 'success', padding: 'sm' } satisfies Partial<StatProps>, props);
-  const [local, rest] = splitProps(merged, [
+  const merged = withDefaults({ tone: 'success', padding: 'sm' } satisfies Partial<StatProps>, props);
+  const [local, rest] = partitionProps(merged, [
     'label',
     'value',
     'delta',

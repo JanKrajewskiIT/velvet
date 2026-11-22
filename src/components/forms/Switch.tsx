@@ -1,6 +1,8 @@
-import { type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { Show } from 'solid-js';
 
 import { cx } from '../../utils/cx';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
 import { createNativeChecked, type NativeCheckedProps } from './createNativeChecked';
@@ -17,8 +19,8 @@ export interface SwitchProps
 
 /** Switch for instant on/off settings (no Save needed). `class` styles the wrapping label; other attributes go to the input. */
 export const Switch = (props: SwitchProps) => {
-  const merged = mergeProps({ size: 'md' } satisfies SwitchProps, props);
-  const [local, rest] = splitProps(merged, ['label', 'description', 'size', 'class', 'checked', 'defaultChecked']);
+  const merged = withDefaults({ size: 'md' } satisfies SwitchProps, props);
+  const [local, rest] = partitionProps(merged, ['label', 'description', 'size', 'class', 'checked', 'defaultChecked']);
   const checked = createNativeChecked(local);
   return (
     <label class={cx(typographyClass('body'), styles.check, rest.disabled && styles.checkVariantDisabled, local.class)}>

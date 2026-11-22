@@ -1,8 +1,10 @@
-import { For, type JSX, mergeProps, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { EmptyText } from '../primitives/EmptyText';
 import { ListItem as ListRow } from '../primitives/ListItem';
 import styles from './List.module.css';
@@ -41,7 +43,7 @@ export interface ListProps {
 
 /** Lightweight rows for people, files, candidates, settings. Pass onValueChange (selectable) or onItemClick (plain actions) to make rows interactive. */
 export const List = (props: ListProps) => {
-  const merged = mergeProps({ divided: true, size: 'md' } satisfies Partial<ListProps>, props);
+  const merged = withDefaults({ divided: true, size: 'md' } satisfies Partial<ListProps>, props);
   const translate = useTranslate();
   const empty = () => merged.empty ?? translate('velvet.data.list.empty');
   const interactive = () => !!(merged.onValueChange || merged.onItemClick);

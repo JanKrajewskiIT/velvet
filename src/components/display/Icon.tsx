@@ -1,6 +1,7 @@
-import { type JSX, mergeProps, splitProps } from 'solid-js';
+import { type JSX } from '@solidjs/web';
 
 import { cx } from '../../utils/cx';
+import { partitionProps, withDefaults } from '../../utils/props';
 import styles from './Icon.module.css';
 import { type IconAlias, IconAliases } from './IconAliases';
 import { type IconName, VelvetIcons } from './VelvetIcons';
@@ -25,11 +26,11 @@ export interface IconProps extends Omit<JSX.SvgSVGAttributes<SVGSVGElement>, 'st
 
 /** Velvet Icons glyph as inline SVG. Inherits `currentColor`; 24px grid. For plain HTML use `<i class="vui-icon icon-NAME">`. */
 export const Icon = (props: IconProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     { size: DEFAULT_SIZE, strokeWidth: DEFAULT_STROKE_WIDTH } satisfies Partial<IconProps>,
     props,
   );
-  const [local, rest] = splitProps(merged, ['name', 'size', 'color', 'strokeWidth', 'label', 'class', 'style']);
+  const [local, rest] = partitionProps(merged, ['name', 'size', 'color', 'strokeWidth', 'label', 'class', 'style']);
   const name = () => {
     const value = local.name;
     return isIconAlias(value) ? IconAliases[value] : value;

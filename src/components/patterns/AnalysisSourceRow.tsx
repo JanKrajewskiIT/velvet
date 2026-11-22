@@ -1,6 +1,8 @@
-import { type JSX, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { Button } from '../actions/Button';
@@ -59,7 +61,7 @@ export const AnalysisSourceRow = (props: AnalysisSourceRowProps) => {
         type="button"
         class={styles.areqPartSrcbtn}
         role="checkbox"
-        aria-checked={props.included}
+        aria-checked={booleanAttribute(props.included)}
         disabled={status() !== 'ready'}
         onClick={() => props.onToggle(props.source)}
       >

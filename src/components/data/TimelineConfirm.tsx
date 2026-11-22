@@ -1,4 +1,4 @@
-import { onCleanup, onMount, Show } from 'solid-js';
+import { onSettled, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
@@ -21,14 +21,14 @@ export interface TimelineConfirmProps {
 export const TimelineConfirm = (props: TimelineConfirmProps) => {
   const translate = useTranslate();
   let root!: HTMLDivElement;
-  onMount(() => {
+  onSettled(() => {
     const trigger = document.activeElement;
     root.querySelector('button')?.focus();
-    onCleanup(() => {
+    return () => {
       const active = document.activeElement;
       const focusLost = !active || active === document.body || root.contains(active);
       if (focusLost && trigger instanceof HTMLElement && trigger.isConnected) trigger.focus();
-    });
+    };
   });
   return (
     <div

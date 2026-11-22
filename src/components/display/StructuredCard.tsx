@@ -1,7 +1,9 @@
-import { children, type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { children, Show } from 'solid-js';
 
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { Surface, type SurfaceProps } from '../primitives/Surface';
 import { Text } from '../primitives/Text';
 import styles from './StructuredCard.module.css';
@@ -42,8 +44,8 @@ export interface StructuredCardProps extends Omit<SurfaceProps, 'title' | 'paddi
 }
 
 export const StructuredCard = (props: StructuredCardProps) => {
-  const merged = mergeProps({ mediaRatio: '16 / 9', footerAlign: 'between' } satisfies StructuredCardProps, props);
-  const [local, surface] = splitProps(merged, [
+  const merged = withDefaults({ mediaRatio: '16 / 9', footerAlign: 'between' } satisfies StructuredCardProps, props);
+  const [local, surface] = partitionProps(merged, [
     'media',
     'mediaRatio',
     'mediaTag',

@@ -1,6 +1,7 @@
 import { createMemo, createSignal, For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { Button } from '../actions/Button';
@@ -84,7 +85,7 @@ export const AtsRecommendationList = (props: AtsRecommendationListProps) => {
           size="sm"
           class={styles.atsPartMore}
           iconRight={showAll() ? 'chevron-up' : 'chevron-down'}
-          aria-expanded={showAll()}
+          aria-expanded={booleanAttribute(showAll())}
           onClick={() => setShowAll(!showAll())}
         >
           {showAll()

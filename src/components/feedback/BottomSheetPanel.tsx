@@ -66,7 +66,7 @@ export const BottomSheetPanel = (props: BottomSheetPanelProps) => {
       aria-describedby={description() ? descriptionId : undefined}
     >
       <div
-        tabIndex={-1}
+        tabindex={-1}
         data-vui-focus-fallback
         class={cx(styles.sheet, dy() > 0 && styles.sheetVariantDragging, props.sheet.class)}
         style={{ transform: dy() ? `translateY(${dy()}px)` : undefined }}

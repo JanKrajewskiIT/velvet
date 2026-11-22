@@ -1,9 +1,11 @@
-import { children, Index, type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { children, For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { toneIcon } from '../../utils/tone';
 import { Glyph } from '../primitives/Glyph';
 import { Heading } from '../primitives/Heading';
@@ -43,8 +45,8 @@ export interface StatusPageProps extends HtmlProps<HTMLDivElement, 'title'> {
 
 /** The end of a page or flow — errors (404 / 403 / 500) and outcomes (offline / success / warning / info). Same layout as EmptyState. */
 export const StatusPage = (props: StatusPageProps) => {
-  const merged = mergeProps({ code: 404, size: 'lg' } satisfies StatusPageProps, props);
-  const [local, rest] = splitProps(merged, [
+  const merged = withDefaults({ code: 404, size: 'lg' } satisfies StatusPageProps, props);
+  const [local, rest] = partitionProps(merged, [
     'code',
     'status',
     'title',
@@ -106,7 +108,9 @@ export const StatusPage = (props: StatusPageProps) => {
             </Show>
           </Text>
           <Text as="span" variant="display-lg" tone="inherit" class={styles.statusPagePartNum} aria-hidden="true">
-            <Index each={String(current()).split('')}>{(char, i) => <span style={{ '--d': i }}>{char()}</span>}</Index>
+            <For keyed={false} each={String(current()).split('')}>
+              {(char, i) => <span style={{ '--d': i }}>{char()}</span>}
+            </For>
           </Text>
         </div>
       </Show>

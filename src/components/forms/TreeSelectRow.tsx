@@ -1,5 +1,6 @@
 import { Show } from 'solid-js';
 
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
 import { Text } from '../primitives/Text';
@@ -30,9 +31,11 @@ export const TreeSelectRow = (props: TreeSelectRowProps) => (
     id={props.id}
     role="treeitem"
     aria-level={props.row.level}
-    aria-expanded={props.row.hasChildren ? props.expanded : undefined}
-    aria-selected={props.multiple ? undefined : props.state === 'on'}
-    aria-checked={props.multiple ? (props.state === 'mixed' ? 'mixed' : props.state === 'on') : undefined}
+    aria-expanded={props.row.hasChildren ? booleanAttribute(props.expanded) : undefined}
+    aria-selected={props.multiple ? undefined : booleanAttribute(props.state === 'on')}
+    aria-checked={
+      props.multiple ? booleanAttribute(props.state === 'mixed' ? 'mixed' : props.state === 'on') : undefined
+    }
     class={cx(
       typographyClass('body'),
       styles.option,

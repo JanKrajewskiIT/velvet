@@ -1,11 +1,13 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { createEffect, createMemo, createSignal, createUniqueId, type JSX, mergeProps, on, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, createMemo, createSignal, createUniqueId, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { createToday } from '../../hooks/createToday';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { addMonths, DAY_MS, fmtDate, sameDay } from '../../utils/date';
+import { withDefaults } from '../../utils/props';
 import { Button } from '../actions/Button';
 import { FieldLabel } from '../primitives/FieldLabel';
 import { Text } from '../primitives/Text';
@@ -65,7 +67,7 @@ type ResolvedDateRangePickerProps = DateRangePickerProps &
 
 /** Range field → popover with presets column + two months (one on narrow screens). Changes are a draft until Apply; footer shows the span in days. */
 export const DateRangePicker = (props: DateRangePickerProps) => {
-  const p: ResolvedDateRangePickerProps = mergeProps(
+  const p: ResolvedDateRangePickerProps = withDefaults(
     {
       presets: DEFAULT_RANGE_PRESETS,
       weekStartsOn: 1,
@@ -93,9 +95,12 @@ export const DateRangePicker = (props: DateRangePickerProps) => {
   });
   const popover = createPickerPopover(p.defaultOpen, () => p.align);
   let trigger!: HTMLButtonElement;
-  createEffect(() => {
-    if (p.disabled) popover.close();
-  });
+  createEffect(
+    () => p.disabled,
+    (disabled) => {
+      if (disabled) popover.close();
+    },
+  );
   const serialized = () => {
     const range = current();
     if (!range.start || !range.end) return [];
@@ -116,13 +121,11 @@ export const DateRangePicker = (props: DateRangePickerProps) => {
     setMonth(monthFor(range, narrow()));
   };
 
-  createEffect(
-    on(popover.open, (isOpen) => {
-      if (!isOpen) return;
-      setNarrow(window.matchMedia(NARROW_QUERY).matches);
-      showRange(current());
-    }),
-  );
+  createEffect(popover.open, (isOpen) => {
+    if (!isOpen) return;
+    setNarrow(window.matchMedia(NARROW_QUERY).matches);
+    showRange(current());
+  });
 
   const formatRange = (range: DateRange): string => {
     const { start, end } = range;

@@ -1,4 +1,5 @@
-import { type Accessor, createSignal, type JSX, onCleanup, onMount } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { type Accessor, createSignal, onSettled } from 'solid-js';
 
 import type { CropView } from './createCropView';
 import type { Point } from './cropGeometry';
@@ -31,14 +32,14 @@ export const createCropGestures = (view: CropView, elements: CropElements): Crop
   let drag: DragStart | undefined;
   const [dragging, setDragging] = createSignal(false);
 
-  onMount(() => {
+  onSettled(() => {
     const stage = elements.stage();
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
       view.setZoom(view.zoom() * (1 - e.deltaY * WHEEL_ZOOM_SENSITIVITY));
     };
     stage.addEventListener('wheel', onWheel, { passive: false });
-    onCleanup(() => stage.removeEventListener('wheel', onWheel));
+    return () => stage.removeEventListener('wheel', onWheel);
   });
 
   const endDrag = () => {

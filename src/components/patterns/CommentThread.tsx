@@ -1,8 +1,9 @@
-import { createEffect, createMemo, createSignal, For, mergeProps, on, Show, untrack } from 'solid-js';
+import { createEffect, createMemo, createSignal, For, Show, untrack } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { createId } from '../../utils/id';
+import { withDefaults } from '../../utils/props';
 import { Count } from '../primitives/Count';
 import { EmptyText } from '../primitives/EmptyText';
 import { Heading } from '../primitives/Heading';
@@ -52,7 +53,7 @@ export interface CommentThreadProps {
  * Manages its own state from `comments`; listen with `onChange` or the per-action callbacks.
  */
 export const CommentThread = (props: CommentThreadProps) => {
-  const p = mergeProps({ comments: [] as Comment[], collapseAfter: 2 } satisfies CommentThreadProps, props);
+  const p = withDefaults({ comments: [] as Comment[], collapseAfter: 2 } satisfies CommentThreadProps, props);
   const translate = useTranslate();
   const currentUser = () => p.currentUser ?? translate('velvet.patterns.commentThread.currentUser');
   const title = () => p.title ?? translate('velvet.patterns.commentThread.title');
@@ -66,11 +67,11 @@ export const CommentThread = (props: CommentThreadProps) => {
   const [expanded, setExpandedMap] = createSignal<Record<string, boolean>>({});
 
   createEffect(
-    on(
-      () => p.comments,
-      (comments) => setList(comments),
-      { defer: true },
-    ),
+    () => p.comments,
+    (comments) => {
+      setList(comments);
+    },
+    { defer: true },
   );
 
   const index = createMemo(() => indexComments(list()));

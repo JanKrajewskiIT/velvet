@@ -1,7 +1,8 @@
-import { createMemo, createSignal, createUniqueId, For, mergeProps, Show, untrack } from 'solid-js';
+import { createMemo, createSignal, createUniqueId, For, Show, untrack } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Button } from '../actions/Button';
 import { OptionSwitcher } from '../forms/OptionSwitcher';
 import { SearchInput } from '../forms/SearchInput';
@@ -35,7 +36,7 @@ const DEFAULT_CARD_COUNT = 20;
 
 /** Study-session setup: deck picker (due counts), card count, order and direction. */
 export const PracticeSetup = (props: PracticeSetupProps) => {
-  const p = mergeProps({ maxCards: 50 } satisfies Partial<PracticeSetupProps>, props);
+  const p = withDefaults({ maxCards: 50 } satisfies Partial<PracticeSetupProps>, props);
   const translate = useTranslate();
   const orderOptions = () => FLASH_ORDERS.map((value) => ({ value, label: translate(FLASH_ORDER_LABEL_KEYS[value]) }));
   const directionOptions = () =>
@@ -104,7 +105,7 @@ export const PracticeSetup = (props: PracticeSetupProps) => {
               <div
                 class={styles.collections}
                 // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- the labelled deck list must take focus so keyboard users can scroll it
-                tabIndex={0}
+                tabindex={0}
                 role="region"
                 aria-label={translate('velvet.patterns.flashcardSetup.categories')}
               >

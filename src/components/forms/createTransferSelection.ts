@@ -25,9 +25,12 @@ export const createTransferSelection = (options: TransferSelectionOptions) => {
   const [focus, setFocus] = createSignal(0);
   let anchor: number | undefined;
 
-  createEffect(() => {
-    if (focus() >= view.visible().length) setFocus(Math.max(0, view.visible().length - 1));
-  });
+  createEffect(
+    () => [focus(), view.visible().length] as const,
+    ([focused, count]) => {
+      if (focused >= count) setFocus(Math.max(0, count - 1));
+    },
+  );
 
   const mark = (values: Iterable<string>) => props.onMarkedChange(new Set(values));
   const toggle = (item: TransferItem, index: number, range: boolean) => {

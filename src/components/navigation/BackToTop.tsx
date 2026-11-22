@@ -1,8 +1,10 @@
-import { createEffect, createSignal, mergeProps, on, onCleanup } from 'solid-js';
+import { createEffect, createSignal } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { scrollBehavior } from '../../utils/motion';
+import { withDefaults } from '../../utils/props';
 import { Glyph } from '../primitives/Glyph';
 import styles from './BackToTop.module.css';
 import { resolveScrollContainer, type ScrollContainer } from './scrollContainer';
@@ -24,14 +26,15 @@ const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
 
 /** Floating "scroll to top" that appears after the threshold, with a ring showing scroll progress. Respects reduced motion. */
 export const BackToTop = (props: BackToTopProps) => {
-  const p = mergeProps({ threshold: 400, position: 'fixed' } satisfies Partial<BackToTopProps>, props);
+  const p = withDefaults({ threshold: 400, position: 'fixed' } satisfies Partial<BackToTopProps>, props);
   const translate = useTranslate();
   const label = () => p.label ?? translate('velvet.navigation.backToTop.label');
   const [progress, setProgress] = createSignal(0);
   const [visible, setVisible] = createSignal(false);
 
   createEffect(
-    on([() => p.target, () => p.threshold], () => {
+    () => [p.target, p.threshold] as const,
+    () => {
       const container = resolveScrollContainer(p.target);
       const source: HTMLElement | Window = container ?? window;
       const read = () => {
@@ -44,8 +47,8 @@ export const BackToTop = (props: BackToTopProps) => {
       };
       read();
       source.addEventListener('scroll', read, { passive: true });
-      onCleanup(() => source.removeEventListener('scroll', read));
-    }),
+      return () => source.removeEventListener('scroll', read);
+    },
   );
 
   const scrollToTop = () => {
@@ -63,8 +66,8 @@ export const BackToTop = (props: BackToTopProps) => {
         visible() && styles.backtopVariantShow,
         p.class,
       )}
-      tabIndex={visible() ? 0 : -1}
-      aria-hidden={!visible() || undefined}
+      tabindex={visible() ? 0 : -1}
+      aria-hidden={booleanAttribute(!visible() || undefined)}
       onClick={scrollToTop}
     >
       <svg viewBox="0 0 48 48" aria-hidden="true">

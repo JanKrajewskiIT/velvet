@@ -1,6 +1,7 @@
 import { AuthProvider, type OidcAuthConfig } from '@jankrajewskiit/auth';
 import { defineDictionaries, type DictionaryNode, I18nProvider, type Locale } from '@jankrajewskiit/i18n';
-import { ErrorBoundary, type JSX, onCleanup, onMount, Show, untrack } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { type Accessor, Errored, onSettled, Show, untrack } from 'solid-js';
 
 import { ErrorState } from '../components/feedback/ErrorState';
 import { ToastProvider, type ToastProviderProps } from '../components/feedback/ToastProvider';
@@ -35,9 +36,10 @@ export const VelvetProvider = (props: VelvetProviderProps) => {
     }),
   );
 
-  onMount(() => onCleanup(initTheme()));
+  onSettled(initTheme);
 
-  const fallback = (error: unknown, reset: () => void) => {
+  const fallback = (failure: Accessor<unknown>, reset: () => void) => {
+    const error = failure();
     if (props.onError) props.onError(error);
     else reportAsyncError(error);
     return props.errorFallback?.(error, reset) ?? <ErrorState size="lg" onRetry={reset} />;
@@ -50,11 +52,11 @@ export const VelvetProvider = (props: VelvetProviderProps) => {
       storageKey={props.localeStorageKey ?? LOCALE_STORAGE_KEY}
     >
       <ToastProvider {...props.toasts}>
-        <ErrorBoundary fallback={fallback}>
+        <Errored fallback={fallback}>
           <Show when={props.authConfig} keyed fallback={props.children}>
             {(config) => <AuthProvider config={config}>{props.children}</AuthProvider>}
           </Show>
-        </ErrorBoundary>
+        </Errored>
       </ToastProvider>
     </I18nProvider>
   );

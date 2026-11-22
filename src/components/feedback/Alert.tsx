@@ -1,9 +1,11 @@
-import { children, type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { children, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import type { StatusTone } from '../../utils/tone';
 import { CloseButton } from '../primitives/CloseButton';
 import { Glyph } from '../primitives/Glyph';
@@ -40,8 +42,8 @@ export interface AlertProps extends HtmlProps<HTMLDivElement, 'title' | 'onClose
 
 /** Inline message inside content — form errors, plan limits, contextual tips. danger/warning announce as `role="alert"`. */
 export const Alert = (props: AlertProps) => {
-  const merged = mergeProps({ tone: 'info', variant: 'soft' } satisfies AlertProps, props);
-  const [local, rest] = splitProps(merged, [
+  const merged = withDefaults({ tone: 'info', variant: 'soft' } satisfies AlertProps, props);
+  const [local, rest] = partitionProps(merged, [
     'tone',
     'title',
     'children',

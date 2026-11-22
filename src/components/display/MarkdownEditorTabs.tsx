@@ -42,7 +42,7 @@ export const MarkdownEditorTabs = (props: MarkdownEditorTabsProps) => {
         {(item) => (
           <SegmentedItem
             role="tab"
-            tabIndex={props.mode === item.id ? 0 : -1}
+            tabindex={props.mode === item.id ? 0 : -1}
             selected={props.mode === item.id}
             onClick={() => props.onModeChange(item.id)}
           >

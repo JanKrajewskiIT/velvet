@@ -1,10 +1,11 @@
-import { batch, createEffect, createMemo, createSignal, mergeProps, on, onCleanup, onMount, Show } from 'solid-js';
+import { createEffect, createMemo, createSignal, onCleanup, onSettled, Show } from 'solid-js';
 
 import { ownsLayerEvent } from '../../hooks/createLayer';
 import { useTranslate } from '../../i18n/useTranslate';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { isInteractiveTarget } from '../../utils/interactiveTarget';
+import { withDefaults } from '../../utils/props';
 import { Button } from '../actions/Button';
 import { FlipCard } from '../data/FlipCard';
 import { CloseButton } from '../primitives/CloseButton';
@@ -35,7 +36,7 @@ const SESSION_SELECTOR = '[data-vui-flashcard-session]';
 
 /** One-card-at-a-time practice: flip (Space), then "Didn’t know" (1 / ←) or "Knew it" (2 / →); the card slides out, progress bar and tally update. */
 export const PracticeSession = (props: PracticeSessionProps) => {
-  const p = mergeProps({ reverse: false } satisfies Partial<PracticeSessionProps>, props);
+  const p = withDefaults({ reverse: false } satisfies Partial<PracticeSessionProps>, props);
   const translate = useTranslate();
   const [index, setIndex] = createSignal(0);
   const [flipped, setFlipped] = createSignal(false);
@@ -54,20 +55,16 @@ export const PracticeSession = (props: PracticeSessionProps) => {
   };
 
   createEffect(
-    on(
-      () => p.cards,
-      () => {
-        clearTimeout(leaveTimer);
-        leaveTimer = undefined;
-        batch(() => {
-          setIndex(0);
-          setFlipped(false);
-          setResults([]);
-          setLeaving(null);
-        });
-      },
-      { defer: true },
-    ),
+    () => p.cards,
+    () => {
+      clearTimeout(leaveTimer);
+      leaveTimer = undefined;
+      setIndex(0);
+      setFlipped(false);
+      setResults([]);
+      setLeaving(null);
+    },
+    { defer: true },
   );
 
   const answer = (isKnown: boolean) => {
@@ -88,17 +85,15 @@ export const PracticeSession = (props: PracticeSessionProps) => {
       }
       const next = [...results(), { id: current.id ?? position, known: isKnown }];
       const finished = position + 1 >= cards.length;
-      batch(() => {
-        setResults(next);
-        setLeaving(null);
-        setFlipped(false);
-        setIndex(position + 1);
-      });
+      setResults(next);
+      setLeaving(null);
+      setFlipped(false);
+      setIndex(position + 1);
       if (finished) p.onFinish?.(next);
     }, LEAVE_MS);
   };
 
-  onMount(() => {
+  onSettled(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.defaultPrevented || e.repeat || e.altKey || e.ctrlKey || e.metaKey || leaving() || !card()) return;
       if (!root || !ownsLayerEvent(root)) return;
@@ -119,7 +114,7 @@ export const PracticeSession = (props: PracticeSessionProps) => {
       }
     };
     window.addEventListener('keydown', onKeyDown);
-    onCleanup(() => window.removeEventListener('keydown', onKeyDown));
+    return () => window.removeEventListener('keydown', onKeyDown);
   });
   onCleanup(() => clearTimeout(leaveTimer));
 

@@ -1,5 +1,6 @@
 import { Show } from 'solid-js';
 
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Button } from '../actions/Button';
@@ -22,9 +23,9 @@ export const TreeStatusRow = (props: TreeStatusRowProps) => (
     data-id={props.row.id}
     role="treeitem"
     aria-level={props.row.level}
-    aria-selected={false}
-    aria-disabled={props.row.status.kind === 'loading' || undefined}
-    tabIndex={props.tree.focus.tabbableId() === props.row.id ? 0 : -1}
+    aria-selected="false"
+    aria-disabled={booleanAttribute(props.row.status.kind === 'loading' || undefined)}
+    tabindex={props.tree.focus.tabbableId() === props.row.id ? 0 : -1}
     class={cx(
       typographyClass('body-sm'),
       styles.treePartRow,
@@ -54,7 +55,7 @@ export const TreeStatusRow = (props: TreeStatusRowProps) => (
         variant="ghost"
         size="sm"
         class={styles.treePartRetry}
-        tabIndex={-1}
+        tabindex={-1}
         onClick={(e) => {
           e.stopPropagation();
           void props.tree.model.loadChildren(props.row.owner).catch(reportAsyncError);

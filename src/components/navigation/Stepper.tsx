@@ -1,9 +1,11 @@
-import { createEffect, createSignal, For, type JSX, Match, mergeProps, on, onCleanup, Show, Switch } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, createSignal, For, Match, Show, Switch } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { classSelector, variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { Polymorphic } from '../../utils/polymorphic';
+import { withDefaults } from '../../utils/props';
 import { Glyph } from '../primitives/Glyph';
 import { Marker } from '../primitives/Marker';
 import { Text } from '../primitives/Text';
@@ -64,7 +66,10 @@ const FOCUS_STEP: Readonly<Record<'horizontal' | 'vertical', Readonly<Record<str
  * With onStepClick steps become buttons (←→ / ↑↓ move focus).
  */
 export const Stepper = (props: StepperProps) => {
-  const p = mergeProps({ current: 0, orientation: 'horizontal', linear: true } satisfies Partial<StepperProps>, props);
+  const p = withDefaults(
+    { current: 0, orientation: 'horizontal', linear: true } satisfies Partial<StepperProps>,
+    props,
+  );
   const translate = useTranslate();
   const labels = (): StepperLabels => ({
     navigation: p.labels?.navigation ?? translate('velvet.navigation.stepper.navigation'),
@@ -75,16 +80,14 @@ export const Stepper = (props: StepperProps) => {
   let root!: HTMLOListElement;
 
   createEffect(
-    on(
-      () => p.current,
-      (current, previous = current) => {
-        if (current <= previous) return;
-        setPopping(Array.from({ length: current - previous }, (_, i) => previous + i));
-        const timer = setTimeout(() => setPopping([]), POP_DURATION_MS);
-        onCleanup(() => clearTimeout(timer));
-      },
-      { defer: true },
-    ),
+    () => p.current,
+    (current, previous = current) => {
+      if (current <= previous) return;
+      setPopping(Array.from({ length: current - previous }, (_, i) => previous + i));
+      const timer = setTimeout(() => setPopping([]), POP_DURATION_MS);
+      return () => clearTimeout(timer);
+    },
+    { defer: true },
   );
 
   const statusOf = (index: number): StepStatus => {

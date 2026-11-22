@@ -17,9 +17,12 @@ export const createPromptSubmission = (
     operation.invalidate();
   };
   onCleanup(cancel);
-  createEffect(() => {
-    if (props.disabled) cancel();
-  });
+  createEffect(
+    () => props.disabled,
+    (disabled) => {
+      if (disabled) cancel();
+    },
+  );
   const canSend = () =>
     !!props.onSubmit &&
     !props.disabled &&

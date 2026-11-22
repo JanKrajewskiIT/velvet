@@ -1,4 +1,4 @@
-import { type Accessor, batch, createSignal } from 'solid-js';
+import { type Accessor, createSignal } from 'solid-js';
 
 import type { OrganizerCalendar } from './createOrganizerCalendar';
 import {
@@ -48,10 +48,8 @@ export const createOrganizerEditing = (
     const applied = current && applyDraft(source.events, current);
     if (!applied) return;
     source.onEventsChange?.(applied.events);
-    batch(() => {
-      setDraft(undefined);
-      calendar.pick(applied.date);
-    });
+    setDraft(undefined);
+    calendar.pick(applied.date);
   };
   const askDelete = (event: OrganizerEvent) => setPendingDelete(event);
   const cancelDelete = () => setPendingDelete(undefined);

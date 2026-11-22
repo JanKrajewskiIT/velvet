@@ -1,6 +1,7 @@
 import { For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Control } from '../primitives/Control';
@@ -35,12 +36,12 @@ export const ColorLabelForm = (props: ColorLabelFormProps) => {
             id={props.manager.nameId}
             placeholder={translate('velvet.patterns.colorLabelManager.namePlaceholder')}
             value={props.draft.name}
-            readOnly={props.manager.busy()}
+            readonly={props.manager.busy()}
             onInput={(e) => props.manager.rename(e.currentTarget.value)}
             onKeyDown={(e) => {
               if (e.key === 'Enter') void props.manager.save().catch(reportAsyncError);
             }}
-            aria-invalid={!!props.manager.nameError() || undefined}
+            aria-invalid={booleanAttribute(!!props.manager.nameError() || undefined)}
           />
         </Control>
         <Show when={props.manager.nameError()}>
@@ -64,7 +65,7 @@ export const ColorLabelForm = (props: ColorLabelFormProps) => {
                 round
                 color={color}
                 role="radio"
-                aria-checked={color === props.draft.color}
+                aria-checked={booleanAttribute(color === props.draft.color)}
                 aria-label={translate('velvet.patterns.colorLabelManager.colorOption', { index: index() + 1 })}
                 class={styles.clmPartSw}
                 disabled={props.manager.busy()}

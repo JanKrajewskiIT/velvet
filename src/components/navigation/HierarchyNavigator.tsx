@@ -1,6 +1,8 @@
-import { createEffect, createSignal, For, Index, type JSX, on, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, createSignal, For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { IconButton } from '../actions/IconButton';
 import { Glyph } from '../primitives/Glyph';
@@ -54,11 +56,11 @@ export const HierarchyNavigator = (props: HierarchyNavigatorProps) => {
 
   let list: HTMLUListElement | undefined;
   createEffect(
-    on(
-      () => path().length,
-      () => list?.querySelector('button')?.focus({ preventScroll: true }),
-      { defer: true },
-    ),
+    () => path().length,
+    () => {
+      list?.querySelector('button')?.focus({ preventScroll: true });
+    },
+    { defer: true },
   );
 
   const into = (node: HierarchyNode) => {
@@ -122,7 +124,7 @@ export const HierarchyNavigator = (props: HierarchyNavigatorProps) => {
               direction() > 0 ? styles.hnavPartListVariantIn : styles.hnavPartListVariantOut,
             )}
           >
-            <Index each={level()}>
+            <For keyed={false} each={level()}>
               {(node) => (
                 <li>
                   <button
@@ -132,7 +134,7 @@ export const HierarchyNavigator = (props: HierarchyNavigatorProps) => {
                       styles.hnavPartItem,
                       props.value === node().id && styles.hnavPartItemVariantSel,
                     )}
-                    aria-current={props.value === node().id || undefined}
+                    aria-current={booleanAttribute(props.value === node().id || undefined)}
                     onClick={() =>
                       hasChildren(node()) ? into(node()) : props.onSelect?.(node().id, node(), [...path(), node()])
                     }
@@ -168,7 +170,7 @@ export const HierarchyNavigator = (props: HierarchyNavigatorProps) => {
                   </button>
                 </li>
               )}
-            </Index>
+            </For>
           </ul>
         )}
       </Show>

@@ -1,8 +1,10 @@
-import { For, type JSX, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps } from '../../utils/props';
 import { Card, type CardProps } from '../display/Card';
 import { Progress, type ProgressTone } from '../feedback/Progress';
 import { ProgressRing } from '../feedback/ProgressRing';
@@ -47,7 +49,7 @@ const toneOf = (score: number, tone: ScoreTone | undefined): ScoreTone =>
 
 /** Result card for a computed score (ATS match, quiz result, health check): ring + verdict badge + per-criterion bars. For a single KPI use Stat. */
 export const ScoreCard = (props: ScoreCardProps) => {
-  const [local, rest] = splitProps(props, ['label', 'score', 'verdict', 'hint', 'criteria', 'tone', 'class']);
+  const [local, rest] = partitionProps(props, ['label', 'score', 'verdict', 'hint', 'criteria', 'tone', 'class']);
   const translate = useTranslate();
   const tone = () => toneOf(local.score, local.tone);
   return (

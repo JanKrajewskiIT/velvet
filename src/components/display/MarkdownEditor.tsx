@@ -1,9 +1,11 @@
-import { createUniqueId, type JSX, mergeProps, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createUniqueId, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { joinIdRefs } from '../../utils/joinIdRefs';
+import { withDefaults } from '../../utils/props';
 import { EmptyText } from '../primitives/EmptyText';
 import type { FieldErrorAnnouncementProps } from '../primitives/fieldErrorAnnouncement';
 import { FieldFeedback } from '../primitives/FieldFeedback';
@@ -65,7 +67,7 @@ const formatHeight = (height: number | string): string => (typeof height === 'nu
  * same renderer, same sanitising, so what you write is what readers see.
  */
 export const MarkdownEditor = (props: MarkdownEditorProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     { defaultValue: '', defaultMode: 'split', height: 280, toolbar: true } satisfies MarkdownEditorProps,
     props,
   );
@@ -114,9 +116,9 @@ export const MarkdownEditor = (props: MarkdownEditorProps) => {
               value={editor.value()}
               placeholder={placeholder()}
               disabled={merged.disabled}
-              readOnly={merged.readOnly}
-              spellcheck
-              aria-invalid={merged.error ? true : undefined}
+              readonly={merged.readOnly}
+              spellcheck="true"
+              aria-invalid={merged.error ? 'true' : undefined}
               aria-describedby={joinIdRefs(footId(), merged.error ? errorId() : merged.hint ? hintId() : undefined)}
               onInput={editor.onInput}
               onKeyDown={editor.onKeyDown}
@@ -126,7 +128,7 @@ export const MarkdownEditor = (props: MarkdownEditorProps) => {
             <div
               class={styles.mdePartPreview}
               aria-label={translate('velvet.display.markdownEditor.previewLabel')}
-              tabIndex={editor.mode() === 'preview' ? 0 : -1}
+              tabindex={editor.mode() === 'preview' ? 0 : -1}
             >
               <Show
                 when={editor.previewSource().trim()}

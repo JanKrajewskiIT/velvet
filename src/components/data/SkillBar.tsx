@@ -1,8 +1,10 @@
-import { createSignal, type JSX, mergeProps, onCleanup, onMount, Show, untrack } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createSignal, onSettled, Show, untrack } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { clamp } from '../../utils/math';
+import { withDefaults } from '../../utils/props';
 import { Meter } from '../primitives/Meter';
 import { Text } from '../primitives/Text';
 import styles from './SkillBar.module.css';
@@ -22,13 +24,13 @@ export interface SkillBarProps {
 
 /** Competency meter: label, optional level word, and a bar that grows in once on mount with a single shimmer sweep. Not for task progress (use Progress). */
 export const SkillBar = (props: SkillBarProps) => {
-  const merged = mergeProps({ tone: 'brand', animate: true } satisfies Partial<SkillBarProps>, props);
+  const merged = withDefaults({ tone: 'brand', animate: true } satisfies Partial<SkillBarProps>, props);
   const translate = useTranslate();
   const [grown, setGrown] = createSignal(untrack(() => !merged.animate));
-  onMount(() => {
+  onSettled(() => {
     if (!merged.animate) return;
     const frame = requestAnimationFrame(() => setGrown(true));
-    onCleanup(() => cancelAnimationFrame(frame));
+    return () => cancelAnimationFrame(frame);
   });
   const percent = () => clamp(merged.value, 0, 100);
   const valueText = () =>

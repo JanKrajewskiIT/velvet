@@ -1,9 +1,10 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { createEffect, createMemo, createSignal, For, mergeProps, on, onCleanup, Show, splitProps } from 'solid-js';
+import { createEffect, createMemo, createSignal, For, onCleanup, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { Delta } from '../data/Delta';
 import { VisuallyHidden } from '../primitives/VisuallyHidden';
 import styles from './PriceCell.module.css';
@@ -29,7 +30,7 @@ export interface PriceCellProps extends HtmlProps<HTMLSpanElement, 'children' | 
 const FLASH_MS = 900;
 
 export const PriceCell = (props: PriceCellProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     {
       digits: DEFAULT_PRICE_DIGITS,
       flash: true,
@@ -39,7 +40,7 @@ export const PriceCell = (props: PriceCellProps) => {
     } satisfies Partial<PriceCellProps>,
     props,
   );
-  const [local, rest] = splitProps(p, [
+  const [local, rest] = partitionProps(p, [
     'value',
     'quotes',
     'symbol',
@@ -73,30 +74,28 @@ export const PriceCell = (props: PriceCellProps) => {
   let timer: ReturnType<typeof setTimeout> | undefined;
   onCleanup(() => clearTimeout(timer));
   createEffect(
-    on(
-      () => [value(), local.flash, local.hidden, local.quotes, local.symbol] as const,
-      (next, previous) => {
-        clearTimeout(timer);
-        setDirection(undefined);
-        const current = next[0];
-        const old = previous?.[0];
-        if (previous && (next[3] !== previous[3] || next[4] !== previous[4])) return;
-        if (
-          !next[1] ||
-          next[2] ||
-          current == null ||
-          old == null ||
-          !Number.isFinite(current) ||
-          !Number.isFinite(old) ||
-          current === old
-        )
-          return;
-        setDirection(current > old ? 'up' : 'down');
-        setRevision((number) => number + 1);
-        timer = setTimeout(() => setDirection(undefined), FLASH_MS);
-      },
-      { defer: true },
-    ),
+    () => [value(), local.flash, local.hidden, local.quotes, local.symbol] as const,
+    (next, previous) => {
+      clearTimeout(timer);
+      setDirection(undefined);
+      const current = next[0];
+      const old = previous?.[0];
+      if (previous && (next[3] !== previous[3] || next[4] !== previous[4])) return;
+      if (
+        !next[1] ||
+        next[2] ||
+        current == null ||
+        old == null ||
+        !Number.isFinite(current) ||
+        !Number.isFinite(old) ||
+        current === old
+      )
+        return;
+      setDirection(current > old ? 'up' : 'down');
+      setRevision((number) => number + 1);
+      timer = setTimeout(() => setDirection(undefined), FLASH_MS);
+    },
+    { defer: true },
   );
   const valid = () => value() != null && Number.isFinite(value());
   const text = () =>
@@ -122,7 +121,7 @@ export const PriceCell = (props: PriceCellProps) => {
       <Show when={name()}>{(description) => <VisuallyHidden>{description()}</VisuallyHidden>}</Show>
       <For each={[revision()]}>
         {() => (
-          <span class={styles.value} aria-hidden={name() ? true : undefined}>
+          <span class={styles.value} aria-hidden={name() ? 'true' : undefined}>
             {text()}
             <Show when={local.currency && valid()}>
               <span class={styles.currency}>{local.currency}</span>

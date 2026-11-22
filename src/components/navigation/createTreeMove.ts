@@ -1,4 +1,4 @@
-import { type Accessor, createEffect, createMemo, createSignal, on } from 'solid-js';
+import { type Accessor, createEffect, createMemo, createSignal } from 'solid-js';
 
 import type { TreeFocus } from './createTreeFocus';
 import type { TreeModel } from './createTreeModel';
@@ -40,15 +40,13 @@ export const createTreeMove = (
   let pendingFocus: string | undefined;
 
   createEffect(
-    on(
-      () => config.data,
-      () => {
-        if (!pendingFocus) return;
-        focus.focusRow(pendingFocus);
-        pendingFocus = undefined;
-      },
-      { defer: true },
-    ),
+    () => config.data,
+    () => {
+      if (!pendingFocus) return;
+      focus.focusRow(pendingFocus);
+      pendingFocus = undefined;
+    },
+    { defer: true },
   );
 
   const canDrop = (target: string, nextPosition: TreeMovePosition = 'inside', source = sourceId() ?? ''): boolean => {

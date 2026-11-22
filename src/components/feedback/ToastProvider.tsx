@@ -1,7 +1,8 @@
-import { createContext, createEffect, createSignal, For, type JSX, mergeProps, splitProps, useContext } from 'solid-js';
-import { Portal } from 'solid-js/web';
+import { type JSX, Portal } from '@solidjs/web';
+import { createContext, createEffect, createSignal, For, getOwner, useContext } from 'solid-js';
 
 import { cx } from '../../utils/cx';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { Toast, type ToastProps } from './Toast';
 import styles from './ToastProvider.module.css';
 import { ToastRegion } from './ToastRegion';
@@ -35,11 +36,11 @@ interface ToastEntry {
   options: ToastOptions;
 }
 
-const ToastContext = createContext<ToastController>();
+const ToastContext = createContext<ToastController | null>(null);
 
 /** Owns the toast queue and renders it in a `ToastRegion` portal. */
 export const ToastProvider = (props: ToastProviderProps) => {
-  const p = mergeProps({ max: 5, defaultDuration: 5000 } satisfies Partial<ToastProviderProps>, props);
+  const p = withDefaults({ max: 5, defaultDuration: 5000 } satisfies Partial<ToastProviderProps>, props);
   const [entries, setEntries] = createSignal<ToastEntry[]>([]);
   let sequence = 0;
   const max = () => (Number.isFinite(p.max) && p.max >= 0 ? Math.min(100, Math.floor(p.max)) : 5);
@@ -49,10 +50,12 @@ export const ToastProvider = (props: ToastProviderProps) => {
     setEntries(keep ? list.slice(-keep) : []);
     evicted.forEach((entry) => entry.options.onClose?.());
   };
-  createEffect(() => {
-    const limit = max();
-    if (entries().length > limit) trim(entries());
-  });
+  createEffect(
+    () => [max(), entries()] as const,
+    ([limit, current]) => {
+      if (current.length > limit) trim(current);
+    },
+  );
 
   const dismiss = (id: string) => {
     const entry = entries().find((e) => e.id === id);
@@ -71,13 +74,13 @@ export const ToastProvider = (props: ToastProviderProps) => {
   const clear = () => entries().forEach((entry) => dismiss(entry.id));
 
   return (
-    <ToastContext.Provider value={{ show, dismiss, clear }}>
+    <ToastContext value={{ show, dismiss, clear }}>
       {props.children}
       <Portal>
         <ToastRegion class={cx(styles.root, p.regionClass)}>
           <For each={entries()}>
             {(entry) => {
-              const [local, rest] = splitProps(entry.options, ['id', 'onClose', 'duration']);
+              const [local, rest] = partitionProps(entry.options, ['id', 'onClose', 'duration']);
               return (
                 <Toast {...rest} duration={local.duration ?? p.defaultDuration} onClose={() => dismiss(entry.id)} />
               );
@@ -85,13 +88,13 @@ export const ToastProvider = (props: ToastProviderProps) => {
           </For>
         </ToastRegion>
       </Portal>
-    </ToastContext.Provider>
+    </ToastContext>
   );
 };
 
 /** The nearest `ToastProvider`'s controller. Throws when used outside one. */
 export const useToast = (): ToastController => {
-  const controller = useContext(ToastContext);
+  const controller = getOwner() === null ? null : useContext(ToastContext);
   if (!controller) throw new Error('useToast must be used inside a <ToastProvider>.');
   return controller;
 };

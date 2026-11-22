@@ -1,18 +1,11 @@
-import {
-  children as resolveChildren,
-  createEffect,
-  createMemo,
-  createSignal,
-  type JSX,
-  mergeProps,
-  on,
-  Show,
-  untrack,
-} from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { children as resolveChildren, createEffect, createMemo, createSignal, Show, untrack } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Glyph } from '../primitives/Glyph';
 import { Text } from '../primitives/Text';
 import { aspectLabel, aspectRatioValue } from './aspect';
@@ -42,7 +35,7 @@ export type { MediaFrameProps } from './mediaFrameTypes';
  * bottom overlay on a scrim, caption + credit. A `src` with an unsafe scheme is treated as a failed load.
  */
 export const MediaFrame = (props: MediaFrameProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     {
       alt: '',
       kind: 'image',
@@ -67,14 +60,12 @@ export const MediaFrame = (props: MediaFrameProps) => {
   const [state, setState] = createSignal<FrameState>(untrack(initialState));
   const [playing, setPlaying] = createSignal(false);
   createEffect(
-    on(
-      () => [p.src, p.poster, p.kind],
-      () => {
-        setState(initialState());
-        setPlaying(false);
-      },
-      { defer: true },
-    ),
+    () => [p.src, p.poster, p.kind],
+    () => {
+      setState(initialState());
+      setPlaying(false);
+    },
+    { defer: true },
   );
 
   const status = (): FrameState => (p.loading ? 'loading' : state());
@@ -118,7 +109,7 @@ export const MediaFrame = (props: MediaFrameProps) => {
       <div
         class={cx(styles.mediaPartFrame, variantClass(MEDIA_PART_FRAME_CLASSES, status()))}
         style={{ 'aspect-ratio': aspectRatioValue(p.ratio) }}
-        aria-busy={status() === 'loading' || undefined}
+        aria-busy={booleanAttribute(status() === 'loading' || undefined)}
       >
         <Show when={state() !== 'error' && url()}>
           {(src) => (

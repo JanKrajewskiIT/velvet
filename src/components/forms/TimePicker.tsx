@@ -1,5 +1,6 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { createEffect, createMemo, createSignal, createUniqueId, type JSX, mergeProps, on, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, createMemo, createSignal, createUniqueId, Show } from 'solid-js';
 
 import { createActiveOptionScroll } from '../../hooks/createActiveOptionScroll';
 import { createControllable } from '../../hooks/createControllable';
@@ -7,8 +8,10 @@ import { createDismiss } from '../../hooks/createDismiss';
 import { createFloating } from '../../hooks/createFloating';
 import { ownsLayerEvent } from '../../hooks/createLayer';
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { pad } from '../../utils/date';
+import { withDefaults } from '../../utils/props';
 import { Control } from '../primitives/Control';
 import { ControlInput } from '../primitives/ControlInput';
 import { FieldLabel } from '../primitives/FieldLabel';
@@ -49,7 +52,7 @@ export interface TimePickerProps extends FormControlProps {
 
 /** Time field: type freely ("930", "9:30", "9.30pm") or pick from a step list. Value is always "HH:MM" 24h. */
 export const TimePicker = (props: TimePickerProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     { step: 15, min: '00:00', max: '23:59', hour12: false, size: 'md' } satisfies Partial<TimePickerProps>,
     props,
   );
@@ -145,29 +148,28 @@ export const TimePicker = (props: TimePickerProps) => {
     { refocus: false },
   );
   createEffect(
-    on(
-      current,
-      () => {
-        setTyped(null);
-        setInvalidText(undefined);
-      },
-      { defer: true },
-    ),
-  );
-  createEffect(() => {
-    if (p.disabled) {
-      setOpen(false);
+    current,
+    () => {
       setTyped(null);
-    }
-  });
-  createEffect(
-    on(open, (isOpen) => {
-      if (!isOpen) return;
-      const time = current();
-      const index = indexAtOrAfter(time ?? `${pad(new Date().getHours())}:00`);
-      setActive(index < 0 ? 0 : index);
-    }),
+      setInvalidText(undefined);
+    },
+    { defer: true },
   );
+  createEffect(
+    () => p.disabled,
+    (disabled) => {
+      if (disabled) {
+        setOpen(false);
+        setTyped(null);
+      }
+    },
+  );
+  createEffect(open, (isOpen) => {
+    if (!isOpen) return;
+    const time = current();
+    const index = indexAtOrAfter(time ?? `${pad(new Date().getHours())}:00`);
+    setActive(index < 0 ? 0 : index);
+  });
   createActiveOptionScroll(open, () => (active() >= 0 ? `${listId()}-${active()}` : undefined));
 
   const onKeyDown: JSX.EventHandler<HTMLInputElement, KeyboardEvent> = (e) => {
@@ -228,20 +230,20 @@ export const TimePicker = (props: TimePickerProps) => {
             }}
             id={id()}
             role="combobox"
-            aria-expanded={open()}
+            aria-expanded={booleanAttribute(open())}
             aria-controls={listId()}
             aria-activedescendant={open() && active() >= 0 ? `${listId()}-${active()}` : undefined}
             aria-describedby={validation.describedBy(message() || p.hint ? hintId() : undefined)}
-            aria-invalid={!!message() || validation.invalid() || undefined}
+            aria-invalid={booleanAttribute(!!message() || validation.invalid() || undefined)}
             aria-label={p['aria-label']}
             aria-labelledby={p['aria-labelledby']}
-            aria-required={p.required || undefined}
+            aria-required={booleanAttribute(p.required || undefined)}
             class={styles.timePartInput}
             value={text()}
             placeholder={p.placeholder ?? example()}
             disabled={p.disabled}
             autocomplete="off"
-            inputMode="numeric"
+            inputmode="numeric"
             onInput={onInput}
             onFocus={() => !p.disabled && setOpen(true)}
             onClick={() => !p.disabled && setOpen(true)}

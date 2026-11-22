@@ -4,6 +4,7 @@ import { createDismiss } from '../../hooks/createDismiss';
 import { createFloating } from '../../hooks/createFloating';
 import { createFrameFocus } from '../../hooks/createFrameFocus';
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { createTypeahead } from '../../utils/createTypeahead';
 import { classSelector } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
@@ -113,7 +114,7 @@ export const FilterChip = (props: FilterChipProps) => {
         icon={props.filter.icon}
         class={cx(styles.fchip, picked().length > 0 && styles.fchipVariantOn)}
         aria-haspopup="listbox"
-        aria-expanded={open()}
+        aria-expanded={booleanAttribute(open())}
         aria-controls={listId}
         onClick={() => (open() ? setOpen(false) : openList())}
         onKeyDown={(event) => {
@@ -142,7 +143,7 @@ export const FilterChip = (props: FilterChipProps) => {
           <Listbox
             floating={false}
             id={listId}
-            tabIndex={props.filter.options.length ? -1 : 0}
+            tabindex={props.filter.options.length ? -1 : 0}
             multiselectable={multiple()}
             aria-label={props.filter.label}
           >
@@ -154,7 +155,7 @@ export const FilterChip = (props: FilterChipProps) => {
                     as="li"
                     selected={on()}
                     showCheck={!multiple()}
-                    tabIndex={index() === active() ? 0 : -1}
+                    tabindex={index() === active() ? 0 : -1}
                     onClick={() => toggle(option.value)}
                     onKeyDown={(e) => onOptionKeyDown(e, option.value)}
                     onFocus={() => setActiveValue(option.value)}

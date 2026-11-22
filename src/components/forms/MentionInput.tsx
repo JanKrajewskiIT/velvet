@@ -1,9 +1,12 @@
-import { createMemo, createSignal, createUniqueId, Index, type JSX, mergeProps, onCleanup, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createMemo, createSignal, createUniqueId, For, onCleanup, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { createDismiss } from '../../hooks/createDismiss';
 import { createFloating } from '../../hooks/createFloating';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Control } from '../primitives/Control';
 import { Field } from '../primitives/Field';
 import type { FieldErrorAnnouncementProps } from '../primitives/fieldErrorAnnouncement';
@@ -50,7 +53,7 @@ export interface MentionInputProps extends FieldErrorAnnouncementProps {
 
 /** Multi-line field with `@mention` (and optional `#tag`) suggestions at the caret. ↑↓ move, ↵ / Tab insert, Esc closes. Known mentions are highlighted in place; the value stays plain text. */
 export const MentionInput = (props: MentionInputProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     { defaultValue: '', users: [], tags: [], rows: 3, maxRows: 8, maxResults: 6 } satisfies Partial<MentionInputProps>,
     props,
   );
@@ -132,13 +135,13 @@ export const MentionInput = (props: MentionInputProps) => {
                 class={styles.mentionPartHl}
                 aria-hidden="true"
               >
-                <Index each={search.parts()}>
+                <For keyed={false} each={search.parts()}>
                   {(part, index) => (
                     <Show when={index % 2 === 1} fallback={part()}>
                       <mark class={styles.mentionPartTok}>{part()}</mark>
                     </Show>
                   )}
-                </Index>
+                </For>
                 {'\u200b'}
               </div>
               <div
@@ -162,10 +165,10 @@ export const MentionInput = (props: MentionInputProps) => {
                 required={p.required}
                 role="combobox"
                 aria-autocomplete="list"
-                aria-expanded={search.open()}
+                aria-expanded={booleanAttribute(search.open())}
                 aria-controls={search.open() ? `${control.id}-list` : undefined}
                 aria-activedescendant={search.open() ? `${control.id}-list-${search.activeIndex()}` : undefined}
-                aria-invalid={control.invalid || undefined}
+                aria-invalid={booleanAttribute(control.invalid || undefined)}
                 aria-describedby={control.describedBy}
                 onInput={(event) => {
                   setValue(event.currentTarget.value);

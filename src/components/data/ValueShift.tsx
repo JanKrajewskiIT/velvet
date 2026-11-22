@@ -1,9 +1,11 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { createMemo, type JSX, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createMemo, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps } from '../../utils/props';
 import { Glyph } from '../primitives/Glyph';
 import { VisuallyHidden } from '../primitives/VisuallyHidden';
 import styles from './ValueShift.module.css';
@@ -18,7 +20,7 @@ export interface ValueShiftProps<T = number> extends HtmlProps<HTMLSpanElement> 
 }
 
 export const ValueShift = <T,>(props: ValueShiftProps<T>) => {
-  const [local, rest] = splitProps(props, ['from', 'to', 'format', 'worse', 'better', 'label', 'class']);
+  const [local, rest] = partitionProps(props, ['from', 'to', 'format', 'worse', 'better', 'label', 'class']);
   const i18n = useI18n();
   const translate = useTranslate();
   const formatter = createMemo(() => new Intl.NumberFormat(i18n.locale()));

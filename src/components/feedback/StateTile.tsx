@@ -1,5 +1,4 @@
-import { mergeProps } from 'solid-js';
-
+import { withDefaults } from '../../utils/props';
 import type { StatusTone } from '../../utils/tone';
 import { IconTile } from '../primitives/IconTile';
 import styles from './StateTile.module.css';
@@ -18,7 +17,7 @@ export interface StateTileProps {
 
 /** The tinted icon circle shared by EmptyState, ErrorState and StatusPage. */
 export const StateTile = (props: StateTileProps) => {
-  const p = mergeProps({ tone: 'neutral' } satisfies Partial<StateTileProps>, props);
+  const p = withDefaults({ tone: 'neutral' } satisfies Partial<StateTileProps>, props);
   return (
     <IconTile
       icon={p.icon}

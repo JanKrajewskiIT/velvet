@@ -1,7 +1,8 @@
-import { type JSX, mergeProps } from 'solid-js';
+import { type JSX } from '@solidjs/web';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import styles from './SkipLink.module.css';
 import { typographyClass } from './typography';
 
@@ -15,7 +16,7 @@ export interface SkipLinkProps {
 
 /** First focusable element on the page; moves focus to the target landmark (adds `tabindex=-1` if needed). */
 export const SkipLink = (props: SkipLinkProps) => {
-  const p = mergeProps({ href: '#main' } satisfies SkipLinkProps, props);
+  const p = withDefaults({ href: '#main' } satisfies SkipLinkProps, props);
   const translate = useTranslate();
   const go: JSX.EventHandler<HTMLAnchorElement, MouseEvent> = (e) => {
     const target = p.href.startsWith('#') ? document.getElementById(p.href.slice(1)) : null;

@@ -1,4 +1,4 @@
-import type { JSX } from 'solid-js';
+import { type JSX } from '@solidjs/web';
 
 import { cx } from '../../utils/cx';
 import styles from './ToastRegion.module.css';

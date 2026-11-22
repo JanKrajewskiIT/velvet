@@ -1,7 +1,8 @@
-import { type JSX, mergeProps, splitProps } from 'solid-js';
+import { type JSX } from '@solidjs/web';
 
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import styles from './EmptyText.module.css';
 import { renderIcon } from './Glyph';
 import { Text } from './Text';
@@ -19,8 +20,8 @@ export interface EmptyTextProps extends HtmlProps<HTMLElement> {
 
 /** One-line "nothing here" inside a list, panel or column. For a whole empty view use EmptyState. */
 export const EmptyText = (props: EmptyTextProps) => {
-  const merged = mergeProps({ align: 'center', as: 'div' } satisfies EmptyTextProps, props);
-  const [local, rest] = splitProps(merged, ['icon', 'align', 'dashed', 'as', 'class', 'children']);
+  const merged = withDefaults({ align: 'center', as: 'div' } satisfies EmptyTextProps, props);
+  const [local, rest] = partitionProps(merged, ['icon', 'align', 'dashed', 'as', 'class', 'children']);
   return (
     <Text
       {...rest}

@@ -1,4 +1,5 @@
-import { type Accessor, createEffect, createSignal, type JSX } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { type Accessor, createEffect, createSignal } from 'solid-js';
 
 import { createDismiss } from '../../hooks/createDismiss';
 import { createFloating } from '../../hooks/createFloating';
@@ -42,15 +43,18 @@ export const createPhoneCountryPopup = (options: PhoneCountryPopupOptions) => {
   createDismiss(open, () => setOpen(false), options.root);
   const floating = createFloating(open, options.root, { matchWidth: true });
 
-  createEffect(() => {
-    if (!open()) return;
-    const list = options.root()?.querySelector(classSelector(styles.selectPartMenu));
-    const row = list?.children[active()];
-    if (!list || !(row instanceof HTMLElement)) return;
-    if (row.offsetTop < list.scrollTop) list.scrollTop = row.offsetTop;
-    else if (row.offsetTop + row.offsetHeight > list.scrollTop + list.clientHeight)
-      list.scrollTop = row.offsetTop + row.offsetHeight - list.clientHeight;
-  });
+  createEffect(
+    () => [open(), options.root(), active()] as const,
+    ([opened, root, index]) => {
+      if (!opened) return;
+      const list = root?.querySelector(classSelector(styles.selectPartMenu));
+      const row = list?.children[index];
+      if (!list || !(row instanceof HTMLElement)) return;
+      if (row.offsetTop < list.scrollTop) list.scrollTop = row.offsetTop;
+      else if (row.offsetTop + row.offsetHeight > list.scrollTop + list.clientHeight)
+        list.scrollTop = row.offsetTop + row.offsetHeight - list.clientHeight;
+    },
+  );
 
   const onKeyDown: JSX.EventHandler<HTMLButtonElement, KeyboardEvent> = (event) => {
     if (!open()) {

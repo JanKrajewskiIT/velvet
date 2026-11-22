@@ -1,4 +1,4 @@
-import { createEffect, createSignal, For, onCleanup, Show } from 'solid-js';
+import { createEffect, createSignal, For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
@@ -59,24 +59,25 @@ export const TourCard = (props: TourCardProps) => {
   const nextLabel = () => props.tour.nextLabel ?? translate('velvet.common.next');
   const doneLabel = () => props.tour.doneLabel ?? translate('velvet.feedback.tour.done');
 
-  createEffect(() => {
-    const initialCard = card();
-    if (!initialCard) return;
-    const rect = props.rect;
-    const padding = props.tour.padding;
-    const side = props.step.placement;
-    const measure = () => setPosition(placeCard(rect, initialCard.getBoundingClientRect(), padding, side));
-    measure();
-    const observer = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(measure);
-    observer?.observe(initialCard);
-    onCleanup(() => observer?.disconnect());
+  createEffect(
+    () => [card(), props.rect, props.tour.padding, props.step.placement] as const,
+    ([initialCard, rect, padding, side]) => {
+      if (!initialCard) return;
+      const measure = () => setPosition(placeCard(rect, initialCard.getBoundingClientRect(), padding, side));
+      measure();
+      const observer = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(measure);
+      observer?.observe(initialCard);
+      return () => observer?.disconnect();
+    },
+  );
+  createEffect(card, (element) => {
+    element?.focus({ preventScroll: true });
   });
-  createEffect(() => card()?.focus({ preventScroll: true }));
 
   return (
     <div
       ref={setCard}
-      tabIndex={-1}
+      tabindex={-1}
       class={cx(styles.tourPartCard, `vui-tour__card--${position().side}`)}
       style={{ left: `${position().left}px`, top: `${position().top}px` }}
     >

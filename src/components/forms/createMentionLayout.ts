@@ -1,4 +1,4 @@
-import { type Accessor, createEffect, createSignal, on } from 'solid-js';
+import { type Accessor, createEffect, createSignal } from 'solid-js';
 
 import { clamp } from '../../utils/math';
 
@@ -39,7 +39,8 @@ export const createMentionLayout = (elements: MentionLayoutElements, inputs: Men
   const [popoverPosition, setPopoverPosition] = createSignal({ left: 0, top: 0 });
 
   createEffect(
-    on([inputs.value, inputs.rows, inputs.maxRows], () => {
+    () => [inputs.value(), inputs.rows(), inputs.maxRows()] as const,
+    () => {
       const textarea = elements.textarea();
       if (!textarea) return;
       const highlight = elements.highlight();
@@ -54,11 +55,12 @@ export const createMentionLayout = (elements: MentionLayoutElements, inputs: Men
       textarea.style.height = `${Math.min(Math.max(textarea.scrollHeight, inputs.rows() * lineHeight + padding), maxHeight)}px`;
       textarea.style.overflowY = textarea.scrollHeight > maxHeight ? 'auto' : 'hidden';
       if (highlight) highlight.scrollTop = textarea.scrollTop;
-    }),
+    },
   );
 
   createEffect(
-    on([inputs.queryStart, inputs.value], ([start]) => {
+    () => [inputs.queryStart(), inputs.value()] as const,
+    ([start]) => {
       const textarea = elements.textarea();
       const caret = elements.caret();
       if (start === undefined || !caret || !textarea) return;
@@ -66,7 +68,7 @@ export const createMentionLayout = (elements: MentionLayoutElements, inputs: Men
         left: clamp(caret.offsetLeft - CARET_LEFT_OFFSET_PX, 0, textarea.clientWidth - POPOVER_WIDTH_PX),
         top: caret.offsetTop + caret.offsetHeight - textarea.scrollTop + POPOVER_GAP_PX,
       });
-    }),
+    },
   );
 
   return { popoverPosition };

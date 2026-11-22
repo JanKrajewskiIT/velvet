@@ -1,8 +1,11 @@
-import { createEffect, type JSX, mergeProps, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
+import { booleanAttribute, isBooleanAttributeSet } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { joinIdRefs } from '../../utils/joinIdRefs';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { Control } from '../primitives/Control';
 import { Field } from '../primitives/Field';
 import type { FieldErrorAnnouncementProps } from '../primitives/fieldErrorAnnouncement';
@@ -45,11 +48,11 @@ export interface TextareaProps
 
 /** Multi-line text field with the same label/hint/error/validate/counter API as Input. */
 export const Textarea = (props: TextareaProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     { rows: 3, autoResize: true, maxRows: 10, size: 'md', defaultValue: '' } satisfies TextareaProps,
     props,
   );
-  const [local, rest] = splitProps(merged, [
+  const [local, rest] = partitionProps(merged, [
     'label',
     'hint',
     'error',
@@ -61,12 +64,12 @@ export const Textarea = (props: TextareaProps) => {
     'maxRows',
     'resize',
     'size',
-    'readOnly',
+    'readonly',
     'disabled',
     'validate',
     'reserveHint',
     'showCount',
-    'maxLength',
+    'maxlength',
     'id',
     'class',
     'style',
@@ -77,9 +80,12 @@ export const Textarea = (props: TextareaProps) => {
     'aria-describedby',
     'aria-invalid',
   ]);
+  const required = () => isBooleanAttributeSet(local.required);
+  const disabled = () => isBooleanAttributeSet(local.disabled);
+  const readonly = () => isBooleanAttributeSet(local.readonly);
   const [text, setText] = createControllable({ value: () => local.value, defaultValue: local.defaultValue });
   const validation = createValidation(() => local.validate, text);
-  const counterMax = () => (local.showCount && local.maxLength ? Number(local.maxLength) : undefined);
+  const counterMax = () => (local.showCount && local.maxlength ? Number(local.maxlength) : undefined);
   const resize = () => local.resize ?? (local.autoResize ? 'none' : 'vertical');
   let area!: HTMLTextAreaElement;
 
@@ -92,10 +98,12 @@ export const Textarea = (props: TextareaProps) => {
     area.style.height = `${Math.min(Math.max(area.scrollHeight, local.rows * lineHeight + padding), cap)}px`;
     area.style.overflowY = area.scrollHeight > cap ? 'auto' : 'hidden';
   };
-  createEffect(() => {
-    text();
-    if (local.autoResize) fit();
-  });
+  createEffect(
+    () => [text(), local.autoResize] as const,
+    ([, autoResize]) => {
+      if (autoResize) fit();
+    },
+  );
 
   return (
     <Field
@@ -104,8 +112,8 @@ export const Textarea = (props: TextareaProps) => {
       error={local.error || validation.message()}
       data-field-error-announcement={local['data-field-error-announcement']}
       optional={local.optional}
-      required={local.required}
-      id={local.id}
+      required={required()}
+      id={local.id || undefined}
       reserveHint={local.reserveHint || !!local.validate || !!counterMax()}
       count={counterMax() ? text().length : undefined}
       maxCount={counterMax()}
@@ -115,8 +123,8 @@ export const Textarea = (props: TextareaProps) => {
           multiline
           size={local.size}
           invalid={control.invalid}
-          disabled={local.disabled}
-          readOnly={local.readOnly}
+          disabled={disabled()}
+          readOnly={readonly()}
           class={local.class}
         >
           <textarea
@@ -128,12 +136,12 @@ export const Textarea = (props: TextareaProps) => {
             rows={local.rows}
             class={cx(styles.controlPartInput, 'vui-textarea', typographyClass('body'))}
             style={{ resize: resize(), 'min-height': 0, ...local.style }}
-            disabled={local.disabled}
-            readOnly={local.readOnly}
-            required={local.required}
-            maxLength={local.maxLength}
+            disabled={disabled()}
+            readonly={readonly()}
+            required={required()}
+            maxlength={local.maxlength}
             value={text()}
-            aria-invalid={control.invalid || local['aria-invalid']}
+            aria-invalid={booleanAttribute(control.invalid || local['aria-invalid'])}
             aria-describedby={joinIdRefs(local['aria-describedby'], control.describedBy)}
             onBlur={(e) => {
               validation.blur();

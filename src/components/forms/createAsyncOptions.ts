@@ -1,4 +1,4 @@
-import { type Accessor, createEffect, createSignal, onCleanup } from 'solid-js';
+import { type Accessor, createEffect, createSignal } from 'solid-js';
 
 import { normalizeOption, type SelectOption } from './selectOption';
 
@@ -35,32 +35,32 @@ export const createAsyncOptions = (
   const [state, setState] = createSignal(idleState());
   const [attempt, setAttempt] = createSignal(0);
 
-  createEffect(() => {
-    const loader = load();
-    const text = query();
-    attempt();
-    if (!loader || !enabled()) {
-      setState((previous) => (previous.loading ? { ...previous, loading: false } : previous));
-      return;
-    }
+  createEffect(
+    () => [load(), query(), attempt(), enabled()] as const,
+    ([loader, text, , active]) => {
+      if (!loader || !active) {
+        setState((previous) => (previous.loading ? { ...previous, loading: false } : previous));
+        return;
+      }
 
-    let latest = true;
-    setState({ items: [], loading: true, failed: false });
-    const timer = setTimeout(() => {
-      new Promise<ReadonlyArray<string | SelectOption>>((resolve) => resolve(loader(text))).then(
-        (result) => {
-          if (latest) setState({ items: result.map(normalizeOption), loading: false, failed: false });
-        },
-        () => {
-          if (latest) setState({ items: [], loading: false, failed: true });
-        },
-      );
-    }, delayMs);
-    onCleanup(() => {
-      latest = false;
-      clearTimeout(timer);
-    });
-  });
+      let latest = true;
+      setState({ items: [], loading: true, failed: false });
+      const timer = setTimeout(() => {
+        new Promise<ReadonlyArray<string | SelectOption>>((resolve) => resolve(loader(text))).then(
+          (result) => {
+            if (latest) setState({ items: result.map(normalizeOption), loading: false, failed: false });
+          },
+          () => {
+            if (latest) setState({ items: [], loading: false, failed: true });
+          },
+        );
+      }, delayMs);
+      return () => {
+        latest = false;
+        clearTimeout(timer);
+      };
+    },
+  );
 
   return {
     items: () => state().items,

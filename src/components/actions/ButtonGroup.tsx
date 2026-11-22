@@ -1,15 +1,17 @@
-import { type Accessor, createContext, createMemo, mergeProps, splitProps, useContext } from 'solid-js';
+import { type Accessor, createContext, createMemo, getOwner, useContext } from 'solid-js';
 
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import type { ButtonSize } from './buttonClass';
 import styles from './ButtonGroup.module.css';
 
-const ButtonGroupSizeContext = createContext<Accessor<ButtonSize | undefined>>();
+const noGroupSize = (): undefined => undefined;
+const ButtonGroupSizeContext = createContext<Accessor<ButtonSize | undefined>>(noGroupSize);
 
 /** Size set on the enclosing ButtonGroup, for children that do not set their own. */
 export const useButtonGroupSize = (): Accessor<ButtonSize | undefined> =>
-  useContext(ButtonGroupSizeContext) ?? (() => undefined);
+  getOwner() === null ? noGroupSize : useContext(ButtonGroupSizeContext);
 
 export interface ButtonGroupProps extends HtmlProps<HTMLDivElement> {
   /** Join the buttons into one segmented control with shared borders. @default true */
@@ -24,11 +26,11 @@ export interface ButtonGroupProps extends HtmlProps<HTMLDivElement> {
 
 /** Groups related Buttons / IconButtons. For a single choice among options use OptionSwitcher or Tabs. */
 export const ButtonGroup = (props: ButtonGroupProps) => {
-  const merged = mergeProps({ attached: true, orientation: 'horizontal' } satisfies ButtonGroupProps, props);
-  const [local, rest] = splitProps(merged, ['attached', 'orientation', 'size', 'label', 'class', 'children']);
+  const merged = withDefaults({ attached: true, orientation: 'horizontal' } satisfies ButtonGroupProps, props);
+  const [local, rest] = partitionProps(merged, ['attached', 'orientation', 'size', 'label', 'class', 'children']);
   const size = createMemo(() => local.size);
   return (
-    <ButtonGroupSizeContext.Provider value={size}>
+    <ButtonGroupSizeContext value={size}>
       <div
         role="group"
         aria-label={local.label}
@@ -42,6 +44,6 @@ export const ButtonGroup = (props: ButtonGroupProps) => {
       >
         {local.children}
       </div>
-    </ButtonGroupSizeContext.Provider>
+    </ButtonGroupSizeContext>
   );
 };

@@ -32,8 +32,8 @@ export const createPickerPopover = (initialOpen: boolean, align?: Accessor<Float
     wrap()?.querySelector<HTMLElement>(FIELD_SELECTOR)?.focus();
   };
   createDismiss(open, close, wrap, { refocus: FIELD_SELECTOR });
-  createEffect(() => {
-    if (!open()) return;
+  createEffect(open, (opened) => {
+    if (!opened) return;
     focusDay(FOCUSABLE_DAY);
   });
   return { floating, open, setOpen, setWrap, close, closeToField };

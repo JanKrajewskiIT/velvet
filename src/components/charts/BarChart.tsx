@@ -1,8 +1,9 @@
-import { createMemo, createSignal, For, mergeProps, Show } from 'solid-js';
+import { createMemo, createSignal, For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { positiveNumber } from '../../utils/numericOption';
+import { withDefaults } from '../../utils/props';
 import { typographyClass } from '../primitives/typography';
 import { VisuallyHidden } from '../primitives/VisuallyHidden';
 import styles from './BarChart.module.css';
@@ -37,7 +38,7 @@ export interface BarChartProps {
 
 /** Vertical bar chart (grouped or stacked). Hover or focus + ←→ to read each group; the tooltip lists every series and is announced. */
 export const BarChart = (props: BarChartProps) => {
-  const merged = mergeProps({ height: 240, stacked: false } satisfies Partial<BarChartProps>, props);
+  const merged = withDefaults({ height: 240, stacked: false } satisfies Partial<BarChartProps>, props);
   const translate = useTranslate();
   const format = createChartFormat(() => merged.format);
   const { ref, width } = createWidth();

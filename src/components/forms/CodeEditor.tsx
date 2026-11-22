@@ -1,24 +1,14 @@
-import {
-  createEffect,
-  createMemo,
-  createSignal,
-  createUniqueId,
-  For,
-  Index,
-  type JSX,
-  mergeProps,
-  on,
-  Show,
-  splitProps,
-  untrack,
-} from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, createMemo, createSignal, createUniqueId, For, onSettled, Show, untrack } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { ownsLayerEvent } from '../../hooks/createLayer';
 import { useTranslate } from '../../i18n/useTranslate';
 import { assignRef } from '../../utils/assignRef';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { callHandler } from '../../utils/callHandler';
 import { cx } from '../../utils/cx';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { VisuallyHidden } from '../primitives/VisuallyHidden';
 import styles from './CodeEditor.module.css';
 import { tokenizeCode } from './highlightCode';
@@ -55,7 +45,7 @@ export interface CodeEditorProps extends Omit<
 }
 
 export const CodeEditor = (props: CodeEditorProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     {
       defaultValue: '',
       language: 'text',
@@ -65,7 +55,7 @@ export const CodeEditor = (props: CodeEditorProps) => {
     } satisfies Partial<CodeEditorProps>,
     props,
   );
-  const [local, rest] = splitProps(merged, [
+  const [local, rest] = partitionProps(merged, [
     'value',
     'defaultValue',
     'onValueChange',
@@ -111,9 +101,10 @@ export const CodeEditor = (props: CodeEditorProps) => {
     if (gutter) gutter.scrollTop = element.scrollTop;
   };
   createEffect(
-    on([value, () => local.highlight, () => local.lineNumbers], () => {
+    () => [value(), local.highlight, local.lineNumbers] as const,
+    () => {
       if (textarea) sync(textarea);
-    }),
+    },
   );
   const onKeyDown: JSX.EventHandler<HTMLTextAreaElement, KeyboardEvent> = (event) => {
     callHandler(local.onKeyDown, event);
@@ -147,6 +138,15 @@ export const CodeEditor = (props: CodeEditorProps) => {
     element.setSelectionRange(start + 2, start + 2);
     sync(element);
   };
+  onSettled(() => {
+    const input = textarea;
+    if (!input) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.target === input) onKeyDown(event as Parameters<typeof onKeyDown>[0]);
+    };
+    input.addEventListener('keydown', handleKeyDown);
+    return () => input.removeEventListener('keydown', handleKeyDown);
+  });
   return (
     <div
       class={cx(styles.root, !!local.error && styles.invalid, local.readOnly && styles.readOnly, local.class)}
@@ -174,7 +174,9 @@ export const CodeEditor = (props: CodeEditorProps) => {
             class={styles.gutter}
             aria-hidden="true"
           >
-            <Index each={lines()}>{(line) => <div>{line()}</div>}</Index>
+            <For keyed={false} each={lines()}>
+              {(line) => <div>{line()}</div>}
+            </For>
           </div>
         </Show>
         <div class={styles.area}>
@@ -200,11 +202,11 @@ export const CodeEditor = (props: CodeEditorProps) => {
             class={cx(styles.textarea, local.highlight && styles.highlight)}
             value={value()}
             rows={local.rows}
-            readOnly={local.readOnly}
-            spellcheck={false}
+            readonly={local.readOnly}
+            spellcheck="false"
             autocapitalize="off"
             autocorrect="off"
-            aria-invalid={local.error ? true : rest['aria-invalid']}
+            aria-invalid={local.error ? 'true' : booleanAttribute(rest['aria-invalid'])}
             aria-describedby={[
               local['aria-describedby'],
               `${id()}-keys`,
@@ -217,7 +219,6 @@ export const CodeEditor = (props: CodeEditorProps) => {
               callHandler(local.onInput, event);
               callHandler(local.onChange, event);
             }}
-            on:keydown={onKeyDown}
             onScroll={(event) => {
               sync(event.currentTarget);
               callHandler(local.onScroll, event);

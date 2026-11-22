@@ -48,7 +48,7 @@ export const DialogPanel = (props: DialogPanelProps) => {
       aria-describedby={description() ? descriptionId : undefined}
     >
       <div
-        tabIndex={-1}
+        tabindex={-1}
         data-vui-focus-fallback
         class={cx(
           styles.dialog,

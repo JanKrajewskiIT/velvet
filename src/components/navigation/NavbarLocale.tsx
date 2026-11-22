@@ -1,7 +1,6 @@
-import { mergeProps } from 'solid-js';
-
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { typographyClass } from '../primitives/typography';
 import styles from './NavbarLocale.module.css';
 
@@ -15,7 +14,7 @@ export interface NavbarLocaleProps {
 
 /** Glass locale pill for the menubar navbar's actions slot. */
 export const NavbarLocale = (props: NavbarLocaleProps) => {
-  const p = mergeProps({ value: 'PL' } satisfies Partial<NavbarLocaleProps>, props);
+  const p = withDefaults({ value: 'PL' } satisfies Partial<NavbarLocaleProps>, props);
   const translate = useTranslate();
   return (
     <button

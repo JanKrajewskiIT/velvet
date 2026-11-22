@@ -1,8 +1,10 @@
-import { createEffect, createMemo, createSignal, type JSX, mergeProps, on, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, createMemo, createSignal, Show } from 'solid-js';
 
 import { createOperation } from '../../hooks/createOperation';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Button } from '../actions/Button';
 import { Text } from '../primitives/Text';
@@ -46,7 +48,7 @@ export interface WizardProps {
 
 /** Multi-step flow that owns its index: Stepper on top, one step's content, Back / Next → Finish. Validation errors mark the step red and block. Focus moves to the new panel. */
 export const Wizard = (props: WizardProps) => {
-  const p = mergeProps({ defaultStep: 0 } satisfies Partial<WizardProps>, props);
+  const p = withDefaults({ defaultStep: 0 } satisfies Partial<WizardProps>, props);
   const translate = useTranslate();
   const labels = (): WizardLabels => ({
     cancel: p.labels?.cancel ?? translate('velvet.common.cancel'),
@@ -65,8 +67,14 @@ export const Wizard = (props: WizardProps) => {
   const last = () => index() === steps().length - 1;
   let panel: HTMLDivElement | undefined;
 
-  createEffect(on(index, () => panel?.focus({ preventScroll: true }), { defer: true }));
-  createEffect(on(step, operation.invalidate, { defer: true }));
+  createEffect(
+    index,
+    () => {
+      panel?.focus({ preventScroll: true });
+    },
+    { defer: true },
+  );
+  createEffect(step, operation.invalidate, { defer: true });
 
   const goTo = (target: number) => {
     operation.invalidate();
@@ -105,7 +113,7 @@ export const Wizard = (props: WizardProps) => {
             ref={(element) => {
               panel = element;
             }}
-            tabIndex={-1}
+            tabindex={-1}
             class={styles.wizardPartPanel}
             role="group"
             aria-label={typeof current.label === 'string' ? current.label : undefined}

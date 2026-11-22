@@ -1,8 +1,10 @@
-import { createEffect, createMemo, For, type JSX, mergeProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, createMemo, For, merge } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { fmtDate, sameDay } from '../../utils/date';
+import { withDefaults } from '../../utils/props';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
 import { Weekday } from '../primitives/Weekday';
@@ -24,7 +26,7 @@ const MIN_DAY_COLUMN_PX: Record<SchedulerView, number> = { day: 200, week: 96 };
 
 /** Day / week time grid for bookings, shifts and meetings. Overlapping events split into lanes, a now-line marks the current time, clicking an empty slot reports the slot (snap to `slotMinutes`) so you can open a create dialog. Use EventCalendar for a month overview, Timeline for sequences without a clock. */
 export const Scheduler = (props: SchedulerProps): JSX.Element => {
-  const raw: SchedulerConfig = mergeProps(
+  const raw: SchedulerConfig = withDefaults(
     {
       events: [],
       defaultView: 'week',
@@ -40,7 +42,7 @@ export const Scheduler = (props: SchedulerProps): JSX.Element => {
     props,
   );
   const options = createMemo(() => schedulerOptions(raw));
-  const p: SchedulerConfig = mergeProps(raw, {
+  const p: SchedulerConfig = merge(raw, {
     get startHour() {
       return options().startHour;
     },
@@ -76,11 +78,12 @@ export const Scheduler = (props: SchedulerProps): JSX.Element => {
   };
   let frame!: HTMLDivElement;
 
-  createEffect(() => {
-    calendar.view();
-    const hour = p.scrollToHour;
-    if (hour != null) frame.scrollTop = Math.max(0, (hour - p.startHour) * p.hourHeight);
-  });
+  createEffect(
+    () => [calendar.view(), p.scrollToHour, p.startHour, p.hourHeight] as const,
+    ([, hour, startHour, hourHeight]) => {
+      if (hour != null) frame.scrollTop = Math.max(0, (hour - startHour) * hourHeight);
+    },
+  );
 
   return (
     <div class={cx(typographyClass('body'), styles.sched, p.class)}>
@@ -92,7 +95,7 @@ export const Scheduler = (props: SchedulerProps): JSX.Element => {
         class={styles.schedPartFrame}
         style={{ 'max-height': cssLength(p.maxHeight) }}
         // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- scrollable schedule region must be focusable so keyboard users can scroll it
-        tabIndex={0}
+        tabindex={0}
         aria-label={translate('velvet.data.scheduler.scheduleLabel')}
       >
         <div

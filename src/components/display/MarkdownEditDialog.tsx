@@ -1,7 +1,9 @@
-import { createEffect, createSignal, type JSX, mergeProps, on, Show, untrack } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, createSignal, Show, untrack } from 'solid-js';
 
 import { createOperation } from '../../hooks/createOperation';
 import { useTranslate } from '../../i18n/useTranslate';
+import { withDefaults } from '../../utils/props';
 import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Button } from '../actions/Button';
 import { Dialog } from '../feedback/Dialog';
@@ -45,7 +47,7 @@ export interface MarkdownEditDialogProps {
 }
 
 export const MarkdownEditDialog = (props: MarkdownEditDialogProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     {
       value: '',
       defaultMode: 'split',
@@ -68,16 +70,14 @@ export const MarkdownEditDialog = (props: MarkdownEditDialogProps) => {
   const dirty = () => draft() !== merged.value;
 
   createEffect(
-    on(
-      () => merged.open,
-      (open) => {
-        operation.invalidate();
-        if (!open) return;
-        setDraft(merged.value);
-        setFailed(false);
-        setAsking(false);
-      },
-    ),
+    () => merged.open,
+    (open) => {
+      operation.invalidate();
+      if (!open) return;
+      setDraft(merged.value);
+      setFailed(false);
+      setAsking(false);
+    },
   );
 
   const close = () => {

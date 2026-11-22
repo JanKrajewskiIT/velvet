@@ -1,8 +1,10 @@
-import { For, type JSX, mergeProps, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Glyph } from '../primitives/Glyph';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
@@ -48,7 +50,7 @@ export interface FooterProps {
 
 /** Product footer: a full brand + link columns + legal bar, or a compact single row for inside an app. */
 export const Footer = (props: FooterProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     {
       variant: 'full',
       surface: 'card',

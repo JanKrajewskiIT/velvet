@@ -1,5 +1,4 @@
-import { splitProps } from 'solid-js';
-
+import { partitionProps } from '../../utils/props';
 import type { FlashcardConfig, FlashDeck } from './flashcard';
 import { PracticeSetup, type PracticeSetupProps } from './PracticeSetup';
 
@@ -9,7 +8,7 @@ export interface FlashcardSetupProps extends Omit<PracticeSetupProps, 'collectio
 }
 
 export const FlashcardSetup = (props: FlashcardSetupProps) => {
-  const [local, rest] = splitProps(props, ['decks', 'onStart']);
+  const [local, rest] = partitionProps(props, ['decks', 'onStart']);
   return (
     <PracticeSetup
       {...rest}

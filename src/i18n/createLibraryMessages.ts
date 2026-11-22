@@ -9,7 +9,7 @@ import {
   type TranslateStaticFn,
   useI18n,
 } from '@jankrajewskiit/i18n';
-import type { JSX } from 'solid-js';
+import { type JSX } from '@solidjs/web';
 
 export type StaticTranslate = (key: I18nKey) => string;
 

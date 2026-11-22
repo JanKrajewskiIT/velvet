@@ -1,7 +1,9 @@
-import { createEffect, createMemo, createSignal, createUniqueId, For, type JSX, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, createMemo, createSignal, createUniqueId, For, Show } from 'solid-js';
 
 import { createModal } from '../../hooks/createModal';
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { ModalBackdrop } from '../feedback/ModalBackdrop';
 import { EmptyText } from '../primitives/EmptyText';
@@ -48,8 +50,8 @@ export const CommandPaletteDialog = (props: CommandPaletteDialogProps) => {
   const flat = createMemo(() => groups().flatMap((group) => group.results.map((result) => result.item)));
   const active = () => (flat().length ? Math.min(Math.max(0, highlighted()), flat().length - 1) : -1);
 
-  createEffect(() => {
-    const el = document.getElementById(optionId(active()));
+  createEffect(active, (index) => {
+    const el = document.getElementById(optionId(index));
     if (el && (el.offsetTop < list.scrollTop || el.offsetTop + el.offsetHeight > list.scrollTop + list.clientHeight)) {
       list.scrollTop = el.offsetTop - list.clientHeight / 2;
     }
@@ -135,7 +137,7 @@ export const CommandPaletteDialog = (props: CommandPaletteDialogProps) => {
                     <div
                       id={optionId(result.index)}
                       role="option"
-                      aria-selected={result.index === active()}
+                      aria-selected={booleanAttribute(result.index === active())}
                       class={cx(
                         typographyClass('body'),
                         styles.menuPartItem,

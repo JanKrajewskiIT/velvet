@@ -1,9 +1,10 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { createSignal, createUniqueId, mergeProps, Show } from 'solid-js';
+import { createSignal, createUniqueId, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { clamp } from '../../utils/math';
+import { withDefaults } from '../../utils/props';
 import { Text } from '../primitives/Text';
 import { VisuallyHidden } from '../primitives/VisuallyHidden';
 import { seriesColor } from './chartScale';
@@ -33,7 +34,10 @@ export interface SparklineProps {
 
 /** Tiny inline trend for stat cards and table cells. Scrub with the mouse or focus + ←→; the readout floats top-right and is announced. The last point is marked. */
 export const Sparkline = (props: SparklineProps) => {
-  const merged = mergeProps({ height: 40, color: seriesColor(0), area: true } satisfies Partial<SparklineProps>, props);
+  const merged = withDefaults(
+    { height: 40, color: seriesColor(0), area: true } satisfies Partial<SparklineProps>,
+    props,
+  );
   const i18n = useI18n();
   const translate = useTranslate();
   const format = (v: number) => (merged.format ?? ((n: number) => i18n.formatNumber(n)))(v);

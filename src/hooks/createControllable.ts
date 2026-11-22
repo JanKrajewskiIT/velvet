@@ -1,4 +1,4 @@
-import { type Accessor, createSignal } from 'solid-js';
+import { type Accessor, createSignal, untrack } from 'solid-js';
 
 export interface ControllableOptions<T> {
   /** Controlled value; `undefined` means the component is uncontrolled. */
@@ -9,7 +9,8 @@ export interface ControllableOptions<T> {
 
 /** Controlled/uncontrolled state: reads `value` when provided, otherwise owns the state. */
 export const createControllable = <T>(options: ControllableOptions<T>): [Accessor<T>, (next: T) => void] => {
-  const [inner, setInner] = createSignal<T>(options.defaultValue);
+  const initial = untrack(() => options.defaultValue);
+  const [inner, setInner] = createSignal<T>(() => initial);
   const current = () => {
     const controlled = options.value();
     return controlled !== undefined ? controlled : inner();

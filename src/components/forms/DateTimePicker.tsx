@@ -1,10 +1,12 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { createEffect, createMemo, createSignal, type JSX, mergeProps, on, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, createMemo, createSignal, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { fmtDate, minutesOfDay, startOfDay } from '../../utils/date';
+import { withDefaults } from '../../utils/props';
 import { Button } from '../actions/Button';
 import { Field } from '../primitives/Field';
 import type { FieldErrorAnnouncementProps } from '../primitives/fieldErrorAnnouncement';
@@ -78,7 +80,7 @@ const withTime = (day: Date, minutes: number): Date =>
  * Times outside min/max are disabled. Use DatePicker when time does not matter, TimePicker for a time on its own.
  */
 export const DateTimePicker = (props: DateTimePickerProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     {
       step: 30,
       hour12: false,
@@ -111,15 +113,16 @@ export const DateTimePicker = (props: DateTimePickerProps) => {
     const date = current();
     return date ? (p.serializeValue ?? formDateTime)(date) : '';
   };
-  createEffect(() => {
-    if (p.disabled) popover.close();
-  });
-
   createEffect(
-    on(popover.open, (isOpen) => {
-      if (isOpen) setDraft(current() ?? roundedNow(step()));
-    }),
+    () => p.disabled,
+    (disabled) => {
+      if (disabled) popover.close();
+    },
   );
+
+  createEffect(popover.open, (isOpen) => {
+    if (isOpen) setDraft(current() ?? roundedNow(step()));
+  });
 
   const draftMinutes = () => {
     const d = draft();
@@ -152,13 +155,14 @@ export const DateTimePicker = (props: DateTimePickerProps) => {
   };
 
   createEffect(
-    on([popover.open, () => draft() && startOfDay(draft() ?? new Date()).getTime()], () => {
+    () => [popover.open(), draft() && startOfDay(draft() ?? new Date()).getTime()] as const,
+    () => {
       if (!popover.open() || !list) return;
       const row =
         list.querySelector<HTMLElement>('[aria-selected="true"]') ??
         list.querySelector<HTMLElement>('[data-near="true"]');
       if (row) list.scrollTop = row.offsetTop - list.clientHeight / 2 + row.offsetHeight / 2;
-    }),
+    },
   );
 
   const setDay = (day: Date | null) => {

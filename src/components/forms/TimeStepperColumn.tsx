@@ -38,7 +38,7 @@ export const TimeStepperColumn = (props: TimeStepperColumnProps) => {
     <div class={styles.tstepPartCol}>
       <button
         type="button"
-        tabIndex={-1}
+        tabindex={-1}
         class={styles.tstepPartArrow}
         aria-label={props.increaseLabel}
         disabled={props.disabled}
@@ -48,7 +48,7 @@ export const TimeStepperColumn = (props: TimeStepperColumnProps) => {
       </button>
       <div
         role="spinbutton"
-        tabIndex={props.disabled ? -1 : 0}
+        tabindex={props.disabled ? -1 : 0}
         aria-label={props.name}
         aria-valuenow={props.value}
         aria-valuemin={0}
@@ -62,7 +62,7 @@ export const TimeStepperColumn = (props: TimeStepperColumnProps) => {
       </div>
       <button
         type="button"
-        tabIndex={-1}
+        tabindex={-1}
         class={styles.tstepPartArrow}
         aria-label={props.decreaseLabel}
         disabled={props.disabled}

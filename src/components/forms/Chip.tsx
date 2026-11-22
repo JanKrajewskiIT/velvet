@@ -1,6 +1,9 @@
-import { type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { Show } from 'solid-js';
 
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { Glyph, renderIcon } from '../primitives/Glyph';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
@@ -33,8 +36,8 @@ export interface ChipProps extends Omit<JSX.ButtonHTMLAttributes<HTMLButtonEleme
  * For a removable token use Tag; for a menu trigger use MenuChip.
  */
 export const Chip = (props: ChipProps) => {
-  const merged = mergeProps({ dashed: false, size: 'md', check: true } satisfies ChipProps, props);
-  const [local, rest] = splitProps(merged, [
+  const merged = withDefaults({ dashed: false, size: 'md', check: true } satisfies ChipProps, props);
+  const [local, rest] = partitionProps(merged, [
     'selected',
     'icon',
     'count',
@@ -50,7 +53,9 @@ export const Chip = (props: ChipProps) => {
   const showsCheck = () => local.check && on() && !local.color;
   const selectionState = () => {
     if (local.selected === undefined) return {};
-    return CHECKABLE_ROLES.includes(rest.role) ? { 'aria-checked': on() } : { 'aria-pressed': on() };
+    return CHECKABLE_ROLES.includes(rest.role || undefined)
+      ? { 'aria-checked': booleanAttribute(on()) }
+      : { 'aria-pressed': booleanAttribute(on()) };
   };
   return (
     <button

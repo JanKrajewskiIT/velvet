@@ -1,8 +1,9 @@
-import { mergeProps, Show, splitProps } from 'solid-js';
+import { Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { Button } from '../actions/Button';
 import { ButtonGroup } from '../actions/ButtonGroup';
 import type { IconButtonProps } from '../actions/IconButton';
@@ -30,11 +31,11 @@ export interface PeriodNavProps extends HtmlProps<HTMLDivElement, 'onChange'> {
 
 /** Today and previous / next controls for a month, week or day. */
 export const PeriodNav = (props: PeriodNavProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     { variant: DEFAULT_VARIANT, size: DEFAULT_SIZE, attached: true } satisfies PeriodNavProps,
     props,
   );
-  const [local, rest] = splitProps(merged, [
+  const [local, rest] = partitionProps(merged, [
     'onPrev',
     'onNext',
     'onToday',

@@ -1,4 +1,5 @@
-import { type JSX, useContext } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { useContext } from 'solid-js';
 
 import { SectionLabel } from '../primitives/SectionLabel';
 import styles from './NavSection.module.css';

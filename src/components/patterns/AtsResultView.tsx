@@ -1,6 +1,8 @@
-import { createMemo, createSignal, For, type JSX, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createMemo, createSignal, For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { Button } from '../actions/Button';
@@ -295,10 +297,20 @@ export const AtsResultView = (props: AtsResultViewProps) => {
             <Text as="span" variant="button-sm" tone="inherit">
               {translate('velvet.patterns.atsResultView.accurate')}
             </Text>
-            <Button variant="ghost" size="sm" aria-pressed={vote() === 'up'} onClick={() => toggleVote('up')}>
+            <Button
+              variant="ghost"
+              size="sm"
+              aria-pressed={booleanAttribute(vote() === 'up')}
+              onClick={() => toggleVote('up')}
+            >
               {translate('velvet.common.yes')}
             </Button>
-            <Button variant="ghost" size="sm" aria-pressed={vote() === 'down'} onClick={() => toggleVote('down')}>
+            <Button
+              variant="ghost"
+              size="sm"
+              aria-pressed={booleanAttribute(vote() === 'down')}
+              onClick={() => toggleVote('down')}
+            >
               {translate('velvet.common.no')}
             </Button>
           </Text>

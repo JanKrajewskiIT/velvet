@@ -1,8 +1,9 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { createMemo, createSignal, For, mergeProps, Show } from 'solid-js';
+import { createMemo, createSignal, For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Glyph } from '../primitives/Glyph';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
@@ -38,7 +39,7 @@ export interface FunnelChartProps {
 
 /** Conversion funnel — centred bars that narrow step by step, value + share of the first step, and a conversion / drop-off line between steps. The hatched ghost marks where the previous step was. Tab through steps; each step reads its numbers to screen readers. */
 export const FunnelChart = (props: FunnelChartProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     { color: seriesColor(0), showConversion: true, relativeTo: 'previous' } satisfies Partial<FunnelChartProps>,
     props,
   );

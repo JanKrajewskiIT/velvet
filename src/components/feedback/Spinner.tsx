@@ -1,8 +1,10 @@
-import { Index, mergeProps, Show } from 'solid-js';
+import { For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { VisuallyHidden } from '../primitives/VisuallyHidden';
 import styles from './Spinner.module.css';
 
@@ -37,15 +39,15 @@ export interface SpinnerProps {
 
 /** Loader: ring (inline/buttons), dots (chat/typing), bars (audio/processing), pulse (live). */
 export const Spinner = (props: SpinnerProps) => {
-  const p = mergeProps({ variant: 'ring', size: 'md', tone: 'brand' } satisfies SpinnerProps, props);
+  const p = withDefaults({ variant: 'ring', size: 'md', tone: 'brand' } satisfies SpinnerProps, props);
   const translate = useTranslate();
   const parts = () => Array.from({ length: ELEMENT_COUNT[p.variant] });
   return (
     <span
       role={p.decorative ? undefined : 'status'}
       aria-live={p.decorative ? undefined : 'polite'}
-      aria-atomic={p.decorative ? undefined : true}
-      aria-hidden={p.decorative || undefined}
+      aria-atomic={p.decorative ? undefined : 'true'}
+      aria-hidden={booleanAttribute(p.decorative || undefined)}
       class={cx(
         styles.loader,
         variantClass(LOADER_CLASSES, p.variant),
@@ -54,7 +56,9 @@ export const Spinner = (props: SpinnerProps) => {
         p.class,
       )}
     >
-      <Index each={parts()}>{() => <i aria-hidden="true" />}</Index>
+      <For keyed={false} each={parts()}>
+        {() => <i aria-hidden="true" />}
+      </For>
       <Show when={!p.decorative}>
         <VisuallyHidden>{p.label ?? translate('velvet.common.loading')}</VisuallyHidden>
       </Show>

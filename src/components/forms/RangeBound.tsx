@@ -1,5 +1,7 @@
-import { createEffect, createMemo, createSignal, type JSX, on } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, createMemo, createSignal } from 'solid-js';
 
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { parseDecimal } from '../../utils/decimalValue';
 import { Control } from '../primitives/Control';
 import { ControlInput } from '../primitives/ControlInput';
@@ -35,14 +37,12 @@ export const RangeBound = (props: RangeBoundProps) => {
   const shown = () => (focused() ? text() : formatted(props.value));
   const invalidText = () => text().trim() !== '' && parseDecimal(text().replace(/[\s\u00a0]/gu, '')) === undefined;
   createEffect(
-    on(
-      () => props.resetKey,
-      () => {
-        setFocused(false);
-        setText('');
-        props.onValidityChange?.(false);
-      },
-    ),
+    () => props.resetKey,
+    () => {
+      setFocused(false);
+      setText('');
+      props.onValidityChange?.(false);
+    },
   );
 
   const commit = () => {
@@ -65,11 +65,11 @@ export const RangeBound = (props: RangeBoundProps) => {
       <ControlInput
         ref={props.ref}
         id={props.id}
-        inputMode="decimal"
+        inputmode="decimal"
         value={shown()}
         placeholder={props.placeholder}
         aria-label={props.ariaLabel}
-        aria-invalid={props.invalid || undefined}
+        aria-invalid={booleanAttribute(props.invalid || undefined)}
         aria-describedby={props.describedBy}
         disabled={props.disabled}
         onFocus={() => {

@@ -1,7 +1,9 @@
-import { children, type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { children, Show } from 'solid-js';
 
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { Surface, type SurfaceProps } from '../primitives/Surface';
 import { Text } from '../primitives/Text';
 import styles from './Card.module.css';
@@ -40,8 +42,8 @@ export interface CardProps extends Omit<SurfaceProps, 'title' | 'padding'> {
 }
 
 export const Card = (props: CardProps) => {
-  const merged = mergeProps({ footerAlign: 'end', padding: 'md' } satisfies CardProps, props);
-  const [local, surface] = splitProps(merged, [
+  const merged = withDefaults({ footerAlign: 'end', padding: 'md' } satisfies CardProps, props);
+  const [local, surface] = partitionProps(merged, [
     'title',
     'description',
     'actions',

@@ -1,8 +1,10 @@
-import { type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import styles from './StatusBar.module.css';
 
 export interface StatusBarProps extends HtmlProps<HTMLElement> {
@@ -15,8 +17,8 @@ export interface StatusBarProps extends HtmlProps<HTMLElement> {
 }
 
 export const StatusBar = (props: StatusBarProps) => {
-  const p = mergeProps({ fixed: false }, props);
-  const [local, rest] = splitProps(p, ['start', 'end', 'fixed', 'label', 'children', 'class']);
+  const p = withDefaults({ fixed: false }, props);
+  const [local, rest] = partitionProps(p, ['start', 'end', 'fixed', 'label', 'children', 'class']);
   const translate = useTranslate();
 
   return (

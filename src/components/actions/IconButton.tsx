@@ -1,6 +1,7 @@
-import { type JSX, mergeProps, splitProps } from 'solid-js';
+import { type JSX } from '@solidjs/web';
 
 import { cx } from '../../utils/cx';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { renderIcon } from '../primitives/Glyph';
 import { buttonClass, type ButtonSize } from './buttonClass';
 import { useButtonGroupSize } from './ButtonGroup';
@@ -23,11 +24,11 @@ export interface IconButtonProps extends JSX.ButtonHTMLAttributes<HTMLButtonElem
 
 /** Square icon-only button. Always carries an accessible label. */
 export const IconButton = (props: IconButtonProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     { variant: 'ghost', shape: 'square', type: 'button' } satisfies Partial<IconButtonProps>,
     props,
   );
-  const [local, rest] = splitProps(merged, ['icon', 'label', 'variant', 'shape', 'size', 'class']);
+  const [local, rest] = partitionProps(merged, ['icon', 'label', 'variant', 'shape', 'size', 'class']);
   const groupSize = useButtonGroupSize();
   return (
     <button

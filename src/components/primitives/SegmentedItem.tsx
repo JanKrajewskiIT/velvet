@@ -1,6 +1,8 @@
-import { type JSX, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
 
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
+import { partitionProps } from '../../utils/props';
 import { renderIcon } from './Glyph';
 import { useSegmentedSize } from './Segmented';
 import styles from './SegmentedItem.module.css';
@@ -14,13 +16,13 @@ export interface SegmentedItemProps extends JSX.ButtonHTMLAttributes<HTMLButtonE
 }
 
 export const SegmentedItem = (props: SegmentedItemProps) => {
-  const [local, rest] = splitProps(props, ['selected', 'icon', 'class', 'children']);
+  const [local, rest] = partitionProps(props, ['selected', 'icon', 'class', 'children']);
   const size = useSegmentedSize();
   const selectionState = () => {
     if (local.selected === undefined) return {};
-    if (rest.role === 'tab') return { 'aria-selected': local.selected };
-    if (rest.role === 'radio') return { 'aria-checked': local.selected };
-    return { 'aria-pressed': local.selected };
+    if (rest.role === 'tab') return { 'aria-selected': booleanAttribute(local.selected) };
+    if (rest.role === 'radio') return { 'aria-checked': booleanAttribute(local.selected) };
+    return { 'aria-pressed': booleanAttribute(local.selected) };
   };
   return (
     <button

@@ -1,4 +1,4 @@
-import { type Accessor, createEffect, createSignal, createUniqueId, onCleanup, type Setter } from 'solid-js';
+import { type Accessor, createEffect, createSignal, createUniqueId, type Setter } from 'solid-js';
 
 import { createActiveOptionScroll } from '../../hooks/createActiveOptionScroll';
 import { createFloating, type Floating } from '../../hooks/createFloating';
@@ -47,15 +47,17 @@ export const createComboboxPopup = (
   };
   const [root, setRoot] = createSignal<HTMLElement>();
   const floating = createFloating(open, root, { matchWidth: true });
-  createEffect(() => {
-    const initialRoot = root();
-    if (!open() || !initialRoot) return;
-    const leave = (event: FocusEvent) => {
-      if (event.relatedTarget instanceof Node && !initialRoot.contains(event.relatedTarget)) setOpen(false);
-    };
-    initialRoot.addEventListener('focusout', leave);
-    onCleanup(() => initialRoot.removeEventListener('focusout', leave));
-  });
+  createEffect(
+    () => (open() ? root() : undefined),
+    (initialRoot) => {
+      if (!initialRoot) return;
+      const leave = (event: FocusEvent) => {
+        if (event.relatedTarget instanceof Node && !initialRoot.contains(event.relatedTarget)) setOpen(false);
+      };
+      initialRoot.addEventListener('focusout', leave);
+      return () => initialRoot.removeEventListener('focusout', leave);
+    },
+  );
   createActiveOptionScroll(open, () => (active() >= 0 ? optionId(active()) : undefined));
 
   const activeDescendant = (items: ReadonlyArray<unknown>) =>

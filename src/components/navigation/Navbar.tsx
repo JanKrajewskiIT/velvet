@@ -1,7 +1,10 @@
-import { createSignal, For, type JSX, mergeProps, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createSignal, For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Glyph, renderIcon } from '../primitives/Glyph';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
@@ -53,7 +56,7 @@ export interface NavbarProps {
  * Both collapse to a burger under 768px, or always with `condensed`. Leave ~14px of space below a menubar navbar for the indicator.
  */
 export const Navbar = (props: NavbarProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     { variant: 'links', items: [], showActiveLabel: true, tone: 'default' } satisfies Partial<NavbarProps>,
     props,
   );
@@ -80,7 +83,7 @@ export const Navbar = (props: NavbarProps) => {
     <button
       type="button"
       class={styles.navbarPartBurger}
-      aria-expanded={open()}
+      aria-expanded={booleanAttribute(open())}
       aria-label={open() ? labels().closeMenu : labels().openMenu}
       onClick={() => setOpen(!open())}
     >

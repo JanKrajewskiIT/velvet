@@ -1,4 +1,5 @@
-import { createEffect, createMemo, createSignal, createUniqueId, type JSX, on, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, createMemo, createSignal, createUniqueId, Show } from 'solid-js';
 
 import { createOperation } from '../../hooks/createOperation';
 import { useTranslate } from '../../i18n/useTranslate';
@@ -89,19 +90,17 @@ export const FileUrlImportDialog = (props: FileUrlImportDialogProps) => {
   };
 
   createEffect(
-    on(
-      () => props.open,
-      (open) => {
-        operation.invalidate();
-        if (!open) return;
-        setSourceId(props.sources[0]?.value ?? '');
-        setUrl('');
-        setFile(undefined);
-        setFailure(undefined);
-      },
-    ),
+    () => props.open,
+    (open) => {
+      operation.invalidate();
+      if (!open) return;
+      setSourceId(props.sources[0]?.value ?? '');
+      setUrl('');
+      setFile(undefined);
+      setFailure(undefined);
+    },
   );
-  createEffect(on(source, operation.invalidate, { defer: true }));
+  createEffect(source, operation.invalidate, { defer: true });
 
   const selectSource = (value: string) => {
     if (busy()) return;

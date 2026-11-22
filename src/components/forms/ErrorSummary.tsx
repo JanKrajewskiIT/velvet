@@ -1,8 +1,10 @@
-import { createEffect, createMemo, createUniqueId, For, type JSX, mergeProps, on, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, createMemo, createUniqueId, For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { scrollBehavior } from '../../utils/motion';
+import { withDefaults } from '../../utils/props';
 import { Glyph } from '../primitives/Glyph';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
@@ -39,17 +41,15 @@ const jumpToField = (event: MouseEvent, id: string) => {
 
 /** Submit-time error summary: takes focus when errors appear and lists each problem as a link that focuses its field. Put it at the top of the form. */
 export const ErrorSummary = (props: ErrorSummaryProps) => {
-  const p = mergeProps({ focusOnShow: true } satisfies Partial<ErrorSummaryProps>, props);
+  const p = withDefaults({ focusOnShow: true } satisfies Partial<ErrorSummaryProps>, props);
   const translate = useTranslate();
   const titleId = createUniqueId();
   const signature = createMemo(() => p.errors.map((error) => `${error.id}\u0000${error.message}`).join('\u0001'));
   let root: HTMLDivElement | undefined;
 
-  createEffect(
-    on(signature, () => {
-      if (p.focusOnShow && p.errors.length > 0) root?.focus({ preventScroll: true });
-    }),
-  );
+  createEffect(signature, () => {
+    if (p.focusOnShow && p.errors.length > 0) root?.focus({ preventScroll: true });
+  });
 
   return (
     <Show when={p.errors.length > 0}>
@@ -57,7 +57,7 @@ export const ErrorSummary = (props: ErrorSummaryProps) => {
         ref={(element) => {
           root = element;
         }}
-        tabIndex={-1}
+        tabindex={-1}
         role="alert"
         aria-labelledby={titleId}
         class={cx(styles.errsum, p.class)}

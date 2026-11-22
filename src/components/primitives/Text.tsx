@@ -1,8 +1,9 @@
-import { type JSX, mergeProps, splitProps } from 'solid-js';
+import { type JSX } from '@solidjs/web';
 
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { type ElementTag, type HtmlProps, Polymorphic } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import styles from './Text.module.css';
 import { TEXT_ROLES, textRoleClass, type TextVariant, typographyClass } from './typography';
 
@@ -37,15 +38,15 @@ export interface TextProps
     HtmlProps<HTMLElement>,
     TextOptions,
     Pick<JSX.LabelHTMLAttributes<HTMLLabelElement>, 'for'>,
-    Pick<JSX.TimeHTMLAttributes<HTMLTimeElement>, 'dateTime' | 'datetime'> {
+    Pick<JSX.TimeHTMLAttributes<HTMLTimeElement>, 'datetime'> {
   /** Element override, independent of the visual variant. */
   as?: ElementTag;
 }
 
 /** Applies one type role (`--type-*`) and an optional text colour. */
 export const Text = (props: TextProps) => {
-  const merged = mergeProps({ variant: 'body' } satisfies TextOptions, props);
-  const [local, rest] = splitProps(merged, ['as', 'variant', 'tone', 'truncate', 'tabular', 'mono', 'class']);
+  const merged = withDefaults({ variant: 'body' } satisfies TextOptions, props);
+  const [local, rest] = partitionProps(merged, ['as', 'variant', 'tone', 'truncate', 'tabular', 'mono', 'class']);
   return (
     <Polymorphic
       {...rest}

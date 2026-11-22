@@ -1,5 +1,6 @@
 import { For, Show } from 'solid-js';
 
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { Listbox } from '../primitives/Listbox';
 import { ListboxPanel } from '../primitives/ListboxPanel';
 import { highlightMatch } from '../primitives/Mark';
@@ -33,7 +34,7 @@ export const AutocompleteMenu = (props: AutocompleteMenuProps) => (
     <Listbox
       floating={false}
       id={props.popup.listId()}
-      aria-busy={props.status.loading || undefined}
+      aria-busy={booleanAttribute(props.status.loading || undefined)}
       aria-label={props.label}
       aria-labelledby={props.labelledBy}
       class={styles.comboboxPartList}

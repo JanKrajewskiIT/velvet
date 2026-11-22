@@ -1,4 +1,4 @@
-import type { JSX } from 'solid-js';
+import { type JSX } from '@solidjs/web';
 
 import type { ThemePreference } from '../../theme/theme';
 import type { MenuItem } from '../menus/menuItem';

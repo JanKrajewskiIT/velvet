@@ -1,6 +1,7 @@
-import { For, mergeProps, Show } from 'solid-js';
+import { For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { withDefaults } from '../../utils/props';
 import { Dialog } from '../feedback/Dialog';
 import { EmptyText } from '../primitives/EmptyText';
 import { Glyph } from '../primitives/Glyph';
@@ -17,7 +18,7 @@ export type { ColorLabelManagerProps } from './colorLabelManagerTypes';
 
 /** Compact dialog listing labels as dot + name with edit / delete; edit and "Add label" open a Name + Color form; delete confirms inline. */
 export const ColorLabelManager = (props: ColorLabelManagerProps) => {
-  const p: ColorLabelManagerConfig = mergeProps(
+  const p: ColorLabelManagerConfig = withDefaults(
     { colors: LABEL_COLORS } satisfies Partial<ColorLabelManagerProps>,
     props,
   );

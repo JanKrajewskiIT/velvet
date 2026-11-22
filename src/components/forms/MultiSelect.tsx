@@ -1,10 +1,13 @@
-import { createEffect, createSignal, For, type JSX, mergeProps, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, createSignal, For, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { createDismiss } from '../../hooks/createDismiss';
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { classSelector } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Spinner } from '../feedback/Spinner';
 import { Chevron } from '../primitives/Chevron';
 import { Control } from '../primitives/Control';
@@ -32,7 +35,7 @@ const NO_OPTIONS: ReadonlyArray<string | AutocompleteOption> = [];
 
 /** Pick many from a searchable list. Selected values show as removable tags in the field; checkbox rows in the menu; footer shows count + Clear. */
 export const MultiSelect = (props: MultiSelectProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     {
       options: NO_OPTIONS,
       defaultValue: [],
@@ -93,9 +96,12 @@ export const MultiSelect = (props: MultiSelectProps) => {
   };
 
   createDismiss(open, close, popup.root);
-  createEffect(() => {
-    if (p.disabled) close();
-  });
+  createEffect(
+    () => p.disabled,
+    (disabled) => {
+      if (disabled) close();
+    },
+  );
 
   const onKeyDown: JSX.EventHandler<HTMLInputElement, KeyboardEvent> = (e) => {
     if (p.disabled || e.isComposing) return;
@@ -163,14 +169,14 @@ export const MultiSelect = (props: MultiSelectProps) => {
               }}
               id={control.id}
               role="combobox"
-              aria-expanded={open()}
+              aria-expanded={booleanAttribute(open())}
               aria-controls={listId()}
               aria-autocomplete="list"
               aria-activedescendant={popup.activeDescendant(available())}
               aria-label={p['aria-label']}
               aria-labelledby={p['aria-labelledby']}
-              aria-required={p.required || undefined}
-              aria-invalid={control.invalid || validation.invalid() || undefined}
+              aria-required={booleanAttribute(p.required || undefined)}
+              aria-invalid={booleanAttribute(control.invalid || validation.invalid() || undefined)}
               aria-describedby={validation.describedBy(control.describedBy)}
               class={cx(styles.taginputPartInput, typographyClass('body'))}
               value={query()}
@@ -214,7 +220,7 @@ export const MultiSelect = (props: MultiSelectProps) => {
                 floating={false}
                 id={listId()}
                 multiselectable
-                aria-busy={remote.loading() || undefined}
+                aria-busy={booleanAttribute(remote.loading() || undefined)}
                 aria-label={p['aria-label']}
                 aria-labelledby={p['aria-labelledby'] ?? (p.label ? `${id()}-label` : undefined)}
                 class={styles.multiPartList}

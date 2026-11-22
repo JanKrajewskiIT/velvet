@@ -1,8 +1,11 @@
-import { type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { Glyph } from '../primitives/Glyph';
 import { VisuallyHidden } from '../primitives/VisuallyHidden';
 import styles from './Link.module.css';
@@ -35,8 +38,8 @@ export interface LinkProps extends JSX.AnchorHTMLAttributes<HTMLAnchorElement> {
  * For navigation lists use Anchor / Breadcrumb / Tabs; for actions that don't navigate use Button variant="ghost".
  */
 export const Link = (props: LinkProps) => {
-  const merged = mergeProps({ variant: 'default' } satisfies Partial<LinkProps>, props);
-  const [local, rest] = splitProps(merged, [
+  const merged = withDefaults({ variant: 'default' } satisfies Partial<LinkProps>, props);
+  const [local, rest] = partitionProps(merged, [
     'href',
     'variant',
     'standalone',
@@ -53,8 +56,8 @@ export const Link = (props: LinkProps) => {
       href={local.disabled ? undefined : local.href}
       target={local.external ? '_blank' : rest.target}
       rel={local.external ? 'noopener noreferrer' : rest.rel}
-      aria-disabled={local.disabled || undefined}
-      tabIndex={local.disabled ? -1 : rest.tabIndex}
+      aria-disabled={booleanAttribute(local.disabled || undefined)}
+      tabindex={local.disabled ? -1 : rest.tabindex}
       class={cx(
         styles.link,
         variantClass(LINK_CLASSES, local.variant, 'default'),

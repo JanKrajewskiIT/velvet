@@ -1,8 +1,9 @@
-import { type JSX, splitProps } from 'solid-js';
+import { type JSX } from '@solidjs/web';
 
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps } from '../../utils/props';
 import styles from './Glyph.module.css';
 
 const ICON_CLASSES = {
@@ -26,7 +27,7 @@ export interface GlyphProps extends HtmlProps<HTMLElement, 'children'> {
 
 /** One Velvet icon as a CSS-mask glyph. Decorative unless `label` is set. */
 export const Glyph = (props: GlyphProps) => {
-  const [local, rest] = splitProps(props, ['name', 'size', 'label', 'class', 'style']);
+  const [local, rest] = partitionProps(props, ['name', 'size', 'label', 'class', 'style']);
   const style = (): JSX.CSSProperties | undefined =>
     typeof local.size === 'number' ? { '--glyph-size': `${local.size}px`, ...local.style } : local.style;
   return (
@@ -41,7 +42,7 @@ export const Glyph = (props: GlyphProps) => {
       style={style()}
       role={local.label ? 'img' : undefined}
       aria-label={local.label}
-      aria-hidden={local.label ? undefined : true}
+      aria-hidden={local.label ? undefined : 'true'}
       {...rest}
     />
   );

@@ -1,8 +1,10 @@
-import { createMemo, For, type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createMemo, For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { type HtmlProps, Polymorphic } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { Glyph } from '../primitives/Glyph';
 import styles from './GateList.module.css';
 
@@ -30,11 +32,11 @@ export interface GateListProps extends HtmlProps<HTMLDivElement> {
 }
 
 export const GateList = (props: GateListProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     { ordered: true, stopAtFirstFail: true, size: 'md' } satisfies Partial<GateListProps>,
     props,
   );
-  const [local, rest] = splitProps(merged, ['items', 'ordered', 'stopAtFirstFail', 'size', 'class']);
+  const [local, rest] = partitionProps(merged, ['items', 'ordered', 'stopAtFirstFail', 'size', 'class']);
   const translate = useTranslate();
   const firstFail = createMemo(() => local.items.findIndex((item) => item.status === 'fail'));
   const passed = createMemo(() => local.items.filter((item) => item.status === 'pass').length);

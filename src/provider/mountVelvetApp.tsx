@@ -1,6 +1,5 @@
 import { handleAuthRedirectCallback } from '@jankrajewskiit/auth';
-import type { JSX } from 'solid-js';
-import { render } from 'solid-js/web';
+import { type JSX, render } from '@solidjs/web';
 
 import { VelvetProvider, type VelvetProviderProps } from './VelvetProvider';
 

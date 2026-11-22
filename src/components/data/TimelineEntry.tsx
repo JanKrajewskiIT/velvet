@@ -105,7 +105,7 @@ export const TimelineEntry = (props: TimelineEntryProps) => {
                 variant="caption"
                 tone="tertiary"
                 class={styles.timelinePartTime}
-                dateTime={props.item.datetime}
+                datetime={props.item.datetime}
               >
                 {time()}
               </Text>

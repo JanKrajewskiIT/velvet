@@ -1,9 +1,11 @@
 import type { I18nKey } from '@jankrajewskiit/i18n';
-import { createMemo, For, type JSX, mergeProps, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createMemo, For, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Button } from '../actions/Button';
 import { OptionSwitcher } from '../forms/OptionSwitcher';
 import { Badge } from '../primitives/Badge';
@@ -90,7 +92,7 @@ const isFeature = (entry: JSX.Element | PricingFeature): entry is PricingFeature
  * ("Talk to us") drop the period. `current` marks the user's plan.
  */
 export const PricingTable = (props: PricingTableProps) => {
-  const p = mergeProps({ defaultBilling: 'monthly' } satisfies Partial<PricingTableProps>, props);
+  const p = withDefaults({ defaultBilling: 'monthly' } satisfies Partial<PricingTableProps>, props);
   const translate = useTranslate();
   const billingLabel = (value: Billing) => p.billingLabels?.[value] ?? translate(BILLING_LABEL_KEYS[value]);
   const periodLabel = (value: Billing) => p.periods?.[value] ?? translate(PERIOD_KEYS[value]);

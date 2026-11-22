@@ -1,8 +1,10 @@
-import { type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { Show } from 'solid-js';
 
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { type ElementTag, type HtmlProps, Polymorphic } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { renderIcon } from './Glyph';
 import styles from './SectionLabel.module.css';
 import { Text } from './Text';
@@ -29,8 +31,8 @@ export interface SectionLabelProps extends HtmlProps<HTMLElement> {
 
 /** Uppercase group heading inside menus, listboxes, sidebars, filter bars and panels. */
 export const SectionLabel = (props: SectionLabelProps) => {
-  const merged = mergeProps({ as: 'div' } satisfies SectionLabelProps, props);
-  const [local, rest] = splitProps(merged, ['as', 'icon', 'end', 'tone', 'sticky', 'class', 'children']);
+  const merged = withDefaults({ as: 'div' } satisfies SectionLabelProps, props);
+  const [local, rest] = partitionProps(merged, ['as', 'icon', 'end', 'tone', 'sticky', 'class', 'children']);
   return (
     <Polymorphic
       {...rest}

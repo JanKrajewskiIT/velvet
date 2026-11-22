@@ -1,8 +1,9 @@
-import { createMemo, mergeProps, Show } from 'solid-js';
+import { createMemo, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Chevron } from '../primitives/Chevron';
 import { Glyph } from '../primitives/Glyph';
 import { Text } from '../primitives/Text';
@@ -37,7 +38,7 @@ const normalize = (option: string | MenuChipOption): MenuChipOption =>
 
 /** Filter chip that opens a single-choice menu: "Status: Open ▾". Tinted when a value is set. Use in filter bars; for always-visible options use ChipGroup. */
 export const MenuChip = (props: MenuChipProps) => {
-  const p = mergeProps({ allowClear: true, defaultValue: null } satisfies Partial<MenuChipProps>, props);
+  const p = withDefaults({ allowClear: true, defaultValue: null } satisfies Partial<MenuChipProps>, props);
   const translate = useTranslate();
   const clearLabel = () => p.clearLabel ?? translate('velvet.menus.menuChip.clearLabel');
   const [current, setCurrent] = createControllable<string | null>({

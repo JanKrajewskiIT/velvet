@@ -1,10 +1,12 @@
-import { children, createMemo, type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { children, createMemo, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { percentOf } from '../../utils/math';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { Meter } from '../primitives/Meter';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
@@ -36,11 +38,11 @@ export interface ProgressProps extends HtmlProps<HTMLDivElement> {
 
 /** Linear progress for determinate tasks (upload, onboarding, quota) or indeterminate loading. */
 export const Progress = (props: ProgressProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     { value: 0, max: 100, showValue: false, indeterminate: false, tone: 'brand', size: 'md' } satisfies ProgressProps,
     props,
   );
-  const [local, rest] = splitProps(merged, [
+  const [local, rest] = partitionProps(merged, [
     'value',
     'max',
     'label',
@@ -94,7 +96,7 @@ export const Progress = (props: ProgressProps) => {
         indeterminate={local.indeterminate}
         class="vui-progress__track"
         role="progressbar"
-        aria-hidden={false}
+        aria-hidden="false"
         aria-label={labelText()}
         aria-valuemin={0}
         aria-valuemax={local.max}

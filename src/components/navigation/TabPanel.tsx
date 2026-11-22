@@ -1,7 +1,6 @@
-import { splitProps } from 'solid-js';
-
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps } from '../../utils/props';
 import { tabIds } from './tabIds';
 import styles from './TabPanel.module.css';
 
@@ -14,7 +13,7 @@ export interface TabPanelProps extends HtmlProps<HTMLDivElement> {
 }
 
 export const TabPanel = (props: TabPanelProps) => {
-  const [local, rest] = splitProps(props, ['tabsId', 'value', 'activeValue', 'tabId', 'id', 'tabIndex', 'class']);
+  const [local, rest] = partitionProps(props, ['tabsId', 'value', 'activeValue', 'tabId', 'id', 'tabindex', 'class']);
   const ids = () => tabIds(local.tabsId, local.value);
   return (
     <div
@@ -24,7 +23,7 @@ export const TabPanel = (props: TabPanelProps) => {
       role="tabpanel"
       aria-labelledby={local.tabId ?? ids().tab}
       hidden={local.value !== local.activeValue}
-      tabIndex={local.tabIndex ?? 0}
+      tabindex={local.tabindex ?? 0}
     />
   );
 };

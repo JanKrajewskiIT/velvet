@@ -15,17 +15,22 @@ export const createMultiSelectEntries = (
   query: Accessor<string>,
 ) => {
   const [pickedLabels, setPickedLabels] = createSignal<ReadonlyMap<string, string>>(new Map());
-  createEffect(() => {
-    const keys = new Set(selected());
-    const known = [...options.local(), ...options.remote.items()].filter((option) => keys.has(option.value));
-    setPickedLabels((previous) => {
-      const next = new Map([...previous].filter(([key]) => keys.has(key)));
-      for (const option of known) next.set(option.value, option.label);
-      return next.size === previous.size && [...next].every(([key, label]) => previous.get(key) === label)
-        ? previous
-        : next;
-    });
-  });
+  createEffect(
+    () => {
+      const keys = new Set(selected());
+      const known = [...options.local(), ...options.remote.items()].filter((option) => keys.has(option.value));
+      return { keys, known };
+    },
+    ({ keys, known }) => {
+      setPickedLabels((previous) => {
+        const next = new Map([...previous].filter(([key]) => keys.has(key)));
+        for (const option of known) next.set(option.value, option.label);
+        return next.size === previous.size && [...next].every(([key, label]) => previous.get(key) === label)
+          ? previous
+          : next;
+      });
+    },
+  );
   const isFull = () => props.max != null && selected().length >= props.max;
   const labelOf = (value: string) =>
     pickedLabels().get(value) ??

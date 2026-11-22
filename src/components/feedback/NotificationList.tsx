@@ -1,8 +1,10 @@
-import { For, type JSX, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps } from '../../utils/props';
 import { toneIcon } from '../../utils/tone';
 import { Dot } from '../primitives/Dot';
 import { EmptyText } from '../primitives/EmptyText';
@@ -36,7 +38,7 @@ const unreadMarker = (item: NotificationItem, label: string): JSX.Element => {
 
 /** The bare notification list (for a full activity page). */
 export const NotificationList = (props: NotificationListProps) => {
-  const [local, rest] = splitProps(props, ['items', 'onItemClick', 'emptyText', 'class']);
+  const [local, rest] = partitionProps(props, ['items', 'onItemClick', 'emptyText', 'class']);
   const translate = useTranslate();
   const emptyText = () => local.emptyText ?? translate('velvet.feedback.notificationList.emptyText');
   return (

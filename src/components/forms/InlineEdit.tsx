@@ -1,10 +1,13 @@
-import { batch, createSignal, type JSX, mergeProps, onCleanup, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createSignal, onCleanup, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { createOperation } from '../../hooks/createOperation';
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { reportAsyncError } from '../../utils/reportAsyncError';
 import { IconButton } from '../actions/IconButton';
 import { Control } from '../primitives/Control';
@@ -57,7 +60,7 @@ export interface InlineEditProps {
 
 /** Click-to-edit value, no separate form or modal. Enter or blur saves, Esc cancels, focus returns to the value. A brief ✓ confirms a save. */
 export const InlineEdit = (props: InlineEditProps) => {
-  const p = mergeProps({ defaultValue: '', size: 'md' } satisfies Partial<InlineEditProps>, props);
+  const p = withDefaults({ defaultValue: '', size: 'md' } satisfies Partial<InlineEditProps>, props);
   const translate = useTranslate();
   const placeholder = () => p.placeholder ?? translate('velvet.forms.inlineEdit.placeholder');
   const [current, setCurrent] = createControllable({ value: () => p.value, defaultValue: p.defaultValue });
@@ -73,21 +76,17 @@ export const InlineEdit = (props: InlineEditProps) => {
 
   const close = (restoreFocus: boolean) => {
     operation.invalidate();
-    batch(() => {
-      setEditing(false);
-      setError(undefined);
-    });
+    setEditing(false);
+    setError(undefined);
     if (restoreFocus) trigger?.focus();
   };
 
   const start = () => {
     if (p.disabled || busy()) return;
     operation.invalidate();
-    batch(() => {
-      setDraft(current());
-      setError(undefined);
-      setEditing(true);
-    });
+    setDraft(current());
+    setError(undefined);
+    setEditing(true);
   };
 
   const flashSaved = () => {
@@ -163,8 +162,8 @@ export const InlineEdit = (props: InlineEditProps) => {
           )}
           onClick={start}
           disabled={p.disabled}
-          aria-disabled={p.disabled || busy() || undefined}
-          aria-busy={busy() || undefined}
+          aria-disabled={booleanAttribute(p.disabled || busy() || undefined)}
+          aria-busy={booleanAttribute(busy() || undefined)}
           aria-label={
             p.label
               ? `${p.label}: ${current() || placeholder()}. ${translate('velvet.forms.inlineEdit.editHint')}`
@@ -190,9 +189,9 @@ export const InlineEdit = (props: InlineEditProps) => {
             ref={focusAndSelect}
             value={draft()}
             aria-label={p.label}
-            aria-invalid={!!error() || undefined}
-            aria-busy={busy() || undefined}
-            readOnly={p.disabled || busy()}
+            aria-invalid={booleanAttribute(!!error() || undefined)}
+            aria-busy={booleanAttribute(busy() || undefined)}
+            readonly={p.disabled || busy()}
             onInput={(event) => {
               setDraft(event.currentTarget.value);
               setError(undefined);
@@ -208,7 +207,7 @@ export const InlineEdit = (props: InlineEditProps) => {
             variant="primary"
             size="sm"
             disabled={busy()}
-            aria-busy={busy() || undefined}
+            aria-busy={booleanAttribute(busy() || undefined)}
             onMouseDown={keepInputFocus}
             onClick={() => void save(true).catch(reportAsyncError)}
           />

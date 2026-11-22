@@ -1,8 +1,7 @@
-import { mergeProps, splitProps } from 'solid-js';
-
 import { cssLength } from '../../utils/cssLength';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import styles from './Skeleton.module.css';
 
 export interface SkeletonProps extends HtmlProps<HTMLSpanElement> {
@@ -16,8 +15,8 @@ export interface SkeletonProps extends HtmlProps<HTMLSpanElement> {
 
 /** Shimmering placeholder in the shape of content that is loading. Wrap the loading region in `aria-busy="true"`. */
 export const Skeleton = (props: SkeletonProps) => {
-  const merged = mergeProps({ height: 12 } satisfies SkeletonProps, props);
-  const [local, rest] = splitProps(merged, ['width', 'height', 'circle', 'radius', 'class', 'style']);
+  const merged = withDefaults({ height: 12 } satisfies SkeletonProps, props);
+  const [local, rest] = partitionProps(merged, ['width', 'height', 'circle', 'radius', 'class', 'style']);
   return (
     <span
       {...rest}

@@ -1,7 +1,8 @@
-import { createSignal, For, mergeProps, Show } from 'solid-js';
+import { createSignal, For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Button } from '../actions/Button';
 import { Glyph } from '../primitives/Glyph';
@@ -41,7 +42,7 @@ interface PendingConfirm {
  * actions with `confirm` ask inline first, and async handlers are awaited.
  */
 export const Timeline = (props: TimelineProps) => {
-  const merged = mergeProps({ variant: 'default' } satisfies Partial<TimelineProps>, props);
+  const merged = withDefaults({ variant: 'default' } satisfies Partial<TimelineProps>, props);
   const translate = useTranslate();
   const addLabel = () => merged.addLabel ?? translate('velvet.data.timeline.addLabel');
   const errorText = () => merged.errorText ?? translate('velvet.data.timeline.errorText');

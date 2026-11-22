@@ -1,6 +1,7 @@
-import { For, mergeProps } from 'solid-js';
+import { For } from 'solid-js';
 
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import styles from './Calendar.module.css';
 import { CalendarMonth } from './CalendarMonth';
 import type { CalendarConfig, CalendarModelProps, CalendarProps } from './calendarTypes';
@@ -10,7 +11,7 @@ export type { CalendarProps, CalendarRangeProps, CalendarSingleProps, CalendarVa
 
 /** Month grid. single or range (hover previews the range). Keyboard: arrows = day/week, PageUp/Down = month (Shift = year), Home/End = week edges, Enter selects. */
 export const Calendar = (props: CalendarProps) => {
-  const p: CalendarConfig = mergeProps({ months: 1, weekStartsOn: 1 }, props as CalendarModelProps);
+  const p: CalendarConfig = withDefaults({ months: 1, weekStartsOn: 1 }, props as CalendarModelProps);
   const calendar = createCalendar(p);
 
   return (

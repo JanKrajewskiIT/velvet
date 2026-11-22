@@ -1,10 +1,12 @@
-import { children, createMemo, createSignal, type JSX, mergeProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { children, createMemo, createSignal } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { clamp } from '../../utils/math';
+import { withDefaults } from '../../utils/props';
 import styles from './SplitPane.module.css';
 
 const SPLIT_CLASSES = {
@@ -53,7 +55,7 @@ const arrowSign = (direction: keyof typeof KEY_DIRECTION, key: string): number |
 
 /** Two resizable panes. Drag the handle, or focus it and use arrows (Shift ×5), Home/End, Enter / double-click to reset. */
 export const SplitPane = (props: SplitPaneProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     {
       direction: 'horizontal',
       defaultSize: 50,
@@ -169,7 +171,7 @@ export const SplitPane = (props: SplitPaneProps) => {
       <div
         role="separator"
         // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a splitter separator with aria-valuenow is a focusable widget
-        tabIndex={0}
+        tabindex={0}
         aria-label={p.label ?? translate('velvet.layout.splitPane.label')}
         aria-orientation={horizontal() ? 'vertical' : 'horizontal'}
         aria-valuenow={Math.round(current())}

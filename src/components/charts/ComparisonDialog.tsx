@@ -1,7 +1,9 @@
-import { children, For, Index, type JSX, Match, mergeProps, Show, Switch } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { children, For, Match, Show, Switch } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Button } from '../actions/Button';
 import { Dialog, type DialogProps } from '../feedback/Dialog';
 import { Spinner } from '../feedback/Spinner';
@@ -48,7 +50,7 @@ export interface ComparisonDialogProps {
 
 /** Side-by-side comparison in a dialog: colour-keyed column headers, a RadarChart across axes (≥3 axes with `item.scores`), a criteria table with best-value stars, and an optional AI insights block (generate on demand). */
 export const ComparisonDialog = (props: ComparisonDialogProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     { axes: [], rows: [], insightsStatus: 'idle', status: 'done', size: 'lg' } satisfies Partial<ComparisonDialogProps>,
     props,
   );
@@ -191,7 +193,7 @@ export const ComparisonDialog = (props: ComparisonDialogProps) => {
                                 )}
                               </Show>
                             </th>
-                            <Index each={row.values}>
+                            <For keyed={false} each={row.values}>
                               {(value, i) => (
                                 <td class={cx(best().includes(i) && styles.cmpdlgPartBest)}>
                                   <Text
@@ -210,7 +212,7 @@ export const ComparisonDialog = (props: ComparisonDialogProps) => {
                                   </Show>
                                 </td>
                               )}
-                            </Index>
+                            </For>
                           </tr>
                         );
                       }}

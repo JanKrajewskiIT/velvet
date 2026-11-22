@@ -1,7 +1,8 @@
-import { mergeProps, Show } from 'solid-js';
+import { Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Menu } from '../menus/Menu';
 import { Avatar } from '../primitives/Avatar';
 import { Glyph } from '../primitives/Glyph';
@@ -15,7 +16,7 @@ export type { NavbarUserProps } from './navbarUserTypes';
 
 /** Account pill for the menubar's actions slot — avatar + first name + chevron → Menu (profile, settings, sign in/out). */
 export const NavbarUser = (props: NavbarUserProps) => {
-  const p = mergeProps({ showName: true, width: 220 } satisfies Partial<NavbarUserProps>, props);
+  const p = withDefaults({ showName: true, width: 220 } satisfies Partial<NavbarUserProps>, props);
   const translate = useTranslate();
   const label = () => p.label ?? translate('velvet.navigation.navbarUser.label');
   const accessibleName = () =>

@@ -1,6 +1,8 @@
-import { type JSX, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { IconButton } from '../actions/IconButton';
 import { Handle } from '../primitives/Handle';
@@ -58,7 +60,7 @@ export const EditableCollectionRow = (props: EditableCollectionRowProps): JSX.El
         <Handle
           class="vui-editcol__grip"
           data-vui-collection-grip
-          draggable
+          draggable="true"
           label={translate('velvet.forms.editableCollection.reorderItem', { index: props.index + 1 })}
           title={translate('velvet.forms.editableCollection.reorderHint')}
           onDragStart={(event) => props.drag.onDragStart(event, props.index)}
@@ -72,7 +74,7 @@ export const EditableCollectionRow = (props: EditableCollectionRowProps): JSX.El
         value={props.item.text}
         placeholder={props.placeholder ?? translate('velvet.forms.editableCollection.placeholder')}
         aria-label={translate('velvet.forms.editableCollection.itemLabel', { index: props.index + 1 })}
-        aria-invalid={invalid() || undefined}
+        aria-invalid={booleanAttribute(invalid() || undefined)}
         onInput={(event) => props.rows.patch(props.item.id, { text: event.currentTarget.value })}
         onBlur={() => props.rows.markTouched(props.item.id)}
       />

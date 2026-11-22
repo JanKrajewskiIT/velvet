@@ -1,5 +1,7 @@
-import { type JSX, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { Show } from 'solid-js';
 
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
 import { typographyClass } from '../primitives/typography';
@@ -24,7 +26,7 @@ export const PlayerButton = (props: PlayerButtonProps) => {
       class={cx(typographyClass('label-sm'), styles.playerPartBtn, props.class)}
       aria-label={props.label}
       title={props.label}
-      aria-pressed={props.pressed}
+      aria-pressed={booleanAttribute(props.pressed)}
       onClick={() => props.onClick?.()}
     >
       <Show when={props.icon} fallback={props.children}>

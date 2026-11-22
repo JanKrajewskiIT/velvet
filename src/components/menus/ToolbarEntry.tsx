@@ -1,5 +1,6 @@
 import { Match, Show, Switch } from 'solid-js';
 
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
 import { Separator } from '../primitives/Separator';
@@ -21,14 +22,14 @@ export const ToolbarEntry = (props: ToolbarEntryProps) => (
       <button
         type="button"
         data-tb={props.index}
-        tabIndex={props.tabIndex}
+        tabindex={props.tabIndex}
         class={cx(
           typographyClass('label'),
           styles.toolbarPartBtn,
           !isIconOnly(props.item) && styles.toolbarPartBtnVariantLabel,
         )}
         disabled={props.item.disabled}
-        aria-pressed={props.item.active}
+        aria-pressed={booleanAttribute(props.item.active)}
         aria-label={isIconOnly(props.item) ? props.item.label : undefined}
         title={
           isIconOnly(props.item)

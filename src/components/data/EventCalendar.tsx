@@ -1,11 +1,13 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { createMemo, For, type JSX, mergeProps, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createMemo, For, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { fmtDate, sameDay, toDate } from '../../utils/date';
+import { withDefaults } from '../../utils/props';
 import { Calendar } from '../forms/Calendar';
 import { Dot } from '../primitives/Dot';
 import { EmptyText } from '../primitives/EmptyText';
@@ -52,7 +54,7 @@ const AGENDA_DATE_FORMAT: Intl.DateTimeFormatOptions = { weekday: 'long', month:
 
 /** Compact month grid (days with events get a dot) + agenda for the selected day. Built on Calendar. */
 export const EventCalendar = (props: EventCalendarProps) => {
-  const merged = mergeProps({ weekStartsOn: 1, layout: 'stacked' } satisfies Partial<EventCalendarProps>, props);
+  const merged = withDefaults({ weekStartsOn: 1, layout: 'stacked' } satisfies Partial<EventCalendarProps>, props);
   const translate = useTranslate();
   const i18n = useI18n();
   const locale = () => merged.locale ?? i18n.locale();

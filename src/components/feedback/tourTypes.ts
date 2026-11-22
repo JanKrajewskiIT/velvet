@@ -1,4 +1,4 @@
-import type { JSX } from 'solid-js';
+import { type JSX } from '@solidjs/web';
 
 type TourPlacement = 'bottom' | 'top' | 'left' | 'right';
 export type CardSide = TourPlacement | 'center';

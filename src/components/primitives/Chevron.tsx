@@ -1,8 +1,7 @@
-import { mergeProps, splitProps } from 'solid-js';
-
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import styles from './Chevron.module.css';
 
 const CHEVRON_CLASSES = {
@@ -26,8 +25,8 @@ export interface ChevronProps extends HtmlProps<HTMLElement> {
 
 /** Decorative disclosure arrow; the host carries `aria-expanded`. */
 export const Chevron = (props: ChevronProps) => {
-  const merged = mergeProps({ direction: 'down' } satisfies ChevronProps, props);
-  const [local, rest] = splitProps(merged, ['direction', 'open', 'class']);
+  const merged = withDefaults({ direction: 'down' } satisfies ChevronProps, props);
+  const [local, rest] = partitionProps(merged, ['direction', 'open', 'class']);
   return (
     <i
       class={cx(

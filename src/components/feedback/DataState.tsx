@@ -1,8 +1,10 @@
-import { type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { type HtmlProps, Polymorphic } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { toneIcon } from '../../utils/tone';
 import { Dot } from '../primitives/Dot';
 import styles from './DataState.module.css';
@@ -31,8 +33,11 @@ export interface DataStateProps extends HtmlProps<HTMLElement> {
 }
 
 export const DataState = (props: DataStateProps) => {
-  const merged = mergeProps({ state: 'fresh', variant: 'inline', size: 'md' } satisfies Partial<DataStateProps>, props);
-  const [local, rest] = splitProps(merged, [
+  const merged = withDefaults(
+    { state: 'fresh', variant: 'inline', size: 'md' } satisfies Partial<DataStateProps>,
+    props,
+  );
+  const [local, rest] = partitionProps(merged, [
     'state',
     'label',
     'detail',

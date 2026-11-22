@@ -1,4 +1,5 @@
-import { type JSX, onCleanup, onMount } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { onSettled } from 'solid-js';
 
 import type { RichTextCommands } from './createRichTextCommands';
 import type { RichTextHistory } from './createRichTextHistory';
@@ -35,7 +36,7 @@ export const createRichTextInput = (options: RichTextInputOptions) => {
   const { history } = options;
   const { run, exec } = options.commands;
 
-  onMount(() => {
+  onSettled(() => {
     const editor = options.editor();
     const onBeforeInput = (event: InputEvent) => {
       if (event.inputType === 'historyUndo' || event.inputType === 'historyRedo') {
@@ -66,11 +67,11 @@ export const createRichTextInput = (options: RichTextInputOptions) => {
     };
     editor.addEventListener('beforeinput', onBeforeInput);
     document.addEventListener('selectionchange', onSelectionChange);
-    onCleanup(() => {
+    return () => {
       editor.removeEventListener('beforeinput', onBeforeInput);
       document.removeEventListener('selectionchange', onSelectionChange);
       cancelAnimationFrame(frame);
-    });
+    };
   });
 
   const onInput: JSX.EventHandler<HTMLDivElement, InputEvent> = (event) => {

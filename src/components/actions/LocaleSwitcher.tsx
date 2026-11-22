@@ -1,10 +1,13 @@
-import { For, type JSX, mergeProps, untrack } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { For, untrack } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
 import { activeItemKey } from '../../utils/activeItem';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { freezeRecords } from '../../utils/freezeRecords';
+import { withDefaults } from '../../utils/props';
 import { Glyph } from '../primitives/Glyph';
 import { typographyClass } from '../primitives/typography';
 import styles from './LocaleSwitcher.module.css';
@@ -36,7 +39,7 @@ export interface LocaleSwitcherProps {
 
 /** Compact language toggle with a sliding thumb; ←→ switch. For 4+ languages use Select. */
 export const LocaleSwitcher = (props: LocaleSwitcherProps) => {
-  const p = mergeProps({ locales: DEFAULT_LOCALE_OPTIONS, size: 'sm' } satisfies Partial<LocaleSwitcherProps>, props);
+  const p = withDefaults({ locales: DEFAULT_LOCALE_OPTIONS, size: 'sm' } satisfies Partial<LocaleSwitcherProps>, props);
   const translate = useTranslate();
   const [current, setCurrent] = createControllable({
     value: () => p.value,
@@ -86,10 +89,10 @@ export const LocaleSwitcher = (props: LocaleSwitcherProps) => {
           <button
             type="button"
             role="radio"
-            aria-checked={locale.value === current()}
+            aria-checked={booleanAttribute(locale.value === current())}
             aria-label={locale.name}
             lang={locale.value}
-            tabIndex={locale.value === tabStop() ? 0 : -1}
+            tabindex={locale.value === tabStop() ? 0 : -1}
             class={cx(
               typographyClass('label-sm'),
               styles.localePartOpt,

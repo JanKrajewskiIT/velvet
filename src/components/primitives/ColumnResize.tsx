@@ -1,10 +1,12 @@
-import { createEffect, createSignal, type JSX, mergeProps, onCleanup, splitProps, untrack } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, createSignal, onCleanup, untrack } from 'solid-js';
 
 import { assignRef } from '../../utils/assignRef';
 import { callHandler } from '../../utils/callHandler';
 import { columnWidthBounds, constrainColumnWidth } from '../../utils/columnWidth';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import styles from './ColumnResize.module.css';
 
 export interface ColumnResizeProps extends HtmlProps<HTMLSpanElement, 'onResize'> {
@@ -24,8 +26,8 @@ export interface ColumnResizeProps extends HtmlProps<HTMLSpanElement, 'onResize'
 
 /** Column-width handle for a header cell's right edge: drag, ←/→, double-click to reset. Place inside a `position: relative` header cell. */
 export const ColumnResize = (props: ColumnResizeProps) => {
-  const merged = mergeProps({ step: 16 } satisfies Partial<ColumnResizeProps>, props);
-  const [local, rest] = splitProps(merged, [
+  const merged = withDefaults({ step: 16 } satisfies Partial<ColumnResizeProps>, props);
+  const [local, rest] = partitionProps(merged, [
     'label',
     'width',
     'min',
@@ -53,15 +55,17 @@ export const ColumnResize = (props: ColumnResizeProps) => {
       bounds(),
     );
   const value = () => constrainColumnWidth(local.width ?? measured() ?? bounds().min, bounds());
-  createEffect(() => {
-    const initialCell = handle()?.parentElement;
-    if (!initialCell) return;
-    const measure = () => setMeasured(initialCell.getBoundingClientRect().width);
-    measure();
-    const observer = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(measure);
-    observer?.observe(initialCell);
-    onCleanup(() => observer?.disconnect());
-  });
+  createEffect(
+    () => handle()?.parentElement,
+    (initialCell) => {
+      if (!initialCell) return;
+      const measure = () => setMeasured(initialCell.getBoundingClientRect().width);
+      measure();
+      const observer = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(measure);
+      observer?.observe(initialCell);
+      return () => observer?.disconnect();
+    },
+  );
   const resize = (width: number) => {
     if (Number.isFinite(width)) local.onResize?.(constrainColumnWidth(width, bounds()));
   };
@@ -111,7 +115,7 @@ export const ColumnResize = (props: ColumnResizeProps) => {
       }}
       role="separator"
       // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a splitter separator with aria-valuenow is a focusable widget
-      tabIndex={0}
+      tabindex={0}
       aria-orientation="vertical"
       aria-label={local.label}
       aria-valuenow={Math.round(value())}

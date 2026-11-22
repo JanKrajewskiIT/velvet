@@ -1,8 +1,11 @@
-import { createEffect, createSignal, createUniqueId, type JSX, mergeProps, on, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, createSignal, createUniqueId, Show } from 'solid-js';
 
 import { createOperation } from '../../hooks/createOperation';
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Spinner } from '../feedback/Spinner';
 import { Glyph } from '../primitives/Glyph';
@@ -33,8 +36,8 @@ export interface AuthControlProps extends Omit<JSX.ButtonHTMLAttributes<HTMLButt
 
 /** Neutral session action; AuthButton supplies the Velvet Auth integration. */
 export const AuthControl = (props: AuthControlProps) => {
-  const p = mergeProps({ size: 'md' } satisfies Partial<AuthControlProps>, props);
-  const [local, rest] = splitProps(p, [
+  const p = withDefaults({ size: 'md' } satisfies Partial<AuthControlProps>, props);
+  const [local, rest] = partitionProps(p, [
     'signedIn',
     'initializing',
     'pending',
@@ -55,14 +58,12 @@ export const AuthControl = (props: AuthControlProps) => {
   const operation = createOperation();
   const [failure, setFailure] = createSignal(false);
   createEffect(
-    on(
-      () => [local.signedIn, local.onSignIn, local.onSignOut],
-      () => {
-        operation.invalidate();
-        setFailure(false);
-      },
-      { defer: true },
-    ),
+    () => [local.signedIn, local.onSignIn, local.onSignOut],
+    () => {
+      operation.invalidate();
+      setFailure(false);
+    },
+    { defer: true },
   );
   const translate = useTranslate();
   const errorId = createUniqueId();
@@ -115,7 +116,7 @@ export const AuthControl = (props: AuthControlProps) => {
         )}
         disabled={local.disabled || busy()}
         onClick={click}
-        aria-busy={busy() || undefined}
+        aria-busy={booleanAttribute(busy() || undefined)}
         aria-label={local.iconOnly ? label() : rest['aria-label']}
         aria-describedby={
           [local['aria-describedby'], error() ? errorId : undefined].filter(Boolean).join(' ') || undefined

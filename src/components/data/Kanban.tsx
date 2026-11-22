@@ -1,7 +1,9 @@
-import { createSignal, createUniqueId, For, type JSX, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createSignal, createUniqueId, For, Show } from 'solid-js';
 
 import { createFrameFocus } from '../../hooks/createFrameFocus';
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { isInteractiveTarget } from '../../utils/interactiveTarget';
 import { IconButton } from '../actions/IconButton';
@@ -102,7 +104,7 @@ export const Kanban = (props: KanbanProps): JSX.Element => {
         board = element;
       }}
       class={cx(styles.kanban, props.class)}
-      aria-busy={movement.pending() || undefined}
+      aria-busy={booleanAttribute(movement.pending() || undefined)}
     >
       <Text as="span" variant="caption" tone="inherit" class={styles.srOnly} aria-live="assertive">
         {announcement()}
@@ -180,8 +182,8 @@ export const Kanban = (props: KanbanProps): JSX.Element => {
                         role="listitem"
                         data-card={card.id}
                         // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- each card is a keyboard-operable item (arrows move focus, modifiers move the card)
-                        tabIndex={0}
-                        draggable={movement.movable()}
+                        tabindex={0}
+                        draggable={booleanAttribute(movement.movable())}
                         class={cx(styles.kanbanPartCard, dragId() === card.id && styles.kanbanPartCardVariantDrag)}
                         aria-roledescription={translate('velvet.data.kanban.cardRoleDescription')}
                         aria-describedby={helpId}

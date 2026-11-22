@@ -1,5 +1,6 @@
 import { For } from 'solid-js';
 
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { typographyClass } from '../primitives/typography';
 import type { DateRange } from './calendarTypes';
@@ -25,7 +26,7 @@ export const DateRangePresets = (props: DateRangePresetsProps) => (
         <button
           type="button"
           disabled={choice.disabled}
-          aria-pressed={index() === props.active}
+          aria-pressed={booleanAttribute(index() === props.active)}
           class={cx(
             typographyClass('button-sm'),
             styles.rangepopPartPreset,

@@ -1,9 +1,11 @@
-import { type JSX, mergeProps, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
 
 import { createControllable } from '../../hooks/createControllable';
+import { booleanAttribute, isBooleanAttributeSet } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { joinIdRefs } from '../../utils/joinIdRefs';
 import { Polymorphic } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { Control } from '../primitives/Control';
 import { Field } from '../primitives/Field';
 import type { FieldErrorAnnouncementProps } from '../primitives/fieldErrorAnnouncement';
@@ -56,8 +58,8 @@ export interface InputProps
 /** Text field with label, hint, icons, prefix/suffix and validation. The message lane is fixed-height when `validate`, `reserveHint` or `showCount` is set, so errors never reflow the form. */
 export const Input = (props: InputProps) => {
   // eslint-disable-next-line @typescript-eslint/no-deprecated -- Input implements its own deprecated multiline prop
-  const merged = mergeProps({ size: 'md', defaultValue: '', multiline: false } satisfies InputProps, props);
-  const [local, rest] = splitProps(merged, [
+  const merged = withDefaults({ size: 'md', defaultValue: '', multiline: false } satisfies InputProps, props);
+  const [local, rest] = partitionProps(merged, [
     'label',
     'hint',
     'error',
@@ -71,12 +73,12 @@ export const Input = (props: InputProps) => {
     'size',
     'multiline',
     'rows',
-    'readOnly',
+    'readonly',
     'disabled',
     'validate',
     'reserveHint',
     'showCount',
-    'maxLength',
+    'maxlength',
     'id',
     'class',
     'value',
@@ -86,9 +88,12 @@ export const Input = (props: InputProps) => {
     'aria-describedby',
     'aria-invalid',
   ]);
+  const required = () => isBooleanAttributeSet(local.required);
+  const disabled = () => isBooleanAttributeSet(local.disabled);
+  const readonly = () => isBooleanAttributeSet(local.readonly);
   const [text, setText] = createControllable({ value: () => local.value, defaultValue: local.defaultValue });
   const validation = createValidation(() => local.validate, text);
-  const counterMax = () => (local.showCount && local.maxLength ? Number(local.maxLength) : undefined);
+  const counterMax = () => (local.showCount && local.maxlength ? Number(local.maxlength) : undefined);
 
   return (
     <Field
@@ -97,8 +102,8 @@ export const Input = (props: InputProps) => {
       error={local.error || validation.message()}
       data-field-error-announcement={local['data-field-error-announcement']}
       optional={local.optional}
-      required={local.required}
-      id={local.id}
+      required={required()}
+      id={local.id || undefined}
       reserveHint={local.reserveHint || !!local.validate}
       count={text().length}
       maxCount={counterMax()}
@@ -109,8 +114,8 @@ export const Input = (props: InputProps) => {
           // eslint-disable-next-line @typescript-eslint/no-deprecated -- Input implements its own deprecated multiline prop
           multiline={local.multiline}
           invalid={control.invalid}
-          disabled={local.disabled}
-          readOnly={local.readOnly}
+          disabled={disabled()}
+          readOnly={readonly()}
           iconLeft={local.iconLeft}
           iconRight={local.iconRight}
           prefix={local.prefix}
@@ -125,12 +130,12 @@ export const Input = (props: InputProps) => {
             class={cx(styles.controlPartInput, typographyClass('body'))}
             // eslint-disable-next-line @typescript-eslint/no-deprecated -- Input implements its own deprecated multiline prop
             rows={local.multiline ? local.rows : undefined}
-            disabled={local.disabled}
-            readOnly={local.readOnly}
-            required={local.required}
-            maxLength={local.maxLength}
+            disabled={disabled()}
+            readonly={readonly()}
+            required={required()}
+            maxlength={local.maxlength}
             value={text()}
-            aria-invalid={control.invalid || local['aria-invalid']}
+            aria-invalid={booleanAttribute(control.invalid || local['aria-invalid'])}
             aria-describedby={joinIdRefs(local['aria-describedby'], control.describedBy)}
             onBlur={(e: FocusEvent) => {
               validation.blur();

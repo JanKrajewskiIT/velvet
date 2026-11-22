@@ -1,9 +1,11 @@
-import { createMemo, createSignal, createUniqueId, type JSX, mergeProps, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createMemo, createSignal, createUniqueId, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { numberRange } from '../../utils/decimalValue';
+import { withDefaults } from '../../utils/props';
 import type { FieldErrorAnnouncementProps } from '../primitives/fieldErrorAnnouncement';
 import { FieldFeedback } from '../primitives/FieldFeedback';
 import { FieldLabel } from '../primitives/FieldLabel';
@@ -67,7 +69,7 @@ export interface RangeInputProps extends FormControlProps, FieldErrorAnnouncemen
 
 /** From–to numeric field — salary, budget, price filter. Both bounds share one label and error lane; either may stay empty (open range). Optional unit and period selects turn it into a money range. */
 export const RangeInput = (props: RangeInputProps) => {
-  const p = mergeProps({ defaultValue: {}, min: 0, size: 'md' } satisfies Partial<RangeInputProps>, props);
+  const p = withDefaults({ defaultValue: {}, min: 0, size: 'md' } satisfies Partial<RangeInputProps>, props);
   const translate = useTranslate();
   const fromLabel = () => p.fromLabel ?? translate('velvet.forms.rangeInput.fromLabel');
   const toLabel = () => p.toLabel ?? translate('velvet.forms.rangeInput.toLabel');

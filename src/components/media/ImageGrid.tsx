@@ -1,8 +1,10 @@
-import { createMemo, createSignal, For, type JSX, mergeProps, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createMemo, createSignal, For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Glyph } from '../primitives/Glyph';
 import { Text } from '../primitives/Text';
 import styles from './ImageGrid.module.css';
@@ -38,7 +40,7 @@ export interface ImageGridProps {
 
 /** Image grid that opens the Lightbox. */
 export const ImageGrid = (props: ImageGridProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     {
       layout: 'uniform',
       columns: 3,

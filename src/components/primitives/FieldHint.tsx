@@ -1,7 +1,6 @@
-import { splitProps } from 'solid-js';
-
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps } from '../../utils/props';
 import styles from './FieldHint.module.css';
 import { Text } from './Text';
 
@@ -12,7 +11,7 @@ export interface FieldHintProps extends HtmlProps<HTMLSpanElement> {
 }
 
 export const FieldHint = (props: FieldHintProps) => {
-  const [local, rest] = splitProps(props, ['error', 'lane', 'class', 'children']);
+  const [local, rest] = partitionProps(props, ['error', 'lane', 'class', 'children']);
   return (
     <Text
       as="span"

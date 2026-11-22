@@ -1,7 +1,6 @@
-import { mergeProps, splitProps } from 'solid-js';
-
 import { cx } from '../../utils/cx';
 import { type ElementTag, type HtmlProps, Polymorphic } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import styles from './Grid.module.css';
 import { lengthValue, spaceValue } from './space';
 
@@ -20,8 +19,8 @@ export interface GridProps extends HtmlProps<HTMLElement> {
 
 /** CSS grid: fixed columns, or auto-fill cards of a minimum width. */
 export const Grid = (props: GridProps) => {
-  const merged = mergeProps({ as: 'div', columns: 3, gap: 4 } satisfies GridProps, props);
-  const [local, rest] = splitProps(merged, ['as', 'columns', 'min', 'fit', 'gap', 'class', 'style']);
+  const merged = withDefaults({ as: 'div', columns: 3, gap: 4 } satisfies GridProps, props);
+  const [local, rest] = partitionProps(merged, ['as', 'columns', 'min', 'fit', 'gap', 'class', 'style']);
   const template = () =>
     local.min
       ? `repeat(${local.fit ? 'auto-fit' : 'auto-fill'}, minmax(min(${lengthValue(local.min)}, 100%), 1fr))`

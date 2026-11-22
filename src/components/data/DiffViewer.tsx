@@ -1,10 +1,12 @@
 import type { I18nKey } from '@jankrajewskiit/i18n';
-import { createMemo, createSignal, For, Match, mergeProps, Switch } from 'solid-js';
+import { createMemo, createSignal, For, Match, Switch } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
 import { diffLines } from './diffLines';
@@ -51,7 +53,7 @@ export interface DiffViewerProps {
  * word-level highlights inside changed lines, unchanged runs folded to `context` lines. Fine up to a few thousand lines.
  */
 export const DiffViewer = (props: DiffViewerProps) => {
-  const merged = mergeProps({ context: 3 } satisfies Partial<DiffViewerProps>, props);
+  const merged = withDefaults({ context: 3 } satisfies Partial<DiffViewerProps>, props);
   const translate = useTranslate();
   const [mode, setMode] = createControllable<DiffMode>({
     value: () => props.mode,
@@ -101,7 +103,7 @@ export const DiffViewer = (props: DiffViewerProps) => {
               <button
                 type="button"
                 class={cx(typographyClass('kbd'), styles.codePartTab, mode() === option && styles.codePartTabVariantOn)}
-                aria-pressed={mode() === option}
+                aria-pressed={booleanAttribute(mode() === option)}
                 onClick={() => setMode(option)}
               >
                 {translate(DIFF_MODE_LABEL_KEY[option])}

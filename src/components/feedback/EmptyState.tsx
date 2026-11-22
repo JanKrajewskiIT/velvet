@@ -1,8 +1,10 @@
-import { children, type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { children, Show } from 'solid-js';
 
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { Text } from '../primitives/Text';
 import type { TextVariant } from '../primitives/typography';
 import styles from './EmptyState.module.css';
@@ -42,8 +44,8 @@ export interface EmptyStateProps extends HtmlProps<HTMLDivElement, 'title'> {
 
 /** No-data placeholder: tinted icon circle + title + description + actions (use size="sm" buttons). Always offer the next action. */
 export const EmptyState = (props: EmptyStateProps) => {
-  const merged = mergeProps({ icon: 'inbox', size: 'md', tone: 'brand' } satisfies EmptyStateProps, props);
-  const [local, rest] = splitProps(merged, [
+  const merged = withDefaults({ icon: 'inbox', size: 'md', tone: 'brand' } satisfies EmptyStateProps, props);
+  const [local, rest] = partitionProps(merged, [
     'icon',
     'title',
     'description',

@@ -1,8 +1,11 @@
-import { type JSX, mergeProps, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Glyph } from '../primitives/Glyph';
 import styles from './Sidebar.module.css';
 import { SidebarContext } from './sidebarContext';
@@ -32,13 +35,13 @@ export interface SidebarProps {
 
 /** App navigation spine: expanded panel or 64px icon rail on the same element. Fill it with NavItem and NavSection. */
 export const Sidebar = (props: SidebarProps) => {
-  const p = mergeProps({ collapsed: false, variant: 'floating' } satisfies SidebarProps, props);
+  const p = withDefaults({ collapsed: false, variant: 'floating' } satisfies SidebarProps, props);
   const translate = useTranslate();
   const showHead = () => Boolean(p.brand || p.brandCollapsed || p.onCollapsedChange);
   const showRailMark = () => Boolean(p.brandCollapsed && !p.onCollapsedChange);
 
   return (
-    <SidebarContext.Provider
+    <SidebarContext
       value={{
         collapsed: () => p.collapsed,
         expand: () => {
@@ -82,7 +85,7 @@ export const Sidebar = (props: SidebarProps) => {
                     ? translate('velvet.layout.sidebar.expandTitle')
                     : translate('velvet.layout.sidebar.collapseTitle')
                 }
-                aria-expanded={!p.collapsed}
+                aria-expanded={booleanAttribute(!p.collapsed)}
                 onClick={() => p.onCollapsedChange?.(!p.collapsed)}
               >
                 <Glyph name="chevrons-left" />
@@ -95,6 +98,6 @@ export const Sidebar = (props: SidebarProps) => {
           <div class={styles.sidebarPartFooter}>{p.footer}</div>
         </Show>
       </aside>
-    </SidebarContext.Provider>
+    </SidebarContext>
   );
 };

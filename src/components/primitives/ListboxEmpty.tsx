@@ -1,7 +1,6 @@
-import { splitProps } from 'solid-js';
-
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps } from '../../utils/props';
 import { EmptyText } from './EmptyText';
 import styles from './ListboxEmpty.module.css';
 
@@ -12,7 +11,7 @@ export interface ListboxEmptyProps extends HtmlProps<HTMLLIElement> {
 
 /** Empty or failed list content. The owning control places actionable status outside its listbox. */
 export const ListboxEmpty = (props: ListboxEmptyProps) => {
-  const [local, rest] = splitProps(props, ['error', 'class']);
+  const [local, rest] = partitionProps(props, ['error', 'class']);
   return (
     <EmptyText
       // The explicit li root preserves the native event targets declared by ListboxEmptyProps.

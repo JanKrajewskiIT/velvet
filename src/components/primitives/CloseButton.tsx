@@ -1,9 +1,10 @@
-import { type JSX, mergeProps, splitProps } from 'solid-js';
+import { type JSX } from '@solidjs/web';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { callHandler } from '../../utils/callHandler';
 import { cx } from '../../utils/cx';
 import { type HtmlProps, Polymorphic } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { buttonClass } from '../actions/buttonClass';
 import styles from './CloseButton.module.css';
 import { Glyph } from './Glyph';
@@ -34,11 +35,11 @@ export interface CloseButtonProps extends HtmlProps<HTMLElement, 'children' | 'o
 
 /** The one "×" control: closes, dismisses, removes, clears. Always a real control with an accessible name. */
 export const CloseButton = (props: CloseButtonProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     { variant: 'button', size: 'sm', icon: 'x', as: 'button' } satisfies CloseButtonProps,
     props,
   );
-  const [local, rest] = splitProps(merged, [
+  const [local, rest] = partitionProps(merged, [
     'variant',
     'size',
     'label',
@@ -70,9 +71,9 @@ export const CloseButton = (props: CloseButtonProps) => {
       tag={local.as}
       type={isSpan() ? undefined : 'button'}
       role={isSpan() ? 'button' : undefined}
-      tabIndex={isSpan() ? (local.disabled ? -1 : 0) : undefined}
+      tabindex={isSpan() ? (local.disabled ? -1 : 0) : undefined}
       disabled={isSpan() ? undefined : local.disabled}
-      aria-disabled={isSpan() && local.disabled ? true : undefined}
+      aria-disabled={isSpan() && local.disabled ? 'true' : undefined}
       aria-label={local.label ?? translate('velvet.common.close')}
       class={cx(
         local.variant === 'button'

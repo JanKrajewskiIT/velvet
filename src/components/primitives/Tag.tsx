@@ -1,9 +1,12 @@
-import { type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { type HtmlProps, Polymorphic } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import type { Tone } from '../../utils/tone';
 import { CloseButton } from './CloseButton';
 import { renderIcon } from './Glyph';
@@ -46,12 +49,12 @@ export interface TagProps extends HtmlProps<HTMLElement, 'onClick'> {
 
 /** Chip for filters, categories and removable selections. */
 export const Tag = (props: TagProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     { disabled: false, size: 'md', variant: 'outline', shape: 'rounded' } satisfies TagProps,
     props,
   );
   const translate = useTranslate();
-  const [local, rest] = splitProps(merged, [
+  const [local, rest] = partitionProps(merged, [
     'icon',
     'selected',
     'onClick',
@@ -77,7 +80,7 @@ export const Tag = (props: TagProps) => {
       tag={selectable() ? 'button' : 'span'}
       type={selectable() ? 'button' : undefined}
       onClick={local.onClick}
-      aria-pressed={selectable() ? !!local.selected : undefined}
+      aria-pressed={selectable() ? booleanAttribute(!!local.selected) : undefined}
       data-tone={local.tone}
       class={cx(
         typographyClass(local.size === 'sm' ? 'label-sm' : 'button-sm'),
@@ -91,7 +94,7 @@ export const Tag = (props: TagProps) => {
         local.class,
       )}
       disabled={selectable() ? local.disabled : undefined}
-      aria-disabled={!selectable() && local.disabled ? true : undefined}
+      aria-disabled={!selectable() && local.disabled ? 'true' : undefined}
     >
       {renderIcon(local.icon)}
       {local.children}

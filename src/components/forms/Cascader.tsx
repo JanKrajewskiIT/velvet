@@ -1,20 +1,13 @@
-import {
-  batch,
-  createEffect,
-  createMemo,
-  createSignal,
-  createUniqueId,
-  type JSX,
-  mergeProps,
-  on,
-  Show,
-} from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, createMemo, createSignal, createUniqueId, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { createDismiss } from '../../hooks/createDismiss';
 import { createFloating } from '../../hooks/createFloating';
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Chevron } from '../primitives/Chevron';
 import { Control, type ControlProps } from '../primitives/Control';
 import { ControlInput } from '../primitives/ControlInput';
@@ -68,7 +61,7 @@ export interface CascaderProps extends FormControlProps, FieldErrorAnnouncementP
 
 /** Single-path hierarchical pick shown as side-by-side columns (region → country → city). Keys: ↑↓ in a column · → into child column · ← back · Enter pick · Esc close. */
 export const Cascader = (props: CascaderProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     {
       separator: '/',
       changeOnSelect: false,
@@ -89,9 +82,12 @@ export const Cascader = (props: CascaderProps) => {
   const listId = createUniqueId();
   const [open, setOpen] = createSignal(false);
   const [root, setRoot] = createSignal<HTMLElement>();
-  createEffect(() => {
-    if (p.disabled) setOpen(false);
-  });
+  createEffect(
+    () => p.disabled,
+    (disabled) => {
+      if (disabled) setOpen(false);
+    },
+  );
   const floating = createFloating(open, root, { minWidth: true });
   let menu: HTMLDivElement | undefined;
   let search: HTMLInputElement | undefined;
@@ -133,16 +129,12 @@ export const Cascader = (props: CascaderProps) => {
     root,
     { refocus: false },
   );
-  createEffect(
-    on(open, (isOpen) => {
-      if (!isOpen) return;
-      batch(() => {
-        nav.reset(pickedPath().map((node) => node.id));
-        finder.reset();
-      });
-      (search ?? menu)?.focus();
-    }),
-  );
+  createEffect(open, (isOpen) => {
+    if (!isOpen) return;
+    nav.reset(pickedPath().map((node) => node.id));
+    finder.reset();
+    (search ?? menu)?.focus();
+  });
 
   const onMenuKeyDown = (e: KeyboardEvent) => {
     if (e.defaultPrevented || e.key === 'Escape') return;
@@ -175,7 +167,7 @@ export const Cascader = (props: CascaderProps) => {
               role="combobox"
               disabled={p.disabled}
               aria-haspopup="dialog"
-              aria-expanded={open()}
+              aria-expanded={booleanAttribute(open())}
               aria-controls={listId}
               aria-describedby={validation.describedBy(control.describedBy)}
               aria-label={p['aria-label']}
@@ -234,7 +226,7 @@ export const Cascader = (props: CascaderProps) => {
               }}
               style={floating.style()}
               id={listId}
-              tabIndex={-1}
+              tabindex={-1}
               class={styles.cascPartMenu}
               role="dialog"
               aria-label={typeof p.label === 'string' ? p.label : translate('velvet.forms.cascader.dialogLabel')}

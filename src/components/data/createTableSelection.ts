@@ -1,4 +1,4 @@
-import { type Accessor, createEffect, on } from 'solid-js';
+import { type Accessor, createEffect } from 'solid-js';
 
 import { toggleKey, toggleKeyScope } from '../../utils/keySelection';
 import type { RowKey } from './rowData';
@@ -27,14 +27,12 @@ export interface TableSelection {
 export const createTableSelection = <T extends object>(options: TableSelectionOptions<T>): TableSelection => {
   let anchor: RowKey | undefined;
   createEffect(
-    on(
-      options.dataKey,
-      () => {
-        anchor = undefined;
-        options.onChange([]);
-      },
-      { defer: true },
-    ),
+    options.dataKey,
+    () => {
+      anchor = undefined;
+      options.onChange([]);
+    },
+    { defer: true },
   );
 
   const isSelected = (key: RowKey) => options.selected().includes(key);

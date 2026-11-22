@@ -1,7 +1,10 @@
-import { type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { Show } from 'solid-js';
 
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { type HtmlProps, Polymorphic } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { IconTile } from '../primitives/IconTile';
 import styles from './CodeLabel.module.css';
 
@@ -21,8 +24,8 @@ export interface CodeLabelProps extends HtmlProps<HTMLElement, 'onClick'> {
 
 /** Identifier with an optional tag, description, and mark. */
 export const CodeLabel = (props: CodeLabelProps) => {
-  const merged = mergeProps({ size: 'md' } satisfies Partial<CodeLabelProps>, props);
-  const [local, rest] = splitProps(merged, [
+  const merged = withDefaults({ size: 'md' } satisfies Partial<CodeLabelProps>, props);
+  const [local, rest] = partitionProps(merged, [
     'code',
     'name',
     'tag',
@@ -47,7 +50,7 @@ export const CodeLabel = (props: CodeLabelProps) => {
       tag={local.onClick ? 'button' : 'span'}
       type={local.onClick ? 'button' : undefined}
       onClick={local.onClick}
-      aria-pressed={local.onClick ? !!local.selected : undefined}
+      aria-pressed={local.onClick ? booleanAttribute(!!local.selected) : undefined}
       class={cx(styles.root, local.class)}
       data-size={local.size}
       data-selected={!!local.selected}

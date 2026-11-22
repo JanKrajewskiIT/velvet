@@ -1,8 +1,11 @@
-import { createEffect, createSignal, type JSX, mergeProps, on, Show, untrack } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, createSignal, Show, untrack } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Button } from '../actions/Button';
 import { ConfirmDialog } from '../feedback/ConfirmDialog';
 import { NavbarChip } from '../navigation/NavbarChip';
@@ -13,6 +16,9 @@ export interface KillSwitchButtonProps {
   active?: boolean;
   onActivate?: () => void;
   onActiveClick?: () => void;
+  /** Receives the click instead of the built-in typed confirmation, which is then not rendered; use when the application owns the confirmation. */
+  onRequest?: () => void;
+  disabled?: boolean;
   scope?: string;
   label?: string;
   activeLabel?: string;
@@ -39,7 +45,7 @@ interface StopConfirmation {
 }
 
 export const KillSwitchButton = (props: KillSwitchButtonProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     { active: false, variant: 'chip', collapse: true } satisfies Partial<KillSwitchButtonProps>,
     props,
   );
@@ -61,25 +67,32 @@ export const KillSwitchButton = (props: KillSwitchButtonProps) => {
     return isOpen() && !!pending && valid(pending);
   };
   createEffect(
-    on(
-      isOpen,
-      (open) => {
-        if (!open) setRequest(undefined);
-        else if (!request()) setRequest(snapshot());
-      },
-      { defer: true },
-    ),
+    isOpen,
+    (open) => {
+      if (!open) setRequest(undefined);
+      else if (!request()) setRequest(snapshot());
+    },
+    { defer: true },
   );
-  createEffect(() => {
-    const pending = request();
-    if (pending && !valid(pending)) {
-      setRequest(undefined);
-      if (isOpen()) untrack(() => setOpen(false));
-    }
-  });
+  createEffect(
+    () => {
+      const pending = request();
+      return !!pending && !valid(pending);
+    },
+    (stale) => {
+      if (stale) {
+        setRequest(undefined);
+        if (isOpen()) setOpen(false);
+      }
+    },
+  );
   const click = () => {
     if (p.active) {
       if (p.onActiveClick) dispatchTradingAction(p.onActiveClick);
+      return;
+    }
+    if (p.onRequest) {
+      dispatchTradingAction(p.onRequest);
       return;
     }
     if (request() && isOpen()) return;
@@ -116,8 +129,9 @@ export const KillSwitchButton = (props: KillSwitchButtonProps) => {
             variant="danger"
             size="sm"
             iconLeft="stop"
-            aria-pressed={p.active}
+            aria-pressed={booleanAttribute(p.active)}
             aria-label={name()}
+            disabled={p.disabled}
             onClick={click}
             class={cx(styles.root, p.class)}
             data-variant="button"
@@ -131,6 +145,7 @@ export const KillSwitchButton = (props: KillSwitchButtonProps) => {
           collapse={p.collapse}
           pressed={p.active}
           label={name()}
+          disabled={p.disabled}
           onClick={click}
           class={cx(styles.root, p.class)}
           data-variant="chip"
@@ -138,17 +153,19 @@ export const KillSwitchButton = (props: KillSwitchButtonProps) => {
           {caption()}
         </NavbarChip>
       </Show>
-      <ConfirmDialog
-        open={dialogOpen()}
-        tone="danger"
-        title={p.title ?? translate('velvet.trading.killSwitchButton.title')}
-        description={p.description}
-        confirmLabel={p.confirmLabel ?? translate('velvet.trading.killSwitchButton.confirmLabel')}
-        cancelLabel={p.cancelLabel ?? translate('velvet.common.cancel')}
-        requireText={required()}
-        onCancel={cancel}
-        onConfirm={confirm}
-      />
+      <Show when={!p.onRequest}>
+        <ConfirmDialog
+          open={dialogOpen()}
+          tone="danger"
+          title={p.title ?? translate('velvet.trading.killSwitchButton.title')}
+          description={p.description}
+          confirmLabel={p.confirmLabel ?? translate('velvet.trading.killSwitchButton.confirmLabel')}
+          cancelLabel={p.cancelLabel ?? translate('velvet.common.cancel')}
+          requireText={required()}
+          onCancel={cancel}
+          onConfirm={confirm}
+        />
+      </Show>
     </>
   );
 };

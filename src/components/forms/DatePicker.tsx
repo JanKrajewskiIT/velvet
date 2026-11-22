@@ -1,11 +1,13 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { createEffect, createUniqueId, type JSX, mergeProps, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, createUniqueId, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { createToday } from '../../hooks/createToday';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import { fmtDate } from '../../utils/date';
+import { withDefaults } from '../../utils/props';
 import { Button } from '../actions/Button';
 import { FieldLabel } from '../primitives/FieldLabel';
 import { Text } from '../primitives/Text';
@@ -57,7 +59,7 @@ export interface DatePickerProps extends FormControlProps {
 
 /** Date field → calendar popover. Today / Clear in the footer, Esc closes and refocuses. Compact: the field is a button, no free typing. */
 export const DatePicker = (props: DatePickerProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     {
       weekStartsOn: 1,
       clearable: true,
@@ -85,9 +87,12 @@ export const DatePicker = (props: DatePickerProps) => {
   });
   const popover = createPickerPopover(p.defaultOpen, () => p.align);
   let trigger!: HTMLButtonElement;
-  createEffect(() => {
-    if (p.disabled) popover.close();
-  });
+  createEffect(
+    () => p.disabled,
+    (disabled) => {
+      if (disabled) popover.close();
+    },
+  );
   const serialized = () => {
     const date = current();
     return date ? (p.serializeValue ?? formDate)(date) : '';

@@ -1,4 +1,4 @@
-import type { JSX } from 'solid-js';
+import { type JSX } from '@solidjs/web';
 
 import { clamp } from '../../utils/math';
 import type { AiScoreTone, AiSection } from './aiResultTypes';

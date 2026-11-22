@@ -1,9 +1,12 @@
-import { createEffect, createMemo, createSignal, type JSX, mergeProps, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, createMemo, createSignal, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { createDismiss } from '../../hooks/createDismiss';
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Spinner } from '../feedback/Spinner';
 import { CloseButton } from '../primitives/CloseButton';
 import { Control } from '../primitives/Control';
@@ -27,7 +30,7 @@ const NO_OPTIONS: ReadonlyArray<string | AutocompleteOption> = [];
 
 /** Type-to-filter single select (combobox). Esc reverts the text; blur without a pick restores the selection unless `allowCustom`. */
 export const Autocomplete = (props: AutocompleteProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     {
       defaultValue: null,
       options: NO_OPTIONS,
@@ -67,12 +70,17 @@ export const Autocomplete = (props: AutocompleteProps) => {
     open,
   );
 
-  createEffect(() => {
-    const current = value();
-    const known =
-      remote.items().find((option) => option.value === current) ?? local().find((option) => option.value === current);
-    setPicked((previous) => known ?? (previous?.value === current ? previous : undefined));
-  });
+  createEffect(
+    () => {
+      const current = value();
+      const known =
+        remote.items().find((option) => option.value === current) ?? local().find((option) => option.value === current);
+      return { current, known };
+    },
+    ({ current, known }) => {
+      setPicked((previous) => known ?? (previous?.value === current ? previous : undefined));
+    },
+  );
 
   const selectedLabel = () => {
     const current = value();
@@ -146,11 +154,14 @@ export const Autocomplete = (props: AutocompleteProps) => {
     setOpen(true);
     setActive(0);
   };
-  createEffect(() => {
-    if (!p.disabled) return;
-    setOpen(false);
-    setTyping(false);
-  });
+  createEffect(
+    () => p.disabled,
+    (disabled) => {
+      if (!disabled) return;
+      setOpen(false);
+      setTyping(false);
+    },
+  );
 
   createDismiss(
     open,
@@ -236,14 +247,14 @@ export const Autocomplete = (props: AutocompleteProps) => {
               }}
               id={control.id}
               role="combobox"
-              aria-expanded={open()}
+              aria-expanded={booleanAttribute(open())}
               aria-controls={listId()}
               aria-autocomplete="list"
               aria-activedescendant={popup.activeDescendant(navigation())}
               aria-label={p['aria-label']}
               aria-labelledby={p['aria-labelledby']}
-              aria-required={p.required || undefined}
-              aria-invalid={control.invalid || validation.invalid() || undefined}
+              aria-required={booleanAttribute(p.required || undefined)}
+              aria-invalid={booleanAttribute(control.invalid || validation.invalid() || undefined)}
               aria-describedby={validation.describedBy(control.describedBy)}
               value={shownText()}
               placeholder={p.placeholder ?? translate('velvet.forms.autocomplete.placeholder')}

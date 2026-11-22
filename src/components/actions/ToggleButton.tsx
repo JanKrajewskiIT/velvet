@@ -1,9 +1,12 @@
-import { type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { callHandler } from '../../utils/callHandler';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { filledIcon } from '../display/IconFilled';
 import { Glyph } from '../primitives/Glyph';
 import { typographyClass } from '../primitives/typography';
@@ -36,8 +39,8 @@ export interface ToggleButtonProps extends Omit<JSX.ButtonHTMLAttributes<HTMLBut
 
 /** Button with an on/off state (`aria-pressed`) — an action that stays pressed, not a setting (use Switch). */
 export const ToggleButton = (props: ToggleButtonProps) => {
-  const merged = mergeProps({ defaultPressed: false, tone: 'brand', size: 'md' } satisfies ToggleButtonProps, props);
-  const [local, rest] = splitProps(merged, [
+  const merged = withDefaults({ defaultPressed: false, tone: 'brand', size: 'md' } satisfies ToggleButtonProps, props);
+  const [local, rest] = partitionProps(merged, [
     'pressed',
     'defaultPressed',
     'onPressedChange',
@@ -72,7 +75,7 @@ export const ToggleButton = (props: ToggleButtonProps) => {
   return (
     <button
       type="button"
-      aria-pressed={on()}
+      aria-pressed={booleanAttribute(on())}
       aria-label={iconOnly() ? local.label : undefined}
       title={iconOnly() ? local.label : undefined}
       disabled={local.disabled || group?.disabled()}

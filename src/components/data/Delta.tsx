@@ -1,9 +1,10 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { createMemo, mergeProps, Show, splitProps } from 'solid-js';
+import { createMemo, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { marketDirection } from '../finance/marketDirection';
 import { Glyph } from '../primitives/Glyph';
 import styles from './Delta.module.css';
@@ -29,7 +30,7 @@ export interface DeltaProps extends HtmlProps<HTMLSpanElement, 'children'> {
 
 /** Signed change with a trend colour and a localized accessible description. */
 export const Delta = (props: DeltaProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     {
       format: 'percent',
       digits: 2,
@@ -40,7 +41,7 @@ export const Delta = (props: DeltaProps) => {
     } satisfies Partial<DeltaProps>,
     props,
   );
-  const [local, rest] = splitProps(merged, [
+  const [local, rest] = partitionProps(merged, [
     'value',
     'format',
     'digits',

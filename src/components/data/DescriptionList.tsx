@@ -1,8 +1,10 @@
-import { For, type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { For, Show } from 'solid-js';
 
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { Text } from '../primitives/Text';
 import styles from './DescriptionList.module.css';
 
@@ -31,8 +33,8 @@ export interface DescriptionListProps extends HtmlProps<HTMLDListElement, 'child
 
 /** Key–value details (record pages, invoices, settings summary). Missing values show an em dash. */
 export const DescriptionList = (props: DescriptionListProps) => {
-  const merged = mergeProps({ layout: 'row', columns: 2 } satisfies Partial<DescriptionListProps>, props);
-  const [local, rest] = splitProps(merged, ['items', 'layout', 'columns', 'class', 'style']);
+  const merged = withDefaults({ layout: 'row', columns: 2 } satisfies Partial<DescriptionListProps>, props);
+  const [local, rest] = partitionProps(merged, ['items', 'layout', 'columns', 'class', 'style']);
   const style = (): JSX.CSSProperties | undefined =>
     local.layout === 'grid' ? { '--dl-cols': local.columns, ...local.style } : local.style;
   return (

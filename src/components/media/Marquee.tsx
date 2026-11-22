@@ -1,7 +1,9 @@
-import { createSignal, type JSX, mergeProps, onCleanup, onMount, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createSignal, onSettled, Show } from 'solid-js';
 
 import { cx } from '../../utils/cx';
 import { nonNegativeNumber, positiveNumber } from '../../utils/numericOption';
+import { withDefaults } from '../../utils/props';
 import styles from './Marquee.module.css';
 import { MarqueeCopy } from './MarqueeCopy';
 import { MarqueePresentation } from './MarqueePresentation';
@@ -37,7 +39,7 @@ export interface MarqueeProps {
  * Pauses on hover and keyboard focus; static under reduced motion.
  */
 export const Marquee = (props: MarqueeProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     {
       speed: DEFAULT_SPEED_PX_S,
       direction: 'left',
@@ -56,12 +58,12 @@ export const Marquee = (props: MarqueeProps) => {
     return Number.isFinite(seconds) && seconds > 0 ? Math.max(MIN_DURATION_S, seconds) : FALLBACK_DURATION_S;
   };
 
-  onMount(() => {
+  onSettled(() => {
     setContentWidth(group.scrollWidth);
     if (typeof ResizeObserver === 'undefined') return;
     const observer = new ResizeObserver(() => setContentWidth(group.scrollWidth));
     observer.observe(group);
-    onCleanup(() => observer.disconnect());
+    return () => observer.disconnect();
   });
 
   return (

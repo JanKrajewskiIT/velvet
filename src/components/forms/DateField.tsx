@@ -1,8 +1,11 @@
-import { type JSX, mergeProps, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { assignRef } from '../../utils/assignRef';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { CloseButton } from '../primitives/CloseButton';
 import { Control } from '../primitives/Control';
 import { Glyph } from '../primitives/Glyph';
@@ -35,7 +38,7 @@ export interface DateFieldProps {
 
 /** The button-styled field that opens a picker popover: icon, value or placeholder, optional clear. */
 export const DateField = (props: DateFieldProps) => {
-  const p = mergeProps({ icon: 'calendar' } satisfies Partial<DateFieldProps>, props);
+  const p = withDefaults({ icon: 'calendar' } satisfies Partial<DateFieldProps>, props);
   const translate = useTranslate();
   return (
     <Control size={p.size} invalid={p.invalid} disabled={p.disabled}>
@@ -47,7 +50,7 @@ export const DateField = (props: DateFieldProps) => {
         class={cx(styles.datefield, typographyClass('body'))}
         disabled={p.disabled}
         aria-haspopup="dialog"
-        aria-expanded={p.open}
+        aria-expanded={booleanAttribute(p.open)}
         aria-describedby={p.describedBy}
         aria-label={p['aria-label']}
         aria-labelledby={p['aria-labelledby']}

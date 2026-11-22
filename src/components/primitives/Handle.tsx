@@ -1,8 +1,10 @@
-import { type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { assignRef } from '../../utils/assignRef';
 import { cx } from '../../utils/cx';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { Glyph } from './Glyph';
 import styles from './Handle.module.css';
 
@@ -17,8 +19,8 @@ export interface HandleProps extends JSX.ButtonHTMLAttributes<HTMLElement> {
 
 /** Drag grip for reorderable rows and cards. A focusable button unless `decorative`. */
 export const Handle = (props: HandleProps) => {
-  const merged = mergeProps({ icon: 'grip-vertical' } satisfies HandleProps, props);
-  const [local, rest] = splitProps(merged, ['label', 'decorative', 'icon', 'class', 'ref']);
+  const merged = withDefaults({ icon: 'grip-vertical' } satisfies HandleProps, props);
+  const [local, rest] = partitionProps(merged, ['label', 'decorative', 'icon', 'class', 'ref']);
   const translate = useTranslate();
   return (
     <Show

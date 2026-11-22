@@ -1,7 +1,10 @@
-import { createEffect, createSignal, type JSX, mergeProps, on, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, createSignal, Show } from 'solid-js';
 
 import { createOperation } from '../../hooks/createOperation';
 import { useTranslate, useTranslateRich } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
+import { withDefaults } from '../../utils/props';
 import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Button } from '../actions/Button';
 import { Control } from '../primitives/Control';
@@ -38,7 +41,7 @@ export interface ConfirmDialogProps {
 
 /** Second-thought dialog. Prefer a Toast with undo for reversible actions. */
 export const ConfirmDialog = (props: ConfirmDialogProps) => {
-  const p = mergeProps({ tone: 'primary' } satisfies Partial<ConfirmDialogProps>, props);
+  const p = withDefaults({ tone: 'primary' } satisfies Partial<ConfirmDialogProps>, props);
   const translate = useTranslate();
   const title = () => (p.title === undefined ? translate('velvet.feedback.confirmDialog.title') : p.title);
   const confirmLabel = () => p.confirmLabel ?? translate('velvet.common.confirm');
@@ -52,15 +55,13 @@ export const ConfirmDialog = (props: ConfirmDialogProps) => {
   const danger = () => p.tone === 'danger';
   const confirmed = () => !p.requireText || typed().trim() === p.requireText;
   createEffect(
-    on(
-      () => p.open,
-      (open) => {
-        operation.invalidate();
-        if (!open) return;
-        setTyped('');
-        setFailed(false);
-      },
-    ),
+    () => p.open,
+    (open) => {
+      operation.invalidate();
+      if (!open) return;
+      setTyped('');
+      setFailed(false);
+    },
   );
 
   const confirm = async () => {
@@ -98,7 +99,7 @@ export const ConfirmDialog = (props: ConfirmDialogProps) => {
         <>
           <Button
             variant="secondary"
-            aria-disabled={busy() || undefined}
+            aria-disabled={booleanAttribute(busy() || undefined)}
             autofocus={danger()}
             onClick={() => p.onCancel?.()}
           >
@@ -145,7 +146,7 @@ export const ConfirmDialog = (props: ConfirmDialogProps) => {
                     if (e.key === 'Enter') void confirm().catch(reportAsyncError);
                   }}
                   autocomplete="off"
-                  spellcheck={false}
+                  spellcheck="false"
                   autofocus
                 />
               </Control>

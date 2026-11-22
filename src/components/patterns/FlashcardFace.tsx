@@ -1,4 +1,5 @@
-import { type JSX, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
@@ -21,7 +22,7 @@ export const FlashcardFace = (props: FlashcardFaceProps) => {
       class={styles.content}
       role="region"
       // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- the labelled scroll region must take focus so keyboard users can scroll long card content
-      tabIndex={0}
+      tabindex={0}
       aria-label={props.hint}
     >
       <Text

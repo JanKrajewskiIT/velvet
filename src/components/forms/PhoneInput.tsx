@@ -1,19 +1,13 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import {
-  createEffect,
-  createMemo,
-  createSignal,
-  createUniqueId,
-  type JSX,
-  mergeProps,
-  Show,
-  splitProps,
-} from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, createMemo, createSignal, createUniqueId, flush, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute, isBooleanAttributeSet } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { joinIdRefs } from '../../utils/joinIdRefs';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { Control } from '../primitives/Control';
 import { ControlInput } from '../primitives/ControlInput';
 import { Field } from '../primitives/Field';
@@ -79,7 +73,7 @@ export interface PhoneInputProps
 
 /** Phone field with country picker (ISO code + dial code) and as-you-type formatting per country mask. Emits E.164. */
 export const PhoneInput = (props: PhoneInputProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     {
       countries: PHONE_COUNTRIES,
       defaultCountry: 'PL',
@@ -89,7 +83,7 @@ export const PhoneInput = (props: PhoneInputProps) => {
     } satisfies PhoneInputProps,
     props,
   );
-  const [local, rest] = splitProps(merged, [
+  const [local, rest] = partitionProps(merged, [
     'label',
     'hint',
     'error',
@@ -107,7 +101,7 @@ export const PhoneInput = (props: PhoneInputProps) => {
     'countryLabel',
     'size',
     'disabled',
-    'readOnly',
+    'readonly',
     'id',
     'name',
     'form',
@@ -118,6 +112,9 @@ export const PhoneInput = (props: PhoneInputProps) => {
     'aria-describedby',
     'aria-invalid',
   ]);
+  const disabled = () => isBooleanAttributeSet(local.disabled);
+  const readonly = () => isBooleanAttributeSet(local.readonly);
+  const required = () => isBooleanAttributeSet(local.required);
   const autoId = createUniqueId();
   const i18n = useI18n();
   const translate = useTranslate();
@@ -133,7 +130,7 @@ export const PhoneInput = (props: PhoneInputProps) => {
           country: countryName(target),
           count: nationalLength(target),
         });
-  const id = () => local.id ?? autoId;
+  const id = () => local.id || autoId;
   const listId = () => `${id()}-list`;
   const optionId = (index: number) => `${listId()}-${index}`;
 
@@ -151,7 +148,7 @@ export const PhoneInput = (props: PhoneInputProps) => {
   const [touched, setTouched] = createSignal(false);
   const [root, setRoot] = createSignal<HTMLElement>();
   let input!: HTMLInputElement;
-  const editable = () => !local.disabled && !local.readOnly;
+  const editable = () => !disabled() && !readonly();
 
   const e164 = (digits: string, target: PhoneCountry) => (digits ? `+${target.dial}${digits}` : '');
   const emit = (digits: string, target: PhoneCountry) =>
@@ -186,8 +183,8 @@ export const PhoneInput = (props: PhoneInputProps) => {
     root,
     onPick: pickCountry,
   });
-  createEffect(() => {
-    if (!editable()) setOpen(false);
+  createEffect(editable, (enabled) => {
+    if (!enabled) setOpen(false);
   });
   return (
     <Field
@@ -196,7 +193,7 @@ export const PhoneInput = (props: PhoneInputProps) => {
       error={local.error || lengthError()}
       data-field-error-announcement={local['data-field-error-announcement']}
       optional={local.optional}
-      required={local.required}
+      required={required()}
       id={id()}
     >
       {(control) => (
@@ -204,8 +201,8 @@ export const PhoneInput = (props: PhoneInputProps) => {
           <Control
             size={local.size}
             invalid={control.invalid || validation.invalid()}
-            disabled={local.disabled}
-            readOnly={local.readOnly}
+            disabled={disabled()}
+            readOnly={readonly()}
             class={local.class}
           >
             <button
@@ -215,7 +212,7 @@ export const PhoneInput = (props: PhoneInputProps) => {
               disabled={!editable()}
               aria-label={`${countryLabel()}: ${countryName(country())} +${country().dial}`}
               aria-haspopup="listbox"
-              aria-expanded={open()}
+              aria-expanded={booleanAttribute(open())}
               aria-controls={listId()}
               aria-activedescendant={open() && active() >= 0 ? optionId(active()) : undefined}
               onClick={() => {
@@ -242,15 +239,15 @@ export const PhoneInput = (props: PhoneInputProps) => {
               }}
               id={control.id}
               type="tel"
-              form={local.form}
-              inputMode="tel"
+              form={local.form || undefined}
+              inputmode="tel"
               autocomplete="tel-national"
-              disabled={local.disabled}
-              readOnly={local.readOnly}
+              disabled={disabled()}
+              readonly={readonly()}
               placeholder={country().mask.replace(/#/gu, '0')}
               value={formatNational(digitState(), country().mask)}
-              aria-required={local.required || undefined}
-              aria-invalid={control.invalid || validation.invalid() || local['aria-invalid']}
+              aria-required={booleanAttribute(required() || undefined)}
+              aria-invalid={booleanAttribute(control.invalid || validation.invalid() || local['aria-invalid'])}
               aria-describedby={joinIdRefs(local['aria-describedby'], validation.describedBy(control.describedBy))}
               onInput={(e) => {
                 if (!editable()) return;
@@ -265,18 +262,20 @@ export const PhoneInput = (props: PhoneInputProps) => {
             />
           </Control>
           <FormValue
-            name={local.name}
-            form={local.form}
-            required={local.required}
-            disabled={local.disabled}
+            name={local.name || undefined}
+            form={local.form || undefined}
+            required={required()}
+            disabled={disabled()}
             value={e164(digitState(), country())}
             validation={validation}
             focusInvalid={() => input.focus()}
             onReset={() => {
-              setCountryCode(local.defaultCountry);
-              setDigitState(onlyDigits(local.defaultValue));
-              setTouched(false);
-              setOpen(false);
+              flush(() => {
+                setCountryCode(local.defaultCountry);
+                setDigitState(onlyDigits(local.defaultValue));
+                setTouched(false);
+                setOpen(false);
+              });
               input.value = formatNational(digitState(), country().mask);
               emit(digitState(), country());
             }}

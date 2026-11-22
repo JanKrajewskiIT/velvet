@@ -1,7 +1,9 @@
-import { type JSX, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { Show } from 'solid-js';
 
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps } from '../../utils/props';
 import type { StatusTone } from '../../utils/tone';
 import { Dot } from '../primitives/Dot';
 import { renderIcon } from '../primitives/Glyph';
@@ -20,7 +22,7 @@ export interface StatusBarItemProps extends HtmlProps<HTMLSpanElement> {
 }
 
 export const StatusBarItem = (props: StatusBarItemProps) => {
-  const [local, rest] = splitProps(props, ['tone', 'pulse', 'icon', 'mono', 'strong', 'hide', 'children', 'class']);
+  const [local, rest] = partitionProps(props, ['tone', 'pulse', 'icon', 'mono', 'strong', 'hide', 'children', 'class']);
 
   return (
     <span

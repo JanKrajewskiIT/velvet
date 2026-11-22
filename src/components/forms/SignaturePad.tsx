@@ -1,7 +1,9 @@
-import { createSignal, type JSX, mergeProps, onCleanup, onMount, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createSignal, onSettled, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Button } from '../actions/Button';
 import { Field } from '../primitives/Field';
 import type { FieldErrorAnnouncementProps } from '../primitives/fieldErrorAnnouncement';
@@ -46,7 +48,7 @@ export interface SignaturePadProps extends FieldErrorAnnouncementProps {
 
 /** Draw-to-sign field. Strokes are smoothed and width follows speed or pen pressure; the ink follows `--fg-primary` and redraws on theme change. Drawing is not keyboard-accessible — always offer a typed alternative. */
 export const SignaturePad = (props: SignaturePadProps) => {
-  const p = mergeProps({ height: 180, penWidth: 2.5 } satisfies Partial<SignaturePadProps>, props);
+  const p = withDefaults({ height: 180, penWidth: 2.5 } satisfies Partial<SignaturePadProps>, props);
   const translate = useTranslate();
   const canvasLabel = () => p.canvasLabel ?? translate('velvet.forms.signaturePad.canvasLabel');
   const signatureState = () =>
@@ -65,18 +67,18 @@ export const SignaturePad = (props: SignaturePadProps) => {
     p.onValueChange?.(next.length ? canvas.toDataURL('image/png') : null, next);
   };
 
-  onMount(() => {
+  onSettled(() => {
     const resize = new ResizeObserver(redraw);
     resize.observe(canvas);
     const theme = new MutationObserver(redraw);
     theme.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'class'] });
     const scheme = window.matchMedia('(prefers-color-scheme: dark)');
     scheme.addEventListener('change', redraw);
-    onCleanup(() => {
+    return () => {
       resize.disconnect();
       theme.disconnect();
       scheme.removeEventListener('change', redraw);
-    });
+    };
   });
 
   const onPointerDown: JSX.EventHandler<HTMLCanvasElement, PointerEvent> = (event) => {

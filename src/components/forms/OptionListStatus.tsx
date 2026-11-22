@@ -1,4 +1,5 @@
-import { Index, type JSX, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
@@ -36,13 +37,13 @@ export const OptionListStatus = (props: OptionListStatusProps) => {
         <Text as="span" variant="caption" tone="inherit" class={styles.srOnly}>
           {translate('velvet.common.loading')}
         </Text>
-        <Index each={SKELETON_WIDTHS}>
+        <For keyed={false} each={SKELETON_WIDTHS}>
           {(width) => (
             <div class={cx(styles.selectPartOption, typographyClass('body'))} aria-hidden="true">
               <Skeleton width={`${width()}%`} />
             </div>
           )}
-        </Index>
+        </For>
       </Show>
       <Show when={props.failed}>
         <EmptyText align="start" class={cx(styles.selectPartEmpty, styles.selectPartError)}>

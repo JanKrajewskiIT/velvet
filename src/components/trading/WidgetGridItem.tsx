@@ -1,5 +1,6 @@
 import { Show } from 'solid-js';
 
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { IconButton } from '../actions/IconButton';
 import { Glyph } from '../primitives/Glyph';
 import { Text } from '../primitives/Text';
@@ -17,7 +18,7 @@ export const WidgetGridItem = (props: { grid: WidgetGridController; id: string }
       data-editing={props.grid.props.editing || undefined}
       data-dragging={props.grid.drag() === props.id ? '' : undefined}
       aria-label={widget()?.title}
-      draggable={props.grid.props.editing || undefined}
+      draggable={booleanAttribute(props.grid.props.editing || undefined)}
       onDragStart={(event) => {
         if (event.target !== event.currentTarget) return;
         if (!props.grid.props.editing) {

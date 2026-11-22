@@ -1,6 +1,7 @@
 import { Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { fmtDate } from '../../utils/date';
 import { IconButton } from '../actions/IconButton';
@@ -44,7 +45,7 @@ export const OrganizerEventRow = (props: OrganizerEventRowProps) => {
       data-event-id={props.event.id}
       class={cx(styles.organizerPartEv, props.dragging && styles.organizerPartEvVariantDrag)}
       style={{ '--ec': props.event.color ?? 'var(--dv-1)' }}
-      draggable={props.draggable && !props.confirmingDelete}
+      draggable={booleanAttribute(props.draggable && !props.confirmingDelete)}
       onDragStart={(e) => props.onDragStart(e.dataTransfer)}
       onDragEnd={() => props.onDragEnd()}
     >

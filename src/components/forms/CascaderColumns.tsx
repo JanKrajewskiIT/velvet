@@ -1,4 +1,4 @@
-import { For, Index, Show } from 'solid-js';
+import { For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
@@ -22,7 +22,7 @@ export const CascaderColumns = (props: CascaderColumnsProps) => {
   const translate = useTranslate();
   return (
     <div class={styles.cascPartCols}>
-      <Index each={props.columns}>
+      <For keyed={false} each={props.columns}>
         {(list, level) => (
           <Listbox
             floating={false}
@@ -59,7 +59,7 @@ export const CascaderColumns = (props: CascaderColumnsProps) => {
             </For>
           </Listbox>
         )}
-      </Index>
+      </For>
     </div>
   );
 };

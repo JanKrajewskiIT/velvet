@@ -1,7 +1,9 @@
-import { type JSX, mergeProps, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Button } from '../actions/Button';
 import { Progress } from '../feedback/Progress';
 import { Text } from '../primitives/Text';
@@ -31,7 +33,7 @@ export interface LoadMoreProps {
  * button; replaced by "All N shown" at the end. Use Pagination when users need to jump to a page or share a URL to one.
  */
 export const LoadMore = (props: LoadMoreProps) => {
-  const p = mergeProps({ shown: 0, total: 0 } satisfies LoadMoreProps, props);
+  const p = withDefaults({ shown: 0, total: 0 } satisfies LoadMoreProps, props);
   const translate = useTranslate();
   const countText = (shown: number, total: number): JSX.Element =>
     p.format ? p.format(shown, total) : translate('velvet.navigation.loadMore.format', { shown, total });

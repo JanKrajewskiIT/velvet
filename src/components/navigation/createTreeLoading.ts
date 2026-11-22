@@ -27,29 +27,31 @@ export const createTreeLoading = (
     visit(props.data);
     return result;
   });
-  createEffect(() => {
-    const current = nodes();
-    const changed = dataKey !== props.dataKey;
-    dataKey = props.dataKey;
-    for (const [id, run] of pending) {
-      if (!changed && current.get(id) === run.node) continue;
-      run.controller.abort();
-      pending.delete(id);
-    }
-    const previous = previousNodes;
-    previousNodes = current;
-    setLoad((statuses) =>
-      Object.fromEntries(
-        Object.entries(statuses).filter(
-          ([id, status]) =>
-            !changed &&
-            current.has(id) &&
-            current.get(id) === previous.get(id) &&
-            (status.kind !== 'loading' || pending.has(id)),
+  createEffect(
+    () => [nodes(), props.dataKey] as const,
+    ([current, key]) => {
+      const changed = dataKey !== key;
+      dataKey = key;
+      for (const [id, run] of pending) {
+        if (!changed && current.get(id) === run.node) continue;
+        run.controller.abort();
+        pending.delete(id);
+      }
+      const previous = previousNodes;
+      previousNodes = current;
+      setLoad((statuses) =>
+        Object.fromEntries(
+          Object.entries(statuses).filter(
+            ([id, status]) =>
+              !changed &&
+              current.has(id) &&
+              current.get(id) === previous.get(id) &&
+              (status.kind !== 'loading' || pending.has(id)),
+          ),
         ),
-      ),
-    );
-  });
+      );
+    },
+  );
   onCleanup(() => {
     disposed = true;
     for (const run of pending.values()) run.controller.abort();

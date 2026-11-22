@@ -1,4 +1,4 @@
-import { Index } from 'solid-js';
+import { For } from 'solid-js';
 
 import styles from './LoaderSpans.module.css';
 
@@ -7,5 +7,7 @@ export interface LoaderSpansProps {
 }
 
 export const LoaderSpans = (props: LoaderSpansProps) => (
-  <Index each={props.count}>{() => <span class={styles.part} />}</Index>
+  <For keyed={false} each={props.count}>
+    {() => <span class={styles.part} />}
+  </For>
 );

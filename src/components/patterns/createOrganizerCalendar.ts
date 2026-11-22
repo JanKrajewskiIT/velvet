@@ -1,4 +1,5 @@
-import { type Accessor, batch, createMemo, createSignal, type JSX } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { type Accessor, createMemo, createSignal } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { createFrameFocus } from '../../hooks/createFrameFocus';
@@ -101,16 +102,14 @@ export const createOrganizerCalendar = (input: OrganizerCalendarInput, locale: A
     input.onMonthChange?.(first);
   };
   const shiftMonth = (delta: number) => showMonth(addMonths(view(), delta));
-  const pick = (d: Date) =>
-    batch(() => {
-      setSelected(d);
-      if (!sameMonth(d, view())) showMonth(d);
-    });
-  const goToday = () =>
-    batch(() => {
-      showMonth(today());
-      setSelected(today());
-    });
+  const pick = (d: Date) => {
+    setSelected(d);
+    if (!sameMonth(d, view())) showMonth(d);
+  };
+  const goToday = () => {
+    showMonth(today());
+    setSelected(today());
+  };
 
   const onGridKeyDown: JSX.EventHandler<HTMLDivElement, KeyboardEvent> = (e) => {
     const step = KEY_STEP[e.key];

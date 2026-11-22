@@ -1,9 +1,12 @@
-import { For, type JSX, Match, mergeProps, Show, Switch } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { For, Match, Show, Switch } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { Polymorphic } from '../../utils/polymorphic';
+import { withDefaults } from '../../utils/props';
 import { Button } from '../actions/Button';
 import { Skeleton } from '../feedback/Skeleton';
 import { SkeletonText } from '../feedback/SkeletonText';
@@ -56,7 +59,7 @@ export interface AiResultPanelProps {
 
 /** Surface for a structured (non-chat) model answer: provenance, score ring, findings, sources, copy / regenerate / feedback and cost meta. */
 export const AiResultPanel = (props: AiResultPanelProps) => {
-  const p = mergeProps({ status: 'done', scoreMax: 100 } satisfies AiResultPanelProps, props);
+  const p = withDefaults({ status: 'done', scoreMax: 100 } satisfies AiResultPanelProps, props);
   const translate = useTranslate();
   const title = () => p.title ?? translate('velvet.patterns.aiResultPanel.title');
   const error = () => p.error ?? translate('velvet.patterns.aiResultPanel.error');
@@ -80,7 +83,7 @@ export const AiResultPanel = (props: AiResultPanelProps) => {
   return (
     <article
       class={cx(typographyClass('body'), styles.ai, streaming() && 'vui-ai--streaming', p.class)}
-      aria-busy={streaming() || undefined}
+      aria-busy={booleanAttribute(streaming() || undefined)}
     >
       <header class={styles.aiPartHead}>
         <Badge tone="brand" class="vui-ai__chip" dot={streaming()} pulse icon="sparkles">

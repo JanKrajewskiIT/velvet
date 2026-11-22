@@ -1,7 +1,6 @@
-import { mergeProps, splitProps } from 'solid-js';
-
 import { cx } from '../../utils/cx';
 import { type ElementTag, type HtmlProps, Polymorphic } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import styles from './Rail.module.css';
 
 export interface RailProps extends HtmlProps<HTMLElement> {
@@ -15,8 +14,8 @@ export interface RailProps extends HtmlProps<HTMLElement> {
 
 /** Vertical list whose items are joined by a connector line under their leading Marker. */
 export const Rail = (props: RailProps) => {
-  const merged = mergeProps({ as: 'ol', size: 'md', line: true } satisfies RailProps, props);
-  const [local, rest] = splitProps(merged, ['as', 'size', 'line', 'class']);
+  const merged = withDefaults({ as: 'ol', size: 'md', line: true } satisfies RailProps, props);
+  const [local, rest] = partitionProps(merged, ['as', 'size', 'line', 'class']);
   return (
     <Polymorphic
       tag={local.as}

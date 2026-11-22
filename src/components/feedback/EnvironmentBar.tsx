@@ -1,8 +1,10 @@
-import { For, type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { Button } from '../actions/Button';
 import { DataState } from './DataState';
 import styles from './EnvironmentBar.module.css';
@@ -49,8 +51,8 @@ export interface EnvironmentBarProps extends HtmlProps<HTMLDivElement> {
 }
 
 export const EnvironmentBar = (props: EnvironmentBarProps) => {
-  const merged = mergeProps({ items: [], top: 0, maxWidth: 1360 } satisfies Partial<EnvironmentBarProps>, props);
-  const [local, rest] = splitProps(merged, [
+  const merged = withDefaults({ items: [], top: 0, maxWidth: 1360 } satisfies Partial<EnvironmentBarProps>, props);
+  const [local, rest] = partitionProps(merged, [
     'tone',
     'environment',
     'label',

@@ -1,5 +1,5 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { createEffect, createMemo, createSignal, onCleanup, onMount, untrack } from 'solid-js';
+import { createEffect, createMemo, createSignal, onCleanup, onSettled, untrack } from 'solid-js';
 
 import { reportAsyncError } from '../../utils/reportAsyncError';
 import { nextRate, type PlaybackState, rateLabel, readPlayback, seekMedia, togglePlayback } from './playback';
@@ -81,21 +81,27 @@ export const createVideoControls = (options: VideoControlsOptions) => {
   const cycleRate = () => setRate(nextRate(options.rates, rate()));
   const onMouseLeave = () => state().playing && setIdle(true);
 
-  createEffect(() => {
-    video.muted = muted();
-    video.volume = volume();
+  createEffect(
+    () => [muted(), volume()] as const,
+    ([isMuted, loudness]) => {
+      video.muted = isMuted;
+      video.volume = loudness;
+    },
+  );
+  createEffect(rate, (speed) => {
+    video.playbackRate = speed;
   });
-  createEffect(() => {
-    video.playbackRate = rate();
-  });
-  createEffect(() => {
-    const track = tracks().length ? video.textTracks[0] : undefined;
-    if (track) track.mode = captions() ? 'showing' : 'hidden';
-  });
-  onMount(() => {
+  createEffect(
+    () => [tracks().length, captions()] as const,
+    ([count, enabled]) => {
+      const track = count ? video.textTracks[0] : undefined;
+      if (track) track.mode = enabled ? 'showing' : 'hidden';
+    },
+  );
+  onSettled(() => {
     const onFullscreenChange = () => setFullscreen(document.fullscreenElement === wrap);
     document.addEventListener('fullscreenchange', onFullscreenChange);
-    onCleanup(() => document.removeEventListener('fullscreenchange', onFullscreenChange));
+    return () => document.removeEventListener('fullscreenchange', onFullscreenChange);
   });
   onCleanup(() => clearTimeout(idleTimer));
 

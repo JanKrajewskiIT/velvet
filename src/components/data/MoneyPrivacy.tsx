@@ -1,4 +1,4 @@
-import type { JSX } from 'solid-js';
+import { type JSX } from '@solidjs/web';
 
 import { MoneyPrivacyContext } from './moneyPrivacyContext';
 
@@ -9,5 +9,5 @@ export interface MoneyPrivacyProps {
 
 export const MoneyPrivacy = (props: MoneyPrivacyProps) => {
   const hidden = () => !!props.hidden;
-  return <MoneyPrivacyContext.Provider value={hidden}>{props.children}</MoneyPrivacyContext.Provider>;
+  return <MoneyPrivacyContext value={hidden}>{props.children}</MoneyPrivacyContext>;
 };

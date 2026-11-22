@@ -1,8 +1,11 @@
-import { type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { Show } from 'solid-js';
 
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { callHandler } from '../../utils/callHandler';
 import { cx } from '../../utils/cx';
 import { type ElementTag, type HtmlProps, Polymorphic } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { Glyph, renderIcon } from './Glyph';
 import styles from './Option.module.css';
 import { Text } from './Text';
@@ -35,8 +38,8 @@ export interface OptionProps extends HtmlProps<HTMLElement> {
 
 /** One row inside any listbox or menu — icon, label, description, shortcut, check and its states. */
 export const Option = (props: OptionProps) => {
-  const merged = mergeProps({ as: 'div', role: 'option' } satisfies OptionProps, props);
-  const [local, rest] = splitProps(merged, [
+  const merged = withDefaults({ as: 'div', role: 'option' } satisfies OptionProps, props);
+  const [local, rest] = partitionProps(merged, [
     'as',
     'type',
     'icon',
@@ -64,9 +67,9 @@ export const Option = (props: OptionProps) => {
       type={local.as === 'button' ? (local.type ?? 'button') : local.type}
       disabled={local.as === 'button' ? local.disabled : undefined}
       role={local.role}
-      aria-selected={local.role === 'option' ? !!local.selected : undefined}
-      aria-checked={checkable() ? !!local.selected : undefined}
-      aria-disabled={local.disabled || undefined}
+      aria-selected={local.role === 'option' ? booleanAttribute(!!local.selected) : undefined}
+      aria-checked={checkable() ? booleanAttribute(!!local.selected) : undefined}
+      aria-disabled={booleanAttribute(local.disabled || undefined)}
       onClick={(event: MouseEvent & { currentTarget: HTMLElement; target: Element }) => {
         if (local.disabled) {
           event.preventDefault();

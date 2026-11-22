@@ -1,7 +1,8 @@
-import { createMemo, mergeProps } from 'solid-js';
+import { createMemo } from 'solid-js';
 
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import styles from './Markdown.module.css';
 import { renderMarkdown } from './renderMarkdown';
 
@@ -28,7 +29,7 @@ export interface MarkdownProps {
 }
 
 export const Markdown = (props: MarkdownProps) => {
-  const merged = mergeProps({ size: 'md' } satisfies MarkdownProps, props);
+  const merged = withDefaults({ size: 'md' } satisfies MarkdownProps, props);
   const html = createMemo(() =>
     renderMarkdown(merged.source ?? (typeof merged.children === 'string' ? merged.children : '')),
   );

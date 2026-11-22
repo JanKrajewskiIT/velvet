@@ -1,9 +1,12 @@
-import { createUniqueId, type JSX, mergeProps, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createUniqueId } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import styles from './Loader.module.css';
 import { LOADER_BODIES, LOADER_CLASS_SUFFIX } from './loaderBodies';
 import type { LoaderShape } from './loaderTypes';
@@ -49,11 +52,11 @@ export interface LoaderProps extends HtmlProps<HTMLDivElement> {
 
 /** Decorative brand loaders for page / hero / empty-wait moments; for inline and button waits use Spinner. Animation stops under reduced motion. */
 export const Loader = (props: LoaderProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     { variant: 'ripple-dots', shape: 'circle', scale: 1, tone: 'brand', decorative: false } satisfies LoaderProps,
     props,
   );
-  const [local, rest] = splitProps(merged, [
+  const [local, rest] = partitionProps(merged, [
     'variant',
     'shape',
     'scale',
@@ -79,7 +82,7 @@ export const Loader = (props: LoaderProps) => {
       data-vui-loader={local.variant}
       role={local.decorative ? undefined : 'status'}
       aria-label={local.decorative ? undefined : (local.label ?? translate('velvet.common.loading'))}
-      aria-hidden={local.decorative || undefined}
+      aria-hidden={booleanAttribute(local.decorative || undefined)}
       class={cx(
         styles.ld,
         variantClass(LD_CLASSES, LOADER_CLASS_SUFFIX[local.variant]),

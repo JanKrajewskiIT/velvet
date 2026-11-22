@@ -1,8 +1,11 @@
-import { For, type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { For, Show } from 'solid-js';
 
 import { createRecordKeys } from '../../hooks/createRecordKeys';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { type HtmlProps, Polymorphic } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
 import styles from './ChartLegend.module.css';
@@ -32,8 +35,8 @@ export interface ChartLegendProps extends HtmlProps<HTMLElement, 'onToggle'> {
 const NO_EXCLUDED: readonly string[] = Object.freeze([]);
 
 export const ChartLegend = (props: ChartLegendProps) => {
-  const merged = mergeProps({ layout: 'inline', off: NO_EXCLUDED } satisfies Partial<ChartLegendProps>, props);
-  const [local, rest] = splitProps(merged, ['items', 'layout', 'off', 'onToggle', 'onHover', 'class']);
+  const merged = withDefaults({ layout: 'inline', off: NO_EXCLUDED } satisfies Partial<ChartLegendProps>, props);
+  const [local, rest] = partitionProps(merged, ['items', 'layout', 'off', 'onToggle', 'onHover', 'class']);
   const records = createRecordKeys(
     () => local.items,
     (item, index) => item.key ?? (typeof item.label === 'string' ? item.label : index),
@@ -59,7 +62,7 @@ export const ChartLegend = (props: ChartLegendProps) => {
                   <Polymorphic
                     tag={local.onToggle ? 'button' : 'span'}
                     type={local.onToggle ? 'button' : undefined}
-                    aria-pressed={local.onToggle ? on(item()) : undefined}
+                    aria-pressed={local.onToggle ? booleanAttribute(on(item())) : undefined}
                     class={cx(
                       typographyClass('caption'),
                       styles.inlineItem,
@@ -76,7 +79,7 @@ export const ChartLegend = (props: ChartLegendProps) => {
                 <li>
                   <button
                     type="button"
-                    aria-pressed={on(item())}
+                    aria-pressed={booleanAttribute(on(item()))}
                     class={cx(typographyClass('body-sm'), styles.listItem, !on(item()) && styles.listOff)}
                     onMouseEnter={() => on(item()) && local.onHover?.(item())}
                     onMouseLeave={() => local.onHover?.(null)}

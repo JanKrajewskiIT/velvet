@@ -1,7 +1,9 @@
-import { type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { Show } from 'solid-js';
 
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import styles from './CellStack.module.css';
 
 export interface CellStackProps extends HtmlProps<HTMLSpanElement> {
@@ -17,8 +19,8 @@ export interface CellStackProps extends HtmlProps<HTMLSpanElement> {
 }
 
 export const CellStack = (props: CellStackProps) => {
-  const merged = mergeProps({ strong: true, align: 'left' } satisfies Partial<CellStackProps>, props);
-  const [local, rest] = splitProps(merged, [
+  const merged = withDefaults({ strong: true, align: 'left' } satisfies Partial<CellStackProps>, props);
+  const [local, rest] = partitionProps(merged, [
     'primary',
     'secondary',
     'mono',

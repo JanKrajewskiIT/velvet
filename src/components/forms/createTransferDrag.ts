@@ -1,4 +1,5 @@
-import { createSignal, type JSX } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createSignal } from 'solid-js';
 
 import type { TransferView } from './createTransferView';
 import { hasTransferPayload, readTransferPayload, writeTransferPayload } from './transferDrag';

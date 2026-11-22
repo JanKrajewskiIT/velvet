@@ -1,4 +1,4 @@
-import type { JSX } from 'solid-js';
+import { type JSX } from '@solidjs/web';
 
 const LONG_CONTENT_LENGTH = 140;
 const contentLength = (content: JSX.Element) => (typeof content === 'string' ? content.length : 0);

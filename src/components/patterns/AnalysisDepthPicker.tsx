@@ -1,6 +1,7 @@
 import { createUniqueId, For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
@@ -29,7 +30,7 @@ export const AnalysisDepthPicker = (props: AnalysisDepthPickerProps) => {
             <button
               type="button"
               role="radio"
-              aria-checked={option.id === props.depth}
+              aria-checked={booleanAttribute(option.id === props.depth)}
               disabled={props.disabled}
               class={cx(styles.areqPartDbtn, typographyClass('label'))}
               onClick={() => props.onSelect(option.id)}

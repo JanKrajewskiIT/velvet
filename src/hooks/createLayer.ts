@@ -1,4 +1,4 @@
-import { type Accessor, createEffect, onCleanup } from 'solid-js';
+import { type Accessor, createEffect } from 'solid-js';
 
 export interface LayerOptions {
   root?: Accessor<HTMLElement | undefined>;
@@ -77,10 +77,13 @@ const registerLayer = (document: Document, layer: Layer): (() => void) => {
 
 /** One event is owned by the layer that was topmost when it began, even if dismissal exposes another layer. */
 export const createLayer = (open: Accessor<boolean>, onEscape: () => void, options: LayerOptions = {}): void => {
-  createEffect(() => {
-    if (!open()) return;
-    const root = options.root?.();
-    if (options.root && !root) return;
-    onCleanup(registerLayer(root?.ownerDocument ?? document, { ...options, onEscape }));
-  });
+  createEffect(
+    () => (open() ? { root: options.root?.() } : undefined),
+    (state) => {
+      if (!state) return;
+      const { root } = state;
+      if (options.root && !root) return;
+      return registerLayer(root?.ownerDocument ?? document, { ...options, onEscape });
+    },
+  );
 };

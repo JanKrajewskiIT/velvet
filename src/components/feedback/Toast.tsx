@@ -1,10 +1,12 @@
-import { createSignal, type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createSignal, Show } from 'solid-js';
 
 import { createAutoDismiss, dismissDuration } from '../../hooks/createAutoDismiss';
 import { useTranslate } from '../../i18n/useTranslate';
 import { callHandler } from '../../utils/callHandler';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { type StatusTone, toneIcon } from '../../utils/tone';
 import { Button } from '../actions/Button';
 import { CloseButton } from '../primitives/CloseButton';
@@ -44,8 +46,8 @@ export interface ToastProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'ti
 
 /** Transient status message. With `onUndo` it becomes the undo pattern — prefer it over a confirm dialog for reversible destructive actions. */
 export const Toast = (props: ToastProps) => {
-  const merged = mergeProps({ tone: 'neutral' } satisfies Partial<ToastProps>, props);
-  const [local, rest] = splitProps(merged, [
+  const merged = withDefaults({ tone: 'neutral' } satisfies Partial<ToastProps>, props);
+  const [local, rest] = partitionProps(merged, [
     'tone',
     'title',
     'description',

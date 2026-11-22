@@ -1,8 +1,10 @@
-import { type Accessor, createContext, type JSX, mergeProps, useContext } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { type Accessor, createContext, getOwner, useContext } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { classSelector } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import styles from './ToggleGroup.module.css';
 
 export type ToggleSize = 'sm' | 'md' | 'lg';
@@ -14,9 +16,10 @@ export interface ToggleGroupState {
   disabled: Accessor<boolean | undefined>;
 }
 
-const ToggleGroupContext = createContext<ToggleGroupState>();
+const ToggleGroupContext = createContext<ToggleGroupState | null>(null);
 
-export const useToggleGroup = (): ToggleGroupState | undefined => useContext(ToggleGroupContext);
+export const useToggleGroup = (): ToggleGroupState | undefined =>
+  getOwner() === null ? undefined : (useContext(ToggleGroupContext) ?? undefined);
 
 interface ToggleGroupBaseProps {
   /** Joined segments with a shared border. @default true */
@@ -51,7 +54,7 @@ const FOCUSABLE_TOGGLE = `${classSelector(styles.toggle)}:not(:disabled)`;
 
 /** Set of ToggleButtons that share state; ←→ move focus between buttons. */
 export const ToggleGroup = (props: ToggleGroupProps) => {
-  const p = mergeProps({ attached: true }, props);
+  const p = withDefaults({ attached: true }, props);
   const multiple = () => p.type !== 'single';
 
   const [selected, setSelected] = createControllable<string | string[] | null>({
@@ -87,7 +90,7 @@ export const ToggleGroup = (props: ToggleGroupProps) => {
   };
 
   return (
-    <ToggleGroupContext.Provider value={{ isOn, toggle, size: () => p.size, disabled: () => p.disabled }}>
+    <ToggleGroupContext value={{ isOn, toggle, size: () => p.size, disabled: () => p.disabled }}>
       {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- arrow-key focus movement between the group's buttons is handled on the group container */}
       <div
         ref={(element) => {
@@ -105,6 +108,6 @@ export const ToggleGroup = (props: ToggleGroupProps) => {
       >
         {p.children}
       </div>
-    </ToggleGroupContext.Provider>
+    </ToggleGroupContext>
   );
 };

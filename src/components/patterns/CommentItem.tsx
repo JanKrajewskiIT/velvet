@@ -1,6 +1,7 @@
 import { For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { Button } from '../actions/Button';
 import { Avatar } from '../primitives/Avatar';
@@ -125,7 +126,7 @@ export const CommentItem = (props: CommentItemProps) => {
                           size="xs"
                           iconLeft={comment().liked ? 'heart-filled' : 'heart'}
                           class={cx(styles.cmtPartAct, comment().liked && styles.cmtPartActVariantOn)}
-                          aria-pressed={!!comment().liked}
+                          aria-pressed={booleanAttribute(!!comment().liked)}
                           aria-label={likeLabel()}
                           onClick={() => thread.like(comment().id)}
                         >
@@ -142,7 +143,7 @@ export const CommentItem = (props: CommentItemProps) => {
                             variant="ghost"
                             size="xs"
                             class={cx(styles.cmtPartAct, styles.cmtPartActVariantDanger)}
-                            aria-expanded={confirming()}
+                            aria-expanded={booleanAttribute(confirming())}
                             onClick={() => thread.confirmDelete(confirming() ? null : comment().id)}
                           >
                             {translate('velvet.common.delete')}

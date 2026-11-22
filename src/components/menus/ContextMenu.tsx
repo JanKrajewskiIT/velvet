@@ -1,5 +1,5 @@
-import { createEffect, createMemo, createSignal, type JSX, onCleanup, Show } from 'solid-js';
-import { Portal } from 'solid-js/web';
+import { type JSX, Portal } from '@solidjs/web';
+import { createEffect, createMemo, createSignal, Show } from 'solid-js';
 
 import { createDismiss } from '../../hooks/createDismiss';
 import { cx } from '../../utils/cx';
@@ -36,9 +36,12 @@ export const ContextMenu = (props: ContextMenuProps) => {
   const isOpen = createMemo(() => pos() !== null);
 
   const close = () => setPos(null);
-  createEffect(() => {
-    if (props.disabled) close();
-  });
+  createEffect(
+    () => props.disabled,
+    (disabled) => {
+      if (disabled) close();
+    },
+  );
   createDismiss(
     isOpen,
     (reason) => {
@@ -49,27 +52,29 @@ export const ContextMenu = (props: ContextMenuProps) => {
     { refocus: false },
   );
 
-  createEffect(() => {
-    if (!isOpen()) return;
+  createEffect(isOpen, (opened) => {
+    if (!opened) return;
     const onScroll = (e: Event) => {
       if (!(e.target instanceof Node && host()?.contains(e.target))) close();
     };
     window.addEventListener('scroll', onScroll, true);
     window.addEventListener('resize', close);
-    onCleanup(() => {
+    return () => {
       window.removeEventListener('scroll', onScroll, true);
       window.removeEventListener('resize', close);
-    });
+    };
   });
 
-  createEffect(() => {
-    const at = pos();
-    const rect = host()?.firstElementChild?.getBoundingClientRect();
-    if (!at || !rect) return;
-    const x = fitInViewport(at.x, rect.width, window.innerWidth);
-    const y = fitInViewport(at.y, rect.height, window.innerHeight);
-    if (x !== at.x || y !== at.y) setPos({ x, y });
-  });
+  createEffect(
+    () => [pos(), host()] as const,
+    ([at, panel]) => {
+      const rect = panel?.getBoundingClientRect();
+      if (!at || !rect) return;
+      const x = fitInViewport(at.x, rect.width, window.innerWidth);
+      const y = fitInViewport(at.y, rect.height, window.innerHeight);
+      if (x !== at.x || y !== at.y) setPos({ x, y });
+    },
+  );
 
   const onContextMenu: JSX.EventHandler<HTMLDivElement, MouseEvent> = (e) => {
     if (props.disabled || e.defaultPrevented) return;
@@ -95,7 +100,7 @@ export const ContextMenu = (props: ContextMenuProps) => {
       class={cx(styles.root, props.class)}
       style={props.style}
       // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- the zone must be focusable so Shift+F10 / ContextMenu open the menu from the keyboard
-      tabIndex={0}
+      tabindex={0}
       aria-haspopup="menu"
       onContextMenu={onContextMenu}
       onKeyDown={onKeyDown}
@@ -103,13 +108,9 @@ export const ContextMenu = (props: ContextMenuProps) => {
       {props.children}
       <Show when={pos()}>
         {(at) => (
-          <Portal
-            ref={(element) => {
-              if (element instanceof HTMLElement) setHost(element);
-            }}
-            mount={zone.closest('dialog[open]') ?? undefined}
-          >
+          <Portal mount={zone.closest('dialog[open]') ?? undefined}>
             <MenuPanel
+              ref={setHost}
               items={props.items}
               style={{ position: 'fixed', left: `${at().x}px`, top: `${at().y}px`, 'z-index': 'var(--z-dropdown)' }}
               onClose={(refocus) => {

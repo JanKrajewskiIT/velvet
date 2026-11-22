@@ -1,8 +1,10 @@
-import { For, type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { For, Show } from 'solid-js';
 
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import styles from './Kbd.module.css';
 import { Text } from './Text';
 
@@ -44,8 +46,8 @@ export interface KbdProps extends HtmlProps<HTMLElement> {
 
 /** Keyboard key(s). */
 export const Kbd = (props: KbdProps) => {
-  const p = mergeProps({ size: 'md', plain: false } satisfies KbdProps, props);
-  const [local, rest] = splitProps(p, ['keys', 'children', 'size', 'plain', 'class']);
+  const p = withDefaults({ size: 'md', plain: false } satisfies KbdProps, props);
+  const [local, rest] = partitionProps(p, ['keys', 'children', 'size', 'plain', 'class']);
   const list = () => (local.keys ? (Array.isArray(local.keys) ? local.keys : local.keys.split('+')) : undefined);
   const capClass = () =>
     cx(styles.kbd, variantClass(KBD_CLASSES, local.size, 'md'), local.plain && styles.kbdVariantPlain);

@@ -1,22 +1,13 @@
-import {
-  createEffect,
-  createMemo,
-  createSignal,
-  createUniqueId,
-  Index,
-  type JSX,
-  Match,
-  mergeProps,
-  onMount,
-  Show,
-  Switch,
-} from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, createMemo, createSignal, createUniqueId, For, Match, onSettled, Show, Switch } from 'solid-js';
 
 import { createFrameFocus } from '../../hooks/createFrameFocus';
 import { ownsLayerEvent } from '../../hooks/createLayer';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { createTypeahead } from '../../utils/createTypeahead';
 import { classSelector } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Glyph, renderIcon } from '../primitives/Glyph';
 import { SectionLabel } from '../primitives/SectionLabel';
 import { typographyClass } from '../primitives/typography';
@@ -42,7 +33,7 @@ export interface MenuPanelProps {
 
 /** The bare menu panel, for custom positioning (ContextMenu uses it). */
 export const MenuPanel = (props: MenuPanelProps) => {
-  const p = mergeProps({ autoFocus: true, iconPosition: 'start' } satisfies Partial<MenuPanelProps>, props);
+  const p = withDefaults({ autoFocus: true, iconPosition: 'start' } satisfies Partial<MenuPanelProps>, props);
   let panel!: HTMLDivElement;
   const id = createUniqueId();
   const itemId = (index: number) => `${id}-${index}`;
@@ -57,14 +48,14 @@ export const MenuPanel = (props: MenuPanelProps) => {
     return actionable().includes(index) ? index : (actionable()[0] ?? -1);
   };
 
-  onMount(() => {
+  onSettled(() => {
     if (!p.autoFocus) return;
     focusFrame();
     setActive(actionable()[0] ?? -1);
   });
 
-  createEffect(() => {
-    const el = active() >= 0 ? document.getElementById(itemId(active())) : null;
+  createEffect(active, (index) => {
+    const el = index >= 0 ? document.getElementById(itemId(index)) : null;
     if (
       el &&
       (el.offsetTop < panel.scrollTop || el.offsetTop + el.offsetHeight > panel.scrollTop + panel.clientHeight)
@@ -146,13 +137,13 @@ export const MenuPanel = (props: MenuPanelProps) => {
         p.ref?.(element);
       }}
       role="menu"
-      tabIndex={-1}
+      tabindex={-1}
       aria-activedescendant={active() >= 0 ? itemId(active()) : undefined}
       class={cx(styles.menu, p.class)}
       style={p.style}
       onKeyDown={onKeyDown}
     >
-      <Index each={p.items}>
+      <For keyed={false} each={p.items}>
         {(item, index) => (
           <Switch>
             <Match when={menuItemKind(item()) === 'divider'}>
@@ -168,8 +159,8 @@ export const MenuPanel = (props: MenuPanelProps) => {
               <div
                 id={itemId(index)}
                 role={item().checked !== undefined ? 'menuitemcheckbox' : 'menuitem'}
-                aria-checked={item().checked !== undefined ? !!item().checked : undefined}
-                aria-disabled={item().disabled || undefined}
+                aria-checked={item().checked !== undefined ? booleanAttribute(!!item().checked) : undefined}
+                aria-disabled={booleanAttribute(item().disabled || undefined)}
                 class={cx(
                   typographyClass('body'),
                   styles.menuPartItem,
@@ -206,7 +197,7 @@ export const MenuPanel = (props: MenuPanelProps) => {
             </Match>
           </Switch>
         )}
-      </Index>
+      </For>
     </div>
   );
 };

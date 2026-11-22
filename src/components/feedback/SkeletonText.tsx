@@ -1,7 +1,8 @@
-import { Index, mergeProps, splitProps } from 'solid-js';
+import { For } from 'solid-js';
 
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import styles from './SkeletonText.module.css';
 
 export interface SkeletonTextProps extends HtmlProps<HTMLSpanElement> {
@@ -15,8 +16,8 @@ export interface SkeletonTextProps extends HtmlProps<HTMLSpanElement> {
 
 /** Paragraph placeholder — full-width lines, shorter last line. */
 export const SkeletonText = (props: SkeletonTextProps) => {
-  const merged = mergeProps({ lines: 3, lastWidth: '60%', gap: 8 } satisfies SkeletonTextProps, props);
-  const [local, rest] = splitProps(merged, ['lines', 'lastWidth', 'gap', 'class', 'style']);
+  const merged = withDefaults({ lines: 3, lastWidth: '60%', gap: 8 } satisfies SkeletonTextProps, props);
+  const [local, rest] = partitionProps(merged, ['lines', 'lastWidth', 'gap', 'class', 'style']);
   const lines = () => Array.from({ length: local.lines }, (_, i) => i);
   const widthOf = (line: number) => (line === local.lines - 1 && local.lines > 1 ? local.lastWidth : '100%');
   return (
@@ -26,7 +27,9 @@ export const SkeletonText = (props: SkeletonTextProps) => {
       style={{ gap: `${local.gap}px`, ...local.style }}
       aria-hidden="true"
     >
-      <Index each={lines()}>{(line) => <span class={styles.skeleton} style={{ width: widthOf(line()) }} />}</Index>
+      <For keyed={false} each={lines()}>
+        {(line) => <span class={styles.skeleton} style={{ width: widthOf(line()) }} />}
+      </For>
     </span>
   );
 };

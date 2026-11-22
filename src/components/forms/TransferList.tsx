@@ -1,8 +1,10 @@
-import { createMemo, createSignal, type JSX, mergeProps, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createMemo, createSignal, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Glyph } from '../primitives/Glyph';
 import { Meter } from '../primitives/Meter';
 import { Text } from '../primitives/Text';
@@ -57,7 +59,7 @@ const insertAt = (list: readonly string[], values: readonly string[], before: st
  * Duplicate values are reported and block transfer. Stacks vertically under 640px.
  */
 export const TransferList = (props: TransferListProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     { height: 280, searchable: true, orderable: false, groupBy: true } satisfies Partial<TransferListProps>,
     props,
   );

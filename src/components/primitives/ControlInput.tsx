@@ -1,6 +1,7 @@
-import { type JSX, splitProps } from 'solid-js';
+import { type JSX } from '@solidjs/web';
 
 import { cx } from '../../utils/cx';
+import { partitionProps } from '../../utils/props';
 import styles from './ControlInput.module.css';
 import { type TextVariant, typographyClass } from './typography';
 
@@ -10,6 +11,6 @@ export interface ControlInputProps extends JSX.InputHTMLAttributes<HTMLInputElem
 }
 
 export const ControlInput = (props: ControlInputProps) => {
-  const [local, rest] = splitProps(props, ['class', 'textVariant']);
+  const [local, rest] = partitionProps(props, ['class', 'textVariant']);
   return <input {...rest} class={cx(styles.input, typographyClass(local.textVariant ?? 'body'), local.class)} />;
 };

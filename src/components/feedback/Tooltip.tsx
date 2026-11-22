@@ -1,19 +1,11 @@
-import {
-  createEffect,
-  createMemo,
-  createSignal,
-  createUniqueId,
-  type JSX,
-  mergeProps,
-  on,
-  onCleanup,
-  Show,
-} from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, createMemo, createSignal, createUniqueId, onCleanup, Show } from 'solid-js';
 
 import { createFloating } from '../../hooks/createFloating';
 import { createLayer } from '../../hooks/createLayer';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Kbd } from '../primitives/Kbd';
 import { Text } from '../primitives/Text';
 import styles from './Tooltip.module.css';
@@ -46,7 +38,7 @@ export interface TooltipProps {
 
 /** Short hint on hover/focus. Stays visible while hovered, dismisses with Esc. Never put essential info or interactive content inside. */
 export const Tooltip = (props: TooltipProps) => {
-  const p = mergeProps({ side: 'top' } satisfies Partial<TooltipProps>, props);
+  const p = withDefaults({ side: 'top' } satisfies Partial<TooltipProps>, props);
   const id = createUniqueId();
   const [wrap, setWrap] = createSignal<HTMLElement>();
   const [hovered, setHovered] = createSignal(false);
@@ -57,13 +49,11 @@ export const Tooltip = (props: TooltipProps) => {
 
   const visible = () => !dismissed() && (!!p.open || hovered() || focused());
   createEffect(
-    on(
-      () => p.open,
-      (open) => {
-        if (open) setDismissed(false);
-      },
-      { defer: true },
-    ),
+    () => p.open,
+    (open) => {
+      if (open) setDismissed(false);
+    },
+    { defer: true },
   );
   const enter = () => {
     clearTimeout(hideTimer);
@@ -88,15 +78,14 @@ export const Tooltip = (props: TooltipProps) => {
     offset: 'var(--tooltip-offset)',
   });
 
-  createEffect(() => {
-    const described = anchor();
+  createEffect(anchor, (described) => {
     if (!described) return;
     const previous = described.getAttribute('aria-describedby');
     described.setAttribute('aria-describedby', previous ? `${previous} ${id}` : id);
-    onCleanup(() => {
+    return () => {
       if (previous) described.setAttribute('aria-describedby', previous);
       else described.removeAttribute('aria-describedby');
-    });
+    };
   });
 
   return (

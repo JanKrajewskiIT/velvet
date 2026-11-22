@@ -1,24 +1,14 @@
-import {
-  createEffect,
-  createSignal,
-  createUniqueId,
-  For,
-  type JSX,
-  mergeProps,
-  on,
-  onCleanup,
-  onMount,
-  Show,
-  splitProps,
-  untrack,
-} from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, createSignal, createUniqueId, For, onSettled, Show, untrack } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { activeItemKey } from '../../utils/activeItem';
 import { assignRef } from '../../utils/assignRef';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { callHandler } from '../../utils/callHandler';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { reportAsyncError } from '../../utils/reportAsyncError';
 import { renderIcon } from '../primitives/Glyph';
 import { Text } from '../primitives/Text';
@@ -61,8 +51,8 @@ const ARROW_KEYS = {
 
 /** Tab switcher with roving focus; manual activation leaves selection to Enter, Space or click. */
 export const Tabs = (props: TabsProps) => {
-  const merged = mergeProps({ variant: 'underline', orientation: 'horizontal' } satisfies Partial<TabsProps>, props);
-  const [local, rest] = splitProps(merged, [
+  const merged = withDefaults({ variant: 'underline', orientation: 'horizontal' } satisfies Partial<TabsProps>, props);
+  const [local, rest] = partitionProps(merged, [
     'items',
     'value',
     'defaultValue',
@@ -96,23 +86,28 @@ export const Tabs = (props: TabsProps) => {
   const [focused, setFocused] = createSignal<string>();
   const tabStop = () => availableKey(local.activation === 'manual' ? (focused() ?? current()) : current());
   const autoId = createUniqueId();
-  const id = () => local.id ?? autoId;
+  const id = () => local.id || autoId;
   const vertical = () => local.orientation === 'vertical' && local.variant !== 'segmented';
   const [indicator, setIndicator] = createSignal<JSX.CSSProperties | null>(null);
   let list!: HTMLDivElement;
 
   const measure = () => {
     const tab = list.querySelector<HTMLElement>('[aria-selected="true"]');
-    if (!tab) return setIndicator(null);
-    if (vertical())
-      return setIndicator({ transform: `translateY(${tab.offsetTop}px)`, height: `${tab.offsetHeight}px` });
+    if (!tab) {
+      setIndicator(null);
+      return;
+    }
+    if (vertical()) {
+      setIndicator({ transform: `translateY(${tab.offsetTop}px)`, height: `${tab.offsetHeight}px` });
+      return;
+    }
     const lift = local.variant === 'segmented' ? ` translateY(${tab.offsetTop}px)` : '';
     setIndicator({ transform: `translateX(${tab.offsetLeft}px)${lift}`, width: `${tab.offsetWidth}px` });
   };
 
-  createEffect(on([current, () => local.items, tabStop, vertical, () => local.variant], measure));
+  createEffect(() => [current(), local.items, tabStop(), vertical(), local.variant] as const, measure);
 
-  onMount(() => {
+  onSettled(() => {
     if (typeof ResizeObserver === 'undefined') return;
     const observer = new ResizeObserver(measure);
     observer.observe(list);
@@ -122,10 +117,10 @@ export const Tabs = (props: TabsProps) => {
         if (!disposed) measure();
       })
       .catch(reportAsyncError);
-    onCleanup(() => {
+    return () => {
       disposed = true;
       observer.disconnect();
-    });
+    };
   });
 
   const onKeyDown: JSX.EventHandler<HTMLDivElement, KeyboardEvent> = (e) => {
@@ -185,8 +180,8 @@ export const Tabs = (props: TabsProps) => {
             aria-controls={item.panelId ?? tabIds(id(), item.value).panel}
             role="tab"
             type="button"
-            aria-selected={current() === item.value}
-            tabIndex={!item.disabled && tabStop() === item.value ? 0 : -1}
+            aria-selected={booleanAttribute(current() === item.value)}
+            tabindex={!item.disabled && tabStop() === item.value ? 0 : -1}
             disabled={item.disabled}
             class={cx(styles.tab, typographyClass(local.variant === 'segmented' ? 'button-sm' : 'button'))}
             onClick={() => !item.disabled && select(item.value)}

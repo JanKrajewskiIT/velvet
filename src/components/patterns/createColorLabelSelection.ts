@@ -1,4 +1,5 @@
-import { type Accessor, createEffect, createMemo, createSignal, type JSX, on, untrack } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { type Accessor, createEffect, createMemo, createSignal, untrack } from 'solid-js';
 
 import { reportAsyncError } from '../../utils/reportAsyncError';
 import { type ColorLabel, nextLabelColor, normalizeLabelText } from './colorLabel';
@@ -62,18 +63,16 @@ export const createColorLabelSelection = (
   let session = 0;
 
   createEffect(
-    on(
-      () => input.open,
-      (open) => {
-        if (!open) return;
-        session++;
-        setSelection(input.value ?? NO_IDS);
-        setQuery('');
-        setError(null);
-        setBusy(false);
-        setCreating(false);
-      },
-    ),
+    () => input.open,
+    (open) => {
+      if (!open) return;
+      session++;
+      setSelection(input.value ?? NO_IDS);
+      setQuery('');
+      setError(null);
+      setBusy(false);
+      setCreating(false);
+    },
   );
 
   const showSearch = () => input.searchable ?? (input.labels.length > SEARCH_THRESHOLD || !!input.onCreate);

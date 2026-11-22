@@ -1,8 +1,9 @@
-import { mergeProps, Show, splitProps } from 'solid-js';
+import { Show } from 'solid-js';
 
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import type { Tone } from '../../utils/tone';
 import styles from './Marker.module.css';
 import { Text } from './Text';
@@ -34,8 +35,17 @@ export interface MarkerProps extends HtmlProps<HTMLSpanElement> {
 
 /** Round step / event badge — a number, icon, avatar or dot in a circle. */
 export const Marker = (props: MarkerProps) => {
-  const merged = mergeProps({ size: 'md', appearance: 'soft' } satisfies MarkerProps, props);
-  const [local, rest] = splitProps(merged, ['size', 'appearance', 'tone', 'ring', 'gap', 'dot', 'class', 'children']);
+  const merged = withDefaults({ size: 'md', appearance: 'soft' } satisfies MarkerProps, props);
+  const [local, rest] = partitionProps(merged, [
+    'size',
+    'appearance',
+    'tone',
+    'ring',
+    'gap',
+    'dot',
+    'class',
+    'children',
+  ]);
   return (
     <Text
       as="span"

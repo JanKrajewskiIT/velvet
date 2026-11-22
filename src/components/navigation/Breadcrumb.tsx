@@ -1,7 +1,9 @@
-import { For, type JSX, Match, mergeProps, Show, Switch } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { For, Match, Show, Switch } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Menu } from '../menus/Menu';
 import type { MenuItem } from '../menus/menuItem';
 import { Glyph } from '../primitives/Glyph';
@@ -62,7 +64,7 @@ const menuItemFor = (item: BreadcrumbItem): MenuItem => ({
 
 /** Location trail. Last item is the current page (not a link). Beyond maxItems the middle collapses into a "…" menu. */
 export const Breadcrumb = (props: BreadcrumbProps) => {
-  const p = mergeProps({ maxItems: 4 } satisfies Partial<BreadcrumbProps>, props);
+  const p = withDefaults({ maxItems: 4 } satisfies Partial<BreadcrumbProps>, props);
   const translate = useTranslate();
   const labels = (): BreadcrumbLabels => ({
     navigation: p.labels?.navigation ?? translate('velvet.navigation.breadcrumb.navigation'),

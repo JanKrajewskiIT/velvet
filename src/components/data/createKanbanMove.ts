@@ -1,4 +1,4 @@
-import { createEffect, createSignal, on, onCleanup } from 'solid-js';
+import { createEffect, createSignal, onCleanup } from 'solid-js';
 
 import { createOperation } from '../../hooks/createOperation';
 import { clamp } from '../../utils/math';
@@ -18,10 +18,13 @@ export const createKanbanMove = (
     setFailed(false);
   };
   onCleanup(invalidate);
-  createEffect(on(() => props.dataKey, invalidate, { defer: true }));
-  createEffect(() => {
-    if (props.disabled) invalidate();
-  });
+  createEffect(() => props.dataKey, invalidate, { defer: true });
+  createEffect(
+    () => props.disabled,
+    (disabled) => {
+      if (disabled) invalidate();
+    },
+  );
   const movable = () => !!props.onCardsChange && !props.disabled && !operation.busy();
   const save = async (id: KanbanCard['id'], columnId: string, index?: number) => {
     if (!movable()) return;

@@ -1,6 +1,7 @@
-import { createMemo, Index, Show } from 'solid-js';
+import { createMemo, For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { addMonths, fmtDate, sameDay } from '../../utils/date';
 import { PeriodNavButton } from '../navigation/PeriodNavButton';
@@ -53,14 +54,14 @@ export const CalendarMonth = (props: CalendarMonthProps) => {
         </Show>
       </div>
       <div role="grid" class={styles.calPartGrid} aria-label={title()}>
-        <Index each={calendar().weekdays()}>
+        <For keyed={false} each={calendar().weekdays()}>
           {(name) => (
             <Weekday class={styles.calPartWd} role="columnheader">
               {name()}
             </Weekday>
           )}
-        </Index>
-        <Index each={days()}>
+        </For>
+        <For keyed={false} each={days()}>
           {(day) => {
             const outside = () => day().getMonth() !== first().getMonth();
             const isToday = () => sameDay(day(), calendar().today());
@@ -81,9 +82,9 @@ export const CalendarMonth = (props: CalendarMonthProps) => {
                   role="gridcell"
                   data-vui-calendar-day
                   data-day={day().toDateString()}
-                  tabIndex={tabStop() ? 0 : -1}
+                  tabindex={tabStop() ? 0 : -1}
                   disabled={calendar().isOff(day())}
-                  aria-selected={selected() || inRange() || undefined}
+                  aria-selected={booleanAttribute(selected() || inRange() || undefined)}
                   aria-current={isToday() ? 'date' : undefined}
                   aria-label={calendar().dayLabel().format(day())}
                   class={cx(
@@ -110,7 +111,7 @@ export const CalendarMonth = (props: CalendarMonthProps) => {
               </Show>
             );
           }}
-        </Index>
+        </For>
       </div>
     </div>
   );

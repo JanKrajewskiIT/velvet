@@ -1,6 +1,7 @@
-import { createEffect, createSignal, For, on, Show, untrack } from 'solid-js';
+import { createEffect, createSignal, For, Show, untrack } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { clamp } from '../../utils/math';
 import { Control } from '../primitives/Control';
@@ -37,15 +38,13 @@ export const ColorPanel = (props: ColorPanelProps) => {
   let hue: HTMLDivElement | undefined;
 
   createEffect(
-    on(
-      () => props.hex,
-      (hex) => {
-        const parsed = hexToHsv(hex);
-        if (parsed && hsvToHex(hsv()) !== hex.toLowerCase()) setHsv(parsed);
-        setTyped(null);
-      },
-      { defer: true },
-    ),
+    () => props.hex,
+    (hex) => {
+      const parsed = hexToHsv(hex);
+      if (parsed && hsvToHex(hsv()) !== hex.toLowerCase()) setHsv(parsed);
+      setTyped(null);
+    },
+    { defer: true },
   );
 
   const push = (next: Hsv) => {
@@ -114,7 +113,7 @@ export const ColorPanel = (props: ColorPanelProps) => {
       >
         <span
           role="slider"
-          tabIndex={0}
+          tabindex={0}
           aria-label={translate('velvet.forms.colorPanel.areaLabel')}
           aria-valuemin={0}
           aria-valuemax={100}
@@ -138,7 +137,7 @@ export const ColorPanel = (props: ColorPanelProps) => {
       >
         <span
           role="slider"
-          tabIndex={0}
+          tabindex={0}
           aria-label={translate('velvet.forms.colorPanel.hueLabel')}
           aria-valuemin={0}
           aria-valuemax={360}
@@ -159,8 +158,8 @@ export const ColorPanel = (props: ColorPanelProps) => {
             class={styles.colorPartHex}
             aria-label={translate('velvet.forms.colorPanel.hexLabel')}
             value={(typed() ?? props.hex).replace('#', '')}
-            maxLength={6}
-            spellcheck={false}
+            maxlength={6}
+            spellcheck="false"
             onInput={onHexInput}
             onBlur={() => setTyped(null)}
           />
@@ -177,7 +176,7 @@ export const ColorPanel = (props: ColorPanelProps) => {
               <button
                 type="button"
                 role="option"
-                aria-selected={swatch.toLowerCase() === props.hex.toLowerCase()}
+                aria-selected={booleanAttribute(swatch.toLowerCase() === props.hex.toLowerCase())}
                 aria-label={swatch}
                 class={cx(styles.swatch, styles.swatchVariantFill)}
                 style={{ '--swatch': swatch }}

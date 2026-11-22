@@ -1,8 +1,10 @@
-import { createEffect, createMemo, createSignal, For, Index, mergeProps, Show, untrack } from 'solid-js';
+import { createEffect, createMemo, createSignal, For, Show, untrack } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Glyph } from '../primitives/Glyph';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
@@ -52,7 +54,7 @@ export interface LogViewerProps {
  * shows "N new" to jump back. Plain strings work — the level is detected from ERROR / WARN / INFO / DEBUG.
  */
 export const LogViewer = (props: LogViewerProps) => {
-  const merged = mergeProps({ height: 320, showTimestamps: true, lineNumbers: true }, props);
+  const merged = withDefaults({ height: 320, showTimestamps: true, lineNumbers: true }, props);
   const translate = useTranslate();
   const title = () => merged.title ?? translate('velvet.data.logViewer.title');
   const [query, setQuery] = createSignal('');
@@ -81,17 +83,17 @@ export const LogViewer = (props: LogViewerProps) => {
     );
   });
 
-  createEffect(() => {
-    const total = rows().length;
-    const following = follow();
-    shown();
-    const previous = seenCount;
-    seenCount = total;
-    if (following) {
-      body.scrollTop = body.scrollHeight;
-      setUnseen(0);
-    } else if (total > previous) setUnseen((count) => count + total - previous);
-  });
+  createEffect(
+    () => [rows().length, follow(), shown()] as const,
+    ([total, following]) => {
+      const previous = seenCount;
+      seenCount = total;
+      if (following) {
+        body.scrollTop = body.scrollHeight;
+        setUnseen(0);
+      } else if (total > previous) setUnseen((count) => count + total - previous);
+    },
+  );
 
   const toggleLevel = (level: LogLevel) => {
     const next = new Set(visibleLevels());
@@ -116,7 +118,7 @@ export const LogViewer = (props: LogViewerProps) => {
               <button
                 type="button"
                 class={cx(typographyClass('kbd'), styles.logPartLvl, variantClass(LOG_PART_LVL_CLASSES, level))}
-                aria-pressed={visibleLevels().has(level)}
+                aria-pressed={booleanAttribute(visibleLevels().has(level))}
                 onClick={() => toggleLevel(level)}
               >
                 {level}
@@ -140,7 +142,7 @@ export const LogViewer = (props: LogViewerProps) => {
         <button
           type="button"
           class={cx(styles.codePartCopy, typographyClass('label-sm'))}
-          aria-pressed={wrap()}
+          aria-pressed={booleanAttribute(wrap())}
           onClick={() => setWrap(!wrap())}
         >
           {translate(wrap() ? 'velvet.data.logViewer.noWrap' : 'velvet.data.logViewer.wrap')}
@@ -153,7 +155,7 @@ export const LogViewer = (props: LogViewerProps) => {
         class={cx(typographyClass('code'), styles.logPartBody, wrap() && styles.logPartBodyVariantWrap)}
         style={{ height: cssLength(merged.height) }}
         // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- scrollable log region must be focusable so keyboard users can scroll it
-        tabIndex={0}
+        tabindex={0}
         role="log"
         aria-live="off"
         aria-label={title()}
@@ -167,7 +169,7 @@ export const LogViewer = (props: LogViewerProps) => {
             </Text>
           }
         >
-          <Index each={shown()}>
+          <For keyed={false} each={shown()}>
             {(row) => (
               <Text
                 as="div"
@@ -194,7 +196,7 @@ export const LogViewer = (props: LogViewerProps) => {
                 </span>
               </Text>
             )}
-          </Index>
+          </For>
         </Show>
       </div>
       <Show when={!follow()}>

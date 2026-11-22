@@ -1,11 +1,13 @@
 import { useAuth } from '@jankrajewskiit/auth';
-import { createEffect, createMemo, type JSX, mergeProps, on, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, createMemo, Show } from 'solid-js';
 
 import { Button } from '../components/actions/Button';
 import { ErrorState } from '../components/feedback/ErrorState';
 import { PageLoader } from '../components/feedback/PageLoader';
 import { StatusPage } from '../components/feedback/StatusPage';
 import { useTranslate } from '../i18n/useTranslate';
+import { withDefaults } from '../utils/props';
 import { reportAsyncError } from '../utils/reportAsyncError';
 import { createAuthAction } from './createAuthAction';
 
@@ -30,7 +32,7 @@ export interface AuthGuardProps {
 
 /** Resolves the Velvet Auth session and required roles before rendering protected content. */
 export const AuthGuard = (props: AuthGuardProps) => {
-  const p = mergeProps({ unauthorizedBehavior: 'access-denied' } satisfies Partial<AuthGuardProps>, props);
+  const p = withDefaults({ unauthorizedBehavior: 'access-denied' } satisfies Partial<AuthGuardProps>, props);
   const auth = useAuth();
   const action = createAuthAction(auth, p);
   const translate = useTranslate();
@@ -41,9 +43,10 @@ export const AuthGuard = (props: AuthGuardProps) => {
   const signIn = () => void action.signIn().catch(reportAsyncError);
 
   createEffect(
-    on([auth.isLoading, auth.isAuthenticated, redirecting], ([loading, authenticated, redirect]) => {
+    () => [auth.isLoading(), auth.isAuthenticated(), redirecting()] as const,
+    ([loading, authenticated, redirect]) => {
       if (!loading && !authenticated && redirect && !action.failed()) signIn();
-    }),
+    },
   );
 
   return (

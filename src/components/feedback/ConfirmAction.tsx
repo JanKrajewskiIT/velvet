@@ -1,6 +1,8 @@
-import { createSignal, type JSX, mergeProps, onCleanup } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createSignal, merge, onCleanup } from 'solid-js';
 
 import { createTrigger } from '../../hooks/createTrigger';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { Button } from '../actions/Button';
 import styles from './ConfirmAction.module.css';
 import { ConfirmDialog, type ConfirmDialogProps } from './ConfirmDialog';
@@ -27,7 +29,7 @@ export const ConfirmAction = (props: ConfirmActionProps) => {
       onClick: show,
       'aria-haspopup': 'dialog' as const,
       get 'aria-expanded'() {
-        return open();
+        return booleanAttribute(open());
       },
     },
     (content, attributes) => (
@@ -36,7 +38,7 @@ export const ConfirmAction = (props: ConfirmActionProps) => {
       </Button>
     ),
   );
-  const rest = mergeProps(props, {
+  const rest = merge(props, {
     get open() {
       return open();
     },

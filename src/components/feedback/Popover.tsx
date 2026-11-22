@@ -1,13 +1,5 @@
-import {
-  children as resolveChildren,
-  createSignal,
-  createUniqueId,
-  type JSX,
-  mergeProps,
-  onCleanup,
-  Show,
-  splitProps,
-} from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { children as resolveChildren, createSignal, createUniqueId, onCleanup, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { createDismiss } from '../../hooks/createDismiss';
@@ -15,9 +7,11 @@ import { createFloating } from '../../hooks/createFloating';
 import { createTrigger } from '../../hooks/createTrigger';
 import { useTranslate } from '../../i18n/useTranslate';
 import { assignRef } from '../../utils/assignRef';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { callHandler } from '../../utils/callHandler';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
 import styles from './Popover.module.css';
@@ -25,7 +19,7 @@ import styles from './Popover.module.css';
 /** Attributes and handler a custom trigger must spread onto its element. */
 export interface PopoverTriggerProps {
   'aria-haspopup': 'dialog';
-  'aria-expanded': boolean;
+  'aria-expanded': 'true' | 'false';
   'aria-controls': string;
   onClick: (e: MouseEvent) => void;
 }
@@ -60,7 +54,7 @@ export interface PopoverProps extends HtmlProps<HTMLSpanElement, 'title'> {
 
 /** Floating panel for rich content — profiles, quick settings, small forms. Use Tooltip for plain-text hints. Closes on outside click and Esc. */
 export const Popover = (props: PopoverProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     {
       side: 'bottom',
       align: 'start',
@@ -71,7 +65,7 @@ export const Popover = (props: PopoverProps) => {
     } satisfies Partial<PopoverProps>,
     props,
   );
-  const [p, rest] = splitProps(merged, [
+  const [p, rest] = partitionProps(merged, [
     'trigger',
     'title',
     'label',
@@ -127,7 +121,7 @@ export const Popover = (props: PopoverProps) => {
   const triggerProps: PopoverTriggerProps = {
     'aria-haspopup': 'dialog',
     get 'aria-expanded'() {
-      return isOpen();
+      return booleanAttribute(isOpen());
     },
     'aria-controls': id,
     onClick: () => {

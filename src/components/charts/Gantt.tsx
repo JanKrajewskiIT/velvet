@@ -1,7 +1,8 @@
-import { mergeProps, onMount } from 'solid-js';
+import { onSettled } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { typographyClass } from '../primitives/typography';
 import { createGanttFormat } from './createGanttFormat';
 import { createGanttTimeline } from './createGanttTimeline';
@@ -40,7 +41,7 @@ export interface GanttProps {
 
 /** Timeline of tasks on a date axis — sticky task column and header, month + day / week scale, weekend shading, today line, progress strip, milestones and finish-to-start dependency arrows. Bars are buttons whose label carries name, dates and progress. Scrolls to today on mount. */
 export const Gantt = (props: GanttProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     { scale: 'day', labelWidth: 220, rowHeight: 40, showDependencies: true } satisfies Partial<GanttProps>,
     props,
   );
@@ -58,7 +59,7 @@ export const Gantt = (props: GanttProps) => {
   });
   const format = createGanttFormat({ locale: () => merged.locale, px: timeline.px });
 
-  onMount(() => {
+  onSettled(() => {
     const at = timeline.todayX();
     if (scroller && at !== undefined) scroller.scrollLeft = Math.max(0, at - timeline.px() * SCROLL_LEAD_DAYS);
   });

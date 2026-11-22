@@ -1,4 +1,5 @@
-import { createEffect, createMemo, createSignal, For, type JSX, mergeProps, onCleanup, onMount, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, createMemo, createSignal, For, onSettled, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { classSelector } from '../../utils/cssModule';
@@ -6,6 +7,7 @@ import { cx } from '../../utils/cx';
 import { clamp } from '../../utils/math';
 import { REDUCED_MOTION_QUERY } from '../../utils/motion';
 import { nonNegativeNumber, positiveInteger } from '../../utils/numericOption';
+import { withDefaults } from '../../utils/props';
 import { IconButton } from '../actions/IconButton';
 import styles from './Carousel.module.css';
 
@@ -39,7 +41,7 @@ export interface CarouselProps {
 
 /** Horizontal slider with inert off-screen slides. Focus stops autoplay until explicitly resumed; hover pauses it temporarily. */
 export const Carousel = (props: CarouselProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     {
       perView: DEFAULT_PER_VIEW,
       gap: DEFAULT_GAP_PX,
@@ -77,25 +79,30 @@ export const Carousel = (props: CarouselProps) => {
     else setPosition(clamp(target, 0, max()));
   };
 
-  onMount(() => {
+  onSettled(() => {
     setWidth(viewport.clientWidth);
     const media = window.matchMedia(REDUCED_MOTION_QUERY);
     const onMotionChange = () => setReducedMotion(media.matches);
     onMotionChange();
     media.addEventListener('change', onMotionChange);
-    onCleanup(() => media.removeEventListener('change', onMotionChange));
-    if (typeof ResizeObserver === 'undefined') return;
+    const removeListener = () => media.removeEventListener('change', onMotionChange);
+    if (typeof ResizeObserver === 'undefined') return removeListener;
     const observer = new ResizeObserver(([entry]) => entry && setWidth(entry.contentRect.width));
     observer.observe(viewport);
-    onCleanup(() => observer.disconnect());
+    return () => {
+      observer.disconnect();
+      removeListener();
+    };
   });
 
-  createEffect(() => {
-    if (!rotating()) return;
-    const interval = autoplay();
-    const timer = setInterval(() => setPosition((x) => (x >= max() ? 0 : x + 1)), interval);
-    onCleanup(() => clearInterval(timer));
-  });
+  createEffect(
+    () => (rotating() ? autoplay() : 0),
+    (interval) => {
+      if (!interval) return;
+      const timer = setInterval(() => setPosition((x) => (x >= max() ? 0 : x + 1)), interval);
+      return () => clearInterval(timer);
+    },
+  );
 
   const endDrag = () => {
     dragStartX = undefined;
@@ -164,7 +171,7 @@ export const Carousel = (props: CarouselProps) => {
                 role="group"
                 aria-roledescription={translate('velvet.media.carousel.slideRoleDescription')}
                 aria-label={translate('velvet.media.carousel.slide', { index: k() + 1, count: slides().length })}
-                aria-hidden={visible(k()) ? undefined : true}
+                aria-hidden={visible(k()) ? undefined : 'true'}
                 inert={visible(k()) ? undefined : true}
                 class={styles.carouselPartSlide}
                 style={{ flex: `0 0 ${slideWidth()}px` }}
@@ -203,7 +210,7 @@ export const Carousel = (props: CarouselProps) => {
                 <button
                   type="button"
                   aria-label={translate('velvet.media.carousel.goTo', { index: k + 1 })}
-                  aria-current={k === index() ? true : undefined}
+                  aria-current={k === index() ? 'true' : undefined}
                   class={cx(styles.carouselPartDot, k === index() && styles.carouselPartDotVariantOn)}
                   onClick={() => setPosition(k)}
                 />

@@ -1,4 +1,5 @@
-import { type Accessor, children, createEffect, type JSX, onCleanup, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { type Accessor, children, createEffect, Show } from 'solid-js';
 
 interface TriggerEvents {
   onClick: JSX.EventHandler<HTMLElement, MouseEvent>;
@@ -34,23 +35,28 @@ export const createTrigger = <P extends TriggerEvents>(
     return undefined;
   };
 
-  createEffect(() => {
-    const node = element();
-    if (!node) return;
-    const previous = new Map<string, string | null>();
-    for (const [name, value] of Object.entries(props)) {
-      if (!name.startsWith('aria-')) continue;
-      previous.set(name, node.getAttribute(name));
-      if (value === undefined) node.removeAttribute(name);
-      else node.setAttribute(name, String(value));
-    }
-    onCleanup(() => {
-      for (const [name, value] of previous) {
-        if (value === null) node.removeAttribute(name);
-        else node.setAttribute(name, value);
+  createEffect(
+    () => {
+      const node = element();
+      return node && { node, attributes: Object.entries(props).filter(([name]) => name.startsWith('aria-')) };
+    },
+    (state) => {
+      if (!state) return;
+      const { node, attributes } = state;
+      const previous = new Map<string, string | null>();
+      for (const [name, value] of attributes) {
+        previous.set(name, node.getAttribute(name));
+        if (value === undefined) node.removeAttribute(name);
+        else node.setAttribute(name, String(value));
       }
-    });
-  });
+      return () => {
+        for (const [name, value] of previous) {
+          if (value === null) node.removeAttribute(name);
+          else node.setAttribute(name, value);
+        }
+      };
+    },
+  );
 
   const containsTarget = (event: Event) => {
     const node = element();

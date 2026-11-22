@@ -1,11 +1,12 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { mergeProps, Show } from 'solid-js';
+import { Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { pad } from '../../utils/date';
+import { withDefaults } from '../../utils/props';
 import { callbackAlias } from './callbackAlias';
 import { meridiemOf, timeOf } from './time';
 import styles from './TimeStepper.module.css';
@@ -45,7 +46,7 @@ const parseParts = (time: string): [hours: number, minutes: number] => {
 
 /** Inline hour/minute stepper with AM/PM toggle — for popovers, schedulers and touch where a typed TimePicker is awkward. Values wrap at their bounds. ↑/↓ step, PgUp/PgDn ×5. */
 export const TimeStepper = (props: TimeStepperProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     { defaultValue: '09:00', hour12: true, minuteStep: 5, size: 'md' } satisfies Partial<TimeStepperProps>,
     props,
   );

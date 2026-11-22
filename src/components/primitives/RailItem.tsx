@@ -1,8 +1,7 @@
-import { mergeProps, splitProps } from 'solid-js';
-
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { type ElementTag, type HtmlProps, Polymorphic } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import styles from './RailItem.module.css';
 
 const RAIL_PART_ITEM_CLASSES = {
@@ -19,8 +18,8 @@ export interface RailItemProps extends HtmlProps<HTMLElement> {
 }
 
 export const RailItem = (props: RailItemProps) => {
-  const merged = mergeProps({ as: 'li' } satisfies RailItemProps, props);
-  const [local, rest] = splitProps(merged, ['as', 'state', 'class']);
+  const merged = withDefaults({ as: 'li' } satisfies RailItemProps, props);
+  const [local, rest] = partitionProps(merged, ['as', 'state', 'class']);
   return (
     <Polymorphic
       tag={local.as}

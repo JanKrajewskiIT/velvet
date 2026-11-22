@@ -1,9 +1,12 @@
-import { createMemo, For, type JSX, mergeProps, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createMemo, For, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { activeItemKey } from '../../utils/activeItem';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Glyph } from '../primitives/Glyph';
 import { Option } from '../primitives/Option';
 import { Segmented } from '../primitives/Segmented';
@@ -59,7 +62,10 @@ const stringLabel = (option: SwitcherOption): string | undefined =>
 
 /** Single choice with roving radio focus. `list` adds descriptions and disabled reasons. Use Tabs for page panels and ChipGroup for multi-select. */
 export const OptionSwitcher = (props: OptionSwitcherProps) => {
-  const p = mergeProps({ variant: 'track', size: 'md', iconOnly: false } satisfies Partial<OptionSwitcherProps>, props);
+  const p = withDefaults(
+    { variant: 'track', size: 'md', iconOnly: false } satisfies Partial<OptionSwitcherProps>,
+    props,
+  );
   const options = createMemo(() => p.options.map(normalizeSwitcherOption));
   const [current, setCurrent] = createControllable({
     value: () => p.value,
@@ -111,7 +117,7 @@ export const OptionSwitcher = (props: OptionSwitcherProps) => {
               <SegmentedItem
                 role="radio"
                 selected={current() === option.value}
-                tabIndex={tabStop() === option.value ? 0 : -1}
+                tabindex={tabStop() === option.value ? 0 : -1}
                 disabled={option.disabled}
                 icon={option.icon}
                 aria-label={p.iconOnly ? stringLabel(option) : undefined}
@@ -146,8 +152,8 @@ export const OptionSwitcher = (props: OptionSwitcherProps) => {
                 <button
                   type="button"
                   role="radio"
-                  aria-checked={current() === option.value}
-                  tabIndex={tabStop() === option.value ? 0 : -1}
+                  aria-checked={booleanAttribute(current() === option.value)}
+                  tabindex={tabStop() === option.value ? 0 : -1}
                   disabled={option.disabled}
                   aria-label={p.iconOnly ? stringLabel(option) : undefined}
                   title={p.iconOnly ? stringLabel(option) : undefined}
@@ -175,7 +181,7 @@ export const OptionSwitcher = (props: OptionSwitcherProps) => {
                 role="radio"
                 data-value={option.value}
                 selected={current() === option.value}
-                tabIndex={tabStop() === option.value ? 0 : -1}
+                tabindex={tabStop() === option.value ? 0 : -1}
                 disabled={option.disabled}
                 showCheck
                 icon={option.icon || (option.disabled && option.disabledReason ? 'lock' : undefined)}

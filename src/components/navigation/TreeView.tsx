@@ -1,7 +1,9 @@
-import { createUniqueId, For, Match, mergeProps, Switch } from 'solid-js';
+import { createUniqueId, For, Match, Switch } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Text } from '../primitives/Text';
 import { typographyClass } from '../primitives/typography';
 import { createTreeFocus } from './createTreeFocus';
@@ -25,7 +27,7 @@ export type { TreeViewLabels, TreeViewMoveLabels, TreeViewProps };
  * With onMovePosition, edge drops reorder siblings, folder centers accept children, and Alt+arrows reorder or change parents.
  */
 export const TreeView = (props: TreeViewProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     { checkable: false, defaultExpanded: [], defaultChecked: [] } satisfies Partial<TreeViewProps>,
     props,
   );
@@ -54,7 +56,7 @@ export const TreeView = (props: TreeViewProps) => {
         role="tree"
         aria-label={p.label}
         aria-describedby={move.enabled() ? instructionsId : undefined}
-        aria-multiselectable={p.checkable || undefined}
+        aria-multiselectable={booleanAttribute(p.checkable || undefined)}
         class={cx(typographyClass('body-sm'), styles.tree, p.checkable && styles.treeVariantCheckable, p.class)}
         onKeyDown={onKeyDown}
       >

@@ -1,6 +1,7 @@
 import { Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Button } from '../actions/Button';
@@ -46,7 +47,7 @@ export const ColorLabelRow = (props: ColorLabelRowProps) => {
               size="xs"
               class={styles.clmPartDel}
               disabled={props.manager.busy()}
-              aria-expanded={props.manager.confirming() === props.label.id}
+              aria-expanded={booleanAttribute(props.manager.confirming() === props.label.id)}
               onClick={() => props.manager.toggleConfirm(props.label)}
             />
           </>

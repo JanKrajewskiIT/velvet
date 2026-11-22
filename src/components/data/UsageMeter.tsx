@@ -1,8 +1,10 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { createMemo, type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createMemo, Show } from 'solid-js';
 
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import type { StatusTone } from '../../utils/tone';
 import { Meter } from '../primitives/Meter';
 import styles from './UsageMeter.module.css';
@@ -23,11 +25,11 @@ export interface UsageMeterProps extends HtmlProps<HTMLDivElement> {
 }
 
 export const UsageMeter = (props: UsageMeterProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     { max: 100, unit: '', thresholds: THRESHOLDS, size: 'md' } satisfies Partial<UsageMeterProps>,
     props,
   );
-  const [local, rest] = splitProps(merged, [
+  const [local, rest] = partitionProps(merged, [
     'label',
     'value',
     'max',

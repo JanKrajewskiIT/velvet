@@ -1,8 +1,9 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { createMemo, mergeProps } from 'solid-js';
+import { createMemo } from 'solid-js';
 
 import { cx } from '../../utils/cx';
 import { ymd } from '../../utils/date';
+import { withDefaults } from '../../utils/props';
 import styles from './CalendarOrganizer.module.css';
 import { createOrganizerCalendar } from './createOrganizerCalendar';
 import { createOrganizerDrag } from './createOrganizerDrag';
@@ -43,7 +44,7 @@ export interface CalendarOrganizerProps {
 
 /** Month planner: day grid with event chips beside a detail panel for the selected day, with quick add, edit, delete and drag-to-move. Multi-day events span their days. Arrow keys move between days. */
 export const CalendarOrganizer = (props: CalendarOrganizerProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     {
       weekStartsOn: 1,
       maxChips: 2,

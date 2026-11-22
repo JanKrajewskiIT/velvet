@@ -1,4 +1,4 @@
-import { createDeferred, onMount } from 'solid-js';
+import { createEffect, createSignal, flush, onSettled, untrack } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
@@ -44,14 +44,26 @@ export const createMarkdownEditor = (options: MarkdownEditorOptions) => {
     defaultValue: options.defaultMode,
     onChange: (next) => options.onModeChange?.(next),
   });
-  const previewSource = createDeferred(value);
+  const [previewSource, setPreviewSource] = createSignal(untrack(value));
+  createEffect(
+    value,
+    (text) => {
+      if (typeof requestIdleCallback === 'function') {
+        const idle = requestIdleCallback(() => setPreviewSource(text));
+        return () => cancelIdleCallback(idle);
+      }
+      const timer = setTimeout(() => setPreviewSource(text), 0);
+      return () => clearTimeout(timer);
+    },
+    { defer: true },
+  );
   const editable = () => !options.disabled && !options.readOnly;
 
   const limit = (text: string) =>
     options.maxLength && text.length > options.maxLength ? text.slice(0, options.maxLength) : text;
 
   const commit = (edit: TextEdit) => {
-    setValue(limit(edit.value));
+    flush(() => setValue(limit(edit.value)));
     textarea?.focus({ preventScroll: true });
     textarea?.setSelectionRange(edit.selectionStart, edit.selectionEnd);
   };
@@ -67,7 +79,7 @@ export const createMarkdownEditor = (options: MarkdownEditorOptions) => {
   };
 
   const onInput = (e: InputEvent & { currentTarget: HTMLTextAreaElement }) => {
-    setValue(limit(e.currentTarget.value));
+    flush(() => setValue(limit(e.currentTarget.value)));
     e.currentTarget.value = value();
   };
 
@@ -101,7 +113,7 @@ export const createMarkdownEditor = (options: MarkdownEditorOptions) => {
     }
   };
 
-  onMount(() => {
+  onSettled(() => {
     if (options.autoFocus) textarea?.focus();
   });
 

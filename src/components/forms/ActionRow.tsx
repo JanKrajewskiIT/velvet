@@ -1,7 +1,9 @@
-import { type JSX, mergeProps, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { Show } from 'solid-js';
 
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { typographyClass } from '../primitives/typography';
 import styles from './ActionRow.module.css';
 
@@ -28,7 +30,7 @@ export interface ActionRowProps {
 
 /** Button row for forms, dialogs and panels. Wraps on narrow widths; the primary action stays last. */
 export const ActionRow = (props: ActionRowProps) => {
-  const p = mergeProps({ align: 'end' } satisfies Partial<ActionRowProps>, props);
+  const p = withDefaults({ align: 'end' } satisfies Partial<ActionRowProps>, props);
   return (
     <div
       class={cx(

@@ -1,7 +1,9 @@
-import { createUniqueId, type JSX, mergeProps, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createUniqueId, Show } from 'solid-js';
 
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Heading } from '../primitives/Heading';
 import { Text } from '../primitives/Text';
 import styles from './FormSection.module.css';
@@ -26,7 +28,7 @@ export interface FormSectionProps {
 
 /** Titled group of fields. */
 export const FormSection = (props: FormSectionProps) => {
-  const p = mergeProps({ layout: 'stacked' } satisfies Partial<FormSectionProps>, props);
+  const p = withDefaults({ layout: 'stacked' } satisfies Partial<FormSectionProps>, props);
   const titleId = createUniqueId();
   return (
     <section

@@ -1,7 +1,8 @@
-import { createEffect, createMemo, createSignal, mergeProps, Show } from 'solid-js';
+import { createEffect, createMemo, createSignal, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { reportAsyncError } from '../../utils/reportAsyncError';
 import { ConfirmDialog } from '../feedback/ConfirmDialog';
 import { Menu } from '../menus/Menu';
@@ -18,7 +19,7 @@ const NO_CONTEXTS: readonly ContextItem[] = Object.freeze([]);
 const NO_EXTRA_ITEMS: readonly MenuItem[] = Object.freeze([]);
 
 export const ContextSwitcher = (props: ContextSwitcherProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     {
       items: NO_CONTEXTS,
       extraItems: NO_EXTRA_ITEMS,
@@ -54,10 +55,15 @@ export const ContextSwitcher = (props: ContextSwitcherProps) => {
   const valid = (pair: ContextConfirmation) =>
     sameContext(current(), pair.current) && sameContext(targetOf(pair), pair.next) && pair.action === p.onValueChange;
 
-  createEffect(() => {
-    const pair = request();
-    if (pair && !valid(pair)) setRequest(undefined);
-  });
+  createEffect(
+    () => {
+      const pair = request();
+      return !!pair && !valid(pair);
+    },
+    (stale) => {
+      if (stale) setRequest(undefined);
+    },
+  );
   const pick = (id: string) => {
     const next = byId().get(id);
     const previous = current();

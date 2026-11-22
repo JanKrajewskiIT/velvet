@@ -1,8 +1,11 @@
-import { createEffect, For, type JSX, mergeProps, onMount, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createEffect, For, onSettled, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { reportAsyncError } from '../../utils/reportAsyncError';
 import { IconButton } from '../actions/IconButton';
 import { Glyph } from '../primitives/Glyph';
@@ -48,7 +51,7 @@ const FALLBACK_LINE_HEIGHT_PX = 22;
  * Attachment chips above the text, optional suggestion chips when empty, a toolbar slot for model / mode pickers.
  */
 export const PromptInput = (props: PromptInputProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     {
       defaultValue: '',
       loading: false,
@@ -65,17 +68,19 @@ export const PromptInput = (props: PromptInputProps) => {
   });
   let input!: HTMLTextAreaElement;
 
-  createEffect(() => {
-    text();
-    const style = getComputedStyle(input);
-    const lineHeight = parseFloat(style.lineHeight) || FALLBACK_LINE_HEIGHT_PX;
-    const padding = parseFloat(style.paddingTop) + parseFloat(style.paddingBottom);
-    const maxHeight = p.maxRows * lineHeight + padding;
-    input.style.height = 'auto';
-    input.style.height = `${Math.min(input.scrollHeight, maxHeight)}px`;
-    input.style.overflowY = input.scrollHeight > maxHeight ? 'auto' : 'hidden';
-  });
-  onMount(() => {
+  createEffect(
+    () => [text(), p.maxRows] as const,
+    ([, maxRows]) => {
+      const style = getComputedStyle(input);
+      const lineHeight = parseFloat(style.lineHeight) || FALLBACK_LINE_HEIGHT_PX;
+      const padding = parseFloat(style.paddingTop) + parseFloat(style.paddingBottom);
+      const maxHeight = maxRows * lineHeight + padding;
+      input.style.height = 'auto';
+      input.style.height = `${Math.min(input.scrollHeight, maxHeight)}px`;
+      input.style.overflowY = input.scrollHeight > maxHeight ? 'auto' : 'hidden';
+    },
+  );
+  onSettled(() => {
     if (p.autoFocus) input.focus();
   });
 
@@ -211,7 +216,7 @@ export const PromptInput = (props: PromptInputProps) => {
                 variant="primary"
                 shape="circle"
                 disabled={!submission.canSend()}
-                aria-busy={submission.pending() || undefined}
+                aria-busy={booleanAttribute(submission.pending() || undefined)}
                 onClick={send}
               />
             }

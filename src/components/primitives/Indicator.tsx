@@ -1,7 +1,8 @@
-import { mergeProps, Show, splitProps } from 'solid-js';
+import { Show } from 'solid-js';
 
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { Count, COUNT_TONES } from './Count';
 import { Dot } from './Dot';
 import styles from './Indicator.module.css';
@@ -31,11 +32,11 @@ export interface IndicatorProps extends HtmlProps<HTMLSpanElement> {
 
 /** Anchors a Count or Dot to the corner of any element — icon, IconButton, Avatar, tab. */
 export const Indicator = (props: IndicatorProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     { max: 99, size: 'sm', placement: 'top-end', overlap: 'rect' } satisfies IndicatorProps,
     props,
   );
-  const [local, rest] = splitProps(merged, [
+  const [local, rest] = partitionProps(merged, [
     'count',
     'dot',
     'max',
@@ -50,7 +51,7 @@ export const Indicator = (props: IndicatorProps) => {
   ]);
   const hasCount = () => local.count != null && local.count !== 0 && local.count !== '';
   const announce = () => ({
-    'aria-hidden': local.label ? undefined : (true as const),
+    'aria-hidden': local.label ? undefined : ('true' as const),
     'aria-label': local.label,
     role: local.label ? ('status' as const) : undefined,
   });

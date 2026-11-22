@@ -1,4 +1,5 @@
-import { Index, type JSX, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { For, Show } from 'solid-js';
 
 import { Separator } from '../primitives/Separator';
 import { Text } from '../primitives/Text';
@@ -29,7 +30,7 @@ const highlight = (label: JSX.Element, query: string | undefined): JSX.Element =
 
 /** Labels of a root-to-node path joined by a text separator. */
 export const CascaderPath = (props: CascaderPathProps) => (
-  <Index each={props.path}>
+  <For keyed={false} each={props.path}>
     {(node, index) => (
       <>
         <Show when={index > 0}>
@@ -40,5 +41,5 @@ export const CascaderPath = (props: CascaderPathProps) => (
         </Text>
       </>
     )}
-  </Index>
+  </For>
 );

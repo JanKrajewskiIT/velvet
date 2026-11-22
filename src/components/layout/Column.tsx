@@ -1,7 +1,6 @@
-import { mergeProps, splitProps } from 'solid-js';
-
 import { cx } from '../../utils/cx';
 import { type ElementTag, type HtmlProps, Polymorphic } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import styles from './Column.module.css';
 import { lengthValue } from './space';
 
@@ -19,8 +18,8 @@ export interface ColumnProps extends HtmlProps<HTMLElement> {
 
 /** Weighted column that wraps when its basis no longer fits. */
 export const Column = (props: ColumnProps) => {
-  const merged = mergeProps({ as: 'div', grow: DEFAULT_GROW, basis: DEFAULT_BASIS } satisfies ColumnProps, props);
-  const [local, rest] = splitProps(merged, ['as', 'grow', 'basis', 'class', 'style']);
+  const merged = withDefaults({ as: 'div', grow: DEFAULT_GROW, basis: DEFAULT_BASIS } satisfies ColumnProps, props);
+  const [local, rest] = partitionProps(merged, ['as', 'grow', 'basis', 'class', 'style']);
   return (
     <Polymorphic
       {...rest}

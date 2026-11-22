@@ -1,4 +1,4 @@
-import { type Accessor, createEffect, onCleanup } from 'solid-js';
+import { type Accessor, createEffect } from 'solid-js';
 
 import { createLayer, isTopLayer } from './createLayer';
 
@@ -48,27 +48,29 @@ export const createModal = (
   options: ModalOptions = {},
 ): void => {
   createLayer(open, () => options.onEscape?.(), { root });
-  createEffect(() => {
-    const dialog = root();
-    if (!open() || !dialog) return;
-    const document = dialog.ownerDocument;
-    const previouslyFocused = document.activeElement instanceof HTMLElement ? document.activeElement : undefined;
-    const onCancel = (event: Event) => {
-      event.preventDefault();
-      if (isTopLayer(dialog)) options.onEscape?.();
-    };
-    dialog.addEventListener('cancel', onCancel);
-    dialog.showModal();
-    const unlock = lockScroll(document);
-    focusInitial(dialog, options.initialFocus);
-    onCleanup(() => {
-      dialog.removeEventListener('cancel', onCancel);
-      dialog.close();
-      unlock();
-      const target = previouslyFocused?.isConnected ? previouslyFocused : options.restoreFocus?.();
-      if (target?.isConnected && !target.closest('[inert]') && !target.closest('dialog:not([open])')) {
-        target.focus({ preventScroll: true });
-      }
-    });
-  });
+  createEffect(
+    () => (open() ? root() : undefined),
+    (dialog) => {
+      if (!dialog) return;
+      const document = dialog.ownerDocument;
+      const previouslyFocused = document.activeElement instanceof HTMLElement ? document.activeElement : undefined;
+      const onCancel = (event: Event) => {
+        event.preventDefault();
+        if (isTopLayer(dialog)) options.onEscape?.();
+      };
+      dialog.addEventListener('cancel', onCancel);
+      dialog.showModal();
+      const unlock = lockScroll(document);
+      focusInitial(dialog, options.initialFocus);
+      return () => {
+        dialog.removeEventListener('cancel', onCancel);
+        dialog.close();
+        unlock();
+        const target = previouslyFocused?.isConnected ? previouslyFocused : options.restoreFocus?.();
+        if (target?.isConnected && !target.closest('[inert]') && !target.closest('dialog:not([open])')) {
+          target.focus({ preventScroll: true });
+        }
+      };
+    },
+  );
 };

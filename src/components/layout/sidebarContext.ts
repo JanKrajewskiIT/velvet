@@ -1,4 +1,4 @@
-import { type Accessor, createContext, useContext } from 'solid-js';
+import { type Accessor, createContext, getOwner, useContext } from 'solid-js';
 
 export interface SidebarContextValue {
   collapsed: Accessor<boolean>;
@@ -6,10 +6,10 @@ export interface SidebarContextValue {
   expand: () => boolean;
 }
 
-export const SidebarContext = createContext<SidebarContextValue>();
+export const SidebarContext = createContext<SidebarContextValue | null>(null);
 
 export const useSidebar = (): SidebarContextValue => {
-  const context = useContext(SidebarContext);
+  const context = getOwner() === null ? null : useContext(SidebarContext);
   if (!context) throw new Error('NavItem must be rendered inside a Sidebar.');
   return context;
 };

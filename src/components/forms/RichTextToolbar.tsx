@@ -1,5 +1,7 @@
-import { createMemo, createSignal, For, type JSX, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createMemo, createSignal, For, Show } from 'solid-js';
 
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { Glyph } from '../primitives/Glyph';
 import { Text } from '../primitives/Text';
@@ -106,12 +108,14 @@ export const RichTextToolbar = (props: RichTextToolbarProps) => {
             {(tool) => (
               <button
                 type="button"
-                tabIndex={buttons().indexOf(tool()) === roving() ? 0 : -1}
+                tabindex={buttons().indexOf(tool()) === roving() ? 0 : -1}
                 class={cx(typographyClass('label'), styles.toolbarPartBtn, tool().flip && styles.rtePartFlip)}
                 aria-label={props.toolLabel(tool().id)}
                 title={`${props.toolLabel(tool().id)} (${formatShortcut(tool().keys)})`}
                 aria-pressed={
-                  tool().id === 'undo' || tool().id === 'redo' ? undefined : isPressed(tool(), props.format)
+                  tool().id === 'undo' || tool().id === 'redo'
+                    ? undefined
+                    : booleanAttribute(isPressed(tool(), props.format))
                 }
                 aria-keyshortcuts={ariaShortcut(tool().keys)}
                 disabled={isDisabled(tool())}

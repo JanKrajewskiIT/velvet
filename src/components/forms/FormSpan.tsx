@@ -1,6 +1,7 @@
-import { type JSX, mergeProps } from 'solid-js';
+import { type JSX } from '@solidjs/web';
 
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import styles from './FormSpan.module.css';
 
 export interface FormSpanProps {
@@ -12,7 +13,7 @@ export interface FormSpanProps {
 
 /** Cell of a `FormGrid` that spans several columns. */
 export const FormSpan = (props: FormSpanProps) => {
-  const p = mergeProps({ span: 'full' } satisfies Partial<FormSpanProps>, props);
+  const p = withDefaults({ span: 'full' } satisfies Partial<FormSpanProps>, props);
   return (
     <div
       class={cx(styles.formspan, p.class)}

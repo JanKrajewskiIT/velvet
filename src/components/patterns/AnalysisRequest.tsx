@@ -1,8 +1,11 @@
-import { createMemo, type JSX, mergeProps, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createMemo, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Button } from '../actions/Button';
 import { Glyph } from '../primitives/Glyph';
@@ -74,7 +77,7 @@ export interface AnalysisRequestProps {
 
 /** Compose and send an AI analysis request from several pieces of context; Run stays blocked with a reason until requirements are met. */
 export const AnalysisRequest = (props: AnalysisRequestProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     {
       defaultInstructions: '',
       defaultDepth: 'standard',
@@ -125,7 +128,7 @@ export const AnalysisRequest = (props: AnalysisRequestProps) => {
   return (
     <section
       class={cx(typographyClass('body'), styles.areq, running() && 'vui-areq--running', p.class)}
-      aria-busy={running() || undefined}
+      aria-busy={booleanAttribute(running() || undefined)}
     >
       <header class={styles.areqPartHead}>
         <IconTile class={styles.areqPartSpark} icon="sparkles" />

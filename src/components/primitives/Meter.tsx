@@ -1,9 +1,10 @@
-import { createMemo, For, mergeProps, Show, splitProps } from 'solid-js';
+import { createMemo, For, Show } from 'solid-js';
 
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { percentOf } from '../../utils/math';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import type { Tone } from '../../utils/tone';
 import styles from './Meter.module.css';
 
@@ -38,8 +39,8 @@ export interface MeterProps extends HtmlProps<HTMLSpanElement> {
 
 /** Track + fill for a known quantity (skill level, rating share, quota). Progress is the task-progress component. */
 export const Meter = (props: MeterProps) => {
-  const merged = mergeProps({ value: 0, max: 100, size: 'md' } satisfies MeterProps, props);
-  const [local, rest] = splitProps(merged, [
+  const merged = withDefaults({ value: 0, max: 100, size: 'md' } satisfies MeterProps, props);
+  const [local, rest] = partitionProps(merged, [
     'value',
     'max',
     'tone',
@@ -63,7 +64,7 @@ export const Meter = (props: MeterProps) => {
           'aria-valuemax': local.max,
           'aria-valuenow': local.value,
         }
-      : { 'aria-hidden': true as const };
+      : { 'aria-hidden': 'true' as const };
 
   return (
     <span

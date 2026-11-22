@@ -1,7 +1,8 @@
-import { type JSX, mergeProps } from 'solid-js';
+import { type JSX } from '@solidjs/web';
 
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { cssLength } from '../data/cssLength';
 import styles from './FormGrid.module.css';
 import type { FormGap } from './FormLayout';
@@ -25,7 +26,7 @@ export interface FormGridProps {
 
 /** Responsive field grid. Wrap a field in `FormSpan` to span columns. */
 export const FormGrid = (props: FormGridProps) => {
-  const p = mergeProps({ minColumnWidth: 240, gap: 'md' } satisfies Partial<FormGridProps>, props);
+  const p = withDefaults({ minColumnWidth: 240, gap: 'md' } satisfies Partial<FormGridProps>, props);
   const template = () =>
     p.columns
       ? `repeat(${p.columns},minmax(0,1fr))`

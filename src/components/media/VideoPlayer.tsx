@@ -1,7 +1,8 @@
-import { For, mergeProps, Show } from 'solid-js';
+import { For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { reportAsyncError } from '../../utils/reportAsyncError';
 import { Glyph } from '../primitives/Glyph';
 import { Text } from '../primitives/Text';
@@ -40,7 +41,7 @@ const NO_TRACKS: readonly VideoTrack[] = [];
  * Controls fade after 2.5 s of stillness while playing. Keyboard on the focused player: Space / K play · ← → 5 s · J / L 10 s · M mute · F full screen · C captions.
  */
 export const VideoPlayer = (props: VideoPlayerProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     {
       tracks: NO_TRACKS,
       autoPlay: false,
@@ -67,7 +68,7 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
       )}
       style={{ 'aspect-ratio': aspectRatioValue(p.ratio) }}
       // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- the player region must take focus so its keyboard shortcuts work
-      tabIndex={0}
+      tabindex={0}
       role="region"
       aria-label={
         p.title

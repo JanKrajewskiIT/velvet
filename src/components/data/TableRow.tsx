@@ -1,6 +1,7 @@
 import { For, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { Checkbox } from '../forms/Checkbox';
 import { Glyph } from '../primitives/Glyph';
@@ -23,9 +24,9 @@ export const TableRow = <T extends object>(props: TableRowProps<T>) => {
   return (
     <>
       <tr
-        tabIndex={0}
-        aria-selected={props.table.config.selectable ? on() : undefined}
-        aria-expanded={props.table.config.renderExpanded ? open() : undefined}
+        tabindex={0}
+        aria-selected={props.table.config.selectable ? booleanAttribute(on()) : undefined}
+        aria-expanded={props.table.config.renderExpanded ? booleanAttribute(open()) : undefined}
         class={cx(styles.row, open() && styles.tablePartRowVariantOpen)}
         onKeyDown={(e) => props.table.onRowKey(e, key())}
       >
@@ -35,7 +36,7 @@ export const TableRow = <T extends object>(props: TableRowProps<T>) => {
             style={props.table.pins.checkPinned() ? { position: 'sticky', left: '0' } : undefined}
           >
             <Checkbox
-              tabIndex={-1}
+              tabindex={-1}
               aria-label={translate('velvet.data.table.selectRow')}
               checked={on()}
               onClick={(e) => props.table.selection.clickCheck(e, props.index, key())}
@@ -59,10 +60,10 @@ export const TableRow = <T extends object>(props: TableRowProps<T>) => {
           <td class={styles.tablePartExp}>
             <button
               type="button"
-              tabIndex={-1}
+              tabindex={-1}
               class={styles.tablePartExpbtn}
               aria-label={translate(open() ? 'velvet.data.table.collapseRow' : 'velvet.data.table.expandRow')}
-              aria-expanded={open()}
+              aria-expanded={booleanAttribute(open())}
               onClick={() => props.table.expansion.toggleExpanded(key())}
             >
               <Glyph name="chevron-down" />
@@ -72,7 +73,7 @@ export const TableRow = <T extends object>(props: TableRowProps<T>) => {
       </tr>
       <Show when={open()}>
         <tr class={cx(styles.row, styles.tablePartDetail)}>
-          <td colSpan={props.table.span()}>
+          <td colspan={props.table.span()}>
             <div class={styles.tablePartDetailIn}>{props.table.config.renderExpanded?.(props.row)}</div>
           </td>
         </tr>

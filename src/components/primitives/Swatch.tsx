@@ -1,8 +1,10 @@
-import { mergeProps, Show, splitProps } from 'solid-js';
+import { Show } from 'solid-js';
 
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { type HtmlProps, Polymorphic } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import type { Tone } from '../../utils/tone';
 import { Glyph } from './Glyph';
 import styles from './Swatch.module.css';
@@ -31,8 +33,8 @@ export interface SwatchProps extends HtmlProps<HTMLElement, 'onClick'> {
 
 /** A colour chip — presets, label colours, picker trigger. */
 export const Swatch = (props: SwatchProps) => {
-  const merged = mergeProps({ size: 'md' } satisfies SwatchProps, props);
-  const [local, rest] = splitProps(merged, [
+  const merged = withDefaults({ size: 'md' } satisfies SwatchProps, props);
+  const [local, rest] = partitionProps(merged, [
     'color',
     'tone',
     'size',
@@ -51,7 +53,7 @@ export const Swatch = (props: SwatchProps) => {
       tag={clickable() ? 'button' : 'span'}
       type={clickable() ? 'button' : undefined}
       disabled={clickable() ? local.disabled : undefined}
-      aria-disabled={!clickable() && local.disabled ? true : undefined}
+      aria-disabled={!clickable() && local.disabled ? 'true' : undefined}
       class={cx(
         styles.swatch,
         variantClass(SWATCH_CLASSES, local.size, 'md'),
@@ -60,7 +62,7 @@ export const Swatch = (props: SwatchProps) => {
       )}
       data-tone={local.tone}
       style={local.color ? { '--swatch': local.color, ...local.style } : local.style}
-      aria-pressed={clickable() && local.selected != null ? local.selected : undefined}
+      aria-pressed={clickable() && local.selected != null ? booleanAttribute(local.selected) : undefined}
       aria-label={local.label}
       role={!clickable() && local.label ? 'img' : undefined}
       onClick={(event: MouseEvent) => {

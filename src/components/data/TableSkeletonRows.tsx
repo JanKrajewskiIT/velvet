@@ -1,4 +1,4 @@
-import { For, Index, Show } from 'solid-js';
+import { For, Show } from 'solid-js';
 
 import { Skeleton } from '../feedback/Skeleton';
 import type { TableController } from './tableController';
@@ -11,7 +11,7 @@ export interface TableSkeletonRowsProps<T extends object> {
 const SKELETON_WIDTHS = [72, 56, 40, 64];
 
 export const TableSkeletonRows = <T extends object>(props: TableSkeletonRowsProps<T>) => (
-  <Index each={Array.from({ length: props.table.config.loadingRows })}>
+  <For keyed={false} each={Array.from({ length: props.table.config.loadingRows })}>
     {(_, i) => (
       <tr class={styles.row}>
         <Show when={props.table.config.selectable}>
@@ -34,5 +34,5 @@ export const TableSkeletonRows = <T extends object>(props: TableSkeletonRowsProp
         </Show>
       </tr>
     )}
-  </Index>
+  </For>
 );

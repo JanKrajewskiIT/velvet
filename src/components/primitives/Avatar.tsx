@@ -1,10 +1,12 @@
 import type { I18nKey } from '@jankrajewskiit/i18n';
-import { children, createSignal, type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { children, createSignal, Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import styles from './Avatar.module.css';
 import { Dot } from './Dot';
 
@@ -64,9 +66,9 @@ const initialsOf = (name: string): string =>
 
 /** Initials or image avatar with optional presence dot. */
 export const Avatar = (props: AvatarProps) => {
-  const merged = mergeProps({ size: 'md', tone: 'brand' } satisfies AvatarProps, props);
+  const merged = withDefaults({ size: 'md', tone: 'brand' } satisfies AvatarProps, props);
   const translate = useTranslate();
-  const [local, rest] = splitProps(merged, [
+  const [local, rest] = partitionProps(merged, [
     'name',
     'initials',
     'src',

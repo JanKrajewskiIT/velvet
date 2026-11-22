@@ -1,7 +1,9 @@
-import { type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { Show } from 'solid-js';
 
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { Text } from '../primitives/Text';
 import styles from './Divider.module.css';
 
@@ -13,8 +15,8 @@ export interface DividerProps extends HtmlProps<HTMLDivElement, 'children'> {
 
 /** Hairline separator, optionally with a centered label ("or"). */
 export const Divider = (props: DividerProps) => {
-  const merged = mergeProps({ orientation: 'horizontal' } satisfies DividerProps, props);
-  const [local, rest] = splitProps(merged, ['label', 'orientation', 'class']);
+  const merged = withDefaults({ orientation: 'horizontal' } satisfies DividerProps, props);
+  const [local, rest] = partitionProps(merged, ['label', 'orientation', 'class']);
   return (
     <div
       {...rest}

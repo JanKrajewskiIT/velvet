@@ -1,4 +1,5 @@
-import { createUniqueId, type JSX, onCleanup, onMount } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createUniqueId, onSettled } from 'solid-js';
 
 import styles from './MarqueePresentation.module.css';
 import { disablePresentationControl, presentationAttribute } from './presentationAttributes';
@@ -11,7 +12,7 @@ export interface MarqueePresentationProps {
 export const MarqueePresentation = (props: MarqueePresentationProps) => {
   const prefix = createUniqueId();
   let lane!: HTMLDivElement;
-  onMount(() => {
+  onSettled(() => {
     const sanitize = () => {
       for (const element of lane.querySelectorAll('*')) {
         for (const attribute of Array.from(element.attributes)) {
@@ -29,10 +30,10 @@ export const MarqueePresentation = (props: MarqueePresentationProps) => {
       if (event.target instanceof HTMLMediaElement) event.target.pause();
     };
     lane.addEventListener('play', pause, true);
-    onCleanup(() => {
+    return () => {
       observer.disconnect();
       lane.removeEventListener('play', pause, true);
-    });
+    };
   });
   return (
     <div

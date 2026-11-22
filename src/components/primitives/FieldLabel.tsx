@@ -1,8 +1,9 @@
-import { Show, splitProps } from 'solid-js';
+import { Show } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import { cx } from '../../utils/cx';
 import type { ElementTag, HtmlProps } from '../../utils/polymorphic';
+import { partitionProps } from '../../utils/props';
 import styles from './FieldLabel.module.css';
 import { Text } from './Text';
 
@@ -17,7 +18,7 @@ export interface FieldLabelProps extends HtmlProps<HTMLElement> {
 }
 
 export const FieldLabel = (props: FieldLabelProps) => {
-  const [local, rest] = splitProps(props, [
+  const [local, rest] = partitionProps(props, [
     'as',
     'htmlFor',
     'optional',

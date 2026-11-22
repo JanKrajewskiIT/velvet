@@ -1,8 +1,10 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { createMemo, For, type JSX, mergeProps, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createMemo, For } from 'solid-js';
 
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { marketDirection } from '../finance/marketDirection';
 import styles from './ContributionBar.module.css';
 
@@ -24,8 +26,8 @@ export interface ContributionBarProps extends HtmlProps<HTMLDivElement> {
 const contributionValue = (item: ContributionItem): number => (Number.isFinite(item.value) ? item.value : 0);
 
 export const ContributionBar = (props: ContributionBarProps) => {
-  const merged = mergeProps({ unit: '', digits: 0, labelWidth: 180 } satisfies Partial<ContributionBarProps>, props);
-  const [local, rest] = splitProps(merged, [
+  const merged = withDefaults({ unit: '', digits: 0, labelWidth: 180 } satisfies Partial<ContributionBarProps>, props);
+  const [local, rest] = partitionProps(merged, [
     'items',
     'max',
     'unit',

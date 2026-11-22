@@ -1,4 +1,4 @@
-import { type Accessor, createEffect, createSignal, on } from 'solid-js';
+import { type Accessor, createEffect, createSignal } from 'solid-js';
 
 import type { RowKey } from './rowData';
 
@@ -13,11 +13,20 @@ export const createTableExpansion = (
 ): TableExpansion => {
   const [expanded, setExpanded] = createSignal<RowKey[]>([]);
   if (keys)
-    createEffect(() => {
-      const available = new Set(keys());
-      setExpanded((current) => current.filter((key) => available.has(key)));
-    });
-  if (dataKey) createEffect(on(dataKey, () => setExpanded([]), { defer: true }));
+    createEffect(
+      () => new Set(keys()),
+      (available) => {
+        setExpanded((current) => current.filter((key) => available.has(key)));
+      },
+    );
+  if (dataKey)
+    createEffect(
+      dataKey,
+      () => {
+        setExpanded([]);
+      },
+      { defer: true },
+    );
   const isOpen = (key: RowKey) => expanded().includes(key);
   const toggleExpanded = (key: RowKey) =>
     setExpanded((x) => (x.includes(key) ? x.filter((y) => y !== key) : [...x, key]));

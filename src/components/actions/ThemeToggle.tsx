@@ -1,5 +1,6 @@
 import type { I18nKey } from '@jankrajewskiit/i18n';
-import { createSignal, For, type JSX, mergeProps, onCleanup, onMount } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createSignal, For, onSettled } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
 import {
@@ -10,8 +11,10 @@ import {
   type ThemePreference,
 } from '../../theme/theme';
 import { activeItemKey } from '../../utils/activeItem';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Glyph } from '../primitives/Glyph';
 import { ThemeMoonRings } from './ThemeMoonRings';
 import { ThemeSunRings } from './ThemeSunRings';
@@ -57,7 +60,7 @@ export interface ThemeToggleProps {
 
 /** Light/dark switch. Uncontrolled it sets `html[data-theme]` and persists the choice; pass `value` + `onValueChange` to control. */
 export const ThemeToggle = (props: ThemeToggleProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     { variant: 'light', appearance: 'rings', size: 'md' } satisfies Partial<ThemeToggleProps>,
     props,
   );
@@ -80,12 +83,12 @@ export const ThemeToggle = (props: ThemeToggleProps) => {
       () => true,
     );
 
-  onMount(() => {
+  onSettled(() => {
     const observer = new MutationObserver(() => {
       if (!controlled()) setOwn(readDocumentTheme());
     });
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-    onCleanup(() => observer.disconnect());
+    return () => observer.disconnect();
   });
 
   const pick = (next: ThemePreference) => {
@@ -142,10 +145,10 @@ export const ThemeToggle = (props: ThemeToggleProps) => {
             role="radio"
             data-set={t}
             class={cx(styles.ttPartBtn, popped() === t && styles.ttPartBtnVariantPop)}
-            aria-checked={theme() === t}
+            aria-checked={booleanAttribute(theme() === t)}
             aria-label={labelOf(t)}
             title={labelOf(t)}
-            tabIndex={tabStop() === t ? 0 : -1}
+            tabindex={tabStop() === t ? 0 : -1}
             onClick={() => pick(t)}
           >
             <span class={styles.ttPartIcon}>{icon(t)}</span>

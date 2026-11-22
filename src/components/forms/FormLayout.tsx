@@ -1,8 +1,9 @@
-import { type JSX, mergeProps, splitProps } from 'solid-js';
+import { type JSX } from '@solidjs/web';
 
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
 import { type HtmlProps, Polymorphic } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { cssLength } from '../data/cssLength';
 import styles from './FormLayout.module.css';
 
@@ -27,8 +28,8 @@ export interface FormLayoutProps extends HtmlProps<HTMLElement, 'onSubmit'> {
 
 /** Vertical form shell. Renders a `<form>` (`noValidate`) or any element. Sets rhythm between sections, grids and fields. */
 export const FormLayout = (props: FormLayoutProps) => {
-  const merged = mergeProps({ as: 'form', gap: 'md' } satisfies Partial<FormLayoutProps>, props);
-  const [local, rest] = splitProps(merged, ['as', 'gap', 'width', 'onSubmit', 'class', 'style']);
+  const merged = withDefaults({ as: 'form', gap: 'md' } satisfies Partial<FormLayoutProps>, props);
+  const [local, rest] = partitionProps(merged, ['as', 'gap', 'width', 'onSubmit', 'class', 'style']);
   const submit = (event: SubmitEvent) => {
     if (!local.onSubmit) return;
     event.preventDefault();

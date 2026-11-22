@@ -1,4 +1,4 @@
-import { type Accessor, batch, createSignal } from 'solid-js';
+import { type Accessor, createSignal } from 'solid-js';
 
 import { ymd } from '../../utils/date';
 import { moveEvent, type OrganizerEvent, type OrganizerEventsSource } from './organizerEvents';
@@ -17,11 +17,10 @@ export const createOrganizerDrag = (source: OrganizerEventsSource): OrganizerDra
   const [dragId, setDragId] = createSignal<OrganizerEvent['id']>();
   const [dropKey, setDropKey] = createSignal<string>();
 
-  const endDrag = () =>
-    batch(() => {
-      setDragId(undefined);
-      setDropKey(undefined);
-    });
+  const endDrag = () => {
+    setDragId(undefined);
+    setDropKey(undefined);
+  };
   const dropOn = (day: Date) => {
     const id = dragId();
     const moved = id === undefined ? undefined : moveEvent(source.events, id, day);

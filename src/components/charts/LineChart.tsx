@@ -1,9 +1,11 @@
-import { createMemo, createSignal, createUniqueId, For, Index, mergeProps, Show, untrack } from 'solid-js';
+import { createMemo, createSignal, createUniqueId, For, Show, untrack } from 'solid-js';
 
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { clamp } from '../../utils/math';
 import { positiveNumber } from '../../utils/numericOption';
+import { withDefaults } from '../../utils/props';
 import { Button } from '../actions/Button';
 import { typographyClass } from '../primitives/typography';
 import { VisuallyHidden } from '../primitives/VisuallyHidden';
@@ -42,7 +44,7 @@ export interface LineChartProps {
 
 /** Line / area chart with crosshair. Mouse, or focus + ←→ Home End, moves the crosshair and the value is announced. The "Table" toggle shows the same data as an accessible table with period-over-period Δ. */
 export const LineChart = (props: LineChartProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     { height: 240, area: true, curved: true, includeZero: true } satisfies Partial<LineChartProps>,
     props,
   );
@@ -85,7 +87,7 @@ export const LineChart = (props: LineChartProps) => {
           variant="ghost"
           size="sm"
           iconLeft={table() ? 'bar-chart' : 'list'}
-          aria-pressed={table()}
+          aria-pressed={booleanAttribute(table())}
           onClick={() => setTable(!table())}
         >
           {table() ? translate('velvet.charts.lineChart.chart') : translate('velvet.charts.lineChart.table')}
@@ -159,7 +161,7 @@ export const LineChart = (props: LineChartProps) => {
                     y2={geometry.baseline()}
                     class={styles.chartPartCross}
                   />
-                  <Index each={series()}>
+                  <For keyed={false} each={series()}>
                     {(s, k) => (
                       <Show when={valueOf(d(), s().key) !== undefined}>
                         <circle
@@ -171,7 +173,7 @@ export const LineChart = (props: LineChartProps) => {
                         />
                       </Show>
                     )}
-                  </Index>
+                  </For>
                 </>
               )}
             </Show>

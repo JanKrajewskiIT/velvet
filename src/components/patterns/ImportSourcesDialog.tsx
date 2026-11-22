@@ -1,4 +1,4 @@
-import { createEffect, createMemo, createSignal, For, on, Show } from 'solid-js';
+import { createEffect, createMemo, createSignal, For, Show } from 'solid-js';
 
 import { createOperation } from '../../hooks/createOperation';
 import { useTranslate } from '../../i18n/useTranslate';
@@ -55,19 +55,17 @@ export const ImportSourcesDialog = (props: ImportSourcesDialogProps) => {
   const [error, setError] = createSignal<string | null>(null);
 
   createEffect(
-    on(
-      () => props.open,
-      (open) => {
-        operation.invalidate();
-        if (!open) return;
-        setError(null);
-        setSelected(
-          props.sources
-            .filter((source) => source.status === 'connected' && source.defaultSelected)
-            .map((source) => source.id),
-        );
-      },
-    ),
+    () => props.open,
+    (open) => {
+      operation.invalidate();
+      if (!open) return;
+      setError(null);
+      setSelected(
+        props.sources
+          .filter((source) => source.status === 'connected' && source.defaultSelected)
+          .map((source) => source.id),
+      );
+    },
   );
 
   const total = createMemo(() =>

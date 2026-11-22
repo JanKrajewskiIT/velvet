@@ -1,5 +1,6 @@
 import { For, Show } from 'solid-js';
 
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { Button } from '../actions/Button';
 import { Card } from '../display/Card';
@@ -39,8 +40,8 @@ export const OrderTicket = (props: OrderTicketProps) => {
               <button
                 type="button"
                 role="radio"
-                aria-checked={t.side() === side}
-                tabIndex={t.side() === side ? 0 : -1}
+                aria-checked={booleanAttribute(t.side() === side)}
+                tabindex={t.side() === side ? 0 : -1}
                 class={styles.side}
                 data-side={side}
                 onClick={() => t.setSide(side)}

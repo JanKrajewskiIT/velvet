@@ -1,7 +1,9 @@
-import { children, type JSX, mergeProps, Show, splitProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { children, Show } from 'solid-js';
 
 import { cx } from '../../utils/cx';
 import type { HtmlProps } from '../../utils/polymorphic';
+import { partitionProps, withDefaults } from '../../utils/props';
 import { Card, type CardProps } from '../display/Card';
 import { IconTile } from '../primitives/IconTile';
 import { Text } from '../primitives/Text';
@@ -38,7 +40,7 @@ export interface FeatureCardProps extends HtmlProps<HTMLElement, 'title'> {
 
 /** Feature tile built on Card: tone icon tile, title, copy, optional action. Hoverable + tonal by default, but only the action inside is a link unless `interactive`. */
 export const FeatureCard = (props: FeatureCardProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     {
       tone: 'brand',
       tonal: true,
@@ -48,7 +50,7 @@ export const FeatureCard = (props: FeatureCardProps) => {
     } satisfies Partial<FeatureCardProps>,
     props,
   );
-  const [local, rest] = splitProps(merged, [
+  const [local, rest] = partitionProps(merged, [
     'icon',
     'title',
     'description',

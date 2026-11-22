@@ -1,9 +1,11 @@
-import { type JSX, mergeProps } from 'solid-js';
+import type { JSX } from '@solidjs/web';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { cx } from '../../utils/cx';
 import { isInteractiveTarget } from '../../utils/interactiveTarget';
+import { withDefaults } from '../../utils/props';
 import { Card, type CardProps } from '../display/Card';
 import { cssLength } from './cssLength';
 import styles from './FlipCard.module.css';
@@ -39,7 +41,7 @@ export interface FlipCardProps {
 
 /** Two-sided card that flips in 3D on click / Enter / Space (fades under reduced motion). Each face is a Card. */
 export const FlipCard = (props: FlipCardProps) => {
-  const merged = mergeProps(
+  const merged = withDefaults(
     { height: 220, backVariant: 'brand-solid', align: 'center', flipOnHover: false } satisfies Partial<FlipCardProps>,
     props,
   );
@@ -62,7 +64,7 @@ export const FlipCard = (props: FlipCardProps) => {
     <div
       data-vui-flip
       role="button"
-      tabIndex={0}
+      tabindex={0}
       class={cx(
         styles.flip,
         on() && styles.flipVariantOn,
@@ -71,7 +73,7 @@ export const FlipCard = (props: FlipCardProps) => {
         merged.class,
       )}
       style={{ height: cssLength(merged.height), width: cssLength(merged.width) }}
-      aria-pressed={on()}
+      aria-pressed={booleanAttribute(on())}
       aria-label={translate(on() ? 'velvet.data.flipCard.showingBack' : 'velvet.data.flipCard.showingFront', {
         label: label(),
       })}
@@ -86,7 +88,7 @@ export const FlipCard = (props: FlipCardProps) => {
           tone={merged.tone}
           accent={merged.accent}
           class={cx(styles.flipPartFace, styles.flipPartFaceVariantFront)}
-          aria-hidden={on()}
+          aria-hidden={booleanAttribute(on())}
           inert={on()}
           bodyClass={cx(styles.cardBody, merged.bodyClass)}
         >
@@ -95,7 +97,7 @@ export const FlipCard = (props: FlipCardProps) => {
         <Card
           variant={merged.backVariant}
           class={cx(styles.flipPartFace, styles.flipPartFaceVariantBack)}
-          aria-hidden={!on()}
+          aria-hidden={booleanAttribute(!on())}
           inert={!on()}
           bodyClass={cx(styles.cardBody, merged.bodyClass)}
         >

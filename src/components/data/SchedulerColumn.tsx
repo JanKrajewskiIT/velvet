@@ -47,7 +47,7 @@ export const SchedulerColumn = (props: SchedulerColumnProps) => {
             })
           : undefined
       }
-      tabIndex={config().onSlotClick ? 0 : undefined}
+      tabindex={config().onSlotClick ? 0 : undefined}
       onClick={(e) => slots.onClick(props.day, e)}
       onKeyDown={(event) => {
         if (event.target !== event.currentTarget || !config().onSlotClick) return;

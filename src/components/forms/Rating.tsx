@@ -1,10 +1,13 @@
 import { useI18n } from '@jankrajewskiit/i18n';
-import { createMemo, createSignal, For, type JSX, mergeProps, Show } from 'solid-js';
+import type { JSX } from '@solidjs/web';
+import { createMemo, createSignal, For, Show } from 'solid-js';
 
 import { createControllable } from '../../hooks/createControllable';
 import { useTranslate } from '../../i18n/useTranslate';
+import { booleanAttribute } from '../../utils/booleanAttribute';
 import { variantClass } from '../../utils/cssModule';
 import { cx } from '../../utils/cx';
+import { withDefaults } from '../../utils/props';
 import { Text } from '../primitives/Text';
 import styles from './Rating.module.css';
 import { RatingStar } from './RatingStar';
@@ -40,7 +43,7 @@ export interface RatingProps {
 
 /** Star rating. Hover previews, click commits (click the current star again to clear), ←→ ↑↓ Home End by keyboard. */
 export const Rating = (props: RatingProps) => {
-  const p = mergeProps(
+  const p = withDefaults(
     { defaultValue: 0, max: 5, readOnly: false, size: 'md', showValue: false } satisfies RatingProps,
     props,
   );
@@ -120,9 +123,9 @@ export const Rating = (props: RatingProps) => {
             <button
               type="button"
               role="radio"
-              aria-checked={current() === star + 1}
+              aria-checked={booleanAttribute(current() === star + 1)}
               aria-label={starLabel(star + 1, p.max)}
-              tabIndex={(current() || 1) === star + 1 ? 0 : -1}
+              tabindex={(current() || 1) === star + 1 ? 0 : -1}
               class={cx(
                 styles.ratingPartStar,
                 star < shown() && styles.ratingPartStarVariantOn,

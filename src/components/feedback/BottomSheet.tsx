@@ -1,5 +1,5 @@
-import { mergeProps, Show } from 'solid-js';
-import { Portal } from 'solid-js/web';
+import { Portal } from '@solidjs/web';
+import { merge, Show } from 'solid-js';
 
 import { cx } from '../../utils/cx';
 import styles from './BottomSheet.module.css';
@@ -11,7 +11,7 @@ export type { BottomSheetProps } from './bottomSheetTypes';
 /** Mobile-first panel sliding up from the bottom. Drag the grabber down (or flick) to dismiss; Esc and backdrop tap also close. Respects safe-area insets. */
 export const BottomSheet = (props: BottomSheetProps) => {
   const ref = createModalRoot(() => props.open, { onEscape: () => props.onClose?.() });
-  const sheet = mergeProps(props, {
+  const sheet = merge(props, {
     get class() {
       return cx(styles.root, props.class);
     },
